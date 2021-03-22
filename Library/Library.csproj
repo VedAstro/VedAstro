@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Genso.Astrology.Library</AssemblyName>
+    <RootNamespace>Genso.Astrology.Library</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="objects\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Apis" Version="1.51.0" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.51.0" />
+    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.51.0.2237" />
+    <PackageReference Include="Google.Apis.Core" Version="1.51.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
+    <PackageReference Include="SwissEphNet" Version="2.8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Genso.Framework\Framework.csproj" />
+  </ItemGroup>
+
+</Project>

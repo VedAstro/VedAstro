@@ -25,7 +25,7 @@ namespace Genso.Astrology.Library
 
         //the limit on how many cache items are saved in each file on disk
         //cache is saved in pieces to optimeze load time with threading
-        private const int CacheFileLimit = 1000;
+        private const int CacheFileLimit = 5000;
 
         //list of caches of methods
         private static ConcurrentDictionary<string, ConcurrentDictionary<CacheKey, object>> _cacheList = new();

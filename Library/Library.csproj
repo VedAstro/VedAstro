@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="objects\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Google.Apis" Version="1.51.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.51.0" />
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.51.0.2237" />

@@ -1,18 +1,21 @@
 ﻿using System;
 using Genso.Astrology.Library;
 
-
-namespace Muhurtha.Desktop
+namespace Horoscope.Desktop
 {
     class Program
     {
         static void Main(string[] args)
         {
 
+
             Program application = new Program();
 
             System.Console.ReadLine();
+
         }
+
+
 
         public Program()
         {
@@ -22,10 +25,18 @@ namespace Muhurtha.Desktop
             var endStdTime = DateTimeOffset.ParseExact("23:59 20/03/2021 +08:00", Time.GetDateTimeFormat(), null);
             var geoLocation = new GeoLocation("Ipoh", 101.0901, 4.5975);
 
+            var stdBirthTimeVik = DateTimeOffset.ParseExact("12:44 23/04/1994 +08:00", Time.GetDateTimeFormat(), null);
+            var stdBirthTimeSin = DateTimeOffset.ParseExact("13:16 23/02/1998 +08:00", Time.GetDateTimeFormat(), null);
+            var stdBirthTimeDevi = DateTimeOffset.ParseExact("06:15 05/08/1963 +08:00", Time.GetDateTimeFormat(), null);
+
+            var birthLocation = new GeoLocation("Teluk Intan", 101.0206, 4.0224);
+            var personViknesh = new Person("Viknesh", new Time(stdBirthTimeVik, birthLocation));
+            var personSindhu = new Person("Sindhu", new Time(stdBirthTimeSin, birthLocation));
+            var personDevi = new Person("Devi", new Time(stdBirthTimeDevi, birthLocation));
 
 
             //get list of event data to check for event
-            var eventDataList = DatabaseManager.GetEventDataList();
+            var eventDataList = DatabaseManager.GetEventDataList("data\\EventDataList.xml");
 
             //filter IN event data list
             var filteredEventDataList = eventDataList.FindAll(eventData =>
@@ -72,7 +83,7 @@ namespace Muhurtha.Desktop
             if (string.Equals(input, "y", StringComparison.OrdinalIgnoreCase))
             {
                 //add events to google calender
-                Calendar.AddEventsToGoogleCalender(splittedEvents, Calendar.Sindhu);
+                CalendarManager.AddEventsToGoogleCalender(splittedEvents, CalendarManager.Sindhu);
                 //Logic.General.AddEventsToiCloudCalender(temp.GetEventList());
 
             }
@@ -80,7 +91,5 @@ namespace Muhurtha.Desktop
             System.Console.ReadLine();
 
         }
-
-
     }
 }

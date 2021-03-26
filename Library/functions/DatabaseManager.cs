@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Genso.Framework;
 
 namespace Genso.Astrology.Library
 {
     /// <summary>
-    /// Class to handle DB logic, database is the XML file
+    /// Manager to handle getting from & saving to database (XML files on disk)
     /// </summary>
-    public static class Database
+    public static class DatabaseManager
     {
-        //get the event data list in a structed form xml file
-        private static Data EventDataList = new Data("data\\EventDataList.xml");
 
 
         /// <summary>
-        /// Gets a list of all event data from XML file
+        /// Gets a list of all event data from database
         /// </summary>
-        public static List<EventData> GetEventDataListFromDatabase()
+        public static List<EventData> GetEventDataList(string filePath)
         {
+            //get the event data list in a structed form xml file
+            Data eventDataListFile = new Data(filePath);
+
             //create a place to store the list
             List<EventData> eventDataList = new List<EventData>();
 
             //get all the raw event data into a list
-            var rawEventDataList = EventDataList.getAllRecords();
+            var rawEventDataList = eventDataListFile.getAllRecords();
 
             //parse each raw event data in list
             foreach (var eventData in rawEventDataList)
@@ -37,6 +39,7 @@ namespace Genso.Astrology.Library
                 var description = eventData.Element("Description").Value;
                 var tagString = eventData.Element("Tag").Value;
                 var tagList = getEventTags(tagString);
+                //todo needs to be moved to a better place
                 var calculatorMethod = General.GetEventCalculatorMethod(name);
 
                 //place the data into an event data structure
@@ -72,6 +75,46 @@ namespace Genso.Astrology.Library
                 }
 
                 return returnTags;
+            }
+
+        }
+
+
+        public static List<Person> GetPersonList(string filePath)
+        {
+            //get the person list file
+            Data personListFile = new Data(filePath);
+
+            //create a place to store the list
+            var eventDataList = new List<Person>();
+
+            //get all the raw person data into a list
+            var rawPersonList = personListFile.getAllRecords();
+
+            //parse each raw person data in list
+            foreach (var personXml in rawPersonList)
+            {
+                //extract the individual data out & convert it to the correct type
+                var nameString = personXml.Element("Name").Value;
+                var birthTime = getBirthTime(personXml.Element("BirthTime"));
+
+                //place the data into an event data structure
+                var person = new Person(nameString, birthTime);
+
+                //add it to the return list
+                eventDataList.Add(person);
+            }
+
+
+            //return the list to caller
+            return eventDataList;
+
+            //--------------FUNCTIONS
+            //converts xml reprisentation of birth time to object instance of it
+            Time getBirthTime(XElement rawBirthTime)
+            {
+
+
             }
 
         }

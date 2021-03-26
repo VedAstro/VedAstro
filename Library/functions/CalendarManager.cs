@@ -12,7 +12,7 @@ using Event = Genso.Astrology.Library.Event;
 
 namespace Genso.Astrology.Library
 {
-    public static class Calendar
+    public static class CalendarManager
     {
         //store the ID's of each calendar
         public static String Agriculture = "i32upicbta6asvu2kbhlmcmu3c@group.calendar.google.com";
@@ -25,7 +25,7 @@ namespace Genso.Astrology.Library
         public static String BuyingSelling = "sqb75ocqme43int94aevqvjmck@group.calendar.google.com";
         public static String Astronomical = "5dnb8488n051v5gt4npi5q36q8@group.calendar.google.com";
         public static String Marriage = "68evakk36vgd9nnipe0m7jms8s@group.calendar.google.com";
-
+        public static String Sindhu = "b8sj4qhiat5vgjj4f5jaektl88@group.calendar.google.com";
 
         public static void AddEventsToGoogleCalender(List<Event> eventToAddList, String calendarId)
         {

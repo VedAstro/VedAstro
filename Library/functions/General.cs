@@ -155,6 +155,9 @@ namespace Genso.Astrology.Library
             return timeList;
         }
 
+        /// <summary>
+        /// Gets the method that does the caculations for an event based on the events name
+        /// </summary>
         public static EventCalculator GetEventCalculatorMethod(EventName inputEventName)
         {
             //get all event calculator methods

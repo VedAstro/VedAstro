@@ -15,6 +15,8 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Gets a list of all event data from database
+        /// Note: element names used here corespond to the ones found in the XML file
+        ///       if change here, than change in XML as well
         /// </summary>
         public static List<EventData> GetEventDataList(string filePath)
         {
@@ -80,6 +82,11 @@ namespace Genso.Astrology.Library
         }
 
 
+        /// <summary>
+        /// Gets a list of all persons from database
+        /// Note: element names used here corespond to the ones found in the XML file
+        ///       if change here, than change in XML as well
+        /// </summary>
         public static List<Person> GetPersonList(string filePath)
         {
             //get the person list file
@@ -111,12 +118,30 @@ namespace Genso.Astrology.Library
 
             //--------------FUNCTIONS
             //converts xml reprisentation of birth time to object instance of it
-            Time getBirthTime(XElement rawBirthTime)
+            Time getBirthTime(XElement birthTimeXml)
             {
+                //extract the individual data out & convert it to the correct type
+                var birthDateTimeRaw = birthTimeXml.Element("Time").Value;
+                var birthDateTime = DateTimeOffset.ParseExact(birthDateTimeRaw, Time.GetDateTimeFormat(), null);
 
+                //extract geolocation
+                var locationHolder = birthTimeXml.Element("Location");
+                var locationName = locationHolder.Element("Name").Value;
+                var longitude = double.Parse(locationHolder.Element("Longitude").Value);
+                var latitide = double.Parse(locationHolder.Element("Latitude").Value);
+                var birthLocation = new GeoLocation(locationName, longitude, latitide);
 
+                //return the extracted data
+                return new Time(birthDateTime, birthLocation);
             }
 
+        }
+
+
+        //DEMO METHOD
+        public static void SavePersonList(List<Person> personList, string filePath)
+        {
+            throw new NotImplementedException();
         }
     }
 }

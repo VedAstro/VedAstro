@@ -1,0 +1,104 @@
+﻿<Window x:Class="Muhurtha.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Muhurtha.Desktop"
+        mc:Ignorable="d"
+        Title="Muhurtha" Height="350" Width="566">
+
+    <!--Code to link style/resource dictionary-->
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StyleDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+
+    <Grid DataContext="{StaticResource MainGrid}">
+
+        <TabControl>
+            <TabItem Header="Events">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <!--Content Grid-->
+                        <ColumnDefinition Width="*" />
+                        <!--Options Grid-->
+                        <ColumnDefinition Width="140" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--Content Grid-->
+                    <Grid Grid.Column="0">
+
+                    </Grid>
+
+                    <!--Options Grid-->
+                    <Grid Grid.Column="1" Background="#FFEBEBEB">
+                        <StackPanel Style="{StaticResource ResourceKey=Panel}" x:Name="loginPanel" >
+
+                            <Grid Margin="0,10,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Start time" />
+                                <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="startTimeTextBox" Text="{Binding StartTimeText}" />
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="End time" />
+                                <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="endTimeTextBox" Text="{Binding EndTimeText}" />
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Person" />
+                                <ComboBox Grid.Row="1" SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center">
+                                    <ComboBoxItem IsSelected="True">openddns.ml</ComboBoxItem>
+                                    <ComboBoxItem>ddns.genso.tk</ComboBoxItem>
+                                </ComboBox>
+
+                            </Grid>
+                            <Grid Margin="0,10,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
+                                <ComboBox Grid.Row="1" SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center">
+                                    <ComboBoxItem IsSelected="True">openddns.ml</ComboBoxItem>
+                                    <ComboBoxItem>ddns.genso.tk</ComboBoxItem>
+                                </ComboBox>
+                            </Grid>
+                            <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>
+
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Persons">
+                <Grid />
+            </TabItem>
+            <TabItem Header="Locations">
+                <Grid />
+            </TabItem>
+            <TabItem Header="Log">
+                <Grid />
+            </TabItem>
+            <TabItem Header="Settings">
+                <Grid />
+            </TabItem>
+        </TabControl>
+
+
+
+    </Grid>
+</Window>

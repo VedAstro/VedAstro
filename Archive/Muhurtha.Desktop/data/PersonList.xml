@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <Person>
+    <Name>Viknesh</Name>
+    <BirthTime>
+      <Time>12:44 23/04/1994 +08:00</Time>
+      <Location>
+        <Name>Teluk Intan</Name>
+        <Longitude>101.0206</Longitude>
+        <Latitude>4.0224</Latitude>
+      </Location>
+    </BirthTime>
+  </Person>
+  <Person>
+    <Name>Sindhu</Name>
+    <BirthTime>
+      <Time>13:16 23/02/1998 +08:00</Time>
+      <Location>
+        <Name>Teluk Intan</Name>
+        <Longitude>101.0206</Longitude>
+        <Latitude>4.0224</Latitude>
+      </Location>
+    </BirthTime>
+  </Person>
+  <Person>
+    <Name>Devi</Name>
+    <BirthTime>
+      <Time>06:15 05/08/1963 +08:00</Time>
+      <Location>
+        <Name>Teluk Intan</Name>
+        <Longitude>101.0206</Longitude>
+        <Latitude>4.0224</Latitude>
+      </Location>
+    </BirthTime>
+  </Person>
+  <Person>
+    <Name>Nagayah</Name>
+    <BirthTime>
+      <Time>16:30 23/12/1949 +08:00</Time>
+      <Location>
+        <Name>Teluk Intan</Name>
+        <Longitude>101.0206</Longitude>
+        <Latitude>4.0224</Latitude>
+      </Location>
+    </BirthTime>
+  </Person>
+  <Person>
+    <Name>Rosita</Name>
+    <BirthTime>
+      <Time>16:00 13/12/1990 +08:00</Time>
+      <Location>
+        <Name>Kuala Lumpur</Name>
+        <Longitude>101.6873</Longitude>
+        <Latitude>3.16027</Latitude>
+      </Location>
+    </BirthTime>
+  </Person>
+
+</Root>

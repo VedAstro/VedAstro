@@ -9,19 +9,16 @@ namespace Muhurtha.Desktop
         static void Main(string[] args)
         {
 
-            Program application = new Program();
+            Start();
 
             System.Console.ReadLine();
         }
 
-        public Program()
+        public static void Start()
         {
-
-            //1. SET THE DATA
             var startStdTime = DateTimeOffset.ParseExact("00:00 19/03/2021 +08:00", Time.GetDateTimeFormat(), null);
             var endStdTime = DateTimeOffset.ParseExact("23:59 20/03/2021 +08:00", Time.GetDateTimeFormat(), null);
             var geoLocation = new GeoLocation("Ipoh", 101.0901, 4.5975);
-
 
 
             //get list of event data to check for event
@@ -80,7 +77,6 @@ namespace Muhurtha.Desktop
             System.Console.ReadLine();
 
         }
-
 
     }
 }

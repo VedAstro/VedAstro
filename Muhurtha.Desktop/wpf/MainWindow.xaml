@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Muhurtha.Desktop"
         mc:Ignorable="d"
-        Title="Muhurtha" Height="350" Width="566">
+        Title="Muhurtha" Height="377" Width="566"
+        Loaded="Window_Initialized"
+        Closed="Window_Closed"
+        >
 
     <!--Code to link style/resource dictionary-->
     <Window.Resources>
@@ -24,58 +27,63 @@
             <TabItem Header="Events">
                 <Grid >
                     <Grid.ColumnDefinitions>
-                        <!--Content Grid-->
+                        <!--Events List-->
                         <ColumnDefinition Width="*" />
-                        <!--Options Grid-->
-                        <ColumnDefinition Width="140" />
+                        <!--Event Options-->
+                        <ColumnDefinition Width="160" />
                     </Grid.ColumnDefinitions>
 
-                    <!--Content Grid-->
-                    <Grid Grid.Column="0">
+                    <!--Events List-->
+                    <Grid DataContext="{Binding EventsList}" Grid.Column="0">
 
                     </Grid>
 
-                    <!--Options Grid-->
-                    <Grid Grid.Column="1" Background="#FFEBEBEB">
-                        <StackPanel Style="{StaticResource ResourceKey=Panel}" x:Name="loginPanel" >
+                    <!--Event Options-->
+                    <Grid DataContext="{Binding EventOptions}" Grid.Column="1" Background="#FFEBEBEB">
+                        <StackPanel Style="{StaticResource ResourceKey=Panel}" x:Name="EventOptions" >
 
-                            <Grid Margin="0,10,0,0">
+                            <Grid Margin="0,3,0,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Start time" />
-                                <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="startTimeTextBox" Text="{Binding StartTimeText}" />
+                                <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="StartTimeTextBox" Text="{Binding StartTimeText}" />
                             </Grid>
-                            <Grid Margin="0,10,0,0">
+                            <Grid Margin="0,3,0,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="End time" />
-                                <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="endTimeTextBox" Text="{Binding EndTimeText}" />
+                                <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="EndTimeTextBox" Text="{Binding EndTimeText}" />
                             </Grid>
-                            <Grid Margin="0,10,0,0">
+                            <Grid Margin="0,3,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Location" />
+                                <ComboBox Grid.Row="1" ItemsSource="{Binding LocationList}" SelectedItem="{Binding SelectedLocation}" VerticalContentAlignment="Center"/>
+
+                            </Grid>
+
+                            <Grid Margin="0,3,0,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Person" />
-                                <ComboBox Grid.Row="1" SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center">
-                                    <ComboBoxItem IsSelected="True">openddns.ml</ComboBoxItem>
-                                    <ComboBoxItem>ddns.genso.tk</ComboBoxItem>
-                                </ComboBox>
+                                <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}" SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center"/>
 
                             </Grid>
-                            <Grid Margin="0,10,0,0">
+                            <Grid Margin="0,3,0,0">
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
-                                <ComboBox Grid.Row="1" SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center">
-                                    <ComboBoxItem IsSelected="True">openddns.ml</ComboBoxItem>
-                                    <ComboBoxItem>ddns.genso.tk</ComboBoxItem>
+                                <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}" SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center">
                                 </ComboBox>
                             </Grid>
                             <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>

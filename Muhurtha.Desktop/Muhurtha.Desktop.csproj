@@ -7,4 +7,10 @@
     <StartupObject>Muhurtha.Desktop.Start</StartupObject>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Genso.Framework\Framework.csproj" />
+    <ProjectReference Include="..\Library\Library.csproj" />
+    <ProjectReference Include="..\Muhurtha.Core\Muhurtha.Core.csproj" />
+  </ItemGroup>
+
 </Project>

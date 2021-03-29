@@ -7,7 +7,7 @@ namespace Muhurtha.Desktop
     /// <summary>
     /// Simple class to only start the Program and catch crtical errors
     /// </summary>
-    public class Start
+    public static class Start
     {
         [STAThread]
         static void Main(string[] args)

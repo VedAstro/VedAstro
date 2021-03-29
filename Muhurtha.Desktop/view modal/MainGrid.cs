@@ -20,7 +20,7 @@ namespace Muhurtha.Desktop
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler WindowInitialized;
-        public event EventHandler MainWindow_Closed;
+        public event EventHandler WindowClosed;
 
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Muhurtha.Desktop
 
         /** EVENT ROUTING **/
         public void Window_Initialized(object sender, EventArgs eventArgs) => WindowInitialized?.Invoke(sender, eventArgs);
-        public void mainWindow_Closed(object sender, EventArgs eventArgs) => MainWindow_Closed?.Invoke(sender, eventArgs);
+        public void Window_Closed(object sender, EventArgs eventArgs) => WindowClosed?.Invoke(sender, eventArgs);
 
 
 

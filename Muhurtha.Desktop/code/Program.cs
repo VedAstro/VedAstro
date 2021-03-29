@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Genso.Astrology.Muhurtha.Core;
 
 namespace Muhurtha.Desktop
 {
@@ -32,7 +34,6 @@ namespace Muhurtha.Desktop
 
 
 
-
         /** EVENT HANDLERS **/
 
         //EVENT OPTIONS
@@ -46,14 +47,17 @@ namespace Muhurtha.Desktop
         //MAIN WINDOW
         private void WindowInitialized(object sender, EventArgs e)
         {
+            //load values into event options panel
+            LoadEventOptionsDefaultValues();
 
 
         }
 
+
         /// <summary>
         /// Closes the program once the main window is closed
         /// </summary>
-        private void MainGrid_MainWindow_Closed(object sender, EventArgs e) => System.Environment.Exit(1);
+        private void WindowClosed(object sender, EventArgs e) => System.Environment.Exit(1);
 
 
 
@@ -61,12 +65,11 @@ namespace Muhurtha.Desktop
 
 
         /** PUBLIC METHODS **/
-        //starts the GUI
-        //and handles the errors gracefuly
+        //runs the program
         public void Run()
         {
             //attach handlers to the GUI events
-            attachEventHandlers();
+            AttachEventHandlers();
 
             //run the gui
             _guiManager.Run();
@@ -78,15 +81,28 @@ namespace Muhurtha.Desktop
 
         /** PRIVATE METHODS **/
 
-        private void attachEventHandlers()
+        //attaches all event handlers to the from the gui
+        private void AttachEventHandlers()
         {
             //MAIN GRID
             _guiManager.MainGrid.WindowInitialized += WindowInitialized;
-            _guiManager.MainGrid.MainWindow_Closed += MainGrid_MainWindow_Closed;
+            _guiManager.MainGrid.WindowClosed += WindowClosed;
 
             //LOGIN PANEL
             _guiManager.MainGrid.EventOptions.CalculateEventsButtonClicked += CalculateEventsButtonClicked;
 
+        }
+
+        private void LoadEventOptionsDefaultValues()
+        {
+            //load all person, location & tag list into combo box
+            _guiManager.MainGrid.EventOptions.PersonList = MuhurthaCore.GetAllPeopleList();
+            _guiManager.MainGrid.EventOptions.TagList = MuhurthaCore.GetAllTagList();
+            _guiManager.MainGrid.EventOptions.LocationList = MuhurthaCore.GetAllLocationList();
+
+            //set default start & end times
+            _guiManager.MainGrid.EventOptions.StartTimeText = "00:00 19/03/2021 +08:00";
+            _guiManager.MainGrid.EventOptions.EndTimeText = "23:59 20/03/2021 +08:00";
         }
 
 

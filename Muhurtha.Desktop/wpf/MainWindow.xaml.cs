@@ -40,6 +40,7 @@ namespace Muhurtha.Desktop
         /** EVENT ROUTING **/
 
         private void CalculateEventsButton_Click(object sender, RoutedEventArgs e) => MainGrid.EventOptions.CalculateEventsButton_Click(sender, e);
-
+        private void Window_Closed(object sender, EventArgs e) => MainGrid.Window_Closed(sender, e);
+        private void Window_Initialized(object sender, RoutedEventArgs e) => MainGrid.Window_Initialized(sender, e);
     }
 }

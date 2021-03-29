@@ -143,5 +143,18 @@ namespace Genso.Astrology.Library
         {
             throw new NotImplementedException();
         }
+
+        public static List<GeoLocation> GetLocationList(string dataLocationlistXml)
+        {
+            //todo dummy location list needs proper location list
+            var list = new List<GeoLocation>()
+            {
+                new GeoLocation("Ipoh", 101.0901, 4.5975),
+                new GeoLocation("Kuala", 101.0901, 4.5975),
+                new GeoLocation("Teluk", 101.0901, 4.5975)
+            };
+
+            return list;
+        }
     }
 }

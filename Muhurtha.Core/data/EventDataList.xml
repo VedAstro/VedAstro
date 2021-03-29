@@ -1,0 +1,1397 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <!--<Event>
+    <Id>1</Id>
+    <Name>GoodTarabala</Name>
+    <Nature>Good</Nature>
+    <Description>Good Tarabala, good strength of constellation</Description>
+    <Tag>Personal</Tag>
+  </Event>-->
+  <!--<Event>
+    <Id>2</Id>
+    <Name>BadTarabala</Name>
+    <Nature>Bad</Nature>
+    <Description>Bad Tarabala, bad strength of constellation</Description>
+    <Tag>Personal</Tag>
+  </Event>-->
+  <Event>
+    <Id>3</Id>
+    <Name>GoodChandrabala</Name>
+    <Nature>Good</Nature>
+    <Description>
+      To be at its best, the Moon should not
+      occupy in the election chart, a position that happens to
+      represent the 6th, 8th or 12th from the persons Janma Rasi
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>4</Id>
+    <Name>BadChandrabala</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      To be at its best, the Moon should not
+      occupy in the election chart, a position that happens to
+      represent the 6th, 8th or 12th from the persons Janma Rasi
+
+      Exceptions:
+      Chandrashtama (8th) shows no evil when the Moon is waxing and
+      occupies a benefic sign and a benefic Navamsa, or when there is
+      Tarabala. The sting is lost when the Moon and the 8th lord are friends.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>12</Id>
+    <Name>AmritaSiddhaYoga</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Sunday to Saturday respectively coinciding with the constellations
+      Hasta, Sravana, Aswini, Anuradha, Pushya, Revati and Rohini will give
+      rise to Amita Siddha Yoga.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>13</Id>
+    <Name>PanchangaSuddhi</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Panchanga Suddhi. - We have already said that a Panchanga
+      consists of tithi, vara, nakshatra. yoga and karana. All these must be
+      auspicious. In regard to lunar days, the 4th, 6th, 8th, 12th and 14th, full
+      and new moon days should be avoided. In regard to vara, Thursday and
+      Friday are held to be suitable for all works. Tuesday, is to be generally
+      avoided except when it happens to be the 10th, 12th or 16th day of the
+      child's birth when the child's Namakarana (baptising or giving name)
+      may be performed. Of the several Nakshatras, Bharani and Krittika
+      should be avoided for all auspicious works as these two are said to be
+      presided o ver by the god of death (Yama) and the god of fire (Agni) respectively. In urgent cases if the Lagna could be fortified, the dosha
+      due to nakshatra may get neutralised. The last parts of Aslesha,
+      Jyeshta and Revati should also be avoided. Coming to the Yoga (vide
+      page 12) the 6th (Atiganda). 9th (Soola). 10th (Ganda), 17th (Vyatipata)
+      and 27th (Vydhruti) have deleterious effects upon events which are
+      started or commenced under them. - The Karana chosen must be
+      appropriate to the election in view. Thus Bava is auspicious for starting
+      works of permanent importance while Thaithula is propitious for
+      marriage. Bhadra is unfit for any good work but is eminently suitable for
+      violent and cruel deeds. For getting initiation into kshudra mantras
+      Sakuni Havana is propitious.
+      Therefore, Panchanga Suddhi means a good lunar day, a beneficial
+      weekday, an auspicious constellation, a good yoga and a fertilising
+      Karana.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>14</Id>
+    <Name>UgraYoga</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Any treatment commenced under Ugra yogas are supposed to prove
+      successful. Ugra yogas arise when the 3rd (or 9th), 4th, 5th, 6th, 7th,
+      9th, 10th, 12th (or 3rd) and 13th lunar days coincide respectively with
+      Rohini, Uttara, Sravana, Mrigasira. Revats, Krittika, Pushva, Anuradha.
+      Krittika (or Makha).
+    </Description>
+    <Tag>Medical</Tag>
+  </Event>
+  <Event>
+    <Id>15</Id>
+    <Name>SuryaSankramana</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      The 2nd great evil is Surya Sankramana or the
+      solar ingress into different zodiacal signs. When the Sun is about to
+      leave one sign and enter another there seem to occur certain
+      disturbances in the organisation of the solar forces and such times are
+      not recommended for any good work. On the contrary, they are held to
+      be propitious for meditation, initiation into secret mantras and
+      performance of certain religious rites which are held to purify not only
+      the bodily electrical discharges but also the mental currents. Sixteen
+      ghatis (6 hours 24 minutes) both before and after the entry of the Sun
+      into a new sign should be rejected for all new works.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>16</Id>
+    <Name>CustomEvent</Name>
+    <Nature>Good</Nature>
+    <Description>Good tarabala &amp; good chandrabala</Description>
+    <Tag>Debug</Tag>
+  </Event>
+  <Event>
+    <Id>17</Id>
+    <Name>KarthariDosha</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Karthari means scissors. In an election, when two
+      evil planets are placed on either side of the Lagna, the combination
+      goes under the special name of Karthari Dosha and it should be
+      rejected for good work particularly in regard to marriage.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>18</Id>
+    <Name>ShashtashtaRiphagathaChandraDosha</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Shashtashta Riphagatha Chandra Dosha. - The Moon should
+      invariably be avoided in the 6th, 8th and 12th houses from the Lagna
+      rising in an election chart.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>19</Id>
+    <Name>SagrahaChandraDosha</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Sagraha Chandra Dosha. - The Moon's association (conjunction) with any other
+      planet, benefic or malefic, should be avoided. This injunction is specially
+      applicable in case of marriage.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>20</Id>
+    <Name>UdayasthaSuddhi</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Udayasta Suddhi. - The Lagna and the seventh should be strong.
+      The Lagna should be occupied by its own lord and the Navamsa Lagna by its own lord or vice versa or lord of Lagna should aspect Navamsa
+      Lagna and vice versa. Similarly the seventh and the lord of the seventh
+      Bhava should be favourably disposed. The strength of Lagna and the
+      seventh is necessary in all elections but especially so in regard to
+      marriage.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>21</Id>
+    <Name>SiddhaYoga</Name>
+    <Nature>Good</Nature>
+    <Description>
+      When a certain weekday coincides with a certain asterism and a certain
+      lunar day, it becomes specialy auspicious for good work.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>22</Id>
+    <Name>SakunaKarana</Name>
+    <Nature>Good</Nature>
+    <Description>For getting initiations into mantras Sakini Karana is propitious</Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>23</Id>
+    <Name>BadNithyaYoga</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Coming to the Yoga the 6th (Atiganda). 9th (Soola). 10th (Ganda), 17th (Vyatipata)
+      and 27th (Vydhruti) have deleterious effects upon events which are
+      started or commenced under them.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>24</Id>
+    <Name>LagnaThyajya</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Even when the ascendant is strong, certain parts of it which go
+      under the name of Lagna tyajya should be rejected. In Aries, Taurus, Sagittarius and Virgo, the first three degrees should be
+      avoided as it is supposed to be in the nature of a serpent (bhujanga)
+      and hence destructive. In regard to Pisces, Capricorn, Cancer and
+      Scorpio, the last (three degrees) has to be avoided as it is supposed to
+      be presided over by the evil force of Rahu. The middle half ghati (13°
+      30' to 16° 30') should be rejected with regard to Gemini, Libra, Leo and
+      Aquarius as it is ruled by an evil force termed Gridhra.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>GoodPanchaka</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Panchaka (Five-Source Energy):
+
+      For matters of ordinary importance
+      such as interviewing superiors or going on short journeys, a favourable
+      Tarabala will do and there is no need to consider the panchaka. But in
+      regard to very important ceremonies such as marriage, nuptials, entry
+      into new houses, etc., this should be carefully looked into.
+
+      Five sources of planetary, stellar and zodiacal energies are involved. Take
+      the number of the lunar day (from the 1st of the month), the number of
+      the weekday, Sunday 1. etc.), the number of the constellation (from
+      Aswini) and the number of the Lagna (from Aries). Add these together
+      and divide the total by 9.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>26</Id>
+    <Name>BadPanchaka</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Panchaka (Five-Source Energy):
+
+      For matters of ordinary importance such as interviewing superiors or going on short journeys,
+      a favourable Tarabala will do and there is no need to consider the panchaka. But in
+      regard to very important ceremonies such as marriage, nuptials, entry
+      into new houses, etc., this should be carefully looked into.
+
+      Five sources of planetary, stellar and zodiacal energies are involved. Take
+      the number of the lunar day (from the 1st of the month), the number of
+      the weekday, Sunday 1. etc.), the number of the constellation (from
+      Aswini) and the number of the Lagna (from Aries). Add these together
+      and divide the total by 9.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>27</Id>
+    <Name>BadTaraChandraPanchaka</Name>
+    <Nature>Bad</Nature>
+    <Description>Very bad time for any important works. Bad tarabala, bad chandrabala and bad panchaka.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>28</Id>
+    <Name>GoodTaraChandraPanchaka</Name>
+    <Nature>Good</Nature>
+    <Description>Very good time for any important works. Good tarabala, good chandrabala and good panchaka.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>29</Id>
+    <Name>BadTaraChandra</Name>
+    <Nature>Bad</Nature>
+    <Description>Generally bad time for important works. Bad tarabala &amp; bad chandrabala </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>30</Id>
+    <Name>GoodTaraChandra</Name>
+    <Nature>Good</Nature>
+    <Description>Generally good time for important works. Good tarabala &amp; good chandrabala </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>31</Id>
+    <Name>BhriguShatka</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      The position of Venus in the 6th is injurious. This is
+      especially so in regard to marriage. Even when Venus is exalted and
+      associated with benefics, such a disposition is not approved.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>32</Id>
+    <Name>Kujasthama</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Mars should be avoided in the 8th house, as it
+      indicates destruction of the object in view. In a marriage election chart.
+      Mars in the 8th is unthinkable. Even if Mars is otherwise powerful, he
+      should not occupy the 8th house.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>33</Id>
+    <Name>GoodHairCutting</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Shaving may be had in the constellations
+      of Pushya, Punarvasu, Rcvati, Hasta, Sravana,
+      Dhanista, Mrignsira, Aswini, Chitta, Jyeshta,
+      Satabliislia and Swati. 4th, Gth and 14th lunar
+      days as also New Moon and Full Moon days
+      arc not desirable. And solar and lunar eclipses.
+    </Description>
+    <Tag>HairNailCutting</Tag>
+  </Event>
+  <Event>
+    <Id>34</Id>
+    <Name>GoodNailCutting</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Avoid Fridays and Saturdays - the 8th, 9th, 14th lunar
+      days as well as New and Full Moon days.
+    </Description>
+    <Tag>HairNailCutting</Tag>
+  </Event>
+  <Event>
+    <Id>35</Id>
+    <Name>FixedConstellationRuling</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Rohini, Uttara, Uttarashadha and Uttarabhadra are supposed to be fixed
+      constellations and they are favourable for coronations, laying the
+      foundations of cities, sowing operations, planting trees and other
+      permanent things.
+    </Description>
+    <Tag>RulingConstellation</Tag>
+  </Event>
+  <Event>
+    <Id>36</Id>
+    <Name>SoftConstellationRuling</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Chitta, Anuradha, Mrigasira and Revati are soft constellations. They are
+      good for wearing new apparel, learning dancing, music and fine arts,
+      sexual union and performance of auspicious ceremonies.
+    </Description>
+    <Tag>RulingConstellation</Tag>
+  </Event>
+  <Event>
+    <Id>37</Id>
+    <Name>LightConstellationRuling</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Aswini, Pushya, Hasta and Abhijit are light constellations, and they can
+      be selected for putting ornamentation, pleasures and sports,
+      administering medicine, starting industries and undertaking travels.
+    </Description>
+    <Tag>RulingConstellation</Tag>
+  </Event>
+  <Event>
+    <Id>38</Id>
+    <Name>SharpConstellationRuling</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Moola, Jyestha, Aridra and Aslesha are sharp in nature and they are
+      favourable for incantations, invoking spirits, for imprisonment, murders,
+      and separation of friends.
+    </Description>
+    <Tag>RulingConstellation</Tag>
+  </Event>
+  <Event>
+    <Id>39</Id>
+    <Name>MovableConstellationRuling</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Saravana, Dhanishta, Satabhisha, Punarvasu and Swati are movable
+      stars and they are auspicious for acquiring vehicles, for gardening and
+      for going on procession.
+    </Description>
+    <Tag>RulingConstellation</Tag>
+  </Event>
+  <Event>
+    <Id>40</Id>
+    <Name>DreadfulConstellationRuling</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Pubba, Poorvashadha and Poorvabhadra, Bharani and Makha are
+      dreadful stars and they are suitable for nefarious schemes, poisoning,
+      deceit, imprisonment, setting fire and other evil deeds.
+    </Description>
+    <Tag>RulingConstellation</Tag>
+  </Event>
+  <Event>
+    <Id>41</Id>
+    <Name>MixedConstellationRuling</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Krittika and Visakha are mixed constellations and during their
+      influences, works of day-to-day importance can be undertaken.
+    </Description>
+    <Tag>RulingConstellation</Tag>
+  </Event>
+  <Event>
+    <Id>42</Id>
+    <Name>BadForStartingAllAgriculture</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      While beginning all agricultural operations, see that the 8th house is unoccupied.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>43</Id>
+    <Name>LagnaLordIsWeekdayLord</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Lagna owned by the planet who is lord of the weekday in question.
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>44</Id>
+    <Name>GoodLunarDayAgriculture</Name>
+    <Nature>Good</Nature>
+    <Description>
+      All odd lunar days except the 9th are good. All even tithis except the 2nd and 4th should be avoided.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>45</Id>
+    <Name>BadLagnaForAllAgriculture</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Gemini: Not favourable for any planting being a barren sign.
+      Leo: Not good for any planting, especially bad for underground plants such as potato.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>46</Id>
+    <Name>GoodYogaForAllAgriculture</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good yoga for all agriculture is formed when:
+      1. A good lunar day for planting
+      2. Lagna owned by the planet who is lord of the weekday
+      3. Beginning all agricultural operations, see that the 8th house is unoccupied
+      4. No malefic rising sign (Gemini and Leo)
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>47</Id>
+    <Name>GoodAnySeedsSowing</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Any seeds can be sown on a day ruled by Hasta,
+      Chitta, Swati, Makha, Pushyami, Uttara, Uttarashadha, Uttarabhadra,
+      Rohini, Revati, Aswini, Moola or Anuradha provided the lunar day is
+      also propitious. Choose a Lagna, owned by the planet who is lord of the
+      weekday in question.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>48</Id>
+    <Name>Ekadashi</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      It is the 11th tithi. Special religious significance in Hindu tradition, usually it's observed by fasting.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>49</Id>
+    <Name>NotAuspiciousDay</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Tuesday and Saturday should be avoided for all good and auspicious works.
+      Tuesday is not evil after midday
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>50</Id>
+    <Name>GoodPlanetsInLagna</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Venus, Mercury or Jupiter in the ascendant will completely destroy all other adverse influences.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>51</Id>
+    <Name>GoodForPlantingFloweringPlants</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting flowering plants when Virgo is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>52</Id>
+    <Name>GoodForPlantingGarlic</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting garlic when Aries is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>53</Id>
+    <Name>GoodForPlantingPeachAndOthers</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting peach, plum, potatoes, radishes, onion sets and turnips when Taurus is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>54</Id>
+    <Name>GoodForPlantingTomatoesAndOthers</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting beans, cabbage, corn, cucumber, lettuce, melons, pumpkins, tomatoes, cauliflower,
+      water melons, and cereals when Cancer is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>55</Id>
+    <Name>GoodForPlantingGrains</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting wheat, rye, barley, rice and other field crops when Libra is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>56</Id>
+    <Name>GoodForPlantingOnionAndOthers</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting garlic and onion seeds when Scorpio is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>57</Id>
+    <Name>GoodForPlantingPepperAndOthers</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting Pepper and other spring crops and garlic when Sagittarius is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>58</Id>
+    <Name>GoodForPlantingPotatoAndOthers</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting potato, radishes and turnips when Capricorn is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>59</Id>
+    <Name>GoodForPlantingGrainsAndOthers</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting all black cereals and grains when Aquarius is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>60</Id>
+    <Name>GoodForPlantingPumpkinsAndOthers</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting cucumbers, pumpkins, radishes, water-melons and carrots when Pisces is rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>61</Id>
+    <Name>GoodForPlantingTrees</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting trees in Rohini
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>62</Id>
+    <Name>GoodForPlantingSugarcane</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Good for planting sugarcane in Punarvasu
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>63</Id>
+    <Name>GoodForPlantingFlowerSeeds</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Seeds of flower plants, and fruit-bearing creepers should be sown in the asterisms of
+      Mriyusira, Punarvasu, Hasta, Chitta, Swati, Anuradha and Revati
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>64</Id>
+    <Name>GoodForPlantingFruitTrees</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Seedlings of long-lived fruit trees when Jupiter is in Lagna on Thursday
+      OR
+      Fruit trees may be planted when Sagittarius and Pisces are rising on Thursday
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>65</Id>
+    <Name>GoodForPlantingFlowerTrees</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Seedlings of flower trees when Venus is in Lagna on Friday
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>66</Id>
+    <Name>GoodForPlantingFlowers</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Seedlings of flower sown when Mars is in Lagna on Tuesday
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>67</Id>
+    <Name>GoodForPlantingFlowerCuttings</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Flower seeds and cuttings may be sown when Taurus or Libra rising
+      and general good time for planting.
+    </Description>
+    <Tag>Agriculture</Tag>
+  </Event>
+  <Event>
+    <Id>68</Id>
+    <Name>GoodRullingConstellation</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Pushya rulling is a constellation par excellence that could
+      be universally employed for all purposes, excepting of course marriage
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>69</Id>
+    <Name>BadRullingConstellation</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Certain constellations, apart from their being harmonious or otherwise disposed
+      with reference to one's own Janma Nakshatra, should be avoided for
+      certain specific purposes on account of their inherent evil natures. In
+      fact, Bharani is condemned for all good work and it has to be
+      scrupulously avoided for all good work.
+
+      When a constellation like
+      Bharani(beta Arietis) is held to be constitutionally unfit for certain types
+      of elections; it means that the vibrations emanating from it are
+      destructive in character
+
+      Of the several Nakshatras, Bharani and Krittika
+      should be avoided for all auspicious works as these two are said to be
+      presided over by the god of death (Yama) and the god of fire (Agni)
+      respectively. In urgent cases if the Lagna could be fortified, the dosha
+      due to nakshatra may get neutralised. The last parts of Aslesha,
+      Jyeshta and Revati should also be avoided.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>70</Id>
+    <Name>GoodTakingInjections</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Injections may be taken on Saturday or Monday.
+      Aries, Taurus. Cancer and Virgo are auspicious. The 8th house must be
+      unoccupied. See that Mercury is free from affliction; as otherwise the
+      pain wilt be severe and nervous weakness may set in.
+    </Description>
+    <Tag>Medical</Tag>
+  </Event>
+  <Event>
+    <Id>71</Id>
+    <Name>GoodSellingForProfit</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Selling for Profit. - Let the Moon and Mercury be free from the
+      conjunction or aspect of Mars. The Moon's situation in Taurus. Cancer
+      or Pisces would greatly help the seller. Try to keep Mercury in a kendra
+      from Lagna or at least in good aspect to Jupiter. Tuesday should be
+      avoided. Monday, Wednesday and Thursday are the best. While Friday
+      is unpropitious, Saturday is middling.
+    </Description>
+    <Tag>BuyingSelling</Tag>
+  </Event>
+  <Event>
+    <Id>72</Id>
+    <Name>BavaKarana</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Bava is auspicious for starting works of permanent importance.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>73</Id>
+    <Name>TaitulaKarana</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Thaithula is propitious for marriage
+    </Description>
+    <Tag>Marriage</Tag>
+  </Event>
+  <Event>
+    <Id>74</Id>
+    <Name>BhadraKarana</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Bhadra is unfit for any good work but is eminently suitable for
+      violent and cruel deeds.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>75</Id>
+    <Name>JanmaNakshatraRulling</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      A day ruled by one's Janma Nakshatra is ordinarily held to be
+      unfavourable for an election. But in regard to nuptials, sacrifices, first
+      feeding, agriculture, upanayanam, coronation, buying lands, learning
+      the alphabet, Janma Nakshatra is favourable without exception. But it is
+      inauspicious for war, sexual union, shaving, taking medical treatment,
+      travel and marriage. For a woman, Janma Nakshatra would be quite
+      favourable for marriage.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>76</Id>
+    <Name>SunIsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>77</Id>
+    <Name>MoonIsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>78</Id>
+    <Name>MarsIsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>79</Id>
+    <Name>MercuryIsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>80</Id>
+    <Name>JupiterIsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>81</Id>
+    <Name>VenusIsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>82</Id>
+    <Name>SaturnIsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>83</Id>
+    <Name>House1IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>84</Id>
+    <Name>House2IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>85</Id>
+    <Name>House3IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>86</Id>
+    <Name>House4IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>87</Id>
+    <Name>House5IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>88</Id>
+    <Name>House6IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>89</Id>
+    <Name>House7IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>90</Id>
+    <Name>House8IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>91</Id>
+    <Name>House9IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>92</Id>
+    <Name>House10IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>93</Id>
+    <Name>House11IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>94</Id>
+    <Name>House12IsStrong</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>95</Id>
+    <Name>BadForBuyingToolsUtensilsJewellery</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Buying Utensils, etc. Avoid the asterisms of Aslesha. Moola and Jyeshta. For buying tools, similarly avoid the 8th
+      and 9th lunar days and New Moon.
+
+      Buying Jewellery.
+      As usual unfavourable lunar days and asterisms should be
+      avoided.
+    </Description>
+    <Tag>BuyingSelling</Tag>
+  </Event>
+  <Event>
+    <Id>95</Id>
+    <Name>GoodForBuyingBrassVessels</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Buying Utensils, etc. -
+      Place Jupiter in good aspect to the Moon while buying brass vessels.
+      Avoid the asterisms of Aslesha. Moola and Jyeshta.
+      For buying tools, similarly avoid the 8th
+      and 9th lunar days and New Moon.
+    </Description>
+    <Tag>BuyingSelling</Tag>
+  </Event>
+  <Event>
+    <Id>96</Id>
+    <Name>GoodForBuyingCopperVessels</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Buying Utensils, etc. -
+      Place Jupiter in good aspect to Mars when buying vessels of copper.
+      Avoid the asterisms of Aslesha. Moola and Jyeshta.
+      For buying tools, similarly avoid the 8th
+      and 9th lunar days and New Moon.
+    </Description>
+    <Tag>BuyingSelling</Tag>
+  </Event>
+  <Event>
+    <Id>97</Id>
+    <Name>GoodForBuyingSteelIronVessels</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Buying Utensils, etc. -
+      Place Jupiter in good aspect to Saturn if steel and iron.
+      Avoid the asterisms of Aslesha. Moola and Jyeshta.
+      For buying tools, similarly avoid the 8th
+      and 9th lunar days and New Moon.
+    </Description>
+    <Tag>BuyingSelling</Tag>
+  </Event>
+  <Event>
+    <Id>98</Id>
+    <Name>GoodForBuyingSilverVessels</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Buying Utensils, etc. -
+      Place Jupiter in good aspect to ascendant if of silver.
+      Avoid the asterisms of Aslesha. Moola and Jyeshta.
+      For buying tools, similarly avoid the 8th
+      and 9th lunar days and New Moon.
+    </Description>
+    <Tag>BuyingSelling</Tag>
+  </Event>
+  <Event>
+    <Id>99</Id>
+    <Name>GoodForBuyingJewellery</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Buying Jewellery. - The Sun and the Moon should be well situated and
+      aspected. As usual unfavourable lunar days and asterisms should be
+      avoided.
+    </Description>
+    <Tag>BuyingSelling</Tag>
+  </Event>
+  <Event>
+    <Id>100</Id>
+    <Name>GoodPlanetsIn11th</Name>
+    <Nature>Good</Nature>
+    <Description>
+      The mere presence of the Moon or the Sun in the 11th will act as an
+      antidote for other evils obtaining in the horoscope.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>101</Id>
+    <Name>GoodPlanetsInKendra</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Jupiter or Venus in a kendra (quadrant) and malefics in 3, 6 or 11
+      will remove all the flaws arising on account of unfavourable weekday,
+      constellation, lunar day and yoga.
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>102</Id>
+    <Name>Sunrise</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      It has been acknowledged
+      that it is the moment at which the centre
+      of the solar disc rises at the eastern horizon, that
+      marks the sunrise at the particular place. It must
+      also be noted that on account of the refraction
+      of the solar rays, due to the various strata
+      enveloping the earth, the Sun is not really at the
+      horizon where he appears to be so but is really
+      below the horizon by about a few minutes of
+      arc (Rekha). But we can take the apparent time
+      as almost correct and need not worry ourselves
+      with the so called delicate correct time of rising.
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>103</Id>
+    <Name>Sunset</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      It has been acknowledged
+      that it is the moment at which the centre
+      of the solar disc rises at the western horizon, that
+      marks the sunset at the particular place. It must
+      also be noted that on account of the refraction
+      of the solar rays, due to the various strata
+      enveloping the earth, the Sun is not really at the
+      horizon where he appears to be so but is really
+      below the horizon by about a few minutes of
+      arc (Rekha). But we can take the apparent time
+      as almost correct and need not worry ourselves
+      with the so called delicate correct time of setting.
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+  <Event>
+    <Id>104</Id>
+    <Name>Midday</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      This is marked when the centre of the Sun is exactly on the
+      meridian of the place. The apparent noon is
+      almost the same for all places.
+    </Description>
+    <Tag>Astronomical</Tag>
+  </Event>
+
+  <!--Tarabala Start-->
+  <Event>
+    <Id>105</Id>
+    <Name>TarabalaJanmaStrong</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Janma: danger to body
+      1st Paryaya or cycle : the evil suggested holds good in full
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>106</Id>
+    <Name>TarabalaJanmaMiddling</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Janma: danger to body
+      2nd Paryaya or cycle : the evil is said to be only fifty percent.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>107</Id>
+    <Name>TarabalaJanmaWeak</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Janma: danger to body
+      3rd Paryaya or cycle : the evil is said to be almost negligible
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+    <Id>108</Id>
+    <Name>TarabalaSampatStrong</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Sampat: wealth and prosperity
+      1st Paryaya or cycle : the good suggested holds good in full
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>109</Id>
+    <Name>TarabalaSampatMiddling</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Sampat: wealth and prosperity
+      2nd Paryaya or cycle : the good is said to be only fifty percent.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>110</Id>
+    <Name>TarabalaSampatWeak</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Sampat: wealth and prosperity
+      3rd Paryaya or cycle : the good is said to be almost negligible
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+    <Id>111</Id>
+    <Name>TarabalaVipatStrong</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Vipat: dangers, losses and accidents
+      1st Paryaya or cycle : the evil suggested holds good in full
+
+      It is better to avoid Vipat and Naidhana stars
+      for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
+      even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>112</Id>
+    <Name>TarabalaVipatMiddling</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Vipat: dangers, losses and accidents
+      2nd Paryaya or cycle : the evil is said to be only fifty percent.
+
+      It is better to avoid Vipat and Naidhana stars
+      for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
+      even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>113</Id>
+    <Name>TarabalaVipatWeak</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Vipat: dangers, losses and accidents
+      3rd Paryaya or cycle : the evil is said to be almost negligible
+
+      It is better to avoid Vipat and Naidhana stars
+      for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
+      even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+    <Id>114</Id>
+    <Name>TarabalaKshemaStrong</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Kshema: prosperity
+      1st Paryaya or cycle : the good suggested holds good in full
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>115</Id>
+    <Name>TarabalaKshemaMiddling</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Kshema: prosperity
+      2nd Paryaya or cycle : the good is said to be only fifty percent.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>116</Id>
+    <Name>TarabalaKshemaWeak</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Kshema: prosperity
+      3rd Paryaya or cycle : the good is said to be almost negligible
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+    <Id>117</Id>
+    <Name>TarabalaPratyakStrong</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Pratyak: obstacles
+      1st Paryaya or cycle : the evil suggested holds good in full
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>118</Id>
+    <Name>TarabalaPratyakMiddling</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Pratyak: obstacles
+      2nd Paryaya or cycle : the evil is said to be only fifty percent.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>119</Id>
+    <Name>TarabalaPratyakWeak</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Pratyak: obstacles
+      3rd Paryaya or cycle : the evil is said to be almost negligible
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+    <Id>120</Id>
+    <Name>TarabalaSadhanaStrong</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Sadhana: realisation of ambitions
+      1st Paryaya or cycle : the good suggested holds good in full
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>121</Id>
+    <Name>TarabalaSadhanaMiddling</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Sadhana: realisation of ambitions
+      2nd Paryaya or cycle : the good is said to be only fifty percent.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>122</Id>
+    <Name>TarabalaSadhanaWeak</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Sadhana: realisation of ambitions
+      3rd Paryaya or cycle : the good is said to be almost negligible
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+    <Id>123</Id>
+    <Name>TarabalaNaidhanaStrong</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Naidhana: dangers
+      1st Paryaya or cycle : the evil suggested holds good in full
+
+      It is better to avoid Vipat and Naidhana stars
+      for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
+      even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>124</Id>
+    <Name>TarabalaNaidhanaMiddling</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Naidhana: dangers
+      2nd Paryaya or cycle : the evil is said to be only fifty percent.
+
+      It is better to avoid Vipat and Naidhana stars
+      for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
+      even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>125</Id>
+    <Name>TarabalaNaidhanaWeak</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Naidhana: dangers
+      3rd Paryaya or cycle : the evil is said to be almost negligible
+
+      It is better to avoid Vipat and Naidhana stars
+      for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
+      even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+    <Id>126</Id>
+    <Name>TarabalaMitraStrong</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Mitra: good
+      1st Paryaya or cycle : the good suggested holds good in full
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>127</Id>
+    <Name>TarabalaMitraMiddling</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Mitra: good
+      2nd Paryaya or cycle : the good is said to be only fifty percent.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>128</Id>
+    <Name>TarabalaMitraWeak</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Mitra: good
+      3rd Paryaya or cycle : the good is said to be almost negligible
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+    <Id>129</Id>
+    <Name>TarabalaParamaMitraStrong</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Parama Mitra: very favourable
+      1st Paryaya or cycle : the good suggested holds good in full
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>130</Id>
+    <Name>TarabalaParamaMitraMiddling</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Parama Mitra: very favourable
+      2nd Paryaya or cycle : the good is said to be only fifty percent.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>131</Id>
+    <Name>TarabalaParamaMitraWeak</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Parama Mitra: very favourable
+      3rd Paryaya or cycle : the good is said to be almost negligible
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <!--Tarabala End-->
+
+  <Event>
+    <Id>132</Id>
+    <Name>Papashadvargas</Name>
+    <Nature>Bad</Nature>
+    <Description>
+      Papashadvargs : Malefics should not be strong in shadvargas in an election chart.
+      This event idicates that malefics are strong in shadvargas
+    </Description>
+    <Tag>General</Tag>
+  </Event>
+
+</Root>

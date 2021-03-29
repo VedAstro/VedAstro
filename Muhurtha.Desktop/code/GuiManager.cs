@@ -13,7 +13,6 @@ namespace Muhurtha.Desktop
     /// </summary>
     public class GuiManager
     {
-        //keep a record of the previous & currently visible panel
         private MainWindow _mainWindow;
         private MainGrid _mainGrid;
         public bool isReady = false; //default is not ready

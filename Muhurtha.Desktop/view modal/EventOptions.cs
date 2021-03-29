@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Genso.Astrology.Library;
 
 namespace Muhurtha.Desktop
 {
@@ -10,10 +12,12 @@ namespace Muhurtha.Desktop
     {
         /** BACKING FIELDS **/
         private Visibility _visibility;
-        private string _newSubDomainText;
+        private string _startTimeText;
+        private string _endTimeText;
         private Brush _newSubDomainBorderColor = DefaultBorderColor; //set defaults
         private Thickness _newSubDomainBorderThickness = DefaultTextInputThickness; //set defaults
-        private ComboBoxItem _selectedDomain;
+        private ComboBoxItem _selectedPerson;
+        private List<Person> _personList;
 
 
         /** PRESET STYLING **/
@@ -22,8 +26,10 @@ namespace Muhurtha.Desktop
 
         private static readonly Brush ErrorBorderColor = new SolidColorBrush(Color.FromRgb(255, 0, 0));
         private static readonly Thickness ErrorBorderThickness = new Thickness(2);
-
-
+        private List<EventTag> _tagList;
+        private ComboBoxItem _selectedTag;
+        private List<GeoLocation> _locationList;
+        private ComboBoxItem _selectedLocation;
 
 
         /** EVENTS **/
@@ -43,24 +49,81 @@ namespace Muhurtha.Desktop
                 PropertyChanged(this, new PropertyChangedEventArgs("Visibility"));
             }
         }
-        public string NewSubDomainText
+        public string StartTimeText
         {
-            get => _newSubDomainText;
+            get => _startTimeText;
             set
             {
-                _newSubDomainText = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("NewSubDomainText"));
+                _startTimeText = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("StartTimeText"));
             }
         }
-        public ComboBoxItem SelectedDomain
+        public string EndTimeText
         {
-            get => _selectedDomain;
+            get => _endTimeText;
             set
             {
-                _selectedDomain = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedDomain"));
+                _endTimeText = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("EndTimeText"));
             }
         }
+        public ComboBoxItem SelectedPerson
+        {
+            get => _selectedPerson;
+            set
+            {
+                _selectedPerson = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("SelectedPerson"));
+            }
+        }
+        public ComboBoxItem SelectedLocation
+        {
+            get => _selectedLocation;
+            set
+            {
+                _selectedLocation = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("SelectedLocation"));
+            }
+        }
+        public ComboBoxItem SelectedTag
+        {
+            get => _selectedTag;
+            set
+            {
+                _selectedTag = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("SelectedTag"));
+            }
+        }
+        public List<Person> PersonList
+        {
+            get => _personList;
+            set
+            {
+                _personList = value;
+                //todo might need to observable collection test needed
+                PropertyChanged(this, new PropertyChangedEventArgs("PersonList"));
+            }
+        }
+        public List<EventTag> TagList
+        {
+            get => _tagList;
+            set
+            {
+                _tagList = value;
+                //todo might need to observable collection test needed
+                PropertyChanged(this, new PropertyChangedEventArgs("TagList"));
+            }
+        }
+        public List<GeoLocation> LocationList
+        {
+            get => _locationList;
+            set
+            {
+                _locationList = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("LocationList"));
+            }
+        }
+
         public Brush NewSubDomainBorderColor
         {
             get => _newSubDomainBorderColor;

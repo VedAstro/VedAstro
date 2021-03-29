@@ -8,16 +8,16 @@ using Genso.Astrology.Library;
 
 namespace Muhurtha.Desktop
 {
-    public class EventOptions : INotifyPropertyChanged
+
+
+    public class EventView : INotifyPropertyChanged
     {
         /** BACKING FIELDS **/
         private Visibility _visibility;
-        private string _startTimeText;
-        private string _endTimeText;
         private Brush _newSubDomainBorderColor = DefaultBorderColor; //set defaults
         private Thickness _newSubDomainBorderThickness = DefaultTextInputThickness; //set defaults
-        private Person _selectedPerson;
-        private List<Person> _personList;
+        private List<Event> _eventList;
+        private ComboBoxItem _selectedEvent;
 
 
         /** PRESET STYLING **/
@@ -26,10 +26,7 @@ namespace Muhurtha.Desktop
 
         private static readonly Brush ErrorBorderColor = new SolidColorBrush(Color.FromRgb(255, 0, 0));
         private static readonly Thickness ErrorBorderThickness = new Thickness(2);
-        private List<EventTag> _tagList;
-        private EventTag _selectedTag;
-        private List<GeoLocation> _locationList;
-        private GeoLocation _selectedLocation;
+
 
 
         /** EVENTS **/
@@ -49,78 +46,23 @@ namespace Muhurtha.Desktop
                 PropertyChanged(this, new PropertyChangedEventArgs("Visibility"));
             }
         }
-        public string StartTimeText
+        public ComboBoxItem SelectedEvent
         {
-            get => _startTimeText;
+            get => _selectedEvent;
             set
             {
-                _startTimeText = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("StartTimeText"));
+                _selectedEvent = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("SelectedEvent"));
             }
         }
-        public string EndTimeText
+        public List<Event> EventList
         {
-            get => _endTimeText;
+            get => _eventList;
             set
             {
-                _endTimeText = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("EndTimeText"));
-            }
-        }
-        public Person SelectedPerson
-        {
-            get => _selectedPerson;
-            set
-            {
-                _selectedPerson = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedPerson"));
-            }
-        }
-        public GeoLocation SelectedLocation
-        {
-            get => _selectedLocation;
-            set
-            {
-                _selectedLocation = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedLocation"));
-            }
-        }
-        public EventTag SelectedTag
-        {
-            get => _selectedTag;
-            set
-            {
-                _selectedTag = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedTag"));
-            }
-        }
-        public List<Person> PersonList
-        {
-            get => _personList;
-            set
-            {
-                _personList = value;
+                _eventList = value;
                 //todo might need to observable collection test needed
-                PropertyChanged(this, new PropertyChangedEventArgs("PersonList"));
-            }
-        }
-        public List<EventTag> TagList
-        {
-            get => _tagList;
-            set
-            {
-                _tagList = value;
-                //todo might need to observable collection test needed
-                PropertyChanged(this, new PropertyChangedEventArgs("TagList"));
-            }
-        }
-        public List<GeoLocation> LocationList
-        {
-            get => _locationList;
-            set
-            {
-                _locationList = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("LocationList"));
+                PropertyChanged(this, new PropertyChangedEventArgs("EventList"));
             }
         }
 
@@ -174,4 +116,6 @@ namespace Muhurtha.Desktop
         public void CancelButton_OnClick(object sender, RoutedEventArgs routedEventArgs) => CancelButtonClicked?.Invoke(sender, routedEventArgs);
 
     }
+
+
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Genso.Astrology.Library;
 using Genso.Astrology.Muhurtha.Core;
 
 namespace Muhurtha.Desktop
@@ -40,7 +41,18 @@ namespace Muhurtha.Desktop
         private void CalculateEventsButtonClicked(object sender, EventArgs e)
         {
 
-            MessageBox.Show("Test");
+            //get all the needed values
+            var startTime = _guiManager.MainGrid.EventOptions.StartTimeText;
+            var endTime = _guiManager.MainGrid.EventOptions.EndTimeText;
+            var location = _guiManager.MainGrid.EventOptions.SelectedLocation;
+            var person = _guiManager.MainGrid.EventOptions.SelectedPerson;
+            var tag = _guiManager.MainGrid.EventOptions.SelectedTag;
+
+            //get events from values
+            var events = MuhurthaCore.GetEvents(startTime, endTime, location, person, tag);
+
+            //set event into view
+            _guiManager.MainGrid.EventView.EventList = events;
 
         }
 

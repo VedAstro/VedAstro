@@ -15,7 +15,7 @@ namespace Muhurtha.Desktop
     public class MainGrid : INotifyPropertyChanged
     {
         /** BACKING FIELDS **/
-        private EventsList _eventsList;
+        private EventView _eventView;
         private EventOptions _eventOptions;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,7 +28,7 @@ namespace Muhurtha.Desktop
         /// </summary>
         public MainGrid()
         {
-            _eventsList = new();
+            _eventView = new();
             _eventOptions = new();
         }
 
@@ -36,7 +36,7 @@ namespace Muhurtha.Desktop
 
         /** PROPERTIES **/
 
-        public EventsList EventsList => _eventsList;
+        public EventView EventView => _eventView;
         public EventOptions EventOptions => _eventOptions;
 
 

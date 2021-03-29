@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Muhurtha.Desktop"
         mc:Ignorable="d"
-        Title="Muhurtha" Height="377" Width="566"
+        Title="Muhurtha" Height="377" Width="734"
         Loaded="Window_Initialized"
         Closed="Window_Closed"
         >
@@ -34,7 +34,10 @@
                     </Grid.ColumnDefinitions>
 
                     <!--Events List-->
-                    <Grid DataContext="{Binding EventsList}" Grid.Column="0">
+                    <Grid DataContext="{Binding EventView}" Grid.Column="0">
+
+                        <ListBox ItemsSource="{Binding EventList}">
+                        </ListBox>
 
                     </Grid>
 
@@ -83,7 +86,7 @@
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
-                                <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}" SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center">
+                                <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}" SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center">
                                 </ComboBox>
                             </Grid>
                             <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>

@@ -8,6 +8,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -15,6 +16,10 @@ namespace Genso.Astrology.Library
 {
     public static class General
     {
+        //used for canceling calculation halfway
+        public static CancellationToken threadCanceler;
+
+
         /// <summary>
         /// Get list of events occurig in a time periode for all the
         /// inputed event types aka "event data"
@@ -30,28 +35,37 @@ namespace Genso.Astrology.Library
             var sync = new object();//to lock thread access to list
 
             //var count = 0;
-
-            Parallel.ForEach(eventDataList, (eventData) =>
+            try
             {
-                //get list of occuring events for a sigle event type
-                var eventListForThisEvent = GetListOfEventsByEventData(eventData, person, timeList);
-
-                //TODO Progress show code WIP
-                //count++;
-                //double percentDone = ((double)count / (double)eventDataList.Count) * 100.0;
-                //debug print
-                //Console.Write($"\r Completed : {percentDone}%");
-
-                //adding to list needs to be synced for thread safety
-                lock (sync)
+                Parallel.ForEach(eventDataList, (eventData) =>
                 {
-                    //add events to main list of event
-                    eventList.AddRange(eventListForThisEvent);
+                    //get list of occuring events for a sigle event type
+                    var eventListForThisEvent = GetListOfEventsByEventData(eventData, person, timeList);
+                    //TODO Progress show code WIP
+                    //count++;
+                    //double percentDone = ((double)count / (double)eventDataList.Count) * 100.0;
+                    //debug print
+                    //Console.Write($"\r Completed : {percentDone}%");
 
-                }
-            });
+                    //adding to list needs to be synced for thread safety
+                    lock (sync)
+                    {
+                        //add events to main list of event
+                        eventList.AddRange(eventListForThisEvent);
 
-            //return event list
+                    }
+                });
+
+            }
+            //catches only exceptions that idicates that user canceled the calculation (caller lost interest in the result)
+            catch (Exception e) when (e.InnerException.GetType() == typeof(OperationCanceledException))
+            {
+                //return empty list
+                return new List<Event>();
+            }
+
+
+            //return calculated event list
             return eventList;
         }
 
@@ -76,6 +90,10 @@ namespace Genso.Astrology.Library
             //note: loop must be done in sequencial order, to detect correct start & end time
             foreach (var time in timeList)
             {
+                // used for canceling calculation by outside thread (user cancel halfway)
+                // this will throw the appropriate exception
+                threadCanceler.ThrowIfCancellationRequested();
+
                 //debug print
                 Console.Write($"\r Checking time:{time} : {eventData.GetName()}");
 
@@ -346,6 +364,7 @@ namespace Genso.Astrology.Library
             typeof(Func<MemoryCache, object>),
             typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true),
             throwOnBindFailure: true) as Func<MemoryCache, object>;
+
 
         public static IEnumerable GetKeys(this IMemoryCache memoryCache) =>
             ((IDictionary)GetEntriesCollection((MemoryCache)memoryCache)).Keys;

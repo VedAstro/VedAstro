@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Genso.Astrology.Library;
 
@@ -14,6 +15,22 @@ namespace Genso.Astrology.Muhurtha.Core
     /// </summary>
     public static class MuhurthaCore
     {
+        /** FIELDS **/
+
+        //used for canceling calculation halfway
+        public static CancellationToken threadCanceler;
+
+
+
+        /** EVENTS **/
+        //fired when event calculator completes
+        public static event Action EventCalculationCompleted;
+
+
+
+
+        /** PUBLIC METHODS **/
+
         public static List<Person> GetAllPeopleList() => DatabaseManager.GetPersonList("data\\PersonList.xml");
 
         public static List<EventTag> GetAllTagList()
@@ -50,9 +67,17 @@ namespace Genso.Astrology.Muhurtha.Core
             });
             //-------------------
 
-            var x = General.GetNewMuhurthaTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, filteredEventDataList);
+            //pass thread canceler General, so that methods inside can be stopped if needed
+            General.threadCanceler = threadCanceler;
 
-            return x.GetEventList();
+            //start calculating events
+            var muhurthaTimePeriod = General.GetNewMuhurthaTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, filteredEventDataList);
+
+            //fire event to let others know event calculation is done
+            EventCalculationCompleted.Invoke();
+
+            return muhurthaTimePeriod.GetEventList();
         }
+
     }
 }

@@ -42,5 +42,7 @@ namespace Muhurtha.Desktop
         private void CalculateEventsButton_Click(object sender, RoutedEventArgs e) => MainGrid.EventOptions.CalculateEventsButton_Click(sender, e);
         private void Window_Closed(object sender, EventArgs e) => MainGrid.Window_Closed(sender, e);
         private void Window_Initialized(object sender, RoutedEventArgs e) => MainGrid.Window_Initialized(sender, e);
+        private void SendToCalendarButton_Click(object sender, RoutedEventArgs e) => MainGrid.EventOptions.SendToCalendarButton_Click(sender, e);
+        private void CancelCalculateEventsButton_Click(object sender, RoutedEventArgs e) => MainGrid.EventsCalculatingMessageBox.CancelCalculateEventsButton_Click(sender, e);
     }
 }

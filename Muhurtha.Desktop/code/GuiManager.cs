@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Muhurtha.Desktop
 {
@@ -42,6 +43,7 @@ namespace Muhurtha.Desktop
 
 
 
+
         /** PUBLIC METHODS **/
 
         /// <summary>
@@ -54,6 +56,26 @@ namespace Muhurtha.Desktop
 
         /** PRIVATE METHODS **/
 
+        public void ShowSmokeScreen()
+        {
+            //check first before setting (stops unnecessary style updates)
+            if (MainGrid.SmokeScreenVisibility != Visibility.Visible) { MainGrid.SmokeScreenVisibility = Visibility.Visible; }
+        }
+        public void HideSmokeScreen()
+        {
+            //check first before setting (stops unnecessary style updates)
+            if (MainGrid.SmokeScreenVisibility != Visibility.Hidden) { MainGrid.SmokeScreenVisibility = Visibility.Hidden; }
+        }
+        public void ShowEventsCalculatingMessage()
+        {
+            //check first before setting (stops unnecessary style updates)
+            if (MainGrid.EventsCalculatingMessageBox.Visibility != Visibility.Visible) { MainGrid.EventsCalculatingMessageBox.Visibility = Visibility.Visible; }
+        }
+        public void HideEventsCalculatingMessage()
+        {
+            //check first before setting (stops unnecessary style updates)
+            if (MainGrid.EventsCalculatingMessageBox.Visibility != Visibility.Hidden) { MainGrid.EventsCalculatingMessageBox.Visibility = Visibility.Hidden; }
+        }
     }
 
 

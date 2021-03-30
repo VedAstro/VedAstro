@@ -27,31 +27,28 @@ namespace Genso.Astrology.Library
         }
 
 
+
+        //PROPERTIES
+        //Note: Created mainly for ease of use with WPF binding
+        public EventName Name => _name;
+        public string Description => _description;
+        public EventNature Nature => _nature;
+        public Time StartTime => _startTime;
+        public Time EndTime => _endTime;
+        public int Duration => GetDurationMinutes();
+
+
+
         //PUBLIC METHODS
-        public EventName GetName()
-        {
-            return _name;
-        }
+        public EventName GetName() => _name;
 
-        public EventNature GetNature()
-        {
-            return _nature;
-        }
+        public EventNature GetNature() => _nature;
 
-        public Time GetStartTime()
-        {
-            return _startTime;
-        }
+        public Time GetStartTime() => _startTime;
 
-        public string GetDescription()
-        {
-            return _description;
-        }
+        public string GetDescription() => _description;
 
-        public Time GetEndTime()
-        {
-            return _endTime;
-        }
+        public Time GetEndTime() => _endTime;
 
 
         //PRIVATE METHODS

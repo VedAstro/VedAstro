@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Muhurtha.Desktop
 {
@@ -17,7 +18,11 @@ namespace Muhurtha.Desktop
         /** BACKING FIELDS **/
         private EventView _eventView;
         private EventOptions _eventOptions;
+        private Visibility _smokeScreenVisibility = Visibility.Hidden; //default hidden
+        private EventsCalculatingMessageBox _eventsCalculatingMessageBox;
 
+
+        /** EVENTS **/
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler WindowInitialized;
         public event EventHandler WindowClosed;
@@ -30,6 +35,7 @@ namespace Muhurtha.Desktop
         {
             _eventView = new();
             _eventOptions = new();
+            _eventsCalculatingMessageBox = new();
         }
 
 
@@ -38,6 +44,18 @@ namespace Muhurtha.Desktop
 
         public EventView EventView => _eventView;
         public EventOptions EventOptions => _eventOptions;
+        public EventsCalculatingMessageBox EventsCalculatingMessageBox => _eventsCalculatingMessageBox;
+
+        //smoke screen used to mask main content while showing other windows
+        public Visibility SmokeScreenVisibility
+        {
+            get => _smokeScreenVisibility;
+            set
+            {
+                _smokeScreenVisibility = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("SmokeScreenVisibility"));
+            }
+        }
 
 
 
@@ -47,9 +65,12 @@ namespace Muhurtha.Desktop
 
 
 
-        /** INotifyPropertyChanged **/
+        /** PUBLIC METHODS ROUTING **/
 
-        //[NotifyPropertyChangedInvocator][CallerMemberName]
+
+
+
+        /** INotifyPropertyChanged **/
         protected virtual void onPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -35,6 +35,7 @@ namespace Muhurtha.Desktop
         /** EVENTS **/
         public event EventHandler CalculateEventsButtonClicked;
         public event EventHandler CancelButtonClicked;
+        public event EventHandler SendToCalendarButtonClicked;
         public event PropertyChangedEventHandler PropertyChanged;
 
 
@@ -172,6 +173,6 @@ namespace Muhurtha.Desktop
         /** EVENT ROUTING **/
         public void CalculateEventsButton_Click(object sender, RoutedEventArgs routedEventArgs) => CalculateEventsButtonClicked?.Invoke(sender, routedEventArgs);
         public void CancelButton_OnClick(object sender, RoutedEventArgs routedEventArgs) => CancelButtonClicked?.Invoke(sender, routedEventArgs);
-
+        public void SendToCalendarButton_Click(object sender, RoutedEventArgs routedEventArgs) => SendToCalendarButtonClicked?.Invoke(sender, routedEventArgs);
     }
 }

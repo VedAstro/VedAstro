@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Muhurtha.Desktop"
         mc:Ignorable="d"
-        Title="Muhurtha" Height="377" Width="734"
+        Title="Muhurtha" Height="400" Width="734"
         Loaded="Window_Initialized"
         Closed="Window_Closed"
+        WindowStartupLocation="CenterScreen"
         >
 
     <!--Code to link style/resource dictionary-->
@@ -23,93 +24,98 @@
 
     <Grid DataContext="{StaticResource MainGrid}">
 
-        <TabControl>
-            <TabItem Header="Events">
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <!--Events List-->
-                        <ColumnDefinition Width="*" />
-                        <!--Event Options-->
-                        <ColumnDefinition Width="160" />
-                    </Grid.ColumnDefinitions>
 
-                    <!--Events List-->
-                    <Grid DataContext="{Binding EventView}" Grid.Column="0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!--Events List-->
+                <ColumnDefinition Width="*" />
+                <!--Event Options-->
+                <ColumnDefinition Width="160" />
+            </Grid.ColumnDefinitions>
 
-                        <ListBox ItemsSource="{Binding EventList}">
-                        </ListBox>
+            <!--Events List-->
+            <Grid DataContext="{Binding EventView}" Grid.Column="0">
+
+                <ListView  ItemsSource="{Binding EventList}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Header="Nature" DisplayMemberBinding="{Binding Nature}"/>
+                            <GridViewColumn Header="Start" DisplayMemberBinding="{Binding StartTime}"/>
+                            <GridViewColumn Header="End" DisplayMemberBinding="{Binding EndTime}"/>
+                            <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Duration}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+            </Grid>
+
+            <!--Event Options-->
+            <Grid DataContext="{Binding EventOptions}" Grid.Column="1" Background="#FFEBEBEB">
+                <StackPanel Style="{StaticResource ResourceKey=Panel}" x:Name="EventOptions" >
+
+                    <Grid Margin="0,3,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Start time" />
+                        <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="StartTimeTextBox" Text="{Binding StartTimeText}" />
+                    </Grid>
+                    <Grid Margin="0,3,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="End time" />
+                        <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="EndTimeTextBox" Text="{Binding EndTimeText}" />
+                    </Grid>
+                    <Grid Margin="0,3,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Location" />
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding LocationList}" SelectedItem="{Binding SelectedLocation}" VerticalContentAlignment="Center"/>
 
                     </Grid>
 
-                    <!--Event Options-->
-                    <Grid DataContext="{Binding EventOptions}" Grid.Column="1" Background="#FFEBEBEB">
-                        <StackPanel Style="{StaticResource ResourceKey=Panel}" x:Name="EventOptions" >
+                    <Grid Margin="0,3,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Person" />
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}" SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center"/>
 
-                            <Grid Margin="0,3,0,0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Start time" />
-                                <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="StartTimeTextBox" Text="{Binding StartTimeText}" />
-                            </Grid>
-                            <Grid Margin="0,3,0,0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="End time" />
-                                <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="EndTimeTextBox" Text="{Binding EndTimeText}" />
-                            </Grid>
-                            <Grid Margin="0,3,0,0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Location" />
-                                <ComboBox Grid.Row="1" ItemsSource="{Binding LocationList}" SelectedItem="{Binding SelectedLocation}" VerticalContentAlignment="Center"/>
-
-                            </Grid>
-
-                            <Grid Margin="0,3,0,0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Person" />
-                                <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}" SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center"/>
-
-                            </Grid>
-                            <Grid Margin="0,3,0,0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
-                                <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}" SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center">
-                                </ComboBox>
-                            </Grid>
-                            <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>
-
-                        </StackPanel>
                     </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Persons">
-                <Grid />
-            </TabItem>
-            <TabItem Header="Locations">
-                <Grid />
-            </TabItem>
-            <TabItem Header="Log">
-                <Grid />
-            </TabItem>
-            <TabItem Header="Settings">
-                <Grid />
-            </TabItem>
-        </TabControl>
+                    <Grid Margin="0,3,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}" SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center">
+                        </ComboBox>
+                    </Grid>
+                    <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,15,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>
+                    <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="SendToCalendarButton_Click" >Send to Calendar</Button>
 
+                </StackPanel>
+            </Grid>
+        </Grid>
 
+        <!--Smoke Screen : to hide the underlying main content view-->
+        <Grid Name="SmokeScreen" Visibility="{Binding SmokeScreenVisibility}" Background="#A48C8C8C"/>
+
+        <Grid Name="EventsCalculatingMessageBox" Background="White" Width="300" Height="100"  DataContext="{Binding EventsCalculatingMessageBox}" Visibility="{Binding Visibility}">
+            <StackPanel Style="{StaticResource ResourceKey=Panel}" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                <Label Content="{Binding MessageText}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,0,9" FontWeight="SemiBold"  />
+                <local:Spinner EllipseSize="4" HorizontalAlignment="Center" Height="20" Width="20" VerticalAlignment="Center" />
+                <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,20,0,0" Click="CancelCalculateEventsButton_Click" >Cancel</Button>
+            </StackPanel>
+
+        </Grid>
 
     </Grid>
 </Window>

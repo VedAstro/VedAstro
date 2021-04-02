@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Genso.Astrology.Library;
+using Genso.Astrology.Library.objects.Enum;
+using Genso.Framework;
 
 namespace Genso.Astrology.Muhurtha.Core
 {
@@ -25,7 +24,7 @@ namespace Genso.Astrology.Muhurtha.Core
         /** EVENTS **/
         //fired when event calculator completes
         public static event Action EventCalculationCompleted;
-
+        public static event Action SendingEventsCompleted;
 
 
 
@@ -79,5 +78,50 @@ namespace Genso.Astrology.Muhurtha.Core
             return muhurthaTimePeriod.GetEventList();
         }
 
+        public static void SendEventsToCalendar(List<Event> events, Calendar calendarName, CalendarAccount google, bool splitEvents)
+        {
+            //split events by day
+            var splittedEvents = General.SplitEventsByDay(events);
+
+            CalendarManager.AddEventsToCalenderGoogle(splittedEvents, calendarName.Id);
+
+            //fire event to let others know event sending is done
+            SendingEventsCompleted.Invoke();
+
+        }
+
+        public static List<Calendar> GetCalendarsForAccount(CalendarAccount selectedAccount)
+        {
+            //create empty calendar list
+            var calendarList = new List<Calendar>();
+
+            //based on calendar account use the right calendar list getter
+            switch (selectedAccount)
+            {
+                case CalendarAccount.Google:
+                    calendarList = CalendarManager.GetCalendarListGoogle();
+                    break;
+                case CalendarAccount.iCloud:
+                    LogManager.Error("iCloud not supported atm!");
+                    break;
+                case CalendarAccount.Outlook:
+                    LogManager.Error("Outlook not supported atm!");
+                    break;
+
+            }
+
+            //return possibly filed list to caller
+            return calendarList;
+        }
+
+        public static List<CalendarAccount> GetAllCalendarAccounts()
+        {
+            //get all "CalendarAccount" values into an array
+            var array = (CalendarAccount[])Enum.GetValues(typeof(CalendarAccount));
+
+            //convert to list & return to caller
+            return new List<CalendarAccount>(array);
+
+        }
     }
 }

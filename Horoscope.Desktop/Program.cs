@@ -83,7 +83,7 @@ namespace Horoscope.Desktop
             if (string.Equals(input, "y", StringComparison.OrdinalIgnoreCase))
             {
                 //add events to google calender
-                CalendarManager.AddEventsToGoogleCalender(splittedEvents, CalendarManager.Sindhu);
+                //CalendarManager.AddEventsToCalenderGoogle(splittedEvents, CalendarManager.Sindhu);
                 //Logic.General.AddEventsToiCloudCalender(temp.GetEventList());
 
             }

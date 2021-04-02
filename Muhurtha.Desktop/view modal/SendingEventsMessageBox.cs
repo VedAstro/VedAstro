@@ -6,23 +6,24 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Genso.Astrology.Library;
 
+
 namespace Muhurtha.Desktop
 {
 
-    public class EventsCalculatingMessageBox : ViewModal
+    public class SendingEventsMessageBox : ViewModal
     {
         /** BACKING FIELDS **/
         private string _messageText;
 
         /** EVENTS **/
-        public event EventHandler CancelCalculateEventsButtonClicked;
+        public event EventHandler CancelSendingEventsButtonClicked;
 
 
         /** CTOR **/
         //defaults are set here
-        public EventsCalculatingMessageBox()
+        public SendingEventsMessageBox()
         {
-            _messageText = "Calculating events...";
+            _messageText = "Sending events...";
             this.Hide(); //default hidden
         }
 
@@ -44,7 +45,7 @@ namespace Muhurtha.Desktop
 
 
         /** EVENT ROUTING **/
-        public void CancelCalculateEventsButton_Click(object sender, RoutedEventArgs routedEventArgs) => CancelCalculateEventsButtonClicked?.Invoke(sender, routedEventArgs);
+        public void CancelSendingEventsButton_Click(object sender, RoutedEventArgs routedEventArgs) => CancelSendingEventsButtonClicked?.Invoke(sender, routedEventArgs);
     }
 
 

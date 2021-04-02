@@ -8,55 +8,37 @@ using Genso.Astrology.Library;
 
 namespace Muhurtha.Desktop
 {
-    public class EventOptions : INotifyPropertyChanged
+    public class EventOptions : ViewModal
     {
         /** BACKING FIELDS **/
-        private Visibility _visibility;
         private string _startTimeText;
         private string _endTimeText;
-        private Brush _newSubDomainBorderColor = DefaultBorderColor; //set defaults
-        private Thickness _newSubDomainBorderThickness = DefaultTextInputThickness; //set defaults
         private Person _selectedPerson;
-        private List<Person> _personList;
-
-
-        /** PRESET STYLING **/
-        private static readonly Brush DefaultBorderColor = new SolidColorBrush(Color.FromRgb(170, 170, 170));
-        private static readonly Thickness DefaultTextInputThickness = new Thickness(1);
-
-        private static readonly Brush ErrorBorderColor = new SolidColorBrush(Color.FromRgb(255, 0, 0));
-        private static readonly Thickness ErrorBorderThickness = new Thickness(2);
-        private List<EventTag> _tagList;
         private EventTag _selectedTag;
-        private List<GeoLocation> _locationList;
         private GeoLocation _selectedLocation;
+        private List<Person> _personList;
+        private List<EventTag> _tagList;
+        private List<GeoLocation> _locationList;
+
+
+
 
 
         /** EVENTS **/
         public event EventHandler CalculateEventsButtonClicked;
         public event EventHandler CancelButtonClicked;
         public event EventHandler SendToCalendarButtonClicked;
-        public event PropertyChangedEventHandler PropertyChanged;
 
 
 
         /** PROPERTIES **/
-        public Visibility Visibility
-        {
-            get => _visibility;
-            set
-            {
-                _visibility = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("Visibility"));
-            }
-        }
         public string StartTimeText
         {
             get => _startTimeText;
             set
             {
                 _startTimeText = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("StartTimeText"));
+                OnPropertyChanged(nameof(StartTimeText));
             }
         }
         public string EndTimeText
@@ -65,7 +47,7 @@ namespace Muhurtha.Desktop
             set
             {
                 _endTimeText = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("EndTimeText"));
+                OnPropertyChanged(nameof(EndTimeText));
             }
         }
         public Person SelectedPerson
@@ -74,7 +56,7 @@ namespace Muhurtha.Desktop
             set
             {
                 _selectedPerson = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedPerson"));
+                OnPropertyChanged(nameof(SelectedPerson));
             }
         }
         public GeoLocation SelectedLocation
@@ -83,7 +65,7 @@ namespace Muhurtha.Desktop
             set
             {
                 _selectedLocation = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedLocation"));
+                OnPropertyChanged(nameof(SelectedLocation));
             }
         }
         public EventTag SelectedTag
@@ -92,7 +74,7 @@ namespace Muhurtha.Desktop
             set
             {
                 _selectedTag = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedTag"));
+                OnPropertyChanged(nameof(SelectedTag));
             }
         }
         public List<Person> PersonList
@@ -101,8 +83,7 @@ namespace Muhurtha.Desktop
             set
             {
                 _personList = value;
-                //todo might need to observable collection test needed
-                PropertyChanged(this, new PropertyChangedEventArgs("PersonList"));
+                OnPropertyChanged(nameof(PersonList));
             }
         }
         public List<EventTag> TagList
@@ -111,8 +92,7 @@ namespace Muhurtha.Desktop
             set
             {
                 _tagList = value;
-                //todo might need to observable collection test needed
-                PropertyChanged(this, new PropertyChangedEventArgs("TagList"));
+                OnPropertyChanged(nameof(TagList));
             }
         }
         public List<GeoLocation> LocationList
@@ -121,52 +101,13 @@ namespace Muhurtha.Desktop
             set
             {
                 _locationList = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("LocationList"));
-            }
-        }
-
-        public Brush NewSubDomainBorderColor
-        {
-            get => _newSubDomainBorderColor;
-            set
-            {
-                _newSubDomainBorderColor = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("NewSubDomainBorderColor"));
-            }
-        }
-        public Thickness NewSubDomainBorderThickness
-        {
-            get => _newSubDomainBorderThickness;
-            set
-            {
-                _newSubDomainBorderThickness = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("NewSubDomainBorderThickness"));
+                OnPropertyChanged(nameof(LocationList));
             }
         }
 
 
 
         /** PUBLIC METHODS **/
-        public void setDefaultStyling()
-        {
-            //name shortning
-            var color = DefaultBorderColor;
-            var thick = DefaultTextInputThickness;
-
-
-            //set default value only if not default (stops unnecessary style updates)
-            if (NewSubDomainBorderColor != color) { NewSubDomainBorderColor = color; }
-            if (NewSubDomainBorderThickness != thick) { NewSubDomainBorderThickness = thick; }
-        }
-
-        /// <summary>
-        /// Shows domain not available error
-        /// </summary>
-        public void DomainNotAvailableError()
-        {
-            NewSubDomainBorderColor = ErrorBorderColor;
-            NewSubDomainBorderThickness = ErrorBorderThickness;
-        }
 
 
 

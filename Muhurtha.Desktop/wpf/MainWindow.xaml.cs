@@ -44,5 +44,12 @@ namespace Muhurtha.Desktop
         private void Window_Initialized(object sender, RoutedEventArgs e) => MainGrid.Window_Initialized(sender, e);
         private void SendToCalendarButton_Click(object sender, RoutedEventArgs e) => MainGrid.EventOptions.SendToCalendarButton_Click(sender, e);
         private void CancelCalculateEventsButton_Click(object sender, RoutedEventArgs e) => MainGrid.EventsCalculatingMessageBox.CancelCalculateEventsButton_Click(sender, e);
+        private void CancelSendEventsButton_Click(object sender, RoutedEventArgs e) => MainGrid.SendToCalendarBox.CancelSendEventsButton_Click(sender, e);
+        private void SendEventsButton_Click(object sender, RoutedEventArgs e) => MainGrid.SendToCalendarBox.SendEventsButton_Click(sender, e);
+        private void CancelSendingEventsButton_Click(object sender, RoutedEventArgs e) => MainGrid.SendingEventsMessageBox.CancelSendingEventsButton_Click(sender, e);
+        private void Account_SelectionChanged(object sender, SelectionChangedEventArgs e) => MainGrid.SendToCalendarBox.Account_SelectionChanged(sender, e);
+        private void SendToCalendarBox_OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) => MainGrid.SendToCalendarBox.SendToCalendarBox_OnIsVisibleChanged(sender, e);
+
+        private void CalendarList_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => MainGrid.SendToCalendarBox.CalendarList_OnPreviewMouseLeftButtonDown(sender, e);
     }
 }

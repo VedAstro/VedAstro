@@ -13,17 +13,18 @@ namespace Muhurtha.Desktop
     /// The view modal of the Main Window that contains all the rest of view modals
     /// All manipulation to underlying XML is done through this modal
     /// </summary>
-    public class MainGrid : INotifyPropertyChanged
+    public class MainGrid : ViewModal
     {
         /** BACKING FIELDS **/
         private EventView _eventView;
         private EventOptions _eventOptions;
-        private Visibility _smokeScreenVisibility = Visibility.Hidden; //default hidden
         private EventsCalculatingMessageBox _eventsCalculatingMessageBox;
+        private SmokeScreen _smokeScreen;
+        private SendToCalendarBox _sendToCalendarBox;
+        private SendingEventsMessageBox _sendingEventsMessageBox;
 
 
         /** EVENTS **/
-        public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler WindowInitialized;
         public event EventHandler WindowClosed;
 
@@ -33,9 +34,14 @@ namespace Muhurtha.Desktop
         /// </summary>
         public MainGrid()
         {
+            //creates a new instance for all the view models
+            //this also sets any defaults that the view modal implementss
             _eventView = new();
             _eventOptions = new();
             _eventsCalculatingMessageBox = new();
+            _smokeScreen = new();
+            _sendToCalendarBox = new();
+            _sendingEventsMessageBox = new();
         }
 
 
@@ -45,17 +51,9 @@ namespace Muhurtha.Desktop
         public EventView EventView => _eventView;
         public EventOptions EventOptions => _eventOptions;
         public EventsCalculatingMessageBox EventsCalculatingMessageBox => _eventsCalculatingMessageBox;
-
-        //smoke screen used to mask main content while showing other windows
-        public Visibility SmokeScreenVisibility
-        {
-            get => _smokeScreenVisibility;
-            set
-            {
-                _smokeScreenVisibility = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SmokeScreenVisibility"));
-            }
-        }
+        public SmokeScreen SmokeScreen => _smokeScreen;
+        public SendToCalendarBox SendToCalendarBox => _sendToCalendarBox;
+        public SendingEventsMessageBox SendingEventsMessageBox => _sendingEventsMessageBox;
 
 
 
@@ -65,16 +63,8 @@ namespace Muhurtha.Desktop
 
 
 
-        /** PUBLIC METHODS ROUTING **/
+        /** PUBLIC METHODS **/
 
-
-
-
-        /** INotifyPropertyChanged **/
-        protected virtual void onPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
     }
 }

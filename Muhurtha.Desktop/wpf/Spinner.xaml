@@ -122,7 +122,7 @@
                                     <Ellipse x:Name="ellipseNW" Canvas.Left="{Binding Path=EllipseNW.Left}" Canvas.Top="{Binding Path=EllipseNW.Top}"/>
 
                                 </Canvas>
-                                <Label Content="{Binding Path=Text}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <!--<Label Content="{Binding Path=Text}" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
                             </Grid>
                         </Border>
                     </ControlTemplate>

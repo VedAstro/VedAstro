@@ -38,8 +38,8 @@
     <Style x:Key="TextBox">
 
         <Setter Property="Control.VerticalContentAlignment" Value="Center" />
-        <Setter Property="Control.BorderThickness" Value="{Binding TextBoxBorderThickness}" />
-        <Setter Property="Control.BorderBrush" Value="{Binding TextBoxBorderColor}" />
+        <!--<Setter Property="Control.BorderThickness" Value="{Binding TextBoxBorderThickness}" />
+        <Setter Property="Control.BorderBrush" Value="{Binding TextBoxBorderColor}" />-->
         <Setter Property="TextBox.TextWrapping" Value="Wrap" />
         <Setter Property="FrameworkElement.Height" Value="23" />
     </Style>

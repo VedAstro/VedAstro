@@ -15,11 +15,13 @@ namespace Genso.Astrology.Library
         }
 
         //METHODS
-        public Time GetBirthDateTime()
-        {
-            return _birthTime;
-        }
+        public Time GetBirthDateTime() => _birthTime;
 
+        /// <summary>
+        /// Get the place of birth
+        /// Note: uses the location stored in birth "Time"
+        /// </summary>
+        public GeoLocation GetBirthLocation() => _birthTime.GetGeoLocation();
 
 
         //OVERRIDES METHODS

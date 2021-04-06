@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Genso.Framework;
 
-namespace Genso.Astrology.Library
+namespace Horoscope.Desktop
 {
     /// <summary>
+    /// Class to encapsulate access to data files
     /// Manager to handle getting from & saving to database (XML files on disk)
     /// </summary>
     public static class DatabaseManager
     {
-
-
         /// <summary>
-        /// Gets a list of all event data from database
+        /// Gets a list of all prediction data from database
         /// Note: element names used here corespond to the ones found in the XML file
         ///       if change here, than change in XML as well
         /// </summary>
-        public static List<EventData> GetEventDataList(string filePath)
+        public static List<EventData> GetPredictionDataList(string filePath)
         {
             //get the event data list in a structed form xml file
             Data eventDataListFile = new Data(filePath);
@@ -80,7 +82,6 @@ namespace Genso.Astrology.Library
             }
 
         }
-
 
 
         /// <summary>
@@ -157,5 +158,7 @@ namespace Genso.Astrology.Library
 
             return list;
         }
+
+
     }
 }

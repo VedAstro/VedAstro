@@ -1030,7 +1030,7 @@ namespace Genso.Astrology.Library
 
                 //POSSIBLE 1
                 //1.1 Lagna occupied by Lagna Lord
-                bool lagnaLordInLagna = IsLagnaLordInLagnaOccuring(time);
+                bool lagnaLordInLagna = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House1, time);
 
                 //1.2 Navamsa lagna occupied Navamsa Lagna Lord
                 bool navamsaLagnaLordInNavamsaLagna = IsNavamsaLagnaLordInNavamsaLagnaOccuring(time);
@@ -1081,7 +1081,7 @@ namespace Genso.Astrology.Library
 
                 //POSSIBLE 1
                 //7th occupied by 7th Lord
-                bool _7thLordIn7th = Is7thLordIn7thOccuring(time);
+                bool _7thLordIn7th = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House7, time);
 
                 //Navamsa 7th occupied Navamsa 7th Lord
                 bool navamsa7thLordInNavamsa7th = IsNavamsa7thLordInNavamsa7thOccuring(time);
@@ -1387,56 +1387,6 @@ namespace Genso.Astrology.Library
                 //3.0
                 //check if 7th lord is in navamsa 7th sign
                 if (navamsaSignOfNavamsa7thLord == navamsa7thSign)
-                {
-                    //event is occuring
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            bool IsLagnaLordInLagnaOccuring(Time time)
-            {
-                //lagna lord is in same sign as first house
-
-                //get lord of lagna (house 1)
-                PlanetName lordOfLagna = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-                //get house 1 sign
-                var house1Sign = AstronomicalCalculator.GetHouseSignName(1, time);
-
-                //get sign lagna lord is in
-                var signLagnaLordIsIn = AstronomicalCalculator.GetPlanetRasiSign(lordOfLagna, time);
-
-                //if the house 1 sign & lagna lord sign is same
-                if (house1Sign == signLagnaLordIsIn.GetSignName())
-                {
-                    //event is occuring
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            bool Is7thLordIn7thOccuring(Time time)
-            {
-                //7t lord is in same sign as 7th house
-
-                //get lord of 7th 
-                PlanetName lordOf7th = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-                //get house 7 sign
-                var house7Sign = AstronomicalCalculator.GetHouseSignName(7, time);
-
-                //get sign 7th lord is in
-                var sign7thLordIsIn = AstronomicalCalculator.GetPlanetRasiSign(lordOf7th, time);
-
-                //if the house 7 sign & 7th lord sign is same
-                if (house7Sign == sign7thLordIsIn.GetSignName())
                 {
                     //event is occuring
                     return true;
@@ -3806,6 +3756,154 @@ namespace Genso.Astrology.Library
 
 
         #endregion
+
+        #region HOROSCOPE
+
+        //Results of Lord of 1st being Situated in Different Houses
+
+        [EventCalculator(EventName.House1LordInHouse1)]
+        public static bool House1LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House1, time);
+
+        [EventCalculator(EventName.House1LordInHouse2)]
+        public static bool House1LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House2, time);
+
+        [EventCalculator(EventName.House1LordInHouse3)]
+        public static bool House1LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House3, time);
+
+        [EventCalculator(EventName.House1LordInHouse4)]
+        public static bool House1LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House4, time);
+
+        [EventCalculator(EventName.House1LordInHouse5)]
+        public static bool House1LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House5, time);
+
+        [EventCalculator(EventName.House1LordInHouse6)]
+        public static bool House1LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House6, time);
+
+        [EventCalculator(EventName.House1LordInHouse7)]
+        public static bool House1LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House7, time);
+
+        [EventCalculator(EventName.House1LordInHouse8)]
+        public static bool House1LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House8, time);
+
+        [EventCalculator(EventName.House1LordInHouse9)]
+        public static bool House1LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House9, time);
+
+        [EventCalculator(EventName.House1LordInHouse10)]
+        public static bool House1LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House10, time);
+
+        [EventCalculator(EventName.House1LordInHouse11)]
+        public static bool House1LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House11, time);
+
+        [EventCalculator(EventName.House1LordInHouse12)]
+        public static bool House1LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House12, time);
+
+
+        //Results of Lord of Second being Situated in Different Houses
+
+        [EventCalculator(EventName.House2LordInHouse1)]
+        public static bool House2LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House1, time);
+        [EventCalculator(EventName.House2LordInHouse2)]
+        public static bool House2LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House2, time);
+        [EventCalculator(EventName.House2LordInHouse3)]
+        public static bool House2LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House3, time);
+        [EventCalculator(EventName.House2LordInHouse4)]
+        public static bool House2LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House4, time);
+        [EventCalculator(EventName.House2LordInHouse5)]
+        public static bool House2LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House5, time);
+        [EventCalculator(EventName.House2LordInHouse6)]
+        public static bool House2LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House6, time);
+        [EventCalculator(EventName.House2LordInHouse7)]
+        public static bool House2LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House7, time);
+        [EventCalculator(EventName.House2LordInHouse8)]
+        public static bool House2LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House8, time);
+        [EventCalculator(EventName.House2LordInHouse9)]
+        public static bool House2LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House9, time);
+        [EventCalculator(EventName.House2LordInHouse10)]
+        public static bool House2LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House10, time);
+        [EventCalculator(EventName.House2LordInHouse11)]
+        public static bool House2LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House11, time);
+        [EventCalculator(EventName.House2LordInHouse12)]
+        public static bool House2LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House12, time);
+
+        //Results of Lord of 3rd being Situated in Different Houses
+        [EventCalculator(EventName.House3LordInHouse1)]
+        public static bool House3LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House1, time);
+        [EventCalculator(EventName.House3LordInHouse2)]
+        public static bool House3LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House2, time);
+        [EventCalculator(EventName.House3LordInHouse3)]
+        public static bool House3LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House3, time);
+        [EventCalculator(EventName.House3LordInHouse4)]
+        public static bool House3LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House4, time);
+        [EventCalculator(EventName.House3LordInHouse5)]
+        public static bool House3LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House5, time);
+        [EventCalculator(EventName.House3LordInHouse6)]
+        public static bool House3LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House6, time);
+        [EventCalculator(EventName.House3LordInHouse7)]
+        public static bool House3LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House7, time);
+        [EventCalculator(EventName.House3LordInHouse8)]
+        public static bool House3LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House8, time);
+        [EventCalculator(EventName.House3LordInHouse9)]
+        public static bool House3LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House9, time);
+        [EventCalculator(EventName.House3LordInHouse10)]
+        public static bool House3LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House10, time);
+        [EventCalculator(EventName.House3LordInHouse11)]
+        public static bool House3LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House11, time);
+        [EventCalculator(EventName.House3LordInHouse12)]
+        public static bool House3LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House12, time);
+
+
+        #endregion
     }
 
 }
+
+//--------------ARCHIVED CODE-----------------
+//bool IsLagnaLordInLagnaOccuring(Time time)
+//{
+////lagna lord is in same sign as first house
+
+////get lord of lagna (house 1)
+//PlanetName lordOfLagna = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+
+////get house 1 sign
+//var house1Sign = AstronomicalCalculator.GetHouseSignName(1, time);
+
+////get sign lagna lord is in
+//var signLagnaLordIsIn = AstronomicalCalculator.GetPlanetRasiSign(lordOfLagna, time);
+
+//    //if the house 1 sign & lagna lord sign is same
+//    if (house1Sign == signLagnaLordIsIn.GetSignName())
+//{
+//    //event is occuring
+//    return true;
+//}
+//else
+//{
+//    return false;
+//}
+//}
+//bool Is7thLordIn7thOccuring(Time time)
+// {
+// //7t lord is in same sign as 7th house
+// 
+// //get lord of 7th 
+// PlanetName lordOf7th = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+// 
+// //get house 7 sign
+// var house7Sign = AstronomicalCalculator.GetHouseSignName(7, time);
+// 
+// //get sign 7th lord is in
+// var sign7thLordIsIn = AstronomicalCalculator.GetPlanetRasiSign(lordOf7th, time);
+// 
+// //if the house 7 sign & 7th lord sign is same
+// if (house7Sign == sign7thLordIsIn.GetSignName())
+// {
+// //event is occuring
+// return true;
+// }
+// else
+// {
+// return false;
+// }
+// }
+// 

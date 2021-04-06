@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <!--Results of Lord of First House Occupying Different Houses-->
+  <Event>
+    <Id>1</Id>
+    <Name>House1LordInHouse1</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      The subject lives by his own exertion, will have an independent spirit and will have two wives or one married and another illegal.
+      If the Lagnadhipati is well disposed in Lagna, the person becomes famous in his own community and country.
+      The reader must note that the combination is of general application. The exact nature of the results should be interpreted by taking into account the strength, weakness and other factors attendant upon the house lord. If Lagnadhipati is in Lagna and aspected by evil planets, the results produced will be quite different from those which he would have produced by being aspected by benefics. The same rules apply to all Bhavas which should be borne in mind by every reader.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>2</Id>
+    <Name>House1LordInHouse2</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      There will be more of gains, teased or worried by enemies, good character respectable and generous hearted.
+      Well disposed. He will gladly discharge his duties towards his kith and kin, and will be ambitious. He will possess prominent eyes and be blessed with forethought.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>3</Id>
+    <Name>House1LordInHouse3</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Makes one highly couragious, fortunate, reepectable, two wives, intelligent and happy.
+      When Lagnadhipati is well disposed, the native's rise in life will be brought about by his brothers. He may become famous as a musician or a mathematician depending upon the nature of the sign and the planets involved.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>4</Id>
+    <Name>House1LordInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      There will be happiness from parents, many brothers, materialistic, well built, fair looking and well-behaved.
+      If the 4th lord is favourably disposed, the person will acquire considerable landed properties, specially through maternal sources. He will be rich, happy, famous and commands a number of conveyances.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>5</Id>
+    <Name>House1LordInHouse5</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      The first child does not survive, not much happiness from children, short tempered, subservient and serving others.
+      If fortified : In the good graces of rulers or powerful political parties and likely to be absorbed into trade or diplomatic services. He will propitiate deities consistent with the indications of the fifth lord.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>6</Id>
+    <Name>House1LordInHouse6</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      In addition to the results produced by the lord of Lagna being in the third, the following may also be noted. There will be bebts but they will be liquidated when the Dasa of the Lagndhipati comes.
+      When the lord is fortified, the native joins the army, becomes a Commander or even a Commander-in-chief provided the lord's Dasa operates at the opportune period. Or, he may become head of medical or health services or an expert physician or surgeon. Here the other influences should be suitably balanced.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>7</Id>
+    <Name>House1LordInHouse7</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      The wife does not live or there will be more than one marriage. Later in life becomes detached from worldly affairs and tries to lead an ascetic life.
+      Depending upon other factors the subject will either be rich or poor. There will be much travelling.
+      If well disposed, he will spend most of his time in foriegn countries and lead a licentious life. Or he will be a puppet in the hands of his parents-in-law.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>8</Id>
+    <Name>House1LordInHouse8</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Learned, gambling tendencies, interested in occultism and mean character.
+      If the lord is strong the native takes pride in helping others, has a number of friends, religiously inclined and will have a peaceful and sudden end.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>9</Id>
+    <Name>House1LordInHouse9</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Generally fortunate, protector of others, religious; if a Hindu—worshipper of Vishnu, good orator, happiness on account of wife and children; and rich.
+      Provided the lord is well disposed, he will inherit good ancestral and paternal property. The father will be famous, philanthropic and god-fearing.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>10</Id>
+    <Name>House1LordInHouse10</Name>
+    <Nature>Neutral</Nature>
+    <Description>In addition to the results of the 4th house, there will be professional success, honoured by eminent men, a research scholar or specialisation in that branch of knowledge or profession which is represented by lord of Lagna and the 10th.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>11</Id>
+    <Name>House1LordInHouse11</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      In addition to the results of the 2nd house, there will always be gains in business if a businessman. The subject will not experience financial straits.
+      He owes his prosperity to his elder brother. He will earn enormous business profits, consistent with the indications of the other planets joining the combination.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>12</Id>
+    <Name>House1LordInHouse12</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      The same results as in the 8th are produced. In addition, there will be many losses, visiting holy places and no success in business enterprises.
+      He will spend inherited riches on charities and other deserving causes. Emotionally balanced he will dedicate himself for public weal.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <!--Results of Lord of Second being Situated in Different Houses-->
+  <Event>
+    <Id>13</Id>
+    <Name>House2LordInHouse1</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      The native becomes no doubt wealthy but he hates his own family, lacks polite manners, becomes passionate, subservient and time-serving.
+      When the lord of the 2nd is in Lagna, one will earn money by his own effort, intelligence and learning or he will get inherited wealth if the 9th
+      lord or the Sun has anything to do with this combination.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>14</Id>
+    <Name>House2LordInHouse2</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Becomes proud. The native may marry twice or thrice depending upon the strength of the seventh house. He may become childless.
+      The position of the 2nd lord in a constellation which does not happen to be the 3rd, 5th and 7th from Janma Nakshatra is highly desirable, especially
+      if he is otherwise fortified, i.e., joined with or aspected by benefics. The exaltation of the 2nd lord of his disposition in Lagna, the 4th, 5th, 7th, 9th or 10th,
+      will fortify him to the extent of making him a yogakaraka. The native will be enabled to earn considerable fortune through business or other occupations consistent with the nature of the 2nd lord and 2nd house. Depending upon the nature of the aspects cast on the 2nd lord by malefic planets, the native will sustain losses. An affliction to the 2nd lord may also express itself in the shape of the subject not getting nutritious and delicious food, or his family and children suffering from constant diseases, or want of cordial relations between the native and his life-partner.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>15</Id>
+    <Name>House2LordInHouse3</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Brave, intelligent, good-natured but depraved character. Atheistic tendencies will be rampant and he becomes addicted to luxuries. Later in life he turns out to be a miser.
+      When the 2nd lord in the 3rd is well fortified, he will be benefited by his sisters. He will benefit by learning fine arts, viz., music and dancing. He will also indulge in propitiating Kshudra Devatas or evil spirits.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>16</Id>
+    <Name>House2LordInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      The above results will apply in addition to the following. He will spend money for his own happiness. He will be highly frugal in dealing with money.
+      When the 2nd lord in the 4th is well fortified, one will earn well as an automobile dealer or agent or an agriculturist or landlord or commission agent. He will also be benefited by his maternal relations. There will be losses on this account if the 4th lord is afflicted.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>17</Id>
+    <Name>House2LordInHouse5</Name>
+    <Nature>Neutral</Nature>
+    <Description>Hating family, sensual, not spending money even on children, he lacks manners and etiquette. When the 2nd lord in the 5th is well fortified there will be unexpected acquisition of wealth through lotteries, crosswords, or the favour of rulers.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>18</Id>
+    <Name>House2LordInHouse6</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Income and expenditure from enemies. He will suffer from defects or diseases in the anus and thighs.
+      Amassing of wealth by black-marketing, deceit, dissimulation and by creating misunderstandings and troubles between friends and relatives and through questionable and suspicious dealings can be anticipated if the second lord joins the 6th and is well fortified. If afflicted, he will be involved in these troubles and sentenced for such crimes as breach of trust, forgeries and perjuries.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>19</Id>
+    <Name>House2LordInHouse7</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Likely to become a healer. Laxity of morals will mark both husband and wife. He will waste much money on the gratification of the senses.
+      When the second lord who joins the 7th with the 7th lord is strong there will be influx of wealth through foreign sources. The native will undertake journeys to foreign countries and do business. When the Rasi, Navamsa or the constellation held by the 2nd lord happens to be a feminine one, then he will benefit by contact with women.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>20</Id>
+    <Name>House2LordInHouse8</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Will have very little or no happiness from wife or husband. Misunderstandings with elder brothers. Gets landed properties.
+      When the 2nd lord is strong, there will be influx as well as loss of wealth. Actual observation reveals that under such a combination, there will hardly be any earnings, but inherited or accumulated wealth will disappear.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>21</Id>
+    <Name>House2LordInHouse9</Name>
+    <Nature>Neutral</Nature>
+    <Description>Skilful, ill-health in young age but healthy afterwards, will possess lot of wealth and become happy. When the 2nd lord is well fortified and the 9th lord is in Lagna, the native will have good inheritance. There will also be benefits through different sources according to the nature of the sign and nakshatra held by the 2nd lord.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>22</Id>
+    <Name>House2LordInHouse10</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Respect from elders and superiors, learned, wealthy and he earns by his own exertions.
+      The native will take to a number of useful avocations. He will do business or take to agriculture and also engage himself in philosophical lectures and dissertations, and thereby benefit financially. Here again, the constellation and the sign held by the 2nd lord determine the exact nature and sources of earnings. Powerful afflictions will cause loss from the very same sources.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>23</Id>
+    <Name>House2LordInHouse11</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      Health will be bad during childhood, earns considerable wealth but becomes unscrupulous.
+      When well fortified, one earns by lending money or as a banker or by running a boarding house.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>24</Id>
+    <Name>House2LordInHouse12</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+      The native becomes a respectable man. In all probability he will be a government servant, and will be deprived of the happiness of elder brother.
+      The income will be through ecclesiastical sources. If the second lord is afflicted, he will lose money on this account.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <!--Results of Lord of 3rd being Situated in Different Houses-->
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse1</Name>
+    <Nature>Neutral</Nature>
+    <Description>Earns livelihood by self-exertion, becomes vindictive, lean and tall body, brave and courageous, always sickly and serving others. When well fortified he will become an expert in dancing, music and acting, and the means of livelihood will be primarily fine arts. He will earn a good name as an actor.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse2</Name>
+    <Nature>Neutral</Nature>
+    <Description>This is an unfavourable position as it makes the subject rather unscrupulous unless there are other favourable combinations. He will make advances on the women and wealth of others. Likes mean deeds and is generally devoid of happiness. He is likely to lose his younger brothers.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse3</Name>
+    <Nature>Neutral</Nature>
+    <Description>Brave, surrounded by friends, relatives, blessed with good children, wealthy, happy and contented. The 3rd lord well disposed in the 3rd, 6th or 11th indicates a number of younger brothers. When the 3rd lord happens to be Mars and occupies the 3rd, then, generally, the native will lose all his younger brothers. Saturn will also give similar effects. The Sun in a similar position will kill elder brothers.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>If the lord of the 3rd is in the 4th, life will be happy on the whole. He becomes rich and learned. But the wife will be cruel-hearted and mean. When the lord of the 3rd is well fortified in the 4th and the lords of Lagna and 9th are rendered weak, his brothers will survive him. He will have step-brothers if the 9th lord is strong. When Mars is weak he will lose his lands and he will have to live in others' houses. Evil results will be minimised if the 3rd house is beneficially disposed.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse5</Name>
+    <Nature>Neutral</Nature>
+    <Description>Much pleasure will not be derived from children. Financially well off in life. Friction will prevail in the domestic life. If the 3rd lord is in the 5th, well disposed, the native will be highly benefited by his brothers. He will carry on agricultural operations on a large scale, or he will be adopted by a rich family. He will also shine well in Government service.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse6</Name>
+    <Nature>Neutral</Nature>
+    <Description>Hates brothers and relatives and difficulty through them. Becomes rich. Maternal relatives will suffer. Accepts illegal gratifications. When the 3rd lord is in the 6th, well disposed, younger brother joins the Army. One of the brothers will become a successful physician. If the 6th lord also joins the 3rd, the native becomes either a sportsman, physical culturist or an athlete. When the 6th and the 3rd are both afflicted, he will suffer from diseases and be tormented by enemies and he will himself be deceitful.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse7</Name>
+    <Nature>Neutral</Nature>
+    <Description>May incur the displeasure of rulers or authorities. Many vicissitudes in life. Much suffering in childhood. The union will be unfortunate. Danger while travelling. When the 3rd lord is in the 7th, well fortified, there will be cordial feelings between brothers. When the 7th lord is in Lagna, one of the brothers will settle in a foreign country and he will help the native.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse8</Name>
+    <Nature>Neutral</Nature>
+    <Description>Involvement in a criminal case or false accusations. Trouble on account of death or bequests, marriage unfortunate, career will not be smooth, victim of misfortune. When the 3rd lord is in the 8th, he will suffer from a serious and dangerous disease and lose his younger brother.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse9</Name>
+    <Nature>Neutral</Nature>
+    <Description>Fortune will improve after marriage. Father untrustworthy. Long journeys. Sudden and unexpected changes in life. When the 3rd lord is in the 9th, favourably disposed, the native's brother will inherit ancestral property. The native himself will be benefited by his brother. When afflicted, the person will have misunderstandings with his father.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse10</Name>
+    <Nature>Neutral</Nature>
+    <Description>A quarrelsome and faithless wife. The native will become rich. He will be happy and intelligent. Gain from journeys connected with profession. When the 3rd lord is in the 10th, all the brother, will shine well and they will be helpful to him in all ways</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse11</Name>
+    <Nature>Neutral</Nature>
+    <Description>Not a very good combination.. Earnings with effort. He becomes vindictive. The body will be unattractive and emaciated. Subservient to or dependent upon others, and liable to surfer from frequent attacks of illness.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>House3LordInHouse12</Name>
+    <Nature>Neutral</Nature>
+    <Description>Sorrow through relatives, gets fortune from marriage, seclusion. Great ups and downs. Unscrupulous father. When the 3rd lord is in the 12th, the youngest brother will be a tyrant. The native becomes poor on account of him.</Description>
+    <Tag>Personal</Tag>
+  </Event>
+</Root>

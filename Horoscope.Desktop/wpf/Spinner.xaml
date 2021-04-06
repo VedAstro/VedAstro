@@ -1,0 +1,136 @@
+﻿<UserControl x:Class="Horoscope.Desktop.Spinner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:local="clr-namespace:Horoscope.Desktop"
+             mc:Ignorable="d" 
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Color x:Key="FilledColor" A="255" B="155" R="155" G="155"/>
+        <Color x:Key="UnfilledColor" A="0" B="155" R="155" G="155"/>
+
+        <Style x:Key="BusyAnimationStyle" TargetType="Control">
+            <Setter Property="Background" Value="Transparent"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Control">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="Animation0" BeginTime="00:00:00.0" RepeatBehavior="Forever">
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipseN" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                    <SplineColorKeyFrame KeyTime="00:00:00.0" Value="{StaticResource FilledColor}"/>
+                                    <SplineColorKeyFrame KeyTime="00:00:01.6" Value="{StaticResource UnfilledColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                            <Storyboard x:Key="Animation1" BeginTime="00:00:00.2" RepeatBehavior="Forever">
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipseNE" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                    <SplineColorKeyFrame KeyTime="00:00:00.0" Value="{StaticResource FilledColor}"/>
+                                    <SplineColorKeyFrame KeyTime="00:00:01.6" Value="{StaticResource UnfilledColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                            <Storyboard x:Key="Animation2" BeginTime="00:00:00.4" RepeatBehavior="Forever">
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipseE" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                    <SplineColorKeyFrame KeyTime="00:00:00.0" Value="{StaticResource FilledColor}"/>
+                                    <SplineColorKeyFrame KeyTime="00:00:01.6" Value="{StaticResource UnfilledColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                            <Storyboard x:Key="Animation3" BeginTime="00:00:00.6" RepeatBehavior="Forever">
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipseSE" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                    <SplineColorKeyFrame KeyTime="00:00:00.0" Value="{StaticResource FilledColor}"/>
+                                    <SplineColorKeyFrame KeyTime="00:00:01.6" Value="{StaticResource UnfilledColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                            <Storyboard x:Key="Animation4" BeginTime="00:00:00.8" RepeatBehavior="Forever">
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipseS" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                    <SplineColorKeyFrame KeyTime="00:00:00.0" Value="{StaticResource FilledColor}"/>
+                                    <SplineColorKeyFrame KeyTime="00:00:01.6" Value="{StaticResource UnfilledColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                            <Storyboard x:Key="Animation5" BeginTime="00:00:01.0" RepeatBehavior="Forever">
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipseSW" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                    <SplineColorKeyFrame KeyTime="00:00:00.0" Value="{StaticResource FilledColor}"/>
+                                    <SplineColorKeyFrame KeyTime="00:00:01.6" Value="{StaticResource UnfilledColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                            <Storyboard x:Key="Animation6" BeginTime="00:00:01.2" RepeatBehavior="Forever">
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipseW" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                    <SplineColorKeyFrame KeyTime="00:00:00.0" Value="{StaticResource FilledColor}"/>
+                                    <SplineColorKeyFrame KeyTime="00:00:01.6" Value="{StaticResource UnfilledColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+
+                            <Storyboard x:Key="Animation7" BeginTime="00:00:01.4" RepeatBehavior="Forever">
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="ellipseNW" Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)">
+                                    <SplineColorKeyFrame KeyTime="00:00:00.0" Value="{StaticResource FilledColor}"/>
+                                    <SplineColorKeyFrame KeyTime="00:00:01.6" Value="{StaticResource UnfilledColor}"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsVisible" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Animation0}" x:Name="Storyboard0" />
+                                    <BeginStoryboard Storyboard="{StaticResource Animation1}" x:Name="Storyboard1"/>
+                                    <BeginStoryboard Storyboard="{StaticResource Animation2}" x:Name="Storyboard2"/>
+                                    <BeginStoryboard Storyboard="{StaticResource Animation3}" x:Name="Storyboard3"/>
+                                    <BeginStoryboard Storyboard="{StaticResource Animation4}" x:Name="Storyboard4"/>
+                                    <BeginStoryboard Storyboard="{StaticResource Animation5}" x:Name="Storyboard5"/>
+                                    <BeginStoryboard Storyboard="{StaticResource Animation6}" x:Name="Storyboard6"/>
+                                    <BeginStoryboard Storyboard="{StaticResource Animation7}" x:Name="Storyboard7"/>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <StopStoryboard BeginStoryboardName="Storyboard0"/>
+                                    <StopStoryboard BeginStoryboardName="Storyboard1"/>
+                                    <StopStoryboard BeginStoryboardName="Storyboard2"/>
+                                    <StopStoryboard BeginStoryboardName="Storyboard3"/>
+                                    <StopStoryboard BeginStoryboardName="Storyboard4"/>
+                                    <StopStoryboard BeginStoryboardName="Storyboard5"/>
+                                    <StopStoryboard BeginStoryboardName="Storyboard6"/>
+                                    <StopStoryboard BeginStoryboardName="Storyboard7"/>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <Grid>
+                                <Canvas>
+                                    <Canvas.Resources>
+                                        <Style TargetType="Ellipse">
+                                            <Setter Property="Width" Value="{Binding Path=EllipseSize}"/>
+                                            <Setter Property="Height" Value="{Binding Path=EllipseSize}" />
+                                            <Setter Property="Fill" Value="Transparent" />
+                                        </Style>
+                                    </Canvas.Resources>
+
+                                    <Ellipse x:Name="ellipseN" Canvas.Left="{Binding Path=EllipseN.Left}" Canvas.Top="{Binding Path=EllipseN.Top}"/>
+                                    <Ellipse x:Name="ellipseNE" Canvas.Left="{Binding Path=EllipseNE.Left}" Canvas.Top="{Binding Path=EllipseNE.Top}"/>
+                                    <Ellipse x:Name="ellipseE" Canvas.Left="{Binding Path=EllipseE.Left}" Canvas.Top="{Binding Path=EllipseE.Top}"/>
+                                    <Ellipse x:Name="ellipseSE" Canvas.Left="{Binding Path=EllipseSE.Left}" Canvas.Top="{Binding Path=EllipseSE.Top}"/>
+                                    <Ellipse x:Name="ellipseS" Canvas.Left="{Binding Path=EllipseS.Left}" Canvas.Top="{Binding Path=EllipseS.Top}"/>
+                                    <Ellipse x:Name="ellipseSW" Canvas.Left="{Binding Path=EllipseSW.Left}" Canvas.Top="{Binding Path=EllipseSW.Top}"/>
+                                    <Ellipse x:Name="ellipseW" Canvas.Left="{Binding Path=EllipseW.Left}" Canvas.Top="{Binding Path=EllipseW.Top}"/>
+                                    <Ellipse x:Name="ellipseNW" Canvas.Left="{Binding Path=EllipseNW.Left}" Canvas.Top="{Binding Path=EllipseNW.Top}"/>
+
+                                </Canvas>
+                                <!--<Label Content="{Binding Path=Text}" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border>
+        <Control Style="{StaticResource BusyAnimationStyle}"/>
+    </Border>
+</UserControl>

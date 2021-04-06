@@ -6255,6 +6255,23 @@ namespace Genso.Astrology.Library
             //check if planet is in kendra
             return planetHouse == 4 || planetHouse == 7 || planetHouse == 10;
         }
+
+        /// <summary>
+        /// Checks if the lord of a house is in the specified house.
+        /// Example question : Is Lord of 1st house in 2nd house?
+        /// </summary>
+        public static bool IsHouseLordInHouse(HouseName lordHouse, HouseName occupiedHouse, Time time)
+        {
+            //get the house lord
+            var houseLord = AstronomicalCalculator.GetLordOfHouse(lordHouse, time);
+
+            //get house the lord is in
+            var houseIsIn = AstronomicalCalculator.GetHousePlanetIsIn(time, houseLord);
+
+            //if it matches then occuring
+            return houseIsIn == (int)occupiedHouse;
+
+        }
     }
 
 }

@@ -248,8 +248,10 @@ namespace Muhurtha.Desktop
             gui.MainGrid.EventOptions.LocationList = MuhurthaCore.GetAllLocationList();
 
             //set default start & end times
-            gui.MainGrid.EventOptions.StartTimeText = "00:00 19/03/2021 +08:00";
-            gui.MainGrid.EventOptions.EndTimeText = "23:59 20/03/2021 +08:00";
+            var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
+            var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
+            gui.MainGrid.EventOptions.StartTimeText = todayStart;
+            gui.MainGrid.EventOptions.EndTimeText = todayEnd;
         }
         private void CalculateAndUpdateEvents(object threadCanceler)
         {

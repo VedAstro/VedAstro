@@ -39,8 +39,6 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Creates a new instance of time from STD & Geo location
         /// </summary>
-        /// <param name="stdDateTime"></param>
-        /// <param name="geoLocation"></param>
         public Time(DateTimeOffset stdDateTime, GeoLocation geoLocation)
         {
             //store std time

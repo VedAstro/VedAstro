@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
@@ -40,7 +41,7 @@ namespace Horoscope.Desktop
                 Enum.TryParse(nameString, out EventName name);
                 var natureString = eventData.Element("Nature").Value;
                 Enum.TryParse(natureString, out EventNature nature);
-                var description = eventData.Element("Description").Value;
+                var description = getDescription(eventData.Element("Description").Value); //with proper formating
                 var tagString = eventData.Element("Tag").Value;
                 var tagList = getEventTags(tagString);
                 //todo needs to be moved to a better place
@@ -81,6 +82,21 @@ namespace Horoscope.Desktop
                 return returnTags;
             }
 
+            //little function to format the description coming from the file
+            //so that the description wraps nicely when rendered
+            string getDescription(string rawDescription)
+            {
+                //remove new line
+                //var cleaned1 = rawDescription.Replace("\n", "").Replace("\r", "");
+
+                //remove double spaces
+                //RegexOptions options = RegexOptions.None;
+                //Regex regex = new Regex("[ ]{3,}", options);
+                //var cleaned2 = regex.Replace(cleaned1, " ");
+                var cleaned = Regex.Replace(rawDescription, @"\s+", " ");
+
+                return cleaned;
+            }
         }
 
 

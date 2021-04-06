@@ -5,6 +5,11 @@ using Genso.Astrology.Library;
 
 namespace Genso.Astrology.Library
 {
+
+    /// <summary>
+    /// Data structure to encapsulat an event before it's calculated
+    /// In other words an object instance of the event data as stored in file
+    /// </summary>
     public struct EventData : IHasName
     {
         //FIELDS
@@ -87,6 +92,14 @@ namespace Genso.Astrology.Library
             return $"{_id} - {_name} - {_nature} - {_description}";
         }
 
+        public static bool operator ==(EventData left, EventData right)
+        {
+            return left.Equals(right);
+        }
 
+        public static bool operator !=(EventData left, EventData right)
+        {
+            return !(left == right);
+        }
     }
 }

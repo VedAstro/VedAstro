@@ -6,11 +6,11 @@
         xmlns:eo="http://schemas.essentialobjects.com/wpf/"
         xmlns:local="clr-namespace:Muhurtha.Desktop"
         mc:Ignorable="d"
-        Title="Muhurtha" Height="400" Width="734"
+        Title="Muhurtha" Height="450" Width="734"
         Loaded="Window_Initialized"
         Closed="Window_Closed"
         WindowStartupLocation="CenterScreen"
-        >
+>
 
     <!--Code to link style/resource dictionary-->
     <Window.Resources>
@@ -21,11 +21,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-
-
     <Grid DataContext="{StaticResource MainGrid}">
-
-
         <Grid>
             <Grid.ColumnDefinitions>
                 <!--Events List-->
@@ -35,7 +31,7 @@
             </Grid.ColumnDefinitions>
 
             <!--Events List-->
-            <Grid DataContext="{Binding EventView}" Grid.Column="0">
+            <Grid Name="EventList" DataContext="{Binding EventView}" Grid.Column="0">
 
                 <ListView  ItemsSource="{Binding EventList}">
                     <ListView.View>
@@ -52,10 +48,18 @@
             </Grid>
 
             <!--Event Options-->
-            <Grid DataContext="{Binding EventOptions}" Grid.Column="1" Background="#FFEBEBEB">
-                <StackPanel Style="{StaticResource ResourceKey=Panel}" x:Name="EventOptions" >
+            <Grid Name="EventOptions" DataContext="{Binding EventOptions}" Grid.Column="1" Background="#FFEBEBEB">
+                <StackPanel Style="{StaticResource ResourceKey=Panel}" >
 
-                    <Grid Margin="0,3,0,0">
+                    <ComboBox SelectedIndex="0" FontWeight="SemiBold" >
+                        <ComboBoxItem ToolTip="Calculate all muhurtha events for a specific time period">Calculate Events</ComboBoxItem>
+                        <ComboBoxItem ToolTip="Find a time with specific occuring events">Find Events</ComboBoxItem>
+                        <ComboBoxItem ToolTip="Developer logs for debugging">Logs</ComboBoxItem>
+                        <ComboBoxItem ToolTip="General settings for the program">Settings</ComboBoxItem>
+                    </ComboBox>
+
+
+                    <Grid Margin="0,15,0,0">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
@@ -77,7 +81,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Location" />
-                        <ComboBox Grid.Row="1" ItemsSource="{Binding LocationList}" SelectedItem="{Binding SelectedLocation}" VerticalContentAlignment="Center" Text="Select Location"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding LocationList}"   SelectedItem="{Binding SelectedLocation}" VerticalContentAlignment="Center" Text="Select Location"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
 
                     </Grid>
 
@@ -87,7 +91,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Person" />
-                        <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}" SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center" Text="Select Person"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}"  SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center" Text="Select Person"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
 
                     </Grid>
                     <Grid Margin="0,3,0,0">
@@ -96,8 +100,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
-                        <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}" SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center"
-                                  Text="Select Tag"  Focusable="False" IsEditable="True" IsReadOnly="True" />
+                        <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}"   SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center" Text="Select Tag"  Focusable="False" IsEditable="True" IsReadOnly="True" />
                     </Grid>
                     <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,15,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>
                     <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="SendToCalendarButton_Click" >Send to Calendar</Button>
@@ -107,7 +110,7 @@
         </Grid>
 
         <!--Smoke Screen : to hide the underlying main content view-->
-        <Grid Name="SmokeScreen" DataContext="{Binding SmokeScreen}" Visibility="{Binding Visibility}" Background="#A48C8C8C"/>
+        <Grid Name="SmokeScreen" DataContext="{Binding SmokeScreen}" Visibility="{Binding Visibility}" Background="#A48C8C8C" d:IsHidden="True"/>
 
         <Grid Name="EventsCalculatingMessageBox" Background="White" Width="300" Height="100"  DataContext="{Binding EventsCalculatingMessageBox}" Visibility="{Binding Visibility}" d:IsHidden="True">
             <StackPanel Style="{StaticResource ResourceKey=Panel}" VerticalAlignment="Center" HorizontalAlignment="Center" >
@@ -125,7 +128,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Name="SendToCalendarBox" IsVisibleChanged="SendToCalendarBox_OnIsVisibleChanged" DataContext="{Binding SendToCalendarBox}"  Width="230" Height="190" Visibility="{Binding Visibility}" Background="White">
+        <Grid Name="SendToCalendarBox" IsVisibleChanged="SendToCalendarBox_OnIsVisibleChanged" DataContext="{Binding SendToCalendarBox}"  Width="230" Height="190" Visibility="{Binding Visibility}" Background="White" d:IsHidden="True">
             <StackPanel Style="{StaticResource ResourceKey=Panel}">
                 <Label HorizontalAlignment="Center" FontWeight="SemiBold">Send events to calendar</Label>
                 <Grid Margin="0,3,0,0">
@@ -156,4 +159,5 @@
 
 
     </Grid>
+
 </Window>

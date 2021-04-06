@@ -52,10 +52,18 @@ namespace Muhurtha.Desktop
         /// </summary>
         public void Run() => _mainWindow.ShowDialog();
 
+        /// <summary>
+        /// Show generic popup message to user
+        /// </summary>
+        public void ShowPopupMessage(string message)
+        {
+            MessageBox.Show(message);
+        }
 
 
 
         /** PRIVATE METHODS **/
+
 
     }
 

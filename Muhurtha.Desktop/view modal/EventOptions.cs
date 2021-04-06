@@ -19,7 +19,9 @@ namespace Muhurtha.Desktop
         private List<Person> _personList;
         private List<EventTag> _tagList;
         private List<GeoLocation> _locationList;
-
+        private int _selectedPersonIndex;
+        private int _selectedLocationIndex;
+        private int _selectedTagIndex;
 
 
 
@@ -102,6 +104,33 @@ namespace Muhurtha.Desktop
             {
                 _locationList = value;
                 OnPropertyChanged(nameof(LocationList));
+            }
+        }
+        public int SelectedPersonIndex
+        {
+            get => _selectedPersonIndex;
+            set
+            {
+                _selectedPersonIndex = value;
+                OnPropertyChanged(nameof(SelectedPersonIndex));
+            }
+        }
+        public int SelectedLocationIndex
+        {
+            get => _selectedLocationIndex;
+            set
+            {
+                _selectedLocationIndex = value;
+                OnPropertyChanged(nameof(SelectedLocationIndex));
+            }
+        }
+        public int SelectedTagIndex
+        {
+            get => _selectedTagIndex;
+            set
+            {
+                _selectedTagIndex = value;
+                OnPropertyChanged(nameof(SelectedTagIndex));
             }
         }
 

@@ -9,6 +9,7 @@ using System.Windows;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.objects.Enum;
 using Genso.Astrology.Muhurtha.Core;
+using Genso.Framework;
 
 namespace Muhurtha.Desktop
 {
@@ -44,6 +45,11 @@ namespace Muhurtha.Desktop
         //EVENT OPTIONS
         private void CalculateEventsButtonClicked(object sender, EventArgs e)
         {
+            //check if options choosen by user is ok
+            //if not it tells user which options is wrong, and returns false
+            //end here if validation failed
+            if (!isEventOptionsValid()) { return; }
+
             //turn on smoke screen
             gui.MainGrid.SmokeScreen.Show();
 
@@ -54,6 +60,53 @@ namespace Muhurtha.Desktop
             //note: upon completion an event will fire, it's handled elsewhere
             calculatorThreadControl = new CancellationTokenSource(); //placed here so that only initialized when needed
             ThreadPool.QueueUserWorkItem(new WaitCallback(CalculateAndUpdateEvents), calculatorThreadControl.Token);
+
+
+            //------------------------FUNTIONS------------------------------------
+            //checks if all the event options is valid, returns true
+            //also raises the error to user here
+            bool isEventOptionsValid()
+            {
+                bool isValid = true; //default is valid
+
+                //check date time
+                var startTime = gui.MainGrid.EventOptions.StartTimeText;
+                isValid = isStartTimeValid(startTime);
+                if (!isValid) { gui.ShowPopupMessage("Start time not correct!"); return false; }
+
+                //check date time
+                var endTime = gui.MainGrid.EventOptions.EndTimeText;
+                isValid = isEndTimeValid(endTime);
+                if (!isValid) { gui.ShowPopupMessage("End time not correct!"); return false; }
+
+
+                //check each combo box
+                isValid = !EqualityComparer<GeoLocation>.Default.Equals(gui.MainGrid.EventOptions.SelectedLocation, default(GeoLocation));
+                if (!isValid) { gui.ShowPopupMessage("Please select a location!"); return false; }
+
+                isValid = !EqualityComparer<Person>.Default.Equals(gui.MainGrid.EventOptions.SelectedPerson, default(Person));
+                if (!isValid) { gui.ShowPopupMessage("Please select a person!"); return false; }
+
+                //todo for now disabled since EventTag is an enum & does not have null/default value
+                //isValid = !EqualityComparer<EventTag>.Default.Equals(gui.MainGrid.EventOptions.SelectedTag, default(EventTag));
+                //if (!isValid) { gui.ShowPopupMessage("Please select a tag!"); return false; }
+
+
+                return isValid;
+
+                //--------------------FUNCTIONS-----------------
+                bool isStartTimeValid(string startTime)
+                {
+                    //todo not yet implemented
+                    return true;
+                }
+
+                bool isEndTimeValid(string endTime)
+                {
+                    //todo not yet implemented
+                    return true;
+                }
+            }
 
         }
         private void SendToCalendarButtonClicked(object sender, EventArgs e)
@@ -252,6 +305,11 @@ namespace Muhurtha.Desktop
             var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
             gui.MainGrid.EventOptions.StartTimeText = todayStart;
             gui.MainGrid.EventOptions.EndTimeText = todayEnd;
+
+            //set default combobox option to be none
+            //gui.MainGrid.EventOptions.SelectedLocationIndex = -1;
+            //gui.MainGrid.EventOptions.SelectedPersonIndex = -1;
+            //gui.MainGrid.EventOptions.SelectedTag = ;
         }
         private void CalculateAndUpdateEvents(object threadCanceler)
         {
@@ -262,6 +320,7 @@ namespace Muhurtha.Desktop
             var person = gui.MainGrid.EventOptions.SelectedPerson;
             var tag = gui.MainGrid.EventOptions.SelectedTag;
 
+
             //pass thread canceler MuhurthaCore, so that methods inside can be stopped if needed
             MuhurthaCore.threadCanceler = (CancellationToken)threadCanceler;
 
@@ -270,6 +329,9 @@ namespace Muhurtha.Desktop
 
             //set event into view
             gui.MainGrid.EventView.EventList = events;
+
+
+
         }
         private void SendEventsToCalendar(object threadCanceler)
         {

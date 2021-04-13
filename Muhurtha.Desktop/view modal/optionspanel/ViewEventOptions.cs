@@ -8,7 +8,7 @@ using Genso.Astrology.Library;
 
 namespace Muhurtha.Desktop
 {
-    public class EventOptions : ViewModal
+    public class ViewEventOptions : ViewModal
     {
         /** BACKING FIELDS **/
         private string _startTimeText;

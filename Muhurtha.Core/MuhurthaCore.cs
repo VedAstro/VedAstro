@@ -20,6 +20,13 @@ namespace Genso.Astrology.Muhurtha.Core
         public static CancellationToken threadCanceler;
 
 
+        /** CONST FIELDS **/
+
+        private const string dataPersonlistXml = "data\\PersonList.xml";
+        private const string dataLocationlistXml = "data\\LocationList.xml";
+        private const string dataEventdatalistXml = "data\\EventDataList.xml";
+
+
 
         /** EVENTS **/
         //fired when event calculator completes
@@ -30,7 +37,10 @@ namespace Genso.Astrology.Muhurtha.Core
 
         /** PUBLIC METHODS **/
 
-        public static List<Person> GetAllPeopleList() => DatabaseManager.GetPersonList("data\\PersonList.xml");
+        public static List<Person> GetAllPeopleList()
+        {
+            return DatabaseManager.GetPersonList(dataPersonlistXml);
+        }
 
         public static List<EventTag> GetAllTagList()
         {
@@ -41,7 +51,7 @@ namespace Genso.Astrology.Muhurtha.Core
             return new List<EventTag>(array);
         }
 
-        public static List<GeoLocation> GetAllLocationList() => DatabaseManager.GetLocationList("data\\LocationList.xml");
+        public static List<GeoLocation> GetAllLocationList() => DatabaseManager.GetLocationList(dataLocationlistXml);
 
         public static List<Event> GetEvents(string startTime, string endTime, GeoLocation location, Person person, EventTag tag)
         {
@@ -51,7 +61,7 @@ namespace Genso.Astrology.Muhurtha.Core
             //TODO NEEDS TO BE MOVED TO A BETTER PLACE
             //----------------
             //get list of event data to check for event
-            var eventDataList = DatabaseManager.GetEventDataList("data\\EventDataList.xml");
+            var eventDataList = DatabaseManager.GetEventDataList(dataEventdatalistXml);
 
             //filter IN event data list
             var filteredEventDataList = eventDataList.FindAll(eventData =>
@@ -67,10 +77,10 @@ namespace Genso.Astrology.Muhurtha.Core
             //-------------------
 
             //pass thread canceler General, so that methods inside can be stopped if needed
-            General.threadCanceler = threadCanceler;
+            EventManager.threadCanceler = threadCanceler;
 
             //start calculating events
-            var muhurthaTimePeriod = General.GetNewMuhurthaTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, filteredEventDataList);
+            var muhurthaTimePeriod = EventManager.GetNewMuhurthaTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, filteredEventDataList);
 
             //fire event to let others know event calculation is done
             EventCalculationCompleted.Invoke();
@@ -81,8 +91,12 @@ namespace Genso.Astrology.Muhurtha.Core
         public static void SendEventsToCalendar(List<Event> events, Calendar calendarName, CalendarAccount google, bool splitEvents)
         {
             //split events by day
-            var splittedEvents = General.SplitEventsByDay(events);
+            var splittedEvents = EventManager.SplitEventsByDay(events);
 
+            //pass thread canceler, so that sending can be stopped if needed
+            CalendarManager.threadCanceler = threadCanceler;
+
+            //start sending
             CalendarManager.AddEventsToCalenderGoogle(splittedEvents, calendarName.Id);
 
             //fire event to let others know event sending is done
@@ -123,5 +137,7 @@ namespace Genso.Astrology.Muhurtha.Core
             return new List<CalendarAccount>(array);
 
         }
+
+        public static List<EventData> GetAllEventDataList() => DatabaseManager.GetEventDataList(dataEventdatalistXml);
     }
 }

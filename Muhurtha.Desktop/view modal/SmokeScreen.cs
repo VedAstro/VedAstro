@@ -3,7 +3,7 @@
 namespace Muhurtha.Desktop
 {
     /// <summary>
-    /// smoke screen used to mask main content while showing other windows
+    /// smoke screen used to mask main content while showing popups
     /// </summary>
     public class SmokeScreen : ViewModal
     {

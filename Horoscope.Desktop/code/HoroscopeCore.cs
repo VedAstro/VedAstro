@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Genso.Astrology.Library;
+using Genso.Framework;
 
 namespace Horoscope.Desktop
 {
@@ -42,7 +43,7 @@ namespace Horoscope.Desktop
             var eventDataList = DatabaseManager.GetPredictionDataList(PredictionFilePath);
 
             //pass thread canceler General, so that methods inside can be stopped if needed
-            General.threadCanceler = threadCanceler;
+            EventManager.threadCanceler = threadCanceler;
 
             //start calculating predictions
             var predictionList = GetListOfPredictionInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute1, eventDataList);
@@ -182,8 +183,7 @@ namespace Horoscope.Desktop
                         eventEndTime);
 
                     //if event is duration is 0 minute, raise alarm
-                    //if (newEvent.GetDurationMinutes() <= 0) { throw new Exception("Event duration is 0!"); }
-                    if (newEvent.GetDurationMinutes() <= 0) { Console.WriteLine("Event duration is 0!"); }
+                    if (newEvent.GetDurationMinutes() <= 0) { LogManager.Debug("Event duration is 0!"); }
 
 
                     eventList.Add(newEvent);
@@ -203,7 +203,7 @@ namespace Horoscope.Desktop
                         eventEndTime);
 
                     //if event is duration is 0 minute, raise alarm
-                    if (newEvent2.GetDurationMinutes() <= 0) { Console.WriteLine("Event duration is 0!"); }
+                    if (newEvent2.GetDurationMinutes() <= 0) { LogManager.Debug("Event duration is 0!"); }
 
                     eventList.Add(newEvent2);
                 }

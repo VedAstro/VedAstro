@@ -11,7 +11,7 @@ namespace Muhurtha.Desktop
     /// <summary>
     /// The dialog box used for sending/exporting events to google calendar
     /// </summary>
-    public class SendToCalendarBox : ViewModal
+    public class SendToCalendarPopup : ViewModal
     {
 
         /** BACKING FIELDS **/
@@ -30,7 +30,7 @@ namespace Muhurtha.Desktop
 
 
         /** CTOR **/
-        public SendToCalendarBox()
+        public SendToCalendarPopup()
         {
             //start default hidden
             Visibility = Visibility.Hidden;

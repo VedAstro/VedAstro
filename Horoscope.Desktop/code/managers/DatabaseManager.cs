@@ -16,6 +16,9 @@ namespace Horoscope.Desktop
     /// </summary>
     public static class DatabaseManager
     {
+
+
+
         /// <summary>
         /// Gets a list of all prediction data from database
         /// Note: element names used here corespond to the ones found in the XML file
@@ -45,7 +48,7 @@ namespace Horoscope.Desktop
                 var tagString = eventData.Element("Tag").Value;
                 var tagList = getEventTags(tagString);
                 //todo needs to be moved to a better place
-                var calculatorMethod = General.GetEventCalculatorMethod(name);
+                var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
 
                 //place the data into an event data structure
                 var eventX = new EventData(id, name, nature, description, tagList, calculatorMethod);
@@ -98,7 +101,6 @@ namespace Horoscope.Desktop
                 return cleaned;
             }
         }
-
 
         /// <summary>
         /// Gets a list of all persons from database

@@ -8,12 +8,23 @@ using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Genso.Astrology.Library;
+using Genso.Framework;
 using Event = Genso.Astrology.Library.Event;
 
 namespace Genso.Astrology.Library
 {
     public static class CalendarManager
     {
+
+
+        /** FIELDS **/
+
+        //used for canceling sending halfway
+        public static CancellationToken threadCanceler;
+
+
+        /** CONST FIELDS **/
+
         //store the ID's of each calendar
         //TODO mark for removal
         //public static String Agriculture = "i32upicbta6asvu2kbhlmcmu3c@group.calendar.google.com";
@@ -59,7 +70,7 @@ namespace Genso.Astrology.Library
                     new FileDataStore(credPath, true)).Result;
 
                 //debug print
-                Console.WriteLine("Credential file saved to: " + credPath);
+                LogManager.Debug("Credential file saved to: " + credPath);
             }
 
 
@@ -74,6 +85,10 @@ namespace Genso.Astrology.Library
             return service;
         }
 
+        /// <summary>
+        /// Adds a list of event to google calendar
+        /// Note: Cancelation token is raised & caught here
+        /// </summary>
         public static void AddEventsToCalenderGoogle(List<Event> eventToAddList, String calendarId)
         {
             var addedEventCount = 0;
@@ -81,14 +96,43 @@ namespace Genso.Astrology.Library
             // get the Google Calendar API service, for connecting to calendar
             var service = GetAccountAPIAccessGoogle();
 
-            //loop through each event in list & add to calendar
-            foreach (var eventToAdd in eventToAddList)
+            try
             {
-                //print progress
-                Console.Write($"\r {addedEventCount} of {eventToAddList.Count} Events added to Google Calendar");
-                //increment progress counter
-                addedEventCount++;
+                //loop through each event in list & add to calendar
+                foreach (var eventToAdd in eventToAddList)
+                {
+                    //check if user has canceled sending events halfway
+                    threadCanceler.ThrowIfCancellationRequested();
 
+                    //log progress
+                    LogManager.Debug($"\r {addedEventCount} of {eventToAddList.Count} Events added to Google Calendar");
+
+                    //increment progress counter
+                    addedEventCount++;
+
+                    //add an event to calendar
+                    AddEventToCalendar(eventToAdd, service);
+
+                }
+
+            }
+            //catches only exceptions that idicates that user canceled the sending (caller lost interest in the result)
+            catch (Exception e) when (e.GetType() == typeof(OperationCanceledException))
+            {
+                //log the event and end here
+                LogManager.Debug($"User canceled sending events to google calendar: {addedEventCount} events already sent!");
+                return;
+            }
+
+
+            LogManager.Debug($"All {eventToAddList.Count} events added to Google calender");
+
+
+            //----------------FUNCTIONS-----------------------
+
+            void AddEventToCalendar(Event eventToAdd, CalendarService service)
+            {
+                //create the event in google's calendar type
                 var newEvent = new Google.Apis.Calendar.v3.Data.Event()
                 {
                     Summary = Format.FormatName(eventToAdd),
@@ -117,11 +161,11 @@ namespace Genso.Astrology.Library
 
                 };
 
+                //insert the event into google calander service
                 EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
                 var createdEvent = request.Execute();
-            }
 
-            Console.WriteLine($"\nAll {eventToAddList.Count} Events added to Google calender");
+            }
 
         }
 
@@ -151,7 +195,7 @@ namespace Genso.Astrology.Library
             }
 
             //debug event
-            Console.WriteLine($"{result.Items.Count} events deleted!");
+            LogManager.Debug($"{result.Items.Count} events deleted!");
 
         }
 

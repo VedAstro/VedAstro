@@ -10,19 +10,29 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Genso.Framework;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Genso.Astrology.Library
 {
-    public static class General
+    /// <summary>
+    /// All logic dealing with creating events is here
+    /// </summary>
+    public static class EventManager
     {
+        /** FIELDS **/
+
         //used for canceling calculation halfway
         public static CancellationToken threadCanceler;
 
 
+
+        /** PUBLIC METHODS **/
+
         /// <summary>
         /// Get list of events occurig in a time periode for all the
         /// inputed event types aka "event data"
+        /// Note : Cancelation token caught here
         /// </summary>
         public static List<Event> GetListOfEventsInTimePeriod(Time startTime, Time endTime, Person person, double precisionInHours, List<EventData> eventDataList)
         {
@@ -58,8 +68,11 @@ namespace Genso.Astrology.Library
 
             }
             //catches only exceptions that idicates that user canceled the calculation (caller lost interest in the result)
+            //since the error is not thrown here, we use InnerException
             catch (Exception e) when (e.InnerException.GetType() == typeof(OperationCanceledException))
             {
+                //log it
+                LogManager.Debug("User canceled event calculation halfway!");
                 //return empty list
                 return new List<Event>();
             }
@@ -72,6 +85,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Get a list of events in a time period for a single event type aka "event data"
         /// Decision on when event starts & ends is also done here
+        /// Note : thread cancelation checked & thrown here (caught by caller)
         /// </summary>
         private static List<Event> GetListOfEventsByEventData(EventData eventData, Person person, List<Time> timeList)
         {
@@ -90,8 +104,7 @@ namespace Genso.Astrology.Library
             //note: loop must be done in sequencial order, to detect correct start & end time
             foreach (var time in timeList)
             {
-                // used for canceling calculation by outside thread (user cancel halfway)
-                // this will throw the appropriate exception
+                //check if user has canceled calculation halfway
                 threadCanceler.ThrowIfCancellationRequested();
 
                 //debug print
@@ -128,8 +141,7 @@ namespace Genso.Astrology.Library
                         eventEndTime);
 
                     //if event is duration is 0 minute, raise alarm
-                    //if (newEvent.GetDurationMinutes() <= 0) { throw new Exception("Event duration is 0!"); }
-                    if (newEvent.GetDurationMinutes() <= 0) { Console.WriteLine("Event duration is 0!"); }
+                    if (newEvent.GetDurationMinutes() <= 0) { LogManager.Debug("Event duration is 0!"); }
 
 
                     eventList.Add(newEvent);
@@ -149,7 +161,7 @@ namespace Genso.Astrology.Library
                         eventEndTime);
 
                     //if event is duration is 0 minute, raise alarm
-                    if (newEvent2.GetDurationMinutes() <= 0) { Console.WriteLine("Event duration is 0!"); }
+                    if (newEvent2.GetDurationMinutes() <= 0) { LogManager.Debug("Event duration is 0!"); }
 
                     eventList.Add(newEvent2);
                 }
@@ -257,7 +269,7 @@ namespace Genso.Astrology.Library
 
             //remove 0 minutes events
             //Note:during splitting 0 minute events are sometimes created it is removed here
-            var filteredEvents = General.FilterOutShortEvents(returnList, 0);
+            var filteredEvents = EventManager.FilterOutShortEvents(returnList, 0);
 
 
             //return list to caller 
@@ -357,21 +369,6 @@ namespace Genso.Astrology.Library
             }
         }
 
-
-        // EXTENSION FUNCTIONS TO GET KEYS OUT OF MEMORY CACHE (USED IN ASTRONOMICAL FUNCTION CACHING)
-
-        private static readonly Func<MemoryCache, object> GetEntriesCollection = Delegate.CreateDelegate(
-            typeof(Func<MemoryCache, object>),
-            typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true),
-            throwOnBindFailure: true) as Func<MemoryCache, object>;
-
-
-        public static IEnumerable GetKeys(this IMemoryCache memoryCache) =>
-            ((IDictionary)GetEntriesCollection((MemoryCache)memoryCache)).Keys;
-
-        public static IEnumerable<T> GetKeys<T>(this IMemoryCache memoryCache) =>
-            GetKeys(memoryCache).OfType<T>();
-
         /// <summary>
         /// Removes events that are shorter or equal minimum minutes specified
         /// </summary>
@@ -399,5 +396,8 @@ namespace Genso.Astrology.Library
             return returnList;
 
         }
+
+
+
     }
 }

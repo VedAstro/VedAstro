@@ -9,7 +9,7 @@ using Genso.Astrology.Library;
 namespace Muhurtha.Desktop
 {
 
-    public class EventsCalculatingMessageBox : ViewModal
+    public class EventsCalculatingPopup : ViewModal
     {
         /** BACKING FIELDS **/
         private string _messageText;
@@ -20,7 +20,7 @@ namespace Muhurtha.Desktop
 
         /** CTOR **/
         //defaults are set here
-        public EventsCalculatingMessageBox()
+        public EventsCalculatingPopup()
         {
             _messageText = "Calculating events...";
             this.Hide(); //default hidden

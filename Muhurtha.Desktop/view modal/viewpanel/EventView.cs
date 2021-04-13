@@ -9,7 +9,9 @@ using Genso.Astrology.Library;
 namespace Muhurtha.Desktop
 {
 
-
+    /// <summary>
+    /// The main visible place where events are listed, located next to options panel
+    /// </summary>
     public class EventView : ViewModal
     {
         /** BACKING FIELDS **/
@@ -20,7 +22,7 @@ namespace Muhurtha.Desktop
 
         /** EVENTS **/
         public event EventHandler CalculateEventsButtonClicked;
-        public event EventHandler CancelButtonClicked;
+        public event EventHandler CancelButtonClicked; //todo supposed to be in options panel
 
 
 

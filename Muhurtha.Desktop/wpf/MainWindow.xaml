@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:eo="http://schemas.essentialobjects.com/wpf/"
         xmlns:local="clr-namespace:Muhurtha.Desktop"
         mc:Ignorable="d"
         Title="Muhurtha" Height="450" Width="734"
@@ -22,7 +21,9 @@
     </Window.Resources>
 
     <Grid DataContext="{StaticResource MainGrid}">
-        <Grid>
+
+        <!--Grid holding the list panel & options panel, main area used when interacting with the program-->
+        <Grid Name="ViewAndOptionsHolder">
             <Grid.ColumnDefinitions>
                 <!--Events List-->
                 <ColumnDefinition Width="*" />
@@ -30,8 +31,8 @@
                 <ColumnDefinition Width="160" />
             </Grid.ColumnDefinitions>
 
-            <!--Events List-->
-            <Grid Name="EventList" DataContext="{Binding EventView}" Grid.Column="0">
+            <!--EVENT VIEW PANEL-->
+            <Grid Name="EventList" DataContext="{Binding EventView}" Visibility="{Binding Visibility}" Grid.Column="0" d:IsHidden="True">
 
                 <ListView  ItemsSource="{Binding EventList}">
                     <ListView.View>
@@ -47,72 +48,166 @@
 
             </Grid>
 
-            <!--Event Options-->
-            <Grid Name="EventOptions" DataContext="{Binding EventOptions}" Grid.Column="1" Background="#FFEBEBEB">
-                <StackPanel Style="{StaticResource ResourceKey=Panel}" >
-
-                    <ComboBox SelectedIndex="0" FontWeight="SemiBold" >
-                        <ComboBoxItem ToolTip="Calculate all muhurtha events for a specific time period">Calculate Events</ComboBoxItem>
-                        <ComboBoxItem ToolTip="Find a time with specific occuring events">Find Events</ComboBoxItem>
-                        <ComboBoxItem ToolTip="Developer logs for debugging">Logs</ComboBoxItem>
-                        <ComboBoxItem ToolTip="General settings for the program">Settings</ComboBoxItem>
-                    </ComboBox>
-
-
-                    <Grid Margin="0,15,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Start time" />
-                        <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="StartTimeTextBox" Text="{Binding StartTimeText}" />
-                    </Grid>
-                    <Grid Margin="0,3,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="End time" />
-                        <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="EndTimeTextBox" Text="{Binding EndTimeText}" />
-                    </Grid>
-                    <Grid Margin="0,3,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Location" />
-                        <ComboBox Grid.Row="1" ItemsSource="{Binding LocationList}"   SelectedItem="{Binding SelectedLocation}" VerticalContentAlignment="Center" Text="Select Location"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
-
-                    </Grid>
-
-                    <Grid Margin="0,3,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Person" />
-                        <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}"  SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center" Text="Select Person"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
-
-                    </Grid>
-                    <Grid Margin="0,3,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
-                        <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}"   SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center" Text="Select Tag"  Focusable="False" IsEditable="True" IsReadOnly="True" />
-                    </Grid>
-                    <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,15,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>
-                    <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="SendToCalendarButton_Click" >Send to Calendar</Button>
-
-                </StackPanel>
+            <!--LOG VIEW PANEL-->
+            <Grid Name="LogView" DataContext="{Binding LogView}" Visibility="{Binding Visibility}" Grid.Column="0">
+                <ScrollViewer>
+                    <TextBlock Text="{Binding Log}" Background="Gray" />
+                </ScrollViewer>
             </Grid>
+
+
+
+            <!--OPTIONS PANELS-->
+            <Grid Name="OptionsPanel" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="26" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <!--Combobox to select which options panel to show-->
+                <ComboBox Grid.Row="0" SelectedIndex="0" SelectedItem="{Binding SelectedOptionsPanel}" FontWeight="SemiBold" VerticalContentAlignment="Center" SelectionChanged="OptionsPanel_OnSelectionChanged" >
+                    <ComboBoxItem ToolTip="View all muhurtha events in specific time period">View Events</ComboBoxItem>
+                    <ComboBoxItem ToolTip="Find a time with specific occuring events">Find Events</ComboBoxItem>
+                    <ComboBoxItem ToolTip="Developer logs for debugging">Logs</ComboBoxItem>
+                    <ComboBoxItem ToolTip="General settings for the program">Settings</ComboBoxItem>
+                </ComboBox>
+
+
+                <!--Option Panels-->
+
+                <!--View Event Options-->
+                <Grid Grid.Row="1" Name="ViewEventOptions" DataContext="{Binding ViewEventOptions}" Visibility="{Binding Visibility}" Grid.Column="1" Background="#FFEBEBEB">
+                    <StackPanel Style="{StaticResource ResourceKey=Panel}" >
+
+                        <Grid Margin="0,5,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Start time" />
+                            <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="StartTimeTextBox" Text="{Binding StartTimeText}" />
+                        </Grid>
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="End time" />
+                            <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" x:Name="EndTimeTextBox" Text="{Binding EndTimeText}" />
+                        </Grid>
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Location" />
+                            <ComboBox Grid.Row="1" ItemsSource="{Binding LocationList}"   SelectedItem="{Binding SelectedLocation}" VerticalContentAlignment="Center" Text="Select Location"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
+
+                        </Grid>
+
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Person" />
+                            <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}"  SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center" Text="Select Person"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
+
+                        </Grid>
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
+                            <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}"   SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center" Text="Select Tag"  Focusable="False" IsEditable="True" IsReadOnly="True" />
+                        </Grid>
+                        <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,15,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>
+                        <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="SendToCalendarButton_Click" >Send to Calendar</Button>
+
+                    </StackPanel>
+                </Grid>
+
+                <!--Find Event Options-->
+                <Grid Grid.Row="1" Name="FindEventOptions" DataContext="{Binding FindEventOptions}" Visibility="{Binding Visibility}" Grid.Column="1" Background="#FFEBEBEB" d:IsHidden="True">
+                    <StackPanel Style="{StaticResource ResourceKey=Panel}" >
+
+                        <Grid Margin="0,5,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Select events to find" />
+                            <!--list of events to look for-->
+                            <ListView Grid.Row="1" ItemsSource="{Binding EventsToFindList}" Height="150">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding Name}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Start time" />
+                            <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}"  Text="{Binding StartTimeText}" />
+                        </Grid>
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="End time" />
+                            <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" Text="{Binding EndTimeText}" />
+                        </Grid>
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Location" />
+                            <ComboBox Grid.Row="1" ItemsSource="{Binding LocationList}"   SelectedItem="{Binding SelectedLocation}" VerticalContentAlignment="Center" Text="Select Location"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
+
+                        </Grid>
+
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Person" />
+                            <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}"  SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center" Text="Select Person"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
+
+                        </Grid>
+                        <Grid Margin="0,3,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Tags" />
+                            <ComboBox Grid.Row="1" ItemsSource="{Binding TagList}"   SelectedItem="{Binding SelectedTag}" VerticalContentAlignment="Center" Text="Select Tag"  Focusable="False" IsEditable="True" IsReadOnly="True" />
+                        </Grid>
+                        <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,15,0,0" Click="CalculateEventsButton_Click" >Calculate</Button>
+                        <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="SendToCalendarButton_Click" >Send to Calendar</Button>
+
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+
+
         </Grid>
 
         <!--Smoke Screen : to hide the underlying main content view-->
         <Grid Name="SmokeScreen" DataContext="{Binding SmokeScreen}" Visibility="{Binding Visibility}" Background="#A48C8C8C" d:IsHidden="True"/>
 
-        <Grid Name="EventsCalculatingMessageBox" Background="White" Width="300" Height="100"  DataContext="{Binding EventsCalculatingMessageBox}" Visibility="{Binding Visibility}" d:IsHidden="True">
+
+        <!--POPUP WINDOWS-->
+
+        <Grid Name="EventsCalculatingMessageBox" Background="White" Width="300" Height="100"  DataContext="{Binding EventsCalculatingPopup}" Visibility="{Binding Visibility}" d:IsHidden="True">
             <StackPanel Style="{StaticResource ResourceKey=Panel}" VerticalAlignment="Center" HorizontalAlignment="Center" >
                 <Label Content="{Binding MessageText}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,0,9" FontWeight="SemiBold"  />
                 <local:Spinner EllipseSize="4" HorizontalAlignment="Center" Height="20" Width="20" VerticalAlignment="Center" />
@@ -120,7 +215,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Name="SendingEventsMessageBox" Background="White" Width="300" Height="100"  DataContext="{Binding SendingEventsMessageBox}" Visibility="{Binding Visibility}" d:IsHidden="True">
+        <Grid Name="SendingEventsMessageBox" Background="White" Width="300" Height="100"  DataContext="{Binding SendingEventsPopup}" Visibility="{Binding Visibility}" d:IsHidden="True">
             <StackPanel Style="{StaticResource ResourceKey=Panel}" VerticalAlignment="Center" HorizontalAlignment="Center" >
                 <Label Content="{Binding MessageText}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,0,9" FontWeight="SemiBold"  />
                 <local:Spinner EllipseSize="4" HorizontalAlignment="Center" Height="20" Width="20" VerticalAlignment="Center" />
@@ -128,7 +223,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Name="SendToCalendarBox" IsVisibleChanged="SendToCalendarBox_OnIsVisibleChanged" DataContext="{Binding SendToCalendarBox}"  Width="230" Height="190" Visibility="{Binding Visibility}" Background="White" d:IsHidden="True">
+        <Grid Name="SendToCalendarBox" IsVisibleChanged="SendToCalendarBox_OnIsVisibleChanged" DataContext="{Binding SendToCalendarPopup}"  Width="230" Height="190" Visibility="{Binding Visibility}" Background="White" d:IsHidden="True">
             <StackPanel Style="{StaticResource ResourceKey=Panel}">
                 <Label HorizontalAlignment="Center" FontWeight="SemiBold">Send events to calendar</Label>
                 <Grid Margin="0,3,0,0">

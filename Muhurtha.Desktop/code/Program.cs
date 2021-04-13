@@ -54,7 +54,7 @@ namespace Muhurtha.Desktop
             gui.MainGrid.SmokeScreen.Show();
 
             //show events being calculated message
-            gui.MainGrid.EventsCalculatingMessageBox.Show();
+            gui.MainGrid.EventsCalculatingPopup.Show();
 
             //place heavy event calculation on a seperate thread & start it off
             //note: upon completion an event will fire, it's handled elsewhere
@@ -70,21 +70,21 @@ namespace Muhurtha.Desktop
                 bool isValid = true; //default is valid
 
                 //check date time
-                var startTime = gui.MainGrid.EventOptions.StartTimeText;
+                var startTime = gui.MainGrid.ViewEventOptions.StartTimeText;
                 isValid = isStartTimeValid(startTime);
                 if (!isValid) { gui.ShowPopupMessage("Start time not correct!"); return false; }
 
                 //check date time
-                var endTime = gui.MainGrid.EventOptions.EndTimeText;
+                var endTime = gui.MainGrid.ViewEventOptions.EndTimeText;
                 isValid = isEndTimeValid(endTime);
                 if (!isValid) { gui.ShowPopupMessage("End time not correct!"); return false; }
 
 
                 //check each combo box
-                isValid = !EqualityComparer<GeoLocation>.Default.Equals(gui.MainGrid.EventOptions.SelectedLocation, default(GeoLocation));
+                isValid = !EqualityComparer<GeoLocation>.Default.Equals(gui.MainGrid.ViewEventOptions.SelectedLocation, default(GeoLocation));
                 if (!isValid) { gui.ShowPopupMessage("Please select a location!"); return false; }
 
-                isValid = !EqualityComparer<Person>.Default.Equals(gui.MainGrid.EventOptions.SelectedPerson, default(Person));
+                isValid = !EqualityComparer<Person>.Default.Equals(gui.MainGrid.ViewEventOptions.SelectedPerson, default(Person));
                 if (!isValid) { gui.ShowPopupMessage("Please select a person!"); return false; }
 
                 //todo for now disabled since EventTag is an enum & does not have null/default value
@@ -115,7 +115,7 @@ namespace Muhurtha.Desktop
             gui.MainGrid.SmokeScreen.Show();
 
             //open send to calendar dialog
-            gui.MainGrid.SendToCalendarBox.Show();
+            gui.MainGrid.SendToCalendarPopup.Show();
 
         }
 
@@ -126,21 +126,20 @@ namespace Muhurtha.Desktop
             gui.MainGrid.SmokeScreen.Hide();
 
             //hide event calculating message
-            gui.MainGrid.EventsCalculatingMessageBox.Hide();
+            gui.MainGrid.EventsCalculatingPopup.Hide();
 
             //terminate thread
             calculatorThreadControl.Cancel();
             calculatorThreadControl.Dispose();
         }
 
-        //SENDING EVENTS MESSAGE BOX
+        //SENDING PROGESS EVENTS POPUP
         private void CancelSendingEventsButtonClicked(object sender, EventArgs e)
         {
             //turn off smoke screen
             gui.MainGrid.SmokeScreen.Hide();
-
             //hide event calculating message
-            gui.MainGrid.EventsCalculatingMessageBox.Hide();
+            gui.MainGrid.SendingEventsPopup.Hide();
 
             //terminate thread
             calculatorThreadControl.Cancel();
@@ -150,21 +149,22 @@ namespace Muhurtha.Desktop
 
 
         //SEND TO CALENDAR BOX
+        //popup becomes visible
         private void SendToCalendarBoxOnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //if becoming visible then, load calendar accounts into dropdown
-            if (gui.MainGrid.SendToCalendarBox.Visibility == Visibility.Visible)
+            if (gui.MainGrid.SendToCalendarPopup.Visibility == Visibility.Visible)
             {
                 //get all calendar account names
                 var allAccounts = MuhurthaCore.GetAllCalendarAccounts();
 
                 //before setting account list, disable handler listening for account list changes
-                gui.MainGrid.SendToCalendarBox.AccountSelectionChanged -= AccountSelectionChanged;
+                gui.MainGrid.SendToCalendarPopup.AccountSelectionChanged -= AccountSelectionChanged;
 
-                gui.MainGrid.SendToCalendarBox.AccountList = allAccounts;
+                gui.MainGrid.SendToCalendarPopup.AccountList = allAccounts;
 
                 //enable handler back
-                gui.MainGrid.SendToCalendarBox.AccountSelectionChanged += AccountSelectionChanged;
+                gui.MainGrid.SendToCalendarPopup.AccountSelectionChanged += AccountSelectionChanged;
 
             }
 
@@ -172,10 +172,10 @@ namespace Muhurtha.Desktop
         private void SendEventsButtonClicked(object sender, EventArgs e)
         {
             //hide send events dialog box
-            gui.MainGrid.SendToCalendarBox.Hide();
+            gui.MainGrid.SendToCalendarPopup.Hide();
 
             //show sending events message box
-            gui.MainGrid.SendingEventsMessageBox.Show();
+            gui.MainGrid.SendingEventsPopup.Show();
 
 
             //place time consuming sending on a seperate thread & start it off
@@ -183,30 +183,35 @@ namespace Muhurtha.Desktop
             calculatorThreadControl = new CancellationTokenSource(); //placed here so that only initialized when needed
             ThreadPool.QueueUserWorkItem(new WaitCallback(SendEventsToCalendar), calculatorThreadControl.Token);
         }
+        //just close the box, not yet start sending
         private void CancelSendEventsButtonClicked(object sender, EventArgs e)
         {
             //turn off smoke screen
             gui.MainGrid.SmokeScreen.Hide();
 
             //hide event send fvents dialog box
-            gui.MainGrid.SendToCalendarBox.Hide();
+            gui.MainGrid.SendToCalendarPopup.Hide();
         }
         private void AccountSelectionChanged(object sender, EventArgs e) => UpdateCalendarListDropdown();
         private void CalendarListOnPreviewMouseLeftButtonDown(object sender, EventArgs e)
         {
             //only update if calendar list is empty
-            if (gui.MainGrid.SendToCalendarBox.CalendarList == null)
+            if (gui.MainGrid.SendToCalendarPopup.CalendarList == null)
             {
                 UpdateCalendarListDropdown();
             }
         }
 
+        //MAIN GRID
+        //when optional panel selection drop down is changed
+        private void MainGridOnOptionsPanelOnSelectionChanged(object sender, EventArgs e) => LoadSelectedOptionsPanel();
+
 
         //MAIN WINDOW
         private void WindowInitialized(object sender, EventArgs e)
         {
-            //load values into event options panel
-            LoadEventOptionsDefaultValues();
+            //load options panel that is selected
+            LoadSelectedOptionsPanel();
 
 
         }
@@ -216,6 +221,7 @@ namespace Muhurtha.Desktop
         /// </summary>
         private void WindowClosed(object sender, EventArgs e) => System.Environment.Exit(1);
 
+
         //MUHURTHA CORE
         //this event is fired when event calculation have finished
         private void CalculationCompleted()
@@ -224,7 +230,7 @@ namespace Muhurtha.Desktop
             gui.MainGrid.SmokeScreen.Hide();
 
             //hide event calculating message
-            gui.MainGrid.EventsCalculatingMessageBox.Hide();
+            gui.MainGrid.EventsCalculatingPopup.Hide();
 
         }
         private void SendingEventsCompleted()
@@ -237,7 +243,7 @@ namespace Muhurtha.Desktop
             //Thread.Sleep(1500);
 
             //hide event diolog box
-            gui.MainGrid.SendingEventsMessageBox.Hide();
+            gui.MainGrid.SendingEventsPopup.Hide();
 
         }
 
@@ -259,6 +265,46 @@ namespace Muhurtha.Desktop
 
 
 
+        /** DEFAULT VALUE LOADERS **/
+        private void LoadViewEventOptionsDefaultValues()
+        {
+            //load all person, location & tag list into combo box
+            gui.MainGrid.ViewEventOptions.PersonList = MuhurthaCore.GetAllPeopleList();
+            gui.MainGrid.ViewEventOptions.TagList = MuhurthaCore.GetAllTagList();
+            gui.MainGrid.ViewEventOptions.LocationList = MuhurthaCore.GetAllLocationList();
+
+            //set default start & end times
+            var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
+            var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
+            gui.MainGrid.ViewEventOptions.StartTimeText = todayStart;
+            gui.MainGrid.ViewEventOptions.EndTimeText = todayEnd;
+
+            //set default combobox option to be none
+            //gui.MainGrid.EventOptions.SelectedLocationIndex = -1;
+            //gui.MainGrid.EventOptions.SelectedPersonIndex = -1;
+            //gui.MainGrid.EventOptions.SelectedTag = ;
+        }
+        private void LoadFindEventOptionsDefaultValues()
+        {
+            //load all person, location & tag list into combo box
+            gui.MainGrid.FindEventOptions.EventsToFindList = MuhurthaCore.GetAllEventDataList();
+            gui.MainGrid.FindEventOptions.PersonList = MuhurthaCore.GetAllPeopleList();
+            gui.MainGrid.FindEventOptions.TagList = MuhurthaCore.GetAllTagList();
+            gui.MainGrid.FindEventOptions.LocationList = MuhurthaCore.GetAllLocationList();
+
+            //set default start & end times to begining and end of the day
+            var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
+            var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
+            gui.MainGrid.ViewEventOptions.StartTimeText = todayStart;
+            gui.MainGrid.ViewEventOptions.EndTimeText = todayEnd;
+
+            //set default combobox option to be none
+            //gui.MainGrid.EventOptions.SelectedLocationIndex = -1;
+            //gui.MainGrid.EventOptions.SelectedPersonIndex = -1;
+            //gui.MainGrid.EventOptions.SelectedTag = ;
+        }
+
+
 
         /** PRIVATE METHODS **/
 
@@ -268,57 +314,81 @@ namespace Muhurtha.Desktop
             //MAIN GRID
             gui.MainGrid.WindowInitialized += WindowInitialized;
             gui.MainGrid.WindowClosed += WindowClosed;
+            gui.MainGrid.OptionsPanelOnSelectionChanged += MainGridOnOptionsPanelOnSelectionChanged;
 
             //EVENT OPTIONS
-            gui.MainGrid.EventOptions.CalculateEventsButtonClicked += CalculateEventsButtonClicked;
-            gui.MainGrid.EventOptions.SendToCalendarButtonClicked += SendToCalendarButtonClicked;
+            gui.MainGrid.ViewEventOptions.CalculateEventsButtonClicked += CalculateEventsButtonClicked;
+            gui.MainGrid.ViewEventOptions.SendToCalendarButtonClicked += SendToCalendarButtonClicked;
 
             //SEND TO CALENDAR BOX
-            gui.MainGrid.SendToCalendarBox.SendToCalendarBoxOnIsVisibleChanged += SendToCalendarBoxOnIsVisibleChanged;
-            gui.MainGrid.SendToCalendarBox.CancelSendEventsButtonClicked += CancelSendEventsButtonClicked;
-            gui.MainGrid.SendToCalendarBox.SendEventsButtonClicked += SendEventsButtonClicked;
-            gui.MainGrid.SendToCalendarBox.AccountSelectionChanged += AccountSelectionChanged;
-            gui.MainGrid.SendToCalendarBox.CalendarListOnPreviewMouseLeftButtonDown += CalendarListOnPreviewMouseLeftButtonDown;
+            gui.MainGrid.SendToCalendarPopup.SendToCalendarBoxOnIsVisibleChanged += SendToCalendarBoxOnIsVisibleChanged;
+            gui.MainGrid.SendToCalendarPopup.CancelSendEventsButtonClicked += CancelSendEventsButtonClicked;
+            gui.MainGrid.SendToCalendarPopup.SendEventsButtonClicked += SendEventsButtonClicked;
+            gui.MainGrid.SendToCalendarPopup.AccountSelectionChanged += AccountSelectionChanged;
+            gui.MainGrid.SendToCalendarPopup.CalendarListOnPreviewMouseLeftButtonDown += CalendarListOnPreviewMouseLeftButtonDown;
 
             //EVENTS CALCULATING MESSAGEBOX
-            gui.MainGrid.EventsCalculatingMessageBox.CancelCalculateEventsButtonClicked += CancelCalculateEventsButtonClicked;
+            gui.MainGrid.EventsCalculatingPopup.CancelCalculateEventsButtonClicked += CancelCalculateEventsButtonClicked;
 
             //SENDING EVENTS MESSAGE BOX
-            gui.MainGrid.SendingEventsMessageBox.CancelSendingEventsButtonClicked += CancelSendingEventsButtonClicked;
+            gui.MainGrid.SendingEventsPopup.CancelSendingEventsButtonClicked += CancelSendingEventsButtonClicked;
 
 
             //MUHURTHA CORE
             MuhurthaCore.EventCalculationCompleted += CalculationCompleted;
             MuhurthaCore.SendingEventsCompleted += SendingEventsCompleted;
         }
-
-
-        private void LoadEventOptionsDefaultValues()
+        /// <summary>
+        /// based on which panel is selected in dropdown, that panel is loaded with deafult values
+        /// </summary>
+        private void LoadSelectedOptionsPanel()
         {
-            //load all person, location & tag list into combo box
-            gui.MainGrid.EventOptions.PersonList = MuhurthaCore.GetAllPeopleList();
-            gui.MainGrid.EventOptions.TagList = MuhurthaCore.GetAllTagList();
-            gui.MainGrid.EventOptions.LocationList = MuhurthaCore.GetAllLocationList();
+            //get selected value
+            var selectedPanel = gui.MainGrid.SelectedOptionsPanel;
 
-            //set default start & end times
-            var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
-            var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
-            gui.MainGrid.EventOptions.StartTimeText = todayStart;
-            gui.MainGrid.EventOptions.EndTimeText = todayEnd;
+            //show/hide based on which panel is choosen
+            var panelName = selectedPanel.Content;
 
-            //set default combobox option to be none
-            //gui.MainGrid.EventOptions.SelectedLocationIndex = -1;
-            //gui.MainGrid.EventOptions.SelectedPersonIndex = -1;
-            //gui.MainGrid.EventOptions.SelectedTag = ;
+            switch (panelName)
+            {
+                case "Find Events":
+                    LoadFindEventOptionsDefaultValues();
+                    gui.MainGrid.FindEventOptions.Show();
+                    gui.MainGrid.ViewEventOptions.Hide();
+                    gui.MainGrid.LogView.Hide();
+                    gui.MainGrid.EventView.Show();
+
+                    break;
+                case "View Events":
+                    LoadViewEventOptionsDefaultValues();
+                    gui.MainGrid.FindEventOptions.Hide();
+                    gui.MainGrid.ViewEventOptions.Show();
+                    gui.MainGrid.LogView.Hide();
+                    gui.MainGrid.EventView.Show();
+
+                    break;
+                case "Logs":
+                    gui.MainGrid.FindEventOptions.Hide();
+                    gui.MainGrid.ViewEventOptions.Hide();
+                    gui.MainGrid.LogView.ReloadLogText();
+                    gui.MainGrid.LogView.Show();
+                    gui.MainGrid.EventView.Hide();
+                    break;
+                default:
+                    //log error if panel not found
+                    LogManager.Error($"Panel not accounted for! : {panelName}"); break;
+            }
+
+
         }
         private void CalculateAndUpdateEvents(object threadCanceler)
         {
             //get all the needed values
-            var startTime = gui.MainGrid.EventOptions.StartTimeText;
-            var endTime = gui.MainGrid.EventOptions.EndTimeText;
-            var location = gui.MainGrid.EventOptions.SelectedLocation;
-            var person = gui.MainGrid.EventOptions.SelectedPerson;
-            var tag = gui.MainGrid.EventOptions.SelectedTag;
+            var startTime = gui.MainGrid.ViewEventOptions.StartTimeText;
+            var endTime = gui.MainGrid.ViewEventOptions.EndTimeText;
+            var location = gui.MainGrid.ViewEventOptions.SelectedLocation;
+            var person = gui.MainGrid.ViewEventOptions.SelectedPerson;
+            var tag = gui.MainGrid.ViewEventOptions.SelectedTag;
 
 
             //pass thread canceler MuhurthaCore, so that methods inside can be stopped if needed
@@ -336,29 +406,28 @@ namespace Muhurtha.Desktop
         private void SendEventsToCalendar(object threadCanceler)
         {
             //get name of the selected calendar
-            var calendarName = gui.MainGrid.SendToCalendarBox.SelectedCalendar;
+            var calendarName = gui.MainGrid.SendToCalendarPopup.SelectedCalendar;
 
             //get events to send
             var events = gui.MainGrid.EventView.EventList;
 
-            //pass thread canceler MuhurthaCore, so that methods inside can be stopped if needed
+            //use thread canceler, so that sending events can be stopped if needed
             MuhurthaCore.threadCanceler = (CancellationToken)threadCanceler;
 
             //start uploading events to calendar
             MuhurthaCore.SendEventsToCalendar(events, calendarName, CalendarAccount.Google, true);
 
         }
-
         private void UpdateCalendarListDropdown()
         {
             //get selected account
-            var selectedAccount = gui.MainGrid.SendToCalendarBox.SelectedAccount;
+            var selectedAccount = gui.MainGrid.SendToCalendarPopup.SelectedAccount;
 
             //get the calendars available for that account
             var calendarList = MuhurthaCore.GetCalendarsForAccount(selectedAccount);
 
             //place calendars into combobox
-            gui.MainGrid.SendToCalendarBox.CalendarList = calendarList;
+            gui.MainGrid.SendToCalendarPopup.CalendarList = calendarList;
         }
 
     }

@@ -42,7 +42,7 @@ namespace Genso.Astrology.Library
                 var tagString = eventData.Element("Tag").Value;
                 var tagList = getEventTags(tagString);
                 //todo needs to be moved to a better place
-                var calculatorMethod = General.GetEventCalculatorMethod(name);
+                var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
 
                 //place the data into an event data structure
                 var eventX = new EventData(id, name, nature, description, tagList, calculatorMethod);

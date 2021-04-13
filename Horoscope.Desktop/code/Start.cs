@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Genso.Framework;
 
 
 namespace Horoscope.Desktop
@@ -26,7 +27,7 @@ namespace Horoscope.Desktop
             catch (Exception e)
             {
 
-                Console.WriteLine(e);
+                LogManager.Error(e);
 
                 //show user error
                 MessageBox.Show(e.Message, "Unexpected error", MessageBoxButton.OK, MessageBoxImage.Error);

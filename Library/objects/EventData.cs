@@ -12,29 +12,35 @@ namespace Genso.Astrology.Library
     /// </summary>
     public struct EventData : IHasName
     {
-        //FIELDS
+        /** FIELDS **/
+
         private readonly int _id;
-        private readonly EventName _name;
-        private readonly EventNature _nature;
-        private readonly string _description;
-        private readonly List<EventTag> _eventTags;
+
         private readonly EventCalculator _eventCalculator;
 
 
-        //CTOR
+        /** CTOR **/
         public EventData(int id, EventName name, EventNature nature, string description, List<EventTag> eventTags, EventCalculator eventCalculator)
         {
-            _name = name;
-            _nature = nature;
-            _description = description;
-            _eventTags = eventTags;
+            Name = name;
+            Nature = nature;
+            Description = description;
+            EventTags = eventTags;
             _eventCalculator = eventCalculator;
             _id = id;
         }
 
 
+        /** PROPERTIES **/
+        //mainly created for access from WPF binding
+        public EventName Name { get; }
+        public EventNature Nature { get; }
+        public string Description { get; }
+        public List<EventTag> EventTags { get; }
 
-        //METHODS
+
+
+        /** PUBLIC METHODS **/
         public bool IsEventOccuring(Time time, Person person)
         {
             //call event calculator to check if event is occuring
@@ -43,17 +49,17 @@ namespace Genso.Astrology.Library
             return isEventOccuring;
         }
 
-        public EventName GetName() => _name;
+        public EventName GetName() => Name;
 
-        public EventNature GetNature() => _nature;
+        public EventNature GetNature() => Nature;
 
-        public string GetDescription() => _description;
+        public string GetDescription() => Description;
 
-        public List<EventTag> GetEventTags() => _eventTags;
+        public List<EventTag> GetEventTags() => EventTags;
 
 
 
-        //METHOD OVERRIDES
+        /** METHOD OVERRIDES **/
         public override bool Equals(object value)
         {
 
@@ -80,16 +86,16 @@ namespace Genso.Astrology.Library
         {
             //get hash of all the fields & combine them
             var hash1 = _id.GetHashCode();
-            var hash2 = _name.GetHashCode();
-            var hash3 = _nature.GetHashCode();
-            var hash4 = _description.GetHashCode();
+            var hash2 = Name.GetHashCode();
+            var hash3 = Nature.GetHashCode();
+            var hash4 = Description.GetHashCode();
 
             return hash1 + hash2 + hash3 + hash4;
         }
 
         public override string ToString()
         {
-            return $"{_id} - {_name} - {_nature} - {_description}";
+            return $"{_id} - {Name} - {Nature} - {Description}";
         }
 
         public static bool operator ==(EventData left, EventData right)

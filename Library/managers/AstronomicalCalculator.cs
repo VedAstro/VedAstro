@@ -7,6 +7,7 @@ using Genso.Astrology.Library;
 using SwissEphNet;
 using DayOfWeek = Genso.Astrology.Library.DayOfWeek;
 using System.Reflection;
+using Genso.Framework;
 
 namespace Genso.Astrology.Library
 {
@@ -3672,7 +3673,7 @@ namespace Genso.Astrology.Library
 
                 //if not conjunct with any planet, should be malefic (not 100% sure, maybe aspects needs to be considered)
                 //TODO NOTE : Further checking on this point is needed, for now just place as benefic with mild warning
-                //Console.WriteLine("Info:Mercury not conjunct, but placed as benefic!");
+                LogManager.Debug("Info:Mercury not conjunct, but placed as benefic!");
                 return false;
 
 

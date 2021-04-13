@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
+using Genso.Framework;
 using Microsoft.Extensions.Caching.Memory;
 //using Xfrogcn.BinaryFormatter;
 
@@ -159,7 +163,7 @@ namespace Genso.Astrology.Library
                 //if fail just skip this cache file
                 catch (Exception)
                 {
-                    Console.WriteLine($"Loading cache failed : {rawName}");
+                    LogManager.Error($"Loading cache failed : {rawName}");
                     return;
                 }
 
@@ -175,11 +179,11 @@ namespace Genso.Astrology.Library
                     Parallel.ForEach(cacheData, cache => methodCache.TryAdd(cache.Key, cache.Value));
                 }
 
-                //Console.WriteLine("Cache Loaded: " + methodName);
+                LogManager.Debug("Cache Loaded: " + methodName);
 
             });
 
-            Console.WriteLine("All Cache Loaded");
+            LogManager.Debug("All Cache Loaded");
 
         }
 
@@ -208,9 +212,16 @@ namespace Genso.Astrology.Library
 
         }
 
+        public static IEnumerable GetKeys(this IMemoryCache memoryCache) =>
+            ((IDictionary)GetEntriesCollection((MemoryCache)memoryCache)).Keys;
+
+        public static IEnumerable<T> GetKeys<T>(this IMemoryCache memoryCache) =>
+            GetKeys(memoryCache).OfType<T>();
+
 
 
         //PRIVATE METHODS
+
 
         /// <summary>
         /// Deletes all cache files in disk
@@ -253,7 +264,7 @@ namespace Genso.Astrology.Library
             //if accesing file failed, try again with different name (count)
             catch (Exception)
             {
-                Console.WriteLine("Saving cache file failed!");
+                LogManager.Error("Saving cache file failed!");
                 count++;
                 goto CreateFile;
             }
@@ -281,7 +292,8 @@ namespace Genso.Astrology.Library
                 //if value is null, try again, possible miss with multiple threads
                 if (value == null)
                 {
-                    Console.WriteLine("Cache said to be loaded, but not here!");
+                    //log the cache miss
+                    LogManager.Debug("Cache said to be loaded, but not here!");
                     goto Start;
                 }
                 return value;
@@ -295,6 +307,15 @@ namespace Genso.Astrology.Library
             return value;
 
         }
+
+        // EXTENSION FUNCTIONS TO GET KEYS OUT OF MEMORY CACHE (USED IN ASTRONOMICAL FUNCTION CACHING)
+
+        private static readonly Func<MemoryCache, object> GetEntriesCollection = Delegate.CreateDelegate(
+            typeof(Func<MemoryCache, object>),
+            typeof(MemoryCache).GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance).GetGetMethod(true),
+            throwOnBindFailure: true) as Func<MemoryCache, object>;
+
+
     }
 }
 

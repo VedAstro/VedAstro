@@ -10,6 +10,8 @@ using Genso.Astrology.Library;
 using Genso.Astrology.Library.objects.Enum;
 using Genso.Astrology.Muhurtha.Core;
 using Genso.Framework;
+using System.Media;
+using Microsoft.Win32;
 
 namespace Muhurtha.Desktop
 {
@@ -226,6 +228,9 @@ namespace Muhurtha.Desktop
         //this event is fired when event calculation have finished
         private void CalculationCompleted()
         {
+            //play notification sound
+            PlayNotificationSound();
+
             //turn off smoke screen
             gui.MainGrid.SmokeScreen.Hide();
 
@@ -235,6 +240,9 @@ namespace Muhurtha.Desktop
         }
         private void SendingEventsCompleted()
         {
+            //play notification sound
+            PlayNotificationSound();
+
             //turn off smoke screen
             gui.MainGrid.SmokeScreen.Hide();
 
@@ -370,7 +378,6 @@ namespace Muhurtha.Desktop
                 case "Logs":
                     gui.MainGrid.FindEventOptions.Hide();
                     gui.MainGrid.ViewEventOptions.Hide();
-                    gui.MainGrid.LogView.ReloadLogText();
                     gui.MainGrid.LogView.Show();
                     gui.MainGrid.EventView.Hide();
                     break;
@@ -429,6 +436,29 @@ namespace Muhurtha.Desktop
             //place calendars into combobox
             gui.MainGrid.SendToCalendarPopup.CalendarList = calendarList;
         }
-
+        public void PlayNotificationSound()
+        {
+            bool found = false;
+            try
+            {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"AppEvents\Schemes\Apps\.Default\Notification.Default\.Current"))
+                {
+                    if (key != null)
+                    {
+                        Object o = key.GetValue(null); // pass null to get (Default)
+                        if (o != null)
+                        {
+                            SoundPlayer theSound = new SoundPlayer((String)o);
+                            theSound.Play();
+                            found = true;
+                        }
+                    }
+                }
+            }
+            catch
+            { }
+            if (!found)
+                SystemSounds.Beep.Play(); // consolation prize
+        }
     }
 }

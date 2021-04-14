@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.objects.Enum;
@@ -79,13 +80,19 @@ namespace Genso.Astrology.Muhurtha.Core
             //pass thread canceler General, so that methods inside can be stopped if needed
             EventManager.threadCanceler = threadCanceler;
 
+            //debug measure execution time
+            var watch = Stopwatch.StartNew();
+
             //start calculating events
-            var muhurthaTimePeriod = EventManager.GetNewMuhurthaTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, filteredEventDataList);
+            var eventList = EventManager.GetEventsInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, filteredEventDataList);
+
+            watch.Stop();
+            LogManager.Debug($"Events computed in: { watch.Elapsed.TotalSeconds}s");
 
             //fire event to let others know event calculation is done
             EventCalculationCompleted.Invoke();
 
-            return muhurthaTimePeriod.GetEventList();
+            return eventList;
         }
 
         public static void SendEventsToCalendar(List<Event> events, Calendar calendarName, CalendarAccount google, bool splitEvents)

@@ -2215,6 +2215,11 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.SuryaSankramana)]
         public static bool IsSuryaSankramanaOccuring(Time time, Person person)
         {
+
+            //TODO HANGS, NEEDS WORK
+            //DISABLE FOR NOW
+            return false;
+
             //Surya Sankramana. - The 2nd great evil is Surya Sankramana or the
             // solar ingress into different zodiacal signs. When the Sun is about to
             // leave one sign and enter another there seem to occur certain
@@ -2264,6 +2269,11 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.Papashadvargas)]
         public static bool IsPapashadvargasOccuring(Time time, Person person)
         {
+            //TODO ALWAYS ON
+            //DISABLE FOR NOW
+            return false;
+
+
             //Papashadvargs. - Malefics should not be strong in shadvargas in an election chart.
             //This event idicates that malefics are strong in shadvargas
 

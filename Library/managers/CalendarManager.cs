@@ -105,7 +105,7 @@ namespace Genso.Astrology.Library
                     threadCanceler.ThrowIfCancellationRequested();
 
                     //log progress
-                    LogManager.Debug($"\r {addedEventCount} of {eventToAddList.Count} Events added to Google Calendar");
+                    LogManager.Debug($"{addedEventCount} of {eventToAddList.Count} Events added to Google Calendar");
 
                     //increment progress counter
                     addedEventCount++;

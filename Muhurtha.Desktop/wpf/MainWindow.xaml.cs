@@ -50,6 +50,7 @@ namespace Muhurtha.Desktop
         private void Account_SelectionChanged(object sender, SelectionChangedEventArgs e) => MainGrid.SendToCalendarPopup.Account_SelectionChanged(sender, e);
         private void SendToCalendarBox_OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) => MainGrid.SendToCalendarPopup.SendToCalendarBox_OnIsVisibleChanged(sender, e);
         private void CalendarList_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => MainGrid.SendToCalendarPopup.CalendarList_OnPreviewMouseLeftButtonDown(sender, e);
-        private void OptionsPanel_OnSelectionChanged(object sender, SelectionChangedEventArgs e) => MainGrid?.OptionsPanel_OnSelectionChanged(sender, e);
+        private void OptionsPanel_OnSelectionChanged(object sender, SelectionChangedEventArgs e) => MainGrid?.OptionsPanel_OnSelectionChanged(sender, e); //watch for null, cause fires before viewmodal is ready
+        private void LogView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) => MainGrid.LogView.IsVisibleChanged(sender, e);
     }
 }

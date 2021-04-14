@@ -333,7 +333,10 @@ namespace Genso.Astrology.Library
 
                 //return new instance of planet sign
                 var degreesAngle = Angle.FromDegrees(Math.Abs(degreesInSign)); //make always positive
-                return new ZodiacSign(currentSignName, degreesAngle);
+
+                var zodiacSignAtLongitude = new ZodiacSign(currentSignName, degreesAngle);
+
+                return zodiacSignAtLongitude;
             }
 
 
@@ -2980,6 +2983,12 @@ namespace Genso.Astrology.Library
             return relationship;
         }
 
+        /// <summary>
+        /// Temporary Friendship
+        /// Planets found in the 2nd, 3rd, 4th, 10th, 11th
+        /// and 12th signs from any other planet becomes the
+        /// latter's temporary friends. The others are its enemies.
+        /// </summary>
         public static PlanetToPlanetRelationship GetPlanetTemporaryRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
         {
 
@@ -2996,21 +3005,9 @@ namespace Genso.Astrology.Library
                 return PlanetToPlanetRelationship.Mitra;
             }
 
-            //2.0 get planet's enemies
-            var enemyPlanetList = AstronomicalCalculator.GetPlanetTemporaryEnemyList(mainPlanet, time);
-
-            //check if planet is found in enemy list
-            var planetFoundInEnemyList = enemyPlanetList.Contains(secondaryPlanet);
-
-            //if found in enemy list
-            if (planetFoundInEnemyList)
-            {
-                //return relationship as enemy
-                return PlanetToPlanetRelationship.Satru;
-            }
-
-
-            throw new Exception("Temporary planet relationship not found, error!");
+            //if planet is not a friend then it is an enemy
+            //return relationship as enemy
+            return PlanetToPlanetRelationship.Satru;
         }
 
         //public static List<PlanetName> GetPlanetTemporaryEnemyList(PlanetName planetName, Time time)
@@ -3060,55 +3057,56 @@ namespace Genso.Astrology.Library
 
         //}
 
-        public static List<PlanetName> GetPlanetTemporaryEnemyList(PlanetName planetName, Time time)
-        {
-            //Signs where enemy planets are located 1,5,6,7,8,9
+        //public static List<PlanetName> GetPlanetTemporaryEnemyList(PlanetName planetName, Time time)
+        //{
+        //    //Signs where enemy planets are located 1,5,6,7,8,9
 
-            //get sign planet is currently in
-            var planetSignName = AstronomicalCalculator.GetPlanetRasiSign(planetName, time).GetSignName();
+        //    //get sign planet is currently in
+        //    var planetSignName = AstronomicalCalculator.GetPlanetRasiSign(planetName, time).GetSignName();
 
-            //Get signs of enemies of main planet
-            //get planets in 1
-            var sign1FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 1);
-            //get planets in 5
-            var sign5FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 5);
-            //get planets in 6
-            var sign6FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 6);
-            //get planets in 7
-            var sign7FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 7);
-            //get planets in 8
-            var sign8FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 8);
-            //get planets in 9
-            var sign9FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 9);
+        //    //Get signs of enemies of main planet
+        //    //get planets in 1
+        //    var sign1FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 1);
+        //    //get planets in 5
+        //    var sign5FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 5);
+        //    //get planets in 6
+        //    var sign6FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 6);
+        //    //get planets in 7
+        //    var sign7FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 7);
+        //    //get planets in 8
+        //    var sign8FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 8);
+        //    //get planets in 9
+        //    var sign9FromMainPlanet = AstronomicalCalculator.GetSignCountedFromInputSign(planetSignName, 9);
 
-            //add signs of enemy planets to a list
-            var signsOfEnemyPlanet = new List<ZodiacName>(){sign1FromMainPlanet, sign5FromMainPlanet, sign6FromMainPlanet,
-                                                        sign7FromMainPlanet, sign8FromMainPlanet, sign9FromMainPlanet};
+        //    //add signs of enemy planets to a list
+        //    var signsOfEnemyPlanet = new List<ZodiacName>(){sign1FromMainPlanet, sign5FromMainPlanet, sign6FromMainPlanet,
+        //                                                sign7FromMainPlanet, sign8FromMainPlanet, sign9FromMainPlanet};
 
-            //declare list of enemy planets
-            var enemyPlanetList = new List<PlanetName>();
+        //    //declare list of enemy planets
+        //    var enemyPlanetList = new List<PlanetName>();
 
-            //loop through the signs and fill the enemy planet list
-            foreach (var sign in signsOfEnemyPlanet)
-            {
-                //get the planets in the current sign
-                var enemyPlanetsInThisSign = AstronomicalCalculator.GetPlanetInSign(sign, time);
+        //    //loop through the signs and fill the enemy planet list
+        //    foreach (var sign in signsOfEnemyPlanet)
+        //    {
+        //        //get the planets in the current sign
+        //        var enemyPlanetsInThisSign = AstronomicalCalculator.GetPlanetInSign(sign, time);
 
-                //add the planets in to the list
-                enemyPlanetList.AddRange(enemyPlanetsInThisSign);
-            }
-
-            //remove rahu & ketu from list
-            enemyPlanetList.Remove(PlanetName.Rahu);
-            enemyPlanetList.Remove(PlanetName.Ketu);
-
-            //remove the main planet from list
-            enemyPlanetList.Remove(planetName);
+        //        //add the planets in to the list
+        //        enemyPlanetList.AddRange(enemyPlanetsInThisSign);
+        //    }
 
 
-            return enemyPlanetList;
+        //    //remove rahu & ketu from list
+        //    enemyPlanetList.Remove(PlanetName.Rahu);
+        //    enemyPlanetList.Remove(PlanetName.Ketu);
 
-        }
+        //    //remove the main planet from list
+        //    enemyPlanetList.Remove(planetName);
+
+
+        //    return enemyPlanetList;
+
+        //}
 
         public static List<PlanetName> GetPlanetInSign(ZodiacName signName, Time time)
         {
@@ -3169,12 +3167,13 @@ namespace Genso.Astrology.Library
             return planetFoundInSign;
         }
 
+        /// <summary>
+        /// The planets in -the 2nd, 3rd, 4th, 10th, 11th and
+        /// 12th signs from any other planet becomes his
+        /// (Tatkalika) friend.
+        /// </summary>
         public static List<PlanetName> GetPlanetTemporaryFriendList(PlanetName planetName, Time time)
         {
-            //The planets in -the 2nd, 3rd, 4th, 10th, 11th and
-            // 12th signs from any other planet becomes his
-            // (Tatkalika) friend.
-
             //get sign planet is currently in
             var planetSignName = AstronomicalCalculator.GetPlanetRasiSign(planetName, time).GetSignName();
 

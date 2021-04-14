@@ -31,6 +31,7 @@ namespace Muhurtha.Desktop
 
         /** EVENTS **/
         public event PropertyChangedEventHandler PropertyChanged;
+        public event DependencyPropertyChangedEventHandler IsVisible_Changed;
 
 
 
@@ -65,9 +66,8 @@ namespace Muhurtha.Desktop
         /** EVENT ROUTING **/
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public void IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs eventArgs) => IsVisible_Changed.Invoke(sender, eventArgs);
     }
 }

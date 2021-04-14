@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Genso.Framework;
 using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Concurrent;
 
 namespace Genso.Astrology.Library
 {
@@ -34,8 +35,15 @@ namespace Genso.Astrology.Library
         /// inputed event types aka "event data"
         /// Note : Cancelation token caught here
         /// </summary>
-        public static List<Event> GetListOfEventsInTimePeriod(Time startTime, Time endTime, Person person, double precisionInHours, List<EventData> eventDataList)
+        public static List<Event> GetEventsInTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
         {
+
+            //get data to instantiate muhurtha time period
+            //get start & end times
+            var startTime = new Time(startStdTime, geoLocation);
+            var endTime = new Time(endStdTime, geoLocation);
+
+
             //initialize empty list of event to return
             List<Event> eventList = new();
 
@@ -50,12 +58,12 @@ namespace Genso.Astrology.Library
                 Parallel.ForEach(eventDataList, (eventData) =>
                 {
                     //get list of occuring events for a sigle event type
-                    var eventListForThisEvent = GetListOfEventsByEventData(eventData, person, timeList);
+                    var eventListForThisEvent = GetListOfEventsByEventDataParallel(eventData, person, timeList);
                     //TODO Progress show code WIP
                     //count++;
                     //double percentDone = ((double)count / (double)eventDataList.Count) * 100.0;
                     //debug print
-                    //Console.Write($"\r Completed : {percentDone}%");
+                    //LogManager.Debug($"\r Completed : {percentDone}%");
 
                     //adding to list needs to be synced for thread safety
                     lock (sync)
@@ -85,7 +93,140 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Get a list of events in a time period for a single event type aka "event data"
         /// Decision on when event starts & ends is also done here
-        /// Note : thread cancelation checked & thrown here (caught by caller)
+        /// Note :
+        /// 1.thread cancelation checked & thrown here (caught by caller)
+        /// 2.method is operated in paralled threaded way (inside) for performance gains
+        /// </summary>
+        private static List<Event> GetListOfEventsByEventDataParallel(EventData eventData, Person person, List<Time> timeList)
+        {
+            //caculate if event occured for each time slice and store it in a dictionary
+            var precalculatedList = GetCalculatedTimeEventOccuringList();
+
+            //go through time slices and identify start & end of events
+            //place them in a event list
+            var eventList = ExtractEventsFromTimeSlices();
+
+            return eventList;
+
+
+            //----------------------FUNCTIONS--------------------------
+
+            //takes time list and checks if event is occurig for each time slice,
+            //and returns it in dictionary list, done in parallel
+            ConcurrentDictionary<Time, bool> GetCalculatedTimeEventOccuringList()
+            {
+                //time is "key", and is occuring is "value"
+                var returnList = new ConcurrentDictionary<Time, bool>();
+
+                Parallel.ForEach(timeList, (time, state) =>
+                {
+                    //get if event occuring at the inputed time
+                    var isEventOccuring = eventData.IsEventOccuring(time, person);
+
+                    //add to the dictionary
+                    returnList[time] = isEventOccuring;
+
+                });
+
+                return returnList;
+            }
+
+            //go through time slices and identify start & end of events
+            //place them in a event list and return it
+            List<Event> ExtractEventsFromTimeSlices()
+            {
+                //declare empty event list to fill
+                var eventList = new List<Event>();
+
+                //set previous time as false for first time instance
+                var eventOccuredInPreviousTime = false;
+
+                //declare start & end times
+                Time eventStartTime = new Time();
+                Time eventEndTime = new Time();
+                var lastInstanceOfTime = timeList.Last();
+
+                //loop through time list 
+                //note: loop must be done in sequencial order, to detect correct start & end time
+                foreach (var time in timeList)
+                {
+                    //check if user has canceled calculation halfway
+                    threadCanceler.ThrowIfCancellationRequested();
+
+                    //check if event is occuring at this time slice (precalculated list)
+                    var eventIsOccuringNow = precalculatedList[time];
+
+                    //if event is occuring now & not in previous time
+                    if (eventIsOccuringNow == true & eventOccuredInPreviousTime == false)
+                    {
+                        //save new start & end time
+                        eventStartTime = time;
+                        eventEndTime = time;
+                        //update flag
+                        eventOccuredInPreviousTime = true;
+                    }
+                    //if event is occuring now & in previous time
+                    else if (eventIsOccuringNow == true & eventOccuredInPreviousTime == true)
+                    {
+                        //update end time only
+                        eventEndTime = time;
+                        //update flag
+                        eventOccuredInPreviousTime = true;
+                    }
+                    //if event is not occuring now but occured before
+                    else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
+                    {
+                        //add previous event to list
+                        var newEvent = new Event(eventData.GetName(),
+                            eventData.GetNature(),
+                            eventData.GetDescription(),
+                            eventStartTime,
+                            eventEndTime);
+
+                        //if event is duration is 0 minute, raise alarm
+                        if (newEvent.GetDurationMinutes() <= 0)
+                        {
+                            LogManager.Debug("Event duration is 0!");
+                        }
+
+
+                        eventList.Add(newEvent);
+
+                        //set flag
+                        eventOccuredInPreviousTime = false;
+                    }
+
+                    //if event is occuring now & it is the last time
+                    if (eventIsOccuringNow == true & time == lastInstanceOfTime)
+                    {
+                        //add current event to list
+                        var newEvent2 = new Event(eventData.GetName(),
+                            eventData.GetNature(),
+                            eventData.GetDescription(),
+                            eventStartTime,
+                            eventEndTime);
+
+                        //if event is duration is 0 minute, raise alarm
+                        if (newEvent2.GetDurationMinutes() <= 0)
+                        {
+                            LogManager.Debug("Event duration is 0!");
+                        }
+
+                        eventList.Add(newEvent2);
+                    }
+                }
+
+                return eventList;
+            }
+        }
+
+        /// <summary>
+        /// MARKED FOR ARHIVEING, if not used long archive it
+        /// Get a list of events in a time period for a single event type aka "event data"
+        /// Decision on when event starts & ends is also done here
+        /// Note :
+        /// 1.thread cancelation checked & thrown here (caught by caller)
+        /// 2.method is operated in sequencial way, it is anloder version, marked for archiving!
         /// </summary>
         private static List<Event> GetListOfEventsByEventData(EventData eventData, Person person, List<Time> timeList)
         {
@@ -106,9 +247,6 @@ namespace Genso.Astrology.Library
             {
                 //check if user has canceled calculation halfway
                 threadCanceler.ThrowIfCancellationRequested();
-
-                //debug print
-                Console.Write($"\r Checking time:{time} : {eventData.GetName()}");
 
                 //get flag of event occuring now
                 var eventIsOccuringNow = eventData.IsEventOccuring(time, person);
@@ -223,24 +361,7 @@ namespace Genso.Astrology.Library
 
         }
 
-        public static MuhurthaTimePeriod GetNewMuhurthaTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
-        {
 
-            //get data to instantiate muhurtha time period
-            //get start & end times
-            var startTime = new Time(startStdTime, geoLocation);
-            var endTime = new Time(endStdTime, geoLocation);
-
-
-            //get list of events
-            var eventList = GetListOfEventsInTimePeriod(startTime, endTime, person, precisionInHours, eventDataList);
-
-            //initialize new muhurtha time period
-            var muhurthaTimePeriod = new MuhurthaTimePeriod(startTime, endTime, person, eventList);
-
-            //return 
-            return muhurthaTimePeriod;
-        }
 
         /// <summary>
         /// Splits events that span across 2 days or more
@@ -401,3 +522,20 @@ namespace Genso.Astrology.Library
 
     }
 }
+
+
+//ARCHIVE CODE
+//public static MuhurthaTimePeriod GetNewMuhurthaTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
+//{
+
+
+
+//    //get list of events
+//    var eventList = GetEventsInTimePeriod(startTime, endTime, person, precisionInHours, eventDataList);
+
+//    //initialize new muhurtha time period
+//    var muhurthaTimePeriod = new MuhurthaTimePeriod(startTime, endTime, person, eventList);
+
+//    //return 
+//    return muhurthaTimePeriod;
+//}

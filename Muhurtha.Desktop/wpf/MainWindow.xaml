@@ -41,7 +41,14 @@
                                 <!--cell template is done to show description in tooltip-->
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate >
-                                        <TextBlock Text="{Binding Name}" ToolTip="{Binding Description}"/>
+                                        <TextBlock Text="{Binding FormattedName}"  ToolTipService.ShowDuration="999999">
+                                            <TextBlock.ToolTip>
+                                                <StackPanel>
+                                                    <TextBlock FontWeight="Bold" FontSize="14" Margin="0,0,0,5">Description</TextBlock>
+                                                    <TextBlock Text="{Binding Description}" />
+                                                </StackPanel>
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -73,10 +80,10 @@
 
                 <!--Combobox to select which options panel to show-->
                 <ComboBox Grid.Row="0" SelectedIndex="0" SelectedItem="{Binding SelectedOptionsPanel}" FontWeight="SemiBold" VerticalContentAlignment="Center" SelectionChanged="OptionsPanel_OnSelectionChanged" >
-                    <ComboBoxItem ToolTip="View all muhurtha events in specific time period">View Events</ComboBoxItem>
-                    <ComboBoxItem ToolTip="Find a time with specific occuring events">Find Events</ComboBoxItem>
-                    <ComboBoxItem ToolTip="Developer logs for debugging">Logs</ComboBoxItem>
-                    <ComboBoxItem ToolTip="General settings for the program">Settings</ComboBoxItem>
+                    <ComboBoxItem  ToolTipService.ShowDuration="999999" ToolTip="View all muhurtha events in specific time period">View Events</ComboBoxItem>
+                    <ComboBoxItem  ToolTipService.ShowDuration="999999" ToolTip="Find a time with specific occuring events">Find Events</ComboBoxItem>
+                    <ComboBoxItem  ToolTipService.ShowDuration="999999" ToolTip="Developer logs for debugging">Logs</ComboBoxItem>
+                    <ComboBoxItem  ToolTipService.ShowDuration="999999" ToolTip="General settings for the program">Settings</ComboBoxItem>
                 </ComboBox>
 
 
@@ -145,14 +152,30 @@
                                 <RowDefinition />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-                            <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Select events to find" />
+                            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                <Label Style="{StaticResource ResourceKey=Label}" Content="Select events to find" />
+                                <Label Foreground="Blue" FontWeight="Bold" ToolTipService.ShowDuration="999999" Content="{Binding SelectedEventsCount}">
+                                    <Label.ToolTip>
+                                        <StackPanel>
+                                            <TextBlock FontWeight="Bold" FontSize="14" Margin="0,0,0,5">Selected</TextBlock>
+                                            <ItemsControl ItemsSource="{Binding SelectedEventsToFind}" DisplayMemberPath="FormattedName" />
+                                            <!--<Border BorderBrush="Silver" BorderThickness="0,1,0,0" Margin="0,8" />-->
+                                            <!--<WrapPanel>
+                                                <Image Source="/WpfTutorialSamples;component/Images/help.png" Margin="0,0,5,0" />
+                                                <TextBlock FontStyle="Italic">Press F1 for more help</TextBlock>
+                                            </WrapPanel>-->
+                                        </StackPanel>
+                                    </Label.ToolTip>
+                                </Label>
+                            </StackPanel>
+
                             <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" TextChanged="EventListFilterText_OnTextChanged" Text="{Binding EventListFilterText}" />
                             <!--list of events to look for-->
                             <ListView Grid.Row="2" ItemsSource="{Binding EventsToFindListFiltered}" IsSynchronizedWithCurrentItem="True" SelectionChanged="EventsToFind_SelectionChanged"  Height="160" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <CheckBox Content="{Binding Name}" 
-                                                  IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                        <CheckBox Content="{Binding FormattedName}" 
+                                                  IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}" ToolTipService.ShowDuration="999999"
                                                   ToolTip="{Binding Description}"/>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -254,10 +277,10 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Custom name" />
-                        <TextBox ToolTip="Give a custom name for all the events, this name will be used when sending the event to calendar" Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}"  Text="{Binding CustomEventName}" />
+                        <TextBox ToolTipService.ShowDuration="999999" ToolTip="Give a custom name for all the events, this name will be used when sending the event to calendar" Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}"  Text="{Binding CustomEventName}" />
                     </Grid>
-                    <CheckBox Margin="0,10,0,0" ToolTip="Splits the events by day before sending to calendar, makes viewing events easier in calendar" IsChecked="{Binding IsSplitEventsChecked}">Split events</CheckBox>
-                    <CheckBox Margin="0,10,0,0" ToolTip="Enable reminder for calendar events 1 day, 1 hour and 1 minute before" IsChecked="{Binding IsEnableRemindersChecked}">Enable reminders</CheckBox>
+                    <CheckBox Margin="0,10,0,0" ToolTipService.ShowDuration="999999" ToolTip="Splits the events by day before sending to calendar, makes viewing events easier in calendar" IsChecked="{Binding IsSplitEventsChecked}">Split events</CheckBox>
+                    <CheckBox Margin="0,10,0,0" ToolTipService.ShowDuration="999999" ToolTip="Enable reminder for calendar events 1 day, 1 hour and 1 minute before" IsChecked="{Binding IsEnableRemindersChecked}">Enable reminders</CheckBox>
 
                 </StackPanel>
 

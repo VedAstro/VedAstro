@@ -30,6 +30,7 @@ namespace Genso.Astrology.Library
         //PROPERTIES
         //Note: Created mainly for ease of use with WPF binding
         public EventName Name => _name;
+        public string FormattedName => Format.FormatName(this);
         public string Description => _description;
         public EventNature Nature => _nature;
         public Time StartTime => _startTime;

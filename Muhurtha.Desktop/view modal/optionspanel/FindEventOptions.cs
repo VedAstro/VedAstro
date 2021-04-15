@@ -30,6 +30,7 @@ namespace Muhurtha.Desktop
         private string _eventListFilterText = "";
         private List<EventData> _eventsToFindListFiltered;
         private IList _selectedItems;
+        private string _selectedEventsCount = ""; //default empty string, so nothing appears
 
         /** EVENTS **/
         public event EventHandler SendToCalendarButtonClicked;
@@ -197,6 +198,26 @@ namespace Muhurtha.Desktop
             }
 
         }
+        /// <summary>
+        /// This is the number of selected events,
+        /// useful to show user the events selected when filtering,
+        /// since the previously selected event can be hidden
+        /// Note: stored as string so that easy to hide when it is 0 ("")
+        /// </summary>
+        public string SelectedEventsCount
+        {
+            get => _selectedEventsCount;
+            set
+            {
+                //if count is 0, then don't show anything
+                if (value == "0")
+                {
+                    value = "";
+                }
+                _selectedEventsCount = value;
+                OnPropertyChanged(nameof(SelectedEventsCount));
+            }
+        }
 
 
         /** PUBLIC METHODS **/
@@ -210,14 +231,16 @@ namespace Muhurtha.Desktop
         /// </summary>
         public void EventsToFind_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var listView = ((ListView)sender);
+
             //make a copy of the Selected Items for use later
-            SelectedItems ??= ((ListView)sender).SelectedItems;
+            SelectedItems ??= listView.SelectedItems;
 
 
             //if user did not click the event checkbox then,
             //the event is being triggered by the filterng machanism or autoselect
             //so ignore
-            if (((ListView)sender).IsMouseOver == false) { return; }
+            if (!listView.IsMouseOver || !listView.IsKeyboardFocusWithin) { return; }
 
 
             //add & remove events from the internal list which
@@ -232,6 +255,11 @@ namespace Muhurtha.Desktop
             {
                 SelectedEventsToFind.Add(eventToAdd);
             }
+
+            //if control reaches here, than user has changed selectec events
+            //so need to update selected event count
+            SelectedEventsCount = SelectedEventsToFind.Count.ToString();
+
         }
 
         /// <summary>

@@ -34,6 +34,7 @@ namespace Genso.Astrology.Library
         /** PROPERTIES **/
         //mainly created for access from WPF binding
         public EventName Name { get; }
+        public string FormattedName => Format.FormatName(this);
         public EventNature Nature { get; }
         public string Description { get; }
         public List<EventTag> EventTags { get; }
@@ -107,5 +108,6 @@ namespace Genso.Astrology.Library
         {
             return !(left == right);
         }
+
     }
 }

@@ -89,8 +89,14 @@ namespace Genso.Astrology.Muhurtha.Core
             var startStdTime = DateTimeOffset.ParseExact(startTime, Time.GetDateTimeFormat(), null);
             var endStdTime = DateTimeOffset.ParseExact(endTime, Time.GetDateTimeFormat(), null);
 
+            //debug to measure event calculation time
+            var watch = Stopwatch.StartNew();
+
             //start calculating events
             var eventList = EventManager.FindCombinedEventsInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, eventsToFind);
+
+            watch.Stop();
+            LogManager.Debug($"Events found in: { watch.Elapsed.TotalSeconds}s");
 
             //fire event to let others know event calculation is done
             EventCalculationCompleted.Invoke();
@@ -99,16 +105,16 @@ namespace Genso.Astrology.Muhurtha.Core
         }
 
 
-        public static void SendEventsToCalendar(List<Event> events, Calendar calendarName, CalendarAccount google, bool splitEvents)
+        public static void SendEventsToCalendar(List<Event> events, Calendar calendarName, CalendarAccount google, bool splitEvents, bool enableReminders, string customEventName)
         {
-            //split events by day
-            var splittedEvents = EventManager.SplitEventsByDay(events);
+            //split events by day if checked
+            if (splitEvents) { events = EventManager.SplitEventsByDay(events); }
 
             //pass thread canceler, so that sending can be stopped if needed
             CalendarManager.threadCanceler = threadCanceler;
 
             //start sending
-            CalendarManager.AddEventsToCalenderGoogle(splittedEvents, calendarName.Id);
+            CalendarManager.AddEventsToCalenderGoogle(events, calendarName.Id, enableReminders, customEventName);
 
             //fire event to let others know event sending is done
             SendingEventsCompleted.Invoke();

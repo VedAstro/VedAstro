@@ -1,22 +1,33 @@
-                                             +----------------------------+
-                                             |                            |
-                                             | MUHURTHA DESKTOP BLUEPRINT |
-                                             |                            |
-                                             +----------------------------+
+                                                                                                           +----------------------------+
+                                                                                                           |                            |
+                                                                                                           | MUHURTHA DESKTOP BLUEPRINT |
+                                                                                                           |                            |
+                                                                                                           +----------------------------+
 
-       THREAD CANCELATION PROCESS
+                                                                                                                                                        GUI WINDOW DESIGN
 
-
-                                 +-------------------+
-                                 | Cancelation Token |
-                   +-----------> | Instance          | <---------+
-                   |             +-----------+-------+           |
-                   |                         |                   |
-                   +                         |                   +
-USER -> GUI -> PROGRAM                       |      CALCULATION THREAD
-                                             |
-User clicks cancel, Program                  |      This thread checks when possible
-then marks its token as canceled             +--->  if thread is marked as cancled,
-                                                    if so raises exception, which is
-                                                    caught by Muhurtha Core and handled nicely
-                                                    Program doesn't see this exception
+                                                                                                                                                      +-----------------------------------------------+
+                                                                                                                                                      +-----------------------------------------------+
+                                                                                                                                                      |                                |              |
+                                                                                                                                                      |   VIEW PANEL                   |   OPTIONS    |
+                                                                                                                                                      |                                |   PANEL      |
+                                                                                                                                                      |             +---------------+  |              |
++-------------------------------------------------------------------------------------------------+                                                   |             |               |  |              |
+|                                 THREAD CANCELATION PROCESS                                      |                                                   |             |   POPUP       |  |              |
+|                                                                                                 |                                                   |             |               |  |              |
+|                                                                                                 |                                                   |             +---------------+  |              |
+|                                   +-------------------+                                         |                                                   |                                |              |
+|                                   | Cancelation Token |                                         |                                                   |                                |              |
+|                     +-----------> | Instance          | <---------+                             |                                                   |                                |              |
+|                     |             +-----------+-------+           |                             |                                                   |                                |              |
+|                     |                         |                   |                             |                                                   +--------------------------------+--------------+
+|                     +                         |                   +                             |
+|  USER -> GUI -> PROGRAM                       |      CALCULATION THREAD                         |
+|                                               |                                                 |
+|  User clicks cancel, Program                  |      This thread checks when possible           |
+|  then marks its token as canceled             +--->  if thread is marked as cancled,            |
+|                                                      if so raises exception, which is           |
+|                                                      caught by Muhurtha Core and handled nicely |
+|                                                      Program doesn't see this exception         |
+|                                                                                                 |
++-------------------------------------------------------------------------------------------------+

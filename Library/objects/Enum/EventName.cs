@@ -55,7 +55,6 @@
         PanchangaSuddhi,
         UgraYoga,
         SuryaSankramana,
-        CustomEvent,
         KarthariDosha,
         ShashtashtaRiphagathaChandraDosha,
         SagrahaChandraDosha,
@@ -209,6 +208,8 @@
         House3LordInHouse10,
         House3LordInHouse11,
         House3LordInHouse12,
-        CombinedEvent
+        CombinedEvent,
+        GoodMoonSignForSelling,
+        GoodWeekdayForSelling
     }
 }

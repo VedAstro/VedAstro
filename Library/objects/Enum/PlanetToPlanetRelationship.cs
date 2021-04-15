@@ -3,6 +3,11 @@
     public enum PlanetToPlanetRelationship
     {
         /// <summary>
+        /// Same planet
+        /// </summary>
+        Own,
+
+        /// <summary>
         /// Intimate friend
         /// </summary>
         AdhiMitra,

@@ -27,7 +27,6 @@ namespace Genso.Astrology.Library
         }
 
 
-
         //PROPERTIES
         //Note: Created mainly for ease of use with WPF binding
         public EventName Name => _name;

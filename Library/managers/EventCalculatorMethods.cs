@@ -698,7 +698,7 @@ namespace Genso.Astrology.Library
 
         #region DEBUG
 
-        [EventCalculator(EventName.CustomEvent)]
+        //[EventCalculator(EventName.CustomEvent)]
         public static bool IsCustomEventOccuring(Time time, Person person)
         {
             //good tarabala
@@ -3387,6 +3387,57 @@ namespace Genso.Astrology.Library
 
             //if not correct weekday, end here as not occuring
             if (inCorrectWeekday == false) { return false; }
+
+
+            //if control reaches here then event is ocuring
+            return true;
+
+        }
+
+        [EventCalculator(EventName.GoodWeekdayForSelling)]
+        public static bool IsGoodWeekdayForSellingOccuring(Time time, Person person)
+        {
+            //Selling for Profit. -  Monday, Wednesday and Thursday are the best.
+
+
+            //4. Monday, Wednesday and Thursday are the best.
+
+            //get weekday
+            var weekDay = AstronomicalCalculator.GetDayOfWeek(time);
+
+            //check if weekday correct 
+            var inCorrectWeekday = weekDay == DayOfWeek.Monday ||
+                                   weekDay == DayOfWeek.Wednesday ||
+                                   weekDay == DayOfWeek.Thursday;
+
+            //if not correct weekday, end here as not occuring
+            if (inCorrectWeekday == false) { return false; }
+
+
+            //if control reaches here then event is ocuring
+            return true;
+
+        }
+
+        [EventCalculator(EventName.GoodMoonSignForSelling)]
+        public static bool IsGoodMoonSignForSellingOccuring(Time time, Person person)
+        {
+            //Selling for Profit. - The Moon's situation in Taurus. Cancer
+            // or Pisces would greatly help the seller.
+
+
+            //2. The Moon's situation in Taurus. Cancer or Pisces would greatly help the seller.
+
+            //get sign moon is in 
+            var moonSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, time);
+
+            //check if moon is in the correct sign
+            var inCorrectSign = moonSign.GetSignName() == ZodiacName.Taurus ||
+                                moonSign.GetSignName() == ZodiacName.Cancer ||
+                                moonSign.GetSignName() == ZodiacName.Pisces;
+
+            //if not correct sign, end here as not occuring
+            if (inCorrectSign == false) { return false; }
 
 
             //if control reaches here then event is ocuring

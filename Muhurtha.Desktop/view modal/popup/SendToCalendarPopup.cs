@@ -19,6 +19,9 @@ namespace Muhurtha.Desktop
         private List<Calendar> _calendarList;
         private Calendar _selectedCalendar;
         private List<CalendarAccount> _accountList;
+        private string _customEventName = ""; //default is empty string
+        private bool _isSplitEventsChecked = true; //default true
+        private bool _isEnableRemindersChecked = false; //default false
 
 
         /** EVENTS **/
@@ -48,6 +51,35 @@ namespace Muhurtha.Desktop
                 OnPropertyChanged(nameof(SelectedAccount));
             }
         }
+        public string CustomEventName
+        {
+            get => _customEventName;
+            set
+            {
+                _customEventName = value;
+                OnPropertyChanged(nameof(CustomEventName));
+            }
+        }
+        public bool IsSplitEventsChecked
+        {
+            get => _isSplitEventsChecked;
+            set
+            {
+                _isSplitEventsChecked = value;
+                OnPropertyChanged(nameof(IsSplitEventsChecked));
+            }
+        }
+        public bool IsEnableRemindersChecked
+        {
+            get => _isEnableRemindersChecked;
+            set
+            {
+                _isEnableRemindersChecked = value;
+                OnPropertyChanged(nameof(IsEnableRemindersChecked));
+            }
+        }
+
+
 
         public List<CalendarAccount> AccountList
         {

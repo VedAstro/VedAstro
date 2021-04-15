@@ -328,8 +328,8 @@ namespace Genso.Astrology.Library
                 //convert zodiac number to zodiac name
                 var calculatedZodiac = (ZodiacName)zodiacNumber;
 
-                //if rough zodiac number is less than 0, then return Pisces else return calculated zodiac
-                ZodiacName currentSignName = (roughZodiacNumber < 0) ? ZodiacName.Pisces : calculatedZodiac;
+                //if rough zodiac number is less than or equal 0, then return Pisces else return calculated zodiac
+                ZodiacName currentSignName = (roughZodiacNumber <= 0) ? ZodiacName.Pisces : calculatedZodiac;
 
                 //return new instance of planet sign
                 var degreesAngle = Angle.FromDegrees(Math.Abs(degreesInSign)); //make always positive
@@ -932,6 +932,10 @@ namespace Genso.Astrology.Library
             //UNDERLYING FUNCTION
             PlanetToPlanetRelationship _getPlanetPermanentRelationshipWithPlanet()
             {
+                //if main planet & secondary planet is same, then it is own plant (same planet), end here
+                if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.Own; }
+
+
                 bool planetInEnemies = false;
                 bool planetInNeutrals = false;
                 bool planetInFriends = false;
@@ -2919,6 +2923,10 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static PlanetToPlanetRelationship GetPlanetCombinedRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
         {
+            //if main planet & secondary planet is same, then it is own plant (same planet), end here
+            if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.Own; }
+
+
             //get planet's permanent relationship
             PlanetToPlanetRelationship planetPermanentRelationship =
                 AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(mainPlanet, secondaryPlanet);
@@ -2991,6 +2999,9 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static PlanetToPlanetRelationship GetPlanetTemporaryRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
         {
+            //if main planet & secondary planet is same, then it is own plant (same planet), end here
+            if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.Own; }
+
 
             //1.0 get planet's friends
             var friendlyPlanetList = AstronomicalCalculator.GetPlanetTemporaryFriendList(mainPlanet, time);

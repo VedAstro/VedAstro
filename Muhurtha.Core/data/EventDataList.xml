@@ -114,13 +114,13 @@
     </Description>
     <Tag>General</Tag>
   </Event>
-  <Event>
+  <!--<Event>
     <Id>16</Id>
     <Name>CustomEvent</Name>
     <Nature>Good</Nature>
     <Description>Good tarabala &amp; good chandrabala</Description>
     <Tag>Debug</Tag>
-  </Event>
+  </Event>-->
   <Event>
     <Id>17</Id>
     <Name>KarthariDosha</Name>
@@ -1392,6 +1392,25 @@
       This event idicates that malefics are strong in shadvargas
     </Description>
     <Tag>General</Tag>
+  </Event>
+  <Event>
+    <Id>133</Id>
+    <Name>GoodMoonSignForSelling</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Selling for Profit. - The Moon's situation in Taurus. Cancer
+      or Pisces would greatly help the seller.
+    </Description>
+    <Tag>BuyingSelling</Tag>
+  </Event>
+  <Event>
+    <Id>134</Id>
+    <Name>GoodWeekdayForSelling</Name>
+    <Nature>Good</Nature>
+    <Description>
+      Selling for Profit. - Monday, Wednesday and Thursday are the best.
+    </Description>
+    <Tag>BuyingSelling</Tag>
   </Event>
 
 </Root>

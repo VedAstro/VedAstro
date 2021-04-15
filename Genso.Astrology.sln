@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muhurtha.Core", "Muhurtha.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muhurtha.Desktop", "Muhurtha.Desktop\Muhurtha.Desktop.csproj", "{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Horoscope.Desktop", "Horoscope.Desktop\Horoscope.Desktop.csproj", "{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horoscope.Desktop", "Horoscope.Desktop\Horoscope.Desktop.csproj", "{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryTests", "LibraryTests\LibraryTests.csproj", "{979EDF0E-9B11-4100-A37A-13A9E0924555}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979EDF0E-9B11-4100-A37A-13A9E0924555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979EDF0E-9B11-4100-A37A-13A9E0924555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979EDF0E-9B11-4100-A37A-13A9E0924555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979EDF0E-9B11-4100-A37A-13A9E0924555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

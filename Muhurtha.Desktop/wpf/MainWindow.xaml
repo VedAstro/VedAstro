@@ -28,7 +28,7 @@
                 <!--Events List-->
                 <ColumnDefinition Width="*" />
                 <!--Event Options-->
-                <ColumnDefinition Width="210" />
+                <ColumnDefinition Width="230" />
             </Grid.ColumnDefinitions>
 
             <!--EVENT VIEW PANEL-->
@@ -37,12 +37,18 @@
                 <ListView  ItemsSource="{Binding EventList}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Header="Name" >
+                                <!--cell template is done to show description in tooltip-->
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate >
+                                        <TextBlock Text="{Binding Name}" ToolTip="{Binding Description}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Header="Nature" DisplayMemberBinding="{Binding Nature}"/>
                             <GridViewColumn Header="Start" DisplayMemberBinding="{Binding StartTime}"/>
                             <GridViewColumn Header="End" DisplayMemberBinding="{Binding EndTime}"/>
                             <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Duration}"/>
-                            <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -137,14 +143,17 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Select events to find" />
+                            <TextBox Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}" TextChanged="EventListFilterText_OnTextChanged" Text="{Binding EventListFilterText}" />
                             <!--list of events to look for-->
-                            <ListView Grid.Row="1" ItemsSource="{Binding EventsToFindList}"  IsSynchronizedWithCurrentItem="True" SelectionChanged="EventsToFind_SelectionChanged" Height="150">
+                            <ListView Grid.Row="2" ItemsSource="{Binding EventsToFindListFiltered}" IsSynchronizedWithCurrentItem="True" SelectionChanged="EventsToFind_SelectionChanged"  Height="160" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <CheckBox Content="{Binding Name}" 
-                                                  IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}" />
+                                                  IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListViewItem}}, Path=IsSelected}"
+                                                  ToolTip="{Binding Description}"/>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
@@ -184,6 +193,7 @@
                             <ComboBox Grid.Row="1" ItemsSource="{Binding PersonList}"  SelectedItem="{Binding SelectedPerson}" VerticalContentAlignment="Center" Text="Select Person"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
 
                         </Grid>
+
                         <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,15,0,0" Click="FindEventsButton_Click" >Find</Button>
                         <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,9,0,0" Click="SendToCalendarButton_Click" >Send to Calendar</Button>
 
@@ -217,34 +227,50 @@
             </StackPanel>
         </Grid>
 
-        <Grid Name="SendToCalendarBox" IsVisibleChanged="SendToCalendarBox_OnIsVisibleChanged" DataContext="{Binding SendToCalendarPopup}"  Width="230" Height="190" Visibility="{Binding Visibility}" Background="White" d:IsHidden="True">
-            <StackPanel Style="{StaticResource ResourceKey=Panel}">
-                <Label HorizontalAlignment="Center" FontWeight="SemiBold">Send events to calendar</Label>
-                <Grid Margin="0,3,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Account" />
-                    <ComboBox Grid.Row="1" ItemsSource="{Binding AccountList}" SelectedItem="{Binding SelectedAccount}" VerticalContentAlignment="Center" SelectionChanged="Account_SelectionChanged" Focusable="False" IsEditable="True" IsReadOnly="True" Text="Select Account" />
+        <StackPanel  x:Name="SendToCalendarPopup" IsVisibleChanged="SendToCalendarPopup_OnIsVisibleChanged" DataContext="{Binding SendToCalendarPopup}"  Visibility="{Binding Visibility}" Background="White"  Style="{StaticResource ResourceKey=Panel}" VerticalAlignment="Center" HorizontalAlignment="Center" d:IsHidden="True">
+            <Label Margin="5,3,5,0" HorizontalAlignment="Center" FontWeight="SemiBold">Send events to calendar</Label>
+            <Grid Margin="5,3,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Account" />
+                <ComboBox Grid.Row="1" ItemsSource="{Binding AccountList}" SelectedItem="{Binding SelectedAccount}" VerticalContentAlignment="Center" SelectionChanged="Account_SelectionChanged" Focusable="False" IsEditable="True" IsReadOnly="True" Text="Select Account" />
 
-                </Grid>
-                <Grid Margin="0,3,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Calendar" />
-                    <ComboBox Grid.Row="1" ItemsSource="{Binding CalendarList}" PreviewMouseLeftButtonDown="CalendarList_OnPreviewMouseLeftButtonDown" SelectedItem="{Binding SelectedCalendar}" VerticalContentAlignment="Center" Text="Select Calendar"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
-                </Grid>
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,20,0,0" Click="CancelSendEventsButton_Click">Cancel</Button>
-                    <Button  Style="{StaticResource ResourceKey=Button}"  Margin="18,20,0,0" Click="SendEventsButton_Click">Send</Button>
+            </Grid>
+            <Grid Margin="5,3,5,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Calendar" />
+                <ComboBox Grid.Row="1" ItemsSource="{Binding CalendarList}" PreviewMouseLeftButtonDown="CalendarList_OnPreviewMouseLeftButtonDown" SelectedItem="{Binding SelectedCalendar}" VerticalContentAlignment="Center" Text="Select Calendar"  Focusable="False" IsEditable="True" IsReadOnly="True"/>
+            </Grid>
+            <Expander BorderBrush="DarkGray" Margin="5,10,5,0" Header="Extra options" >
+                <StackPanel Margin="20,0,5,5">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Style="{StaticResource ResourceKey=Label}" Grid.Row="0" Content="Custom name" />
+                        <TextBox ToolTip="Give a custom name for all the events, this name will be used when sending the event to calendar" Grid.Row="1" Style="{StaticResource ResourceKey=TextBox}"  Text="{Binding CustomEventName}" />
+                    </Grid>
+                    <CheckBox Margin="0,10,0,0" ToolTip="Splits the events by day before sending to calendar, makes viewing events easier in calendar" IsChecked="{Binding IsSplitEventsChecked}">Split events</CheckBox>
+                    <CheckBox Margin="0,10,0,0" ToolTip="Enable reminder for calendar events 1 day, 1 hour and 1 minute before" IsChecked="{Binding IsEnableRemindersChecked}">Enable reminders</CheckBox>
+
                 </StackPanel>
 
+            </Expander>
+
+
+            <StackPanel Margin="5,0,5,10" HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button  Style="{StaticResource ResourceKey=Button}"  Margin="0,20,0,0" Click="CancelSendEventsButton_Click">Cancel</Button>
+                <Button  Style="{StaticResource ResourceKey=Button}"  Margin="18,20,0,0" Click="SendEventsButton_Click">Send</Button>
             </StackPanel>
 
-        </Grid>
+        </StackPanel>
+
 
 
     </Grid>

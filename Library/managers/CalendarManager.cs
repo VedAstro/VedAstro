@@ -89,7 +89,7 @@ namespace Genso.Astrology.Library
         /// Adds a list of event to google calendar
         /// Note: Cancelation token is raised & caught here
         /// </summary>
-        public static void AddEventsToCalenderGoogle(List<Event> eventToAddList, String calendarId)
+        public static void AddEventsToCalenderGoogle(List<Event> eventToAddList, String calendarId, bool enableReminders, string customEventName)
         {
             var addedEventCount = 0;
 
@@ -111,7 +111,7 @@ namespace Genso.Astrology.Library
                     addedEventCount++;
 
                     //add an event to calendar
-                    AddEventToCalendar(eventToAdd, service);
+                    AddEventToCalendar(eventToAdd, service, enableReminders, customEventName);
 
                 }
 
@@ -130,12 +130,16 @@ namespace Genso.Astrology.Library
 
             //----------------FUNCTIONS-----------------------
 
-            void AddEventToCalendar(Event eventToAdd, CalendarService service)
+            void AddEventToCalendar(Event eventToAdd, CalendarService service, bool enableReminders, string customEventName)
             {
+
+                //if a custom event name is specified use that instead (empty string not specified)
+                var eventName = customEventName == "" ? Format.FormatName(eventToAdd) : customEventName;
+
                 //create the event in google's calendar type
                 var newEvent = new Google.Apis.Calendar.v3.Data.Event()
                 {
-                    Summary = Format.FormatName(eventToAdd),
+                    Summary = eventName,
                     //Location = "",
                     Description = eventToAdd.GetDescription() + "\nDuration:" + TimeSpan.FromMinutes(eventToAdd.GetDurationMinutes()).ToString(),
                     Start = new EventDateTime()
@@ -149,17 +153,22 @@ namespace Genso.Astrology.Library
                         TimeZone = "Asia/Kuala_Lumpur",
                     },
                     ColorId = GetEventColorGoogle(eventToAdd)
-                    //Reminders = new Google.Apis.Calendar.v3.Data.Event.RemindersData()
-                    //{
-                    //    UseDefault = false,
-                    //    Overrides = new EventReminder[]
-                    //    {
-                    //        new EventReminder() { Method = "popup", Minutes = 24 * 60 }, //1 day before
-                    //        new EventReminder() { Method = "popup", Minutes = 60 } //1 hour before
-                    //    }
-                    //}
-
                 };
+
+                //if reminders is enabled added it to the event
+                if (enableReminders)
+                {
+                    newEvent.Reminders = new Google.Apis.Calendar.v3.Data.Event.RemindersData()
+                    {
+                        UseDefault = false,
+                        Overrides = new EventReminder[]
+                        {
+                            new EventReminder() {Method = "popup", Minutes = 24 * 60}, //1 day before
+                            new EventReminder() {Method = "popup", Minutes = 60}, //1 hour before
+                            new EventReminder() {Method = "popup", Minutes = 1} //1 minute before
+                        }
+                    };
+                }
 
                 //insert the event into google calander service
                 EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);

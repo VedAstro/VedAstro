@@ -221,7 +221,7 @@ namespace Muhurtha.Desktop
 
         //SEND TO CALENDAR POPUP
         //popup becomes visible
-        private void SendToCalendarBoxOnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void SendToCalendarPopupOnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //if becoming visible then, load calendar accounts into dropdown
             if (gui.MainGrid.SendToCalendarPopup.Visibility == Visibility.Visible)
@@ -345,16 +345,19 @@ namespace Muhurtha.Desktop
         /** DEFAULT VALUE LOADERS **/
         private void LoadViewEventOptionsDefaultValues()
         {
+            //only load defaults if the property is null
+            //this allows users to switch views without getting data reset
+
             //load all person, location & tag list into combo box
-            gui.MainGrid.ViewEventOptions.PersonList = MuhurthaCore.GetAllPeopleList();
-            gui.MainGrid.ViewEventOptions.TagList = MuhurthaCore.GetAllTagList();
-            gui.MainGrid.ViewEventOptions.LocationList = MuhurthaCore.GetAllLocationList();
+            gui.MainGrid.ViewEventOptions.PersonList ??= MuhurthaCore.GetAllPeopleList();
+            gui.MainGrid.ViewEventOptions.TagList ??= MuhurthaCore.GetAllTagList();
+            gui.MainGrid.ViewEventOptions.LocationList ??= MuhurthaCore.GetAllLocationList();
 
             //set default start & end times
             var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
             var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
-            gui.MainGrid.ViewEventOptions.StartTimeText = todayStart;
-            gui.MainGrid.ViewEventOptions.EndTimeText = todayEnd;
+            gui.MainGrid.ViewEventOptions.StartTimeText ??= todayStart;
+            gui.MainGrid.ViewEventOptions.EndTimeText ??= todayEnd;
 
             //set default combobox option to be none
             //gui.MainGrid.EventOptions.SelectedLocationIndex = -1;
@@ -363,17 +366,19 @@ namespace Muhurtha.Desktop
         }
         private void LoadFindEventOptionsDefaultValues()
         {
+            //only load defaults if the property is null
+            //this allows users to switch views without getting data reset
+
             //load all person, location & tag list into combo box
-            gui.MainGrid.FindEventOptions.EventsToFindList = MuhurthaCore.GetAllEventDataList();
-            gui.MainGrid.FindEventOptions.PersonList = MuhurthaCore.GetAllPeopleList();
-            gui.MainGrid.FindEventOptions.TagList = MuhurthaCore.GetAllTagList();
-            gui.MainGrid.FindEventOptions.LocationList = MuhurthaCore.GetAllLocationList();
+            gui.MainGrid.FindEventOptions.EventsToFindList ??= MuhurthaCore.GetAllEventDataList();
+            gui.MainGrid.FindEventOptions.PersonList ??= MuhurthaCore.GetAllPeopleList();
+            gui.MainGrid.FindEventOptions.LocationList ??= MuhurthaCore.GetAllLocationList();
 
             //set default start & end times to begining and end of the day
             var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
             var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
-            gui.MainGrid.FindEventOptions.StartTimeText = todayStart;
-            gui.MainGrid.FindEventOptions.EndTimeText = todayEnd;
+            gui.MainGrid.FindEventOptions.StartTimeText ??= todayStart;
+            gui.MainGrid.FindEventOptions.EndTimeText ??= todayEnd;
 
             //set default combobox option to be none
             //gui.MainGrid.EventOptions.SelectedLocationIndex = -1;
@@ -402,7 +407,7 @@ namespace Muhurtha.Desktop
 
 
             //SEND TO CALENDAR BOX
-            gui.MainGrid.SendToCalendarPopup.SendToCalendarBoxOnIsVisibleChanged += SendToCalendarBoxOnIsVisibleChanged;
+            gui.MainGrid.SendToCalendarPopup.SendToCalendarBoxOnIsVisibleChanged += SendToCalendarPopupOnIsVisibleChanged;
             gui.MainGrid.SendToCalendarPopup.CancelSendEventsButtonClicked += CancelSendEventsButtonClicked;
             gui.MainGrid.SendToCalendarPopup.SendEventsButtonClicked += SendEventsButtonClicked;
             gui.MainGrid.SendToCalendarPopup.AccountSelectionChanged += AccountSelectionChanged;
@@ -506,6 +511,9 @@ namespace Muhurtha.Desktop
         {
             //get name of the selected calendar
             var calendarName = gui.MainGrid.SendToCalendarPopup.SelectedCalendar;
+            var customEventName = gui.MainGrid.SendToCalendarPopup.CustomEventName;
+            var isSplitEventsChecked = gui.MainGrid.SendToCalendarPopup.IsSplitEventsChecked;
+            var isEnableRemindersChecked = gui.MainGrid.SendToCalendarPopup.IsEnableRemindersChecked;
 
             //get events to send
             var events = gui.MainGrid.EventView.EventList;
@@ -514,7 +522,7 @@ namespace Muhurtha.Desktop
             MuhurthaCore.threadCanceler = (CancellationToken)threadCanceler;
 
             //start uploading events to calendar
-            MuhurthaCore.SendEventsToCalendar(events, calendarName, CalendarAccount.Google, true);
+            MuhurthaCore.SendEventsToCalendar(events, calendarName, CalendarAccount.Google, isSplitEventsChecked, isEnableRemindersChecked, customEventName);
 
         }
         private void UpdateCalendarListDropdown()

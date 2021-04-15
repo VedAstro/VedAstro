@@ -59,32 +59,17 @@ namespace Genso.Astrology.Muhurtha.Core
             var startStdTime = DateTimeOffset.ParseExact(startTime, Time.GetDateTimeFormat(), null);
             var endStdTime = DateTimeOffset.ParseExact(endTime, Time.GetDateTimeFormat(), null);
 
-            //TODO NEEDS TO BE MOVED TO A BETTER PLACE
-            //----------------
-            //get list of event data to check for event
-            var eventDataList = DatabaseManager.GetEventDataList(dataEventdatalistXml);
+            //get all event data/types which has the inputed tag
+            var eventDataList = DatabaseManager.GetEventDataListByTag(tag, dataEventdatalistXml);
 
-            //filter IN event data list
-            var filteredEventDataList = eventDataList.FindAll(eventData =>
-            {
-                //single tag filter
-                //var filter1 = eventData.GetName() == EventName.SuryaSankramana || eventData.GetName() == EventName.Sunset || eventData.GetName() == EventName.Midday;
-                //var filter1 = eventData.GetName() == EventName.Papashadvargas;
-                //var filter1 = eventData.GetName().ToString().Contains("Suns");
-                var filter1 = eventData.GetEventTags().Contains(tag);
-
-                return filter1;
-            });
-            //-------------------
-
-            //pass thread canceler General, so that methods inside can be stopped if needed
+            //send thread canceler into calculator, so that calculator can be stopped halfway if needed
             EventManager.threadCanceler = threadCanceler;
 
-            //debug measure execution time
+            //debug to measure event calculation time
             var watch = Stopwatch.StartNew();
 
             //start calculating events
-            var eventList = EventManager.GetEventsInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, filteredEventDataList);
+            var eventList = EventManager.GetEventsInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, eventDataList);
 
             watch.Stop();
             LogManager.Debug($"Events computed in: { watch.Elapsed.TotalSeconds}s");
@@ -94,6 +79,25 @@ namespace Genso.Astrology.Muhurtha.Core
 
             return eventList;
         }
+
+        /// <summary>
+        /// Finds a time when a few events occur at the same time.
+        /// </summary>
+        public static List<Event> FindCombinedEvents(string startTime, string endTime, GeoLocation location, Person person, List<EventData> eventsToFind)
+        {
+            //todo move it into Time object
+            var startStdTime = DateTimeOffset.ParseExact(startTime, Time.GetDateTimeFormat(), null);
+            var endStdTime = DateTimeOffset.ParseExact(endTime, Time.GetDateTimeFormat(), null);
+
+            //start calculating events
+            var eventList = EventManager.FindCombinedEventsInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, eventsToFind);
+
+            //fire event to let others know event calculation is done
+            EventCalculationCompleted.Invoke();
+
+            return eventList;
+        }
+
 
         public static void SendEventsToCalendar(List<Event> events, Calendar calendarName, CalendarAccount google, bool splitEvents)
         {
@@ -146,5 +150,6 @@ namespace Genso.Astrology.Muhurtha.Core
         }
 
         public static List<EventData> GetAllEventDataList() => DatabaseManager.GetEventDataList(dataEventdatalistXml);
+
     }
 }

@@ -208,6 +208,7 @@
         House3LordInHouse9,
         House3LordInHouse10,
         House3LordInHouse11,
-        House3LordInHouse12
+        House3LordInHouse12,
+        CombinedEvent
     }
 }

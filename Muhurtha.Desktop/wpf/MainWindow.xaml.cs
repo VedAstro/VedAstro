@@ -52,5 +52,9 @@ namespace Muhurtha.Desktop
         private void CalendarList_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => MainGrid.SendToCalendarPopup.CalendarList_OnPreviewMouseLeftButtonDown(sender, e);
         private void OptionsPanel_OnSelectionChanged(object sender, SelectionChangedEventArgs e) => MainGrid?.OptionsPanel_OnSelectionChanged(sender, e); //watch for null, cause fires before viewmodal is ready
         private void LogView_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) => MainGrid.LogView.IsVisibleChanged(sender, e);
+        private void FindEventsButton_Click(object sender, RoutedEventArgs e) => MainGrid.FindEventOptions.FindEventsButton_Click(sender, e);
+
+        private void EventsToFind_SelectionChanged(object sender, SelectionChangedEventArgs e) =>
+            MainGrid.FindEventOptions.EventsToFind_SelectionChanged(sender, e);
     }
 }

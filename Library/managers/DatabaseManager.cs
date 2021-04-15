@@ -81,6 +81,28 @@ namespace Genso.Astrology.Library
 
         }
 
+        /// <summary>
+        /// Gets all event data/types that match the inputed tag
+        /// </summary>
+        public static List<EventData> GetEventDataListByTag(EventTag tag, string filePath)
+        {
+            //get all event data/types
+            var eventDataList = DatabaseManager.GetEventDataList(filePath);
+
+            //filter IN event data list by tag
+            var filteredEventDataList = eventDataList.FindAll(eventData =>
+            {
+                //single tag filter
+                //var filter1 = eventData.GetName() == EventName.SuryaSankramana || eventData.GetName() == EventName.Sunset || eventData.GetName() == EventName.Midday;
+                //var filter1 = eventData.GetName() == EventName.Papashadvargas;
+                //var filter1 = eventData.GetName().ToString().Contains("Suns");
+                var filter1 = eventData.GetEventTags().Contains(tag);
+
+                return filter1;
+            });
+
+            return filteredEventDataList;
+        }
 
 
         /// <summary>
@@ -157,5 +179,6 @@ namespace Genso.Astrology.Library
 
             return list;
         }
+
     }
 }

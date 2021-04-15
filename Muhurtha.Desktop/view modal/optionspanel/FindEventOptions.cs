@@ -23,12 +23,14 @@ namespace Muhurtha.Desktop
         private int _selectedLocationIndex;
         private int _selectedTagIndex;
         private List<EventData> _eventsToFindList;
+        private List<EventData> _selectedEventsToFind = new List<EventData>();//initialize by itself because the list is created by the panel
 
 
         /** EVENTS **/
         public event EventHandler CalculateEventsButtonClicked;
         public event EventHandler CancelButtonClicked;
         public event EventHandler SendToCalendarButtonClicked;
+        public event EventHandler FindEventsButtonClicked;
 
 
 
@@ -114,6 +116,15 @@ namespace Muhurtha.Desktop
                 OnPropertyChanged(nameof(EventsToFindList));
             }
         }
+        public List<EventData> SelectedEventsToFind
+        {
+            get => _selectedEventsToFind;
+            set
+            {
+                _selectedEventsToFind = value;
+                OnPropertyChanged(nameof(SelectedEventsToFind));
+            }
+        }
         public int SelectedPersonIndex
         {
             get => _selectedPersonIndex;
@@ -149,8 +160,22 @@ namespace Muhurtha.Desktop
 
 
         /** EVENT ROUTING **/
-        public void CalculateEventsButton_Click(object sender, RoutedEventArgs routedEventArgs) => CalculateEventsButtonClicked?.Invoke(sender, routedEventArgs);
-        public void CancelButton_OnClick(object sender, RoutedEventArgs routedEventArgs) => CancelButtonClicked?.Invoke(sender, routedEventArgs);
+        //public void CalculateEventsButton_Click(object sender, RoutedEventArgs routedEventArgs) => CalculateEventsButtonClicked?.Invoke(sender, routedEventArgs);
+        //public void CancelButton_OnClick(object sender, RoutedEventArgs routedEventArgs) => CancelButtonClicked?.Invoke(sender, routedEventArgs);
         public void SendToCalendarButton_Click(object sender, RoutedEventArgs routedEventArgs) => SendToCalendarButtonClicked?.Invoke(sender, routedEventArgs);
+        public void FindEventsButton_Click(object sender, RoutedEventArgs routedEventArgs) => FindEventsButtonClicked?.Invoke(sender, routedEventArgs);
+
+        public void EventsToFind_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (EventData item in e.RemovedItems)
+            {
+                SelectedEventsToFind.Remove(item);
+            }
+
+            foreach (EventData item in e.AddedItems)
+            {
+                SelectedEventsToFind.Add(item);
+            }
+        }
     }
 }

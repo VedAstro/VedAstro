@@ -83,7 +83,6 @@ namespace Muhurtha.Desktop
         public SendingEventsPopup SendingEventsPopup => _sendingEventsPopup;
 
 
-
         /** EVENT ROUTING **/
         //TODO Might need to be moved to mainwindow's viewmodal
         public void Window_Initialized(object sender, EventArgs eventArgs) => WindowInitialized?.Invoke(sender, eventArgs);

@@ -121,7 +121,76 @@ namespace Muhurtha.Desktop
 
         }
 
-        //EVENTS CALCULATING MESSAGEBOX
+        //FIND EVENT OPTIONS
+        private void FindEventsButtonClicked(object sender, EventArgs e)
+        {
+            //check if options choosen by user is ok
+            //if not it tells user which options is wrong, and returns false
+            //end here if validation failed
+            if (!isFindEventOptionsValid()) { return; }
+
+            //turn on smoke screen
+            gui.MainGrid.SmokeScreen.Show();
+
+            //show events being calculated message
+            gui.MainGrid.EventsCalculatingPopup.Show();
+
+            //place heavy event calculation on a seperate thread & start it off
+            //note: upon completion an event will fire, it's handled elsewhere
+            calculatorThreadControl = new CancellationTokenSource(); //placed here so that only initialized when needed
+            ThreadPool.QueueUserWorkItem(new WaitCallback(FindAndUpdateEvents), calculatorThreadControl.Token);
+
+
+            //------------------------FUNTIONS------------------------------------
+            //checks if all the event options is valid, returns true
+            //also raises the error to user here
+            bool isFindEventOptionsValid()
+            {
+                bool isValid = true; //default is valid
+
+                //check date time
+                var startTime = gui.MainGrid.FindEventOptions.StartTimeText;
+                isValid = isStartTimeValid(startTime);
+                if (!isValid) { gui.ShowPopupMessage("Start time not correct!"); return false; }
+
+                //check date time
+                var endTime = gui.MainGrid.FindEventOptions.EndTimeText;
+                isValid = isEndTimeValid(endTime);
+                if (!isValid) { gui.ShowPopupMessage("End time not correct!"); return false; }
+
+
+                //check each combo box
+                isValid = !EqualityComparer<GeoLocation>.Default.Equals(gui.MainGrid.FindEventOptions.SelectedLocation, default(GeoLocation));
+                if (!isValid) { gui.ShowPopupMessage("Please select a location!"); return false; }
+
+                isValid = !EqualityComparer<Person>.Default.Equals(gui.MainGrid.FindEventOptions.SelectedPerson, default(Person));
+                if (!isValid) { gui.ShowPopupMessage("Please select a person!"); return false; }
+
+                //todo for now disabled since EventTag is an enum & does not have null/default value
+                //isValid = !EqualityComparer<EventTag>.Default.Equals(gui.MainGrid.EventOptions.SelectedTag, default(EventTag));
+                //if (!isValid) { gui.ShowPopupMessage("Please select a tag!"); return false; }
+
+
+                return isValid;
+
+                //--------------------FUNCTIONS-----------------
+                bool isStartTimeValid(string startTime)
+                {
+                    //todo not yet implemented
+                    return true;
+                }
+
+                bool isEndTimeValid(string endTime)
+                {
+                    //todo not yet implemented
+                    return true;
+                }
+            }
+
+        }
+
+
+        //EVENTS CALCULATING POPUP
         private void CancelCalculateEventsButtonClicked(object sender, EventArgs e)
         {
             //turn off smoke screen
@@ -150,7 +219,7 @@ namespace Muhurtha.Desktop
         }
 
 
-        //SEND TO CALENDAR BOX
+        //SEND TO CALENDAR POPUP
         //popup becomes visible
         private void SendToCalendarBoxOnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -303,8 +372,8 @@ namespace Muhurtha.Desktop
             //set default start & end times to begining and end of the day
             var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
             var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
-            gui.MainGrid.ViewEventOptions.StartTimeText = todayStart;
-            gui.MainGrid.ViewEventOptions.EndTimeText = todayEnd;
+            gui.MainGrid.FindEventOptions.StartTimeText = todayStart;
+            gui.MainGrid.FindEventOptions.EndTimeText = todayEnd;
 
             //set default combobox option to be none
             //gui.MainGrid.EventOptions.SelectedLocationIndex = -1;
@@ -327,6 +396,10 @@ namespace Muhurtha.Desktop
             //EVENT OPTIONS
             gui.MainGrid.ViewEventOptions.CalculateEventsButtonClicked += CalculateEventsButtonClicked;
             gui.MainGrid.ViewEventOptions.SendToCalendarButtonClicked += SendToCalendarButtonClicked;
+
+            //FIND EVENT OPTIONS
+            gui.MainGrid.FindEventOptions.FindEventsButtonClicked += FindEventsButtonClicked;
+
 
             //SEND TO CALENDAR BOX
             gui.MainGrid.SendToCalendarPopup.SendToCalendarBoxOnIsVisibleChanged += SendToCalendarBoxOnIsVisibleChanged;
@@ -408,6 +481,25 @@ namespace Muhurtha.Desktop
             gui.MainGrid.EventView.EventList = events;
 
 
+
+        }
+        private void FindAndUpdateEvents(object threadCanceler)
+        {
+            //get all the needed values
+            var startTime = gui.MainGrid.FindEventOptions.StartTimeText;
+            var endTime = gui.MainGrid.FindEventOptions.EndTimeText;
+            var location = gui.MainGrid.FindEventOptions.SelectedLocation;
+            var person = gui.MainGrid.FindEventOptions.SelectedPerson;
+            var selectedEvents = gui.MainGrid.FindEventOptions.SelectedEventsToFind;
+
+            //pass thread canceler MuhurthaCore, so that methods inside can be stopped if needed
+            MuhurthaCore.threadCanceler = (CancellationToken)threadCanceler;
+
+            //calculate events from values
+            var events = MuhurthaCore.FindCombinedEvents(startTime, endTime, location, person, selectedEvents);
+
+            //set event into view
+            gui.MainGrid.EventView.EventList = events;
 
         }
         private void SendEventsToCalendar(object threadCanceler)

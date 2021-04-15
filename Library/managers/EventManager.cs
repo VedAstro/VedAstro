@@ -91,6 +91,75 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
+        /// Note : the list of events to find is treated as 1 event here
+        /// </summary>
+        public static List<Event> FindCombinedEventsInTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
+        {
+
+            //get data to instantiate
+            //get start & end times
+            var startTime = new Time(startStdTime, geoLocation);
+            var endTime = new Time(endStdTime, geoLocation);
+
+
+            //split time into slices based on precision
+            List<Time> timeList = GetTimeListFromRange(startTime, endTime, precisionInHours);
+
+            //takes time slices and check if all the events is occurig for each time slice,
+            //the list of events is treated as 1 event here 
+            var precalculatedList = GetCalculatedTimeEventOccuringList(eventDataList);
+
+            //create a new combined event data type (used when extracting events)
+            var description = "Combined event of:\n";
+            eventDataList.ForEach(eventData => description += $"-{eventData.Name}\n");//name of each event is added to description
+            var combinedEvent = new EventData(0, EventName.CombinedEvent, EventNature.Neutral, description, null, null); //no need tag & calculator
+
+            //go through time slices and identify start & end of events
+            //and place them in a event list
+            var eventList = ExtractEventsFromTimeSlices(timeList, precalculatedList, combinedEvent);
+
+            return eventList;
+
+            //----------------------FUNCTIONS--------------------------
+
+            //takes time list and checks if event is occurig for each time slice,
+            //and returns it in dictionary list, done in parallel
+            ConcurrentDictionary<Time, bool> GetCalculatedTimeEventOccuringList(List<EventData> combinedEvents)
+            {
+                //time is "key", and "is occuring" is "value"
+                var returnList = new ConcurrentDictionary<Time, bool>();
+
+                Parallel.ForEach(timeList, (time, state) =>
+                {
+                    //check if all events are occuring in this time slice
+                    var isEventOccuring = isAllEventsOccuring(time, person, combinedEvents);
+
+                    //add to the dictionary
+                    returnList[time] = isEventOccuring;
+
+                });
+
+                return returnList;
+            }
+
+            //check if all events are occuring for a time slice
+            bool isAllEventsOccuring(Time timeSlice, Person person, List<EventData> combinedEvents)
+            {
+                //makes sure all the events are occuring for this time slice
+                //else false is returned even if 1 event is not occuring
+                foreach (var _event in combinedEvents)
+                {
+                    var isEventOccuring = _event.IsEventOccuring(timeSlice, person);
+                    if (isEventOccuring == false) { return false; }
+                }
+
+                //if control reaches here, then all events are occuring
+                return true;
+            }
+
+        }
+
+        /// <summary>
         /// Get a list of events in a time period for a single event type aka "event data"
         /// Decision on when event starts & ends is also done here
         /// Note :
@@ -104,7 +173,7 @@ namespace Genso.Astrology.Library
 
             //go through time slices and identify start & end of events
             //place them in a event list
-            var eventList = ExtractEventsFromTimeSlices();
+            var eventList = ExtractEventsFromTimeSlices(timeList, precalculatedList, eventData);
 
             return eventList;
 
@@ -131,94 +200,96 @@ namespace Genso.Astrology.Library
                 return returnList;
             }
 
-            //go through time slices and identify start & end of events
-            //place them in a event list and return it
-            List<Event> ExtractEventsFromTimeSlices()
+        }
+
+        //go through time slices and identify start & end of events
+        //place them in a event list and return it
+        private static List<Event> ExtractEventsFromTimeSlices(List<Time> timeList, ConcurrentDictionary<Time, bool> precalculatedList, EventData eventData)
+        {
+            //declare empty event list to fill
+            var eventList = new List<Event>();
+
+            //set previous time as false for first time instance
+            var eventOccuredInPreviousTime = false;
+
+            //declare start & end times
+            Time eventStartTime = new Time();
+            Time eventEndTime = new Time();
+            var lastInstanceOfTime = timeList.Last();
+
+            //loop through time list 
+            //note: loop must be done in sequencial order, to detect correct start & end time
+            foreach (var time in timeList)
             {
-                //declare empty event list to fill
-                var eventList = new List<Event>();
+                //check if user has canceled calculation halfway
+                threadCanceler.ThrowIfCancellationRequested();
 
-                //set previous time as false for first time instance
-                var eventOccuredInPreviousTime = false;
+                //check if event is occuring at this time slice (precalculated list)
+                var eventIsOccuringNow = precalculatedList[time];
 
-                //declare start & end times
-                Time eventStartTime = new Time();
-                Time eventEndTime = new Time();
-                var lastInstanceOfTime = timeList.Last();
-
-                //loop through time list 
-                //note: loop must be done in sequencial order, to detect correct start & end time
-                foreach (var time in timeList)
+                //if event is occuring now & not in previous time
+                if (eventIsOccuringNow == true & eventOccuredInPreviousTime == false)
                 {
-                    //check if user has canceled calculation halfway
-                    threadCanceler.ThrowIfCancellationRequested();
+                    //save new start & end time
+                    eventStartTime = time;
+                    eventEndTime = time;
+                    //update flag
+                    eventOccuredInPreviousTime = true;
+                }
+                //if event is occuring now & in previous time
+                else if (eventIsOccuringNow == true & eventOccuredInPreviousTime == true)
+                {
+                    //update end time only
+                    eventEndTime = time;
+                    //update flag
+                    eventOccuredInPreviousTime = true;
+                }
+                //if event is not occuring now but occured before
+                else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
+                {
+                    //add previous event to list
+                    var newEvent = new Event(eventData.GetName(),
+                        eventData.GetNature(),
+                        eventData.GetDescription(),
+                        eventStartTime,
+                        eventEndTime);
 
-                    //check if event is occuring at this time slice (precalculated list)
-                    var eventIsOccuringNow = precalculatedList[time];
-
-                    //if event is occuring now & not in previous time
-                    if (eventIsOccuringNow == true & eventOccuredInPreviousTime == false)
+                    //if event is duration is 0 minute, raise alarm
+                    if (newEvent.GetDurationMinutes() <= 0)
                     {
-                        //save new start & end time
-                        eventStartTime = time;
-                        eventEndTime = time;
-                        //update flag
-                        eventOccuredInPreviousTime = true;
-                    }
-                    //if event is occuring now & in previous time
-                    else if (eventIsOccuringNow == true & eventOccuredInPreviousTime == true)
-                    {
-                        //update end time only
-                        eventEndTime = time;
-                        //update flag
-                        eventOccuredInPreviousTime = true;
-                    }
-                    //if event is not occuring now but occured before
-                    else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
-                    {
-                        //add previous event to list
-                        var newEvent = new Event(eventData.GetName(),
-                            eventData.GetNature(),
-                            eventData.GetDescription(),
-                            eventStartTime,
-                            eventEndTime);
-
-                        //if event is duration is 0 minute, raise alarm
-                        if (newEvent.GetDurationMinutes() <= 0)
-                        {
-                            LogManager.Debug("Event duration is 0!");
-                        }
-
-
-                        eventList.Add(newEvent);
-
-                        //set flag
-                        eventOccuredInPreviousTime = false;
+                        LogManager.Debug("Event duration is 0!");
                     }
 
-                    //if event is occuring now & it is the last time
-                    if (eventIsOccuringNow == true & time == lastInstanceOfTime)
-                    {
-                        //add current event to list
-                        var newEvent2 = new Event(eventData.GetName(),
-                            eventData.GetNature(),
-                            eventData.GetDescription(),
-                            eventStartTime,
-                            eventEndTime);
 
-                        //if event is duration is 0 minute, raise alarm
-                        if (newEvent2.GetDurationMinutes() <= 0)
-                        {
-                            LogManager.Debug("Event duration is 0!");
-                        }
+                    eventList.Add(newEvent);
 
-                        eventList.Add(newEvent2);
-                    }
+                    //set flag
+                    eventOccuredInPreviousTime = false;
                 }
 
-                return eventList;
+                //if event is occuring now & it is the last time
+                if (eventIsOccuringNow == true & time == lastInstanceOfTime)
+                {
+                    //add current event to list
+                    var newEvent2 = new Event(eventData.GetName(),
+                        eventData.GetNature(),
+                        eventData.GetDescription(),
+                        eventStartTime,
+                        eventEndTime);
+
+                    //if event is duration is 0 minute, raise alarm
+                    if (newEvent2.GetDurationMinutes() <= 0)
+                    {
+                        LogManager.Debug("Event duration is 0!");
+                    }
+
+                    eventList.Add(newEvent2);
+                }
             }
+
+            return eventList;
         }
+
 
         /// <summary>
         /// MARKED FOR ARHIVEING, if not used long archive it

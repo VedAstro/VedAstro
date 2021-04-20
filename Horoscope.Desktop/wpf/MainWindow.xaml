@@ -10,7 +10,8 @@
         Loaded="Window_Initialized"
         Closed="Window_Closed"
         WindowStartupLocation="CenterScreen"
-        >
+        Background="#FF52525D" Foreground="White"
+>
 
     <!--Code to link style/resource dictionary-->
     <Window.Resources>
@@ -23,7 +24,7 @@
 
 
 
-    <Grid DataContext="{StaticResource MainGrid}">
+    <Grid DataContext="{StaticResource MainGrid}" Background="Transparent">
 
 
         <Grid>
@@ -35,25 +36,28 @@
             </Grid.ColumnDefinitions>
 
             <!--Events List-->
-            <Grid DataContext="{Binding EventView}" Grid.Column="0">
+            <Grid DataContext="{Binding EventView}" Grid.Column="0"  Background="Transparent">
 
-                <ListView ItemsSource="{Binding EventList}"  SelectionMode="Single"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                           >
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn  Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                            <GridViewColumn Header="Description" >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap"></TextBlock>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding EventList}" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="White"  Background="#FF52525D">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <!--Events List-->
+                                        <ColumnDefinition Width="150" />
+                                        <!--Event Options-->
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="0,5,20,0" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Description}"  Margin="0,5,0,0" TextWrapping="Wrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
 
             </Grid>
 

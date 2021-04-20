@@ -3912,6 +3912,251 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.House3LordInHouse12)]
         public static bool House3LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House12, time);
 
+        //Results of the Lord of the 4th House Occupying Different Houses
+
+        [EventCalculator(EventName.House4LordInHouse1)]
+        public static bool House4LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House1, time);
+        [EventCalculator(EventName.House4LordInHouse2)]
+        public static bool House4LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House2, time);
+        [EventCalculator(EventName.House4LordInHouse3)]
+        public static bool House4LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House3, time);
+        [EventCalculator(EventName.House4LordInHouse4)]
+        public static bool House4LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House4, time);
+        [EventCalculator(EventName.House4LordInHouse5)]
+        public static bool House4LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House5, time);
+        [EventCalculator(EventName.House4LordInHouse6)]
+        public static bool House4LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House6, time);
+        [EventCalculator(EventName.House4LordInHouse7)]
+        public static bool House4LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House7, time);
+        [EventCalculator(EventName.House4LordInHouse8)]
+        public static bool House4LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House8, time);
+        [EventCalculator(EventName.House4LordInHouse9)]
+        public static bool House4LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House9, time);
+        [EventCalculator(EventName.House4LordInHouse10)]
+        public static bool House4LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House10, time);
+        [EventCalculator(EventName.House4LordInHouse11)]
+        public static bool House4LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House11, time);
+        [EventCalculator(EventName.House4LordInHouse12)]
+        public static bool House4LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House12, time);
+
+        //Results of the Lord of the 5th House Occupying Different Houses
+
+        [EventCalculator(EventName.House5LordInHouse1)]
+        public static bool House5LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House1, time);
+        [EventCalculator(EventName.House5LordInHouse2)]
+        public static bool House5LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House2, time);
+        [EventCalculator(EventName.House5LordInHouse3)]
+        public static bool House5LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House3, time);
+        [EventCalculator(EventName.House5LordInHouse4)]
+        public static bool House5LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House4, time);
+        [EventCalculator(EventName.House5LordInHouse5)]
+        public static bool House5LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House5, time);
+        [EventCalculator(EventName.House5LordInHouse6)]
+        public static bool House5LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House6, time);
+        [EventCalculator(EventName.House5LordInHouse7)]
+        public static bool House5LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House7, time);
+        [EventCalculator(EventName.House5LordInHouse8)]
+        public static bool House5LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House8, time);
+        [EventCalculator(EventName.House5LordInHouse9)]
+        public static bool House5LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House9, time);
+        [EventCalculator(EventName.House5LordInHouse10)]
+        public static bool House5LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House10, time);
+        [EventCalculator(EventName.House5LordInHouse11)]
+        public static bool House5LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House11, time);
+        [EventCalculator(EventName.House5LordInHouse12)]
+        public static bool House5LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House12, time);
+
+        //Results of the Lord of the 6th House Occupying Different Houses
+
+        [EventCalculator(EventName.House6LordInHouse1)]
+        public static bool House6LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House1, time);
+        [EventCalculator(EventName.House6LordInHouse2)]
+        public static bool House6LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House2, time);
+        [EventCalculator(EventName.House6LordInHouse3)]
+        public static bool House6LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House3, time);
+        [EventCalculator(EventName.House6LordInHouse4)]
+        public static bool House6LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House4, time);
+        [EventCalculator(EventName.House6LordInHouse5)]
+        public static bool House6LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House5, time);
+        [EventCalculator(EventName.House6LordInHouse6)]
+        public static bool House6LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House6, time);
+        [EventCalculator(EventName.House6LordInHouse7)]
+        public static bool House6LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House7, time);
+        [EventCalculator(EventName.House6LordInHouse8)]
+        public static bool House6LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House8, time);
+        [EventCalculator(EventName.House6LordInHouse9)]
+        public static bool House6LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House9, time);
+        [EventCalculator(EventName.House6LordInHouse10)]
+        public static bool House6LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House10, time);
+        [EventCalculator(EventName.House6LordInHouse11)]
+        public static bool House6LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House11, time);
+        [EventCalculator(EventName.House6LordInHouse12)]
+        public static bool House6LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House12, time);
+
+        //Results of the Lord of the 7th House Occupying Different Houses
+
+        [EventCalculator(EventName.House7LordInHouse1)]
+        public static bool House7LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House1, time);
+        [EventCalculator(EventName.House7LordInHouse2)]
+        public static bool House7LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House2, time);
+        [EventCalculator(EventName.House7LordInHouse3)]
+        public static bool House7LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House3, time);
+        [EventCalculator(EventName.House7LordInHouse4)]
+        public static bool House7LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House4, time);
+        [EventCalculator(EventName.House7LordInHouse5)]
+        public static bool House7LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House5, time);
+        [EventCalculator(EventName.House7LordInHouse6)]
+        public static bool House7LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House6, time);
+        [EventCalculator(EventName.House7LordInHouse7)]
+        public static bool House7LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House7, time);
+        [EventCalculator(EventName.House7LordInHouse8)]
+        public static bool House7LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House8, time);
+        [EventCalculator(EventName.House7LordInHouse9)]
+        public static bool House7LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House9, time);
+        [EventCalculator(EventName.House7LordInHouse10)]
+        public static bool House7LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House10, time);
+        [EventCalculator(EventName.House7LordInHouse11)]
+        public static bool House7LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House11, time);
+        [EventCalculator(EventName.House7LordInHouse12)]
+        public static bool House7LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House12, time);
+
+        //Results of the Lord of the 8th House Occupying Different Houses
+
+        [EventCalculator(EventName.House8LordInHouse1)]
+        public static bool House8LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House1, time);
+        [EventCalculator(EventName.House8LordInHouse2)]
+        public static bool House8LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House2, time);
+        [EventCalculator(EventName.House8LordInHouse3)]
+        public static bool House8LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House3, time);
+        [EventCalculator(EventName.House8LordInHouse4)]
+        public static bool House8LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House4, time);
+        [EventCalculator(EventName.House8LordInHouse5)]
+        public static bool House8LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House5, time);
+        [EventCalculator(EventName.House8LordInHouse6)]
+        public static bool House8LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House6, time);
+        [EventCalculator(EventName.House8LordInHouse7)]
+        public static bool House8LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House7, time);
+        [EventCalculator(EventName.House8LordInHouse8)]
+        public static bool House8LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House8, time);
+        [EventCalculator(EventName.House8LordInHouse9)]
+        public static bool House8LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House9, time);
+        [EventCalculator(EventName.House8LordInHouse10)]
+        public static bool House8LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House10, time);
+        [EventCalculator(EventName.House8LordInHouse11)]
+        public static bool House8LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House11, time);
+        [EventCalculator(EventName.House8LordInHouse12)]
+        public static bool House8LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House12, time);
+
+        //Results of the Lord of the 9th House Occupying Different Houses
+
+        [EventCalculator(EventName.House9LordInHouse1)]
+        public static bool House9LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House1, time);
+        [EventCalculator(EventName.House9LordInHouse2)]
+        public static bool House9LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House2, time);
+        [EventCalculator(EventName.House9LordInHouse3)]
+        public static bool House9LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House3, time);
+        [EventCalculator(EventName.House9LordInHouse4)]
+        public static bool House9LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House4, time);
+        [EventCalculator(EventName.House9LordInHouse5)]
+        public static bool House9LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House5, time);
+        [EventCalculator(EventName.House9LordInHouse6)]
+        public static bool House9LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House6, time);
+        [EventCalculator(EventName.House9LordInHouse7)]
+        public static bool House9LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House7, time);
+        [EventCalculator(EventName.House9LordInHouse8)]
+        public static bool House9LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House8, time);
+        [EventCalculator(EventName.House9LordInHouse9)]
+        public static bool House9LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House9, time);
+        [EventCalculator(EventName.House9LordInHouse10)]
+        public static bool House9LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House10, time);
+        [EventCalculator(EventName.House9LordInHouse11)]
+        public static bool House9LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House11, time);
+        [EventCalculator(EventName.House9LordInHouse12)]
+        public static bool House9LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House12, time);
+
+        //Results of the Lord of the 10th House Occupying Different Houses
+
+        [EventCalculator(EventName.House10LordInHouse1)]
+        public static bool House10LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House1, time);
+        [EventCalculator(EventName.House10LordInHouse2)]
+        public static bool House10LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House2, time);
+        [EventCalculator(EventName.House10LordInHouse3)]
+        public static bool House10LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House3, time);
+        [EventCalculator(EventName.House10LordInHouse4)]
+        public static bool House10LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House4, time);
+        [EventCalculator(EventName.House10LordInHouse5)]
+        public static bool House10LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House5, time);
+        [EventCalculator(EventName.House10LordInHouse6)]
+        public static bool House10LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House6, time);
+        [EventCalculator(EventName.House10LordInHouse7)]
+        public static bool House10LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House7, time);
+        [EventCalculator(EventName.House10LordInHouse8)]
+        public static bool House10LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House8, time);
+        [EventCalculator(EventName.House10LordInHouse9)]
+        public static bool House10LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House9, time);
+        [EventCalculator(EventName.House10LordInHouse10)]
+        public static bool House10LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House10, time);
+        [EventCalculator(EventName.House10LordInHouse11)]
+        public static bool House10LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House11, time);
+        [EventCalculator(EventName.House10LordInHouse12)]
+        public static bool House10LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House12, time);
+
+
+        //Results of the Lord of the 11th House Occupying Different Houses
+
+        [EventCalculator(EventName.House11LordInHouse1)]
+        public static bool House11LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House1, time);
+        [EventCalculator(EventName.House11LordInHouse2)]
+        public static bool House11LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House2, time);
+        [EventCalculator(EventName.House11LordInHouse3)]
+        public static bool House11LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House3, time);
+        [EventCalculator(EventName.House11LordInHouse4)]
+        public static bool House11LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House4, time);
+        [EventCalculator(EventName.House11LordInHouse5)]
+        public static bool House11LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House5, time);
+        [EventCalculator(EventName.House11LordInHouse6)]
+        public static bool House11LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House6, time);
+        [EventCalculator(EventName.House11LordInHouse7)]
+        public static bool House11LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House7, time);
+        [EventCalculator(EventName.House11LordInHouse8)]
+        public static bool House11LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House8, time);
+        [EventCalculator(EventName.House11LordInHouse9)]
+        public static bool House11LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House9, time);
+        [EventCalculator(EventName.House11LordInHouse10)]
+        public static bool House11LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House10, time);
+        [EventCalculator(EventName.House11LordInHouse11)]
+        public static bool House11LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House11, time);
+        [EventCalculator(EventName.House11LordInHouse12)]
+        public static bool House11LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House12, time);
+
+        //Results of the Lord of the 12th House Occupying Different Houses
+
+        [EventCalculator(EventName.House12LordInHouse1)]
+        public static bool House12LordInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House1, time);
+        [EventCalculator(EventName.House12LordInHouse2)]
+        public static bool House12LordInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House2, time);
+        [EventCalculator(EventName.House12LordInHouse3)]
+        public static bool House12LordInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House3, time);
+        [EventCalculator(EventName.House12LordInHouse4)]
+        public static bool House12LordInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House4, time);
+        [EventCalculator(EventName.House12LordInHouse5)]
+        public static bool House12LordInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House5, time);
+        [EventCalculator(EventName.House12LordInHouse6)]
+        public static bool House12LordInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House6, time);
+        [EventCalculator(EventName.House12LordInHouse7)]
+        public static bool House12LordInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House7, time);
+        [EventCalculator(EventName.House12LordInHouse8)]
+        public static bool House12LordInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House8, time);
+        [EventCalculator(EventName.House12LordInHouse9)]
+        public static bool House12LordInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House9, time);
+        [EventCalculator(EventName.House12LordInHouse10)]
+        public static bool House12LordInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House10, time);
+        [EventCalculator(EventName.House12LordInHouse11)]
+        public static bool House12LordInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House11, time);
+        [EventCalculator(EventName.House12LordInHouse12)]
+        public static bool House12LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House12, time);
+
+
 
         #endregion
     }

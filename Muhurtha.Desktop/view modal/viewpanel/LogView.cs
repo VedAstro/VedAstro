@@ -35,7 +35,7 @@ namespace Muhurtha.Desktop
 
 
 
-        /** EVENT HADLERS **/
+        /** EVENT HANDLERS **/
 
 
         /// <summary>
@@ -47,12 +47,13 @@ namespace Muhurtha.Desktop
             //based on visibility start or stop listening to updates from log manager
             switch (Visibility)
             {
+                //TODO needs work here
                 case Visibility.Visible:
                     ReloadLogText();//get logs from before listening
-                    LogManager.LogUpdated += ReloadLogText; //start listening
+                    //LogManager.LogUpdated += ReloadLogText; //start listening
                     break;
                 case Visibility.Hidden:
-                    LogManager.LogUpdated -= ReloadLogText; //stop listening
+                    //LogManager.LogUpdated -= ReloadLogText; //stop listening
                     break;
             }
 

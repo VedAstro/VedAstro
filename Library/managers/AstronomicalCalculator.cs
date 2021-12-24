@@ -1338,14 +1338,21 @@ namespace Genso.Astrology.Library
 
                 Angle birthAyanamsa = GetAyanamsa(time);
 
-                if (longitude.TotalDegrees < birthAyanamsa.TotalDegrees)
-                    returnValue = (longitude + Angle.Degrees360) - birthAyanamsa;
-                else
-                    returnValue = longitude - birthAyanamsa;
+                //if below ayanamsa add 360 before minus
+                returnValue = longitude.TotalDegrees < birthAyanamsa.TotalDegrees
+                    ? (longitude + Angle.Degrees360) - birthAyanamsa
+                    : longitude - birthAyanamsa;
 
                 //Calculates Kethu with inital values from Rahu
-                if ((PlanetName)planetName == PlanetName.Ketu)
-                    returnValue -= Angle.Degrees180;
+                if (planetName == PlanetName.Ketu)
+                {
+                    //TODO unsure code, if below should u add 360 as done above instead of changing minus order?
+                    LogManager.Debug("!!!Running untested code!!! in GetPlanetNirayanaLongitude");
+                    returnValue = returnValue < Angle.Degrees180
+                        ? Angle.Degrees180 - returnValue
+                        : returnValue - Angle.Degrees180;
+                }
+
 
                 return returnValue;
             }
@@ -2250,10 +2257,21 @@ namespace Genso.Astrology.Library
             var specifiedHouse = allHouses.Find(house => house.GetHouseNumber() == houseNumber);
 
             //get sign of the specified house
-            var houseSign = AstronomicalCalculator.GetZodiacSignAtLongitude(specifiedHouse.GetMiddleLongitude());
+            //Note :
+            //When the middle longitude has just entered a new sign,
+            //rounding the longitude shows better accuracy.
+            //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
+            //but predictive results points to Gemini (30°0'0"), so rounding is implemented
+            var middleLongitude = specifiedHouse.GetMiddleLongitude();
+            var roundedMiddleLongitude = Angle.FromDegrees(Math.Round(middleLongitude.TotalDegrees));
+            var houseSignName = AstronomicalCalculator.GetZodiacSignAtLongitude(roundedMiddleLongitude).GetSignName();
+
+            //for sake of testing, if sign is changed due to rounding, then log it
+            var unroundedSignName = AstronomicalCalculator.GetZodiacSignAtLongitude(middleLongitude).GetSignName();
+            if (unroundedSignName != houseSignName) { LogManager.Debug($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}"); }
 
             //return the name of house sign
-            return houseSign.GetSignName();
+            return houseSignName;
         }
 
         public static ZodiacName GetNavamsaSignNameFromLongitude(Angle longitude)

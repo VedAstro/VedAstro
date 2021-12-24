@@ -4156,7 +4156,394 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.House12LordInHouse12)]
         public static bool House12LordInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House12, time);
 
+        //Results of Different Signs Ascending
 
+        [EventCalculator(EventName.AriesRising)]
+        public static bool AriesRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aries;
+
+        [EventCalculator(EventName.TaurusRising)]
+        public static bool TaurusRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Taurus;
+
+        [EventCalculator(EventName.GeminiRising)]
+        public static bool GeminiRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Gemini;
+
+        [EventCalculator(EventName.CancerRising)]
+        public static bool CancerRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Cancer;
+
+        [EventCalculator(EventName.LeoRising)]
+        public static bool LeoRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Leo;
+
+        [EventCalculator(EventName.VirgoRising)]
+        public static bool VirgoRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Virgo;
+
+        [EventCalculator(EventName.LibraRising)]
+        public static bool LibraRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Libra;
+
+        [EventCalculator(EventName.ScorpioRising)]
+        public static bool ScorpioRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Scorpio;
+
+        [EventCalculator(EventName.SagittariusRising)]
+        public static bool SagittariusRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Sagittarius;
+
+        [EventCalculator(EventName.CapricornusRising)]
+        public static bool CapricornusRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Capricornus;
+
+        [EventCalculator(EventName.AquariusRising)]
+        public static bool AquariusRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aquarius;
+
+        [EventCalculator(EventName.PiscesRising)]
+        public static bool PiscesRisingOccuring(Time time, Person person) => AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Pisces;
+
+
+        //Planets in the First House
+
+        [EventCalculator(EventName.SunInHouse1)]
+        public static bool SunInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 1;
+
+        [EventCalculator(EventName.MoonInHouse1)]
+        public static bool MoonInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 1;
+
+        [EventCalculator(EventName.MarsInHouse1)]
+        public static bool MarsInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 1;
+
+        [EventCalculator(EventName.MercuryInHouse1)]
+        public static bool MercuryInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 1;
+
+        [EventCalculator(EventName.JupiterInHouse1)]
+        public static bool JupiterInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 1;
+
+        [EventCalculator(EventName.VenusInHouse1)]
+        public static bool VenusInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 1;
+
+        [EventCalculator(EventName.SaturnInHouse1)]
+        public static bool SaturnInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 1;
+
+        [EventCalculator(EventName.RahuInHouse1)]
+        public static bool RahuInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 1;
+
+        [EventCalculator(EventName.KetuInHouse1)]
+        public static bool KetuInHouse1Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 1;
+
+
+        //Planets in the 2nd House
+
+        [EventCalculator(EventName.SunInHouse2)]
+        public static bool SunInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 2;
+
+        [EventCalculator(EventName.MoonInHouse2)]
+        public static bool MoonInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 2;
+
+        [EventCalculator(EventName.MarsInHouse2)]
+        public static bool MarsInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 2;
+
+        [EventCalculator(EventName.MercuryInHouse2)]
+        public static bool MercuryInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 2;
+
+        [EventCalculator(EventName.JupiterInHouse2)]
+        public static bool JupiterInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 2;
+
+        [EventCalculator(EventName.VenusInHouse2)]
+        public static bool VenusInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 2;
+
+        [EventCalculator(EventName.SaturnInHouse2)]
+        public static bool SaturnInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 2;
+
+        [EventCalculator(EventName.RahuInHouse2)]
+        public static bool RahuInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 2;
+
+        [EventCalculator(EventName.KetuInHouse2)]
+        public static bool KetuInHouse2Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 2;
+
+        //Planets in the 3rd House
+
+        [EventCalculator(EventName.SunInHouse3)]
+        public static bool SunInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 3;
+
+        [EventCalculator(EventName.MoonInHouse3)]
+        public static bool MoonInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 3;
+
+        [EventCalculator(EventName.MarsInHouse3)]
+        public static bool MarsInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 3;
+
+        [EventCalculator(EventName.MercuryInHouse3)]
+        public static bool MercuryInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 3;
+
+        [EventCalculator(EventName.JupiterInHouse3)]
+        public static bool JupiterInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 3;
+
+        [EventCalculator(EventName.VenusInHouse3)]
+        public static bool VenusInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 3;
+
+        [EventCalculator(EventName.SaturnInHouse3)]
+        public static bool SaturnInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 3;
+
+        [EventCalculator(EventName.RahuInHouse3)]
+        public static bool RahuInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 3;
+
+        [EventCalculator(EventName.KetuInHouse3)]
+        public static bool KetuInHouse3Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 3;
+
+        //Planets in the 4th House
+
+        [EventCalculator(EventName.SunInHouse4)]
+        public static bool SunInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 4;
+
+        [EventCalculator(EventName.MoonInHouse4)]
+        public static bool MoonInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 4;
+
+        [EventCalculator(EventName.MarsInHouse4)]
+        public static bool MarsInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 4;
+
+        [EventCalculator(EventName.MercuryInHouse4)]
+        public static bool MercuryInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 4;
+
+        [EventCalculator(EventName.JupiterInHouse4)]
+        public static bool JupiterInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 4;
+
+        [EventCalculator(EventName.VenusInHouse4)]
+        public static bool VenusInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 4;
+
+        [EventCalculator(EventName.SaturnInHouse4)]
+        public static bool SaturnInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 4;
+
+        [EventCalculator(EventName.RahuInHouse4)]
+        public static bool RahuInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 4;
+
+        [EventCalculator(EventName.KetuInHouse4)]
+        public static bool KetuInHouse4Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 4;
+
+        //Planets in the 5th House
+
+        [EventCalculator(EventName.SunInHouse5)]
+        public static bool SunInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 5;
+
+        [EventCalculator(EventName.MoonInHouse5)]
+        public static bool MoonInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 5;
+
+        [EventCalculator(EventName.MarsInHouse5)]
+        public static bool MarsInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 5;
+
+        [EventCalculator(EventName.MercuryInHouse5)]
+        public static bool MercuryInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 5;
+
+        [EventCalculator(EventName.JupiterInHouse5)]
+        public static bool JupiterInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 5;
+
+        [EventCalculator(EventName.VenusInHouse5)]
+        public static bool VenusInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 5;
+
+        [EventCalculator(EventName.SaturnInHouse5)]
+        public static bool SaturnInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 5;
+
+        [EventCalculator(EventName.RahuInHouse5)]
+        public static bool RahuInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 5;
+
+        [EventCalculator(EventName.KetuInHouse5)]
+        public static bool KetuInHouse5Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 5;
+
+        //Planets in the 6th House
+
+        [EventCalculator(EventName.SunInHouse6)]
+        public static bool SunInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 6;
+
+        [EventCalculator(EventName.MoonInHouse6)]
+        public static bool MoonInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 6;
+
+        [EventCalculator(EventName.MarsInHouse6)]
+        public static bool MarsInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 6;
+
+        [EventCalculator(EventName.MercuryInHouse6)]
+        public static bool MercuryInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 6;
+
+        [EventCalculator(EventName.JupiterInHouse6)]
+        public static bool JupiterInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 6;
+
+        [EventCalculator(EventName.VenusInHouse6)]
+        public static bool VenusInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 6;
+
+        [EventCalculator(EventName.SaturnInHouse6)]
+        public static bool SaturnInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 6;
+
+        [EventCalculator(EventName.RahuInHouse6)]
+        public static bool RahuInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 6;
+
+        [EventCalculator(EventName.KetuInHouse6)]
+        public static bool KetuInHouse6Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 6;
+
+
+        //Planets in the 7th House
+
+        [EventCalculator(EventName.SunInHouse7)]
+        public static bool SunInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 7;
+
+        [EventCalculator(EventName.MoonInHouse7)]
+        public static bool MoonInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 7;
+
+        [EventCalculator(EventName.MarsInHouse7)]
+        public static bool MarsInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 7;
+
+        [EventCalculator(EventName.MercuryInHouse7)]
+        public static bool MercuryInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 7;
+
+        [EventCalculator(EventName.JupiterInHouse7)]
+        public static bool JupiterInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 7;
+
+        [EventCalculator(EventName.VenusInHouse7)]
+        public static bool VenusInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 7;
+
+        [EventCalculator(EventName.SaturnInHouse7)]
+        public static bool SaturnInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 7;
+
+        [EventCalculator(EventName.RahuInHouse7)]
+        public static bool RahuInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 7;
+
+        [EventCalculator(EventName.KetuInHouse7)]
+        public static bool KetuInHouse7Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 7;
+
+        //Planets in the 8th House
+
+        [EventCalculator(EventName.SunInHouse8)]
+        public static bool SunInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 8;
+
+        [EventCalculator(EventName.MoonInHouse8)]
+        public static bool MoonInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 8;
+
+        [EventCalculator(EventName.MarsInHouse8)]
+        public static bool MarsInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 8;
+
+        [EventCalculator(EventName.MercuryInHouse8)]
+        public static bool MercuryInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 8;
+
+        [EventCalculator(EventName.JupiterInHouse8)]
+        public static bool JupiterInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 8;
+
+        [EventCalculator(EventName.VenusInHouse8)]
+        public static bool VenusInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 8;
+
+        [EventCalculator(EventName.SaturnInHouse8)]
+        public static bool SaturnInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 8;
+
+        [EventCalculator(EventName.RahuInHouse8)]
+        public static bool RahuInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 8;
+
+        [EventCalculator(EventName.KetuInHouse8)]
+        public static bool KetuInHouse8Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 8;
+
+        //Planets in the 9th House
+
+        [EventCalculator(EventName.SunInHouse9)]
+        public static bool SunInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 9;
+
+        [EventCalculator(EventName.MoonInHouse9)]
+        public static bool MoonInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 9;
+
+        [EventCalculator(EventName.MarsInHouse9)]
+        public static bool MarsInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 9;
+
+        [EventCalculator(EventName.MercuryInHouse9)]
+        public static bool MercuryInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 9;
+
+        [EventCalculator(EventName.JupiterInHouse9)]
+        public static bool JupiterInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 9;
+
+        [EventCalculator(EventName.VenusInHouse9)]
+        public static bool VenusInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 9;
+
+        [EventCalculator(EventName.SaturnInHouse9)]
+        public static bool SaturnInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 9;
+
+        [EventCalculator(EventName.RahuInHouse9)]
+        public static bool RahuInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 9;
+
+        [EventCalculator(EventName.KetuInHouse9)]
+        public static bool KetuInHouse9Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 9;
+
+        //Planets in the 10th House
+
+        [EventCalculator(EventName.SunInHouse10)]
+        public static bool SunInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 10;
+
+        [EventCalculator(EventName.MoonInHouse10)]
+        public static bool MoonInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 10;
+
+        [EventCalculator(EventName.MarsInHouse10)]
+        public static bool MarsInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 10;
+
+        [EventCalculator(EventName.MercuryInHouse10)]
+        public static bool MercuryInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 10;
+
+        [EventCalculator(EventName.JupiterInHouse10)]
+        public static bool JupiterInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 10;
+
+        [EventCalculator(EventName.VenusInHouse10)]
+        public static bool VenusInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 10;
+
+        [EventCalculator(EventName.SaturnInHouse10)]
+        public static bool SaturnInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 10;
+
+        [EventCalculator(EventName.RahuInHouse10)]
+        public static bool RahuInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 10;
+
+        [EventCalculator(EventName.KetuInHouse10)]
+        public static bool KetuInHouse10Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 10;
+
+        //Planets in the 11th House
+
+        [EventCalculator(EventName.SunInHouse11)]
+        public static bool SunInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 11;
+
+        [EventCalculator(EventName.MoonInHouse11)]
+        public static bool MoonInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 11;
+
+        [EventCalculator(EventName.MarsInHouse11)]
+        public static bool MarsInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 11;
+
+        [EventCalculator(EventName.MercuryInHouse11)]
+        public static bool MercuryInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 11;
+
+        [EventCalculator(EventName.JupiterInHouse11)]
+        public static bool JupiterInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 11;
+
+        [EventCalculator(EventName.VenusInHouse11)]
+        public static bool VenusInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 11;
+
+        [EventCalculator(EventName.SaturnInHouse11)]
+        public static bool SaturnInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 11;
+
+        [EventCalculator(EventName.RahuInHouse11)]
+        public static bool RahuInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 11;
+
+        [EventCalculator(EventName.KetuInHouse11)]
+        public static bool KetuInHouse11Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 11;
+
+        //Planets in the 12th House
+
+        [EventCalculator(EventName.SunInHouse12)]
+        public static bool SunInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 12;
+
+        [EventCalculator(EventName.MoonInHouse12)]
+        public static bool MoonInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 12;
+
+        [EventCalculator(EventName.MarsInHouse12)]
+        public static bool MarsInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 12;
+
+        [EventCalculator(EventName.MercuryInHouse12)]
+        public static bool MercuryInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 12;
+
+        [EventCalculator(EventName.JupiterInHouse12)]
+        public static bool JupiterInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 12;
+
+        [EventCalculator(EventName.VenusInHouse12)]
+        public static bool VenusInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 12;
+
+        [EventCalculator(EventName.SaturnInHouse12)]
+        public static bool SaturnInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 12;
+
+        [EventCalculator(EventName.RahuInHouse12)]
+        public static bool RahuInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 12;
+
+        [EventCalculator(EventName.KetuInHouse12)]
+        public static bool KetuInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 12;
 
         #endregion
     }

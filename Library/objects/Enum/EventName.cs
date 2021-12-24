@@ -438,6 +438,8 @@
         VenusInHouse12,
         SaturnInHouse12,
         RahuInHouse12,
-        KetuInHouse12
+        KetuInHouse12,
+        GeminiRisingWithEvilPlanet,
+        AriesRisingWithEvilPlanet
     }
 }

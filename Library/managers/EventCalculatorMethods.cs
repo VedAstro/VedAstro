@@ -4545,6 +4545,45 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.KetuInHouse12)]
         public static bool KetuInHouse12Occuring(Time time, Person person) => AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 12;
 
+
+        //CUSTOM
+        [EventCalculator(EventName.GeminiRisingWithEvilPlanet)]
+        public static bool GeminiRisingWithEvilPlanet(Time time, Person person)
+        {
+            //1.gemini rising 
+            var geminiRising = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Gemini;
+
+            //2.find evil planets in gemini
+            //get planets in sign
+            var planetsInSign = AstronomicalCalculator.GetPlanetInSign(ZodiacName.Gemini, time);
+            //filer in only evil (malefic) planets 
+            var evilPlanets = planetsInSign.Where(planet => AstronomicalCalculator.IsPlanetMalefic(planet, time));
+            //mark if evil planets found in sign
+            var evilPlanetFound = evilPlanets.Any();
+
+
+            //both must be true for event to occur
+            return geminiRising && evilPlanetFound;
+        }
+
+        [EventCalculator(EventName.AriesRisingWithEvilPlanet)]
+        public static bool AriesRisingWithEvilPlanet(Time time, Person person)
+        {
+            //Mental affliction and derangement are also likely since Saturn and the Moon are in Aries.
+
+            //1.aries rising 
+            var ariesRising = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aries;
+
+            //2.find if Saturn and the Moon are in Aries.
+            //get planets in sign
+            var planetsInSign = AstronomicalCalculator.GetPlanetInSign(ZodiacName.Aries, time);
+            var evilPlanetFound = planetsInSign.Contains(PlanetName.Saturn) || planetsInSign.Contains(PlanetName.Moon);
+
+
+            //both must be true for event to occur
+            return ariesRising && evilPlanetFound;
+        }
+
         #endregion
     }
 

@@ -1137,7 +1137,7 @@
     <Description>
       Mental Tendencies.- They will have a wavering mind. Fond of writing and reading they are ingenious and quickwitted, vivacious and inconsistent, nervous and restless.
       Physical Tendencies.—They are tall and straight in stature and active in motion. Face well developed, there is a depression near the chin, a thin face, sanguine complexion, unusual height if malefics are there, the eyes are clear and the nose snub. They are weak but active.
-      General Tendencies—They are very active and tend to become experts in mechanical sciences. They may suffer sudden nervous breakdowns. They must be cautious in moving with the opposite sex. Their mind will be often conscious of their own depravity. They are very clever and possess inherent conversational and literary ability. They are liable to fraud and deception. If evil planets are in Gemini, trickery and deceit will characterise their nature. They are best in occupations where there is much activity.
+      General Tendencies—They are very active and tend to become experts in mechanical sciences. They may suffer sudden nervous breakdowns. They must be cautious in moving with the opposite sex. Their mind will be often conscious of their own depravity. They are very clever and possess inherent conversational and literary ability. They are liable to fraud and deception. If evil planets are in Gemini, trickery and deceit will characterize their nature. They are best in occupations where there is much activity.
     </Description>
     <Tag>Personal</Tag>
   </Event>
@@ -1435,72 +1435,293 @@
     <Tag>Personal</Tag>
   </Event>
 
+  <Event>
+    <Id>25</Id>
+    <Name>SunInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    This combination is said to make one generally unhappy and mentally worried.
+	    He will be roaming about. The position promises some inheritance. He will have interest in occult
+	    and philosophical studies. In the political Geld success is difficult. Obstacles in life are shown if Saturn
+	    or Mars aspects the Sun.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>MoonInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    Possesses house derives happiness from relatives; will he cheerful and contented
+	    becomes important as a leader or ruler ; proud and somewhat quarrelsome. The position indicates
+	    early separation from the mother if the Moon is afflicted; will be fond of sensual pleasures, unless
+	    aspected by Jupiter.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>MarsInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    This is generally a bad combination. The person will be deprived of happiness from
+	    mother, relations and friends, but will have success in the political line. There will be quarrels with
+	    mother and domestic affairs go awry. If Mars joins Rahu or Ketu, the man will have a tendency
+	    for suicide. The person will own houses but will not be happy on that account.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>MercuryInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    Shines well as an educationist or diplomat. He will boldly criticise the
+	    Government. He will be held in great esteem. Father will be a self-made man. He will command a
+	    good conveyance. He will have taste for music and other fine arts and will frequently travel to far off
+	    countries. He will be witty in speech.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>JupiterInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    Philosophically inclined, learned, happy, possesses the favour of the ruling class; a
+	    terror to his enemies; religiously inclined, respected and fortunate; peaceful domestic environments;
+	    great spiritual advancement.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>VenusInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    Well versed in music, polished manners, deep attachment to mother, many friends,
+	    conveyances and houses; religious by inclined: successful achievement of desires. This is a
+	    favourable yoga for affairs of a domestic nature, concord and happiness.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>SaturnInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    Sickly during early years; deprived of mother and unhappy; suffers from windy and
+	    phlegmatic complaints; lethargic temperament; will not inherit any property; will have troubles from
+	    houses and vehicles; disliked by relatives; desire to live a very secluded life; unfavourable for
+	    domestic or family affairs, unless beneficially aspected or associated.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>RahuInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    Foolish in behaviour; few friends; will be subjected to fraud; or guilty of fraudulent action.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+  <Event>
+    <Id>25</Id>
+    <Name>KetuInHouse4</Name>
+    <Nature>Neutral</Nature>
+    <Description>
+	    Will be deprived of mother, properties and happiness; lives in a foreign place. There
+	    will be exceptional experiences at the end of life. There will be reversals and sudden changes.
+    </Description>
+    <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+	  <Id>25</Id>
+	  <Name>SunInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  This combination deprises the person of children, riches and happiness. His life
+		  will be short. He will suffer from heart disease, will roam about in forest regions; a mountaineer.
+		  This position also denotes difficult child-birth.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>MoonInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Clarity of mind, happiness from children, acquisition of lands, gems and
+		  precious stones, opportunity to serve the State are indicated when the Moon is in the 5th. The person
+		  will be straightforward, truthful, learned, gentlemanly, god-fearing, and devoid of enemies. Strong
+		  tendency towards speculation is also denoted. One of the children becomes famous.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>MarsInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Miserable for his wife, friends and children ; always disturbed in thoughts;
+		  impressive, rash, weak- minded, back-biter and unhappy. He will suffer from colic and suffers
+		  misfortunes through children. Too much attached to sex pleasures and consequently loss of health.
+		  Dangerous child-birth may be predicted in a woman's chart.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>MercuryInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Learned and happy, will have
+		  a number of children. The person may become an adviser or a minister ; highly intelligent and
+		  learned in Mantrasastras ; inclined to too much of sex pleasure and consequently lacking in vitality.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>JupiterInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Learned in logic and law, mantrasastra, highly intelligent, preceptor or adviser to a
+		  king and great discriminating power. He will have good friends and vehicles and decorous manners.
+		  A number of children ; god-fearing ; happy with children and friends.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>VenusInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Poetic; possesses a number of friends and beautiful children ; happiness through
+		  offspring ; wise and discriminating; acquires wealth ; respected by the State. This position also
+		  indicates more of female children and success in speculation.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>SaturnInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Evil-minded and stupid ; sickly and weak; poor and hated by others. This
+		  combination denotes sorrows through children. Fortune will be variable and not steady and he will
+		  have a hyprocritical nature. Quarrels with friends and relatives and sorrow in domestic life.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>RahuInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Suffers from colic; mistaken by others and unfriended; will lose a number of
+		  children; hard-hearted and unconventional; heart trouble.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>KetuInHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Loss of children; trouble in the stomach, strange and peculiar experiences in
+		  connection with emotions and feelings. Later on in life, inclination towards spirituality.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
 
 
   <Event>
-    <Id>25</Id>
-    <Name>SunInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>SunInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
   <Event>
-    <Id>25</Id>
-    <Name>MoonInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>MoonInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
   <Event>
-    <Id>25</Id>
-    <Name>MarsInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>MarsInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
   <Event>
-    <Id>25</Id>
-    <Name>MercuryInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>MercuryInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
   <Event>
-    <Id>25</Id>
-    <Name>JupiterInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>JupiterInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
   <Event>
-    <Id>25</Id>
-    <Name>VenusInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>VenusInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
   <Event>
-    <Id>25</Id>
-    <Name>SaturnInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>SaturnInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
   <Event>
-    <Id>25</Id>
-    <Name>RahuInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>RahuInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
   <Event>
-    <Id>25</Id>
-    <Name>KetuInHouse1</Name>
-    <Nature>Neutral</Nature>
-    <Description></Description>
-    <Tag>Personal</Tag>
+	  <Id>25</Id>
+	  <Name>KetuInHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description></Description>
+	  <Tag>Personal</Tag>
   </Event>
 
+
+	<!--CUSTOM-->
+
+  <Event>
+	  <Id>25</Id>
+	  <Name>GeminiRisingWithEvilPlanet</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>
+		  Evil planets are in Gemini, trickery and deceit will characterize their nature.
+	  </Description>
+	  <Tag>Personal</Tag>
+  </Event>
+
+  <Event>
+	  <Id>25</Id>
+	  <Name>AriesRisingWithEvilPlanet</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>Mental affliction and derangement are also likely since Saturn and the Moon are in Aries.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
 
 
 </Root>

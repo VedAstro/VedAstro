@@ -127,6 +127,7 @@ namespace Horoscope.Desktop
         /// <summary>
         /// Get a list of events in a time period for a single event type aka "event data"
         /// Decision on when event starts & ends is also done here
+        /// Event Data + Time = Prediction
         /// </summary>
         private static List<Prediction> GetPredictionListByEventData(EventData eventData, Person person, List<Time> timeList)
         {
@@ -179,6 +180,7 @@ namespace Horoscope.Desktop
                     var newEvent = new Prediction(eventData.GetName(),
                         eventData.GetNature(),
                         eventData.GetDescription(),
+                        eventData.GetStrength(),
                         eventStartTime,
                         eventEndTime);
 
@@ -199,6 +201,7 @@ namespace Horoscope.Desktop
                     var newEvent2 = new Prediction(eventData.GetName(),
                         eventData.GetNature(),
                         eventData.GetDescription(),
+                        eventData.GetStrength(),
                         eventStartTime,
                         eventEndTime);
 

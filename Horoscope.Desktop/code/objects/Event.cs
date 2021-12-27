@@ -8,24 +8,27 @@ namespace Horoscope.Desktop
 
     /// <summary>
     /// Simple class to encapsulate a prediction (data)
+    /// TODO another Prediction class better naming?
     /// </summary>
     public class Prediction : IHasName
     {
         //FIELDS
         private readonly EventName _name;
         private readonly string _description;
+        private readonly string _strength;
         private readonly EventNature _nature;
         private readonly Time _startTime;
         private readonly Time _endTime;
 
 
         //CTOR
-        public Prediction(EventName name, EventNature nature, string description, Time startTime, Time endTime)
+        public Prediction(EventName name, EventNature nature, string description, string strength, Time startTime, Time endTime)
         {
             //initialize fields
             _name = name;
             _nature = nature;
             _description = description;
+            _strength = strength;
             _startTime = startTime;
             _endTime = endTime;
         }
@@ -36,6 +39,7 @@ namespace Horoscope.Desktop
         //Note: Created mainly for ease of use with WPF binding
         public EventName Name => _name;
         public string Description => _description;
+        public string Strength => _strength;
         public EventNature Nature => _nature;
         public Time StartTime => _startTime;
         public Time EndTime => _endTime;

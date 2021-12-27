@@ -83,6 +83,9 @@ namespace Genso.Astrology.Library
             return hash1;
         }
 
+        /// <summary>
+        /// Will print Shashtiamsa As Double
+        /// </summary>
         public override string ToString()
         {
             return $"{_shashtiamsaAsDouble}";

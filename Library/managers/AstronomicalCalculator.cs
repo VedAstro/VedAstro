@@ -4028,9 +4028,10 @@ namespace Genso.Astrology.Library
                 return sortedArray;
 
 
-                //-------------FUNCTIONS
+                /*--------------FUNCTIONS----------------*/
 
                 //get a preset strength limit for planet
+                //TODO more info needed on this method, why is it not in GetPlanetShadbalaPinda
                 double getLimit(PlanetName _planet)
                 {
                     if (_planet == PlanetName.Sun) { return 5; }
@@ -4106,6 +4107,8 @@ namespace Genso.Astrology.Library
         /// above sum according as it is positive or negative.
         /// The resul.t obtained is the Shadbala Pinda of the
         /// planet in Shashtiamsas.
+        ///
+        /// Note: Rahu & Ketu is not supported, possible fix?
         /// </summary>
         public static Shashtiamsa GetPlanetShadbalaPinda(PlanetName planetName, Time time)
         {
@@ -6299,6 +6302,8 @@ namespace Genso.Astrology.Library
 
             //if it matches then occuring
             return houseIsIn == (int)occupiedHouse;
+            
+
 
         }
     }

@@ -7,7 +7,7 @@ namespace Genso.Astrology.Library
 {
 
     /// <summary>
-    /// Data structure to encapsulat an event before it's calculated
+    /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
     public struct EventData : IHasName
@@ -25,6 +25,7 @@ namespace Genso.Astrology.Library
             Name = name;
             Nature = nature;
             Description = description;
+            Strength = "";//strength is only gotten after calculator is run
             EventTags = eventTags;
             _eventCalculator = eventCalculator;
             _id = id;
@@ -37,6 +38,7 @@ namespace Genso.Astrology.Library
         public string FormattedName => Format.FormatName(this);
         public EventNature Nature { get; }
         public string Description { get; }
+        public string Strength { get; set; }
         public List<EventTag> EventTags { get; }
 
 
@@ -44,9 +46,16 @@ namespace Genso.Astrology.Library
         /** PUBLIC METHODS **/
         public bool IsEventOccuring(Time time, Person person)
         {
-            //call event calculator to check if event is occuring
-            bool isEventOccuring = _eventCalculator(time, person);
+            //calculate prediction
+            var prediction = _eventCalculator(time, person);
 
+            //is prediction occuring
+            bool isEventOccuring = prediction.Occuring;
+
+            //store prediction strength for later
+            Strength = prediction.Strength;
+
+            //let caller know if occuring
             return isEventOccuring;
         }
 
@@ -55,6 +64,8 @@ namespace Genso.Astrology.Library
         public EventNature GetNature() => Nature;
 
         public string GetDescription() => Description;
+        public string GetStrength() => Strength;
+    
 
         public List<EventTag> GetEventTags() => EventTags;
 

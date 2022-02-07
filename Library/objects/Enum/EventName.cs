@@ -440,6 +440,8 @@
         RahuInHouse12,
         KetuInHouse12,
         GeminiRisingWithEvilPlanet,
-        AriesRisingWithEvilPlanet
+        AriesRisingWithEvilPlanet,
+        Lord2WithEvilInHouse,
+        SaturnIn2WithVenus
     }
 }

@@ -3745,152 +3745,207 @@ namespace Genso.Astrology.Library
         public static Prediction IsSunIsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Sun;
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonIsStrong)]
         public static Prediction IsMoonIsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Moon;
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsIsStrong)]
         public static Prediction IsMarsIsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Mars;
-            return new() { Occuring = occuring };
 
+            //
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryIsStrong)]
         public static Prediction IsMercuryIsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Mercury;
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterIsStrong)]
         public static Prediction IsJupiterIsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Jupiter;
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusIsStrong)]
         public static Prediction IsVenusIsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Venus;
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnIsStrong)]
         public static Prediction IsSaturnIsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Saturn;
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House1IsStrong)]
         public static Prediction IsHouse1IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House1;
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House2IsStrong)]
         public static Prediction IsHouse2IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House2;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House3IsStrong)]
         public static Prediction IsHouse3IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House4IsStrong)]
         public static Prediction IsHouse4IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House4;
-            return new() { Occuring = occuring };
 
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House5IsStrong)]
         public static Prediction IsHouse5IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House5;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House6IsStrong)]
         public static Prediction IsHouse6IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House7IsStrong)]
         public static Prediction IsHouse7IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House8IsStrong)]
         public static Prediction IsHouse8IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House9IsStrong)]
         public static Prediction IsHouse9IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House10IsStrong)]
         public static Prediction IsHouse10IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House11IsStrong)]
         public static Prediction IsHouse11IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House12IsStrong)]
         public static Prediction IsHouse12IsStrongOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetAllHousesOrderedByStrength(time)[0] == HouseName.House12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.Sunrise)]
@@ -3911,9 +3966,10 @@ namespace Genso.Astrology.Library
 
             //time is within +-5min
             var occuring = isAfter && isBefore;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
-
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.Sunset)]
@@ -3934,8 +3990,10 @@ namespace Genso.Astrology.Library
 
             //time is within +-5min
             var occuring = isAfter && isBefore;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.Midday)]
@@ -3960,9 +4018,10 @@ namespace Genso.Astrology.Library
 
             //time is within 11:55AM to 12:05PM
             var occuring = isAfter && isBefore;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
-
+            return new() { Occuring = occuring, Strength = strength};
         }
 
 
@@ -3970,13 +4029,19 @@ namespace Genso.Astrology.Library
 
         #region HOROSCOPE
 
-        //Results of Lord of 1st being Situated in Different Houses
+        #region Lord of 1st being Situated in Different Houses
 
         [EventCalculator(EventName.House1LordInHouse1)]
         public static Prediction House1LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House1, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -3984,7 +4049,13 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House2, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -3992,7 +4063,13 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House3, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4000,7 +4077,12 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4008,7 +4090,12 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House5, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4016,7 +4103,12 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4024,7 +4116,13 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4032,7 +4130,13 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House8, time);
-            return new() { Occuring = occuring };
+           
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4040,7 +4144,12 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House9, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4048,7 +4157,13 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House10, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4056,7 +4171,12 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4064,18 +4184,30 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
+        #endregion
 
-        //Results of Lord of Second being Situated in Different Houses
+        #region Lord of 2nd being Situated in Different Houses
 
         [EventCalculator(EventName.House2LordInHouse1)]
         public static Prediction House2LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House1, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4083,7 +4215,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House2, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4091,7 +4229,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House3, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4099,7 +4243,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House4, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4107,7 +4257,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House5, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4115,7 +4271,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House6, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4123,7 +4285,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House7, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4131,7 +4299,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House8, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4139,7 +4313,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House9, time);
-            return new() { Occuring = occuring };
+            
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4147,7 +4327,13 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            
+            //STRENGTH CALCULATION
+            var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord7, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4155,7 +4341,12 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4163,15 +4354,29 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
         }
 
-        //Results of Lord of 3rd being Situated in Different Houses
+        #endregion
+
+        #region Lord of 3rd being Situated in Different Houses
+
         [EventCalculator(EventName.House3LordInHouse1)]
         public static Prediction House3LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House1, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4179,7 +4384,13 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House2, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4187,7 +4398,12 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House3, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4195,7 +4411,12 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4203,7 +4424,12 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House5, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4211,7 +4437,12 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4219,7 +4450,12 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4227,7 +4463,12 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4235,7 +4476,12 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House9, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4243,15 +4489,25 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House10, time);
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House3LordInHouse11)]
         public static Prediction House3LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4259,97 +4515,148 @@ namespace Genso.Astrology.Library
         public static Prediction House3LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
-        //Results of the Lord of the 4th House Occupying Different Houses
+        #endregion
+
+        #region Lord of the 4th House Occupying Different Houses
 
         [EventCalculator(EventName.House4LordInHouse1)]
         public static Prediction House4LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House1, time);
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse2)]
         public static Prediction House4LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House2, time);
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse3)]
         public static Prediction House4LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House3, time);
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse4)]
         public static Prediction House4LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House4, time);
-            return new() { Occuring = occuring };
 
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse5)]
         public static Prediction House4LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House5, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse6)]
         public static Prediction House4LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse7)]
         public static Prediction House4LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse8)]
         public static Prediction House4LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse9)]
         public static Prediction House4LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House9, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse10)]
         public static Prediction House4LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4LordInHouse11)]
         public static Prediction House4LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House11, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4357,81 +4664,117 @@ namespace Genso.Astrology.Library
         public static Prediction House4LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
+        #endregion
+
         //Results of the Lord of the 5th House Occupying Different Houses
+        #region MyRegion
 
         [EventCalculator(EventName.House5LordInHouse1)]
         public static Prediction House5LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House1, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse2)]
         public static Prediction House5LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House2, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse3)]
         public static Prediction House5LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House3, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse4)]
         public static Prediction House5LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse5)]
         public static Prediction House5LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House5, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse6)]
         public static Prediction House5LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse7)]
         public static Prediction House5LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse8)]
         public static Prediction House5LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse9)]
         public static Prediction House5LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House9, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4439,65 +4782,95 @@ namespace Genso.Astrology.Library
         public static Prediction House5LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse11)]
         public static Prediction House5LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5LordInHouse12)]
         public static Prediction House5LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
+        #endregion
+
         //Results of the Lord of the 6th House Occupying Different Houses
+        #region MyRegion
 
         [EventCalculator(EventName.House6LordInHouse1)]
         public static Prediction House6LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House1, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse2)]
         public static Prediction House6LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House2, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse3)]
         public static Prediction House6LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House3, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse4)]
         public static Prediction House6LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse5)]
         public static Prediction House6LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House5, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
 
         }
 
@@ -4505,90 +4878,125 @@ namespace Genso.Astrology.Library
         public static Prediction House6LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse7)]
         public static Prediction House6LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse8)]
         public static Prediction House6LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse9)]
         public static Prediction House6LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House9, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse10)]
         public static Prediction House6LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse11)]
         public static Prediction House6LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6LordInHouse12)]
         public static Prediction House6LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
-        //Results of the Lord of the 7th House Occupying Different Houses
+        #endregion
+
+        #region Lord of the 7th House Occupying Different Houses
 
         [EventCalculator(EventName.House7LordInHouse1)]
         public static Prediction House7LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House1, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse2)]
         public static Prediction House7LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House2, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse3)]
         public static Prediction House7LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House3, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse4)]
         public static Prediction House7LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
 
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse5)]
@@ -4597,578 +5005,973 @@ namespace Genso.Astrology.Library
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House5, time);
 
             //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord7, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring };
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.House7LordInHouse6)]
         public static Prediction House7LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse7)]
         public static Prediction House7LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse8)]
         public static Prediction House7LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse9)]
         public static Prediction House7LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House9, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse10)]
         public static Prediction House7LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse11)]
         public static Prediction House7LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse12)]
         public static Prediction House7LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
+        #endregion
+
         //Results of the Lord of the 8th House Occupying Different Houses
+        #region MyRegion
 
         [EventCalculator(EventName.House8LordInHouse1)]
         public static Prediction House8LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House1, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse2)]
         public static Prediction House8LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House2, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse3)]
         public static Prediction House8LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House3, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse4)]
         public static Prediction House8LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse5)]
         public static Prediction House8LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House5, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse6)]
         public static Prediction House8LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse7)]
         public static Prediction House8LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse8)]
         public static Prediction House8LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse9)]
         public static Prediction House8LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House9, time);
-            return new() { Occuring = occuring };
+           
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse10)]
         public static Prediction House8LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse11)]
         public static Prediction House8LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8LordInHouse12)]
         public static Prediction House8LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
-        //Results of the Lord of the 9th House Occupying Different Houses
+        #endregion
+
+        #region Lord of the 9th House Occupying Different Houses
 
         [EventCalculator(EventName.House9LordInHouse1)]
         public static Prediction House9LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House1, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse2)]
         public static Prediction House9LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House2, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse3)]
         public static Prediction House9LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House3, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse4)]
         public static Prediction House9LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse5)]
         public static Prediction House9LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House5, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse6)]
         public static Prediction House9LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse7)]
         public static Prediction House9LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse8)]
         public static Prediction House9LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse9)]
         public static Prediction House9LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House9, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse10)]
         public static Prediction House9LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse11)]
         public static Prediction House9LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9LordInHouse12)]
         public static Prediction House9LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
-        //Results of the Lord of the 10th House Occupying Different Houses
+        #endregion
+
+
+        #region Lord of the 10th House Occupying Different Houses
 
         [EventCalculator(EventName.House10LordInHouse1)]
         public static Prediction House10LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House1, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse2)]
         public static Prediction House10LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House2, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse3)]
         public static Prediction House10LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House3, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse4)]
         public static Prediction House10LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse5)]
         public static Prediction House10LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House5, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse6)]
         public static Prediction House10LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse7)]
         public static Prediction House10LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse8)]
         public static Prediction House10LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse9)]
         public static Prediction House10LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House9, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse10)]
         public static Prediction House10LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse11)]
         public static Prediction House10LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House11, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10LordInHouse12)]
         public static Prediction House10LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House12, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
 
-        //Results of the Lord of the 11th House Occupying Different Houses
+        #endregion
+
+
+        #region Lord of the 11th House Occupying Different Houses
 
         [EventCalculator(EventName.House11LordInHouse1)]
         public static Prediction House11LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House1, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse2)]
         public static Prediction House11LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House2, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse3)]
         public static Prediction House11LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House3, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse4)]
         public static Prediction House11LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House4, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse5)]
         public static Prediction House11LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House5, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse6)]
         public static Prediction House11LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House6, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse7)]
         public static Prediction House11LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House7, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse8)]
         public static Prediction House11LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House8, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse9)]
         public static Prediction House11LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House9, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse10)]
         public static Prediction House11LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse11)]
         public static Prediction House11LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House11, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11LordInHouse12)]
         public static Prediction House11LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House12, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
-        //Results of the Lord of the 12th House Occupying Different Houses
+        #endregion
+
+        #region Lord of the 12th House Occupying Different Houses
 
         [EventCalculator(EventName.House12LordInHouse1)]
         public static Prediction House12LordInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House1, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse2)]
         public static Prediction House12LordInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House2, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse3)]
         public static Prediction House12LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House3, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse4)]
         public static Prediction House12LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House4, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse5)]
         public static Prediction House12LordInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House5, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse6)]
         public static Prediction House12LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House6, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse7)]
         public static Prediction House12LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House7, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse8)]
         public static Prediction House12LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House8, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse9)]
         public static Prediction House12LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House9, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse10)]
         public static Prediction House12LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House10, time);
-            return new() { Occuring = occuring };
+            
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse11)]
         public static Prediction House12LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House11, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12LordInHouse12)]
         public static Prediction House12LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House12, time);
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
-        //Results of Different Signs Ascending
+        #endregion
+
+        #region Different Signs Ascending
 
         [EventCalculator(EventName.AriesRising)]
         public static Prediction AriesRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aries;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Aries);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.TaurusRising)]
         public static Prediction TaurusRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Taurus;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Taurus);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.GeminiRising)]
         public static Prediction GeminiRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Gemini;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Gemini);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.CancerRising)]
         public static Prediction CancerRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Cancer;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Cancer);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.LeoRising)]
         public static Prediction LeoRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Leo;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Leo);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VirgoRising)]
         public static Prediction VirgoRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Virgo;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Virgo);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.LibraRising)]
         public static Prediction LibraRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Libra;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Libra);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.ScorpioRising)]
         public static Prediction ScorpioRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Scorpio;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Scorpio);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SagittariusRising)]
         public static Prediction SagittariusRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Sagittarius;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Sagittarius);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.CapricornusRising)]
         public static Prediction CapricornusRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Capricornus;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Capricornus);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.AquariusRising)]
         public static Prediction AquariusRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aquarius;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Aquarius);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.PiscesRising)]
         public static Prediction PiscesRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Pisces;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Pisces);
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
+
+            var strength = raw.ToString();
+            return new() { Occuring = occuring, Strength = strength };
         }
 
+        #endregion
+
+
+        //Planets in the 1-7th House
+        #region MyRegion
 
         //Planets in the First House
 
@@ -5176,63 +5979,108 @@ namespace Genso.Astrology.Library
         public static Prediction SunInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse1)]
         public static Prediction MoonInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse1)]
         public static Prediction MarsInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse1)]
         public static Prediction MercuryInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse1)]
         public static Prediction JupiterInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse1)]
         public static Prediction VenusInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse1)]
         public static Prediction SaturnInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse1)]
         public static Prediction RahuInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = 0; //TODO stregth for RAHU
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse1)]
         public static Prediction KetuInHouse1Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 1;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = 0; //TODO stregth for RAHU
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
 
@@ -5242,63 +6090,106 @@ namespace Genso.Astrology.Library
         public static Prediction SunInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 2;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse2)]
         public static Prediction MoonInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 2;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse2)]
         public static Prediction MarsInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 2;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse2)]
         public static Prediction MercuryInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 2;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse2)]
         public static Prediction JupiterInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 2;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse2)]
         public static Prediction VenusInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 2;
-            return new() { Occuring = occuring };
+            
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse2)]
         public static Prediction SaturnInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 2;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse2)]
         public static Prediction RahuInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 2;
-            return new() { Occuring = occuring };
+
+            //STRENGTH CALCULATION
+            var raw = "0";//TODO impliment
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse2)]
         public static Prediction KetuInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 2;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         //Planets in the 3rd House
@@ -5307,7 +6198,10 @@ namespace Genso.Astrology.Library
         public static Prediction SunInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse3)]
@@ -5326,49 +6220,70 @@ namespace Genso.Astrology.Library
         public static Prediction MarsInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse3)]
         public static Prediction MercuryInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse3)]
         public static Prediction JupiterInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse3)]
         public static Prediction VenusInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse3)]
         public static Prediction SaturnInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse3)]
         public static Prediction RahuInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse3)]
         public static Prediction KetuInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 3;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         //Planets in the 4th House
@@ -5377,63 +6292,90 @@ namespace Genso.Astrology.Library
         public static Prediction SunInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse4)]
         public static Prediction MoonInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse4)]
         public static Prediction MarsInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse4)]
         public static Prediction MercuryInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse4)]
         public static Prediction JupiterInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse4)]
         public static Prediction VenusInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse4)]
         public static Prediction SaturnInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse4)]
         public static Prediction RahuInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse4)]
         public static Prediction KetuInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 4;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         //Planets in the 5th House
@@ -5453,21 +6395,30 @@ namespace Genso.Astrology.Library
         public static Prediction MoonInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 5;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse5)]
         public static Prediction MarsInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 5;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse5)]
         public static Prediction MercuryInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 5;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse5)]
@@ -5486,14 +6437,20 @@ namespace Genso.Astrology.Library
         public static Prediction VenusInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 5;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse5)]
         public static Prediction SaturnInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 5;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse5)]
@@ -5506,14 +6463,20 @@ namespace Genso.Astrology.Library
             //var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Rahu, time);
             //var strength = raw.ToString();
 
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse5)]
         public static Prediction KetuInHouse5Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 5;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         //Planets in the 6th House
@@ -5522,63 +6485,90 @@ namespace Genso.Astrology.Library
         public static Prediction SunInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse6)]
         public static Prediction MoonInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse6)]
         public static Prediction MarsInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse6)]
         public static Prediction MercuryInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse6)]
         public static Prediction JupiterInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse6)]
         public static Prediction VenusInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse6)]
         public static Prediction SaturnInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse6)]
         public static Prediction RahuInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse6)]
         public static Prediction KetuInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 6;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
 
@@ -5588,389 +6578,645 @@ namespace Genso.Astrology.Library
         public static Prediction SunInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse7)]
         public static Prediction MoonInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse7)]
         public static Prediction MarsInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse7)]
         public static Prediction MercuryInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse7)]
         public static Prediction JupiterInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse7)]
         public static Prediction VenusInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse7)]
         public static Prediction SaturnInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse7)]
         public static Prediction RahuInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse7)]
         public static Prediction KetuInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 7;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
-        //Planets in the 8th House
+        #endregion
+
+        #region Planets in the 8th House
 
         [EventCalculator(EventName.SunInHouse8)]
         public static Prediction SunInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse8)]
         public static Prediction MoonInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse8)]
         public static Prediction MarsInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse8)]
         public static Prediction MercuryInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse8)]
         public static Prediction JupiterInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse8)]
         public static Prediction VenusInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse8)]
         public static Prediction SaturnInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse8)]
         public static Prediction RahuInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 8;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse8)]
         public static Prediction KetuInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 8;
-            return new() { Occuring = occuring };
-        }
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
 
-        //Planets in the 9th House
+            return new() { Occuring = occuring, Strength = strength};
+        }
+        
+
+        #endregion
+
+        #region Planets in the 9th House
 
         [EventCalculator(EventName.SunInHouse9)]
         public static Prediction SunInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse9)]
         public static Prediction MoonInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse9)]
         public static Prediction MarsInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse9)]
         public static Prediction MercuryInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse9)]
         public static Prediction JupiterInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse9)]
         public static Prediction VenusInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse9)]
         public static Prediction SaturnInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse9)]
         public static Prediction RahuInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse9)]
         public static Prediction KetuInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 9;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
-        //Planets in the 10th House
+        #endregion
+
+        #region Planets in the 10th House
 
         [EventCalculator(EventName.SunInHouse10)]
         public static Prediction SunInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse10)]
         public static Prediction MoonInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse10)]
         public static Prediction MarsInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse10)]
         public static Prediction MercuryInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse10)]
         public static Prediction JupiterInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse10)]
         public static Prediction VenusInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse10)]
         public static Prediction SaturnInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse10)]
         public static Prediction RahuInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse10)]
         public static Prediction KetuInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 10;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
-        //Planets in the 11th House
+        #endregion
+
+        #region Planets in the 11th House
 
         [EventCalculator(EventName.SunInHouse11)]
         public static Prediction SunInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse11)]
         public static Prediction MoonInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse11)]
         public static Prediction MarsInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse11)]
         public static Prediction MercuryInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse11)]
         public static Prediction JupiterInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse11)]
         public static Prediction VenusInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse11)]
         public static Prediction SaturnInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse11)]
         public static Prediction RahuInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse11)]
         public static Prediction KetuInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 11;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
-        //Planets in the 12th House
+        #endregion
+
+        #region Planets in the 12th House
 
         [EventCalculator(EventName.SunInHouse12)]
         public static Prediction SunInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MoonInHouse12)]
         public static Prediction MoonInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MarsInHouse12)]
         public static Prediction MarsInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.MercuryInHouse12)]
         public static Prediction MercuryInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.JupiterInHouse12)]
         public static Prediction JupiterInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.VenusInHouse12)]
         public static Prediction VenusInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.SaturnInHouse12)]
         public static Prediction SaturnInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.RahuInHouse12)]
         public static Prediction RahuInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
 
         [EventCalculator(EventName.KetuInHouse12)]
         public static Prediction KetuInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 12;
-            return new() { Occuring = occuring };
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = occuring, Strength = strength};
         }
+
+        #endregion
+
+
+        #region 2ND HOUSE COMBINATIONS
+
+        [EventCalculator(EventName.Lord2WithEvilInHouse)]
+        public static Prediction Lord2WithEvilInHouse(Time time, Person person)
+        {
+            //If the 2nd lord is in the 2nd with(1) evil planets or aspected by him(2), he will be poor.
+            //NOTE: 1."with" here is interpreted as "conjunct" and not just same house
+            //      2. interpreted as evil planets transmitting aspect to the inputed planet
+            //TODO check validity
+
+
+            //if 2nd lord not in second, end here
+            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lordPlace = AstronomicalCalculator.GetHousePlanetIsIn(time, lord);
+            if (lordPlace != 2) { return Prediction.NotOccuring(); }
+
+            //if lord is with evil planets, prediction occuring
+            var conjuctWithEvil = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(lord, time);
+
+            //if evil planets aspect the lord, prediction occuring
+            var aspectedByEvil = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(lord, time);
+
+            //either one true for prediction to occur
+            var occurring = conjuctWithEvil || aspectedByEvil;
+            return new Prediction() { Occuring = occurring };
+
+        }
+
+        [EventCalculator(EventName.SaturnIn2WithVenus)]
+        public static Prediction SaturnIn2WithVenus(Time time, Person person)
+        {
+            //Ordinary wealth is indicated if Saturn is in the 2nd aspected by Venus.
+
+            //if saturn not in 2nd end here
+            var saturnHouse = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn);
+            var saturnIn2 = saturnHouse == 2;
+            if (!saturnIn2) { return Prediction.NotOccuring(); }
+
+            //if venus is aspecting saturn, event occuring
+            var venusAspecting =
+                AstronomicalCalculator.IsPlanetAspectedByPlanet(PlanetName.Saturn, PlanetName.Venus, time);
+
+            return new Prediction() { Occuring = venusAspecting };
+        }
+
+
+        //If the Moon and Mars reside in the 2nd bhava and Saturn aspects it, he suffers from a peculiar skin disease.
+
+        //The situation of Mercury in the 2nd with another evil planet aspected by the Moon is bad for saving money.
+        //Eevn if there is any ancestral wealth, it will be spent—rather wasted on extravagant purposes.
+
+        //The Sun in the 2nd without being aspected by Saturn is favourable for a steady fortune.
+
+        //If the lord of the 2nd is Jupiter or Jupiter resides unaspected by malefics, there will be much wealth.
+
+        //If the lord of the 2nd is Jupiter or Jupiter resides unaspected by malefics, there will be much wealth.
+        //He loses wealth if Mercury (aspected by the Moon) contacts this combination.
+
+        //The Moon being placed in the 2nd and aspected by Mercury is favourable for earning money by self-exertion.
+
+        //If lords of the 2nd and 11th interchange their places or both are in kendras or quadrants and one aspected
+        //or joined by Mercury or Jupiter, the person will be pretty rich.
+
+        //He will be poor if lords of the 2nd and 3rd are in the 6th with or aspected by evil planets.
+
+        //One will always be indigent if lords of the 2nd and 11th remain separate without evil planets or aspected by them.
+
+        //Money will be spent on moral purposes when Jupiter is in the 11th house, Venus in the 2nd and its lord with benefics.
+
+        //If the 2nd lord is with good planets in a kendra or if the 2nd house has all the good
+        //association and aspects he will be on good terms with relatives.
+
+        //One becomes a good mathematician if Mars is in the 2nd with the Moon or aspected by Mercury. The same result can be
+        //foretold if Jupiter is in the ascendant and Saturn in the 8th or if Jupiter is in a quadrant and the lord of Lagna or Mercury is exalted.
+
+        //The person will be an able debator if the Sun or the Moon is aspected by Jupiter or Venus.
+
+
+        #endregion
 
 
         //CUSTOM
@@ -6012,6 +7258,7 @@ namespace Genso.Astrology.Library
             var occuring = ariesRising && evilPlanetFound;
             return new() { Occuring = occuring };
         }
+
 
         #endregion
     }

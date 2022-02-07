@@ -18,6 +18,14 @@ namespace Genso.Astrology.Library
         public string Strength { get; set; }
 
         /// <summary>
+        /// Defaults set here
+        /// </summary>
+        public Prediction()
+        {
+            Strength = "0";
+        }
+
+        /// <summary>
         /// Return an Not Occuring Prediction
         /// </summary>
         public static Prediction NotOccuring()

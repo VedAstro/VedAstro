@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -35,18 +36,21 @@ namespace Horoscope.Desktop
                 OnPropertyChanged(nameof(SelectedEvent));
             }
         }
-        //List of events that have been calculated
+
+        /// <summary>
+        /// List of events that have been calculated
+        /// 
+        /// Note : List is auto sorted by Strength
+        /// </summary>
         public List<Prediction> EventList
         {
             get => _eventList;
             set
-            {
-                _eventList = value;
+            {   //sort list by Strength before storing
+                _eventList = value.OrderBy(prediction => Double.Parse(prediction.Strength)).ToList();
                 OnPropertyChanged(nameof(EventList));
             }
         }
-
-
 
 
         /** PUBLIC METHODS **/

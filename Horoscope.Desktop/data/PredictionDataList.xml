@@ -1712,7 +1712,7 @@
   <Event>
 	  <Id>25</Id>
 	  <Name>GeminiRisingWithEvilPlanet</Name>
-	  <Nature>Neutral</Nature>
+	  <Nature>Bad</Nature>
 	  <Description>
 		  Evil planets are in Gemini, trickery and deceit will characterize their nature.
 	  </Description>
@@ -1722,8 +1722,22 @@
   <Event>
 	  <Id>25</Id>
 	  <Name>AriesRisingWithEvilPlanet</Name>
-	  <Nature>Neutral</Nature>
+	  <Nature>Bad</Nature>
 	  <Description>Mental affliction and derangement are also likely since Saturn and the Moon are in Aries.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2WithEvilInHouse</Name>
+	  <Nature>Bad</Nature>
+	  <Description>If the second lord is in the 2nd with evil planets or aspected by him, he will be poor.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>SaturnIn2WithVenus</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>Ordinary wealth is indicated if Saturn is in the 2nd aspected by Venus.</Description>
 	  <Tag>Personal</Tag>
   </Event>
 

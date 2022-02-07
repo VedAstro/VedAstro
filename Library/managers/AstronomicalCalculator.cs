@@ -6306,6 +6306,40 @@ namespace Genso.Astrology.Library
 
 
         }
+
+        /// <summary>
+        /// Checks if a planet is conjuct with an evil/malefic planet
+        /// </summary>
+        public static bool IsPlanetConjunctWithMaleficPlanets(PlanetName planetName, Time time)
+        {
+            //get all the planets conjuct with inputed planet
+            var planetsInConjunct = AstronomicalCalculator.GetPlanetsInConjuction(time, planetName);
+            
+            //get all evil planets
+            var evilPlanets = AstronomicalCalculator.GetMaleficPlanetList(time);
+
+            //check if any conjunct planet is an evil one
+            var evilFound = planetsInConjunct.FindAll(planet => evilPlanets.Contains(planet)).Any();
+            return evilFound;
+
+        }
+
+
+        /// <summary>
+        /// Checks if a planet is receiving aspects from an evil planet
+        /// </summary>
+        public static bool IsPlanetAspectedByMaleficPlanets(PlanetName lord, Time time)
+        {
+            //get list of evil planets
+            var evilPlanets = GetMaleficPlanetList(time);
+
+            //check if any of the evil planets is aspecting inputed planet
+            var evilAspectFound = evilPlanets.FindAll(evilPlanet =>
+                IsPlanetAspectedByPlanet(lord, evilPlanet, time)).Any();
+            return evilAspectFound;
+
+
+        }
     }
 
 }

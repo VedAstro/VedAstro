@@ -1,0 +1,4 @@
+- To add a new prediction/event
+1. Create a method in EventCalculatorMethods.cs
+2. Add the name in EventNames.cs
+3. Add the prediction/event details PredictionDataList.xml

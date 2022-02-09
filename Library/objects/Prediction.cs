@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace Genso.Astrology.Library
 {
     /// <summary>
-    /// Simple data type to enclose a prediction
+    /// Simple data type to enclose a prediction.
+    /// Prediction = did it occur & the strength 
     /// </summary>
     public class Prediction
     {

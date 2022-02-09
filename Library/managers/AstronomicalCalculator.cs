@@ -1490,8 +1490,6 @@ namespace Genso.Astrology.Library
             {
                 //If dayMoonSign is more than or equal to birthMoonSign
                 chandrabalaNumber = (dayMoonSignNumber - birthMoonSignNumber) + 1; //plus 1 to count it self
-
-
             }
 
             return chandrabalaNumber;
@@ -3137,6 +3135,9 @@ namespace Genso.Astrology.Library
 
         //}
 
+        /// <summary>
+        /// Gets all the planets in a sign
+        /// </summary>
         public static List<PlanetName> GetPlanetInSign(ZodiacName signName, Time time)
         {
             //get all planets locations in signs
@@ -6324,6 +6325,75 @@ namespace Genso.Astrology.Library
 
         }
 
+        /// <summary>
+        /// Checks if any evil/malefic planets are in a house
+        /// </summary>
+        public static bool IsMaleficPlanetInHouse(int houseNumber, Time time)
+        {
+            //get all the planets in the house
+            var planetsInHouse = AstronomicalCalculator.GetPlanetsInHouse(houseNumber, time);
+            
+            //get all evil planets
+            var evilPlanets = AstronomicalCalculator.GetMaleficPlanetList(time);
+
+            //check if any planet in house is an evil one
+            var evilFound = planetsInHouse.FindAll(planet => evilPlanets.Contains(planet)).Any();
+
+            return evilFound;
+
+        }
+
+        /// <summary>
+        /// Checks if any evil/malefic planets are in a sign
+        /// </summary>
+        public static bool IsMaleficPlanetInSign(ZodiacName sign, Time time)
+        {
+            //get all the planets in the sign
+            var planetsInSign = AstronomicalCalculator.GetPlanetInSign(sign, time);
+
+            //get all evil planets
+            var evilPlanets = AstronomicalCalculator.GetMaleficPlanetList(time);
+
+            //check if any planet in sign is an evil one
+            var evilFound = planetsInSign.FindAll(planet => evilPlanets.Contains(planet)).Any();
+
+            return evilFound;
+        }
+
+        /// <summary>
+        /// Checks if any good/benefic planets are in a sign
+        /// </summary>
+        public static bool IsBeneficPlanetInSign(ZodiacName sign, Time time)
+        {
+            //get all the planets in the sign
+            var planetsInSign = AstronomicalCalculator.GetPlanetInSign(sign, time);
+
+            //get all good planets
+            var goodPlanets = AstronomicalCalculator.GetBeneficPlanetList(time);
+
+            //check if any planet in sign is an good one
+            var goodFound = planetsInSign.FindAll(planet => goodPlanets.Contains(planet)).Any();
+
+            return goodFound;
+        }
+
+
+        /// <summary>
+        /// Checks if any evil/malefic planet is transmitting aspect to a house
+        /// Note: This does NOT account for bad aspects, where relationship with house lord is checked
+        /// </summary>
+        public static bool IsMaleficPlanetAspectHouse(HouseName house, Time time)
+        {
+            //get all evil planets
+            var evilPlanets = AstronomicalCalculator.GetMaleficPlanetList(time);
+
+            //check if any evil planet is aspecting the inputed house
+            var evilFound = evilPlanets.FindAll(evilPlanet => AstronomicalCalculator.IsHouseAspectedByPlanet(house, evilPlanet, time)).Any();
+
+            return evilFound;
+
+        }
+
 
         /// <summary>
         /// Checks if a planet is receiving aspects from an evil planet
@@ -6340,6 +6410,70 @@ namespace Genso.Astrology.Library
 
 
         }
+
+        /// <summary>
+        /// Gets the Arudha Lagna Sign 
+        /// 
+        /// Reference Note:
+        /// Arudha Lagna and planetary dispositions in reference to it have a strong bearing on the
+        /// financial status of the person. In my own humble experience, Arudha Lagna should be given
+        /// as much importance as the usual Janma Lagna. Arudha Lagna is the sign arrived at by counting
+        /// as many signs from lord of Lagna as lord of Lagna is removed from Lagna.
+        /// Thus if Aquarius is ascendant and its lord Saturn is in the 4th (Taurus)
+        /// then the 4th from Taurus, viz., Leo becomes Arudha Lagna.
+        /// </summary>
+        public static ZodiacName GetArudhaLagnaSign(Time time)
+        {
+            //get janma lagna
+            var janmaLagna = AstronomicalCalculator.GetHouseSignName(1, time);
+
+            //get sign lord of janma lagna is in
+            var lagnaLord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var lagnaLordSign = AstronomicalCalculator.GetPlanetRasiSign(lagnaLord, time).GetSignName();
+
+            //count the signs from janma to the sign the lord is in
+            var janmaToLordCount = AstronomicalCalculator.CountFromSignToSign(janmaLagna, lagnaLordSign);
+
+            //use the above count to find arudha sign from lord's sign
+            var arudhaSign = AstronomicalCalculator.GetSignCountedFromInputSign(lagnaLordSign, janmaToLordCount);
+
+            return arudhaSign;
+        }
+
+        /// <summary>
+        /// Counts from start sign to end sign
+        /// Example : Aquarius to Taurus is 4
+        /// </summary>
+        public static int CountFromSignToSign(ZodiacName startSign, ZodiacName endSign)
+        {
+            int count = 0;
+
+            //get zodiac name & convert to its number equivalent
+            var startSignNumber = (int)startSign;
+            var endSignNumber = (int)endSign;
+
+            //if start sign is more than end sign (meaning lower in the list)
+            if (startSignNumber > endSignNumber)
+            {
+                //minus with 12, as though counting to the end
+                int countToLastZodiac = (12 - startSignNumber) + 1; //plus 1 to count it self
+
+                count = endSignNumber + countToLastZodiac;
+            }
+            else if (startSignNumber == endSignNumber)
+            {
+                count = 1;
+            }
+            //if start sign is lesser than end sign (meaning higher in the list)
+            //we can minus like normal, and just add 1 to count it self
+            else if (startSignNumber < endSignNumber)
+            {
+                count = (endSignNumber - startSignNumber) + 1; //plus 1 to count it self
+            }
+
+            return count;
+        }
+
     }
 
 }

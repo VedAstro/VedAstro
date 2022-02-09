@@ -28,5 +28,27 @@ namespace Genso.Astrology.Library.Tests
 
             AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, birthTime);
         }
+
+        [TestMethod()]
+        public void CountFromSignToSignTest()
+        {
+            //test
+            var count = AstronomicalCalculator.CountFromSignToSign(ZodiacName.Aquarius, ZodiacName.Taurus);
+
+            //correct result is 4
+            Assert.IsTrue(count == 4);
+
+        }
+
+        [TestMethod()]
+        public void GetArudhaLagnaSignTest()
+        {
+            //test
+            var count = AstronomicalCalculator.CountFromSignToSign(ZodiacName.Aquarius, ZodiacName.Taurus);
+
+            //correct result is 4
+            Assert.IsTrue(count == 4);
+
+        }
     }
 }

@@ -7138,14 +7138,14 @@ namespace Genso.Astrology.Library
         #endregion
 
 
-        #region 2ND HOUSE COMBINATIONS
+        #region 2ND HOUSE SPECIAL COMBINATIONS
 
         [EventCalculator(EventName.Lord2WithEvilInHouse)]
         public static Prediction Lord2WithEvilInHouse(Time time, Person person)
         {
             //If the 2nd lord is in the 2nd with(1) evil planets or aspected by him(2), he will be poor.
-            //NOTE: 1."with" here is interpreted as "conjunct" and not just same house
-            //      2. interpreted as evil planets transmitting aspect to the inputed planet
+            //NOTE: 1."with" here is interpreted as same house
+            //      2. interpreted as evil planets transmitting aspect to 2nd lord (receiving aspect)
             //TODO check validity
 
 
@@ -7154,14 +7154,15 @@ namespace Genso.Astrology.Library
             var lordPlace = AstronomicalCalculator.GetHousePlanetIsIn(time, lord);
             if (lordPlace != 2) { return Prediction.NotOccuring(); }
 
-            //if lord is with evil planets, prediction occuring
-            var conjuctWithEvil = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(lord, time);
+            //evil planet in house 2, prediction occuring
+            var evilInHouse2 = AstronomicalCalculator.IsMaleficPlanetInHouse(2, time);
 
             //if evil planets aspect the lord, prediction occuring
             var aspectedByEvil = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(lord, time);
 
             //either one true for prediction to occur
-            var occurring = conjuctWithEvil || aspectedByEvil;
+            var occurring = evilInHouse2 || aspectedByEvil;
+
             return new Prediction() { Occuring = occurring };
 
         }
@@ -7183,25 +7184,357 @@ namespace Genso.Astrology.Library
             return new Prediction() { Occuring = venusAspecting };
         }
 
+        [EventCalculator(EventName.MoonMarsIn2WithSaturnAspect)]
+        public static Prediction MoonMarsIn2WithSaturnAspect(Time time, Person person)
+        {
+            //If the Moon and Mars reside in the 2nd bhava and Saturn aspects it,
+            //he suffers from a peculiar skin disease.
 
-        //If the Moon and Mars reside in the 2nd bhava and Saturn aspects it, he suffers from a peculiar skin disease.
+            //moon and mars in 2nd
+            var moonIn2 = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 2;
+            var marsIn2 = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 2;
 
-        //The situation of Mercury in the 2nd with another evil planet aspected by the Moon is bad for saving money.
-        //Eevn if there is any ancestral wealth, it will be spent—rather wasted on extravagant purposes.
+            //saturn aspects 2nd House
+            var saturnAspects2nd =
+                AstronomicalCalculator.IsHouseAspectedByPlanet(HouseName.House2, PlanetName.Saturn, time);
 
-        //The Sun in the 2nd without being aspected by Saturn is favourable for a steady fortune.
+            //check if all conditions met
+            var occuring = moonIn2 && marsIn2 && saturnAspects2nd;
 
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryAndEvilIn2WithMoonAspect)]
+        public static Prediction MercuryAndEvilIn2WithMoonAspect(Time time, Person person)
+        {
+            //The situation of Mercury in the 2nd with another evil planet aspected by the Moon is bad for saving money.
+            //Even if there is any ancestral wealth, it will be spent—rather wasted on extravagant purposes.
+
+            //is mercury in 2nd house
+            var mercuryIn2 = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 2;
+            
+            //evil planet in 2nd house
+            var evilPlanetIn2 = AstronomicalCalculator.IsMaleficPlanetInHouse(2, time);
+
+            //moon aspects 2nd House
+            var moonAspects2nd =
+                AstronomicalCalculator.IsHouseAspectedByPlanet(HouseName.House2, PlanetName.Moon, time);
+
+            //check if all conditions met
+            var occuring = mercuryIn2 && evilPlanetIn2 && moonAspects2nd;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunIn2WithNoSaturnAspect)]
+        public static Prediction SunIn2WithNoSaturnAspect(Time time, Person person)
+        {
+            //The Sun in the 2nd without being aspected by Saturn is favourable for a steady fortune.
+
+            //sun in 2nd
+            var sunIn2 = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 2;
+
+            //saturn aspects 2nd House
+            var saturnNotAspects2nd =
+                !AstronomicalCalculator.IsHouseAspectedByPlanet(HouseName.House2, PlanetName.Saturn, time);
+
+            //check if all conditions met
+            var occuring = sunIn2 && saturnNotAspects2nd;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonIn2WithMercuryAspect)]
+        public static Prediction MoonIn2WithMercuryAspect(Time time, Person person)
+        {
+            //The Moon being placed in the 2nd and aspected by Mercury is favourable for earning money by self-exertion.
+
+            //moon in 2nd
+            var moonIn2 = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 2;
+
+            //mercury aspects 2nd House
+            var mercuryAspects2nd =
+                AstronomicalCalculator.IsHouseAspectedByPlanet(HouseName.House2, PlanetName.Mercury, time);
+
+            //check if all conditions met
+            var occuring = moonIn2 && mercuryAspects2nd;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2And3In6WithEvilPlanet)]
+        public static Prediction Lord2And3In6WithEvilPlanet(Time time, Person person)
+        {
+            //He will be poor if lords of the 2nd and 3rd are in the 6th with or aspected by evil planets.
+
+            //lord 2 in 6th
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In6 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 6;
+
+            //lord 3 in 6th
+            var lord3 = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
+            var lord3In6 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord3) == 6;
+
+            //evil planets in 6th house OR aspecting the 6th
+            var evilPlanetIn6 = AstronomicalCalculator.IsMaleficPlanetInHouse(6, time);
+            var evilPlanetAspects6 = AstronomicalCalculator.IsMaleficPlanetAspectHouse(HouseName.House6, time);
+            var evilPresentIn6 = evilPlanetIn6 || evilPlanetAspects6;
+
+            //check if all conditions met
+            var occuring = lord2In6 && lord3In6 && evilPresentIn6;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse1)]
+        public static Prediction Lord2InHouse1(Time time, Person person)
+        {
+            //If the second lord is in the first — One earns money by his own exertions and generally by manual labour.
+
+            //lord 2 in house 1
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In1 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 1;
+
+            //check if all conditions met
+            var occuring = lord2In1;
+
+            return new Prediction() { Occuring = occuring };
+        }
+        
+        [EventCalculator(EventName.Lord2InHouse1AndLord1InHouse2)]
+        public static Prediction Lord2InHouse1AndLord1InHouse2(Time time, Person person)
+        {
+            //In the second — Riches will be acquired without effort if the 1st and 2nd lords have exchanged their houses.
+            //Note: Prediction is part of positions of lord 2 in varies houses,
+            //      but for lord 2 in house 2, this "exchange" is mentioned.
+            //      Further checking needed.
+
+            //lord 1 in house 2
+            var lord1 = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
+            var lord1In2 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord1) == 2;
+
+            //lord 2 in house 1
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In1 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 1;
+
+            //check if all conditions met
+            var occuring = lord2In1 && lord1In2;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse3)]
+        public static Prediction Lord2InHouse3(Time time, Person person)
+        {
+            //In the third — Loss from relatives, brothers and gain from travels and journeys.
+
+            //lord 2 in house 3
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In3 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 3;
+
+            //check if all conditions met
+            var occuring = lord2In3;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse4)]
+        public static Prediction Lord2InHouse4(Time time, Person person)
+        {
+            //In the fourth - Through mother, inheritance.
+
+            //lord 2 in house 4
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In4 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 4;
+
+            //check if all conditions met
+            var occuring = lord2In4;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse5)]
+        public static Prediction Lord2InHouse5(Time time, Person person)
+        {
+            //In the fifth — Ancestral properties, speculation and chance games.
+
+            //lord 2 in house 5
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In5 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 5;
+
+            //check if all conditions met
+            var occuring = lord2In5;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse6)]
+        public static Prediction Lord2InHouse6(Time time, Person person)
+        {
+            //In the sixth — Broker's business, loss from relatives.
+
+            //lord 2 in house 6
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In6 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 6;
+
+            //check if all conditions met
+            var occuring = lord2In6;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse7)]
+        public static Prediction Lord2InHouse7(Time time, Person person)
+        {
+            //In the seventh — Gain after marriage but loss from sickness, etc., of wife.
+
+            //lord 2 in house 7
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In7 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 7;
+
+            //check if all conditions met
+            var occuring = lord2In7;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse8)]
+        public static Prediction Lord2InHouse8(Time time, Person person)
+        {
+            //In the eighth — Legacies and enemies (source of income).
+
+            //lord 2 in house 8
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In8 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 8;
+
+            //check if all conditions met
+            var occuring = lord2In8;
+
+            return new Prediction() { Occuring = occuring };
+        }
+        
+        [EventCalculator(EventName.Lord2InHouse9)]
+        public static Prediction Lord2InHouse9(Time time, Person person)
+        {
+            //In the ninth — From father, voyages and shipping.
+
+            //lord 2 in house 9
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In9 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 9;
+
+            //check if all conditions met
+            var occuring = lord2In9;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse10)]
+        public static Prediction Lord2InHouse10(Time time, Person person)
+        {
+            //In the tenth — Profession, eminent people, government favours.
+
+            //lord 2 in house 10
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In10 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 10;
+
+            //check if all conditions met
+            var occuring = lord2In10;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse11)]
+        public static Prediction Lord2InHouse11(Time time, Person person)
+        {
+            //In the eleventh — From different means.
+
+            //lord 2 in house 11
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In11 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 11;
+
+            //check if all conditions met
+            var occuring = lord2In11;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord2InHouse12)]
+        public static Prediction Lord2InHouse12(Time time, Person person)
+        {
+            //In the twelfth — Gain from servants and unscrupulous means including illegal gratifications.
+
+            //lord 2 in house 12
+            var lord2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
+            var lord2In12 = AstronomicalCalculator.GetHousePlanetIsIn(time, lord2) == 12;
+
+            //check if all conditions met
+            var occuring = lord2In12;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MaleficIn11FromArudha)]
+        public static Prediction MaleficIn11FromArudha(Time time, Person person)
+        {
+            //The just or unjust means of earning depends upon the presence of
+            //benefic or malefic planets in the 11th from Arudha Lagna.
+
+            //Note : here only malefic is checked, if benefic are present than not accounted for
+            //      it is gussed that results would be mixed, needs further confirmation
+
+
+            //get Arudha Lagna
+            var arudhaLagna = AstronomicalCalculator.GetArudhaLagnaSign(time);
+            
+            //get 11th sign from Arudha lagna
+            var sign11fromArudha = AstronomicalCalculator.GetSignCountedFromInputSign(arudhaLagna, 11);
+
+            //see if malefic planets are in that sign
+            var maleficFound = AstronomicalCalculator.IsMaleficPlanetInSign(sign11fromArudha, time);
+
+            //check if all conditions met
+            var occuring = maleficFound;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.BeneficIn11FromArudha)]
+        public static Prediction BeneficIn11FromArudha(Time time, Person person)
+        {
+            //The just or unjust means of earning depends upon the presence of
+            //benefic or malefic planets in the 11th from Arudha Lagna.
+
+            //Note : here only benefic is checked, if malefic are present than not accounted for
+            //      it is gussed that results would be mixed, needs further confirmation
+
+
+            //get Arudha Lagna
+            var arudhaLagna = AstronomicalCalculator.GetArudhaLagnaSign(time);
+            
+            //get 11th sign from Arudha lagna
+            var sign11fromArudha = AstronomicalCalculator.GetSignCountedFromInputSign(arudhaLagna, 11);
+
+            //see if benefic planets are in that sign
+            var beneficFound = AstronomicalCalculator.IsBeneficPlanetInSign(sign11fromArudha, time);
+
+            //check if all conditions met
+            var occuring = beneficFound;
+
+            return new Prediction() { Occuring = occuring };
+        }
+
+
+
+
+
+        //TODO 
         //If the lord of the 2nd is Jupiter or Jupiter resides unaspected by malefics, there will be much wealth.
 
         //If the lord of the 2nd is Jupiter or Jupiter resides unaspected by malefics, there will be much wealth.
         //He loses wealth if Mercury (aspected by the Moon) contacts this combination.
 
-        //The Moon being placed in the 2nd and aspected by Mercury is favourable for earning money by self-exertion.
-
-        //If lords of the 2nd and 11th interchange their places or both are in kendras or quadrants and one aspected
+        //If lords of the 2nd and 11th interchange their places(1) or both are in kendras or quadrants and one aspected
         //or joined by Mercury or Jupiter, the person will be pretty rich.
-
-        //He will be poor if lords of the 2nd and 3rd are in the 6th with or aspected by evil planets.
 
         //One will always be indigent if lords of the 2nd and 11th remain separate without evil planets or aspected by them.
 

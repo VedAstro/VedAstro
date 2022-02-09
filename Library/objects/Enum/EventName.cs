@@ -442,6 +442,25 @@
         GeminiRisingWithEvilPlanet,
         AriesRisingWithEvilPlanet,
         Lord2WithEvilInHouse,
-        SaturnIn2WithVenus
+        SaturnIn2WithVenus,
+        MoonMarsIn2WithSaturnAspect,
+        MercuryAndEvilIn2WithMoonAspect,
+        SunIn2WithNoSaturnAspect,
+        MoonIn2WithMercuryAspect,
+        Lord2And3In6WithEvilPlanet,
+        Lord2InHouse1,
+        Lord2InHouse1AndLord1InHouse2,
+        Lord2InHouse3,
+        Lord2InHouse4,
+        Lord2InHouse5,
+        Lord2InHouse6,
+        Lord2InHouse7,
+        Lord2InHouse8,
+        Lord2InHouse9,
+        Lord2InHouse10,
+        Lord2InHouse11,
+        Lord2InHouse12,
+        MaleficIn11FromArudha,
+        BeneficIn11FromArudha
     }
 }

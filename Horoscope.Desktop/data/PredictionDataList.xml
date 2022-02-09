@@ -1242,7 +1242,7 @@
     <Tag>Personal</Tag>
   </Event>
 
-  <!--Planets in the First House-->
+  <!--Planets in the 1 House-->
   <Event>
     <Id>25</Id>
     <Name>SunInHouse1</Name>
@@ -1708,7 +1708,6 @@
 
 
 	<!--CUSTOM-->
-
   <Event>
 	  <Id>25</Id>
 	  <Name>GeminiRisingWithEvilPlanet</Name>
@@ -1718,7 +1717,6 @@
 	  </Description>
 	  <Tag>Personal</Tag>
   </Event>
-
   <Event>
 	  <Id>25</Id>
 	  <Name>AriesRisingWithEvilPlanet</Name>
@@ -1726,6 +1724,9 @@
 	  <Description>Mental affliction and derangement are also likely since Saturn and the Moon are in Aries.</Description>
 	  <Tag>Personal</Tag>
   </Event>
+
+
+  <!--House 2 - Other Important Combinations-->
   <Event>
 	  <Id>25</Id>
 	  <Name>Lord2WithEvilInHouse</Name>
@@ -1738,6 +1739,132 @@
 	  <Name>SaturnIn2WithVenus</Name>
 	  <Nature>Neutral</Nature>
 	  <Description>Ordinary wealth is indicated if Saturn is in the 2nd aspected by Venus.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>MoonMarsIn2WithSaturnAspect</Name>
+	  <Nature>Bad</Nature>
+	  <Description>If the Moon and Mars reside in the 2nd bhava and Saturn aspects it, he suffers from a peculiar skin disease.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>MercuryAndEvilIn2WithMoonAspect</Name>
+	  <Nature>Bad</Nature>
+	  <Description>The situation of Mercury in the 2nd with another evil planet aspected by the Moon is bad for saving money. Even if there is any ancestral wealth, it will be spent—rather wasted on extravagant purposes.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>SunIn2WithNoSaturnAspect</Name>
+	  <Nature>Good</Nature>
+	  <Description>The Sun in the 2nd without being aspected by Saturn is favorable for a steady fortune.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>MoonIn2WithMercuryAspect</Name>
+	  <Nature>Good</Nature>
+	  <Description>The Moon being placed in the 2nd and aspected by Mercury is favorable for earning money by self-exertion.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2And3In6WithEvilPlanet</Name>
+	  <Nature>Bad</Nature>
+	  <Description>He will be poor if lords of the 2nd and 3rd are in the 6th with or aspected by evil planets.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse1</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>If the second lord is in the first — One earns money by his own exertions and generally by manual labour. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse1AndLord1InHouse2</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the second — Riches will be acquired without effort if the 1st and 2nd lords have exchanged their houses. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse3</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the third — Loss from relatives, brothers and gain from travels and journeys. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse4</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the fourth - Through mother, inheritance. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse5</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the fifth — Ancestral properties, speculation and chance games. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse6</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the sixth — Broker's business, loss from relatives. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse7</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the seventh — Gain after marriage but loss from sickness, etc., of wife. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse8</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the eighth — Legacies and enemies. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse9</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the ninth — From father, voyages and shipping. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse10</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the tenth — Profession, eminent people, government favours. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>Lord2InHouse11</Name>
+	  <Nature>Neutral</Nature>
+	  <Description>In the eleventh — From different means. (source of income)</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>MaleficIn11FromArudha</Name>
+	  <Nature>Bad</Nature>
+	  <Description>Unjust means of earning because malefic planets in the 11th from Arudha Lagna.</Description>
+	  <Tag>Personal</Tag>
+  </Event>
+  <Event>
+	  <Id>25</Id>
+	  <Name>BeneficIn11FromArudha</Name>
+	  <Nature>Good</Nature>
+	  <Description>Just means of earning because benefic planets in the 11th from Arudha Lagna.</Description>
 	  <Tag>Personal</Tag>
   </Event>
 

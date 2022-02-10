@@ -3,7 +3,8 @@
 namespace Genso.Astrology.Library
 {
     /// <summary>
-    /// Tags added to event data for categorizing, calendar marking & etc.
+    /// List of Tags added to event data for categorizing, calendar marking & etc.
+    /// Note : This is the main list, all add & remove is done here
     /// </summary>
     public enum EventTag
     {
@@ -16,6 +17,7 @@ namespace Genso.Astrology.Library
         Debug,
         Marriage,
         Astronomical,
-        BuyingSelling
+        BuyingSelling,
+        Gochara
     }
 }

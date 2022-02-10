@@ -8,6 +8,7 @@ namespace Genso.Astrology.Library
 {
     /// <summary>
     /// Manager to handle getting from & saving to database (XML files on disk)
+    /// TODO NOTE : Another similar class exist in Horoscope.Desktop, needs to be checked for duplication
     /// </summary>
     public static class DatabaseManager
     {
@@ -15,7 +16,7 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Gets a list of all event data from database
-        /// Note: element names used here corespond to the ones found in the XML file
+        /// Note: element names used here correspond to the ones found in the XML file
         ///       if change here, than change in XML as well
         /// </summary>
         public static List<EventData> GetEventDataList(string filePath)
@@ -174,7 +175,9 @@ namespace Genso.Astrology.Library
             {
                 new GeoLocation("Ipoh", 101.0901, 4.5975),
                 new GeoLocation("Kuala", 101.0901, 4.5975),
-                new GeoLocation("Teluk", 101.0901, 4.5975)
+                new GeoLocation("Teluk", 101.0901, 4.5975),
+                new GeoLocation("Mangaluru", 74.8625, 12.9172)
+
             };
 
             return list;

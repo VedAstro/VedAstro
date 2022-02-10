@@ -13,6 +13,7 @@ namespace Horoscope.Desktop
     /// <summary>
     /// Class to encapsulate access to data files
     /// Manager to handle getting from & saving to database (XML files on disk)
+    /// TODO NOTE : Another similar class exist in Genso.Astrology.Library, needs to be checked for duplication
     /// </summary>
     public static class DatabaseManager
     {
@@ -171,7 +172,8 @@ namespace Horoscope.Desktop
             {
                 new GeoLocation("Ipoh", 101.0901, 4.5975),
                 new GeoLocation("Kuala", 101.0901, 4.5975),
-                new GeoLocation("Teluk", 101.0901, 4.5975)
+                new GeoLocation("Teluk", 101.0901, 4.5975),
+                new GeoLocation("Mangaluru", 74.8625, 12.9172)
             };
 
             return list;

@@ -1462,6 +1462,9 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static int GetChandrabala(Time time, Person person)
         {
+            //TODO Needs to be updated with count sign from sign for better consistency
+            //     also possible to leave it as is for better decoupling since this is working fine
+
             //initialize chandrabala number as 0
             int chandrabalaNumber = 0;
 
@@ -6472,6 +6475,224 @@ namespace Genso.Astrology.Library
             }
 
             return count;
+        }
+
+        /// <summary>
+        /// Gets the Gochara House number which is the count from birth Moon sign (janma rasi)
+        /// to the sign the planet is at the current time. Gochara == Transits
+        /// </summary>
+        public static int GetGocharaHouse(Time birthTime, Time currentTime, PlanetName planet)
+        {
+            //get moon sign at birth (janma rasi)
+            var janmaSign = AstronomicalCalculator.GetMoonSignName(birthTime);
+
+            //get planet sign at input time
+            var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planet, currentTime).GetSignName();
+
+            //count from janma to sign planet is in
+            var count = AstronomicalCalculator.CountFromSignToSign(janmaSign, planetSign);
+
+            return count;
+        }
+
+        /// <summary>
+        /// Check if there is an obstruction to a given Gochara
+        /// </summary>
+        public static bool IsGocharaObstructed(PlanetName planet, int gocharaHouse, Time birthTime, Time currentTime)
+        {
+
+            //get the obstructing house/point (Vedhanka) for the inputed Gochara house
+            var vedhanka = GetVedhanka(planet, gocharaHouse);
+
+            //if vedhanka is 0, then end here as no obstruction
+            if (vedhanka == 0) { return false; }
+
+            //get all the planets transiting (gochara) in this obstruction point/house (vedhanka)
+            var planetList = GetPlanetsInGocharaHouse(birthTime, currentTime, gocharaHouse);
+
+            //remove the exception planets
+            //No Vedha occurs between the Sun and Saturn, and the Moon and Mercury.
+            //TODO check if logic below works
+            if (planet == PlanetName.Sun || planet == PlanetName.Saturn)
+            {
+                planetList.Remove(PlanetName.Sun);
+                planetList.Remove(PlanetName.Saturn);
+            }
+            if (planet == PlanetName.Moon || planet == PlanetName.Mercury)
+            {
+                planetList.Remove(PlanetName.Moon);
+                planetList.Remove(PlanetName.Mercury);
+            }
+
+            //now if any planet is found in the list, than obstruction is present
+            return planetList.Any();
+
+        }
+
+        /// <summary>
+        /// Gets all the planets in a given Gochara House
+        /// 
+        /// Note : Gochara House number is the count from birth Moon sign (janma rasi)
+        /// to the sign the planet is at the current time. Gochara == Transits
+        /// </summary>
+        public static List<PlanetName> GetPlanetsInGocharaHouse(Time birthTime, Time currentTime, int gocharaHouse)
+        {
+            //get the gochara house for every planet at current time
+            var gocharaSun = GetGocharaHouse(birthTime, currentTime, PlanetName.Sun);
+            var gocharaMoon = GetGocharaHouse(birthTime, currentTime, PlanetName.Moon);
+            var gocharaMars = GetGocharaHouse(birthTime, currentTime, PlanetName.Mars);
+            var gocharaMercury = GetGocharaHouse(birthTime, currentTime, PlanetName.Mercury);
+            var gocharaJupiter = GetGocharaHouse(birthTime, currentTime, PlanetName.Jupiter);
+            var gocharaVenus = GetGocharaHouse(birthTime, currentTime, PlanetName.Venus);
+            var gocharaSaturn = GetGocharaHouse(birthTime, currentTime, PlanetName.Saturn);
+
+            //add every planet name to return list that matches input Gochara house number
+            var planetList = new List<PlanetName>();
+            if (gocharaSun == gocharaHouse) { planetList.Add(PlanetName.Sun); }
+            if (gocharaMoon == gocharaHouse) { planetList.Add(PlanetName.Moon); }
+            if (gocharaMars == gocharaHouse) { planetList.Add(PlanetName.Mars); }
+            if (gocharaMercury == gocharaHouse) { planetList.Add(PlanetName.Mercury); }
+            if (gocharaJupiter == gocharaHouse) { planetList.Add(PlanetName.Jupiter); }
+            if (gocharaVenus == gocharaHouse) { planetList.Add(PlanetName.Venus); }
+            if (gocharaSaturn == gocharaHouse) { planetList.Add(PlanetName.Saturn); }
+
+            return planetList;
+        }
+
+        /// <summary>
+        /// Gets the Vedhanka (point of obstruction), used for Gohchara calculations.
+        /// The data returned comes from a fixed table. 
+        /// NOTE: - Planet exceptions are not accounted for here.
+        ///       - Return 0 when no obstruction point exists 
+        /// Reference : Hindu Predictive Astrology pg. 257
+        /// </summary>
+        public static int GetVedhanka(PlanetName planet, int house)
+        {
+            //filter based on planet
+            if (planet == PlanetName.Sun)
+            {
+                //good
+                if (house == 11) { return 5; } 
+                if (house == 3) { return 9; }
+                if (house == 10) { return 4; }
+                if (house == 6) { return 12; }
+                //bad
+                if (house == 5) { return 11; } 
+                if (house == 9) { return 3; }
+                if (house == 4) { return 10; }
+                if (house == 12) { return 6; }
+            }
+           
+            if (planet == PlanetName.Moon)
+            {
+                //good
+                if (house == 7) { return 2; }
+                if (house == 1) { return 5; }
+                if (house == 6) { return 12; }
+                if (house == 11) { return 8; }
+                if (house == 10) { return 4; }
+                if (house == 3) { return 9; }
+                //bad
+                if (house == 2) { return 7; }
+                if (house == 5) { return 1; }
+                if (house == 12) { return 6; }
+                if (house == 8) { return 11; }
+                if (house == 4) { return 10; }
+                if (house == 9) { return 3; }
+
+            }
+
+            if (planet == PlanetName.Mars)
+            {
+                //good
+                if (house == 3) { return 12; }
+                if (house == 11) { return 5; }
+                if (house == 6) { return 9; }
+                //bad
+                if (house == 12) { return 3; }
+                if (house == 5) { return 11; }
+                if (house == 9) { return 6; }
+            }
+            
+            if (planet == PlanetName.Mercury)
+            {
+                //good
+                if (house == 2) { return 5; }
+                if (house == 4) { return 3; }
+                if (house == 6) { return 9; }
+                if (house == 8) { return 1; }
+                if (house == 10) { return 7; }
+                if (house == 11) { return 12; }
+
+                //bad
+                if (house == 5) { return 2; }
+                if (house == 3) { return 4; }
+                if (house == 9) { return 6; }
+                if (house == 1) { return 8; }
+                if (house == 7) { return 10; }
+                if (house == 12) { return 11; }
+            }
+
+            if (planet == PlanetName.Jupiter)
+            {
+                //good
+                if (house == 2) { return 12; }
+                if (house == 11) { return 8; }
+                if (house == 9) { return 10; }
+                if (house == 5) { return 4; }
+                if (house == 7) { return 3; }
+
+                //bad
+                if (house == 12) { return 2; }
+                if (house == 8) { return 11; }
+                if (house == 10) { return 9; }
+                if (house == 4) { return 5; }
+                if (house == 3) { return 7; }
+
+            }
+
+            if (planet == PlanetName.Venus)
+            {
+                //good
+                if (house == 1) { return 8; }
+                if (house == 2) { return 7; }
+                if (house == 3) { return 1; }
+                if (house == 4) { return 10; }
+                if (house == 5) { return 9; }
+                if (house == 8) { return 5; }
+                if (house == 9) { return 11; }
+                if (house == 11) { return 6; }
+                if (house == 12) { return 3; }
+
+                //bad
+                if (house == 8) { return 1; }
+                if (house == 7) { return 2; }
+                if (house == 1) { return 3; }
+                if (house == 10) { return 4; }
+                if (house == 9) { return 5; }
+                if (house == 5) { return 8; }
+                if (house == 11) { return 9; }
+                if (house == 6) { return 11; }
+                if (house == 3) { return 12; }
+
+            }
+
+            if (planet == PlanetName.Saturn)
+            {
+                //good
+                if (house == 3) { return 12; }
+                if (house == 11) { return 5; }
+                if (house == 6) { return 9; }
+
+                //bad
+                if (house == 12) { return 3; }
+                if (house == 5) { return 11; }
+                if (house == 9) { return 6; }
+
+            }
+
+            //if no condition above met, then there is no obstruction point
+            return 0;
         }
 
     }

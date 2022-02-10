@@ -59,7 +59,6 @@ namespace Genso.Astrology.Library
             }
         }
 
-
         [EventCalculator(EventName.TarabalaJanmaStrong)]
         public static Prediction IsTarabalaJanmaStrongOccuring(Time time, Person person)
         {
@@ -173,8 +172,6 @@ namespace Genso.Astrology.Library
 
         }
 
-
-
         [EventCalculator(EventName.TarabalaJanmaMiddling)]
         public static Prediction IsTarabalaJanmaMiddlingOccuring(Time time, Person person)
         {
@@ -283,8 +280,6 @@ namespace Genso.Astrology.Library
 
         }
 
-
-
         [EventCalculator(EventName.TarabalaJanmaWeak)]
         public static Prediction IsTarabalaJanmaWeakOccuring(Time time, Person person)
         {
@@ -387,8 +382,6 @@ namespace Genso.Astrology.Library
             var occuring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 3;
             return new() { Occuring = occuring };
         }
-
-
 
 
 
@@ -7589,6 +7582,34 @@ namespace Genso.Astrology.Library
 
             //both must be true for event to occur
             var occuring = ariesRising && evilPlanetFound;
+            return new() { Occuring = occuring };
+        }
+
+
+        #endregion
+
+        #region GOCHARA
+
+
+        [EventCalculator(EventName.SunGocharaInHouse1)]
+        public static Prediction SunGocharaInHouse1(Time time, Person person)
+        {
+            //When the Sun traverses through the Rasi occupied by
+            // the Moon, the person suffers from loss of wealth, loss of
+            // prestige, sickness and will have many obstacles and aimless
+            // travels.
+
+            var birthTime = person.GetBirthDateTime();
+
+            //check if Sun in gochara house 1
+            var sunGocharaHouse1 = AstronomicalCalculator.GetGocharaHouse(birthTime, time, PlanetName.Sun) == 1;
+
+            //check if there is any planet obstructing this transit in Vedhasthana
+            var obstructionNotFound = !AstronomicalCalculator.IsGocharaObstructed(PlanetName.Sun, 1, birthTime, time);
+
+            //occurign if all conditions met
+            var occuring = sunGocharaHouse1 && obstructionNotFound;
+
             return new() { Occuring = occuring };
         }
 

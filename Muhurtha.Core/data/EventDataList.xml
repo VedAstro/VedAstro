@@ -1412,5 +1412,17 @@
     </Description>
     <Tag>BuyingSelling</Tag>
   </Event>
+    <Event>
+	    <Id>135</Id>
+	    <Name>SunGocharaInHouse1</Name>
+	    <Nature>Bad</Nature>
+	    <Description>
+			When the Sun traverses through the Rasi occupied by
+			the Moon, the person suffers from loss of wealth, loss of
+			prestige, sickness and will have many obstacles and aimless
+			travels.
+		</Description>
+	    <Tag>Gochara</Tag>
+    </Event>
 
 </Root>

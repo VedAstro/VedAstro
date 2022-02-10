@@ -461,6 +461,8 @@
         Lord2InHouse11,
         Lord2InHouse12,
         MaleficIn11FromArudha,
-        BeneficIn11FromArudha
+        BeneficIn11FromArudha,
+        SunGocharaInHouse1
+
     }
 }

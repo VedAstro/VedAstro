@@ -14,13 +14,12 @@ namespace Genso.Astrology.Library
     {
         /** FIELDS **/
 
-        private readonly int _id;
 
         private readonly EventCalculator _eventCalculator;
 
 
         /** CTOR **/
-        public EventData(int id, EventName name, EventNature nature, string description, List<EventTag> eventTags, EventCalculator eventCalculator)
+        public EventData(EventName name, EventNature nature, string description, List<EventTag> eventTags, EventCalculator eventCalculator)
         {
             Name = name;
             Nature = nature;
@@ -28,7 +27,6 @@ namespace Genso.Astrology.Library
             Strength = "";//strength is only gotten after calculator is run
             EventTags = eventTags;
             _eventCalculator = eventCalculator;
-            _id = id;
         }
 
 
@@ -97,17 +95,16 @@ namespace Genso.Astrology.Library
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
-            var hash1 = _id.GetHashCode();
-            var hash2 = Name.GetHashCode();
-            var hash3 = Nature.GetHashCode();
-            var hash4 = Description.GetHashCode();
+            var hash1 = Name.GetHashCode();
+            var hash2 = Nature.GetHashCode();
+            var hash3 = Description.GetHashCode();
 
-            return hash1 + hash2 + hash3 + hash4;
+            return hash1 + hash2 + hash3;
         }
 
         public override string ToString()
         {
-            return $"{_id} - {Name} - {Nature} - {Description}";
+            return $"{Name} - {Nature} - {Description}";
         }
 
         public static bool operator ==(EventData left, EventData right)

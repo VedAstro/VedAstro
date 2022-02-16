@@ -7590,28 +7590,345 @@ namespace Genso.Astrology.Library
 
         #region GOCHARA
 
-
         [EventCalculator(EventName.SunGocharaInHouse1)]
-        public static Prediction SunGocharaInHouse1(Time time, Person person)
-        {
-            //When the Sun traverses through the Rasi occupied by
-            // the Moon, the person suffers from loss of wealth, loss of
-            // prestige, sickness and will have many obstacles and aimless
-            // travels.
+        public static Prediction SunGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 1) };
 
-            var birthTime = person.GetBirthDateTime();
+        [EventCalculator(EventName.SunGocharaInHouse2)]
+        public static Prediction SunGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 2) };
 
-            //check if Sun in gochara house 1
-            var sunGocharaHouse1 = AstronomicalCalculator.GetGocharaHouse(birthTime, time, PlanetName.Sun) == 1;
+        [EventCalculator(EventName.SunGocharaInHouse3)]
+        public static Prediction SunGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 3) };
 
-            //check if there is any planet obstructing this transit in Vedhasthana
-            var obstructionNotFound = !AstronomicalCalculator.IsGocharaObstructed(PlanetName.Sun, 1, birthTime, time);
+        [EventCalculator(EventName.SunGocharaInHouse4)]
+        public static Prediction SunGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 4) };
 
-            //occurign if all conditions met
-            var occuring = sunGocharaHouse1 && obstructionNotFound;
+        [EventCalculator(EventName.SunGocharaInHouse5)]
+        public static Prediction SunGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 5) };
 
-            return new() { Occuring = occuring };
-        }
+        [EventCalculator(EventName.SunGocharaInHouse6)]
+        public static Prediction SunGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 6) };
+
+        [EventCalculator(EventName.SunGocharaInHouse7)]
+        public static Prediction SunGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 7) };
+
+        [EventCalculator(EventName.SunGocharaInHouse8)]
+        public static Prediction SunGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 8) };
+
+        [EventCalculator(EventName.SunGocharaInHouse9)]
+        public static Prediction SunGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 9) };
+
+        [EventCalculator(EventName.SunGocharaInHouse10)]
+        public static Prediction SunGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 10) };
+
+        [EventCalculator(EventName.SunGocharaInHouse11)]
+        public static Prediction SunGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 11) };
+
+        [EventCalculator(EventName.SunGocharaInHouse12)]
+        public static Prediction SunGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 12) };
+
+        //MOON
+        [EventCalculator(EventName.MoonGocharaInHouse1)]
+        public static Prediction MoonGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 1) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse2)]
+        public static Prediction MoonGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 2) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse3)]
+        public static Prediction MoonGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 3) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse4)]
+        public static Prediction MoonGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 4) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse5)]
+        public static Prediction MoonGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 5) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse6)]
+        public static Prediction MoonGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 6) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse7)]
+        public static Prediction MoonGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 7) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse8)]
+        public static Prediction MoonGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 8) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse9)]
+        public static Prediction MoonGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 9) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse10)]
+        public static Prediction MoonGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 10) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse11)]
+        public static Prediction MoonGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 11) };
+        
+        [EventCalculator(EventName.MoonGocharaInHouse12)]
+        public static Prediction MoonGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 12) };
+
+
+        //MARS
+        [EventCalculator(EventName.MarsGocharaInHouse1)]
+        public static Prediction MarsGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 1) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse2)]
+        public static Prediction MarsGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 2) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse3)]
+        public static Prediction MarsGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 3) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse4)]
+        public static Prediction MarsGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 4) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse5)]
+        public static Prediction MarsGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 5) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse6)]
+        public static Prediction MarsGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 6) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse7)]
+        public static Prediction MarsGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 7) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse8)]
+        public static Prediction MarsGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 8) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse9)]
+        public static Prediction MarsGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 9) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse10)]
+        public static Prediction MarsGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 10) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse11)]
+        public static Prediction MarsGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 11) };
+
+        [EventCalculator(EventName.MarsGocharaInHouse12)]
+        public static Prediction MarsGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 12) };
+
+
+
+        //MERCURY
+        [EventCalculator(EventName.MercuryGocharaInHouse1)]
+        public static Prediction MercuryGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 1) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse2)]
+        public static Prediction MercuryGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 2) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse3)]
+        public static Prediction MercuryGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 3) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse4)]
+        public static Prediction MercuryGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 4) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse5)]
+        public static Prediction MercuryGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 5) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse6)]
+        public static Prediction MercuryGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 6) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse7)]
+        public static Prediction MercuryGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 7) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse8)]
+        public static Prediction MercuryGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 8) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse9)]
+        public static Prediction MercuryGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 9) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse10)]
+        public static Prediction MercuryGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 10) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse11)]
+        public static Prediction MercuryGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 11) };
+
+        [EventCalculator(EventName.MercuryGocharaInHouse12)]
+        public static Prediction MercuryGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 12) };
+
+
+        //JUPITER
+        [EventCalculator(EventName.JupiterGocharaInHouse1)]
+        public static Prediction JupiterGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 1) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse2)]
+        public static Prediction JupiterGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 2) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse3)]
+        public static Prediction JupiterGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 3) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse4)]
+        public static Prediction JupiterGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 4) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse5)]
+        public static Prediction JupiterGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 5) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse6)]
+        public static Prediction JupiterGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 6) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse7)]
+        public static Prediction JupiterGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 7) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse8)]
+        public static Prediction JupiterGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 8) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse9)]
+        public static Prediction JupiterGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 9) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse10)]
+        public static Prediction JupiterGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 10) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse11)]
+        public static Prediction JupiterGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 11) };
+
+        [EventCalculator(EventName.JupiterGocharaInHouse12)]
+        public static Prediction JupiterGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 12) };
+
+
+        //VENUS
+        [EventCalculator(EventName.VenusGocharaInHouse1)]
+        public static Prediction VenusGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 1) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse2)]
+        public static Prediction VenusGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 2) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse3)]
+        public static Prediction VenusGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 3) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse4)]
+        public static Prediction VenusGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 4) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse5)]
+        public static Prediction VenusGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 5) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse6)]
+        public static Prediction VenusGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 6) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse7)]
+        public static Prediction VenusGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 7) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse8)]
+        public static Prediction VenusGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 8) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse9)]
+        public static Prediction VenusGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 9) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse10)]
+        public static Prediction VenusGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 10) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse11)]
+        public static Prediction VenusGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 11) };
+
+        [EventCalculator(EventName.VenusGocharaInHouse12)]
+        public static Prediction VenusGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 12) };
+
+
+        //SATURN
+        [EventCalculator(EventName.SaturnGocharaInHouse1)]
+        public static Prediction SaturnGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 1) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse2)]
+        public static Prediction SaturnGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 2) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse3)]
+        public static Prediction SaturnGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 3) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse4)]
+        public static Prediction SaturnGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 4) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse5)]
+        public static Prediction SaturnGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 5) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse6)]
+        public static Prediction SaturnGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 6) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse7)]
+        public static Prediction SaturnGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 7) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse8)]
+        public static Prediction SaturnGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 8) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse9)]
+        public static Prediction SaturnGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 9) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse10)]
+        public static Prediction SaturnGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 10) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse11)]
+        public static Prediction SaturnGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 11) };
+
+        [EventCalculator(EventName.SaturnGocharaInHouse12)]
+        public static Prediction SaturnGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 12) };
+
+
+        //RAHU
+        [EventCalculator(EventName.RahuGocharaInHouse1)]
+        public static Prediction RahuGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 1) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse2)]
+        public static Prediction RahuGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 2) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse3)]
+        public static Prediction RahuGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 3) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse4)]
+        public static Prediction RahuGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 4) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse5)]
+        public static Prediction RahuGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 5) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse6)]
+        public static Prediction RahuGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 6) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse7)]
+        public static Prediction RahuGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 7) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse8)]
+        public static Prediction RahuGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 8) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse9)]
+        public static Prediction RahuGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 9) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse10)]
+        public static Prediction RahuGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 10) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse11)]
+        public static Prediction RahuGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 11) };
+
+        [EventCalculator(EventName.RahuGocharaInHouse12)]
+        public static Prediction RahuGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 12) };
+
+
+        //KETU
+        [EventCalculator(EventName.KetuGocharaInHouse1)]
+        public static Prediction KetuGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 1) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse2)]
+        public static Prediction KetuGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 2) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse3)]
+        public static Prediction KetuGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 3) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse4)]
+        public static Prediction KetuGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 4) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse5)]
+        public static Prediction KetuGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 5) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse6)]
+        public static Prediction KetuGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 6) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse7)]
+        public static Prediction KetuGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 7) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse8)]
+        public static Prediction KetuGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 8) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse9)]
+        public static Prediction KetuGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 9) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse10)]
+        public static Prediction KetuGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 10) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse11)]
+        public static Prediction KetuGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 11) };
+
+        [EventCalculator(EventName.KetuGocharaInHouse12)]
+        public static Prediction KetuGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 12) };
 
 
         #endregion

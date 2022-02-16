@@ -17,6 +17,7 @@ namespace Genso.Astrology.Library
     /// </summary>
     public static class AstronomicalCalculator
     {
+        #region Cached Functions
         //CACHED FUNCTIONS
         //NOTE : These are functions that don't call other functions from this class
         //       Only functions that don't call other cached functions are allowed to be cached
@@ -1260,18 +1261,20 @@ namespace Genso.Astrology.Library
             }
         }
 
+        #endregion
+
         /// <summary>
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
         /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
         /// </summary>
         public static Angle TimeToLongitude(TimeSpan time)
         {
+            //TODO function is a candidate for caching
             //degrees is equivelant to hours
             var totalDegrees = time.TotalHours * 15;
 
             return Angle.FromDegrees(totalDegrees);
         }
-
 
 
         //NORMAL FUNCTIONS
@@ -2414,7 +2417,6 @@ namespace Genso.Astrology.Library
 
             return navamsaSignOfPlanet;
         }
-
 
         /// <summary>
         /// All their location with a quarter sight, the 5th and the
@@ -6196,7 +6198,6 @@ namespace Genso.Astrology.Library
 
         }
 
-
         /// <summary>
         /// To determine if sthana bala is indicating good position or bad position
         /// a neutral point is set, anything above is good & below is bad
@@ -6276,9 +6277,6 @@ namespace Genso.Astrology.Library
                 return neutralPoint;
             }
         }
-
-
-
 
         /// <summary>
         /// Checks if a planet is in a kendra house (4,7,10)
@@ -6380,7 +6378,6 @@ namespace Genso.Astrology.Library
             return goodFound;
         }
 
-
         /// <summary>
         /// Checks if any evil/malefic planet is transmitting aspect to a house
         /// Note: This does NOT account for bad aspects, where relationship with house lord is checked
@@ -6396,7 +6393,6 @@ namespace Genso.Astrology.Library
             return evilFound;
 
         }
-
 
         /// <summary>
         /// Checks if a planet is receiving aspects from an evil planet
@@ -6477,6 +6473,8 @@ namespace Genso.Astrology.Library
             return count;
         }
 
+        #region Gochara Calculations
+
         /// <summary>
         /// Gets the Gochara House number which is the count from birth Moon sign (janma rasi)
         /// to the sign the planet is at the current time. Gochara == Transits
@@ -6512,7 +6510,6 @@ namespace Genso.Astrology.Library
 
             //remove the exception planets
             //No Vedha occurs between the Sun and Saturn, and the Moon and Mercury.
-            //TODO check if logic below works
             if (planet == PlanetName.Sun || planet == PlanetName.Saturn)
             {
                 planetList.Remove(PlanetName.Sun);
@@ -6694,6 +6691,26 @@ namespace Genso.Astrology.Library
             //if no condition above met, then there is no obstruction point
             return 0;
         }
+
+        /// <summary>
+        /// Checks if a Gochara is occuring for a planet in a given house without any obstructions at a given time
+        /// Note : Basically a wrapper method for Gochra event calculations
+        /// </summary>
+        public static bool IsGocharaOccurring(Time birthTime, Time time, PlanetName planet, int gocharaHouse)
+        {
+            //check if planet is in the specified gochara house
+            var planetGocharaMatch = AstronomicalCalculator.GetGocharaHouse(birthTime, time, planet) == gocharaHouse;
+
+            //check if there is any planet obstructing this transit prediction via Vedhasthana
+            var obstructionNotFound = !AstronomicalCalculator.IsGocharaObstructed(planet, gocharaHouse, birthTime, time);
+
+            //occuring if all conditions met
+            var occuring = planetGocharaMatch && obstructionNotFound;
+
+            return occuring;
+        }
+
+        #endregion
 
     }
 

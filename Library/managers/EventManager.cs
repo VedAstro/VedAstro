@@ -170,7 +170,7 @@ namespace Genso.Astrology.Library
                 var description = "Combined event of:\n";
                 eventDatas.ForEach(eventData => description += $"-{eventData.Name}\n"); //name of each event is added to description
                 var combinedEvent =
-                    new EventData(0, eventName, EventNature.Neutral, description, null,
+                    new EventData(eventName, EventNature.Neutral, description, null,
                         null); //no need tag & calculator since only used visualy
                 return combinedEvent;
             }

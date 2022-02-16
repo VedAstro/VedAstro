@@ -2,3 +2,19 @@
 1. Create a method in EventCalculatorMethods.cs
 2. Add the name in EventNames.cs
 3. Add the prediction/event details PredictionDataList.xml
+
+
+
+Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
+
+- Built on reference to, Hindu Predictive Astrology pg. 254
+
+- Asthavarga bindus are not yet account for, asthavarga good or bad nature of the planet.
+  It is assumed that Shadbala system can compensate for it.
+
+- This passage on page 255 needs to be clarified
+"It must be noted that when passing through the first 10
+degrees of a sign, Mars and the Sun produce results."
+
+- It's intepreted that Vendha is an obstruction and not a reversal of the Gochara results
+  So as for now the design is that if a vedha is present than the result is simply nullified.

@@ -40,7 +40,6 @@ namespace Horoscope.Desktop
             foreach (var eventData in rawEventDataList)
             {
                 //extract the individual data out & convert it to the correct type
-                var id = Int32.Parse(eventData.Element("Id").Value);
                 var nameString = eventData.Element("Name").Value;
                 Enum.TryParse(nameString, out EventName name);
                 var natureString = eventData.Element("Nature").Value;
@@ -52,7 +51,7 @@ namespace Horoscope.Desktop
                 var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
 
                 //place the data into an event data structure
-                var eventX = new EventData(id, name, nature, description, tagList, calculatorMethod);
+                var eventX = new EventData(name, nature, description, tagList, calculatorMethod);
 
                 //add it to the return list
                 eventDataList.Add(eventX);

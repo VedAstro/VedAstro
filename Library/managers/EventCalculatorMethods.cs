@@ -9577,6 +9577,103 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        
+        //DASA GENERAL RULES
+
+        [EventCalculator(EventName.Lord6And8Dasa)]
+        public static Prediction Lord6And8Dasa(Time time, Person person)
+        {
+            //The Dasa period of the lords of the 6th and the 8th
+            // produce harmful results unless they acquire beneficence
+            // otherwise.
+
+
+            //get lord 6th house
+            var lord6th = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, person.GetBirthDateTime());
+
+            //is lord 6th dasa occuring
+            var isLord6thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == lord6th;
+
+
+            //get lord 8th house
+            var lord8th = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, person.GetBirthDateTime());
+
+            //is lord 8th dasa occuring
+            var isLord8thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == lord8th;
+
+
+            //occuring if one of the conditions met
+            var occuring = isLord6thDasa || isLord8thDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord5And9Dasa)]
+        public static Prediction Lord5And9Dasa(Time time, Person person)
+        {
+            //The periods of lords of the 5th and the 9th are said
+            // to be good, so much so that the periods of planets, which are
+            // joined or otherwise related with them, are also supposed to
+            // give rise to good.
+
+            //get lord 5th house
+            var lord5th = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, person.GetBirthDateTime());
+
+            //is lord 5th dasa occuring
+            var isLord5thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == lord5th;
+
+
+            //get lord 9th house
+            var lord9th = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, person.GetBirthDateTime());
+
+            //is lord 8th dasa occuring
+            var isLord9thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == lord9th;
+
+
+            //occuring if one of the conditions met
+            var occuring = isLord5thDasa || isLord9thDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        
+        [EventCalculator(EventName.BhuktiDasaLordInBadHouses)]
+        public static Prediction BhuktiDasaLordInBadHouses(Time time, Person person)
+        {
+            //Unfavourable results will be realised when the sublord (bhukti)
+            // and the major lord (dasa) are situated in the 6th and the 8th or
+            // the 12th and the 2nd from each other respectively.
+
+            //get bukti lord
+            var buhktiLord = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Bhukti;
+
+            //get dasa lord = 
+            var dasaLord = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa;
+
+            //condition 1
+            //is bukti lord in 6th house at birth
+            var bhuktiLordIn6th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), buhktiLord, 6);
+            //is dasa lord in 8th house at birth
+            var dasaLordIn8th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), dasaLord, 8);
+            //check if both planets are in bad houses at the same time
+            var buhktiDasaIn6And8 = bhuktiLordIn6th && dasaLordIn8th;
+
+
+            //condition 2
+            //is bukti lord in 12th house at birth
+            var bhuktiLordIn12th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), buhktiLord, 12);
+            //is dasa lord in 2nd house at birth
+            var dasaLordIn2nd = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), dasaLord, 2);
+            //check if both planets are in bad houses at the same time
+            var buhktiDasaIn12And2 = bhuktiLordIn12th && dasaLordIn2nd;
+
+
+            //occuring if one of the conditions are met
+            var occuring = buhktiDasaIn6And8 || buhktiDasaIn12And2;
+
+            return new() { Occuring = occuring };
+        }
+
 
         #endregion
     }

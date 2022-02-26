@@ -677,7 +677,10 @@
         SagittariusVenusDasa,
         CapricornusVenusDasa,
         AquariusVenusDasa,
-        PiscesVenusDasa
+        PiscesVenusDasa,
+        Lord6And8Dasa,
+        Lord5And9Dasa,
+        BhuktiDasaLordInBadHouses
 
 
 

@@ -7084,6 +7084,15 @@ namespace Genso.Astrology.Library
         }
 
         #endregion
+
+
+        /// <summary>
+        /// Checks if a planet is in a given house at a specified time 
+        /// </summary>
+        public static bool IsPlanetInHouse(Time time, PlanetName planet, int houseNumber)
+        {
+            return AstronomicalCalculator.GetHousePlanetIsIn(time, planet) == houseNumber;
+        }
     }
 
 }

@@ -2132,7 +2132,6 @@
 		<Tag>Gochara</Tag>
 	</Event>
 
-
 	<!--Gochara Saturn-->
 	<Event>
 		<Name>SaturnGocharaInHouse1</Name>
@@ -2260,7 +2259,6 @@
 		</Description>
 		<Tag>Gochara</Tag>
 	</Event>
-
 
 	<!--Gochara Rahu-->
 	<Event>
@@ -2390,7 +2388,6 @@
 		<Tag>Gochara</Tag>
 	</Event>
 
-
 	<!--Gochara Ketu-->
 	<Event>
 		<Name>KetuGocharaInHouse1</Name>
@@ -2513,5 +2510,1176 @@
 		<Tag>Gochara</Tag>
 	</Event>
 
+	<!--Sun Dasa-->
+	<Event>
+		<Name>AriesSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Dasa of the Sun in Aries in deep exaltation.- Sudden
+			gains in cattle and wealth, much traveling in eastern
+			countries, residence in foreign countries, quarrels among
+			friends and relations, pleasure trips and picnic parties and
+			company of beautiful women.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Increase in landed properties, fame among relations
+			and friends, cultivation of love and reverence for holy people
+			and saints.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Much wealth, education, inclination
+			to interest oneself in music and such other fine arts, and
+			generally happy and cheerful.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Political success,
+			always gay and happy, traveling in foreign countries and
+			increase in lands, houses and wealth.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Respect from
+			kings and noble personages, righteous conduct, birth of
+			children and respect among children.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoSunDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Virgo - Suffering off
+			and on from physical complaints, loss of cattle, wealth and
+			house and misunderstandings with close relatives and friends.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraSunDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Libra - Reduced to poverty, troubled by enemies, failure in
+			undertakings, death of brothers and friends and miserable
+			and complicated life.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Starting new schemes and
+			enterprises, realization of many ambitious things, travelling
+			in hilly tracts and countries.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Happiness, success in undertakings, good health, destruction of enemies, satisfaction
+			in every way.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusSunDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Capricorn - A wandering life, loss of
+			patrimony, self-respect and good name, misunderstanding
+			among his own people.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusSunDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Mental worries, loss or
+			illness to wife, loss of property and wealth.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Pisces - Gains
+			in wealth, auspicious celebrations, respect among relations,
+			increase in family members and smooth sailing in every way.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Moon Dasa-->
+	<Event>
+		<Name>AriesMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Moon in Aries - Physical and mental happiness,
+			gains in wealth and perfect contentment.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Increase
+			in fame and name, collection of enormous wealth, mental and
+			physical happiness.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Progress in education and
+			acquiring of much immovable and movable properties.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Addition in wealth, success in litigation, unexpected findings
+			of treasure, travels.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Progress in education, much gains
+			from unexpected sources.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoMoonDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Virgo - Death of serious illness to
+			mother, worries from enemies and swindlers, mental and
+			physical restlessness.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Gains in wealth, increase in
+			friends, visits to holy places and shrines, realisation of
+			schemes and destruction of enemies.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioMoonDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Scorpio - Fear from
+			political heads, destruction of relatives, disappointments in
+			every respect, loss of wealth, liberty and honor at risk and
+			much mental uneasiness.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Domestic happiness and felicity, celebration of happy functions, accumulation of
+			wealth and undisturbed progress of normal private affairs.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricorn - Increase in lands and houses and wealth, success
+			in every new enterprise, pilgrimages to holy places and success
+			in litigation.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusMoonDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Destruction of property, fear from
+			political authorities, mental worries from enemies, misunderstandings
+			among relatives and friends.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesMoonDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Pisces - Taking
+			charges of fresh office, reciting religious texts and moral codes
+			and easy access to anything coveted without effort.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Mars Dasa-->
+	<Event>
+		<Name>AriesMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Aries - Acquisition of wealth, increase in reputation
+			and respect, much gain.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Destruction of
+			enemies, success in all struggles, respect from elders and rulers
+			and good produce from lands.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Access to great
+			wealth, precious· stones and me~ agricultural success,
+			general success in all undertakings.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerMarsDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Cancer - Danger from
+			enemies, of honour and reputation, domestic disharmony and
+			misunderstandings among brothers or close relatives.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Happy
+			and successful all through the period of 7 years, taste
+			in fine arts and material gains through them, increase of income
+			from house and lands.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Beneficial results, successful
+			termination of educational pursuits, ability to address
+			meetings and deliver lectures, and happiness from relatives
+			and friends.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraMarsDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Libra - Most miserable life, misunderstandings
+			with cousins and brothers, death of wife and children, loss of
+			wealth and grains and mortgaging of landed property.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Increase in wealth, good earnings, friendship and intimacy with exalted personages, 
+			love for own people, always happy and active.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Earnings from political or royal
+			sources, courting their friendships, destruction of enemies and
+			realisation of all hopes and desires.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricorn - Success in
+			battles and respect for military skill, gains from quadrupeds
+			and increase in wealth.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusMarsDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Great hardships and
+			difficulties, misunderstandings with rulers and the immediate
+			superiors in office, unpleasant relations with mother and
+			servants.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesMarsDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Pisces - Much wealth, general success and
+			happiness. bumper crops in lands, prosperity and acquisition
+			of house and business, respect as a learned man, great reputation.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Rahu Dasa-->
+	<Event>
+		<Name>AriesRahuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Rahu In Aries - Auspicious celebrations in the house,
+			recitations of sacred texts, acquisition of tracts of land,
+			perfect domestic happiness, respect from rulers and a life of
+			harmony in every respect.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusRahuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Pilgrimages to shrines
+			and holy places, increase in philosophical knowledge, entertainments,
+			gains from cattle and dealings with quadrupeds.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiRahuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Gemini - Multiplication of enemies, always peevish and short tempered,
+			fear from police and magistrates, sickness to wife
+			and family, misunderstandings and disfavour.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerRahuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Serving the suffering, humanitarian propaganda, zeal and
+			enthusiasm for national service, gains and increase in wealth,
+			riches and honour and great reputation.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoRahuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Leo - Fear of imprisonment of fraud and deception or misappropriation or
+			political offenses, destruction of property and mental worries
+			distractions.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoRahuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Gain in wealth, general prosperity and
+			success, acquisition of new lands, elevation to exalted positions,
+			respect for learning, sexual happiness and domestic
+			harmony, birth of children and sudden access to much wealth.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraRahuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Libra - Destruction of property, loss of wealth, waste of
+			agricultural products, loss of position, fear of imprisonment,
+			residence in foreign countries-rather in exile, many miseries,
+			hardships, business failure, litigation troubles and physical
+			and mental sufferings.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioRahuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Scorpio - Rahu is debilitated here
+			and as such, causes great havoc to the native. The results in
+			Rahu's Dasa will be :-abortion, loss of children, inclination
+			to bid farewell to moral aspect of life, failure in business
+			enterprises and mental discontentment.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusRahuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Acquisition
+			of wealth, sudden and unexpected gain without effort,
+			great success in any undertakings, loss of near and dear
+			relatives and mental unrest.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusRahuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricorn - Sudden promotions
+			to higher positions, recognition of one's merits by the State
+			and rulers, marriage festivities at home, increase of wealth
+			and general prosperity.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusRahuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Orphanage, disappointments,
+			mental derangement and affection, sorrowful news,
+			loss of wife or children, premature death and mean instincts.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesRahuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Pisces - Great fear in life from thieves, swindlers and such
+			people, inclination to matrimonial alliance, progress of education,
+			some gains, ill health and mental uneasiness. Rahu
+			in Pisces gives mixed results - his position, viz., whether he is
+			in a friendly or unfriendly sign, in the house of loss or gain,
+			wife or children, etc., should be correctly determined.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Jupiter Dasa-->
+	<Event>
+		<Name>AriesJupiterDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Jupiter in Aries - Acquisition of landed property, general
+			prosperity and success in all undertakings and litigations,
+			elevation to a responsible office or appointment as a trustee
+			and great respect from his or her own people.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusJupiterDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - If a king or a president - access to new territories, fresh treaties
+			and pacts, if an ordinary person - acquisition of wealth, establishment
+			of business on a firm foundation, gains in trade
+			and agriculture, increase in lands and cattle, respect from friends and foes.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiJupiterDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Gemini - Death of wife if married or
+			sweet heart, loss of children, brothers and cousins, deportation,
+			fear from rulers and mental uneasiness.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerJupiterDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Jupiter is exalted here and gives all beneficial results such as much
+			political success, promotions, exalted positions, humanitarian
+			work, national service, acquisition of wealth from unexpected
+			sources and without efforts, journalistic success, minister of
+			education or lands and perfect harmony in domestic life.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoJupiterDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Respect from rulers, gain of lands, much agricultural
+			produce, and realisation of one's own desires and ambitions.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoJupiterDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Virgo - Residence in foreign countries, destruction of wife
+			and property, loss of wealth, misunderstandings among relatives,
+			strife, body ill-health and symptoms of nervous
+			troubles and diseases.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraJupiterDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Libra - Residence in desolate places,
+			dissolute and shameful life, active part in perverted social
+			reform, selfish interests, great and unbearable difficulties and
+			troubles, tendency to create factions in societies and families.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioJupiterDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Mental calm and happiness, acquisition of new
+			lands and estates, undisturbed progress and religious worship
+			and philosophical discourses and triumph of spiritual influences
+			over sensual passions, reputation at stake if aspected by
+			malefics.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusJupiterDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Many sons, much wealth, success in
+			every undertaking, increase in relations and family members.
+			widespread fame and perfect happiness.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusJupiterDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Capricorn - Death or
+			illness of children, wife always ill, loss of property, reputation
+			and self-respect, irreligious acts, sacrilegious attacks upon
+			sacred institutions, predominance of mean motives, liable to
+			prosecution and the upspringing of numerous enemies.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusJupiterDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Consumption and fear from wild beasts, animals,
+			bad luck, many hardships and loss of wealth.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesJupiterDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Pisces - Much
+			fame throughout this long period of 16 years, high education
+			and gt1in from exhibition of knowledge, acquisition of
+			property and general success and happiness.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Saturn Dasa-->
+	<Event>
+		<Name>AriesSaturnDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Saturn In Aries - The worst period in a man's career,
+			unexpected losses, disappointments in every undertaking, misunderstandings
+			among relatives and friends and increase in the
+			number of enemies.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusSaturnDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Success and gains in agricultural
+			operations, much prosperity to the cattle and other domestic
+			animals, great income, and access to things desired.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiSaturnDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Recognition of his services, great humanitarian work, profits
+			in speculations and trade, respect from rulers, political
+			success, reputation, fame and much general happiness.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerSaturnDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Cancer - Miseries and calamities, family strife, increase of
+			enemies, trouble from relatives and physical diseases and mental
+			affliction.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoSaturnDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Leo - A period of uneasiness, distrust, disappointments
+			and unrest, misappropriation of money and consequent
+			prosecution if Saturn is afflicted powerfully, hatred by all and
+			courting death as a source of relief from mental worries.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoSaturnDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Elevation to exalted positions, royal favour, business
+			success and establishment of fame and reputation.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraSaturnDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Travelling in countries inhabited by Christians and Moslems,
+			establishment of fresh branches if proprietor of a business
+			concern, acceptance of invitations for public lectures and
+			great honour and respect throughout the long period of 19 years
+			and perfect domestic happiness.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioSaturnDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Scorpio - Odium of superiors,
+			disliked and hated by all, loss or prestige, self-respect and
+			fame and destruction and damage to property and possessions.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusSaturnDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Inclination to study philosophical and religious
+			treatises and success in such studies, auspicious occasions like
+			marriage ceremonies, etc., at home and happiness and mental
+			peace throughout.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusSaturnDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricorn - Increase in lands, gains in
+			wealth and business, friendship with great and illustrious
+			personages.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusSaturnDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Aquarius - Great travelling in Western countries,
+			success in litigation, mental happiness and acquisition of
+			wealth.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesSaturnDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - Pilgrimage to sacred shrines and holy
+			places, indifference towards sectarian restrictions and observances,
+			sorrows, misery and unrest.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Mercury Dasa-->
+	<Event>
+		<Name>AriesMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Mercury in Aries - Marriage, performance of religious and
+			social work, charity, increase in religiousness and intelligence,
+			favour of rulers, gains from cultivation. cattle, precious
+			stones and conveyances and happiness through these.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Great happiness, sexual contact with beautiful young
+			women, getting titles and name, ornaments and authority over
+			men, acquaintance of sweet girls and their company and
+			practice of music and kindred sciences.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Access to
+			great intellectual treasures, increase in knowledge, successful
+			termination of educational career, acquisition of fame and
+			wealth, happiness from wife and children, marriage ceremonies
+			and recitation of sacred scriptures.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerMercuryDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Cancer - Degradation,
+			change of residence, fines and imprisonments, penalties.
+			confinement in chains, hatred of relations, loss of lands.
+			failure of crops and comity with all.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Good courage
+			and elevation, travelling in hilly and mountainous tracts, acquisition of 
+			wealth from various countries, progress in
+			knowledge, expeditions to mountains, caves and similar
+			places, marriage and great reputation.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - The most
+			auspicious and happy period of life, favour of kings, admirers
+			and royal courts and great success in them, undisturbed
+			health, marriage in the house, increase in intelligence, religiousness,
+			charitable foundings, and unexpected gains.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Great works published in the native's name, favour of
+			wealthy and educated people without effort, and leadership
+			over men.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioMercuryDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Scorpio - Loss or wife, children, riches, mental
+			troubles, losses from merchandise, great hatred of people and
+			relations and loss of reputation and power.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Success
+			in education, meeting with learned and religious
+			people, worship of holy men, virtuous and charitable deeds,
+			travelling in Eastern countries, inclination for marital enterprises
+			and great exhilaration.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricorn - Success in trade,
+			inception of new business-like trades in tanneries, leather
+			goods, glassware, etc., recitation of religious scriptures. Godly
+			contemplations, patronage of kings, destruction of foes and
+			enemies and general success in life.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusMercuryDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Aquarius - Acquisition
+			of paraphernalia, access to good and much wealth, indulging
+			in a pleasurely life and good fame and name.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesMercuryDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - Trouble
+			from thieves, dysentery, destruction of relations, litigation,
+			quarrels with relatives, mental derangement, nervous breakdown
+			and failure in attempts.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Ketu Dasa-->
+	<Event>
+		<Name>AriesKetuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Ketu in Aries - Disgrace, troubles from relatives, loss of
+			property, cattle and other domestic animals, constant travels
+			in Eastern countries, great hardship, sudden quarrels, loss of
+			mother and wife or their serious sickness, want of prudence
+			and capacity in private matters.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusKetuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Taurus - Many dangers,
+			death of wife, acquisition of wealth through evil ways and
+			means, sexual sorrows, visits to sacred shrines and holy
+			waters, inclination to religious study and success in it,
+			compunction and in the end appeasing sins by resort to foul
+			stratagems.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiKetuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Good health, happiness, elevation to responsible
+			and exalted positions, rounding of sacred institutions,
+			good food, advent of relations and in later years venereal
+			troubles, death of near relation and loss of reputation and
+			self-respect.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerKetuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Many dangers, disturbances from his
+			place and a period of exile, serious sickness to wife, parents
+			or children, and if badly afflicted, their death, quarrels with
+			friends, initiation into the mysteries of philosophical knowledge.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoKetuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Increase of lands, cultivation. progress in education,
+			heated debates and discussions on philosophical and
+			scientific subjects with great scholars and eminent people,
+			attracted by females and company with them, travels in
+			mountainous tracts and billy countries to spread any righteous
+			cause, and treated to great musical entertainment.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoKetuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Virgo - Fear from fires, weapons and poisonous gases, beasts and reptiles,
+			destruction of dear lives, properties and self-respect,
+			unrighteous acts and nasty venereal complaints.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraKetuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Libra - Happiness
+			and prosperity to wife or husband, self and
+			children, enmity of relations, gains from gold and precious
+			stones, headache, heart disease, nervous breakdown, trouble
+			in the anus and much discontent.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioKetuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Living dependent
+			on relations, sycophant acts, acquisition of much wealth.
+			loss of few children, gains from lands, contraction of new friendship
+			from among the members of the fair sex and liable
+			to suffer from venereal complaints.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusKetuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Perfect
+			domestic harmony and happiness, favour from aristocrats,
+			progress in education, religious discussions, moral elevation
+			and manifestation of a spirit of tolerance and equality.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusKetuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Capricorn - Misappropriation of private and governmental
+			funds and consequent prosecution, wife or husband catching
+			consumption and such diseases, death of a few children,
+			anxiety about everything, misunderstanding with relations
+			and disgrace and disappointments.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusKetuDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Hating all and hated by all, incurring the displeasure of superiors,
+			pessimistic about every hope, abject dependency and servile flattery; in the end,
+			happiness and prosperity to wife and children.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesKetuDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Pisces - Learned discussions, general success, helping
+			the suffering, mental depression, promotion, acquisition of
+			fertile lands, favour of the superiors and moneyed people,
+			moral and religious devotions, vigorous and clear understanding,
+			travel on water to distant countries and respect there.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Venus Dasa-->
+	<Event>
+		<Name>AriesVenusDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Venus in Aries - Residence in palatial buildings, acquaintance
+			with noble personages, wearing good clothes, good
+			earnings, spread of fame, much respect, birth of child, happy
+			sexual relations and praised by friends and enemies.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>TaurusVenusDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - A life of great ease and indulgence throughout the period of
+			20 years, enjoyment of much happiness, company of beautiful
+			girls and joy through association with them, travels on seas to foreign countries
+			particularly southern, all ambitions of life fairly realised, 
+			redemption from debts, symptoms of venereal troubles.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>GeminiVenusDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Gain of territory, affording
+			protection to brothers, sisters, cousins and paternal uncles
+			and aunts, gain of vehicles, increase of reputation, children.
+			harmony with wife, mental peace and a check over inclination
+			to indulge in loose life.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CancerVenusDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Cancer - Paroxysms of grief and terror, destruction of property, 
+			discontent with relations, increase
+			of enemies, loss of wealth, disturbance to good work
+			and some mental ease in the end.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LeoVenusDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Leo - Mental disease and
+			sorrow, troubles from fires, poisons and hurts, evil women,
+			foul language and mental disorder, exile, and aimless wanderings
+			in deserts and woods to evade detection by law, dangerous
+			sickness to the better half or a child, stigma on self-respect
+			due to mean fellows and inclination to conceal true identity.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VirgoVenusDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Virgo - Quarrels with wife or husband and separation from
+			him or her, mortgage of all property, trouble in the generative
+			organ often leading to surgical operation, symptoms of
+			arthritis, troubles relating to nervous breakdown, mental
+			unrest, separation from relatives and friends and much grief
+			and sorrow.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>LibraVenusDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Great reputation, gain of wealth from
+			royal patronage, comforts, good enjoyment of life, luxurious
+			invitations and worships of mammon and a period of extreme
+			sensuality.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>ScorpioVenusDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Scorpio - Hatred for all, many miseries and
+			troubles, serious risks, vengeance against relatives, loss of
+			wealth and property, mental affliction and imbalance.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SagittariusVenusDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Much fame and name, religious _and philosophical
+			studies, recitation of sacred writings, regard for holy people
+			and ascetics, success in any undertakings and general prosperity.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>CapricornusVenusDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricorn - Travels in foreign lands, freedom from
+			domestic worries, discussion with learned people, progress
+			in general education, acquaintance with low class people,
+			development of perverted ideas of social or religious reform
+			and success in all endeavors.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>AquariusVenusDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Aquarius - Acquisition of
+			fresh property, a good library, lands and houses, honours
+			and unexpected gains, love for Christian or Islamic literature
+			and its studies, stray intercourse with senile women, domestic
+			happiness and harmony.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>PiscesVenusDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Pisces - High political power and
+			great success, promotion to responsible office, acts of charity
+			and generosity, exercise of prudence in official matters and
+			perfect happiness in domestic life and smooth-sailing in every
+			respect.
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
 
 </Root>

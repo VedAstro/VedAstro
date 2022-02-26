@@ -2,6 +2,9 @@
 
 namespace Genso.Astrology.Library
 {
+    /// <summary>
+    /// Simple data type to contain a person's details
+    /// </summary>
     public struct Person
     {
         private readonly string _name;

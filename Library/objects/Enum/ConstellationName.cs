@@ -1,5 +1,8 @@
 ﻿namespace Genso.Astrology.Library
 {
+    /// <summary>
+    /// Constellation names ordered as seen in the sky with corresponding number values
+    /// </summary>
     public enum ConstellationName
     {
         Aswini = 1,

@@ -3,7 +3,8 @@
 namespace Genso.Astrology.Library
 {
     /// <summary>
-    /// The constellation which is behind a planet
+    /// Holds all the info of a specific point in the constellation
+    /// Usually a point (longitude) behind a planet.
     /// </summary>
     [Serializable()]
     public struct PlanetConstellation
@@ -16,37 +17,49 @@ namespace Genso.Astrology.Library
         //DATA FIELDS
         private readonly ConstellationName _name;
         private readonly int _quarter;
+        private readonly Angle _degreeInConstellation;
         //private readonly double _bodyPosition;
 
 
         //CTOR
-        public PlanetConstellation(int constellationNumber, int quarter)
+        public PlanetConstellation(int constellationNumber, int quarter, Angle degreeInConstellation)
         {
             //convert constellation number to constellation name
             _name = (ConstellationName)constellationNumber;
-            //save quarter
             _quarter = quarter;
+            _degreeInConstellation = degreeInConstellation;
+
+            //if degrees in constellation not within range raise alarm
+            var min = Angle.Zero;
+            var max = new Angle(0, 800, 0);
+            if (_degreeInConstellation < min || _degreeInConstellation > max) { throw new Exception("Degrees in constellation not valid!"); }
         }
 
 
 
         //PUBLIC METHODS
-        public int GetConstellationNumber()
-        {
-            //convert constellation name to its number
-            return (int)_name;
-        }
 
-        public ConstellationName GetConstellationName()
-        {
-            return _name;
-        }
+        /// <summary>
+        ///  Gets the constellation name as a number in the preset order
+        /// </summary>
+        public int GetConstellationNumber() => (int)_name; //convert constellation name to its number
 
-        public int GetQuater()
-        {
-            return _quarter;
-        }
+        /// <summary>
+        /// Gets the name of the constellation
+        /// </summary>
+        public ConstellationName GetConstellationName() => _name;
 
+        /// <summary>
+        /// Gets the quarter (subdivision) of a constellation, 1 to 4
+        /// A rougher form of "degrees in constellation"
+        /// </summary>
+        public int GetQuarter() => _quarter;
+
+        /// <summary>
+        /// Gets the degrees in the constellation, 0 to 800' (13° 20')
+        /// An accurate form of "quarter"
+        /// </summary>
+        public Angle GetDegreesInConstellation() => _degreeInConstellation;
 
 
         //OPERATORS OVERRIDES

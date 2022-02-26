@@ -21,7 +21,7 @@ namespace Genso.Astrology.Library
         //CACHED FUNCTIONS
         //NOTE : These are functions that don't call other functions from this class
         //       Only functions that don't call other cached functions are allowed to be cached
-        //       otherwise, it's errorneous in parallel
+        //       otherwise, it's erroneous in parallel
 
         public static Angle GetAyanamsa(Time time)
         {
@@ -247,6 +247,10 @@ namespace Genso.Astrology.Library
             return results[3];
         }
 
+        /// <summary>
+        /// Gets info about the constellation at a given longitude, ie. Constellation Name,
+        /// Quarter, Degrees in constellation, etc.
+        /// </summary>
         public static PlanetConstellation GetPlanetConstellation(Angle planetLongitude)
         {
 
@@ -262,13 +266,13 @@ namespace Genso.Astrology.Library
                 var planetLongitudeInMinutes = planetLongitude.TotalMinutes;
 
                 //The ecliptic is divided into 27 constellations
-                //of 13° 20' (or 800' of arc) each. Hence divide 800
+                //of 13° 20' (800') each. Hence divide 800
                 var roughConstellationNumber = planetLongitudeInMinutes / 800.0;
 
-                //get constellation number
+                //get constellation number (rounds up)
                 var constellationNumber = (int)Math.Ceiling(roughConstellationNumber);
 
-                //calculate quarter from body position
+                //calculate quarter from remainder
                 int quarter;
 
                 var remainder = roughConstellationNumber - Math.Floor(roughConstellationNumber);
@@ -279,8 +283,13 @@ namespace Genso.Astrology.Library
                 else if (remainder > 0.75 && remainder <= 1) quarter = 4;
                 else quarter = 0;
 
-                //initialize new constellation with number & quarter
-                var constellation = new PlanetConstellation(constellationNumber, quarter);
+                //calculate "degrees in constellation" from the remainder
+                var minutesInConstellation = remainder * 800.0;
+                var degreesInConstellation = new Angle(0, minutesInConstellation, 0);
+
+
+                //put together all the info of this point in the constellation
+                var constellation = new PlanetConstellation(constellationNumber, quarter, degreesInConstellation);
 
                 //return constellation value
                 return constellation;
@@ -6712,6 +6721,369 @@ namespace Genso.Astrology.Library
 
         #endregion
 
+
+        #region Dasa Calcuations
+
+        /// <summary>
+        /// Gets the occuring dasa, bhukti & antaram for a person at the given time
+        /// </summary>
+        public static Dasas GetCurrentDasaBhuktiAntaram(Time birthTime, Time currentTime)
+        {
+            //get dasa planet at birth
+            var moonConstellation = GetMoonConstellation(birthTime);
+            var birthDasaPlanet =  GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
+
+            //get time traversed in birth dasa
+            var timeTraversedInDasa = GetYearsTraversedInBirthDasa(birthTime);
+            
+            //get time from birth to current time (converted to Dasa years ie. 360 days per year)
+            var timeBetween = currentTime.Subtract(birthTime).TotalDays/360.0;
+
+            //combine years traversed at birth and years to current time
+            //this is done to easily calculate to current dasa, bhukti & antaram
+            var combinedYears = timeTraversedInDasa + timeBetween;
+            var wholeDasa = GetDasaCountedFromInputDasa(birthDasaPlanet, combinedYears);
+
+            return wholeDasa;
+        }
+
+        /// <summary>
+        /// Counts from inputed dasa by years to dasa, bhukti & antaram
+        /// Inputed planet is taken as birth dasa ("starting dasa" to count from)
+        /// Note: It is easier to calculate from start of Dasa,
+        ///       so years already traversed at birth must be added into inputed years
+        /// Exp: Get dasa, bhukti & antaram planet 3.5 years from start of Sun dasa
+        /// </summary>
+        public static Dasas GetDasaCountedFromInputDasa(PlanetName startDasaPlanet, double years)
+        {
+            double dasaYears = years;
+            double bhuktiYears; //will be filled when getting dasa
+            double antaramYears; //will be filled when getting bhukti
+
+            //NOTE: Get Dasa prepares values for Get Bhukti and so on.
+
+            //first get the major dasa planet
+            var dasaPlanet = GetDasa();
+
+            //based on major dasa get bhukti planet
+            var bhuktiPlanet = GetBhukti();
+
+            //based on bhukti get antaram planet
+            var antaramPlanet = GetAntaram();
+
+
+            return new Dasas() { Dasa = dasaPlanet, Bhukti = bhuktiPlanet, Antaram = antaramPlanet };
+
+
+            //LOCAL FUNCTIONS
+            PlanetName GetAntaram()
+            {
+                //first possible antaram planet is the bhukti planet
+                var possibleAntaramPlanet = bhuktiPlanet;
+
+                //minus the possible antaram planet's full years
+                MinusAntaramYears:
+                var antaramPlanetFullYears = GetAntaramPlanetFullYears(dasaPlanet, bhuktiPlanet, possibleAntaramPlanet);
+                antaramYears -= antaramPlanetFullYears;
+
+                //if remaining antaram years is negative,
+                //than current possible antaram planet is correct
+                if (antaramYears <= 0)
+                {
+                    //return possible planet as correct
+                    return possibleAntaramPlanet;
+                }
+                //else possible antaram planet not correct, go to next one 
+                else
+                {
+                    //change to next antaram planet in order
+                    possibleAntaramPlanet = GetNextDasaPlanet(possibleAntaramPlanet);
+                    //go back to minus this planet's years
+                    goto MinusAntaramYears;
+                }
+
+
+            }
+
+            PlanetName GetBhukti()
+            {
+                //first possible bhukti planet is the major Dasa planet
+                var possibleBhuktiPlanet = dasaPlanet;
+                
+                //minus the possible bhukti planet's full years
+                MinusBhuktiYears:
+                var bhuktiPlanetFullYears = GetBhuktiPlanetFullYears(dasaPlanet, possibleBhuktiPlanet);
+                bhuktiYears -= bhuktiPlanetFullYears;
+
+                //if remaining bhukti years is negative,
+                //than current possible bhukti planet is correct
+                if (bhuktiYears <= 0)
+                {
+                    //get back the bhukti years before it became negative
+                    //this is the years inside the current bhukti, aka antaram years
+                    //save it for late use
+                    antaramYears = bhuktiYears + bhuktiPlanetFullYears;
+                    
+                    //return possible planet as correct
+                    return possibleBhuktiPlanet;
+                }
+                //else possible bhukti planet not correct, go to next one 
+                else
+                {
+                    //change to next bhukti planet in order
+                    possibleBhuktiPlanet = GetNextDasaPlanet(possibleBhuktiPlanet);
+                    //go back to minus this planet's years
+                    goto MinusBhuktiYears;
+                }
+
+            }
+
+            PlanetName GetDasa()
+            {
+                //possible planet starts with the inputed one
+                var possibleDasaPlanet = startDasaPlanet;
+
+                //minus planet years
+                MinusDasaYears:
+                var dasaPlanetFullYears = GetDasaPlanetFullYears(possibleDasaPlanet);
+                dasaYears -= dasaPlanetFullYears;
+
+                //if remaining dasa years is negative,
+                //than possible dasa planet is correct
+                if (dasaYears <= 0)
+                {
+                    //get back the dasa years before it became negative
+                    //this is the years inside the current dasa, aka bhukti years
+                    //save it for late use
+                    bhuktiYears = dasaYears + dasaPlanetFullYears;
+
+                    //return possible planet as correct
+                    return possibleDasaPlanet;
+                }
+                //else possible dasa planet not correct, go to next one 
+                else
+                {
+                    //change to next dasa planet in order
+                    possibleDasaPlanet = GetNextDasaPlanet(possibleDasaPlanet);
+                    //go back to minus this planet's years
+                    goto MinusDasaYears;
+                }
+            }
+
+        }
+
+
+        /// <summary>
+        /// Gets next planet in Dasa order
+        /// This order is also used for Bhukti & Antaram
+        /// Ref:Hindu Predictive Astrology pg. 54
+        /// </summary>
+        public static PlanetName GetNextDasaPlanet(PlanetName planet)
+        {
+            if (planet == PlanetName.Sun) { return PlanetName.Moon; }
+            if (planet == PlanetName.Moon) { return PlanetName.Mars; }
+            if (planet == PlanetName.Mars) { return PlanetName.Rahu; }
+            if (planet == PlanetName.Rahu) { return PlanetName.Jupiter; }
+            if (planet == PlanetName.Jupiter) { return PlanetName.Saturn; }
+            if (planet == PlanetName.Saturn) { return PlanetName.Mercury; }
+            if (planet == PlanetName.Mercury) { return PlanetName.Ketu; }
+            if (planet == PlanetName.Ketu) { return PlanetName.Venus; }
+            if (planet == PlanetName.Venus) { return PlanetName.Sun; }
+
+            //if no plant found something wrong
+            throw new Exception("Planet not found!");
+
+        }
+
+        /// <summary>
+        ///  Gets years left in birth dasa at birth
+        ///  Note : Returned years can only be 0 or above
+        /// </summary>
+        public static double GetTimeLeftInBirthDasa(Time birthTime)
+        {
+            //get years already passed in birth dasa
+            var yearsTraversed = GetYearsTraversedInBirthDasa(birthTime);
+
+            //get full years of birth dasa planet
+            var moonConstellation = GetMoonConstellation(birthTime);
+            var birthDasaPlanet = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
+            var fullYears = GetDasaPlanetFullYears(birthDasaPlanet);
+
+            //calculate the years left in birth dasa at birth
+            var yearsLeft = fullYears - yearsTraversed;
+
+            //raise error if years traversed is more than full years
+            if (yearsLeft < 0) {throw new Exception("Dasa years traversed is more than full years!");}
+
+            return yearsLeft;
+        }
+
+        /// <summary>
+        /// Gets the time in years traversed in Dasa at birth
+        /// </summary>
+        public static double GetYearsTraversedInBirthDasa(Time birthTime)
+        {
+            //get longitude minutes the Moon already traveled in the constellation 
+            var moonConstellation = GetMoonConstellation(birthTime);
+            var minutesTraversed = moonConstellation.GetDegreesInConstellation().TotalMinutes;
+
+            //get the time period each minute represents
+            var timePerMinute = GetDasaTimePerMinute(moonConstellation.GetConstellationName());
+
+            //calculate the years already traversed
+            var traversedYears = minutesTraversed * timePerMinute;
+
+            return traversedYears;
+        }
+
+
+        /// <summary>
+        /// Gets the Dasa time period each longitude minute in a constellation represents,
+        /// based on the planet which is related (lord) to it.
+        /// Note: Returns the time in years, exp 0.5 = half year
+        /// </summary>
+        public static double GetDasaTimePerMinute(ConstellationName constellationName)
+        {
+            //maximum longitude minutes of a constellation
+            const double maxMinutes = 800.0;
+
+            //get the related (lord) planet for the constellation
+            var relatedPlanet = GetConstellationDasaPlanet(constellationName);
+
+            //get the full Dasa years for the related planet
+            var fullYears = GetDasaPlanetFullYears(relatedPlanet);
+
+            //calculate the time in years each longitude minute represents
+            var timePerMinute = fullYears / maxMinutes;
+
+            return timePerMinute;
+        }
+
+        /// <summary>
+        /// Gets the full Dasa years for a given planet
+        /// Note: Returns "double" so that division down the road is accurate
+        /// Ref:Hindu Predictive Astrology pg. 54
+        /// </summary>
+        public static double GetDasaPlanetFullYears(PlanetName planet)
+        {
+
+            if (planet == PlanetName.Sun) { return 6.0; }
+            if (planet == PlanetName.Moon) { return 10.0; }
+            if (planet == PlanetName.Mars) { return 7.0; }
+            if (planet == PlanetName.Rahu) { return 18.0; }
+            if (planet == PlanetName.Jupiter) { return 16.0; }
+            if (planet == PlanetName.Saturn) { return 19.0; }
+            if (planet == PlanetName.Mercury) { return 17.0; }
+            if (planet == PlanetName.Ketu) { return 7.0; }
+            if (planet == PlanetName.Venus) { return 20.0; }
+
+            //if no plant found something wrong
+            throw new Exception("Planet not found!");
+
+        }
+
+
+        /// <summary>
+        /// Gets the full years of a bhukti planet in a dasa
+        /// </summary>
+        public static double GetBhuktiPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time a bhukti planet consumes in a dasa is
+            //a fixed percentage it consumes in a person's full life
+            var bhuktiPlanetPercentage = GetDasaPlanetFullYears(bhuktiPlanet) / fullHumanLifeYears;
+
+            //bhukti planet's years in a dasa is percentage of the dasa planet's full years
+            var bhuktiPlanetFullYears = bhuktiPlanetPercentage * GetDasaPlanetFullYears(dasaPlanet);
+
+            //return the calculated value
+            return bhuktiPlanetFullYears;
+
+        }
+
+        /// <summary>
+        /// Gets the full years of an antaram planet in a bhukti of a dasa
+        /// </summary>
+        public static double GetAntaramPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet, PlanetName antaramPlanet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time a antaram planet consumes in a bhukti is
+            //a fixed percentage it consumes in a person's full life
+            var antaramPlanetPercentage = GetDasaPlanetFullYears(antaramPlanet) / fullHumanLifeYears;
+
+            //Antaram planet's full years is a percentage of the Bhukti planet's full years
+            var antaramPlanetFullYears = antaramPlanetPercentage * GetBhuktiPlanetFullYears(dasaPlanet, bhuktiPlanet);
+
+            //return the calculated value
+            return antaramPlanetFullYears;
+
+        }
+
+
+        /// <summary>
+        /// Gets the related (lord) Dasa planet for a given constellation
+        /// Used to find the ruling Dasa Planet
+        /// Ref:Hindu Predictive Astrology pg. 54
+        /// </summary>
+        public static PlanetName GetConstellationDasaPlanet(ConstellationName constellationName)
+        {
+            switch (constellationName)
+            {
+                case ConstellationName.Krithika:
+                case ConstellationName.Uttara:
+                case ConstellationName.Uttarashada:
+                    return PlanetName.Sun;
+
+                case ConstellationName.Rohini:
+                case ConstellationName.Hasta:
+                case ConstellationName.Sravana:
+                    return PlanetName.Moon;
+
+                case ConstellationName.Mrigasira:
+                case ConstellationName.Chitta:
+                case ConstellationName.Dhanishta:
+                    return PlanetName.Mars;
+
+                case ConstellationName.Aridra:
+                case ConstellationName.Swathi:
+                case ConstellationName.Satabhisha:
+                    return PlanetName.Rahu;
+
+                case ConstellationName.Punarvasu:
+                case ConstellationName.Vishhaka:
+                case ConstellationName.Poorvabhadra:
+                    return PlanetName.Jupiter;
+
+                case ConstellationName.Pushyami:
+                case ConstellationName.Anuradha:
+                case ConstellationName.Uttarabhadra:
+                    return PlanetName.Saturn;
+
+                case ConstellationName.Aslesha:
+                case ConstellationName.Jyesta:
+                case ConstellationName.Revathi:
+                    return PlanetName.Mercury;
+
+                case ConstellationName.Makha:
+                case ConstellationName.Moola:
+                case ConstellationName.Aswini:
+                    return PlanetName.Ketu;
+
+                case ConstellationName.Pubba:
+                case ConstellationName.Poorvashada:
+                case ConstellationName.Bharani:
+                    return PlanetName.Venus;
+            }
+
+            //if it reaches here something wrong
+            throw new Exception("Dasa planet for constellation not found!");
+        }
+
+        #endregion
     }
 
 }

@@ -4,6 +4,9 @@ using System.Diagnostics;
 
 namespace Genso.Astrology.Library
 {
+    /// <summary>
+    /// A list of planet names, with string parsing & comparison
+    /// </summary>
     [Serializable()]
     public class PlanetName
     {

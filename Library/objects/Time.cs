@@ -157,6 +157,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Subtracts a Time value with current Time,
         /// to get the time interval in between.
+        /// Note: Inputed time has to be older (smaller), else return value will be negative
         /// </summary>
         public TimeSpan Subtract(Time time)
         {

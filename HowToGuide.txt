@@ -4,6 +4,13 @@
 3. Add the prediction/event details PredictionDataList.xml
 
 
+- To add a new Event Tag
+1. Edit in Genso.Astrology.Library EventTag enum. Change here reflects even in GUI
+
+
+
+
+-------------------------------------DESIGN NOTES------------------------------------------------
 
 Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
 

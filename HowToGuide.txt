@@ -12,7 +12,7 @@
 
 -------------------------------------DESIGN NOTES------------------------------------------------
 
-Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
+**Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
 
 - Built on reference to, Hindu Predictive Astrology pg. 254
 
@@ -25,3 +25,7 @@ degrees of a sign, Mars and the Sun produce results."
 
 - It's intepreted that Vendha is an obstruction and not a reversal of the Gochara results
   So as for now the design is that if a vedha is present than the result is simply nullified.
+
+**In Horoscope predictions methods have "time" & "person" arguments available, 
+  obvioulsy "time" is not needed, but for sake of semantic similarity 
+  with Muhurtha methods this is maintained.

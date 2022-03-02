@@ -6337,6 +6337,8 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Checks if any evil/malefic planets are in a house
+        /// Note : Planet to house relationship not account for
+        /// TODO Account for planet to sign relationship, find reference
         /// </summary>
         public static bool IsMaleficPlanetInHouse(int houseNumber, Time time)
         {
@@ -6352,6 +6354,28 @@ namespace Genso.Astrology.Library
             return evilFound;
 
         }
+
+        /// <summary>
+        /// Checks if any good/benefic planets are in a house
+        /// Note : Planet to house relationship not account for
+        /// TODO Account for planet to sign relationship, find reference
+        /// </summary>
+        public static bool IsBeneficPlanetInHouse(int houseNumber, Time time)
+        {
+            //get all the planets in the house
+            var planetsInHouse = AstronomicalCalculator.GetPlanetsInHouse(houseNumber, time);
+            
+            //get all good planets
+            var goodPlanets = AstronomicalCalculator.GetBeneficPlanetList(time);
+
+            //check if any planet in house is an good one
+            var goodFound = planetsInHouse.FindAll(planet => goodPlanets.Contains(planet)).Any();
+
+            return goodFound;
+
+        }
+
+
 
         /// <summary>
         /// Checks if any evil/malefic planets are in a sign
@@ -6390,6 +6414,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Checks if any evil/malefic planet is transmitting aspect to a house
         /// Note: This does NOT account for bad aspects, where relationship with house lord is checked
+        /// TODO relationship aspect should be added get reference for it firsts
         /// </summary>
         public static bool IsMaleficPlanetAspectHouse(HouseName house, Time time)
         {
@@ -6400,6 +6425,23 @@ namespace Genso.Astrology.Library
             var evilFound = evilPlanets.FindAll(evilPlanet => AstronomicalCalculator.IsHouseAspectedByPlanet(house, evilPlanet, time)).Any();
 
             return evilFound;
+
+        }
+
+        /// <summary>
+        /// Checks if any good/benefic planet is transmitting aspect to a house
+        /// Note: This does NOT account for good aspects, where relationship with house lord is checked
+        /// TODO relationship aspect should be added get reference for it firsts
+        /// </summary>
+        public static bool IsBeneficPlanetAspectHouse(HouseName house, Time time)
+        {
+            //get all good planets
+            var goodPlanets = AstronomicalCalculator.GetBeneficPlanetList(time);
+
+            //check if any good planet is aspecting the inputed house
+            var goodFound = goodPlanets.FindAll(goodPlanet => AstronomicalCalculator.IsHouseAspectedByPlanet(house, goodPlanet, time)).Any();
+
+            return goodFound;
 
         }
 

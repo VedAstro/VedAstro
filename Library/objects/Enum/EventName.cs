@@ -680,10 +680,15 @@
         PiscesVenusDasa,
         Lord6And8Dasa,
         Lord5And9Dasa,
-        BhuktiDasaLordInBadHouses
-
-
-
-
+        BhuktiDasaLordInBadHouses,
+        MarsVenusIn7th,
+        MercuryOrJupiterIn7th,
+        LeoLagna7thLordSaturnIn2,
+        SaturnIn7thNotLagnaLord,
+        MarsIn7thNoBenefics,
+        SunVenusIn5th7th9th,
+        Lord7And1Friends,
+        Lord7And1NotFriends,
+        SaturnIn7th
     }
 }

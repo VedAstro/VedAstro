@@ -811,12 +811,228 @@ namespace Genso.Astrology.Library
 
         }
 
+        [EventCalculator(EventName.MarsVenusIn7th)]
+        public static Prediction MarsVenusIn7th(Time time, Person person)
+        {
+            //When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts
+            //and such an individual should be mated to one who has similar instincts
+
+            //mars in 7th at birth
+            var marsIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Mars, 7);
+
+            //venus in 7th at birth
+            var venusIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Venus, 7);
+
+            //occuring if all conditions met
+            var occuring = marsIn7th && venusIn7th;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryOrJupiterIn7th)]
+        public static Prediction MercuryOrJupiterIn7th(Time time, Person person)
+        {
+            // Mercury or Jupiter in the 7th, makes one under-sexed.
+            // And such an individual should not be mated to a person with strong sex instincts.
+
+            //Mercury in 7th at birth
+            var mercuryIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Mercury, 7);
+
+            //Jupiter in 7th at birth
+            var jupiterIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Jupiter, 7);
+
+            //occuring if either conditions met
+            var occuring = mercuryIn7th || jupiterIn7th;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.LeoLagna7thLordSaturnIn2)]
+        public static Prediction LeoLagna7thLordSaturnIn2(Time time, Person person)
+        {
+            //When Leo is Lagna and the 7th lord Saturn is in the 2nd, the
+            // husband will be subservient to the wife carrying out all her orders.
+
+            //lagna is leo
+            var leoIsLagna = AstronomicalCalculator.GetHouseSignName(1, person.GetBirthDateTime()) == ZodiacName.Leo;
+
+            //is 7th lord saturn
+            var isLord7thSaturn = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.GetBirthDateTime()) ==
+                                  PlanetName.Saturn;
+
+            //is saturn in 2nd
+            var isSaturnIn2nd =
+                AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Saturn, 2);
+
+
+            //occuring conditions met
+            var occuring = leoIsLagna && isLord7thSaturn && isSaturnIn2nd;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnIn7thNotLagnaLord)]
+        public static Prediction SaturnIn7thNotLagnaLord(Time time, Person person)
+        {
+            //Saturn in the 7th house is also indicative of unhappiness in marriage
+            // unless Saturn happens to be either lord of Lagna or lord of the 7th.
+
+            //is saturn in 7th house
+            var isSaturnIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Saturn, 7);
+
+            //saturn is not lord of lagna
+            var saturnNotLagnaLord =
+                AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.GetBirthDateTime()) != PlanetName.Saturn;
+
+            //saturn is not lord of 7th
+            var saturnNot7thLord =
+                AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.GetBirthDateTime()) != PlanetName.Saturn;
+
+
+            //occuring conditions met
+            var occuring = isSaturnIn7th && saturnNotLagnaLord && saturnNot7thLord;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsIn7thNoBenefics)]
+        public static Prediction MarsIn7thNoBenefics(Time time, Person person)
+        {
+            //If Kuja is in the 7th house unaspected or not joined by benefics,
+            //there will be frequent quarrels in the married life often leading to
+            //misunderstandings and separation.
+
+            //is mars in 7th house
+            var isMarsIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Mars, 7);
+
+            //no benefics aspecting 7th house
+            var beneficsNotAspect7th = !AstronomicalCalculator.IsBeneficPlanetAspectHouse(HouseName.House7, person.GetBirthDateTime());
+
+            //no benefics located in 7th
+            var beneficNotFoundIn7th = !AstronomicalCalculator.IsBeneficPlanetInHouse(7, person.GetBirthDateTime());
+
+            //occuring conditions met
+            var occuring = isMarsIn7th && beneficsNotAspect7th && beneficNotFoundIn7th;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunVenusIn5th7th9th)]
+        public static Prediction SunVenusIn5th7th9th(Time time, Person person)
+        {
+            //According to Prasna Marga the famous Kerala work on Astrology, if
+            //the Sun and Venus occupy the 5th, 7th, or 9th house then the native will
+            //lack marital happiness.
+            //
+            //NOTE : *is intepreted as in the same house at the same time
+
+            //is sun & venus in 5th
+            var isSunIn5th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Sun, 5);
+            var isVenusIn5th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Venus, 5);
+            var sunAndVenusIn5th = isSunIn5th && isVenusIn5th;
+
+            //is sun & venus in 7th
+            var isSunIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Sun, 7);
+            var isVenusIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Venus, 7);
+            var sunAndVenusIn7th = isSunIn7th && isVenusIn7th;
+
+            //is sun & venus in 9th
+            var isSunIn9th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Sun, 9);
+            var isVenusIn9th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Venus, 9);
+            var sunAndVenusIn9th = isSunIn9th && isVenusIn9th;
+
+
+            //occuring conditions met
+            var occuring = sunAndVenusIn5th || sunAndVenusIn7th || sunAndVenusIn9th;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord7And1Friends)]
+        public static Prediction Lord7And1Friends(Time time, Person person)
+        {
+
+            //If the lords of the 7th and 1st are friends then the native will be loved
+            //by his wife. Otherwise there will be no harmony.
+
+
+            //get lord of 7th and 1st house
+            var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.GetBirthDateTime());
+            var lord1 = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.GetBirthDateTime());
+
+            //get the relationship
+            var lord7And1Relationship = AstronomicalCalculator.GetPlanetCombinedRelationshipWithPlanet(lord7, lord1,
+                person.GetBirthDateTime());
+
+            //occuring only if best friends or normal friends nothing else
+            var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.AdhiMitra) ||
+                           (lord7And1Relationship == PlanetToPlanetRelationship.Mitra);
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Lord7And1NotFriends)]
+        public static Prediction Lord7And1NotFriends(Time time, Person person)
+        {
+
+            //If the lords of the 7th and 1st are friends then the native will be loved
+            //by his wife. Otherwise* there will be no harmony.
+            //
+            //* Intepreted as enemies or bitter enemies only, neutral is not inlcuded
+
+
+            //get lord of 7th and 1st house
+            var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.GetBirthDateTime());
+            var lord1 = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.GetBirthDateTime());
+
+            //get the relationship
+            var lord7And1Relationship = AstronomicalCalculator.GetPlanetCombinedRelationshipWithPlanet(lord7, lord1,
+                person.GetBirthDateTime());
+
+            //occuring only if bitter enemies or normal enemies nothing else
+            var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.AdhiSatru) ||
+                           (lord7And1Relationship == PlanetToPlanetRelationship.Satru);
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnIn7th)]
+        public static Prediction SaturnIn7th(Time time, Person person)
+        {
+            //Saturn in the 7th
+            //confers stability in the marriage but the, husband or wife manifests
+            //coldness and not warmth.
+
+            //is saturn in 7th house
+            var isSaturnIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Saturn, 7);
+
+            //occuring conditions met
+            var occuring = isSaturnIn7th;
+
+            return new() { Occuring = occuring };
+        }
+
+
+
+        //Moola (first quarter) for husband's father;
+        //the boy or girl born in the first quarter of Moola is to be
+        //rejected as it is said to cause the death of the father-in-law.
+
+        //Aslesha (first quarter) for husband's mother;
+
+        //Jyeshta (first quarter) for girl's husband's elder brother;
+        //A girl born in Jyeshta is said to
+        // cause evil to her husband's elder brother.
+
+        //Visakha (last quarter) for husband's younger brother
+        //girl born in Visakha is said to bring about the destruction of her husband's
+        // younger brother
 
         #endregion
 
         #region GENERAL
 
-        [EventCalculator(EventName.SakunaKarana)]
+                [EventCalculator(EventName.SakunaKarana)]
         public static Prediction IsSakunaKaranaOccuring(Time time, Person person)
         {
             //For getting initiations into mantras Sakuni Karana is propitious.   
@@ -3743,7 +3959,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonIsStrong)]
@@ -3755,7 +3971,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsIsStrong)]
@@ -3767,7 +3983,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryIsStrong)]
@@ -3779,7 +3995,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterIsStrong)]
@@ -3791,7 +4007,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusIsStrong)]
@@ -3803,7 +4019,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnIsStrong)]
@@ -3815,7 +4031,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House1IsStrong)]
@@ -3827,7 +4043,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House2IsStrong)]
@@ -3837,7 +4053,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House3IsStrong)]
@@ -3847,7 +4063,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House4IsStrong)]
@@ -3858,7 +4074,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House5IsStrong)]
@@ -3868,7 +4084,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House6IsStrong)]
@@ -3878,7 +4094,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7IsStrong)]
@@ -3888,7 +4104,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House8IsStrong)]
@@ -3898,7 +4114,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House9IsStrong)]
@@ -3908,7 +4124,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House10IsStrong)]
@@ -3918,7 +4134,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House11IsStrong)]
@@ -3928,7 +4144,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House12IsStrong)]
@@ -3938,7 +4154,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.Sunrise)]
@@ -3962,7 +4178,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.Sunset)]
@@ -3986,7 +4202,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.Midday)]
@@ -4014,7 +4230,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
 
@@ -4109,7 +4325,7 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse7Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House7, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4123,7 +4339,7 @@ namespace Genso.Astrology.Library
         public static Prediction House1LordInHouse8Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House8, time);
-           
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4306,7 +4522,7 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House9, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4320,7 +4536,7 @@ namespace Genso.Astrology.Library
         public static Prediction House2LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House10, time);
-            
+
             //STRENGTH CALCULATION
             var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord7, time);
@@ -5002,7 +5218,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord7, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.House7LordInHouse6)]
@@ -5179,7 +5395,7 @@ namespace Genso.Astrology.Library
         public static Prediction House8LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House9, time);
-           
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -5765,7 +5981,7 @@ namespace Genso.Astrology.Library
         public static Prediction House12LordInHouse10Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House10, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -5977,7 +6193,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse1)]
@@ -5989,7 +6205,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse1)]
@@ -6001,7 +6217,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse1)]
@@ -6013,7 +6229,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse1)]
@@ -6025,7 +6241,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse1)]
@@ -6037,7 +6253,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse1)]
@@ -6049,7 +6265,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse1)]
@@ -6061,7 +6277,7 @@ namespace Genso.Astrology.Library
             var raw = 0; //TODO stregth for RAHU
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse1)]
@@ -6073,7 +6289,7 @@ namespace Genso.Astrology.Library
             var raw = 0; //TODO stregth for RAHU
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
 
@@ -6088,7 +6304,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse2)]
@@ -6100,7 +6316,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse2)]
@@ -6112,7 +6328,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse2)]
@@ -6124,7 +6340,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse2)]
@@ -6136,19 +6352,19 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse2)]
         public static Prediction VenusInHouse2Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 2;
-            
+
             //STRENGTH CALCULATION
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse2)]
@@ -6160,7 +6376,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse2)]
@@ -6172,7 +6388,7 @@ namespace Genso.Astrology.Library
             var raw = "0";//TODO impliment
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse2)]
@@ -6182,7 +6398,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         //Planets in the 3rd House
@@ -6194,7 +6410,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse3)]
@@ -6206,7 +6422,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse3)]
@@ -6216,7 +6432,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse3)]
@@ -6226,7 +6442,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse3)]
@@ -6236,7 +6452,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse3)]
@@ -6246,7 +6462,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse3)]
@@ -6256,7 +6472,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse3)]
@@ -6266,7 +6482,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse3)]
@@ -6276,7 +6492,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         //Planets in the 4th House
@@ -6288,7 +6504,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse4)]
@@ -6298,7 +6514,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse4)]
@@ -6308,7 +6524,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse4)]
@@ -6318,7 +6534,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse4)]
@@ -6328,7 +6544,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse4)]
@@ -6338,7 +6554,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse4)]
@@ -6348,7 +6564,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse4)]
@@ -6358,7 +6574,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse4)]
@@ -6368,7 +6584,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         //Planets in the 5th House
@@ -6391,7 +6607,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse5)]
@@ -6401,7 +6617,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse5)]
@@ -6411,7 +6627,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse5)]
@@ -6433,7 +6649,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse5)]
@@ -6443,7 +6659,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse5)]
@@ -6459,7 +6675,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse5)]
@@ -6469,7 +6685,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         //Planets in the 6th House
@@ -6481,7 +6697,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse6)]
@@ -6491,7 +6707,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse6)]
@@ -6501,7 +6717,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse6)]
@@ -6511,7 +6727,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse6)]
@@ -6521,7 +6737,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse6)]
@@ -6531,7 +6747,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse6)]
@@ -6541,7 +6757,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse6)]
@@ -6551,7 +6767,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse6)]
@@ -6561,7 +6777,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
 
@@ -6574,7 +6790,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse7)]
@@ -6584,7 +6800,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse7)]
@@ -6594,7 +6810,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse7)]
@@ -6604,7 +6820,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse7)]
@@ -6614,7 +6830,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse7)]
@@ -6624,7 +6840,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse7)]
@@ -6634,7 +6850,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse7)]
@@ -6644,7 +6860,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse7)]
@@ -6654,7 +6870,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         #endregion
@@ -6668,7 +6884,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse8)]
@@ -6678,7 +6894,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse8)]
@@ -6688,7 +6904,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse8)]
@@ -6698,7 +6914,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse8)]
@@ -6708,7 +6924,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse8)]
@@ -6718,7 +6934,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse8)]
@@ -6728,7 +6944,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse8)]
@@ -6738,7 +6954,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse8)]
@@ -6748,9 +6964,9 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
-        
+
 
         #endregion
 
@@ -6763,7 +6979,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse9)]
@@ -6773,7 +6989,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse9)]
@@ -6783,7 +6999,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse9)]
@@ -6793,7 +7009,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse9)]
@@ -6803,7 +7019,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse9)]
@@ -6813,7 +7029,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse9)]
@@ -6823,7 +7039,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse9)]
@@ -6833,7 +7049,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse9)]
@@ -6843,7 +7059,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         #endregion
@@ -6857,7 +7073,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse10)]
@@ -6867,7 +7083,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse10)]
@@ -6877,7 +7093,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse10)]
@@ -6887,7 +7103,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse10)]
@@ -6897,7 +7113,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse10)]
@@ -6907,7 +7123,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse10)]
@@ -6917,7 +7133,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse10)]
@@ -6927,7 +7143,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse10)]
@@ -6937,7 +7153,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         #endregion
@@ -6951,7 +7167,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse11)]
@@ -6961,7 +7177,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse11)]
@@ -6971,7 +7187,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse11)]
@@ -6981,7 +7197,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse11)]
@@ -6991,7 +7207,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse11)]
@@ -7001,7 +7217,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse11)]
@@ -7011,7 +7227,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse11)]
@@ -7021,7 +7237,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse11)]
@@ -7031,7 +7247,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         #endregion
@@ -7045,7 +7261,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MoonInHouse12)]
@@ -7055,7 +7271,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MarsInHouse12)]
@@ -7065,7 +7281,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.MercuryInHouse12)]
@@ -7075,7 +7291,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.JupiterInHouse12)]
@@ -7085,7 +7301,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.VenusInHouse12)]
@@ -7095,7 +7311,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.SaturnInHouse12)]
@@ -7105,7 +7321,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.RahuInHouse12)]
@@ -7115,7 +7331,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         [EventCalculator(EventName.KetuInHouse12)]
@@ -7125,7 +7341,7 @@ namespace Genso.Astrology.Library
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
             var strength = raw.ToString();
 
-            return new() { Occuring = occuring, Strength = strength};
+            return new() { Occuring = occuring, Strength = strength };
         }
 
         #endregion
@@ -7205,7 +7421,7 @@ namespace Genso.Astrology.Library
 
             //is mercury in 2nd house
             var mercuryIn2 = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 2;
-            
+
             //evil planet in 2nd house
             var evilPlanetIn2 = AstronomicalCalculator.IsMaleficPlanetInHouse(2, time);
 
@@ -7293,7 +7509,7 @@ namespace Genso.Astrology.Library
 
             return new Prediction() { Occuring = occuring };
         }
-        
+
         [EventCalculator(EventName.Lord2InHouse1AndLord1InHouse2)]
         public static Prediction Lord2InHouse1AndLord1InHouse2(Time time, Person person)
         {
@@ -7405,7 +7621,7 @@ namespace Genso.Astrology.Library
 
             return new Prediction() { Occuring = occuring };
         }
-        
+
         [EventCalculator(EventName.Lord2InHouse9)]
         public static Prediction Lord2InHouse9(Time time, Person person)
         {
@@ -7478,7 +7694,7 @@ namespace Genso.Astrology.Library
 
             //get Arudha Lagna
             var arudhaLagna = AstronomicalCalculator.GetArudhaLagnaSign(time);
-            
+
             //get 11th sign from Arudha lagna
             var sign11fromArudha = AstronomicalCalculator.GetSignCountedFromInputSign(arudhaLagna, 11);
 
@@ -7503,7 +7719,7 @@ namespace Genso.Astrology.Library
 
             //get Arudha Lagna
             var arudhaLagna = AstronomicalCalculator.GetArudhaLagnaSign(time);
-            
+
             //get 11th sign from Arudha lagna
             var sign11fromArudha = AstronomicalCalculator.GetSignCountedFromInputSign(arudhaLagna, 11);
 
@@ -7629,37 +7845,37 @@ namespace Genso.Astrology.Library
         //MOON
         [EventCalculator(EventName.MoonGocharaInHouse1)]
         public static Prediction MoonGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 1) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse2)]
         public static Prediction MoonGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 2) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse3)]
         public static Prediction MoonGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 3) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse4)]
         public static Prediction MoonGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 4) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse5)]
         public static Prediction MoonGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 5) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse6)]
         public static Prediction MoonGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 6) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse7)]
         public static Prediction MoonGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 7) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse8)]
         public static Prediction MoonGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 8) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse9)]
         public static Prediction MoonGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 9) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse10)]
         public static Prediction MoonGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 10) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse11)]
         public static Prediction MoonGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 11) };
-        
+
         [EventCalculator(EventName.MoonGocharaInHouse12)]
         public static Prediction MoonGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 12) };
 
@@ -9577,7 +9793,7 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
-        
+
         //DASA GENERAL RULES
 
         [EventCalculator(EventName.Lord6And8Dasa)]
@@ -9636,7 +9852,7 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
-        
+
         [EventCalculator(EventName.BhuktiDasaLordInBadHouses)]
         public static Prediction BhuktiDasaLordInBadHouses(Time time, Person person)
         {
@@ -9676,6 +9892,7 @@ namespace Genso.Astrology.Library
 
 
         #endregion
+
     }
 
 }

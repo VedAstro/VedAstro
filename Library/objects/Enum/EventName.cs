@@ -770,6 +770,15 @@
         VenusDasaSaturnBhukti,
         VenusDasaMercuryBhukti,
         VenusDasaKetuBhukti,
-        VenusDasaVenusBhukti
+        VenusDasaVenusBhukti,
+        SunAntaram,
+        MoonAntaram,
+        MarsAntaram,
+        RahuAntaram,
+        JupiterAntaram,
+        SaturnAntaram,
+        MercuryAntaram,
+        KetuAntaram,
+        VenusAntaram
     }
 }

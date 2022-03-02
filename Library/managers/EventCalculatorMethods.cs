@@ -11397,6 +11397,144 @@ namespace Genso.Astrology.Library
 
         #endregion
 
+        #region ANTARAM
+
+        [EventCalculator(EventName.SunAntaram)]
+        public static Prediction SunAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Sun;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonAntaram)]
+        public static Prediction MoonAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Moon;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsAntaram)]
+        public static Prediction MarsAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Mars;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuAntaram)]
+        public static Prediction RahuAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Rahu;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterAntaram)]
+        public static Prediction JupiterAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Jupiter;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnAntaram)]
+        public static Prediction SaturnAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Saturn;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryAntaram)]
+        public static Prediction MercuryAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Mercury;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuAntaram)]
+        public static Prediction KetuAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Ketu;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusAntaram)]
+        public static Prediction VenusAntaram(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check antaram
+            var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Venus;
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        #endregion
 
         #region DASA GENERAL RULES
 

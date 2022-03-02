@@ -4276,6 +4276,70 @@
 		<Tag>Dasa</Tag>
 	</Event>
 
+	<!--ANTARAM-->
+	<Event>
+		<Name>SunAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusAntaram</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
 
 
 	<!--Dasa General Rules-->

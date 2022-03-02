@@ -8150,7 +8150,7 @@ namespace Genso.Astrology.Library
 
         #region DASAS
 
-        //SUN DASA
+        #region SUN DASA
 
         [EventCalculator(EventName.AriesSunDasa)]
         public static Prediction AriesSunDasa(Time time, Person person)
@@ -8331,9 +8331,12 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
+        
 
+        #endregion
 
-        //MOON DASA
+        #region MOON DASA
+
         [EventCalculator(EventName.AriesMoonDasa)]
         public static Prediction AriesMoonDasa(Time time, Person person)
         {
@@ -8513,9 +8516,11 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
+        
 
+        #endregion
 
-        //MARS
+        #region MARS DASA
 
         [EventCalculator(EventName.AriesMarsDasa)]
         public static Prediction AriesMarsDasa(Time time, Person person)
@@ -8697,8 +8702,10 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        #endregion
 
-        //RAHU
+        #region RAHU DASA
+
         [EventCalculator(EventName.AriesRahuDasa)]
         public static Prediction AriesRahuDasa(Time time, Person person)
         {
@@ -8878,9 +8885,11 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
+        
 
+        #endregion
 
-        //JUPITER DASA
+        #region JUPITER DASA
 
         [EventCalculator(EventName.AriesJupiterDasa)]
         public static Prediction AriesJupiterDasa(Time time, Person person)
@@ -9062,8 +9071,11 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        
 
-        //SATURN DASA
+        #endregion
+
+        #region SATURN DASA
 
         [EventCalculator(EventName.AriesSaturnDasa)]
         public static Prediction AriesSaturnDasa(Time time, Person person)
@@ -9245,8 +9257,9 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        #endregion
 
-        //MERCURY DASA
+        #region MERCURY DASA
 
         [EventCalculator(EventName.AriesMercuryDasa)]
         public static Prediction AriesMercuryDasa(Time time, Person person)
@@ -9427,10 +9440,11 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
+        
 
+        #endregion
 
-        //KETU DASA
-
+        #region KETU DASA
         [EventCalculator(EventName.AriesKetuDasa)]
         public static Prediction AriesKetuDasa(Time time, Person person)
         {
@@ -9611,7 +9625,11 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
-        //VENUS DASA
+
+
+        #endregion
+
+        #region VENUS DASA
 
         [EventCalculator(EventName.AriesVenusDasa)]
         public static Prediction AriesVenusDasa(Time time, Person person)
@@ -9793,8 +9811,1594 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        #endregion
 
-        //DASA GENERAL RULES
+        #region SUN BHUKTI
+
+        [EventCalculator(EventName.SunDasaSunBhukti)]
+        public static Prediction SunDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunDasaMoonBhukti)]
+        public static Prediction SunDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunDasaMarsBhukti)]
+        public static Prediction SunDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunDasaRahuBhukti)]
+        public static Prediction SunDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunDasaJupiterBhukti)]
+        public static Prediction SunDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunDasaSaturnBhukti)]
+        public static Prediction SunDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunDasaMercuryBhukti)]
+        public static Prediction SunDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunDasaKetuBhukti)]
+        public static Prediction SunDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SunDasaVenusBhukti)]
+        public static Prediction SunDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+        
+
+        #endregion
+
+        #region MOON BHUKTI
+
+        [EventCalculator(EventName.MoonDasaSunBhukti)]
+        public static Prediction MoonDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonDasaMoonBhukti)]
+        public static Prediction MoonDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonDasaMarsBhukti)]
+        public static Prediction MoonDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonDasaRahuBhukti)]
+        public static Prediction MoonDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonDasaJupiterBhukti)]
+        public static Prediction MoonDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonDasaSaturnBhukti)]
+        public static Prediction MoonDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonDasaMercuryBhukti)]
+        public static Prediction MoonDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonDasaKetuBhukti)]
+        public static Prediction MoonDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MoonDasaVenusBhukti)]
+        public static Prediction MoonDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+        
+
+        #endregion
+
+        #region MARS BHUKTI
+
+        [EventCalculator(EventName.MarsDasaSunBhukti)]
+        public static Prediction MarsDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsDasaMoonBhukti)]
+        public static Prediction MarsDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsDasaMarsBhukti)]
+        public static Prediction MarsDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsDasaRahuBhukti)]
+        public static Prediction MarsDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsDasaJupiterBhukti)]
+        public static Prediction MarsDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsDasaSaturnBhukti)]
+        public static Prediction MarsDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsDasaMercuryBhukti)]
+        public static Prediction MarsDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsDasaKetuBhukti)]
+        public static Prediction MarsDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MarsDasaVenusBhukti)]
+        public static Prediction MarsDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        
+
+        #endregion
+
+        #region RAHU BHUKTI
+
+        [EventCalculator(EventName.RahuDasaSunBhukti)]
+        public static Prediction RahuDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuDasaMoonBhukti)]
+        public static Prediction RahuDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuDasaMarsBhukti)]
+        public static Prediction RahuDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuDasaRahuBhukti)]
+        public static Prediction RahuDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuDasaJupiterBhukti)]
+        public static Prediction RahuDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuDasaSaturnBhukti)]
+        public static Prediction RahuDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuDasaMercuryBhukti)]
+        public static Prediction RahuDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuDasaKetuBhukti)]
+        public static Prediction RahuDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.RahuDasaVenusBhukti)]
+        public static Prediction RahuDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+
+        #endregion
+
+        #region JUPITER BHUKTI
+
+        [EventCalculator(EventName.JupiterDasaSunBhukti)]
+        public static Prediction JupiterDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterDasaMoonBhukti)]
+        public static Prediction JupiterDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterDasaMarsBhukti)]
+        public static Prediction JupiterDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterDasaRahuBhukti)]
+        public static Prediction JupiterDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterDasaJupiterBhukti)]
+        public static Prediction JupiterDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterDasaSaturnBhukti)]
+        public static Prediction JupiterDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterDasaMercuryBhukti)]
+        public static Prediction JupiterDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterDasaKetuBhukti)]
+        public static Prediction JupiterDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.JupiterDasaVenusBhukti)]
+        public static Prediction JupiterDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+
+        #endregion
+
+        #region SATURN BHUKTI
+
+        [EventCalculator(EventName.SaturnDasaSunBhukti)]
+        public static Prediction SaturnDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnDasaMoonBhukti)]
+        public static Prediction SaturnDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnDasaMarsBhukti)]
+        public static Prediction SaturnDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnDasaRahuBhukti)]
+        public static Prediction SaturnDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnDasaJupiterBhukti)]
+        public static Prediction SaturnDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnDasaSaturnBhukti)]
+        public static Prediction SaturnDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnDasaMercuryBhukti)]
+        public static Prediction SaturnDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnDasaKetuBhukti)]
+        public static Prediction SaturnDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.SaturnDasaVenusBhukti)]
+        public static Prediction SaturnDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+
+        #endregion
+
+        #region MERCURY BHUKTI
+
+        [EventCalculator(EventName.MercuryDasaSunBhukti)]
+        public static Prediction MercuryDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryDasaMoonBhukti)]
+        public static Prediction MercuryDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryDasaMarsBhukti)]
+        public static Prediction MercuryDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryDasaRahuBhukti)]
+        public static Prediction MercuryDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryDasaJupiterBhukti)]
+        public static Prediction MercuryDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryDasaSaturnBhukti)]
+        public static Prediction MercuryDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryDasaMercuryBhukti)]
+        public static Prediction MercuryDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryDasaKetuBhukti)]
+        public static Prediction MercuryDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.MercuryDasaVenusBhukti)]
+        public static Prediction MercuryDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+
+        #endregion
+
+        #region KETU BHUKTI
+
+        [EventCalculator(EventName.KetuDasaSunBhukti)]
+        public static Prediction KetuDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuDasaMoonBhukti)]
+        public static Prediction KetuDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuDasaMarsBhukti)]
+        public static Prediction KetuDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuDasaRahuBhukti)]
+        public static Prediction KetuDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuDasaJupiterBhukti)]
+        public static Prediction KetuDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuDasaSaturnBhukti)]
+        public static Prediction KetuDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuDasaMercuryBhukti)]
+        public static Prediction KetuDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuDasaKetuBhukti)]
+        public static Prediction KetuDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.KetuDasaVenusBhukti)]
+        public static Prediction KetuDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        #endregion
+
+        #region VENUS BHUKTI
+
+        [EventCalculator(EventName.VenusDasaSunBhukti)]
+        public static Prediction VenusDasaSunBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var bhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Sun;
+
+
+            //occuring if all conditions met
+            var occuring = dasa && bhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusDasaMoonBhukti)]
+        public static Prediction VenusDasaMoonBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Moon;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusDasaMarsBhukti)]
+        public static Prediction VenusDasaMarsBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mars;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusDasaRahuBhukti)]
+        public static Prediction VenusDasaRahuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Rahu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusDasaJupiterBhukti)]
+        public static Prediction VenusDasaJupiterBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Jupiter;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusDasaSaturnBhukti)]
+        public static Prediction VenusDasaSaturnBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Saturn;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusDasaMercuryBhukti)]
+        public static Prediction VenusDasaMercuryBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Mercury;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusDasaKetuBhukti)]
+        public static Prediction VenusDasaKetuBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Ketu;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.VenusDasaVenusBhukti)]
+        public static Prediction VenusDasaVenusBhukti(Time time, Person person)
+        {
+            //get dasas for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+
+            //check dasa
+            var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
+
+            //check bhukti
+            var isCorrectBhukti = currentDasaBhuktiAntaram.Bhukti == PlanetName.Venus;
+
+
+            //occuring if all conditions met
+            var occuring = isCorrectDasa && isCorrectBhukti;
+
+            return new() { Occuring = occuring };
+        }
+
+
+        #endregion
+
+
+        #region DASA GENERAL RULES
 
         [EventCalculator(EventName.Lord6And8Dasa)]
         public static Prediction Lord6And8Dasa(Time time, Person person)
@@ -9890,6 +11494,7 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        #endregion
 
         #endregion
 

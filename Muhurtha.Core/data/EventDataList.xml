@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Root>
+	<!--This is the DATA list for MUHURTHA-->
 	<!--<Event>
     <Id>1</Id>
     <Name>GoodTarabala</Name>
@@ -1463,7 +1464,7 @@
 		<Name>SunGocharaInHouse5</Name>
 		<Nature>Bad</Nature>
 		<Description>
-			The Sun transiting the 5th will cause mental agitation, 
+			The Sun transiting the 5th will cause mental agitation,
 			ill-health, embarrassment and accidents.
 		</Description>
 		<Tag>Gochara</Tag>
@@ -1543,8 +1544,8 @@
 		<Name>MoonGocharaInHouse1</Name>
 		<Nature>Good</Nature>
 		<Description>
-			When the Moon transits the sign occupied by her at the time of 
-			birth of a person, the native will get excellent food, 
+			When the Moon transits the sign occupied by her at the time of
+			birth of a person, the native will get excellent food,
 			bed and clothes.
 		</Description>
 		<Tag>Gochara</Tag>
@@ -1615,7 +1616,7 @@
 		<Name>MoonGocharaInHouse9</Name>
 		<Nature>Bad</Nature>
 		<Description>
-			In the 9th from herself, pain of mind, chest pain, 
+			In the 9th from herself, pain of mind, chest pain,
 			fatigue of body and the like are caused.
 		</Description>
 		<Tag>Gochara</Tag>
@@ -1633,7 +1634,7 @@
 		<Name>MoonGocharaInHouse11</Name>
 		<Nature>Good</Nature>
 		<Description>
-			In the 11th house, the person will enjoy prosperity, 
+			In the 11th house, the person will enjoy prosperity,
 			will get wealth and new friends.
 		</Description>
 		<Tag>Gochara</Tag>
@@ -1734,7 +1735,7 @@
 		<Description>
 			Mars transiting in the 9th produces quite unfavorable
 			effects, such as discharging of blood, loss of
-			wealth, disgrace and mental worry.In addition, 
+			wealth, disgrace and mental worry.In addition,
 			the subject becomes extremely weak.
 		</Description>
 		<Tag>Gochara</Tag>
@@ -1842,7 +1843,7 @@
 		<Name>MercuryGocharaInHouse8</Name>
 		<Nature>Good</Nature>
 		<Description>
-			When Mercury passes through the 8th house, the person will get sons, 
+			When Mercury passes through the 8th house, the person will get sons,
 			success, clothes and wealth and will become happy and powerful.
 		</Description>
 		<Tag>Gochara</Tag>
@@ -1934,7 +1935,7 @@
 		<Name>JupiterGocharaInHouse5</Name>
 		<Nature>Good</Nature>
 		<Description>
-			When Jupiter passes through the 5th house from the Moon, 
+			When Jupiter passes through the 5th house from the Moon,
 			the person will get servants, prosperity, sons, elephants,
 			houses, bullocks, gold, women, clothes, gems and good qualities.
 		</Description>
@@ -1944,10 +1945,10 @@
 		<Name>JupiterGocharaInHouse6</Name>
 		<Nature>Bad</Nature>
 		<Description>
-			When Jupiter passes through the 6th house from the Moon, 
+			When Jupiter passes through the 6th house from the Moon,
 			the person will be so much afflicted at heart that he will take
-			no delight in the agreeable faces of beautiful women, 
-			in the music of the peacock and the cuckoo and in houses made 
+			no delight in the agreeable faces of beautiful women,
+			in the music of the peacock and the cuckoo and in houses made
 			pleasant by the frolic of children playing like the young of the deer.
 		</Description>
 		<Tag>Gochara</Tag>
@@ -1998,7 +1999,7 @@
 		<Name>JupiterGocharaInHouse11</Name>
 		<Nature>Good</Nature>
 		<Description>
-			When Jupiter passes through the 11th house, the person will 
+			When Jupiter passes through the 11th house, the person will
 			return to his country and will recover his health and wealth.
 		</Description>
 		<Tag>Gochara</Tag>
@@ -2826,7 +2827,7 @@
 		<Name>ScorpioMarsDasa</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Scorpio - Increase in wealth, good earnings, friendship and intimacy with exalted personages, 
+			Scorpio - Increase in wealth, good earnings, friendship and intimacy with exalted personages,
 			love for own people, always happy and active.
 		</Description>
 		<Tag>Dasa</Tag>
@@ -3314,7 +3315,7 @@
 		<Nature>Good</Nature>
 		<Description>
 			Leo - Good courage
-			and elevation, travelling in hilly and mountainous tracts, acquisition of 
+			and elevation, travelling in hilly and mountainous tracts, acquisition of
 			wealth from various countries, progress in
 			knowledge, expeditions to mountains, caves and similar
 			places, marriage and great reputation.
@@ -3560,7 +3561,7 @@
 			Taurus - A life of great ease and indulgence throughout the period of
 			20 years, enjoyment of much happiness, company of beautiful
 			girls and joy through association with them, travels on seas to foreign countries
-			particularly southern, all ambitions of life fairly realised, 
+			particularly southern, all ambitions of life fairly realised,
 			redemption from debts, symptoms of venereal troubles.
 		</Description>
 		<Tag>Dasa</Tag>
@@ -3581,7 +3582,7 @@
 		<Name>CancerVenusDasa</Name>
 		<Nature>Bad</Nature>
 		<Description>
-			Cancer - Paroxysms of grief and terror, destruction of property, 
+			Cancer - Paroxysms of grief and terror, destruction of property,
 			discontent with relations, increase
 			of enemies, loss of wealth, disturbance to good work
 			and some mental ease in the end.
@@ -3681,6 +3682,601 @@
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
+
+
+	<!--SUN BHUKTI-->
+	<Event>
+		<Name>SunDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SunDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SunDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SunDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SunDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SunDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SunDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SunDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SunDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+
+	<!--Moon BHUKTI-->
+	<Event>
+		<Name>MoonDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MoonDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+
+	<!--Mars BHUKTI-->
+	<Event>
+		<Name>MarsDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MarsDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+	<!--Rahu BHUKTI-->
+	<Event>
+		<Name>RahuDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>RahuDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+
+	<!--JUPITER BHUKTI-->
+	<Event>
+		<Name>JupiterDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+
+	<!--Saturn BHUKTI-->
+	<Event>
+		<Name>SaturnDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+
+	<!--Mercury BHUKTI-->
+	<Event>
+		<Name>MercuryDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+
+	<!--Ketu BHUKTI-->
+	<Event>
+		<Name>KetuDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>KetuDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+
+	<!--Venus BHUKTI-->
+	<Event>
+		<Name>VenusDasaSunBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusDasaMoonBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusDasaMarsBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusDasaRahuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusDasaJupiterBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusDasaSaturnBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusDasaMercuryBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusDasaKetuBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+	<Event>
+		<Name>VenusDasaVenusBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Dasa</Tag>
+	</Event>
+
+
 
 	<!--Dasa General Rules-->
 	<Event>

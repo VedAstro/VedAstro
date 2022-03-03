@@ -54,7 +54,7 @@ namespace Genso.Astrology.Muhurtha.Core
 
         public static List<GeoLocation> GetAllLocationList() => DatabaseManager.GetLocationList(dataLocationlistXml);
 
-        public static List<Event> GetEvents(string startTime, string endTime, GeoLocation location, Person person, EventTag tag)
+        public static List<Event> GetEvents(string startTime, string endTime, GeoLocation location, Person person, EventTag tag, double precision)
         {
             var startStdTime = DateTimeOffset.ParseExact(startTime, Time.GetDateTimeFormat(), null);
             var endStdTime = DateTimeOffset.ParseExact(endTime, Time.GetDateTimeFormat(), null);
@@ -69,7 +69,7 @@ namespace Genso.Astrology.Muhurtha.Core
             var watch = Stopwatch.StartNew();
 
             //start calculating events
-            var eventList = EventManager.GetEventsInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute3, eventDataList);
+            var eventList = EventManager.GetEventsInTimePeriod(startStdTime, endStdTime, location, person, precision, eventDataList);
 
             watch.Stop();
             LogManager.Debug($"Events computed in: { watch.Elapsed.TotalSeconds}s");

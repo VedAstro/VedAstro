@@ -3689,6 +3689,12 @@
 		<Name>SunDasaSunBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Unpleasantness with relatives and superiors, anxieties,
+			headache. pain in the ear, some tendency to urinary or kidney
+			troubles, sickness, fear from rulers and enemies, fear of death,
+			loss of money, danger to father if the Sun is afflicted, stomachache
+			and travels, gains through religious people, mental
+			sufferings, a wandering life in a foreign country.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3696,27 +3702,51 @@
 		<Name>SunDasaMoonBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			The Moon's sub-period-6 months
+			Winning favour from superiors, increase in business, fresh
+			enterprises, troubles through women, eye troubles, many
+			relatives and friends, indulgence in idle pastimes, jaundice
+			and kindred ailments, new clothes and ornaments, will be
+			happy, healthy, good meals, respect among relatives.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaMarsBhukti</Name>
 		<Nature>Good</Nature>
-		<Description>
+		<Description>Mars' sub-period-4 months, 6 days.
+			Rheumatic and similar troubles, quarrels, danger of
+			enteric fever, dysentery, troubles to relatives, loss of money
+			by thefts or wasteful expenses, failures, acquisition of wealth
+			in the form of gold and gems, royal favour leading to prosperity,
+			contraction and transmission of bilious and other
+			diseases, mental worries, danger from fire, ill-health, loss of
+			reputation, sorrow.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaRahuBhukti</Name>
 		<Nature>Good</Nature>
-		<Description>
+		<Description>Rahu's sub-period -10 months, 24 days.
+			Many troubles, changes according to the position of Rahu,
+			family disputes, journeys, pang of death, trouble from
+			relatives and enemies, loss of peace or mental misery, loss of
+			money, sorrows, unsuccessful in all attempts, fear of thieves
+			and reptiles, scandals.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaJupiterBhukti</Name>
 		<Nature>Good</Nature>
-		<Description>
+		<Description>Jupiter's sub-perlod-9 months, 18 days.
+			Benefits from friends and acquaintances, increase in education,
+			employment in high circles, association with people of
+			high rank, success through obstacles, birth of a child, wealth
+			got through sons (if there is·a son), honour to religious people,
+			virtuous acts, good traditional observances, good society and
+			conversations, reputation, gains and court-honours.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3724,6 +3754,12 @@
 		<Name>SunDasaSaturnBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Saturn's sub-period--11 months, 12 days.
+			Constant sickness to family members, new enemies,• some
+			loss of property, bodily ailmenu, much unhappiness, dis·
+			placement from home accidents, quarrels with relatives, loss
+			of money, disease, lacking in energy, ignoble calls, mental
+			worries, loans, danger from thieve and rulers.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3731,6 +3767,14 @@
 		<Name>SunDasaMercuryBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Mercury's sub-period-IO months, 6 days.
+			Gain in money, good reputation, acquisition of new
+			clothes and ornaments, new education, trouble through
+			telatives, mental distress, depression of spirits, waste of
+			money and nervous weakness, no comforts, friends becoming
+			enemies, much anxiety and fears, health bad, children ungrateful,
+			disputes and trouble from ruler or judge, suffer
+			disgrace, many short journeys and wanderings.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3738,6 +3782,13 @@
 		<Name>SunDasaKetuBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Ketu' s sub-period-4 months, 6 days.
+			Loss of money, afHiction of mind with troubles, faintings
+			or nervous exhaustion, mind full of-misgivings, a long journey
+			to a distant place, change of house due to disputes, troubles
+			among relatives and associates, throat disease, mental anguish,
+			ophthalmia, serious illness, fear from kings or rulers and
+			enemies, diseases, cheated by others.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3745,6 +3796,12 @@
 		<Name>SunDasaVenusBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Venus' sub-period-I year.
+			Gain of money, respect by rulers and gain of vehicles,
+			likelihood of marriage, increase of property, illness, does
+			many good works, acquisition of pearls or other precious
+			stones, fatigue, addiction to immoral females and profitless
+			discussions.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3753,8 +3810,15 @@
 	<!--Moon BHUKTI-->
 	<Event>
 		<Name>MoonDasaSunBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			The Sun's sub-period - 6 months.
+			Feverish complaints, pains in the eyes, success or failure
+			according to position of the Sun and the Moon, legal power,
+			free from diseases, decadence of enemies, happiness and
+			prosperity, jaundice, dropsy, fever, loss of money, travels,
+			danger to father and mother, piles, weakness, loss of
+			children and friends.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3762,20 +3826,43 @@
 		<Name>MoonDasaMoonBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			The Moon's sub-period- 1O months.
+			Devoted attention to learning, love or music, good clothing,
+			company of refined society, sound health, good reputation,
+			journey to holy places, acquisition of abandoned wealth,
+			power, vehicles and lands; marriage, relatives, fortunate
+			deeds, inclination to public life, change of residence, birth of
+			a child, increase of wealth, prosperity to relatives.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaMarsBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Mars's sub-period - 7 months.
+			Quarrels and litigation among friends and relatives, headlong
+			enterprises, danger of disputes between husband and
+			wife, between lovers or in regard to marital affairs; disease,
+			petulence, loss of money, waste of wealth, trouble from
+			brothers and friends, danger from fever and fire, injury from
+			instruments or stones, loss of blood and disease to household
+			animals.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaRahuBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Rahu's sub-period - 1 year, 6 months.
+			Distress of risks from falls and dangerous diseases, waste
+			of wealth and loss of relatives and no ease to body. loss of
+			money, danger of stirring up enemies, sickness, anxiety, enmity
+			of superiors and elders, anxiety and troubles through wife,
+			scandals, change of residence, diseases of skin, danger from
+			thieves and poison, ill-health to father and mother, suffering
+			from hunger.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3783,13 +3870,25 @@
 		<Name>MoonDasaJupiterBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Jupiter's sub-period - 1 year, 4 months.
+			Increase of property, plenty of food and comforts, prosperous,
+			benefits from superiors such as masters or governors,
+			birth. of a child, vehicles, abundance of clothes and ornaments
+			and success in undertakings, patronage or rulers, gain or
+			property, respect, learned.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaSaturnBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Saturn's sub-period - 1 year, 7 months.
+			Wife's death or separation, much mental anguish, loss or
+			property, loss of friends, ill·health, mental trouble due to
+			mother, wind and bilious affections, harsh words, and discussion
+			with unfriendly people, disease due to indigestion, no peace of mind,
+			quarrels with relatives.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3797,13 +3896,28 @@
 		<Name>MoonDasaMercuryBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Mercury's sub-period - 1 year, 5 months.
+			Acquisition of wealth from maternal relatives, new
+			clothes and ornaments, settlement of disputes, pleasure
+			through children or lover, increase of wealth, accomplishment
+			of desires, intellectual achievements, new education, honour
+			from rulers. general happiness, enjoyment with females,
+			addiction to betting and drinks.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaKetuBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Ketu's sub-period - 7 months.
+			Illness to wife, loss of relatives, suffering from stomach
+			ache, loss or property, sickness of a feverish nature, danger
+			from fire, subject to swellings or eruptions, eye troubles,
+			mind filled with cares, public criticism or displeasure, dishonour,
+			danger to father, mother and children, scandals
+			among equals, eating of prohibited food, bad acts, bad
+			company, loss of money and memory.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3811,6 +3925,12 @@
 		<Name>MoonDasaVenusBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Venus's sub-period - 1 year, 8 months.
+			Sudden gain from wife, enjoys comforts of agriculture,
+			water products and clothing : suffers from diseases inherited
+			by mother, sickness, pain, loss of property, enmity, gain of
+			houses, good works and "good meals, birth of children,
+			expenses due to marriage or other auspicious acts.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3821,6 +3941,13 @@
 		<Name>MarsDasaSunBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			The Sun's sub-period - 4 months, 6 days.
+			Gain of money in bad ways, destruction of enemies, good
+			reputation, long journey to foreign lands and peace of mind,
+			blame, odium of ciders, quarrels with them, sufferings by
+			diseases, heartache occasioned by one's own relatives, fever or
+			other inflammatory affection, danger of fire, troubles through
+			persons in position, many enemies.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3828,13 +3955,26 @@
 		<Name>MarsDasaMoonBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			The Moon's sub-period -7 months.
+			Profit, acquisition of wealth, house renovated or some
+			improvements effected in it, comforts of wealth, heavy sleep,
+			ardent passion, enjoyment by the help or women.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaMarsBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Mars's sub-period - 4 months, 27 days.
+			Great heat, dislike of friends, annoyance from brothers
+			and sisters, danger from rulers, failure of all undertakings,
+			danger of hurts according to the sign held by Kuja, trouble
+			with superiors and some anxiety through strangers, foreigners
+			or people abroad and through warlike clan. Danger of open
+			violence, quarrel with relations, loss of money, skin disease,
+			consumption, loss of blood, fistula, and fissures in anus, Jou
+			of females and brothers, evil doings and boils.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3842,34 +3982,69 @@
 		<Name>MarsDasaRahuBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Rahu's sub-period- 1 year, 18 days.
+			Danger from rulers and robbers, loss of wealth, success
+			in evil pursuits, suffering from poisonous complaints, loss of
+			relatives, danger from skin diseases, change of residence,
+			some severe kind of cutaneous disease, journey to a foreign
+			country, scandals, loss of cows and buffaloes, illness to wife,
+			loss of memory, fear from insects and thieves, falls into well,
+			fear from ghosts, affection of gonorrhoea, fretting and
+			litigation.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaJupiterBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Jupiter's sub-period - 11 months, 6 days.
+			Loss of wealth, enemies, end the unfortunate period,
+			favour from superiors and persons in position. gain of
+			money, birth of children, auspicious celebrations, acquisition
+			or wealth through holy people, freedom from illness, public
+			reputation, ascendancy and happiness.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaSaturnBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Saturn's sub-period - 1 year, 1 month, 9 days.
+			Loss of money, diseases, loss of relatives and danger from
+			arms or operation, illness leading to misery, evil threatened by
+			enemies and robbers, disputes with rulers, loss of wealth,
+			quarrel, disputes, litigation, loss of property, cutaneous
+			effects. loss of office or position and much anxiety.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaMercuryBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Mercury's sub-period- 11 months, 27 days.
+			Marriage or inclination to marriage, knowledge and fruits
+			of knowledge, wealth, bodily evils disappear, slander, fear of
+			insects, poisoned by animals and insects, gain of wealth by
+			trade, abundance of houses, trouble from enemies and mental
+			worries, service rendered to friends and relatives, new knowledge,
+			success in litigation.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaKetuBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
+			Ketu's sub-period - 4 months, 27 days.
+			Enmity and quarrels with low people, loss of money due
+			to evil works, commission of signs, great sufferings due to
+			troubles from relatives and brothers and opposition of bad
+			people, family disputes, troubles with one's own kindred
+			diseases, poisonous complaints, trouble through women, many
+			enemies.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3877,6 +4052,14 @@
 		<Name>MarsDasaVenusBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Venus's sub-period - 1 year, 2 months.
+			Acquisition of property, gain of money, domestic happiness,
+			successful love affairs, inclination towards religious
+			observances and festivities, favourable associations, influenced
+			by priests, skin eruptions, boils, pleasure from travelling,
+			jewels to wife, clothing, money from relatives and brothers,
+			odium.of females and their society, increase of intelligence,
+			enjoyment of females and gain of money.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3886,6 +4069,14 @@
 		<Name>RahuDasaSunBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			The Sun's sub-.qeriqd-JO months, 24 days.
+			Hot fevers, giddiness, fear and enmity of people, quarrels
+			in family, benefits from persons in good position, fear and
+			suspicion in connection with wife, children and relatives,
+			change of position or residence, love of charitable acts,
+			contentment, cessation of all violence and outrage of contagious
+			diseases, success in examinations, private life happy,
+			much reputation and fame, but mental unrest.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3893,6 +4084,13 @@
 		<Name>RahuDasaMoonBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			The Moor!u!lb..."Jle.ciluL-1 year, 6 months.
+			Abundance of enjoyments, good crops, coming in of
+			money and communion with kith and kin, loss of relatives,
+			loss of money through wife, pains in the limbs, change of
+			position or residence, danger of personal hurts, unstability of
+			health, sea voyages, gain of lands and money, Joss or danger
+			to wife and children.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3900,6 +4098,13 @@
 		<Name>RahuDasaMarsBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Mars' sub:;_J!,eriod-1 year, 18 days.
+			Danger from rulers, fires or thieves and by arms, defeat
+			in litigation, loss of money due to cousins, difficulties,
+			1orrows, danger to the person due to malice of enemies,
+			tendency to ease or difsolute habits, disputes and mental
+			anxiety, combination of all possible calamities, bewilderment
+			in every work and culpable failure of memory.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3907,6 +4112,14 @@
 		<Name>RahuDasaRahuBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			JSabu' s sub-ptrlod-2 years, 8 months, 12 days.
+			Disturbance 10 mind, anxieties, quarrels among relatives,
+			death of partner, master or the head of the family, mental
+			anxiety, danger of poisoning, transfer, all sorts of scandals
+			and quarrels, fever, bites of insects or wounds by arms, death
+			of ralativcs, going to court as witness, quarrels ~th parents,
+			diseases, illness to wife, failure of intellect, lou,of wealth,
+			wandering in far-off countries and distress there.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3914,6 +4127,13 @@
 		<Name>RahuDasaJupiterBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Jupiter• s ~JI./) P.er!q_d~'l years, 4 months, 24 days.
+			Total disappearance of enemies and sickness, royal favour,
+			acq\lisition of wealth, birth of children, increase of pleasure,
+			gain through nobles or persons in power, benefits and
+			comforts from superiors, success in all efforts, marriage in
+			the house, increase of enemies, litigations and dips in sacred
+			rivers.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3921,6 +4141,12 @@
 		<Name>RahuDasaSaturnBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			~aturn' s sub-e,eriod.-2 years, 10 months, 6 days.
+			Scandal, danger due to fall of a tree, bad assoc1auons,
+			divorce of wife or husband, incessant disputes and contests,
+			rheumatism, biliousness, etc., throughout: disease due to
+			wind and bile, distress of relatives, friends and well-wishers,
+			residence in a remote foreign land.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3928,6 +4154,14 @@
 		<Name>RahuDasaMercuryBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Mercy,cy' s sub-Jl.i.dgJ[-2 years, 6 months, 18 days.
+			Many friends and relatives, wife and children, accession
+			to wealth or royal favour. Jn the first 18 months of this
+			period very busy, seriously inclined to marry. In the latter
+			12 months, enemies increase through bis own action, happincsf.,
+			birth of children, acquisition of vehicles, happiness to
+			relatives and family, enjoyments with prostitutes, showy,
+			gains through trade, fraudulent schemes.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3935,6 +4169,13 @@
 		<Name>RahuDasaKetuBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			Kfl.t!-:'_s sub-qeriqd-1 year, 18 days.
+			Danger, disease in the anus, no good and timely meals,
+			epidemic diseasesL danger of physical hurts and poison, illhealth
+			to children, some swellings in the body, troubles
+			through wife, danger from superiors, loss of wealth and
+			honour, loss of children, death of cattle and misfortunes of
+			all kinds.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>
@@ -3942,6 +4183,13 @@
 		<Name>RahuDasaVenusBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
+			~nuL..!ub eeriod-3 years.
+			Accession to vehicles and things of foreign land, troubles
+			from foes, relatives and diseases, acquisition of wealth and
+			other advantages, friendly alliances, wife a source of fortune
+			and happiness, benefits from superiors or beads above in
+			office, liable to deception, false _friends, gain in land, birth
+			of a child or marriage.
 		</Description>
 		<Tag>Dasa</Tag>
 	</Event>

@@ -22,6 +22,7 @@ namespace Muhurtha.Desktop
         private int _selectedPersonIndex;
         private int _selectedLocationIndex;
         private int _selectedTagIndex;
+        private double _precisionHours;
 
 
 
@@ -131,6 +132,15 @@ namespace Muhurtha.Desktop
             {
                 _selectedTagIndex = value;
                 OnPropertyChanged(nameof(SelectedTagIndex));
+            }
+        }
+        public double PrecisionHours
+        {
+            get => _precisionHours;
+            set
+            {
+                _precisionHours = value;
+                OnPropertyChanged(nameof(PrecisionHours));
             }
         }
 

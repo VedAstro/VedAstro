@@ -474,13 +474,14 @@ namespace Muhurtha.Desktop
             var location = gui.MainGrid.ViewEventOptions.SelectedLocation;
             var person = gui.MainGrid.ViewEventOptions.SelectedPerson;
             var tag = gui.MainGrid.ViewEventOptions.SelectedTag;
+            var precision = gui.MainGrid.ViewEventOptions.PrecisionHours;
 
 
             //pass thread canceler MuhurthaCore, so that methods inside can be stopped if needed
             MuhurthaCore.threadCanceler = (CancellationToken)threadCanceler;
 
             //calculate events from values
-            var events = MuhurthaCore.GetEvents(startTime, endTime, location, person, tag);
+            var events = MuhurthaCore.GetEvents(startTime, endTime, location, person, tag, precision);
 
             //set event into view
             gui.MainGrid.EventView.EventList = events;

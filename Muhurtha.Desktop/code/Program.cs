@@ -425,14 +425,14 @@ namespace Muhurtha.Desktop
             MuhurthaCore.SendingEventsCompleted += SendingEventsCompleted;
         }
         /// <summary>
-        /// based on which panel is selected in dropdown, that panel is loaded with deafult values
+        /// based on which panel is selected in dropdown, that panel is loaded with default values
         /// </summary>
         private void LoadSelectedOptionsPanel()
         {
             //get selected value
             var selectedPanel = gui.MainGrid.SelectedOptionsPanel;
 
-            //show/hide based on which panel is choosen
+            //show/hide based on which panel is chosen
             var panelName = selectedPanel.Content;
 
             switch (panelName)

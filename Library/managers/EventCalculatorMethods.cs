@@ -7761,6 +7761,536 @@ namespace Genso.Astrology.Library
         #endregion
 
 
+
+        #region PLANETS IN SIGN
+
+        //SUN
+        [EventCalculator(EventName.SunInAries)]
+        public static Prediction SunInAries(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aries
+        };
+        [EventCalculator(EventName.SunInTaurus)]
+        public static Prediction SunInTaurus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Taurus
+        };
+        [EventCalculator(EventName.SunInGemini)]
+        public static Prediction SunInGemini(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Gemini
+        };
+        [EventCalculator(EventName.SunInCancer)]
+        public static Prediction SunInCancer(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Cancer
+        };
+        [EventCalculator(EventName.SunInLeo)]
+        public static Prediction SunInLeo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Leo
+        };
+        [EventCalculator(EventName.SunInVirgo)]
+        public static Prediction SunInVirgo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Virgo
+        };
+        [EventCalculator(EventName.SunInLibra)]
+        public static Prediction SunInLibra(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Libra
+        };
+        [EventCalculator(EventName.SunInScorpio)]
+        public static Prediction SunInScorpio(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Scorpio
+        };
+        [EventCalculator(EventName.SunInSagittarius)]
+        public static Prediction SunInSagittarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Sagittarius
+        };
+        [EventCalculator(EventName.SunInCapricornus)]
+        public static Prediction SunInCapricornus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Capricornus
+        };
+        [EventCalculator(EventName.SunInAquarius)]
+        public static Prediction SunInAquarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aquarius
+        };
+        [EventCalculator(EventName.SunInPisces)]
+        public static Prediction SunInPisces(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Pisces
+        };
+
+        //MOON
+        [EventCalculator(EventName.MoonInAries)]
+        public static Prediction MoonInAries(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aries
+        };
+        [EventCalculator(EventName.MoonInTaurus)]
+        public static Prediction MoonInTaurus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Taurus
+        };
+        [EventCalculator(EventName.MoonInGemini)]
+        public static Prediction MoonInGemini(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Gemini
+        };
+        [EventCalculator(EventName.MoonInCancer)]
+        public static Prediction MoonInCancer(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Cancer
+        };
+        [EventCalculator(EventName.MoonInLeo)]
+        public static Prediction MoonInLeo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Leo
+        };
+        [EventCalculator(EventName.MoonInVirgo)]
+        public static Prediction MoonInVirgo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Virgo
+        };
+        [EventCalculator(EventName.MoonInLibra)]
+        public static Prediction MoonInLibra(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Libra
+        };
+        [EventCalculator(EventName.MoonInScorpio)]
+        public static Prediction MoonInScorpio(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Scorpio
+        };
+        [EventCalculator(EventName.MoonInSagittarius)]
+        public static Prediction MoonInSagittarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Sagittarius
+        };
+        [EventCalculator(EventName.MoonInCapricornus)]
+        public static Prediction MoonInCapricornus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Capricornus
+        };
+        [EventCalculator(EventName.MoonInAquarius)]
+        public static Prediction MoonInAquarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aquarius
+        };
+        [EventCalculator(EventName.MoonInPisces)]
+        public static Prediction MoonInPisces(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Pisces
+        };
+
+        //MARS
+        [EventCalculator(EventName.MarsInAries)]
+        public static Prediction MarsInAries(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aries
+        };
+        [EventCalculator(EventName.MarsInTaurus)]
+        public static Prediction MarsInTaurus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Taurus
+        };
+        [EventCalculator(EventName.MarsInGemini)]
+        public static Prediction MarsInGemini(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Gemini
+        };
+        [EventCalculator(EventName.MarsInCancer)]
+        public static Prediction MarsInCancer(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Cancer
+        };
+        [EventCalculator(EventName.MarsInLeo)]
+        public static Prediction MarsInLeo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Leo
+        };
+        [EventCalculator(EventName.MarsInVirgo)]
+        public static Prediction MarsInVirgo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Virgo
+        };
+        [EventCalculator(EventName.MarsInLibra)]
+        public static Prediction MarsInLibra(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Libra
+        };
+        [EventCalculator(EventName.MarsInScorpio)]
+        public static Prediction MarsInScorpio(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Scorpio
+        };
+        [EventCalculator(EventName.MarsInSagittarius)]
+        public static Prediction MarsInSagittarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Sagittarius
+        };
+        [EventCalculator(EventName.MarsInCapricornus)]
+        public static Prediction MarsInCapricornus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Capricornus
+        };
+        [EventCalculator(EventName.MarsInAquarius)]
+        public static Prediction MarsInAquarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aquarius
+        };
+        [EventCalculator(EventName.MarsInPisces)]
+        public static Prediction MarsInPisces(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Pisces
+        };
+
+
+        //MERCURY
+        [EventCalculator(EventName.MercuryInAries)]
+        public static Prediction MercuryInAries(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aries
+        };
+        [EventCalculator(EventName.MercuryInTaurus)]
+        public static Prediction MercuryInTaurus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Taurus
+        };
+        [EventCalculator(EventName.MercuryInGemini)]
+        public static Prediction MercuryInGemini(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Gemini
+        };
+        [EventCalculator(EventName.MercuryInCancer)]
+        public static Prediction MercuryInCancer(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Cancer
+        };
+        [EventCalculator(EventName.MercuryInLeo)]
+        public static Prediction MercuryInLeo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Leo
+        };
+        [EventCalculator(EventName.MercuryInVirgo)]
+        public static Prediction MercuryInVirgo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Virgo
+        };
+        [EventCalculator(EventName.MercuryInLibra)]
+        public static Prediction MercuryInLibra(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Libra
+        };
+        [EventCalculator(EventName.MercuryInScorpio)]
+        public static Prediction MercuryInScorpio(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Scorpio
+        };
+        [EventCalculator(EventName.MercuryInSagittarius)]
+        public static Prediction MercuryInSagittarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Sagittarius
+        };
+        [EventCalculator(EventName.MercuryInCapricornus)]
+        public static Prediction MercuryInCapricornus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Capricornus
+        };
+        [EventCalculator(EventName.MercuryInAquarius)]
+        public static Prediction MercuryInAquarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aquarius
+        };
+        [EventCalculator(EventName.MercuryInPisces)]
+        public static Prediction MercuryInPisces(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Pisces
+        };
+
+
+        //JUPITER
+        [EventCalculator(EventName.JupiterInAries)]
+        public static Prediction JupiterInAries(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aries
+        };
+        [EventCalculator(EventName.JupiterInTaurus)]
+        public static Prediction JupiterInTaurus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Taurus
+        };
+        [EventCalculator(EventName.JupiterInGemini)]
+        public static Prediction JupiterInGemini(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Gemini
+        };
+        [EventCalculator(EventName.JupiterInCancer)]
+        public static Prediction JupiterInCancer(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Cancer
+        };
+        [EventCalculator(EventName.JupiterInLeo)]
+        public static Prediction JupiterInLeo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Leo
+        };
+        [EventCalculator(EventName.JupiterInVirgo)]
+        public static Prediction JupiterInVirgo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Virgo
+        };
+        [EventCalculator(EventName.JupiterInLibra)]
+        public static Prediction JupiterInLibra(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Libra
+        };
+        [EventCalculator(EventName.JupiterInScorpio)]
+        public static Prediction JupiterInScorpio(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Scorpio
+        };
+        [EventCalculator(EventName.JupiterInSagittarius)]
+        public static Prediction JupiterInSagittarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Sagittarius
+        };
+        [EventCalculator(EventName.JupiterInCapricornus)]
+        public static Prediction JupiterInCapricornus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Capricornus
+        };
+        [EventCalculator(EventName.JupiterInAquarius)]
+        public static Prediction JupiterInAquarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aquarius
+        };
+        [EventCalculator(EventName.JupiterInPisces)]
+        public static Prediction JupiterInPisces(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Pisces
+        };
+        
+        
+        //VENUS
+        [EventCalculator(EventName.VenusInAries)]
+        public static Prediction VenusInAries(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aries
+        };
+        [EventCalculator(EventName.VenusInTaurus)]
+        public static Prediction VenusInTaurus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Taurus
+        };
+        [EventCalculator(EventName.VenusInGemini)]
+        public static Prediction VenusInGemini(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Gemini
+        };
+        [EventCalculator(EventName.VenusInCancer)]
+        public static Prediction VenusInCancer(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Cancer
+        };
+        [EventCalculator(EventName.VenusInLeo)]
+        public static Prediction VenusInLeo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Leo
+        };
+        [EventCalculator(EventName.VenusInVirgo)]
+        public static Prediction VenusInVirgo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Virgo
+        };
+        [EventCalculator(EventName.VenusInLibra)]
+        public static Prediction VenusInLibra(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Libra
+        };
+        [EventCalculator(EventName.VenusInScorpio)]
+        public static Prediction VenusInScorpio(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Scorpio
+        };
+        [EventCalculator(EventName.VenusInSagittarius)]
+        public static Prediction VenusInSagittarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Sagittarius
+        };
+        [EventCalculator(EventName.VenusInCapricornus)]
+        public static Prediction VenusInCapricornus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Capricornus
+        };
+        [EventCalculator(EventName.VenusInAquarius)]
+        public static Prediction VenusInAquarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aquarius
+        };
+        [EventCalculator(EventName.VenusInPisces)]
+        public static Prediction VenusInPisces(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Pisces
+        };
+
+
+        //SATURN
+        [EventCalculator(EventName.SaturnInAries)]
+        public static Prediction SaturnInAries(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aries
+        };
+        [EventCalculator(EventName.SaturnInTaurus)]
+        public static Prediction SaturnInTaurus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Taurus
+        };
+        [EventCalculator(EventName.SaturnInGemini)]
+        public static Prediction SaturnInGemini(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Gemini
+        };
+        [EventCalculator(EventName.SaturnInCancer)]
+        public static Prediction SaturnInCancer(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Cancer
+        };
+        [EventCalculator(EventName.SaturnInLeo)]
+        public static Prediction SaturnInLeo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Leo
+        };
+        [EventCalculator(EventName.SaturnInVirgo)]
+        public static Prediction SaturnInVirgo(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Virgo
+        };
+        [EventCalculator(EventName.SaturnInLibra)]
+        public static Prediction SaturnInLibra(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Libra
+        };
+        [EventCalculator(EventName.SaturnInScorpio)]
+        public static Prediction SaturnInScorpio(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Scorpio
+        };
+        [EventCalculator(EventName.SaturnInSagittarius)]
+        public static Prediction SaturnInSagittarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Sagittarius
+        };
+        [EventCalculator(EventName.SaturnInCapricornus)]
+        public static Prediction SaturnInCapricornus(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Capricornus
+        };
+        [EventCalculator(EventName.SaturnInAquarius)]
+        public static Prediction SaturnInAquarius(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Aquarius
+        };
+        [EventCalculator(EventName.SaturnInPisces)]
+        public static Prediction SaturnInPisces(Time time, Person person) => new()
+        {
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+                .GetSignName() == ZodiacName.Pisces
+        };
+
+
+
+        #endregion
+
+
         //CUSTOM
         [EventCalculator(EventName.GeminiRisingWithEvilPlanet)]
         public static Prediction GeminiRisingWithEvilPlanet(Time time, Person person)
@@ -11635,6 +12165,8 @@ namespace Genso.Astrology.Library
         #endregion
 
         #endregion
+
+
 
     }
 

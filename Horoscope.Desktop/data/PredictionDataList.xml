@@ -1895,7 +1895,7 @@
 			husband will be subservient to the wife carrying out all her orders.
 		</Description>
 		<Tag>Marriage</Tag>
-	</Event>	
+	</Event>
 	<Event>
 		<Name>SaturnIn7thNotLagnaLord</Name>
 		<Nature>Bad</Nature>
@@ -1951,5 +1951,930 @@
 		</Description>
 		<Tag>Marriage</Tag>
 	</Event>
+
+
+	<!--SUN IN SIGNS-->
+	<Event>
+		<Name>SunInAries</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sun in Aries - Active, intelligent, famous, traveler.
+			wealthy, warrior. variable fortune, ambitious, phlegmatic,
+			powerful, marked personality, impulsive, irritable, pioneering,
+			initiative.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInTaurus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Clever, reflective, attracted by perfumes and
+			dealer in them, hated by women, slow to action, musician,
+			self-confident, delicious drinks, happy meals, tactful, original,
+			sociable, intelligent. prominent nose
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInGemini</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Learned. astronomer, scholarly. grammarian,
+			polite, wealthy, critical, assimilative, good conversationalist,
+			shy, reserved, lacking in originality.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInCancer</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Somewhat harsh, indolent, wealthy, unhappy,
+			constipation, sickly, travelling, independent, expert astrologer.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInLeo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Stubborn, fixed views, strong, cruel, independent,
+			organizing capacity and talents for propaganda, humanitarian,
+			frequenting solitary places, generous, famous.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInVirgo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Linguist, poet, mathematician, taste for literature,
+			well scholarly, artistic, good memory, reasoning faculty,
+			effeminate body, frank, lucid comprehension, learned in
+			religious lore, reserved, wanting adulation.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInLibra</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Manufacture of liquors, popular. tactless, base,
+			drunkard, loose morals, arrogant, wicked, frank, submissive,
+			pompous.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInScorpio</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Adventurous, bold, rearing thieves and robbers,
+			reckless, cruel, stubborn, unprincipled, impulsive, idiotic,
+			indolent, surgical skill, dexterous, military ability.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInSagittarius</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Short-tempered, spoils, reliable, rich, obstinate,
+			respected by all, happy, popular, religious, wealthy,
+			musician.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInCapricornus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricornus - Mean-minded, stubborn, ignorant, miserly,
+			pushful, unhappy, boring, active, meddlesome, obliging,
+			humorous, witty, affable, prudent, firm.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInAquarius</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Poor, unhappy, stubborn, unlucky, unsuccessful,
+			medium height, rare faculties, self-esteem.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SunInPisces</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - Pearl merchant, peaceful, wealthy, uneventful,
+			religious, prodigal, loved by women.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+
+	<!--MOON IN SIGNS-->
+	<Event>
+		<Name>MoonInAries</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Moon in Aries - Round eyes, impulsive, fond of
+			travel, irritable, fond of women, vegetable diet, quick to
+			decide and act, haughty, inflexible, sores in the head,
+			dexterous, tickle-minded, war-like, enterprising, good position.
+			self-respect, valiant, ambitious, liable to hydrophobia if the
+			Moon is afflicted, large thighs, popular, restless, idiosyncratic.
+			versatile.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInTaurus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Liberal, powerful. happy, ability to command,
+			intelligent, handsome, influential, fond of fair sex, happy in
+			middle life and old age, great strides in life, beautiful gait,
+			large thighs aod hips, phlegmatic afflictions, rich patience,
+			respected, love-intrigues, inconsistent, wavering mind, sound
+			judgment, voracious cater and reader, lucky, popular,
+			influenced by women, passionate, indolent.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInGemini</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Well read, creative, fond of women, learned in
+			scriptures, able, persuasive, curly hair, powerful speaker,
+			clever. witty, dexterous, food of music, elevated nose, thought
+			reader, subtle, long life.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInCancer</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Wise, powerful, charming, influenced by women,
+			wealthy, kind, good, a bit stout, sensitive; impetuous, unprofitable
+			voyages, meditative, much immovable property,scientist, middle stature,
+			prudent, frugal, piercing. conventional.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInLeo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Bold, irritable, large cheeks. blonde, broad face,
+			brown eyes, repugnant to women. likes meat, frequenting
+			forests and hills, colic troubles, inclined to be unhappy,
+			haughty, mental anxiety, liberal, generous, deformed body,
+			steady, aristocratic, settled views, proud, ambitious.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInVirgo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Lovely complexion, almond eyes, modest, sunken
+			shoulders and arms, charming, attractive, principled, affluent,
+			comfortable, soft body, sweet speech, honest; truthful,
+			modest, virtuous. intelligent. phlegmatic, fond of women.
+			acute insight, conceited in self-estimation, pensive, conversationalist,
+			many daughters, loquacious, astrologer and
+			clairvoyant or attracted towards them, skilled in arts like
+			music and dancing, few sons.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInLibra</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Reverence and respect for learned and holy people,
+			saints and gods; tall, raised nose, thin, deformed limbs,
+			sickly constitution, rejected by kinsmen, intelligent, principled,
+			wealthy. business-like, obliging, love for arts, far-seeing,
+			idealistic, clever, mutable, amicable, losses through women,
+			loves women, just, not ambitious, aspiring.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInScorpio</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Broad eyes, wide chest, round shanks and
+			thighs, isolation from parents or preceptors, brown complexion.
+			straight-forward, frank. open-minded, cruel.
+			simulator, malicious, sterility, agitated, unhappy. wealthy,
+			impetuous, obstinate.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInSagittarius</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Face broad, teeth large, ski11ed in fine arts.
+			indistinct shoulders, disfigured nails and arms. deep and
+			inventive intellect. yielding to praise, good speech, upright.
+			help from wife and women. happy marriage, many children,
+			good inheritance, benefactor, patron of arts and literature.
+			ceremonial-minded. showy, unexpected gifts, author, reflective
+			mentality, inflexible to threats.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInCapricornus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricornus - Ever attached to wife and children, virtuous,
+			good eyes. slender waist, quick in perception, clever, active,
+			crafty, somewhat selfish, sagacious, strategic, liberal. merciless,
+			unscrupulous, inconsistent, low morals, niggardly and
+			mean.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInAquarius</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Fair-looking, well-formed body, tall, large
+			teeth, belly low, youngish, sensual, sudden elevations and
+			depressions, pure-minded. artistic. intuitional. diplomatic,
+			lonely. pce"ish. artistic taste, energetic, emotional, esoteric,
+			mystical. grateful, healing power.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonInPisces</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - Fixed, dealer in pearls and fond of wife and
+			children, perfect build, long nose, bright body, annihilating
+			enemies, subservient to opposite sex. handsome, learned,
+			steady. simple, good reputation, loose morals, adventurous,
+			many children, spiritually inclined later in life.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+
+	<!--MARS IN SIGNS-->
+	<Event>
+		<Name>MarsInAries</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Mars in Aries - Organizing capacity, commanding,
+			rich, social, scars in the body, sensual. dark, mathematician,
+			active, powerful, inspiring. pioneering. able, statesmanly.
+			frank, generous, careful not economical in domestic dealings,
+			vague imaginations, combative tendencies, hard-hearted.
+			versatile.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInTaurus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Influenced by women, timid, rough body,
+			stubborn, sensual, liking for magic and sports, somewhat
+			unprincipled, selfish, tyrannical, not soft-hearted, rash,
+			emotional, animal instinct strong, sensitive.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInGemini</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Loving family and children, taste in refinement,
+			scientific, middle stature, well built, learned, ambitious.
+			quick, rash, ingenious, skilled in music, fearless, tactless,
+			peevish, unhappy, subservient, diplomate, humiliating,
+			detective.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInCancer</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Intelligent, wealthy, rich travels and voyages,
+			wicked. perverted, love of agriculture. medical and surgical
+			proficiency. fickle-minded, defective sight, bold, dashing,
+			headlong, speculative unkind. egoistic.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInLeo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Tendency to occultism, astrology astronomy and
+			mathematics, love for parents, regard and respect for ciders and
+			preceptors, independent thinking, peevish. liberal, victorious
+			stomach troubles, worried by mental complaints, generous,
+			nobel, author early in life, successful, combative, restless.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInVirgo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Imitable, explosive, trouble in digestive organs,
+			no marital harmony. general love for the fair sex, revengeful,
+			self-confident. conceited, affable, boastful. materialistic,
+			ceremonial-minded, positive, indiscriminative, pretentious,
+			deceptive, scientific enterprises.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInLibra</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Tall, body symmetrically built, complexion fair
+			and swarthy, ambitious, self-confident, perceptive faculties,
+			materialistic, love for family, self-earned wealth, affable, warlike,
+			foresight, business-like, deceived by women, sanguine
+			temperament, kind, gentle, fond of adulation, easily ruffled,
+			boastful.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInScorpio</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Middle stature, clever. diplomatic, positive
+			tendency, indulgent, tenacious memory, malicious, aggressive,
+			proud, haughty. great strides in life.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInSagittarius</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Gentlemanly, many foes, famous minister.
+			statesman, open, frank, pleasure loving, few children, liable
+			to extremes, conservative. indifferent, exacting, impatient;
+			severe, quarrelsome. litigation troubles, good citizen.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInCapricornus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricornus - Rich. high political position, many sons,
+			brave, generous. love for children, middle stature, industrious,
+			indefatigable, successful. penetrating, bold, tactful, respected,
+			generous, ,gallant, influential.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInAquarius</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Unhappy, miserable, poor, not truthful, independent,
+			unwise, wandering, impulsive. controversial.
+			combative, well-versed in dialects, free, quick in forgiving
+			and forgetting, conventional, danger on water, morose,
+			meditative.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsInPisces</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - Fair complexion. troubles in love affairs. few
+			children, passionate, restless, antagonistic, exacting, 
+			uncertainty of feeling, faithful, unclean, colic, indolent, willful.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+
+	<!--MERCURY IN SIGNS-->
+	<Event>
+		<Name>MercuryInAries</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Mercury in Aries - Evil-minded, middle stature,
+			obstinate, clever, social, great endurance, materialistic tendencies.
+			unscrupulous, wavering mind, antagonistic, fond of
+			speculation. impulsive, greedy, dangerous connections,
+			deceitful, swerving from rectitude.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInTaurus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - High position, well built, clever. logical, mental
+			harmony, many children, liberal, persevering, opinionative,
+			wealthy, practicable, friends among women of eminence,
+			inclination to sensual pleasures, well read, showy.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInGemini</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Inclination to physical labor, boastful, sweet
+			speech, tall. active, cultured, tactful, dexterous to mothers,
+			indolent, inventive. taste in literature, arts and sciences, winning
+			manners, liable to throat and bronchial troubles, musician,
+			mirthful, studious.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInCancer</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Witty, likes music, disliked by relations, low
+			stature, speculative, diplomatic, discreet, flexible, restless,
+			sensual though religious, liable to consumption, strong
+			parental love, dislike for chastity.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInLeo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Few children. wanderer, idiotic, proud, indolent,
+			not fond of women. boastful. orator. good memory, lwo
+			mothers, poor, early marriage, independent in thinking,
+			impulsive, positive will, remunerative profession, likes travelling
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInVirgo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Learned, virtuous, liberal. fearless, ingenious.
+			handsome, irritable, refined, subtle, intuitive, sociable, no
+			self-control, morbid imaginations, dyspeptic difficulties,
+			eloquent, author, priest, astronomer.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInLibra</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Fair complexion, sanguine disposition. inclination
+			to excesses, perceptive faculties, material tendencies, frugal,
+			agreeable. courteous. philosophical, faithful. ceremonial-minded,
+			sociable, discreet.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInScorpio</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Short, curly hair, incentive to indulgence,
+			liable to disease of the generative organ, general debility,
+			crafty, malicious, selfish, subtle, indiscreet, bold, reckless
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInSagittarius</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Taste in sciences, respected by polished
+			society, tall, well built, learned, rash, superstitious, vigorous,
+			executive, diplomatic, cunning, just, capable.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInCapricornus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricornus - Selfless, business tendencies, economical,
+			debtor, inconsistent, low stature, cunning, inventive, active.
+			restless, suspicious, drudging.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInAquarius</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Middle stature, licentious, proud, quarrelsome
+			frank, sociable, rapid strides in life, famous, scholar,
+			cowardly, weak constitution.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryInPisces</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - A dependent, serves others, dexterous, peevish,
+			indolent, petty-minded, respect for gods, and Brahmins.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	
+	
+	<!--JUPITER IN SIGNS-->
+	<Event>
+		<Name>JupiterInAries</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Jupiter in Aries - Love of grandeur, powerful, wealthy,
+			prudent, many children, courteous, generous, firm, sympathetic,
+			happy marriage, patient nature, harmonious, refined,
+			high position.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInTaurus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Stately, elegant, self-importance, liberal, dutiful
+			sons, just, sympathetic, well read, creative ability, despotic,
+			healthy, happy marriage, liked by all, inclination to self-gratification.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInGemini</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Oratorial ability, tall, well-built, benevolent,
+			pure-hearted. scholarly. sagicious, diplomatic, linguist or
+			poet, elegant, incentive.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInCancer</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Well read, dignified. wealthy. comfortable:
+			intelligent, swarthy complexion, inclined to social gossip,
+			mathematician, faithful.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInLeo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Commanding appearance, tall. great, easily offended,
+			ambitious, active happy, intelligent, wise, prudent generous
+			broad-minded, literary, harmonious surroundings, likes hills
+			and dales.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInVirgo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Middle stature, ambitious, selfish, stoical, resignation,
+			affectionate, fortunate, stingy, lovable, a beautiful
+			wife, great endurance, learned.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInLibra</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Handsome, free, open-minded. hasty, attractive,
+			just, courteous, strong, able, exhaustion from over-activity,
+			religious, competent, unassuming, pleasing.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInScorpio</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Tall, somewhat stooping, elegant manners,
+			serious, exacting, well built, superior airs, selfish, imprudent,
+			weak constitution, sub-servient to women, passionate, conventional,
+			proud, zealous, ceremonious, unhappy life.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInSagittarius</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Pretty inheritaner, wealthy, influential,
+			handsome, noble, trustworthy, charitable, good executive
+			ability, weak constitution, artistic qualities, poetic, open-minded,
+			good conversationalist .
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInCapricornus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricornus - Tactless, good intention, disgraceful behaviour,
+			generous, unhappy, irritable, inconsistent, avaricious,
+			unmanly, jealous.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInAquarius</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Learned, not rich, controversial figure, philosophical,
+			popular, compassionate, sympathetic, amiable, prudent, humanitarian
+			melancholic, meditative, dreamy, dental troubles.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterInPisces</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - Good inheritance. stout, medium height, two
+			marriages if with malefics, enterprising, political diplomacy,
+			high position.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+
+
+	<!--VENUS IN SIGNS-->
+	<Event>
+		<Name>VenusInAries</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Venus in Aries - Extravagant, active, mutable, artistic,
+			dreamy, idealist, proficient in fine arts, licentious, sorrowful,
+			fickle-minded, prudent, unhappy, irreligious, easy going, loss
+			of wealth due to loose life.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInTaurus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Well built, handsome, pleasing countenance,
+			independent, sensual, love of nature, fond of pleasure, elegant,
+			taste in dancing and music voluptuous.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInGemini</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Rich, gentle, kind, generous, eloquent, proud,
+			respected, gullible, love of fine arts, learned, intelligent, good
+			logician, just, dual marriage. tendencies towards materialism.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInCancer</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Melancholy, emotional, timid, more than one
+			wife, haughty, sorrowful, light character, inconsistent, unhappy,
+			many children, sensitive, learned
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInLeo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Money through women, pretty wife, wayward,
+			conceited, passionate, fair complexion, emotional, zealous,
+			licentious. attracted by the fair sex, premature in conclusions,
+			superior airs, unvanquished by enemies.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInVirgo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Petty-minded, licentious, unscrupulous, unhappy,
+			illicit love, agile, loquacious, rich, learned.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInLibra</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Statesman, poet, intelligent, generous, philosophical,
+			handsome, matrimonial felicity, successful marriage,
+			passoinate, proud, respected, intuitive, sensual, wide travels.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInScorpio</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Broad features, quarrelsome, medium statured,
+			independent, artistic, unjust, proud, disappointed in love,
+			haughty, not rich.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInSagittarius</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Medium height, powerful, wealthy, respected,
+			impertinent, generous, frank, happy domestic lire, high
+			position, philosophical.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInCapricornus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricornus - Fond of low class women, imprudent, ambitious,
+			unprincipled, licentious, boastful, subtle, learned, weak
+			body.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInAquarius</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Liked by all, middle stature, handsome, affable.
+			persuasive, witty, timid, chaste, calm, helpful and humanitarian.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusInPisces</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - Witty, tactful, learned, popular, just, ingenious,
+			caricaturist, modest, refined, powerful, exalted, respected,
+			pleasure-seeking.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+
+
+	<!--SATURN IN SIGNS-->
+	<Event>
+		<Name>SaturnInAries</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Saturn in Aries - Idiotic, wanderer, insincere,
+			peevish, resentful, cruel, fraudulent, immoral, boastful,
+			quarrelsome, gloomy, mischievous, perverse, misunderstanding nature.
+			nature.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInTaurus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Taurus - Dark complexion, deceitful, successful, powerful,
+			unorthodox, clever, likes solitude, voracious eater, persuasive,
+			cool, contagious diseases. many wives. self-restraint, worried
+			nature
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInGemini</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Gemini - Wandering nature, miserable, untidy, original,
+			thin, subtle, ingenious. strategic, few children, taste for
+			chemical and mechanical sciences, narrow-minded. speculative,
+			logical, desperado.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInCancer</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Cancer - Poor, weak teeth, pleasure-seeking, few sons,
+			cheeks full, slow, dull, cunning, rich, selfish, deceitful,
+			malicious, stubborn, devoid of motherly care.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInLeo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Leo - Middle stature, severe, obstinate, few sons, stubborn,
+			unfortunate, conflicting, hard worker, good writer,
+			evil-minded.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInVirgo</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Virgo - Dark complexion, malicious, poor, quarrelsome,
+			erratic, narrow-minded, rude, conservative, taste for public
+			life, weak health.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInLibra</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Libra - Famous, founder of institutions and the like. rich.
+			tall, fair, self-conceited, handsome, tactful, powerful, respected,
+			sound judgment, antagonistic, independent, proud,
+			prominent. charitable, subservient to females.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInScorpio</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Scorpio - Rash. indifferent, hard-hearted, adventurous,
+			petty, self-conceited, reserved, unscrupulous, violent, unhappy.
+			danger from poisons, fire and weapons, wasteful, unhealthy.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInSagittarius</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Sagittarius - Pushful, artful, cunning, famous, peaceful,
+			faithful, pretentious, apparently generous, troubles with wife,
+			courteous, dutiful children, generally happy.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInCapricornus</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Capricornus - Intelligent, harmony and felicity in domestic
+			life, selfish, covetous, peevish, intellectual, learned, suspicious,
+			reflective, revengeful, prudent, melancholy, inheritance from
+			wife's parties.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInAquarius</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Aquarius - Practical, able, diplomatic, ingenious, a bit
+			conceited, prudent, happy, reflective, intellectual, philosophical,
+			vanquished by enemies.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnInPisces</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Pisces - Clever, pushful, gifted, polite, happy, good, wife
+			trustworthy, scheming, wealthy, helpful.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+
 
 </Root>

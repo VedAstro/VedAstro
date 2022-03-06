@@ -1640,20 +1640,12 @@ namespace Genso.Astrology.Library
 
         public static ZodiacSign GetSunSign(Time time)
         {
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetSunSign", time), _getSunSign);
 
+            //get zodiac sign behind the sun
+            var sunSign = GetPlanetRasiSign(PlanetName.Sun, time);
 
-            //UNDERLYING FUNCTION
-            ZodiacSign _getSunSign()
-            {
-                //get zodiac sign behind the sun
-                var sunSign = GetPlanetRasiSign(PlanetName.Sun, time);
-
-                //return zodiac sign behind sun
-                return sunSign;
-
-            }
+            //return zodiac sign behind sun
+            return sunSign;
 
         }
 

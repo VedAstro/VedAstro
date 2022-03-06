@@ -20,6 +20,7 @@ namespace Genso.Astrology.Library
         Astronomical,
         BuyingSelling,
         Gochara,
-        Dasa
+        Dasa,
+        Horoscope
     }
 }

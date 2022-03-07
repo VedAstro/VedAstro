@@ -8331,6 +8331,72 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        //PLANET STRENGHT
+
+        [EventCalculator(EventName.SunStrength)]
+        public static Prediction SunStrength(Time time, Person person)
+        {
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = true, Strength = strength };
+        }
+        [EventCalculator(EventName.MoonStrength)]
+        public static Prediction MoonStrength(Time time, Person person)
+        {
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = true, Strength = strength };
+        }
+        [EventCalculator(EventName.MarsStrength)]
+        public static Prediction MarsStrength(Time time, Person person)
+        {
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = true, Strength = strength };
+        }
+        [EventCalculator(EventName.MercuryStrength)]
+        public static Prediction MercuryStrength(Time time, Person person)
+        {
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = true, Strength = strength };
+        }
+        [EventCalculator(EventName.JupiterStrength)]
+        public static Prediction JupiterStrength(Time time, Person person)
+        {
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = true, Strength = strength };
+        }
+        [EventCalculator(EventName.SaturnStrength)]
+        public static Prediction SaturnStrength(Time time, Person person)
+        {
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = true, Strength = strength };
+        }
+        [EventCalculator(EventName.VenusStrength)]
+        public static Prediction VenusStrength(Time time, Person person)
+        {
+            //STRENGTH CALCULATION
+            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
+            var strength = raw.ToString();
+
+            return new() { Occuring = true, Strength = strength };
+        }
+
 
         #endregion
 

@@ -863,8 +863,13 @@
         SaturnInSagittarius,
         SaturnInCapricornus,
         SaturnInAquarius,
-        SaturnInPisces
-
-
+        SaturnInPisces,
+        SunStrength,
+        MoonStrength,
+        MarsStrength,
+        MercuryStrength,
+        JupiterStrength,
+        SaturnStrength,
+        VenusStrength
     }
 }

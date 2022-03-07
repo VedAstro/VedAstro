@@ -180,8 +180,9 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Customizable function to delete accidentally created events
+        /// Example date : "00:00 01/01/2021 +08:00"
         /// </summary>
-        public static void DeleteEventsGoogle(string calendarId)
+        public static void DeleteEventsGoogle(string calendarId, string searchText, string startDate)
         {
             // get the Google Calendar API service, for connecting to calendar
             var service = GetAccountAPIAccessGoogle();
@@ -189,9 +190,9 @@ namespace Genso.Astrology.Library
             EventsResource.ListRequest eventRequest = service.Events.List(calendarId);
 
             //specify variables to find the events to delete
-            eventRequest.Q = "Ugra";
+            eventRequest.Q = searchText;
             //all events after this time
-            eventRequest.TimeMin = DateTimeOffset.ParseExact("00:00 01/01/2021 +08:00", Time.GetDateTimeFormat(), null).DateTime;
+            eventRequest.TimeMin = DateTimeOffset.ParseExact(startDate, Time.GetDateTimeFormat(), null).DateTime;
 
             //execute request
             var result = eventRequest.Execute();

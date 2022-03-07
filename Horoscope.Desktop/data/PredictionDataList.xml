@@ -2876,5 +2876,58 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 
+	<!--PLANET STRENGTH-->
+	<Event>
+		<Name>SunStrength</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MoonStrength</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MarsStrength</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryStrength</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterStrength</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnStrength</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+	<Event>
+		<Name>VenusStrength</Name>
+		<Nature>Good</Nature>
+		<Description>
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>
+
+	<!--HOUSE STRENGTH-->
+
 
 </Root>

@@ -6730,6 +6730,37 @@ namespace Genso.Astrology.Library
                 if (house == 9) { return 6; }
 
             }
+            //copy of saturn & mars
+            if (planet == PlanetName.Rahu)
+            {
+                //good
+                if (house == 3) { return 12; }
+                if (house == 11) { return 5; }
+                if (house == 6) { return 9; }
+
+                //bad
+                if (house == 12) { return 3; }
+                if (house == 5) { return 11; }
+                if (house == 9) { return 6; }
+
+            }
+            if (planet == PlanetName.Ketu)
+            {
+                //good
+                if (house == 3) { return 12; }
+                if (house == 11) { return 5; }
+                if (house == 6) { return 9; }
+
+                //bad
+                if (house == 12) { return 3; }
+                if (house == 5) { return 11; }
+                if (house == 9) { return 6; }
+
+            }
+
+
+
+
 
             //if no condition above met, then there is no obstruction point
             return 0;

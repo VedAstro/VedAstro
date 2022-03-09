@@ -26,6 +26,8 @@ namespace Genso.Astrology.Library
         /// </summary>
         public GeoLocation GetBirthLocation() => _birthTime.GetGeoLocation();
 
+        public string GetName() => _name;
+
 
         //OVERRIDES METHODS
         public override bool Equals(object value)

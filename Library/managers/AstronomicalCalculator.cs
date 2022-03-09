@@ -258,7 +258,6 @@ namespace Genso.Astrology.Library
             return CacheManager.GetCache(new CacheKey("GetPlanetConstellation", planetLongitude), _getPlanetConstellation);
 
 
-
             //UNDERLYING FUNCTION
             PlanetConstellation _getPlanetConstellation()
             {
@@ -296,6 +295,8 @@ namespace Genso.Astrology.Library
             }
 
         }
+
+
 
         /// <summary>
         /// Get zodiac sign at the longitude
@@ -1410,6 +1411,7 @@ namespace Genso.Astrology.Library
             return GetPlanetConstellation(moonLongitude);
         }
 
+
         public static Tarabala GetTarabala(Time time, Person person)
         {
             int dayRulingConstellationNumber = GetMoonConstellation(time).GetConstellationNumber();
@@ -1422,7 +1424,7 @@ namespace Genso.Astrology.Library
 
 
             //Need to count from birthRulingConstellationNumber to dayRulingConstellationNumber
-
+            //todo upgrade to "ConstellationCounter", double check validity first
             //If birthRulingConstellationNumber is more than dayRulingConstellationNumber
             if (birthRulingConstellationNumber > dayRulingConstellationNumber)
             {
@@ -6514,6 +6516,47 @@ namespace Genso.Astrology.Library
             }
 
             return count;
+        }
+
+        /// <summary>
+        /// Counts from start Constellation to end Constellation
+        /// Example : Aquarius to Taurus is 4
+        /// </summary>
+        public static int CountFromConstellationToConstellation(PlanetConstellation start, PlanetConstellation end)
+        {
+
+            //get the number equivalent of the constellation
+            int endConstellationNumber = end.GetConstellationNumber();
+
+            int startConstellationNumber = start.GetConstellationNumber();
+
+            int counter = 0;
+
+
+            //Need to count from birthRulingConstellationNumber to dayRulingConstellationNumber
+
+            //if start is more than end (meaning lower in the list)
+            if (startConstellationNumber > endConstellationNumber)
+            {
+                //count from start to last constellation (27)
+                int countToLastConstellation = (27 - startConstellationNumber) + 1; //plus 1 to count it self
+
+                //to previous count add end constellation number
+                counter = endConstellationNumber + countToLastConstellation;
+            }
+            else if (startConstellationNumber == endConstellationNumber)
+            {
+                counter = 1;
+            }
+            else if (startConstellationNumber < endConstellationNumber)
+            {
+                //if start sign is lesser than end sign (meaning higher in the list)
+                //we can minus like normal, and just add 1 to count it self
+                counter = (endConstellationNumber - startConstellationNumber) + 1; //plus 1 to count it self
+            }
+
+
+            return counter;
         }
 
         #region Gochara Calculations

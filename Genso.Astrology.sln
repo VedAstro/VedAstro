@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Books\MUHURTHA.pdf = Books\MUHURTHA.pdf
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Compatibility", "Compatibility\Compatibility.csproj", "{EE6B3578-639B-4EE5-BC02-B9B226D8E17F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{B27D2CCB-49F7-4D8E-8743-60563BF1DB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B27D2CCB-49F7-4D8E-8743-60563BF1DB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B27D2CCB-49F7-4D8E-8743-60563BF1DB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE6B3578-639B-4EE5-BC02-B9B226D8E17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE6B3578-639B-4EE5-BC02-B9B226D8E17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE6B3578-639B-4EE5-BC02-B9B226D8E17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE6B3578-639B-4EE5-BC02-B9B226D8E17F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

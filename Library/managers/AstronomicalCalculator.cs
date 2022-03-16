@@ -116,6 +116,7 @@ namespace Genso.Astrology.Library
 
 
         }
+
         public static Angle GetPlanetSayanaLatitude(Time time, PlanetName planetName)
         {
 
@@ -248,6 +249,7 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
+        /// Converts Planet Longitude to Constellation equivelant
         /// Gets info about the constellation at a given longitude, ie. Constellation Name,
         /// Quarter, Degrees in constellation, etc.
         /// </summary>
@@ -297,10 +299,8 @@ namespace Genso.Astrology.Library
         }
 
 
-
         /// <summary>
-        /// Get zodiac sign at the longitude
-        /// And contains also the degrees in that sign
+        /// Converts Planet Longitude to Zodiac Sign equivelant
         /// </summary>
         public static ZodiacSign GetZodiacSignAtLongitude(Angle longitude)
         {
@@ -352,6 +352,45 @@ namespace Genso.Astrology.Library
 
 
         }
+
+        /// <summary>
+        /// Converts Planet Longitude to Zodiac Sign equivelant
+        /// TODO needs testing!
+        /// </summary>
+        public static Angle GetLongitudeAtZodiacSign(ZodiacSign zodiacSign)
+        {
+
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey("GetLongitudeAtZodiacSign", zodiacSign), _getLongitudeAtZodiacSign);
+
+
+            //UNDERLYING FUNCTION
+            Angle _getLongitudeAtZodiacSign()
+            {
+
+                //convert zodic name to its number equivelant in order
+                var zodiacNumber = (int)zodiacSign.GetSignName();
+
+                //calculate planet longitude to sign just before
+                var zodiacBefore = zodiacNumber - 1;
+                var maxDegreesInSign = 30.0;
+                var longtiudeToBefore = Angle.FromDegrees(maxDegreesInSign * zodiacBefore);
+
+                //add planet longitude from sign just before with
+                //degrees already traversed in current sign
+                var totalLongitude = longtiudeToBefore + zodiacSign.GetDegreesInSign();
+
+                return totalLongitude;
+            }
+
+
+        }
+
+        #region Longitude Converters
+
+
+
+        #endregion
 
         public static DayOfWeek GetDayOfWeek(Time time)
         {
@@ -770,6 +809,20 @@ namespace Genso.Astrology.Library
 
         }
 
+        /// <summary>
+        /// Gets the exact longitude where planet is Exaltated/Exaltation
+        ///
+        /// NOTE:
+        /// Rahu & ketu have exaltation points ref : Astroloy for Beginners pg. 12
+        /// 
+        /// Exaltation
+        /// Each planet is held to be exalted when it is
+        /// in a particular sign. The power to do good when in
+        /// exaltation is greater than when in its own sign.
+        /// Throughout the sign ascribed, the planet is exalted
+        /// but in a particular degree its exaltation is at the maximum level.
+        /// 
+        /// </summary>
         public static ZodiacSign GetPlanetExaltationPoint(PlanetName planetName)
         {
 
@@ -785,6 +838,7 @@ namespace Genso.Astrology.Library
                 {
                     return new ZodiacSign(ZodiacName.Aries, Angle.FromDegrees(10));
                 }
+
                 // Moon 3rd of Taurus;
                 else if (planetName == PlanetName.Moon)
                 {
@@ -821,13 +875,39 @@ namespace Genso.Astrology.Library
                     return new ZodiacSign(ZodiacName.Libra, Angle.FromDegrees(20));
                 }
 
+                // Rahu 20th of Taurus.
+                else if (planetName == PlanetName.Rahu)
+                {
+                    return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(20));
+                }
+                // Ketu 20th of Scorpio.
+                else if (planetName == PlanetName.Ketu)
+                {
+                    return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(20));
+                }
+
                 throw new Exception("Planet exaltation point not found, error!");
 
             }
 
         }
 
-        public static Angle GetPlanetDebilitationPoint(PlanetName planetName)
+        /// <summary>
+        /// Gets the exact longitude where planet is Debilitated/Debility
+        /// TODO method needs testing!
+        /// Note:
+        /// -   Rahu & ketu have debilitation points ref : Astroloy for Beginners pg. 12
+        /// -   "planet to sign relationship" is the whole sign, this is just a point
+        /// -   The 7th house or the 180th degree from the place of exaltation is the
+        ///     place of debilitation or fall. The Sun is debilitated-
+        ///     in the 10th degree of Libra, the Moon 3rd
+        ///     of Scorpio and so on.
+        /// -   The debilitation or depression points are found
+        ///     by adding 180° to the maximum points given above.
+        ///     While in a state of fall, planets give results contrary
+        ///     to those when in exaltation. ref : Astroloy for Beginners pg. 11
+        /// </summary>
+        public static ZodiacSign GetPlanetDebilitationPoint(PlanetName planetName)
         {
 
             //CACHE MECHANISM
@@ -835,7 +915,7 @@ namespace Genso.Astrology.Library
 
 
             //UNDERLYING FUNCTION
-            Angle _getPlanetDebilitationPoint()
+            ZodiacSign _getPlanetDebilitationPoint()
             {
                 //The 7th house or the
                 // 180th degree from the place of exaltation is the
@@ -843,34 +923,90 @@ namespace Genso.Astrology.Library
                 // in the 10th degree of Libra, the Moon 3rd
                 // of Scorpio and so on.
 
+                //if (planetName == PlanetName.Sun)
+                //{
+                //    return Angle.FromDegrees(190);
+                //}
+                //else if (planetName == PlanetName.Moon)
+                //{
+                //    return Angle.FromDegrees(213);
+                //}
+                //else if (planetName == PlanetName.Mars)
+                //{
+                //    return Angle.FromDegrees(118);
+                //}
+                //else if (planetName == PlanetName.Mercury)
+                //{
+                //    return Angle.FromDegrees(345);
+                //}
+                //else if (planetName == PlanetName.Jupiter)
+                //{
+                //    return Angle.FromDegrees(275);
+                //}
+                //else if (planetName == PlanetName.Venus)
+                //{
+                //    return Angle.FromDegrees(177);
+                //}
+                //else if (planetName == PlanetName.Saturn)
+                //{
+                //    return Angle.FromDegrees(20);
+                //}
+
+
+                //Sun in the 10th degree of Libra;
                 if (planetName == PlanetName.Sun)
                 {
-                    return Angle.FromDegrees(190);
+                    return new ZodiacSign(ZodiacName.Libra, Angle.FromDegrees(10));
                 }
+
+                // Moon 0 of Scorpio
                 else if (planetName == PlanetName.Moon)
                 {
-                    return Angle.FromDegrees(213);
+                    //TODO check if 0 degrees exist
+                    return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(0));
                 }
+
+                // Mars 28th of Cancer ;
                 else if (planetName == PlanetName.Mars)
                 {
-                    return Angle.FromDegrees(118);
+                    return new ZodiacSign(ZodiacName.Cancer, Angle.FromDegrees(28));
                 }
+
+                // Mercury 15th of Pisces;
                 else if (planetName == PlanetName.Mercury)
                 {
-                    return Angle.FromDegrees(345);
+                    return new ZodiacSign(ZodiacName.Pisces, Angle.FromDegrees(15));
                 }
+
+                // Jupiter 5th of Capricorn;
                 else if (planetName == PlanetName.Jupiter)
                 {
-                    return Angle.FromDegrees(275);
+                    return new ZodiacSign(ZodiacName.Capricornus, Angle.FromDegrees(5));
                 }
+
+                // Venus 27th of Virgo and
                 else if (planetName == PlanetName.Venus)
                 {
-                    return Angle.FromDegrees(177);
+                    return new ZodiacSign(ZodiacName.Virgo, Angle.FromDegrees(27));
                 }
+
+                // Saturn 20th of Aries.
                 else if (planetName == PlanetName.Saturn)
                 {
-                    return Angle.FromDegrees(20);
+                    return new ZodiacSign(ZodiacName.Aries, Angle.FromDegrees(20));
                 }
+
+                // Rahu 20th of Scorpio.
+                else if (planetName == PlanetName.Rahu)
+                {
+                    return new ZodiacSign(ZodiacName.Scorpio, Angle.FromDegrees(20));
+                }
+                // Ketu 20th of Taurus.
+                else if (planetName == PlanetName.Ketu)
+                {
+                    return new ZodiacSign(ZodiacName.Taurus, Angle.FromDegrees(20));
+                }
+
 
                 throw new Exception("Planet debilitation point not found, error!");
 
@@ -1330,6 +1466,10 @@ namespace Genso.Astrology.Library
 
         }
 
+        /// <summary>
+        /// Gets planet longitude used vedic astrology
+        /// Nirayana Longitude = Sayana Longitude corrected to Ayanamsa
+        /// </summary>
         public static Angle GetPlanetNirayanaLongitude(Time time, PlanetName planetName)
         {
             //CACHE MECHANISM
@@ -1410,7 +1550,6 @@ namespace Genso.Astrology.Library
             //return the constellation behind the moon
             return GetPlanetConstellation(moonLongitude);
         }
-
 
         public static Tarabala GetTarabala(Time time, Person person)
         {
@@ -2088,7 +2227,6 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
-        /// <summary>
         /// Gets longitudinal space between 2 planets
         /// Note :
         /// - Longitude of planet after 360 is 0 degrees,
@@ -2713,6 +2851,12 @@ namespace Genso.Astrology.Library
             throw new Exception("Planet drekkana not found, error!");
         }
 
+        /// <summary>
+        /// Similar to Exaltation but covers a range not just a point
+        /// Moolathrikonas, these are positions similar to exaltation.
+        /// NOTE:
+        /// - No moolatrikone for Rahu & Ketu, no error will be raised
+        /// </summary>
         public static bool IsPlanetInMoolatrikona(PlanetName planetName, Time time)
         {
             //get sign planet is in
@@ -2895,6 +3039,9 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Gets a planet's relationship to a sign, based on the relation to the lord
+        /// Note :
+        /// - Moolatrikona, Debilited & Exalted is not calculated heres
+        /// - Rahu & ketu not accounted for
         /// </summary>
         public static PlanetToSignRelationship GetPlanetRelationshipWithSign(PlanetName planetName, ZodiacName zodiacSignName, Time time)
         {
@@ -2905,6 +3052,7 @@ namespace Genso.Astrology.Library
             //Adhi Mitravarga - Intimate friend varga
             //Satruvarga - enemy's varga
             //Adhi Satruvarga - Bitter enemy varga
+
 
             //Get lord of zodiac sign
             var lordOfSign = AstronomicalCalculator.GetLordOfZodiacSign(zodiacSignName);
@@ -2917,8 +3065,7 @@ namespace Genso.Astrology.Library
             }
 
             //else, get relationship between input planet and lord of sign
-            PlanetToPlanetRelationship relationshipToLordOfSign =
-                AstronomicalCalculator.GetPlanetCombinedRelationshipWithPlanet(planetName, lordOfSign, time);
+            PlanetToPlanetRelationship relationshipToLordOfSign = GetPlanetCombinedRelationshipWithPlanet(planetName, lordOfSign, time);
 
             //return relation ship with sign based on relationship with lord of sign
             switch (relationshipToLordOfSign)
@@ -2950,14 +3097,11 @@ namespace Genso.Astrology.Library
             //if main planet & secondary planet is same, then it is own plant (same planet), end here
             if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.Own; }
 
-
             //get planet's permanent relationship
-            PlanetToPlanetRelationship planetPermanentRelationship =
-                AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(mainPlanet, secondaryPlanet);
+            PlanetToPlanetRelationship planetPermanentRelationship = GetPlanetPermanentRelationshipWithPlanet(mainPlanet, secondaryPlanet);
 
             //get planet's temporary relationship
-            PlanetToPlanetRelationship planetTemporaryRelationship =
-                AstronomicalCalculator.GetPlanetTemporaryRelationshipWithPlanet(mainPlanet, secondaryPlanet, time);
+            PlanetToPlanetRelationship planetTemporaryRelationship = GetPlanetTemporaryRelationshipWithPlanet(mainPlanet, secondaryPlanet, time);
 
             //Tatkalika Mitra + Naisargika Mitra = Adhi Mitras
             if (planetTemporaryRelationship == PlanetToPlanetRelationship.Mitra && planetPermanentRelationship == PlanetToPlanetRelationship.Mitra)
@@ -4768,10 +4912,12 @@ namespace Genso.Astrology.Library
 
         }
 
-        //TODO : use of shadvarga bala might be wrong here, needs clarification
-        //      problem is too much of time goes under bad, doesnt seem right
-        //      for now we put it 140 threhold so guarenteed to be strong
-        //      and doesn not occur all the time
+        /// <summary>
+        /// TODO : use of shadvarga bala might be wrong here, needs clarification
+        /// problem is too much of time goes under bad, doesnt seem right
+        /// for now we put it 140 threhold so guarenteed to be strong
+        /// and doesn not occur all the time
+        /// </summary>
         public static bool IsPlanetStrongInShadvarga(PlanetName planet, Time time)
         {
             //get planet shadvarga bala
@@ -5573,10 +5719,12 @@ namespace Genso.Astrology.Library
 
             //2.0 Get planet debilitation point
             var planetDebilitationPoint = AstronomicalCalculator.GetPlanetDebilitationPoint(planetName);
+            //convert to planet longitude
+            var debilitationLongitude = GetLongitudeAtZodiacSign(planetDebilitationPoint);
 
             //3.0 Get difference between planet longitude & debilitation point
             //var difference = planetLongitude.GetDifference(planetDebilitationPoint); //todo need checking
-            var difference = AstronomicalCalculator.GetDistanceBetweenPlanets(planetLongitude, planetDebilitationPoint);
+            var difference = GetDistanceBetweenPlanets(planetLongitude, debilitationLongitude);
 
             //4.0 If difference is more than 180 degrees
             if (difference.TotalDegrees > 180)
@@ -6249,7 +6397,7 @@ namespace Genso.Astrology.Library
         /// Neutral point is derived from all possible Shadvarga bala values across
         /// 25 years (2000-2025), with 1 hour granularity
         ///
-        /// Formula used = ((max-min)/2)+min (min is added because lowest value is not 0)
+        /// Formula used = ((max-min)/2)+min (add min to get exact neutral point from 0 range)
         /// max = hightest possible value
         /// min = lowest possible value
         /// </summary>
@@ -6272,10 +6420,15 @@ namespace Genso.Astrology.Library
                 if (planet == PlanetName.Sun) { max = 180; min = 17; }
                 if (planet == PlanetName.Moon) { max = 165; min = 26; }
 
-                //calculate neutral point
-                var neutralPoint = ((max - min) / 2) + min;
+                //difference between max & min
+                var difference = (max - min);
+
+                //divide difference in half to get neutral point
+                //add min to get exact neutral point from 0 range
+                var neutralPoint = (difference / 2) + min;
 
                 if (neutralPoint <= 0) { throw new Exception("Planet does not have neutral point!"); }
+
 
                 return neutralPoint;
             }
@@ -6307,7 +6460,7 @@ namespace Genso.Astrology.Library
 
             //if it matches then occuring
             return houseIsIn == (int)occupiedHouse;
-            
+
 
 
         }
@@ -6319,7 +6472,7 @@ namespace Genso.Astrology.Library
         {
             //get all the planets conjuct with inputed planet
             var planetsInConjunct = AstronomicalCalculator.GetPlanetsInConjuction(time, planetName);
-            
+
             //get all evil planets
             var evilPlanets = AstronomicalCalculator.GetMaleficPlanetList(time);
 
@@ -6338,7 +6491,7 @@ namespace Genso.Astrology.Library
         {
             //get all the planets in the house
             var planetsInHouse = AstronomicalCalculator.GetPlanetsInHouse(houseNumber, time);
-            
+
             //get all evil planets
             var evilPlanets = AstronomicalCalculator.GetMaleficPlanetList(time);
 
@@ -6358,7 +6511,7 @@ namespace Genso.Astrology.Library
         {
             //get all the planets in the house
             var planetsInHouse = AstronomicalCalculator.GetPlanetsInHouse(houseNumber, time);
-            
+
             //get all good planets
             var goodPlanets = AstronomicalCalculator.GetBeneficPlanetList(time);
 
@@ -6655,17 +6808,17 @@ namespace Genso.Astrology.Library
             if (planet == PlanetName.Sun)
             {
                 //good
-                if (house == 11) { return 5; } 
+                if (house == 11) { return 5; }
                 if (house == 3) { return 9; }
                 if (house == 10) { return 4; }
                 if (house == 6) { return 12; }
                 //bad
-                if (house == 5) { return 11; } 
+                if (house == 5) { return 11; }
                 if (house == 9) { return 3; }
                 if (house == 4) { return 10; }
                 if (house == 12) { return 6; }
             }
-           
+
             if (planet == PlanetName.Moon)
             {
                 //good
@@ -6696,7 +6849,7 @@ namespace Genso.Astrology.Library
                 if (house == 5) { return 11; }
                 if (house == 9) { return 6; }
             }
-            
+
             if (planet == PlanetName.Mercury)
             {
                 //good
@@ -6839,13 +6992,13 @@ namespace Genso.Astrology.Library
         {
             //get dasa planet at birth
             var moonConstellation = GetMoonConstellation(birthTime);
-            var birthDasaPlanet =  GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
+            var birthDasaPlanet = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
 
             //get time traversed in birth dasa
             var timeTraversedInDasa = GetYearsTraversedInBirthDasa(birthTime);
-            
+
             //get time from birth to current time (converted to Dasa years ie. 360 days per year)
-            var timeBetween = currentTime.Subtract(birthTime).TotalDays/360.0;
+            var timeBetween = currentTime.Subtract(birthTime).TotalDays / 360.0;
 
             //combine years traversed at birth and years to current time
             //this is done to easily calculate to current dasa, bhukti & antaram
@@ -6889,8 +7042,8 @@ namespace Genso.Astrology.Library
                 //first possible antaram planet is the bhukti planet
                 var possibleAntaramPlanet = bhuktiPlanet;
 
-                //minus the possible antaram planet's full years
-                MinusAntaramYears:
+            //minus the possible antaram planet's full years
+            MinusAntaramYears:
                 var antaramPlanetFullYears = GetAntaramPlanetFullYears(dasaPlanet, bhuktiPlanet, possibleAntaramPlanet);
                 antaramYears -= antaramPlanetFullYears;
 
@@ -6917,9 +7070,9 @@ namespace Genso.Astrology.Library
             {
                 //first possible bhukti planet is the major Dasa planet
                 var possibleBhuktiPlanet = dasaPlanet;
-                
-                //minus the possible bhukti planet's full years
-                MinusBhuktiYears:
+
+            //minus the possible bhukti planet's full years
+            MinusBhuktiYears:
                 var bhuktiPlanetFullYears = GetBhuktiPlanetFullYears(dasaPlanet, possibleBhuktiPlanet);
                 bhuktiYears -= bhuktiPlanetFullYears;
 
@@ -6931,7 +7084,7 @@ namespace Genso.Astrology.Library
                     //this is the years inside the current bhukti, aka antaram years
                     //save it for late use
                     antaramYears = bhuktiYears + bhuktiPlanetFullYears;
-                    
+
                     //return possible planet as correct
                     return possibleBhuktiPlanet;
                 }
@@ -6951,8 +7104,8 @@ namespace Genso.Astrology.Library
                 //possible planet starts with the inputed one
                 var possibleDasaPlanet = startDasaPlanet;
 
-                //minus planet years
-                MinusDasaYears:
+            //minus planet years
+            MinusDasaYears:
                 var dasaPlanetFullYears = GetDasaPlanetFullYears(possibleDasaPlanet);
                 dasaYears -= dasaPlanetFullYears;
 
@@ -7021,7 +7174,7 @@ namespace Genso.Astrology.Library
             var yearsLeft = fullYears - yearsTraversed;
 
             //raise error if years traversed is more than full years
-            if (yearsLeft < 0) {throw new Exception("Dasa years traversed is more than full years!");}
+            if (yearsLeft < 0) { throw new Exception("Dasa years traversed is more than full years!"); }
 
             return yearsLeft;
         }
@@ -7200,6 +7353,66 @@ namespace Genso.Astrology.Library
         public static bool IsPlanetInHouse(Time time, PlanetName planet, int houseNumber)
         {
             return AstronomicalCalculator.GetHousePlanetIsIn(time, planet) == houseNumber;
+        }
+
+        /// <summary>
+        /// Checks if a planet is in a longitude where it's in Debilited
+        /// Note : Rahu & ketu accounted for
+        /// </summary>
+        public static bool IsPlanetDebilited(PlanetName planet, Time time)
+        {
+            //get planet location
+            var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
+
+            //convert planet longitude to zodiac sign
+            var planetZodiac = GetZodiacSignAtLongitude(planetLongitude);
+
+            //get the longitude where planet is Debilited
+            var point = GetPlanetDebilitationPoint(planet);
+
+            //check if planet is in Debilitation sign
+            var sameSign = planetZodiac.GetSignName() == point.GetSignName();
+
+            //check only degree ignore minutes & seconds
+            var sameDegree = planetZodiac.GetDegreesInSign().Degrees == point.GetDegreesInSign().Degrees;
+            var planetIsDebilitated = sameSign && sameDegree;
+
+            return planetIsDebilitated;
+        }
+
+        /// <summary>
+        /// Checks if a planet is in a longitude where it's in Exaltation
+        ///
+        /// NOTE:
+        /// -   Rahu & ketu accounted for
+        /// 
+        /// -   Exaltation
+        ///     Each planet is held to be exalted when it is
+        ///     in a particular sign. The power to do good when in
+        ///     exaltation is greater than when in its own sign.
+        ///     Throughout the sign ascribed,
+        ///     the planet is exalted but in a particular degree
+        ///     its exaltation is at the maximum level.
+        /// </summary>
+        public static bool IsPlanetExaltated(PlanetName planet, Time time)
+        {
+            //get planet location
+            var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
+
+            //convert planet longitude to zodiac sign
+            var planetZodiac = AstronomicalCalculator.GetZodiacSignAtLongitude(planetLongitude);
+
+            //get the longitude where planet is Exaltation
+            var point = GetPlanetExaltationPoint(planet);
+
+            //check if planet is in Exaltation sign
+            var sameSign = planetZodiac.GetSignName() == point.GetSignName();
+
+            //check only degree ignore minutes & seconds
+            var sameDegree = planetZodiac.GetDegreesInSign().Degrees == point.GetDegreesInSign().Degrees;
+            var planetIsExaltation = sameSign && sameDegree;
+
+            return planetIsExaltation;
         }
     }
 

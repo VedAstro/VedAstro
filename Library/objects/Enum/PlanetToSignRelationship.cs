@@ -33,7 +33,7 @@
         AdhiSatruvarga = 6,
 
         /// <summary>
-        /// Special position
+        /// Special position Note: use special calculator
         /// </summary>
         Moolatrikona = 7
     }

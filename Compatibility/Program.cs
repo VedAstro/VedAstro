@@ -14,8 +14,8 @@ namespace Compatibility
             var peopleList = MuhurthaCore.GetAllPeopleList();
 
             //filter out the male and female ones we want
-            var maleName = "Viknesh";
-            var femaleName = "Rosita";
+            var maleName = "Rubeshen";
+            var femaleName = "Dhiviya";
             var male = peopleList.Find(person => person.GetName() == maleName);
             var female = peopleList.Find(person => person.GetName() == femaleName);
 
@@ -28,14 +28,20 @@ namespace Compatibility
             //var female = new Person("Female", new Time(stdTimeFemale, geoLocation));
 
 
-            //given a list of people find good matches
-            var goodMatches = FindGoodMatches(peopleList);
+            PrintOneVsOne(male, female);
+            //PrintOneVsList(female);
+
+        }
 
 
-            //var report = GetCompatibilityReport(male, female);
+        private static void PrintOneVsOne(Person male, Person female)
+        {
+            var report = GetCompatibilityReport(male, female);
 
-            //show final results to user
-            printResultList(ref goodMatches);
+            var maleName = male.GetName();
+            var femaleName = female.GetName();
+
+            printResult(ref report);
 
 
 
@@ -63,6 +69,22 @@ namespace Compatibility
                 Console.ReadLine();
             }
 
+        }
+
+
+        private static void PrintOneVsList(Person person)
+        {
+
+            //get all the people
+            var peopleList = MuhurthaCore.GetAllPeopleList();
+
+            //given a list of people find good matches
+            //var goodMatches = FindGoodMatches(peopleList);
+            var goodMatches = GetAllMatchesForPersonByStrength(person, peopleList);
+
+            //show final results to user
+            printResultList(ref goodMatches);
+
             void printResultList(ref List<CompatibilityReport> reportList)
             {
                 foreach (var report in reportList)
@@ -74,18 +96,59 @@ namespace Compatibility
             }
 
 
-            EventNature getScoreGrade(double score)
+        }
+
+        private static EventNature getScoreGrade(double score)
+        {
+            if (score > 50)
             {
-                if (score > 50)
-                {
-                    return EventNature.Good;
-                }
-                else
-                {
-                    return EventNature.Bad;
-                }
-                
+                return EventNature.Good;
             }
+            else
+            {
+                return EventNature.Bad;
+            }
+
+        }
+
+
+        private static List<CompatibilityReport> GetAllMatchesForPersonByStrength(Person inputPerson, List<Person> personList)
+        {
+
+            var returnList = new List<CompatibilityReport>();
+
+
+            //this makes sure each person is cross checked against this person correctly
+            foreach (var personMatch in personList)
+            {
+                //get needed details
+                var inputPersonIsMale = inputPerson.GetGender() == Gender.Male;
+                var inputPersonIsFemale = inputPerson.GetGender() == Gender.Female;
+                var personMatchIsMale = personMatch.GetGender() == Gender.Male;
+                var personMatchIsFemale = personMatch.GetGender() == Gender.Female;
+
+                if (inputPersonIsMale && personMatchIsFemale)
+                {
+                    //add report to list
+                    var report = GetCompatibilityReport(inputPerson, personMatch);
+                    returnList.Add(report);
+                }
+
+                if (inputPersonIsFemale && personMatchIsMale)
+                {
+                    //add report to list
+                    var report = GetCompatibilityReport(personMatch, inputPerson);
+                    returnList.Add(report);
+                }
+
+
+            }
+
+
+            //order the list by strength, highest at 0 index
+            var SortedList = returnList.OrderBy(o => o.KutaScore).ToList();
+
+            return SortedList;
 
         }
 

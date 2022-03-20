@@ -132,4 +132,28 @@
 		</BirthTime>
 		<Gender>Male</Gender>
 	</Person>
+	<Person>
+		<Name>Rubeshen</Name>
+		<BirthTime>
+			<Time>23:35 15/05/1992 +08:00</Time>
+			<Location>
+				<Name>Klang</Name>
+				<Longitude>101.4456</Longitude>
+				<Latitude>3.0449</Latitude>
+			</Location>
+		</BirthTime>
+		<Gender>Male</Gender>
+	</Person>
+	<Person>
+		<Name>Haravin</Name>
+		<BirthTime>
+			<Time>04:10 25/03/1991 +08:00</Time>
+			<Location>
+				<Name>Kuala Lumpur</Name>
+				<Longitude>101.6873</Longitude>
+				<Latitude>3.16027</Latitude>
+			</Location>
+		</BirthTime>
+		<Gender>Male</Gender>
+	</Person>
 </Root>

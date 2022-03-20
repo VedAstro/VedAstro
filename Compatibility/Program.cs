@@ -13,51 +13,358 @@ namespace Compatibility
             //get all the people
             var peopleList = MuhurthaCore.GetAllPeopleList();
 
-            //filter out the male and get female ones we want
-            var maleName = "Ravi";
-            var femaleName = "Prema";
+            //filter out the male and female ones we want
+            var maleName = "Viknesh";
+            var femaleName = "Rosita";
             var male = peopleList.Find(person => person.GetName() == maleName);
             var female = peopleList.Find(person => person.GetName() == femaleName);
 
-            //do the calculations & add results to a list
-            var list = new List<Prediction>(){
-                GrahaMaitram(male, female),
-                Rajju(male, female),
-                NadiKuta(male, female),
-                VasyaKuta(male, female),
-                DinaKuta(male, female),
-                GunaKuta(male, female),
-                Mahendra(male, female),
-                StreeDeergha(male, female),
-                RasiKuta(male, female),
-                VedhaKuta(male, female),
-                Varna(male, female),
-                YoniKuta(male, female),
-                LagnaAndHouse7Good(male, female),
-                KujaDosa(male, female)
-            };
+            //var geoLocation = new GeoLocation("Ipoh", 101, 4.59); //todo check if change in location changes much
+
+            //var stdTimeMale = DateTimeOffset.ParseExact("23:33 19/03/1989 +08:00", Time.GetDateTimeFormat(), null);
+            //var stdTimeFemale = DateTimeOffset.ParseExact("10:27 14/02/1995 +08:00", Time.GetDateTimeFormat(), null);
+
+            //var male = new Person("Male", new Time(stdTimeMale, geoLocation));
+            //var female = new Person("Female", new Time(stdTimeFemale, geoLocation));
 
 
-            //print header
-            Console.WriteLine($"{maleName} <> {femaleName}");
-            Console.WriteLine("Name#Nature#Info#Male#Female#Description");
+            //given a list of people find good matches
+            var goodMatches = FindGoodMatches(peopleList);
 
-            //print rows
-            foreach (var prediction in list)
+
+            //var report = GetCompatibilityReport(male, female);
+
+            //show final results to user
+            printResultList(ref goodMatches);
+
+
+
+            //FUNCTIONS
+            void printResult(ref CompatibilityReport report)
             {
-                //if prediction is empty, than skip it
-                if (prediction.Name == "") { continue; }
-                Console.WriteLine($"{prediction.Name}#{prediction.Nature}#{prediction.Info}#{prediction.MaleInfo}#{prediction.FemaleInfo}#{prediction.Description}");
+                var list = report.PredictionList;
+
+                //print header
+                var maleYear = male.GetBirthDateTime().GetStdDateTimeOffset().Year;
+                var femaleYear = female.GetBirthDateTime().GetStdDateTimeOffset().Year;
+                Console.WriteLine($"{maleName}-{maleYear} <> {femaleName}-{femaleYear}");
+                Console.WriteLine("Name#Nature#Description#Extra Info#Male#Female#");
+
+                //print rows
+                foreach (var prediction in list)
+                {
+                    //if prediction is empty, than skip it
+                    if (prediction.Name == Name.Empty) { continue; }
+                    Console.WriteLine($"{prediction.Name}#{prediction.Nature}#{prediction.Description}#{prediction.Info}#{prediction.MaleInfo}#{prediction.FemaleInfo}");
+                }
+
+                Console.WriteLine($"Total Score#{getScoreGrade(report.KutaScore)}#Total score must be above 50%#Score: {report.KutaScore}/100##");
+
+                Console.ReadLine();
             }
 
-            Console.ReadLine();
+            void printResultList(ref List<CompatibilityReport> reportList)
+            {
+                foreach (var report in reportList)
+                {
+                    Console.WriteLine($"{report.Male.GetName()}\t{report.Female.GetName()}\t{report.KutaScore}");
+                }
+
+                Console.ReadLine();
+            }
+
+
+            EventNature getScoreGrade(double score)
+            {
+                if (score > 50)
+                {
+                    return EventNature.Good;
+                }
+                else
+                {
+                    return EventNature.Bad;
+                }
+                
+            }
+
         }
+
+        /// <summary>
+        /// Finds good matches from a list of people who meet the criteria
+        /// </summary>
+        private static List<CompatibilityReport> FindGoodMatches(List<Person> peopleList)
+        {
+            //from a list of people find good matches
+
+            //split the sexes
+            var femaleList = peopleList.FindAll(person => person.GetGender() == Gender.Female);
+            var maleList = peopleList.FindAll(person => person.GetGender() == Gender.Male);
+
+            var goodReports = new List<CompatibilityReport>();
+
+            //cross reference male & female list
+            foreach (var female in femaleList)
+            {
+                foreach (var male in maleList)
+                {
+                    var report = GetCompatibilityReport(male, female);
+                    //if report meets criteria save it
+                    if (report.KutaScore > 50)
+                    {
+                        goodReports.Add(report);
+                    }
+                }
+            }
+
+            //return reports that got saved
+            return goodReports;
+        }
+
+        /// <summary>
+        /// Gets the compatibility report for a male & female
+        /// The place where compatibility report gets generated
+        /// </summary>
+        private static CompatibilityReport GetCompatibilityReport(Person male, Person female)
+        {
+
+            var report = new CompatibilityReport
+            {
+                Male = male,
+                Female = female,
+                //do the calculations & add results to a list
+                PredictionList = new List<Prediction>(){
+                    GrahaMaitram(male, female), //5
+                    Rajju(male, female),
+                    NadiKuta(male, female), //8
+                    VasyaKuta(male, female), //2
+                    DinaKuta(male, female), //3
+                    GunaKuta(male, female),//6
+                    Mahendra(male, female),
+                    StreeDeergha(male, female),
+                    RasiKuta(male, female),//7
+                    VedhaKuta(male, female),
+                    Varna(male, female), //1
+                    YoniKuta(male, female),//4
+                    LagnaAndHouse7Good(male, female),
+                    KujaDosa(male, female),
+                    BadConstellations(male, female)
+
+                }
+            };
+
+            //count the total points
+            calculateTotalPoints(ref report);
+
+            //check results for exceptions
+            handleExceptions(ref report);
+
+            return report;
+            
+            //FUNCTIONS
+
+            //checks & modifies results for exceptions 
+            void handleExceptions(ref CompatibilityReport report)
+            {
+
+                var list = report.PredictionList;
+
+                //each exception below modifies the list if needed
+
+                streeDeerghaException(list);
+
+                rajjuException(list);
+
+                nadiKutaException(list);
+
+
+
+                //FUNCTIONS
+
+                void streeDeerghaException(List<Prediction> list)
+                {
+                    //1.The absence of Stree-Deerga may be ignored if
+                    //  Rasi Kuta add Graha Maitri are present.
+
+                    //get the needed prediction
+                    var streeDeerga = list.Find(pr => pr.Name == Name.StreeDeergha);
+                    var rasiKuta = list.Find(pr => pr.Name == Name.RasiKuta);
+                    var grahaMaitram = list.Find(pr => pr.Name == Name.GrahaMaitram);
+
+                    //if prediction is bad and exception can be applied
+                    var streeDeergaIsBad = streeDeerga.Nature == EventNature.Bad;
+                    var rasiKutaIsGood = rasiKuta.Nature == EventNature.Good;
+                    var grahaMaitramIsGood = grahaMaitram.Nature == EventNature.Good;
+
+                    if (streeDeergaIsBad && rasiKutaIsGood && grahaMaitramIsGood)
+                    {
+                        //create new prediction
+                        var newPrediction = new Prediction()
+                        {
+                            Name = streeDeerga.Name,
+                            Description = streeDeerga.Description,
+                            FemaleInfo = streeDeerga.FemaleInfo,
+                            MaleInfo = streeDeerga.MaleInfo,
+                            Info = "bad Stree-Deerga is ignored, due to good Rasi Kuta and Graha Maitri",
+                            Nature = EventNature.Neutral
+                        };
+
+                        //replace old prediction with new one
+                        list.Remove(streeDeerga);
+                        list.Add(newPrediction);
+
+                    }
+
+                }
+
+                void rajjuException(List<Prediction> list)
+                {
+                    //2.Rajju Kuta need not be considered in case Graha Maitri, Rasi, Dina
+                    //  and Mahendra Kuta are present.
+
+                    //get the needed prediction
+                    var rajju = list.Find(pr => pr.Name == Name.Rajju);
+                    var grahaMaitram = list.Find(pr => pr.Name == Name.GrahaMaitram);
+                    var rasiKuta = list.Find(pr => pr.Name == Name.RasiKuta);
+                    var dinaKuta = list.Find(pr => pr.Name == Name.DinaKuta);
+                    var mahendra = list.Find(pr => pr.Name == Name.Mahendra);
+
+
+                    //if prediction is bad and exception can be applied
+                    var rajjuIsBad = rajju.Nature == EventNature.Bad;
+                    var grahaMaitramIsGood = grahaMaitram.Nature == EventNature.Good;
+                    var rasiKutaIsGood = rasiKuta.Nature == EventNature.Good;
+                    var dinaKutaIsGood = dinaKuta.Nature == EventNature.Good;
+                    var mahendraIsGood = mahendra.Nature == EventNature.Good;
+
+
+                    if (rajjuIsBad && grahaMaitramIsGood && rasiKutaIsGood && dinaKutaIsGood && mahendraIsGood)
+                    {
+                        //create new prediction
+                        var newPrediction = new Prediction()
+                        {
+                            Name = rajju.Name,
+                            Description = rajju.Description,
+                            FemaleInfo = rajju.FemaleInfo,
+                            MaleInfo = rajju.MaleInfo,
+                            Info = "bad Rajju Kuta is ignored, due to good Graha Maitri, Rasi, Dina and Mahendra",
+                            Nature = EventNature.Neutral
+                        };
+
+                        //replace old prediction with new one
+                        list.Remove(rajju);
+                        list.Add(newPrediction);
+
+                    }
+
+                }
+
+                void nadiKutaException(List<Prediction> list)
+                {
+                    //The evil due to Nadi Kuta can be ignored subject to the following
+                    // conditions: -
+                    // (a) The Rasi and Rajju Kuta prevail
+
+                    //get the needed prediction
+                    var nadiKuta = list.Find(pr => pr.Name == Name.NadiKuta);
+                    var rasiKuta = list.Find(pr => pr.Name == Name.RasiKuta);
+                    var rajju = list.Find(pr => pr.Name == Name.Rajju);
+
+                    //if prediction is bad and exception can be applied
+                    var nadiKutaIsBad = nadiKuta.Nature == EventNature.Bad;
+                    var rasiKutaIsGood = rasiKuta.Nature == EventNature.Good;
+                    var rajjuIsGood = rajju.Nature == EventNature.Good;
+
+                    if (nadiKutaIsBad && rasiKutaIsGood && rajjuIsGood)
+                    {
+                        //create new prediction
+                        var newPrediction = new Prediction()
+                        {
+                            Name = nadiKuta.Name,
+                            Description = nadiKuta.Description,
+                            FemaleInfo = nadiKuta.FemaleInfo,
+                            MaleInfo = nadiKuta.MaleInfo,
+                            Info = "bad Nadi Kuta is ignored, due to good Rasi Kuta and Rajju",
+                            Nature = EventNature.Neutral
+                        };
+
+                        //replace old prediction with new one
+                        list.Remove(nadiKuta);
+                        list.Add(newPrediction);
+
+                    }
+
+                }
+
+            }
+
+            void calculateTotalPoints(ref CompatibilityReport report)
+            {
+
+                //count points total 36 points
+                foreach (var prediction in report.PredictionList)
+                {
+                    //only count if prediction is good
+                    if (prediction.Nature != EventNature.Good) { continue; }
+
+                    //based on prediction name add together the score
+                    switch (prediction.Name)
+                    {
+                        case Name.Mahendra:
+                            break;
+                        case Name.NadiKuta:
+                            report.KutaScore += 8;
+                            break;
+                        case Name.GunaKuta:
+                            report.KutaScore += 6;
+                            break;
+                        case Name.Varna:
+                            report.KutaScore += 1;
+                            break;
+                        case Name.Yoni:
+                            report.KutaScore += 4;
+                            break;
+                        case Name.Vedha:
+                            break;
+                        case Name.VasyaKuta:
+                            report.KutaScore += 2;
+                            break;
+                        case Name.GrahaMaitram:
+                            report.KutaScore += 5;
+                            break;
+                        case Name.RasiKuta:
+                            report.KutaScore += 7;
+                            break;
+                        case Name.StreeDeergha:
+                            break;
+                        case Name.DinaKuta:
+                            report.KutaScore += 3;
+                            break;
+                        case Name.KujaDosa:
+                            break;
+                        case Name.Rajju:
+                            break;
+                        case Name.LagnaAnd7thGood:
+                            break;
+                        case Name.BadConstellation:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+
+                //convert score to percentage of 36
+                report.KutaScore = Math.Round((report.KutaScore / 36) * 100);
+
+            }
+
+        }
+
 
         public static Prediction Mahendra(Person male, Person female)
         {
             var prediction = new Prediction
             {
-                Name = "Mahendra",
+                Name = Name.Mahendra,
                 Description = "well-being and longevity"
             };
 
@@ -94,7 +401,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Nadi Kuta",
+                Name = Name.NadiKuta,
                 Description = "nervous energy compatibility (important)"
             };
 
@@ -111,14 +418,35 @@ namespace Compatibility
             prediction.MaleInfo = maleNadi;
             prediction.FemaleInfo = femaleNadi;
 
-            //A boy with a predominantly
+            // A boy with a predominantly
             // windy or phlegmatic or bilious constitution
             // should not many a girl of the same type. The
             // girl should belong to a different’ temperament.
             if (maleNadi == femaleNadi)
             {
-                prediction.Nature = EventNature.Bad;
-                prediction.Info = "same type";
+                //The evil due to Nadi Kuta can be ignored subject to the following conditions:
+
+                //a.The same planet is lord of the Janma Rasis of both the male and the female,
+                var maleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName());
+                var femaleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName());
+                var sameJanmaLord = maleJanmaLord == femaleJanmaLord;
+
+                //b.The lords of the Janma Rasi of the couple are friends.
+                var relationship = AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(maleJanmaLord, femaleJanmaLord);
+                var janmaIsFriend = relationship is PlanetToPlanetRelationship.AdhiMitra or PlanetToPlanetRelationship.Mitra;
+
+                //if any above exceptions met, change prediction
+                if (sameJanmaLord || janmaIsFriend)
+                {
+                    prediction.Nature = EventNature.Neutral;
+                    prediction.Info = "bad, but exception by Janma Rasi lord same/friend";
+                }
+                else
+                {
+                    prediction.Nature = EventNature.Bad;
+                    prediction.Info = "same type, should belong to different";
+                }
+
             }
             else
             {
@@ -177,7 +505,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Guna Kuta",
+                Name = Name.GunaKuta,
                 Description = "temperament and character compatibility"
             };
 
@@ -236,15 +564,26 @@ namespace Compatibility
             }
 
 
-            //If the asterism of the bride is beyond the 14th from that of the
-            // bridegroom the evil may be ignored.
-            var maleToFemale =
-                AstronomicalCalculator.CountFromConstellationToConstellation(maleConstellation, femaleConstellation);
+            //EXCEPTION
+
+            //If the asterism of the bride is beyond the 14th from that of the bridegroom the evil may be ignored.
+            var maleToFemale = AstronomicalCalculator.CountFromConstellationToConstellation(maleConstellation, femaleConstellation);
             //only show user the exception when prediction thus is bad
             if (maleToFemale > 14 && prediction.Nature == EventNature.Bad)
             {
-                prediction.Info +=
-                    "female star is more than 14th from male's, evil may be ignored.";
+                //create new prediction
+                var newPrediction = new Prediction()
+                {
+                    Name = prediction.Name,
+                    Description = prediction.Description,
+                    FemaleInfo = prediction.FemaleInfo,
+                    MaleInfo = prediction.MaleInfo,
+                    Info = "female star is more than 14th from male's, evil may be ignored",
+                    Nature = EventNature.Neutral
+                };
+
+                //replace old prediction
+                prediction = newPrediction;
             }
 
             return prediction;
@@ -304,7 +643,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Varna",
+                Name = Name.Varna,
                 Description = "spiritual/ego compatibility"
             };
 
@@ -394,10 +733,11 @@ namespace Compatibility
 
             var prediction = new Prediction
             {
-                Name = "Yoni",
+                Name = Name.Yoni,
                 Description = "sex compatibility"
             };
 
+            //1. Get Details
 
             var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime()).GetConstellationName();
             var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime()).GetConstellationName();
@@ -416,62 +756,70 @@ namespace Compatibility
             var compatibleGrade = getAnimalCompatible(maleAnimal, femaleAnimal);
 
             //save details to show user
-            prediction.MaleInfo = maleAnimal.ToString();
-            prediction.FemaleInfo = femaleAnimal.ToString();
+            prediction.MaleInfo = $"{maleAnimal} - {maleGender}";
+            prediction.FemaleInfo = $"{femaleAnimal} - {femaleGender}";
 
 
-            //Marriage between the constellations indicating
-            // same class of yoni and between the male
-            // and female stars of that yoni conduces to great
-            // happiness, perfect harmony and progeny.
-            //The union
-            // of these is agreeable and conduces to favourable
-            // results to the fullest extent.
-            if (maleAnimal == femaleAnimal && maleGender != femaleGender)
-            {
-                prediction.Nature = EventNature.Good;
-                prediction.Info = "favourable results to the fullest extent";
-            }
+            //2. Interpret details
 
 
-            // If the male and female happen to be born in
-            // friendly yonies, but both representing female
-            // constellations there will be fair happiness and agreement.
-            var isFriendlyYoni = compatibleGrade == 3;
-            var bothFemale = femaleGender == "Female" && maleGender == "Female";
-            if (isFriendlyYoni && bothFemale)
-            {
-                prediction.Nature = EventNature.Good;
-                prediction.Info = "fair happiness and agreement";
-            }
-
-
-            // If the couple belong both to male
-            // constellations there will be constant quarrels
-            // and unhappiness.
-            if (maleGender == "Male" && femaleGender == "Male")
-            {
-                prediction.Nature = EventNature.Bad;
-                prediction.Info = "both are male constellations, constant quarrels and unhappiness";
-            }
-
-
-            //The following
-            // pairs are hostile and in matching Yoni Kuta,
-            // they should be avoided.
-            // Cow and tiger;
-
+            //The following pairs are hostile and in matching Yoni Kuta,
+            // they should be avoided.Cow and tiger;
             // In a similar way, similar pairs of constellations typifying
             // other hostile pairs as they occur in nature should
             // be avoided.
-            var isHostileYoni = compatibleGrade <= 3;
+            var isHostileYoni = compatibleGrade <= 2;
             if (isHostileYoni)
             {
                 prediction.Nature = EventNature.Bad;
                 prediction.Info = "pairs are hostile, should be avoided.";
             }
+            //else it is a friendly (3) or perfect (4) pair
+            else
+            {
+                //Marriage between the constellations indicating same class of yoni and between the male and
+                //female stars of that yoni conduces to great happiness, perfect harmony and progeny.
+                //The union of these is agreeable and conduces to favourable results to the fullest extent.
+                if (maleAnimal == femaleAnimal && maleGender != femaleGender)
+                {
+                    prediction.Nature = EventNature.Good;
+                    prediction.Info = "favourable results to the fullest extent, harmony and progeny";
+                }
+
+
+                // If the male and female happen to be born in friendly yonies, but both
+                // representing female constellations there will be fair happiness and agreement.
+                var isFriendlyYoni = compatibleGrade == 3;
+                var bothFemale = femaleGender == "Female" && maleGender == "Female";
+                if (isFriendlyYoni && bothFemale)
+                {
+                    prediction.Nature = EventNature.Good;
+                    prediction.Info = "fair happiness and agreement";
+                }
+
+                //friendly yoni & opposite genders
+                if (isFriendlyYoni && maleGender != femaleGender)
+                {
+                    prediction.Nature = EventNature.Good;
+                    prediction.Info = "passable, not best but ok";
+
+                }
+
+                // If the couple belong both to male
+                // constellations there will be constant quarrels
+                // and unhappiness.
+                var bothMale = maleGender == "Male" && femaleGender == "Male";
+                if (bothMale)
+                {
+                    prediction.Nature = EventNature.Bad;
+                    prediction.Info = "both male constellations, constant quarrels and unhappiness";
+                }
+
+            }
 
             return prediction;
+
+            //FUNCTIONS
 
             //gets animal compatibility grade
             int getAnimalCompatible(Animal a, Animal b)
@@ -588,7 +936,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Vedha",
+                Name = Name.Vedha,
                 Description = "birth constellations compatibility"
             };
 
@@ -673,7 +1021,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Rajju",
+                Name = Name.Rajju,
                 Description = "strength/duration of married life (important)"
             };
 
@@ -799,7 +1147,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Vasya Kuta",
+                Name = Name.VasyaKuta,
                 Description = "degree of magnetic control"
             };
 
@@ -984,8 +1332,8 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Graha Maitram",
-                Description = "mental compatibility (important)"
+                Name = Name.GrahaMaitram,
+                Description = "happiness, mental compatibility (important)"
             };
 
 
@@ -997,7 +1345,13 @@ namespace Compatibility
             var maleLord = AstronomicalCalculator.GetLordOfZodiacSign(maleRuleSign);
             var femaleLord = AstronomicalCalculator.GetLordOfZodiacSign(femaleRuleSign);
 
-            //get relationship of planets
+            // get permanent relationship of planets
+            // Ref : Some suggest that in considering the planetary
+            // relations,the temporary dispositions should
+            // also be taken into account. This in my humble
+            // opinion is uncalled for, because, the entire
+            // subject of adaptability hinges on the birth
+            // constellations and not on birth charts as a whole.
             var maleToFemaleRelation = AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(maleLord, femaleLord);
             var femaleToMaleRelation = AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(femaleLord, maleLord);
 
@@ -1052,7 +1406,7 @@ namespace Compatibility
             else
             {
                 prediction.Nature = EventNature.Bad;
-                prediction.Info = "no good connection";
+                prediction.Info = "no good connection between male and female";
             }
 
             return prediction;
@@ -1062,7 +1416,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Rasi Kuta",
+                Name = Name.RasiKuta,
                 Description = "rasi compatibility"
             };
 
@@ -1169,6 +1523,84 @@ namespace Compatibility
                 prediction.Info = "progeny will prosper";
             }
 
+
+            //Common Janma Rasi. - Views differ as regards the results accruing
+            // from the Janma Rasis being common. According to Narada, common
+            // Janma Rasi would be conducive to the couple provided they are born in
+            // different constellations. Garga opines.that under the above
+            // circumstance, the asterism of the boy should precede that of the girl if
+            // the marriage is to prove happy. Incase the reverse holds good (Streepurva).
+            // i. e., the constellation of the girl precedes that of the boy, the
+            // alliance should be rejected.
+            if (maleRuleSign == femaleRuleSign)
+            {
+                //get male & female constellation number
+                var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime()).GetConstellationNumber();
+                var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime()).GetConstellationNumber();
+                
+                //male constellation number should precede (lower number)
+                if (maleConstellation < femaleConstellation)
+                {
+                    prediction.Nature = EventNature.Good;
+                    prediction.Info = "male constellation precede female, marriage to prove happy";
+                }
+
+                if (femaleConstellation < maleConstellation)
+                {
+                    prediction.Nature = EventNature.Bad;
+                    prediction.Info = "female constellation precede male, alliance should be rejected.";
+
+                }
+
+                if (femaleConstellation == maleConstellation)
+                {
+                    throw new NotImplementedException();
+                }
+
+            }
+
+
+            //EXCEPTION
+
+            //When both the Rasis are owned by one planet or if the
+            //lords of the two Rasis happen to be friends, the evil attributed above to
+            //the inauspicious disposition of Rasis gets cancelled.
+
+            //only check if prediction thus is bad
+            if (prediction.Nature == EventNature.Bad)
+            {            
+                //a.The same planet is lord of the Janma Rasis of both the male and the female,
+                var maleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName());
+                var femaleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName());
+                var sameJanmaLord = maleJanmaLord == femaleJanmaLord;
+
+                //b.The lords of the Janma Rasi of the couple are friends.
+                var relationship = AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(maleJanmaLord, femaleJanmaLord);
+                var janmaIsFriend = relationship is PlanetToPlanetRelationship.AdhiMitra or PlanetToPlanetRelationship.Mitra;
+
+                //if any above exceptions met, change prediction
+                if (sameJanmaLord || janmaIsFriend)
+                {
+                    //create new prediction
+                    var newPrediction = new Prediction()
+                    {
+                        Name = prediction.Name,
+                        Description = prediction.Description,
+                        FemaleInfo = prediction.FemaleInfo,
+                        MaleInfo = prediction.MaleInfo,
+                        Info = "bad, but exception by Janma Rasi lord same/friend",
+                        Nature = EventNature.Neutral
+                    };
+
+                    //replace old prediction
+                    prediction = newPrediction;
+                }
+
+
+            }
+
+
+
             return prediction;
 
         }
@@ -1177,7 +1609,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Stree Deergha",
+                Name = Name.StreeDeergha,
                 Description = "husband well being, longevity and prosperity"
             };
 
@@ -1214,7 +1646,7 @@ namespace Compatibility
         {
             var prediction = new Prediction
             {
-                Name = "Dina Kuta",
+                Name = Name.DinaKuta,
                 Description = "day to day living compatibility"
             };
 
@@ -1286,7 +1718,7 @@ namespace Compatibility
             var prediction = new Prediction();
             if (occuring)
             {
-                prediction.Name = "Lagna And 7th Good";
+                prediction.Name = Name.LagnaAnd7thGood;
                 prediction.Nature = EventNature.Good;
                 prediction.Info = "marriage stable, mutual understanding and affection";
                 prediction.Description = "special combination";
@@ -1566,8 +1998,8 @@ namespace Compatibility
             {
                 var prediction = new Prediction
                 {
-                    Name = "Kuja Dosa",
-                    Description = "causes the death of the wife/husband"
+                    Name = Name.KujaDosa,
+                    Description = "if bad, may cause death/bad health to spouse"
                 };
 
                 //show details to user
@@ -1600,7 +2032,7 @@ namespace Compatibility
 
                 //If the dosha in the male horoscope not exceeds the dosha
                 //in the female horoscope by 25%, it is passable.
-                if (scoreMale > scoreFemale)
+                if (scoreMale > scoreFemale && !differenceIsBelowThreshold)
                 {
                     //get 25% of female score
                     var female25Percent = scoreFemale * 0.25;
@@ -1626,9 +2058,73 @@ namespace Compatibility
                 return prediction;
             }
         }
+
+        public static Prediction BadConstellations(Person male, Person female)
+        {
+            var prediction = new Prediction();
+
+            // Almost all authors agree that certain parts of Moola, Astesha, Jyeshta and Visakha are destructive
+            // constellations -
+            // Aslesha (first quarter) for husband's mother;
+            // Jyeshta (first quarter) for girl's husband's elder brother;
+            // and Visakha (last quarter) for husband's younger brother.
+
+            //get female constellation
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime());
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime());
+
+            //Moola (first quarter) for husband's father;
+            //the boy or girl born in the first quarter of Moola is to be
+            //rejected as it is said to cause the death of the father-in-law.
+            var isMoola1stQuarterFemale = femaleConstellation.GetConstellationName() == ConstellationName.Moola && femaleConstellation.GetQuarter() == 1;
+            var isMoola1stQuarterMale = maleConstellation.GetConstellationName() == ConstellationName.Moola && maleConstellation.GetQuarter() == 1;
+
+            if (isMoola1stQuarterFemale || isMoola1stQuarterMale)
+            {
+                prediction.Nature = EventNature.Bad;
+                prediction.Info = "cause the death of the father-in-law";
+            }
+
+            //Aslesha (first quarter) for husband's mother;
+            var isAslesha1stQuarterFemale = femaleConstellation.GetConstellationName() == ConstellationName.Aslesha && femaleConstellation.GetQuarter() == 1;
+            if (isAslesha1stQuarterFemale)
+            {
+                prediction.Nature = EventNature.Bad;
+                prediction.Info = "cause evil to husband's mother";
+            }
+
+            //Jyesta (first quarter) for girl's husband's elder brother;
+            //A girl born in Jyesta is said to
+            // cause evil to her husband's elder brother.
+            var isJyesta1stQuarterFemale = femaleConstellation.GetConstellationName() == ConstellationName.Jyesta && femaleConstellation.GetQuarter() == 1;
+            if (isJyesta1stQuarterFemale)
+            {
+                prediction.Nature = EventNature.Bad;
+                prediction.Info = "cause evil to husband's elder brother";
+            }
+
+            //Visakha (last quarter) for husband's younger brother
+            //girl born in Visakha is said to bring about the destruction of her husband's
+            // younger brother
+            var isVishhaka4thQuarterFemale = femaleConstellation.GetConstellationName() == ConstellationName.Vishhaka && femaleConstellation.GetQuarter() == 4;
+            if (isVishhaka4thQuarterFemale)
+            {
+                prediction.Nature = EventNature.Bad;
+                prediction.Info = "cause evil to husband's younger brother";
+            }
+
+
+            //if any of the above conditions met only then, fill in name & description
+            if (prediction.Info != "")
+            {
+                prediction.Name = Name.BadConstellation;
+                prediction.Description = "Evil constellation, if present analyse horoscope";
+            }
+
+            return prediction;
+
+        }
     }
-
-
 
 }
 

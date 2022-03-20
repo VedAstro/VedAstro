@@ -1,16 +1,16 @@
 ﻿namespace Genso.Astrology.Library
 {
     /// <summary>
-    /// General type to represent good, bad , neutral
+    /// Gender type female/male used in Person
+    /// Also compatibility matching
     /// </summary>
-    public enum EventNature
+    public enum Gender
     {
         /// <summary>
         /// default value when not assigned
         /// </summary>
         Empty = 0,
-        Good, 
-        Neutral, 
-        Bad
+        Male,
+        Female
     }
 }

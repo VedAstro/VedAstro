@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Root>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Person>
 		<Name>Viknesh</Name>
 		<BirthTime>
@@ -10,6 +10,7 @@
 				<Latitude>4.0224</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Sindhu</Name>
@@ -21,6 +22,7 @@
 				<Latitude>4.0224</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Devi</Name>
@@ -32,6 +34,7 @@
 				<Latitude>4.0224</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Nagayah</Name>
@@ -43,6 +46,7 @@
 				<Latitude>4.0224</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Rosita</Name>
@@ -54,6 +58,7 @@
 				<Latitude>3.16027</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Prema</Name>
@@ -65,6 +70,7 @@
 				<Latitude>4.0224</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Ravi</Name>
@@ -76,6 +82,7 @@
 				<Latitude>1.5174</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Govindha</Name>
@@ -87,6 +94,7 @@
 				<Latitude>4.0224</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Dhiviya</Name>
@@ -98,6 +106,7 @@
 				<Latitude>4.0224</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Anba</Name>
@@ -109,6 +118,18 @@
 				<Latitude>2.7265</Latitude>
 			</Location>
 		</BirthTime>
+		<Gender>Male</Gender>
 	</Person>
-
+	<Person>
+		<Name>Shadtharcharan</Name>
+		<BirthTime>
+			<Time>19:04 20/07/1988 +08:00</Time>
+			<Location>
+				<Name>Klang</Name>
+				<Longitude>101.4456</Longitude>
+				<Latitude>3.0449</Latitude>
+			</Location>
+		</BirthTime>
+		<Gender>Male</Gender>
+	</Person>
 </Root>

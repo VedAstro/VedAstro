@@ -8,25 +8,29 @@ namespace Genso.Astrology.Library
     public struct Person
     {
         private readonly string _name;
+        private readonly Gender _gender;
         private readonly Time _birthTime;
 
         //CTOR
-        public Person(string name, Time birthTime)
+        public Person(string name, Time birthTime, Gender gender)
         {
             _name = name;
             _birthTime = birthTime;
+            _gender = gender;
         }
 
-        //METHODS
+        
+        
+        //PUBLIC PROPERTIES
         public Time GetBirthDateTime() => _birthTime;
-
         /// <summary>
         /// Get the place of birth
         /// Note: uses the location stored in birth "Time"
         /// </summary>
         public GeoLocation GetBirthLocation() => _birthTime.GetGeoLocation();
-
         public string GetName() => _name;
+        public Gender GetGender() => _gender;
+
 
 
         //OVERRIDES METHODS

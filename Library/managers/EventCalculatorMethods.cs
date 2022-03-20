@@ -1014,20 +1014,6 @@ namespace Genso.Astrology.Library
 
 
 
-        //Moola (first quarter) for husband's father;
-        //the boy or girl born in the first quarter of Moola is to be
-        //rejected as it is said to cause the death of the father-in-law.
-
-        //Aslesha (first quarter) for husband's mother;
-
-        //Jyeshta (first quarter) for girl's husband's elder brother;
-        //A girl born in Jyeshta is said to
-        // cause evil to her husband's elder brother.
-
-        //Visakha (last quarter) for husband's younger brother
-        //girl born in Visakha is said to bring about the destruction of her husband's
-        // younger brother
-
         #endregion
 
         #region GENERAL

@@ -9,7 +9,8 @@ namespace Compatibility
 {
     /// <summary>
     /// simple data type to contain info on a kuta prediction
-    /// Note : properties can only be set once
+    /// Note : properties can only be set once,
+    /// so that doesn't accidentally get changed
     /// </summary>
     internal class Prediction
     {
@@ -17,21 +18,11 @@ namespace Compatibility
         private string _info = "";
         private string _maleInfo = "";
         private string _femaleInfo = "";
-        private string _name = "";
         private string _description = "";
 
 
         //PUBLIC PROPERTIES
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                //if value already set, raise alarm
-                if (_name != "") throw new InvalidOperationException("Only set once!");
-                _name = value;
-            }
-        }
+        public Name Name { get; set; }
 
         public string Description
         {

@@ -128,9 +128,11 @@ namespace Genso.Astrology.Library
                 //extract the individual data out & convert it to the correct type
                 var nameString = personXml.Element("Name").Value;
                 var birthTime = getBirthTime(personXml.Element("BirthTime"));
+                var rawGender = personXml.Element("Gender").Value;
+                Enum.TryParse(rawGender, out Gender gender);
 
                 //place the data into an event data structure
-                var person = new Person(nameString, birthTime);
+                var person = new Person(nameString, birthTime, gender);
 
                 //add it to the return list
                 eventDataList.Add(person);

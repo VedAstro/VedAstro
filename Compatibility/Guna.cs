@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Compatibility
 {
-    //used for Guna Kuta
-    enum Guna
+    /// <summary>
+    /// used for Guna Kuta
+    /// </summary>
+    internal enum Guna
     {
         Deva = 3,
         Manusha = 2,

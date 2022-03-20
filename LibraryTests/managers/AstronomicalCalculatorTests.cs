@@ -12,13 +12,6 @@ namespace Genso.Astrology.Library.Tests
     public class AstronomicalCalculatorTests
     {
         [TestMethod()]
-        public void GetPlanetSaptavargajaBalaTest()
-        {
-
-            Assert.Fail();
-        }
-
-        [TestMethod()]
         public void GetPlanetRasiSignTest()
         {
             var endStdTime = DateTimeOffset.ParseExact("06:42 16/04/2021 +08:00", Time.GetDateTimeFormat(), null);
@@ -40,15 +33,19 @@ namespace Genso.Astrology.Library.Tests
 
         }
 
+
         [TestMethod()]
-        public void GetArudhaLagnaSignTest()
+        public void GetLongitudeAtZodiacSignTest()
         {
-            //test
-            var count = AstronomicalCalculator.CountFromSignToSign(ZodiacName.Aquarius, ZodiacName.Taurus);
+            //TEST 190 = 10 in Libra
+            var libra10 = new ZodiacSign(ZodiacName.Libra, Angle.FromDegrees(10));
+            var longitude = AstronomicalCalculator.GetLongitudeAtZodiacSign(libra10);
+            var testSign = AstronomicalCalculator.GetZodiacSignAtLongitude(longitude);
 
-            //correct result is 4
-            Assert.IsTrue(count == 4);
+            var expected = libra10.GetDegreesInSign().TotalDegrees;
+            var actual = testSign.GetDegreesInSign().TotalDegrees;
 
+            Assert.AreEqual(expected, actual);
         }
     }
 }

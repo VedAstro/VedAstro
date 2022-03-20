@@ -323,7 +323,9 @@ namespace Genso.Astrology.Library
                 var roughZodiacNumberRemainder = roughZodiacNumber - Math.Truncate(roughZodiacNumber);
 
                 //convert remainder to degrees in current sign
-                var degreesInSign = roughZodiacNumberRemainder * maxDegreesInSign;
+                var degreesInSignRaw = roughZodiacNumberRemainder * maxDegreesInSign;
+                //round number (too high accuracy causes equality mismtach because of minute difference)
+                var degreesInSign = Math.Round(degreesInSignRaw, 4);
 
                 //if degrees in sign is 0, it means 30 degrees
                 if (degreesInSign == 0)

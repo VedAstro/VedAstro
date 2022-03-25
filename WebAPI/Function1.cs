@@ -2,7 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
+using Azure.Core;
 using Compatibility;
 using Genso.Astrology.Library;
 using Genso.Astrology.Muhurtha.Core;
@@ -14,12 +20,16 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Prediction = Compatibility.Prediction;
 using Genso.Framework;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Net.Http.Headers;
 
 namespace WebAPI
 {
     public static class Function1
     {
-        [FunctionName("Function1")]
+
+        [FunctionName("compatibility")]
+        [Produces("text/html")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             [Blob("vedastro-site-data/PersonList.xml", FileAccess.Read)] Stream PersonListRead,
@@ -27,7 +37,6 @@ namespace WebAPI
             //[Blob("vedastro-site-data/PersonList.xml", FileAccess.Write)] Stream PersonListWrite,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
 
             string male = req.Query["male"];
             string female = req.Query["female"];
@@ -42,11 +51,12 @@ namespace WebAPI
 
             try
             {
-                 responseMessage += $"{PersonListRead.Length}";
-                var personList = new Data(PersonListRead); //prep data
-
+                var personList = new Data(PersonListRead);
                 result = processRequest(male, female, personList);
-                responseMessage = $"{male} <> {female} = KutaScore:{result.KutaScore}";
+                //responseMessage = $"{male} <> {female} = KutaScore:{result.KutaScore}";
+                var htmlTable = ToHtmlTable(result.PredictionList);
+                var htmlPage = $"<!DOCTYPE html><html><body>{htmlTable}</body></html>";
+                responseMessage = htmlPage;
             }
             catch (Exception e)
             {
@@ -54,33 +64,59 @@ namespace WebAPI
             }
 
 
-            return new OkObjectResult(responseMessage);
+            var okObjectResult = new OkObjectResult(responseMessage);
+            //okObjectResult.ContentTypes.Add("text/html");
+            return okObjectResult;
         }
 
 
-        //[FunctionName("GetCustomer")]
-        //public static async Task<IActionResult> Run(
-        //    [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] BlobInfo info,
-        //    [Blob("{CityName}/customer.json", FileAccess.Read)] Stream blob,
-        //    ILogger log)
-        //{
+        public static string ToHtmlTable<T>(this List<T> listOfClassObjects)
+        {
+            var ret = string.Empty;
 
-        //[FunctionName("GetReview")]
-        //public static HttpResponseMessage getReview(
-        //    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage request,
-        //    [Blob(Consts.API.ReviewList, FileAccess.Read)] Stream reviewListRead,
-        //    [Blob(Consts.API.ReviewList, FileAccess.Write)] Stream reviewListWrite,
-        //    [Blob(Consts.API.AppLog, FileAccess.Read)] Stream appLogRead,
-        //    [Blob(Consts.API.AppLog, FileAccess.Write)] Stream appLogWrite,
-        //    TraceWriter log) =>
-        //    runApi(apiName: ApiName.GetReviewAll,
-        //        request: request,
-        //        reviewListRead: reviewListRead,
-        //        reviewListWrite: reviewListWrite,
-        //        appLogRead: appLogRead,
-        //        appLogWrite: appLogWrite);
+            return listOfClassObjects == null || !listOfClassObjects.Any()
+                ? ret
+                : "<table>" +
+                  listOfClassObjects.First().GetType().GetProperties().Select(p => p.Name).ToList().ToColumnHeaders() +
+                  listOfClassObjects.Aggregate(ret, (current, t) => current + t.ToHtmlTableRow()) +
+                  "</table>";
+        }
 
+        public static string ToColumnHeaders<T>(this List<T> listOfProperties)
+        {
+            var ret = string.Empty;
 
+            return listOfProperties == null || !listOfProperties.Any()
+                ? ret
+                : "<tr>" +
+                  listOfProperties.Aggregate(ret,
+                      (current, propValue) =>
+                          current +
+                          ("<th style='font-size: 11pt; font-weight: bold; border: 1pt solid black'>" +
+                           (Convert.ToString(propValue).Length <= 100
+                               ? Convert.ToString(propValue)
+                               : Convert.ToString(propValue).Substring(0, 100)) + "..." + "</th>")) +
+                  "</tr>";
+        }
+
+        public static string ToHtmlTableRow<T>(this T classObject)
+        {
+            var ret = string.Empty;
+
+            return classObject == null
+                ? ret
+                : "<tr>" +
+                  classObject.GetType()
+                      .GetProperties()
+                      .Aggregate(ret,
+                          (current, prop) =>
+                              current + ("<td style='font-size: 11pt; font-weight: normal; border: 1pt solid black'>" +
+                                         (Convert.ToString(prop.GetValue(classObject, null)).Length <= 100
+                                             ? Convert.ToString(prop.GetValue(classObject, null))
+                                             : Convert.ToString(prop.GetValue(classObject, null)).Substring(0, 100) +
+                                               "...") +
+                                         "</td>")) + "</tr>";
+        }
 
 
         static CompatibilityReport processRequest(string maleName, string femaleName, Data personList)

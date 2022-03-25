@@ -47,5 +47,65 @@ namespace Genso.Astrology.Library.Tests
 
             Assert.AreEqual(expected, actual);
         }
+
+        [TestMethod()]
+        public void GetLunarMonthTest1()
+        {
+
+            var endStdTime = DateTimeOffset.ParseExact("15:00 01/01/2022 +08:00", Time.GetDateTimeFormat(), null);
+            var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
+            var time = new Time(endStdTime, geoLocation);
+
+            var lunarMonthTest = AstronomicalCalculator.GetLunarMonth(time);
+
+            var lunarMonthCorrect = LunarMonth.Margasiram;
+
+            Assert.AreEqual(lunarMonthCorrect, lunarMonthTest);
+        }
+
+        [TestMethod()]
+        public void GetLunarMonthTest2()
+        {
+
+            var endStdTime = DateTimeOffset.ParseExact("15:00 01/03/2022 +08:00", Time.GetDateTimeFormat(), null);
+            var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
+            var time = new Time(endStdTime, geoLocation);
+
+            var lunarMonthTest = AstronomicalCalculator.GetLunarMonth(time);
+
+            var lunarMonthCorrect = LunarMonth.Magham;
+
+            Assert.AreEqual(lunarMonthCorrect, lunarMonthTest);
+        }
+
+        [TestMethod()]
+        public void GetLunarMonthTest3()
+        {
+
+            var endStdTime = DateTimeOffset.ParseExact("15:00 01/01/2021 +08:00", Time.GetDateTimeFormat(), null);
+            var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
+            var time = new Time(endStdTime, geoLocation);
+
+            var lunarMonthTest = AstronomicalCalculator.GetLunarMonth(time);
+
+            var lunarMonthCorrect = LunarMonth.Margasiram;
+
+            Assert.AreEqual(lunarMonthCorrect, lunarMonthTest);
+        }
+
+        [TestMethod()]
+        public void GetLunarMonthTest4()
+        {
+
+            var endStdTime = DateTimeOffset.ParseExact("15:00 01/01/2020 +08:00", Time.GetDateTimeFormat(), null);
+            var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
+            var time = new Time(endStdTime, geoLocation);
+
+            var lunarMonthTest = AstronomicalCalculator.GetLunarMonth(time);
+
+            var lunarMonthCorrect = LunarMonth.Pooshiam;
+
+            Assert.AreEqual(lunarMonthCorrect, lunarMonthTest);
+        }
     }
 }

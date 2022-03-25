@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Genso.Astrology.Library.objects.Enum;
+using Genso.Astrology.Library;
 using Calendar = Genso.Astrology.Library.Calendar;
 
 namespace Muhurtha.Desktop

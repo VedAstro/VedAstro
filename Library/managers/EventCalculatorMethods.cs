@@ -1018,7 +1018,7 @@ namespace Genso.Astrology.Library
 
         #region GENERAL
 
-                [EventCalculator(EventName.SakunaKarana)]
+        [EventCalculator(EventName.SakunaKarana)]
         public static Prediction IsSakunaKaranaOccuring(Time time, Person person)
         {
             //For getting initiations into mantras Sakuni Karana is propitious.   
@@ -2476,11 +2476,6 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.SuryaSankramana)]
         public static Prediction IsSuryaSankramanaOccuring(Time time, Person person)
         {
-
-            //TODO HANGS, NEEDS WORK
-            //DISABLE FOR NOW
-            return Prediction.NotOccuring();
-
             //Surya Sankramana. - The 2nd great evil is Surya Sankramana or the
             // solar ingress into different zodiacal signs. When the Sun is about to
             // leave one sign and enter another there seem to occur certain
@@ -8121,8 +8116,8 @@ namespace Genso.Astrology.Library
             Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
                 .GetSignName() == ZodiacName.Pisces
         };
-        
-        
+
+
         //VENUS
         [EventCalculator(EventName.VenusInAries)]
         public static Prediction VenusInAries(Time time, Person person) => new()
@@ -8913,7 +8908,7 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
-        
+
 
         #endregion
 
@@ -9098,7 +9093,7 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
-        
+
 
         #endregion
 
@@ -9467,7 +9462,7 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
-        
+
 
         #endregion
 
@@ -9653,7 +9648,7 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
-        
+
 
         #endregion
 
@@ -10022,7 +10017,7 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
-        
+
 
         #endregion
 
@@ -10567,7 +10562,7 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
-        
+
 
         #endregion
 
@@ -10743,7 +10738,7 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
-        
+
 
         #endregion
 
@@ -10920,7 +10915,7 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
-        
+
 
         #endregion
 
@@ -12218,6 +12213,250 @@ namespace Genso.Astrology.Library
 
         #endregion
 
+        #region BUILDING CONSTRUCTION
+
+        [EventCalculator(EventName.BadLunarMonthForBuilding)]
+        public static Prediction BadLunarMonthForBuilding(Time time, Person person)
+        {
+            //No house-building should be commenced in the lunar months of
+            // Jyeshta, Ashadha, Bhadrapada, Aswayuja, Margasira, Pushya and
+            // Phalguna as they connote respectively death, destruction, disease,
+            // quarrels and misunderstandings, loss of wealth, incendiarism and
+            // physical danger
+
+            //get lunar current lunar month
+            var lunarMonth = AstronomicalCalculator.GetLunarMonth(time);
+
+            if (lunarMonth is LunarMonth.Jaistam or LunarMonth.Ashadam or LunarMonth.Bhadrapadam 
+                or LunarMonth.Aswijam or LunarMonth.Margasiram or LunarMonth.Pooshiam or LunarMonth.Phalgunam)
+            {
+                return Prediction.IsOccuring();
+            }
+
+            //if conrtol reaches here then event is ocuring
+            return Prediction.NotOccuring();
+        }
+
+
+        // The lunar months of Chaitra, Vaisakha, Sravana,
+        // Kartika and Magha are the best.
+
+        
+        [EventCalculator(EventName.GoodSunSignForBuilding)]
+        public static Prediction GoodSunSignForBuilding(Time time, Person person)
+        {
+            // The Sun should occupy fixed signs or
+            // at least movable signs but
+
+            //get sign sun is in
+            var sunSign = AstronomicalCalculator.GetSunSign(time).GetSignName();
+
+            //check if sign is a fixed or movable sign
+            var isFixedSign = AstronomicalCalculator.IsFixedSign(sunSign);
+            var isMovableSign = AstronomicalCalculator.IsMovableSign(sunSign);
+            var occuring = isFixedSign || isMovableSign;
+
+            //if conrtol reaches here then event is ocuring
+            return new Prediction(){Occuring = occuring};
+        }
+
+        [EventCalculator(EventName.BadSunSignForBuilding)]
+        public static Prediction BadSunSignForBuilding(Time time, Person person)
+        {
+            // no building work should be undertaken when
+            // the Sun is in common signs.
+
+            //get sign sun is in
+            var sunSign = AstronomicalCalculator.GetSunSign(time).GetSignName();
+
+            //check if sign is a common sign
+            var isCommonSign = AstronomicalCalculator.IsCommonSign(sunSign);
+            var occuring = isCommonSign;
+
+            //if conrtol reaches here then event is ocuring
+            return new Prediction(){Occuring = occuring};
+        }
+
+        [EventCalculator(EventName.GoodLunarDayForBuilding)]
+        public static Prediction GoodLunarDayForBuilding(Time time, Person person)
+        {
+            //All odd tithis (lunar days) except the 9th are good.
+            //odd numbers : 1, 3, 5, 7, 11, 13, 15
+
+            //Of the even tithis the 2nd, 6th and 10th are auspicious.
+            //even numbers : 2, 6, 10,
+
+            //get lunar day
+            var lunarDayNumber = AstronomicalCalculator.GetLunarDay(time).GetLunarDayNumber();
+
+            //right lunar days to look for
+            var rightLunarDay = lunarDayNumber == 1 ||
+                                lunarDayNumber == 3 ||
+                                lunarDayNumber == 5 ||
+                                lunarDayNumber == 7 ||
+                                lunarDayNumber == 11 ||
+                                lunarDayNumber == 13 ||
+                                lunarDayNumber == 15 ||//full moon
+                                lunarDayNumber == 2 ||
+                                lunarDayNumber == 6 ||
+                                lunarDayNumber == 10;
+
+            //if not correct lunar days, end here as not occuring
+            if (rightLunarDay == false) { return Prediction.NotOccuring(); }
+
+
+            //if control reaches here then event is ocuring
+            return Prediction.IsOccuring();
+
+        }
+
+        [EventCalculator(EventName.GoodWeekDayForBuilding)]
+        public static Prediction GoodWeekDayForBuilding(Time time, Person person)
+        {
+            // Monday, Wednesday, Thursday and  Friday are the best,
+            // Monday, Wednesday and Thursday are the best.
+
+            //get week day
+            var weekday = AstronomicalCalculator.GetDayOfWeek(time);
+
+
+            switch (weekday)
+            {
+                case DayOfWeek.Monday:
+                case DayOfWeek.Wednesday:
+                case DayOfWeek.Thursday:
+                case DayOfWeek.Friday:
+                    return Prediction.IsOccuring();
+                default:
+                    //event not occuring, if planet not same
+                    return Prediction.NotOccuring();
+            }
+
+        }
+
+        [EventCalculator(EventName.BadLunarPhaseForBuilding)]
+        public static Prediction BadLunarPhaseForBuilding(Time time, Person person)
+        {
+            // Even Monday should be rejected when the Moon is
+            // waning.
+            //Waning moon is bad
+
+            //get the moon phase
+            var moonPhase = AstronomicalCalculator.GetLunarDay(time).GetMoonPhase();
+
+            //occuring when moon is wanning
+            var occuring = moonPhase == MoonPhase.DarkHalf;
+
+            return new Prediction(){Occuring = occuring};
+        }
+
+        [EventCalculator(EventName.BadWeekDayForBuilding)]
+        public static Prediction BadWeekDayForBuilding(Time time, Person person)
+        {
+            //Saturday should be rejected as it connots frequent thefts. Sunday
+            // should also be avoided unless the day is otherwise very auspicious.
+
+            //get week day
+            var weekday = AstronomicalCalculator.GetDayOfWeek(time);
+
+
+            switch (weekday)
+            {
+                case DayOfWeek.Saturday:
+                case DayOfWeek.Sunday:
+                    return Prediction.IsOccuring();
+                default:
+                    //event not occuring, if planet not same
+                    return Prediction.NotOccuring();
+            }
+
+        }
+
+        [EventCalculator(EventName.BadWeekDayForRepairs)]
+        public static Prediction BadWeekDayForRepairs(Time time, Person person)
+        {
+            // Do not commence repairs on Tuesdays.
+
+            //get week day
+            var weekday = AstronomicalCalculator.GetDayOfWeek(time);
+
+
+            switch (weekday)
+            {
+                case DayOfWeek.Tuesday:
+                    return Prediction.IsOccuring();
+                default:
+                    //event not occuring, if planet not same
+                    return Prediction.NotOccuring();
+            }
+
+        }
+
+
+        [EventCalculator(EventName.GoodYogaForRepairs)]
+        public static Prediction GoodYogaForRepairs(Time time, Person person)
+        {
+
+            // Friday at a moment when Lagna is Taurus or Libra and
+            // Monday when Cancer is rising are very suitable for beginning repairs.
+
+            //friday & lagna is taurus or libra
+            var isFriday = AstronomicalCalculator.GetDayOfWeek(time) == DayOfWeek.Friday;
+            var lagnaIsTaurus = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Taurus;
+            var lagnaIsLibra = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Libra;
+            var isFridayLagnaTaurusLibra = isFriday && (lagnaIsLibra || lagnaIsTaurus);
+
+            //monday & lagna is cancer
+            var isMonday = AstronomicalCalculator.GetDayOfWeek(time) == DayOfWeek.Monday;
+            var lagnaIsCancer = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Cancer;
+            var isMondayLagnaCancer = isMonday && lagnaIsCancer;
+
+            //if either is true
+            var occuring = isFridayLagnaTaurusLibra || isMondayLagnaCancer;
+
+            return new Prediction() {Occuring = occuring};
+
+        }
+
+
+        [EventCalculator(EventName.GoodYogaForRepairs2)]
+        public static Prediction GoodYogaForRepairs2(Time time, Person person)
+        {
+
+            // The Lagna must be occupied by a benefic and the Moon should be in an aquatic sign.
+
+            //benefic in lagna
+            var beneficsInLagna = AstronomicalCalculator.IsBeneficPlanetInHouse(1, time);
+
+            //monday in aquatic sign
+            var moonSign = AstronomicalCalculator.GetMoonSignName(time);
+            var isMoonInAquaticSign = AstronomicalCalculator.IsAquaticSign(moonSign);
+
+            //if either is true
+            var occuring = isMoonInAquaticSign || beneficsInLagna;
+
+            return new Prediction() { Occuring = occuring };
+
+        }
+
+        //[EventCalculator(EventName.BadConstellationForRepairs)]
+        //public static Prediction BadConstellationForRepairs(Time time, Person person)
+        //{
+
+        //    //No repairs should be started under the constellations of Krittika, Makha.
+        //    // Pushyami, Pubba, Hasta, Moola and Revati when Mars is transiting
+        //    // these constellations.
+
+
+
+        //    var occuring = isMoonInAquaticSign || beneficsInLagna;
+
+        //    return new Prediction() { Occuring = occuring };
+
+        //}
+
+
+        #endregion
 
 
     }

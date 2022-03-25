@@ -4895,4 +4895,99 @@
 		<Tag>Dasa</Tag>
 	</Event>
 
+	
+	<Event>
+		<Name>BadLunarMonthForBuilding</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			No house-building should be commenced in the lunar months of
+			Jyeshta, Ashadha, Bhadrapada, Aswayuja, Margasira, Pushya and
+			Phalguna as they connote respectively death, destruction, disease,
+			quarrels and misunderstandings, loss of wealth, incendiarism and
+			physical danger
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>GoodSunSignForBuilding</Name>
+		<Nature>Good</Nature>
+		<Description>
+			For building work,
+			the Sun should occupy fixed signs or
+			at least movable signs.
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>BadSunSignForBuilding</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			No building work should be undertaken when
+			the Sun is in common signs.
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>GoodLunarDayForBuilding</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Good for building:
+			- All odd tithis (lunar days) except the 9th are good.
+			- Of the even tithis the 2nd, 6th and 10th are auspicious.
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>GoodWeekDayForBuilding</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Good for building:
+			Monday, Wednesday, Thursday and  Friday are the best.
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>BadLunarPhaseForBuilding</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Moon is waning.
+			Even Monday should be rejected when the Moon is waning.
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>BadWeekDayForBuilding</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Saturday should be rejected as it connots frequent thefts. Sunday
+			should also be avoided unless the day is otherwise very auspicious.
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>BadWeekDayForRepairs</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			Do not commence repairs on Tuesdays.
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>GoodYogaForRepairs</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Friday at a moment when Lagna is Taurus or Libra and Monday when Cancer is
+			rising are very suitable for beginning repairs
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+	<Event>
+		<Name>GoodYogaForRepairs2</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Lagna must be occupied by a benefic and the Moon should be in an aquatic sign.
+		</Description>
+		<Tag>Building</Tag>
+	</Event>
+
 </Root>

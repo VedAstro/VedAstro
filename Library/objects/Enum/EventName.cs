@@ -870,6 +870,16 @@
         MercuryStrength,
         JupiterStrength,
         SaturnStrength,
-        VenusStrength
+        VenusStrength,
+        BadLunarMonthForBuilding,
+        GoodSunSignForBuilding,
+        BadSunSignForBuilding,
+        GoodLunarDayForBuilding,
+        GoodWeekDayForBuilding,
+        BadLunarPhaseForBuilding,
+        BadWeekDayForBuilding,
+        BadWeekDayForRepairs,
+        GoodYogaForRepairs,
+        GoodYogaForRepairs2
     }
 }

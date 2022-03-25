@@ -21,6 +21,7 @@ namespace Genso.Astrology.Library
         BuyingSelling,
         Gochara,
         Dasa,
-        Horoscope
+        Horoscope,
+        Building
     }
 }

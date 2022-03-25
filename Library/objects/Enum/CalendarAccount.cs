@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Genso.Astrology.Library.objects.Enum
+namespace Genso.Astrology.Library
 {
     /// <summary>
     /// Names of calendar holding accounts used when sending/exporting events

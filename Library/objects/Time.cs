@@ -67,6 +67,10 @@ namespace Genso.Astrology.Library
 
         //PUBLIC METHODS
 
+        /// <summary>
+        /// Returns a new instance of the modified time.
+        /// Only positive numbers
+        /// </summary>
         public Time AddHours(double granularityHours)
         {
             //increment time by hours
@@ -80,6 +84,10 @@ namespace Genso.Astrology.Library
 
         }
 
+        /// <summary>
+        /// Returns a new instance of the modified time.
+        /// Only positive numbers
+        /// </summary>
         public Time SubtractHours(double granularityHours)
         {
             //convert hours to negative number for subtraction

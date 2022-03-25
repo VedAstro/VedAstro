@@ -357,7 +357,6 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Converts Planet Longitude to Zodiac Sign equivelant
-        /// TODO needs testing!
         /// </summary>
         public static Angle GetLongitudeAtZodiacSign(ZodiacSign zodiacSign)
         {
@@ -410,6 +409,8 @@ namespace Genso.Astrology.Library
 
                 //TODO Change to new day system
                 //TODO make test first
+
+                var sunRise = AstronomicalCalculator.GetSunriseTime(time);
 
                 //get week day name in string
                 var dayOfWeekNameInString = time.GetLmtDateTimeOffset().DayOfWeek.ToString();
@@ -1017,6 +1018,8 @@ namespace Genso.Astrology.Library
 
         }
 
+        #region SIGN GROUP CALULATORS
+
         /// <summary>
         /// Returns true if zodiac sign is an Even sign,  Yugma Rasis
         /// </summary>
@@ -1070,6 +1073,64 @@ namespace Genso.Astrology.Library
 
 
         }
+
+        /// <summary>
+        /// Fixed signs- Taurus, Leo, Scropio, Aquarius.
+        /// </summary>
+        public static bool IsFixedSign(ZodiacName sunSign)
+        {
+            switch (sunSign)
+            {
+                case ZodiacName.Taurus:
+                case ZodiacName.Leo:
+                case ZodiacName.Scorpio:
+                case ZodiacName.Aquarius:
+                    return true;
+                default:
+                    return false;
+            } 
+           
+        }
+
+        /// <summary>
+        /// Movable signs- Aries, Cancer, Libra, Capricorn.
+        /// </summary>
+        public static bool IsMovableSign(ZodiacName sunSign)
+        {
+            switch (sunSign)
+            {
+                case ZodiacName.Aries:
+                case ZodiacName.Cancer:
+                case ZodiacName.Libra:
+                case ZodiacName.Capricornus:
+                    return true;
+                default:
+                    return false;
+            } 
+           
+        }
+
+        /// <summary>
+        /// Common signs- Gemini, Virgo, Sagitarius, Pisces.
+        /// </summary>
+        public static  bool IsCommonSign(ZodiacName sunSign)
+        {
+            switch (sunSign)
+            {
+                case ZodiacName.Gemini:
+                case ZodiacName.Virgo:
+                case ZodiacName.Sagittarius:
+                case ZodiacName.Pisces:
+                    return true;
+                default:
+                    return false;
+            } 
+           
+        }
+
+
+        #endregion
+
 
         public static PlanetToPlanetRelationship GetPlanetPermanentRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet)
         {
@@ -2410,12 +2471,15 @@ namespace Genso.Astrology.Library
             //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
             //but predictive results points to Gemini (30°0'0"), so rounding is implemented
             var middleLongitude = specifiedHouse.GetMiddleLongitude();
-            var roundedMiddleLongitude = Angle.FromDegrees(Math.Round(middleLongitude.TotalDegrees));
+            var roundedMiddleLongitude = Angle.FromDegrees(Math.Round(middleLongitude.TotalDegrees,4)); //rounded to 5 places for accuracy
             var houseSignName = AstronomicalCalculator.GetZodiacSignAtLongitude(roundedMiddleLongitude).GetSignName();
 
             //for sake of testing, if sign is changed due to rounding, then log it
             var unroundedSignName = AstronomicalCalculator.GetZodiacSignAtLongitude(middleLongitude).GetSignName();
-            if (unroundedSignName != houseSignName) { LogManager.Debug($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}"); }
+            if (unroundedSignName != houseSignName)
+            {
+                LogManager.Debug($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
+            }
 
             //return the name of house sign
             return houseSignName;
@@ -5278,7 +5342,12 @@ namespace Genso.Astrology.Library
                     //The conquering planet is the one whose longitude is less.
                     if (inputedPlanetLong < checkingPlanetLong) { winnerPlanet = inputedPlanet; losserPlanet = checkingPlanet; } //inputed planet won
                     else if (inputedPlanetLong > checkingPlanetLong) { winnerPlanet = checkingPlanet; losserPlanet = inputedPlanet; } //checking planet won
-                    else if (inputedPlanetLong == checkingPlanetLong) { throw new Exception("Planets same longitude! Not expected"); } //unlikely chance, throw error
+                    else if (inputedPlanetLong == checkingPlanetLong)
+                    {
+                        //unlikely chance, log error & set inputed planet as winner (random)
+                        LogManager.Error($"Planets same longitude! Not expected, random result used!");
+                        winnerPlanet = inputedPlanet; losserPlanet = checkingPlanet;
+                    } 
 
                     //When two planets are in war, get the sum of the various Balas, viv., Sthanabala, the
                     // Dikbala and the Kalabala (up to Horabala) described hitherto of the fighting planets. Find out the
@@ -6525,7 +6594,6 @@ namespace Genso.Astrology.Library
         }
 
 
-
         /// <summary>
         /// Checks if any evil/malefic planets are in a sign
         /// </summary>
@@ -7402,7 +7470,7 @@ namespace Genso.Astrology.Library
             var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
 
             //convert planet longitude to zodiac sign
-            var planetZodiac = AstronomicalCalculator.GetZodiacSignAtLongitude(planetLongitude);
+            var planetZodiac = GetZodiacSignAtLongitude(planetLongitude);
 
             //get the longitude where planet is Exaltation
             var point = GetPlanetExaltationPoint(planet);
@@ -7416,6 +7484,217 @@ namespace Genso.Astrology.Library
 
             return planetIsExaltation;
         }
+
+        public static LunarMonth GetLunarMonth(Time time)
+        {
+            //TODO NEEDS WORK
+            throw new NotImplementedException();
+
+
+            //get this months full moon date
+            var fullMoonTime = getFullMoonTime();
+
+            //sunrise
+            var x = GetSunriseTime(time);
+            var y = GetMoonConstellation(x).GetConstellationName();
+
+        Calculate:
+            //get the constellation behind the moon
+            var constellation = GetMoonConstellation(fullMoonTime).GetConstellationName();
+
+            //go back one constellation
+            //constellation = constellation - 1;
+
+            switch (constellation)
+            {
+                case ConstellationName.Aswini:
+                    return LunarMonth.Aswijam;
+                    break;
+                case ConstellationName.Bharani:
+                    break;
+                case ConstellationName.Krithika:
+                    return LunarMonth.Karthikam;
+                    break;
+                case ConstellationName.Rohini:
+                    break;
+                case ConstellationName.Mrigasira:
+                case ConstellationName.Aridra:
+                    return LunarMonth.Margasiram;
+                    break;
+                case ConstellationName.Punarvasu:
+                    break;
+                case ConstellationName.Pushyami:
+                    return LunarMonth.Pooshiam;
+                    break;
+                case ConstellationName.Aslesha:
+                    break;
+                case ConstellationName.Makha:
+                    return LunarMonth.Magham;
+                    break;
+                case ConstellationName.Pubba:
+                    return LunarMonth.Phalgunam;
+                    break;
+                case ConstellationName.Uttara:
+                    break;
+                case ConstellationName.Hasta:
+                    break;
+                case ConstellationName.Chitta:
+                    return LunarMonth.Chitram;
+                    break;
+                case ConstellationName.Swathi:
+                    break;
+                case ConstellationName.Vishhaka:
+                    return LunarMonth.Visakham;
+                    break;
+                case ConstellationName.Anuradha:
+                    break;
+                case ConstellationName.Jyesta:
+                    return LunarMonth.Jaistam;
+                    break;
+                case ConstellationName.Moola:
+                    break;
+                case ConstellationName.Poorvashada:
+                    return LunarMonth.Ashadam;
+                    break;
+                case ConstellationName.Uttarashada:
+                    break;
+                case ConstellationName.Sravana:
+                    return LunarMonth.Sravanam;
+                    break;
+                case ConstellationName.Dhanishta:
+                    break;
+                case ConstellationName.Satabhisha:
+                    break;
+                case ConstellationName.Poorvabhadra:
+                    return LunarMonth.Bhadrapadam;
+                case ConstellationName.Uttarabhadra:
+                    break;
+                case ConstellationName.Revathi:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            throw new ArgumentOutOfRangeException();
+            //switch (constellation)
+            //{
+            //    case ConstellationName.Aswini:
+            //        return LunarMonth.Aswijam;
+            //        break;
+            //    case ConstellationName.Krithika:
+            //        return LunarMonth.Karthikam;
+            //        break;
+            //    case ConstellationName.Mrigasira:
+            //        return LunarMonth.Margasiram;
+            //        break;
+            //    case ConstellationName.Pushyami:
+            //        return LunarMonth.Pooshiam;
+            //        break;
+            //    case ConstellationName.Makha:
+            //        return LunarMonth.Magham;
+            //        break;
+            //    case ConstellationName.Pubba:
+            //        return LunarMonth.Phalgunam;
+            //        break;
+            //    case ConstellationName.Chitta:
+            //        return LunarMonth.Chitram;
+            //        break;
+            //    case ConstellationName.Vishhaka:
+            //        return LunarMonth.Visakham;
+            //        break;
+            //    case ConstellationName.Jyesta:
+            //        return LunarMonth.Jaistam;
+            //        break;
+            //    case ConstellationName.Poorvashada:
+            //        return LunarMonth.Ashadam;
+            //        break;
+            //    case ConstellationName.Sravana:
+            //        return LunarMonth.Sravanam;
+            //        break;
+            //    case ConstellationName.Poorvabhadra:
+            //        return LunarMonth.Bhadrapadam;
+            //        break;
+            //    default:
+            //        fullMoonTime = fullMoonTime.AddHours(1);
+            //        goto Calculate;
+            //}
+
+
+
+
+
+            //FUNCTIONS
+
+            Time getFullMoonTime()
+            {
+                //get the lunar date number
+                int lunarDayNumber = GetLunarDay(time).GetLunarDateNumber();
+
+                //start with input time
+                var fullMoonTime = time;
+
+                //full moon not yet pass
+                if (lunarDayNumber < 15)
+                {
+                    //go forward in time till find full moon
+                    while (!IsFullMoon(fullMoonTime))
+                    {
+                        fullMoonTime = fullMoonTime.AddHours(1);
+                    }
+
+                    return fullMoonTime;
+                }
+                else
+                {
+                    //go backward in time till find full moon
+                    while (!IsFullMoon(fullMoonTime))
+                    {
+                        fullMoonTime = fullMoonTime.SubtractHours(1);
+                    }
+
+                    return fullMoonTime;
+
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Checks if the moon is FULL, moon day 15
+        /// </summary>
+        public static bool IsFullMoon(Time time)
+        {
+            //get the lunar date number
+            int lunarDayNumber = AstronomicalCalculator.GetLunarDay(time).GetLunarDayNumber();
+
+            //if day 15, it is full moon
+            return lunarDayNumber == 15;
+        }
+
+
+
+        /// <summary>
+        /// Check if it is a Water / Aquatic sign
+        /// Water Signs: this category include Cancer, Scorpio and Pisces.
+        /// </summary>
+        public static bool IsAquaticSign(ZodiacName moonSign) => moonSign is ZodiacName.Cancer or ZodiacName.Scorpio or ZodiacName.Pisces;
+
+        /// <summary>
+        /// Check if it is a Fire sign
+        /// Fire Signs: this sign encloses Aries, Leo and Sagittarius.
+        /// </summary>
+        public static bool IsFireSign(ZodiacName moonSign) => moonSign is ZodiacName.Aries or ZodiacName.Leo or ZodiacName.Sagittarius;
+
+        /// <summary>
+        /// Check if it is a Earth sign
+        /// Earth Signs: it contains Taurus, Virgo and Capricorn.
+        /// </summary>
+        public static bool IsEarthSign(ZodiacName moonSign) => moonSign is ZodiacName.Taurus or ZodiacName.Virgo or ZodiacName.Capricornus;
+
+        /// <summary>
+        /// Check if it is a Air / Windy sign
+        /// Air Signs: this sign include Gemini, Libra and Aquarius.
+        /// </summary>
+        public static bool IsAirSign(ZodiacName moonSign) => moonSign is ZodiacName.Gemini or ZodiacName.Libra or ZodiacName.Aquarius;
     }
 
 }

@@ -9,6 +9,8 @@ namespace Genso.Astrology.Library
         private readonly int _lunarDateNumber; //number from 1 to 30
         private readonly int _lunarDayNumber; //number from 1 to 15
 
+
+
         //CTOR
         public LunarDay(int lunarDateNumber)
         {
@@ -18,37 +20,23 @@ namespace Genso.Astrology.Library
             _lunarDayNumber = ConvertLunarDateNumberToLunarDayNumber(_lunarDateNumber);
         }
 
-        //PRIVATE METHODS
-        private static int ConvertLunarDateNumberToLunarDayNumber(int lunarDateNumber)
-        {
-            //declare lunar day number as 0 first
-            int lunarDayNumber = 0;
 
-            //if lunar date number is less than or equal to 15
-            if (lunarDateNumber <= 15)
-            {
-                //lunar date number is same as lunar day number
-                lunarDayNumber = lunarDateNumber;
-            }
-            else
-            //if 16 and above
-            {
-                //minus lunar date number with 15 to get lunar day number
-                lunarDayNumber = lunarDateNumber - 15;
-            }
 
-            // return lunar day number
-            return lunarDayNumber;
-        }
 
         //PUBLIC METHODS
         /// <summary>
         /// Gets the lunar day number 1 to 15
+        /// NOTE:
+        /// - NEW MOON = 1
+        /// - FULL MOON = 15
         /// </summary>
-        public int GetLunarDayNumber()
-        {
-            return _lunarDayNumber;
-        }
+        public int GetLunarDayNumber() => _lunarDayNumber;
+
+        /// <summary>
+        /// Gets the lunar day number 1 to 30
+        /// </summary>
+        public int GetLunarDateNumber() => _lunarDateNumber;
+
         /// <summary>
         /// Gets the lunar day group, such as Nanda, Bhadra, Jaya
         /// </summary>
@@ -122,12 +110,29 @@ namespace Genso.Astrology.Library
             throw new Exception("Moon phase not found, error!");
         }
 
-        /// <summary>
-        /// Gets the lunar day number 1 to 30
-        /// </summary>
-        public int GetLunarDateNumber()
+
+
+        //PRIVATE METHODS
+        private static int ConvertLunarDateNumberToLunarDayNumber(int lunarDateNumber)
         {
-            return _lunarDateNumber;
+            //declare lunar day number as 0 first
+            int lunarDayNumber = 0;
+
+            //if lunar date number is less than or equal to 15
+            if (lunarDateNumber <= 15)
+            {
+                //lunar date number is same as lunar day number
+                lunarDayNumber = lunarDateNumber;
+            }
+            else
+                //if 16 and above
+            {
+                //minus lunar date number with 15 to get lunar day number
+                lunarDayNumber = lunarDateNumber - 15;
+            }
+
+            // return lunar day number
+            return lunarDayNumber;
         }
 
 

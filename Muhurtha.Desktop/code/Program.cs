@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Genso.Astrology.Library;
-using Genso.Astrology.Library.objects.Enum;
 using Genso.Astrology.Muhurtha.Core;
 using Genso.Framework;
 using System.Media;

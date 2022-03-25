@@ -111,11 +111,8 @@ namespace Genso.Astrology.Library
         /// Note: element names used here corespond to the ones found in the XML file
         ///       if change here, than change in XML as well
         /// </summary>
-        public static List<Person> GetPersonList(string filePath)
+        public static List<Person> GetPersonList(Data personListFile)
         {
-            //get the person list file
-            Data personListFile = new Data(filePath);
-
             //create a place to store the list
             var eventDataList = new List<Person>();
 
@@ -163,6 +160,14 @@ namespace Genso.Astrology.Library
 
         }
 
+        //overload for above method
+        public static List<Person> GetPersonList(string filePath)
+        {
+            //get the person list file
+            Data personListFile = new Data(filePath);
+
+            return GetPersonList(personListFile);
+        }
 
         //DEMO METHOD
         public static void SavePersonList(List<Person> personList, string filePath)

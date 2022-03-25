@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using Genso.Astrology.Library;
-using Genso.Astrology.Library.objects.Enum;
 
 namespace Horoscope.Desktop
 {

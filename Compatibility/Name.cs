@@ -9,7 +9,7 @@ namespace Compatibility
     /// <summary>
     /// Represents the name of the prediction method
     /// </summary>
-    internal enum Name
+    public enum Name
     {
         /// <summary>
         /// default value when not assigned

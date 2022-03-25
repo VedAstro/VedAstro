@@ -1,21 +1,98 @@
-﻿
-
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Compatibility;
 using Genso.Astrology.Library;
 using Genso.Astrology.Muhurtha.Core;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Prediction = Compatibility.Prediction;
+using Genso.Framework;
 
-namespace Compatibility
+namespace WebAPI
 {
-    internal class Program
+    public static class Function1
     {
-        static void Main(string[] args)
+        [FunctionName("Function1")]
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            [Blob("vedastro-site-data/PersonList.xml", FileAccess.Read)] Stream PersonListRead,
+            //[Blob("vedastro-site-data/PersonList.xml", FileAccess.Read)] Stream PersonListRead,
+            //[Blob("vedastro-site-data/PersonList.xml", FileAccess.Write)] Stream PersonListWrite,
+            ILogger log)
         {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            string male = req.Query["male"];
+            string female = req.Query["female"];
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            male = male ?? data?.male;
+            female = female ?? data?.female;
+
+            CompatibilityReport result;
+            string responseMessage = "Nothing Done!";
+
+            try
+            {
+                 responseMessage += $"{PersonListRead.Length}";
+                var personList = new Data(PersonListRead); //prep data
+
+                result = processRequest(male, female, personList);
+                responseMessage = $"{male} <> {female} = KutaScore:{result.KutaScore}";
+            }
+            catch (Exception e)
+            {
+                responseMessage += $"{e.Message}";
+            }
+
+
+            return new OkObjectResult(responseMessage);
+        }
+
+
+        //[FunctionName("GetCustomer")]
+        //public static async Task<IActionResult> Run(
+        //    [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] BlobInfo info,
+        //    [Blob("{CityName}/customer.json", FileAccess.Read)] Stream blob,
+        //    ILogger log)
+        //{
+
+        //[FunctionName("GetReview")]
+        //public static HttpResponseMessage getReview(
+        //    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage request,
+        //    [Blob(Consts.API.ReviewList, FileAccess.Read)] Stream reviewListRead,
+        //    [Blob(Consts.API.ReviewList, FileAccess.Write)] Stream reviewListWrite,
+        //    [Blob(Consts.API.AppLog, FileAccess.Read)] Stream appLogRead,
+        //    [Blob(Consts.API.AppLog, FileAccess.Write)] Stream appLogWrite,
+        //    TraceWriter log) =>
+        //    runApi(apiName: ApiName.GetReviewAll,
+        //        request: request,
+        //        reviewListRead: reviewListRead,
+        //        reviewListWrite: reviewListWrite,
+        //        appLogRead: appLogRead,
+        //        appLogWrite: appLogWrite);
+
+
+
+
+        static CompatibilityReport processRequest(string maleName, string femaleName, Data personList)
+        {
+
+
             //get all the people
-            var peopleList = MuhurthaCore.GetAllPeopleList();
+            var peopleList = MuhurthaCore.GetAllPeopleList(personList);
 
             //filter out the male and female ones we want
-            var maleName = "Rubeshen";
-            var femaleName = "Dhiviya";
+            //var maleName = "Rubeshen";
+            //var femaleName = "Dhiviya";
             var male = peopleList.Find(person => person.GetName() == maleName);
             var female = peopleList.Find(person => person.GetName() == femaleName);
 
@@ -27,8 +104,10 @@ namespace Compatibility
             //var male = new Person("Male", new Time(stdTimeMale, geoLocation));
             //var female = new Person("Female", new Time(stdTimeFemale, geoLocation));
 
+            return GetCompatibilityReport(male, female);
 
-            PrintOneVsOne(male, female);
+
+            //PrintOneVsOne(male, female);
             //PrintOneVsList(female);
 
         }
@@ -222,7 +301,7 @@ namespace Compatibility
             handleExceptions(ref report);
 
             return report;
-            
+
             //FUNCTIONS
 
             //checks & modifies results for exceptions 
@@ -484,7 +563,7 @@ namespace Compatibility
             // A boy with a predominantly
             // windy or phlegmatic or bilious constitution
             // should not many a girl of the same type. The
-            // girl should belong to a different’ temperament.
+            // girl should belong to a different� temperament.
             if (maleNadi == femaleNadi)
             {
                 //The evil due to Nadi Kuta can be ignored subject to the following conditions:
@@ -1600,7 +1679,7 @@ namespace Compatibility
                 //get male & female constellation number
                 var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime()).GetConstellationNumber();
                 var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime()).GetConstellationNumber();
-                
+
                 //male constellation number should precede (lower number)
                 if (maleConstellation < femaleConstellation)
                 {
@@ -1631,7 +1710,7 @@ namespace Compatibility
 
             //only check if prediction thus is bad
             if (prediction.Nature == EventNature.Bad)
-            {            
+            {
                 //a.The same planet is lord of the Janma Rasis of both the male and the female,
                 var maleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName());
                 var femaleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName());
@@ -2189,7 +2268,4 @@ namespace Compatibility
         }
 
     }
-
 }
-
-

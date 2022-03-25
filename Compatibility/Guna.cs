@@ -9,7 +9,7 @@ namespace Compatibility
     /// <summary>
     /// used for Guna Kuta
     /// </summary>
-    internal enum Guna
+    public enum Guna
     {
         Deva = 3,
         Manusha = 2,

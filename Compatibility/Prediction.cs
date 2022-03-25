@@ -12,7 +12,7 @@ namespace Compatibility
     /// Note : properties can only be set once,
     /// so that doesn't accidentally get changed
     /// </summary>
-    internal class Prediction
+    public class Prediction
     {
         //DATA FIELDS
         private string _info = "";

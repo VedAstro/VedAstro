@@ -34,13 +34,19 @@ namespace Genso.Astrology.Muhurtha.Core
         public static event Action SendingEventsCompleted;
 
 
-
         /** PUBLIC METHODS **/
 
-        public static List<Person> GetAllPeopleList()
-        {
-            return DatabaseManager.GetPersonList(dataPersonlistXml);
-        }
+        /// <summary>
+        /// People list from default file
+        /// </summary>
+        public static List<Person> GetAllPeopleList() => DatabaseManager.GetPersonList(dataPersonlistXml);
+
+        /// <summary>
+        /// People list from inputed data file
+        /// </summary>
+        public static List<Person> GetAllPeopleList(Data personListFile) => DatabaseManager.GetPersonList(personListFile);
+
+
 
         public static List<EventTag> GetAllTagList()
         {

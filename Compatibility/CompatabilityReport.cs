@@ -10,7 +10,7 @@ namespace Compatibility
     /// <summary>
     /// Represents the final data generated for compatibility
     /// </summary>
-    internal class CompatibilityReport
+    public class CompatibilityReport
     {
         public List<Prediction> PredictionList { get; set; }
 

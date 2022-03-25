@@ -19,6 +19,7 @@ namespace Genso.Framework
         //mark which data underlying type is used (default is false)
         private bool fileType = false;
         private bool blobType = false;
+        private bool readOnly = false; //if marked data cannot be edited, if violated raises alarm
 
         /// <summary>
         /// Used when initializing from Azure functions, files in blob
@@ -38,6 +39,25 @@ namespace Genso.Framework
             blobType = true;
 
         }
+
+        /// <summary>
+        /// Used when initializing from Azure functions, READ-ONLY files in blob
+        /// </summary>
+        public Data(Stream readStream)
+        {
+            //document for reading data
+            _document = XDocument.Load(readStream);
+
+            //get all records in document
+            _allRecords = _document.Root.Elements();
+
+            //underlying type is blob
+            blobType = true;
+
+            //since no write stream, enable read only access
+            readOnly = true;
+        }
+
 
         /// <summary>
         /// Used when initialing locally, with files on disk
@@ -107,6 +127,7 @@ namespace Genso.Framework
 
         /// <summary>
         /// Gets the record by its name
+        /// </summary>
         public XElement getRecord(string elementName)
         {
             //find record with name
@@ -132,14 +153,7 @@ namespace Genso.Framework
             var found = getRecord(elementName, elementValue);
 
             //if none is found, no element exist
-            if (found == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return found != null;
         }
 
         /// <summary>
@@ -147,6 +161,8 @@ namespace Genso.Framework
         /// </summary>set
         public void insertRecord(XElement record)
         {
+            if (readOnly) { throw new InvalidOperationException("Data is read-only!"); }
+
             //add new record to the document
             _document.Root.Add(record);
 
@@ -185,6 +201,8 @@ namespace Genso.Framework
         /// </summary>
         public void deleteRecord(XElement record)
         {
+            if (readOnly) { throw new InvalidOperationException("Data is read-only!"); }
+
             //remove node from document
             record.Remove();
 
@@ -208,6 +226,8 @@ namespace Genso.Framework
         /// </summary>
         public void updateRecord(string name, string value)
         {
+            if (readOnly) { throw new InvalidOperationException("Data is read-only!"); }
+
             //get the record that needs to be updated
             var foundRecords = from record in _allRecords
                                where record.Name.ToString() == name
@@ -236,6 +256,8 @@ namespace Genso.Framework
         /// </summary>
         public void updateUnderlyingFile()
         {
+            if (readOnly) { throw new InvalidOperationException("Data is read-only!"); }
+
             if (blobType)
             {
                 _document.Save(_writeStream);

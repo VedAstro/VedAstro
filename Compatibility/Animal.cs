@@ -8,7 +8,7 @@ namespace Compatibility
 {
     //simple type to hold animal names
     //used in yoni calculations
-    enum Animal
+    public enum Animal
     {
         Horse = 1,
         Elephant = 2,

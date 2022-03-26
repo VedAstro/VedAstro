@@ -25,7 +25,7 @@ using Microsoft.Net.Http.Headers;
 
 namespace WebAPI
 {
-    public static class Function1
+    public static class EntryPoint
     {
 
         [FunctionName("compatibility")]
@@ -37,36 +37,46 @@ namespace WebAPI
             //[Blob("vedastro-site-data/PersonList.xml", FileAccess.Write)] Stream PersonListWrite,
             ILogger log)
         {
-
-            string male = req.Query["male"];
-            string female = req.Query["female"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            male = male ?? data?.male;
-            female = female ?? data?.female;
-
-            CompatibilityReport result;
-            string responseMessage = "Nothing Done!";
+            string responseMessage;
 
             try
             {
+                //get name of male & female
+                dynamic names = await ExtractNames(req);
+                
+                //get list of all people
                 var personList = new Data(PersonListRead);
-                result = processRequest(male, female, personList);
-                //responseMessage = $"{male} <> {female} = KutaScore:{result.KutaScore}";
-                var htmlTable = ToHtmlTable(result.PredictionList);
-                var htmlPage = $"<!DOCTYPE html><html><body>{htmlTable}</body></html>";
-                responseMessage = htmlPage;
+
+                //generate compatibility report
+                CompatibilityReport compatibilityReport = GetCompatibilityReport(names.Male, names.Female, personList);
+                responseMessage = compatibilityReport.ToXML().ToString();
             }
             catch (Exception e)
             {
-                responseMessage += $"{e.Message}";
+                responseMessage = $"{e.Message}";
             }
 
 
             var okObjectResult = new OkObjectResult(responseMessage);
             //okObjectResult.ContentTypes.Add("text/html");
             return okObjectResult;
+        }
+
+        /// <summary>
+        /// Extracts names from the query URL
+        /// </summary>
+        private static async Task<object> ExtractNames(HttpRequest request)
+        {
+            string male = request.Query["male"];
+            string female = request.Query["female"];
+
+            string requestBody = await new StreamReader(request.Body).ReadToEndAsync();
+            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            male = male ?? data?.male;
+            female = female ?? data?.female;
+
+            return new { Male = male, Female = female };
+
         }
 
 
@@ -119,33 +129,16 @@ namespace WebAPI
         }
 
 
-        static CompatibilityReport processRequest(string maleName, string femaleName, Data personList)
+        static CompatibilityReport GetCompatibilityReport(string maleName, string femaleName, Data personList)
         {
-
-
             //get all the people
             var peopleList = MuhurthaCore.GetAllPeopleList(personList);
 
             //filter out the male and female ones we want
-            //var maleName = "Rubeshen";
-            //var femaleName = "Dhiviya";
             var male = peopleList.Find(person => person.GetName() == maleName);
             var female = peopleList.Find(person => person.GetName() == femaleName);
 
-            //var geoLocation = new GeoLocation("Ipoh", 101, 4.59); //todo check if change in location changes much
-
-            //var stdTimeMale = DateTimeOffset.ParseExact("23:33 19/03/1989 +08:00", Time.GetDateTimeFormat(), null);
-            //var stdTimeFemale = DateTimeOffset.ParseExact("10:27 14/02/1995 +08:00", Time.GetDateTimeFormat(), null);
-
-            //var male = new Person("Male", new Time(stdTimeMale, geoLocation));
-            //var female = new Person("Female", new Time(stdTimeFemale, geoLocation));
-
             return GetCompatibilityReport(male, female);
-
-
-            //PrintOneVsOne(male, female);
-            //PrintOneVsList(female);
-
         }
 
 

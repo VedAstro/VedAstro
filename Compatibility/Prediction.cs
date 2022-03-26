@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Genso.Astrology.Library;
 
 namespace Compatibility
@@ -72,5 +73,20 @@ namespace Compatibility
 
 
         //PRIVATE METHODS
+        public XElement ToXML()
+        {
+            //create root tag to hold data
+            var predictionXml = new XElement("Prediction");
+            var name = new XElement("Name", this.Name);
+            var nature = new XElement("Nature", this.Nature);
+            var maleInfo = new XElement("MaleInfo", this.MaleInfo);
+            var femaleInfo = new XElement("FemaleInfo", this.FemaleInfo);
+            var info = new XElement("Info", this.Info);
+            var description = new XElement("Description", this.Description);
+
+            predictionXml.Add(name, nature, maleInfo, femaleInfo, info, description);
+
+            return predictionXml;
+        }
     }
 }

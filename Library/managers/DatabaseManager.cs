@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
-using Genso.Astrology.Library;
-using Genso.Framework;
 
 namespace Genso.Astrology.Library
 {

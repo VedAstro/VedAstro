@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using Genso.Astrology.Library;
 
 namespace Genso.Astrology.Library
 {

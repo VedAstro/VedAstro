@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Genso.Astrology.Library
+﻿namespace Genso.Astrology.Library
 {
     public interface IHasName
     {

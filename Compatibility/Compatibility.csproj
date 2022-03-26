@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Library\Library.csproj" />
-    <ProjectReference Include="..\Muhurtha.Core\Muhurtha.Core.csproj" />
   </ItemGroup>
 
 </Project>

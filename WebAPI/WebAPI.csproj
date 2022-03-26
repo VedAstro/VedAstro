@@ -10,7 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compatibility\Compatibility.csproj" />
-    <ProjectReference Include="..\Muhurtha.Core\Muhurtha.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

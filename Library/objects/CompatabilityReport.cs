@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Genso.Astrology.Library;
 
 namespace Genso.Astrology.Library.Compatibility
 {

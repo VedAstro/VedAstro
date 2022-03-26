@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Genso.Astrology.Library;
-using DayOfWeek = Genso.Astrology.Library.DayOfWeek;
 
 namespace Genso.Astrology.Library
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using Genso.Framework;
+using Genso.Astrology.Library;
 
 
 namespace Muhurtha.Desktop

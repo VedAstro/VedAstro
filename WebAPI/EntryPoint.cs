@@ -2,26 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Net.Http;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using Azure.Core;
-using Compatibility;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
-using Genso.Astrology.Muhurtha.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Genso.Framework;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Net.Http.Headers;
 
 namespace WebAPI
 {
@@ -135,7 +124,7 @@ namespace WebAPI
         static CompatibilityReport GetCompatibilityReport(string maleName, string femaleName, Data personList)
         {
             //get all the people
-            var peopleList = MuhurthaCore.GetAllPeopleList(personList);
+            var peopleList = DatabaseManager.GetPersonList(personList);
 
             //filter out the male and female ones we want
             var male = peopleList.Find(person => person.GetName() == maleName);
@@ -183,31 +172,6 @@ namespace WebAPI
         }
 
 
-        private static void PrintOneVsList(Person person)
-        {
-
-            //get all the people
-            var peopleList = MuhurthaCore.GetAllPeopleList();
-
-            //given a list of people find good matches
-            //var goodMatches = FindGoodMatches(peopleList);
-            var goodMatches = GetAllMatchesForPersonByStrength(person, peopleList);
-
-            //show final results to user
-            printResultList(ref goodMatches);
-
-            void printResultList(ref List<CompatibilityReport> reportList)
-            {
-                foreach (var report in reportList)
-                {
-                    Console.WriteLine($"{report.Male.GetName()}\t{report.Female.GetName()}\t{report.KutaScore}");
-                }
-
-                Console.ReadLine();
-            }
-
-
-        }
 
         private static EventNature getScoreGrade(double score)
         {

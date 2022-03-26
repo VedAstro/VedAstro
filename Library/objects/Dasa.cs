@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Genso.Astrology.Library
+﻿namespace Genso.Astrology.Library
 {
     /// <summary>
     /// Holds info (Dasa, Bhukti & Antaram) on the ruling period at point in time.

@@ -5,15 +5,11 @@ VisualStudioVersion = 17.1.31911.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library", "Library\Library.csproj", "{13F722B6-DF6B-45E7-A563-9379C05BBE7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muhurtha.Core", "Muhurtha.Core\Muhurtha.Core.csproj", "{43930B3B-E9FF-4C07-A507-E951983B49BD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muhurtha.Desktop", "Muhurtha.Desktop\Muhurtha.Desktop.csproj", "{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horoscope.Desktop", "Horoscope.Desktop\Horoscope.Desktop.csproj", "{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryTests", "LibraryTests\LibraryTests.csproj", "{979EDF0E-9B11-4100-A37A-13A9E0924555}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "Framework\Framework.csproj", "{B27D2CCB-49F7-4D8E-8743-60563BF1DB52}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{317ADC97-8BF1-49D5-880F-07818908FCE3}"
 	ProjectSection(SolutionItems) = preProject
@@ -40,10 +36,6 @@ Global
 		{13F722B6-DF6B-45E7-A563-9379C05BBE7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13F722B6-DF6B-45E7-A563-9379C05BBE7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13F722B6-DF6B-45E7-A563-9379C05BBE7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{43930B3B-E9FF-4C07-A507-E951983B49BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43930B3B-E9FF-4C07-A507-E951983B49BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43930B3B-E9FF-4C07-A507-E951983B49BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43930B3B-E9FF-4C07-A507-E951983B49BD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -56,10 +48,6 @@ Global
 		{979EDF0E-9B11-4100-A37A-13A9E0924555}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{979EDF0E-9B11-4100-A37A-13A9E0924555}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{979EDF0E-9B11-4100-A37A-13A9E0924555}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B27D2CCB-49F7-4D8E-8743-60563BF1DB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B27D2CCB-49F7-4D8E-8743-60563BF1DB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B27D2CCB-49F7-4D8E-8743-60563BF1DB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B27D2CCB-49F7-4D8E-8743-60563BF1DB52}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EE6B3578-639B-4EE5-BC02-B9B226D8E17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE6B3578-639B-4EE5-BC02-B9B226D8E17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE6B3578-639B-4EE5-BC02-B9B226D8E17F}.Release|Any CPU.ActiveCfg = Release|Any CPU

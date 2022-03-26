@@ -1,18 +1,16 @@
-﻿
-
-using System;
-using Genso.Astrology.Library;
+﻿using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
-using Genso.Astrology.Muhurtha.Core;
 
 namespace Compatibility
 {
     internal class Program
     {
+        const string dataPersonlistXml = "data\\PersonList.xml";
+
         static void Main(string[] args)
         {
             //get all the people
-            var peopleList = MuhurthaCore.GetAllPeopleList();
+            var peopleList = DatabaseManager.GetPersonList(dataPersonlistXml);
 
             //filter out the male and female ones we want
             var maleName = "Rubeshen";
@@ -77,7 +75,7 @@ namespace Compatibility
         {
 
             //get all the people
-            var peopleList = MuhurthaCore.GetAllPeopleList();
+            var peopleList = DatabaseManager.GetPersonList(dataPersonlistXml);
 
             //given a list of people find good matches
             //var goodMatches = FindGoodMatches(peopleList);
@@ -223,7 +221,7 @@ namespace Compatibility
             handleExceptions(ref report);
 
             return report;
-            
+
             //FUNCTIONS
 
             //checks & modifies results for exceptions 
@@ -1601,7 +1599,7 @@ namespace Compatibility
                 //get male & female constellation number
                 var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime()).GetConstellationNumber();
                 var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime()).GetConstellationNumber();
-                
+
                 //male constellation number should precede (lower number)
                 if (maleConstellation < femaleConstellation)
                 {
@@ -1632,7 +1630,7 @@ namespace Compatibility
 
             //only check if prediction thus is bad
             if (prediction.Nature == EventNature.Bad)
-            {            
+            {
                 //a.The same planet is lord of the Janma Rasis of both the male and the female,
                 var maleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName());
                 var femaleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName());

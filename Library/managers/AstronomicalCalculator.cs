@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Google.Apis.Auth.OAuth2.Requests;
-using Genso.Astrology.Library;
 using SwissEphNet;
-using DayOfWeek = Genso.Astrology.Library.DayOfWeek;
-using System.Reflection;
-using Genso.Framework;
+
+//using Genso.Framework;
 
 namespace Genso.Astrology.Library
 {

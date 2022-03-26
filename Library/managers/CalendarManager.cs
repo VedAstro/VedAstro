@@ -7,9 +7,6 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using Genso.Astrology.Library;
-using Genso.Framework;
-using Event = Genso.Astrology.Library.Event;
 
 namespace Genso.Astrology.Library
 {
@@ -24,20 +21,6 @@ namespace Genso.Astrology.Library
 
 
         /** CONST FIELDS **/
-
-        //store the ID's of each calendar
-        //TODO mark for removal
-        //public static String Agriculture = "i32upicbta6asvu2kbhlmcmu3c@group.calendar.google.com";
-        //public static String General = "qr47qb2fpt4n3mue4onambrge4@group.calendar.google.com";
-        //public static String Personal = "q6j3bef1c79p7apse3uiibsfgs@group.calendar.google.com";
-        //public static String RgkDevi = "b0s6p44la7m0h8ttlfesfvmj28@group.calendar.google.com";
-        //public static String RulingConstellation = "ouopcpjk2hcetvtvufvhfec4u4@group.calendar.google.com";
-        //public static String HairNailCutting = "lvada0mpnqmdjviqqeug9m49kc@group.calendar.google.com";
-        //public static String Medical = "t9be6rhvqdlm45q6mlkf82fqlk@group.calendar.google.com";
-        //public static String BuyingSelling = "sqb75ocqme43int94aevqvjmck@group.calendar.google.com";
-        //public static String Astronomical = "5dnb8488n051v5gt4npi5q36q8@group.calendar.google.com";
-        //public static String Marriage = "68evakk36vgd9nnipe0m7jms8s@group.calendar.google.com";
-        //public static String Sindhu = "b8sj4qhiat5vgjj4f5jaektl88@group.calendar.google.com";
 
 
 

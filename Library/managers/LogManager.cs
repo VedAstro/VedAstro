@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Xml.Linq;
 
-namespace Genso.Framework
+namespace Genso.Astrology.Library
 {
 
     /// <summary>
@@ -134,7 +134,7 @@ namespace Genso.Framework
                     new XElement("SourceLineNumber", line),
                     new XElement("SourceColNumber", columnNumber),
                     new XElement("MethodName", methodName),
-                    new XElement("Time", Utils.GetNow())
+                    new XElement("Time", GetNow())
                 );
 
                 //place new record into the log list
@@ -195,7 +195,7 @@ namespace Genso.Framework
 
                 var newRecord = new XElement("Error",
                     new XElement("Message", errorMessage),
-                    new XElement("Time", Utils.GetNow())
+                    new XElement("Time", GetNow())
                 );
 
                 //place new record into the log list
@@ -229,7 +229,7 @@ namespace Genso.Framework
                 //put together the new error record
                 var newRecord = new XElement("Debug",
                     new XElement("Message", message),
-                    new XElement("Time", Utils.GetNow())
+                    new XElement("Time", GetNow())
                 );
 
                 //place new record into the log list
@@ -244,12 +244,30 @@ namespace Genso.Framework
         /// <summary>
         /// Adds message to the main log at a new line
         /// </summary>
-        private static void AddToLog(string message, LogType debug) => LogText += $"\n{Utils.GetNow()}:\t{debug}:\t{message}";
+        private static void AddToLog(string message, LogType debug) => LogText += $"\n{GetNow()}:\t{debug}:\t{message}";
 
         public static void Initialize(object data)
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Gets now time in UTC +8:00
+        /// </summary>
+        /// <returns></returns>
+        private static DateTimeOffset GetNow()
+        {
+            //create utc 8
+            var utc8 = new TimeSpan(8, 0, 0);
+            //get now time in utc 0
+            var nowTime = DateTimeOffset.Now.ToUniversalTime();
+            //convert time utc 0 to utc 8
+            var utc8Time = nowTime.ToOffset(utc8);
+
+            //return converted time to caller
+            return utc8Time;
+        }
+
     }
 
 

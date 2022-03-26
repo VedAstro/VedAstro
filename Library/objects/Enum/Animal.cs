@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Genso.Astrology.Library.Compatibility
+﻿namespace Genso.Astrology.Library.Compatibility
 {
     //simple type to hold animal names
     //used in yoni calculations

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
@@ -121,7 +122,9 @@ namespace Genso.Astrology.Library
         public string GetStdDateTimeOffsetText()
         {
             //format time with formatting info
-            var stdTimeString = _stdTime.ToString(FormatInfo);
+            //var stdTimeString = _stdTime.ToString(FormatInfo);
+            var stdTimeString = _stdTime.ToString("HH:mm dd/MM/yyyy zzz");
+
 
             //return formatted time
             return stdTimeString;
@@ -303,5 +306,29 @@ namespace Genso.Astrology.Library
         }
 
 
+        public XElement ToXML()
+        {
+            var timeHoler = new XElement("Time");
+            var timeString = this.GetStdDateTimeOffsetText();
+            var timeValue = new XElement("StdTime", timeString);
+            var location = this.GetGeoLocation().ToXml();
+
+            timeHoler.Add(timeValue, location);
+
+            return timeHoler;
+        }
+        public static Time FromXML(XElement root)
+        {
+            var timeString = root.Element("StdTime")?.Value;
+            var locationXml = root.Element("Location");
+            Console.WriteLine(timeString);
+            //timeString = "06:42 16/04/2021 +08:00";
+            var stdDateTime = DateTimeOffset.ParseExact(timeString, Time.GetDateTimeFormat(), null);
+            var geoLocation = GeoLocation.FromXml(locationXml);
+
+            var parsedTime = new Time(stdDateTime, geoLocation);
+
+            return parsedTime;
+        }
     }
 }

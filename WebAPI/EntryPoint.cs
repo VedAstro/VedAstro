@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Azure.Core;
 using Compatibility;
 using Genso.Astrology.Library;
+using Genso.Astrology.Library.Compatibility;
 using Genso.Astrology.Muhurtha.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -18,7 +19,6 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Prediction = Compatibility.Prediction;
 using Genso.Framework;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
@@ -33,8 +33,6 @@ namespace WebAPI
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             [Blob("vedastro-site-data/PersonList.xml", FileAccess.Read)] Stream PersonListRead,
-            //[Blob("vedastro-site-data/PersonList.xml", FileAccess.Read)] Stream PersonListRead,
-            //[Blob("vedastro-site-data/PersonList.xml", FileAccess.Write)] Stream PersonListWrite,
             ILogger log)
         {
             string responseMessage;
@@ -53,7 +51,12 @@ namespace WebAPI
             }
             catch (Exception e)
             {
-                responseMessage = $"{e.Message}";
+                responseMessage = $"Message\n{e.Message}\n";
+                responseMessage += $"Data\n{e.Data}\n";
+                responseMessage += $"InnerException\n{e.InnerException}\n";
+                responseMessage += $"Source\n{e.Source}\n";
+                responseMessage += $"StackTrace\n{e.StackTrace}\n";
+                responseMessage += $"StackTrace\n{e.TargetSite}\n";
             }
 
 
@@ -303,7 +306,7 @@ namespace WebAPI
                 Male = male,
                 Female = female,
                 //do the calculations & add results to a list
-                PredictionList = new List<Prediction>(){
+                PredictionList = new List<CompatibilityPrediction>(){
                     GrahaMaitram(male, female), //5
                     Rajju(male, female),
                     NadiKuta(male, female), //8
@@ -351,7 +354,7 @@ namespace WebAPI
 
                 //FUNCTIONS
 
-                void streeDeerghaException(List<Prediction> list)
+                void streeDeerghaException(List<CompatibilityPrediction> list)
                 {
                     //1.The absence of Stree-Deerga may be ignored if
                     //  Rasi Kuta add Graha Maitri are present.
@@ -369,7 +372,7 @@ namespace WebAPI
                     if (streeDeergaIsBad && rasiKutaIsGood && grahaMaitramIsGood)
                     {
                         //create new prediction
-                        var newPrediction = new Prediction()
+                        var newPrediction = new CompatibilityPrediction()
                         {
                             Name = streeDeerga.Name,
                             Description = streeDeerga.Description,
@@ -387,7 +390,7 @@ namespace WebAPI
 
                 }
 
-                void rajjuException(List<Prediction> list)
+                void rajjuException(List<CompatibilityPrediction> list)
                 {
                     //2.Rajju Kuta need not be considered in case Graha Maitri, Rasi, Dina
                     //  and Mahendra Kuta are present.
@@ -411,7 +414,7 @@ namespace WebAPI
                     if (rajjuIsBad && grahaMaitramIsGood && rasiKutaIsGood && dinaKutaIsGood && mahendraIsGood)
                     {
                         //create new prediction
-                        var newPrediction = new Prediction()
+                        var newPrediction = new CompatibilityPrediction()
                         {
                             Name = rajju.Name,
                             Description = rajju.Description,
@@ -429,7 +432,7 @@ namespace WebAPI
 
                 }
 
-                void nadiKutaException(List<Prediction> list)
+                void nadiKutaException(List<CompatibilityPrediction> list)
                 {
                     //The evil due to Nadi Kuta can be ignored subject to the following
                     // conditions: -
@@ -448,7 +451,7 @@ namespace WebAPI
                     if (nadiKutaIsBad && rasiKutaIsGood && rajjuIsGood)
                     {
                         //create new prediction
-                        var newPrediction = new Prediction()
+                        var newPrediction = new CompatibilityPrediction()
                         {
                             Name = nadiKuta.Name,
                             Description = nadiKuta.Description,
@@ -531,9 +534,9 @@ namespace WebAPI
         }
 
 
-        public static Prediction Mahendra(Person male, Person female)
+        public static CompatibilityPrediction Mahendra(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.Mahendra,
                 Description = "well-being and longevity"
@@ -568,9 +571,9 @@ namespace WebAPI
             return prediction;
         }
 
-        public static Prediction NadiKuta(Person male, Person female)
+        public static CompatibilityPrediction NadiKuta(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.NadiKuta,
                 Description = "nervous energy compatibility (important)"
@@ -672,9 +675,9 @@ namespace WebAPI
             }
         }
 
-        public static Prediction GunaKuta(Person male, Person female)
+        public static CompatibilityPrediction GunaKuta(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.GunaKuta,
                 Description = "temperament and character compatibility"
@@ -743,7 +746,7 @@ namespace WebAPI
             if (maleToFemale > 14 && prediction.Nature == EventNature.Bad)
             {
                 //create new prediction
-                var newPrediction = new Prediction()
+                var newPrediction = new CompatibilityPrediction()
                 {
                     Name = prediction.Name,
                     Description = prediction.Description,
@@ -810,9 +813,9 @@ namespace WebAPI
 
         }
 
-        public static Prediction Varna(Person male, Person female)
+        public static CompatibilityPrediction Varna(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.Varna,
                 Description = "spiritual/ego compatibility"
@@ -899,10 +902,10 @@ namespace WebAPI
             }
         }
 
-        public static Prediction YoniKuta(Person male, Person female)
+        public static CompatibilityPrediction YoniKuta(Person male, Person female)
         {
 
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.Yoni,
                 Description = "sex compatibility"
@@ -1103,9 +1106,9 @@ namespace WebAPI
             }
         }
 
-        public static Prediction VedhaKuta(Person male, Person female)
+        public static CompatibilityPrediction VedhaKuta(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.Vedha,
                 Description = "birth constellations compatibility"
@@ -1188,9 +1191,9 @@ namespace WebAPI
             }
         }
 
-        public static Prediction Rajju(Person male, Person female)
+        public static CompatibilityPrediction Rajju(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.Rajju,
                 Description = "strength/duration of married life (important)"
@@ -1314,9 +1317,9 @@ namespace WebAPI
 
         }
 
-        public static Prediction VasyaKuta(Person male, Person female)
+        public static CompatibilityPrediction VasyaKuta(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.VasyaKuta,
                 Description = "degree of magnetic control"
@@ -1499,9 +1502,9 @@ namespace WebAPI
             return prediction;
         }
 
-        public static Prediction GrahaMaitram(Person male, Person female)
+        public static CompatibilityPrediction GrahaMaitram(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.GrahaMaitram,
                 Description = "happiness, mental compatibility (important)"
@@ -1583,9 +1586,9 @@ namespace WebAPI
             return prediction;
         }
 
-        public static Prediction RasiKuta(Person male, Person female)
+        public static CompatibilityPrediction RasiKuta(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.RasiKuta,
                 Description = "rasi compatibility"
@@ -1753,7 +1756,7 @@ namespace WebAPI
                 if (sameJanmaLord || janmaIsFriend)
                 {
                     //create new prediction
-                    var newPrediction = new Prediction()
+                    var newPrediction = new CompatibilityPrediction()
                     {
                         Name = prediction.Name,
                         Description = prediction.Description,
@@ -1776,9 +1779,9 @@ namespace WebAPI
 
         }
 
-        public static Prediction StreeDeergha(Person male, Person female)
+        public static CompatibilityPrediction StreeDeergha(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.StreeDeergha,
                 Description = "husband well being, longevity and prosperity"
@@ -1813,9 +1816,9 @@ namespace WebAPI
             return prediction;
         }
 
-        public static Prediction DinaKuta(Person male, Person female)
+        public static CompatibilityPrediction DinaKuta(Person male, Person female)
         {
-            var prediction = new Prediction
+            var prediction = new CompatibilityPrediction
             {
                 Name = Name.DinaKuta,
                 Description = "day to day living compatibility"
@@ -1857,7 +1860,7 @@ namespace WebAPI
 
         }
 
-        public static Prediction LagnaAndHouse7Good(Person male, Person female)
+        public static CompatibilityPrediction LagnaAndHouse7Good(Person male, Person female)
         {
 
             //get birth moon sign & lagna, details needed for prediction
@@ -1886,7 +1889,7 @@ namespace WebAPI
 
 
             //fill details to show user if occuring, else nothing
-            var prediction = new Prediction();
+            var prediction = new CompatibilityPrediction();
             if (occuring)
             {
                 prediction.Name = Name.LagnaAnd7thGood;
@@ -1901,7 +1904,7 @@ namespace WebAPI
 
         }
 
-        public static Prediction KujaDosa(Person male, Person female)
+        public static CompatibilityPrediction KujaDosa(Person male, Person female)
         {
 
             //get kuja dosha score for male & female
@@ -2165,9 +2168,9 @@ namespace WebAPI
             }
 
             //interpret kuja dosa & creates the prediction
-            Prediction interpretScore(double scoreMale, double scoreFemale)
+            CompatibilityPrediction interpretScore(double scoreMale, double scoreFemale)
             {
-                var prediction = new Prediction
+                var prediction = new CompatibilityPrediction
                 {
                     Name = Name.KujaDosa,
                     Description = "if bad, may cause death/bad health to spouse"
@@ -2230,9 +2233,9 @@ namespace WebAPI
             }
         }
 
-        public static Prediction BadConstellations(Person male, Person female)
+        public static CompatibilityPrediction BadConstellations(Person male, Person female)
         {
-            var prediction = new Prediction();
+            var prediction = new CompatibilityPrediction();
 
             // Almost all authors agree that certain parts of Moola, Astesha, Jyeshta and Visakha are destructive
             // constellations -

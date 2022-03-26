@@ -3,156 +3,182 @@
 	<Person>
 		<Name>Viknesh</Name>
 		<BirthTime>
-			<Time>12:44 23/04/1994 +08:00</Time>
-			<Location>
-				<Name>Teluk Intan</Name>
-				<Longitude>101.0206</Longitude>
-				<Latitude>4.0224</Latitude>
-			</Location>
+			<Time>
+				<StdTime>12:44 23/04/1994 +08:00</StdTime>
+				<Location>
+					<Name>Teluk Intan</Name>
+					<Longitude>101.0206</Longitude>
+					<Latitude>4.0224</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Sindhu</Name>
 		<BirthTime>
-			<Time>13:16 23/02/1998 +08:00</Time>
-			<Location>
-				<Name>Teluk Intan</Name>
-				<Longitude>101.0206</Longitude>
-				<Latitude>4.0224</Latitude>
-			</Location>
+			<Time>
+				<StdTime>13:16 23/02/1998 +08:00</StdTime>
+				<Location>
+					<Name>Teluk Intan</Name>
+					<Longitude>101.0206</Longitude>
+					<Latitude>4.0224</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Devi</Name>
 		<BirthTime>
-			<Time>06:15 05/08/1963 +08:00</Time>
-			<Location>
-				<Name>Teluk Intan</Name>
-				<Longitude>101.0206</Longitude>
-				<Latitude>4.0224</Latitude>
-			</Location>
+			<Time>
+				<StdTime>06:15 05/08/1963 +08:00</StdTime>
+				<Location>
+					<Name>Teluk Intan</Name>
+					<Longitude>101.0206</Longitude>
+					<Latitude>4.0224</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Nagayah</Name>
 		<BirthTime>
-			<Time>16:30 23/12/1949 +08:00</Time>
-			<Location>
-				<Name>Teluk Intan</Name>
-				<Longitude>101.0206</Longitude>
-				<Latitude>4.0224</Latitude>
-			</Location>
+			<Time>
+				<StdTime>16:30 23/12/1949 +08:00</StdTime>
+				<Location>
+					<Name>Teluk Intan</Name>
+					<Longitude>101.0206</Longitude>
+					<Latitude>4.0224</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Rosita</Name>
 		<BirthTime>
-			<Time>16:00 13/12/1990 +08:00</Time>
-			<Location>
-				<Name>Kuala Lumpur</Name>
-				<Longitude>101.6873</Longitude>
-				<Latitude>3.16027</Latitude>
-			</Location>
+			<Time>
+				<StdTime>16:00 13/12/1990 +08:00</StdTime>
+				<Location>
+					<Name>Kuala Lumpur</Name>
+					<Longitude>101.6873</Longitude>
+					<Latitude>3.16027</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Prema</Name>
 		<BirthTime>
-			<Time>05:45 14/04/1967 +08:00</Time>
-			<Location>
-				<Name>Teluk Intan</Name>
-				<Longitude>101.0206</Longitude>
-				<Latitude>4.0224</Latitude>
-			</Location>
+			<Time>
+				<StdTime>05:45 14/04/1967 +08:00</StdTime>
+				<Location>
+					<Name>Teluk Intan</Name>
+					<Longitude>101.0206</Longitude>
+					<Latitude>4.0224</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Ravi</Name>
 		<BirthTime>
-			<Time>22:40 22/09/1964 +08:00</Time>
-			<Location>
-				<Name>Johor</Name>
-				<Longitude>103.7533</Longitude>
-				<Latitude>1.5174</Latitude>
-			</Location>
+			<Time>
+				<StdTime>22:40 22/09/1964 +08:00</StdTime>
+				<Location>
+					<Name>Johor</Name>
+					<Longitude>103.7533</Longitude>
+					<Latitude>1.5174</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Govindha</Name>
 		<BirthTime>
-			<Time>16:00 06/02/1943 +08:00</Time>
-			<Location>
-				<Name>Teluk Intan</Name>
-				<Longitude>101.0206</Longitude>
-				<Latitude>4.0224</Latitude>
-			</Location>
+			<Time>
+				<StdTime>16:00 06/02/1943 +08:00</StdTime>
+				<Location>
+					<Name>Teluk Intan</Name>
+					<Longitude>101.0206</Longitude>
+					<Latitude>4.0224</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Dhiviya</Name>
 		<BirthTime>
-			<Time>12:48 31/07/1992 +08:00</Time>
-			<Location>
-				<Name>Teluk Intan</Name>
-				<Longitude>101.0206</Longitude>
-				<Latitude>4.0224</Latitude>
-			</Location>
+			<Time>
+				<StdTime>12:48 31/07/1992 +08:00</StdTime>
+				<Location>
+					<Name>Teluk Intan</Name>
+					<Longitude>101.0206</Longitude>
+					<Latitude>4.0224</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Female</Gender>
 	</Person>
 	<Person>
 		<Name>Anba</Name>
 		<BirthTime>
-			<Time>00:20 02/12/1963 +08:00</Time>
-			<Location>
-				<Name>Seremban</Name>
-				<Longitude>101.9556</Longitude>
-				<Latitude>2.7265</Latitude>
-			</Location>
+			<Time>
+				<StdTime>00:20 02/12/1963 +08:00</StdTime>
+				<Location>
+					<Name>Seremban</Name>
+					<Longitude>101.9556</Longitude>
+					<Latitude>2.7265</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Shadtharcharan</Name>
 		<BirthTime>
-			<Time>19:04 20/07/1988 +08:00</Time>
-			<Location>
-				<Name>Klang</Name>
-				<Longitude>101.4456</Longitude>
-				<Latitude>3.0449</Latitude>
-			</Location>
+			<Time>
+				<StdTime>19:04 20/07/1988 +08:00</StdTime>
+				<Location>
+					<Name>Klang</Name>
+					<Longitude>101.4456</Longitude>
+					<Latitude>3.0449</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Rubeshen</Name>
 		<BirthTime>
-			<Time>23:35 15/05/1992 +08:00</Time>
-			<Location>
-				<Name>Klang</Name>
-				<Longitude>101.4456</Longitude>
-				<Latitude>3.0449</Latitude>
-			</Location>
+			<Time>
+				<StdTime>23:35 15/05/1992 +08:00</StdTime>
+				<Location>
+					<Name>Klang</Name>
+					<Longitude>101.4456</Longitude>
+					<Latitude>3.0449</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Male</Gender>
 	</Person>
 	<Person>
 		<Name>Haravin</Name>
 		<BirthTime>
-			<Time>04:10 25/03/1991 +08:00</Time>
-			<Location>
-				<Name>Kuala Lumpur</Name>
-				<Longitude>101.6873</Longitude>
-				<Latitude>3.16027</Latitude>
-			</Location>
+			<Time>
+				<StdTime>04:10 25/03/1991 +08:00</StdTime>
+				<Location>
+					<Name>Kuala Lumpur</Name>
+					<Longitude>101.6873</Longitude>
+					<Latitude>3.16027</Latitude>
+				</Location>
+			</Time>
 		</BirthTime>
 		<Gender>Male</Gender>
 	</Person>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
@@ -72,5 +73,28 @@ namespace Genso.Astrology.Library
             return hash1 + hash2;
         }
 
+
+        public XElement toXML()
+        {
+            var person = new XElement("Person");
+            var name = new XElement("Name", this.GetName());
+            var gender = new XElement("Gender", this.GetGender().ToString());
+            var birthTime = new XElement("BirthTime", this.GetBirthDateTime().ToXML());
+
+            person.Add(name, gender, birthTime);
+
+            return person;
+        }
+
+        public static Person fromXml(XElement root)
+        {
+            var name = root.Element("Name")?.Value;
+            var time = Time.FromXML(root.Element("BirthTime")?.Element("Time"));
+            var gender = Enum.Parse<Gender>(root.Element("Gender")?.Value);
+
+            var parsedPerson = new Person(name, time, gender);
+
+            return parsedPerson;
+        }
     }
 }

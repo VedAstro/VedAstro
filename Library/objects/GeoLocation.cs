@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
@@ -77,6 +78,27 @@ namespace Genso.Astrology.Library
             var hash3 = _latitude.GetHashCode();
 
             return hash1 + hash2 + hash3;
+        }
+
+        public XElement ToXml()
+        {
+            var locationHolder = new XElement("Location");
+            var name = new XElement("Name", this.GetName());
+            var longitude = new XElement("Longitude", this.GetLongitude());
+            var latitude = new XElement("Latitude", this.GetLatitude());
+
+            locationHolder.Add(name, longitude, latitude);
+
+            return locationHolder;
+        }
+        public static GeoLocation FromXml(XElement root)
+        {
+            var name = root.Element("Name")?.Value;
+            var longitude = Double.Parse(root.Element("Longitude")?.Value);
+            var latitude = Double.Parse(root.Element("Latitude")?.Value);
+
+
+            return new GeoLocation(name, longitude, latitude);
         }
     }
 }

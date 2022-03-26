@@ -122,41 +122,13 @@ namespace Genso.Astrology.Library
             //parse each raw person data in list
             foreach (var personXml in rawPersonList)
             {
-                //extract the individual data out & convert it to the correct type
-                var nameString = personXml.Element("Name").Value;
-                var birthTime = getBirthTime(personXml.Element("BirthTime"));
-                var rawGender = personXml.Element("Gender").Value;
-                Enum.TryParse(rawGender, out Gender gender);
-
-                //place the data into an event data structure
-                var person = new Person(nameString, birthTime, gender);
-
                 //add it to the return list
-                eventDataList.Add(person);
+                eventDataList.Add(Person.fromXml(personXml));
             }
 
 
             //return the list to caller
             return eventDataList;
-
-            //--------------FUNCTIONS
-            //converts xml reprisentation of birth time to object instance of it
-            Time getBirthTime(XElement birthTimeXml)
-            {
-                //extract the individual data out & convert it to the correct type
-                var birthDateTimeRaw = birthTimeXml.Element("Time").Value;
-                var birthDateTime = DateTimeOffset.ParseExact(birthDateTimeRaw, Time.GetDateTimeFormat(), null);
-
-                //extract geolocation
-                var locationHolder = birthTimeXml.Element("Location");
-                var locationName = locationHolder.Element("Name").Value;
-                var longitude = double.Parse(locationHolder.Element("Longitude").Value);
-                var latitide = double.Parse(locationHolder.Element("Latitude").Value);
-                var birthLocation = new GeoLocation(locationName, longitude, latitide);
-
-                //return the extracted data
-                return new Time(birthDateTime, birthLocation);
-            }
 
         }
 

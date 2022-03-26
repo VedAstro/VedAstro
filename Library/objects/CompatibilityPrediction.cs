@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 
-namespace Compatibility
+namespace Genso.Astrology.Library.Compatibility
 {
     /// <summary>
     /// simple data type to contain info on a kuta prediction
     /// Note : properties can only be set once,
     /// so that doesn't accidentally get changed
     /// </summary>
-    public class Prediction
+    public class CompatibilityPrediction
     {
         //DATA FIELDS
         private string _info = "";

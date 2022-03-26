@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Compatibility
+namespace Genso.Astrology.Library.Compatibility
 {
     /// <summary>
     /// used for Guna Kuta

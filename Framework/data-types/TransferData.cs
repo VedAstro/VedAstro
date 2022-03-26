@@ -137,13 +137,18 @@ namespace Genso.Framework
         /// </summary>
         public string getDataAsString() => xmlToString(_data);
 
-        public HttpStatusCode getStatus() => _status;
+        /// <summary>
+        /// Gets the HTTP status
+        /// Note: this status only represents the HTTP response was received properly or not
+        /// it does NOT represent the status of the request.
+        /// </summary>
+        public HttpStatusCode GetHttpStatus() => _status;
 
         /// <summary>
         /// Converts/parses xml string into data instance
         /// Returns null if unable to convert
         /// </summary>
-        public static TransferData fromXml(string xmlString)
+        public static TransferData FromXml(string xmlString)
         {
             //convert raw xml data into a recognized data (parse)
             var xElement = toXml(xmlString);

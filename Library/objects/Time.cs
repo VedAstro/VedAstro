@@ -123,6 +123,7 @@ namespace Genso.Astrology.Library
         {
             //format time with formatting info
             //var stdTimeString = _stdTime.ToString(FormatInfo);
+            //note: only explicit statement of format as below works
             var stdTimeString = _stdTime.ToString("HH:mm dd/MM/yyyy zzz");
 
 

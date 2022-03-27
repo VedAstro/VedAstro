@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using System.Text;
+using System.Xml.Linq;
+using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
 
 namespace BlazorApp.Client
@@ -49,10 +51,63 @@ namespace BlazorApp.Client
         }
 
 
+        /// <summary>
+        /// Send xml as string to server and returns xml as response
+        /// </summary>
+        public static async Task<XElement> SendXmlToServer(string apiAddress, XElement xmlData)
+        {
+            //prepare the data to be sent
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiAddress);
+
+            httpRequestMessage.Content = XMLtoStringContent(xmlData);
+
+            //get the data sender
+            using var client = new HttpClient();
+
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+            //send the data on its way
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+            //extract the content of the reply data
+            var rawMessage = response.Content.ReadAsStringAsync().Result;
 
 
 
+            //return the raw reply to caller
+            return XElement.Parse(rawMessage);
 
+        }
+
+        /// <summary>
+        /// Packages the data into ready form for the HTTP client to use in final sending stage
+        /// </summary>
+        public static StringContent XMLtoStringContent(XElement _data)
+        {
+            //gets the main XML data as a string
+            var data = xmlToString(_data);
+
+            //specify the data encoding
+            var encoding = Encoding.UTF8;
+
+            //specify the type of the data sent
+            //plain text, stops auto formatting
+            var mediaType = "plain/text";
+
+            //return packaged data to caller
+            return new StringContent(data, encoding, mediaType);
+        }
+
+        /// <summary>
+        /// Converts xml element instance to string properly
+        /// TODO needs to be a separate class utils
+        /// </summary>
+        public static string xmlToString(XElement xml)
+        {
+            //remove all formatting, for clean xml as string
+            return xml.ToString(SaveOptions.DisableFormatting);
+        }
 
 
     }

@@ -29,8 +29,8 @@ namespace Genso.Astrology.Library.Compatibility
 
             //place data in individual tags
             var kutaScore = new XElement("KutaScore", this.KutaScore);
-            var male = new XElement("Male", Male.toXML());
-            var female = new XElement("Female", Female.toXML());
+            var male = new XElement("Male", Male.ToXml());
+            var female = new XElement("Female", Female.ToXml());
             var predictionList = PredictionListToXML(this.PredictionList);
 
             //add in the data
@@ -56,8 +56,8 @@ namespace Genso.Astrology.Library.Compatibility
 
         public static CompatibilityReport FromXml(XElement compatibilityReportXml)
         {
-            var male = Person.fromXml(compatibilityReportXml.Element("Male").Element("Person"));
-            var female = Person.fromXml(compatibilityReportXml.Element("Female").Element("Person"));
+            var male = Person.FromXml(compatibilityReportXml.Element("Male").Element("Person"));
+            var female = Person.FromXml(compatibilityReportXml.Element("Female").Element("Person"));
             var kutaScore = Double.Parse(compatibilityReportXml.Element("KutaScore")?.Value ?? "0");
 
 

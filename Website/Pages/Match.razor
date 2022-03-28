@@ -1,41 +1,36 @@
-﻿@page "/match/{MaleName}/{FemaleName}"
-@using Genso.Astrology.Library.Compatibility
+﻿@page "/match"
+@using Microsoft.AspNetCore.Components
+@using Genso.Astrology.Library
+@inject NavigationManager _navigation
 
-<PageTitle>Match</PageTitle>
 
-@if (_report != null)
+<PageTitle>Find Marriage Match</PageTitle>
+
+@if (_pageReady)
 {
 
-    <h1>@MaleName + @FemaleName - Score @_report.KutaScore/100</h1>
+    <div>
+        <label>Select Male</label>
+        <select @bind="SelectedMale" class="form-control">
+            @foreach (var male in MaleList)
+            {
+                <option value="@male.GetName()">@male.GetName() - @male.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label>Select Female</label>
+        <select @bind="SelectedFemale" class="form-control">
+            @foreach (var female in FemaleList)
+            {
+                <option value="@female.GetName()">@female.GetName() - @female.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
+            }
+        </select>
+    </div>
 
-    <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Nature</th>
-            <th scope="col">Description</th>
-            <th scope="col">Info</th>
-            <th scope="col">MaleInfo</th>
-            <th scope="col">FemaleInfo</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var prediction in _report.PredictionList)
-        {
-            //if no prediction then don't print
-            @if (prediction.Name == Name.Empty){continue;}
-
-            <tr>
-                <td scope="row">@prediction.Name</td>
-                <td>@prediction.Nature</td>
-                <td>@prediction.Description</td>
-                <td>@prediction.Info</td>
-                <td>@prediction.MaleInfo</td>
-                <td>@prediction.FemaleInfo</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <div style="margin-top: 50px" class="row">
+        <button type="submit" @onclick="GetMatchReport" class="btn btn-primary">Submit</button>
+    </div>
 
 }
 
@@ -43,19 +38,33 @@
 @code {
 
     //VARIABLES
-    [Parameter]
-    public string? MaleName { get; set; } //data from URL not necessary provided
-    [Parameter]
-    public string? FemaleName { get; set; } //data from URL not necessary provided
+    public List<Person> MaleList { get; set; } //data from URL not necessary provided
+    public List<Person> FemaleList { get; set; } //data from URL not necessary provided
+    public string? SelectedMale { get; set; }
+    public string? SelectedFemale { get; set; }
 
-    CompatibilityReport? _report = null; //when needs to be show before init
+    private bool _pageReady = false; //marks if the page ready to loaded
+
 
     protected override async Task OnInitializedAsync()
     {
-        //generate the report
-        _report = await ServerManager.GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
+        //get male list from api server & save it for later
+        var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetMaleListAPI);
+        MaleList = rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
+
+        //get female list from api server & save it for later
+        var rawFemaleListXml = await ServerManager.ReadFromServer(ServerManager.GetFemaleListAPI);
+        FemaleList = rawFemaleListXml.Elements().Select(femaleXml => Person.FromXml(femaleXml)).ToList();
+
+        _pageReady = true;
+
+        //refresh the page variables
+        this.StateHasChanged();
+
     }
 
-
-
+    private void GetMatchReport()
+    {
+        _navigation.NavigateTo($"matchreport/{SelectedMale}/{SelectedFemale}");
+    }
 }

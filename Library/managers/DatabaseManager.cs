@@ -120,7 +120,7 @@ namespace Genso.Astrology.Library
             foreach (var personXml in rawPersonList)
             {
                 //add it to the return list
-                eventDataList.Add(Person.fromXml(personXml));
+                eventDataList.Add(Person.FromXml(personXml));
             }
 
 

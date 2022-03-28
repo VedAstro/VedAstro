@@ -76,8 +76,8 @@
 
         //send newly created person to API server
         var apiAddress = ServerManager.AddPersonAPI;
-        var xmlData = _newPerson.toXML();
-        var result = ServerManager.SendXmlToServer(apiAddress, xmlData);
+        var xmlData = _newPerson.ToXml();
+        var result = ServerManager.WriteToServer(apiAddress, xmlData);
 
         //let user know person has been added
         _showPersonAddedSuccessAlert = true;

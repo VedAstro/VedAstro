@@ -64,6 +64,9 @@ namespace Genso.Astrology.Library
             return returnString;
         }
 
+        /// <summary>
+        /// Name & Birth Time are used to generate Hash
+        /// </summary>
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
@@ -74,7 +77,7 @@ namespace Genso.Astrology.Library
         }
 
 
-        public XElement toXML()
+        public XElement ToXml()
         {
             var person = new XElement("Person");
             var name = new XElement("Name", this.GetName());
@@ -86,7 +89,7 @@ namespace Genso.Astrology.Library
             return person;
         }
 
-        public static Person fromXml(XElement root)
+        public static Person FromXml(XElement root)
         {
             var name = root.Element("Name")?.Value;
             var time = Time.FromXML(root.Element("BirthTime")?.Element("Time"));

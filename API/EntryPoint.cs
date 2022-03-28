@@ -19,7 +19,7 @@ namespace API
     public static class EntryPoint
     {
 
-        [FunctionName("match")]
+        [FunctionName("getmatchreport")]
         public static async Task<IActionResult> Match(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             [Blob("vedastro-site-data/PersonList.xml", FileAccess.Read)] Stream personListRead,

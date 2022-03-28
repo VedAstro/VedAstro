@@ -10,8 +10,9 @@
 {
 
     <div>
-        <label>Select Male</label>
+        <label>Male</label>
         <select @bind="SelectedMale" class="form-control">
+            <option value="">Select Name</option>
             @foreach (var male in MaleList)
             {
                 <option value="@male.GetName()">@male.GetName() - @male.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
@@ -19,8 +20,9 @@
         </select>
     </div>
     <div>
-        <label>Select Female</label>
+        <label>Female</label>
         <select @bind="SelectedFemale" class="form-control">
+            <option value="">Select Name</option>
             @foreach (var female in FemaleList)
             {
                 <option value="@female.GetName()">@female.GetName() - @female.GetBirthDateTime().GetStdDateTimeOffset().Year</option>

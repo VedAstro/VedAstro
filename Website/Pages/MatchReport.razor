@@ -1,12 +1,13 @@
 ﻿@page "/matchreport/{MaleName}/{FemaleName}"
 @using Genso.Astrology.Library.Compatibility
+@using Genso.Astrology.Library
 
 <PageTitle>Match Report</PageTitle>
 
 @if (_report != null)
 {
 
-    <h1>@MaleName + @FemaleName - Score @_report.KutaScore/100</h1>
+    <h1>@MaleName + @FemaleName = Score <b style="color:@GetScoreColor(_report.KutaScore);">@_report.KutaScore/100</b></h1>
 
     <table class="table table-striped table-hover">
         <thead>
@@ -27,7 +28,7 @@
 
             <tr>
                 <td scope="row">@prediction.Name</td>
-                <td>@prediction.Nature</td>
+                <td style="color:@GetNatureColor(prediction.Nature);">@prediction.Nature</td>
                 <td>@prediction.Description</td>
                 <td>@prediction.Info</td>
                 <td>@prediction.MaleInfo</td>
@@ -56,6 +57,20 @@
         _report = await ServerManager.GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
     }
 
+    private static string GetNatureColor(EventNature nature)
+    {
+        switch (nature)
+        {
+            case EventNature.Good:
+                return "Green";
+            case EventNature.Bad:
+                return "Red";
+            default:
+                return "Black";
+        }
+
+    }
+    private static string GetScoreColor(double score) => score > 50 ? "Green" : "Red";
 
 
 }

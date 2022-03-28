@@ -125,5 +125,21 @@ namespace API
             return MatchCalculator.GetCompatibilityReport(male, female);
         }
 
+        /// <summary>
+        /// Gets the error in a nice string to send to user
+        /// </summary>
+        public static string FormatErrorReply(Exception e)
+        {
+            var responseMessage = "";
+
+            responseMessage += $"#Message#\n{e.Message}\n";
+            responseMessage += $"#Data#\n{e.Data}\n";
+            responseMessage += $"#InnerException#\n{e.InnerException}\n";
+            responseMessage += $"#Source#\n{e.Source}\n";
+            responseMessage += $"#StackTrace#\n{e.StackTrace}\n";
+            responseMessage += $"#StackTrace#\n{e.TargetSite}\n";
+
+            return responseMessage;
+        }
     }
 }

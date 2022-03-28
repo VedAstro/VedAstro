@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -40,12 +41,8 @@ namespace API
             }
             catch (Exception e)
             {
-                responseMessage = $"Message\n{e.Message}\n";
-                responseMessage += $"Data\n{e.Data}\n";
-                responseMessage += $"InnerException\n{e.InnerException}\n";
-                responseMessage += $"Source\n{e.Source}\n";
-                responseMessage += $"StackTrace\n{e.StackTrace}\n";
-                responseMessage += $"StackTrace\n{e.TargetSite}\n";
+                //format error nicely to show user
+                responseMessage = Tools.FormatErrorReply(e);
             }
 
 
@@ -75,12 +72,76 @@ namespace API
             }
             catch (Exception e)
             {
-                responseMessage += $"#Message#\n{e.Message}\n";
-                responseMessage += $"#Data#\n{e.Data}\n";
-                responseMessage += $"#InnerException#\n{e.InnerException}\n";
-                responseMessage += $"#Source#\n{e.Source}\n";
-                responseMessage += $"#StackTrace#\n{e.StackTrace}\n";
-                responseMessage += $"#StackTrace#\n{e.TargetSite}\n";
+                //format error nicely to show user
+                responseMessage = Tools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
+        [FunctionName("getmalelist")]
+        public static async Task<IActionResult> GetMaleList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+
+                //get person list from storage
+                var personListXml = Tools.BlobClientToXml(personListClient);
+
+                //get only male ppl into a list
+                var maleList = from person in personListXml.Root?.Elements()
+                    where person.Element("Gender")?.Value == "Male"
+                    select person;
+
+                //send male list to caller
+                responseMessage = new XElement("Root", maleList).ToString();
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = Tools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
+        [FunctionName("getfemalelist")]
+        public static async Task<IActionResult> GetFemaleList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+
+                //get person list from storage
+                var personListXml = Tools.BlobClientToXml(personListClient);
+
+                //get only female ppl into a list
+                var maleList = from person in personListXml.Root?.Elements()
+                    where person.Element("Gender")?.Value == "Female"
+                    select person;
+
+                //send female list to caller
+                responseMessage = new XElement("Root", maleList).ToString();
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = Tools.FormatErrorReply(e);
             }
 
 

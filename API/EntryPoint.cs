@@ -30,7 +30,7 @@ namespace API
             {
                 //get name of male & female
                 dynamic names = await ExtractNames(req);
-                
+
                 //get list of all people
                 var personList = new Data(personListRead);
 
@@ -56,25 +56,21 @@ namespace API
 
         [FunctionName("addperson")]
         public static async Task<IActionResult> AddPerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,
-            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)]BlobClient personListClient)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
         {
-            string responseMessage = "";
-
-            var newPersonXml = ExtractXmlFromRequest(req);
+            var responseMessage = "";
 
             try
             {
+                //get new person data out of incoming request 
+                var newPersonXml = ExtractDataFromRequest(incomingRequest);
 
-                //get person list from storage
-                var personListXml = GetXmlFile(personListClient);
-
-                //add new person to list
-                personListXml.Root.Add(newPersonXml);
+                //add new person to main list
+                var personListXml = AddXElementToXDocument(personListClient, newPersonXml);
 
                 //upload modified list to storage
-                var updatedPersonListStream = GenerateStreamFromString(personListXml.ToString());
-                await personListClient.UploadAsync(updatedPersonListStream, overwrite: true );
+                await OverwriteBlobData(personListClient, personListXml);
 
             }
             catch (Exception e)
@@ -93,7 +89,40 @@ namespace API
             return okObjectResult;
         }
 
-        static XElement ExtractXmlFromRequest(HttpRequestMessage request)
+        /// <summary>
+        /// Overwrites new XML data to a blob file
+        /// </summary>
+        private static async Task OverwriteBlobData(BlobClient blobClient, XDocument newData)
+        {
+            //convert xml data to string
+            var dataString = newData.ToString();
+
+            //convert xml string to stream
+            var dataStream = GenerateStreamFromString(dataString);
+
+            //upload stream to blob
+            await blobClient.UploadAsync(dataStream, overwrite: true);
+        }
+
+        /// <summary>
+        /// Adds an XML element to XML document in blob form
+        /// </summary>
+        private static XDocument AddXElementToXDocument(BlobClient xDocuBlobClient, XElement newElement)
+        {
+            //get person list from storage
+            var personListXml = BlobClientToXml(xDocuBlobClient);
+
+            //add new person to list
+            personListXml.Root.Add(newElement);
+
+            return personListXml;
+        }
+
+        /// <summary>
+        /// Extracts data coming in from API caller
+        /// Note : Data is assumed to be XML in string form
+        /// </summary>
+        private static XElement ExtractDataFromRequest(HttpRequestMessage request)
         {
             //get xml string from caller
             var xmlString = RequestToXmlString(request);
@@ -104,7 +133,10 @@ namespace API
             return xml;
         }
 
-        static XDocument GetXmlFile(BlobClient blobClient)
+        /// <summary>
+        /// Converts a blob client of a file to an XML document
+        /// </summary>
+        private static XDocument BlobClientToXml(BlobClient blobClient)
         {
             //parse string as xml doc
             var document = XDocument.Load(blobClient.Download().Value.Content);
@@ -132,7 +164,7 @@ namespace API
             //get request body
             return rawData.Content.ReadAsStringAsync().Result;
 
-            
+
 
             //extract needed data from reply
             //_status = rawRequest.StatusCode;
@@ -159,7 +191,7 @@ namespace API
 
         }
 
-        static CompatibilityReport GetCompatibilityReport(string maleName, string femaleName, Data personList)
+        private static CompatibilityReport GetCompatibilityReport(string maleName, string femaleName, Data personList)
         {
             //get all the people
             var peopleList = DatabaseManager.GetPersonList(personList);

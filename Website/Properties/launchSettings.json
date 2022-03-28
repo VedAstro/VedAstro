@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "BlazorApp.Client": {
+    "Website": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

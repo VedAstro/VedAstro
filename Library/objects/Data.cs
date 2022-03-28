@@ -107,6 +107,15 @@ namespace Genso.Astrology.Library
 
         }
 
+        public Stream getStream()
+        {
+            Stream stream = new MemoryStream();
+            _document.Save(stream);
+            // Rewind the stream ready to read from it elsewhere
+            stream.Position = 0;
+            return stream;
+        }
+
         /// <summary>
         /// Gets the record by its name & its value
         /// </summary>
@@ -260,7 +269,7 @@ namespace Genso.Astrology.Library
 
             if (blobType)
             {
-                _document.Save(_writeStream);
+                _document.Save(_writeStream, SaveOptions.None);
             }
             else if (fileType)
             {

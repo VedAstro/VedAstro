@@ -11,13 +11,16 @@ namespace BlazorApp.Client
     /// </summary>
     public static class ServerManager
     {
+
+        public static string AddPersonAPI = "https://vedastroapi.azurewebsites.net/api/addperson";
+
         /// <summary>
         /// Gets CompatibilityReport from API server
         /// </summary>
         public static async Task<CompatibilityReport?> GetCompatibilityReport(string male, string female)
         {
             //prepare request to API server
-            var url = $"https://vedastroapi.azurewebsites.net/api/compatibility?male={male}&female={female}";
+            var url = $"https://vedastroapi.azurewebsites.net/api/match?male={male}&female={female}";
 
             //send request to API server
             var result = await RequestServer(url);
@@ -30,7 +33,6 @@ namespace BlazorApp.Client
             //return parsed data to caller
             return report;
         }
-
 
         private static async Task<HttpResponseMessage> RequestServer(string receiverAddress)
         {
@@ -49,7 +51,6 @@ namespace BlazorApp.Client
             //return the raw reply to caller
             return response;
         }
-
 
         /// <summary>
         /// Send xml as string to server and returns xml as response

@@ -3,10 +3,10 @@
 
 <PageTitle>Add new person</PageTitle>
 
-@if (showPersonAddedSuccessAlert)
+@if (_showPersonAddedSuccessAlert)
 {
     <div class="alert alert-success" role="alert">
-        @newPerson.GetName() added successful!
+        @_newPerson.GetName() added successful!
     </div>
 
 }
@@ -25,39 +25,39 @@
                 </div>
                 <div class="form-group">
                     <label>Birth Location</label>
-                    <input @bind="_longitude" type="text" class="form-control" placeholder="Ipoh">
+                    <input @bind="_locationName" type="text" class="form-control" placeholder="Ipoh">
                     <label>Longitude</label>
-                    <input type="text" class="form-control" placeholder="101">
+                    <input @bind="_longitude" type="text" class="form-control" placeholder="101">
                     <label>Latitude</label>
                     <input @bind="_latitude" type="text" class="form-control" placeholder="4.59">
                 </div>
 
                 <div class="form-group">
                     <label>Gender</label>
-                    <select @bind="genderString" class="form-control">
-                        <option>Male</option>
-                        <option>Female</option>
+                    <select @bind="_genderString" class="form-control">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
                 </div>
             </form>
         </div>
     </div>
-    <div class="row">
+    <div style="margin-top: 50px" class="row">
         <button type="submit" @onclick="SubmitNewPerson" class="btn btn-primary">Submit</button>
     </div>
 </div>
 
 @code {
 
-    string _name;
-    string _timeString;
-    string _locationName;
+    string? _name;
+    string? _timeString;
+    string? _locationName;
     double _longitude;
     double _latitude;
-    Gender gender;
-    string genderString;
-    Person newPerson;
-    bool showPersonAddedSuccessAlert = false; //default alert is not shown
+    Gender _gender;
+    string _genderString = "";
+    Person _newPerson;
+    bool _showPersonAddedSuccessAlert = false; //default alert is not shown
 
     //sends the newly created person to API server
     private async void SubmitNewPerson()
@@ -67,20 +67,20 @@
         var stdTimeMale = DateTimeOffset.ParseExact(_timeString, Time.GetDateTimeFormat(), null);
 
         //get gender from gender string
-        gender = Enum.Parse<Gender>(genderString);
+        _gender = Enum.Parse<Gender>(_genderString);
 
         //create a new person from the inputed data
         var birthTime = new Time(stdTimeMale, geoLocation);
-        newPerson = new Person(_name, birthTime, gender);
+        _newPerson = new Person(_name, birthTime, _gender);
 
 
-    //send newly created person to API server
-        var apiAddress = "";
-        var xmlData = newPerson.toXML();
+        //send newly created person to API server
+        var apiAddress = ServerManager.AddPersonAPI;
+        var xmlData = _newPerson.toXML();
         var result = ServerManager.SendXmlToServer(apiAddress, xmlData);
 
         //let user know person has been added
-        showPersonAddedSuccessAlert = true;
+        _showPersonAddedSuccessAlert = true;
 
         //refresh the page variables
         this.StateHasChanged();

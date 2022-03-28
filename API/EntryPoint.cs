@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
@@ -11,15 +12,20 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Xml.Linq;
+using Azure.Storage.Blobs.Specialized;
+using System.Text;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using System.Net.Mime;
 
 namespace WebAPI
 {
     public static class EntryPoint
     {
 
-        [FunctionName("compatibility")]
-        [Produces("text/html")]
-        public static async Task<IActionResult> Run(
+        [FunctionName("match")]
+        public static async Task<IActionResult> Match(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             [Blob("vedastro-site-data/PersonList.xml", FileAccess.Read)] Stream PersonListRead,
             ILogger log)
@@ -54,6 +60,116 @@ namespace WebAPI
             return okObjectResult;
         }
 
+        [FunctionName("addperson")]
+        public static async Task<IActionResult> AddPerson(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage req,
+            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)]BlobClient personListClient)
+        {
+            string responseMessage = "";
+
+            var newPersonXml = ExtractXmlFromRequest(req);
+
+            try
+            {
+
+                //get person list from storage
+                var personListXml = GetXMLFile(personListClient);
+
+                //add new person to list
+                personListXml.Root.Add(newPersonXml);
+
+                //upload modified list to storage
+                var updatedPersonListStream = GenerateStreamFromString(personListXml.ToString());
+                await personListClient.UploadAsync(updatedPersonListStream, overwrite: true );
+
+            }
+            catch (Exception e)
+            {
+                responseMessage += $"#Message#\n{e.Message}\n";
+                responseMessage += $"#Data#\n{e.Data}\n";
+                responseMessage += $"#InnerException#\n{e.InnerException}\n";
+                responseMessage += $"#Source#\n{e.Source}\n";
+                responseMessage += $"#StackTrace#\n{e.StackTrace}\n";
+                responseMessage += $"#StackTrace#\n{e.TargetSite}\n";
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
+        static XElement ExtractXmlFromRequest(HttpRequestMessage request)
+        {
+            //get xml string from caller
+            var xmlString = requestToXmlString(request);
+
+            //parse xml string
+            var xml = XElement.Parse(xmlString);
+
+            return xml;
+        }
+
+        static XDocument GetXMLFile(BlobClient blobClient)
+        {
+            //parse string as xml doc
+            var _document = XDocument.Load(blobClient.Download().Value.Content);
+
+            return _document;
+        }
+
+
+        static async Task AppendBlobExample()
+        {
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=vedastroapistorage;AccountKey=kquBbAE8QKhe/Iyny4F0we3Yx6Y/zJv7yZgrERuFq7nRoEa53o6rb50W88II+PsSEP7RzYYNQizDHPOlt0kwxw==;EndpointSuffix=core.windows.net";
+            string containerName = "vedastro-site-data";
+            string blobName = "PersonList.xml";
+            string content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pulvinar auctor vehicula. Proin vitae ante risus. Quisque fringilla orci eros, nec fermentum ipsum blandit et. Curabitur imperdiet tristique magna non vehicula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed efficitur magna nisl, vitae venenatis leo semper nec. Nulla consequat lorem sapien, sed aliquam lectus dictum non. Morbi ac pulvinar justo, sit amet cursus turpis. In dictum odio non tellus aliquam viverra. Nunc vel vestibulum nulla. Ut mollis ultrices dignissim. Donec tellus nibh, bibendum suscipit felis sed, elementum auctor est. Donec ex nibh, pellentesque vitae odio ut, ornare pulvinar odio.";
+
+    
+            var appendBlobClient = new AppendBlobClient(connectionString, containerName, blobName);
+            
+            if (!await appendBlobClient.ExistsAsync())
+            {
+                await appendBlobClient.CreateAsync();
+            }
+
+            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(content)))
+            {
+                await appendBlobClient.AppendBlockAsync(ms);
+            }
+        }
+
+        public static Stream GenerateStreamFromString(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
+        /// <summary>
+        /// When receiving
+        /// Extracts the raw data coming from the server, and extract what is needed
+        ///  here original data is overwritten
+        /// </summary>
+        public static string requestToXmlString(HttpRequestMessage rawData)
+        {
+            //get request body
+            return rawData.Content.ReadAsStringAsync().Result;
+
+            
+
+            //extract needed data from reply
+            //_status = rawRequest.StatusCode;
+
+            //_message = parseMessage(rawRequest);
+
+        }
+
+
         /// <summary>
         /// Extracts names from the query URL
         /// </summary>
@@ -69,55 +185,6 @@ namespace WebAPI
 
             return new { Male = male, Female = female };
 
-        }
-
-
-        public static string ToHtmlTable<T>(this List<T> listOfClassObjects)
-        {
-            var ret = string.Empty;
-
-            return listOfClassObjects == null || !listOfClassObjects.Any()
-                ? ret
-                : "<table>" +
-                  listOfClassObjects.First().GetType().GetProperties().Select(p => p.Name).ToList().ToColumnHeaders() +
-                  listOfClassObjects.Aggregate(ret, (current, t) => current + t.ToHtmlTableRow()) +
-                  "</table>";
-        }
-
-        public static string ToColumnHeaders<T>(this List<T> listOfProperties)
-        {
-            var ret = string.Empty;
-
-            return listOfProperties == null || !listOfProperties.Any()
-                ? ret
-                : "<tr>" +
-                  listOfProperties.Aggregate(ret,
-                      (current, propValue) =>
-                          current +
-                          ("<th style='font-size: 11pt; font-weight: bold; border: 1pt solid black'>" +
-                           (Convert.ToString(propValue).Length <= 100
-                               ? Convert.ToString(propValue)
-                               : Convert.ToString(propValue).Substring(0, 100)) + "..." + "</th>")) +
-                  "</tr>";
-        }
-
-        public static string ToHtmlTableRow<T>(this T classObject)
-        {
-            var ret = string.Empty;
-
-            return classObject == null
-                ? ret
-                : "<tr>" +
-                  classObject.GetType()
-                      .GetProperties()
-                      .Aggregate(ret,
-                          (current, prop) =>
-                              current + ("<td style='font-size: 11pt; font-weight: normal; border: 1pt solid black'>" +
-                                         (Convert.ToString(prop.GetValue(classObject, null)).Length <= 100
-                                             ? Convert.ToString(prop.GetValue(classObject, null))
-                                             : Convert.ToString(prop.GetValue(classObject, null)).Substring(0, 100) +
-                                               "...") +
-                                         "</td>")) + "</tr>";
         }
 
 

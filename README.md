@@ -1,4 +1,4 @@
-##Project Architecture
+# Project Architecture
 
 ```
 +--------+          +------------------------+                +------------------+
@@ -9,7 +9,7 @@
                     +------------------------+                +------------------+
 ```
 
-##Code Edit Guide
+# Code Edit Guide
 ### To add a new prediction/event
 1. Create a method in EventCalculatorMethods.cs
 2. Add the name in EventNames.cs
@@ -22,9 +22,9 @@
 
 
 
-##DESIGN NOTES
+# DESIGN NOTES
 
-###Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
+### Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
 
 - Built on reference to, Hindu Predictive Astrology pg. 254
 

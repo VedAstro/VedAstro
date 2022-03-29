@@ -1,3 +1,5 @@
+[![Azure Static Web Apps CI/CD](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-purple-flower-03ae64d1e.yml/badge.svg)](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-purple-flower-03ae64d1e.yml)
+
 # Project Architecture
 
 ```

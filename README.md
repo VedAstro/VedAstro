@@ -1,12 +1,12 @@
 #Project Architecture
-
+```
 +--------+          +------------------------+                +------------------+
 |  User  | <------+ |        Website         | -------------> |        API       |
 |        | +------> | - Blazor WebAssembly   | <------------- | -Azure Functions |
 +--------+   GUI    | - Azure Static WebApp  |      XML       |                  |
                     |                        |                |                  |
                     +------------------------+                +------------------+
-
+```
 
 #Code Edit Guide
 ## To add a new prediction/event

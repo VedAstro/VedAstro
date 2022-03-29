@@ -4,21 +4,16 @@
 <PageTitle>Local Mean Time (LMT)</PageTitle>
 
 <h3>Local Mean Time (LMT)</h3>
-<p>LMT is the real time at a place.</p>
-<p>LMT = STD + LMT offset</p>
+<p>LMT is the real time at a place based on it's longitude. 
+    <br/>
+    At 12PM LMT the Sun will be directly overhead.
+</p>
 
-<b>LMT: @_lmtString</b>
-<br />
-<b>STD: @_stdString</b>
+<h5>LMT: @_lmtString</h5>
+<h5>STD: @_stdString</h5>
 
-<div class="form-group">
-    <label>Birth Location</label>
-    <input @bind="_locationName" type="text" class="form-control" placeholder="Ipoh">
-    <label>Longitude</label>
-    <input @bind="_longitude" type="text" class="form-control" placeholder="101">
-    <label>Latitude</label>
-    <input @bind="_latitude" type="text" class="form-control" placeholder="4.59">
-</div>
+<GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitude" @bind-Latitude="_latitude" />
+
 <div style="margin-top: 50px" class="row">
     <button type="submit" @onclick="UpdateLocalMeanTime" class="btn btn-primary">Update</button>
 </div>
@@ -28,20 +23,16 @@
 
     string? _lmtString = "Loading...";
     string? _stdString = "Loading...";
-    string? _locationName = "Ipoh";
+    string? _locationName = "London";
     double _longitude = 101;
     double _latitude = 4.59;
 
 
     protected override async Task OnInitializedAsync()
     {
-        //update time every 10s
+        //update time every 5s
         var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
-
-        while (await timer.WaitForNextTickAsync())
-        {
-            UpdateLocalMeanTime();
-        }
+        while (await timer.WaitForNextTickAsync()) { UpdateLocalMeanTime(); }
     }
 
     private void UpdateLocalMeanTime()

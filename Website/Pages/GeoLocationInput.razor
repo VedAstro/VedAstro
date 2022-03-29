@@ -1,0 +1,131 @@
+﻿@using Microsoft.AspNetCore.Components
+@using System.Xml.Linq
+@*Component that allows the input of geo location*@
+
+<div class="form-group">
+    <div class="row">
+        <div class="col-6">
+            <label>Birth Location</label>
+            <input @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control" placeholder="London">
+        </div>
+        <div class="col">
+            <label>Longitude</label>
+            <input @bind="Longitude" type="text" class="form-control" placeholder="101">
+        </div>
+        <div class="col">
+            <label>Latitude</label>
+            <input @bind="Latitude" type="text" class="form-control" placeholder="4.59">
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+
+    private string _locationName;
+    private double _longitude;
+    private double _latitude;
+
+
+    [Parameter]
+    public string LocationName
+    {
+        get => _locationName;
+        set
+        {
+            //this stops update loops
+            if (_locationName == value) return;
+            _locationName = value;
+            //update value in parent page
+            LocationNameChanged.InvokeAsync(value);
+        }
+    }
+
+    [Parameter]
+    public double Longitude
+    {
+        get => _longitude;
+        set
+        {
+            //this stops update loops
+            if (_longitude == value) return;
+            _longitude = value;
+            //update value in parent page
+            LongitudeChanged.InvokeAsync(value);
+        }
+    }
+
+    [Parameter]
+    public double Latitude
+    {
+        get => _latitude;
+        set
+        {
+            //this stops update loops
+            if (_latitude == value) return;
+            _latitude = value;
+            //update value in parent page
+            LatitudeChanged.InvokeAsync(value);
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> LocationNameChanged { get; set; }
+    [Parameter]
+    public EventCallback<double> LongitudeChanged { get; set; }
+    [Parameter]
+    public EventCallback<double> LatitudeChanged { get; set; }
+
+
+
+    /// <summary>
+    /// When location name text is changed this method is called to fetch longitude & latitude
+    /// </summary>
+    private async Task OnLocationNameUpdated(FocusEventArgs obj)
+    {
+        //if location not set, default to London
+        LocationName = LocationName is "" or null ? "London" : LocationName;
+
+        //get longitude & latitude for location
+        var coordinates = await GetAddressLocation(LocationName); //backup place as not to raise error
+
+        //set new coordinates into view
+        Longitude = coordinates.Longitude;
+        Latitude = coordinates.Latitude;
+
+        //update user typed location name to proper formatted one
+        LocationName = coordinates.FullName;
+
+
+        //FUNCTIONS
+
+        async Task<dynamic> GetAddressLocation(string address)
+        {
+
+            var requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?key={1}&address={0}&sensor=false", Uri.EscapeDataString(address), ServerManager.GoogleGeoLocationAPIKey);
+
+            //get location data from GoogleAPI
+            var rawReplyXml = await ServerManager.ReadFromServer(requestUri);
+
+            //extract out the longitude & latitude
+            var locationData = new XDocument(rawReplyXml);
+            var result = locationData.Element("GeocodeResponse").Element("result");
+            var locationElement = result.Element("geometry").Element("location");
+            var lat = Double.Parse(locationElement.Element("lat").Value);
+            var lng = Double.Parse(locationElement.Element("lng").Value);
+
+            //round coordinates to 3 decimal places
+            lat = Math.Round(lat, 3);
+            lng = Math.Round(lng, 3);
+
+            //get full name with country & state
+            var fullName = result.Element("formatted_address").Value;
+
+            return new { FullName = fullName, Latitude = lat, Longitude = lng };
+
+        }
+    }
+
+
+}

@@ -12,10 +12,12 @@ namespace Website
     public static class ServerManager
     {
 
-        public static string AddPersonAPI = "https://vedastroapi.azurewebsites.net/api/addperson";
-        public static string GetMaleListAPI = "https://vedastroapi.azurewebsites.net/api/getmalelist";
-        public static string GetFemaleListAPI = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
-        public static string GetMatchReportAPI = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
+        public const string AddPersonAPI = "https://vedastroapi.azurewebsites.net/api/addperson";
+        public const string GetMaleListAPI = "https://vedastroapi.azurewebsites.net/api/getmalelist";
+        public const string GetFemaleListAPI = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
+        public const string GetMatchReportAPI = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
+        public const string GoogleGeoLocationAPIKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg";
+
 
         /// <summary>
         /// Gets CompatibilityReport from API server

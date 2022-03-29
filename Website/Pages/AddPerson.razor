@@ -20,18 +20,23 @@
                     <input @bind="_name" type="text" class="form-control" placeholder="Enter name">
                 </div>
                 <div class="form-group">
-                    <label>Birth Time</label>
-                    <input @bind="_timeString" type="text" class="form-control" placeholder="06:42 16/04/2021 +08:00">
-                </div>
-                <div class="form-group">
-                    <label>Birth Location</label>
-                    <input @bind="_locationName" type="text" class="form-control" placeholder="Ipoh">
-                    <label>Longitude</label>
-                    <input @bind="_longitude" type="text" class="form-control" placeholder="101">
-                    <label>Latitude</label>
-                    <input @bind="_latitude" type="text" class="form-control" placeholder="4.59">
+                    <div class="row">
+                        <div class="col-6">
+                            <label>Birth Time</label>
+                            <input @bind="_timeInput" type="text" class="form-control" placeholder="06:42">
+                        </div>
+                        <div class="col">
+                            <label>Date</label>
+                            <input @bind="_dateInput" type="text" class="form-control" placeholder="16/04/2021">
+                        </div>
+                        <div class="col">
+                            <label>Timezone</label>
+                            <input @bind="_timezoneInput" type="text" class="form-control" placeholder="+08:00">
+                        </div>
+                    </div>
                 </div>
 
+                <GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitude" @bind-Latitude="_latitude" />
                 <div class="form-group">
                     <label>Gender</label>
                     <select @bind="_genderString" class="form-control">
@@ -50,21 +55,22 @@
 @code {
 
     string? _name;
-    string? _timeString;
-    string? _locationName;
+    string? _timeInput, _dateInput, _timezoneInput;
+    string _locationName = "";
     double _longitude;
     double _latitude;
     Gender _gender;
     string _genderString = "";
     Person _newPerson;
-    bool _showPersonAddedSuccessAlert = false; //default alert is not shown
+    bool _showPersonAddedSuccessAlert = false; //default, alert is not shown
 
     //sends the newly created person to API server
     private async void SubmitNewPerson()
     {
         //parse data received from user
         var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
-        var stdTimeMale = DateTimeOffset.ParseExact(_timeString, Time.GetDateTimeFormat(), null);
+        var fullTimeString = $"{_timeInput} {_dateInput} {_timezoneInput}";
+        var stdTimeMale = DateTimeOffset.ParseExact(fullTimeString, Time.GetDateTimeFormat(), null);
 
         //get gender from gender string
         _gender = Enum.Parse<Gender>(_genderString);
@@ -72,7 +78,6 @@
         //create a new person from the inputed data
         var birthTime = new Time(stdTimeMale, geoLocation);
         _newPerson = new Person(_name, birthTime, _gender);
-
 
         //send newly created person to API server
         var apiAddress = ServerManager.AddPersonAPI;
@@ -86,5 +91,7 @@
         this.StateHasChanged();
 
     }
+
+
 
 }

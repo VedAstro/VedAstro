@@ -14,7 +14,6 @@
         <tr>
             <th scope="col">Name</th>
             <th scope="col">Nature</th>
-            <th scope="col">Description</th>
             <th scope="col">Info</th>
             <th scope="col">MaleInfo</th>
             <th scope="col">FemaleInfo</th>
@@ -27,9 +26,11 @@
             @if (prediction.Name == Name.Empty){continue;}
 
             <tr>
-                <td scope="row">@prediction.Name</td>
-                <td style="color:@GetNatureColor(prediction.Nature);">@prediction.Nature</td>
-                <td>@prediction.Description</td>
+                <td scope="row">
+                    <b>@prediction.Name</b>
+                    <p><small>@prediction.Description</small></p>
+                </td>
+                <td style="color:@GetNatureColor(prediction.Nature);"><b>@prediction.Nature</b></td>
                 <td>@prediction.Info</td>
                 <td>@prediction.MaleInfo</td>
                 <td>@prediction.FemaleInfo</td>

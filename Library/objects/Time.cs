@@ -126,7 +126,6 @@ namespace Genso.Astrology.Library
             //note: only explicit statement of format as below works
             var stdTimeString = _stdTime.ToString("HH:mm dd/MM/yyyy zzz");
 
-
             //return formatted time
             return stdTimeString;
         }
@@ -138,7 +137,7 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
-        /// Formating used for parsing date time,  HH:mm dd/MM/yyyy zzz 
+        /// Formatting used for parsing/printing date time,  HH:mm dd/MM/yyyy zzz 
         /// </summary>
         /// <returns></returns>
         public static string GetDateTimeFormat() => DateTimeFormat;

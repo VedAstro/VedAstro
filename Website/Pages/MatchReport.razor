@@ -51,11 +51,8 @@
 
     CompatibilityReport? _report = null; //when needs to be show before init
 
-    protected override async Task OnInitializedAsync()
-    {
-        //generate the report
-        _report = await ServerManager.GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
-    }
+    //generate the report
+    protected override async Task OnInitializedAsync() => _report = await ServerManager.GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
 
     private static string GetNatureColor(EventNature nature)
     {
@@ -68,7 +65,6 @@
             default:
                 return "Black";
         }
-
     }
     private static string GetScoreColor(double score) => score > 50 ? "Green" : "Red";
 

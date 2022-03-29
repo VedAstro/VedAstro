@@ -1,0 +1,66 @@
+﻿@page "/localmeantime"
+@using Genso.Astrology.Library
+
+<PageTitle>Local Mean Time (LMT)</PageTitle>
+
+<h3>Local Mean Time (LMT)</h3>
+<p>LMT is the real time at a place.</p>
+<p>LMT = STD + LMT offset</p>
+
+<b>LMT: @_lmtString</b>
+<br />
+<b>STD: @_stdString</b>
+
+<div class="form-group">
+    <label>Birth Location</label>
+    <input @bind="_locationName" type="text" class="form-control" placeholder="Ipoh">
+    <label>Longitude</label>
+    <input @bind="_longitude" type="text" class="form-control" placeholder="101">
+    <label>Latitude</label>
+    <input @bind="_latitude" type="text" class="form-control" placeholder="4.59">
+</div>
+<div style="margin-top: 50px" class="row">
+    <button type="submit" @onclick="UpdateLocalMeanTime" class="btn btn-primary">Update</button>
+</div>
+
+
+@code {
+
+    string? _lmtString = "Loading...";
+    string? _stdString = "Loading...";
+    string? _locationName = "Ipoh";
+    double _longitude = 101;
+    double _latitude = 4.59;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //update time every 10s
+        var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+
+        while (await timer.WaitForNextTickAsync())
+        {
+            UpdateLocalMeanTime();
+        }
+    }
+
+    private void UpdateLocalMeanTime()
+    {
+        //parse location received from user
+        var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
+
+        //get standard time now
+        var stdTimeNow = DateTimeOffset.Now;
+
+        //get parsed time
+        var time = new Time(stdTimeNow, geoLocation);
+
+        //show lmt time as string
+        _lmtString = time.GetLmtDateTimeOffset().ToString(Time.GetDateTimeFormat());
+        _stdString = time.GetStdDateTimeOffsetText();
+
+        //re-render page
+        this.StateHasChanged();
+    }
+
+}

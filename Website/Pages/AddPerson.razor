@@ -62,8 +62,8 @@
     //sends the newly created person to API server
     private async void SubmitNewPerson()
     {
+        //parse data received from user
         var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
-
         var stdTimeMale = DateTimeOffset.ParseExact(_timeString, Time.GetDateTimeFormat(), null);
 
         //get gender from gender string

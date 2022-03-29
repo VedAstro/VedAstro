@@ -1,4 +1,5 @@
-#Project Architecture
+##Project Architecture
+
 ```
 +--------+          +------------------------+                +------------------+
 |  User  | <------+ |        Website         | -------------> |        API       |
@@ -8,22 +9,22 @@
                     +------------------------+                +------------------+
 ```
 
-#Code Edit Guide
-## To add a new prediction/event
+##Code Edit Guide
+### To add a new prediction/event
 1. Create a method in EventCalculatorMethods.cs
 2. Add the name in EventNames.cs
 3. Add the prediction/event details PredictionDataList.xml
 
 
-## To add a new Event Tag
+### To add a new Event Tag
 1. Edit in Genso.Astrology.Library EventTag enum. Change here reflects even in GUI
 
 
 
 
-#DESIGN NOTES
+##DESIGN NOTES
 
-##Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
+###Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
 
 - Built on reference to, Hindu Predictive Astrology pg. 254
 

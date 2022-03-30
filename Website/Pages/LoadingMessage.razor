@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered" style="width: fit-content;" role="document">
         <div class="modal-content">
             <div class="modal-body align-content-center">
-                <img src="images/loading-animation.svg" alt="My Happy SVG" />
+                <img src="images/loading-animation.gif" />
             </div>
         </div>
     </div>
@@ -19,9 +19,25 @@
 
 @code {
 
+
     private string _modalDisplay = "none;";
     private string _modalClass = "";
     private bool _showBackdrop = false;
+
+    /// <summary>
+    /// If true shows the page
+    /// Another way of show/hide loading by setting a value instead
+    /// </summary>
+    [Parameter]
+    public bool Show
+    {
+        get => throw new NotImplementedException();
+        set
+        {
+            if (value){ Open();}
+            else{ Close(); }
+        }
+    }
 
     /// <summary>
     /// Show loading message

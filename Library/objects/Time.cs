@@ -321,8 +321,6 @@ namespace Genso.Astrology.Library
         {
             var timeString = root.Element("StdTime")?.Value;
             var locationXml = root.Element("Location");
-            Console.WriteLine(timeString);
-            //timeString = "06:42 16/04/2021 +08:00";
             var stdDateTime = DateTimeOffset.ParseExact(timeString, Time.GetDateTimeFormat(), null);
             var geoLocation = GeoLocation.FromXml(locationXml);
 

@@ -232,7 +232,7 @@ namespace Genso.Astrology.Library
             return offsetToReturn;
         }
 
-        private string GetLmtDateTimeOffsetText()
+        public string GetLmtDateTimeOffsetText()
         {
             //convert internal STD time to LMT
             var lmtTime = StdToLmt(_stdTime, _geoLocation.GetLongitude());
@@ -248,7 +248,7 @@ namespace Genso.Astrology.Library
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
         /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
         /// </summary>
-        private static Angle TimeToLongitude(TimeSpan time)
+        public static Angle TimeToLongitude(TimeSpan time)
         {
             //degrees is equivelant to hours
             var totalDegrees = time.TotalHours * 15;

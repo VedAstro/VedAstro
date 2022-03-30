@@ -1,0 +1,41 @@
+﻿@page "/sunrisesettime"
+@using Genso.Astrology.Library
+
+<PageTitle>Sun Rise And Set Time</PageTitle>
+
+<h2>Sunrise:@_sunRiseTime</h2>
+<h2>Sunset:@_sunSetTime</h2>
+
+<GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitude" @bind-Latitude="_latitude" />
+
+<div style="margin-top: 50px" class="row">
+    <button type="submit" @onclick="UpdateLocalMeanTime" class="btn btn-primary">Update</button>
+</div>
+
+@code {
+
+    private string _sunSetTime;
+    private string _sunRiseTime;
+    string? _locationName = "";
+    double _longitude;
+    double _latitude;
+
+    private void UpdateLocalMeanTime()
+    {
+        //parse location received from user
+        var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
+
+        //get time now
+        var timeNow = Time.Now(geoLocation);
+
+        var rise = AstronomicalCalculator.GetSunriseTime(timeNow);
+        var set = AstronomicalCalculator.GetSunsetTime(timeNow);
+
+        //show lmt time as string
+        _sunRiseTime = rise.GetStdDateTimeOffsetText();
+        _sunSetTime = set.GetStdDateTimeOffsetText();
+
+        //re-render page
+        this.StateHasChanged();
+    }
+}

@@ -20,6 +20,9 @@
     double _longitude;
     double _latitude;
 
+    //calculate sun rise/set time once page initialized
+    protected override void OnParametersSet() => UpdateLocalMeanTime();
+
     private void UpdateLocalMeanTime()
     {
         //parse location received from user

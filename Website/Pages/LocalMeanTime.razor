@@ -4,8 +4,9 @@
 <PageTitle>Local Mean Time (LMT)</PageTitle>
 
 <h3>Local Mean Time (LMT)</h3>
-<p>LMT is the real time at a place based on it's longitude. 
-    <br/>
+<p>
+    LMT is the real time at a place based on it's longitude.
+    <br />
     At 12PM LMT the Sun will be directly overhead.
 </p>
 
@@ -24,8 +25,11 @@
     string? _lmtString = "Loading...";
     string? _stdString = "Loading...";
     string? _locationName = "";
-    double _longitude ;
-    double _latitude ;
+    double _longitude;
+    double _latitude;
+
+    //run once in beginning so page is not empty
+    protected override void OnParametersSet() => UpdateLocalMeanTime();
 
 
     protected override async Task OnInitializedAsync()

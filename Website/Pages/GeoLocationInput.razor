@@ -91,15 +91,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //show loading to user
-        _loadingMessage.Open();
-
         //try to auto set location gotten from browser
         await AutoSetLocation();
     }
 
-    //hide loading box started on init
-    protected override void OnAfterRender(bool firstRender) => _loadingMessage.Close();
 
     /// <summary>
     /// When location name text is changed this method is called to fetch longitude & latitude

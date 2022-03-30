@@ -4,6 +4,7 @@
 
 <PageTitle>Match Report</PageTitle>
 
+
 @if (_report != null)
 {
 
@@ -38,6 +39,12 @@
         }
         </tbody>
     </table>
+
+}
+else
+{
+    //show loading message if page not yet loaded
+    <LoadingMessage Show="true"/>
 
 }
 

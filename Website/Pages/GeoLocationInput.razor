@@ -91,11 +91,27 @@
         //show loading to user
         _loadingMessage.Open();
 
+        TryAgain:
         //if location not set, default to London
         LocationName = LocationName is "" or null ? DefaultLocationCountry : LocationName;
 
-        //get longitude & latitude for location
-        var coordinates = await GetAddressLocation(LocationName); //backup place as not to raise error
+        //sometimes location can't be found, causes critical failure
+        //so if fail here try again with default location
+        dynamic coordinates;
+        try
+        {
+            //get longitude & latitude for location
+            coordinates = await GetAddressLocation(LocationName);
+        }
+        catch (Exception e)
+        {
+            //if fail set to default location & try again
+            LocationName = DefaultLocationCountry;
+            //TODO change to proper alter msg
+            Console.WriteLine("Error: Your location could not be found, check spelling.");
+            goto TryAgain;
+        }
+
 
         //set new coordinates into view
         Longitude = coordinates.Longitude;

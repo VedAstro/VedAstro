@@ -1,0 +1,47 @@
+﻿@*Component to show loading message to user*@
+
+<div class="modal fade @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
+    <div class="modal-dialog modal-dialog-centered" style="width: fit-content;" role="document">
+        <div class="modal-content">
+            <div class="modal-body align-content-center">
+                <img src="images/loading-animation.svg" alt="My Happy SVG" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@if (_showBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+    private string _modalDisplay = "none;";
+    private string _modalClass = "";
+    private bool _showBackdrop = false;
+
+    /// <summary>
+    /// Show loading message
+    /// </summary>
+    public void Open()
+    {
+        _modalDisplay = "block;";
+        _modalClass = "show";
+        _showBackdrop = true;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Hide loading message
+    /// </summary>
+    public void Close()
+    {
+        _modalDisplay = "none";
+        _modalClass = "";
+        _showBackdrop = false;
+        StateHasChanged();
+    }
+}

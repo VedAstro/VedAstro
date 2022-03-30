@@ -330,5 +330,16 @@ namespace Genso.Astrology.Library
 
             return parsedTime;
         }
+
+        /// <summary>
+        /// Gets the Time now in current system, needs location
+        /// </summary>
+        public static Time Now(GeoLocation geoLocation)
+        {
+            //get standard time now
+            var stdTimeNow = DateTimeOffset.Now;
+
+            return new Time(stdTimeNow, geoLocation);
+        }
     }
 }

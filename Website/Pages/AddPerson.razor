@@ -21,11 +21,11 @@
                 </div>
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-6">
-                            <label>Birth Time</label>
+                        <div class="col-5">
+                            <label>Birth Time (24h)</label>
                             <input @bind="_timeInput" type="text" class="form-control" placeholder="06:42">
                         </div>
-                        <div class="col">
+                        <div class="col-5">
                             <label>Date</label>
                             <input @bind="_dateInput" type="text" class="form-control" placeholder="16/04/2021">
                         </div>
@@ -52,7 +52,10 @@
     </div>
 </div>
 
+
+
 @code {
+
 
     string? _name;
     string? _timeInput, _dateInput, _timezoneInput;
@@ -63,6 +66,14 @@
     string _genderString = "";
     Person _newPerson;
     bool _showPersonAddedSuccessAlert = false; //default, alert is not shown
+
+
+
+    protected override void OnInitialized()
+    {
+        //auto fill time zone based on system time
+        _timezoneInput = DateTimeOffset.Now.ToString("zzz");
+    }
 
     //sends the newly created person to API server
     private async void SubmitNewPerson()

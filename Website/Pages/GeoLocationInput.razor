@@ -2,6 +2,9 @@
 @using System.Xml.Linq
 @*Component that allows the input of geo location*@
 
+<LoadingMessage @ref="_loadingMessage"></LoadingMessage>
+
+
 <div class="form-group">
     <div class="row">
         <div class="col-6">
@@ -22,10 +25,11 @@
 
 
 @code {
-
+    private LoadingMessage _loadingMessage { get; set; }
     private string _locationName;
     private double _longitude;
     private double _latitude;
+    const string DefaultLocationCountry = "Singapore";
 
 
     [Parameter]
@@ -84,8 +88,11 @@
     /// </summary>
     private async Task OnLocationNameUpdated(FocusEventArgs obj)
     {
+        //show loading to user
+        _loadingMessage.Open();
+
         //if location not set, default to London
-        LocationName = LocationName is "" or null ? "London" : LocationName;
+        LocationName = LocationName is "" or null ? DefaultLocationCountry : LocationName;
 
         //get longitude & latitude for location
         var coordinates = await GetAddressLocation(LocationName); //backup place as not to raise error
@@ -97,6 +104,8 @@
         //update user typed location name to proper formatted one
         LocationName = coordinates.FullName;
 
+        //hide loading from user
+        _loadingMessage.Close();
 
         //FUNCTIONS
 

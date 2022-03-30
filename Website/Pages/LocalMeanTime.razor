@@ -40,15 +40,12 @@
         //parse location received from user
         var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
 
-        //get standard time now
-        var stdTimeNow = DateTimeOffset.Now;
-
-        //get parsed time
-        var time = new Time(stdTimeNow, geoLocation);
+        //get time now
+        var timeNow = Time.Now(geoLocation);
 
         //show lmt time as string
-        _lmtString = time.GetLmtDateTimeOffset().ToString(Time.GetDateTimeFormat());
-        _stdString = time.GetStdDateTimeOffsetText();
+        _lmtString = timeNow.GetLmtDateTimeOffset().ToString(Time.GetDateTimeFormat());
+        _stdString = timeNow.GetStdDateTimeOffsetText();
 
         //re-render page
         this.StateHasChanged();

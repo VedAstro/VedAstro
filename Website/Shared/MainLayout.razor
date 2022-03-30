@@ -1,10 +1,14 @@
 ﻿@inherits LayoutComponentBase
 
+@inject GlobalVariableManager _globalVariable;
+
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
-
+   @* this is where global variable alert message gets created*@
+    <AlertMessage @ref="_globalVariable.Alert"/>
     <main>
         <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
@@ -13,14 +17,7 @@
         <article class="content px-4">
             @Body
         </article>
-        
-@*        <div class="card">
-            <h5 class="card-header">Like AstroVed?</h5>
-            <div class="card-body">
-                <h5 class="card-title">Donate to support</h5>
-                <p class="card-text">Your donation will fund programming & cloud server costs.</p>
-                <a href="#" class="btn btn-primary">Donate</a>
-            </div>
-        </div>
-*@    </main>
+
+    </main>
 </div>
+

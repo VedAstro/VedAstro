@@ -1,9 +1,12 @@
-﻿@using Microsoft.AspNetCore.Components
+﻿@*Component that allows the input of geo location*@
+
+
+@using Microsoft.AspNetCore.Components
 @using System.Xml.Linq
-@*Component that allows the input of geo location*@
+@inject GlobalVariableManager _globalVariable;
+
 
 <LoadingMessage @ref="_loadingMessage"></LoadingMessage>
-
 
 <div class="form-group">
     <div class="row">
@@ -30,7 +33,6 @@
     private double _longitude;
     private double _latitude;
     const string DefaultLocationCountry = "Singapore";
-
 
     [Parameter]
     public string LocationName
@@ -107,8 +109,7 @@
         {
             //if fail set to default location & try again
             LocationName = DefaultLocationCountry;
-            //TODO change to proper alter msg
-            Console.WriteLine("Error: Your location could not be found, check spelling.");
+            _globalVariable.Alert.ShowError("Your location could not be found, check spelling.");
             goto TryAgain;
         }
 

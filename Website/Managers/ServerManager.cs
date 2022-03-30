@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Xml.Linq;
-using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
 
 namespace Website

@@ -1,0 +1,63 @@
+﻿@*Simple alert at top of page to show user a message*@
+
+@inject IJSRuntime JsRuntime
+
+
+@*<div class="alert @_alertType alert-dismissible fade @_modalClass" role="alert">
+    <strong>@_title</strong> @_message
+    <button type="button" onclick="@Close" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>*@
+
+@*<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+*@
+
+@code {
+
+    private string _display = "none;";
+    private string _modalClass = "";
+    private string _title = "";
+    private string _message = "";
+    private string _alertType = "";
+
+
+    public void ShowError(string message = "")
+    {
+
+        JsRuntime.InvokeVoidAsync("alert", message); // Alert
+
+        //set the values then make visible
+        //_message = message;
+        //_alertType = "alert-warning";
+        //_title = "Error:";
+        //Open();
+    }
+
+    /// <summary>
+    /// Show loading message
+    /// </summary>
+    public void Open()
+    {
+        _display = "block;";
+        _modalClass = "show";
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// Hide loading message
+    /// </summary>
+    public void Close()
+    {
+        _display = "none";
+        _modalClass = "";
+        StateHasChanged();
+    }
+
+
+}

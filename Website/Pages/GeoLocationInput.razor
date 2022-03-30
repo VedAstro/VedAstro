@@ -1,9 +1,11 @@
 ﻿@*Component that allows the input of geo location*@
 
-
 @using Microsoft.AspNetCore.Components
 @using System.Xml.Linq
+
+
 @inject GlobalVariableManager _globalVariable;
+@inject LocationService LocationService
 
 
 <LoadingMessage @ref="_loadingMessage"></LoadingMessage>
@@ -84,6 +86,14 @@
     public EventCallback<double> LatitudeChanged { get; set; }
 
 
+    Location locationCoordinates;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //try to auto set location gotten from browser
+        await AutoSetLocation();
+    }
 
     /// <summary>
     /// When location name text is changed this method is called to fetch longitude & latitude
@@ -93,23 +103,41 @@
         //show loading to user
         _loadingMessage.Open();
 
-        TryAgain:
-        //if location not set, default to London
+        await SetCoordinatesFromNameInput();
+
+        //hide loading from user
+        _loadingMessage.Close();
+
+    }
+
+
+    /// <summary>
+    /// Takes location name and gets the coordinates
+    /// and sets them in the input box
+    /// </summary>
+    private async Task SetCoordinatesFromNameInput()
+    {
+
+    TryAgain:
+        //if location not set, default to preset location
         LocationName = LocationName is "" or null ? DefaultLocationCountry : LocationName;
 
         //sometimes location can't be found, causes critical failure
-        //so if fail here try again with default location
+        //so if fail here try again with default location & alert user
         dynamic coordinates;
         try
         {
             //get longitude & latitude for location
-            coordinates = await GetAddressLocation(LocationName);
+            coordinates = await Tools.GetAddressLocation(LocationName);
         }
         catch (Exception e)
         {
-            //if fail set to default location & try again
+            //alert user first with the wrong name
+            _globalVariable.Alert.ShowError($"The location \"{LocationName}\", can not be found!" +
+                                            $"\n Check the spelling, or try another nearby place.");
+
+            //change to default location & try again to get coordinates
             LocationName = DefaultLocationCountry;
-            _globalVariable.Alert.ShowError("Your location could not be found, check spelling.");
             goto TryAgain;
         }
 
@@ -121,36 +149,24 @@
         //update user typed location name to proper formatted one
         LocationName = coordinates.FullName;
 
-        //hide loading from user
-        _loadingMessage.Close();
+    }
 
-        //FUNCTIONS
+    /// <summary>
+    /// Gets location from browser & sets the input boxes
+    /// </summary>
+    private async Task AutoSetLocation()
+    {
+        //try get location from Browser
+        locationCoordinates = await LocationService.GetLocationAsync();
 
-        async Task<dynamic> GetAddressLocation(string address)
-        {
+        //set new coordinates into view
+        Longitude = (double)locationCoordinates.Longitude;
+        Latitude = (double)locationCoordinates.Latitude;
 
-            var requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?key={1}&address={0}&sensor=false", Uri.EscapeDataString(address), ServerManager.GoogleGeoLocationAPIKey);
+        //set gotten location name into view
+        LocationName = await Tools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude);
 
-            //get location data from GoogleAPI
-            var rawReplyXml = await ServerManager.ReadFromServer(requestUri);
 
-            //extract out the longitude & latitude
-            var locationData = new XDocument(rawReplyXml);
-            var result = locationData.Element("GeocodeResponse").Element("result");
-            var locationElement = result.Element("geometry").Element("location");
-            var lat = Double.Parse(locationElement.Element("lat").Value);
-            var lng = Double.Parse(locationElement.Element("lng").Value);
-
-            //round coordinates to 3 decimal places
-            lat = Math.Round(lat, 3);
-            lng = Math.Round(lng, 3);
-
-            //get full name with country & state
-            var fullName = result.Element("formatted_address").Value;
-
-            return new { FullName = fullName, Latitude = lat, Longitude = lng };
-
-        }
     }
 
 

@@ -1,3 +1,4 @@
+using AspNetMonsters.Blazor.Geolocation;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Website;
@@ -11,5 +12,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 //setup for global variables (to remember state)
 builder.Services.AddScoped<GlobalVariableManager>();
 
+//setup for getting location from browser
+builder.Services.AddSingleton<LocationService>();
 
 await builder.Build().RunAsync();

@@ -91,7 +91,7 @@
         _newPerson = new Person(_name, birthTime, _gender);
 
         //send newly created person to API server
-        var apiAddress = ServerManager.AddPersonAPI;
+        const string apiAddress = ServerManager.AddPersonAPI;
         var xmlData = _newPerson.ToXml();
         var result = ServerManager.WriteToServer(apiAddress, xmlData);
 

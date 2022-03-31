@@ -22,14 +22,17 @@
 
 @code {
 
-    string? _lmtString = "Loading...";
-    string? _stdString = "Loading...";
+    string? _lmtString = "";
+    string? _stdString = "";
     string? _locationName = "";
     double _longitude;
     double _latitude;
 
-    //run once in beginning so page is not empty
-    protected override void OnParametersSet() => UpdateLocalMeanTime();
+
+    //auto update "time" after location is updated
+    //called every time after the component has finished rendering
+    protected override void OnAfterRender(bool firstRender) => UpdateLocalMeanTime();
+
 
 
     protected override async Task OnInitializedAsync()
@@ -50,9 +53,6 @@
         //show lmt time as string
         _lmtString = timeNow.GetLmtDateTimeOffset().ToString(Time.GetDateTimeFormat());
         _stdString = timeNow.GetStdDateTimeOffsetText();
-
-        //re-render page
-        this.StateHasChanged();
     }
 
 }

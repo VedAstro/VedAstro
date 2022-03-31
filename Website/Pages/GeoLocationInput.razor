@@ -1,4 +1,6 @@
-﻿@*Component that allows the input of geo location*@
+﻿@*Component that allows the input of geo location
+    Note : When loaded location from browser is tried to get
+*@
 
 @using Microsoft.AspNetCore.Components
 @using System.Xml.Linq
@@ -14,15 +16,15 @@
     <div class="row">
         <div class="col-6">
             <label>Birth Location</label>
-            <input @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control" placeholder="London">
+            <input @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control" placeholder="Singapore">
         </div>
         <div class="col">
             <label>Longitude</label>
-            <input @bind="Longitude" type="text" class="form-control" placeholder="101">
+            <input @bind="Longitude" type="text" class="form-control" placeholder="103.82">
         </div>
         <div class="col">
             <label>Latitude</label>
-            <input @bind="Latitude" type="text" class="form-control" placeholder="4.59">
+            <input @bind="Latitude" type="text" class="form-control" placeholder="1.352">
         </div>
     </div>
 </div>
@@ -31,9 +33,9 @@
 
 @code {
     private LoadingMessage _loadingMessage { get; set; }
-    private string _locationName;
-    private double _longitude;
-    private double _latitude;
+    private string _locationName = DefaultLocationCountry;
+    private double _longitude = 103.82;
+    private double _latitude = 1.352;
     const string DefaultLocationCountry = "Singapore";
 
     [Parameter]
@@ -86,7 +88,7 @@
     public EventCallback<double> LatitudeChanged { get; set; }
 
 
-    Location locationCoordinates;
+    //Location locationCoordinates;
 
 
     protected override async Task OnInitializedAsync()
@@ -134,8 +136,8 @@
         catch (Exception e)
         {
             //alert user first with the wrong name
-            _globalVariable.Alert.ShowError($"The location \"{LocationName}\", can not be found!" +
-                                            $"\n Check the spelling, or try another nearby place.");
+            _globalVariable.Alert.ShowError($"The location \"{LocationName}\", not found!" +
+                                            $"\n Check the spelling or try other nearby place.");
 
             //change to default location & try again to get coordinates
             LocationName = DefaultLocationCountry;
@@ -152,6 +154,7 @@
 
     }
 
+
     /// <summary>
     /// Gets location from browser & sets the input boxes
     /// </summary>
@@ -160,7 +163,7 @@
         try
         {
             //try get location from Browser
-            locationCoordinates = await LocationService.GetLocationAsync();
+            var locationCoordinates = await LocationService.GetLocationAsync();
 
             //set new coordinates into view
             Longitude = (double)locationCoordinates.Longitude;
@@ -176,7 +179,7 @@
             LocationName = DefaultLocationCountry;
 
             //update coordinates based on name
-            SetCoordinatesFromNameInput();
+            await SetCoordinatesFromNameInput();
 
         }
 

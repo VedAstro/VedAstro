@@ -9,21 +9,23 @@
 <GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitude" @bind-Latitude="_latitude" />
 
 <div style="margin-top: 50px" class="row">
-    <button type="submit" @onclick="UpdateLocalMeanTime" class="btn btn-primary">Update</button>
+    <button type="submit" @onclick="UpdateSunRiseSetTime" class="btn btn-primary">Update</button>
 </div>
 
 @code {
 
     private string _sunSetTime;
     private string _sunRiseTime;
-    string? _locationName = "";
-    double _longitude;
-    double _latitude;
+    private string? _locationName = "";
+    private double _longitude;
+    private double _latitude;
 
-    //calculate sun rise/set time once page initialized
-    protected override void OnParametersSet() => UpdateLocalMeanTime();
+    //auto calculate sun rise/set time every time location is changed
+    //called every time after the component has finished rendering
+    protected override void OnAfterRender(bool firstRender) => UpdateSunRiseSetTime();
 
-    private void UpdateLocalMeanTime()
+
+    private void UpdateSunRiseSetTime()
     {
         //parse location received from user
         var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
@@ -38,7 +40,5 @@
         _sunRiseTime = rise.GetStdDateTimeOffsetText();
         _sunSetTime = set.GetStdDateTimeOffsetText();
 
-        //re-render page
-        this.StateHasChanged();
     }
 }

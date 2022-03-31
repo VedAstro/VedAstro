@@ -4,7 +4,7 @@
 A non-profit, opensource project to provide Vedic astrological tools for the public.
 Check it out @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.net/)
 
-#Donate/Support
+# Donate/Support
 - [Donate](https://purple-flower-03ae64d1e.1.azurestaticapps.net/donate) to support programming & server costs
 - [Report](https://purple-flower-03ae64d1e.1.azurestaticapps.net/reportbugs) problems you find when using software
 - [Share](https://purple-flower-03ae64d1e.1.azurestaticapps.net/featurerequest) ideas you for new or better features 

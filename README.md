@@ -1,5 +1,15 @@
 [![Azure Static Web Apps CI/CD](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-purple-flower-03ae64d1e.yml/badge.svg)](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-purple-flower-03ae64d1e.yml)
 
+# Vedic Astrolger
+A non-profit, opensource project to provide Vedic astrological tools for the public.
+Check it out @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.net/)
+
+#Donate/Support
+- [Donate](https://purple-flower-03ae64d1e.1.azurestaticapps.net/donate) to support programming & server costs
+- [Report](https://purple-flower-03ae64d1e.1.azurestaticapps.net/reportbugs) problems you find when using software
+- [Share](https://purple-flower-03ae64d1e.1.azurestaticapps.net/featurerequest) ideas you for new or better features 
+- [Fix](https://purple-flower-03ae64d1e.1.azurestaticapps.net/featurerequestlist) fix bugs & implement features
+
 # Project Architecture
 
 ```

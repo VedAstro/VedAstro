@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using Genso.Astrology.Library;
 
-namespace Genso.Astrology.Muhurtha.Core
+namespace Muhurtha.Desktop
 {
     /// <summary>
     /// The logic part of the Muhurtha program,

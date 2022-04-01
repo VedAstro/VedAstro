@@ -4,10 +4,13 @@
 A non-profit, opensource project to provide Vedic astrological tools for the public.
 Check it out @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.net/)
 
+# How To Use
+Coming soon...
+
 # Donate/Support
 - [Donate](https://purple-flower-03ae64d1e.1.azurestaticapps.net/donate) to support programming & server costs
 - [Report](https://purple-flower-03ae64d1e.1.azurestaticapps.net/reportbugs) problems you find when using software
-- [Share](https://purple-flower-03ae64d1e.1.azurestaticapps.net/featurerequest) ideas you for new or better features 
+- [Share](https://purple-flower-03ae64d1e.1.azurestaticapps.net/featurerequest) your ideas for new or better features 
 - [Fix](https://purple-flower-03ae64d1e.1.azurestaticapps.net/featurerequestlist) fix bugs & implement features
 
 # Project Architecture
@@ -34,9 +37,15 @@ Check it out @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.
 
 
 
-# DESIGN NOTES
+# Design Decision Notes
 
-### Notes On Gochara Prediction in Muhurtha (from book ) - 11/2/2022
+## WEBSITE : Why astrological calculation done on API server and not in client (browser) via webassmebly?
+- The calculations tested on Intel Xeon with parallel procesing takes about 1GB RAM & 30% CPU.
+With these loads browsers with mobile CPU's are going to be probelmatic for sure.
+So as not to waste time, the API route has been decided since it has been proven to work.
+
+
+## MUHURTHA : Notes On Gochara Prediction (from book ) - 11/2/2022
 
 - Built on reference to, Hindu Predictive Astrology pg. 254
 

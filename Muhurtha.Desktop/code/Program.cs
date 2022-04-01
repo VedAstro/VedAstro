@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using Genso.Astrology.Library;
-using Genso.Astrology.Muhurtha.Core;
 using System.Media;
 using Microsoft.Win32;
 
@@ -52,7 +51,7 @@ namespace Muhurtha.Desktop
             //show events being calculated message
             gui.MainGrid.EventsCalculatingPopup.Show();
 
-            //place heavy event calculation on a seperate thread & start it off
+            //place heavy event calculation on a separate thread & start it off
             //note: upon completion an event will fire, it's handled elsewhere
             calculatorThreadControl = new CancellationTokenSource(); //placed here so that only initialized when needed
             ThreadPool.QueueUserWorkItem(new WaitCallback(CalculateAndUpdateEvents), calculatorThreadControl.Token);
@@ -460,6 +459,10 @@ namespace Muhurtha.Desktop
 
 
         }
+
+        /// <summary>
+        /// Events are created & updated to view here
+        /// </summary>
         private void CalculateAndUpdateEvents(object threadCanceler)
         {
             //get all the needed values

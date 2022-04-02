@@ -152,39 +152,33 @@ namespace API
             return okObjectResult;
         }
 
-        //[FunctionName("getpeoplelist")]
-        //public static async Task<IActionResult> GetPeopleList(
-        //    [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-        //    [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
-        //{
-        //    var responseMessage = "";
+        [FunctionName("getpersonlist")]
+        public static async Task<IActionResult> GetPersonList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
+        {
+            var responseMessage = "";
 
-        //    try
-        //    {
+            try
+            {
+                //get person list from storage
+                var personListXml = APITools.BlobClientToXml(personListClient);
 
-        //        //get person list from storage
-        //        var personListXml = APITools.BlobClientToXml(personListClient);
+                //send people list to caller
+                responseMessage = personListXml.ToString();
 
-        //        //get only female ppl into a list
-        //        var maleList = from person in personListXml.Root?.Elements()
-        //            where person.Element("Gender")?.Value == "Female"
-        //            select person;
-
-        //        //send female list to caller
-        //        responseMessage = new XElement("Root", maleList).ToString();
-
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        //format error nicely to show user
-        //        responseMessage = APITools.FormatErrorReply(e);
-        //    }
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
 
 
-        //    var okObjectResult = new OkObjectResult(responseMessage);
+            var okObjectResult = new OkObjectResult(responseMessage);
 
-        //    return okObjectResult;
-        //}
+            return okObjectResult;
+        }
 
         [FunctionName("getevents")]
         public static async Task<IActionResult> GetEvents(

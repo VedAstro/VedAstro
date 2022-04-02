@@ -1,46 +1,70 @@
 ﻿@using Genso.Astrology.Library
+@using Tools = Genso.Astrology.Library.Tools
 
+<style>
+    .parent-div {
+        display: flex;
+        flex-wrap: wrap;
+        /* for horizontal aligning of child divs */
+        justify-content: center;
+        /* for vertical aligning */
+        align-items: center;
+        width: max-content;
+        white-space: nowrap;
+    }
+
+    .dasaRow {
+        font-size: large;
+        background-color:aqua;
+    }
+    .yearRow, .ageRow {
+        font-size: x-small; 
+    }
+
+</style>
 
 
 <h3>DasaViewBox</h3>
 
 @if (@EventList != null)
 {
-    <table class="table table-striped table-hover">
-        <thead>
-            @*        <tr>
-                @foreach (var _event in EventList)
-                {
-                <th scope="col">Name</th>
-                }
-                </tr>
-            *@
-        </thead>
-        <tbody>
-            @*Time Span Row*@
-            <tr>
-                @foreach (var _event in EventList)
-                {
-                    <td>@_event.StartTime.GetStdDateTimeOffset().Year.ToString()</td>
-                }
-            </tr>
-            @*Planet Dasa Row*@
-            <tr>
-                @foreach (var _event in EventList)
-                {
-                    <td>@_event.FormattedName</td>
-                }
-            </tr>
-            @*Person Age Row*@
-            <tr>
-                @foreach (var _event in EventList)
-                {
-                    <td>@GetPersonAge(_event.StartTime, Person)</td>
-                }
-            </tr>
 
-        </tbody>
-    </table>
+    <div style="text-align: center;">
+        @*Time Span Row*@
+        <div class="parent-div">
+@*            @foreach (var _event in EventList)
+            {
+                <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px; background-color:cornflowerblue;" class="border border-secondary">
+                    @_event.StartTime.GetStdDateTimeOffset().Year.ToString()
+                </div>
+            }
+*@            @for (var age = 0; age <= 120; age++)
+            {
+                <div style="width: @GetWidth(1)px; background-color: coral; " class="yearRow border border-secondary">
+                   @GetPersonYear(age, Person)
+                </div>
+            }
+
+        </div>
+        @*Planet Dasa Row*@
+        <div class="parent-div">
+            @foreach (var _event in EventList)
+            {
+                <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;" class="dasaRow border border-secondary">
+                    @_event.FormattedName
+                </div>
+            }
+        </div>
+        @*Person Age Row*@
+        <div class="parent-div">
+            @for (var year = 0; year <= 120; year++)
+            {
+                <div style="width: @GetWidth(1)px; background-color: coral; " class="ageRow border border-secondary">
+                    @year
+                </div>
+            }
+        </div>
+    </div>
 
 }
 else
@@ -57,9 +81,14 @@ else
     [Parameter]
     public Person Person { get; set; }
 
+    const double PixelPerYear = 30;
 
     private string GetPersonAge(Time currentTime, Person person)
     {
+@*        var currentTimeYear = currentTime.GetStdDateTimeOffset().Year;
+        var birthTimeYear = person.GetBirthDateTime().GetStdDateTimeOffset().Year;
+        var yearDifference = currentTimeYear - birthTimeYear;
+*@
 
         var difference = currentTime.Subtract(person.GetBirthDateTime());
 
@@ -67,5 +96,13 @@ else
 
         return years.ToString();
     }
+
+    /// <summary>
+    /// Gets width of dasa events based on their duration length
+    /// </summary>
+    private double GetWidth(double years) => System.Math.Round((years * PixelPerYear), 1);
+
+
+    private int GetPersonYear(int age, Person person) => person.GetBirthDateTime().GetStdDateTimeOffset().Year + age;
 
 }

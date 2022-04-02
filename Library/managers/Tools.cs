@@ -215,5 +215,14 @@ namespace Genso.Astrology.Library
         }
 
 
+        /// <summary>
+        /// Converts days to hours
+        /// </summary>
+        /// <returns></returns>
+        public static double DaysToHours(double days) => days * 24.0;
+
+        public static double MinutesToHours(int minutes) => minutes / 60.0;
+
+        public static double MinutesToYears(int minutes) => minutes / 525600.0;
     }
 }

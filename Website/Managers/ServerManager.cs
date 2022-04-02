@@ -1,5 +1,4 @@
 ﻿using Genso.Astrology.Library;
-using Genso.Astrology.Library.Compatibility;
 using System.Text;
 using System.Xml.Linq;
 
@@ -14,7 +13,7 @@ namespace Website
 
         public const string AddPersonAPI = "https://vedastroapi.azurewebsites.net/api/addperson";
         public const string GetMaleListAPI = "https://vedastroapi.azurewebsites.net/api/getmalelist";
-        public const string GetPeopleListAPI = "https://vedastroapi.azurewebsites.net/api/getpeoplelist";
+        public const string GetPersonListAPI = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
         public const string GetFemaleListAPI = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportAPI = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetEventsAPI = "https://vedastroapi.azurewebsites.net/api/getevents";

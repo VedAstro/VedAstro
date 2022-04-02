@@ -1,5 +1,4 @@
-﻿using Website.Pages;
-using Website.Shared;
+﻿using Website.Shared;
 
 namespace Website
 {

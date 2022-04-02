@@ -70,7 +70,7 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Returns a new instance of the modified time.
-        /// Only positive numbers
+        /// Only input positive numbers
         /// </summary>
         public Time AddHours(double granularityHours)
         {
@@ -84,6 +84,27 @@ namespace Genso.Astrology.Library
             return newTime;
 
         }
+
+        /// <summary>
+        /// Returns a new instance with the added years.
+        /// Only input positive numbers 
+        /// </summary>
+        public Time AddYears(int years)
+        {
+            const int hoursInAYear = 8760;
+
+            //create new same as current one
+            var newTime = this;
+
+            //convert years to hours and together
+            for (var i = 0; i < years; i++)
+            {
+                newTime = newTime.AddHours(hoursInAYear);
+            }
+
+            return newTime;
+        }
+
 
         /// <summary>
         /// Returns a new instance of the modified time.
@@ -353,6 +374,5 @@ namespace Genso.Astrology.Library
         }
 
 
-       
     }
 }

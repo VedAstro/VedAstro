@@ -3696,7 +3696,7 @@
 			and travels, gains through religious people, mental
 			sufferings, a wandering life in a foreign country.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaMoonBhukti</Name>
@@ -3709,7 +3709,7 @@
 			and kindred ailments, new clothes and ornaments, will be
 			happy, healthy, good meals, respect among relatives.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaMarsBhukti</Name>
@@ -3723,7 +3723,7 @@
 			diseases, mental worries, danger from fire, ill-health, loss of
 			reputation, sorrow.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaRahuBhukti</Name>
@@ -3735,7 +3735,7 @@
 			money, sorrows, unsuccessful in all attempts, fear of thieves
 			and reptiles, scandals.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaJupiterBhukti</Name>
@@ -3748,7 +3748,7 @@
 			virtuous acts, good traditional observances, good society and
 			conversations, reputation, gains and court-honours.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaSaturnBhukti</Name>
@@ -3761,7 +3761,7 @@
 			of money, disease, lacking in energy, ignoble calls, mental
 			worries, loans, danger from thieve and rulers.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaMercuryBhukti</Name>
@@ -3776,7 +3776,7 @@
 			disputes and trouble from ruler or judge, suffer
 			disgrace, many short journeys and wanderings.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaKetuBhukti</Name>
@@ -3790,7 +3790,7 @@
 			ophthalmia, serious illness, fear from kings or rulers and
 			enemies, diseases, cheated by others.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SunDasaVenusBhukti</Name>
@@ -3803,7 +3803,7 @@
 			stones, fatigue, addiction to immoral females and profitless
 			discussions.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 
@@ -3820,7 +3820,7 @@
 			danger to father and mother, piles, weakness, loss of
 			children and friends.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaMoonBhukti</Name>
@@ -3834,7 +3834,7 @@
 			deeds, inclination to public life, change of residence, birth of
 			a child, increase of wealth, prosperity to relatives.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaMarsBhukti</Name>
@@ -3849,7 +3849,7 @@
 			instruments or stones, loss of blood and disease to household
 			animals.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaRahuBhukti</Name>
@@ -3864,7 +3864,7 @@
 			thieves and poison, ill-health to father and mother, suffering
 			from hunger.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaJupiterBhukti</Name>
@@ -3877,7 +3877,7 @@
 			and success in undertakings, patronage or rulers, gain or
 			property, respect, learned.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaSaturnBhukti</Name>
@@ -3890,7 +3890,7 @@
 			with unfriendly people, disease due to indigestion, no peace of mind,
 			quarrels with relatives.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaMercuryBhukti</Name>
@@ -3904,7 +3904,7 @@
 			from rulers. general happiness, enjoyment with females,
 			addiction to betting and drinks.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaKetuBhukti</Name>
@@ -3919,7 +3919,7 @@
 			among equals, eating of prohibited food, bad acts, bad
 			company, loss of money and memory.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MoonDasaVenusBhukti</Name>
@@ -3932,7 +3932,7 @@
 			houses, good works and "good meals, birth of children,
 			expenses due to marriage or other auspicious acts.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 
@@ -3949,7 +3949,7 @@
 			other inflammatory affection, danger of fire, troubles through
 			persons in position, many enemies.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaMoonBhukti</Name>
@@ -3960,7 +3960,7 @@
 			improvements effected in it, comforts of wealth, heavy sleep,
 			ardent passion, enjoyment by the help or women.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaMarsBhukti</Name>
@@ -3976,7 +3976,7 @@
 			consumption, loss of blood, fistula, and fissures in anus, Jou
 			of females and brothers, evil doings and boils.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaRahuBhukti</Name>
@@ -3992,7 +3992,7 @@
 			fear from ghosts, affection of gonorrhoea, fretting and
 			litigation.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaJupiterBhukti</Name>
@@ -4005,7 +4005,7 @@
 			or wealth through holy people, freedom from illness, public
 			reputation, ascendancy and happiness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaSaturnBhukti</Name>
@@ -4018,7 +4018,7 @@
 			quarrel, disputes, litigation, loss of property, cutaneous
 			effects. loss of office or position and much anxiety.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaMercuryBhukti</Name>
@@ -4032,7 +4032,7 @@
 			worries, service rendered to friends and relatives, new knowledge,
 			success in litigation.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaKetuBhukti</Name>
@@ -4046,7 +4046,7 @@
 			diseases, poisonous complaints, trouble through women, many
 			enemies.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaVenusBhukti</Name>
@@ -4061,7 +4061,7 @@
 			odium.of females and their society, increase of intelligence,
 			enjoyment of females and gain of money.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 	<!--Rahu BHUKTI-->
@@ -4078,7 +4078,7 @@
 			diseases, success in examinations, private life happy,
 			much reputation and fame, but mental unrest.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>RahuDasaMoonBhukti</Name>
@@ -4092,7 +4092,7 @@
 			health, sea voyages, gain of lands and money, loss or danger
 			to wife and children.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>RahuDasaMarsBhukti</Name>
@@ -4106,7 +4106,7 @@
 			anxiety, combination of all possible calamities, bewilderment
 			in every work and culpable failure of memory.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>RahuDasaRahuBhukti</Name>
@@ -4121,7 +4121,7 @@
 			diseases, illness to wife, failure of intellect, loss of wealth,
 			wandering in far-off countries and distress there.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>RahuDasaJupiterBhukti</Name>
@@ -4135,7 +4135,7 @@
 			the house, increase of enemies, litigations and dips in sacred
 			rivers.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>RahuDasaSaturnBhukti</Name>
@@ -4148,7 +4148,7 @@
 			wind and bile, distress of relatives, friends and well-wishers,
 			residence in a remote foreign land.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>RahuDasaMercuryBhukti</Name>
@@ -4163,7 +4163,7 @@
 			relatives and family, enjoyments with prostitutes, showy,
 			gains through trade, fraudulent schemes.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>RahuDasaKetuBhukti</Name>
@@ -4177,7 +4177,7 @@
 			honour, loss of children, death of cattle and misfortunes of
 			all kinds.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>RahuDasaVenusBhukti</Name>
@@ -4191,7 +4191,7 @@
 			office, liable to deception, false friends, gain in land, birth
 			of a child or marriage.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 
@@ -4205,7 +4205,7 @@
 			wealth, royal favour and sound health, gain,good actions or
 			fruits of good action, loss of bodily strength.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterDasaMoonBhukti</Name>
@@ -4218,7 +4218,7 @@
 			birth or a female child or marriage to some male member in
 			the family, gain of money.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterDasaMarsBhukti</Name>
@@ -4232,7 +4232,7 @@
 			pilgrimage to temples, acquisition of wealth and fame,
 			adventures.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterDasaRahuBhukti</Name>
@@ -4242,7 +4242,7 @@
 			Income through low-caste people, apprehension of diseases,
 			possibility of every possible calamity, deprivation of wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterDasaJupiterBhukti</Name>
@@ -4255,7 +4255,7 @@
 			success in all attempts, travels, dips in sacred rivers, pilgrimage,
 			honour at stake if afflicted.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterDasaSaturnBhukti</Name>
@@ -4270,7 +4270,7 @@
 			unrighteous, a witness in court, quarrels in family, mental
 			depression, funeral ceremonies for others,
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterDasaMercuryBhukti</Name>
@@ -4284,7 +4284,7 @@
 			through knowledge in fine arts, birth of a well-favoured child,
 			advantages from superiors.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterDasaKetuBhukti</Name>
@@ -4297,7 +4297,7 @@
 			and friends, may forsake business, poisonous effects, loss of
 			wealth, destruction of work, illness, boils.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterDasaVenusBhukti</Name>
@@ -4312,7 +4312,7 @@
 			relatives, friends, peace or mind, acquisition or valuables,
 			troubles from females and odium of public.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 
@@ -4329,7 +4329,7 @@
 			wife, body full of pain and disorders, danger of death. fear of
 			death to father-in-law.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnDasaMoonBhukti</Name>
@@ -4342,7 +4342,7 @@
 			property and its recovery after a lapse of time, death of a
 			near relative, sorrow, dislike of relatives, coming in of money,windy diseases.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnDasaMarsBhukti</Name>
@@ -4354,7 +4354,7 @@
 			loss of money by fraud or theft, change of residence. serious
 			illness, distress to brothers and friends, hot diseases.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnDasaRahuBhukti</Name>
@@ -4365,7 +4365,7 @@
 			and foes, danger of physical hurts, various physical troubles,
 			fevers, enemies, increase of troubles.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnDasaJupiterBhukti</Name>
@@ -4377,7 +4377,7 @@
 			the help of superiors. increase of family circles. attainment of
 			rank.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnDasaSaturnBhukti</Name>
@@ -4392,7 +4392,7 @@
 			dispute and troubles from relatives, blood and bilious complaints,
 			quarrels in family, loss of money, mental derangement.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnDasaMercuryBhukti</Name>
@@ -4406,7 +4406,7 @@
 			benefits occurring from acts of piety and customary religious
 			observances, agriculture and commerce.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnDasaKetuBhukti</Name>
@@ -4417,7 +4417,7 @@
 			sons, loss of money, contentions and quarrels with vile and
 			wicked people, dread of evil dreams, quarrels in family.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnDasaVenusBhukti</Name>
@@ -4429,7 +4429,7 @@
 			members, victory over enemies, success in life, goodwill of
 			relatives, accession to wife's property and wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 
@@ -4444,7 +4444,7 @@
 			from enemies, many obstacles, troubles through superiors,
 			acquisition of wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryDasaMoonBhukti</Name>
@@ -4457,7 +4457,7 @@
 			happiness, diseases, ill-will of enemies, miscarriage of every
 			concern, risk from quadrupeds.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryDasaMarsBhukti</Name>
@@ -4472,7 +4472,7 @@
 			betting and prostitutes. boils and hurts of arms, travels in
 			forests and villages, sorrows, royal disfavour, imprisonment.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryDasaRahuBhukti</Name>
@@ -4486,7 +4486,7 @@
 			headaches, sickness and loss of appetite. wealth from friends
 			and relatives, happiness, new earnings.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryDasaJupiterBhukti</Name>
@@ -4498,7 +4498,7 @@
 			good happiness, good credit, benefits from superiors,
 			birth of a child or marriage.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryDasaSaturnBhukti</Name>
@@ -4514,7 +4514,7 @@
 			wealth, material comforts through petty chiefs, failure in
 			agricultural operations.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryDasaMercuryBhukti</Name>
@@ -4526,7 +4526,7 @@
 			or sister. increase in family, gain in business, good mind
 			charitable acts, learning of mathematics and arts.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryDasaKetuBhukti</Name>
@@ -4539,7 +4539,7 @@
 			from relatives, mental agony, loss of comfort, dread of enemy,
 			failure in business.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryDasaVenusBhukti</Name>
@@ -4553,7 +4553,7 @@
 			not married, betrothal in this period, health, ornaments,
 			vehicles, house, money gained.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 
@@ -4568,7 +4568,7 @@
 			sickness in family, long journey and return, anxiety about
 			wife's health.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>KetuDasaMoonBhukti</Name>
@@ -4580,7 +4580,7 @@
 			loss of relatives and money, destruction of wealth and
 			distress of mind.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>KetuDasaMarsBhukti</Name>
@@ -4596,7 +4596,7 @@
 			loss and difficulties
 			and surgical operations.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>KetuDasaRahuBhukti</Name>
@@ -4608,7 +4608,7 @@
 			and honour, rear of kings and robbers, sorrow, ruin of all
 			business, adultery with mean women.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>KetuDasaJupiterBhukti</Name>
@@ -4620,7 +4620,7 @@
 			good position, danger of poison, wife an object of pleasure,
 			if unmarried marriage takes place.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>KetuDasaSaturnBhukti</Name>
@@ -4634,7 +4634,7 @@
 			mental anguish, difference of opinion with relations, exile in
 			foreign countries.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>KetuDasaMercuryBhukti</Name>
@@ -4646,7 +4646,7 @@
 			children. failure in plans, deception, jealousy, falsehood, and
 			knowledge.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>KetuDasaKetuBhukti</Name>
@@ -4658,7 +4658,7 @@
 			to some estrangement, restraint or detention, danger of
 			poison.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>KetuDasaVenusBhukti</Name>
@@ -4669,7 +4669,7 @@
 			with success, in the end sickness, wife ill, illness to children,
 			quarrels, loss of relatives and friends, fever and dysentery.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 
@@ -4684,7 +4684,7 @@
 			diseases affecting head, belly and eyes, damage in respect of
 			agriculture.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>VenusDasaMoonBhukti</Name>
@@ -4697,7 +4697,7 @@
 			and disease due to inflammation of nervous tissue and from
 			lust and other passions of human nature.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>VenusDasaMarsBhukti</Name>
@@ -4711,7 +4711,7 @@
 			of females, negligence of duty, bent on pleasure and passion,
 			temporary affection of eyes.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>VenusDasaRahuBhukti</Name>
@@ -4723,7 +4723,7 @@
 			miserliness, acquisition of lost property. dislike of relatives.
 			evil from friends and injury by fire.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>VenusDasaJupiterBhukti</Name>
@@ -4738,7 +4738,7 @@
 			increase of family reputation and good deeds, wealth.
 			ultimate happiness, wife and children suffer in the end.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>VenusDasaSaturnBhukti</Name>
@@ -4753,7 +4753,7 @@
 			bolting and gambling, addiction to liquor, bad company, etc.,
 			ill-health, loss of memory, impotence.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>VenusDasaMercuryBhukti</Name>
@@ -4767,7 +4767,7 @@
 			aru and sciences, wealth, royal favour. prosperity on a large
 			scale and sound health.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>VenusDasaKetuBhukti</Name>
@@ -4782,7 +4782,7 @@
 			relatives, bad company, abode in seclusion, manifold sorrows,
 			but happiness in the end.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>VenusDasaVenusBhukti</Name>
@@ -4793,7 +4793,7 @@
 			plentiful. disappearance of enemies, attainment of fame and
 			birth of children.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Bhukti</Tag>
 	</Event>
 
 	<!--ANTARAM-->
@@ -4802,63 +4802,63 @@
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 	<Event>
 		<Name>MoonAntaram</Name>
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 	<Event>
 		<Name>MarsAntaram</Name>
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 	<Event>
 		<Name>RahuAntaram</Name>
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 	<Event>
 		<Name>JupiterAntaram</Name>
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 	<Event>
 		<Name>SaturnAntaram</Name>
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 	<Event>
 		<Name>MercuryAntaram</Name>
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 	<Event>
 		<Name>KetuAntaram</Name>
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 	<Event>
 		<Name>VenusAntaram</Name>
 		<Nature>Good</Nature>
 		<Description>
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>Antaram</Tag>
 	</Event>
 
 
@@ -4871,7 +4871,7 @@
 			produce harmful results unless they acquire beneficence
 			otherwise.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>DasaSpecialRules</Tag>
 	</Event>
 	<Event>
 		<Name>Lord5And9Dasa</Name>
@@ -4882,7 +4882,7 @@
 			joined or otherwise related with them, are also supposed to
 			give rise to good.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>DasaSpecialRules</Tag>
 	</Event>
 	<Event>
 		<Name>BhuktiDasaLordInBadHouses</Name>
@@ -4892,10 +4892,12 @@
 			and the major lord are situated in the 6th and the 8th or
 			the 12th and the 2nd from each other respectively.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>DasaSpecialRules</Tag>
 	</Event>
 
-	
+
+	<!--HOUSE BUILDING-->
+
 	<Event>
 		<Name>BadLunarMonthForBuilding</Name>
 		<Nature>Bad</Nature>

@@ -1,38 +1,80 @@
 ﻿@page "/muhurtha"
 @using Genso.Astrology.Library
-@using System.Diagnostics
+@using Tools = Genso.Astrology.Library.Tools
 
 
 <PageTitle>Muhurtha</PageTitle>
 
-<DasaViewBox EventList="@dasaEvents" />
+@if (_isPageReady)
+{
+
+    <div>
+        <label>Person</label>
+        <select @bind="SelectedPersonName" class="form-control">
+            <option value="">Select Name</option>
+            @foreach (var person in PersonList)
+            {
+                <option value="@person.GetName()">@person.GetName() - @person.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
+            }
+        </select>
+    </div>
+    <div style="margin-top: 50px" class="row">
+        <button type="submit" @onclick="GetDasaEventsFromApi" class="btn btn-primary">Submit</button>
+    </div>
+}
+
+@if (_isResultReady)
+{
+    <DasaViewBox EventList="@_dasaEvents" Person="@SelectedPerson"/>
+
+}
 
 
 @code {
 
-    List<Event> dasaEvents;
+    public List<Person> PersonList { get; set; } //data from URL not necessary provided
+    public string? SelectedPersonName { get; set; }
+    public Person SelectedPerson { get; set; }
+    List<Event> _dasaEvents;
+    private bool _isPageReady = false; //marks if the page ready to loaded
+    private bool _isResultReady = false; //marks if the page ready to loaded
+
 
     protected override async Task OnInitializedAsync()
     {
-        await GetDasaEventsFromApi();
+        //get person list from api server & save it for later
+        var personListRootXml = await ServerManager.ReadFromServer(ServerManager.GetPersonListAPI);
+        PersonList = personListRootXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
+
+        _isPageReady = true;
+
     }
 
     private async Task GetDasaEventsFromApi()
     {
 
+        //get person instance from string name
+        SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName);
+
         var location = new GeoLocation("Ipoh", 101, 4.59); //todo check if change in location changes much
 
-        var birthTime = new Time(DateTimeOffset.ParseExact("23:33 19/03/1989 +08:00", Time.GetDateTimeFormat(), null), location);
-        var startTime = new Time(DateTimeOffset.ParseExact("00:00 01/02/2022 +08:00", Time.GetDateTimeFormat(), null), location);
-        var endTime = new Time(DateTimeOffset.ParseExact("23:59 01/02/2022 +08:00", Time.GetDateTimeFormat(), null), location);
-
         var tag = EventTag.Dasa;
-        double precision = 0.5;
-        var person = new Person("Male", birthTime, Gender.Male);
+        double precision = Tools.DaysToHours(7);
 
         //get events from API server
-        dasaEvents = await ServerManager.GetEvents(startTime, endTime, location, person, tag, precision);
+        var _120yearsFromBirth = SelectedPerson.GetBirthDateTime().AddYears(120);
+        var dasaEventsUnsorted = await ServerManager.GetEvents(SelectedPerson.GetBirthDateTime(), _120yearsFromBirth, location, SelectedPerson, tag, precision);
 
+        //sort the list by time before sending view
+        var orderByAscResult = from s in dasaEventsUnsorted
+                               orderby s.StartTime.GetStdDateTimeOffset() ascending
+                               select s;
+
+        //send sorted events to view
+        _dasaEvents = orderByAscResult.ToList();
+
+        _isResultReady = true;
     }
+
 
 }

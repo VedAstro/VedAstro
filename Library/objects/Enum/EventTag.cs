@@ -22,6 +22,9 @@ namespace Genso.Astrology.Library
         Gochara,
         Dasa,
         Horoscope,
-        Building
+        Building,
+        Bhukti,
+        Antaram,
+        DasaSpecialRules
     }
 }

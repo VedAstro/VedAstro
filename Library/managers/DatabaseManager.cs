@@ -25,57 +25,18 @@ namespace Genso.Astrology.Library
             List<EventData> eventDataList = new List<EventData>();
 
             //get all the raw event data into a list
-            var rawEventDataList = eventDataListFile.getAllRecords();
+            var rawEventDataList = eventDataListFile.GetAllRecords();
 
             //parse each raw event data in list
             foreach (var eventData in rawEventDataList)
             {
-                //extract the individual data out & convert it to the correct type
-                //var id = Int32.Parse(eventData.Element("Id").Value); TODO mark for deletion
-                var nameString = eventData.Element("Name").Value;
-                Enum.TryParse(nameString, out EventName name);
-                var natureString = eventData.Element("Nature").Value;
-                Enum.TryParse(natureString, out EventNature nature);
-                var description = eventData.Element("Description").Value;
-                var tagString = eventData.Element("Tag").Value;
-                var tagList = getEventTags(tagString);
-                //todo needs to be moved to a better place
-                var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
-
-                //place the data into an event data structure
-                var eventX = new EventData(name, nature, description, tagList, calculatorMethod);
-
                 //add it to the return list
-                eventDataList.Add(eventX);
+                eventDataList.Add(EventData.ToXml(eventData));
             }
 
 
             //return the list to caller
             return eventDataList;
-
-            //Gets a list of tags in string form & changes it a structed list of tags
-            List<EventTag> getEventTags(string rawTags)
-            {
-                //create a place to store the parsed tags
-                var returnTags = new List<EventTag>();
-
-                //split the string by comma "," (tag seperator)
-                var splittedRawTags = rawTags.Split(',');
-
-                //parse each raw tag
-                foreach (var rawTag in splittedRawTags)
-                {
-                    //parse
-                    var result = Enum.TryParse(rawTag, out EventTag eventTag);
-                    //raise error if could not parse
-                    if (!result) throw new Exception("Event tag not found!");
-
-                    //add the parsed tag to the return list
-                    returnTags.Add(eventTag);
-                }
-
-                return returnTags;
-            }
 
         }
 
@@ -86,6 +47,18 @@ namespace Genso.Astrology.Library
         {
             //get all event data/types
             var eventDataList = DatabaseManager.GetEventDataList(filePath);
+
+            return GetEventDataListByTag(tag, eventDataList);
+
+        }
+
+        /// <summary>
+        /// Gets all event data/types that match the inputed tag
+        /// </summary>
+        public static List<EventData> GetEventDataListByTag(EventTag tag, List<EventData> eventDataList)
+        {
+            //get all event data/types
+            //var eventDataList = DatabaseManager.GetEventDataList(filePath);
 
             //filter IN event data list by tag
             var filteredEventDataList = eventDataList.FindAll(eventData =>
@@ -114,7 +87,7 @@ namespace Genso.Astrology.Library
             var eventDataList = new List<Person>();
 
             //get all the raw person data into a list
-            var rawPersonList = personListFile.getAllRecords();
+            var rawPersonList = personListFile.GetAllRecords();
 
             //parse each raw person data in list
             foreach (var personXml in rawPersonList)

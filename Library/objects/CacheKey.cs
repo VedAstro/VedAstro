@@ -12,7 +12,7 @@ namespace Genso.Astrology.Library
     {
         public string Function;
         //public object[] Args;
-        private int ultimateHash;
+        private int _ultimateHash;
 
         //CTOR
         public CacheKey(string function, params object[] args)
@@ -25,7 +25,7 @@ namespace Genso.Astrology.Library
             var allArgumentsHash = GetHashCodeForArray(args);
 
             //combine them together
-            ultimateHash = functionNameHash + allArgumentsHash;
+            _ultimateHash = functionNameHash + allArgumentsHash;
         }
 
 
@@ -49,7 +49,7 @@ namespace Genso.Astrology.Library
             }
         }
 
-        public override int GetHashCode() => ultimateHash;
+        public override int GetHashCode() => _ultimateHash;
         //{
         //    //get hash of all the fields & combine them
         //    var hash1 = Function.GetHashCode();

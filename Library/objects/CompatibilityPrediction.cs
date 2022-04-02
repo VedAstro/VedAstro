@@ -8,7 +8,7 @@ namespace Genso.Astrology.Library.Compatibility
     /// Note : properties can only be set once,
     /// so that doesn't accidentally get changed
     /// </summary>
-    public class CompatibilityPrediction
+    public class CompatibilityPrediction: IToXml
     {
         //DATA FIELDS
         private string _info = "";
@@ -67,8 +67,20 @@ namespace Genso.Astrology.Library.Compatibility
         }
 
 
-        //PRIVATE METHODS
-        public XElement ToXML()
+        //PUBLIC METHODS
+
+        /// <summary>
+        /// The root element is expected to be Person
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
+
+        public CompatibilityReport FromXml(XElement XML)
+        {
+            throw new NotImplementedException();
+        }
+
+        public XElement ToXml()
         {
             //create root tag to hold data
             var predictionXml = new XElement("Prediction");
@@ -83,5 +95,6 @@ namespace Genso.Astrology.Library.Compatibility
 
             return predictionXml;
         }
+
     }
 }

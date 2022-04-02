@@ -1,6 +1,7 @@
-﻿using System.Text;
-using System.Xml.Linq;
+﻿using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
+using System.Text;
+using System.Xml.Linq;
 
 namespace Website
 {
@@ -13,28 +14,14 @@ namespace Website
 
         public const string AddPersonAPI = "https://vedastroapi.azurewebsites.net/api/addperson";
         public const string GetMaleListAPI = "https://vedastroapi.azurewebsites.net/api/getmalelist";
+        public const string GetPeopleListAPI = "https://vedastroapi.azurewebsites.net/api/getpeoplelist";
         public const string GetFemaleListAPI = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportAPI = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
+        public const string GetEventsAPI = "https://vedastroapi.azurewebsites.net/api/getevents";
         public const string GoogleGeoLocationAPIKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg";
 
 
-        /// <summary>
-        /// Gets CompatibilityReport from API server
-        /// </summary>
-        public static async Task<CompatibilityReport?> GetCompatibilityReport(string male, string female)
-        {
-            //prepare request to API server
-            var url = $"{GetMatchReportAPI}?male={male}&female={female}";
-
-            //get report from server
-            var matchReportXml = await ReadFromServer(url);
-
-            //parse report 
-            var matchReport = CompatibilityReport.FromXml(matchReportXml);
-
-            //return parsed report to caller
-            return matchReport;
-        }
+        //PUBLIC METHODS
 
         /// <summary>
         /// Calls a URL and returns the content of the result as XML
@@ -81,7 +68,7 @@ namespace Website
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
 
-            httpRequestMessage.Content = XMLtoStringContent(xmlData);
+            httpRequestMessage.Content = XmLtoStringContent(xmlData);
 
             //get the data sender
             using var client = new HttpClient();
@@ -102,13 +89,45 @@ namespace Website
 
         }
 
+
+
+        /// <summary>
+        /// Gets Muhurtha events from API
+        /// TODO NEED TO MOVE to component that uses it
+        /// </summary>
+        public static async Task<List<Event>> GetEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precision)
+        {
+            //prepare data to send to API
+            var root = new XElement("Root");
+
+            root.Add(
+                new XElement("StartTime", startTime.ToXml()),
+                new XElement("EndTime", endTime.ToXml()),
+                location.ToXml(),
+                person.ToXml(),
+                Genso.Astrology.Library.Tools.AnyTypeToXml(tag),
+                Genso.Astrology.Library.Tools.AnyTypeToXml(precision));
+
+            //send to api and get results
+            var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsAPI, root);
+
+            //parse raw results
+            List<Event> resultsParsed = Event.FromXml(resultsRaw);
+
+            //send to caller
+            return resultsParsed;
+
+        }
+
+
+        //PRIVATE METHODS
         /// <summary>
         /// Packages the data into ready form for the HTTP client to use in final sending stage
         /// </summary>
-        public static StringContent XMLtoStringContent(XElement _data)
+        private static StringContent XmLtoStringContent(XElement _data)
         {
             //gets the main XML data as a string
-            var data = XmlToString(_data);
+            var data = Genso.Astrology.Library.Tools.XmlToString(_data);
 
             //specify the data encoding
             var encoding = Encoding.UTF8;
@@ -120,17 +139,5 @@ namespace Website
             //return packaged data to caller
             return new StringContent(data, encoding, mediaType);
         }
-
-        /// <summary>
-        /// Converts xml element instance to string properly
-        /// TODO needs to be a separate class utils
-        /// </summary>
-        public static string XmlToString(XElement xml)
-        {
-            //remove all formatting, for clean xml as string
-            return xml.ToString(SaveOptions.DisableFormatting);
-        }
-
-
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
@@ -17,7 +14,7 @@ namespace API
     /// <summary>
     /// A collection of general tools used by API
     /// </summary>
-    public static class Tools
+    public static class APITools
     {
 
         /// <summary>

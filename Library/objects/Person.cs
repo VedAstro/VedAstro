@@ -6,7 +6,7 @@ namespace Genso.Astrology.Library
     /// <summary>
     /// Simple data type to contain a person's details
     /// </summary>
-    public struct Person
+    public struct Person : IToXml
     {
         private readonly string _name;
         private readonly Gender _gender;
@@ -82,18 +82,28 @@ namespace Genso.Astrology.Library
             var person = new XElement("Person");
             var name = new XElement("Name", this.GetName());
             var gender = new XElement("Gender", this.GetGender().ToString());
-            var birthTime = new XElement("BirthTime", this.GetBirthDateTime().ToXML());
+            var birthTime = new XElement("BirthTime", this.GetBirthDateTime().ToXml());
 
             person.Add(name, gender, birthTime);
 
             return person;
         }
 
-        public static Person FromXml(XElement root)
+        /// <summary>
+        /// The root element is expected to be Person
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
+
+            
+        /// <summary>
+        /// The root element is expected to be Person
+        /// </summary>
+        public static Person FromXml(XElement personXml)
         {
-            var name = root.Element("Name")?.Value;
-            var time = Time.FromXML(root.Element("BirthTime")?.Element("Time"));
-            var gender = Enum.Parse<Gender>(root.Element("Gender")?.Value);
+            var name = personXml.Element("Name")?.Value;
+            var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
+            var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
 
             var parsedPerson = new Person(name, time, gender);
 

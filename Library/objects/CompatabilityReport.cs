@@ -7,7 +7,7 @@ namespace Genso.Astrology.Library.Compatibility
     /// <summary>
     /// Represents the final data generated for compatibility
     /// </summary>
-    public class CompatibilityReport
+    public class CompatibilityReport : IToXml
     {
         public List<CompatibilityPrediction> PredictionList { get; set; }
 
@@ -22,7 +22,7 @@ namespace Genso.Astrology.Library.Compatibility
         /// Converts the instance data into XML
         /// Used for transmitting across net
         /// </summary>
-        public XElement ToXML()
+        public XElement ToXml()
         {
             //create root tag to hold data
             var compatibilityReport = new XElement("CompatibilityReport");
@@ -31,7 +31,7 @@ namespace Genso.Astrology.Library.Compatibility
             var kutaScore = new XElement("KutaScore", this.KutaScore);
             var male = new XElement("Male", Male.ToXml());
             var female = new XElement("Female", Female.ToXml());
-            var predictionList = PredictionListToXML(this.PredictionList);
+            var predictionList = PredictionListToXml(this.PredictionList);
 
             //add in the data
             compatibilityReport.Add(kutaScore,male, female, predictionList);
@@ -40,7 +40,7 @@ namespace Genso.Astrology.Library.Compatibility
 
         }
 
-        private XElement PredictionListToXML(List<CompatibilityPrediction> predictionList)
+        private XElement PredictionListToXml(List<CompatibilityPrediction> predictionList)
         {
             //create root tag to hold data
             var predictionListXml = new XElement("PredictionList");
@@ -48,11 +48,18 @@ namespace Genso.Astrology.Library.Compatibility
             //convert each prediction to XML and add it in
             foreach (var prediction in predictionList)
             {
-                predictionListXml.Add(prediction.ToXML());
+                predictionListXml.Add(prediction.ToXml());
             }
 
             return predictionListXml;
         }
+
+        /// <summary>
+        /// The root element is expected to be Person
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
+
 
         public static CompatibilityReport FromXml(XElement compatibilityReportXml)
         {

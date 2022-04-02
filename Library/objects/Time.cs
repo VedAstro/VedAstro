@@ -5,8 +5,8 @@ using System.Xml.Linq;
 namespace Genso.Astrology.Library
 {
     //Time : Instance of Time
-
-    public interface ITime
+    //TODO MARK FOR DELETION
+    internal interface ITime
     {
         //string ToStdTimeFormat();
         //string ToLmtTimeFormat();//11:59 30/12/2018 +02:00
@@ -24,7 +24,7 @@ namespace Genso.Astrology.Library
     /// IMMUTABLE CLASS
     /// </summary>
     [Serializable()]
-    public struct Time : ITime
+    public struct Time : ITime, IToXml
     {
         //FIELDS
         private readonly DateTimeOffset _stdTime;
@@ -185,7 +185,65 @@ namespace Genso.Astrology.Library
             return _geoLocation;
         }
 
+        public string GetLmtDateTimeOffsetText()
+        {
+            //convert internal STD time to LMT
+            var lmtTime = StdToLmt(_stdTime, _geoLocation.GetLongitude());
 
+            //create LMT time string based on formatting info
+            var lmtTimeString = lmtTime.ToString(FormatInfo);
+
+            //return time string caller
+            return lmtTimeString;
+        }
+
+        public XElement ToXml()
+        {
+            var timeHoler = new XElement("Time");
+            var timeString = this.GetStdDateTimeOffsetText();
+            var timeValue = new XElement("StdTime", timeString);
+            var location = this.GetGeoLocation().ToXml();
+
+            timeHoler.Add(timeValue, location);
+
+            return timeHoler;
+        }
+        /// <summary>
+        /// The root element is expected to be name of Type
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+
+        /// <summary>
+        /// The root element is expected to be name of Type
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
+
+        /// <summary>
+        /// Note: Root element must be named Time
+        /// </summary>
+        public static Time FromXml(XElement timeXmlElement)
+        {
+            var timeString = timeXmlElement.Element("StdTime").Value ?? "00:00 01/01/2000 +08:00";
+            var locationXml = timeXmlElement.Element("Location");
+            var stdDateTime = DateTimeOffset.ParseExact(timeString, Time.GetDateTimeFormat(), null);
+            var geoLocation = GeoLocation.FromXml(locationXml);
+
+            var parsedTime = new Time(stdDateTime, geoLocation);
+
+            return parsedTime;
+        }
+
+        /// <summary>
+        /// Gets the Time now in current system, needs location
+        /// </summary>
+        public static Time Now(GeoLocation geoLocation)
+        {
+            //get standard time now
+            var stdTimeNow = DateTimeOffset.Now;
+
+            return new Time(stdTimeNow, geoLocation);
+        }
 
 
         //PRIVATE METHODS
@@ -232,17 +290,6 @@ namespace Genso.Astrology.Library
             return offsetToReturn;
         }
 
-        public string GetLmtDateTimeOffsetText()
-        {
-            //convert internal STD time to LMT
-            var lmtTime = StdToLmt(_stdTime, _geoLocation.GetLongitude());
-
-            //create LMT time string based on formatting info
-            var lmtTimeString = lmtTime.ToString(FormatInfo);
-
-            //return time string caller
-            return lmtTimeString;
-        }
 
         /// <summary>
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
@@ -306,38 +353,6 @@ namespace Genso.Astrology.Library
         }
 
 
-        public XElement ToXML()
-        {
-            var timeHoler = new XElement("Time");
-            var timeString = this.GetStdDateTimeOffsetText();
-            var timeValue = new XElement("StdTime", timeString);
-            var location = this.GetGeoLocation().ToXml();
-
-            timeHoler.Add(timeValue, location);
-
-            return timeHoler;
-        }
-        public static Time FromXML(XElement root)
-        {
-            var timeString = root.Element("StdTime")?.Value;
-            var locationXml = root.Element("Location");
-            var stdDateTime = DateTimeOffset.ParseExact(timeString, Time.GetDateTimeFormat(), null);
-            var geoLocation = GeoLocation.FromXml(locationXml);
-
-            var parsedTime = new Time(stdDateTime, geoLocation);
-
-            return parsedTime;
-        }
-
-        /// <summary>
-        /// Gets the Time now in current system, needs location
-        /// </summary>
-        public static Time Now(GeoLocation geoLocation)
-        {
-            //get standard time now
-            var stdTimeNow = DateTimeOffset.Now;
-
-            return new Time(stdTimeNow, geoLocation);
-        }
+       
     }
 }

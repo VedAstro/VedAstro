@@ -30,7 +30,7 @@ namespace Horoscope.Desktop
             List<EventData> eventDataList = new List<EventData>();
 
             //get all the raw event data into a list
-            var rawEventDataList = eventDataListFile.getAllRecords();
+            var rawEventDataList = eventDataListFile.GetAllRecords();
 
             //parse each raw event data in list
             foreach (var eventData in rawEventDataList)
@@ -112,7 +112,7 @@ namespace Horoscope.Desktop
             var eventDataList = new List<Person>();
 
             //get all the raw person data into a list
-            var rawPersonList = personListFile.getAllRecords();
+            var rawPersonList = personListFile.GetAllRecords();
 
             //parse each raw person data in list
             foreach (var personXml in rawPersonList)

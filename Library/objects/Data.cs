@@ -17,9 +17,9 @@ namespace Genso.Astrology.Library
         private IEnumerable<XElement> _allRecords;
 
         //mark which data underlying type is used (default is false)
-        private bool fileType = false;
-        private bool blobType = false;
-        private bool readOnly = false; //if marked data cannot be edited, if violated raises alarm
+        private bool _fileType = false;
+        private bool _blobType = false;
+        private bool _readOnly = false; //if marked data cannot be edited, if violated raises alarm
 
         /// <summary>
         /// Used when initializing from Azure functions, files in blob
@@ -36,7 +36,7 @@ namespace Genso.Astrology.Library
             _allRecords = _document.Root.Elements();
 
             //underlying type is blob
-            blobType = true;
+            _blobType = true;
 
         }
 
@@ -52,10 +52,10 @@ namespace Genso.Astrology.Library
             _allRecords = _document.Root.Elements();
 
             //underlying type is blob
-            blobType = true;
+            _blobType = true;
 
             //since no write stream, enable read only access
-            readOnly = true;
+            _readOnly = true;
         }
 
 
@@ -74,7 +74,7 @@ namespace Genso.Astrology.Library
             _allRecords = _document.Root.Elements();
 
             //underlying type is file
-            fileType = true;
+            _fileType = true;
         }
 
 
@@ -85,7 +85,7 @@ namespace Genso.Astrology.Library
         /// Gets the value of a data by its element name in the specified Type
         /// </summary>
         /// TODO 1 Possibly via generics can make method return list or single values or no value
-        public T getValue<T>(string elementName)
+        public T GetValue<T>(string elementName)
         {
             //get elements with matching name
             var foundElements =
@@ -107,7 +107,7 @@ namespace Genso.Astrology.Library
 
         }
 
-        public Stream getStream()
+        public Stream GetStream()
         {
             Stream stream = new MemoryStream();
             _document.Save(stream);
@@ -119,7 +119,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets the record by its name & its value
         /// </summary>
-        public XElement getRecord(string elementName, string elementValue)
+        public XElement GetRecord(string elementName, string elementValue)
         {
             //find record with matching child
             var foundElements =
@@ -137,7 +137,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets the record by its name
         /// </summary>
-        public XElement getRecord(string elementName)
+        public XElement GetRecord(string elementName)
         {
             //find record with name
             var foundElements =
@@ -156,10 +156,10 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Check if an element with matching name & value exits
         /// </summary>
-        public bool isExist(string elementName, string elementValue)
+        public bool IsExist(string elementName, string elementValue)
         {
             //try to look for element
-            var found = getRecord(elementName, elementValue);
+            var found = GetRecord(elementName, elementValue);
 
             //if none is found, no element exist
             return found != null;
@@ -168,15 +168,15 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Inserts record into XML document
         /// </summary>set
-        public void insertRecord(XElement record)
+        public void InsertRecord(XElement record)
         {
-            if (readOnly) { throw new InvalidOperationException("Data is read-only!"); }
+            if (_readOnly) { throw new InvalidOperationException("Data is read-only!"); }
 
             //add new record to the document
             _document.Root.Add(record);
 
             //save changes underlying file
-            updateUnderlyingFile();
+            UpdateUnderlyingFile();
 
         }
 
@@ -208,9 +208,9 @@ namespace Genso.Astrology.Library
         /// TODO can be improved with expereminetation
         /// NOTE : make sure update underlying file method is called after calling this method
         /// </summary>
-        public void deleteRecord(XElement record)
+        public void DeleteRecord(XElement record)
         {
-            if (readOnly) { throw new InvalidOperationException("Data is read-only!"); }
+            if (_readOnly) { throw new InvalidOperationException("Data is read-only!"); }
 
             //remove node from document
             record.Remove();
@@ -228,14 +228,14 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets all records in list
         /// </summary>
-        public IEnumerable<XElement> getAllRecords() => _allRecords;
+        public IEnumerable<XElement> GetAllRecords() => _allRecords;
 
         /// <summary>
         /// Updates an already existing record by name of record
         /// </summary>
-        public void updateRecord(string name, string value)
+        public void UpdateRecord(string name, string value)
         {
-            if (readOnly) { throw new InvalidOperationException("Data is read-only!"); }
+            if (_readOnly) { throw new InvalidOperationException("Data is read-only!"); }
 
             //get the record that needs to be updated
             var foundRecords = from record in _allRecords
@@ -252,7 +252,7 @@ namespace Genso.Astrology.Library
             element.Value = value;
 
             //save changes underlying file
-            updateUnderlyingFile();
+            UpdateUnderlyingFile();
 
             return;
         }
@@ -263,15 +263,15 @@ namespace Genso.Astrology.Library
         /// Save changes underlying XML file
         /// based on underlying file type save data accordingly
         /// </summary>
-        public void updateUnderlyingFile()
+        public void UpdateUnderlyingFile()
         {
-            if (readOnly) { throw new InvalidOperationException("Data is read-only!"); }
+            if (_readOnly) { throw new InvalidOperationException("Data is read-only!"); }
 
-            if (blobType)
+            if (_blobType)
             {
                 _document.Save(_writeStream, SaveOptions.None);
             }
-            else if (fileType)
+            else if (_fileType)
             {
                 _document.Save(_filePath);
             }

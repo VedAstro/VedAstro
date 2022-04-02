@@ -3,7 +3,8 @@ using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
-    public interface IGeoLocation
+    //TODO MARKED FOR DELETION, LOOKS LIKE A REMANENT OF A GONE CODING DESIGN
+    internal interface IGeoLocation
     {
         string GetName();
         double GetLongitude();
@@ -13,7 +14,7 @@ namespace Genso.Astrology.Library
 
     //IMMUTABLE CLASS
     [Serializable()]
-    public struct GeoLocation : IGeoLocation
+    public struct GeoLocation : IGeoLocation, IToXml
     {
         //FIELDS
         private readonly string _name;
@@ -91,6 +92,13 @@ namespace Genso.Astrology.Library
 
             return locationHolder;
         }
+
+        /// <summary>
+        /// The root element is expected to be name of Type
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
+
         public static GeoLocation FromXml(XElement root)
         {
             var name = root.Element("Name")?.Value;

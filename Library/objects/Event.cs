@@ -1,8 +1,11 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
-    public class Event : IHasName
+    public class Event : IHasName, IToXml
     {
         //FIELDS
         private readonly EventName _name;
@@ -113,5 +116,96 @@ namespace Genso.Astrology.Library
 
             return (int)difference.TotalMinutes;
         }
-    }
+
+
+        /// <summary>
+        /// The root element is expected to be Person
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
+
+
+        /// <summary>
+        /// Convert an XML representation of Event to an Event instance
+        /// Accepts both 1 XML Event and a list of XML events placed in 1 "Root" element
+        /// But always returns a list
+        /// </summary>
+        public static List<Event> FromXml(XElement resultsRaw)
+        {
+            var returnList = new List<Event>();
+
+            //first find out if it's 1 or list
+            var firstElementName = resultsRaw.Name.LocalName;
+            var isList = firstElementName == "Root";
+
+            Console.WriteLine("FINE HERE");
+
+            if (isList)
+            {
+                //parse as list
+                foreach (var eventXml in resultsRaw.Elements())
+                {
+                    returnList.Add(XmlToEvent(eventXml));
+                }
+
+            }
+            //else it is only 1 event xml
+            else
+            {
+                returnList.Add(XmlToEvent(resultsRaw));
+            }
+
+
+            return returnList;
+
+
+            //FUNCTIONS
+
+            //convert 1 event xml to instance
+            Event XmlToEvent(XElement eventXml)
+            {
+
+                var nameXml = eventXml.Element("Name")?.Element(typeof(EventName).FullName);
+                var name =  Enum.Parse<EventName>(nameXml.Value);
+
+                var natureXml = eventXml.Element("Nature")?.Element(typeof(EventNature).FullName);
+                var nature = Enum.Parse<EventNature>(natureXml.Value);
+
+                var descriptionXml = eventXml.Element("Description")?.Element(typeof(String).FullName);
+                var description = descriptionXml.Value;
+                
+                var startTimeXml = eventXml.Element("StartTime").Element("Time");
+                var startTime = Time.FromXml(startTimeXml);
+
+                var endTimeXml = eventXml.Element("EndTime").Element("Time");
+                var endTime = Time.FromXml(endTimeXml);
+
+
+                var parsedPerson = new Event( name,  nature,  description,  startTime,  endTime);
+
+                return parsedPerson;
+
+            }
+        }
+
+
+        /// <summary>
+        /// converts the current instance of Event to its XML version
+        /// </summary>
+        public XElement ToXml()
+        {
+            var eventXml = new XElement("Event");
+            var nameXml = new XElement("Name", Tools.AnyTypeToXml(this.Name));
+            var natureXml = new XElement("Nature", Tools.AnyTypeToXml(this.Nature));
+            var descriptionXml = new XElement("Description", Tools.AnyTypeToXml(this.Description));
+            var startTimeXml = new XElement("StartTime", Tools.AnyTypeToXml(this.StartTime));
+            var endTimeXml = new XElement("EndTime", Tools.AnyTypeToXml(this.EndTime));
+
+            eventXml.Add(nameXml, descriptionXml, natureXml, startTimeXml, endTimeXml);
+
+            return eventXml;
+
+        }
+
+}
 }

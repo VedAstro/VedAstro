@@ -1,0 +1,71 @@
+﻿@using Genso.Astrology.Library
+
+
+
+<h3>DasaViewBox</h3>
+
+@if (@EventList != null)
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            @*        <tr>
+                @foreach (var _event in EventList)
+                {
+                <th scope="col">Name</th>
+                }
+                </tr>
+            *@
+        </thead>
+        <tbody>
+            @*Time Span Row*@
+            <tr>
+                @foreach (var _event in EventList)
+                {
+                    <td>@_event.StartTime.GetStdDateTimeOffset().Year.ToString()</td>
+                }
+            </tr>
+            @*Planet Dasa Row*@
+            <tr>
+                @foreach (var _event in EventList)
+                {
+                    <td>@_event.FormattedName</td>
+                }
+            </tr>
+            @*Person Age Row*@
+            <tr>
+                @foreach (var _event in EventList)
+                {
+                    <td>@GetPersonAge(_event.StartTime, Person)</td>
+                }
+            </tr>
+
+        </tbody>
+    </table>
+
+}
+else
+{
+    <LoadingMessage Show="true" />
+}
+
+
+@code {
+
+    [Parameter]
+    public List<Event>? EventList { get; set; }
+
+    [Parameter]
+    public Person Person { get; set; }
+
+
+    private string GetPersonAge(Time currentTime, Person person)
+    {
+
+        var difference = currentTime.Subtract(person.GetBirthDateTime());
+
+        var years = (difference.Days / 365);
+
+        return years.ToString();
+    }
+
+}

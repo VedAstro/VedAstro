@@ -1,0 +1,38 @@
+﻿@page "/muhurtha"
+@using Genso.Astrology.Library
+@using System.Diagnostics
+
+
+<PageTitle>Muhurtha</PageTitle>
+
+<DasaViewBox EventList="@dasaEvents" />
+
+
+@code {
+
+    List<Event> dasaEvents;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetDasaEventsFromApi();
+    }
+
+    private async Task GetDasaEventsFromApi()
+    {
+
+        var location = new GeoLocation("Ipoh", 101, 4.59); //todo check if change in location changes much
+
+        var birthTime = new Time(DateTimeOffset.ParseExact("23:33 19/03/1989 +08:00", Time.GetDateTimeFormat(), null), location);
+        var startTime = new Time(DateTimeOffset.ParseExact("00:00 01/02/2022 +08:00", Time.GetDateTimeFormat(), null), location);
+        var endTime = new Time(DateTimeOffset.ParseExact("23:59 01/02/2022 +08:00", Time.GetDateTimeFormat(), null), location);
+
+        var tag = EventTag.Dasa;
+        double precision = 0.5;
+        var person = new Person("Male", birthTime, Gender.Male);
+
+        //get events from API server
+        dasaEvents = await ServerManager.GetEvents(startTime, endTime, location, person, tag, precision);
+
+    }
+
+}

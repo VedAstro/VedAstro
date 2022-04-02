@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
@@ -114,5 +116,22 @@ namespace Genso.Astrology.Library
             return !(left == right);
         }
 
+        public static EventData ToXml(XElement eventData)
+        {
+            //extract the individual data out & convert it to the correct type
+            var nameString = eventData.Element("Name").Value;
+            Enum.TryParse(nameString, out EventName name);
+            var natureString = eventData.Element("Nature").Value;
+            Enum.TryParse(natureString, out EventNature nature);
+            var description = eventData.Element("Description").Value;
+            var tagString = eventData.Element("Tag").Value;
+            var tagList = Tools.StringToEventTagList(tagString);
+            var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
+
+            //place the data into an event data structure
+            var eventX = new EventData(name, nature, description, tagList, calculatorMethod);
+
+            return eventX;
+        }
     }
 }

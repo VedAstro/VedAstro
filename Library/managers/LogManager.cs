@@ -138,7 +138,7 @@ namespace Genso.Astrology.Library
                 );
 
                 //place new record into the log list
-                LogFile.insertRecord(newRecord);
+                LogFile.InsertRecord(newRecord);
 
                 void ExtractDataFromException()
                 {
@@ -199,7 +199,7 @@ namespace Genso.Astrology.Library
                 );
 
                 //place new record into the log list
-                LogFile.insertRecord(newRecord);
+                LogFile.InsertRecord(newRecord);
 
             }
         }
@@ -233,7 +233,7 @@ namespace Genso.Astrology.Library
                 );
 
                 //place new record into the log list
-                LogFile.insertRecord(newRecord);
+                LogFile.InsertRecord(newRecord);
             }
         }
 

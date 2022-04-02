@@ -60,7 +60,7 @@ else
     CompatibilityReport? _report = null; //when needs to be show before init
 
     //generate the report
-    protected override async Task OnInitializedAsync() => _report = await ServerManager.GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
+    protected override async Task OnInitializedAsync() => _report = await GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
 
     private static string GetNatureColor(EventNature nature)
     {
@@ -75,6 +75,25 @@ else
         }
     }
     private static string GetScoreColor(double score) => score > 50 ? "Green" : "Red";
+
+
+    /// <summary>
+    /// Gets CompatibilityReport from API server
+    /// </summary>
+    private static async Task<CompatibilityReport?> GetCompatibilityReport(string male, string female)
+    {
+    //prepare request to API server
+        var url = $"{ServerManager.GetMatchReportAPI}?male={male}&female={female}";
+
+    //get report from server
+        var matchReportXml = await ServerManager.ReadFromServer(url);
+
+    //parse report 
+        var matchReport = CompatibilityReport.FromXml(matchReportXml);
+
+    //return parsed report to caller
+        return matchReport;
+    }
 
 
 }

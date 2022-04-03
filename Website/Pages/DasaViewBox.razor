@@ -18,16 +18,17 @@
         white-space: nowrap;
     }
 
-    .dasaRow {
+    .dasaRow, .yearRow, .ageRow  {
+        height: 21.5px !important;
     }
 
     .yearRow, .ageRow {
         font-size: x-small;
+        
     }
 
     #DasaViewHolder {
-        width: 720px;
-        height: 80px;
+        height: 100px;
         overflow: overlay;
         text-align: center;
         color: ivory;
@@ -66,7 +67,7 @@
                     @if (_globalVariable.SystemTimeNow.Year == GetPersonYear(age, Person))
                     {
                         <div style="width: @GetWidth(1)px; background-color:crimson; " 
-                             class="yearRow border @BorderColorClass">
+                             class="yearRow @BorderColorClass">
                             @GetPersonYear(age, Person)
                         </div>
 
@@ -74,7 +75,7 @@
                     else
                     {
                         <div style="width: @GetWidth(1)px; background-color: coral; " 
-                             class="yearRow border @BorderColorClass">
+                             class="yearRow @BorderColorClass">
                             @GetPersonYear(age, Person)
                         </div>
                     }
@@ -86,7 +87,7 @@
                 @foreach (var _event in EventList)
                 {
                     <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;  background-color: @GetEventColor(_event);"
-                         class="dasaRow border @BorderColorClass"
+                         class="dasaRow @BorderColorClass"
                          title="@_event.Description">
                         @_event.FormattedName
                     </div>
@@ -98,7 +99,7 @@
                 @for (var year = 0; year <= 120; year++)
                 {
                     <div style="width: @GetWidth(1)px; background-color: coral; "
-                         class="ageRow border @BorderColorClass">
+                         class="ageRow @BorderColorClass">
                         @year
                     </div>
                 }
@@ -107,13 +108,9 @@
     </div>
 
 }
-else
-{
-    <LoadingMessage Show="true" />
-}
 
 
-@code {
+    @code {
 
     [Parameter]
     public List<Event>? EventList { get; set; }
@@ -199,7 +196,7 @@ else
 
     }
 
-    public string BorderColorClass => "border-dark border-1";
+    public string BorderColorClass => "border border-dark border-1";
 
 }
 

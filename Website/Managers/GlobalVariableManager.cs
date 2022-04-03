@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Website.Pages;
 using Website.Shared;
 
 namespace Website
@@ -9,6 +10,8 @@ namespace Website
     /// </summary>
     public class GlobalVariableManager
     {
+        public LoadingMessage loadingMessage { get; set; }
+
 
         /// <summary>
         /// This instance is referencing the AlertMessage located in MainLayout

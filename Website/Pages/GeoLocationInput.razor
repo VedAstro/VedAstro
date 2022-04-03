@@ -10,7 +10,6 @@
 @inject LocationService LocationService
 
 
-<LoadingMessage @ref="_loadingMessage"></LoadingMessage>
 
 <div class="form-group">
     <div class="row">
@@ -32,7 +31,6 @@
 
 
 @code {
-    private LoadingMessage _loadingMessage { get; set; }
     private string _locationName = DefaultLocationCountry;
     private double _longitude = 103.82;
     private double _latitude = 1.352;
@@ -104,12 +102,12 @@
     private async Task OnLocationNameUpdated(FocusEventArgs obj)
     {
         //show loading to user
-        _loadingMessage.Open();
+        _globalVariable.loadingMessage.Open();
 
         await SetCoordinatesFromNameInput();
 
         //hide loading from user
-        _loadingMessage.Close();
+        _globalVariable.loadingMessage.Close();
 
     }
 

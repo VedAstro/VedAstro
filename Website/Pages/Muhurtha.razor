@@ -1,7 +1,7 @@
 ﻿@page "/muhurtha"
 @using Genso.Astrology.Library
 @using Tools = Genso.Astrology.Library.Tools
-
+@inject GlobalVariableManager _globalVariable
 
 <PageTitle>Muhurtha</PageTitle>
 
@@ -22,11 +22,15 @@
         <button type="submit" @onclick="GetDasaEventsFromApi" class="btn btn-primary">Submit</button>
     </div>
 }
+else
+{
+    <LoadingMessage Show="true"/>
+}
+
 
 @if (_isResultReady)
 {
-    <DasaViewBox EventList="@_dasaEvents" Person="@SelectedPerson"/>
-
+    <DasaViewBox EventList="@_dasaEvents" Person="@SelectedPerson" />
 }
 
 
@@ -52,6 +56,8 @@
 
     private async Task GetDasaEventsFromApi()
     {
+        //show loading message
+        _globalVariable.loadingMessage.Open();
 
         //get person instance from string name
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName);
@@ -66,14 +72,18 @@
         var dasaEventsUnsorted = await ServerManager.GetEvents(SelectedPerson.GetBirthDateTime(), _120yearsFromBirth, location, SelectedPerson, tag, precision);
 
         //sort the list by time before sending view
-        var orderByAscResult = from s in dasaEventsUnsorted
-                               orderby s.StartTime.GetStdDateTimeOffset() ascending
-                               select s;
+        var orderByAscResult = from dasaEvent in dasaEventsUnsorted
+                               orderby dasaEvent.StartTime.GetStdDateTimeOffset() ascending
+                               select dasaEvent;
 
         //send sorted events to view
         _dasaEvents = orderByAscResult.ToList();
 
         _isResultReady = true;
+
+        //show loading message
+        _globalVariable.loadingMessage.Close();
+
     }
 
 

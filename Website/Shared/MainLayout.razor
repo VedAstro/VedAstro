@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-
 @inject GlobalVariableManager _globalVariable;
 
 
@@ -7,7 +6,10 @@
     <div class="sidebar">
         <NavMenu />
     </div>
-   @* this is where global variable alert message gets created*@
+    @* this is where global loading message gets created*@
+    <Website.Pages.LoadingMessage @ref="_globalVariable.loadingMessage"/>
+
+    @* this is where global variable alert message gets created*@
     <AlertMessage @ref="_globalVariable.Alert"/>
     <main>
         <div class="top-row px-4">

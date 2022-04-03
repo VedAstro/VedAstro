@@ -17,10 +17,11 @@
     }
 
     .dasaRow {
-        background-color:aqua;
+        background-color: aqua;
     }
+
     .yearRow, .ageRow {
-        font-size: x-small; 
+        font-size: x-small;
     }
 
     #DasaViewHolder {
@@ -30,6 +31,17 @@
         text-align: center;
     }
 
+    .DasaViewHeaderItems {
+        font-size: small;
+        text-align: center;
+        width: 42px;
+        font-weight: bold;
+        
+    }
+    #MainHolder {
+        display: flex;
+    }
+
 </style>
 
 
@@ -37,46 +49,53 @@
 
 @if (@EventList != null)
 {
-
-    <div id="DasaViewHolder" style="">
-        @*Time Span Row*@
-        <div class="parent-div">
-         @for (var age = 0; age <= 120; age++)
-            {
-                //this is to make current year stand out as "Now"
-                @if (_globalVariable.SystemTimeNow.Year == GetPersonYear(age, Person))
-                {
-                    <div style="width: @GetWidth(1)px; background-color:crimson; " class="yearRow border border-secondary">
-                        @GetPersonYear(age, Person)
-                    </div>
-
-                }
-                else
-                {
-                    <div style="width: @GetWidth(1)px; background-color: coral; " class="yearRow border border-secondary">
-                        @GetPersonYear(age, Person)
-                    </div>
-                }
-            }
+    <div id="MainHolder">
+        <div id="">
+            <div class="DasaViewHeaderItems border border-primary">Year</div>
+            <div class="DasaViewHeaderItems border border-primary">Dasa</div>
+            <div class="DasaViewHeaderItems border border-primary">Age</div>
 
         </div>
-        @*Planet Dasa Row*@
-        <div class="parent-div">
-            @foreach (var _event in EventList)
-            {
-                <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;" class="dasaRow border border-secondary">
-                    @_event.FormattedName
-                </div>
-            }
-        </div>
-        @*Person Age Row*@
-        <div class="parent-div">
-            @for (var year = 0; year <= 120; year++)
-            {
-                <div style="width: @GetWidth(1)px; background-color: coral; " class="ageRow border border-secondary">
-                    @year
-                </div>
-            }
+        <div id="DasaViewHolder">
+            @*Time Span Row*@
+            <div class="parent-div">
+                @for (var age = 0; age <= 120; age++)
+                {
+                    //this is to make current year stand out as "Now"
+                    @if (_globalVariable.SystemTimeNow.Year == GetPersonYear(age, Person))
+                    {
+                        <div style="width: @GetWidth(1)px; background-color:crimson; " class="yearRow border border-secondary">
+                            @GetPersonYear(age, Person)
+                        </div>
+
+                    }
+                    else
+                    {
+                        <div style="width: @GetWidth(1)px; background-color: coral; " class="yearRow border border-secondary">
+                            @GetPersonYear(age, Person)
+                        </div>
+                    }
+                }
+
+            </div>
+            @*Planet Dasa Row*@
+            <div class="parent-div">
+                @foreach (var _event in EventList)
+                {
+                    <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;" class="dasaRow border border-secondary">
+                        @_event.FormattedName
+                    </div>
+                }
+            </div>
+            @*Person Age Row*@
+            <div class="parent-div">
+                @for (var year = 0; year <= 120; year++)
+                {
+                    <div style="width: @GetWidth(1)px; background-color: coral; " class="ageRow border border-secondary">
+                        @year
+                    </div>
+                }
+            </div>
         </div>
     </div>
 
@@ -99,10 +118,10 @@ else
 
     private string GetPersonAge(Time currentTime, Person person)
     {
-@*        var currentTimeYear = currentTime.GetStdDateTimeOffset().Year;
-        var birthTimeYear = person.GetBirthDateTime().GetStdDateTimeOffset().Year;
-        var yearDifference = currentTimeYear - birthTimeYear;
-*@
+        @*        var currentTimeYear = currentTime.GetStdDateTimeOffset().Year;
+            var birthTimeYear = person.GetBirthDateTime().GetStdDateTimeOffset().Year;
+            var yearDifference = currentTimeYear - birthTimeYear;
+        *@
 
         var difference = currentTime.Subtract(person.GetBirthDateTime());
 

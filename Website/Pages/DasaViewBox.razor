@@ -1,6 +1,9 @@
 ﻿@using Genso.Astrology.Library
 @using Tools = Genso.Astrology.Library.Tools
 
+@inject GlobalVariableManager _globalVariable;
+
+
 <style>
     .parent-div {
         display: flex;
@@ -14,11 +17,17 @@
     }
 
     .dasaRow {
-        font-size: large;
         background-color:aqua;
     }
     .yearRow, .ageRow {
         font-size: x-small; 
+    }
+
+    #DasaViewHolder {
+        width: 720px;
+        height: 80px;
+        overflow: overlay;
+        text-align: center;
     }
 
 </style>
@@ -29,20 +38,25 @@
 @if (@EventList != null)
 {
 
-    <div style="text-align: center;">
+    <div id="DasaViewHolder" style="">
         @*Time Span Row*@
         <div class="parent-div">
-@*            @foreach (var _event in EventList)
+         @for (var age = 0; age <= 120; age++)
             {
-                <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px; background-color:cornflowerblue;" class="border border-secondary">
-                    @_event.StartTime.GetStdDateTimeOffset().Year.ToString()
-                </div>
-            }
-*@            @for (var age = 0; age <= 120; age++)
-            {
-                <div style="width: @GetWidth(1)px; background-color: coral; " class="yearRow border border-secondary">
-                   @GetPersonYear(age, Person)
-                </div>
+                //this is to make current year stand out as "Now"
+                @if (_globalVariable.SystemTimeNow.Year == GetPersonYear(age, Person))
+                {
+                    <div style="width: @GetWidth(1)px; background-color:crimson; " class="yearRow border border-secondary">
+                        @GetPersonYear(age, Person)
+                    </div>
+
+                }
+                else
+                {
+                    <div style="width: @GetWidth(1)px; background-color: coral; " class="yearRow border border-secondary">
+                        @GetPersonYear(age, Person)
+                    </div>
+                }
             }
 
         </div>

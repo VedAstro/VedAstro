@@ -5,6 +5,7 @@
 @inject IJSRuntime JSRuntime
 
 
+
 <style>
     .parent-div {
         display: flex;
@@ -18,7 +19,6 @@
     }
 
     .dasaRow {
-        background-color: aqua;
     }
 
     .yearRow, .ageRow {
@@ -30,6 +30,7 @@
         height: 80px;
         overflow: overlay;
         text-align: center;
+        color: ivory;
     }
 
     .DasaViewHeaderItems {
@@ -37,16 +38,15 @@
         text-align: center;
         width: 42px;
         font-weight: bold;
-        
     }
+
     #MainHolder {
         display: flex;
+        margin-top: 27px;
     }
-
+    
 </style>
 
-
-<h3>DasaViewBox</h3>
 
 @if (@EventList != null)
 {
@@ -65,14 +65,16 @@
                     //this is to make current year stand out as "Now"
                     @if (_globalVariable.SystemTimeNow.Year == GetPersonYear(age, Person))
                     {
-                        <div style="width: @GetWidth(1)px; background-color:crimson; " class="yearRow border border-secondary">
+                        <div style="width: @GetWidth(1)px; background-color:crimson; " 
+                             class="yearRow border @BorderColorClass">
                             @GetPersonYear(age, Person)
                         </div>
 
                     }
                     else
                     {
-                        <div style="width: @GetWidth(1)px; background-color: coral; " class="yearRow border border-secondary">
+                        <div style="width: @GetWidth(1)px; background-color: coral; " 
+                             class="yearRow border @BorderColorClass">
                             @GetPersonYear(age, Person)
                         </div>
                     }
@@ -83,16 +85,20 @@
             <div class="parent-div">
                 @foreach (var _event in EventList)
                 {
-                    <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;" class="dasaRow border border-secondary">
+                    <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;  background-color: @GetEventColor(_event);"
+                         class="dasaRow border @BorderColorClass"
+                         title="@_event.Description">
                         @_event.FormattedName
                     </div>
+
                 }
             </div>
             @*Person Age Row*@
             <div class="parent-div">
                 @for (var year = 0; year <= 120; year++)
                 {
-                    <div style="width: @GetWidth(1)px; background-color: coral; " class="ageRow border border-secondary">
+                    <div style="width: @GetWidth(1)px; background-color: coral; "
+                         class="ageRow border @BorderColorClass">
                         @year
                     </div>
                 }
@@ -124,14 +130,14 @@ else
     {
 
         //update view holder width when page width changes
-        var newViewHolderWidth =  await GetViewHolderWidth();
+        var newViewHolderWidth = await GetViewHolderWidth();
         if (ViewHolderWidth != newViewHolderWidth)
         {
             ViewHolderWidth = newViewHolderWidth;
             this.StateHasChanged();
         }
 
-        
+
     }
 
     private string GetPersonAge(Time currentTime, Person person)
@@ -167,6 +173,33 @@ else
         return (int)finalWidth;
     }
 
+
+    /// <summary>
+    /// Get dasa color based on nature
+    /// </summary>
+    private string GetEventColor(Event _event)
+    {
+        var colorId = "";
+
+        //set color id based on nature
+        switch (_event.GetNature())
+        {
+            case EventNature.Good:
+                colorId = "green";
+                break;
+            case EventNature.Neutral:
+                colorId = "";
+                break;
+            case EventNature.Bad:
+                colorId = "red";
+                break;
+        }
+
+        return colorId;
+
+    }
+
+    public string BorderColorClass => "border-dark border-1";
 
 }
 

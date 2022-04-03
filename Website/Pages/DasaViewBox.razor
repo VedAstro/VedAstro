@@ -2,6 +2,7 @@
 @using Tools = Genso.Astrology.Library.Tools
 
 @inject GlobalVariableManager _globalVariable;
+@inject IJSRuntime JSRuntime
 
 
 <style>
@@ -56,7 +57,7 @@
             <div class="DasaViewHeaderItems border border-primary">Age</div>
 
         </div>
-        <div id="DasaViewHolder">
+        <div id="DasaViewHolder" style="width: @(ViewHolderWidth)px">
             @*Time Span Row*@
             <div class="parent-div">
                 @for (var age = 0; age <= 120; age++)
@@ -114,15 +115,27 @@ else
     [Parameter]
     public Person Person { get; set; }
 
+    public int ViewHolderWidth { get; set; }
+
+
     const double PixelPerYear = 30;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        //update view holder width when page width changes
+        var newViewHolderWidth =  await GetViewHolderWidth();
+        if (ViewHolderWidth != newViewHolderWidth)
+        {
+            ViewHolderWidth = newViewHolderWidth;
+            this.StateHasChanged();
+        }
+
+        
+    }
 
     private string GetPersonAge(Time currentTime, Person person)
     {
-        @*        var currentTimeYear = currentTime.GetStdDateTimeOffset().Year;
-            var birthTimeYear = person.GetBirthDateTime().GetStdDateTimeOffset().Year;
-            var yearDifference = currentTimeYear - birthTimeYear;
-        *@
-
         var difference = currentTime.Subtract(person.GetBirthDateTime());
 
         var years = (difference.Days / 365);
@@ -138,4 +151,23 @@ else
 
     private int GetPersonYear(int age, Person person) => person.GetBirthDateTime().GetStdDateTimeOffset().Year + age;
 
+    /// <summary>
+    /// Because width page changes view box width should change proportionately
+    /// </summary>
+    private async Task<int> GetViewHolderWidth()
+    {
+        //get width of the article element that holds view
+        var windowWidth = await JSRuntime.InvokeAsync<int>("getWindowInnerWidth");
+        Console.WriteLine($"window :{ windowWidth}");
+
+        //use a portion of the article width as view box's width
+        var finalWidth = windowWidth * 0.80; //80% of width
+
+        //remove decimals
+        return (int)finalWidth;
+    }
+
+
 }
+
+

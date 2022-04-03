@@ -2,7 +2,7 @@
 @using Tools = Genso.Astrology.Library.Tools
 
 @inject GlobalVariableManager _globalVariable;
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime _jsRuntime
 
 
 
@@ -18,17 +18,16 @@
         white-space: nowrap;
     }
 
-    .dasaRow, .yearRow, .ageRow  {
-        height: 21.5px !important;
-    }
-
+    /*    .dasaRow, .yearRow, .ageRow {
+                        height: 21.5px !important;
+                    }
+                */
     .yearRow, .ageRow {
         font-size: x-small;
-        
     }
 
     #DasaViewHolder {
-        height: 100px;
+        height: 200px;
         overflow: overlay;
         text-align: center;
         color: ivory;
@@ -45,11 +44,10 @@
         display: flex;
         margin-top: 27px;
     }
-    
 </style>
 
 
-@if (@EventList != null)
+@if (_isPageReady)
 {
     <div id="MainHolder">
         <div id="">
@@ -64,19 +62,19 @@
                 @for (var age = 0; age <= 120; age++)
                 {
                     //this is to make current year stand out as "Now"
-                    @if (_globalVariable.SystemTimeNow.Year == GetPersonYear(age, Person))
+                    @if (_globalVariable.SystemTimeNow.Year == GetYearFromPersonAge(age, Person))
                     {
-                        <div style="width: @GetWidth(1)px; background-color:crimson; " 
-                             class="yearRow @BorderColorClass">
-                            @GetPersonYear(age, Person)
+                        <div style="width: @GetWidth(1)px; background-color:crimson; "
+                 class="yearRow @BorderClass">
+                            @GetYearFromPersonAge(age, Person)
                         </div>
 
                     }
                     else
                     {
-                        <div style="width: @GetWidth(1)px; background-color: coral; " 
-                             class="yearRow @BorderColorClass">
-                            @GetPersonYear(age, Person)
+                        <div style="width: @GetWidth(1)px; background-color: coral; "
+                 class="yearRow @BorderClass">
+                            @GetYearFromPersonAge(age, Person)
                         </div>
                     }
                 }
@@ -84,11 +82,23 @@
             </div>
             @*Planet Dasa Row*@
             <div class="parent-div">
-                @foreach (var _event in EventList)
+                @foreach (var _event in DasaEventList)
                 {
                     <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;  background-color: @GetEventColor(_event);"
-                         class="dasaRow @BorderColorClass"
-                         title="@_event.Description">
+                 class="dasaRow @BorderClass"
+                 title="@_event.Description">
+                        @_event.FormattedName
+                    </div>
+
+                }
+            </div>
+            @*Planet Bhukti Row*@
+            <div class="parent-div">
+                @foreach (var _event in BhuktiEventList)
+                {
+                    <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;  background-color: @GetEventColor(_event);"
+                 class="dasaRow @BorderClass"
+                 title="@_event.Description">
                         @_event.FormattedName
                     </div>
 
@@ -99,7 +109,7 @@
                 @for (var year = 0; year <= 120; year++)
                 {
                     <div style="width: @GetWidth(1)px; background-color: coral; "
-                         class="ageRow @BorderColorClass">
+                 class="ageRow @BorderClass">
                         @year
                     </div>
                 }
@@ -110,18 +120,31 @@
 }
 
 
-    @code {
+@code {
+    public string BorderClass => "border border-dark border-1";
 
-    [Parameter]
-    public List<Event>? EventList { get; set; }
+    private List<Event>? DasaEventList { get; set; }
+
+    private List<Event>? BhuktiEventList { get; set; }
 
     [Parameter]
     public Person Person { get; set; }
 
+    [Parameter]
+    public GeoLocation Location { get; set; }
+
     public int ViewHolderWidth { get; set; }
+
+    private bool _isPageReady = false; //marks if the page ready to loaded
 
 
     const double PixelPerYear = 30;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateLocalEventListFromApi();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -152,7 +175,7 @@
     private double GetWidth(double years) => System.Math.Round((years * PixelPerYear), 1);
 
 
-    private int GetPersonYear(int age, Person person) => person.GetBirthDateTime().GetStdDateTimeOffset().Year + age;
+    private int GetYearFromPersonAge(int age, Person person) => person.GetBirthDateTime().GetStdDateTimeOffset().Year + age;
 
     /// <summary>
     /// Because width page changes view box width should change proportionately
@@ -160,7 +183,7 @@
     private async Task<int> GetViewHolderWidth()
     {
         //get width of the article element that holds view
-        var windowWidth = await JSRuntime.InvokeAsync<int>("getWindowInnerWidth");
+        var windowWidth = await _jsRuntime.InvokeAsync<int>("getWindowInnerWidth");
         Console.WriteLine($"window :{ windowWidth}");
 
         //use a portion of the article width as view box's width
@@ -196,7 +219,68 @@
 
     }
 
-    public string BorderColorClass => "border border-dark border-1";
+
+    private async Task UpdateLocalEventListFromApi()
+    {
+        //show loading message
+        _globalVariable.loadingMessage.Open();
+
+
+        //update the list from the new data gotten
+        DasaEventList = await getDasaEvents();
+        BhuktiEventList = await getBhuktiEvents();
+
+        _isPageReady = true;
+
+        //show loading message
+        _globalVariable.loadingMessage.Close();
+
+        //FUNCTIONS
+
+        //method sets custom properties
+        async Task<List<Event>> getDasaEvents()
+        {
+            var tag = EventTag.Dasa;
+            var precision = Tools.DaysToHours(14);
+
+            return await getEvents(tag, precision);
+        }
+
+        //method that sets some properties
+        async Task<List<Event>> getBhuktiEvents()
+        {
+            var tag = EventTag.Bhukti;
+            var precision = Tools.DaysToHours(7);
+
+            return await getEvents(tag, precision);
+        }
+
+        //the underlying method that does the work
+        async Task<List<Event>> getEvents(EventTag tag, double precision)
+        {
+            //prep data
+            var startTime = Person.GetBirthDateTime(); //start time is birth time
+            var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
+
+            //get events from API server
+            var dasaEventsUnsorted =
+                await ServerManager.GetEvents(
+                    startTime,
+                    endTime,
+                    Location,
+                    Person,
+                    tag,
+                    precision);
+
+            //sort the list by time before sending view
+            var orderByAscResult = from dasaEvent in dasaEventsUnsorted
+                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset() ascending
+                                   select dasaEvent;
+
+            //send sorted events to view
+            return orderByAscResult.ToList();
+        }
+    }
 
 }
 

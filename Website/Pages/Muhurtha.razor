@@ -19,19 +19,18 @@
         </select>
     </div>
     <div style="margin-top: 50px" class="row">
-        <button type="submit" @onclick="GetDasaEventsFromApi" class="btn btn-primary">Submit</button>
+        <button type="submit" @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
     </div>
 }
 else
 {
-    <LoadingMessage Show="true"/>
+    <LoadingMessage Show="true" />
 }
-
-
 @if (_isResultReady)
 {
-    <DasaViewBox EventList="@_dasaEvents" Person="@SelectedPerson" />
+    <DasaViewBox Person="@SelectedPerson" Location="@SelectedLocation" />
 }
+
 
 
 @code {
@@ -39,6 +38,7 @@ else
     public List<Person> PersonList { get; set; } //data from URL not necessary provided
     public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
+    public GeoLocation SelectedLocation { get; set; }
     List<Event> _dasaEvents;
     private bool _isPageReady = false; //marks if the page ready to loaded
     private bool _isResultReady = false; //marks if the page ready to loaded
@@ -54,36 +54,15 @@ else
 
     }
 
-    private async Task GetDasaEventsFromApi()
+    private void OnClickCalculate()
     {
-        //show loading message
-        _globalVariable.loadingMessage.Open();
 
-        //get person instance from string name
-        SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName);
+        //get data from inputs and save it for use by other components
+        SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
+        SelectedLocation = new GeoLocation("Ipoh", 101, 4.59);//todo get real location
 
-        var location = new GeoLocation("Ipoh", 101, 4.59); //todo check if change in location changes much
-
-        var tag = EventTag.Dasa;
-        double precision = Tools.DaysToHours(7);
-
-        //get events from API server
-        var _120yearsFromBirth = SelectedPerson.GetBirthDateTime().AddYears(120);
-        var dasaEventsUnsorted = await ServerManager.GetEvents(SelectedPerson.GetBirthDateTime(), _120yearsFromBirth, location, SelectedPerson, tag, precision);
-
-        //sort the list by time before sending view
-        var orderByAscResult = from dasaEvent in dasaEventsUnsorted
-                               orderby dasaEvent.StartTime.GetStdDateTimeOffset() ascending
-                               select dasaEvent;
-
-        //send sorted events to view
-        _dasaEvents = orderByAscResult.ToList();
-
+        //mark page as ready to show results
         _isResultReady = true;
-
-        //show loading message
-        _globalVariable.loadingMessage.Close();
-
     }
 
 

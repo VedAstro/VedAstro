@@ -18,11 +18,7 @@
         white-space: nowrap;
     }
 
-    /*    .dasaRow, .yearRow, .ageRow {
-                            height: 21.5px !important;
-                        }
-                    */
-    .yearRow, .ageRow {
+    #BhuktiRow, .yearRow, .ageRow {
         font-size: x-small;
     }
 
@@ -30,6 +26,7 @@
         text-align: center;
         color: ivory;
         z-index: 1;
+        cursor: pointer;
     }
 
     .DasaViewHeaderItems {
@@ -50,9 +47,9 @@
         height: 200px;
     }
 
-    #container1 > * {
-        position: absolute;
-    }
+        #container1 > * {
+            position: absolute;
+        }
 
     #NowLine {
         background-color: red;
@@ -66,14 +63,17 @@
 
 @if (_isPageReady)
 {
+    <button @onclick="OnClickZoomIn" class="btn btn-primary">Zoom +</button>
+    <button @onclick="OnClickZoomOut" class="btn btn-primary">Zoom -</button>
+
     <div id="MainHolder">
         <div id="">
             <div class="DasaViewHeaderItems border border-primary">Year</div>
             <div class="DasaViewHeaderItems border border-primary">Dasa</div>
             <div class="DasaViewHeaderItems border border-primary">Age</div>
         </div>
-        <div id="container1"  style="width: @(ViewHolderWidth)px">
-            <div id="DasaViewHolder">
+        <div id="container1" style="width: @(ViewHolderWidth)px">
+            <div @onmousewheel="OnMouseWheelInDasaView" id="DasaViewHolder">
                 @*Time Span Row*@
                 <div class="parent-div">
                     @for (var age = 0; age <= 120; age++)
@@ -82,7 +82,7 @@
                         @if (_globalVariable.SystemTimeNow.Year == GetYearFromPersonAge(age, Person))
                         {
                             <div style="width: @GetWidth(1)px; background-color:crimson; "
-                                 class="yearRow @BorderClass">
+                     class="yearRow @BorderClass">
                                 @GetYearFromPersonAge(age, Person)
                             </div>
 
@@ -90,32 +90,31 @@
                         else
                         {
                             <div style="width: @GetWidth(1)px; background-color: coral; "
-                                 class="yearRow @BorderClass">
+                     class="yearRow @BorderClass">
                                 @GetYearFromPersonAge(age, Person)
                             </div>
                         }
                     }
-
                 </div>
                 @*Planet Dasa Row*@
-                <div class="parent-div">
+                <div id="DasaRow" class="parent-div">
                     @foreach (var _event in DasaEventList)
                     {
                         <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;  background-color: @GetEventColor(_event);"
-                             class="dasaRow @BorderClass"
-                             title="@_event.Description">
+                     class="dasaRow @BorderClass"
+                     title="@_event.Description">
                             @_event.FormattedName
                         </div>
 
                     }
                 </div>
                 @*Planet Bhukti Row*@
-                <div class="parent-div">
+                <div id="BhuktiRow" class="parent-div">
                     @foreach (var _event in BhuktiEventList)
                     {
                         <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;  background-color: @GetEventColor(_event);"
-                             class="dasaRow @BorderClass"
-                             title="@_event.Description">
+                     class="dasaRow @BorderClass"
+                     title="@_event.Description">
                             @_event.FormattedName
                         </div>
 
@@ -126,7 +125,7 @@
                     @for (var year = 0; year <= 120; year++)
                     {
                         <div style="width: @GetWidth(1)px; background-color: coral; "
-                             class="ageRow @BorderClass">
+                     class="ageRow @BorderClass">
                             @year
                         </div>
                     }
@@ -140,7 +139,10 @@
 
 
 @code {
-    public string BorderClass => "border border-dark border-1";
+    public string BorderClass => "border-top border-end border-dark border-1";
+
+    //the number of pixel zoomed in at a time
+    private const int ZoomSpeedInPx = 10;
 
     private List<Event>? DasaEventList { get; set; }
 
@@ -157,12 +159,16 @@
     private bool _isPageReady = false; //marks if the page ready to loaded
 
 
-    const double PixelPerYear = 30;
+    private double PixelPerYear { get; set; }
+    private double PixelPerDay => PixelPerYear / 360.0;
 
 
     protected override async Task OnInitializedAsync()
     {
-        await UpdateLocalEventListFromApi();
+        //set default values here
+        PixelPerYear = 50.0;
+
+        await RefreshData();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -181,15 +187,17 @@
     /// <summary>
     /// Get the number of years (double) the person is now
     /// </summary>
-    private double GetPersonAgeInYearsNow(Person person)
+    private double GetPersonAgeInDaysNow(Person person)
     {
         var currentTime = Time.Now(person.GetBirthLocation());
 
         var difference = currentTime.Subtract(person.GetBirthDateTime());
 
-        var years = (difference.TotalDays / 365.0);
+        var days = difference.TotalDays;
 
-        return years;
+        // Console.WriteLine($"GetPersonAgeInYearsNow {days}");
+
+        return days;
     }
 
     /// <summary>
@@ -207,7 +215,7 @@
     {
         //get width of the article element that holds view
         var windowWidth = await _jsRuntime.InvokeAsync<int>("getWindowInnerWidth");
-        Console.WriteLine($"window :{ windowWidth}");
+        //Console.WriteLine($"window :{ windowWidth}");
 
         //use a portion of the article width as view box's width
         var finalWidth = windowWidth * 0.80; //80% of width
@@ -243,8 +251,10 @@
     }
 
 
-    private async Task UpdateLocalEventListFromApi()
+    public async Task RefreshData()
     {
+        _isPageReady = false;
+
         //show loading message
         _globalVariable.loadingMessage.Open();
 
@@ -254,6 +264,8 @@
         BhuktiEventList = await getBhuktiEvents();
 
         _isPageReady = true;
+
+        this.StateHasChanged();
 
         //show loading message
         _globalVariable.loadingMessage.Close();
@@ -309,7 +321,52 @@
     /// Gets the px distance NowLine should be from Left side
     /// Distance is based on current age
     /// </summary>
-    private double GetNowLinePosition() => Math.Round(GetPersonAgeInYearsNow(Person) * PixelPerYear,2);
+    private double GetNowLinePosition()
+    {
+        var personAgeDays = GetPersonAgeInDaysNow(Person) * PixelPerDay;
+        //Console.WriteLine($"GetNowLinePosition {personAgeDays}");
+        return personAgeDays;
+    }
+
+    public void DataHasChanged()
+    {
+        Console.WriteLine("DataHasChanged called!!");
+        this.StateHasChanged();
+    }
+
+    #region EVENT HANDLERS
+
+    private void OnClickZoomIn(MouseEventArgs obj)
+    {
+        PixelPerYear += ZoomSpeedInPx;
+        this.StateHasChanged();
+    }
+    private void OnClickZoomOut(MouseEventArgs obj)
+    {
+        PixelPerYear -= ZoomSpeedInPx;
+        this.StateHasChanged();
+    }
+
+    private void OnMouseWheelInDasaView(WheelEventArgs obj)
+    {
+        //only continue if SHIFT is pressed
+        if (!obj.ShiftKey) { return; }
+
+
+        if (obj.DeltaY > 0)
+        {
+            OnClickZoomOut(null);
+
+        }
+        if (obj.DeltaY < 0)
+        {
+            OnClickZoomIn(null);
+        }
+    }
+
+
+    #endregion
+
 
 }
 

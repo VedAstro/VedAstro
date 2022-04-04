@@ -28,13 +28,15 @@ else
 }
 @if (_isResultReady)
 {
-    <DasaViewBox Person="@SelectedPerson" Location="@SelectedLocation" />
+    <DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />
 }
 
 
 
 @code {
 
+
+    private DasaViewBox _dasaViewBox;
     public List<Person> PersonList { get; set; } //data from URL not necessary provided
     public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
@@ -54,15 +56,21 @@ else
 
     }
 
-    private void OnClickCalculate()
+    private async Task OnClickCalculate()
     {
 
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
         SelectedLocation = new GeoLocation("Ipoh", 101, 4.59);//todo get real location
 
+        //update view box when clicked 2nd time
+        if (_dasaViewBox != null){await _dasaViewBox.RefreshData();}
+
         //mark page as ready to show results
         _isResultReady = true;
+
+
+        this.StateHasChanged();
     }
 
 

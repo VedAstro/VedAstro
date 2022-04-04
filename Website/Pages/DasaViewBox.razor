@@ -75,7 +75,7 @@
             <div class="DasaViewHeaderItems border border-primary">Age</div>
         </div>
         <div @ref="_scrollContainer" id="container1" style="width: @(ViewHolderWidth)px">
-            <div @onmousewheel="OnMouseWheelInDasaView" id="DasaViewHolder">
+            <div @ref="_dasaViewHolder" @onmousewheel="OnMouseWheelInDasaView" id="DasaViewHolder">
                 @*Person Age Row*@
                 <div class="parent-div">
                     @for (var year = 0; year <= 120; year++)
@@ -142,6 +142,7 @@
     double _dasaEventsPrecision = Tools.DaysToHours(14);
     double _bhuktiEventsPrecision = Tools.DaysToHours(14);
 
+    private ElementReference _dasaViewHolder;
     private ElementReference _scrollContainer;
 
     public string BorderClass => "border-top border-end border-dark border-1";
@@ -277,7 +278,7 @@
 
         _globalVariable?.loadingMessage?.Close();
 
-         StateHasChanged();
+        StateHasChanged();
 
         //FUNCTIONS
 
@@ -352,33 +353,41 @@
         //only continue if SHIFT is pressed
         if (!obj.ShiftKey) { return; }
 
-        //get scroll position before zoom
-        var oldScrollPos = await _jsRuntime.InvokeAsync<double>("getElementScrollLeft", _scrollContainer);
-        var oldScrollWidth = await _jsRuntime.InvokeAsync<double>("getElementScrollWidth", _scrollContainer);
-        var oldScrollRatio = oldScrollPos / oldScrollWidth;
+        //get old width of dasa view holder before zoom
+        var oldHolderWidth = await _jsRuntime.InvokeAsync<double>("getElementWidth", _dasaViewHolder);
+        Console.WriteLine($"oldHolderWidth {oldHolderWidth}");
 
-        Console.WriteLine($"oldScrollRatio {oldScrollRatio}");
 
-        double newScrollPos = 0;
+        double dif = 0;
 
         //Zoom out
         if (obj.DeltaY > 0)
         {
             //make the zoom, which changes scroll position
             OnClickZoomOut(null);
+            dif -= 200;
         }
 
         //Zoom in
         if (obj.DeltaY < 0)
         {
             OnClickZoomIn(null);
+            dif += 200;
         }
 
-        Console.WriteLine($"CS:oldScrollPos{oldScrollPos}");
+        this.StateHasChanged();
 
-        //change scroll position back, compensate for width changes via ratios
-        var currentScrollWidth = await _jsRuntime.InvokeAsync<double>("getElementScrollWidth", _scrollContainer);
-        newScrollPos += oldScrollRatio * currentScrollWidth;
+        //get old width of dasa view holder before zoom
+        var newHolderWidth = await _jsRuntime.InvokeAsync<double>("getElementWidth", _dasaViewHolder);
+        Console.WriteLine($"newHolderWidth {newHolderWidth}");
+
+        //var dif = newHolderWidth - oldHolderWidth;
+        Console.WriteLine($"dif {dif}");
+
+        var currentScrollLeft = await _jsRuntime.InvokeAsync<double>("getElementScrollLeft", _scrollContainer);
+        var newScrollPos = currentScrollLeft + dif;
+        Console.WriteLine($"newScrollPos {newScrollPos}");
+
         await _jsRuntime.InvokeVoidAsync("setElementScrollLeft", _scrollContainer, newScrollPos);
 
     }

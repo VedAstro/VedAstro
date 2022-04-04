@@ -1,6 +1,6 @@
-window.getBoundingClientRect = function (element, parm) {
-    console.log("Hello world!");
-    return element.getBoundingClientRect();
+window.getElementWidth = function (element, parm) {
+    console.log(`JS : getElementWidth : ${element.offsetWidth}`);
+    return element.offsetWidth;
 };
 
 window.getWindowInnerWidth = function () {
@@ -8,17 +8,13 @@ window.getWindowInnerWidth = function () {
 };
 
 window.scrollElementLeft = function (element, parm) {
-    console.log("JS : scrollLeft");
-
     element.scrollLeft += 500;
-    console.log(`JS : ${element.scrollLeft}`);
-
+    console.log(`JS : scrollElementLeft : ${element.scrollLeft}`);
 };
 
 
 window.getElementScrollLeft = function (element, parm) {
-    console.log("JS : getElementScrollLeft");
-    console.log(`JS: scrollWidth : ${element.scrollWidth}`);
+    console.log(`JS: getElementScrollLeft : ${element.scrollLeft}`);
     return element.scrollLeft;
 };
 
@@ -27,8 +23,7 @@ window.getElementScrollWidth = function (element, parm) {
 };
 
 window.setElementScrollLeft = function (element, parm) {
-    console.log("JS : setElementScrollLeft");
     element.scrollLeft = parm;
-    console.log(`JS: newScrollPos : ${element.scrollLeft}`);
+    console.log(`JS: setElementScrollLeft : ${element.scrollLeft}`);
 
 };

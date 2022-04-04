@@ -23,6 +23,7 @@
     private string _modalDisplay = "none;";
     private string _modalClass = "";
     private bool _showBackdrop = false;
+    private bool _isOpen = false;
 
     /// <summary>
     /// If true shows the page
@@ -34,8 +35,8 @@
         get => throw new NotImplementedException();
         set
         {
-            if (value){ Open();}
-            else{ Close(); }
+            if (value) { Open(); }
+            else { Close(); }
         }
     }
 
@@ -44,10 +45,14 @@
     /// </summary>
     public void Open()
     {
+        //if already open end here
+        //if (_isOpen) { return; }
+        Console.WriteLine("LoadingMessage.Open");
         _modalDisplay = "block;";
         _modalClass = "show";
         _showBackdrop = true;
-        StateHasChanged();
+        _isOpen = true;
+        StateHasChanged(); //doesn't display without this
     }
 
     /// <summary>
@@ -55,9 +60,13 @@
     /// </summary>
     public void Close()
     {
+        //if already close end here
+        //if (!_isOpen) { return; }
+        Console.WriteLine("LoadingMessage.Close");
         _modalDisplay = "none";
         _modalClass = "";
         _showBackdrop = false;
-        StateHasChanged();
+        _isOpen = false;
+        StateHasChanged(); //doesn't display without this
     }
 }

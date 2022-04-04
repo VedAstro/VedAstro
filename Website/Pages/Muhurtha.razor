@@ -1,7 +1,10 @@
 ﻿@page "/muhurtha"
 @using Genso.Astrology.Library
-@using Tools = Genso.Astrology.Library.Tools
-@inject GlobalVariableManager _globalVariable
+
+<style>
+
+</style>
+
 
 <PageTitle>Muhurtha</PageTitle>
 
@@ -22,13 +25,38 @@
         <button type="submit" @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
     </div>
 }
-else
-{
-    <LoadingMessage Show="true" />
-}
+
 @if (_isResultReady)
 {
+
     <DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />
+
+@*
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col">
+                <PlanetInfoBox planetName="PlanetName.Sun" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+            <div class="col">
+                <PlanetInfoBox planetName="PlanetName.Moon" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+            <div class="col">
+                <PlanetInfoBox planetName="PlanetName.Mercury" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+            <div class="col">
+                <PlanetInfoBox planetName="PlanetName.Mars" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+            <div style="max-width: 219px;" class="col">
+                <PlanetInfoBox planetName="PlanetName.Jupiter" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+            <div style="max-width: 219px;" class="col">
+                <PlanetInfoBox planetName="PlanetName.Saturn" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+            <div style="max-width: 219px;" class="col">
+                <PlanetInfoBox planetName="PlanetName.Venus" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+        </div>
+    </div>*@
 }
 
 
@@ -36,7 +64,7 @@ else
 @code {
 
 
-    private DasaViewBox _dasaViewBox;
+    private DasaViewBox? _dasaViewBox;
     public List<Person> PersonList { get; set; } //data from URL not necessary provided
     public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
@@ -48,11 +76,21 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        _globalVariable.loadingMessage.Open();
+
         //get person list from api server & save it for later
         var personListRootXml = await ServerManager.ReadFromServer(ServerManager.GetPersonListAPI);
         PersonList = personListRootXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
 
         _isPageReady = true;
+
+        _globalVariable.loadingMessage.Close();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine("Muhurtha.OnAfterRenderAsync");
+
 
     }
 
@@ -63,14 +101,19 @@ else
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
         SelectedLocation = new GeoLocation("Ipoh", 101, 4.59);//todo get real location
 
-        //update view box when clicked 2nd time
-        if (_dasaViewBox != null){await _dasaViewBox.RefreshData();}
-
         //mark page as ready to show results
         _isResultReady = true;
 
+        //update view box data directly when clicked 2nd time
+        //without this update does not propagate
+        if (_dasaViewBox != null)
+        {
+            _dasaViewBox.Person = SelectedPerson;
+            _dasaViewBox.Location = SelectedLocation;
 
-        this.StateHasChanged();
+            await _dasaViewBox.RefreshData();
+        }
+
     }
 
 

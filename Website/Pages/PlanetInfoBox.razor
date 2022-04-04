@@ -1,0 +1,51 @@
+﻿@using Genso.Astrology.Library
+
+@if (_isPageReady)
+{
+    { _globalVariable.loadingMessage.Close(); };
+
+    <ul class="list-group">
+        <li class="list-group-item active" aria-current="true">@planetName.ToString()</li>
+        <li class="list-group-item">ShadbalaPinda : @_shadbalaPinda</li>
+        <li class="list-group-item">A third item</li>
+        <li class="list-group-item">A fourth item</li>
+        <li class="list-group-item">And a fifth one</li>
+    </ul>
+}
+else
+{
+    { _globalVariable.loadingMessage.Open(); };
+}
+
+
+@code {
+    [Parameter]
+    public Time time { get; set; }
+    [Parameter]
+    public PlanetName planetName { get; set; }
+    private bool _isPageReady = false; //marks if the page ready to loaded
+
+    private double _shadbalaPinda;
+
+
+
+    protected override Task OnInitializedAsync()
+    {
+
+        UpdateData();
+
+        return base.OnInitializedAsync();
+    }
+
+    public void UpdateData()
+    {
+        _globalVariable.loadingMessage.Open();
+
+        //get planet Strength
+        _shadbalaPinda = AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, time).ToDouble();
+
+        _globalVariable.loadingMessage.Close();
+
+    }
+
+}

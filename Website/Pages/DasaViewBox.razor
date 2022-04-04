@@ -1,8 +1,6 @@
 ﻿@using Genso.Astrology.Library
 @using Tools = Genso.Astrology.Library.Tools
 
-@inject GlobalVariableManager _globalVariable;
-@inject IJSRuntime _jsRuntime
 
 
 
@@ -113,7 +111,7 @@
                 <div id="DasaRow" class="parent-div">
                     @foreach (var _event in DasaEventList)
                     {
-                        <div style="width: @YearsToWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
+                        <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
                      class="dasaRow @BorderClass"
                      title="@_event.Description">
                             @_event.FormattedName
@@ -136,11 +134,13 @@
             <div id="NowLine" style="left: @(GetNowLinePosition())px"></div>
         </div>
     </div>
-
 }
 
 
 @code {
+
+    double _dasaEventsPrecision = Tools.DaysToHours(14);
+    double _bhuktiEventsPrecision = Tools.DaysToHours(14);
 
     private ElementReference _scrollContainer;
 
@@ -149,9 +149,9 @@
     //the number of pixel zoomed in at a time
     private const int ZoomSpeedInPx = 5;
 
-    private List<Event>? DasaEventList { get; set; }
+    private List<Event> DasaEventList { get; set; }
 
-    private List<Event>? BhuktiEventList { get; set; }
+    private List<Event> BhuktiEventList { get; set; }
 
     [Parameter]
     public Person Person { get; set; }
@@ -159,7 +159,7 @@
     [Parameter]
     public GeoLocation Location { get; set; }
 
-    public int ViewHolderWidth { get; set; }
+    private int ViewHolderWidth { get; set; }
 
     private bool _isPageReady = false; //marks if the page ready to loaded
 
@@ -170,10 +170,13 @@
 
     protected override async Task OnInitializedAsync()
     {
+
         //set default values here
         PixelPerYear = 50.0;
 
         await RefreshData();
+
+
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -262,11 +265,9 @@
 
     public async Task RefreshData()
     {
+        _globalVariable?.loadingMessage?.Open();
+
         _isPageReady = false;
-
-        //show loading message
-        _globalVariable.loadingMessage.Open();
-
 
         //update the list from the new data gotten
         DasaEventList = await getDasaEvents();
@@ -274,10 +275,9 @@
 
         _isPageReady = true;
 
-        StateHasChanged();
+        _globalVariable?.loadingMessage?.Close();
 
-        //show loading message
-        _globalVariable.loadingMessage.Close();
+         StateHasChanged();
 
         //FUNCTIONS
 
@@ -285,18 +285,16 @@
         async Task<List<Event>> getDasaEvents()
         {
             var tag = EventTag.Dasa;
-            var precision = Tools.DaysToHours(14);
 
-            return await getEvents(tag, precision);
+            return await getEvents(tag, _dasaEventsPrecision);
         }
 
         //method that sets some properties
         async Task<List<Event>> getBhuktiEvents()
         {
             var tag = EventTag.Bhukti;
-            var precision = Tools.DaysToHours(7);
 
-            return await getEvents(tag, precision);
+            return await getEvents(tag, _bhuktiEventsPrecision);
         }
 
         //the underlying method that does the work
@@ -337,11 +335,6 @@
         return personAgeDays;
     }
 
-    public void DataHasChanged()
-    {
-        Console.WriteLine("DataHasChanged called!!");
-        StateHasChanged();
-    }
 
     #region EVENT HANDLERS
 
@@ -384,7 +377,7 @@
         Console.WriteLine($"CS:oldScrollPos{oldScrollPos}");
 
         //change scroll position back, compensate for width changes via ratios
-        var currentScrollWidth =  await _jsRuntime.InvokeAsync<double>("getElementScrollWidth", _scrollContainer);
+        var currentScrollWidth = await _jsRuntime.InvokeAsync<double>("getElementScrollWidth", _scrollContainer);
         newScrollPos += oldScrollRatio * currentScrollWidth;
         await _jsRuntime.InvokeVoidAsync("setElementScrollLeft", _scrollContainer, newScrollPos);
 

@@ -22,6 +22,10 @@
         font-size: x-small;
     }
 
+    .yearRow, .ageRow {
+        background-color: #1b6ec2;
+    }
+
     #DasaViewHolder {
         text-align: center;
         color: ivory;
@@ -72,24 +76,33 @@
             <div class="DasaViewHeaderItems border border-primary">Dasa</div>
             <div class="DasaViewHeaderItems border border-primary">Age</div>
         </div>
-        <div id="container1" style="width: @(ViewHolderWidth)px">
+        <div @ref="_scrollContainer" id="container1" style="width: @(ViewHolderWidth)px">
             <div @onmousewheel="OnMouseWheelInDasaView" id="DasaViewHolder">
-                @*Time Span Row*@
+                @*Person Age Row*@
+                <div class="parent-div">
+                    @for (var year = 0; year <= 120; year++)
+                    {
+                        <div style="width: @YearsToWidth(1)px; "
+                     class="ageRow @BorderClass">
+                            @year
+                        </div>
+                    }
+                </div>
+                @*Year Span Row*@
                 <div class="parent-div">
                     @for (var age = 0; age <= 120; age++)
                     {
                         //this is to make current year stand out as "Now"
                         @if (_globalVariable.SystemTimeNow.Year == GetYearFromPersonAge(age, Person))
                         {
-                            <div style="width: @GetWidth(1)px; background-color:crimson; "
-                     class="yearRow @BorderClass">
+                            <div style="width: @YearsToWidth(1)px; background-color: crimson;" class="yearRow @BorderClass">
                                 @GetYearFromPersonAge(age, Person)
                             </div>
 
                         }
                         else
                         {
-                            <div style="width: @GetWidth(1)px; background-color: coral; "
+                            <div style="width: @YearsToWidth(1)px; "
                      class="yearRow @BorderClass">
                                 @GetYearFromPersonAge(age, Person)
                             </div>
@@ -100,7 +113,7 @@
                 <div id="DasaRow" class="parent-div">
                     @foreach (var _event in DasaEventList)
                     {
-                        <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;  background-color: @GetEventColor(_event);"
+                        <div style="width: @YearsToWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
                      class="dasaRow @BorderClass"
                      title="@_event.Description">
                             @_event.FormattedName
@@ -112,21 +125,10 @@
                 <div id="BhuktiRow" class="parent-div">
                     @foreach (var _event in BhuktiEventList)
                     {
-                        <div style="width: @GetWidth(Tools.MinutesToYears(_event.GetDurationMinutes()))px;  background-color: @GetEventColor(_event);"
+                        <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
                      class="dasaRow @BorderClass"
                      title="@_event.Description">
                             @_event.FormattedName
-                        </div>
-
-                    }
-                </div>
-                @*Person Age Row*@
-                <div class="parent-div">
-                    @for (var year = 0; year <= 120; year++)
-                    {
-                        <div style="width: @GetWidth(1)px; background-color: coral; "
-                     class="ageRow @BorderClass">
-                            @year
                         </div>
                     }
                 </div>
@@ -139,10 +141,13 @@
 
 
 @code {
+
+    private ElementReference _scrollContainer;
+
     public string BorderClass => "border-top border-end border-dark border-1";
 
     //the number of pixel zoomed in at a time
-    private const int ZoomSpeedInPx = 10;
+    private const int ZoomSpeedInPx = 5;
 
     private List<Event>? DasaEventList { get; set; }
 
@@ -179,13 +184,13 @@
         if (ViewHolderWidth != newViewHolderWidth)
         {
             ViewHolderWidth = newViewHolderWidth;
-            this.StateHasChanged();
+            StateHasChanged();
         }
 
 
     }
     /// <summary>
-    /// Get the number of years (double) the person is now
+    /// Get the number of days (double) the person is now
     /// </summary>
     private double GetPersonAgeInDaysNow(Person person)
     {
@@ -203,7 +208,11 @@
     /// <summary>
     /// Gets width of dasa events based on their duration length
     /// </summary>
-    private double GetWidth(double years) => System.Math.Round((years * PixelPerYear), 1);
+    private double YearsToWidth(double years) => Math.Round((years * PixelPerYear), 1);
+    /// <summary>
+    /// Gets width of dasa events based on their duration length
+    /// </summary>
+    private double DaysToWidth(double days) => Math.Round((days * PixelPerDay), 1);
 
 
     private int GetYearFromPersonAge(int age, Person person) => person.GetBirthDateTime().GetStdDateTimeOffset().Year + age;
@@ -265,7 +274,7 @@
 
         _isPageReady = true;
 
-        this.StateHasChanged();
+        StateHasChanged();
 
         //show loading message
         _globalVariable.loadingMessage.Close();
@@ -331,7 +340,7 @@
     public void DataHasChanged()
     {
         Console.WriteLine("DataHasChanged called!!");
-        this.StateHasChanged();
+        StateHasChanged();
     }
 
     #region EVENT HANDLERS
@@ -339,34 +348,50 @@
     private void OnClickZoomIn(MouseEventArgs obj)
     {
         PixelPerYear += ZoomSpeedInPx;
-        this.StateHasChanged();
     }
     private void OnClickZoomOut(MouseEventArgs obj)
     {
         PixelPerYear -= ZoomSpeedInPx;
-        this.StateHasChanged();
     }
 
-    private void OnMouseWheelInDasaView(WheelEventArgs obj)
+    private async Task OnMouseWheelInDasaView(WheelEventArgs obj)
     {
         //only continue if SHIFT is pressed
         if (!obj.ShiftKey) { return; }
 
+        //get scroll position before zoom
+        var oldScrollPos = await _jsRuntime.InvokeAsync<double>("getElementScrollLeft", _scrollContainer);
+        var oldScrollWidth = await _jsRuntime.InvokeAsync<double>("getElementScrollWidth", _scrollContainer);
+        var oldScrollRatio = oldScrollPos / oldScrollWidth;
 
+        Console.WriteLine($"oldScrollRatio {oldScrollRatio}");
+
+        double newScrollPos = 0;
+
+        //Zoom out
         if (obj.DeltaY > 0)
         {
+            //make the zoom, which changes scroll position
             OnClickZoomOut(null);
-
         }
+
+        //Zoom in
         if (obj.DeltaY < 0)
         {
             OnClickZoomIn(null);
         }
+
+        Console.WriteLine($"CS:oldScrollPos{oldScrollPos}");
+
+        //change scroll position back, compensate for width changes via ratios
+        var currentScrollWidth =  await _jsRuntime.InvokeAsync<double>("getElementScrollWidth", _scrollContainer);
+        newScrollPos += oldScrollRatio * currentScrollWidth;
+        await _jsRuntime.InvokeVoidAsync("setElementScrollLeft", _scrollContainer, newScrollPos);
+
     }
 
 
     #endregion
-
 
 }
 

@@ -35,7 +35,7 @@ namespace Genso.Astrology.Library
         public EventNature Nature => _nature;
         public Time StartTime => _startTime;
         public Time EndTime => _endTime;
-        public int Duration => GetDurationMinutes();
+        public double Duration => GetDurationMinutes();
 
 
 
@@ -110,11 +110,11 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets the duration of the event from start to end time
         /// </summary>
-        public int GetDurationMinutes()
+        public double GetDurationMinutes()
         {
             var difference = GetEndTime().GetStdDateTimeOffset() - GetStartTime().GetStdDateTimeOffset();
 
-            return (int)difference.TotalMinutes;
+            return difference.TotalMinutes;
         }
 
 

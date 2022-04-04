@@ -221,8 +221,10 @@ namespace Genso.Astrology.Library
         /// <returns></returns>
         public static double DaysToHours(double days) => days * 24.0;
 
-        public static double MinutesToHours(int minutes) => minutes / 60.0;
+        public static double MinutesToHours(double minutes) => minutes / 60.0;
 
-        public static double MinutesToYears(int minutes) => minutes / 525600.0;
+        public static double MinutesToYears(double minutes) => minutes / 525600.0;
+
+        public static double MinutesToDays(double minutes) => minutes / 1440.0;
     }
 }

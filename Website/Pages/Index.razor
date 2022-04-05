@@ -2,38 +2,98 @@
 
 <PageTitle>VedAstro | Vedic Astrologer</PageTitle>
 
-<h1>Vedic Astrologer</h1>
 
-<div class="container">
+<div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+    <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+        <h1 class="display-4 fw-bold lh-1">VedAstro</h1>
+        <p class="lead">A non-profit, open source project to make<br /><span class="fw-bold">Vedic Astrology</span> easily available to all.</p>
+
+        <p class="lead">
+            Planetary x-rays are unseen vibrations and they affect <br />
+            biological and psychological processes. - B.V. Raman
+        </p>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+            @*            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Tools</button>
+            *@
+            <button @onclick="OnClickSourceCodeButton" type="button" class="btn btn-primary btn-lg px-4 fw-bold">
+                <img style="height: 26px;" src="images/github.svg" />
+                Source Code
+            </button>
+            <button @onclick="OnClickDonateButton" type="button" class="btn btn-primary btn-lg px-4 fw-bold">
+                <img style="height: 26px;" src="images/donate-icon.svg" />
+                Donate
+            </button>
+        </div>
+    </div>
+    <div style="height: 340px;" class="col-lg-4 offset-lg-1 p-0 overflow-hidden">
+        <img class="rounded-lg-3" src="images/zodiac-wheel.png" alt="" width="720">
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Match</h5>
+                    <p class="card-text">Check marriage compatibility between horoscopes</p>
+                    <a href="match" class="btn btn-primary">Check Match</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Muhurtha</h5>
+                    <p class="card-text">Find a good time for auspicious events</p>
+                    <a href="muhurtha" class="btn btn-primary">Find Muhurtha</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Horoscope</h5>
+                    <p class="card-text">Read predictions based on your birth chart</p>
+                    <a href="horoscope" class="btn btn-primary">Read Horoscope</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 
-<div class="row">
-    <div class="col-sm">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Match</h5>
-                <p class="card-text">Check marriage compatibility between horoscopes</p>
-                <a href="match" class="btn btn-primary">Check Match</a>
-            </div>
-        </div>
+
+
+@code {
+
+    private void OnClickSourceCodeButton() => _navigation.NavigateTo("https://github.com/gen-so/Genso.Astrology");
+    private void OnClickDonateButton() => _navigation.NavigateTo("/donate");
+
+}
+
+
+@*
+    We're always looking to add more features and tools that will be helpful to people.
+    So if you got idea for a feature share it here.
+
+    This website is under active development, if you spot a bug or spelling mistake. Report it here.
+
+    <div class="p-5 mb-4 bg-light rounded-3">
+    <div class="container-fluid py-5">
+    <h1 class="display-5 fw-bold">VedAstro</h1>
+    <p class="col-md-8 fs-4">
+    A non-profit, open source project to make <br\> <span class="fw-bold">Vedic Astrology</span> easily available to all.
+    </p>
+    <button class="btn btn-primary btn-lg" type="button">Example button</button>
     </div>
-    <div class="col-sm">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Muhurtha</h5>
-                <p class="card-text">Find a good time for auspicious events</p>
-                <a href="muhurtha" class="btn btn-primary">Find Muhurtha</a>
-            </div>
-        </div>
     </div>
-    <div class="col-sm">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Horoscope</h5>
-                <p class="card-text">Read predictions based on your birth chart</p>
-                <a href="horoscope" class="btn btn-primary">Read Horoscope</a>
-            </div>
-        </div>
+
+
+    <p>
+    </p>
+
+    <div class="container">
     </div>
-</div>
+*@

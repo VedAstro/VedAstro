@@ -79,7 +79,7 @@
                     @for (var year = 0; year <= 120; year++)
                     {
                         <div style="width: @YearsToWidth(1)px; "
-                             class="ageRow @BorderClass">
+                     class="ageRow @BorderClass">
                             @year
                         </div>
                     }
@@ -99,7 +99,7 @@
                         else
                         {
                             <div style="width: @YearsToWidth(1)px; "
-                                 class="yearRow @BorderClass">
+                     class="yearRow @BorderClass">
                                 @GetYearFromPersonAge(age, Person)
                             </div>
                         }
@@ -110,8 +110,8 @@
                     @foreach (var _event in DasaEventList)
                     {
                         <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
-                             class="dasaRow @BorderClass"
-                             title="@_event.Description">
+                     class="dasaRow @BorderClass"
+                     title="@_event.Description">
                             @_event.FormattedName
                         </div>
 
@@ -122,8 +122,8 @@
                     @foreach (var _event in BhuktiEventList)
                     {
                         <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
-                             class="dasaRow @BorderClass"
-                             title="@_event.Description">
+                     class="dasaRow @BorderClass"
+                     title="@_event.Description">
                             @_event.FormattedName
                         </div>
                     }
@@ -141,20 +141,21 @@
 
 @code {
 
+    //DATA FIELDS
+
     double _dasaEventsPrecision = Tools.DaysToHours(14);
     double _bhuktiEventsPrecision = Tools.DaysToHours(14);
 
-    private ElementReference _dasaViewHolder;
-    private ElementReference _scrollContainer;
+    ElementReference _dasaViewHolder;
+    ElementReference _scrollContainer;
 
-    public string BorderClass => "border-top border-end border-dark border-1";
 
-    //the number of pixel zoomed in at a time
-    private const int ZoomSpeedInPx = 5;
 
     private List<Event> DasaEventList { get; set; }
 
     private List<Event> BhuktiEventList { get; set; }
+
+    private List<Event> AntaramEventList { get; set; }
 
     [Parameter]
     public Person Person { get; set; }
@@ -163,23 +164,31 @@
     public GeoLocation Location { get; set; }
 
     private int ViewHolderWidth { get; set; }
+    private double PixelPerYear { get; set; }
+
+
+
+    //CONSTANTS
+    const double DefaultPixelPerYear = 50.0;
+
+    //the number of pixel zoomed in at a time
+    const int ZoomSpeedInPx = 5;
+
+    private double PixelPerDay => PixelPerYear / 360.0;
 
     private bool _isPageReady = false; //marks if the page ready to loaded
 
+    public string BorderClass => "border-top border-end border-dark border-1";
 
-    private double PixelPerYear { get; set; }
-    private double PixelPerDay => PixelPerYear / 360.0;
 
+    //OVERRIDES
 
     protected override async Task OnInitializedAsync()
     {
-
         //set default values here
-        PixelPerYear = 50.0;
+        PixelPerYear = DefaultPixelPerYear;
 
         await RefreshData();
-
-
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -195,6 +204,9 @@
 
 
     }
+
+    //PRIVATE METHODS
+
     /// <summary>
     /// Get the number of days (double) the person is now
     /// </summary>
@@ -215,11 +227,11 @@
     /// Gets width of dasa events based on their duration length
     /// </summary>
     private double YearsToWidth(double years) => Math.Round((years * PixelPerYear), 1);
+
     /// <summary>
     /// Gets width of dasa events based on their duration length
     /// </summary>
     private double DaysToWidth(double days) => Math.Round((days * PixelPerDay), 1);
-
 
     private int GetYearFromPersonAge(int age, Person person) => person.GetBirthDateTime().GetStdDateTimeOffset().Year + age;
 
@@ -238,7 +250,6 @@
         //remove decimals
         return (int)finalWidth;
     }
-
 
     /// <summary>
     /// Get dasa color based on nature
@@ -262,9 +273,7 @@
         }
 
         return colorId;
-
     }
-
 
     public async Task RefreshData()
     {
@@ -339,7 +348,9 @@
     }
 
 
-    #region EVENT HANDLERS
+
+
+    //EVENT HANDLERS
 
     private void OnClickZoomIn(MouseEventArgs obj)
     {
@@ -393,9 +404,6 @@
         await _jsRuntime.InvokeVoidAsync("setElementScrollLeft", _scrollContainer, newScrollPos);
 
     }
-
-
-    #endregion
 
 }
 

@@ -31,32 +31,17 @@
 
     <DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />
 
-@*
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col">
-                <PlanetInfoBox planetName="PlanetName.Sun" time="@SelectedPerson.GetBirthDateTime()" />
-            </div>
-            <div class="col">
-                <PlanetInfoBox planetName="PlanetName.Moon" time="@SelectedPerson.GetBirthDateTime()" />
-            </div>
-            <div class="col">
-                <PlanetInfoBox planetName="PlanetName.Mercury" time="@SelectedPerson.GetBirthDateTime()" />
-            </div>
-            <div class="col">
-                <PlanetInfoBox planetName="PlanetName.Mars" time="@SelectedPerson.GetBirthDateTime()" />
-            </div>
-            <div style="max-width: 219px;" class="col">
-                <PlanetInfoBox planetName="PlanetName.Jupiter" time="@SelectedPerson.GetBirthDateTime()" />
-            </div>
-            <div style="max-width: 219px;" class="col">
-                <PlanetInfoBox planetName="PlanetName.Saturn" time="@SelectedPerson.GetBirthDateTime()" />
-            </div>
-            <div style="max-width: 219px;" class="col">
-                <PlanetInfoBox planetName="PlanetName.Venus" time="@SelectedPerson.GetBirthDateTime()" />
-            </div>
-        </div>
-    </div>*@
+    <h4 class="mt-2">Planets</h4>
+    <div class="d-flex flex-nowrap">
+        <PlanetInfoBox PlanetName="PlanetName.Sun" time="@SelectedPerson.GetBirthDateTime()" />
+        <PlanetInfoBox PlanetName="PlanetName.Moon" time="@SelectedPerson.GetBirthDateTime()" />
+        <PlanetInfoBox PlanetName="PlanetName.Mercury" time="@SelectedPerson.GetBirthDateTime()" />
+        <PlanetInfoBox PlanetName="PlanetName.Mars" time="@SelectedPerson.GetBirthDateTime()" />
+        <PlanetInfoBox PlanetName="PlanetName.Jupiter" time="@SelectedPerson.GetBirthDateTime()" />
+        <PlanetInfoBox PlanetName="PlanetName.Saturn" time="@SelectedPerson.GetBirthDateTime()" />
+        <PlanetInfoBox PlanetName="PlanetName.Venus" time="@SelectedPerson.GetBirthDateTime()" />
+    </div>
+
 }
 
 

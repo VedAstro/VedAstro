@@ -1,51 +1,45 @@
 ﻿@using Genso.Astrology.Library
 
-@if (_isPageReady)
-{
-    { _globalVariable.loadingMessage.Close(); };
 
-    <ul class="list-group">
-        <li class="list-group-item active" aria-current="true">@planetName.ToString()</li>
-        <li class="list-group-item">ShadbalaPinda : @_shadbalaPinda</li>
-        <li class="list-group-item">A third item</li>
-        <li class="list-group-item">A fourth item</li>
-        <li class="list-group-item">And a fifth one</li>
-    </ul>
-}
-else
-{
-    { _globalVariable.loadingMessage.Open(); };
-}
+<ul style="font-size: small;" class="list-group me-2 my-2">
+    <li class="list-group-item active" aria-current="true">@PlanetName.ToString()</li>
+    <li class="list-group-item">Shadbala Pinda : @_shadbalaPinda</li>
+    <li class="list-group-item">Current House : @_planetCurrentHouse</li>
+    <li class="list-group-item">Relationship with House: @_currentHouseRelation</li>
+    <li class="list-group-item">Malefic Aspect: @(_isPlanetAspectedByMaleficPlanets?"Yes":"No")</li>
+    <li class="list-group-item">Malefic Conjuct: @(_isPlanetConjunctWithMaleficPlanets?"Yes":"No")</li>
+</ul>
 
 
 @code {
     [Parameter]
     public Time time { get; set; }
     [Parameter]
-    public PlanetName planetName { get; set; }
+    public PlanetName PlanetName { get; set; }
     private bool _isPageReady = false; //marks if the page ready to loaded
 
     private double _shadbalaPinda;
+    private int _planetCurrentHouse;
+    private PlanetToSignRelationship _currentHouseRelation;
+    private bool _isPlanetAspectedByMaleficPlanets;
+    private bool _isPlanetConjunctWithMaleficPlanets;
 
 
-
-    protected override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-
         UpdateData();
-
-        return base.OnInitializedAsync();
     }
 
     public void UpdateData()
     {
-        _globalVariable.loadingMessage.Open();
-
-        //get planet Strength
-        _shadbalaPinda = AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, time).ToDouble();
-
-        _globalVariable.loadingMessage.Close();
+        //get planet details and save it for view
+        _shadbalaPinda = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName, time).ToDouble();
+        _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName);
+        _currentHouseRelation = AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, PlanetName, time);
+        _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(PlanetName, time);
+        _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(PlanetName, time);
 
     }
+
 
 }

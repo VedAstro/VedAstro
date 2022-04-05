@@ -65,8 +65,6 @@
 
 @if (_isPageReady)
 {
-    <button @onclick="OnClickZoomIn" class="btn btn-primary">Zoom +</button>
-    <button @onclick="OnClickZoomOut" class="btn btn-primary">Zoom -</button>
 
     <div id="MainHolder">
         <div id="">
@@ -81,7 +79,7 @@
                     @for (var year = 0; year <= 120; year++)
                     {
                         <div style="width: @YearsToWidth(1)px; "
-                     class="ageRow @BorderClass">
+                             class="ageRow @BorderClass">
                             @year
                         </div>
                     }
@@ -101,7 +99,7 @@
                         else
                         {
                             <div style="width: @YearsToWidth(1)px; "
-                     class="yearRow @BorderClass">
+                                 class="yearRow @BorderClass">
                                 @GetYearFromPersonAge(age, Person)
                             </div>
                         }
@@ -112,8 +110,8 @@
                     @foreach (var _event in DasaEventList)
                     {
                         <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
-                     class="dasaRow @BorderClass"
-                     title="@_event.Description">
+                             class="dasaRow @BorderClass"
+                             title="@_event.Description">
                             @_event.FormattedName
                         </div>
 
@@ -124,8 +122,8 @@
                     @foreach (var _event in BhuktiEventList)
                     {
                         <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
-                     class="dasaRow @BorderClass"
-                     title="@_event.Description">
+                             class="dasaRow @BorderClass"
+                             title="@_event.Description">
                             @_event.FormattedName
                         </div>
                     }
@@ -133,6 +131,10 @@
             </div>
             <div id="NowLine" style="left: @(GetNowLinePosition())px"></div>
         </div>
+    </div>
+    <div>
+        <button @onclick="OnClickZoomIn" class="btn btn-primary">Zoom +</button>
+        <button @onclick="OnClickZoomOut" class="btn btn-primary">Zoom -</button>
     </div>
 }
 

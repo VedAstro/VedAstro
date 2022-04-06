@@ -35,12 +35,6 @@
     </div>
 
 }
-else
-{
-    //show loading message if page not yet loaded
-    <LoadingMessage Show="true"/>
-}
-
 
 @code {
 
@@ -56,6 +50,11 @@ else
     protected override async Task OnInitializedAsync()
     {
 
+        //while loading not ready wait here
+        await _globalVariable.WaitTillComponentReady();
+
+        await _globalVariable.LoadingMessage.Show();
+
         //get male list from api server & save it for later
         var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetMaleListAPI);
         MaleList = rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
@@ -65,6 +64,8 @@ else
         FemaleList = rawFemaleListXml.Elements().Select(femaleXml => Person.FromXml(femaleXml)).ToList();
 
         _pageReady = true;
+
+        await _globalVariable.LoadingMessage.Hide();
 
     }
 

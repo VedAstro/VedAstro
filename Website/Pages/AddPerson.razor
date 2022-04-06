@@ -67,17 +67,25 @@
     Person _newPerson;
     bool _showPersonAddedSuccessAlert = false; //default, alert is not shown
 
-
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        await _globalVariable.WaitTillComponentReady();
+        await _globalVariable.LoadingMessage.Show();
+
         //auto fill time zone based on system time
         _timezoneInput = DateTimeOffset.Now.ToString("zzz");
+
     }
+
+    //hide the loading message that was open in init
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await _globalVariable.LoadingMessage.Hide();
+
 
     //sends the newly created person to API server
     private async void SubmitNewPerson()
     {
+        await _globalVariable.LoadingMessage.Show();
+
         //parse data received from user
         var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
         var fullTimeString = $"{_timeInput} {_dateInput} {_timezoneInput}";
@@ -99,8 +107,10 @@
         _showPersonAddedSuccessAlert = true;
 
         //refresh the page variables
+        //todo marked for deletion, test without = no difference > delete
         this.StateHasChanged();
 
+        await _globalVariable.LoadingMessage.Hide();
     }
 
 

@@ -61,7 +61,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _globalVariable.loadingMessage.Open();
+        //while loading not ready wait here
+        await _globalVariable.WaitTillComponentReady();
+
+        //show loading message
+        await _globalVariable.LoadingMessage.Show();
 
         //get person list from api server & save it for later
         var personListRootXml = await ServerManager.ReadFromServer(ServerManager.GetPersonListAPI);
@@ -69,18 +73,14 @@
 
         _isPageReady = true;
 
-        _globalVariable.loadingMessage.Close();
+        //hide loading message
+        await _globalVariable.LoadingMessage.Hide();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        Console.WriteLine("Muhurtha.OnAfterRenderAsync");
-
-
-    }
 
     private async Task OnClickCalculate()
     {
+        await _globalVariable.LoadingMessage.Show();
 
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only

@@ -10,7 +10,7 @@ namespace Website
     /// </summary>
     public class GlobalVariableManager
     {
-        public LoadingMessage loadingMessage { get; set; }
+        public LoadingMessage LoadingMessage { get; set; }
 
 
         /// <summary>
@@ -23,5 +23,18 @@ namespace Website
         /// </summary>
         public DateTimeOffset SystemTimeNow => DateTimeOffset.Now;
 
+        /// <summary>
+        /// Hold the control till components have been loaded
+        /// Poll time 10ms
+        /// </summary>
+        public async Task WaitTillComponentReady()
+        {
+            while (!this.LoadingMessage.PageReady)
+            {
+                Console.WriteLine("WaitForLoadingComplete");
+                await Task.Delay(10);
+            }
+
+        }
     }
 }

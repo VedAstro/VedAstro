@@ -10,9 +10,11 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 //setup for global variables (to remember state)
-builder.Services.AddScoped<GlobalVariableManager>();
+builder.Services.AddSingleton<GlobalVariableManager>();
 
 //setup for getting location from browser
 builder.Services.AddSingleton<LocationService>();
 
 await builder.Build().RunAsync();
+
+

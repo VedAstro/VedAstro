@@ -101,12 +101,12 @@
     private async Task OnLocationNameUpdated(FocusEventArgs obj)
     {
         //show loading to user
-        _globalVariable.loadingMessage.Open();
+        await _globalVariable.LoadingMessage.Show();
 
         await SetCoordinatesFromNameInput();
 
         //hide loading from user
-        _globalVariable.loadingMessage.Close();
+        await _globalVariable.LoadingMessage.Hide();
 
     }
 

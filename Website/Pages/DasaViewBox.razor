@@ -1,9 +1,6 @@
-﻿@using Genso.Astrology.Library
-@using Tools = Genso.Astrology.Library.Tools
-
-
-
-
+﻿@using Tools = Genso.Astrology.Library.Tools
+@using Genso.Astrology.Library
+@using System.Xml.Linq
 <style>
     .parent-div {
         display: flex;
@@ -16,7 +13,7 @@
         white-space: nowrap;
     }
 
-    #BhuktiRow, .yearRow, .ageRow {
+    #BhuktiRow, #AntaramRow, .yearRow, .ageRow {
         font-size: x-small;
     }
 
@@ -60,10 +57,42 @@
         z-index: 999;
         top: -19px;
     }
+
+    body {
+        height: 500vh;
+        margin: 0;
+        overflow: auto;
+    }
+
+    .cursor {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .vt {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: black;
+    }
+
+    .hl {
+        position: absolute;
+        height: 1px;
+        left: 0;
+        right: 0;
+        background: black;
+    }
 </style>
 
 
-@if (_isPageReady)
+@if (PageReady)
 {
 
     <div id="MainHolder">
@@ -128,8 +157,22 @@
                         </div>
                     }
                 </div>
+                @*Planet Antaram Row*@
+                <div id="AntaramRow" class="parent-div">
+                    @foreach (var _event in AntaramEventList)
+                    {
+                        <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
+                     class="dasaRow @BorderClass"
+                     title="@_event.Description">
+                            @_event.FormattedName
+                        </div>
+                    }
+                </div>
             </div>
             <div id="NowLine" style="left: @(GetNowLinePosition())px"></div>
+            <div class="cursor">
+                <div @ref="_verticalLine" class="vt"></div>
+            </div>
         </div>
     </div>
     <div>
@@ -145,11 +188,11 @@
 
     double _dasaEventsPrecision = Tools.DaysToHours(14);
     double _bhuktiEventsPrecision = Tools.DaysToHours(14);
+    double _antaramEventsPrecision = Tools.DaysToHours(14);
 
     ElementReference _dasaViewHolder;
     ElementReference _scrollContainer;
-
-
+    ElementReference _verticalLine;
 
     private List<Event> DasaEventList { get; set; }
 
@@ -157,15 +200,19 @@
 
     private List<Event> AntaramEventList { get; set; }
 
+    private int ViewHolderWidth { get; set; }
+    private double PixelPerYear { get; set; }
+
+
+
+    //ATTRIBUTIVE FIELDS
     [Parameter]
     public Person Person { get; set; }
 
     [Parameter]
     public GeoLocation Location { get; set; }
 
-    private int ViewHolderWidth { get; set; }
-    private double PixelPerYear { get; set; }
-
+    public bool PageReady  { get; set; } //marks if the page ready to loaded
 
 
     //CONSTANTS
@@ -176,9 +223,8 @@
 
     private double PixelPerDay => PixelPerYear / 360.0;
 
-    private bool _isPageReady = false; //marks if the page ready to loaded
-
     public string BorderClass => "border-top border-end border-dark border-1";
+
 
 
     //OVERRIDES
@@ -191,6 +237,8 @@
         await RefreshData();
     }
 
+
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
 
@@ -201,9 +249,9 @@
             ViewHolderWidth = newViewHolderWidth;
             StateHasChanged();
         }
-
-
     }
+
+
 
     //PRIVATE METHODS
 
@@ -277,37 +325,26 @@
 
     public async Task RefreshData()
     {
-        _globalVariable?.loadingMessage?.Open();
+        _globalVariable?.LoadingMessage?.Show();
 
-        _isPageReady = false;
+        PageReady = false;
 
         //update the list from the new data gotten
         DasaEventList = await getDasaEvents();
         BhuktiEventList = await getBhuktiEvents();
+        AntaramEventList = await getAntaramEvents();
 
-        _isPageReady = true;
+        PageReady = true;
 
-        _globalVariable?.loadingMessage?.Close();
+        _globalVariable?.LoadingMessage?.Hide();
 
         StateHasChanged();
 
         //FUNCTIONS
 
-        //method sets custom properties
-        async Task<List<Event>> getDasaEvents()
-        {
-            var tag = EventTag.Dasa;
-
-            return await getEvents(tag, _dasaEventsPrecision);
-        }
-
-        //method that sets some properties
-        async Task<List<Event>> getBhuktiEvents()
-        {
-            var tag = EventTag.Bhukti;
-
-            return await getEvents(tag, _bhuktiEventsPrecision);
-        }
+        async Task<List<Event>> getDasaEvents() => await getEvents(EventTag.Dasa, _dasaEventsPrecision);
+        async Task<List<Event>> getBhuktiEvents() => await getEvents(EventTag.Bhukti, _bhuktiEventsPrecision);
+        async Task<List<Event>> getAntaramEvents() => await getEvents(EventTag.Antaram, _antaramEventsPrecision);
 
         //the underlying method that does the work
         async Task<List<Event>> getEvents(EventTag tag, double precision)
@@ -318,7 +355,7 @@
 
             //get events from API server
             var dasaEventsUnsorted =
-                await ServerManager.GetEvents(
+                await GetEvents(
                     startTime,
                     endTime,
                     Location,
@@ -328,8 +365,8 @@
 
             //sort the list by time before sending view
             var orderByAscResult = from dasaEvent in dasaEventsUnsorted
-                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset() ascending
-                                   select dasaEvent;
+                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset()
+                select dasaEvent;
 
             //send sorted events to view
             return orderByAscResult.ToList();
@@ -356,6 +393,7 @@
     {
         PixelPerYear += ZoomSpeedInPx;
     }
+
     private void OnClickZoomOut(MouseEventArgs obj)
     {
         PixelPerYear -= ZoomSpeedInPx;
@@ -388,7 +426,7 @@
             dif += 200;
         }
 
-        this.StateHasChanged();
+        StateHasChanged();
 
         //get old width of dasa view holder before zoom
         var newHolderWidth = await _jsRuntime.InvokeAsync<double>("getElementWidth", _dasaViewHolder);
@@ -404,6 +442,37 @@
         await _jsRuntime.InvokeVoidAsync("setElementScrollLeft", _scrollContainer, newScrollPos);
 
     }
+
+    //PRIVATE METHODS
+
+    /// <summary>
+    /// Gets Muhurtha events from API
+    /// </summary>
+    private static async Task<List<Event>> GetEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precision)
+    {
+    //prepare data to send to API
+        var root = new XElement("Root");
+
+        root.Add(
+            new XElement("StartTime", startTime.ToXml()),
+            new XElement("EndTime", endTime.ToXml()),
+            location.ToXml(),
+            person.ToXml(),
+            Tools.AnyTypeToXml(tag),
+            Tools.AnyTypeToXml(precision));
+
+    //send to api and get results
+        var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsAPI, root);
+
+    //parse raw results
+        List<Event> resultsParsed = Event.FromXml(resultsRaw);
+
+    //send to caller
+        return resultsParsed;
+
+    }
+
+
 
 }
 

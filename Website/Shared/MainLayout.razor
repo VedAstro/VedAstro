@@ -1,14 +1,20 @@
 ﻿@inherits LayoutComponentBase
 
+@*
+    NOTE : Components here are loaded same time as page,
+    so component might not exist when page needs it.
+    Thus page must check & wait during init.
+*@
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
     @* this is where global loading message gets created*@
-    <Website.Pages.LoadingMessage @ref="_globalVariable.loadingMessage"/>
+    <Website.Pages.LoadingMessage @ref="_globalVariable.LoadingMessage" />
 
     @* this is where global variable alert message gets created*@
-    <AlertMessage @ref="_globalVariable.Alert"/>
+    <AlertMessage @ref="_globalVariable.Alert" />
     <main>
         <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
@@ -20,4 +26,3 @@
 
     </main>
 </div>
-

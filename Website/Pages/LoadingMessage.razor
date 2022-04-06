@@ -1,72 +1,70 @@
 ﻿@*Component to show loading message to user*@
 
-<div class="modal fade @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
-    <div class="modal-dialog modal-dialog-centered" style="width: fit-content;" role="document">
-        <div class="modal-content">
-            <div class="modal-body align-content-center">
-                <img src="images/loading-animation.gif" />
+@*by default invisible*@
+
+<div @ref="_loadingMessage" style="display: none;">
+    <div  class="modal fade show" tabindex="-1" role="dialog" style="display: block">
+        <div class="modal-dialog modal-dialog-centered" style="width: fit-content;" role="document">
+            <div class="modal-content">
+                <div class="modal-body align-content-center">
+                    <img src="images/loading-animation.gif" />
+                </div>
             </div>
         </div>
     </div>
+
+    <div  class="modal-backdrop fade show"></div>
 </div>
 
 
-@if (_showBackdrop)
-{
-    <div class="modal-backdrop fade show"></div>
-}
 
 
 @code {
 
-
-    private string _modalDisplay = "none;";
-    private string _modalClass = "";
-    private bool _showBackdrop = false;
     private bool _isOpen = false;
 
     /// <summary>
-    /// If true shows the page
-    /// Another way of show/hide loading by setting a value instead
+    /// If true page is ready
     /// </summary>
-    [Parameter]
-    public bool Show
+    public bool PageReady = false;
+
+
+    //REFERENCE TO HTML ELEMENTS
+    private ElementReference _loadingMessage;
+
+
+    protected override void OnAfterRender(bool firstRender)
     {
-        get => throw new NotImplementedException();
-        set
-        {
-            if (value) { Open(); }
-            else { Close(); }
-        }
+        //mark page as ready
+        if (firstRender) { PageReady = true; }
     }
 
     /// <summary>
     /// Show loading message
     /// </summary>
-    public void Open()
+    public async Task Show()
     {
         //if already open end here
-        //if (_isOpen) { return; }
-        Console.WriteLine("LoadingMessage.Open");
-        _modalDisplay = "block;";
-        _modalClass = "show";
-        _showBackdrop = true;
+        if (_isOpen) { return; }
+
+        //show the modal & backdrop
+        await _jsRuntime.show(_loadingMessage);
+
         _isOpen = true;
-        StateHasChanged(); //doesn't display without this
+
     }
 
     /// <summary>
     /// Hide loading message
     /// </summary>
-    public void Close()
+    public async Task Hide()
     {
         //if already close end here
-        //if (!_isOpen) { return; }
-        Console.WriteLine("LoadingMessage.Close");
-        _modalDisplay = "none";
-        _modalClass = "";
-        _showBackdrop = false;
+        if (!_isOpen) { return; }
+
+        await _jsRuntime.hide(_loadingMessage);
+
         _isOpen = false;
-        StateHasChanged(); //doesn't display without this
     }
+
 }

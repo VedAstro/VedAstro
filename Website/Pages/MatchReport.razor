@@ -12,39 +12,33 @@
 
     <table class="table table-striped table-hover">
         <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Nature</th>
-            <th scope="col">Info</th>
-            <th scope="col">MaleInfo</th>
-            <th scope="col">FemaleInfo</th>
-        </tr>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Nature</th>
+                <th scope="col">Info</th>
+                <th scope="col">MaleInfo</th>
+                <th scope="col">FemaleInfo</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var prediction in _report.PredictionList)
-        {
-            //if no prediction then don't print
-            @if (prediction.Name == Name.Empty){continue;}
+            @foreach (var prediction in _report.PredictionList)
+            {
+                //if no prediction then don't print
+                @if (prediction.Name == Name.Empty) { continue; }
 
-            <tr>
-                <td scope="row">
-                    <b>@prediction.Name</b>
-                    <p><small>@prediction.Description</small></p>
-                </td>
-                <td style="color:@GetNatureColor(prediction.Nature);"><b>@prediction.Nature</b></td>
-                <td>@prediction.Info</td>
-                <td>@prediction.MaleInfo</td>
-                <td>@prediction.FemaleInfo</td>
-            </tr>
-        }
+                <tr>
+                    <td scope="row">
+                        <b>@prediction.Name</b>
+                        <p><small>@prediction.Description</small></p>
+                    </td>
+                    <td style="color:@GetNatureColor(prediction.Nature);"><b>@prediction.Nature</b></td>
+                    <td>@prediction.Info</td>
+                    <td>@prediction.MaleInfo</td>
+                    <td>@prediction.FemaleInfo</td>
+                </tr>
+            }
         </tbody>
     </table>
-
-}
-else
-{
-    //show loading message if page not yet loaded
-    <LoadingMessage Show="true"/>
 
 }
 
@@ -60,7 +54,17 @@ else
     CompatibilityReport? _report = null; //when needs to be show before init
 
     //generate the report
-    protected override async Task OnInitializedAsync() => _report = await GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
+    protected override async Task OnInitializedAsync()
+    {
+        await _globalVariable.WaitTillComponentReady();
+        await _globalVariable.LoadingMessage.Show();
+
+        _report = await GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
+
+    }
+
+    //hide the loading message that was open in init
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await _globalVariable.LoadingMessage.Hide();
 
     private static string GetNatureColor(EventNature nature)
     {
@@ -82,16 +86,16 @@ else
     /// </summary>
     private static async Task<CompatibilityReport?> GetCompatibilityReport(string male, string female)
     {
-    //prepare request to API server
+        //prepare request to API server
         var url = $"{ServerManager.GetMatchReportAPI}?male={male}&female={female}";
 
-    //get report from server
+        //get report from server
         var matchReportXml = await ServerManager.ReadFromServer(url);
 
-    //parse report 
+        //parse report
         var matchReport = CompatibilityReport.FromXml(matchReportXml);
 
-    //return parsed report to caller
+        //return parsed report to caller
         return matchReport;
     }
 

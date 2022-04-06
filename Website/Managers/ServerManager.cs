@@ -90,34 +90,6 @@ namespace Website
 
 
 
-        /// <summary>
-        /// Gets Muhurtha events from API
-        /// TODO NEED TO MOVE to component that uses it
-        /// </summary>
-        public static async Task<List<Event>> GetEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precision)
-        {
-            //prepare data to send to API
-            var root = new XElement("Root");
-
-            root.Add(
-                new XElement("StartTime", startTime.ToXml()),
-                new XElement("EndTime", endTime.ToXml()),
-                location.ToXml(),
-                person.ToXml(),
-                Genso.Astrology.Library.Tools.AnyTypeToXml(tag),
-                Genso.Astrology.Library.Tools.AnyTypeToXml(precision));
-
-            //send to api and get results
-            var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsAPI, root);
-
-            //parse raw results
-            List<Event> resultsParsed = Event.FromXml(resultsRaw);
-
-            //send to caller
-            return resultsParsed;
-
-        }
-
 
         //PRIVATE METHODS
         /// <summary>

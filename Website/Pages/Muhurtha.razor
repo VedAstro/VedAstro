@@ -10,17 +10,8 @@
 
 @if (_isPageReady)
 {
+    <PeopleSelectorBox @bind-SelectedPersonName="SelectedPersonName" PersonList="@PersonList" />
 
-    <div>
-        <label>Person</label>
-        <select @bind="SelectedPersonName" class="form-control">
-            <option value="">Select Name</option>
-            @foreach (var person in PersonList)
-            {
-                <option value="@person.GetName()">@person.GetName() - @person.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
-            }
-        </select>
-    </div>
     <div style="margin-top: 50px" class="row">
         <button type="submit" @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
     </div>
@@ -28,7 +19,6 @@
 
 @if (_isResultReady)
 {
-
     <DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />
 
     <h4 class="mt-2">Planets</h4>
@@ -41,7 +31,6 @@
         <PlanetInfoBox PlanetName="PlanetName.Saturn" time="@SelectedPerson.GetBirthDateTime()" />
         <PlanetInfoBox PlanetName="PlanetName.Venus" time="@SelectedPerson.GetBirthDateTime()" />
     </div>
-
 }
 
 
@@ -50,7 +39,7 @@
 
 
     private DasaViewBox? _dasaViewBox;
-    public List<Person> PersonList { get; set; } //data from URL not necessary provided
+    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
     public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }

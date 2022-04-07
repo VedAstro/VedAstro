@@ -30,10 +30,17 @@
 
 
 @code {
+    //DEFAULTS
+    const string DefaultLocationCountry = "Singapore";
+
+    
+    //VARIABLES
     private string _locationName = DefaultLocationCountry;
     private double _longitude = 103.82;
     private double _latitude = 1.352;
-    const string DefaultLocationCountry = "Singapore";
+
+    
+    //PARAMETERS
 
     [Parameter]
     public string LocationName
@@ -77,6 +84,7 @@
         }
     }
 
+    //below are needed for 2-way binding between page & component to work
     [Parameter]
     public EventCallback<string> LocationNameChanged { get; set; }
     [Parameter]

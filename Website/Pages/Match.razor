@@ -8,27 +8,8 @@
 
 @if (_pageReady)
 {
-
-    <div>
-        <label>Male</label>
-        <select @bind="SelectedMale" class="form-control">
-            <option value="">Select Name</option>
-            @foreach (var male in MaleList)
-            {
-                <option value="@male.GetName()">@male.GetName() - @male.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
-            }
-        </select>
-    </div>
-    <div>
-        <label>Female</label>
-        <select @bind="SelectedFemale" class="form-control">
-            <option value="">Select Name</option>
-            @foreach (var female in FemaleList)
-            {
-                <option value="@female.GetName()">@female.GetName() - @female.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
-            }
-        </select>
-    </div>
+    <PeopleSelectorBox @bind-SelectedPersonName="@SelectedMale" Label="Male" PersonList="@MaleList" />
+    <PeopleSelectorBox @bind-SelectedPersonName="@SelectedFemale" Label="Female" PersonList="@FemaleList" />
 
     <div style="margin-top: 50px" class="row">
         <button type="submit" @onclick="GetMatchReport" class="btn btn-primary">Submit</button>
@@ -62,12 +43,13 @@
 
         _pageReady = true;
 
-        await _globalVariable.LoadingMessage.Hide();
-
     }
 
-    private void GetMatchReport()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _navigation.NavigateTo($"matchreport/{SelectedMale}/{SelectedFemale}");
+        //close loading box that was opened during init
+        if (_pageReady) { await _globalVariable.LoadingMessage.Hide(); }
     }
+
+    private void GetMatchReport() => _navigation.NavigateTo($"matchreport/{SelectedMale}/{SelectedFemale}");
 }

@@ -1,0 +1,74 @@
+﻿@using System.Collections
+@using Genso.Astrology.Library
+
+@*Component shows combo box with people list*@
+
+<div>
+    <label>@Label</label>
+    <select @bind="SelectedPersonName" class="form-control">
+        <option value="">Select Name</option>
+        @foreach (var person in PersonList)
+        {
+            <option value="@person.GetName()">@person.GetName() - @person.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
+        }
+    </select>
+</div>
+
+
+@code {
+
+    //DEFAULTS
+    const string DefaultLabel = "Person";
+
+
+    //PARAMETERS
+
+    /// <summary>
+    /// Get selected person name
+    /// </summary>
+    [Parameter]
+    public string SelectedPersonName
+    {
+        get => _selectedPersonName;
+        set
+        {
+            //this stops update loops
+            if (_selectedPersonName == value) return;
+            _selectedPersonName = value;
+            //update value in parent page
+            SelectedPersonNameChanged.InvokeAsync(value);
+        }
+    }
+
+    private string _selectedPersonName = "";
+
+
+    /// <summary>
+    /// Set list to show in drop down
+    /// </summary>
+    [Parameter]
+    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
+
+    /// <summary>
+    /// Text that is shown above list
+    /// </summary>
+    [Parameter]
+    public string? Label { get; set; } = DefaultLabel;
+
+
+    //below are needed for 2-way binding between page & component to work
+    [Parameter]
+    public EventCallback<string> SelectedPersonNameChanged { get; set; }
+
+
+    //protected override void OnAfterRender(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        //set default label if not set
+    //        Label = Label == null ? DefaultLabel : Label;
+
+    //    }
+    //}
+
+}

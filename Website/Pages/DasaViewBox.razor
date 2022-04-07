@@ -93,8 +93,22 @@
 </style>
 
 @*DEFAULT INVISIBLE*@
-<div @ref="_dasaViewBox" style="display: none">
-    <p id="TimeCursorLegend">Test123</p>
+<div @ref="_dasaViewBox" class="d-grid gap-3" style="display: none">
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <button @onclick="OnClickZoomIn" class="btn btn-primary">Zoom +</button>
+            </div>
+            <div class="col">
+                <button @onclick="OnClickZoomOut" class="btn btn-primary">Zoom -</button>
+            </div>
+            <div class="col">
+                <p id="TimeCursorLegend">Test123</p>
+            </div>
+        </div>
+    </div>
+
     <div id="MainHolder">
         <div id="">
             <div class="DasaViewHeaderItems border border-primary">Year</div>
@@ -185,10 +199,6 @@
                 <div id="TimeVerticalLine" @ref="_verticalLine" class="vt"></div>
             </div>
         </div>
-    </div>
-    <div>
-        <button @onclick="OnClickZoomIn" class="btn btn-primary">Zoom +</button>
-        <button @onclick="OnClickZoomOut" class="btn btn-primary">Zoom -</button>
     </div>
 </div>
 

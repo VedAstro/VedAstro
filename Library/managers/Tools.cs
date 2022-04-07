@@ -226,5 +226,21 @@ namespace Genso.Astrology.Library
         public static double MinutesToYears(double minutes) => minutes / 525600.0;
 
         public static double MinutesToDays(double minutes) => minutes / 1440.0;
+
+        /// <summary>
+        /// Given a date it will count the days to the end of that year
+        /// </summary>
+        public static double GetDaysToNextYear(Time getBirthDateTime)
+        {
+            //get start of next year
+            var standardTime = getBirthDateTime.GetStdDateTimeOffset();
+            var nextYear = standardTime.Year + 1;
+            var startOfNextYear = new DateTimeOffset(nextYear, 1, 1, 0, 0, 0, 0, standardTime.Offset);
+
+            //calculate difference of days between 2 dates
+            var diffDays = (startOfNextYear - standardTime).TotalDays;
+
+            return diffDays;
+        }
     }
 }

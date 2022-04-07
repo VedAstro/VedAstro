@@ -69,7 +69,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await _globalVariable.WaitTillComponentReady();
+        //show loading box
         await _globalVariable.LoadingMessage.Show();
 
         //auto fill time zone based on system time

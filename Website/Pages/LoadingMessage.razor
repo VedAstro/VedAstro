@@ -3,7 +3,7 @@
 @*by default invisible*@
 
 <div @ref="_loadingMessage" style="display: none;">
-    <div  class="modal fade show" tabindex="-1" role="dialog" style="display: block">
+    <div class="modal fade show" tabindex="-1" role="dialog" style="display: block">
         <div class="modal-dialog modal-dialog-centered" style="width: fit-content;" role="document">
             <div class="modal-content">
                 <div class="modal-body align-content-center">
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <div  class="modal-backdrop fade show"></div>
+    <div class="modal-backdrop fade show"></div>
 </div>
 
 
@@ -47,7 +47,10 @@
         //if already open end here
         if (_isOpen) { return; }
 
-        //show the modal & backdrop
+        //if not ready wait
+        await _globalVariable.WaitTillComponentReady();
+
+        //show the modal
         await _jsRuntime.show(_loadingMessage);
 
         _isOpen = true;
@@ -62,6 +65,10 @@
         //if already close end here
         if (!_isOpen) { return; }
 
+        //if not ready wait
+        await _globalVariable.WaitTillComponentReady();
+
+        //hide loading box
         await _jsRuntime.hide(_loadingMessage);
 
         _isOpen = false;

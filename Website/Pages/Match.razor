@@ -49,10 +49,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-
-        //while loading not ready wait here
-        await _globalVariable.WaitTillComponentReady();
-
+        //show loading box
         await _globalVariable.LoadingMessage.Show();
 
         //get male list from api server & save it for later

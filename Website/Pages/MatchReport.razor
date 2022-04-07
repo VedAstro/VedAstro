@@ -56,7 +56,7 @@
     //generate the report
     protected override async Task OnInitializedAsync()
     {
-        await _globalVariable.WaitTillComponentReady();
+        //show loading box
         await _globalVariable.LoadingMessage.Show();
 
         _report = await GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");

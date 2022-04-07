@@ -1,3 +1,72 @@
+//CUSTOM LOGIC FUNCTIONS
+//WHICH ARE CONSUMED BY OTHERS IN THIS FILE
+
+function timeCursorEventHandler(mouse) {
+
+    //gets the measurements of the dasa view holder
+    //the element where cursor line will be moving
+    let holderMeasurements = $("#DasaViewHolder")[0].getBoundingClientRect();
+
+    //calculate mouse X relative to dasa view box
+    let relativeMouseX = mouse.clientX - holderMeasurements.left;
+
+    //if mouse is beyond element, then reset to 0
+    relativeMouseX = relativeMouseX < 0 ? 0 : relativeMouseX;
+
+    //move vertical line to under mouse inside dasa view box
+    $("#TimeVerticalLine").css('left', relativeMouseX);
+
+    //get date of birth
+    let birthTime = "12:44 23/04/1994 +08:00";
+
+    //convert left position from px to time
+    let cursorTime = PixelToTimeFromBirth(relativeMouseX, birthTime);
+    $("#TimeCursorLegend").html(cursorTime);
+
+}
+
+
+function PixelToTimeFromBirth(pixelValue, stdTime) {
+    return DotNet.invokeMethod('Website', 'PixelToTimeFromBirth', pixelValue, stdTime);
+};
+
+
+function executeFunctionByName(functionName, context /*, args */) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    var namespaces = functionName.split(".");
+    var func = namespaces.pop();
+    for (var i = 0; i < namespaces.length; i++) {
+        context = context[namespaces[i]];
+    }
+    return context[func].apply(context, args);
+}
+
+
+
+//IN PRODUCTION USE CODE BELOW, CAREFUL!
+
+window.jQueryWrapper = function (input) {
+    return $(input);
+};
+
+window.addClassWrapper = function (element, classString) {
+    $(element).addClass(classString);
+
+    console.log(`JS: addClassWrapper : ${classString}`);
+};
+window.showWrapper = function (element) {
+    $(element).show();
+    console.log(`JS: showWrapper`);
+};
+window.hideWrapper = function (element) {
+    $(element).hide();
+    console.log(`JS: hideWrapper`);
+};
+
+
+
+//UNSURE CODE BELOW, REMOVE IT IF SEE FIT
+
 window.getElementWidth = function (element, parm) {
     console.log(`JS : getElementWidth : ${element.offsetWidth}`);
     return element.offsetWidth;
@@ -33,23 +102,6 @@ window.setElementStyleLeft = function (element, leftValue) {
     console.log(`JS: setElementStyleLeft : ${leftValue}`);
 };
 
-window.jQueryWrapper = function (input) {
-    return $(input);
-};
-
-window.addClassWrapper = function (element, classString) {
-    $(element).addClass(classString);
-
-    console.log(`JS: addClassWrapper : ${classString}`);
-};
-window.showWrapper = function (element) {
-    $(element).show();
-    console.log(`JS: showWrapper`);
-};
-window.hideWrapper = function (element) {
-    $(element).hide();
-    console.log(`JS: hideWrapper`);
-};
 
 
 window.initDasaViewBoxVerticalLine = function () {
@@ -60,15 +112,9 @@ window.initDasaViewBoxVerticalLine = function () {
 
 };
 
-//event handler that moves vertical line in dasa view box
-window.dasaViewHolder.addEventListener('mousemove', mouse => {
+window.addEventListenerWrapper = function (element, eventName, functionName) {
 
-    //gets the measurements of the dasa view box
-    let bbox_rect = window.dasaViewHolder.getBoundingClientRect();
+    element.addEventListener(eventName, window[functionName]);
+}
 
-    //calculate mouse X relative to dasa view box
-    let relativeMouseX = mouse.clientX - bbox_rect.left;
 
-    //move vertical line to under mouse inside dasa view box
-    window.dasaViewVerticaLine.setAttribute('style', `left: ${relativeMouseX}px;`);
-});

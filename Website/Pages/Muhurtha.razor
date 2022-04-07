@@ -61,10 +61,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //while loading not ready wait here
-        await _globalVariable.WaitTillComponentReady();
-
-        //show loading message
+        //wait and show loading message
         await _globalVariable.LoadingMessage.Show();
 
         //get person list from api server & save it for later
@@ -80,6 +77,7 @@
 
     private async Task OnClickCalculate()
     {
+        //show loading box
         await _globalVariable.LoadingMessage.Show();
 
         //get data from inputs and save it for use by other components

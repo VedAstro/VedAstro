@@ -17,12 +17,10 @@ namespace Website
         
         
 
-        public static async Task addClass(this IJSRuntime JsRuntime, string element, string classNames) => await JsRuntime.InvokeVoidAsync("addClassWrapper", element, classNames);
         public static async Task addClass(this IJSRuntime JsRuntime, ElementReference element, string classNames) => await JsRuntime.InvokeVoidAsync("addClassWrapper", element, classNames);
-        public static async Task show(this IJSRuntime JsRuntime, string element) => await JsRuntime.InvokeVoidAsync("showWrapper", element);
         public static async Task show(this IJSRuntime JsRuntime, ElementReference element) => await JsRuntime.InvokeVoidAsync("showWrapper", element);
-        public static async Task hide(this IJSRuntime JsRuntime, string element) => await JsRuntime.InvokeVoidAsync("hideWrapper", element);
         public static async Task hide(this IJSRuntime JsRuntime, ElementReference element) => await JsRuntime.InvokeVoidAsync("hideWrapper", element);
+        public static async Task addEventListener(this IJSRuntime JsRuntime, ElementReference element, string eventName, string eventHandlerName) => await JsRuntime.InvokeVoidAsync("addEventListenerWrapper", element, eventName, eventHandlerName);
     }
 
 }

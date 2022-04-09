@@ -23,10 +23,13 @@
 //CUSTOM LOGIC FUNCTIONS
 //WHICH ARE CONSUMED BY OTHERS IN THIS FILE
 
+//moves the line cursor in DasaViewBox
+//this is called from there
 function timeCursorEventHandler(mouse) {
 
     //gets the measurements of the dasa view holder
     //the element where cursor line will be moving
+    //TODO read val from global var
     let holderMeasurements = $("#DasaViewHolder")[0].getBoundingClientRect();
 
     //calculate mouse X relative to dasa view box
@@ -43,7 +46,7 @@ function timeCursorEventHandler(mouse) {
     $("#TimeVerticalLine").css('left', relativeMouseX);
 
     //get date of birth
-    //TODO need to get via global vars
+    //TODO read val from global var
     let birthTime = "12:44 23/04/1994 +08:00";
 
     //convert left position from px to time

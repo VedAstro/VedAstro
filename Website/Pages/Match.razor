@@ -6,7 +6,7 @@
 
 <PageTitle>Find Marriage Match</PageTitle>
 
-@if (_pageReady)
+@if (PageReady)
 {
     <PeopleSelectorBox @bind-SelectedPersonName="@SelectedMale" Label="Male" PersonList="@MaleList" />
     <PeopleSelectorBox @bind-SelectedPersonName="@SelectedFemale" Label="Female" PersonList="@FemaleList" />
@@ -25,7 +25,7 @@
     public string? SelectedMale { get; set; }
     public string? SelectedFemale { get; set; }
 
-    private bool _pageReady = false; //marks if the page ready to loaded
+    public bool PageReady { get; set; } = false; //marks if the page ready to loaded
 
 
     protected override async Task OnInitializedAsync()
@@ -41,14 +41,14 @@
         var rawFemaleListXml = await ServerManager.ReadFromServer(ServerManager.GetFemaleListAPI);
         FemaleList = rawFemaleListXml.Elements().Select(femaleXml => Person.FromXml(femaleXml)).ToList();
 
-        _pageReady = true;
+        PageReady = true;
 
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //close loading box that was opened during init
-        if (_pageReady) { await _globalVariable.LoadingMessage.Hide(); }
+        if (PageReady) { await _globalVariable.LoadingMessage.Hide(); }
     }
 
     private void GetMatchReport() => _navigation.NavigateTo($"matchreport/{SelectedMale}/{SelectedFemale}");

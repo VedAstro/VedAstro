@@ -1,6 +1,7 @@
 ﻿@page "/sunrisesettime"
 @using Genso.Astrology.Library
 
+
 <PageTitle>Sun Rise And Set Time</PageTitle>
 
 <h2>Sunrise:@_sunRiseTime</h2>
@@ -14,11 +15,13 @@
 
 @code {
 
-    private string _sunSetTime;
-    private string _sunRiseTime;
+    private string? _sunSetTime = "";
+    private string? _sunRiseTime = "";
     private string? _locationName = "";
     private double _longitude;
     private double _latitude;
+    public bool PageReady { get; set; }
+
 
     //auto calculate sun rise/set time every time location is changed
     //called every time after the component has finished rendering
@@ -41,4 +44,5 @@
         _sunSetTime = set.GetStdDateTimeOffsetText();
 
     }
+
 }

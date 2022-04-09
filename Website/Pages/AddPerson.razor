@@ -1,15 +1,8 @@
 ﻿@page "/addperson/"
 @using Genso.Astrology.Library
 
+
 <PageTitle>Add new person</PageTitle>
-
-@if (_showPersonAddedSuccessAlert)
-{
-    <div class="alert alert-success" role="alert">
-        @_newPerson.GetName() added successful!
-    </div>
-
-}
 
 <div class="container">
     <div class="row">
@@ -65,7 +58,9 @@
     Gender _gender;
     string _genderString = "";
     Person _newPerson;
-    bool _showPersonAddedSuccessAlert = false; //default, alert is not shown
+
+    public bool PageReady { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -99,12 +94,12 @@
         _newPerson = new Person(_name, birthTime, _gender);
 
         //send newly created person to API server
-        const string apiAddress = ServerManager.AddPersonAPI;
         var xmlData = _newPerson.ToXml();
-        var result = ServerManager.WriteToServer(apiAddress, xmlData);
+        var result = ServerManager.WriteToServer(ServerManager.AddPersonAPI, xmlData);
 
         //let user know person has been added
-        _showPersonAddedSuccessAlert = true;
+        //TODO NOT IMPLEMENTED
+        _globalVariable.Alert.ShowSuccess($"{_name} added successfully!");
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete
@@ -112,7 +107,6 @@
 
         await _globalVariable.LoadingMessage.Hide();
     }
-
 
 
 }

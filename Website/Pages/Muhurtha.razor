@@ -1,26 +1,19 @@
 ﻿@page "/muhurtha"
 @using Genso.Astrology.Library
-
-<style>
-
-</style>
-
+@inherits IPage
 
 <PageTitle>Muhurtha</PageTitle>
 
-@if (_isPageReady)
-{
-    <PeopleSelectorBox @bind-SelectedPersonName="SelectedPersonName" PersonList="@PersonList" />
+@*PERSON SELECTOR*@
+@if (PageReady){<PeopleSelectorBox @bind-SelectedPersonName="SelectedPersonName" PersonList="@PersonList" />}
 
-    <div style="margin-top: 50px" class="row">
-        <button type="submit" @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
-    </div>
-}
+@*PERSON SELECTOR*@
+<button type="submit" @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
+
+@if (_isResultReady){<DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />}
 
 @if (_isResultReady)
 {
-    <DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />
-
     <h4 class="mt-2">Planets</h4>
     <div class="d-flex flex-nowrap">
         <PlanetInfoBox PlanetName="PlanetName.Sun" time="@SelectedPerson.GetBirthDateTime()" />
@@ -43,31 +36,48 @@
     public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }
-    List<Event> _dasaEvents;
-    private bool _isPageReady = false; //marks if the page ready to loaded
     private bool _isResultReady = false; //marks if the page ready to loaded
+
+
+
+    /// <summary>
+    /// This method is called from page base class constructor
+    /// </summary>
+    public override async Task AttachEventHandlers()
+    {
+        Console.WriteLine("Muhurtha:AttachEventHandlers");
+
+        //first call back base's event handlers
+        await base.AttachEventHandlers();
+
+        //event handlers for showing loading box
+        OnPageBusy += async () => await _globalVariable.LoadingMessage.Show();
+        OnPageReady += async () => await _globalVariable.LoadingMessage.Hide();
+    }
+
 
 
     protected override async Task OnInitializedAsync()
     {
-        //wait and show loading message
-        await _globalVariable.LoadingMessage.Show();
+        Console.WriteLine("Muhurtha:OnInitializedAsync");
+
+        //mark page as not ready
+        PageReady = false;
 
         //get person list from api server & save it for later
         var personListRootXml = await ServerManager.ReadFromServer(ServerManager.GetPersonListAPI);
         PersonList = personListRootXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
 
-        _isPageReady = true;
+        //mark page as ready
+        PageReady = true;
 
-        //hide loading message
-        await _globalVariable.LoadingMessage.Hide();
+
     }
-
 
     private async Task OnClickCalculate()
     {
-        //show loading box
-        await _globalVariable.LoadingMessage.Show();
+        //mark page as not ready
+        PageReady = false;
 
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
@@ -78,6 +88,7 @@
 
         //update view box data directly when clicked 2nd time
         //without this update does not propagate
+        //todo can be done better with events & JS
         if (_dasaViewBox != null)
         {
             _dasaViewBox.Person = SelectedPerson;
@@ -86,7 +97,7 @@
             await _dasaViewBox.RefreshData();
         }
 
+        PageReady = true;
     }
-
 
 }

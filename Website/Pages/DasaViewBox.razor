@@ -38,7 +38,6 @@
 
     #MainHolder {
         display: flex;
-        margin-top: 27px;
     }
 
     #container1 {
@@ -59,12 +58,6 @@
         top: -19px;
     }
 
-    body {
-        height: 500vh;
-        margin: 0;
-        overflow: auto;
-    }
-
     .cursor {
         position: fixed;
         top: 0;
@@ -83,31 +76,35 @@
         background: black;
     }
 
-    .hl {
-        position: absolute;
-        height: 1px;
-        left: 0;
-        right: 0;
-        background: black;
+    #AutoScrollLine {
+        /*background-color: #1b6ec2;*/
+        width: 1px;
+        height: 163px;
+        position: relative;
+        z-index: 999; /*needed to be seen*/
+        margin-bottom: -154px;
     }
 </style>
 
 @*DEFAULT INVISIBLE*@
-<div @ref="_dasaViewBox" class="d-grid gap-3" style="display: none">
+<div @ref="_dasaViewBox" class="d-grid gap-1 mt-2" style="display: none">
 
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <button @onclick="OnClickZoomIn" class="btn btn-primary">Zoom +</button>
-            </div>
-            <div class="col">
-                <button @onclick="OnClickZoomOut" class="btn btn-primary">Zoom -</button>
-            </div>
-            <div class="col">
-                <p id="TimeCursorLegend">Test123</p>
-            </div>
+    <div class="d-flex flex-row">
+        <button class="btn btn-primary btn-sm">Goto Now</button>
+        <div class="border border-1 border-primary" id="TimeCursorLegend"></div>
+        <div class="d-flex flex-row mb-3">
+            <label>View</label>
+            <select @bind="SelectedViewName" class="form-control">
+                @foreach (var zoomPreset in @ZoomPresetList)
+                {
+                    <option value="@zoomPreset">@zoomPreset</option>
+                }
+            </select>
         </div>
     </div>
+
+    @*placed in the center, hence divide 2*@
+    <div @ref="_autoScrollLine" id="AutoScrollLine" style="left: @(ViewHolderWidth/2)px;" />
 
     <div id="MainHolder">
         <div id="">
@@ -116,11 +113,14 @@
             <div class="DasaViewHeaderItems border border-primary">Age</div>
         </div>
         <div @ref="_scrollContainer" id="container1" style="width: @(ViewHolderWidth)px">
-            <div @ref="_dasaViewHolder" @onmousewheel="OnMouseWheelInDasaView" id="DasaViewHolder">
+            <div @ref="_dasaViewHolder" id="DasaViewHolder">
                 @*Person Age Row*@
-                <div class="parent-div">
+                <div @ref="_ageRowElement" id="AgeRow" class="parent-div">
+                    @*ID is used in JS*@
                     @for (var year = 0; year <= 120; year++)
                     {
+                        //TODO rewrite for IMPROVED JS method
+                        //TODO solve zoom issue with check for year column when age fails
                         <div style="width: @YearsToWidth(1)px;"
                          class="ageRow @BorderClass">
                             @year
@@ -128,7 +128,7 @@
                     }
                 </div>
                 @*Year Span Row*@
-                <div class="parent-div">
+                <div @ref="_yearRowElement" id="YearRow" class="parent-div">
                     @for (var age = 0; age <= 120; age++)
                     {
                         //align year row to dasa
@@ -160,7 +160,7 @@
                     }
                 </div>
                 @*Planet Dasa Row*@
-                <div id="DasaRow" class="parent-div">
+                <div @ref="_dasaRowElement" id="DasaRow" class="parent-div">
                     @foreach (var _event in @DasaEventList)
                     {
                         <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
@@ -172,7 +172,7 @@
                     }
                 </div>
                 @*Planet Bhukti Row*@
-                <div id="BhuktiRow" class="parent-div">
+                <div @ref="_bhuktiRowElement" id="BhuktiRow" class="parent-div">
                     @foreach (var _event in @BhuktiEventList)
                     {
                         <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
@@ -183,7 +183,7 @@
                     }
                 </div>
                 @*Planet Antaram Row*@
-                <div id="AntaramRow" class="parent-div">
+                <div @ref="_antaramRowElement" id="AntaramRow" class="parent-div">
                     @foreach (var _event in @AntaramEventList)
                     {
                         <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
@@ -200,11 +200,33 @@
             </div>
         </div>
     </div>
+
 </div>
 
 
 
 @code {
+
+    //list of names for view preset selector
+    //for use inside component only!
+    //add/remove here only for changes to apply
+    private enum ZoomPreset
+    {
+        X1 = 1,
+        X2,
+        X3,
+        X4,
+        X5,
+        X6,
+        X7,
+        X8,
+        X9,
+        X10,
+    }
+
+
+
+
 
     //DATA FIELDS
 
@@ -215,9 +237,39 @@
     //REFERENCES TO HTML ELEMENTS ABOVE
     ElementReference _dasaViewHolder;
     ElementReference _scrollContainer;
+
+    /// <summary>
+    /// Line that follows cursor
+    /// </summary>
     ElementReference _verticalLine;
     ElementReference _dasaViewBox;
+    ElementReference _dasaRowElement;
+    ElementReference _yearRowElement;
+    ElementReference _ageRowElement;
+    ElementReference _bhuktiRowElement;
+    ElementReference _antaramRowElement;
 
+    /// <summary>
+    /// div that is used as reference to auto scroll back previous position
+    /// </summary>
+    ElementReference _autoScrollLine;
+
+
+    /// <summary>
+    /// Gets all the zoom presets in a list, for showing in drop down
+    /// </summary>
+    private List<ZoomPreset> ZoomPresetList => Enum.GetValues(typeof(ZoomPreset)).Cast<ZoomPreset>().ToList();
+
+    private string? SelectedViewName
+    {
+        get => _selectedViewName;
+        set
+        {
+            _selectedViewName = value;
+            //when selected name is changed change zoom
+            OnZoomPresetSelectionChange();
+        }
+    }
 
     private List<Event>? DasaEventList { get; set; }
 
@@ -225,11 +277,10 @@
 
     private List<Event>? AntaramEventList { get; set; }
 
-    //todo proper renaming here please
     private int ViewHolderWidth { get; set; }
 
     private double _yearElementWidth;
-
+    private string? _selectedViewName = ZoomPreset.X4.ToString(); //default zoom preset
 
 
     //ATTRIBUTIVE FIELDS
@@ -279,6 +330,9 @@
         await RefreshData();
     }
 
+    /// <summary>
+    /// JS events are attached here because the html element is already loaded
+    /// </summary>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
 
@@ -463,67 +517,6 @@
         return personAgeDays;
     }
 
-
-
-
-    //EVENT HANDLERS
-
-    private void OnClickZoomIn(MouseEventArgs obj)
-    {
-        PixelPerYear += ZoomSpeedInPx;
-    }
-
-    private void OnClickZoomOut(MouseEventArgs obj)
-    {
-        PixelPerYear -= ZoomSpeedInPx;
-    }
-
-    private async Task OnMouseWheelInDasaView(WheelEventArgs obj)
-    {
-        //only continue if SHIFT is pressed
-        if (!obj.ShiftKey) { return; }
-
-        //get old width of dasa view holder before zoom
-        var oldHolderWidth = await _jsRuntime.InvokeAsync<double>("getElementWidth", _dasaViewHolder);
-        Console.WriteLine($"oldHolderWidth {oldHolderWidth}");
-
-
-        double dif = 0;
-
-        //Zoom out
-        if (obj.DeltaY > 0)
-        {
-            //make the zoom, which changes scroll position
-            OnClickZoomOut(null);
-            dif -= 200;
-        }
-
-        //Zoom in
-        if (obj.DeltaY < 0)
-        {
-            OnClickZoomIn(null);
-            dif += 200;
-        }
-
-        StateHasChanged();
-
-        //get old width of dasa view holder before zoom
-        var newHolderWidth = await _jsRuntime.InvokeAsync<double>("getElementWidth", _dasaViewHolder);
-        Console.WriteLine($"newHolderWidth {newHolderWidth}");
-
-        //var dif = newHolderWidth - oldHolderWidth;
-        Console.WriteLine($"dif {dif}");
-
-        var currentScrollLeft = await _jsRuntime.InvokeAsync<double>("getElementScrollLeft", _scrollContainer);
-        var newScrollPos = currentScrollLeft + dif;
-        Console.WriteLine($"newScrollPos {newScrollPos}");
-
-        await _jsRuntime.InvokeVoidAsync("setElementScrollLeft", _scrollContainer, newScrollPos);
-
-    }
-
-    //PRIVATE METHODS
-
     /// <summary>
     /// Gets Muhurtha events from API
     /// </summary>
@@ -549,6 +542,37 @@
         //send to caller
         return resultsParsed;
     }
+
+
+
+    /// <summary>
+    /// Increases the zoom and auto moves scroll to previous position
+    /// </summary>
+    private async Task OnZoomPresetSelectionChange()
+    {
+        Console.WriteLine("OnZoomPresetSelectionChange");
+
+        //get the zoom preset that was selected
+        var selectPreset = Enum.Parse<ZoomPreset>(SelectedViewName);
+
+        //get div that is under line before zoom (for auto scroll)
+        var textUnderBefore = await _jsRuntime.InvokeAsync<string>("getTextUnderAutoScrollLine");
+
+        //based on the selected preset, set the zoom level
+        var selectedPresetInt = (int)selectPreset;
+        PixelPerYear = DefaultPixelPerYear * selectedPresetInt;
+
+        //important for making result appear
+        StateHasChanged();
+
+        //auto scroll back to position before zoom
+        await _jsRuntime.InvokeVoidAsync("autoScrollToYear", _scrollContainer, textUnderBefore);
+
+    }
+
+
+
+
 
 
 }

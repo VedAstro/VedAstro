@@ -4,27 +4,45 @@
 
 <PageTitle>Muhurtha</PageTitle>
 
-@*PERSON SELECTOR*@
-@if (PageReady){<PeopleSelectorBox @bind-SelectedPersonName="SelectedPersonName" PersonList="@PersonList" />}
-
-@*PERSON SELECTOR*@
-<button type="submit" @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
-
-@if (_isResultReady){<DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />}
-
-@if (_isResultReady)
-{
-    <h4 class="mt-2">Planets</h4>
-    <div class="d-flex flex-nowrap">
-        <PlanetInfoBox PlanetName="PlanetName.Sun" time="@SelectedPerson.GetBirthDateTime()" />
-        <PlanetInfoBox PlanetName="PlanetName.Moon" time="@SelectedPerson.GetBirthDateTime()" />
-        <PlanetInfoBox PlanetName="PlanetName.Mercury" time="@SelectedPerson.GetBirthDateTime()" />
-        <PlanetInfoBox PlanetName="PlanetName.Mars" time="@SelectedPerson.GetBirthDateTime()" />
-        <PlanetInfoBox PlanetName="PlanetName.Jupiter" time="@SelectedPerson.GetBirthDateTime()" />
-        <PlanetInfoBox PlanetName="PlanetName.Saturn" time="@SelectedPerson.GetBirthDateTime()" />
-        <PlanetInfoBox PlanetName="PlanetName.Venus" time="@SelectedPerson.GetBirthDateTime()" />
+<div class="vstack gap-2">
+    @*PERSON SELECTOR*@
+    <div>
+        @if (PageReady)
+        {
+            <PeopleSelectorBox @bind-SelectedPersonName="SelectedPersonName" PersonList="@PersonList"/>
+        }
     </div>
-}
+    @*CALCULATE BTN*@
+    <div>
+        <button type="submit" @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
+    </div>
+    <hr>
+    @*DASA VIEW BOX*@
+    <div>
+        
+        @if (_isResultReady)
+        {
+            <DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />
+        }
+    </div>
+    <hr>
+    @*PLANET INFO LIST*@
+    <div>
+        @if (_isResultReady)
+        {
+            <h4 class="mt-2">Planets</h4>
+            <div class="d-flex flex-nowrap">
+                <PlanetInfoBox PlanetName="PlanetName.Sun" time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Moon" time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Mercury" time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Mars" time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Jupiter" time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Saturn" time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Venus" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+        }
+    </div>
+</div>
 
 
 

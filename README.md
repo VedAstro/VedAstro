@@ -38,6 +38,10 @@ Coming soon...
 
 
 # Design Decision Notes
+#### These are randomly ordered notes on why a 
+#### feature was implemented in a certain way.
+#### Will prove usefull when debugging & upgrading code
+
 
 ## WEBSITE : Why astrological calculation done on API server and not in client (browser) via webassmebly?
 - The calculations tested on Intel Xeon with parallel procesing takes about 1GB RAM & 30% CPU.
@@ -59,6 +63,25 @@ degrees of a sign, Mars and the Sun produce results."
 - It's intepreted that Vendha is an obstruction and not a reversal of the Gochara results
   So as for now the design is that if a vedha is present than the result is simply nullified.
 
-**In Horoscope predictions methods have "time" & "person" arguments available, 
+- In Horoscope predictions methods have "time" & "person" arguments available, 
   obvioulsy "time" is not needed, but for sake of semantic similarity 
   with Muhurtha methods this is maintained.
+
+
+ ## Zoom functionality in Dasa View Box
+
+  - Option 1 : generate a high res image (svg/html) and zoom horitontally into it
+              - very fast
+              - image gets blurry
+
+  - Option 2 : Regenerate whole component in Blazor
+              - very slow
+              - hard to implement with touch screen
+
+  - Option 3 : Generate multiple preset zooms, than place them on top of each other,
+               and only make visible what is needed via selector
+              - complicated, neesd documentation
+              - easy touch screen implimentation
+              - very fast
+
+Thus Option 3 was choosen.

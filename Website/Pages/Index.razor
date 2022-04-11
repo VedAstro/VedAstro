@@ -3,26 +3,18 @@
 <PageTitle>VedAstro | Vedic Astrologer</PageTitle>
 
 
-<div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+<div class="bg-white row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
     <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
         <h1 class="display-4 fw-bold lh-1">VedAstro</h1>
-        <p class="lead">A non-profit, open source project to make<br /><span class="fw-bold">Vedic Astrology</span> easily available to all.</p>
-
-        <p class="lead">
-            Planetary x-rays are unseen vibrations and they affect <br />
-            biological and psychological processes. - B.V. Raman
-        </p>
-
+        <p class="lh-base lead">A non-profit, open source project to make<br /><span class="fw-bold">Vedic Astrology</span> easily available to all.</p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-            @*            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Tools</button>
-            *@
-            <button @onclick="OnClickSourceCodeButton" type="button" class="btn btn-primary btn-lg px-4 fw-bold">
-                <img style="height: 26px;" src="images/github.svg" />
-                Source Code
+            <button @onclick="OnClickGuideButton" type="button" class="btn btn-primary btn-lg px-4">
+                <img class="me-1" style="height: 26px;" src="images/quick-guide.svg" />
+                Quick Guide
             </button>
-            <button @onclick="OnClickDonateButton" type="button" class="btn btn-primary btn-lg px-4 fw-bold">
-                <img style="height: 26px;" src="images/donate-icon.svg" />
-                Donate
+            <button @onclick="OnClickSourceCodeButton" type="button" class="btn btn-primary btn-lg px-4 ">
+                <img class="me-1" style="height: 26px;" src="images/github.svg" />
+                Source Code
             </button>
         </div>
     </div>
@@ -69,7 +61,7 @@
 @code {
 
     private void OnClickSourceCodeButton() => _navigation.NavigateTo("https://github.com/gen-so/Genso.Astrology");
-    private void OnClickDonateButton() => _navigation.NavigateTo("/donate");
+    private void OnClickGuideButton() => _navigation.NavigateTo("/quickguide");
 
 }
 

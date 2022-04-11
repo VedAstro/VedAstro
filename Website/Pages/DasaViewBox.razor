@@ -32,7 +32,6 @@
     .DasaViewHeaderItems {
         font-size: small;
         text-align: center;
-        width: 42px;
         font-weight: bold;
     }
 
@@ -40,15 +39,15 @@
         display: flex;
     }
 
-    #container1 {
+    #ScrollContainer {
         position: relative;
         overflow: overlay;
         height: 200px;
     }
 
-        #container1 > * {
-            position: absolute;
-        }
+    #ScrollContainer > * {
+        position: absolute;
+    }
 
     #NowLine {
         background-color: red;
@@ -87,12 +86,13 @@
 </style>
 
 @*DEFAULT INVISIBLE*@
-<div @ref="_dasaViewBox" class="d-grid gap-1 mt-2" style="display: none">
+<div @ref="_dasaViewBox" class="vstack" style="display: none">
 
-    <div class="d-flex flex-row">
+    @*Buttons header row*@
+    <div class="hstack gap-3">
         <button class="btn btn-primary btn-sm">Goto Now</button>
         <div class="border border-1 border-primary" id="TimeCursorLegend"></div>
-        <div class="d-flex flex-row mb-3">
+        <div class="hstack gap-0">
             <label>View</label>
             <select @bind="SelectedViewName" class="form-control">
                 @foreach (var zoomPreset in @ZoomPresetList)
@@ -103,16 +103,22 @@
         </div>
     </div>
 
-    @*placed in the center, hence divide 2*@
+    @*Invisible line that is used to auto scroll
+        placed in the center, hence divide 2*@
     <div @ref="_autoScrollLine" id="AutoScrollLine" style="left: @(ViewHolderWidth/2)px;" />
 
     <div id="MainHolder">
-        <div id="">
+        @*STATIC ROW NAMES*@
+        <div>
+            <div class="DasaViewHeaderItems border border-primary">Age</div>
             <div class="DasaViewHeaderItems border border-primary">Year</div>
             <div class="DasaViewHeaderItems border border-primary">Dasa</div>
-            <div class="DasaViewHeaderItems border border-primary">Age</div>
+            <div class="DasaViewHeaderItems border border-primary">Bhukti</div>
+            <div class="DasaViewHeaderItems border border-primary">Antaram</div>
         </div>
-        <div @ref="_scrollContainer" id="container1" style="width: @(ViewHolderWidth)px">
+
+        @*SCROLLABLE DASA DATA*@
+        <div @ref="_scrollContainer" id="ScrollContainer" style="width: @(ViewHolderWidth)px">
             <div @ref="_dasaViewHolder" id="DasaViewHolder">
                 @*Person Age Row*@
                 <div @ref="_ageRowElement" id="AgeRow" class="parent-div">
@@ -337,6 +343,7 @@
     {
 
         //update view holder width when page width changes
+        //this is needed to dasa view appear on screen
         //TODO NEED to update to interop code
         var newViewHolderWidth = await GetViewHolderWidth();
         if (ViewHolderWidth != newViewHolderWidth)
@@ -347,6 +354,7 @@
 
         //attach event handler for Time Cursor
         if (firstRender) { await _jsRuntime.addEventListener(_dasaViewBox, "mousemove", "timeCursorEventHandler"); }
+        if (firstRender) { await _jsRuntime.addEventListener(_scrollContainer, "wheel", "dasaViewScrollEventHandler"); }
     }
 
     //PUBLIC METHODS
@@ -569,12 +577,7 @@
         await _jsRuntime.InvokeVoidAsync("autoScrollToYear", _scrollContainer, textUnderBefore);
 
     }
-
-
-
-
-
-
+    
 }
 
 

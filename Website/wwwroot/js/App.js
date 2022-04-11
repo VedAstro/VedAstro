@@ -55,6 +55,16 @@ function timeCursorEventHandler(mouse) {
 
 }
 
+//converts vertical scroll to horizontal scroll inside dasa view
+function dasaViewScrollEventHandler(evt) {
+
+    //stop the scroll from normally moving down
+    evt.preventDefault();
+    //move horizontal scroll
+    evt.currentTarget.scrollLeft += evt.deltaY;
+
+}
+
 function PixelToTimeFromBirth(pixelValue, stdTime) {
     return DotNet.invokeMethod('Website', 'PixelToTimeFromBirth', pixelValue, stdTime);
 };

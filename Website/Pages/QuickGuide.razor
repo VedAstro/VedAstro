@@ -1,0 +1,49 @@
+﻿@page "/quickguide"
+@using Genso.Astrology.Library
+@inherits IPage
+
+<PageTitle>Quick Guide</PageTitle>
+
+<h1 class="fw-bold">Quick Guide</h1>
+
+<p class="fs-5 col-md-8">This project is a collection of Vedic astrological tools. <br/>
+    Tools for things like <span @onclick="OnClickButton1" class="fw-bold">Match</span> compatibility for marriage,<br/>
+    <span @onclick="OnClickButton2" class="fw-bold">Muhurtha</span> for good timing or <span>Dasa</span> life predictions.</p>
+
+<hr/>
+
+<h3 class="fw-bold">3 ways</h3>
+
+<div class="hstack gap-3">
+    <div class="card w-50">
+        <div class="card-body">
+            <h5 class="fw-bold card-title">Cloud</h5>
+            <p class="card-text">Easily see match compatibility, choose a good muhurtha and many more.</p>
+            <a href="#" class="btn btn-primary">Tools List</a>
+        </div>
+    </div>
+
+    <div class="card w-50">
+        <div class="card-body">
+            <h5 class="fw-bold card-title">Windows</h5>
+            <p class="card-text">Download & install offline tool for Muhurtha or Horoscope prediction.</p>
+            <a href="#" class="btn btn-primary">Download</a>
+        </div>
+    </div>
+    <div class="card w-50">
+        <div class="card-body">
+            <h5 class="fw-bold card-title">API</h5>
+            <p class="card-text">Program your own app or cloud service with our open & free API.</p>
+            <a href="#" class="btn btn-primary">Read Guide</a>
+        </div>
+    </div>
+
+</div>
+
+
+@code
+{
+    private void OnClickButton1() => _navigation.NavigateTo("/match");
+    private void OnClickButton2() => _navigation.NavigateTo("/muhurtha");
+
+}

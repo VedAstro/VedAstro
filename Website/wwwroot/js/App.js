@@ -24,7 +24,7 @@
 //WHICH ARE CONSUMED BY OTHERS IN THIS FILE
 
 //moves the line cursor in DasaViewBox
-//this is called from there
+//and updates the time cursor legend box
 function timeCursorEventHandler(mouse) {
 
     //gets the measurements of the dasa view holder

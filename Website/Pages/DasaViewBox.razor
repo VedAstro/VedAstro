@@ -91,7 +91,7 @@
     @*Buttons header row*@
     <div class="hstack gap-3">
         <button class="btn btn-primary btn-sm">Goto Now</button>
-        <div class="border border-1 border-primary" id="TimeCursorLegend"></div>
+        <div class="border border-1 border-primary" @ref="_timeCursorLegend" id="TimeCursorLegend"/>
         <div class="hstack gap-0">
             <label>View</label>
             <select @bind="SelectedViewName" class="form-control">
@@ -256,6 +256,11 @@
     ElementReference _antaramRowElement;
 
     /// <summary>
+    /// Div where time is shown where cursor is on dasa view
+    /// </summary>
+    ElementReference _timeCursorLegend;
+
+    /// <summary>
     /// div that is used as reference to auto scroll back previous position
     /// </summary>
     ElementReference _autoScrollLine;
@@ -354,6 +359,7 @@
 
         //attach event handler for Time Cursor
         if (firstRender) { await _jsRuntime.addEventListener(_dasaViewBox, "mousemove", "timeCursorEventHandler"); }
+        //attach handler for converting vertical scroll to horizontal
         if (firstRender) { await _jsRuntime.addEventListener(_scrollContainer, "wheel", "dasaViewScrollEventHandler"); }
     }
 
@@ -367,15 +373,17 @@
     [JSInvokable]
     public static string PixelToTimeFromBirth(double pixelValue, string stdTimeOffsetString)
     {
-
         //convert pixel to days
         var days = pixelValue * DaysPerPixel;
+        Console.WriteLine($"pixelValue * DaysPerPixel: {days}");
 
         //get birthday
         var birthDay = DateTimeOffset.ParseExact(stdTimeOffsetString, Time.GetDateTimeFormat(), null);
+        Console.WriteLine($"stdTimeOffsetString: {stdTimeOffsetString}");
 
         //add days to birth day
         var timeString = birthDay.AddDays(days).ToString(Time.GetDateTimeFormat());
+
 
         return timeString;
     }
@@ -482,13 +490,12 @@
         StateHasChanged();
 
         //FUNCTIONS
-
         async Task<List<Event>?> getDasaEvents() => await getEvents(EventTag.Dasa, _dasaEventsPrecision);
         async Task<List<Event>?> getBhuktiEvents() => await getEvents(EventTag.Bhukti, _bhuktiEventsPrecision);
         async Task<List<Event>?> getAntaramEvents() => await getEvents(EventTag.Antaram, _antaramEventsPrecision);
 
         //the underlying method that does the work
-        async Task<List<Event>?> getEvents(EventTag tag, double precision)
+        async Task<List<Event>?> getEvents(EventTag tag, double precisionHours)
         {
             //prep data
             var startTime = Person.GetBirthDateTime(); //start time is birth time
@@ -502,7 +509,7 @@
                     Location,
                     Person,
                     tag,
-                    precision);
+                    precisionHours);
 
             //sort the list by time before sending view
             var orderByAscResult = from dasaEvent in dasaEventsUnsorted
@@ -528,7 +535,7 @@
     /// <summary>
     /// Gets Muhurtha events from API
     /// </summary>
-    private static async Task<List<Event>> GetEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precision)
+    private static async Task<List<Event>> GetEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours)
     {
         //prepare data to send to API
         var root = new XElement("Root");
@@ -539,7 +546,7 @@
             location.ToXml(),
             person.ToXml(),
             Tools.AnyTypeToXml(tag),
-            Tools.AnyTypeToXml(precision));
+            Tools.AnyTypeToXml(precisionHours));
 
         //send to api and get results
         var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsAPI, root);

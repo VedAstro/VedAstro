@@ -7,6 +7,7 @@
     <div style="background-color: cadetblue;" class="fw-bold" id="TimeCursorLegend"></div>
     <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll;">
         @DasaRowItemsSvg
+        @BhuktiRowItemsSvg
     </div>
 </div>
 
@@ -22,6 +23,11 @@
     double _antaramEventsPrecision = Tools.DaysToHours(14);
     ElementReference _dasaViewBox;
 
+    //px width & height of each slice of time
+    //used when generating dasa rows
+    int _widthPerSlice = 1;  
+    int _heightPerSlice = 30;
+
 
 
     //PROPERTIES
@@ -35,7 +41,9 @@
 
     private List<Event>? AntaramEventList { get; set; }
 
-    private MarkupString DasaRowItemsSvg { get; set; } = new("");//in html string
+    private MarkupString DasaRowItemsSvg { get; set; } = new("");
+
+    private MarkupString BhuktiRowItemsSvg { get; set; } = new("");
 
 
 
@@ -67,12 +75,12 @@
         //use the inputed data to get events from API
         //note: below methods access the data internally
         DasaEventList = await getDasaEvents();
-        //BhuktiEventList = await getBhuktiEvents();
+        BhuktiEventList = await getBhuktiEvents();
         //AntaramEventList = await getAntaramEvents();
 
         //generate rows
         DasaRowItemsSvg = new MarkupString(GenerateRowSvg(DasaEventList, _dasaEventsPrecision));
-
+        BhuktiRowItemsSvg = new MarkupString(GenerateRowSvg(BhuktiEventList, _bhuktiEventsPrecision));
 
 
         this.StateHasChanged();
@@ -80,36 +88,7 @@
 
         //-----------------------LOCAL FUNCTIONS-------------------------
 
-        string GenerateRow(List<Event> eventList, double precisionHours)
-        {
-            //get time slices used to get events
-            var startTime = Person.GetBirthDateTime(); //start time is birth time
-            var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
-            var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, precisionHours);
-
-            //generate the row for each time slice
-            var rowHtml = "";
-            foreach (var slice in timeSlices)
-            {
-                //get event that occurred at this time slice
-                var findResult = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                var foundEvent = findResult.Count > 1 ? findResult[0] : null;
-
-                //if more than 1 event found, raise alarm
-                //if (findResult.Count > 1) { throw new Exception("Only 1 event at 1 time slice!"); }
-
-                //generate and add to row
-                var pxPerSlice = 10;
-                string div;
-                div = $"<div title='{foundEvent?.Description}' value='{slice.GetStdDateTimeOffsetText()}' style='height:30px; width:{pxPerSlice}px; background-color:{GetEventColor(foundEvent?.Nature)};'></div>";
-
-                rowHtml += div;
-
-            }
-            Console.WriteLine($"Rows added : {timeSlices.Count}");
-            return rowHtml;
-
-        }
+       
         string GenerateRowSvg(List<Event> eventList, double precisionHours)
         {
             //get time slices used to get events
@@ -130,25 +109,31 @@
                 //if (findResult.Count > 1) { throw new Exception("Only 1 event at 1 time slice!"); }
 
                 //generate and add to row
-                var pxPerSlice = 1;
-                var sliceHeight = 30;
                 var rect = $"<rect " +
                           $"eventName=\"{foundEvent?.FormattedName}\" " +
                           $"stdTime=\"{slice.GetStdDateTimeOffsetText()}\" " +
                           $"x=\"{horizontalPosition}\" " +
-                          $"width=\"{pxPerSlice}\" " +
-                          $"height=\"{sliceHeight}\" " +
+                          $"width=\"{_widthPerSlice}\" " +
+                          $"height=\"{_heightPerSlice}\" " +
                           $"fill=\"{GetEventColor(foundEvent?.Nature)}\" />";
 
                 //set position for next element
-                horizontalPosition += pxPerSlice;
+                horizontalPosition += _widthPerSlice;
 
                 rowHtml += rect;
 
             }
 
-            var svgTotalWidth = horizontalPosition + 100; //add 100 for wiggle room
-            var svgBody = $"<svg style=\"width:{svgTotalWidth}px;\" xmlns=\"http://www.w3.org/2000/svg\" >{rowHtml}</svg>";
+            //create the final svg that will be displayed
+            var svgTotalWidth = horizontalPosition + 10; //add little for wiggle room
+            var svgTotalHeight = _heightPerSlice + 1; //add little as border between
+            var svgBody = $"<svg " +
+                          $"style=\"" +
+                          $"width:{svgTotalWidth}px;" +
+                          $"height:{svgTotalHeight}px;" +
+                          $"\" " +
+                          $"xmlns=\"http://www.w3.org/2000/svg\">" +
+                          $"{rowHtml}</svg>";
 
 
             return svgBody;
@@ -158,7 +143,7 @@
         // Get dasa color based on nature
         string GetEventColor(EventNature? eventNature)
         {
-            var colorId = "darkgray";
+            var colorId = "gray";
 
             if (eventNature == null) { return colorId; }
 
@@ -179,12 +164,12 @@
             return colorId;
         }
 
-        async Task<List<Event>?> getDasaEvents() => await getEvents(EventTag.Dasa, _dasaEventsPrecision);
-        async Task<List<Event>?> getBhuktiEvents() => await getEvents(EventTag.Bhukti, _bhuktiEventsPrecision);
-        async Task<List<Event>?> getAntaramEvents() => await getEvents(EventTag.Antaram, _antaramEventsPrecision);
+        async Task<List<Event>?> getDasaEvents() => await getEventsByTag(EventTag.Dasa, _dasaEventsPrecision);
+        async Task<List<Event>?> getBhuktiEvents() => await getEventsByTag(EventTag.Bhukti, _bhuktiEventsPrecision);
+        async Task<List<Event>?> getAntaramEvents() => await getEventsByTag(EventTag.Antaram, _antaramEventsPrecision);
 
-        //the underlying method that does the work
-        async Task<List<Event>?> getEvents(EventTag tag, double precisionHours)
+        //gets events from server filtered by event tag
+        async Task<List<Event>?> getEventsByTag(EventTag tag, double precisionHours)
         {
             //prep data
             var startTime = Person.GetBirthDateTime(); //start time is birth time
@@ -192,7 +177,7 @@
 
             //get events from API server
             var dasaEventsUnsorted =
-                await GetEvents(
+                await GetEventsFromApi(
                     startTime,
                     endTime,
                     Location,
@@ -210,7 +195,7 @@
         }
 
         // Gets Muhurtha events from API
-        async Task<List<Event>> GetEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours)
+        async Task<List<Event>> GetEventsFromApi(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours)
         {
             //prepare data to send to API
             var root = new XElement("Root");

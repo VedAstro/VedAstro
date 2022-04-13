@@ -55,6 +55,7 @@ function timeCursorEventHandler(mouse) {
 
 }
 
+//attached to dasa viewer to update time legend 
 function mouseOverDasaViewHandler(mouse) {
 
     //only continue if mouse is exactly over 

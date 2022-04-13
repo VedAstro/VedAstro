@@ -138,8 +138,6 @@ namespace Genso.Astrology.Library
             var firstElementName = resultsRaw.Name.LocalName;
             var isList = firstElementName == "Root";
 
-            Console.WriteLine("FINE HERE");
-
             if (isList)
             {
                 //parse as list
@@ -207,5 +205,21 @@ namespace Genso.Astrology.Library
 
         }
 
-}
+        /// <summary>
+        /// Checks if this event occurred at the inputed time
+        /// </summary>
+        public bool IsOccurredAtTime(Time inputTime)
+        {
+            //input time is after (more than) event start time
+            var afterStart = inputTime >= this.StartTime;
+
+            //input time is before (less than) event end time
+            var beforeStart = inputTime <= this.EndTime;
+
+            //time occurred only if both conditions met
+            var result = afterStart && beforeStart;
+            return result;
+
+        }
+    }
 }

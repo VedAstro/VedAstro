@@ -244,7 +244,7 @@ namespace API
             //get all event data/types which has the inputed tag (FILTER)
             var eventDataListFiltered = DatabaseManager.GetEventDataListByTag(tag, eventDataList);
 
-            //TODO enable when can
+            //TODO event generation time logging enable when can
             ////debug to measure event calculation time
             //var watch = Stopwatch.StartNew();
 

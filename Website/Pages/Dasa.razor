@@ -18,11 +18,13 @@
     @*DASA VIEW BOX*@
     <div>
         
-        @if (_isResultReady)
+        @*        @if (_isResultReady)
         {
             <DasaViewBox @ref="_dasaViewBox" Person="@SelectedPerson" Location="@SelectedLocation" />
         }
-    </div>
+        *@    
+        <DasaReportViewer @ref="_dasaReportViewer"/>
+        </div>
     <hr>
     @*PLANET INFO LIST*@
     <div>
@@ -48,6 +50,7 @@
 
 
     private DasaViewBox? _dasaViewBox;
+    private DasaReportViewer? _dasaReportViewer;
     public List<Person>? PersonList { get; set; } //data from URL not necessary provided
     public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
@@ -98,6 +101,9 @@
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
         SelectedLocation = new GeoLocation("Ipoh", 101, 4.59);//todo get real location
+
+        //set data into dasa viewer
+        await _dasaReportViewer.SetData(SelectedPerson, SelectedLocation);
 
         //mark page as ready to show results
         _isResultReady = true;

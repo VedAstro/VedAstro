@@ -40,7 +40,7 @@ namespace Genso.Astrology.Library
             List<Event> eventList = new();
 
             //split time into slices based on precision
-            List<Time> timeList = GetTimeListFromRange(startTime, endTime, precisionInHours);
+            var timeList = GetTimeListFromRange(startTime, endTime, precisionInHours);
 
             var sync = new object();//to lock thread access to list
 

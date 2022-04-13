@@ -51,6 +51,7 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Creates a new instance of time from LMT
+        /// </summary>
         public Time(DateTime lmtDateTime, TimeSpan stdOffset, GeoLocation geoLocation)
         {
             //get lmt time
@@ -311,7 +312,6 @@ namespace Genso.Astrology.Library
             return offsetToReturn;
         }
 
-
         /// <summary>
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
         /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
@@ -325,6 +325,7 @@ namespace Genso.Astrology.Library
         }
 
 
+        
         //OVERRIDES
         public override bool Equals(object obj)
         {
@@ -354,7 +355,7 @@ namespace Genso.Astrology.Library
 
             return hash1 + hash2;
         }
-
+        
         public override string ToString()
         {
             return GetStdDateTimeOffsetText();
@@ -362,17 +363,19 @@ namespace Genso.Astrology.Library
 
 
 
+
         //OPERATOR METHODS
-        public static bool operator ==(Time left, Time right)
-        {
-            return left.Equals(right);
-        }
+        public static bool operator ==(Time left, Time right) => left.Equals(right);
 
-        public static bool operator !=(Time left, Time right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(Time left, Time right) => !(left == right);
 
+        public static bool operator >(Time a, Time b) => a.GetStdDateTimeOffset() > b.GetStdDateTimeOffset();
+        
+        public static bool operator <(Time a, Time b) => a.GetStdDateTimeOffset() < b.GetStdDateTimeOffset();
+        
+        public static bool operator >=(Time a, Time b) => a.GetStdDateTimeOffset() >= b.GetStdDateTimeOffset();
+        
+        public static bool operator <=(Time a, Time b) => a.GetStdDateTimeOffset() <= b.GetStdDateTimeOffset();
 
     }
 }

@@ -4,13 +4,18 @@ namespace Website
 {
     public class IPage : ComponentBase
     {
+        /// <summary>
+        /// Fires when page/component is ready for viewing
+        /// </summary>
         public Action? OnPageReady;
-        //public Func<Task>? OnPageBusy;
+
+        /// <summary>
+        /// Fires when page/component has left ready stage
+        /// and now is busy processing something
+        /// </summary>
         public Action? OnPageBusy;
 
-        //private GlobalVariableManager _globalVariable;
         private bool _pageReady;
-        //protected GlobalVariableManager baseGlobalVariable;
 
         public GlobalVariableManager _globalVariable;
 
@@ -44,7 +49,11 @@ namespace Website
             }
         }
 
-
+        
+        /// <summary>
+        /// Attaches event handlers
+        /// If you override this method make sure call the base implementation
+        /// </summary>
         public virtual async Task AttachEventHandlers()
         {
             Console.WriteLine("IPage:AttachEventHandlers");
@@ -53,7 +62,6 @@ namespace Website
             OnPageReady += () => Console.WriteLine("Fired:OnPageReady");
 
         }
-
 
     }
 }

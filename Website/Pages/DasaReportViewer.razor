@@ -3,11 +3,11 @@
 @using Tools = Genso.Astrology.Library.Tools
 @inherits IPage
 
-
-<div style="width: 1000px;
-            scroll-behavior: smooth;
-            overflow-x: scroll;">
-    @DasaRowItems
+<div class="vstack gap-1">
+    <div style="background-color: cadetblue;" class="fw-bold" id="TimeCursorLegend"></div>
+    <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll;">
+        @DasaRowItemsSvg
+    </div>
 </div>
 
 
@@ -20,6 +20,7 @@
     double _dasaEventsPrecision = Tools.DaysToHours(14);
     double _bhuktiEventsPrecision = Tools.DaysToHours(14);
     double _antaramEventsPrecision = Tools.DaysToHours(14);
+    ElementReference _dasaViewBox;
 
 
 
@@ -34,7 +35,21 @@
 
     private List<Event>? AntaramEventList { get; set; }
 
-    private MarkupString DasaRowItems { get; set; } = new MarkupString("<p>test</p>");//in html string
+    private MarkupString DasaRowItemsSvg { get; set; } = new("");//in html string
+
+
+
+    //OVERRIDES
+    /// <summary>
+    /// JS events are attached here because the html element is already loaded
+    /// </summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        //attach event handler for Time Cursor
+        if (firstRender) { await _jsRuntime.addEventListener(_dasaViewBox, "mousemove", "mouseOverDasaViewHandler"); }
+    }
+
 
 
 
@@ -56,7 +71,7 @@
         //AntaramEventList = await getAntaramEvents();
 
         //generate rows
-        DasaRowItems = new MarkupString(GenerateRowSvg(DasaEventList, _dasaEventsPrecision));
+        DasaRowItemsSvg = new MarkupString(GenerateRowSvg(DasaEventList, _dasaEventsPrecision));
 
 
 
@@ -129,9 +144,6 @@
                 horizontalPosition += pxPerSlice;
 
                 rowHtml += rect;
-
-                //Console.WriteLine($"Slice : {slice.GetStdDateTimeOffsetText()}");
-                //Console.WriteLine($"Event : {foundEvent?.FormattedName}");
 
             }
 

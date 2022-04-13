@@ -8,6 +8,7 @@
     <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll;">
         @DasaRowItemsSvg
         @BhuktiRowItemsSvg
+        @AntaramRowItemsSvg
     </div>
 </div>
 
@@ -45,6 +46,8 @@
 
     private MarkupString BhuktiRowItemsSvg { get; set; } = new("");
 
+    private MarkupString AntaramRowItemsSvg { get; set; } = new("");
+
 
 
     //OVERRIDES
@@ -76,11 +79,12 @@
         //note: below methods access the data internally
         DasaEventList = await getDasaEvents();
         BhuktiEventList = await getBhuktiEvents();
-        //AntaramEventList = await getAntaramEvents();
+        AntaramEventList = await getAntaramEvents();
 
-        //generate rows
+        //generate rows and pump them into the page
         DasaRowItemsSvg = new MarkupString(GenerateRowSvg(DasaEventList, _dasaEventsPrecision));
         BhuktiRowItemsSvg = new MarkupString(GenerateRowSvg(BhuktiEventList, _bhuktiEventsPrecision));
+        AntaramRowItemsSvg = new MarkupString(GenerateRowSvg(AntaramEventList, _antaramEventsPrecision));
 
 
         this.StateHasChanged();

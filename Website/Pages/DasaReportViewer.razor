@@ -1,7 +1,7 @@
 ﻿@using Genso.Astrology.Library
 @using System.Xml.Linq
 @using Tools = Genso.Astrology.Library.Tools
-@inherits IPage
+
 
 <div class="vstack gap-1">
     <div style="background-color: cadetblue;" class="fw-bold" id="TimeCursorLegend"></div>
@@ -49,6 +49,9 @@
     private MarkupString AntaramRowItemsSvg { get; set; } = new("");
 
 
+    //--------------------CTOR
+
+
 
     //OVERRIDES
     /// <summary>
@@ -86,7 +89,7 @@
         BhuktiRowItemsSvg = new MarkupString(GenerateRowSvg(BhuktiEventList, _bhuktiEventsPrecision));
         AntaramRowItemsSvg = new MarkupString(GenerateRowSvg(AntaramEventList, _antaramEventsPrecision));
 
-
+        //need to propagate changes
         this.StateHasChanged();
 
 
@@ -226,3 +229,4 @@
 
 
 }
+ 

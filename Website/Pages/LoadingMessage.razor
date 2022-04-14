@@ -2,6 +2,8 @@
 
 @*by default invisible*@
 
+
+
 <div @ref="_loadingMessage" style="display: none;">
     <div class="modal fade show" tabindex="-1" role="dialog" style="display: block">
         <div class="modal-dialog modal-dialog-centered" style="width: fit-content;" role="document">
@@ -23,21 +25,11 @@
 
     private bool _isOpen = false;
 
-    /// <summary>
-    /// If true page is ready
-    /// </summary>
-    public bool PageReady = false;
-
 
     //REFERENCE TO HTML ELEMENTS
     private ElementReference _loadingMessage;
 
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        //mark page as ready
-        if (firstRender) { PageReady = true; }
-    }
 
     /// <summary>
     /// Show loading message

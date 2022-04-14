@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Genso.Astrology.Library;
+using Microsoft.AspNetCore.Components;
 using Website.Pages;
 using Website.Shared;
 
@@ -10,13 +11,30 @@ namespace Website
     /// </summary>
     public class GlobalVariableManager
     {
+        //-----------------------------FIELDS
+
+        /// <summary>
+        /// Time spent waiting before checking if components are ready
+        /// </summary>
+        private const int ComponentWaitDelayMs = 10;
+
+
+        
+        //-----------------------------PROPERTIES
+
+        /// <summary>
+        /// Alert box showed at top of page, located in MainLayout
+        /// </summary>
+        public AlertMessage Alert { get; set; }
+
+        /// <summary>
+        /// LoadingMessage box showed over page when loading, located in MainLayout
+        /// </summary>
         public LoadingMessage LoadingMessage { get; set; }
 
 
-        /// <summary>
-        /// This instance is referencing the AlertMessage located in MainLayout
-        /// </summary>
-        public AlertMessage Alert { get; set; }
+
+        //-----------------------------METHODS
 
         /// <summary>
         /// The current time in the system
@@ -26,15 +44,39 @@ namespace Website
         /// <summary>
         /// Hold the control till components have been loaded
         /// Poll time 10ms
+        /// TODO CAN make as static tool
         /// </summary>
         public async Task WaitTillComponentReady()
         {
-            while (!this.LoadingMessage.PageReady)
+            //wait till every component needed is ready
+            while (LoadingMessage == null && Alert == null)
             {
                 Console.WriteLine("WaitForLoadingComplete");
-                await Task.Delay(10);
+                await Task.Delay(ComponentWaitDelayMs);
             }
+        }
 
+        /// <summary>
+        /// Gets all people list from API server
+        /// Todo basic cache mechanism
+        /// </summary>
+        public async Task<List<Person>> GetPeopleList()
+        {
+            var personListRootXml = await ServerManager.ReadFromServer(ServerManager.GetPersonListAPI);
+            var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+
+            return personList;
+        }
+
+        public async Task<List<Person>> GetMalePeopleList()
+        {
+            var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetMaleListAPI);
+            return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
+        }
+        public async Task<List<Person>> GetFemalePeopleList()
+        {
+            var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetFemaleListAPI);
+            return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
         }
     }
 }

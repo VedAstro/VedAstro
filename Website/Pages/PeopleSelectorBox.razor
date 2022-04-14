@@ -7,10 +7,7 @@
     <label>@Label</label>
     <select @bind="SelectedPersonName" class="form-control">
         <option value="">Select Name</option>
-        @foreach (var person in PersonList)
-        {
-            <option value="@person.GetName()">@person.GetName() - @person.GetBirthDateTime().GetStdDateTimeOffset().Year</option>
-        }
+        @DropDownOptionsHtml
     </select>
 </div>
 
@@ -19,6 +16,10 @@
 
     //DEFAULTS
     const string DefaultLabel = "Person";
+
+
+    private MarkupString DropDownOptionsHtml { get; set; } = new("");
+
 
 
     //PARAMETERS
@@ -46,8 +47,7 @@
     /// <summary>
     /// Set list to show in drop down
     /// </summary>
-    [Parameter]
-    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
+    //private List<Person>? PersonList { get; set; } //data from URL not necessary provided
 
     /// <summary>
     /// Text that is shown above list
@@ -61,14 +61,22 @@
     public EventCallback<string> SelectedPersonNameChanged { get; set; }
 
 
-    //protected override void OnAfterRender(bool firstRender)
-    //{
-    //    if (firstRender)
-    //    {
-    //        //set default label if not set
-    //        Label = Label == null ? DefaultLabel : Label;
+    public void SetData(List<Person> personList)
+    {
+        var html = "";
 
-    //    }
-    //}
+        //generate drop down options in html
+        foreach (var person in personList)
+        {
+            html += $"<option value=\"{person.GetName()}\">{person.GetName()} - {person.GetBirthYear()}</option>";
+        }
+
+        //set drop down list into view
+        DropDownOptionsHtml = new MarkupString(html);
+
+        //need to propagate changes
+        this.StateHasChanged();
+
+    }
 
 }

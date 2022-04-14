@@ -1,31 +1,23 @@
 ﻿@page "/match"
 @using Microsoft.AspNetCore.Components
-@using Genso.Astrology.Library
-@inject NavigationManager _navigation
 
 
 <PageTitle>Find Marriage Match</PageTitle>
 
-@if (PageReady)
-{
-    <PeopleSelectorBox @bind-SelectedPersonName="@SelectedMale" Label="Male" PersonList="@MaleList" />
-    <PeopleSelectorBox @bind-SelectedPersonName="@SelectedFemale" Label="Female" PersonList="@FemaleList" />
+<div class="vstack gap-3">
+    <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonName="@SelectedMale" Label="Male" />
+    <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonName="@SelectedFemale" Label="Female" />
+    <button type="submit" @onclick="GetMatchReport" class="btn btn-primary">Submit</button>
+</div>
 
-    <div style="margin-top: 50px" class="row">
-        <button type="submit" @onclick="GetMatchReport" class="btn btn-primary">Submit</button>
-    </div>
-
-}
 
 @code {
 
     //VARIABLES
-    public List<Person> MaleList { get; set; } //data from URL not necessary provided
-    public List<Person> FemaleList { get; set; } //data from URL not necessary provided
     public string? SelectedMale { get; set; }
     public string? SelectedFemale { get; set; }
-
-    public bool PageReady { get; set; } = false; //marks if the page ready to loaded
+    private PeopleSelectorBox _malePeopleSelector;
+    private PeopleSelectorBox _femalePeopleSelector;
 
 
     protected override async Task OnInitializedAsync()
@@ -34,21 +26,12 @@
         await _globalVariable.LoadingMessage.Show();
 
         //get male list from api server & save it for later
-        var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetMaleListAPI);
-        MaleList = rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
+        _malePeopleSelector.SetData(await _globalVariable.GetMalePeopleList());
+        _femalePeopleSelector.SetData(await _globalVariable.GetFemalePeopleList());
 
-        //get female list from api server & save it for later
-        var rawFemaleListXml = await ServerManager.ReadFromServer(ServerManager.GetFemaleListAPI);
-        FemaleList = rawFemaleListXml.Elements().Select(femaleXml => Person.FromXml(femaleXml)).ToList();
+        //hide loading box
+        await _globalVariable.LoadingMessage.Hide();
 
-        PageReady = true;
-
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        //close loading box that was opened during init
-        if (PageReady) { await _globalVariable.LoadingMessage.Hide(); }
     }
 
     private void GetMatchReport() => _navigation.NavigateTo($"matchreport/{SelectedMale}/{SelectedFemale}");

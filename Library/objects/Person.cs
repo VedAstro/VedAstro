@@ -77,6 +77,8 @@ namespace Genso.Astrology.Library
         }
 
 
+
+        //METHODS
         public XElement ToXml()
         {
             var person = new XElement("Person");
@@ -95,7 +97,6 @@ namespace Genso.Astrology.Library
         /// </summary>
         public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
-            
         /// <summary>
         /// The root element is expected to be Person
         /// </summary>
@@ -109,5 +110,10 @@ namespace Genso.Astrology.Library
 
             return parsedPerson;
         }
+
+        /// <summary>
+        /// Gets STD birth year for person
+        /// </summary>
+        public int GetBirthYear() => this.GetBirthDateTime().GetStdDateTimeOffset().Year;
     }
 }

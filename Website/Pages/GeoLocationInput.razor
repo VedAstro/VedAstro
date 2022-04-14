@@ -136,12 +136,12 @@
         try
         {
             //get longitude & latitude for location
-            coordinates = await Tools.GetAddressLocation(LocationName);
+            coordinates = await WebsiteTools.GetAddressLocation(LocationName);
         }
         catch (Exception e)
         {
             //alert user first with the wrong name
-            _globalVariable.Alert.ShowError($"The location \"{LocationName}\", not found!" +
+            _globalVariable.Alert.ShowWarning($"The location \"{LocationName}\", not found!" +
                                             $"\n Check the spelling or try other nearby place.");
 
             //change to default location & try again to get coordinates
@@ -175,7 +175,7 @@
             Latitude = (double)locationCoordinates.Latitude;
 
             //set gotten location name into view
-            LocationName = await Tools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude);
+            LocationName = await WebsiteTools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude);
 
         }
         catch (Exception e)

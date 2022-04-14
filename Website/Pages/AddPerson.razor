@@ -1,5 +1,6 @@
-﻿@page "/addperson/"
+﻿@page "/addperson"
 @using Genso.Astrology.Library
+
 
 
 <PageTitle>Add new person</PageTitle>
@@ -59,21 +60,14 @@
     string _genderString = "";
     Person _newPerson;
 
-    public bool PageReady { get; set; }
 
-
-    protected override async Task OnInitializedAsync()
+    public AddPerson()
     {
-        //show loading box
-        await _globalVariable.LoadingMessage.Show();
-
         //auto fill time zone based on system time
         _timezoneInput = DateTimeOffset.Now.ToString("zzz");
 
     }
 
-    //hide the loading message that was open in init
-    protected override async Task OnAfterRenderAsync(bool firstRender) => await _globalVariable.LoadingMessage.Hide();
 
 
     //sends the newly created person to API server
@@ -98,13 +92,13 @@
         var result = ServerManager.WriteToServer(ServerManager.AddPersonAPI, xmlData);
 
         //let user know person has been added
-        //TODO NOT IMPLEMENTED
-        _globalVariable.Alert.ShowSuccess($"{_name} added successfully!");
+        await _globalVariable.Alert.ShowSuccess($"{_name} added successfully!");
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete
         this.StateHasChanged();
 
+        //page ready
         await _globalVariable.LoadingMessage.Hide();
     }
 

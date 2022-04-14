@@ -1,11 +1,12 @@
 ﻿using System.Xml.Linq;
+using Genso.Astrology.Library;
 
 namespace Website
 {
     /// <summary>
     /// Simple class holding general functions used in project
     /// </summary>
-    public static class Tools
+    public static class WebsiteTools
     {
         public static async Task<dynamic> GetAddressLocation(string address)
         {

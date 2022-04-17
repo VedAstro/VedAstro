@@ -1,5 +1,7 @@
 ﻿using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using Website.Pages;
 using Website.Shared;
 
@@ -11,6 +13,10 @@ namespace Website
     /// </summary>
     public class GlobalVariableManager
     {
+        public IJSRuntime JsRuntime { get; set; }
+        public  NavigationManager Navigation { get; set; }
+
+
         //-----------------------------FIELDS
 
         /// <summary>
@@ -19,7 +25,8 @@ namespace Website
         private const int ComponentWaitDelayMs = 10;
 
 
-        
+
+
         //-----------------------------PROPERTIES
 
         /// <summary>
@@ -78,5 +85,8 @@ namespace Website
             var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetFemaleListAPI);
             return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
         }
+
+        public void OnClickAddTask(MouseEventArgs obj) => Navigation.NavigateTo(PageRoute.TaskEditor);
+
     }
 }

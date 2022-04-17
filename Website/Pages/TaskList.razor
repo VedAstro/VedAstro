@@ -1,20 +1,15 @@
 ﻿@using Genso.Astrology.Library
 @attribute [Route(PageRoute.TaskList)]
 
+<PageTitle>Features & Bug Fixes</PageTitle>
 
-<div class="vstack gap-2">
-    <h2 class="fw-bold">Task List</h2>
-    <h6>
-        This is a list of features, bug fixes & general things<br />
-        to be done for the VedAstro Project
-    </h6>
-    <div class="hstack gap-4">
-        <button @onclick="OnClickAddTask" class="btn btn-primary">Add Task</button>
-    </div>
-    <hr />
+<PageTop Title="Task List" Description="This is a list of features, bug fixes & general things<br />to be done for the VedAstro Project" />
+
+<div class="hstack gap-4">
+    <button @onclick="_globalVariable.OnClickAddTask" class="btn btn-primary">Add Task</button>
 </div>
 
-<PageTitle>Features & Bug Fixes</PageTitle>
+
 
 <div class="container">
     <div id="@TableId"></div>
@@ -64,6 +59,5 @@
 
     //--------------------EVENT HANDLERS
 
-    private void OnClickAddTask(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.TaskEditor);
 
 }

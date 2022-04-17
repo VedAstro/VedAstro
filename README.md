@@ -38,15 +38,18 @@ Coming soon...
 
 
 # Design Decision Notes
-#### These are randomly ordered notes on why a 
-#### feature was implemented in a certain way.
-#### Will prove usefull when debugging & upgrading code
+#### These are randomly ordered notes on why a feature was implemented in a certain way. Will prove usefull when debugging & upgrading code
 
+## Website: Dasa Notes APR 2022
+- This feature is to store notes on the dasa report
+- The notes are actualy Events converted to XML and stored inside each person's record
+- When rendering these events are placed on top dasa report view
 
 ## WEBSITE : Why astrological calculation done on API server and not in client (browser) via webassmebly?
 - The calculations tested on Intel Xeon with parallel procesing takes about 1GB RAM & 30% CPU.
 With these loads browsers with mobile CPU's are going to be probelmatic for sure.
 So as not to waste time, the API route has been decided since it has been proven to work.
+- There are places where all Astronomical computation is done in client, exp. Planet Info Box 
 
 
 ## MUHURTHA : Notes On Gochara Prediction (from book ) - 11/2/2022

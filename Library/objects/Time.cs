@@ -376,6 +376,5 @@ namespace Genso.Astrology.Library
         public static bool operator >=(Time a, Time b) => a.GetStdDateTimeOffset() >= b.GetStdDateTimeOffset();
         
         public static bool operator <=(Time a, Time b) => a.GetStdDateTimeOffset() <= b.GetStdDateTimeOffset();
-
     }
 }

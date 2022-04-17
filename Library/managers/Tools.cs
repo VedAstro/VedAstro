@@ -42,7 +42,8 @@ namespace Genso.Astrology.Library
             }
 
             //gets enum value as string to place inside XML
-            var enumValueStr = value.ToString();
+            //note: value can be null hence ?, fails quietly
+            var enumValueStr = value?.ToString();
 
             //get the name of the Enum
             //Note: This is the name that will be used
@@ -242,5 +243,10 @@ namespace Genso.Astrology.Library
 
             return diffDays;
         }
+
+        /// <summary>
+        /// Gets the time now in the system in text form
+        /// </summary>
+        public static string GetNowSystemTimeText() => DateTimeOffset.Now.ToString(Time.GetDateTimeFormat());
     }
 }

@@ -1,0 +1,125 @@
+﻿@*
+    Place where tasks are created and edited
+    If tashHash supplied it becomes an editor
+    else becomes a new task creator
+*@
+
+@page "/taskeditor/{TaskHash}"
+@page "/taskeditor"
+
+@using Genso.Astrology.Library
+@using Task = System.Threading.Tasks.Task
+
+<PageTitle>@_pageTitle</PageTitle>
+
+
+<div class="vstack gap-1">
+    <h1>@_pageTitle</h1>
+    <h4>
+        It can be a feature, a bug fix or general things<br />
+        to be done for the VedAstro Project
+    </h4>
+    <hr />
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <form>
+                <div>
+                    <label>Name</label>
+                    <input @bind="_name" type="text" class="form-control" placeholder="Bug Fix">
+                </div>
+                <div>
+                    <label>Description</label>
+                    <input @bind="_description" type="text" class="form-control" placeholder="a correction to a bug in a computer program or system">
+                </div>
+                <div>
+                    <label>Status</label>
+                    <select @bind="_status" class="form-control">
+                        <option value="Pending">Pending</option>
+                        <option value="Complete">Complete</option>
+                    </select>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <div style="margin-top: 50px" class="row">
+        <button type="submit" @onclick="OnClickSubmit" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+
+
+@code {
+
+
+    //VARIABLES
+    [Parameter]
+    public string? TaskHash { get; set; } //data from URL not necessary provided
+
+    private WebsiteTask _websiteTask;
+    private string _pageTitle;
+    string? _name;
+    string? _description;
+    string? _status;
+
+    //--------------------PROPERTIES
+
+    private Mode PageMode { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        //decide if page should be editor or creator
+        PageMode = TaskHash == null ? Mode.Creator : Mode.Editor;
+
+        RenderPage();
+    }
+
+
+    /// <summary>
+    /// Renders page based on page mode set during init
+    /// </summary>
+    private void RenderPage()
+    {
+        //set page title
+        _pageTitle = PageMode == Mode.Creator ? "Create Task" : "Edit Task";
+
+        //set task instance used in this page
+        _websiteTask = PageMode == Mode.Creator ? new WebsiteTask() : throw new NotImplementedException();
+
+    }
+
+
+    private async Task OnClickSubmit(MouseEventArgs obj)
+    {
+        await _globalVariable.LoadingMessage.Show();
+
+        //pack details from input together
+        _websiteTask.Name = _name;
+        _websiteTask.Description = _description;
+        _websiteTask.Status = _status;
+        _websiteTask.Date = Tools.GetNowSystemTimeText();
+
+        //send new task to api server
+        var result = await ServerManager.WriteToServer(ServerManager.AddTaskAPI, _websiteTask.ToXml());
+
+        //let user know task has been added
+        await _globalVariable.Alert.ShowSuccess($"{_name} added successfully!");
+
+        //refresh the page variables
+        //todo marked for deletion, test without = no difference > delete
+        StateHasChanged();
+
+        //page ready
+        await _globalVariable.LoadingMessage.Hide();
+
+        //send user to task list page after period of time
+        await Task.Delay(100);
+        _navigation.NavigateTo(PageRoute.TaskList);
+
+    }
+
+}

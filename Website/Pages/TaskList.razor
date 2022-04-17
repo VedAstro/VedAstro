@@ -1,0 +1,69 @@
+﻿@using Genso.Astrology.Library
+@attribute [Route(PageRoute.TaskList)]
+
+
+<div class="vstack gap-2">
+    <h2 class="fw-bold">Task List</h2>
+    <h6>
+        This is a list of features, bug fixes & general things<br />
+        to be done for the VedAstro Project
+    </h6>
+    <div class="hstack gap-4">
+        <button @onclick="OnClickAddTask" class="btn btn-primary">Add Task</button>
+    </div>
+    <hr />
+</div>
+
+<PageTitle>Features & Bug Fixes</PageTitle>
+
+<div class="container">
+    <div id="@TableId"></div>
+</div>
+
+
+
+@code {
+
+    //FIELDS
+    const string TableId = "TaskListTable";
+
+
+    //code executed after page has been rendered
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //generate table
+        if (firstRender) { await GenerateTable(); }
+    }
+
+
+    private async Task GenerateTable()
+    {
+        await _globalVariable.LoadingMessage.Show();
+
+        //get all task from API server
+        var tasksListXml = await ServerManager.ReadFromServer(ServerManager.GetTaskListAPI);
+
+        //var x = tasksListXml?.Element("Root")?.Elements().ToString() ?? "NULL";
+        //var y = tasksListXml?.Elements().ToString() ?? "NULL";
+        //Console.WriteLine(x);
+        //Console.WriteLine(y);
+
+        //convert xml to objects
+
+        var taskList = new List<WebsiteTask>();
+        foreach (var taskXml in tasksListXml.Elements()) { taskList.Add(WebsiteTask.FromXml(taskXml)); }
+
+        //convert objects to json (for js generator library)
+        //and calls js code change table directly
+        await _jsRuntime.InvokeVoidAsync("generateTable", TableId, taskList.ToArray());
+
+        await _globalVariable.LoadingMessage.Hide();
+
+    }
+
+
+    //--------------------EVENT HANDLERS
+
+    private void OnClickAddTask(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.TaskEditor);
+
+}

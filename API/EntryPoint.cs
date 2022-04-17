@@ -84,6 +84,39 @@ namespace API
             return okObjectResult;
         }
 
+        [FunctionName("addtask")]
+        public static async Task<IActionResult> AddTask(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob("vedastro-site-data/TaskList.xml", FileAccess.ReadWrite)] BlobClient taskListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+                //get new task data out of incoming request 
+                var newTaskXml = APITools.ExtractDataFromRequest(incomingRequest);
+
+                //add new task to main list
+                var taskListXml = APITools.AddXElementToXDocument(taskListClient, newTaskXml);
+
+                //upload modified list to storage
+                await APITools.OverwriteBlobData(taskListClient, taskListXml);
+
+                responseMessage = new XElement("Status", "Success").ToString();
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
         [FunctionName("getmalelist")]
         public static async Task<IActionResult> GetMaleList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
@@ -166,6 +199,35 @@ namespace API
 
                 //send people list to caller
                 responseMessage = personListXml.ToString();
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
+
+        [FunctionName("gettasklist")]
+        public static async Task<IActionResult> GetTaskList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob("vedastro-site-data/TaskList.xml", FileAccess.ReadWrite)] BlobClient taskListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+                //get task list from storage
+                var taskListXml = APITools.BlobClientToXml(taskListClient);
+
+                //send task list to caller
+                responseMessage = taskListXml.ToString();
 
             }
             catch (Exception e)

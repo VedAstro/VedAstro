@@ -90,6 +90,9 @@
         AlertHtml = new MarkupString(html);
     }
 
+    /// <summary>
+    /// Will auto close after preset time
+    /// </summary>
     public async Task ShowSuccess(string message = "")
     {
         StartCloseTimer();

@@ -115,5 +115,10 @@ namespace Genso.Astrology.Library
         /// Gets STD birth year for person
         /// </summary>
         public int GetBirthYear() => this.GetBirthDateTime().GetStdDateTimeOffset().Year;
+
+        /// <summary>
+        /// Gets this person's age at the inputed time (using year from STD time)
+        /// </summary>
+        public int GetAge(Time time) => time.GetStdDateTimeOffset().Year - GetBirthYear();
     }
 }

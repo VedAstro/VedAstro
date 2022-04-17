@@ -388,6 +388,11 @@ namespace Genso.Astrology.Library
             return eventList;
         }
 
+        /// <summary>
+        /// Slices time range into pieces by inputed hours
+        /// Given a start time and end time, it will add precision hours to start time until reaching end time.
+        /// Note: number of slices returned != precision hours
+        /// </summary>
         public static List<Time> GetTimeListFromRange(Time startTime, Time endTime, double precisionInHours)
         {
             //declare return value

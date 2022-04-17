@@ -20,9 +20,7 @@
 )(Element.prototype);
 
 
-//CUSTOM LOGIC FUNCTIONS
-//WHICH ARE CONSUMED BY OTHERS IN THIS FILE
-
+//EVENT HANDLERS
 //moves the line cursor in DasaViewBox
 //and updates the time cursor legend box
 function timeCursorEventHandler(mouse) {
@@ -67,9 +65,10 @@ function mouseOverDasaViewHandler(mouse) {
     //get details from inside the time slice
     var eventName = timeSlice.getAttribute("eventname");
     var stdTime = timeSlice.getAttribute("stdtime");
+    var age = timeSlice.getAttribute("age");
 
     //place data into view
-    $("#TimeCursorLegend").html(`${eventName} - ${stdTime}`);
+    $("#TimeCursorLegend").html(`${eventName} - ${stdTime} - AGE : ${age}`);
 
 }
 
@@ -82,6 +81,11 @@ function dasaViewScrollEventHandler(evt) {
     evt.currentTarget.scrollLeft += evt.deltaY;
 
 }
+
+
+
+//CUSTOM LOGIC FUNCTIONS
+//WHICH ARE CONSUMED BY OTHERS IN THIS FILE
 
 function PixelToTimeFromBirth(pixelValue, stdTime) {
     return DotNet.invokeMethod('Website', 'PixelToTimeFromBirth', pixelValue, stdTime);
@@ -96,23 +100,6 @@ function executeFunctionByName(functionName, context /*, args */) {
     }
     return context[func].apply(context, args);
 }
-
-//function getAllElementsUnder() {
-//    var inBox = [];
-//    var divBox = document.getElementById("TimePlaceLine").getBoundingClientRect();
-//    var images = document.getElementsByClassName("intersect");
-//    for (var i = 0; i < images.length; i++) {
-//        var imageBox = images[i].getBoundingClientRect();
-//        var overlap = !(divBox.right < imageBox.left ||
-//            divBox.left > imageBox.right ||
-//            divBox.bottom < imageBox.top ||
-//            divBox.top > imageBox.bottom);
-//        if (overlap) {
-//            inBox.push(images[i]);
-//        }
-//    }
-//    return inBox;
-//}
 
 //returns first elements in input list that is
 //underneath (visually) the inputed top element
@@ -161,8 +148,6 @@ function isElementUnderElement(topElement, underElement) {
 
 
 
-
-
 //IN PRODUCTION USE CODE BELOW, CAREFUL!
 //CALLED BY BLAZOR WRAPPER CLASS
 
@@ -207,7 +192,34 @@ window.getElementWidth = function (element, parm) {
     return element.offsetWidth;
 };
 
+//Generates a table using Tabulator table library
+//id to where table will be generated needs to be inputed
+function generateTable(tableId, tableData) {
 
+
+    var table = new Tabulator(`#${tableId}`, {
+        data: tableData,           //load row data from array
+        layout: "fitColumns",      //fit columns to width of table
+        responsiveLayout: "hide",  //hide columns that don't fit on the table
+        tooltips: true,            //show tool tips on cells
+        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        history: true,             //allow undo and redo actions on the table
+        pagination: "local",       //paginate the data
+        paginationSize: 7,         //allow 7 rows per page of data
+        paginationCounter: "rows", //display count of paginated rows in footer
+        movableColumns: false,      //allow column order to be changed
+        resizableRows: true,       //allow row order to be changed
+        initialSort: [             //set the initial sort order of the data
+            { column: "name", dir: "asc" },
+        ],
+        columns: [                 //define the table columns
+            { title: "Name", field: "name", editor: "input" },
+            { title: "Description", field: "description", editor: "input" },
+            { title: "Status", field: "status", editor: "select", editorParams: { values: ["Pending", "Complete"] } },
+            { title: "Date", field: "date", sorter: "date", hozAlign: "center" },
+        ],
+    });
+}
 
 
 
@@ -381,31 +393,22 @@ window.autoScrollToYear = function (scrollContainer, targetYearText) {
 };
 
 
-//Generates a table using Tabulator table library
-//id to where table will be generated needs to be inputed
-function generateTable(tableId, tableData) {
 
+//ARCHIVED CODE
 
-    var table = new Tabulator(`#${tableId}`, {
-        data: tableData,           //load row data from array
-        layout: "fitColumns",      //fit columns to width of table
-        responsiveLayout: "hide",  //hide columns that don't fit on the table
-        tooltips: true,            //show tool tips on cells
-        addRowPos: "top",          //when adding a new row, add it to the top of the table
-        history: true,             //allow undo and redo actions on the table
-        pagination: "local",       //paginate the data
-        paginationSize: 7,         //allow 7 rows per page of data
-        paginationCounter: "rows", //display count of paginated rows in footer
-        movableColumns: false,      //allow column order to be changed
-        resizableRows: true,       //allow row order to be changed
-        initialSort: [             //set the initial sort order of the data
-            { column: "name", dir: "asc" },
-        ],
-        columns: [                 //define the table columns
-            { title: "Name", field: "name", editor: "input" },
-            { title: "Description", field: "description", editor: "input" },
-            { title: "Status", field: "status", editor: "select", editorParams: { values: ["Pending", "Complete"] } },
-            { title: "Date", field: "date", sorter: "date", hozAlign: "center" },
-        ],
-    });
-}
+//function getAllElementsUnder() {
+//    var inBox = [];
+//    var divBox = document.getElementById("TimePlaceLine").getBoundingClientRect();
+//    var images = document.getElementsByClassName("intersect");
+//    for (var i = 0; i < images.length; i++) {
+//        var imageBox = images[i].getBoundingClientRect();
+//        var overlap = !(divBox.right < imageBox.left ||
+//            divBox.left > imageBox.right ||
+//            divBox.bottom < imageBox.top ||
+//            divBox.top > imageBox.bottom);
+//        if (overlap) {
+//            inBox.push(images[i]);
+//        }
+//    }
+//    return inBox;
+//}

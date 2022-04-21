@@ -6,7 +6,7 @@
 <PageTop Title="Task List" Description="This is a list of features, bug fixes & general things<br />to be done for the VedAstro Project" />
 
 <div class="hstack gap-4">
-    <button @onclick="_globalVariable.OnClickAddTask" class="btn btn-primary">Add Task</button>
+    <button @onclick="OnClickAddTask" class="btn btn-primary">Add Task</button>
 </div>
 
 
@@ -38,19 +38,13 @@
         //get all task from API server
         var tasksListXml = await ServerManager.ReadFromServer(ServerManager.GetTaskListAPI);
 
-        //var x = tasksListXml?.Element("Root")?.Elements().ToString() ?? "NULL";
-        //var y = tasksListXml?.Elements().ToString() ?? "NULL";
-        //Console.WriteLine(x);
-        //Console.WriteLine(y);
-
         //convert xml to objects
-
         var taskList = new List<WebsiteTask>();
         foreach (var taskXml in tasksListXml.Elements()) { taskList.Add(WebsiteTask.FromXml(taskXml)); }
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly
-        await _jsRuntime.InvokeVoidAsync("generateTable", TableId, taskList.ToArray());
+        await _jsRuntime.InvokeVoidAsync("generateWebsiteTaskListTable", TableId, taskList.ToArray());
 
         await _globalVariable.LoadingMessage.Hide();
 
@@ -59,5 +53,6 @@
 
     //--------------------EVENT HANDLERS
 
+    public void OnClickAddTask(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.TaskEditor);
 
 }

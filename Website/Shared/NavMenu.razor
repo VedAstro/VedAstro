@@ -16,46 +16,53 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="match">
-                <span class="oi oi-people" aria-hidden="true"></span> Match
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="dasa">
-                <span class="oi oi-list" aria-hidden="true"></span> Dasa
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="tasklist">
+            <NavLink class="nav-link" href="@PageRoute.TaskList">
                 <span class="oi oi-list" aria-hidden="true"></span> Task List
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="muhurtha">
-                <span class="oi oi-list" aria-hidden="true"></span> Muhurtha
+            <NavLink class="nav-link" href="@PageRoute.PersonList">
+                <span class="oi oi-person" aria-hidden="true"></span> Person List
+            </NavLink>
+        </div>
+
+        @*        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="@PageRoute.Muhurtha">
+            <span class="oi oi-list" aria-hidden="true"></span> Muhurtha
+            </NavLink>
+            </div>
+        *@
+
+        <hr style="
+                   color: white;
+                   height: 2px;
+               ">
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="@PageRoute.Match">
+                <span class="oi oi-people" aria-hidden="true"></span> Match
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="horoscope">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Horoscope
+            <NavLink class="nav-link" href="@PageRoute.Dasa">
+                <span class="oi oi-list" aria-hidden="true"></span> Dasa
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="addperson">
-                <span class="oi oi-person" aria-hidden="true"></span> Add Person
+        @*        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="@PageRoute.Horoscope">
+            <span class="oi oi-list-rich" aria-hidden="true"></span> Horoscope
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="localmeantime">
+            </div>
+        *@        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="@PageRoute.LocalMeanTime">
                 <span class="oi oi-person" aria-hidden="true"></span> Local Mean Time
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="sunrisesettime">
+            <NavLink class="nav-link" href="@PageRoute.SunRiseSetTime">
                 <span class="oi oi-person" aria-hidden="true"></span> Sunrise/Sunset Time
             </NavLink>
         </div>
-
     </nav>
 </div>
 

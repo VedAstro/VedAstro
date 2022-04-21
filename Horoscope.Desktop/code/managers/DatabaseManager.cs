@@ -135,23 +135,8 @@ namespace Horoscope.Desktop
             return eventDataList;
 
             //--------------FUNCTIONS
-            //converts xml reprisentation of birth time to object instance of it
-            Time getBirthTime(XElement birthTimeXml)
-            {
-                //extract the individual data out & convert it to the correct type
-                var birthDateTimeRaw = birthTimeXml.Element("Time").Value;
-                var birthDateTime = DateTimeOffset.ParseExact(birthDateTimeRaw, Time.GetDateTimeFormat(), null);
-
-                //extract geolocation
-                var locationHolder = birthTimeXml.Element("Location");
-                var locationName = locationHolder.Element("Name").Value;
-                var longitude = double.Parse(locationHolder.Element("Longitude").Value);
-                var latitide = double.Parse(locationHolder.Element("Latitude").Value);
-                var birthLocation = new GeoLocation(locationName, longitude, latitide);
-
-                //return the extracted data
-                return new Time(birthDateTime, birthLocation);
-            }
+            //converts xml representative of birth time to object instance of it
+            Time getBirthTime(XElement birthTimeXml) => Time.FromXml(birthTimeXml.Element("Time"));
 
         }
 

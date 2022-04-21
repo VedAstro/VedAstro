@@ -68,7 +68,7 @@
         //generate drop down options in html
         foreach (var person in personList)
         {
-            html += $"<option value=\"{person.GetName()}\">{person.GetName()} - {person.GetBirthYear()}</option>";
+            html += $"<option value=\"{person.GetName()}\">{person.GetName()} - {person.BirthYear}</option>";
         }
 
         //set drop down list into view

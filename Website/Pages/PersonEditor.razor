@@ -1,0 +1,235 @@
+﻿@attribute [Route(PageRoute.PersonEditor)]
+@attribute [Route(PageRoute.PersonEditorParam)]
+
+@using Genso.Astrology.Library
+@using System.Xml.Linq
+
+<PageTitle>@_pageTitle</PageTitle>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <form>
+                <div>
+                    <label>Name</label>
+                    <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+                </div>
+                <div>
+                    <div class="row">
+                        <div class="col-5">
+                            <label>Birth Time (24h)</label>
+                            <input @bind="_hourMinInput" type="text" class="form-control" placeholder="06:42">
+                        </div>
+                        <div class="col-5">
+                            <label>Date</label>
+                            <input @bind="_dateInput" type="text" class="form-control" placeholder="16/04/2021">
+                        </div>
+                        <div class="col">
+                            <label>Timezone</label>
+                            <input @bind="_timeZonInput" type="text" class="form-control" placeholder="+08:00">
+                        </div>
+                    </div>
+                </div>
+
+                <GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitudeInput" @bind-Latitude="_latitudeInput" />
+                <div>
+                    <label>Gender</label>
+                    <select @bind="_genderInput" class="form-control">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div style="margin-top: 50px" class="row">
+        <button type="submit" @onclick="OnClickButton" class="btn btn-primary">Submit</button>
+    </div>
+</div>
+
+
+
+@code {
+
+    /// <summary>
+    /// Person name passed in as param, page becomes
+    /// editor passed, else becomes creator
+    /// </summary>
+    [Parameter]
+    public string PersonName { get; set; }
+
+    /// <summary>
+    /// represents the Person instance that this page represents
+    /// </summary>
+    private Person _person;
+
+    /// <summary>
+    /// a copy of the person's hash during init is saved in edit mode
+    /// because hash will change on edit, used as when updating to API
+    /// </summary>
+    private int _originalPersonHash;
+
+    //get page mode that was decided earlier
+    private bool isCreator => PageMode == Mode.Creator;
+
+    /// <summary>
+    /// Function that is called on click of button
+    /// Note: using delegate so that can change function based on page mode
+    /// </summary>
+    private Action OnClickButton { get; set; }
+
+    string? _hourMinInput, _dateInput, _timeZonInput;
+
+    string _locationName = "";
+    string _nameInput = "";
+    double _longitudeInput;
+    double _latitudeInput;
+    string _genderInput = "";
+
+    private string _pageTitle;
+
+
+    //--------------------PROPERTIES
+
+    private Mode PageMode { get; set; }
+
+
+    protected override async void OnInitialized()
+    {
+        //decide if page should be editor or creator
+        PageMode = PersonName == null ? Mode.Creator : Mode.Editor;
+
+        await RenderPage();
+    }
+
+
+    /// <summary>
+    /// Renders page based on page mode set during init
+    /// </summary>
+    private async Task RenderPage()
+    {
+        //based on page mode set the details
+
+        //set page title
+        _pageTitle = isCreator ? "Add New Person" : "Edit Person Details";
+
+        //set person
+        _person = isCreator ? new Person() : await _globalVariable.GetPersonFromName(PersonName);
+
+        //in edit mode save hash of unedited person
+        _originalPersonHash = isCreator ? 0 : _person.GetHashCode();
+
+        _nameInput = isCreator ? "" : _person.Name;
+
+        _genderInput = isCreator ? "Male" : _person.Gender.ToString();
+
+        //auto fill time zone based on system time
+        var personBirthTimeOffset = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("zzz");
+        var systemTimeOffset = DateTimeOffset.Now.ToString("zzz");
+        _timeZonInput = isCreator ? systemTimeOffset : personBirthTimeOffset;
+
+        var birthTimeHourMin = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("hh:mm");
+        var defaultHourMin = "00:00";
+        _hourMinInput = isCreator ? defaultHourMin : birthTimeHourMin;
+
+        var birthTimeDate = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("dd/MM/yyyy");
+        var defaultDate = "10/10/1990";
+        _dateInput = isCreator ? defaultDate : birthTimeDate;
+
+
+        _locationName = isCreator ? "" : _person.GetBirthLocation().GetName();
+        _longitudeInput = isCreator ? 0 : _person.GetBirthLocation().GetLongitude();
+        _latitudeInput = isCreator ? 0 : _person.GetBirthLocation().GetLatitude();
+
+        //button does different stuff based on page mode
+        OnClickButton = isCreator ? SubmitNewPerson : UpdateExistingPerson;
+
+        this.StateHasChanged();
+    }
+
+
+
+    //sends the newly created person to API server
+    private async void SubmitNewPerson()
+    {
+        await _globalVariable.LoadingMessage.Show();
+
+        //make a new person from the details in the input
+        _person = getPersonInstanceFromInput();
+
+        //send newly created person to API server
+        var xmlData = _person.ToXml();
+        var result = ServerManager.WriteToServer(ServerManager.AddPersonAPI, xmlData);
+
+        //let user know person has been added
+        await _globalVariable.Alert.ShowSuccess($"{_nameInput} added successfully!");
+
+        //refresh the page variables
+        //todo marked for deletion, test without = no difference > delete
+        StateHasChanged();
+
+        //page ready
+        await _globalVariable.LoadingMessage.Hide();
+
+        //send user to task list page after period of time
+        await Task.Delay(100);
+        _navigation.NavigateTo(PageRoute.TaskList);
+
+    }
+
+    /// <summary>
+    /// Using the details in the inputs makes a new Person instance
+    /// Note : Input fields do not use binding because implementing
+    /// separated time fields is erroneous
+    /// </summary>
+    private Person getPersonInstanceFromInput()
+    {
+
+        //parse data received from user
+        var geoLocation = new GeoLocation(_locationName, _longitudeInput, _latitudeInput);
+        var fullTimeString = $"{_hourMinInput} {_dateInput} {_timeZonInput}";
+        var stdTimeMale = DateTimeOffset.ParseExact(fullTimeString, Time.GetDateTimeFormat(), null);
+
+        //get gender from gender string
+        var _gender = Enum.Parse<Gender>(_genderInput);
+
+        //create a new person from the inputed data
+        var birthTime = new Time(stdTimeMale, geoLocation);
+        return new Person(_nameInput, birthTime, _gender);
+
+    }
+
+    private async void UpdateExistingPerson()
+    {
+        //show loading message
+        await _globalVariable.LoadingMessage.Show();
+
+        //make a new person from the details in the input
+        _person = getPersonInstanceFromInput();
+
+        //send newly created person to API server
+        var updatedPersonXml = _person.ToXml();
+        var oriPersonHashXml = new XElement("PersonHash", _originalPersonHash);
+        var rootXml = new XElement("Root");
+        rootXml.Add(oriPersonHashXml, updatedPersonXml);
+        //todo check the result
+        var result = await ServerManager.WriteToServer(ServerManager.UpdatePersonAPI, rootXml);
+        Console.WriteLine(result.ToString());
+
+        //let user know person has been updates
+        await _globalVariable.Alert.ShowSuccess($"{_nameInput} updated successfully!");
+
+        //refresh the page variables
+        //todo marked for deletion, test without = no difference > delete
+        this.StateHasChanged();
+
+        //page ready
+        await _globalVariable.LoadingMessage.Hide();
+
+        //send user to task list page after period of time
+        await Task.Delay(100);
+        _navigation.NavigateTo(PageRoute.PersonList);
+
+    }
+
+}

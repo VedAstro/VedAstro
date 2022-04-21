@@ -23,8 +23,8 @@ namespace Genso.Astrology.Library
 
 
         /// <summary>
-        /// Converts any type to XML
-        /// Will use Type's own ToXml() converter if available
+        /// Converts any type to XML, it will use Type's own ToXml() converter if available
+        /// else ToString is called and placed inside element with Type's full name
         /// Note, used to transfer data via internet Client to API Server
         /// Example:
         /// <TypeName>

@@ -80,13 +80,33 @@ namespace Website
             var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetMaleListAPI);
             return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
         }
+        
         public async Task<List<Person>> GetFemalePeopleList()
         {
             var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetFemaleListAPI);
             return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
         }
 
-        public void OnClickAddTask(MouseEventArgs obj) => Navigation.NavigateTo(PageRoute.TaskEditor);
+        /// <summary>
+        /// Gets person instance from name contacts API
+        /// Note: uses API to get latest data
+        /// </summary>
+        public async Task<Person> GetPersonFromName(string name)
+        {
+
+            //send newly created person to API server
+            var xmlData = Tools.AnyTypeToXml(name);
+            var result = await ServerManager.WriteToServer(ServerManager.GetPersonAPI, xmlData);
+
+            var personXml = result.Element("Person");
+            var y = personXml.ToString();
+
+            //parse received person
+            var receivedPerson = Person.FromXml(personXml);
+
+            return receivedPerson;
+        }
+
 
     }
 }

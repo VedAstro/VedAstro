@@ -18,11 +18,14 @@ namespace API
 {
     public static class EntryPoint
     {
+        //hard coded links to files stored in storage
+        private const string PersonlistXml = "vedastro-site-data/PersonList.xml";
+        private const string TasklistXml = "vedastro-site-data/TaskList.xml";
 
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> Match(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            [Blob("vedastro-site-data/PersonList.xml", FileAccess.Read)] Stream personListRead,
+            [Blob(PersonlistXml, FileAccess.Read)] Stream personListRead,
             ILogger log)
         {
             string responseMessage;
@@ -54,7 +57,7 @@ namespace API
         [FunctionName("addperson")]
         public static async Task<IActionResult> AddPerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -87,7 +90,7 @@ namespace API
         [FunctionName("addtask")]
         public static async Task<IActionResult> AddTask(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob("vedastro-site-data/TaskList.xml", FileAccess.ReadWrite)] BlobClient taskListClient)
+            [Blob(TasklistXml, FileAccess.ReadWrite)] BlobClient taskListClient)
         {
             var responseMessage = "";
 
@@ -120,7 +123,7 @@ namespace API
         [FunctionName("getmalelist")]
         public static async Task<IActionResult> GetMaleList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -132,8 +135,8 @@ namespace API
 
                 //get only male ppl into a list
                 var maleList = from person in personListXml.Root?.Elements()
-                    where person.Element("Gender")?.Value == "Male"
-                    select person;
+                               where person.Element("Gender")?.Value == "Male"
+                               select person;
 
                 //send male list to caller
                 responseMessage = new XElement("Root", maleList).ToString();
@@ -154,7 +157,7 @@ namespace API
         [FunctionName("getfemalelist")]
         public static async Task<IActionResult> GetFemaleList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -166,8 +169,8 @@ namespace API
 
                 //get only female ppl into a list
                 var maleList = from person in personListXml.Root?.Elements()
-                    where person.Element("Gender")?.Value == "Female"
-                    select person;
+                               where person.Element("Gender")?.Value == "Female"
+                               select person;
 
                 //send female list to caller
                 responseMessage = new XElement("Root", maleList).ToString();
@@ -185,10 +188,97 @@ namespace API
             return okObjectResult;
         }
 
+        /// <summary>
+        /// Gets person all details from only name
+        /// </summary>
+        [FunctionName("getperson")]
+        public static async Task<IActionResult> GetPerson(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+                //get person name
+                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+
+                //parse it
+                var personName = requestData.Value;
+
+                //get person list from storage
+                var personListXml = APITools.BlobClientToXml(personListClient);
+
+                //get only female ppl into a list
+                var foundPerson = from person in personListXml.Root?.Elements()
+                                      //todo need to use hash here for checking
+                                  where person.Element("Name")?.Value == personName
+                                  select person;
+
+                //send person to caller
+                responseMessage = new XElement("Root", foundPerson.FirstOrDefault()).ToString();
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
+        /// <summary>
+        /// Updates a person's record, uses hash to identify person to overwrite
+        /// </summary>
+        [FunctionName("updateperson")]
+        public static async Task<IActionResult> UpdatePerson(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+                //get unedited hash & updated person details from incoming request
+                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var rootXml = requestData.Element("Root");
+                var originalHash = int.Parse(rootXml.Element("PersonHash").Value);
+                var updatedPerson = Person.FromXml(rootXml.Element("Person"));
+
+                //update person with matching hash from person list
+                var personListXml = APITools.BlobClientToXml(personListClient);
+                var personToUpdate = (from personXml in personListXml.Root.Elements()
+                                            where Person.FromXml(personXml).GetHashCode() == originalHash
+                                            select personXml).First();
+                //do the replacing
+                personToUpdate.ReplaceWith(updatedPerson);
+
+                //upload modified list to storage
+                await APITools.OverwriteBlobData(personListClient, personListXml);
+
+                responseMessage = new XElement("Status", "Success").ToString();
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
         [FunctionName("getpersonlist")]
         public static async Task<IActionResult> GetPersonList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob("vedastro-site-data/PersonList.xml", FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -217,7 +307,7 @@ namespace API
         [FunctionName("gettasklist")]
         public static async Task<IActionResult> GetTaskList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob("vedastro-site-data/TaskList.xml", FileAccess.ReadWrite)] BlobClient taskListClient)
+            [Blob(TasklistXml, FileAccess.ReadWrite)] BlobClient taskListClient)
         {
             var responseMessage = "";
 
@@ -263,7 +353,7 @@ namespace API
                 var startTime = Time.FromXml(requestData.Element("StartTime").Element("Time"));
                 var endTime = Time.FromXml(requestData.Element("EndTime").Element("Time"));
                 var location = GeoLocation.FromXml(requestData.Element("Location"));
-                var tag =  Tools.XmlToAnyType<EventTag>(requestData.Element(typeof(EventTag).FullName));
+                var tag = Tools.XmlToAnyType<EventTag>(requestData.Element(typeof(EventTag).FullName));
                 var precision = Tools.XmlToAnyType<double>(requestData.Element(typeof(double).FullName));
 
                 //calculate events from the data received

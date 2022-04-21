@@ -56,6 +56,7 @@ namespace API
             var xmlString = RequestToXmlString(request);
 
             //parse xml string
+            //todo an exception check here might be needed
             var xml = XElement.Parse(xmlString);
 
             return xml;
@@ -83,15 +84,10 @@ namespace API
         }
 
         /// <summary>
-        /// When receiving
-        /// Extracts the raw data coming from the server, and extract what is needed
-        ///  here original data is overwritten
+        /// Simply converts incoming request to raw string
+        /// No parsing is done here 
         /// </summary>
-        public static string RequestToXmlString(HttpRequestMessage rawData)
-        {
-            //get request body
-            return rawData.Content.ReadAsStringAsync().Result;
-        }
+        public static string RequestToXmlString(HttpRequestMessage rawData) => rawData.Content.ReadAsStringAsync().Result;
 
         /// <summary>
         /// Extracts names from the query URL

@@ -88,3 +88,6 @@ degrees of a sign, Mars and the Sun produce results."
               - very fast
 
 Thus Option 3 was choosen.
+
+## Astrology Library: Use of Struct vs Class
+- structs are used to reduce overhead from large collections

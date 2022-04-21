@@ -5,32 +5,67 @@ namespace Genso.Astrology.Library
 {
     /// <summary>
     /// Simple data type to contain a person's details
+    /// NOTE: switch to class if needed
     /// </summary>
     public struct Person : IToXml
     {
-        private readonly string _name;
-        private readonly Gender _gender;
-        private readonly Time _birthTime;
+        //DATA FIELDS
+        public string Name { get; set; }
+        public Gender Gender { get; set; }
+        public Time BirthTime { get; set; }
+        
+
 
         //CTOR
         public Person(string name, Time birthTime, Gender gender)
         {
-            _name = name;
-            _birthTime = birthTime;
-            _gender = gender;
+            Name = name;
+            BirthTime = birthTime;
+            Gender = gender;
         }
 
-        
-        
+
+
         //PUBLIC PROPERTIES
-        public Time GetBirthDateTime() => _birthTime;
+
+        /// <summary>
+        /// Todo deprecated use BirthTime
+        /// </summary>
+        public Time GetBirthDateTime() => BirthTime;
+
         /// <summary>
         /// Get the place of birth
         /// Note: uses the location stored in birth "Time"
         /// </summary>
-        public GeoLocation GetBirthLocation() => _birthTime.GetGeoLocation();
-        public string GetName() => _name;
-        public Gender GetGender() => _gender;
+        public GeoLocation GetBirthLocation() => BirthTime.GetGeoLocation();
+
+        /// <summary>
+        /// Todo deprecated use Name
+        /// </summary>
+        public string GetName() => Name;
+
+        /// <summary>
+        /// Todo deprecated use Gender
+        /// </summary>
+        public Gender GetGender() => Gender;
+
+        /// <summary>
+        /// Gets STD birth year for person
+        /// </summary>
+        public int BirthYear => this.GetBirthDateTime().GetStdDateTimeOffset().Year;
+
+        /// <summary>
+        /// Gets this person's age at the inputed time (using year from STD time)
+        /// </summary>
+        public int GetAge(Time time) => time.GetStdDateTimeOffset().Year - this.BirthYear;
+
+        public string GenderString => Gender.ToString();
+
+        /// <summary>
+        /// Gets STD birth time as string
+        /// </summary>
+        public string BirthTimeString => this.GetBirthDateTime().GetStdDateTimeOffsetText();
+
 
 
 
@@ -58,7 +93,7 @@ namespace Genso.Astrology.Library
         public override string ToString()
         {
             //prepare string
-            var returnString = $"{this._name}";
+            var returnString = $"{this.Name}";
 
             //return string to caller
             return returnString;
@@ -70,11 +105,13 @@ namespace Genso.Astrology.Library
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
-            var hash1 = _name?.GetHashCode() ?? 0;
-            var hash2 = _birthTime.GetHashCode();
+            var hash1 = Name?.GetHashCode() ?? 0;
+            var hash2 = BirthTime.GetHashCode();
 
             return hash1 + hash2;
         }
+
+
 
 
 
@@ -111,14 +148,5 @@ namespace Genso.Astrology.Library
             return parsedPerson;
         }
 
-        /// <summary>
-        /// Gets STD birth year for person
-        /// </summary>
-        public int GetBirthYear() => this.GetBirthDateTime().GetStdDateTimeOffset().Year;
-
-        /// <summary>
-        /// Gets this person's age at the inputed time (using year from STD time)
-        /// </summary>
-        public int GetAge(Time time) => time.GetStdDateTimeOffset().Year - GetBirthYear();
     }
 }

@@ -15,6 +15,8 @@ namespace Website
         public const string AddTaskAPI = "https://vedastroapi.azurewebsites.net/api/addtask";
         public const string GetMaleListAPI = "https://vedastroapi.azurewebsites.net/api/getmalelist";
         public const string GetPersonListAPI = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
+        public const string GetPersonAPI = "https://vedastroapi.azurewebsites.net/api/getperson";
+        public const string UpdatePersonAPI = "https://vedastroapi.azurewebsites.net/api/updateperson";
         public const string GetTaskListAPI = "https://vedastroapi.azurewebsites.net/api/gettasklist";
         public const string GetFemaleListAPI = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportAPI = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
@@ -63,6 +65,7 @@ namespace Website
 
         /// <summary>
         /// Send xml as string to server and returns xml as response
+        /// Note: xml is not checked here, just converted
         /// </summary>
         public static async Task<XElement> WriteToServer(string apiUrl, XElement xmlData)
         {
@@ -83,10 +86,12 @@ namespace Website
             //extract the content of the reply data
             var rawMessage = response.Content.ReadAsStringAsync().Result;
 
+            //problems might occur when parsing
+            //try to parse as XML
+            try { return XElement.Parse(rawMessage); }
 
-
-            //return the raw reply to caller
-            return XElement.Parse(rawMessage);
+            //else raise alarm and show raw message in debugger
+            catch (Exception) { Console.WriteLine($"Raw Unparseable Data:\n{rawMessage}"); throw; }
 
         }
 

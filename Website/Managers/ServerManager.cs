@@ -12,6 +12,7 @@ namespace Website
     {
 
         public const string AddPersonAPI = "https://vedastroapi.azurewebsites.net/api/addperson";
+        public const string DeletePersonAPI = "https://vedastroapi.azurewebsites.net/api/deleteperson";
         public const string AddTaskAPI = "https://vedastroapi.azurewebsites.net/api/addtask";
         public const string GetMaleListAPI = "https://vedastroapi.azurewebsites.net/api/getmalelist";
         public const string GetPersonListAPI = "https://vedastroapi.azurewebsites.net/api/getpersonlist";

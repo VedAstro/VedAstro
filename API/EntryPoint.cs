@@ -245,17 +245,69 @@ namespace API
             {
                 //get unedited hash & updated person details from incoming request
                 var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var rootXml = requestData.Element("Root");
-                var originalHash = int.Parse(rootXml.Element("PersonHash").Value);
-                var updatedPerson = Person.FromXml(rootXml.Element("Person"));
+                var originalHash = int.Parse(requestData?.Element("PersonHash").Value);
+                var updatedPersonXml = requestData?.Element("Person");
 
-                //update person with matching hash from person list
+                //get the person record that needs to be updated
                 var personListXml = APITools.BlobClientToXml(personListClient);
-                var personToUpdate = (from personXml in personListXml.Root.Elements()
-                                            where Person.FromXml(personXml).GetHashCode() == originalHash
-                                            select personXml).First();
-                //do the replacing
-                personToUpdate.ReplaceWith(updatedPerson);
+                var personToUpdate = personListXml.Root.Elements()
+                    .Where(delegate(XElement personXml)
+                    {   //use hash as id to find the person's record
+                        var thisHash = Person.FromXml(personXml).GetHashCode();
+                        return thisHash == originalHash;
+                    }).First();
+
+
+                //delete the previous person record,
+                //and insert updated record in the same place
+                personToUpdate.ReplaceWith(updatedPersonXml);
+
+                //upload modified list to storage
+                await APITools.OverwriteBlobData(personListClient, personListXml);
+
+                responseMessage = new XElement("Status", "Success").ToString();
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
+        /// <summary>
+        /// Deletes a person's record, uses hash to identify person
+        /// </summary>
+        [FunctionName("deleteperson")]
+        public static async Task<IActionResult> DeletePerson(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+                //get unedited hash & updated person details from incoming request
+                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var originalHash = int.Parse(requestData.Value);
+
+                //get the person record that needs to be deleted
+                var personListXml = APITools.BlobClientToXml(personListClient);
+                var personToDelete = personListXml.Root.Elements()
+                    .Where(delegate(XElement personXml)
+                    {   //use hash as id to find the person's record
+                        var thisHash = Person.FromXml(personXml).GetHashCode();
+                        return thisHash == originalHash;
+                    }).First();
+
+
+                //delete the person record,
+                personToDelete.Remove();
 
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);

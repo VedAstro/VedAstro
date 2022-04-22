@@ -91,3 +91,10 @@ Thus Option 3 was choosen.
 
 ## Astrology Library: Use of Struct vs Class
 - structs are used to reduce overhead from large collections
+
+## Person Get Hash uses MD5
+- default hashing is inconsistent, MD5 is used
+- many class's get hash overrides still use default hashing (in cache mechanism),
+  could result in errors, needs to be updated
+- NOTE : all default hashing is instance specific (FOR STRINGS ONLY so far), works as id in 1 enviroment, 
+but with Client + Server config, hashes become different, needs changing to MD5

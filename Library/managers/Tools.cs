@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 
@@ -248,5 +249,34 @@ namespace Genso.Astrology.Library
         /// Gets the time now in the system in text form
         /// </summary>
         public static string GetNowSystemTimeText() => DateTimeOffset.Now.ToString(Time.GetDateTimeFormat());
+
+        /// <summary>
+        /// Custom hash generator for Strings. Returns consistent/deterministic values
+        /// Note: MD5 (System.Security.Cryptography) not used because not supported in Blazor WASM
+        /// </summary>
+        public static int GetHashCode(string stringToHash)
+        {
+            unchecked
+            {
+                int hash1 = (5381 << 16) + 5381;
+                int hash2 = hash1;
+
+                for (int i = 0; i < stringToHash.Length; i += 2)
+                {
+                    hash1 = ((hash1 << 5) + hash1) ^ stringToHash[i];
+                    if (i == stringToHash.Length - 1)
+                        break;
+                    hash2 = ((hash2 << 5) + hash2) ^ stringToHash[i + 1];
+                }
+
+                return hash1 + (hash2 * 1566083941);
+            }
+
+            
+            //MD5 md5Hasher = MD5.Create();
+            //var hashedByte = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(stringToHash));
+            //return BitConverter.ToInt32(hashedByte, 0);
+
+        }
     }
 }

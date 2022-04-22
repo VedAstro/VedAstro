@@ -48,6 +48,7 @@ namespace API
 
         /// <summary>
         /// Extracts data coming in from API caller
+        /// And parses it as XML
         /// Note : Data is assumed to be XML in string form
         /// </summary>
         public static XElement ExtractDataFromRequest(HttpRequestMessage request)
@@ -120,7 +121,9 @@ namespace API
 
         /// <summary>
         /// Gets the error in a nice string to send to user
-        /// </summary>
+        /// todo receiver using this data expect XML, so when receiving such data as below will raise parse alarm
+        /// todo so when changing to XML, look for receivers and update their error catching mechanism
+        /// </summary> 
         public static string FormatErrorReply(Exception e)
         {
             var responseMessage = "";

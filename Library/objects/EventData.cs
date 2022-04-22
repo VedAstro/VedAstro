@@ -96,7 +96,7 @@ namespace Genso.Astrology.Library
             //get hash of all the fields & combine them
             var hash1 = Name.GetHashCode();
             var hash2 = Nature.GetHashCode();
-            var hash3 = Description.GetHashCode();
+            var hash3 = Tools.GetHashCode(Description);
 
             return hash1 + hash2 + hash3;
         }

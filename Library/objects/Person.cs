@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
@@ -105,10 +107,11 @@ namespace Genso.Astrology.Library
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
-            var hash1 = Name?.GetHashCode() ?? 0;
+            var hash1 = Tools.GetHashCode(this.Name);
             var hash2 = BirthTime.GetHashCode();
 
-            return hash1 + hash2;
+            //take out negative before returning
+            return Math.Abs(hash1 + hash2);
         }
 
 

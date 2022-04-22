@@ -7422,10 +7422,10 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
-        /// Checks if a planet is in a longitude where it's in Debilited
+        /// Checks if a planet is in a longitude where it's in Debilitated
         /// Note : Rahu & ketu accounted for
         /// </summary>
-        public static bool IsPlanetDebilited(PlanetName planet, Time time)
+        public static bool IsPlanetDebilitated(PlanetName planet, Time time)
         {
             //get planet location
             var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
@@ -7691,6 +7691,33 @@ namespace Genso.Astrology.Library
         /// Air Signs: this sign include Gemini, Libra and Aquarius.
         /// </summary>
         public static bool IsAirSign(ZodiacName moonSign) => moonSign is ZodiacName.Gemini or ZodiacName.Libra or ZodiacName.Aquarius;
+
+        /// <summary>
+        /// Gets what the input house controls, rather
+        /// signifies certain important events and incidents.
+        /// </summary>
+        public static string GetHouseDetails(int house, Time time)
+        {
+            switch (house)
+            {
+                case 1: return "beginning of life, childhood, health, environment, personality, the physical body and character";
+                case 2: return "family, face, right eye, food, wealth, literary gift, and manner and source of death, self-acquisition and optimism";
+                case 3: return "brothers and sisters, intelligence, cousins and other immediate relations";
+                case 4: return "peace of mind, home life, mother, conveyances, house property, landed and ancestral properties, education and neck and shoulders";
+                case 5: return "children, grandfather, intelligence, emotions and fame";
+                case 6: return "debts, diseases, enemies, miseries, sorrows, illness and disappointments";
+                case 7: return "wife, husband, marriage, urinary organs, marital happiness, sexual diseases, business partner, diplomacy, talent, energies and general happiness";
+                case 8: return "longevity, legacies and gifts and unearned wealth, cause of death, disgrace, degradation and details pertaining to death";
+                case 9: return "father, righteousness, preceptor, grandchildren, intuition, religion, sympathy, fame, charities, leadership, journeys and communications with spirits";
+                case 10: return "occupation, profession, temporal honours, foreign travels, self-respect, knowledge and dignity and means of livelihood";
+                case 11: return "means of gains, elder brother and freedom from misery";
+                case 12: return "losses, expenditure, waste, extravagance, sympathy, divine knowledge, Moksha and the state after death";
+                default: throw new Exception("House details not found!");
+            }
+
+
+            
+        }
     }
 
 }

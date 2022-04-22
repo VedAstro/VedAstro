@@ -93,13 +93,11 @@ namespace Website
         /// </summary>
         public async Task<Person> GetPersonFromName(string name)
         {
-
             //send newly created person to API server
             var xmlData = Tools.AnyTypeToXml(name);
             var result = await ServerManager.WriteToServer(ServerManager.GetPersonAPI, xmlData);
 
             var personXml = result.Element("Person");
-            var y = personXml.ToString();
 
             //parse received person
             var receivedPerson = Person.FromXml(personXml);

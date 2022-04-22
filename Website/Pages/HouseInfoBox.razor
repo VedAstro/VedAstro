@@ -1,0 +1,69 @@
+﻿@using Genso.Astrology.Library
+
+
+<ul style="font-size: small; min-width: 228px;" class="list-group me-2 my-2">
+    <li class="list-group-item active" aria-current="true">House @HouseNumber</li>
+    <li class="list-group-item">Details : @_houseDetails</li>
+    <li class="list-group-item">Sign : @_houseSign</li>
+    <li class="list-group-item">Lord : @_houseLord</li>
+    <li class="list-group-item">Lord Exalted: @(_lordExalted?"Yes":"No")</li>
+    <li class="list-group-item">Lord Debilitated: @(_lordDebilitated?"Yes":"No")</li>
+    <li class="list-group-item">Planets Inside: @_planetsInHouse</li>
+</ul>
+
+
+@code {
+
+    //FIELDS
+
+    [Parameter]
+    public Time Time { get; set; }
+    [Parameter]
+    public int HouseNumber { get; set; }
+
+    private string? _houseDetails,_houseLord, _houseSign, _planetsInHouse;
+    private bool _lordExalted, _lordDebilitated;
+
+
+
+
+    //METHODS
+
+    protected override void OnInitialized()
+    {
+        UpdateData();
+    }
+
+    public void UpdateData()
+    {
+        var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName) HouseNumber, Time);
+
+
+        //get house details and save it for view
+        _houseDetails = AstronomicalCalculator.GetHouseDetails(HouseNumber, Time);
+        _houseLord = lordOfHouse.ToString();
+        _planetsInHouse = GetPlanetsInHouse();
+        //_houseStrenght = AstronomicalCalculator.GetAllHousesOrderedByStrength()
+        _houseSign = AstronomicalCalculator.GetHouseSignName(HouseNumber, Time).ToString();
+    //_houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign();
+
+        _lordExalted = AstronomicalCalculator.IsPlanetExaltated(lordOfHouse, Time);
+        _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, Time);
+    }
+
+    private string? GetPlanetsInHouse()
+    {
+        var planetList = AstronomicalCalculator.GetPlanetsInHouse(HouseNumber, Time);
+
+        var combinedNames = "";
+        foreach (var planet in planetList)
+        {
+            combinedNames += planet.ToString() + ", ";
+        }
+
+        return combinedNames;
+
+    }
+
+
+}

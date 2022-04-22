@@ -22,7 +22,7 @@
         @if (_isResultReady)
         {
             <h4 class="mt-2">Planets</h4>
-            <div class="d-flex flex-nowrap">
+            <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
                 <PlanetInfoBox PlanetName="PlanetName.Sun" time="@SelectedPerson.GetBirthDateTime()" />
                 <PlanetInfoBox PlanetName="PlanetName.Moon" time="@SelectedPerson.GetBirthDateTime()" />
                 <PlanetInfoBox PlanetName="PlanetName.Mercury" time="@SelectedPerson.GetBirthDateTime()" />
@@ -30,6 +30,27 @@
                 <PlanetInfoBox PlanetName="PlanetName.Jupiter" time="@SelectedPerson.GetBirthDateTime()" />
                 <PlanetInfoBox PlanetName="PlanetName.Saturn" time="@SelectedPerson.GetBirthDateTime()" />
                 <PlanetInfoBox PlanetName="PlanetName.Venus" time="@SelectedPerson.GetBirthDateTime()" />
+            </div>
+        }
+    </div>
+    @*HOUSE INFO LIST*@
+    <div>
+        @if (_isResultReady)
+        {
+            <h4 class="mt-2">Houses</h4>
+            <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
+                <HouseInfoBox HouseNumber="1" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="2" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="3" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="4" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="5" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="6" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="7" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="8" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="9" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="10" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="11" Time="@SelectedPerson.GetBirthDateTime()" />
+                <HouseInfoBox HouseNumber="12" Time="@SelectedPerson.GetBirthDateTime()" />
             </div>
         }
     </div>
@@ -85,7 +106,7 @@
         SelectedLocation = new GeoLocation("Ipoh", 101, 4.59);//todo get real location
 
         //set data into dasa viewer
-        await _dasaReportViewer.SetData(SelectedPerson, SelectedLocation);
+        //await _dasaReportViewer.SetData(SelectedPerson, SelectedLocation);
 
         //mark page as ready to show results
         _isResultReady = true;

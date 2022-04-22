@@ -1720,7 +1720,7 @@ namespace Genso.Astrology.Library
                 //3. CALCULATE RELATIONSHIP
 
                 //get planet debilitated & exalted friendship
-                var planetDebilitated = AstronomicalCalculator.IsPlanetDebilited(planet, birthTime);
+                var planetDebilitated = AstronomicalCalculator.IsPlanetDebilitated(planet, birthTime);
                 var planetExalted = AstronomicalCalculator.IsPlanetExaltated(planet, birthTime);
 
 

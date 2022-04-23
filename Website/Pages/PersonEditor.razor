@@ -39,6 +39,10 @@
                         <option value="Female">Female</option>
                     </select>
                 </div>
+                @*LIFE EVENTS*@
+                <div>
+
+                </div>
             </form>
         </div>
     </div>
@@ -156,7 +160,6 @@
     }
 
 
-
     //sends the newly created person to API server
     private async void SubmitNewPerson()
     {
@@ -182,7 +185,6 @@
         //send user to task list page after period of time
         await Task.Delay(100);
         _navigation.NavigateTo(PageRoute.TaskList);
-
     }
 
     /// <summary>
@@ -204,7 +206,6 @@
         //create a new person from the inputed data
         var birthTime = new Time(stdTimeMale, geoLocation);
         return new Person(_nameInput, birthTime, _gender);
-
     }
 
     private async void UpdateExistingPerson()
@@ -236,9 +237,10 @@
         //send user to task list page after period of time
         await Task.Delay(100);
         _navigation.NavigateTo(PageRoute.PersonList);
-
     }
 
+
+    //-------------------EVENT HANDLERS
 
     private async Task OnClickDeleteButton()
     {
@@ -262,7 +264,6 @@
         //send user to task list page after period of time
         await Task.Delay(100);
         _navigation.NavigateTo(PageRoute.PersonList);
-
     }
 
 }

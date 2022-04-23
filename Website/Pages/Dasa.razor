@@ -103,10 +103,9 @@
 
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
-        SelectedLocation = new GeoLocation("Ipoh", 101, 4.59);//todo get real location
 
         //set data into dasa viewer
-        //await _dasaReportViewer.SetData(SelectedPerson, SelectedLocation);
+        await _dasaReportViewer.SetData(SelectedPerson);
 
         //mark page as ready to show results
         _isResultReady = true;

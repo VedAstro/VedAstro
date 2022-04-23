@@ -252,10 +252,13 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Custom hash generator for Strings. Returns consistent/deterministic values
+        /// If null returns 0
         /// Note: MD5 (System.Security.Cryptography) not used because not supported in Blazor WASM
         /// </summary>
         public static int GetHashCode(string stringToHash)
         {
+            if (stringToHash == null) { return 0;}
+
             unchecked
             {
                 int hash1 = (5381 << 16) + 5381;

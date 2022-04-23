@@ -38,8 +38,6 @@
     //PROPERTIES
     private Person Person { get; set; }
 
-    private GeoLocation Location { get; set; }
-
     private List<Event>? DasaEventList { get; set; }
 
     private List<Event>? BhuktiEventList { get; set; }
@@ -73,11 +71,10 @@
     /// <summary>
     /// Sets the data that is processed and fill the content
     /// </summary>
-    public async Task SetData(Person person, GeoLocation location)
+    public async Task SetData(Person person)
     {
         //save inputed data
         this.Person = person;
-        this.Location = location;
 
         //use the inputed data to get events from API
         //note: below methods access the data internally
@@ -188,7 +185,9 @@
                 await GetEventsFromApi(
                     startTime,
                     endTime,
-                    Location,
+                    //birth location always as current place,
+                    //since place does not matter for Dasa
+                    Person.GetBirthLocation(),
                     Person,
                     tag,
                     precisionHours);

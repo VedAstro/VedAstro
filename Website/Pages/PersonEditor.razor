@@ -8,50 +8,50 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm">
-            <form>
-                <div>
-                    <label>Name</label>
-                    <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
-                </div>
-                <div>
-                    <div class="row">
-                        <div class="col-5">
-                            <label>Birth Time (24h)</label>
-                            <input @bind="_hourMinInput" type="text" class="form-control" placeholder="06:42">
-                        </div>
-                        <div class="col-5">
-                            <label>Date</label>
-                            <input @bind="_dateInput" type="text" class="form-control" placeholder="16/04/2021">
-                        </div>
-                        <div class="col">
-                            <label>Timezone</label>
-                            <input @bind="_timeZonInput" type="text" class="form-control" placeholder="+08:00">
-                        </div>
+        <div class="col-sm gap-2">
+            
+            <div>
+                <label>Name</label>
+                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-5">
+                        <label>Birth Time (24h)</label>
+                        <input @bind="_hourMinInput" type="text" class="form-control" placeholder="06:42">
+                    </div>
+                    <div class="col-5">
+                        <label>Date</label>
+                        <input @bind="_dateInput" type="text" class="form-control" placeholder="16/04/2021">
+                    </div>
+                    <div class="col">
+                        <label>Timezone</label>
+                        <input @bind="_timeZonInput" type="text" class="form-control" placeholder="+08:00">
                     </div>
                 </div>
+            </div>
 
-                <GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitudeInput" @bind-Latitude="_latitudeInput" />
-                <div>
-                    <label>Gender</label>
-                    <select @bind="_genderInput" class="form-control">
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
-                </div>
-                @*LIFE EVENTS*@
-                <div>
+            <GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitudeInput" @bind-Latitude="_latitudeInput" />
+            <div>
+                <label>Gender</label>
+                <select @bind="_genderInput" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            @*LIFE EVENTS*@
+            <LifeEventEditor @bind-LifeEventList="_lifeEventList" />
 
-                </div>
-            </form>
         </div>
     </div>
+
+    @*BUTTONS*@
     <div style="margin-top: 50px" class="vstack row gap-2">
-        <button type="submit" @onclick="OnClickSubmitButton" class="btn btn-primary">Submit</button>
+        <button @onclick="OnClickSubmitButton" class="btn btn-primary">Submit</button>
         @*Only show delete button in Editor mode*@
         @if (PageMode == Mode.Editor)
         {
-            <button type="submit" @onclick="OnClickDeleteButton" class="btn btn-danger">Delete</button>
+            <button @onclick="OnClickDeleteButton" class="btn btn-danger">Delete</button>
         }
     </div>
 </div>
@@ -78,8 +78,8 @@
     /// </summary>
     private int _originalPersonHash;
 
-    //get page mode that was decided earlier
-    private bool isCreator => PageMode == Mode.Creator;
+    //gets page mode that was decided earlier
+    private bool IsCreator => PageMode == Mode.Creator;
 
     /// <summary>
     /// Function that is called on click of button
@@ -94,8 +94,12 @@
     double _longitudeInput;
     double _latitudeInput;
     string _genderInput = "";
+    string _pageTitle = "";
+    List<Event> _lifeEventList = new();
 
-    private string _pageTitle;
+
+
+
 
 
     //--------------------PROPERTIES
@@ -114,7 +118,6 @@
         await RenderPage();
     }
 
-
     /// <summary>
     /// Renders page based on page mode set during init
     /// </summary>
@@ -123,42 +126,43 @@
         //based on page mode set the details
 
         //set page title
-        _pageTitle = isCreator ? "Add New Person" : "Edit Person Details";
+        _pageTitle = IsCreator ? "Add New Person" : "Edit Person Details";
 
         //set person
-        _person = isCreator ? new Person() : await _globalVariable.GetPersonFromName(PersonName);
+        _person = IsCreator ? new Person() : await _globalVariable.GetPersonFromName(PersonName);
 
         //in edit mode save hash of unedited person
-        _originalPersonHash = isCreator ? 0 : _person.GetHashCode();
+        _originalPersonHash = IsCreator ? 0 : _person.GetHashCode();
 
-        _nameInput = isCreator ? "" : _person.Name;
+        _nameInput = IsCreator ? "" : _person.Name;
 
-        _genderInput = isCreator ? "Male" : _person.Gender.ToString();
+        _genderInput = IsCreator ? "Male" : _person.Gender.ToString();
 
         //auto fill time zone based on system time
         var personBirthTimeOffset = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("zzz");
         var systemTimeOffset = DateTimeOffset.Now.ToString("zzz");
-        _timeZonInput = isCreator ? systemTimeOffset : personBirthTimeOffset;
+        _timeZonInput = IsCreator ? systemTimeOffset : personBirthTimeOffset;
 
         var birthTimeHourMin = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("hh:mm");
         var defaultHourMin = "00:00";
-        _hourMinInput = isCreator ? defaultHourMin : birthTimeHourMin;
+        _hourMinInput = IsCreator ? defaultHourMin : birthTimeHourMin;
 
         var birthTimeDate = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("dd/MM/yyyy");
         var defaultDate = "10/10/1990";
-        _dateInput = isCreator ? defaultDate : birthTimeDate;
+        _dateInput = IsCreator ? defaultDate : birthTimeDate;
 
 
-        _locationName = isCreator ? "" : _person.GetBirthLocation().GetName();
-        _longitudeInput = isCreator ? 0 : _person.GetBirthLocation().GetLongitude();
-        _latitudeInput = isCreator ? 0 : _person.GetBirthLocation().GetLatitude();
+        _locationName = IsCreator ? "" : _person.GetBirthLocation().GetName();
+        _longitudeInput = IsCreator ? 0 : _person.GetBirthLocation().GetLongitude();
+        _latitudeInput = IsCreator ? 0 : _person.GetBirthLocation().GetLatitude();
+
+        _lifeEventList = new List<Event> {new(EventName.AmritaSiddhaYoga, EventNature.Good, "TEST", Time.Now(_person.GetBirthLocation()), Time.Now(_person.GetBirthLocation()))};
 
         //button does different stuff based on page mode
-        OnClickSubmitButton = isCreator ? SubmitNewPerson : UpdateExistingPerson;
+        OnClickSubmitButton = IsCreator ? SubmitNewPerson : UpdateExistingPerson;
 
         this.StateHasChanged();
     }
-
 
     //sends the newly created person to API server
     private async void SubmitNewPerson()
@@ -238,6 +242,9 @@
         await Task.Delay(100);
         _navigation.NavigateTo(PageRoute.PersonList);
     }
+
+
+
 
 
     //-------------------EVENT HANDLERS

@@ -7,7 +7,7 @@
 <div class="vstack gap-3">
     <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonName="@SelectedMale" Label="Male" />
     <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonName="@SelectedFemale" Label="Female" />
-    <button type="submit" @onclick="GetMatchReport" class="btn btn-primary">Submit</button>
+    <button @onclick="GetMatchReport" class="btn btn-primary">Submit</button>
 </div>
 
 

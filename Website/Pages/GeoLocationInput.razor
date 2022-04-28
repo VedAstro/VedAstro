@@ -1,5 +1,6 @@
-﻿@*Component that allows the input of geo location
-    Note : When loaded location from browser is tried to get
+﻿@*
+    Component that allows the input of geo location
+    Note : When loaded location from browser is requested
 *@
 
 @using Microsoft.AspNetCore.Components
@@ -84,7 +85,9 @@
         }
     }
 
-    //below are needed for 2-way binding between page & component to work
+
+    //below are needed for 2-way binding
+    //between page & component to work
     [Parameter]
     public EventCallback<string> LocationNameChanged { get; set; }
     [Parameter]

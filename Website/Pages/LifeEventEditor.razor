@@ -1,0 +1,71 @@
+﻿@using Genso.Astrology.Library
+
+<div class="border border-1">
+    <h3>LifeEventEditor</h3>
+
+    @foreach (var lifeEvent in _lifeEventList)
+    {
+        @lifeEvent.Name
+        ;
+    }
+
+    <button @onclick="OnClickAddButton" class="btn btn-danger">Add</button>
+
+</div>
+
+
+
+@code {
+
+
+
+    //VARIABLES
+    private List<Event> _lifeEventList;
+
+
+
+    //PROPERTIES
+
+    [Parameter]
+    public List<Event> LifeEventList
+    {
+        get => _lifeEventList;
+        set
+        {
+            //this stops update loops
+            if (_lifeEventList == value) return;
+
+            //set new value
+            _lifeEventList = value;
+
+            //update value in parent page
+            LifeEventListChanged.InvokeAsync(value);
+        }
+    }
+
+
+
+    //below are needed for 2-way binding
+    //between page & component to work
+    [Parameter]
+    public EventCallback<List<Event>> LifeEventListChanged { get; set; }
+
+
+    //-------------------EVENT HANDLERS
+
+    private async Task OnClickAddButton()
+    {
+        //show loading message
+        await _globalVariable.LoadingMessage.Show();
+
+
+        var x = _lifeEventList[0];
+        _lifeEventList.Add(x);
+
+
+        //page ready
+        await _globalVariable.LoadingMessage.Hide();
+
+    }
+
+}

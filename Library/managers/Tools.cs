@@ -247,6 +247,7 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Gets the time now in the system in text form
+        /// formatted with standard style (HH:mm dd/MM/yyyy zzz) 
         /// </summary>
         public static string GetNowSystemTimeText() => DateTimeOffset.Now.ToString(Time.GetDateTimeFormat());
 

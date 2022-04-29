@@ -21,16 +21,20 @@
     <link href="css/app.css" rel="stylesheet" />
     <link href="Website.styles.css" rel="stylesheet" />
 
-
     <!--Library for getting location from browser, used in GeoLocationInput-->
     <script src="js/Location.js"></script>
-
-    <!--Custom App Js-->
-    <script src="js/App.js"></script>
 
     <!--Table Rendering Library : TABULATOR-->
     <link href="css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="js/tabulator.min.js"></script>
+
+    <!--Library For User Data Extraction : UAParser.js -->
+    <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@1.0.2/src/ua-parser.min.js"></script>
+
+
+    <!--Application Logic, Must run last since it uses the libraries-->
+    <script src="js/App.js"></script>
+    <script src="js/Debug.js"></script>
 
 </head>
 

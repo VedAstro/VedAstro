@@ -21,6 +21,7 @@ namespace API
         //hard coded links to files stored in storage
         private const string PersonlistXml = "vedastro-site-data/PersonList.xml";
         private const string TasklistXml = "vedastro-site-data/TaskList.xml";
+        private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
 
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> Match(
@@ -104,6 +105,39 @@ namespace API
 
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(taskListClient, taskListXml);
+
+                responseMessage = new XElement("Status", "Success").ToString();
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
+        [FunctionName("addvisitor")]
+        public static async Task<IActionResult> AddVisitor(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob(VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+                //get new visitor data out of incoming request 
+                var newVisitorXml = APITools.ExtractDataFromRequest(incomingRequest);
+
+                //add new visitor to main list
+                var taskListXml = APITools.AddXElementToXDocument(visitorLogClient, newVisitorXml);
+
+                //upload modified list to storage
+                await APITools.OverwriteBlobData(visitorLogClient, taskListXml);
 
                 responseMessage = new XElement("Status", "Success").ToString();
 

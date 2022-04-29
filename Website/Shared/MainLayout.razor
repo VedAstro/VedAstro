@@ -1,4 +1,10 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Text.Json
+@using System.Text.Json.Nodes
+@using System.Xml
+@using System.Xml.Linq
+@using Genso.Astrology.Library
+@using Newtonsoft.Json
+@inherits LayoutComponentBase
 
 @*
     NOTE : Components here are loaded same time as page,
@@ -28,3 +34,29 @@
 
     </main>
 </div>
+
+
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        //run once after first render
+        if (firstRender)
+        {
+            //get visitor data & format it nicely for storage
+            var visitorData = await _jsRuntime.InvokeAsync<JsonNode>("getVisitorData");
+            var rawXml = JsonConvert.DeserializeXmlNode(visitorData.ToString(), "Visitor");
+            var visitorElement = XElement.Parse(rawXml.InnerXml);
+            var timeStamp = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
+            visitorElement.Add(timeStamp);
+
+            //send to API for save keeping
+            var result = await ServerManager.WriteToServer(ServerManager.AddVisitorAPI, visitorElement);
+
+            //todo do something with result
+            Console.WriteLine(result);
+        }
+    }
+
+}

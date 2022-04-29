@@ -60,7 +60,7 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
 
-        //attach event handler for Time Cursor
+        //after first render attach event handler for Time Cursor
         if (firstRender) { await _jsRuntime.addEventListener(_dasaViewBox, "mousemove", "mouseOverDasaViewHandler"); }
     }
 

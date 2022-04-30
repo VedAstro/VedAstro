@@ -39,6 +39,29 @@
 @code
 {
 
+    protected override async Task OnInitializedAsync()
+    {
+        WebsiteTools.OnUserSignIn += async () => { await OnUserSignIn(); };
+        WebsiteTools.OnUserSignOut += async () => { await OnUserSignOut(); };
+    }
+
+    private async Task OnUserSignIn()
+    {
+        //var name =  _jsRuntime.InvokeAsync<string>("getGoogleUserName").Result;
+        var email = await _jsRuntime.InvokeAsync<string>("getGoogleUserEmail");
+        //var idToken = _jsRuntime.InvokeAsync<string>("getGoogleUserIdToken").Result;
+
+        Console.WriteLine($"Hi,{email}!");
+    }
+
+    private async Task OnUserSignOut()
+    {
+        var email = await _jsRuntime.InvokeAsync<string>("getGoogleUserEmail");
+        //var idToken = _jsRuntime.InvokeAsync<string>("getGoogleUserIdToken").Result;
+
+        Console.WriteLine($"Bye,{email}!");
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //log visit everytime page is rendered

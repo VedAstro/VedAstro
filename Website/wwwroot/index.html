@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Azure Static Web Apps Blazor Sample</title>
     <base href="/" />
+
+    <!-- Google Sign In -->
+    <meta name="google-signin-client_id" content="19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
           rel="stylesheet" />
@@ -40,18 +45,29 @@
 
 </head>
 
+
+
 <body>
-<div id="app">
-    <!--loading box shown while blazor is loading-->
-    <img style="position: absolute; left: 39%; top: 30%; " src="images/loading-animation.gif"/>
-</div>
+
+    <!--Google Sign In Button-->
+    <!--Note: has to be available when the JS is loaded-->
+    <div class="g-signin2" data-onsuccess="onSignInEventHandler" data-theme="dark" style="position: absolute; top: 532px; left: 26px; Z-INDEX: 1;"></div>
+
+    <a href="#" onclick="signOut();">Sign out</a>
+
+    <div id="app">
+        <!--loading box shown while blazor is loading-->
+        <img style="position: absolute; left: 39%; top: 30%;" src="images/loading-animation.gif" />
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.webassembly.js"></script>
+<script src="_framework/blazor.webassembly.js"></script>
+
+
 </body>
 
 </html>

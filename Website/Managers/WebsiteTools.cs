@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace Website
 {
+    public delegate Task AsyncEventHandler();
     /// <summary>
     /// Simple class holding general functions used in project
     /// </summary>
@@ -137,5 +138,28 @@ namespace Website
             }
 
         }
+
+
+        /// <summary>
+        /// Event fired just after user has signed in
+        /// </summary>
+        public static event AsyncEventHandler OnUserSignIn;
+
+        /// <summary>
+        /// Event fired just after user has signed out
+        /// </summary>
+        public static event AsyncEventHandler OnUserSignOut;
+
+        /// <summary>
+        /// This method is called from JS when user signs in
+        /// </summary>
+        [JSInvokable]
+        public static void InvokeOnUserSignIn() => OnUserSignIn?.Invoke();
+
+        /// <summary>
+        /// This method is called from JS when user signs out
+        /// </summary>
+        [JSInvokable]
+        public static void InvokeOnUserSignOut() => OnUserSignOut?.Invoke();
     }
 }

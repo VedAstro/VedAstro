@@ -18,5 +18,6 @@
         public const string SunRiseSetTime = "/sunrisesettime";
         public static string LocalMeanTime = "/localmeantime";
         public static string Dasa = "/dasa";
+        public static string QuickGuide = "/quickguide";
     }
 }

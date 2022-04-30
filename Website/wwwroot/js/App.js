@@ -51,7 +51,31 @@ function getUrl () {
     return window.location.href;
 };
 
+function getGoogleUserName () {
+    console.log(`JS: getGoogleUserName`);
+    return window.googleUserName;
+};
 
+function getGoogleUserEmail () {
+    console.log(`JS: googleUserEmail`);
+    return window.googleUserEmail;
+};
+
+function getGoogleUserIdToken() {
+    console.log(`JS: googleUserIdToken`);
+    return window.googleUserIdToken;
+};
+
+//called by Google sign out button
+function signOut() {
+
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut();
+
+    //fire event in Blazor, that user just signed out
+    DotNet.invokeMethod('Website', 'InvokeOnUserSignOut');
+
+}
 
 
 
@@ -82,3 +106,22 @@ function mouseOverDasaViewHandler(mouse) {
     $("#TimeCursorLegend").html(`${eventName} - ${stdTime} - AGE : ${age}`);
 
 }
+
+//this function gets called by google sign in button after successful sign in
+//note : this function's name is hardwired in Blazor
+function onSignInEventHandler(googleUser) {
+
+    console.log(`JS: onSignInEventHandler`);
+
+    //get the google user's details and save it to be accessed by Blazor
+    var profile = googleUser.getBasicProfile();
+    window.googleUserName = profile.getName();
+    window.googleUserEmail = profile.getEmail();
+    var id_token = googleUser.getAuthResponse().id_token;
+    window.googleUserIdToken = id_token;
+
+    //fire event in Blazor, that user just signed in
+    DotNet.invokeMethod('Website', 'InvokeOnUserSignIn');
+
+}
+

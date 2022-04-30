@@ -26,7 +26,8 @@ namespace Website
         public const string GetMatchReportAPI = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetEventsAPI = "https://vedastroapi.azurewebsites.net/api/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
-        public const string GoogleGeoLocationAPIKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg";
+        public const string GoogleGeoLocationAPIKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg"; //marked for deletetion
+        public const string GoogleGeoLocationAPIKey2 = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE"; 
 
 
         //PUBLIC METHODS

@@ -22,8 +22,8 @@
     <main>
         @*        <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-*@
+            </div>
+        *@
 
         <article class="content px-4 mb-5">
             @* this is where global variable alert message gets created*@
@@ -41,15 +41,17 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
 
-        //run once after first render
+        //run once after first render,
+        //Note: until site reloaded this only run once
         if (firstRender)
         {
             //get visitor data & format it nicely for storage
-            var visitorData = await _jsRuntime.InvokeAsync<JsonNode>("getVisitorData");
-            var rawXml = JsonConvert.DeserializeXmlNode(visitorData.ToString(), "Visitor");
+            var dataJson = await _jsRuntime.InvokeAsync<JsonNode>("getVisitorData");
+            var rawXml = JsonConvert.DeserializeXmlNode(dataJson.ToString(), "Visitor");
             var visitorElement = XElement.Parse(rawXml.InnerXml);
-            var timeStamp = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
-            visitorElement.Add(timeStamp);
+            var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
+            var locationXml = await ServerManager.ReadFromServer(ServerManager.GetGeoLocation, "Location");
+            visitorElement.Add(timeStampXml, locationXml);
 
             //send to API for save keeping
             var result = await ServerManager.WriteToServer(ServerManager.AddVisitorAPI, visitorElement);

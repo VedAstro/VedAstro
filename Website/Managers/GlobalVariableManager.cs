@@ -1,6 +1,5 @@
 ﻿using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Website.Pages;
 using Website.Shared;

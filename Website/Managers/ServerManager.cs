@@ -1,6 +1,8 @@
 ﻿using Genso.Astrology.Library;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 
 namespace Website
 {
@@ -23,6 +25,7 @@ namespace Website
         public const string GetFemaleListAPI = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportAPI = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetEventsAPI = "https://vedastroapi.azurewebsites.net/api/getevents";
+        public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
         public const string GoogleGeoLocationAPIKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg";
 
 
@@ -30,18 +33,28 @@ namespace Website
 
         /// <summary>
         /// Calls a URL and returns the content of the result as XML
-        /// NOTE: Content is assumed to be XML here
+        /// Even if content is returned as JSON, it is converted to XML
+        /// Note: if JSON auto adds "Root" as first element, unless specified
+        /// for XML data root element name is ignored
         /// </summary>
-        public static async Task<XElement> ReadFromServer(string apiUrl)
+        public static async Task<XElement> ReadFromServer(string apiUrl, string rootElementName = "Root")
         {
             //send request to API server
             var result = await RequestServer(apiUrl);
 
             //parse data reply
             var rawMessage = result.Content.ReadAsStringAsync().Result;
-            var parsedElement = XElement.Parse(rawMessage);
 
-            return parsedElement;
+            //raw message can be JSON or XML
+            //try parse as XML if fail then as JSON
+            try { return XElement.Parse(rawMessage);}
+            catch (Exception)
+            {
+                //data must be json string
+                var rawXml = JsonConvert.DeserializeXmlNode(rawMessage, rootElementName);
+                return XElement.Parse(rawXml.InnerXml);
+            }
+
 
 
             // FUNCTIONS
@@ -64,6 +77,8 @@ namespace Website
                 return response;
             }
         }
+
+
 
         /// <summary>
         /// Send xml as string to server and returns xml as response

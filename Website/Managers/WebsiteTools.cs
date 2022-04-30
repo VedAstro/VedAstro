@@ -1,6 +1,9 @@
-﻿using System.Xml;
+﻿using System.Text.Json.Nodes;
+using System.Xml;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Newtonsoft.Json;
 
 namespace Website
@@ -59,6 +62,80 @@ namespace Website
 
         }
 
+        /// <summary>
+        /// Tries to ID the user, and sends a log of the visit to API server
+        /// Called from MainLayout everytime page is loaded
+        /// </summary>
+        public static async Task LogVisitor(IJSRuntime _jsRuntime)
+        {
+            //get url user is on
+            var urlXml = new XElement("Url", await _jsRuntime.InvokeAsync<string>("getUrl"));
 
+            //find out if new visitor just arriving or old one browsing
+            var uniqueId = await GetVisitorIdFromCookie();
+            var isNewVisitor = uniqueId == null;
+
+            //based on visitor write the log
+            //this is done to minimize excessive logging
+            if (isNewVisitor) { await NewVisitor(); }
+            else { await OldVisitor(); }
+
+
+            //-------------- FUNCTIONS -------------------------
+
+            //all possible details are logged
+            async Task NewVisitor()
+            {
+
+                //get visitor data & format it nicely for storage
+                var browserDataXml = await GetBrowserDataXml();
+                var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
+                var visitorId = Tools.GenerateId();
+                var uniqueIdXml = new XElement("UniqueId", visitorId);
+                var locationXml = await ServerManager.ReadFromServer(ServerManager.GetGeoLocation, "Location");
+                var visitorElement = new XElement("Visitor");
+                visitorElement.Add(uniqueIdXml, urlXml, timeStampXml, locationXml, browserDataXml);
+
+                //send to API for save keeping
+                var result = await ServerManager.WriteToServer(ServerManager.AddVisitorAPI, visitorElement);
+
+                //mark visitor with id inside cookie
+                await SetNewVisitorIdInCookie(visitorId);
+
+                //todo do something with result
+                Console.WriteLine(result);
+            }
+
+            //only needed details are logged
+            async Task OldVisitor()
+            {
+
+                //get visitor data & format it nicely for storage
+                var visitorElement = new XElement("Visitor");
+                var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
+                var uniqueIdXml = new XElement("UniqueId", uniqueId); //use id generated above
+                visitorElement.Add(uniqueIdXml, urlXml, timeStampXml);
+
+                //send to API for save keeping
+                var result = await ServerManager.WriteToServer(ServerManager.AddVisitorAPI, visitorElement);
+
+                //todo do something with result
+                Console.WriteLine(result);
+            }
+
+            //returns null if no id found
+            async Task<string> GetVisitorIdFromCookie() => await _jsRuntime.InvokeAsync<string>("getCookiesWrapper", "uniqueId");
+
+            async Task SetNewVisitorIdInCookie(string id) => await _jsRuntime.InvokeVoidAsync("setCookiesWrapper", "uniqueId", id);
+
+            //calls js library to get browser data, converts it to xml
+            async Task<XElement> GetBrowserDataXml()
+            {
+                var dataJson = await _jsRuntime.InvokeAsync<JsonNode>("getVisitorData");
+                var rawXml = JsonConvert.DeserializeXmlNode(dataJson.ToString(), "BrowserData");
+                return XElement.Parse(rawXml.InnerXml);
+            }
+
+        }
     }
 }

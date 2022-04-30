@@ -1,11 +1,11 @@
-﻿//PRODUCTIONS FUNCTION IN USE CALLED FROM BLAZOR CODE
-
+﻿
 //██╗      ██████╗  ██████╗ ██╗ ██████╗
 //██║     ██╔═══██╗██╔════╝ ██║██╔════╝
 //██║     ██║   ██║██║  ███╗██║██║
 //██║     ██║   ██║██║   ██║██║██║
 //███████╗╚██████╔╝╚██████╔╝██║╚██████╗
 //╚══════╝ ╚═════╝  ╚═════╝ ╚═╝ ╚═════╝
+//PRODUCTIONS FUNCTION IN USE CALLED FROM BLAZOR CODE
 
 
 //uses UAParser library to extract user data
@@ -27,11 +27,30 @@ function hideWrapper (element) {
     $(element).hide();
 };
 
+//function to get cookies given a name
+function getCookiesWrapper (cookieName) {
+    console.log(`JS: getCookiesWrapper`);
+    return Cookies.get(cookieName);
+};
+
+//function to set cookies given a name
+function setCookiesWrapper (cookieName, cookieValue) {
+    console.log(`JS: setCookiesWrapper`);
+    return Cookies.set(cookieName, cookieValue);
+};
+
 //Jquery to attach event listener to inputed element
 function addEventListenerWrapper (element, eventName, functionName) {
     console.log(`JS: addEventListenerWrapper : ${eventName} : ${functionName}`);
     element.addEventListener(eventName, window[functionName]);
 };
+
+//gets current page url
+function getUrl () {
+    console.log(`JS: getUrl`);
+    return window.location.href;
+};
+
 
 
 
@@ -43,7 +62,6 @@ function addEventListenerWrapper (element, eventName, functionName) {
 //██╔══╝░░░╚████╔╝░██╔══╝░░██║╚████║░░░██║░░░  ██╔══██║██╔══██║██║╚████║██║░░██║██║░░░░░██╔══╝░░██╔══██╗░╚═══██╗
 //███████╗░░╚██╔╝░░███████╗██║░╚███║░░░██║░░░  ██║░░██║██║░░██║██║░╚███║██████╔╝███████╗███████╗██║░░██║██████╔╝
 //╚══════╝░░░╚═╝░░░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═════╝░╚══════╝╚══════╝╚═╝░░╚═╝╚═════╝░
-
 
 
 //attached to dasa viewer to update time legend 

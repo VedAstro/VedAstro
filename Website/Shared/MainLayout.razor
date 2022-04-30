@@ -38,27 +38,11 @@
 
 @code
 {
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
-        //run once after first render,
-        //Note: until site reloaded this only run once
-        if (firstRender)
-        {
-            //get visitor data & format it nicely for storage
-            var dataJson = await _jsRuntime.InvokeAsync<JsonNode>("getVisitorData");
-            var rawXml = JsonConvert.DeserializeXmlNode(dataJson.ToString(), "Visitor");
-            var visitorElement = XElement.Parse(rawXml.InnerXml);
-            var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
-            var locationXml = await ServerManager.ReadFromServer(ServerManager.GetGeoLocation, "Location");
-            visitorElement.Add(timeStampXml, locationXml);
-
-            //send to API for save keeping
-            var result = await ServerManager.WriteToServer(ServerManager.AddVisitorAPI, visitorElement);
-
-            //todo do something with result
-            Console.WriteLine(result);
-        }
+        //log visit everytime page is rendered
+        await WebsiteTools.LogVisitor(_jsRuntime);
     }
 
 }

@@ -282,5 +282,10 @@ namespace Genso.Astrology.Library
             //return BitConverter.ToInt32(hashedByte, 0);
 
         }
+
+        /// <summary>
+        /// Gets random unique ID
+        /// </summary>
+        public static string GenerateId() => Guid.NewGuid().ToString("N");
     }
 }

@@ -8,13 +8,29 @@ namespace Genso.Astrology.Library.Compatibility
     /// Note : properties can only be set once,
     /// so that doesn't accidentally get changed
     /// </summary>
-    public class CompatibilityPrediction: IToXml
+    public class CompatibilityPrediction : IToXml
     {
         //DATA FIELDS
         private string _info = "";
         private string _maleInfo = "";
         private string _femaleInfo = "";
         private string _description = "";
+
+        public CompatibilityPrediction(Name name, EventNature nature, string maleInfo, string femaleInfo, string info, string description)
+        {
+            Name = name;
+            Nature = nature;
+            MaleInfo = maleInfo;
+            FemaleInfo = femaleInfo;
+            Info = info;
+            Description = description;
+
+        }
+
+        public CompatibilityPrediction()
+        {
+            
+        }
 
 
         //PUBLIC PROPERTIES
@@ -75,9 +91,19 @@ namespace Genso.Astrology.Library.Compatibility
         /// </summary>
         public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
-        public CompatibilityReport FromXml(XElement XML)
+        public CompatibilityPrediction FromXml(XElement xml)
         {
-            throw new NotImplementedException();
+            var name = Enum.Parse<Name>(xml.Element("Name")?.Value);
+            var nature = Enum.Parse<EventNature>(xml.Element("Nature")?.Value);
+            var maleInfo = xml.Element("MaleInfo")?.Value;
+            var femaleInfo = xml.Element("FemaleInfo")?.Value;
+            var info = xml.Element("Info")?.Value;
+            var description = xml.Element("Description")?.Value;
+
+            var parsed = new CompatibilityPrediction(name, nature, maleInfo, femaleInfo, info, description);
+
+            return parsed;
+
         }
 
         public XElement ToXml()

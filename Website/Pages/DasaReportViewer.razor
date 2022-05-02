@@ -61,7 +61,7 @@
     {
 
         //after first render attach event handler for Time Cursor
-        if (firstRender) { await _jsRuntime.addEventListener(_dasaViewBox, "mousemove", "mouseOverDasaViewHandler"); }
+        if (firstRender) { await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "mouseOverDasaViewHandler"); }
     }
 
 
@@ -216,7 +216,7 @@
                 Tools.AnyTypeToXml(precisionHours));
 
             //send to api and get results
-            var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsAPI, root);
+            var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsApi, root);
 
             //parse raw results
             List<Event> resultsParsed = Event.FromXml(resultsRaw);

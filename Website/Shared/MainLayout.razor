@@ -1,16 +1,11 @@
-﻿@using System.Text.Json
-@using System.Text.Json.Nodes
-@using System.Xml
-@using System.Xml.Linq
-@using Genso.Astrology.Library
-@using Newtonsoft.Json
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
 @*
     NOTE : Components here are loaded same time as page,
     so component might not exist when page needs it.
     Thus page must check & wait during init.
 *@
+
 
 <div class="page">
     <div class="sidebar">
@@ -45,21 +40,38 @@
         WebsiteTools.OnUserSignOut += async () => { await OnUserSignOut(); };
     }
 
+    /// <summary>
+    /// Called when signed in via click or auto sign in when page load/refresh
+    /// </summary>
+    /// <returns></returns>
     private async Task OnUserSignIn()
     {
         //var name =  _jsRuntime.InvokeAsync<string>("getGoogleUserName").Result;
         var email = await _jsRuntime.InvokeAsync<string>("getGoogleUserEmail");
         //var idToken = _jsRuntime.InvokeAsync<string>("getGoogleUserIdToken").Result;
 
-        Console.WriteLine($"Hi,{email}!");
+        Console.WriteLine($"BLZ: OnUserSignInPass {email}!");
+
+        //refresh the page, to reload data on page only when coming
+        //from Sign In Button Click, else page goes into refresh loop
+        var btnClicked = await _jsRuntime.InvokeAsync<bool>("getSignInButtonClicked");
+        if (btnClicked) { WebsiteTools.ReloadPage(_navigation); }
+
     }
 
+    /// <summary>
+    /// Only called when sign out button clicked
+    /// </summary>
+    /// <returns></returns>
     private async Task OnUserSignOut()
     {
         var email = await _jsRuntime.InvokeAsync<string>("getGoogleUserEmail");
         //var idToken = _jsRuntime.InvokeAsync<string>("getGoogleUserIdToken").Result;
 
-        Console.WriteLine($"Bye,{email}!");
+        Console.WriteLine($"BLZ: OnUserSignOut {email}!");
+
+        //refresh the page, to reload data on page
+        WebsiteTools.ReloadPage(_navigation);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

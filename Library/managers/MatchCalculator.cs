@@ -1443,10 +1443,11 @@ namespace Genso.Astrology.Library
                     prediction.Info = "female constellation precede male, alliance should be rejected.";
 
                 }
-
+                //if same Janma Rasi is only good if in different constellation
                 if (femaleConstellation == maleConstellation)
                 {
-                    throw new NotImplementedException();
+                    prediction.Nature = EventNature.Bad;
+                    prediction.Info = "same constellation, alliance should be rejected.";
                 }
 
             }

@@ -13,7 +13,7 @@
 
 @code {
     [Parameter]
-    public Time time { get; set; }
+    public Time Time { get; set; }
     [Parameter]
     public PlanetName PlanetName { get; set; }
     private bool _isPageReady = false; //marks if the page ready to loaded
@@ -33,11 +33,11 @@
     public void UpdateData()
     {
         //get planet details and save it for view
-        _shadbalaPinda = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName, time).ToDouble();
-        _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName);
-        _currentHouseRelation = AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, PlanetName, time);
-        _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(PlanetName, time);
-        _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(PlanetName, time);
+        _shadbalaPinda = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName, Time).ToDouble();
+        _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(Time, PlanetName);
+        _currentHouseRelation = AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, PlanetName, Time);
+        _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(PlanetName, Time);
+        _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(PlanetName, Time);
 
     }
 

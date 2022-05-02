@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -136,6 +138,34 @@ namespace API
             responseMessage += $"#StackTrace#\n{e.TargetSite}\n";
 
             return responseMessage;
+        }
+
+        /// <summary>
+        /// Given list of person, it will find the person by hash
+        /// and return the XML version of the person.
+        /// Note: Person's hash is computed on the fly to reduce coupling
+        /// </summary>
+        public static XElement FindPersonByHash(XDocument personListXml, int originalHash)
+        {
+            return personListXml.Root.Elements()
+                .Where(delegate (XElement personXml)
+                {   //use hash as id to find the person's record
+                    var thisHash = Person.FromXml(personXml).GetHashCode();
+                    return thisHash == originalHash;
+                }).First();
+        }
+
+        /// <summary>
+        /// Find all person's xml element by user id
+        /// </summary>
+        public static IEnumerable<XElement> FindPersonByUserId(XDocument personListXml, string userId)
+        {
+            var foundPersonListXml = from person in personListXml.Root?.Elements()
+                where
+                    person.Element("UserId")?.Value == userId
+                select person;
+
+            return foundPersonListXml;
         }
     }
 }

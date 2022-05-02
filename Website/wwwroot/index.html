@@ -51,9 +51,9 @@
 
     <!--Google Sign In Button-->
     <!--Note: has to be available when the JS is loaded-->
-    <div class="g-signin2" data-onsuccess="onSignInEventHandler" data-theme="dark" style="position: absolute; top: 532px; left: 26px; Z-INDEX: 1;"></div>
+    <div id="GoogleSignInButton" onclick="onClickGoogleSignInButton()" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark" style="position: absolute; top: 532px; left: 26px; Z-INDEX: 1;"></div>
 
-    <a href="#" onclick="signOut();">Sign out</a>
+    <a href="#" onclick="onClickGoogleSignOutButton();">Sign out</a>
 
     <div id="app">
         <!--loading box shown while blazor is loading-->
@@ -65,7 +65,7 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-<script src="_framework/blazor.webassembly.js"></script>
+    <script src="_framework/blazor.webassembly.js"></script>
 
 
 </body>

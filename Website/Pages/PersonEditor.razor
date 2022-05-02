@@ -65,7 +65,7 @@
     /// editor passed, else becomes creator
     /// </summary>
     [Parameter]
-    public string PersonName { get; set; }
+    public string PersonHash { get; set; }
 
     /// <summary>
     /// represents the Person instance that this page represents
@@ -113,7 +113,7 @@
     protected override async void OnInitialized()
     {
         //decide if page should be editor or creator
-        PageMode = PersonName == null ? Mode.Creator : Mode.Editor;
+        PageMode = PersonHash == null ? Mode.Creator : Mode.Editor;
 
         await RenderPage();
     }
@@ -129,7 +129,7 @@
         _pageTitle = IsCreator ? "Add New Person" : "Edit Person Details";
 
         //set person
-        _person = IsCreator ? new Person() : await _globalVariable.GetPersonFromName(PersonName);
+        _person = IsCreator ? new Person() : await WebsiteTools.GetPersonFromHash(PersonHash);
 
         //in edit mode save hash of unedited person
         _originalPersonHash = IsCreator ? 0 : _person.GetHashCode();
@@ -170,11 +170,11 @@
         await _globalVariable.LoadingMessage.Show();
 
         //make a new person from the details in the input
-        _person = GetPersonInstanceFromInput();
+        _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
         var xmlData = _person.ToXml();
-        var result = ServerManager.WriteToServer(ServerManager.AddPersonAPI, xmlData);
+        var result = ServerManager.WriteToServer(ServerManager.AddPersonApi, xmlData);
 
         //let user know person has been added
         await _globalVariable.Alert.ShowSuccess($"{_nameInput} added successfully!");
@@ -186,9 +186,9 @@
         //page ready
         await _globalVariable.LoadingMessage.Hide();
 
-        //send user to task list page after period of time
+        //send user to person list page after period of time
         await Task.Delay(100);
-        _navigation.NavigateTo(PageRoute.TaskList);
+        _navigation.NavigateTo(PageRoute.PersonList);
     }
 
     /// <summary>
@@ -196,7 +196,7 @@
     /// Note : Input fields do not use binding because implementing
     /// separated time fields is erroneous
     /// </summary>
-    private Person GetPersonInstanceFromInput()
+    private async Task<Person> GetPersonInstanceFromInput()
     {
 
         //parse data received from user
@@ -205,11 +205,11 @@
         var stdTimeMale = DateTimeOffset.ParseExact(fullTimeString, Time.GetDateTimeFormat(), null);
 
         //get gender from gender string
-        var _gender = Enum.Parse<Gender>(_genderInput);
+        var gender = Enum.Parse<Gender>(_genderInput);
 
         //create a new person from the inputed data
         var birthTime = new Time(stdTimeMale, geoLocation);
-        return new Person(_nameInput, birthTime, _gender);
+        return new Person(_nameInput, birthTime, gender, await WebsiteTools.GetUserIdAsync(_jsRuntime));
     }
 
     private async void UpdateExistingPerson()
@@ -218,17 +218,12 @@
         await _globalVariable.LoadingMessage.Show();
 
         //make a new person from the details in the input
-        _person = GetPersonInstanceFromInput();
+        _person = await GetPersonInstanceFromInput();
 
-        //send newly created person to API server
-        var updatedPersonXml = _person.ToXml();
-        var oriPersonHashXml = new XElement("PersonHash", _originalPersonHash);
-        var rootXml = new XElement("Root");
-        rootXml.Add(oriPersonHashXml, updatedPersonXml);
-        //todo log the result
-        var result = await ServerManager.WriteToServer(ServerManager.UpdatePersonAPI, rootXml);
+        //update person in API by hash
+        await WebsiteTools.UpdatePerson(_person, _originalPersonHash);
 
-        //let user know person has been updates
+    //let user know person has been updates
         await _globalVariable.Alert.ShowSuccess($"{_nameInput} updated successfully!");
 
         //refresh the page variables
@@ -255,8 +250,7 @@
         await _globalVariable.LoadingMessage.Show();
 
         //tell API to delete person, using hash as id
-        var personHashXml = new XElement("PersonHash", _originalPersonHash);
-        var result = await ServerManager.WriteToServer(ServerManager.DeletePersonAPI, personHashXml);
+        await WebsiteTools.DeletePerson(_originalPersonHash);
 
         //let user know person has been updates
         await _globalVariable.Alert.ShowSuccess($"{_nameInput} deleted successfully!");

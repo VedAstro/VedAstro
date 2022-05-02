@@ -9,6 +9,7 @@ namespace Genso.Astrology.Library.Compatibility
     /// </summary>
     public class CompatibilityReport : IToXml
     {
+
         public List<CompatibilityPrediction> PredictionList { get; set; }
 
         /// <summary>

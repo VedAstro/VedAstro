@@ -13,17 +13,27 @@ namespace Genso.Astrology.Library
     {
         //DATA FIELDS
         public string Name { get; set; }
+        /// <summary>
+        /// User ID is used by website. Shows owner of person's profile
+        /// </summary>
+        public string UserId { get; set; }
+        /// <summary>
+        /// Misc. notes about the person
+        /// </summary>
+        public string Notes { get; set; }
         public Gender Gender { get; set; }
         public Time BirthTime { get; set; }
         
 
 
         //CTOR
-        public Person(string name, Time birthTime, Gender gender)
+        public Person(string name, Time birthTime, Gender gender, string userId = "101", string notes = "")
         {
             Name = name;
             BirthTime = birthTime;
             Gender = gender;
+            UserId = userId;
+            Notes = notes;
         }
 
 
@@ -61,10 +71,18 @@ namespace Genso.Astrology.Library
         /// </summary>
         public int GetAge(Time time) => time.GetStdDateTimeOffset().Year - this.BirthYear;
 
+        /// <summary>
+        /// Used by tabulator JS, when person is converted to json
+        /// </summary>
         public string GenderString => Gender.ToString();
 
         /// <summary>
-        /// Gets STD birth time as string
+        /// Used by tabulator JS, when person is converted to json
+        /// </summary>
+        public int Hash => this.GetHashCode();
+
+        /// <summary>
+        /// Used by tabulator JS, when person is converted to json
         /// </summary>
         public string BirthTimeString => this.GetBirthDateTime().GetStdDateTimeOffsetText();
 
@@ -125,8 +143,9 @@ namespace Genso.Astrology.Library
             var name = new XElement("Name", this.GetName());
             var gender = new XElement("Gender", this.GetGender().ToString());
             var birthTime = new XElement("BirthTime", this.GetBirthDateTime().ToXml());
+            var userId = new XElement("UserId", this.UserId);
 
-            person.Add(name, gender, birthTime);
+            person.Add(name, gender, birthTime, userId);
 
             return person;
         }
@@ -145,8 +164,9 @@ namespace Genso.Astrology.Library
             var name = personXml.Element("Name")?.Value;
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
+            var userId = personXml.Element("UserId")?.Value;
 
-            var parsedPerson = new Person(name, time, gender);
+            var parsedPerson = new Person(name, time, gender, userId);
 
             return parsedPerson;
         }

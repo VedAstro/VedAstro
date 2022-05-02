@@ -7,7 +7,7 @@
 @using System.Xml.Linq
 
 
-@inject LocationService LocationService
+@inject LocationService _locationService
 
 
 
@@ -171,7 +171,7 @@
         try
         {
             //try get location from Browser
-            var locationCoordinates = await LocationService.GetLocationAsync();
+            var locationCoordinates = await _locationService.GetLocationAsync();
 
             //set new coordinates into view
             Longitude = (double)locationCoordinates.Longitude;

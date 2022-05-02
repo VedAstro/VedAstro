@@ -13,21 +13,21 @@ namespace Website
     public static class ServerManager
     {
 
-        public const string AddPersonAPI = "https://vedastroapi.azurewebsites.net/api/addperson";
-        public const string DeletePersonAPI = "https://vedastroapi.azurewebsites.net/api/deleteperson";
-        public const string AddTaskAPI = "https://vedastroapi.azurewebsites.net/api/addtask";
-        public const string AddVisitorAPI = "https://vedastroapi.azurewebsites.net/api/addvisitor";
-        public const string GetMaleListAPI = "https://vedastroapi.azurewebsites.net/api/getmalelist";
-        public const string GetPersonListAPI = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
-        public const string GetPersonAPI = "https://vedastroapi.azurewebsites.net/api/getperson";
-        public const string UpdatePersonAPI = "https://vedastroapi.azurewebsites.net/api/updateperson";
-        public const string GetTaskListAPI = "https://vedastroapi.azurewebsites.net/api/gettasklist";
-        public const string GetFemaleListAPI = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
-        public const string GetMatchReportAPI = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
-        public const string GetEventsAPI = "https://vedastroapi.azurewebsites.net/api/getevents";
+        public const string AddPersonApi = "https://vedastroapi.azurewebsites.net/api/addperson";
+        public const string DeletePersonApi = "https://vedastroapi.azurewebsites.net/api/deleteperson";
+        public const string AddTaskApi = "https://vedastroapi.azurewebsites.net/api/addtask";
+        public const string AddVisitorApi = "https://vedastroapi.azurewebsites.net/api/addvisitor";
+        public const string GetMaleListApi = "https://vedastroapi.azurewebsites.net/api/getmalelist";
+        public const string GetPersonListApi = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
+        public const string GetPersonApi = "https://vedastroapi.azurewebsites.net/api/getperson";
+        public const string UpdatePersonApi = "https://vedastroapi.azurewebsites.net/api/updateperson";
+        public const string GetTaskListApi = "https://vedastroapi.azurewebsites.net/api/gettasklist";
+        public const string GetFemaleListApi = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
+        public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
+        public const string GetEventsApi = "https://vedastroapi.azurewebsites.net/api/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
-        public const string GoogleGeoLocationAPIKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg"; //marked for deletetion
-        public const string GoogleGeoLocationAPIKey2 = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE"; 
+        public const string GoogleGeoLocationApiKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg"; //marked for deletetion
+        public const string GoogleGeoLocationApiKey2 = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE"; 
 
 
         //PUBLIC METHODS
@@ -51,9 +51,18 @@ namespace Website
             try { return XElement.Parse(rawMessage);}
             catch (Exception)
             {
-                //data must be json string
-                var rawXml = JsonConvert.DeserializeXmlNode(rawMessage, rootElementName);
-                return XElement.Parse(rawXml.InnerXml);
+                //try to parse data as JSON
+                try
+                {
+                    var rawXml = JsonConvert.DeserializeXmlNode(rawMessage, rootElementName);
+                    return XElement.Parse(rawXml.InnerXml);
+                }
+                //unparseable data, let user know
+                catch (Exception e)
+                {
+                    Console.WriteLine(rawMessage);
+                    throw;
+                }
             }
 
 
@@ -120,10 +129,10 @@ namespace Website
         /// <summary>
         /// Packages the data into ready form for the HTTP client to use in final sending stage
         /// </summary>
-        private static StringContent XmLtoStringContent(XElement _data)
+        private static StringContent XmLtoStringContent(XElement data)
         {
             //gets the main XML data as a string
-            var data = Genso.Astrology.Library.Tools.XmlToString(_data);
+            var dataString = Tools.XmlToString(data);
 
             //specify the data encoding
             var encoding = Encoding.UTF8;
@@ -133,7 +142,7 @@ namespace Website
             var mediaType = "plain/text";
 
             //return packaged data to caller
-            return new StringContent(data, encoding, mediaType);
+            return new StringContent(dataString, encoding, mediaType);
         }
     }
 }

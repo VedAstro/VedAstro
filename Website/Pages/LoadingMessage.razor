@@ -43,7 +43,7 @@
         await _globalVariable.WaitTillComponentReady();
 
         //show the modal
-        await _jsRuntime.show(_loadingMessage);
+        await _jsRuntime.Show(_loadingMessage);
 
         _isOpen = true;
 
@@ -61,7 +61,7 @@
         await _globalVariable.WaitTillComponentReady();
 
         //hide loading box
-        await _jsRuntime.hide(_loadingMessage);
+        await _jsRuntime.Hide(_loadingMessage);
 
         _isOpen = false;
     }

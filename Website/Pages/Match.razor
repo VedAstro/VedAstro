@@ -22,16 +22,27 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //show loading box
-        await _globalVariable.LoadingMessage.Show();
 
-        //get male list from api server & save it for later
-        _malePeopleSelector.SetData(await _globalVariable.GetMalePeopleList());
-        _femalePeopleSelector.SetData(await _globalVariable.GetFemalePeopleList());
+    }
 
-        //hide loading box
-        await _globalVariable.LoadingMessage.Hide();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //show loading box
+            await _globalVariable.LoadingMessage.Show();
 
+            //get male list from api server & save it for later
+            _malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime)));
+            _femalePeopleSelector.SetData(await WebsiteTools.GetFemalePeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime)));
+
+            //hide loading box
+            await _globalVariable.LoadingMessage.Hide();
+
+            //called last because will loop back
+            this.StateHasChanged();
+
+        }
     }
 
     private void GetMatchReport() => _navigation.NavigateTo($"matchreport/{SelectedMale}/{SelectedFemale}");

@@ -10,7 +10,7 @@
         public const string TaskEditor = "/taskeditor";
         public const string PersonList = "/personlist";
         public const string PersonEditor = "/personeditor";
-        public const string PersonEditorParam = "/personeditor/{PersonName}";
+        public const string PersonEditorParam = "/personeditor/{PersonHash}";
         public const string Donate = "/donate";
         public const string Horoscope = "/horoscope";
         public const string Muhurtha = "/muhurtha";

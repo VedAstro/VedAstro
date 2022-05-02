@@ -23,13 +23,13 @@
         {
             <h4 class="mt-2">Planets</h4>
             <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
-                <PlanetInfoBox PlanetName="PlanetName.Sun" time="@SelectedPerson.GetBirthDateTime()" />
-                <PlanetInfoBox PlanetName="PlanetName.Moon" time="@SelectedPerson.GetBirthDateTime()" />
-                <PlanetInfoBox PlanetName="PlanetName.Mercury" time="@SelectedPerson.GetBirthDateTime()" />
-                <PlanetInfoBox PlanetName="PlanetName.Mars" time="@SelectedPerson.GetBirthDateTime()" />
-                <PlanetInfoBox PlanetName="PlanetName.Jupiter" time="@SelectedPerson.GetBirthDateTime()" />
-                <PlanetInfoBox PlanetName="PlanetName.Saturn" time="@SelectedPerson.GetBirthDateTime()" />
-                <PlanetInfoBox PlanetName="PlanetName.Venus" time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Sun" Time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Moon" Time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Mercury" Time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Mars" Time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Jupiter" Time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Saturn" Time="@SelectedPerson.GetBirthDateTime()" />
+                <PlanetInfoBox PlanetName="PlanetName.Venus" Time="@SelectedPerson.GetBirthDateTime()" />
             </div>
         }
     </div>
@@ -83,7 +83,7 @@
 
         //set people list into people selector
         //note : without above first call _peopleSelectorBox is null
-        PersonList = await _globalVariable.GetPeopleList();
+        PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
         _peopleSelectorBox.SetData(PersonList);
 
         //hide loading box

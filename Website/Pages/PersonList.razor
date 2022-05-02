@@ -36,7 +36,7 @@
         await _globalVariable.LoadingMessage.Show();
 
         //get all people from API server
-        var personList = await _globalVariable.GetPeopleList();
+        var personList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly

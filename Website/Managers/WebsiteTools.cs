@@ -9,15 +9,50 @@ using Newtonsoft.Json;
 namespace Website
 {
     public delegate Task AsyncEventHandler();
+    
     /// <summary>
     /// Simple class holding general functions used in project
     /// </summary>
     public static class WebsiteTools
     {
+
+        //░█▀▀▀ ▀█▀ ░█▀▀▀ ░█─── ░█▀▀▄ ░█▀▀▀█ 　 ─█▀▀█ ░█▄─░█ ░█▀▀▄ 　 ░█▀▀█ ░█▀▀█ ░█▀▀▀█ ░█▀▀█ ░█▀▀▀█ 
+        //░█▀▀▀ ░█─ ░█▀▀▀ ░█─── ░█─░█ ─▀▀▀▄▄ 　 ░█▄▄█ ░█░█░█ ░█─░█ 　 ░█▄▄█ ░█▄▄▀ ░█──░█ ░█▄▄█ ─▀▀▀▄▄ 
+        //░█─── ▄█▄ ░█▄▄▄ ░█▄▄█ ░█▄▄▀ ░█▄▄▄█ 　 ░█─░█ ░█──▀█ ░█▄▄▀ 　 ░█─── ░█─░█ ░█▄▄▄█ ░█─── ░█▄▄▄█
+
+
+        /// <summary>
+        /// Event fired just after user has signed in
+        /// </summary>
+        public static event AsyncEventHandler OnUserSignIn;
+
+
+        /// <summary>
+        /// Event fired just after user has signed out
+        /// </summary>
+        public static event AsyncEventHandler OnUserSignOut;
+
+
+        public static bool UserSignedIn { get; set; }
+
+
+        /// <summary>
+        /// Default User ID for all before they sign in
+        /// </summary>
+        public const string PublicUserId = "101";
+
+
+
+
+        //░█▀▄▀█ ░█▀▀▀ ▀▀█▀▀ ░█─░█ ░█▀▀▀█ ░█▀▀▄ ░█▀▀▀█ 
+        //░█░█░█ ░█▀▀▀ ─░█── ░█▀▀█ ░█──░█ ░█─░█ ─▀▀▀▄▄ 
+        //░█──░█ ░█▄▄▄ ─░█── ░█─░█ ░█▄▄▄█ ░█▄▄▀ ░█▄▄▄█
+
+
         public static async Task<dynamic> GetAddressLocation(string address)
         {
             //create the request url for Google API
-            var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={ServerManager.GoogleGeoLocationAPIKey}&address={Uri.EscapeDataString(address)}&sensor=false";
+            var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={ServerManager.GoogleGeoLocationApiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
 
             //get location data from GoogleAPI
             var rawReplyXml = await ServerManager.ReadFromServer(url);
@@ -47,7 +82,7 @@ namespace Website
         public static async Task<string> CoordinateToAddress(decimal longitude, decimal latitude)
         {
             //create the request url for Google API
-            var url = string.Format($"https://maps.googleapis.com/maps/api/geocode/xml?latlng={latitude},{longitude}&key={ServerManager.GoogleGeoLocationAPIKey}");
+            var url = string.Format($"https://maps.googleapis.com/maps/api/geocode/xml?latlng={latitude},{longitude}&key={ServerManager.GoogleGeoLocationApiKey}");
 
 
             //get location data from GoogleAPI
@@ -63,14 +98,15 @@ namespace Website
 
         }
 
+
         /// <summary>
         /// Tries to ID the user, and sends a log of the visit to API server
         /// Called from MainLayout everytime page is loaded
         /// </summary>
-        public static async Task LogVisitor(IJSRuntime _jsRuntime)
+        public static async Task LogVisitor(IJSRuntime jsRuntime)
         {
             //get url user is on
-            var urlXml = new XElement("Url", await _jsRuntime.InvokeAsync<string>("getUrl"));
+            var urlXml = new XElement("Url", await jsRuntime.InvokeAsync<string>("getUrl"));
 
             //find out if new visitor just arriving or old one browsing
             var uniqueId = await GetVisitorIdFromCookie();
@@ -98,13 +134,13 @@ namespace Website
                 visitorElement.Add(uniqueIdXml, urlXml, timeStampXml, locationXml, browserDataXml);
 
                 //send to API for save keeping
-                var result = await ServerManager.WriteToServer(ServerManager.AddVisitorAPI, visitorElement);
+                var result = await ServerManager.WriteToServer(ServerManager.AddVisitorApi, visitorElement);
 
                 //mark visitor with id inside cookie
                 await SetNewVisitorIdInCookie(visitorId);
 
-                //todo do something with result
-                Console.WriteLine(result);
+                //check result, display error if needed
+                if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }
             }
 
             //only needed details are logged
@@ -118,21 +154,21 @@ namespace Website
                 visitorElement.Add(uniqueIdXml, urlXml, timeStampXml);
 
                 //send to API for save keeping
-                var result = await ServerManager.WriteToServer(ServerManager.AddVisitorAPI, visitorElement);
+                var result = await ServerManager.WriteToServer(ServerManager.AddVisitorApi, visitorElement);
 
-                //todo do something with result
-                Console.WriteLine(result);
+                //check result, display error if needed
+                if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }
             }
 
             //returns null if no id found
-            async Task<string> GetVisitorIdFromCookie() => await _jsRuntime.InvokeAsync<string>("getCookiesWrapper", "uniqueId");
+            async Task<string> GetVisitorIdFromCookie() => await jsRuntime.InvokeAsync<string>("getCookiesWrapper", "uniqueId");
 
-            async Task SetNewVisitorIdInCookie(string id) => await _jsRuntime.InvokeVoidAsync("setCookiesWrapper", "uniqueId", id);
+            async Task SetNewVisitorIdInCookie(string id) => await jsRuntime.InvokeVoidAsync("setCookiesWrapper", "uniqueId", id);
 
             //calls js library to get browser data, converts it to xml
             async Task<XElement> GetBrowserDataXml()
             {
-                var dataJson = await _jsRuntime.InvokeAsync<JsonNode>("getVisitorData");
+                var dataJson = await jsRuntime.InvokeAsync<JsonNode>("getVisitorData");
                 var rawXml = JsonConvert.DeserializeXmlNode(dataJson.ToString(), "BrowserData");
                 return XElement.Parse(rawXml.InnerXml);
             }
@@ -141,25 +177,120 @@ namespace Website
 
 
         /// <summary>
-        /// Event fired just after user has signed in
-        /// </summary>
-        public static event AsyncEventHandler OnUserSignIn;
-
-        /// <summary>
-        /// Event fired just after user has signed out
-        /// </summary>
-        public static event AsyncEventHandler OnUserSignOut;
-
-        /// <summary>
         /// This method is called from JS when user signs in
         /// </summary>
         [JSInvokable]
-        public static void InvokeOnUserSignIn() => OnUserSignIn?.Invoke();
+        public static void InvokeOnUserSignIn()
+        {
+            //remember user signed in
+            UserSignedIn = true;
+            //let others know
+            OnUserSignIn?.Invoke();
+        }
+
 
         /// <summary>
         /// This method is called from JS when user signs out
         /// </summary>
         [JSInvokable]
-        public static void InvokeOnUserSignOut() => OnUserSignOut?.Invoke();
+        public static void InvokeOnUserSignOut()
+        {
+            //remember user signed out
+            UserSignedIn = false;
+            //let others know
+            OnUserSignOut?.Invoke();
+        }
+
+
+        /// <summary>
+        /// Tries to get user login state, else returns public user id.
+        /// Note: Public User Id is the standard id all unregistered visitors get
+        /// </summary>
+        public static async Task<string> GetUserIdAsync(IJSRuntime jsRuntime)
+        {
+            //wait here a little if user has not signed in
+            //if no sign in, then 
+            var tryLimit = 5;
+            var count = 0;
+            while (!UserSignedIn && count < tryLimit)
+            {
+                Console.WriteLine("BLZ: GetUserIdAsync: Waiting For Sign In");
+                await Task.Delay(250);
+                count++;
+            }
+
+            //if try limit reached & user has not signed in
+            //then end here with Public User Id
+            if (!UserSignedIn && count == tryLimit) { Console.WriteLine("BLZ: GetUserIdAsync: Public ID Assigned"); return PublicUserId; }
+
+            //get user Id from variable in JS scope
+            var userId = await jsRuntime.InvokeAsync<string>("getGoogleUserIdToken");
+
+            return userId;
+        }
+
+        /// <summary>
+        /// Gets all people list from API server
+        /// </summary>
+        public static async Task<List<Person>> GetPeopleList(string userId)
+        {
+            var personListRootXml = await ServerManager.WriteToServer(ServerManager.GetPersonListApi, new XElement("UserId", userId));
+            var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+            return personList;
+        }
+
+        public static async Task<List<Person>> GetMalePeopleList(string userId)
+        {
+            var rawMaleListXml = await ServerManager.WriteToServer(ServerManager.GetMaleListApi, new XElement("UserId", userId));
+            return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
+        }
+
+        public static async Task<List<Person>> GetFemalePeopleList(string userId)
+        {
+            var rawMaleListXml = await ServerManager.WriteToServer(ServerManager.GetFemaleListApi, new XElement("UserId", userId));
+            return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
+        }
+
+        /// <summary>
+        /// Gets person instance from name contacts API
+        /// Note: uses API to get latest data
+        /// </summary>
+        public static async Task<Person> GetPersonFromHash(string personHash)
+        {
+            //send newly created person to API server
+            var xmlData = Tools.AnyTypeToXml(personHash);
+            var result = await ServerManager.WriteToServer(ServerManager.GetPersonApi, xmlData);
+
+            var personXml = result.Element("Person");
+
+            //parse received person
+            var receivedPerson = Person.FromXml(personXml);
+
+            return receivedPerson;
+        }
+
+        public static async Task DeletePerson(int personHash)
+        {
+            var personHashXml = new XElement("PersonHash", personHash);
+            var result = await ServerManager.WriteToServer(ServerManager.DeletePersonApi, personHashXml);
+
+            //check result, display error if needed
+            if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Delete Person API\n{result.Value}"); }
+        }
+
+        public static async Task UpdatePerson(Person person, int originalPersonHash)
+        {
+            var updatedPersonXml = person.ToXml();
+            var oriPersonHashXml = new XElement("PersonHash", originalPersonHash);
+            var rootXml = new XElement("Root");
+            rootXml.Add(oriPersonHashXml, updatedPersonXml);
+            var result = await ServerManager.WriteToServer(ServerManager.UpdatePersonApi, rootXml);
+
+            //check result, display error if needed
+            if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Update Person API\n{result.Value}"); }
+
+        }
+
+        public static void ReloadPage(NavigationManager navigation) => navigation.NavigateTo(navigation.Uri, forceLoad: true);
     }
 }

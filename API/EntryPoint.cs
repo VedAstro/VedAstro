@@ -22,6 +22,11 @@ namespace API
         private const string PersonlistXml = "vedastro-site-data/PersonList.xml";
         private const string TasklistXml = "vedastro-site-data/TaskList.xml";
         private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
+        /// <summary>
+        /// Default success message sent to caller
+        /// </summary>
+        private static string PassMessageXml = new XElement("Status", "Pass").ToString();
+
 
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> Match(
@@ -64,7 +69,8 @@ namespace API
 
             try
             {
-                //get new person data out of incoming request 
+                //get new person data out of incoming request
+                //note: inside new person xml already contains user id
                 var newPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new person to main list
@@ -73,7 +79,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);
 
-                responseMessage = new XElement("Status", "Success").ToString();
+                responseMessage = PassMessageXml;
 
             }
             catch (Exception e)
@@ -106,7 +112,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(taskListClient, taskListXml);
 
-                responseMessage = new XElement("Status", "Success").ToString();
+                responseMessage = PassMessageXml;
 
             }
             catch (Exception e)
@@ -139,7 +145,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, taskListXml);
 
-                responseMessage = new XElement("Status", "Success").ToString();
+                responseMessage = PassMessageXml;
 
             }
             catch (Exception e)
@@ -164,12 +170,17 @@ namespace API
             try
             {
 
+                //get user id
+                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
+
                 //get person list from storage
                 var personListXml = APITools.BlobClientToXml(personListClient);
 
-                //get only male ppl into a list
+                //get only male ppl into a list & matching user id
                 var maleList = from person in personListXml.Root?.Elements()
-                               where person.Element("Gender")?.Value == "Male"
+                               where
+                                   person.Element("Gender")?.Value == "Male" &&
+                                   person.Element("UserId")?.Value == userId
                                select person;
 
                 //send male list to caller
@@ -197,13 +208,18 @@ namespace API
 
             try
             {
+                //get user id
+                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
 
                 //get person list from storage
                 var personListXml = APITools.BlobClientToXml(personListClient);
 
                 //get only female ppl into a list
                 var maleList = from person in personListXml.Root?.Elements()
-                               where person.Element("Gender")?.Value == "Female"
+                               where
+                                   person.Element("Gender")?.Value == "Female"
+                                   &&
+                                   person.Element("UserId")?.Value == userId
                                select person;
 
                 //send female list to caller
@@ -223,7 +239,7 @@ namespace API
         }
 
         /// <summary>
-        /// Gets person all details from only name
+        /// Gets person all details from only hash
         /// </summary>
         [FunctionName("getperson")]
         public static async Task<IActionResult> GetPerson(
@@ -234,23 +250,16 @@ namespace API
 
             try
             {
-                //get person name
+                //get hash that will be used find the person
                 var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var originalHash = int.Parse(requestData.Value);
 
-                //parse it
-                var personName = requestData.Value;
-
-                //get person list from storage
+                //get the person record by hash
                 var personListXml = APITools.BlobClientToXml(personListClient);
-
-                //get only female ppl into a list
-                var foundPerson = from person in personListXml.Root?.Elements()
-                                      //todo need to use hash here for checking
-                                  where person.Element("Name")?.Value == personName
-                                  select person;
+                var foundPerson = APITools.FindPersonByHash(personListXml, originalHash);
 
                 //send person to caller
-                responseMessage = new XElement("Root", foundPerson.FirstOrDefault()).ToString();
+                responseMessage = new XElement("Root", foundPerson).ToString();
 
             }
             catch (Exception e)
@@ -284,13 +293,7 @@ namespace API
 
                 //get the person record that needs to be updated
                 var personListXml = APITools.BlobClientToXml(personListClient);
-                var personToUpdate = personListXml.Root.Elements()
-                    .Where(delegate(XElement personXml)
-                    {   //use hash as id to find the person's record
-                        var thisHash = Person.FromXml(personXml).GetHashCode();
-                        return thisHash == originalHash;
-                    }).First();
-
+                var personToUpdate = APITools.FindPersonByHash(personListXml, originalHash);
 
                 //delete the previous person record,
                 //and insert updated record in the same place
@@ -299,7 +302,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);
 
-                responseMessage = new XElement("Status", "Success").ToString();
+                responseMessage = PassMessageXml;
 
             }
             catch (Exception e)
@@ -316,6 +319,10 @@ namespace API
 
         /// <summary>
         /// Deletes a person's record, uses hash to identify person
+        /// Note : user id is not checked here because Person hash
+        /// can't even be generated by client side if you don't have access.
+        /// Theoretically anybody who gets the hash of the person,
+        /// can delete the record by calling this API
         /// </summary>
         [FunctionName("deleteperson")]
         public static async Task<IActionResult> DeletePerson(
@@ -332,13 +339,7 @@ namespace API
 
                 //get the person record that needs to be deleted
                 var personListXml = APITools.BlobClientToXml(personListClient);
-                var personToDelete = personListXml.Root.Elements()
-                    .Where(delegate(XElement personXml)
-                    {   //use hash as id to find the person's record
-                        var thisHash = Person.FromXml(personXml).GetHashCode();
-                        return thisHash == originalHash;
-                    }).First();
-
+                var personToDelete = APITools.FindPersonByHash(personListXml, originalHash);
 
                 //delete the person record,
                 personToDelete.Remove();
@@ -346,7 +347,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);
 
-                responseMessage = new XElement("Status", "Success").ToString();
+                responseMessage = PassMessageXml;
 
             }
             catch (Exception e)
@@ -370,11 +371,17 @@ namespace API
 
             try
             {
-                //get person list from storage
+                //get user id
+                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
+
+                //get all person list from storage
                 var personListXml = APITools.BlobClientToXml(personListClient);
 
-                //send people list to caller
-                responseMessage = personListXml.ToString();
+                //filter out person by user id
+                var filteredList = APITools.FindPersonByUserId(personListXml, userId);
+
+                //send filtered list to caller
+                responseMessage = new XElement("Root", filteredList).ToString();
 
             }
             catch (Exception e)

@@ -87,7 +87,7 @@
     private static async Task<CompatibilityReport?> GetCompatibilityReport(string male, string female)
     {
         //prepare request to API server
-        var url = $"{ServerManager.GetMatchReportAPI}?male={male}&female={female}";
+        var url = $"{ServerManager.GetMatchReportApi}?male={male}&female={female}";
 
         //get report from server
         var matchReportXml = await ServerManager.ReadFromServer(url);

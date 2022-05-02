@@ -1,4 +1,5 @@
-﻿using Genso.Astrology.Library;
+﻿using System.Xml.Linq;
+using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Website.Pages;
@@ -62,47 +63,7 @@ namespace Website
             }
         }
 
-        /// <summary>
-        /// Gets all people list from API server
-        /// Todo basic cache mechanism
-        /// </summary>
-        public async Task<List<Person>> GetPeopleList()
-        {
-            var personListRootXml = await ServerManager.ReadFromServer(ServerManager.GetPersonListAPI);
-            var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
 
-            return personList;
-        }
-
-        public async Task<List<Person>> GetMalePeopleList()
-        {
-            var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetMaleListAPI);
-            return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
-        }
-        
-        public async Task<List<Person>> GetFemalePeopleList()
-        {
-            var rawMaleListXml = await ServerManager.ReadFromServer(ServerManager.GetFemaleListAPI);
-            return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
-        }
-
-        /// <summary>
-        /// Gets person instance from name contacts API
-        /// Note: uses API to get latest data
-        /// </summary>
-        public async Task<Person> GetPersonFromName(string name)
-        {
-            //send newly created person to API server
-            var xmlData = Tools.AnyTypeToXml(name);
-            var result = await ServerManager.WriteToServer(ServerManager.GetPersonAPI, xmlData);
-
-            var personXml = result.Element("Person");
-
-            //parse received person
-            var receivedPerson = Person.FromXml(personXml);
-
-            return receivedPerson;
-        }
 
 
     }

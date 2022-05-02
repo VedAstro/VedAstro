@@ -22,41 +22,41 @@ function showWrapper(element) {
 };
 
 //Jquery to hide inputed element
-function hideWrapper (element) {
+function hideWrapper(element) {
     console.log(`JS: hideWrapper`);
     $(element).hide();
 };
 
 //function to get cookies given a name
-function getCookiesWrapper (cookieName) {
+function getCookiesWrapper(cookieName) {
     console.log(`JS: getCookiesWrapper`);
     return Cookies.get(cookieName);
 };
 
 //function to set cookies given a name
-function setCookiesWrapper (cookieName, cookieValue) {
+function setCookiesWrapper(cookieName, cookieValue) {
     console.log(`JS: setCookiesWrapper`);
     return Cookies.set(cookieName, cookieValue);
 };
 
 //Jquery to attach event listener to inputed element
-function addEventListenerWrapper (element, eventName, functionName) {
+function addEventListenerWrapper(element, eventName, functionName) {
     console.log(`JS: addEventListenerWrapper : ${eventName} : ${functionName}`);
     element.addEventListener(eventName, window[functionName]);
 };
 
 //gets current page url
-function getUrl () {
+function getUrl() {
     console.log(`JS: getUrl`);
     return window.location.href;
 };
 
-function getGoogleUserName () {
+function getGoogleUserName() {
     console.log(`JS: getGoogleUserName`);
     return window.googleUserName;
 };
 
-function getGoogleUserEmail () {
+function getGoogleUserEmail() {
     console.log(`JS: googleUserEmail`);
     return window.googleUserEmail;
 };
@@ -66,16 +66,95 @@ function getGoogleUserIdToken() {
     return window.googleUserIdToken;
 };
 
-//called by Google sign out button
-function signOut() {
+//get if google sign in button was clicked
+//used by blazor to choose to refresh or not refresh page
+function getSignInButtonClicked() {
+    console.log(`JS: getSignInButtonClicked`);
+    return window.signInButtonClicked;
+};
 
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut();
 
-    //fire event in Blazor, that user just signed out
-    DotNet.invokeMethod('Website', 'InvokeOnUserSignOut');
+//Generates a table using Tabulator table library
+//id to where table will be generated needs to be inputed
+function generateWebsiteTaskListTable(tableId, tableData) {
+
+
+    var table = new Tabulator(`#${tableId}`, {
+        data: tableData,           //load row data from array
+        layout: "fitColumns",      //fit columns to width of table
+        responsiveLayout: "hide",  //hide columns that don't fit on the table
+        tooltips: true,            //show tool tips on cells
+        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        history: true,             //allow undo and redo actions on the table
+        pagination: "local",       //paginate the data
+        paginationSize: 7,         //allow 7 rows per page of data
+        paginationCounter: "rows", //display count of paginated rows in footer
+        movableColumns: false,      //allow column order to be changed
+        resizableRows: true,       //allow row order to be changed
+        initialSort: [             //set the initial sort order of the data
+            { column: "name", dir: "asc" },
+        ],
+        columns: [                 //define the table columns
+            { title: "Name", field: "name", editor: "input" },
+            { title: "Description", field: "description", editor: "input" },
+            { title: "Status", field: "status", editor: "select", editorParams: { values: ["Pending", "Complete"] } },
+            { title: "Date", field: "date", sorter: "date", hozAlign: "center" },
+        ],
+    });
+}
+
+//Generates a table using Tabulator table library
+//id to where table will be generated needs to be inputed
+function generatePersonListTable(tableId, tableData) {
+
+    //set table data
+    var table = new Tabulator(`#${tableId}`, {
+        data: tableData,           //load row data from array
+        editable: false,
+        layout: "fitColumns",      //fit columns to width of table
+        responsiveLayout: "hide",  //hide columns that don't fit on the table
+        tooltips: true,            //show tool tips on cells
+        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        history: false,             //allow undo and redo actions on the table
+        pagination: "local",       //paginate the data
+        paginationSize: 50,         //allow 7 rows per page of data
+        paginationCounter: "rows", //display count of paginated rows in footer
+        movableColumns: false,      //allow column order to be changed
+        resizableRows: true,       //allow row order to be changed
+        initialSort: [             //set the initial sort order of the data
+            { column: "name", dir: "asc" },
+        ],
+        columns: [                 //define the table columns
+            { title: "Name", field: "name", hozAlign: "center" },
+            { title: "Gender", field: "genderString", hozAlign: "center" },
+            { title: "Birth", field: "birthTimeString", hozAlign: "center" },
+            { title: "Hash", field: "hash", hozAlign: "center" },
+        ],
+    });
+
+    //handler when table row is clicked
+    table.on("rowClick", function (e, row) {
+        //get person name
+        let personHash = row._row.data.hash;
+        //send user to person editor page with clicked person
+        window.location.href = `/personeditor/${personHash}`;
+    });
+
+    //same as click handler but for touch
+    table.on("rowTap", function (e, row) {
+        //get person name
+        let personHash = row._row.data.hash;
+        //send user to person editor page with clicked person
+        window.location.href = `/personeditor/${personHash}`;
+    });
 
 }
+
+//async sleep millisecond
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 
 
 
@@ -107,21 +186,47 @@ function mouseOverDasaViewHandler(mouse) {
 
 }
 
-//this function gets called by google sign in button after successful sign in
+//called by sign in button & page refresh
 //note : this function's name is hardwired in Blazor
-function onSignInEventHandler(googleUser) {
+function onSignInSuccessHandler(googleUser) {
 
-    console.log(`JS: onSignInEventHandler`);
+    console.log(`JS: onSignInSuccessHandler`);
 
     //get the google user's details and save it to be accessed by Blazor
     var profile = googleUser.getBasicProfile();
     window.googleUserName = profile.getName();
     window.googleUserEmail = profile.getEmail();
     var id_token = googleUser.getAuthResponse().id_token;
-    window.googleUserIdToken = id_token;
+    window.googleUserIdToken = profile.getId();
+
 
     //fire event in Blazor, that user just signed in
     DotNet.invokeMethod('Website', 'InvokeOnUserSignIn');
+}
 
+//called by Google sign out button only
+function onClickGoogleSignOutButton() {
+
+    console.log(`JS: onSignOutEventHandler`);
+
+    //do the sign out
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut();
+
+    //reset sign in details
+    window.googleUserName = "";
+    window.googleUserEmail = "";
+    window.googleUserIdToken = "";
+
+    //fire event in Blazor, that user just signed out
+    DotNet.invokeMethod('Website', 'InvokeOnUserSignOut');
+
+}
+
+//called by Google sign in button
+//used by blazor to know if page needs to be refreshed
+async function onClickGoogleSignInButton() {
+    console.log(`JS: onClickGoogleSignInButton`);
+    window.signInButtonClicked = true;
 }
 

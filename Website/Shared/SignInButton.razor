@@ -3,7 +3,7 @@
 
 
 @*default show Sign In button*@
-<div @ref="_googleSignInButton" id="GoogleSignInButton" onclick="onClickGoogleSignInButton()" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark"></div>
+<div @ref="_googleSignInButton" id="GoogleSignInButton" @onclick="OnClickSignInButton" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark"></div>
 
 <p>@_greetText</p>
 
@@ -22,9 +22,17 @@
 
     private string _greetText = "";
 
+    /// <summary>
+    /// Set when sign in button clicked,
+    /// reset to false on page reload
+    /// used to check if page needs refresh
+    /// </summary>
+    private bool _signInClicked = false;
+
     private ElementReference _googleSignInButton;
 
     private ElementReference _googleSignOutButton;
+
 
 
 
@@ -37,34 +45,30 @@
     {
         //google sign in code must be only loaded after
         //special sign in google button has been rendered
-        await _jsRuntime.InvokeVoidAsync("loadJs", ServerManager.GoogleSignInJs);
+        if (firstRender) { await _jsRuntime.InvokeVoidAsync("loadJs", ServerManager.GoogleSignInJs); }
     }
 
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
+        //attach handlers
         WebsiteTools.OnUserSignIn += OnUserSignIn;
         WebsiteTools.OnUserSignOut += OnUserSignOut; ;
-
     }
 
-    private async Task OnUserSignOut()
-    {
-        //show sign in button
-        await _jsRuntime.Show(_googleSignInButton);
+    /// <summary>
+    /// gets called only after logout success, page reload
+    /// </summary>
+    private async Task OnUserSignOut() => WebsiteTools.ReloadPage(_navigation);
 
-        //hide sign out button
-        await _jsRuntime.Hide(_googleSignOutButton);
-
-        //remove greet text
-        var userName = await _jsRuntime.InvokeAsync<string>("getGoogleUserName");
-        _greetText = $"";
-
-        StateHasChanged();
-    }
-
+    /// <summary>
+    /// gets called by page refresh & button click sign in
+    /// </summary>
     private async Task OnUserSignIn()
     {
+        //reload page if coming from sign in button
+        if (_signInClicked) { WebsiteTools.ReloadPage(_navigation); }
+
         //hide sign in button
         await _jsRuntime.Hide(_googleSignInButton);
 
@@ -76,7 +80,14 @@
         _greetText = $"Hi, {userName}";
 
         StateHasChanged();
+
     }
 
+
+    /// <summary>
+    /// Called when button clicked, then mark as sign in clicked
+    /// used later to know if page needs refresh
+    /// </summary>
+    private void OnClickSignInButton(MouseEventArgs obj) => _signInClicked = true;
 
 }

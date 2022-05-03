@@ -67,13 +67,6 @@ function getGoogleUserIdToken() {
 };
 
 
-//get if google sign in button was clicked
-//used by blazor to choose to refresh or not refresh page
-function getSignInButtonClicked() {
-    console.log(`JS: getSignInButtonClicked`);
-    return window.signInButtonClicked;
-};
-
 
 //Generates a table using Tabulator table library
 //id to where table will be generated needs to be inputed
@@ -156,12 +149,11 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
 //loads js file programatically,
 //equivalent to js include in header
 function loadJs(sourceUrl) {
     if (sourceUrl.Length == 0) {
-        console.error("Invalid source URL");
+        console.error("JS: loadJs: Invalid source URL");
         return;
     }
 
@@ -170,11 +162,11 @@ function loadJs(sourceUrl) {
     tag.type = "text/javascript";
 
     tag.onload = function () {
-        console.log("Script loaded successfully");
+        console.log("JS: loadJs: Script loaded successfully");
     }
 
     tag.onerror = function () {
-        console.error("Failed to load script");
+        console.error("JS: loadJs: Failed to load script");
     }
 
     document.body.appendChild(tag);
@@ -244,12 +236,5 @@ function onClickGoogleSignOutButton() {
     //fire event in Blazor, that user just signed out
     DotNet.invokeMethod('Website', 'InvokeOnUserSignOut');
 
-}
-
-//called by Google sign in button
-//used by blazor to know if page needs to be refreshed
-async function onClickGoogleSignInButton() {
-    console.log(`JS: onClickGoogleSignInButton`);
-    window.signInButtonClicked = true;
 }
 

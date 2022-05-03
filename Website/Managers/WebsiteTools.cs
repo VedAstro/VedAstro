@@ -32,8 +32,11 @@ namespace Website
         /// </summary>
         public static event AsyncEventHandler OnUserSignOut;
 
-
-        public static bool UserSignedIn { get; set; }
+        /// <summary>
+        /// Is true when only when Google Sign In success
+        /// False when Google Sign Out success
+        /// </summary>
+        public static bool GoogleUserSignedIn { get; set; }
 
 
         /// <summary>
@@ -183,7 +186,7 @@ namespace Website
         public static void InvokeOnUserSignIn()
         {
             //remember user signed in
-            UserSignedIn = true;
+            GoogleUserSignedIn = true;
             //let others know
             OnUserSignIn?.Invoke();
         }
@@ -196,7 +199,7 @@ namespace Website
         public static void InvokeOnUserSignOut()
         {
             //remember user signed out
-            UserSignedIn = false;
+            GoogleUserSignedIn = false;
             //let others know
             OnUserSignOut?.Invoke();
         }
@@ -209,24 +212,37 @@ namespace Website
         public static async Task<string> GetUserIdAsync(IJSRuntime jsRuntime)
         {
             //wait here a little if user has not signed in
-            //if no sign in, then 
-            var tryLimit = 5;
-            var count = 0;
-            while (!UserSignedIn && count < tryLimit)
-            {
-                Console.WriteLine("BLZ: GetUserIdAsync: Waiting For Sign In");
-                await Task.Delay(250);
-                count++;
-            }
+            //5 X 200 delay = 1 sec wait time max
+            var signInSuccess = await WaitTillGoogleSignInSuccess(5, 200);
 
-            //if try limit reached & user has not signed in
-            //then end here with Public User Id
-            if (!UserSignedIn && count == tryLimit) { Console.WriteLine("BLZ: GetUserIdAsync: Public ID Assigned"); return PublicUserId; }
+            //if sign in failed use Public Id
+            if (!signInSuccess) { Console.WriteLine("BLZ: GetUserIdAsync: Public ID Assigned"); return PublicUserId; }
 
             //get user Id from variable in JS scope
             var userId = await jsRuntime.InvokeAsync<string>("getGoogleUserIdToken");
 
             return userId;
+        }
+
+
+        /// <summary>
+        /// if try limit is expired then returns false
+        /// try limit 5 X 200 delay = 1 sec wait time max
+        /// </summary>
+        public static async Task<bool> WaitTillGoogleSignInSuccess(int tryLimit, int delay)
+        {
+            var count = 0;
+            while (!GoogleUserSignedIn && count < tryLimit)
+            {
+                Console.WriteLine("BLZ: GetUserIdAsync: Waiting For Sign In");
+                await Task.Delay(delay);
+                count++;
+            }
+
+            if (!GoogleUserSignedIn && count == tryLimit) {  return false; }
+
+            //if control reaches here than, user sign in success
+            return true;
         }
 
         /// <summary>

@@ -33,47 +33,7 @@
 
 @code
 {
-
-    protected override async Task OnInitializedAsync()
-    {
-        WebsiteTools.OnUserSignIn += async () => { await OnUserSignIn(); };
-        WebsiteTools.OnUserSignOut += async () => { await OnUserSignOut(); };
-    }
-
-    /// <summary>
-    /// Called when signed in via click or auto sign in when page load/refresh
-    /// </summary>
-    /// <returns></returns>
-    private async Task OnUserSignIn()
-    {
-        //var name =  _jsRuntime.InvokeAsync<string>("getGoogleUserName").Result;
-        var email = await _jsRuntime.InvokeAsync<string>("getGoogleUserEmail");
-        //var idToken = _jsRuntime.InvokeAsync<string>("getGoogleUserIdToken").Result;
-
-        Console.WriteLine($"BLZ: OnUserSignInPass {email}!");
-
-        //refresh the page, to reload data on page only when coming
-        //from Sign In Button Click, else page goes into refresh loop
-        var btnClicked = await _jsRuntime.InvokeAsync<bool>("getSignInButtonClicked");
-        if (btnClicked) { WebsiteTools.ReloadPage(_navigation); }
-
-    }
-
-    /// <summary>
-    /// Only called when sign out button clicked
-    /// </summary>
-    /// <returns></returns>
-    private async Task OnUserSignOut()
-    {
-        var email = await _jsRuntime.InvokeAsync<string>("getGoogleUserEmail");
-        //var idToken = _jsRuntime.InvokeAsync<string>("getGoogleUserIdToken").Result;
-
-        Console.WriteLine($"BLZ: OnUserSignOut {email}!");
-
-        //refresh the page, to reload data on page
-        WebsiteTools.ReloadPage(_navigation);
-    }
-
+    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //log visit everytime page is rendered

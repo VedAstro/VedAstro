@@ -2,15 +2,18 @@
 *@
 
 
-@*default show Sign In button*@
-<div @ref="_googleSignInButton" id="GoogleSignInButton" @onclick="OnClickSignInButton" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark"></div>
+<div class="rounded" style="background: rgba(0, 255, 255, 0.1)">
 
-<p>@_greetText</p>
+    @*default show Sign In button*@
+    <div @ref="_googleSignInButton" id="GoogleSignInButton" @onclick="OnClickSignInButton" style="text-align: -webkit-center;" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark"></div>
 
-@*default hide Sign Out button*@
-<button @ref="_googleSignOutButton" style="display: none" onclick="onClickGoogleSignOutButton()" class="btn btn-primary">Sign Out</button>
+    <div class="vstack gap-1" style="padding: 6px;">
+        <span class="" style="align-self: center;padding: 10px;">@_greetText</span>
+        @*default hide Sign Out button*@
+        <button @ref="_googleSignOutButton" style="display: none" onclick="onClickGoogleSignOutButton()" class="btn btn-primary">Sign Out</button>
+    </div>
 
-
+</div>
 
 @code {
 

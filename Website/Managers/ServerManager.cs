@@ -27,7 +27,11 @@ namespace Website
         public const string GetEventsApi = "https://vedastroapi.azurewebsites.net/api/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
         public const string GoogleGeoLocationApiKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg"; //marked for deletetion
-        public const string GoogleGeoLocationApiKey2 = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE"; 
+        public const string GoogleGeoLocationApiKey2 = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
+        /// <summary>
+        /// link to js file used for google sign in function
+        /// </summary>
+        public const string GoogleSignInJs = "https://apis.google.com/js/platform.js"; 
 
 
         //PUBLIC METHODS

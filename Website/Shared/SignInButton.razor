@@ -1,0 +1,82 @@
+﻿@*<button @onclick="OnClickButton" class="btn btn-primary">@_buttonText</button>
+*@
+
+
+@*default show Sign In button*@
+<div @ref="_googleSignInButton" id="GoogleSignInButton" onclick="onClickGoogleSignInButton()" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark"></div>
+
+<p>@_greetText</p>
+
+@*default hide Sign Out button*@
+<button @ref="_googleSignOutButton" style="display: none" onclick="onClickGoogleSignOutButton()" class="btn btn-primary">Sign Out</button>
+
+
+
+@code {
+
+
+    //▒█▀▀▀ ▀█▀ ▒█▀▀▀ ▒█░░░ ▒█▀▀▄ ▒█▀▀▀█ 　 ░█▀▀█ ▒█▄░▒█ ▒█▀▀▄ 　 ▒█▀▀█ ▒█▀▀█ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▀█
+    //▒█▀▀▀ ▒█░ ▒█▀▀▀ ▒█░░░ ▒█░▒█ ░▀▀▀▄▄ 　 ▒█▄▄█ ▒█▒█▒█ ▒█░▒█ 　 ▒█▄▄█ ▒█▄▄▀ ▒█░░▒█ ▒█▄▄█ ░▀▀▀▄▄
+    //▒█░░░ ▄█▄ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▀ ▒█▄▄▄█ 　 ▒█░▒█ ▒█░░▀█ ▒█▄▄▀ 　 ▒█░░░ ▒█░▒█ ▒█▄▄▄█ ▒█░░░ ▒█▄▄▄█
+
+
+    private string _greetText = "";
+
+    private ElementReference _googleSignInButton;
+
+    private ElementReference _googleSignOutButton;
+
+
+
+
+    //▒█▀▄▀█ ▒█▀▀▀ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▀▀█
+    //▒█▒█▒█ ▒█▀▀▀ ░▒█░░ ▒█▀▀█ ▒█░░▒█ ▒█░▒█ ░▀▀▀▄▄
+    //▒█░░▒█ ▒█▄▄▄ ░▒█░░ ▒█░▒█ ▒█▄▄▄█ ▒█▄▄▀ ▒█▄▄▄█
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //google sign in code must be only loaded after
+        //special sign in google button has been rendered
+        await _jsRuntime.InvokeVoidAsync("loadJs", ServerManager.GoogleSignInJs);
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        WebsiteTools.OnUserSignIn += OnUserSignIn;
+        WebsiteTools.OnUserSignOut += OnUserSignOut; ;
+
+    }
+
+    private async Task OnUserSignOut()
+    {
+        //show sign in button
+        await _jsRuntime.Show(_googleSignInButton);
+
+        //hide sign out button
+        await _jsRuntime.Hide(_googleSignOutButton);
+
+        //remove greet text
+        var userName = await _jsRuntime.InvokeAsync<string>("getGoogleUserName");
+        _greetText = $"";
+
+        StateHasChanged();
+    }
+
+    private async Task OnUserSignIn()
+    {
+        //hide sign in button
+        await _jsRuntime.Hide(_googleSignInButton);
+
+        //show sign out button
+        await _jsRuntime.Show(_googleSignOutButton);
+
+        //if signed in set greet text
+        var userName = await _jsRuntime.InvokeAsync<string>("getGoogleUserName");
+        _greetText = $"Hi, {userName}";
+
+        StateHasChanged();
+    }
+
+
+}

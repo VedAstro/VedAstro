@@ -9,7 +9,7 @@
 
     <!-- Google Sign In -->
     <meta name="google-signin-client_id" content="19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!--<script src="https://apis.google.com/js/platform.js" async defer></script>-->
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
@@ -49,11 +49,6 @@
 
 <body>
 
-    <!--Google Sign In Button-->
-    <!--Note: has to be available when the JS is loaded-->
-    <div id="GoogleSignInButton" onclick="onClickGoogleSignInButton()" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark" style="position: absolute; top: 532px; left: 26px; Z-INDEX: 1;"></div>
-
-    <a href="#" onclick="onClickGoogleSignOutButton();">Sign out</a>
 
     <div id="app">
         <!--loading box shown while blazor is loading-->

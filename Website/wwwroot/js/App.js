@@ -66,6 +66,7 @@ function getGoogleUserIdToken() {
     return window.googleUserIdToken;
 };
 
+
 //get if google sign in button was clicked
 //used by blazor to choose to refresh or not refresh page
 function getSignInButtonClicked() {
@@ -156,6 +157,28 @@ function sleep(ms) {
 }
 
 
+//loads js file programatically,
+//equivalent to js include in header
+function loadJs(sourceUrl) {
+    if (sourceUrl.Length == 0) {
+        console.error("Invalid source URL");
+        return;
+    }
+
+    var tag = document.createElement('script');
+    tag.src = sourceUrl;
+    tag.type = "text/javascript";
+
+    tag.onload = function () {
+        console.log("Script loaded successfully");
+    }
+
+    tag.onerror = function () {
+        console.error("Failed to load script");
+    }
+
+    document.body.appendChild(tag);
+}
 
 
 
@@ -204,7 +227,7 @@ function onSignInSuccessHandler(googleUser) {
     DotNet.invokeMethod('Website', 'InvokeOnUserSignIn');
 }
 
-//called by Google sign out button only
+//called by sign out button does the actual sign out process
 function onClickGoogleSignOutButton() {
 
     console.log(`JS: onSignOutEventHandler`);

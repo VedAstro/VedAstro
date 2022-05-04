@@ -151,13 +151,18 @@
         _dateInput = IsCreator ? defaultDate : birthTimeDate;
 
 
-        var geoLocation = new
+        //geolocation only needs to be set in Editor mode
+        //in Creator mode it will auto set after timeout
+        if (!IsCreator)
         {
-            LocationName = IsCreator ? "" : _person.GetBirthLocation().GetName(),
-            Longitude = IsCreator ? 0 : _person.GetBirthLocation().GetLongitude(),
-            Latitude = IsCreator ? 0 : _person.GetBirthLocation().GetLatitude()
-        };
-        _geoLocationInput.UpdateData(geoLocation);
+            var geoLocation = new
+            {
+                LocationName = IsCreator ? "" : _person.GetBirthLocation().GetName(),
+                Longitude = IsCreator ? 0 : _person.GetBirthLocation().GetLongitude(),
+                Latitude = IsCreator ? 0 : _person.GetBirthLocation().GetLatitude()
+            };
+            _geoLocationInput.UpdateData(geoLocation);
+        }
 
 
         //_lifeEventList = new List<Event> { new(EventName.AmritaSiddhaYoga, EventNature.Good, "TEST", Time.Now(_person.GetBirthLocation()), Time.Now(_person.GetBirthLocation())) };

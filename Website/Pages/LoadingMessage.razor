@@ -2,14 +2,24 @@
 
 @*by default invisible*@
 
+<style>
+
+    #progressBar {
+        margin: 20px;
+        width: 400px;
+        height: 8px;
+        position: relative;
+    }
+</style>
 
 
 <div @ref="_loadingMessage" style="display: none;">
     <div class="modal fade show" tabindex="-1" role="dialog" style="display: block">
         <div class="modal-dialog modal-dialog-centered" style="width: fit-content;" role="document">
             <div class="modal-content">
-                <div class="modal-body align-content-center">
+                <div class="modal-body align-content-center" style="text-align: center;">
                     <img src="images/loading-animation.gif" />
+                    <div id="progressBar" style="margin-bottom: 48px;"></div>
                 </div>
             </div>
         </div>
@@ -30,6 +40,13 @@
     private ElementReference _loadingMessage;
 
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _jsRuntime.InvokeVoidAsync("InitProgressBar");
+        }
+    }
 
     /// <summary>
     /// Show loading message
@@ -45,6 +62,9 @@
         //show the modal
         await _jsRuntime.Show(_loadingMessage);
 
+        //auto load to 50%
+        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 50);
+
         _isOpen = true;
 
     }
@@ -56,6 +76,9 @@
     {
         //if already close end here
         if (!_isOpen) { return; }
+
+        await _jsRuntime.InvokeVoidAsync("ResetProgressBar");
+
 
         //if not ready wait
         await _globalVariable.WaitTillComponentReady();

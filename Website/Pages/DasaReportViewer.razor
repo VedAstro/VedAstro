@@ -2,6 +2,19 @@
 @using System.Xml.Linq
 @using Tools = Genso.Astrology.Library.Tools
 
+<style>
+    #NowLine {
+        background-color: red;
+        width: 1px;
+        height: 142px;
+        z-index: 999;
+        left: 0px;
+        top: -144px;
+        position: relative;
+    }
+
+</style>
+
 
 <div class="vstack gap-1">
     <div style="background-color: cadetblue;" class="fw-bold" id="TimeCursorLegend"></div>
@@ -10,6 +23,7 @@
         @BhuktiRowItemsSvg
         @AntaramRowItemsSvg
     </div>
+    <div id="NowLine" style="left: 100px"></div>
 </div>
 
 
@@ -79,21 +93,27 @@
         //use the inputed data to get events from API
         //note: below methods access the data internally
         DasaEventList = await getDasaEvents();
+        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
         BhuktiEventList = await getBhuktiEvents();
+        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
         AntaramEventList = await getAntaramEvents();
+        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
 
         //generate rows and pump them into the page
-        DasaRowItemsSvg = new MarkupString(GenerateRowSvg(DasaEventList, _dasaEventsPrecision));
-        BhuktiRowItemsSvg = new MarkupString(GenerateRowSvg(BhuktiEventList, _bhuktiEventsPrecision));
-        AntaramRowItemsSvg = new MarkupString(GenerateRowSvg(AntaramEventList, _antaramEventsPrecision));
+        DasaRowItemsSvg = new MarkupString(await GenerateRowSvg(DasaEventList, _dasaEventsPrecision));
+
+        BhuktiRowItemsSvg = new MarkupString(await GenerateRowSvg(BhuktiEventList, _bhuktiEventsPrecision));
+
+        AntaramRowItemsSvg = new MarkupString(await GenerateRowSvg(AntaramEventList, _antaramEventsPrecision));
+
 
         //need to propagate changes
-        this.StateHasChanged();
+        //this.StateHasChanged();
 
 
         //-----------------------LOCAL FUNCTIONS-------------------------
 
-        string GenerateRowSvg(List<Event> eventList, double precisionHours)
+        async Task<string> GenerateRowSvg(List<Event> eventList, double precisionHours)
         {
             //get time slices used to get events
             var startTime = Person.GetBirthDateTime(); //start time is birth time
@@ -141,6 +161,8 @@
                           $"{rowHtml}</svg>";
 
 
+            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+
             return svgBody;
 
         }
@@ -176,6 +198,7 @@
         //gets events from server filtered by event tag
         async Task<List<Event>?> getEventsByTag(EventTag tag, double precisionHours)
         {
+
             //prep data
             var startTime = Person.GetBirthDateTime(); //start time is birth time
             var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
@@ -192,10 +215,14 @@
                     tag,
                     precisionHours);
 
+
             //sort the list by time before sending view
             var orderByAscResult = from dasaEvent in dasaEventsUnsorted
                                    orderby dasaEvent.StartTime.GetStdDateTimeOffset()
                                    select dasaEvent;
+
+
+            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 10);
 
             //send sorted events to view
             return orderByAscResult.ToList();
@@ -215,11 +242,15 @@
                 Tools.AnyTypeToXml(tag),
                 Tools.AnyTypeToXml(precisionHours));
 
+
             //send to api and get results
             var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsApi, root);
 
+
             //parse raw results
             List<Event> resultsParsed = Event.FromXml(resultsRaw);
+
+            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 10);
 
             //send to caller
             return resultsParsed;

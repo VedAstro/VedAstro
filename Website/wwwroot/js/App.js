@@ -149,6 +149,63 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function InitProgressBar(ms) {
+
+    window.ProgressBarTempValue = 0;
+
+    window.ProgressBarInstance = new ProgressBar.Line('#progressBar', {
+        strokeWidth: 4,
+        easing: 'linear',
+        duration: 1400,
+        color: '#2dd128',
+        trailColor: '#eee',
+        trailWidth: 1,
+        svgStyle: { width: '100%', height: '100%' },
+        text: {
+            style: {
+                // Text color.
+                // Default: same as stroke color (options.color)
+                color: '#999',
+                position: 'absolute',
+                right: '0',
+                top: '30px',
+                padding: 0,
+                margin: 0,
+                transform: null
+            },
+            autoStyleContainer: false
+        },
+        from: { color: '#FFEA82' },
+        to: { color: '#ED6A5A' },
+        step: (state, bar) => {
+            bar.setText(Math.round(bar.value() * 100) + ' %');
+        }
+    });
+
+}
+
+function SetProgressBar(percentage) {
+
+
+    var value = percentage / 100; //convert 50 to 0.5
+    window.ProgressBarTempValue += value;
+
+    //if above 100 end here & reset to 0
+    if (window.ProgressBarTempValue > 1) {
+        window.ProgressBarTempValue = 0;
+        return;
+    }
+
+    ProgressBarInstance.animate(window.ProgressBarTempValue);
+
+}
+function ResetProgressBar(percentage) {
+    //reset both view & data
+    window.ProgressBarTempValue = 0;
+    ProgressBarInstance.animate(0);
+}
+
+
 //loads js file programatically,
 //equivalent to js include in header
 function loadJs(sourceUrl) {

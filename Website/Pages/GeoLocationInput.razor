@@ -15,15 +15,15 @@
     <div class="row">
         <div class="col-6">
             <label>Birth Location</label>
-            <input @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control" placeholder="Singapore">
+            <input @ref="_locationNameInput" @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control">
         </div>
         <div class="col">
             <label>Longitude</label>
-            <input @bind="Longitude" type="text" class="form-control" placeholder="103.82">
+            <input @ref="_longitudeInput" @bind="Longitude" type="text" class="form-control" placeholder="103.82">
         </div>
         <div class="col">
             <label>Latitude</label>
-            <input @bind="Latitude" type="text" class="form-control" placeholder="1.352">
+            <input @ref="_latitudeInput" @bind="Latitude"  type="text" class="form-control" placeholder="1.352">
         </div>
     </div>
 </div>
@@ -31,80 +31,87 @@
 
 
 @code {
-    //DEFAULTS
+    //FIELDS
     const string DefaultLocationCountry = "Singapore";
+    private ElementReference _locationNameInput;
+    private ElementReference _longitudeInput;
+    private ElementReference _latitudeInput;
+    private string _locationName;
+    private double _longitude;
+    private double _latitude;
 
-    
-    //VARIABLES
-    private string _locationName = DefaultLocationCountry;
-    private double _longitude = 103.82;
-    private double _latitude = 1.352;
 
-    
     //PARAMETERS
 
-    [Parameter]
     public string LocationName
     {
         get => _locationName;
         set
         {
-            //this stops update loops
-            if (_locationName == value) return;
+            //avoid same value to stop loops
+            //avoid null values because random null set is called during page load
+            if (_locationName == value || value == null) { return; }
+
+            //update values directly via JS (faster), no refresh needed in blazor side
+            _jsRuntime.SetProp(_locationNameInput, "value", value);
+
+            //save the value
             _locationName = value;
-            //update value in parent page
-            LocationNameChanged.InvokeAsync(value);
         }
     }
 
-    [Parameter]
     public double Longitude
     {
         get => _longitude;
         set
         {
-            //this stops update loops
-            if (_longitude == value) return;
+            //avoid same value to stop loops
+            //avoid null values because random null set is called during page load
+            if (_longitude == value || value == null) { return; }
+
+            //update values directly via JS (faster), no refresh needed in blazor side
+            _jsRuntime.SetProp(_longitudeInput, "value", value);
+
+            //save the value
             _longitude = value;
-            //update value in parent page
-            LongitudeChanged.InvokeAsync(value);
         }
     }
 
-    [Parameter]
     public double Latitude
     {
         get => _latitude;
         set
         {
-            //this stops update loops
-            if (_latitude == value) return;
+            //avoid same value to stop loops
+            //avoid null values because random null set is called during page load
+            if (_latitude == value || value == null) { return; }
+
+            //update values directly via JS (faster), no refresh needed in blazor side
+            _jsRuntime.SetProp(_latitudeInput, "value", value);
+
+            //save the value
             _latitude = value;
-            //update value in parent page
-            LatitudeChanged.InvokeAsync(value);
         }
+
     }
 
-
-    //below are needed for 2-way binding
-    //between page & component to work
-    [Parameter]
-    public EventCallback<string> LocationNameChanged { get; set; }
-    [Parameter]
-    public EventCallback<double> LongitudeChanged { get; set; }
-    [Parameter]
-    public EventCallback<double> LatitudeChanged { get; set; }
 
 
     //Location locationCoordinates;
 
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        //todo after 1st render if no value is in location name within limited timed, auto set location from browser
         //try to auto set location gotten from browser
-        await AutoSetLocation();
-    }
+        if (firstRender)
+        {
+            //wait 1s before checking if it has been filled by user or other logic
+            await Task.Delay(1000);
+            if (LocationName == "" || LocationName == null) { await AutoSetLocation(); }
+        }
 
+    }
 
     /// <summary>
     /// When location name text is changed this method is called to fetch longitude & latitude
@@ -195,5 +202,15 @@
 
     }
 
+    /// <summary>
+    /// Updates all the fields in the component
+    /// Note: Does not call state has changed
+    /// </summary>
+    public void UpdateData(dynamic newData)
+    {
+        LocationName = newData.LocationName;
+        Longitude = newData.Longitude;
+        Latitude = newData.Latitude;
+    }
 
 }

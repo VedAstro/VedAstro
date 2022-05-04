@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm gap-2">
-            
+
             <div>
                 <label>Name</label>
                 <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitudeInput" @bind-Latitude="_latitudeInput" />
+            <GeoLocationInput @ref="_geoLocationInput" />
             <div>
                 <label>Gender</label>
                 <select @bind="_genderInput" class="form-control">
@@ -89,13 +89,11 @@
 
     string? _hourMinInput, _dateInput, _timeZonInput;
 
-    string _locationName = "";
     string _nameInput = "";
-    double _longitudeInput;
-    double _latitudeInput;
     string _genderInput = "";
     string _pageTitle = "";
     List<Event> _lifeEventList = new();
+    private GeoLocationInput _geoLocationInput;
 
 
 
@@ -131,6 +129,7 @@
         //set person
         _person = IsCreator ? new Person() : await WebsiteTools.GetPersonFromHash(PersonHash);
 
+
         //in edit mode save hash of unedited person
         _originalPersonHash = IsCreator ? 0 : _person.GetHashCode();
 
@@ -152,11 +151,16 @@
         _dateInput = IsCreator ? defaultDate : birthTimeDate;
 
 
-        _locationName = IsCreator ? "" : _person.GetBirthLocation().GetName();
-        _longitudeInput = IsCreator ? 0 : _person.GetBirthLocation().GetLongitude();
-        _latitudeInput = IsCreator ? 0 : _person.GetBirthLocation().GetLatitude();
+        var geoLocation = new
+        {
+            LocationName = IsCreator ? "" : _person.GetBirthLocation().GetName(),
+            Longitude = IsCreator ? 0 : _person.GetBirthLocation().GetLongitude(),
+            Latitude = IsCreator ? 0 : _person.GetBirthLocation().GetLatitude()
+        };
+        _geoLocationInput.UpdateData(geoLocation);
 
-        _lifeEventList = new List<Event> {new(EventName.AmritaSiddhaYoga, EventNature.Good, "TEST", Time.Now(_person.GetBirthLocation()), Time.Now(_person.GetBirthLocation()))};
+
+        //_lifeEventList = new List<Event> { new(EventName.AmritaSiddhaYoga, EventNature.Good, "TEST", Time.Now(_person.GetBirthLocation()), Time.Now(_person.GetBirthLocation())) };
 
         //button does different stuff based on page mode
         OnClickSubmitButton = IsCreator ? SubmitNewPerson : UpdateExistingPerson;
@@ -200,7 +204,7 @@
     {
 
         //parse data received from user
-        var geoLocation = new GeoLocation(_locationName, _longitudeInput, _latitudeInput);
+        var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
         var fullTimeString = $"{_hourMinInput} {_dateInput} {_timeZonInput}";
         var stdTimeMale = DateTimeOffset.ParseExact(fullTimeString, Time.GetDateTimeFormat(), null);
 
@@ -223,7 +227,7 @@
         //update person in API by hash
         await WebsiteTools.UpdatePerson(_person, _originalPersonHash);
 
-    //let user know person has been updates
+        //let user know person has been updates
         await _globalVariable.Alert.ShowSuccess($"{_nameInput} updated successfully!");
 
         //refresh the page variables

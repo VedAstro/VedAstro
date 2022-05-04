@@ -52,6 +52,30 @@ namespace Website
         //░█──░█ ░█▄▄▄ ─░█── ░█─░█ ░█▄▄▄█ ░█▄▄▀ ░█▄▄▄█
 
 
+        /// <summary>
+        /// Extension method for setting a Timeout for a Task
+        /// </summary>
+        public static async Task<TResult> TimeoutAfter<TResult>(this Task<TResult> task, TimeSpan timeout)
+        {
+
+            using (var timeoutCancellationTokenSource = new CancellationTokenSource())
+            {
+
+                var completedTask = await Task.WhenAny(task, Task.Delay(timeout, timeoutCancellationTokenSource.Token));
+                if (completedTask == task)
+                {
+                    timeoutCancellationTokenSource.Cancel();
+                    return await task;  // Very important in order to propagate exceptions
+                }
+                else
+                {
+                    throw new TimeoutException("The operation has timed out.");
+                }
+            }
+        }
+
+
+
         public static async Task<dynamic> GetAddressLocation(string address)
         {
             //create the request url for Google API
@@ -110,6 +134,7 @@ namespace Website
         {
             //get url user is on
             var urlXml = new XElement("Url", await jsRuntime.InvokeAsync<string>("getUrl"));
+            var userIdXml = new XElement("UserId", await GetUserIdAsync(jsRuntime));
 
             //find out if new visitor just arriving or old one browsing
             var uniqueId = await GetVisitorIdFromCookie();
@@ -134,7 +159,7 @@ namespace Website
                 var uniqueIdXml = new XElement("UniqueId", visitorId);
                 var locationXml = await ServerManager.ReadFromServer(ServerManager.GetGeoLocation, "Location");
                 var visitorElement = new XElement("Visitor");
-                visitorElement.Add(uniqueIdXml, urlXml, timeStampXml, locationXml, browserDataXml);
+                visitorElement.Add(userIdXml, uniqueIdXml, urlXml, timeStampXml, locationXml, browserDataXml);
 
                 //send to API for save keeping
                 var result = await ServerManager.WriteToServer(ServerManager.AddVisitorApi, visitorElement);
@@ -154,7 +179,7 @@ namespace Website
                 var visitorElement = new XElement("Visitor");
                 var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
                 var uniqueIdXml = new XElement("UniqueId", uniqueId); //use id generated above
-                visitorElement.Add(uniqueIdXml, urlXml, timeStampXml);
+                visitorElement.Add(userIdXml, uniqueIdXml, urlXml, timeStampXml);
 
                 //send to API for save keeping
                 var result = await ServerManager.WriteToServer(ServerManager.AddVisitorApi, visitorElement);
@@ -162,6 +187,10 @@ namespace Website
                 //check result, display error if needed
                 if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }
             }
+
+
+
+            //----------- LOCAL FUNCTIONS ----------
 
             //returns null if no id found
             async Task<string> GetVisitorIdFromCookie() => await jsRuntime.InvokeAsync<string>("getCookiesWrapper", "uniqueId");
@@ -175,7 +204,6 @@ namespace Website
                 var rawXml = JsonConvert.DeserializeXmlNode(dataJson.ToString(), "BrowserData");
                 return XElement.Parse(rawXml.InnerXml);
             }
-
         }
 
 
@@ -269,20 +297,41 @@ namespace Website
 
         /// <summary>
         /// Gets person instance from name contacts API
-        /// Note: uses API to get latest data
+        /// Note: - uses API to get latest data
+        ///       - will retry forever till result comes
         /// </summary>
         public static async Task<Person> GetPersonFromHash(string personHash)
         {
-            //send newly created person to API server
-            var xmlData = Tools.AnyTypeToXml(personHash);
-            var result = await ServerManager.WriteToServer(ServerManager.GetPersonApi, xmlData);
+            //timeout implemented because calls have known to fail
+            var timeoutMs = 500;
+            Person personFromHash;
+            TryAgain:
+            try
+            {
+                personFromHash = await DoWork().TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
+                return personFromHash;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"BLZ: GetPersonFromHash: {timeoutMs}ms Timeout!!");
+                goto TryAgain;
+            }
 
-            var personXml = result.Element("Person");
 
-            //parse received person
-            var receivedPerson = Person.FromXml(personXml);
+            async Task<Person> DoWork()
+            {
+                //send newly created person to API server
+                var xmlData = Tools.AnyTypeToXml(personHash);
+                var result = await ServerManager.WriteToServer(ServerManager.GetPersonApi, xmlData);
 
-            return receivedPerson;
+                var personXml = result.Element("Person");
+
+                //parse received person
+                var receivedPerson = Person.FromXml(personXml);
+
+                return receivedPerson;
+            }
+
         }
 
         public static async Task DeletePerson(int personHash)

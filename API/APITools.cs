@@ -143,16 +143,26 @@ namespace API
         /// <summary>
         /// Given list of person, it will find the person by hash
         /// and return the XML version of the person.
-        /// Note: Person's hash is computed on the fly to reduce coupling
+        /// Note:- Person's hash is computed on the fly to reduce coupling
+        ///      - If any error occur, it will return empty person tag
         /// </summary>
         public static XElement FindPersonByHash(XDocument personListXml, int originalHash)
         {
-            return personListXml.Root.Elements()
-                .Where(delegate (XElement personXml)
-                {   //use hash as id to find the person's record
-                    var thisHash = Person.FromXml(personXml).GetHashCode();
-                    return thisHash == originalHash;
-                }).First();
+            try
+            {
+                return personListXml.Root.Elements()
+                    .Where(delegate (XElement personXml)
+                    {   //use hash as id to find the person's record
+                        var thisHash = Person.FromXml(personXml).GetHashCode();
+                        return thisHash == originalHash;
+                    }).First();
+            }
+            catch (Exception e)
+            {
+                //if fail log it and return empty xelement
+                //todo log failure
+                return new XElement("Person");
+            }
         }
 
         /// <summary>

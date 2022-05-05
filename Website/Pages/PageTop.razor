@@ -1,11 +1,13 @@
-﻿
+﻿@*
+    Small component placed on page top
+*@
+
 <div class="vstack gap-2">
     <h2 class="fw-bold">@Title</h2>
     <h6>@Description</h6>
+    @ButtonsRow
     <hr />
 </div>
-
-
 
 @code {
 
@@ -15,4 +17,6 @@
     [Parameter]
     public string Description { get; set; }
 
+    [Parameter]
+    public RenderFragment? ButtonsRow { get; set; }
 }

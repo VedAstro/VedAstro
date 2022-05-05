@@ -4,10 +4,28 @@
 
 <PageTitle>Find Marriage Match</PageTitle>
 
+<PageTop Title="Match" Description="Check marriage compatibility between horoscopes">
+    <ButtonsRow>
+        <div class="mt-3 hstack gap-4">
+            <button @onclick="OnClickAddPerson" class="btn btn-primary hstack gap-2">
+                <span class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></span> Add Person
+            </button>
+            <button @onclick="OnClickPersonList" class="btn btn-primary hstack gap-2">
+                <span class="iconify" data-icon="fluent:people-list-24-filled" data-width="25"></span> Person List
+            </button>
+        </div>
+    </ButtonsRow>
+</PageTop>
+
+
+
+
 <div class="vstack gap-3">
     <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonName="@SelectedMale" Label="Male" />
     <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonName="@SelectedFemale" Label="Female" />
-    <button @onclick="GetMatchReport" class="btn btn-primary">Submit</button>
+    <button @onclick="GetMatchReport" class="btn btn-primary hstack gap-2">
+        <span class="iconify" data-icon="uim:process" data-width="25"></span> Calculate
+    </button>
 </div>
 
 
@@ -20,10 +38,12 @@
     private PeopleSelectorBox _femalePeopleSelector;
 
 
-    protected override async Task OnInitializedAsync()
-    {
 
-    }
+    //--------------------EVENT HANDLERS
+
+    public void OnClickAddPerson(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.PersonEditor);
+    public void OnClickPersonList(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.PersonList);
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

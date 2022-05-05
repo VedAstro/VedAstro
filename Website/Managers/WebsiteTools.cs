@@ -129,11 +129,16 @@ namespace Website
         /// <summary>
         /// Tries to ID the user, and sends a log of the visit to API server
         /// Called from MainLayout everytime page is loaded
+        /// Note: Does not log any url with localhost
         /// </summary>
         public static async Task LogVisitor(IJSRuntime jsRuntime)
         {
             //get url user is on
-            var urlXml = new XElement("Url", await jsRuntime.InvokeAsync<string>("getUrl"));
+            var urlString = await jsRuntime.InvokeAsync<string>("getUrl");
+            //if URL is localhost ignore & end here
+            if (urlString.Contains("localhost")) { return; }
+            //place url in xml
+            var urlXml = new XElement("Url", urlString);
             var userIdXml = new XElement("UserId", await GetUserIdAsync(jsRuntime));
 
             //find out if new visitor just arriving or old one browsing

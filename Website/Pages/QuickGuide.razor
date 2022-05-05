@@ -4,44 +4,87 @@
 
 <PageTitle>Quick Guide</PageTitle>
 
-<h1 class="fw-bold">Quick Guide</h1>
+<PageTop Title="Quick Guide">
+    <Description>
+        VedAstro is a WebApp designed to help people 
+        use Vedic Astrology in their daily life.
+    </Description>
+</PageTop>
 
-<p class="fs-5 col-md-8">This project is a collection of Vedic astrological tools. <br/>
-    Tools for things like <span @onclick="OnClickButton1" class="fw-bold">Match</span> compatibility for marriage,<br/>
-    <span @onclick="OnClickButton2" class="fw-bold">Muhurtha</span> for good timing or <span>Dasa</span> life predictions.</p>
+<div class="container">
 
-<hr/>
 
-<h3 class="fw-bold">Advanced Users</h3>
-<p class="fs-5 col-md-8">The cloud method of using VedAstro is the recommended way for most users.
-    But if you're feeling adventurous, feel free to try out VedAstro in Windows & API.
-</p>
+    <h4 class="fw-bold">What is a calculator?</h4>
+    <p class="text-justify" style="max-width: 693px;">
+        This project is a collection of Vedic astrological tools called calculators.There is a list of them in the home page.
+        For example <span class="fw-bold">Match</span> is a calculator for marriage compatibility.
+        <span class="fw-bold">Muhurtha</span> is used for good timing and using the <span class="fw-bold">Dasa</span> calculator
+        you can make life predictions up to 120 years. These cloud calculators are available for free for all.
+        Cost of development and hosting VedAstro is paid for by users like you.
+    </p>
 
-<div class="hstack gap-3">
-    <div class="card w-50">
-        <div class="card-body">
-            <h5 class="fw-bold card-title">Cloud</h5>
-            <p class="card-text">Easily see match compatibility, choose a good muhurtha and many more.</p>
-            <a href="#" class="btn btn-primary">Tools List</a>
-        </div>
-    </div>
 
-    <div class="card w-50">
-        <div class="card-body">
-            <h5 class="fw-bold card-title">Windows</h5>
-            <p class="card-text">Download & install offline tool for Muhurtha or Horoscope prediction.</p>
-            <a href="#" class="btn btn-primary">Download</a>
-        </div>
-    </div>
-    <div class="card w-50">
-        <div class="card-body">
-            <h5 class="fw-bold card-title">API</h5>
-            <p class="card-text">Program your own app or cloud service with our open & free API.</p>
-            <a href="#" class="btn btn-primary">Read Guide</a>
-        </div>
-    </div>
+    <h4 class="fw-bold">Must I login to use?</h4>
+    <p class="text-justify" style="max-width: 693px;">
+        No. VedAstro was designed with ease and speed in mind.So all tools are available 
+        for use without login.But if you don't login, we can't save the data you add. 
+        For example, if you add a Person profile it will only be available the next time you 
+        visit if you login first. Else it will be deleted when you close the page. 
+        We've simplified the login process using Google Sign In. So you don't have to waste 
+        your time creating a new account with boring passwords to remember.
+    </p>
+
+
+    <h4 class="fw-bold">Who is this for?</h4>
+    <p class="text-justify" style="max-width: 693px;">
+        Both an average person and expert astrologer can find VedAstro useful. There are complex calculators 
+        like Dasa that experts can use and there are easy to use calculators like Match that require 
+        no astrological knowledge.
+    </p>
+
+    <p class="text-justify" style="max-width: 693px;">
+        These calculators a constantly being improved. The ideal goal of this project is to make all Vedic Astrological 
+        calculators easily usable by anybody. So if you find any of the calculator too difficult to use, 
+        just leave a comment and it might be better the next time you visit.
+    </p>
+
+
+    <h4 class="fw-bold">Advanced</h4>
+    <p class="text-justify" style="max-width: 693px;">
+        Under the hood, VedAstro is a Blazor WebAssembly + JS web application. 
+        The cloud method of using VedAstro is the recommended way for most users. 
+        But if you're feeling adventurous, feel free to try out VedAstro in Windows & API. 
+        You can find the Windows exe build in our github repo. And for now the best way you can
+        learn to use the API is to read the code in our repo. 
+        If you need help with our API or Code, just drop us a mail.
+    </p>
 
 </div>
+
+@*<div class="hstack gap-3">
+    <div class="card w-50">
+    <div class="card-body">
+    <h5 class="fw-bold card-title">Cloud</h5>
+    <p class="card-text">Easily see match compatibility, choose a good muhurtha and many more.</p>
+    <a href="#" class="btn btn-primary">Tools List</a>
+    </div>
+    </div>
+
+    <div class="card w-50">
+    <div class="card-body">
+    <h5 class="fw-bold card-title">Windows</h5>
+    <p class="card-text">Download & install offline tool for Muhurtha or Horoscope prediction.</p>
+    <a href="#" class="btn btn-primary">Download</a>
+    </div>
+    </div>
+    <div class="card w-50">
+    <div class="card-body">
+    <h5 class="fw-bold card-title">API</h5>
+    <p class="card-text">Program your own app or cloud service with our open & free API.</p>
+    <a href="#" class="btn btn-primary">Read Guide</a>
+    </div>
+    </div>
+    </div>*@
 
 
 @code

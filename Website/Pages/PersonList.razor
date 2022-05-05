@@ -3,19 +3,17 @@
 
 <PageTitle>Person List</PageTitle>
 
-<PageTop Title="Person List" Description="This is a list of all person profiles available, you can also add or edit persons." />
-
-<div class="hstack gap-4">
-    <button @onclick="OnClickAddPerson" class="btn btn-primary">Add Person</button>
-</div>
-
+<PageTop Title="Person List">
+    <Description>This is a list of all person profiles available, you can also add or edit persons.</Description>
+    <ButtonsRow>
+        <button @onclick="OnClickAddPerson" class="btn btn-primary">Add Person</button>
+    </ButtonsRow>
+</PageTop>
 
 
 <div class="container mt-3">
     <div id="@TableId"></div>
 </div>
-
-
 
 @code {
 

@@ -4,16 +4,15 @@
 
 <PageTitle>Find Marriage Match</PageTitle>
 
-<PageTop Title="Match" Description="Check marriage compatibility between horoscopes">
+<PageTop Title="Match">
+    <Description>Check marriage compatibility between horoscopes</Description>
     <ButtonsRow>
-        <div class="mt-3 hstack gap-4">
-            <button @onclick="OnClickAddPerson" class="btn btn-primary hstack gap-2">
-                <span class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></span> Add Person
-            </button>
-            <button @onclick="OnClickPersonList" class="btn btn-primary hstack gap-2">
-                <span class="iconify" data-icon="fluent:people-list-24-filled" data-width="25"></span> Person List
-            </button>
-        </div>
+        <button @onclick="OnClickAddPerson" class="btn btn-primary hstack gap-2">
+            <span class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></span> Add Person
+        </button>
+        <button @onclick="OnClickPersonList" class="btn btn-primary hstack gap-2">
+            <span class="iconify" data-icon="fluent:people-list-24-filled" data-width="25"></span> Person List
+        </button>
     </ButtonsRow>
 </PageTop>
 

@@ -2,6 +2,11 @@
 
 <PageTitle>VedAstro | Vedic Astrologer</PageTitle>
 
+<style>
+    .card-title {
+        font-weight: bolder;
+    }
+</style>
 
 <div class="bg-white row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
     <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
@@ -23,47 +28,65 @@
     </div>
 </div>
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-sm">
-            <div class="card">
+
+<div class="container px-4 py-5" id="icon-grid">
+    <h2 class="pb-2 border-bottom">Free Calculators</h2>
+
+    <div style="margin-top: -54px;" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+                <div class="col-sm">
+            <div class="card rounded-3 border shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Match</h5>
-                    <p class="card-text">Check marriage compatibility between horoscopes</p>
-                    <a href="match" class="btn btn-primary">Check Match</a>
+                    <p class="card-text">Check compatibility between horoscopes</p>
+                    <a href="@PageRoute.Match" class="btn btn-primary">Calculate</a>
                 </div>
             </div>
         </div>
         <div class="col-sm">
-            <div class="card">
+            <div class="card rounded-3 border shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Muhurtha</h5>
                     <p class="card-text">Find a good time for auspicious events</p>
-                    <a href="muhurtha" class="btn btn-primary">Find Muhurtha</a>
+                    <a href="@PageRoute.Muhurtha" class="btn btn-primary">Calculate</a>
                 </div>
             </div>
         </div>
         <div class="col-sm">
-            <div class="card">
+            <div class="card rounded-3 border shadow-lg">
+                <div class="card-body">
+                    <h5 class="card-title">Dasa</h5>
+                    <p class="card-text">Know good and bad periods of your life years ahead.</p>
+                    <a href="@PageRoute.Muhurtha" class="btn btn-primary">Calculate</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card rounded-3 border shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Local Mean Time</h5>
                     <p class="card-text">Actual time at a place based on coordinates</p>
-                    <a href="@PageRoute.LocalMeanTime" class="btn btn-primary">Show</a>
+                    <a href="@PageRoute.LocalMeanTime" class="btn btn-primary">Calculate</a>
                 </div>
             </div>
         </div>
         <div class="col-sm">
-            <div class="card">
+            <div class="card rounded-3 border shadow-lg">
                 <div class="card-body">
                     <h5 class="card-title">Sunrise/Sunset Time</h5>
                     <p class="card-text">Accurate Sunrise/Sunset Time at any place</p>
-                    <a href="@PageRoute.SunRiseSetTime" class="btn btn-primary">Show</a>
+                    <a href="@PageRoute.SunRiseSetTime" class="btn btn-primary">Calculate</a>
                 </div>
             </div>
         </div>
+
+    </div>
+</div>
+@*
+<div class="container mt-5">
+    <div class="row">
     </div>
 
-</div>
+</div>*@
 
 
 

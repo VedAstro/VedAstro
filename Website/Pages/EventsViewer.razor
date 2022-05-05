@@ -237,7 +237,7 @@
                 //if even is different from previous event name, then new event has started draw border black
                 eventColor = previousEventName != foundEvent.Name ? "black" : GetEventColor(foundEvent?.Nature);
                 previousEventName = foundEvent.Name;
-                var timeText = $"{slice.GetStdDateTimeOffset():hh:mm:ss dd/MM/yyyy}";
+                var timeText = $"{slice.GetStdDateTimeOffset():h:mm tt dd/MM/yyyy}";
 
                 //generate and add to row
                 //the hard coded attribute names used here are used in App.js

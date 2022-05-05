@@ -13,6 +13,7 @@
         public const string PersonEditorParam = "/personeditor/{PersonHash}";
         public const string Donate = "/donate";
         public const string About = "/about";
+        public const string Contact = "/contact";
         public const string Horoscope = "/horoscope";
         public const string Muhurtha = "/muhurtha";
         public const string Match = "/match";

@@ -11,18 +11,23 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <nav class="nav-pills flex-column">
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+            <NavLink class="nav-link gap-2" href="" Match="NavLinkMatch.All">
+                <span class="iconify" data-icon="bx:home" data-width="30"></span> Home
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@PageRoute.TaskList">
-                <span class="oi oi-list" aria-hidden="true"></span> Task List
+            <NavLink class="nav-link gap-2" href="@PageRoute.QuickGuide">
+                <span class="iconify" data-icon="cil:book" data-width="30"></span> Guide
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@PageRoute.PersonList">
-                <span class="oi oi-person" aria-hidden="true"></span> Person List
+            <NavLink class="nav-link gap-2" href="@PageRoute.About">
+                <span class="iconify" data-icon="ant-design:info-circle-filled" data-width="30"></span> About
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link gap-2" href="@PageRoute.Donate">
+                <span class="iconify" data-icon="iconoir:donate" data-width="30"></span> Donate
             </NavLink>
         </div>
 
@@ -33,12 +38,12 @@
             </div>
         *@
 
-        <hr style="
+@*        <hr style="
                    color: white;
                    height: 2px;
                ">
-
-        <div class="nav-item px-3">
+*@
+@*        <div class="nav-item px-3">
             <NavLink class="nav-link" href="@PageRoute.Match">
                 <span class="oi oi-people" aria-hidden="true"></span> Match
             </NavLink>
@@ -48,12 +53,12 @@
                 <span class="oi oi-list" aria-hidden="true"></span> Dasa
             </NavLink>
         </div>
-        @*        <div class="nav-item px-3">
+*@        @*        <div class="nav-item px-3">
             <NavLink class="nav-link" href="@PageRoute.Horoscope">
             <span class="oi oi-list-rich" aria-hidden="true"></span> Horoscope
             </NavLink>
             </div>
-        *@        <div class="nav-item px-3">
+        *@    @*    <div class="nav-item px-3">
             <NavLink class="nav-link" href="@PageRoute.LocalMeanTime">
                 <span class="oi oi-person" aria-hidden="true"></span> Local Mean Time
             </NavLink>
@@ -62,7 +67,7 @@
             <NavLink class="nav-link" href="@PageRoute.SunRiseSetTime">
                 <span class="oi oi-person" aria-hidden="true"></span> Sunrise/Sunset Time
             </NavLink>
-        </div>
+        </div>*@
         <div class="nav-item px-3">
             <SignInButton />
         </div>

@@ -1,11 +1,21 @@
 ﻿@*<button @onclick="OnClickButton" class="btn btn-primary">@_buttonText</button>
 *@
 
+<style>
+
+    #GoogleSignInButton {
+        text-align: -webkit-center;
+        position: relative;
+        top: 16px;
+    }
+
+</style>
+
 
 <div class="rounded" style="background: rgba(0, 255, 255, 0.1)">
 
     @*default show Sign In button*@
-    <div @ref="_googleSignInButton" id="GoogleSignInButton" @onclick="OnClickSignInButton" style="text-align: -webkit-center;" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark"></div>
+    <div @ref="_googleSignInButton" id="GoogleSignInButton" @onclick="OnClickSignInButton" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark"></div>
 
     <div class="vstack gap-1" style="padding: 6px;">
         <span class="" style="align-self: center;padding: 10px; color: white;">@_greetText</span>

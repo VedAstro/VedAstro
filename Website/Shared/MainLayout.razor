@@ -33,11 +33,19 @@
 
 @code
 {
-    
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //log visit everytime page is rendered
-        await WebsiteTools.LogVisitor(_jsRuntime);
+        try
+        {
+            //log visit everytime page is rendered
+            await WebsiteTools.LogVisitor(_jsRuntime);
+        }
+        catch (Exception e)
+        {
+            //if fail exit silently, not priority
+            Console.WriteLine("BLZ: LogVisitor: Failed!");
+        }
     }
 
 }

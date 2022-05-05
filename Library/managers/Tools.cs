@@ -82,7 +82,7 @@ namespace Genso.Astrology.Library
         /// - Type is a value typ
         /// - Enum
         /// </summary>
-        public static dynamic XmlToAnyType<T>(XElement xml)// where T : //IToXml, new()
+        public static dynamic XmlToAnyType<T>(XElement xml) // where T : //IToXml, new()
         {
             //get the name of the Enum
             var typeNameFullName = typeof(T).FullName;
@@ -101,7 +101,10 @@ namespace Genso.Astrology.Library
             var isSameName = xmlElementName == typeNameFullName || xmlElementName == typeof(T).GetShortTypeName();
 
             //if not same name raise error
-            if (!isSameName) { throw new Exception($"Can't parse XML {xmlElementName} to {typeNameFullName}"); }
+            if (!isSameName)
+            {
+                throw new Exception($"Can't parse XML {xmlElementName} to {typeNameFullName}");
+            }
 
             //implements ToXml()
             var typeImplementsToXml = typeof(T).GetInterfaces().Any(x =>
@@ -120,15 +123,26 @@ namespace Genso.Astrology.Library
             //if type is an Enum process differently
             if (typeof(T).IsEnum)
             {
-                var parsedEnum = (T)Enum.Parse(typeof(T), rawVal);
+                var parsedEnum = (T) Enum.Parse(typeof(T), rawVal);
 
                 return parsedEnum;
             }
 
             //else it is a value type
-            if (typeof(T) == typeof(string)) { return rawVal; }
-            if (typeof(T) == typeof(double)) { return Double.Parse(rawVal); }
-            if (typeof(T) == typeof(int)) { return int.Parse(rawVal); }
+            if (typeof(T) == typeof(string))
+            {
+                return rawVal;
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                return Double.Parse(rawVal);
+            }
+
+            if (typeof(T) == typeof(int))
+            {
+                return int.Parse(rawVal);
+            }
 
             //raise error since converter not implemented
             throw new NotImplementedException($"XML converter for {typeNameFullName}, not implemented!");
@@ -186,6 +200,7 @@ namespace Genso.Astrology.Library
                 if (type != null)
                     return Activator.CreateInstance(type);
             }
+
             return null;
         }
 
@@ -258,7 +273,10 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static int GetHashCode(string stringToHash)
         {
-            if (stringToHash == null) { return 0;}
+            if (stringToHash == null)
+            {
+                return 0;
+            }
 
             unchecked
             {
@@ -276,7 +294,7 @@ namespace Genso.Astrology.Library
                 return hash1 + (hash2 * 1566083941);
             }
 
-            
+
             //MD5 md5Hasher = MD5.Create();
             //var hashedByte = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(stringToHash));
             //return BitConverter.ToInt32(hashedByte, 0);
@@ -287,5 +305,14 @@ namespace Genso.Astrology.Library
         /// Gets random unique ID
         /// </summary>
         public static string GenerateId() => Guid.NewGuid().ToString("N");
+
+
+
+        //█▀▀ █░█ ▀▀█▀▀ █▀▀ █▀▀▄ █▀▀ ░▀░ █▀▀█ █▀▀▄ 　 █▀▄▀█ █▀▀ ▀▀█▀▀ █░░█ █▀▀█ █▀▀▄ █▀▀ 
+        //█▀▀ ▄▀▄ ░░█░░ █▀▀ █░░█ ▀▀█ ▀█▀ █░░█ █░░█ 　 █░▀░█ █▀▀ ░░█░░ █▀▀█ █░░█ █░░█ ▀▀█ 
+        //▀▀▀ ▀░▀ ░░▀░░ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀░░▀ 　 ▀░░░▀ ▀▀▀ ░░▀░░ ▀░░▀ ▀▀▀▀ ▀▀▀░ ▀▀▀
+
+
     }
+
 }

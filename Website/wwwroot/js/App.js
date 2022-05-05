@@ -258,6 +258,24 @@ function mouseOverDasaViewHandler(mouse) {
 
 }
 
+//attached to event viewer to update time legend
+function mouseOverEventsViewHandler(mouse) {
+
+    //only continue if mouse is exactly over 
+    //a time slice (svg rect element), else end here
+    let timeSlice = mouse.path[0];
+    let isTimeSlice = timeSlice.localName == "rect";
+    if (!isTimeSlice) { return; }
+
+    //get details from inside the time slice
+    var eventName = timeSlice.getAttribute("eventname");
+    var stdTime = timeSlice.getAttribute("stdtime");
+
+    //place data into view
+    $("#TimeCursorLegend").html(`${eventName} - ${stdTime}`);
+
+}
+
 //called by sign in button & page refresh
 //note : this function's name is hardwired in Blazor
 function onSignInSuccessHandler(googleUser) {

@@ -13,12 +13,18 @@
 </button>
 
 @code {
+
+    /// <summary>
+    /// Text that will be displayed in button
+    /// </summary>
     [Parameter]
     public string? ButtonText { get; set; }
+
+    /// <summary>
+    /// Special icon name from icon-sets.iconify.design
+    /// </summary>
     [Parameter]
     public string? IconName { get; set; }
-    [Parameter]
-    public EventCallback<MouseEventArgs>? OnClick { get; set; }
 
 
     /// <summary>
@@ -26,7 +32,7 @@
     /// Note: using delegate so that can change function based on page mode
     /// </summary>
     [Parameter]
-    public Action OnClickSubmitButton { get; set; }
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
 
     /// <summary>
     /// If URL is provided, on button click will navigate to URL
@@ -42,9 +48,9 @@
     private void OnClickButton(MouseEventArgs obj)
     {
         //if custom onclick has been specified than use that
-        if (OnClickSubmitButton != null)
+        if (OnClickCallback.HasDelegate)
         {
-            OnClickSubmitButton.Invoke();
+            OnClickCallback.InvokeAsync();
         }
         //else if URL has been specified use that
         else if (ClickUrl != "" || ClickUrl != null)

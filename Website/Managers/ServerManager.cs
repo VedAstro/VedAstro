@@ -33,6 +33,7 @@ namespace Website
         /// link to js file used for google sign in function
         /// </summary>
         public const string GoogleSignInJs = "https://apis.google.com/js/platform.js"; 
+        public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD"; 
 
 
         //PUBLIC METHODS

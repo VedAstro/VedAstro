@@ -17,7 +17,7 @@
         <label for="messageInputId">Message</label>
         <textarea style="min-height:132px;" class="form-control" @bind="_messageInput" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
     </div>
-    <IconButton OnClickSubmitButton="OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
+    <IconButton OnClickCallback="@OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
 </div>
 
 @*Default Hiden Thank you message*@

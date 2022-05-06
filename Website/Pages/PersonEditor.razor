@@ -46,13 +46,13 @@
     </div>
 
     @*BUTTONS*@
-    <div style="margin-top: 50px" class="vstack row gap-2">
-        <button @onclick="OnClickSubmitButton" class="btn btn-primary">Submit</button>
+    <div style="margin-top: 50px" class="hstack row gap-2">
         @*Only show delete button in Editor mode*@
         @if (PageMode == Mode.Editor)
         {
-            <button @onclick="OnClickDeleteButton" class="btn btn-danger">Delete</button>
+            <IconButton ButtonText="Delete" IconName="fluent:delete-20-regular" OnClickCallback="@OnClickDeleteButton" />
         }
+        <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
     </div>
 </div>
 
@@ -275,5 +275,6 @@
         await Task.Delay(100);
         _navigation.NavigateTo(PageRoute.PersonList);
     }
+
 
 }

@@ -11,21 +11,41 @@
 <h4 class="fw-bold">Where do donations go?</h4>
 <h6>Developers</h6>
 <p class="text-justify" style="max-width:@GlobalVariableManager.MaxWidth;">
-    A major part of cost is developer salary.  
-    A page like Match for example took 3 weeks of developer work time to build.  
-    Cost of one developer work day is $20.  
+    A major part of cost is developer salary.
+    A page like Match for example took 3 weeks of developer work time to build.
+    Cost of one developer work day is $20.
     This means that Match calculator page cost $420 to develop.
 </p>
 <h6>Hosting</h6>
 <p class="text-justify" style="max-width:@GlobalVariableManager.MaxWidth;">
-    Next priority goes to hosting cost. Currently VedAstro is hosted in Azure  
-    as a Static Web App which reduces running cost considerably.  
-    We try our best to be transparent with the monetary flow so that  
+    Next priority goes to hosting cost. Currently VedAstro is hosted in Azure
+    as a Static Web App which reduces running cost considerably.
+    We try our best to be transparent with the monetary flow so that
     you know your money is spent to help the community.
 </p>
 
-<p> Below is a list of ways you can donate funds to support VedAstro.</p>
+<h5>Paypal Donate</h5>
 
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="hosted_button_id" value="WMZ6GHXAFWW2S">
+    <table>
+        <tr><td><input type="hidden" name="on0" value="Donate Amount">Donate Amount</td></tr><tr><td><select name="os0">
+            <option value="Donate">Donate $1.00 USD</option>
+            <option value="Donate">Donate $5.00 USD</option>
+            <option value="Donate">Donate $10.00 USD</option>
+            <option value="Donate">Donate $30.00 USD</option>
+            <option value="Donate">Donate $50.00 USD</option>
+            <option value="Donate">Donate $80.00 USD</option>
+            <option value="Donate">Donate $100.00 USD</option>
+        </select> </td></tr>
+    </table>
+    <input type="hidden" name="currency_code" value="USD">
+    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+
+<h5 class="mt-3">Crypto Donate</h5>
 <div class="vstack gap-1">
 
     <div class="card mb-3" style="max-width: 400px;">
@@ -68,8 +88,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 @*
     <div class="container">
@@ -91,5 +109,6 @@
     </div>*@
 
 @code {
+
 
 }

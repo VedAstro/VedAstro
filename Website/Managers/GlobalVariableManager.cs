@@ -24,7 +24,7 @@ namespace Website
         /// </summary>
         private const int ComponentWaitDelayMs = 10;
 
-
+        public const string MaxWidth = "693px";
 
 
         //-----------------------------PROPERTIES

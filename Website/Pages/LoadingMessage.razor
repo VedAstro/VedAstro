@@ -66,11 +66,32 @@
         //show the modal
         await _jsRuntime.Show(_loadingMessage);
 
-        //auto load to 50%
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 50);
+        //wait a little, if no progress set
+        //within 1 second, then use auto set
+        //purposely called without await so
+        //that it doesn't hold control
+        SendWithDelay();
 
         _isOpen = true;
 
+        async Task SendWithDelay()
+        {
+            //wait a little for progress to be set by caller
+            await Task.Delay(1000);
+
+            //check if caller forgot to set progress
+            var callerForgotToSet = await _jsRuntime.GetProgressBarValue() <= 0;
+
+            if (callerForgotToSet)
+            {
+                Console.WriteLine("BLZ: LoadingMessage.Show: Auto setting progress");
+                await _jsRuntime.AddToProgressBar(50);
+            }
+            else
+            {
+                Console.WriteLine("BLZ: LoadingMessage.Show: Auto setting progress disabled");
+            }
+        }
     }
 
     /// <summary>
@@ -81,7 +102,7 @@
         //if already close end here
         if (!_isOpen) { return; }
 
-        await _jsRuntime.InvokeVoidAsync("ResetProgressBar");
+        await _jsRuntime.ResetProgressBar();
 
 
         //if not ready wait

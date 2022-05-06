@@ -102,8 +102,8 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //todo after 1st render if no value is in location name within limited timed, auto set location from browser
-        //try to auto set location gotten from browser
+        //try to auto set location gotten from
+        //browser if no location name set within 1 second
         if (firstRender)
         {
             //wait 1s before checking if it has been filled by user or other logic

@@ -158,13 +158,13 @@
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
 
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
 
 
         //set data into dasa viewer
         await SetData(SelectedPerson);
 
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
 
         //hide loading box
         await _globalVariable.LoadingMessage.Hide();
@@ -195,19 +195,19 @@
         Time startTime = new Time(stdStartTime, geoLocation);
         Time endTime = new Time(stdEndTime, geoLocation);
 
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
 
         //use the inputed data to get events from API
         //note: below methods access the data internally
         RullingConstellationEventList = await getRullingConstellationEvents(startTime, endTime);
 
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
 
 
         //generate rows and pump them into the page
         DasaRowItemsSvg = new MarkupString(await GenerateRowSvg(startTime, endTime, RullingConstellationEventList, _eventsPrecision));
 
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
 
 
         this.StateHasChanged();
@@ -268,7 +268,7 @@
                           $"{rowHtml}</svg>";
 
 
-            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+            await _jsRuntime.AddToProgressBar( 5);
 
             return svgBody;
 
@@ -327,7 +327,7 @@
                                    select dasaEvent;
 
 
-            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 10);
+            await _jsRuntime.AddToProgressBar( 10);
 
             //send sorted events to view
             return orderByAscResult.ToList();
@@ -355,7 +355,7 @@
             //parse raw results
             List<Event> resultsParsed = Event.FromXml(resultsRaw);
 
-            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 10);
+            await _jsRuntime.AddToProgressBar( 10);
 
             //send to caller
             return resultsParsed;

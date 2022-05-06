@@ -104,7 +104,7 @@
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
 
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
 
         //set data into dasa viewer
         await _dasaReportViewer.SetData(SelectedPerson);

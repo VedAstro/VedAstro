@@ -93,11 +93,11 @@
         //use the inputed data to get events from API
         //note: below methods access the data internally
         DasaEventList = await getDasaEvents();
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
         BhuktiEventList = await getBhuktiEvents();
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
         AntaramEventList = await getAntaramEvents();
-        await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+        await _jsRuntime.AddToProgressBar( 5);
 
         //generate rows and pump them into the page
         DasaRowItemsSvg = new MarkupString(await GenerateRowSvg(DasaEventList, _dasaEventsPrecision));
@@ -161,7 +161,7 @@
                           $"{rowHtml}</svg>";
 
 
-            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 5);
+            await _jsRuntime.AddToProgressBar( 5);
 
             return svgBody;
 
@@ -222,7 +222,7 @@
                                    select dasaEvent;
 
 
-            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 10);
+            await _jsRuntime.AddToProgressBar( 10);
 
             //send sorted events to view
             return orderByAscResult.ToList();
@@ -250,7 +250,7 @@
             //parse raw results
             List<Event> resultsParsed = Event.FromXml(resultsRaw);
 
-            await _jsRuntime.InvokeVoidAsync("SetProgressBar", 10);
+            await _jsRuntime.AddToProgressBar( 10);
 
             //send to caller
             return resultsParsed;

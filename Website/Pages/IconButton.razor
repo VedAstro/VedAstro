@@ -1,0 +1,48 @@
+﻿
+<button @onclick="OnClickButton" class="btn btn-primary hstack gap-2">
+    <span class="iconify" data-icon="@IconName" data-width="25"></span> @ButtonText
+</button>
+
+@code {
+    [Parameter]
+    public string? ButtonText { get; set; }
+    [Parameter]
+    public string? IconName { get; set; }
+    [Parameter]
+    public EventCallback<MouseEventArgs>? OnClick { get; set; }
+    
+
+    /// <summary>
+    /// Function that is called on click of button
+    /// Note: using delegate so that can change function based on page mode
+    /// </summary>
+    [Parameter]
+    public Action OnClickSubmitButton { get; set; }
+
+    /// <summary>
+    /// If URL is provided, on button click will navigate to URL
+    /// </summary>
+    [Parameter]
+    public string? ClickUrl { get; set; }
+
+
+    /// <summary>
+    /// Default button click will send page to URL link if provided
+    /// else exit silently
+    /// </summary>
+    private void OnClickButton(MouseEventArgs obj)
+    {
+        //if custom onclick has been specified than use that
+        if (OnClickSubmitButton != null)
+        {
+            OnClickSubmitButton.Invoke();
+        }
+        //else if URL has been specified use that
+        else if (ClickUrl != "" || ClickUrl != null)
+        {
+            _navigation.NavigateTo(ClickUrl);
+        }
+        
+    }
+
+}

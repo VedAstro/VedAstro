@@ -19,8 +19,9 @@ namespace API
     public static class EntryPoint
     {
         //hard coded links to files stored in storage
-        private const string PersonlistXml = "vedastro-site-data/PersonList.xml";
-        private const string TasklistXml = "vedastro-site-data/TaskList.xml";
+        private const string PersonListXml = "vedastro-site-data/PersonList.xml";
+        private const string MessageListXml = "vedastro-site-data/MessageList.xml";
+        private const string TaskListXml = "vedastro-site-data/TaskList.xml";
         private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
         /// <summary>
         /// Default success message sent to caller
@@ -31,7 +32,7 @@ namespace API
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> Match(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            [Blob(PersonlistXml, FileAccess.Read)] Stream personListRead,
+            [Blob(PersonListXml, FileAccess.Read)] Stream personListRead,
             ILogger log)
         {
             string responseMessage;
@@ -63,7 +64,7 @@ namespace API
         [FunctionName("addperson")]
         public static async Task<IActionResult> AddPerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -94,10 +95,44 @@ namespace API
             return okObjectResult;
         }
 
+        [FunctionName("addmessage")]
+        public static async Task<IActionResult> AddMessage(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob(MessageListXml, FileAccess.ReadWrite)] BlobClient messageListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+                //get new message data out of incoming request
+                //note: inside new person xml already contains user id
+                var newMessageXml = APITools.ExtractDataFromRequest(incomingRequest);
+
+                //add new message to main list
+                var messageListXml = APITools.AddXElementToXDocument(messageListClient, newMessageXml);
+
+                //upload modified list to storage
+                await APITools.OverwriteBlobData(messageListClient, messageListXml);
+
+                responseMessage = PassMessageXml;
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
         [FunctionName("addtask")]
         public static async Task<IActionResult> AddTask(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(TasklistXml, FileAccess.ReadWrite)] BlobClient taskListClient)
+            [Blob(TaskListXml, FileAccess.ReadWrite)] BlobClient taskListClient)
         {
             var responseMessage = "";
 
@@ -163,7 +198,7 @@ namespace API
         [FunctionName("getmalelist")]
         public static async Task<IActionResult> GetMaleList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -202,7 +237,7 @@ namespace API
         [FunctionName("getfemalelist")]
         public static async Task<IActionResult> GetFemaleList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -244,7 +279,7 @@ namespace API
         [FunctionName("getperson")]
         public static async Task<IActionResult> GetPerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -280,7 +315,7 @@ namespace API
         [FunctionName("updateperson")]
         public static async Task<IActionResult> UpdatePerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -327,7 +362,7 @@ namespace API
         [FunctionName("deleteperson")]
         public static async Task<IActionResult> DeletePerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -365,7 +400,7 @@ namespace API
         [FunctionName("getpersonlist")]
         public static async Task<IActionResult> GetPersonList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonlistXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
             var responseMessage = "";
 
@@ -400,7 +435,7 @@ namespace API
         [FunctionName("gettasklist")]
         public static async Task<IActionResult> GetTaskList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(TasklistXml, FileAccess.ReadWrite)] BlobClient taskListClient)
+            [Blob(TaskListXml, FileAccess.ReadWrite)] BlobClient taskListClient)
         {
             var responseMessage = "";
 

@@ -67,7 +67,6 @@ function getGoogleUserIdToken() {
 };
 
 
-
 //Generates a table using Tabulator table library
 //id to where table will be generated needs to be inputed
 function generateWebsiteTaskListTable(tableId, tableData) {
@@ -184,7 +183,8 @@ function InitProgressBar(ms) {
 
 }
 
-function SetProgressBar(percentage) {
+//Adds input value to current progress bar
+function AddToProgressBar(percentage) {
 
 
     var value = percentage / 100; //convert 50 to 0.5
@@ -199,12 +199,17 @@ function SetProgressBar(percentage) {
     ProgressBarInstance.animate(window.ProgressBarTempValue);
 
 }
-function ResetProgressBar(percentage) {
+
+function ResetProgressBar() {
     //reset both view & data
     window.ProgressBarTempValue = 0;
     ProgressBarInstance.animate(0);
 }
 
+//Gets current value of progress bar
+function GetProgressBarValue() {
+    return window.ProgressBarTempValue;
+}
 
 //loads js file programatically,
 //equivalent to js include in header

@@ -1,4 +1,5 @@
 ﻿@using Genso.Astrology.Library
+@using System.Xml.Linq
 @attribute [Route(PageRoute.Contact)]
 
 <PageTitle>Contact</PageTitle>
@@ -7,6 +8,65 @@
     <Description>Contact us anytime. You can report a bug, suggest a feature or just say Hi. We'll always reply.</Description>
 </PageTop>
 
+<div @ref="_messageFormElement" class="vstack gap-2" style="max-width:@GlobalVariableManager.MaxWidth;">
+    <div>
+        <label for="emailInputId">Email</label>
+        <input @bind="_emailInput" type="text" id="emailInputId" class="form-control" placeholder="john@example.com">
+    </div>
+    <div>
+        <label for="messageInputId">Message</label>
+        <textarea style="min-height:132px;" class="form-control" @bind="_messageInput" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
+    </div>
+    <IconButton OnClickSubmitButton="OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
+</div>
+
+@*Default Hiden Thank you message*@
+<div style="display: none;" @ref="_thankYouMessageElement">
+    <h3>
+        Thank you for your message.<br />
+        We'll reply soon.
+    </h3>
+</div>
+
 @code {
+
+    private string? _messageInput;
+    private string? _emailInput;
+    private ElementReference _messageFormElement;
+    private ElementReference _thankYouMessageElement;
+
+
+    private async void OnClickSendButton()
+    {
+
+        //loading box show
+        await _globalVariable.LoadingMessage.Show();
+
+        await _jsRuntime.AddToProgressBar(10);
+
+
+        //package message data to be sent
+        var textXml = new XElement("Text", _messageInput);
+        var timestampXml = new XElement("Timestamp", DateTimeOffset.Now.ToString(Time.GetDateTimeFormat()));
+        var emailXml = new XElement("Message", _emailInput);
+        var userIdXml = new XElement("UserId", await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        var messageXml = new XElement("Message", userIdXml, emailXml, timestampXml, textXml);
+        await _jsRuntime.AddToProgressBar(10);
+
+        //send message to API server
+        await ServerManager.WriteToServer(ServerManager.AddMessageApi, messageXml);
+        await _jsRuntime.AddToProgressBar(20);
+
+
+        //hide message form
+        await _jsRuntime.Hide(_messageFormElement);
+        //show thank you message
+        await _jsRuntime.Show(_thankYouMessageElement);
+
+        await _jsRuntime.AddToProgressBar(20);
+        //hide loading box
+        await _globalVariable.LoadingMessage.Hide();
+
+    }
 
 }

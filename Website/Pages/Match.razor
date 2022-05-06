@@ -4,15 +4,11 @@
 
 <PageTitle>Find Marriage Match</PageTitle>
 
-<PageTop Title="Match">
+<PageTop Title="Match" IconName="bi:arrow-through-heart-fill">
     <Description>Check marriage compatibility between horoscopes</Description>
     <ButtonsRow>
-        <button @onclick="OnClickAddPerson" class="btn btn-primary hstack gap-2">
-            <span class="iconify" data-icon="ant-design:user-add-outlined" data-width="25"></span> Add Person
-        </button>
-        <button @onclick="OnClickPersonList" class="btn btn-primary hstack gap-2">
-            <span class="iconify" data-icon="fluent:people-list-24-filled" data-width="25"></span> Person List
-        </button>
+        <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
+        <IconButton IconName="fluent:people-list-24-filled" ButtonText="Person List" ClickUrl="@PageRoute.PersonList"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -22,9 +18,7 @@
 <div class="vstack gap-3">
     <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonName="@SelectedMale" Label="Male" />
     <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonName="@SelectedFemale" Label="Female" />
-    <button @onclick="GetMatchReport" class="btn btn-primary hstack gap-2">
-        <span class="iconify" data-icon="uim:process" data-width="25"></span> Calculate
-    </button>
+    <IconButton IconName="uim:process" ButtonText="Calculate" ClickUrl="@($"{PageRoute.MatchReport}/{SelectedMale}/{SelectedFemale}")"></IconButton>
 </div>
 
 
@@ -39,9 +33,6 @@
 
 
     //--------------------EVENT HANDLERS
-
-    public void OnClickAddPerson(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.PersonEditor);
-    public void OnClickPersonList(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.PersonList);
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -64,5 +55,4 @@
         }
     }
 
-    private void GetMatchReport() => _navigation.NavigateTo($"matchreport/{SelectedMale}/{SelectedFemale}");
 }

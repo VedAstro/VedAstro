@@ -1,5 +1,14 @@
 ﻿
-<button @onclick="OnClickButton" class="btn btn-primary hstack gap-2">
+<style>
+    .iconButton {
+        width: fit-content;
+        /* padding: 5px; */
+        min-width: 100px;
+        /*align-self: center;*/
+    }
+</style>
+
+<button @onclick="OnClickButton" class="btn btn-primary hstack gap-2 iconButton">
     <span class="iconify" data-icon="@IconName" data-width="25"></span> @ButtonText
 </button>
 
@@ -10,7 +19,7 @@
     public string? IconName { get; set; }
     [Parameter]
     public EventCallback<MouseEventArgs>? OnClick { get; set; }
-    
+
 
     /// <summary>
     /// Function that is called on click of button
@@ -42,7 +51,7 @@
         {
             _navigation.NavigateTo(ClickUrl);
         }
-        
+
     }
 
 }

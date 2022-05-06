@@ -70,11 +70,14 @@
         //within 1 second, then use auto set
         //purposely called without await so
         //that it doesn't hold control
-        SendWithDelay();
+        RunAfterDelay();
 
         _isOpen = true;
 
-        async Task SendWithDelay()
+        
+    //---------------- FUNCTIONS-------------
+       
+        async Task RunAfterDelay()
         {
             //wait a little for progress to be set by caller
             await Task.Delay(1000);
@@ -84,12 +87,12 @@
 
             if (callerForgotToSet)
             {
-                Console.WriteLine("BLZ: LoadingMessage.Show: Auto setting progress");
-                await _jsRuntime.AddToProgressBar(50);
+                Console.WriteLine("BLZ: LoadingMessage.Show: Auto Progress Bar");
+                await _jsRuntime.AddToProgressBar(80);
             }
             else
             {
-                Console.WriteLine("BLZ: LoadingMessage.Show: Auto setting progress disabled");
+                Console.WriteLine("BLZ: LoadingMessage.Show: Manual Progress Bar");
             }
         }
     }

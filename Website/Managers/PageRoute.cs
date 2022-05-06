@@ -17,6 +17,7 @@
         public const string Horoscope = "/horoscope";
         public const string Muhurtha = "/muhurtha";
         public const string Match = "/match";
+        public const string MatchReport = "/matchreport";
         public const string SunRiseSetTime = "/sunrisesettime";
         public static string LocalMeanTime = "/localmeantime";
         public static string Dasa = "/dasa";

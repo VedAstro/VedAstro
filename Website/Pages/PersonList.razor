@@ -6,7 +6,7 @@
 <PageTop Title="Person List" IconName="fluent:people-list-20-filled">
     <Description>This is a list of all person profiles available, you can also add or edit persons.</Description>
     <ButtonsRow>
-        <button @onclick="OnClickAddPerson" class="btn btn-primary">Add Person</button>
+        <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -47,6 +47,5 @@
 
     //--------------------EVENT HANDLERS
 
-    public void OnClickAddPerson(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.PersonEditor);
 
 }

@@ -40,7 +40,11 @@
                 </select>
             </div>
             @*LIFE EVENTS*@
-            <LifeEventEditor @bind-LifeEventList="_lifeEventList" />
+            <LifeEventEditor @ref="_lifeEventEditor" />
+            <div>
+                <label>Notes</label>
+                <input @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person">
+            </div>
 
         </div>
     </div>
@@ -90,11 +94,12 @@
     string? _hourMinInput, _dateInput, _timeZonInput;
 
     string _nameInput = "";
+    string _notesInput = "";
     string _genderInput = "";
     string _pageTitle = "";
-    List<Event> _lifeEventList = new();
     private GeoLocationInput _geoLocationInput;
 
+    private LifeEventEditor _lifeEventEditor;
 
 
 
@@ -135,6 +140,8 @@
 
         _nameInput = IsCreator ? "" : _person.Name;
 
+        _notesInput = IsCreator ? "" : _person.Notes;
+
         _genderInput = IsCreator ? "Male" : _person.Gender.ToString();
 
         //auto fill time zone based on system time
@@ -164,8 +171,9 @@
             _geoLocationInput.UpdateData(geoLocation);
         }
 
-
-        //_lifeEventList = new List<Event> { new(EventName.AmritaSiddhaYoga, EventNature.Good, "TEST", Time.Now(_person.GetBirthLocation()), Time.Now(_person.GetBirthLocation())) };
+        var emptyList = new List<LifeEvent>();
+        var lifeEventList = IsCreator ? emptyList : _person.LifeEventList;
+        await _lifeEventEditor.SetData(lifeEventList);
 
         //button does different stuff based on page mode
         OnClickSubmitButton = IsCreator ? SubmitNewPerson : UpdateExistingPerson;
@@ -212,13 +220,17 @@
         var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
         var fullTimeString = $"{_hourMinInput} {_dateInput} {_timeZonInput}";
         var stdTimeMale = DateTimeOffset.ParseExact(fullTimeString, Time.GetDateTimeFormat(), null);
+        var lifeEventList = await _lifeEventEditor.GetData();
 
         //get gender from gender string
         var gender = Enum.Parse<Gender>(_genderInput);
 
         //create a new person from the inputed data
         var birthTime = new Time(stdTimeMale, geoLocation);
-        return new Person(_nameInput, birthTime, gender, await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        return new Person(_nameInput, birthTime, gender, await WebsiteTools.GetUserIdAsync(_jsRuntime), _notesInput, lifeEventList);
+
+        //----------LOCAL FUNCTION ---------------------
+
     }
 
     private async void UpdateExistingPerson()

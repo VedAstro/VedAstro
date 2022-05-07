@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
@@ -23,17 +24,23 @@ namespace Genso.Astrology.Library
         public string Notes { get; set; }
         public Gender Gender { get; set; }
         public Time BirthTime { get; set; }
-        
+        /// <summary>
+        /// List of events that mark important moments in a persons life
+        /// This is used later by calculators like Dasa to show against astrological predictions
+        /// </summary>
+        public List<LifeEvent> LifeEventList { get; set; }
+
 
 
         //CTOR
-        public Person(string name, Time birthTime, Gender gender, string userId = "101", string notes = "")
+        public Person(string name, Time birthTime, Gender gender, string userId = "101", string notes = "", List<LifeEvent> lifeEventList = null)
         {
             Name = name;
             BirthTime = birthTime;
             Gender = gender;
             UserId = userId;
             Notes = notes;
+            LifeEventList = lifeEventList;
         }
 
 
@@ -85,7 +92,6 @@ namespace Genso.Astrology.Library
         /// Used by tabulator JS, when person is converted to json
         /// </summary>
         public string BirthTimeString => this.GetBirthDateTime().GetStdDateTimeOffsetText();
-
 
 
 
@@ -144,10 +150,27 @@ namespace Genso.Astrology.Library
             var gender = new XElement("Gender", this.GetGender().ToString());
             var birthTime = new XElement("BirthTime", this.GetBirthDateTime().ToXml());
             var userId = new XElement("UserId", this.UserId);
+            var lifeEventListXml = getLifeEventListXml(LifeEventList);
 
-            person.Add(name, gender, birthTime, userId);
+            person.Add(name, gender, birthTime, userId, lifeEventListXml);
 
             return person;
+
+            //----------LOCAL FUNCTIONS ---------------
+            XElement getLifeEventListXml(List<LifeEvent> lifeList)
+            {
+                //create the empty list holder xml
+                var returnXml = new XElement("LifeEventList");
+
+                //convert to xml and add to holder xml
+                foreach (var lifeEvent in lifeList)
+                {
+                    var lifeXml = lifeEvent.ToXml();
+                    returnXml.Add(lifeXml);
+                }
+
+                return returnXml;
+            }
         }
 
         /// <summary>
@@ -165,10 +188,24 @@ namespace Genso.Astrology.Library
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
             var userId = personXml.Element("UserId")?.Value;
+            var lifeEventList = getLifeEventListFromXml();
 
-            var parsedPerson = new Person(name, time, gender, userId);
+            var parsedPerson = new Person(name, time, gender, userId, "",lifeEventList);
 
             return parsedPerson;
+
+            //-------------------LOCAL FUNCTION--------
+            List<LifeEvent> getLifeEventListFromXml()
+            {
+                var lifeEventListXml = personXml.Element("LifeEventList")?.Elements();
+                var returnList = new List<LifeEvent>();
+                foreach (var lifeEventXml in lifeEventListXml)
+                {
+                    returnList.Add(LifeEvent.FromXml(lifeEventXml));
+                }
+
+                return returnList;
+            }
         }
 
     }

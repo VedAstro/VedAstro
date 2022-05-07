@@ -24,6 +24,9 @@ namespace Website
         /// </summary>
         private const int ComponentWaitDelayMs = 10;
 
+        /// <summary>
+        /// Hard coded max width used in pages 
+        /// </summary>
         public const string MaxWidth = "693px";
 
 

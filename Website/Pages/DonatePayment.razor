@@ -1,0 +1,104 @@
+﻿@attribute [Route(PageRoute.DonatePayment)]
+
+<PageTitle>Donate Payment</PageTitle>
+
+<PageTop Title="Sponsor Payment" IconName="iconoir:donate">
+    <Description>Below are a few ways you can make payment for your sponsorship.</Description>
+</PageTop>
+
+<p>Don't see your preferred payment method? <a href="@PageRoute.Contact">Contact us</a></p>
+
+<h5 class="mt-3">Paypal Donate</h5>
+
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="hosted_button_id" value="WMZ6GHXAFWW2S">
+    <table>
+        <tr><td><input type="hidden" name="on0" value="Donate Amount">Donate Amount</td></tr>
+        <tr>
+            <td>
+                <select name="os0">
+                    <option value="Donate">Donate $1.00 USD</option>
+                    <option value="Donate">Donate $5.00 USD</option>
+                    <option value="Donate">Donate $10.00 USD</option>
+                    <option value="Donate">Donate $30.00 USD</option>
+                    <option value="Donate">Donate $50.00 USD</option>
+                    <option value="Donate">Donate $80.00 USD</option>
+                    <option value="Donate">Donate $100.00 USD</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="currency_code" value="USD">
+    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+    <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+</form>
+
+
+<h5 class="mt-3">Crypto Donate</h5>
+<div class="vstack gap-1">
+
+    <div class="card mb-3" style="max-width: 400px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="images/luno-btc-donate.png" class="img-fluid rounded-start">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Bitcoin (BTC)</h5>
+                    <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3" style="max-width: 400px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="images/luno-ltc-donate.png" class="img-fluid rounded-start">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Litecoin (LTC)</h5>
+                    <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-3" style="max-width: 400px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="images/luno-eth-donate.png" class="img-fluid rounded-start">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">Ethereum (ETH)</h5>
+                    <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*
+    <div class="container">
+    <div class="row">
+    <div class="col">Bitcoin (BTC)</div>
+    <div class="col"></div>
+    <div class="col"><img src=""/></div>
+    </div>
+    <div class="row">
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col"><img src="images/luno-ltc-donate.png"/></div>
+    </div>
+    <div class="row">
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col"><img src="images/luno-eth-donate.png"/></div>
+    </div>
+    </div>*@
+
+
+@code {
+
+}

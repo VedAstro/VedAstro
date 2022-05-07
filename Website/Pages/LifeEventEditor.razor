@@ -1,17 +1,12 @@
 ﻿@using Genso.Astrology.Library
 
-<div class="border border-1">
-    <h3>LifeEventEditor</h3>
-
-    @foreach (var lifeEvent in _lifeEventList)
-    {
-        @lifeEvent.Name
-        ;
-    }
-
-    <button @onclick="OnClickAddButton" class="btn btn-danger">Add</button>
-
+<div class="border border-1 mt-3">
+    <div class="container mt-3">
+        <div id="@TableId"></div>
+    </div>
 </div>
+
+
 
 
 
@@ -19,36 +14,16 @@
 
 
 
-    //VARIABLES
-    private List<Event> _lifeEventList;
+    //FIELDS
+    const string TableId = "LifeEventsListTable"; //change only needed here
 
 
 
     //PROPERTIES
 
     [Parameter]
-    public List<Event> LifeEventList
-    {
-        get => _lifeEventList;
-        set
-        {
-            //this stops update loops
-            if (_lifeEventList == value) return;
+    public List<Event> LifeEventList { get; set; }
 
-            //set new value
-            _lifeEventList = value;
-
-            //update value in parent page
-            LifeEventListChanged.InvokeAsync(value);
-        }
-    }
-
-
-
-    //below are needed for 2-way binding
-    //between page & component to work
-    [Parameter]
-    public EventCallback<List<Event>> LifeEventListChanged { get; set; }
 
 
     //-------------------EVENT HANDLERS
@@ -59,13 +34,37 @@
         await _globalVariable.LoadingMessage.Show();
 
 
-        var x = _lifeEventList[0];
-        _lifeEventList.Add(x);
-
 
         //page ready
         await _globalVariable.LoadingMessage.Hide();
 
     }
+
+    public async Task SetData(List<LifeEvent> lifeEventList)
+    {
+        //show loading message
+        await _globalVariable.LoadingMessage.Show();
+
+        //convert objects to json (for js generator library)
+        //and calls js code change table directly
+        await _jsRuntime.InvokeVoidAsync("generateLifeEventListTable", TableId, lifeEventList.ToArray());
+
+        //page ready
+        await _globalVariable.LoadingMessage.Hide();
+
+    }
+
+
+    /// <summary>
+    /// gets the life events entered into Tabulator js table
+    /// converts it into life event instances
+    /// </summary>
+    public async Task<List<LifeEvent>> GetData()
+    {
+        var result = await _jsRuntime.InvokeAsync<object>("getLifeEventsListTableData");
+
+        throw new NotImplementedException();
+    }
+
 
 }

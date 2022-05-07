@@ -143,6 +143,41 @@ function generatePersonListTable(tableId, tableData) {
 
 }
 
+//Generates a table using Tabulator table library
+//id to where table will be generated needs to be inputed
+function generateLifeEventListTable(tableId, tableData) {
+
+    //set table data
+    window.lifeEventsListTable = new Tabulator(`#${tableId}`, {
+        data: tableData,           //load row data from array
+        editable: false,
+        layout: "fitColumns",      //fit columns to width of table
+        responsiveLayout: "hide",  //hide columns that don't fit on the table
+        tooltips: true,            //show tool tips on cells
+        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        history: false,             //allow undo and redo actions on the table
+        pagination: "local",       //paginate the data
+        paginationSize: 50,         //allow 7 rows per page of data
+        paginationCounter: "rows", //display count of paginated rows in footer
+        movableColumns: false,      //allow column order to be changed
+        resizableRows: true,       //allow row order to be changed
+        initialSort: [             //set the initial sort order of the data
+            { column: "name", dir: "asc" },
+        ],
+        columns: [                 //define the table columns
+            { title: "Event Name", field: "name", hozAlign: "center" },
+            { title: "Start Time", field: "startTime", hozAlign: "center" },
+            { title: "End Time", field: "endTime", hozAlign: "center" },
+            { title: "Nature", field: "nature", hozAlign: "center" },
+        ],
+    });
+
+}
+
+function getLifeEventsListTableData() {
+    return  window.lifeEventsListTable;
+}
+
 //async sleep millisecond
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

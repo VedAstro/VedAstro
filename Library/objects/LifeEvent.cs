@@ -73,16 +73,27 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static LifeEvent FromXml(XElement lifeEventXml)
         {
-            var lifeEventParsed = new LifeEvent
-            {
-                Name = lifeEventXml.Element("Name").Value,
-                StartTime = lifeEventXml.Element("StartTime").Value,
-                EndTime = lifeEventXml.Element("EndTime").Value,
-                Nature = lifeEventXml.Element("Nature").Value,
-            };
+            var lifeEventParsed = new LifeEvent();
+
+            //this 2 way naming convention is to support xml data coming from
+            //Tabulator JS that makes first letter small, so for that case this is
+            lifeEventParsed.Name = test(lifeEventXml.Element("Name")?.Value) ? lifeEventXml.Element("Name").Value : lifeEventXml.Element("name").Value;
+            lifeEventParsed.StartTime = test(lifeEventXml.Element("StartTime")?.Value) ? lifeEventXml.Element("StartTime").Value : lifeEventXml.Element("startTime").Value;
+            lifeEventParsed.EndTime = test(lifeEventXml.Element("EndTime")?.Value) ? lifeEventXml.Element("EndTime").Value : lifeEventXml.Element("endTime").Value;
+            lifeEventParsed.Nature = test(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml.Element("Nature").Value : lifeEventXml.Element("nature").Value;
+
 
             return lifeEventParsed;
 
+            //only true if value is not null or ""
+            bool test(string testVal)
+            {
+                if (testVal == "" || testVal == null)
+                {
+                    return false;
+                }
+                return true;
+            }
         }
 
 

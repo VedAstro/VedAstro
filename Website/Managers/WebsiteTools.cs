@@ -156,9 +156,9 @@ namespace Website
             //all possible details are logged
             async Task NewVisitor()
             {
-
+                
                 //get visitor data & format it nicely for storage
-                var browserDataXml = await GetBrowserDataXml();
+                var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
                 var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
                 var visitorId = Tools.GenerateId();
                 var uniqueIdXml = new XElement("UniqueId", visitorId);
@@ -202,13 +202,6 @@ namespace Website
 
             async Task SetNewVisitorIdInCookie(string id) => await jsRuntime.InvokeVoidAsync("setCookiesWrapper", "uniqueId", id);
 
-            //calls js library to get browser data, converts it to xml
-            async Task<XElement> GetBrowserDataXml()
-            {
-                var dataJson = await jsRuntime.InvokeAsync<JsonNode>("getVisitorData");
-                var rawXml = JsonConvert.DeserializeXmlNode(dataJson.ToString(), "BrowserData");
-                return XElement.Parse(rawXml.InnerXml);
-            }
         }
 
 

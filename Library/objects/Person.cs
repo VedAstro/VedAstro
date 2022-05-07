@@ -146,13 +146,14 @@ namespace Genso.Astrology.Library
         public XElement ToXml()
         {
             var person = new XElement("Person");
-            var name = new XElement("Name", this.GetName());
-            var gender = new XElement("Gender", this.GetGender().ToString());
+            var name = new XElement("Name", this.Name);
+            var notes = new XElement("Notes", this.Notes);
+            var gender = new XElement("Gender", this.Gender.ToString());
             var birthTime = new XElement("BirthTime", this.GetBirthDateTime().ToXml());
             var userId = new XElement("UserId", this.UserId);
             var lifeEventListXml = getLifeEventListXml(LifeEventList);
 
-            person.Add(name, gender, birthTime, userId, lifeEventListXml);
+            person.Add(name, gender, birthTime, userId, lifeEventListXml, notes);
 
             return person;
 
@@ -185,26 +186,35 @@ namespace Genso.Astrology.Library
         public static Person FromXml(XElement personXml)
         {
             var name = personXml.Element("Name")?.Value;
+            var notes = personXml.Element("Notes")?.Value;
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
             var userId = personXml.Element("UserId")?.Value;
             var lifeEventList = getLifeEventListFromXml();
 
-            var parsedPerson = new Person(name, time, gender, userId, "",lifeEventList);
+            var parsedPerson = new Person(name, time, gender, userId, notes, lifeEventList);
 
             return parsedPerson;
 
             //-------------------LOCAL FUNCTION--------
             List<LifeEvent> getLifeEventListFromXml()
             {
-                var lifeEventListXml = personXml.Element("LifeEventList")?.Elements();
-                var returnList = new List<LifeEvent>();
-                foreach (var lifeEventXml in lifeEventListXml)
+                //Try to get data from xml
+                //there is a possibility that xml doesn't exist
+                try
                 {
-                    returnList.Add(LifeEvent.FromXml(lifeEventXml));
-                }
+                    var lifeEventListXml = personXml.Element("LifeEventList")?.Elements();
+                    var returnList = new List<LifeEvent>();
+                    foreach (var lifeEventXml in lifeEventListXml)
+                    {
+                        returnList.Add(LifeEvent.FromXml(lifeEventXml));
+                    }
 
-                return returnList;
+                    return returnList;
+
+                }
+                //if fail, probably xml doesn't exist so just send empty list
+                catch (Exception) { return new List<LifeEvent>(); }
             }
         }
 

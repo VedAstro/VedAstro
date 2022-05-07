@@ -165,17 +165,17 @@ function generateLifeEventListTable(tableId, tableData) {
             { column: "name", dir: "asc" },
         ],
         columns: [                 //define the table columns
-            { title: "Event Name", field: "name", hozAlign: "center" },
-            { title: "Start Time", field: "startTime", hozAlign: "center" },
-            { title: "End Time", field: "endTime", hozAlign: "center" },
-            { title: "Nature", field: "nature", hozAlign: "center" },
+            { title: "Event Name", field: "name", editor: "input", hozAlign: "center" },
+            { title: "Start Time", field: "startTime", editor: "input", hozAlign: "center" },
+            { title: "End Time", field: "endTime", editor: "input", hozAlign: "center" },
+            { title: "Nature", field: "nature", editor: "input", hozAlign: "center" },
         ],
     });
 
 }
 
 function getLifeEventsListTableData() {
-    return  window.lifeEventsListTable;
+    return window.lifeEventsListTable.getData();
 }
 
 //async sleep millisecond

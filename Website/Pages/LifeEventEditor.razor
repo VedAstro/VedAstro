@@ -61,9 +61,20 @@
     /// </summary>
     public async Task<List<LifeEvent>> GetData()
     {
-        var result = await _jsRuntime.InvokeAsync<object>("getLifeEventsListTableData");
+        //get life events from the JS generated table
+        var lifeEventListXml = await _jsRuntime.InvokeAsyncJson("getLifeEventsListTableData", "LifeEventList");
 
-        throw new NotImplementedException();
+        var returnList = new List<LifeEvent>();
+
+        //convert xml to instance (parse it baby)
+        //1 day to make this work, no joke looks simple...
+        foreach (var lifeEventXml in lifeEventListXml.Elements())
+        {
+            returnList.Add(LifeEvent.FromXml(lifeEventXml));
+        }
+
+        return returnList;
+        
     }
 
 

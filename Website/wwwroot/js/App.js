@@ -150,25 +150,29 @@ function generateLifeEventListTable(tableId, tableData) {
     //set table data
     window.lifeEventsListTable = new Tabulator(`#${tableId}`, {
         data: tableData,           //load row data from array
-        editable: false,
+        editable: true,
         layout: "fitColumns",      //fit columns to width of table
         responsiveLayout: "hide",  //hide columns that don't fit on the table
         tooltips: true,            //show tool tips on cells
         addRowPos: "top",          //when adding a new row, add it to the top of the table
         history: false,             //allow undo and redo actions on the table
-        pagination: "local",       //paginate the data
-        paginationSize: 50,         //allow 7 rows per page of data
-        paginationCounter: "rows", //display count of paginated rows in footer
+        pagination: false, //enable pagination
+       // pagination: "local",       //paginate the data
+        //paginationSize: 50,         //allow 7 rows per page of data
+        //paginationCounter: "rows", //display count of paginated rows in footer
         movableColumns: false,      //allow column order to be changed
         resizableRows: true,       //allow row order to be changed
         initialSort: [             //set the initial sort order of the data
             { column: "name", dir: "asc" },
         ],
         columns: [                 //define the table columns
-            { title: "Event Name", field: "name", editor: "input", hozAlign: "center" },
-            { title: "Start Time", field: "startTime", editor: "input", hozAlign: "center" },
-            { title: "End Time", field: "endTime", editor: "input", hozAlign: "center" },
-            { title: "Nature", field: "nature", editor: "input", hozAlign: "center" },
+            { title: "Event Name", field: "Name", editor: "input", hozAlign: "center" },
+            { title: "Start Time", field: "StartTime", editor: "input", hozAlign: "center" },
+            { title: "End Time", field: "EndTime", editor: "input", hozAlign: "center" },
+            { title: "Nature", field: "Nature", editor: "input", hozAlign: "center" },
+            //code to delete button for row
+            { formatter: "buttonCross", width: 40, hozAlign: "center", cellClick: function (e, cell) { cell.getRow().delete();
+            } }
         ],
     });
 
@@ -176,6 +180,13 @@ function generateLifeEventListTable(tableId, tableData) {
 
 function getLifeEventsListTableData() {
     return window.lifeEventsListTable.getData();
+}
+
+//adds new row to life events table
+function addNewLifeEventToTable() {
+
+    var addToTopOfTable = true;
+    window.lifeEventsListTable.addData([{ Name: "New Life Event", StartTime: "00:00 10/10/2020 +08:00", EndTime: "00:00 10/10/2020 +08:00", Nature:"Good"}], addToTopOfTable);
 }
 
 //async sleep millisecond

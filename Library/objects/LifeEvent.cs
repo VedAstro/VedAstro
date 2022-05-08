@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -19,25 +20,32 @@ namespace Genso.Astrology.Library
         //░█▀▀▄ ─█▀▀█ ▀▀█▀▀ ─█▀▀█ 
         //░█─░█ ░█▄▄█ ─░█── ░█▄▄█ 
         //░█▄▄▀ ░█─░█ ─░█── ░█─░█
+        //NOTE :
+        //JsonPropertyName used when auto converting
+        //type to Json when interoperating with JS
 
         /// <summary>
         /// Custom name of the event
         /// </summary>
+        [JsonPropertyName("Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Must follow standard time formatting 
         /// </summary>
+        [JsonPropertyName("StartTime")]
         public string StartTime { get; set; }
 
         /// <summary>
         /// Must follow standard time formatting 
         /// </summary>
+        [JsonPropertyName("EndTime")]
         public string EndTime { get; set; }
 
         /// <summary>
         /// must be Good, Neutral or Bad only
         /// </summary>
+        [JsonPropertyName("Nature")]
         public string Nature { get; set; }
 
 

@@ -1,10 +1,9 @@
 ﻿@using Genso.Astrology.Library
 
-<div class="border border-1 mt-3">
-    <div class="container mt-3">
-        <div id="@TableId"></div>
-    </div>
-</div>
+
+<IconButton ButtonText="Add" IconName="fluent:add-square-24-filled" OnClickCallback="OnClickAddLifeEvent"/>
+
+<div style="min-height:150px;" id="@TableId"></div>
 
 
 
@@ -77,5 +76,12 @@
         
     }
 
+
+    private async Task OnClickAddLifeEvent(MouseEventArgs obj)
+    {
+        //call js to add data
+        await _jsRuntime.InvokeVoidAsync("addNewLifeEventToTable");
+
+    }
 
 }

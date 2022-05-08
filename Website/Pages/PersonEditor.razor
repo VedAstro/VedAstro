@@ -7,45 +7,57 @@
 <PageTitle>@_pageTitle</PageTitle>
 
 <div class="container">
-    <div class="row" style="max-width:826px;">
-        <div class="col-sm gap-2">
-
-            <div>
-                <label>Name</label>
-                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+    <div class="vstack gap-3" style="max-width:826px;">
+        <div>
+            <label>Name</label>
+            <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-5">
+                    <label>Birth Time (24h)</label>
+                    <input @bind="_hourMinInput" type="text" class="form-control" placeholder="06:42">
+                </div>
+                <div class="col-5">
+                    <label>Date</label>
+                    <input @bind="_dateInput" type="text" class="form-control" placeholder="16/04/2021">
+                </div>
+                <div class="col">
+                    <label>Timezone</label>
+                    <input @bind="_timeZonInput" type="text" class="form-control" placeholder="+08:00">
+                </div>
             </div>
-            <div>
-                <div class="row">
-                    <div class="col-5">
-                        <label>Birth Time (24h)</label>
-                        <input @bind="_hourMinInput" type="text" class="form-control" placeholder="06:42">
-                    </div>
-                    <div class="col-5">
-                        <label>Date</label>
-                        <input @bind="_dateInput" type="text" class="form-control" placeholder="16/04/2021">
-                    </div>
-                    <div class="col">
-                        <label>Timezone</label>
-                        <input @bind="_timeZonInput" type="text" class="form-control" placeholder="+08:00">
+        </div>
+
+        <GeoLocationInput @ref="_geoLocationInput" />
+        <div>
+            <label>Gender</label>
+            <select @bind="_genderInput" class="form-control">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+        <div class="accordion" id="advancedTabAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <strong>Advanced</strong>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#advancedTabAccordion">
+                    <div class="accordion-body">
+                        <div class="vstack gap-3">
+                            @*LIFE EVENTS*@
+                            <LifeEventEditor @ref="_lifeEventEditor"/>
+                            <div>
+                                <label>Notes</label>
+                                <input @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <GeoLocationInput @ref="_geoLocationInput" />
-            <div>
-                <label>Gender</label>
-                <select @bind="_genderInput" class="form-control">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
-            @*LIFE EVENTS*@
-            <LifeEventEditor @ref="_lifeEventEditor" />
-            <div>
-                <label>Notes</label>
-                <input @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person">
-            </div>
-
         </div>
     </div>
 
@@ -98,7 +110,6 @@
     string _genderInput = "";
     string _pageTitle = "";
     private GeoLocationInput _geoLocationInput;
-
     private LifeEventEditor _lifeEventEditor;
 
 
@@ -287,6 +298,8 @@
         await Task.Delay(100);
         _navigation.NavigateTo(PageRoute.PersonList);
     }
+
+
 
 
 }

@@ -4,22 +4,26 @@
 
 <PageTitle>Sun Rise And Set Time</PageTitle>
 
-<h2>Sunrise:@_sunRiseTime</h2>
-<h2>Sunset:@_sunSetTime</h2>
+<PageTop IconName="mi:sunrise-alt" Title="Sunrise Time">
+    <Description>Accurate sunrise & sunset time based on your coordinates. Time when sun's disc center meets the horizon.</Description>
+</PageTop>
 
-<GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitude" @bind-Latitude="_latitude" />
+<div class="vstack gap-3">
 
-<div style="margin-top: 50px" class="row">
-    <button @onclick="UpdateSunRiseSetTime" class="btn btn-primary">Update</button>
+    <h4>Sunrise:@_sunRiseTime</h4>
+    <h4>Sunset:@_sunSetTime</h4>
+
+    <GeoLocationInput @ref="_geoLocationInput" />
+
+    <IconButton ButtonText="Calculate" IconName="uim:process" OnClickCallback="UpdateSunRiseSetTime"></IconButton>
+
 </div>
 
 @code {
-
+    //FIELDS
+    private GeoLocationInput _geoLocationInput;
     private string? _sunSetTime = "";
     private string? _sunRiseTime = "";
-    private string? _locationName = "";
-    private double _longitude;
-    private double _latitude;
     public bool PageReady { get; set; }
 
 
@@ -31,7 +35,7 @@
     private void UpdateSunRiseSetTime()
     {
         //parse location received from user
-        var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
+        var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
 
         //get time now
         var timeNow = Time.Now(geoLocation);

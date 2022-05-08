@@ -30,44 +30,19 @@
                 <span class="iconify" data-icon="fluent:chat-mail-20-filled" data-width="30"></span> Contact
             </NavLink>
         </div>
+        <div class="nav-item px-3" @onclick="OnClickAccountNav">
+            <NavLink class="nav-link gap-2" >
+                <span class="iconify" data-icon="mdi:account-details" data-width="30"></span> Account
+            </NavLink>
+        </div>
+        @*hidden by default*@
+        <div @ref="_personListHolder" class="nav-item px-3" style="display: none;">
+            <NavLink class="nav-link gap-2" href="@PageRoute.PersonList">
+                <span class="iconify" data-icon="fluent:people-list-20-filled" data-width="30"></span> Person List
+            </NavLink>
+        </div>
 
-        @*        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@PageRoute.Muhurtha">
-            <span class="oi oi-list" aria-hidden="true"></span> Muhurtha
-            </NavLink>
-            </div>
-        *@
-
-@*        <hr style="
-                   color: white;
-                   height: 2px;
-               ">
-*@
-@*        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@PageRoute.Match">
-                <span class="oi oi-people" aria-hidden="true"></span> Match
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@PageRoute.Dasa">
-                <span class="oi oi-list" aria-hidden="true"></span> Dasa
-            </NavLink>
-        </div>
-*@        @*        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@PageRoute.Horoscope">
-            <span class="oi oi-list-rich" aria-hidden="true"></span> Horoscope
-            </NavLink>
-            </div>
-        *@    @*    <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@PageRoute.LocalMeanTime">
-                <span class="oi oi-person" aria-hidden="true"></span> Local Mean Time
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="@PageRoute.SunRiseSetTime">
-                <span class="oi oi-person" aria-hidden="true"></span> Sunrise/Sunset Time
-            </NavLink>
-        </div>*@
+       
         <div class="nav-item px-3">
             <SignInButton />
         </div>
@@ -76,6 +51,9 @@
 
 @code {
     private bool _collapseNavMenu = true;
+    private bool _accountNavIsVisible = false; //default not visible
+    private ElementReference _personListHolder;
+
 
     private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
 
@@ -83,4 +61,24 @@
     {
         _collapseNavMenu = !_collapseNavMenu;
     }
+
+    /// <summary>
+    /// Event handler to toggle account options on and off
+    /// </summary>
+    private async Task OnClickAccountNav(MouseEventArgs obj)
+    {
+        //if visible hide it
+        if (_accountNavIsVisible)
+        {
+            await _jsRuntime.Hide(_personListHolder);
+            _accountNavIsVisible = false;
+        }
+        //if hidden show it
+        else
+        {
+            await _jsRuntime.Show(_personListHolder);
+            _accountNavIsVisible = true;
+        }
+    }
+
 }

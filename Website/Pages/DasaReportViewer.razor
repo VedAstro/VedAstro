@@ -102,12 +102,12 @@
         await _jsRuntime.AddToProgressBar(10);
 
         //generate rows and pump them into the page
-
+        var dasaSvgWidth = 0; //will be filled when calling row generator
         var x = "";
-        x += await GenerateRowSvg(DasaEventList, _eventsPrecision);
-        x += await GenerateRowSvg(BhuktiEventList, _eventsPrecision);
-        x += await GenerateRowSvg(AntaramEventList, _eventsPrecision);
-        var finalSvg = WrapSvgElements(x);
+        x += await GenerateRowSvg(DasaEventList, _eventsPrecision, 0);
+        x += await GenerateRowSvg(BhuktiEventList, _eventsPrecision, 38);
+        x += await GenerateRowSvg(AntaramEventList, _eventsPrecision, 76);
+        var finalSvg = WrapSvgElements(x, dasaSvgWidth, (_heightPerSlice * 3)+10); //little wiggle room
         DasaRowItemsSvg = new MarkupString(finalSvg);
 
         //needed to show generated dasa diagram
@@ -116,13 +116,16 @@
 
         //-----------------------LOCAL FUNCTIONS-------------------------
 
-        async Task<string> GenerateRowSvg(List<Event> eventList, double precisionHours)
+        async Task<string> GenerateRowSvg(List<Event> eventList, double precisionHours, int yAxis)
         {
 
             //get time slices used to get events
             var startTime = Person.GetBirthDateTime(); //start time is birth time
             var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
             var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
+
+            //save a copy of the number of time slices used to calculate the svg total width later
+            dasaSvgWidth = timeSlices.Count; 
 
             //generate the row for each time slice
             var rowHtml = "";
@@ -153,6 +156,10 @@
 
             }
 
+            //wrap all the rects inside a svg so they can me moved together
+            //svg tag here acts as group, svg nesting
+            rowHtml = $"<svg y=\"{yAxis}\" >{rowHtml}</svg>";
+
             return rowHtml;
         }
 
@@ -182,13 +189,12 @@
 
 
         //wraps a list of svg elements inside 1 main svg element
-        //if width not set defaults to 1000px
-        string WrapSvgElements(string combinedSvgString, int svgWidth = 1000)
+        //if width not set defaults to 1000px, and height to 1000px
+        string WrapSvgElements(string combinedSvgString, int svgWidth = 1000, int svgTotalHeight = 1000)
         {
 
             //create the final svg that will be displayed
             var svgTotalWidth = svgWidth + 10; //add little for wiggle room
-            var svgTotalHeight = _heightPerSlice + 1; //add little as border between
             var svgBody = $"<svg " +
                           $"style=\"" +
                           $"width:{svgTotalWidth}px;" +

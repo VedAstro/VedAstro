@@ -355,5 +355,87 @@ namespace Website
         }
 
         public static void ReloadPage(NavigationManager navigation) => navigation.NavigateTo(navigation.Uri, forceLoad: true);
+
+        /// <summary>
+        /// Gets Dasa events from API
+        /// </summary>
+        public static async Task<List<Event>?> GetDasaEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person) 
+            => await EventsByTag(EventTag.Dasa, _eventsPrecision, startTime, endTime, _jsRuntime, person);
+
+        /// <summary>
+        /// Gets Bhukti events from API
+        /// </summary>
+        public static async Task<List<Event>?> GetBhuktiEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person)
+            => await EventsByTag(EventTag.Bhukti, _eventsPrecision, startTime, endTime, _jsRuntime, person);
+
+        /// <summary>
+        /// Gets Antaram events from API
+        /// </summary>
+        public static async Task<List<Event>?> GetAntaramEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person)
+            => await EventsByTag(EventTag.Antaram, _eventsPrecision, startTime, endTime, _jsRuntime, person);
+
+
+        /// <summary>
+        /// gets events from server filtered by event tag
+        /// </summary>
+        public static async Task<List<Event>?> EventsByTag(EventTag tag, double precisionHours, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person)
+        {
+
+            //get events from API server
+            var dasaEventsUnsorted =
+                await GetEventsFromApi(
+                    startTime,
+                    endTime,
+                    //birth location always as current place,
+                    //since place does not matter for Dasa
+                    person.GetBirthLocation(),
+                    person,
+                    tag,
+                    precisionHours, _jsRuntime);
+
+
+            //sort the list by time before sending view
+            var orderByAscResult = from dasaEvent in dasaEventsUnsorted
+                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset()
+                                   select dasaEvent;
+
+
+            await _jsRuntime.AddToProgressBar(10);
+
+            //send sorted events to view
+            return orderByAscResult.ToList();
+        }
+
+        /// <summary>
+        /// Gets Muhurtha events from API
+        /// </summary>
+        public static async Task<List<Event>> GetEventsFromApi(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours, IJSRuntime _jsRuntime)
+        {
+            //prepare data to send to API
+            var root = new XElement("Root");
+
+            root.Add(
+                new XElement("StartTime", startTime.ToXml()),
+                new XElement("EndTime", endTime.ToXml()),
+                location.ToXml(),
+                person.ToXml(),
+                Tools.AnyTypeToXml(tag),
+                Tools.AnyTypeToXml(precisionHours));
+
+
+            //send to api and get results
+            var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsApi, root);
+
+
+            //parse raw results
+            List<Event> resultsParsed = Event.FromXml(resultsRaw);
+
+            await _jsRuntime.AddToProgressBar(10);
+
+            //send to caller
+            return resultsParsed;
+        }
+
+
     }
 }

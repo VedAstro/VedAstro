@@ -105,7 +105,7 @@ namespace Website
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
 
-            httpRequestMessage.Content = XmLtoStringContent(xmlData);
+            httpRequestMessage.Content = XmLtoHttpContent(xmlData);
 
             //get the data sender
             using var client = new HttpClient();
@@ -135,7 +135,7 @@ namespace Website
         /// <summary>
         /// Packages the data into ready form for the HTTP client to use in final sending stage
         /// </summary>
-        private static StringContent XmLtoStringContent(XElement data)
+        private static StringContent XmLtoHttpContent(XElement data)
         {
             //gets the main XML data as a string
             var dataString = Tools.XmlToString(data);
@@ -150,5 +150,6 @@ namespace Website
             //return packaged data to caller
             return new StringContent(dataString, encoding, mediaType);
         }
+
     }
 }

@@ -52,7 +52,9 @@
                             <LifeEventEditor @ref="_lifeEventEditor"/>
                             <div>
                                 <label>Notes</label>
-                                <input @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person">
+                                <textarea @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person" style="min-height:132px;">
+                                </textarea>
+
                             </div>
                         </div>
                     </div>

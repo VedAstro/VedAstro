@@ -29,16 +29,14 @@
 
 @code {
 
-    //INTERNAL TYPES
+    /// <summary>
+    /// One precision value for generating all dasa components,
+    /// because misalignment occurs if use different precision
+    /// </summary>
+    static double _eventsPrecision = Tools.DaysToHours(14);
 
+    double _timeSlicePrecision = _eventsPrecision;
 
-    //FIELDS
-    //NOTE all precision values must match otherwise
-    //misalignment & empty slices occur
-    double _dasaEventsPrecision = Tools.DaysToHours(14);
-    double _bhuktiEventsPrecision = Tools.DaysToHours(14);
-    double _antaramEventsPrecision = Tools.DaysToHours(14);
-    double _timeSlicePrecision = Tools.DaysToHours(14);
     ElementReference _dasaViewBox;
 
     //px width & height of each slice of time
@@ -90,24 +88,29 @@
         //save inputed data
         this.Person = person;
 
+        //prep data
+        var startTime = Person.GetBirthDateTime(); //start time is birth time
+        var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
+
         //use the inputed data to get events from API
         //note: below methods access the data internally
-        DasaEventList = await getDasaEvents();
-        await _jsRuntime.AddToProgressBar( 5);
-        BhuktiEventList = await getBhuktiEvents();
-        await _jsRuntime.AddToProgressBar( 5);
-        AntaramEventList = await getAntaramEvents();
-        await _jsRuntime.AddToProgressBar( 5);
+        DasaEventList = await WebsiteTools.GetDasaEvents(_eventsPrecision, startTime, endTime, _jsRuntime, Person);
+        await _jsRuntime.AddToProgressBar(10);
+        BhuktiEventList = await WebsiteTools.GetBhuktiEvents(_eventsPrecision, startTime, endTime, _jsRuntime, Person);
+        await _jsRuntime.AddToProgressBar(10);
+        AntaramEventList = await WebsiteTools.GetAntaramEvents(_eventsPrecision, startTime, endTime, _jsRuntime, Person);
+        await _jsRuntime.AddToProgressBar(10);
 
         //generate rows and pump them into the page
-        DasaRowItemsSvg = new MarkupString(await GenerateRowSvg(DasaEventList, _dasaEventsPrecision));
 
-        BhuktiRowItemsSvg = new MarkupString(await GenerateRowSvg(BhuktiEventList, _bhuktiEventsPrecision));
+        var x = "";
+        x += await GenerateRowSvg(DasaEventList, _eventsPrecision);
+        x += await GenerateRowSvg(BhuktiEventList, _eventsPrecision);
+        x += await GenerateRowSvg(AntaramEventList, _eventsPrecision);
+        var finalSvg = WrapSvgElements(x);
+        DasaRowItemsSvg = new MarkupString(finalSvg);
 
-        AntaramRowItemsSvg = new MarkupString(await GenerateRowSvg(AntaramEventList, _antaramEventsPrecision));
-
-
-        //need to propagate changes
+        //needed to show generated dasa diagram
         this.StateHasChanged();
 
 
@@ -115,6 +118,7 @@
 
         async Task<string> GenerateRowSvg(List<Event> eventList, double precisionHours)
         {
+
             //get time slices used to get events
             var startTime = Person.GetBirthDateTime(); //start time is birth time
             var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
@@ -134,13 +138,13 @@
                 //generate and add to row
                 //the hard coded attribute names used here are used in App.js
                 var rect = $"<rect " +
-                          $"eventName=\"{foundEvent?.FormattedName}\" " +
-                          $"age=\"{Person.GetAge(slice)}\" " +
-                          $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                          $"x=\"{horizontalPosition}\" " +
-                          $"width=\"{_widthPerSlice}\" " +
-                          $"height=\"{_heightPerSlice}\" " +
-                          $"fill=\"{GetEventColor(foundEvent?.Nature)}\" />";
+                           $"eventName=\"{foundEvent?.FormattedName}\" " +
+                           $"age=\"{Person.GetAge(slice)}\" " +
+                           $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                           $"x=\"{horizontalPosition}\" " +
+                           $"width=\"{_widthPerSlice}\" " +
+                           $"height=\"{_heightPerSlice}\" " +
+                           $"fill=\"{GetEventColor(foundEvent?.Nature)}\" />";
 
                 //set position for next element
                 horizontalPosition += _widthPerSlice;
@@ -149,22 +153,7 @@
 
             }
 
-            //create the final svg that will be displayed
-            var svgTotalWidth = horizontalPosition + 10; //add little for wiggle room
-            var svgTotalHeight = _heightPerSlice + 1; //add little as border between
-            var svgBody = $"<svg " +
-                          $"style=\"" +
-                          $"width:{svgTotalWidth}px;" +
-                          $"height:{svgTotalHeight}px;" +
-                          $"\" " +
-                          $"xmlns=\"http://www.w3.org/2000/svg\">" +
-                          $"{rowHtml}</svg>";
-
-
-            await _jsRuntime.AddToProgressBar( 5);
-
-            return svgBody;
-
+            return rowHtml;
         }
 
         // Get dasa color based on nature & number of events
@@ -191,69 +180,24 @@
             return colorId;
         }
 
-        async Task<List<Event>?> getDasaEvents() => await getEventsByTag(EventTag.Dasa, _dasaEventsPrecision);
-        async Task<List<Event>?> getBhuktiEvents() => await getEventsByTag(EventTag.Bhukti, _bhuktiEventsPrecision);
-        async Task<List<Event>?> getAntaramEvents() => await getEventsByTag(EventTag.Antaram, _antaramEventsPrecision);
 
-        //gets events from server filtered by event tag
-        async Task<List<Event>?> getEventsByTag(EventTag tag, double precisionHours)
+        //wraps a list of svg elements inside 1 main svg element
+        //if width not set defaults to 1000px
+        string WrapSvgElements(string combinedSvgString, int svgWidth = 1000)
         {
 
-            //prep data
-            var startTime = Person.GetBirthDateTime(); //start time is birth time
-            var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
+            //create the final svg that will be displayed
+            var svgTotalWidth = svgWidth + 10; //add little for wiggle room
+            var svgTotalHeight = _heightPerSlice + 1; //add little as border between
+            var svgBody = $"<svg " +
+                          $"style=\"" +
+                          $"width:{svgTotalWidth}px;" +
+                          $"height:{svgTotalHeight}px;" +
+                          $"\" " +
+                          $"xmlns=\"http://www.w3.org/2000/svg\">" +
+                          $"{combinedSvgString}</svg>";
 
-            //get events from API server
-            var dasaEventsUnsorted =
-                await GetEventsFromApi(
-                    startTime,
-                    endTime,
-                    //birth location always as current place,
-                    //since place does not matter for Dasa
-                    Person.GetBirthLocation(),
-                    Person,
-                    tag,
-                    precisionHours);
-
-
-            //sort the list by time before sending view
-            var orderByAscResult = from dasaEvent in dasaEventsUnsorted
-                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset()
-                                   select dasaEvent;
-
-
-            await _jsRuntime.AddToProgressBar( 10);
-
-            //send sorted events to view
-            return orderByAscResult.ToList();
-        }
-
-        // Gets Muhurtha events from API
-        async Task<List<Event>> GetEventsFromApi(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours)
-        {
-            //prepare data to send to API
-            var root = new XElement("Root");
-
-            root.Add(
-                new XElement("StartTime", startTime.ToXml()),
-                new XElement("EndTime", endTime.ToXml()),
-                location.ToXml(),
-                person.ToXml(),
-                Tools.AnyTypeToXml(tag),
-                Tools.AnyTypeToXml(precisionHours));
-
-
-            //send to api and get results
-            var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsApi, root);
-
-
-            //parse raw results
-            List<Event> resultsParsed = Event.FromXml(resultsRaw);
-
-            await _jsRuntime.AddToProgressBar( 10);
-
-            //send to caller
-            return resultsParsed;
+            return svgBody;
         }
     }
 }

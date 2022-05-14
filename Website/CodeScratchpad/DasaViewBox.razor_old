@@ -1,0 +1,593 @@
+﻿@using Tools = Genso.Astrology.Library.Tools
+@using Genso.Astrology.Library
+@using System.Xml.Linq
+
+
+<style>
+    .parent-div {
+        display: flex;
+        flex-wrap: wrap;
+        /* for horizontal aligning of child divs */
+        justify-content: center;
+        /* for vertical aligning */
+        align-items: center;
+        width: max-content;
+        white-space: nowrap;
+    }
+
+    #BhuktiRow, #AntaramRow, .yearRow, .ageRow {
+        font-size: x-small;
+    }
+
+    .yearRow, .ageRow {
+        background-color: #1b6ec2;
+    }
+
+    #DasaViewHolder {
+        text-align: center;
+        color: ivory;
+        z-index: 1;
+        cursor: pointer;
+    }
+
+    .DasaViewHeaderItems {
+        font-size: small;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #MainHolder {
+        display: flex;
+    }
+
+    #ScrollContainer {
+        position: relative;
+        overflow: overlay;
+        height: 200px;
+    }
+
+    #ScrollContainer > * {
+        position: absolute;
+    }
+
+    #NowLine {
+        background-color: red;
+        width: 1px;
+        height: 142px;
+        z-index: 999;
+        top: -19px;
+    }
+
+    .cursor {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .vt {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: black;
+    }
+
+    #AutoScrollLine {
+        /*background-color: #1b6ec2;*/
+        width: 1px;
+        height: 163px;
+        position: relative;
+        z-index: 999; /*needed to be seen*/
+        margin-bottom: -154px;
+    }
+</style>
+
+@*DEFAULT INVISIBLE*@
+<div @ref="_dasaViewBox" class="vstack" style="display: none">
+
+    @*Buttons header row*@
+    <div class="hstack gap-3">
+        <button class="btn btn-primary btn-sm">Goto Now</button>
+        <div class="border border-1 border-primary" @ref="_timeCursorLegend" id="TimeCursorLegend"/>
+        <div class="hstack gap-0">
+            <label>View</label>
+            <select @bind="SelectedViewName" class="form-control">
+                @foreach (var zoomPreset in @ZoomPresetList)
+                {
+                    <option value="@zoomPreset">@zoomPreset</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    @*Invisible line that is used to auto scroll
+        placed in the center, hence divide 2*@
+    <div @ref="_autoScrollLine" id="AutoScrollLine" style="left: @(ViewHolderWidth/2)px;" />
+
+    <div id="MainHolder">
+        @*STATIC ROW NAMES*@
+        <div>
+            <div class="DasaViewHeaderItems border border-primary">Age</div>
+            <div class="DasaViewHeaderItems border border-primary">Year</div>
+            <div class="DasaViewHeaderItems border border-primary">Dasa</div>
+            <div class="DasaViewHeaderItems border border-primary">Bhukti</div>
+            <div class="DasaViewHeaderItems border border-primary">Antaram</div>
+        </div>
+
+        @*SCROLLABLE DASA DATA*@
+        <div @ref="_scrollContainer" id="ScrollContainer" style="width: @(ViewHolderWidth)px">
+            <div @ref="_dasaViewHolder" id="DasaViewHolder">
+                @*Person Age Row*@
+                <div @ref="_ageRowElement" id="AgeRow" class="parent-div">
+                    @*ID is used in JS*@
+                    @for (var year = 0; year <= 120; year++)
+                    {
+                        //TODO rewrite for IMPROVED JS method
+                        //TODO solve zoom issue with check for year column when age fails
+                        <div style="width: @YearsToWidth(1)px;"
+                         class="ageRow @BorderClass">
+                            @year
+                        </div>
+                    }
+                </div>
+                @*Year Span Row*@
+                <div @ref="_yearRowElement" id="YearRow" class="parent-div">
+                    @for (var age = 0; age <= 120; age++)
+                    {
+                        //align year row to dasa
+                        //for birth year only
+                        @if (age == 0)
+                        {
+                            //get number of days to next year
+                            var daysToYearEnd = Tools.GetDaysToNextYear(Person.GetBirthDateTime());
+
+                            //use these number of days to generate reduced year width
+                            _yearElementWidth = DaysToWidth(daysToYearEnd);
+                        }
+                        else
+                        {
+                            //the width of every year box goes to default
+                            _yearElementWidth = YearsToWidth(1);
+                        }
+
+                        //if generating current year than change color
+                        //to highlight year else don't set it
+                        var yearIsCurrent = _globalVariable.SystemTimeNow.Year == GetYearFromPersonAge(age, Person);
+                        var yearColor = yearIsCurrent ? "background-color: crimson;" : "";
+
+                        //finally generate the div with the above computed values
+                        <div style="width: @(_yearElementWidth)px; @yearColor" class="yearRow @BorderClass">
+                            @GetYearFromPersonAge(age, Person)
+                        </div>
+
+                    }
+                </div>
+                @*Planet Dasa Row*@
+                <div @ref="_dasaRowElement" id="DasaRow" class="parent-div">
+                    @foreach (var _event in @DasaEventList)
+                    {
+                        <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
+                         class="dasaRow @BorderClass"
+                         title="@_event.Description">
+                            @_event.FormattedName
+                        </div>
+
+                    }
+                </div>
+                @*Planet Bhukti Row*@
+                <div @ref="_bhuktiRowElement" id="BhuktiRow" class="parent-div">
+                    @foreach (var _event in @BhuktiEventList)
+                    {
+                        <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
+                         class="dasaRow @BorderClass"
+                         title="@_event.Description">
+                            @_event.FormattedName
+                        </div>
+                    }
+                </div>
+                @*Planet Antaram Row*@
+                <div @ref="_antaramRowElement" id="AntaramRow" class="parent-div">
+                    @foreach (var _event in @AntaramEventList)
+                    {
+                        <div style="width: @DaysToWidth(Tools.MinutesToDays(_event.GetDurationMinutes()))px; background-color: @GetEventColor(_event);"
+                         class="dasaRow @BorderClass"
+                         title="@_event.Description">
+                            @_event.FormattedName
+                        </div>
+                    }
+                </div>
+            </div>
+            <div id="NowLine" style="left: @(GetNowLinePosition())px"></div>
+            <div class="cursor">
+                <div id="TimeVerticalLine" @ref="_verticalLine" class="vt"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@code {
+
+    //TODO COMPONENT DEPRECATED MARKED FOR DELETION
+
+    //list of names for view preset selector
+    //for use inside component only!
+    //add/remove here only for changes to apply
+    private enum ZoomPreset
+    {
+        X1 = 1,
+        X2,
+        X3,
+        X4,
+        X5,
+        X6,
+        X7,
+        X8,
+        X9,
+        X10,
+    }
+
+
+
+
+
+    //DATA FIELDS
+
+    double _dasaEventsPrecision = Tools.DaysToHours(14);
+    double _bhuktiEventsPrecision = Tools.DaysToHours(14);
+    double _antaramEventsPrecision = Tools.DaysToHours(14);
+
+    //REFERENCES TO HTML ELEMENTS ABOVE
+    ElementReference _dasaViewHolder;
+    ElementReference _scrollContainer;
+
+    /// <summary>
+    /// Line that follows cursor
+    /// </summary>
+    ElementReference _verticalLine;
+    ElementReference _dasaViewBox;
+    ElementReference _dasaRowElement;
+    ElementReference _yearRowElement;
+    ElementReference _ageRowElement;
+    ElementReference _bhuktiRowElement;
+    ElementReference _antaramRowElement;
+
+    /// <summary>
+    /// Div where time is shown where cursor is on dasa view
+    /// </summary>
+    ElementReference _timeCursorLegend;
+
+    /// <summary>
+    /// div that is used as reference to auto scroll back previous position
+    /// </summary>
+    ElementReference _autoScrollLine;
+
+
+    /// <summary>
+    /// Gets all the zoom presets in a list, for showing in drop down
+    /// </summary>
+    private List<ZoomPreset> ZoomPresetList => Enum.GetValues(typeof(ZoomPreset)).Cast<ZoomPreset>().ToList();
+
+    private string? SelectedViewName
+    {
+        get => _selectedViewName;
+        set
+        {
+            _selectedViewName = value;
+            //when selected name is changed change zoom
+            OnZoomPresetSelectionChange();
+        }
+    }
+
+    private List<Event>? DasaEventList { get; set; }
+
+    private List<Event>? BhuktiEventList { get; set; }
+
+    private List<Event>? AntaramEventList { get; set; }
+
+    private int ViewHolderWidth { get; set; }
+
+    private double _yearElementWidth;
+    private string? _selectedViewName = ZoomPreset.X4.ToString(); //default zoom preset
+
+
+    //ATTRIBUTIVE FIELDS
+    [Parameter]
+    public Person Person { get; set; }
+
+    [Parameter]
+    public GeoLocation Location { get; set; }
+
+    public bool PageReady { get; set; } //marks if the page ready to loaded
+
+
+    //CONSTANTS
+    const double DefaultPixelPerYear = 50.0; //this is value used at startup, will change when zoom
+
+    //the number of pixel zoomed in at a time
+    const int ZoomSpeedInPx = 5;
+
+    //TODO even though marked as static value changes when zooming
+    private static double PixelPerYear = 0;
+    private static double PixelPerDay => PixelPerYear / 360.0;
+    private static double DaysPerPixel => 1 / PixelPerDay;
+
+    public string BorderClass => "border-top border-end border-dark border-1";
+
+
+    public DasaViewBox()
+    {
+        Console.WriteLine("DasaViewBox:CTOR");
+        //fill first with empty list as not to raise null error when rendering
+        DasaEventList = new List<Event>();
+        BhuktiEventList = new List<Event>();
+        AntaramEventList = new List<Event>();
+    }
+
+    //OVERRIDES
+
+    protected override async Task OnInitializedAsync()
+    {
+        //show loading box
+        await _globalVariable.LoadingMessage.Show();
+
+        //set default values here
+        PixelPerYear = DefaultPixelPerYear;
+
+        //update date into view
+        await RefreshData();
+    }
+
+    /// <summary>
+    /// JS events are attached here because the html element is already loaded
+    /// </summary>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        //update view holder width when page width changes
+        //this is needed to dasa view appear on screen
+        //TODO NEED to update to interop code
+        var newViewHolderWidth = await GetViewHolderWidth();
+        if (ViewHolderWidth != newViewHolderWidth)
+        {
+            ViewHolderWidth = newViewHolderWidth;
+            StateHasChanged();
+        }
+
+        //attach event handler for Time Cursor
+        if (firstRender) { await _jsRuntime.addEventListener(_dasaViewBox, "mousemove", "timeCursorEventHandler"); }
+        //attach handler for converting vertical scroll to horizontal
+        if (firstRender) { await _jsRuntime.addEventListener(_scrollContainer, "wheel", "dasaViewScrollEventHandler"); }
+    }
+
+    //PUBLIC METHODS
+
+    /// <summary>
+    /// Converts the place where the cursor is in dasa
+    /// view holder to the time in string at that point
+    /// Note: This is called from event handler in JS
+    /// </summary>
+    [JSInvokable]
+    public static string PixelToTimeFromBirth(double pixelValue, string stdTimeOffsetString)
+    {
+        //convert pixel to days
+        var days = pixelValue * DaysPerPixel;
+        Console.WriteLine($"pixelValue * DaysPerPixel: {days}");
+
+        //get birthday
+        var birthDay = DateTimeOffset.ParseExact(stdTimeOffsetString, Time.GetDateTimeFormat(), null);
+        Console.WriteLine($"stdTimeOffsetString: {stdTimeOffsetString}");
+
+        //add days to birth day
+        var timeString = birthDay.AddDays(days).ToString(Time.GetDateTimeFormat());
+
+
+        return timeString;
+    }
+
+
+
+    //PRIVATE METHODS
+
+    /// <summary>
+    /// Get the number of days (double) the person is now
+    /// </summary>
+    private double GetPersonAgeInDaysNow(Person person)
+    {
+        var currentTime = Time.Now(person.GetBirthLocation());
+
+        var difference = currentTime.Subtract(person.GetBirthDateTime());
+
+        var days = difference.TotalDays;
+
+        // Console.WriteLine($"GetPersonAgeInYearsNow {days}");
+
+        return days;
+    }
+
+    /// <summary>
+    /// Gets width of dasa events based on their duration length
+    /// </summary>
+    private double YearsToWidth(double years) => Math.Round((years * PixelPerYear), 1);
+
+    /// <summary>
+    /// Gets width of dasa events based on their duration length
+    /// </summary>
+    private double DaysToWidth(double days) => Math.Round((days * PixelPerDay), 1);
+
+    /// <summary>
+    /// TODO Comment Please
+    /// </summary>
+    private int GetYearFromPersonAge(int age, Person person) => person.GetBirthDateTime().GetStdDateTimeOffset().Year + age;
+
+
+    /// <summary>
+    /// Because width page changes view box width should change proportionately
+    /// </summary>
+    private async Task<int> GetViewHolderWidth()
+    {
+        //get width of the article element that holds view
+        var windowWidth = await _jsRuntime.InvokeAsync<int>("getWindowInnerWidth");
+        //Console.WriteLine($"window :{ windowWidth}");
+
+        //use a portion of the article width as view box's width
+        var finalWidth = windowWidth * 0.80; //80% of width
+
+        //remove decimals
+        return (int)finalWidth;
+    }
+
+    /// <summary>
+    /// Get dasa color based on nature
+    /// </summary>
+    private string GetEventColor(Event _event)
+    {
+        var colorId = "";
+
+        //set color id based on nature
+        switch (_event.GetNature())
+        {
+            case EventNature.Good:
+                colorId = "green";
+                break;
+            case EventNature.Neutral:
+                colorId = "";
+                break;
+            case EventNature.Bad:
+                colorId = "red";
+                break;
+        }
+
+        return colorId;
+    }
+
+    /// <summary>
+    /// Uses the values from param to get events from API and loads to view
+    /// </summary>
+    /// <returns></returns>
+    public async Task RefreshData()
+    {
+        //show loading box
+        _globalVariable?.LoadingMessage.Show();
+
+        //hide whole element
+        await _jsRuntime.hide(_dasaViewBox);
+
+        //update the list from the new data gotten
+        DasaEventList = await getDasaEvents();
+        BhuktiEventList = await getBhuktiEvents();
+        AntaramEventList = await getAntaramEvents();
+
+        //show whole element
+        await _jsRuntime.show(_dasaViewBox);
+
+        //hide loading box
+        _globalVariable?.LoadingMessage?.Hide();
+
+        StateHasChanged();
+
+        //FUNCTIONS
+        async Task<List<Event>?> getDasaEvents() => await getEvents(EventTag.Dasa, _dasaEventsPrecision);
+        async Task<List<Event>?> getBhuktiEvents() => await getEvents(EventTag.Bhukti, _bhuktiEventsPrecision);
+        async Task<List<Event>?> getAntaramEvents() => await getEvents(EventTag.Antaram, _antaramEventsPrecision);
+
+        //the underlying method that does the work
+        async Task<List<Event>?> getEvents(EventTag tag, double precisionHours)
+        {
+            //prep data
+            var startTime = Person.GetBirthDateTime(); //start time is birth time
+            var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
+
+            //get events from API server
+            var dasaEventsUnsorted =
+                await GetEvents(
+                    startTime,
+                    endTime,
+                    Location,
+                    Person,
+                    tag,
+                    precisionHours);
+
+            //sort the list by time before sending view
+            var orderByAscResult = from dasaEvent in dasaEventsUnsorted
+                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset()
+                                   select dasaEvent;
+
+            //send sorted events to view
+            return orderByAscResult.ToList();
+        }
+    }
+
+    /// <summary>
+    /// Gets the px distance NowLine should be from Left side
+    /// Distance is based on current age
+    /// </summary>
+    private double GetNowLinePosition()
+    {
+        var personAgeDays = GetPersonAgeInDaysNow(Person) * PixelPerDay;
+        //Console.WriteLine($"GetNowLinePosition {personAgeDays}");
+        return personAgeDays;
+    }
+
+    /// <summary>
+    /// Gets Muhurtha events from API
+    /// </summary>
+    private static async Task<List<Event>> GetEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours)
+    {
+        //prepare data to send to API
+        var root = new XElement("Root");
+
+        root.Add(
+            new XElement("StartTime", startTime.ToXml()),
+            new XElement("EndTime", endTime.ToXml()),
+            location.ToXml(),
+            person.ToXml(),
+            Tools.AnyTypeToXml(tag),
+            Tools.AnyTypeToXml(precisionHours));
+
+        //send to api and get results
+        var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsAPI, root);
+
+        //parse raw results
+        List<Event> resultsParsed = Event.FromXml(resultsRaw);
+
+        //send to caller
+        return resultsParsed;
+    }
+
+
+
+    /// <summary>
+    /// Increases the zoom and auto moves scroll to previous position
+    /// </summary>
+    private async Task OnZoomPresetSelectionChange()
+    {
+        Console.WriteLine("OnZoomPresetSelectionChange");
+
+        //get the zoom preset that was selected
+        var selectPreset = Enum.Parse<ZoomPreset>(SelectedViewName);
+
+        //get div that is under line before zoom (for auto scroll)
+        var textUnderBefore = await _jsRuntime.InvokeAsync<string>("getTextUnderAutoScrollLine");
+
+        //based on the selected preset, set the zoom level
+        var selectedPresetInt = (int)selectPreset;
+        PixelPerYear = DefaultPixelPerYear * selectedPresetInt;
+
+        //important for making result appear
+        StateHasChanged();
+
+        //auto scroll back to position before zoom
+        await _jsRuntime.InvokeVoidAsync("autoScrollToYear", _scrollContainer, textUnderBefore);
+
+    }
+    
+}
+
+

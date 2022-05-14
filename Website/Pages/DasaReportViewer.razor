@@ -130,6 +130,7 @@
             //generate the row for each time slice
             var rowHtml = "";
             var horizontalPosition = 0; //distance from left
+            var prevEventName = EventName.EmptyEvent;
             foreach (var slice in timeSlices)
             {
                 //get event that occurred at this time slice
@@ -137,6 +138,11 @@
                 var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
                 if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
                 var foundEvent = foundEventList[0];
+
+                //if current event is different than event has changed, so draw a black line
+                var isNewEvent = prevEventName != foundEvent.Name;
+                var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
+                prevEventName = foundEvent.Name;
 
                 //generate and add to row
                 //the hard coded attribute names used here are used in App.js
@@ -147,7 +153,7 @@
                            $"x=\"{horizontalPosition}\" " +
                            $"width=\"{_widthPerSlice}\" " +
                            $"height=\"{_heightPerSlice}\" " +
-                           $"fill=\"{GetEventColor(foundEvent?.Nature)}\" />";
+                           $"fill=\"{color}\" />";
 
                 //set position for next element
                 horizontalPosition += _widthPerSlice;

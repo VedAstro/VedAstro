@@ -280,6 +280,16 @@ function loadJs(sourceUrl) {
     document.body.appendChild(tag);
 }
 
+function InjectIntoElement(element, valueToInject) {
+
+    //convert string to html node
+    const template = document.createElement("template");
+    template.innerHTML = valueToInject;
+    const node = template.content.firstElementChild;
+
+    //place new node in parent
+    element.appendChild(node);
+}
 
 
 //███████╗██╗░░░██╗███████╗███╗░░██╗████████╗  ██╗░░██╗░█████╗░███╗░░██╗██████╗░██╗░░░░░███████╗██████╗░░██████╗

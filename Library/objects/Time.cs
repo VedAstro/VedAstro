@@ -67,7 +67,9 @@ namespace Genso.Astrology.Library
 
 
 
-        //PUBLIC METHODS
+        
+        //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+        //█▀▀ █▄█ █▄█ █▄▄ █ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
         /// <summary>
         /// Returns a new instance of the modified time.
@@ -105,7 +107,6 @@ namespace Genso.Astrology.Library
 
             return newTime;
         }
-
 
         /// <summary>
         /// Returns a new instance of the modified time.
@@ -267,8 +268,14 @@ namespace Genso.Astrology.Library
             return new Time(stdTimeNow, geoLocation);
         }
 
+        public int GetStdYear() => this.GetStdDateTimeOffset().Year;
 
-        //PRIVATE METHODS
+
+        
+        
+        //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+        //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
         private static DateTimeOffset StdToLmt(DateTimeOffset stdDateTime, double longitudeDeg)
         {
             //NOTE: LMT = STD + LMT offset
@@ -325,8 +332,12 @@ namespace Genso.Astrology.Library
         }
 
 
+
+
         
-        //OVERRIDES
+        //█▀█ █░█ █▀▀ █▀█ █▀█ █ █▀▄ █▀▀ █▀
+        //█▄█ ▀▄▀ ██▄ █▀▄ █▀▄ █ █▄▀ ██▄ ▄█
+
         public override bool Equals(object obj)
         {
             //if type is correct
@@ -355,7 +366,7 @@ namespace Genso.Astrology.Library
 
             return hash1 + hash2;
         }
-        
+
         public override string ToString()
         {
             return GetStdDateTimeOffsetText();
@@ -363,18 +374,21 @@ namespace Genso.Astrology.Library
 
 
 
+        
+        //█▀█ █▀█ █▀▀ █▀█ ▄▀█ ▀█▀ █▀█ █▀█   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+        //█▄█ █▀▀ ██▄ █▀▄ █▀█ ░█░ █▄█ █▀▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-        //OPERATOR METHODS
         public static bool operator ==(Time left, Time right) => left.Equals(right);
 
         public static bool operator !=(Time left, Time right) => !(left == right);
 
         public static bool operator >(Time a, Time b) => a.GetStdDateTimeOffset() > b.GetStdDateTimeOffset();
-        
+
         public static bool operator <(Time a, Time b) => a.GetStdDateTimeOffset() < b.GetStdDateTimeOffset();
-        
+
         public static bool operator >=(Time a, Time b) => a.GetStdDateTimeOffset() >= b.GetStdDateTimeOffset();
-        
+
         public static bool operator <=(Time a, Time b) => a.GetStdDateTimeOffset() <= b.GetStdDateTimeOffset();
+
     }
 }

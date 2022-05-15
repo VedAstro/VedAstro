@@ -32,6 +32,11 @@ namespace Website
         public static async Task AddToProgressBar(this IJSRuntime jsRuntime, int value) => await jsRuntime.InvokeVoidAsync("AddToProgressBar", value);
 
         /// <summary>
+        /// Injects html/svg into an element
+        /// </summary>
+        public static async Task InjectIntoElement(this IJSRuntime jsRuntime, ElementReference _dasaViewBox, string value) => await jsRuntime.InvokeVoidAsync("InjectIntoElement",_dasaViewBox, value);
+
+        /// <summary>
         /// Gets value of progress bar now
         /// </summary>
         public static async Task<double> GetProgressBarValue(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<double>("GetProgressBarValue");

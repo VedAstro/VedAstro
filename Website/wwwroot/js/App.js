@@ -157,7 +157,7 @@ function generateLifeEventListTable(tableId, tableData) {
         addRowPos: "top",          //when adding a new row, add it to the top of the table
         history: false,             //allow undo and redo actions on the table
         pagination: false, //enable pagination
-       // pagination: "local",       //paginate the data
+        // pagination: "local",       //paginate the data
         //paginationSize: 50,         //allow 7 rows per page of data
         //paginationCounter: "rows", //display count of paginated rows in footer
         movableColumns: false,      //allow column order to be changed
@@ -171,8 +171,11 @@ function generateLifeEventListTable(tableId, tableData) {
             { title: "End Time", field: "EndTime", editor: "input", hozAlign: "center" },
             { title: "Nature", field: "Nature", editor: "input", hozAlign: "center" },
             //code to delete button for row
-            { formatter: "buttonCross", width: 40, hozAlign: "center", cellClick: function (e, cell) { cell.getRow().delete();
-            } }
+            {
+                formatter: "buttonCross", width: 40, hozAlign: "center", cellClick: function (e, cell) {
+                    cell.getRow().delete();
+                }
+            }
         ],
     });
 
@@ -183,10 +186,11 @@ function getLifeEventsListTableData() {
 }
 
 //adds new row to life events table
+//note: defaults are set here, maybe move to blazor side for conformity
 function addNewLifeEventToTable() {
 
     var addToTopOfTable = true;
-    window.lifeEventsListTable.addData([{ Name: "New Life Event", StartTime: "00:00 10/10/2020 +08:00", EndTime: "00:00 10/10/2020 +08:00", Nature:"Good"}], addToTopOfTable);
+    window.lifeEventsListTable.addData([{ Name: "New Life Event", StartTime: "00:00 10/10/2020 +08:00", EndTime: "00:00 10/10/2020 +08:00", Nature: "Good" }], addToTopOfTable);
 }
 
 //async sleep millisecond
@@ -291,6 +295,11 @@ function InjectIntoElement(element, valueToInject) {
     element.appendChild(node);
 }
 
+//async delay for specified time in ms
+//example: await delay(1000);
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
 
 //███████╗██╗░░░██╗███████╗███╗░░██╗████████╗  ██╗░░██╗░█████╗░███╗░░██╗██████╗░██╗░░░░░███████╗██████╗░░██████╗
 //██╔════╝██║░░░██║██╔════╝████╗░██║╚══██╔══╝  ██║░░██║██╔══██╗████╗░██║██╔══██╗██║░░░░░██╔════╝██╔══██╗██╔════╝
@@ -300,24 +309,7 @@ function InjectIntoElement(element, valueToInject) {
 //╚══════╝░░░╚═╝░░░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═════╝░╚══════╝╚══════╝╚═╝░░╚═╝╚═════╝░
 
 
-//attached to dasa viewer to update time legend 
-function mouseOverDasaViewHandler(mouse) {
 
-    //only continue if mouse is exactly over 
-    //a time slice (svg rect element), else end here
-    let timeSlice = mouse.path[0];
-    let isTimeSlice = timeSlice.localName == "rect";
-    if (!isTimeSlice) { return; }
-
-    //get details from inside the time slice
-    var eventName = timeSlice.getAttribute("eventname");
-    var stdTime = timeSlice.getAttribute("stdtime");
-    var age = timeSlice.getAttribute("age");
-
-    //place data into view
-    $("#TimeCursorLegend").html(`${eventName} - ${stdTime} - AGE : ${age}`);
-
-}
 
 //attached to event viewer to update time legend
 function mouseOverEventsViewHandler(mouse) {
@@ -374,3 +366,60 @@ function onClickGoogleSignOutButton() {
 
 }
 
+//fired when mouse moves over dasa view box
+//used to auto update cursor line & time legend
+async function onMouseMoveDasaViewEventHandler(mouse) {
+
+    //auto update time legend first then move cursor line
+    //else cursor line will obstruct reading event slice rect 
+    autoUpdateTimeLegend(mouse);
+    //note: delay needed to reduce cursor line obstructing rate,
+    //though it does happen when mouse move very slowly.
+    await delay(100);
+    autoMoveCursorLine(mouse);
+}
+
+function autoMoveCursorLine(mouse) {
+
+    //gets the measurements of the dasa view holder
+    //the element where cursor line will be moving
+    //TODO read val from global var
+    let holderMeasurements = $("#DasaViewHolder")[0].getBoundingClientRect();
+
+    //calculate mouse X relative to dasa view box
+    let relativeMouseX = mouse.clientX - holderMeasurements.left;
+    let relativeMouseY = mouse.clientY - holderMeasurements.top; //when mouse leaves top
+    let relativeMouseYb = mouse.clientY - holderMeasurements.bottom; //when mouse leaves bottom
+
+    //if mouse out of element element, hide cursor and end here
+    let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
+    if (mouseOut) { $("#CursorLine").hide(); return; }
+    else { $("#CursorLine").show(); }
+
+    //move vertical line to under mouse inside dasa view box
+    $("#CursorLine").attr('transform', `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`);
+
+}
+
+//attached to dasa viewer to update time legend 
+function autoUpdateTimeLegend(mouse) {
+
+    //only continue if mouse is exactly over 
+    //a time slice (svg rect element), else end here
+    //note: sometimes other rects get in the way so not 100 filter here
+    let timeSlice = mouse.path[0];
+    let isTimeSlice = timeSlice.localName == "rect";
+    if (!isTimeSlice) { return; }
+
+    //get details from inside the time slice
+    var eventName = timeSlice.getAttribute("eventname");
+    var stdTime = timeSlice.getAttribute("stdtime");
+    var age = timeSlice.getAttribute("age");
+
+    //stop from setting "null" when accidentally hit cursor line
+    if (eventName == null) { return; }
+
+    //place data into view
+    $("#TimeCursorLegend").html(`${eventName} - ${stdTime} - AGE : ${age}`);
+
+}

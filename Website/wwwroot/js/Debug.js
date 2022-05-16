@@ -31,37 +31,6 @@
 
 
 //EVENT HANDLERS
-//moves the line cursor in DasaViewBox
-//and updates the time cursor legend box
-function timeCursorEventHandler(mouse) {
-
-    //gets the measurements of the dasa view holder
-    //the element where cursor line will be moving
-    //TODO read val from global var
-    let holderMeasurements = $("#DasaViewHolder")[0].getBoundingClientRect();
-
-    //calculate mouse X relative to dasa view box
-    let relativeMouseX = mouse.clientX - holderMeasurements.left;
-    let relativeMouseY = mouse.clientY - holderMeasurements.top; //when mouse leaves top
-    let relativeMouseYb = mouse.clientY - holderMeasurements.bottom; //when mouse leaves bottom
-
-    //if mouse out of element element, hide cursor and end here
-    let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
-    if (mouseOut) { $("#TimeVerticalLine").hide(); return; }
-    else { $("#TimeVerticalLine").show(); }
-
-    //move vertical line to under mouse inside dasa view box
-    $("#TimeVerticalLine").css('left', relativeMouseX);
-
-    //get date of birth
-    //TODO read val from global var
-    let birthTime = "12:44 23/04/1994 +08:00";
-
-    //convert left position from px to time
-    let cursorTime = PixelToTimeFromBirth(relativeMouseX, birthTime);
-    $("#TimeCursorLegend").html(cursorTime);
-
-}
 
 
 //converts vertical scroll to horizontal scroll inside dasa view

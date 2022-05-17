@@ -639,7 +639,7 @@ namespace API
             //generate rows and pump them final svg string
             var dasaSvgWidth = 0; //will be filled when calling row generator
             var compiledRow = "";
-            
+
             //generate time slice only once for all rows
             var timeSlices = GetTimeSlices();
 
@@ -647,9 +647,9 @@ namespace API
             dasaSvgWidth = timeSlices.Count;
 
             compiledRow += await GenerateYearRowSvg(dasaEventList, timeSlices, _eventsPrecision, 0);
-            compiledRow += await GenerateRowSvg(dasaEventList, timeSlices, _eventsPrecision, 12);
-            compiledRow += await GenerateRowSvg(bhuktiEventList, timeSlices, _eventsPrecision, 12 + (37 * 1));
-            compiledRow += await GenerateRowSvg(antaramEventList, timeSlices, _eventsPrecision, 12 + (37 * 2));
+            compiledRow +=  GenerateRowSvg(dasaEventList, timeSlices, _eventsPrecision, 12);
+            compiledRow +=  GenerateRowSvg(bhuktiEventList, timeSlices, _eventsPrecision, 12 + (37 * 1));
+            compiledRow +=  GenerateRowSvg(antaramEventList, timeSlices, _eventsPrecision, 12 + (37 * 2));
 
             //add in the cursor line
             compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"124\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
@@ -662,7 +662,7 @@ namespace API
             compiledRow += GetLifeEventLinesSvg(inputPerson);
 
             //compile the final svg
-            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, (_heightPerSlice * 3) + 10); //little wiggle room
+            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, (_heightPerSlice * 3) + 60); //little wiggle room
 
             return finalSvg;
 
@@ -671,7 +671,7 @@ namespace API
             //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
             //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
-            
+
             //gets person's life events as lines for the dasa chart
             string GetLifeEventLinesSvg(Person person)
             {
@@ -695,6 +695,13 @@ namespace API
                     //                 $" y=\"0\" " +
                     //                 $"transform=\"matrix(1, 0, 0, 1, {position}, 0)\" />";
 
+                    var iconSvg = @"
+                                <g style="""" transform=""matrix(1.976054, 0, 0, 2.056383, -1.002061, -130.991486)"">
+                                  <rect style=""fill: rgb(255, 242, 0); stroke: rgb(0, 0, 0); stroke-width: 0.495978px;"" x=""-5.177"" y=""124"" width=""12.477"" height=""9.941"" rx=""2.479"" ry=""2.479""></rect>
+                                  <path d=""M 2.7 129.226 L 1.478 129.226 C 1.254 129.226 1.071 129.403 1.071 129.618 L 1.071 130.793 C 1.071 131.009 1.254 131.185 1.478 131.185 L 2.7 131.185 C 2.923 131.185 3.106 131.009 3.106 130.793 L 3.106 129.618 C 3.106 129.403 2.923 129.226 2.7 129.226 Z M 2.7 125.311 L 2.7 125.703 L -0.557 125.703 L -0.557 125.311 C -0.557 125.095 -0.74 124.92 -0.965 124.92 C -1.189 124.92 -1.372 125.095 -1.372 125.311 L -1.372 125.703 L -1.778 125.703 C -2.231 125.703 -2.589 126.055 -2.589 126.486 L -2.593 131.968 C -2.593 132.401 -2.228 132.751 -1.778 132.751 L 3.921 132.751 C 4.369 132.751 4.734 132.399 4.734 131.968 L 4.734 126.486 C 4.734 126.055 4.369 125.703 3.921 125.703 L 3.513 125.703 L 3.513 125.311 C 3.513 125.095 3.33 124.92 3.106 124.92 C 2.883 124.92 2.7 125.095 2.7 125.311 Z M 3.513 131.968 L -1.372 131.968 C -1.595 131.968 -1.778 131.792 -1.778 131.576 L -1.778 127.661 L 3.921 127.661 L 3.921 131.576 C 3.921 131.792 3.737 131.968 3.513 131.968 Z"" style=""""></path>
+                                </g>
+                                   ";
+
                     compiledLines += $"<g" +
                                      $" eventName=\"{lifeEvent.Name}\" " +
                                      $" age=\"{inputPerson.GetAge(startTime.Year)}\" " +
@@ -707,9 +714,7 @@ namespace API
                                     $" style=\"fill:#fff200;\"" +
                                     //$" x=\"0\"" +
                                     //$" y=\"0\" " +
-                                    $" />" +
-                                    "<rect style=\"stroke-width: 0px; fill: rgb(255, 242, 0);\" y=\"124\" width=\"11.24\" height=\"8.752\" rx=\"1\" ry=\"1\" x=\"-4.588\"/>" +
-                                    "<path d=\"M 2.729 128.66 L 1.507 128.66 C 1.283 128.66 1.1 128.837 1.1 129.052 L 1.1 130.227 C 1.1 130.443 1.283 130.619 1.507 130.619 L 2.729 130.619 C 2.952 130.619 3.135 130.443 3.135 130.227 L 3.135 129.052 C 3.135 128.837 2.952 128.66 2.729 128.66 Z M 2.729 124.745 L 2.729 125.137 L -0.528 125.137 L -0.528 124.745 C -0.528 124.529 -0.711 124.354 -0.936 124.354 C -1.16 124.354 -1.343 124.529 -1.343 124.745 L -1.343 125.137 L -1.749 125.137 C -2.202 125.137 -2.56 125.489 -2.56 125.92 L -2.564 131.402 C -2.564 131.835 -2.199 132.185 -1.749 132.185 L 3.95 132.185 C 4.398 132.185 4.763 131.833 4.763 131.402 L 4.763 125.92 C 4.763 125.489 4.398 125.137 3.95 125.137 L 3.542 125.137 L 3.542 124.745 C 3.542 124.529 3.359 124.354 3.135 124.354 C 2.912 124.354 2.729 124.529 2.729 124.745 Z M 3.542 131.402 L -1.343 131.402 C -1.566 131.402 -1.749 131.226 -1.749 131.01 L -1.749 127.095 L 3.95 127.095 L 3.95 131.01 C 3.95 131.226 3.766 131.402 3.542 131.402 Z\" style=\"\"/>" +
+                                    $" />" + iconSvg +
                                     "</g>";
 
                 }
@@ -734,7 +739,7 @@ namespace API
                     //if same year and same month then send this slice position
                     //as the correct one
                     var sameYear = time.GetStdYear() == nowYear;
-                    var sameMonth= time.GetStdMonth() == nowMonth;
+                    var sameMonth = time.GetStdMonth() == nowMonth;
                     if (sameMonth && sameYear)
                     {
                         return slicePosition;
@@ -750,11 +755,8 @@ namespace API
 
             }
 
-            async Task<string> GenerateRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
+            string GenerateRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
             {
-
-
-
                 //generate the row for each time slice
                 var rowHtml = "";
                 var horizontalPosition = 0; //distance from left
@@ -797,7 +799,7 @@ namespace API
                 return rowHtml;
             }
 
-            async Task<string> GenerateYearRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
+            string GenerateYearRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
             {
 
 
@@ -837,12 +839,6 @@ namespace API
                                                         $"{previousYear}" + //previous year generate at begin of new year
                                                     $"</text>" +
                                              $"</g>";
-
-                            //<g x="3" y="20" transform="matrix(1, 0, 0, 1, 3, 0)">
-                            //    <rect fill="#0d6efd" width="27" height="11" style="paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;"/>
-                            //    <text style="fill: rgb(255, 255, 255); font-size: 10.2278px; font-weight: 700; line-height: 36.3655px; white-space: pre;" transform="matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)" x="0" y="18.034" bx:origin="0.511627 0.5">1943</text>
-                            //</g>
-
 
 
                             //add to final return
@@ -1051,7 +1047,7 @@ namespace API
             var fileBlobClient = blobContainerClient.GetBlobClient(fileName);
 
             return fileBlobClient;
-            
+
             //var returnStream = new MemoryStream();
             //await fileBlobClient.DownloadToAsync(returnStream);
 

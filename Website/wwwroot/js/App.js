@@ -427,16 +427,37 @@ function autoMoveCursorLine(mouse) {
 //attached to dasa viewer to update time legend 
 function autoUpdateTimeLegend(mouse) {
 
-    //get any element under mouse and try to get values from it
-    let elementUnderMouse = mouse.path[0];
+    //go through all the elements until found the one with events
+    var length = mouse.path.length;
+    var elementFound = false;
+    var elementIndex = 0; //start with 0
+    var eventName = null;
+    var elementUnderMouse = null;
+
+
+    //note : this done because the element containing
+    //the data is parent of element that starts event
+    while (!elementFound) {
+
+        //get any element under mouse and try to get values from it
+        elementUnderMouse = mouse.path[elementIndex];
+
+        //get details from inside the time slice
+        eventName = elementUnderMouse.getAttribute("eventname");
+
+        //if found, stop looking
+        if (eventName != null) { elementFound = true; }
+        //if not found, move to element higher in mouse path tree
+        else { ++elementIndex; }
+
+        //only go up 3 levels
+        if (elementIndex > 3) { return; }
+    }
 
     //get details from inside the time slice
-    var eventName = elementUnderMouse.getAttribute("eventname");
     var stdTime = elementUnderMouse.getAttribute("stdtime");
     var age = elementUnderMouse.getAttribute("age");
 
-    //if element doesn't contain an event name the end here
-    if (eventName == null) { return; }
 
     //place data into view
     $("#TimeCursorLegend").html(`${eventName} - ${stdTime} - AGE : ${age}`);

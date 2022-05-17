@@ -57,18 +57,6 @@
 
 
 
-
-    //OVERRIDES
-    /// <summary>
-    /// JS events are attached here because the html element is already loaded
-    /// </summary>
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-
-    }
-
-
-
     //METHODS
 
     /// <summary>
@@ -85,22 +73,31 @@
         //inject new svg into page via JS for a more responsive progress update
         //doing it in blazor, causes progress bar freeze while updating
         await _jsRuntime.InjectIntoElement(_dasaViewBox, finalSvg);
-        //DasaRowItemsSvg = new MarkupString(finalSvg);
-
-        //needed to show generated dasa diagram
-        //this.StateHasChanged();
 
         //attach handlers now that component is loaded
-        //attach mouse handler to auto move cursor line
+        //attach mouse handler to auto move cursor line & update time legend
         await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
     }
 
+    /// <summary>
+    /// Contacts API and gets Person Dasa Report in svg string
+    /// Note:
+    /// -previously used generate in blazor client,
+    ///  but for speed (10s gain) sake moved to server to do heavy lifting
+    /// </summary>
     private async Task<string> GetDasaReportSvgFromApi(Person inputPerson)
     {
+        //since majority of time spent will be waiting for API to do calculation
+        //and receiving the image is fast, so just start an auto progress bar
+        _jsRuntime.ProgressBarSlowAutoUpdate(); //do not await to let control go to next
+
         var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+        //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
         var svgStream = await WriteToServerStreamResponse(ServerManager.GetPersonDasaReport, personHashXml);
 
+        //todo just send as string to remove lags of using stream
         // convert stream to string
+        svgStream.Position = 0; //reset position otherwise can be null value out
         var reader = new StreamReader(svgStream);
         var svgText = await reader.ReadToEndAsync();
 
@@ -132,6 +129,7 @@
         return rawMessage;
 
     }
+
 
     /// <summary>
     /// Packages the data into ready form for the HTTP client to use in final sending stage

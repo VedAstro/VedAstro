@@ -1,10 +1,6 @@
 ﻿
-//██╗      ██████╗  ██████╗ ██╗ ██████╗
-//██║     ██╔═══██╗██╔════╝ ██║██╔════╝
-//██║     ██║   ██║██║  ███╗██║██║
-//██║     ██║   ██║██║   ██║██║██║
-//███████╗╚██████╔╝╚██████╔╝██║╚██████╗
-//╚══════╝ ╚═════╝  ╚═════╝ ╚═╝ ╚═════╝
+//█▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
+//█▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 //PRODUCTIONS FUNCTION IN USE CALLED FROM BLAZOR CODE
 
 
@@ -50,22 +46,6 @@ function getUrl() {
     console.log(`JS: getUrl`);
     return window.location.href;
 };
-
-function getGoogleUserName() {
-    console.log(`JS: getGoogleUserName`);
-    return window.googleUserName;
-};
-
-function getGoogleUserEmail() {
-    console.log(`JS: googleUserEmail`);
-    return window.googleUserEmail;
-};
-
-function getGoogleUserIdToken() {
-    console.log(`JS: googleUserIdToken`);
-    return window.googleUserIdToken;
-};
-
 
 //Generates a table using Tabulator table library
 //id to where table will be generated needs to be inputed
@@ -198,6 +178,51 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+//loads js file programatically,
+//equivalent to js include in header
+function loadJs(sourceUrl) {
+    if (sourceUrl.Length == 0) {
+        console.error("JS: loadJs: Invalid source URL");
+        return;
+    }
+
+    var tag = document.createElement('script');
+    tag.src = sourceUrl;
+    tag.type = "text/javascript";
+
+    tag.onload = function () {
+        console.log("JS: loadJs: Script loaded successfully");
+    }
+
+    tag.onerror = function () {
+        console.error("JS: loadJs: Failed to load script");
+    }
+
+    document.body.appendChild(tag);
+}
+
+function InjectIntoElement(element, valueToInject) {
+
+    //convert string to html node
+    const template = document.createElement("template");
+    template.innerHTML = valueToInject;
+    const node = template.content.firstElementChild;
+
+    //place new node in parent
+    element.appendChild(node);
+}
+
+//async delay for specified time in ms
+//example: await delay(1000);
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
+
+
+//█▀█ █▀█ █▀█ █▀▀ █▀█ █▀▀ █▀ █▀   █▄▄ ▄▀█ █▀█
+//█▀▀ █▀▄ █▄█ █▄█ █▀▄ ██▄ ▄█ ▄█   █▄█ █▀█ █▀▄
+
 function InitProgressBar(ms) {
 
     window.ProgressBarTempValue = 0;
@@ -250,6 +275,28 @@ function AddToProgressBar(percentage) {
 
 }
 
+//Adds input value to current progress bar
+function SetProgressBar(percentage) {
+
+    var value = percentage / 100; //convert 50 to 0.5
+    window.ProgressBarTempValue = value;
+    ProgressBarInstance.animate(window.ProgressBarTempValue);
+}
+
+//auto updates progress bar till 100%
+async function ProgressBarSlowAutoUpdate() {
+
+
+    for (let percent = 0; percent < 100; percent++) {
+        //set 0
+        var progressVal = percent / 100; //convert exp: 50 to 0.5
+        ProgressBarInstance.animate(progressVal);
+        await delay(200);
+    }
+
+
+}
+
 function ResetProgressBar() {
     //reset both view & data
     window.ProgressBarTempValue = 0;
@@ -261,54 +308,30 @@ function GetProgressBarValue() {
     return window.ProgressBarTempValue;
 }
 
-//loads js file programatically,
-//equivalent to js include in header
-function loadJs(sourceUrl) {
-    if (sourceUrl.Length == 0) {
-        console.error("JS: loadJs: Invalid source URL");
-        return;
-    }
-
-    var tag = document.createElement('script');
-    tag.src = sourceUrl;
-    tag.type = "text/javascript";
-
-    tag.onload = function () {
-        console.log("JS: loadJs: Script loaded successfully");
-    }
-
-    tag.onerror = function () {
-        console.error("JS: loadJs: Failed to load script");
-    }
-
-    document.body.appendChild(tag);
-}
-
-function InjectIntoElement(element, valueToInject) {
-
-    //convert string to html node
-    const template = document.createElement("template");
-    template.innerHTML = valueToInject;
-    const node = template.content.firstElementChild;
-
-    //place new node in parent
-    element.appendChild(node);
-}
-
-//async delay for specified time in ms
-//example: await delay(1000);
-function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-}
-
-//███████╗██╗░░░██╗███████╗███╗░░██╗████████╗  ██╗░░██╗░█████╗░███╗░░██╗██████╗░██╗░░░░░███████╗██████╗░░██████╗
-//██╔════╝██║░░░██║██╔════╝████╗░██║╚══██╔══╝  ██║░░██║██╔══██╗████╗░██║██╔══██╗██║░░░░░██╔════╝██╔══██╗██╔════╝
-//█████╗░░╚██╗░██╔╝█████╗░░██╔██╗██║░░░██║░░░  ███████║███████║██╔██╗██║██║░░██║██║░░░░░█████╗░░██████╔╝╚█████╗░
-//██╔══╝░░░╚████╔╝░██╔══╝░░██║╚████║░░░██║░░░  ██╔══██║██╔══██║██║╚████║██║░░██║██║░░░░░██╔══╝░░██╔══██╗░╚═══██╗
-//███████╗░░╚██╔╝░░███████╗██║░╚███║░░░██║░░░  ██║░░██║██║░░██║██║░╚███║██████╔╝███████╗███████╗██║░░██║██████╔╝
-//╚══════╝░░░╚═╝░░░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░  ╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═════╝░╚══════╝╚══════╝╚═╝░░╚═╝╚═════╝░
 
 
+//█▀▀ █▀█ █▀█ █▀▀ █░░ █▀▀   █░░ █▀█ █▀▀ █ █▄░█
+//█▄█ █▄█ █▄█ █▄█ █▄▄ ██▄   █▄▄ █▄█ █▄█ █ █░▀█
+
+function getGoogleUserName() {
+    console.log(`JS: getGoogleUserName`);
+    return window.googleUserName;
+};
+
+function getGoogleUserEmail() {
+    console.log(`JS: googleUserEmail`);
+    return window.googleUserEmail;
+};
+
+function getGoogleUserIdToken() {
+    console.log(`JS: googleUserIdToken`);
+    return window.googleUserIdToken;
+};
+
+
+
+//█▀▀ █░█ █▀▀ █▄░█ ▀█▀   █░█ ▄▀█ █▄░█ █▀▄ █░░ █▀▀ █▀█
+//██▄ ▀▄▀ ██▄ █░▀█ ░█░   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄
 
 
 //attached to event viewer to update time legend
@@ -423,3 +446,4 @@ function autoUpdateTimeLegend(mouse) {
     $("#TimeCursorLegend").html(`${eventName} - ${stdTime} - AGE : ${age}`);
 
 }
+

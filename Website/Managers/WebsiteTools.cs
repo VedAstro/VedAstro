@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Website
 {
     public delegate Task AsyncEventHandler();
-    
+
     /// <summary>
     /// Simple class holding general functions used in project
     /// </summary>
@@ -156,7 +156,7 @@ namespace Website
             //all possible details are logged
             async Task NewVisitor()
             {
-                
+
                 //get visitor data & format it nicely for storage
                 var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
                 var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
@@ -265,7 +265,7 @@ namespace Website
                 count++;
             }
 
-            if (!GoogleUserSignedIn && count == tryLimit) {  return false; }
+            if (!GoogleUserSignedIn && count == tryLimit) { return false; }
 
             //if control reaches here than, user sign in success
             return true;
@@ -303,7 +303,7 @@ namespace Website
             //timeout implemented because calls have known to fail
             var timeoutMs = 500;
             Person personFromHash;
-            TryAgain:
+        TryAgain:
             try
             {
                 personFromHash = await DoWork().TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
@@ -359,7 +359,7 @@ namespace Website
         /// <summary>
         /// Gets Dasa events from API
         /// </summary>
-        public static async Task<List<Event>?> GetDasaEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person) 
+        public static async Task<List<Event>?> GetDasaEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person)
             => await EventsByTag(EventTag.Dasa, _eventsPrecision, startTime, endTime, _jsRuntime, person);
 
         /// <summary>
@@ -437,5 +437,9 @@ namespace Website
         }
 
 
+
+        //█▀▀ ▀▄▀ ▀█▀ █▀▀ █▄░█ █▀ █ █▀█ █▄░█   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+        //██▄ █░█ ░█░ ██▄ █░▀█ ▄█ █ █▄█ █░▀█   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+        
     }
 }

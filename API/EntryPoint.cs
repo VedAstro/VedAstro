@@ -653,7 +653,13 @@ namespace API
 
             //add in the cursor line
             compiledRow += $"<rect id=\"CursorLine\" width=\"2.3506315\" height=\"124.60775\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
-            compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2.3506315\" height=\"124.60775\" style=\"fill:blue;\" x=\"0\" y=\"0\" />";
+
+            //get now line position
+            var nowLinePosition = GetLinePosition(timeSlices, DateTimeOffset.Now);
+            compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2.3506315\" height=\"124.60775\" style=\"fill:blue;\" x=\"0\" y=\"0\" transform=\"matrix(1, 0, 0, 1, {nowLinePosition}, 0)\" />";
+
+            //wait!, add in life events also
+            compiledRow += GetLifeEventLinesSvg(inputPerson);
 
             //compile the final svg
             var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, (_heightPerSlice * 3) + 10); //little wiggle room
@@ -661,7 +667,81 @@ namespace API
             return finalSvg;
 
 
-            //-----------------------LOCAL FUNCTIONS-------------------------
+
+            //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
+            //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
+
+            
+            //gets person's life events as lines for the dasa chart
+            string GetLifeEventLinesSvg(Person person)
+            {
+                var compiledLines = "";
+
+                foreach (var lifeEvent in person.LifeEventList)
+                {
+
+                    //get start time of life event and find the position of it in slices (same as now line)
+                    //so that this life event line can be placed exactly on the report where it happened
+                    var startTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.GetDateTimeFormat(), null);
+                    var position = GetLinePosition(timeSlices, startTime);
+                    compiledLines += $"<rect" +
+                                     $"eventName=\"{lifeEvent.Name}\" " +
+                                     $"age=\"{inputPerson.GetAge(startTime.Year)}\" " +
+                                     $"stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
+                                     $" width=\"2.3506315\"" +
+                                     $" height=\"124.60775\"" +
+                                     $" style=\"fill:blue;\"" +
+                                     $" x=\"0\"" +
+                                     $" y=\"0\" " +
+                                     $"transform=\"matrix(1, 0, 0, 1, {position}, 0)\" />";
+
+                    //var rect = $"<rect " +
+                    //           $"eventName=\"{foundEvent?.FormattedName}\" " +
+                    //           $"age=\"{inputPerson.GetAge(slice)}\" " +
+                    //           $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                    //           $"x=\"{horizontalPosition}\" " +
+                    //           $"width=\"{_widthPerSlice}\" " +
+                    //           $"height=\"{_heightPerSlice}\" " +
+                    //           $"fill=\"{color}\" />";
+
+
+                }
+
+
+                return compiledLines;
+            }
+
+
+            //gets line position given a date
+            //finds most closest time slice, else return 0 means none found
+            int GetLinePosition(List<Time> timeSliceList, DateTimeOffset inputTime)
+            {
+                var nowYear = inputTime.Year;
+                var nowMonth = inputTime.Month;
+
+                //go through the list and find where the slice is closest to now
+                var slicePosition = 0;
+                foreach (var time in timeSliceList)
+                {
+
+                    //if same year and same month then send this slice position
+                    //as the correct one
+                    var sameYear = time.GetStdYear() == nowYear;
+                    var sameMonth= time.GetStdMonth() == nowMonth;
+                    if (sameMonth && sameYear)
+                    {
+                        return slicePosition;
+                    }
+
+                    //move to next slice position
+                    slicePosition++;
+                }
+
+                //if control reaches here then now time not found in time slices
+                //this is possible when viewing old charts as such set now line to 0
+                return 0;
+
+            }
 
             async Task<string> GenerateRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
             {

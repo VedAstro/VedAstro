@@ -14,6 +14,40 @@ namespace Website
     /// </summary>
     public static class BlazorJsInterop
     {
+
+
+        //█▀█ █▀█ █▀█ █▀▀ █▀█ █▀▀ █▀ █▀   █▄▄ ▄▀█ █▀█
+        //█▀▀ █▀▄ █▄█ █▄█ █▀▄ ██▄ ▄█ ▄█   █▄█ █▀█ █▀▄
+
+        /// <summary>
+        /// Adds input value to current progress bar
+        /// </summary>
+        public static async Task AddToProgressBar(this IJSRuntime jsRuntime, int value) => await jsRuntime.InvokeVoidAsync("AddToProgressBar", value);
+
+        /// <summary>
+        /// Adds input value to current progress bar
+        /// </summary>
+        public static async Task SetProgressBar(this IJSRuntime jsRuntime, int value) => await jsRuntime.InvokeVoidAsync("SetProgressBar", value);
+
+        /// <summary>
+        /// Gets value of progress bar now
+        /// </summary>
+        public static async Task<double> GetProgressBarValue(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<double>("GetProgressBarValue");
+
+        /// <summary>
+        /// Resets the progress bar to 0
+        /// </summary>
+        public static async Task ResetProgressBar(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("ResetProgressBar");
+
+        /// <summary>
+        /// Automatically slowly updates the progress bar till 100% (simulation)
+        /// </summary>
+        public static async Task ProgressBarSlowAutoUpdate(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("ProgressBarSlowAutoUpdate");
+
+
+
+
+
         /** FUNCTIONS **/
 
         /// <summary>
@@ -27,24 +61,9 @@ namespace Website
         public static async Task Hide(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync("hideWrapper", element);
 
         /// <summary>
-        /// Adds input value to current progress bar
-        /// </summary>
-        public static async Task AddToProgressBar(this IJSRuntime jsRuntime, int value) => await jsRuntime.InvokeVoidAsync("AddToProgressBar", value);
-
-        /// <summary>
         /// Injects html/svg into an element
         /// </summary>
         public static async Task InjectIntoElement(this IJSRuntime jsRuntime, ElementReference _dasaViewBox, string value) => await jsRuntime.InvokeVoidAsync("InjectIntoElement",_dasaViewBox, value);
-
-        /// <summary>
-        /// Gets value of progress bar now
-        /// </summary>
-        public static async Task<double> GetProgressBarValue(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<double>("GetProgressBarValue");
-
-        /// <summary>
-        /// Resets the progress bar to 0
-        /// </summary>
-        public static async Task ResetProgressBar(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("ResetProgressBar");
 
         /// <summary>
         /// Uses jQuery to attach a function by name to a HTML element event
@@ -90,7 +109,6 @@ namespace Website
 
             return finalXml;
         }
-
 
         public static async Task AddClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("addClassWrapper", element, classNames);
         public static async Task<double> ElementWidth(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<double>("getElementWidth", element);

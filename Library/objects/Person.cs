@@ -77,6 +77,10 @@ namespace Genso.Astrology.Library
         /// Gets this person's age at the inputed time (using year from STD time)
         /// </summary>
         public int GetAge(Time time) => time.GetStdDateTimeOffset().Year - this.BirthYear;
+        /// <summary>
+        /// Gets this person's age at the inputed std year (using year from STD time)
+        /// </summary>
+        public int GetAge(int year) => year - this.BirthYear;
 
         /// <summary>
         /// Used by tabulator JS, when person is converted to json

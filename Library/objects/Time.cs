@@ -269,6 +269,7 @@ namespace Genso.Astrology.Library
         }
 
         public int GetStdYear() => this.GetStdDateTimeOffset().Year;
+        public int GetStdMonth() => this.GetStdDateTimeOffset().Month;
 
 
         

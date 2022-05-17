@@ -427,19 +427,15 @@ function autoMoveCursorLine(mouse) {
 //attached to dasa viewer to update time legend 
 function autoUpdateTimeLegend(mouse) {
 
-    //only continue if mouse is exactly over 
-    //a time slice (svg rect element), else end here
-    //note: sometimes other rects get in the way so not 100 filter here
-    let timeSlice = mouse.path[0];
-    let isTimeSlice = timeSlice.localName == "rect";
-    if (!isTimeSlice) { return; }
+    //get any element under mouse and try to get values from it
+    let elementUnderMouse = mouse.path[0];
 
     //get details from inside the time slice
-    var eventName = timeSlice.getAttribute("eventname");
-    var stdTime = timeSlice.getAttribute("stdtime");
-    var age = timeSlice.getAttribute("age");
+    var eventName = elementUnderMouse.getAttribute("eventname");
+    var stdTime = elementUnderMouse.getAttribute("stdtime");
+    var age = elementUnderMouse.getAttribute("age");
 
-    //stop from setting "null" when accidentally hit cursor line
+    //if element doesn't contain an event name the end here
     if (eventName == null) { return; }
 
     //place data into view

@@ -636,7 +636,7 @@ namespace API
             var bhuktiEventList = await GetBhuktiEvents(_eventsPrecision, startTime, endTime, inputPerson);
             var antaramEventList = await GetAntaramEvents(_eventsPrecision, startTime, endTime, inputPerson);
 
-            //generate rows and pump them into the page
+            //generate rows and pump them final svg string
             var dasaSvgWidth = 0; //will be filled when calling row generator
             var compiledRow = "";
             
@@ -652,11 +652,11 @@ namespace API
             compiledRow += await GenerateRowSvg(antaramEventList, timeSlices, _eventsPrecision, 12 + (37 * 2));
 
             //add in the cursor line
-            compiledRow += $"<rect id=\"CursorLine\" width=\"2.3506315\" height=\"124.60775\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
+            compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"124\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
 
             //get now line position
             var nowLinePosition = GetLinePosition(timeSlices, DateTimeOffset.Now);
-            compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2.3506315\" height=\"124.60775\" style=\"fill:blue;\" x=\"0\" y=\"0\" transform=\"matrix(1, 0, 0, 1, {nowLinePosition}, 0)\" />";
+            compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2\" height=\"124\" style=\"fill:blue;\" x=\"0\" y=\"0\" transform=\"matrix(1, 0, 0, 1, {nowLinePosition}, 0)\" />";
 
             //wait!, add in life events also
             compiledRow += GetLifeEventLinesSvg(inputPerson);
@@ -684,26 +684,33 @@ namespace API
                     //so that this life event line can be placed exactly on the report where it happened
                     var startTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.GetDateTimeFormat(), null);
                     var position = GetLinePosition(timeSlices, startTime);
-                    compiledLines += $"<rect" +
-                                     $"eventName=\"{lifeEvent.Name}\" " +
-                                     $"age=\"{inputPerson.GetAge(startTime.Year)}\" " +
-                                     $"stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
-                                     $" width=\"2.3506315\"" +
-                                     $" height=\"124.60775\"" +
-                                     $" style=\"fill:blue;\"" +
-                                     $" x=\"0\"" +
-                                     $" y=\"0\" " +
-                                     $"transform=\"matrix(1, 0, 0, 1, {position}, 0)\" />";
+                    //compiledLines += $"<rect" +
+                    //                 $" eventName=\"{lifeEvent.Name}\" " +
+                    //                 $" age=\"{inputPerson.GetAge(startTime.Year)}\" " +
+                    //                 $" stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
+                    //                 $" width=\"2\"" +
+                    //                 $" height=\"124\"" +
+                    //                 $" style=\"fill:#fff200;\"" +
+                    //                 $" x=\"0\"" +
+                    //                 $" y=\"0\" " +
+                    //                 $"transform=\"matrix(1, 0, 0, 1, {position}, 0)\" />";
 
-                    //var rect = $"<rect " +
-                    //           $"eventName=\"{foundEvent?.FormattedName}\" " +
-                    //           $"age=\"{inputPerson.GetAge(slice)}\" " +
-                    //           $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                    //           $"x=\"{horizontalPosition}\" " +
-                    //           $"width=\"{_widthPerSlice}\" " +
-                    //           $"height=\"{_heightPerSlice}\" " +
-                    //           $"fill=\"{color}\" />";
-
+                    compiledLines += $"<g" +
+                                     $" eventName=\"{lifeEvent.Name}\" " +
+                                     $" age=\"{inputPerson.GetAge(startTime.Year)}\" " +
+                                     $" stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
+                                     $" transform=\"matrix(1, 0, 0, 1, {position}, 0)\"" +
+                                    $" x=\"0\" y=\"0\" >" +
+                                    $"<rect" +
+                                    $" width=\"2\"" +
+                                    $" height=\"124\"" +
+                                    $" style=\"fill:#fff200;\"" +
+                                    //$" x=\"0\"" +
+                                    //$" y=\"0\" " +
+                                    $" />" +
+                                    "<rect style=\"stroke-width: 0px; fill: rgb(255, 242, 0);\" y=\"124\" width=\"11.24\" height=\"8.752\" rx=\"1\" ry=\"1\" x=\"-4.588\"/>" +
+                                    "<path d=\"M 2.729 128.66 L 1.507 128.66 C 1.283 128.66 1.1 128.837 1.1 129.052 L 1.1 130.227 C 1.1 130.443 1.283 130.619 1.507 130.619 L 2.729 130.619 C 2.952 130.619 3.135 130.443 3.135 130.227 L 3.135 129.052 C 3.135 128.837 2.952 128.66 2.729 128.66 Z M 2.729 124.745 L 2.729 125.137 L -0.528 125.137 L -0.528 124.745 C -0.528 124.529 -0.711 124.354 -0.936 124.354 C -1.16 124.354 -1.343 124.529 -1.343 124.745 L -1.343 125.137 L -1.749 125.137 C -2.202 125.137 -2.56 125.489 -2.56 125.92 L -2.564 131.402 C -2.564 131.835 -2.199 132.185 -1.749 132.185 L 3.95 132.185 C 4.398 132.185 4.763 131.833 4.763 131.402 L 4.763 125.92 C 4.763 125.489 4.398 125.137 3.95 125.137 L 3.542 125.137 L 3.542 124.745 C 3.542 124.529 3.359 124.354 3.135 124.354 C 2.912 124.354 2.729 124.529 2.729 124.745 Z M 3.542 131.402 L -1.343 131.402 C -1.566 131.402 -1.749 131.226 -1.749 131.01 L -1.749 127.095 L 3.95 127.095 L 3.95 131.01 C 3.95 131.226 3.766 131.402 3.542 131.402 Z\" style=\"\"/>" +
+                                    "</g>";
 
                 }
 

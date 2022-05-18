@@ -610,6 +610,9 @@ namespace API
             return eventList;
         }
 
+        /// <summary>
+        /// The massive method that generates every inch of the dasa svg report
+        /// </summary>
         private static async Task<string> GetDasaReportSvgFromApi(Person inputPerson)
         {
 
@@ -617,7 +620,10 @@ namespace API
             //used when generating dasa rows
             //note: changes needed only here
             int _widthPerSlice = 1;
-            int _heightPerSlice = 35;
+            int _heightPerSlice = 50;
+            //the height for all lines, cursor, now & life events line
+            var lineHeight = 170;
+
 
             // One precision value for generating all dasa components,
             // because misalignment occurs if use different precision
@@ -646,17 +652,18 @@ namespace API
             //save a copy of the number of time slices used to calculate the svg total width later
             dasaSvgWidth = timeSlices.Count;
 
-            compiledRow += await GenerateYearRowSvg(dasaEventList, timeSlices, _eventsPrecision, 0);
+            //note: y axis positions are manually set
+            compiledRow +=  GenerateYearRowSvg(dasaEventList, timeSlices, _eventsPrecision, 0);
             compiledRow +=  GenerateRowSvg(dasaEventList, timeSlices, _eventsPrecision, 12);
-            compiledRow +=  GenerateRowSvg(bhuktiEventList, timeSlices, _eventsPrecision, 12 + (37 * 1));
-            compiledRow +=  GenerateRowSvg(antaramEventList, timeSlices, _eventsPrecision, 12 + (37 * 2));
+            compiledRow +=  GenerateRowSvg(bhuktiEventList, timeSlices, _eventsPrecision, 65);
+            compiledRow +=  GenerateRowSvg(antaramEventList, timeSlices, _eventsPrecision, 118);
 
             //add in the cursor line
-            compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"124\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
+            compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
 
             //get now line position
             var nowLinePosition = GetLinePosition(timeSlices, DateTimeOffset.Now);
-            compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2\" height=\"124\" style=\"fill:blue;\" x=\"0\" y=\"0\" transform=\"matrix(1, 0, 0, 1, {nowLinePosition}, 0)\" />";
+            compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:blue;\" x=\"0\" y=\"0\" transform=\"matrix(1, 0, 0, 1, {nowLinePosition}, 0)\" />";
 
             //wait!, add in life events also
             compiledRow += GetLifeEventLinesSvg(inputPerson);
@@ -684,23 +691,14 @@ namespace API
                     //so that this life event line can be placed exactly on the report where it happened
                     var startTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.GetDateTimeFormat(), null);
                     var position = GetLinePosition(timeSlices, startTime);
-                    //compiledLines += $"<rect" +
-                    //                 $" eventName=\"{lifeEvent.Name}\" " +
-                    //                 $" age=\"{inputPerson.GetAge(startTime.Year)}\" " +
-                    //                 $" stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
-                    //                 $" width=\"2\"" +
-                    //                 $" height=\"124\"" +
-                    //                 $" style=\"fill:#fff200;\"" +
-                    //                 $" x=\"0\"" +
-                    //                 $" y=\"0\" " +
-                    //                 $"transform=\"matrix(1, 0, 0, 1, {position}, 0)\" />";
 
+                    //note: this is the icon below the life event line to magnify it
                     var iconSvg = @"
-                                <g style="""" transform=""matrix(1.976054, 0, 0, 2.056383, -1.002061, -130.991486)"">
-                                  <rect style=""fill: rgb(255, 242, 0); stroke: rgb(0, 0, 0); stroke-width: 0.495978px;"" x=""-5.177"" y=""124"" width=""12.477"" height=""9.941"" rx=""2.479"" ry=""2.479""></rect>
-                                  <path d=""M 2.7 129.226 L 1.478 129.226 C 1.254 129.226 1.071 129.403 1.071 129.618 L 1.071 130.793 C 1.071 131.009 1.254 131.185 1.478 131.185 L 2.7 131.185 C 2.923 131.185 3.106 131.009 3.106 130.793 L 3.106 129.618 C 3.106 129.403 2.923 129.226 2.7 129.226 Z M 2.7 125.311 L 2.7 125.703 L -0.557 125.703 L -0.557 125.311 C -0.557 125.095 -0.74 124.92 -0.965 124.92 C -1.189 124.92 -1.372 125.095 -1.372 125.311 L -1.372 125.703 L -1.778 125.703 C -2.231 125.703 -2.589 126.055 -2.589 126.486 L -2.593 131.968 C -2.593 132.401 -2.228 132.751 -1.778 132.751 L 3.921 132.751 C 4.369 132.751 4.734 132.399 4.734 131.968 L 4.734 126.486 C 4.734 126.055 4.369 125.703 3.921 125.703 L 3.513 125.703 L 3.513 125.311 C 3.513 125.095 3.33 124.92 3.106 124.92 C 2.883 124.92 2.7 125.095 2.7 125.311 Z M 3.513 131.968 L -1.372 131.968 C -1.595 131.968 -1.778 131.792 -1.778 131.576 L -1.778 127.661 L 3.921 127.661 L 3.921 131.576 C 3.921 131.792 3.737 131.968 3.513 131.968 Z"" style=""""></path>
+                                <g style="""" transform=""matrix(1.976054, 0, 0, 2.056383, -0.672014, -84.991478)"">
+                                <rect style=""fill: rgb(255, 242, 0); stroke: rgb(0, 0, 0); stroke-width: 0.495978px;"" x=""-5.177"" y=""124"" width=""12.477"" height=""9.941"" rx=""2.479"" ry=""2.479""></rect>
+                                <path d=""M 2.7 129.226 L 1.478 129.226 C 1.254 129.226 1.071 129.403 1.071 129.618 L 1.071 130.793 C 1.071 131.009 1.254 131.185 1.478 131.185 L 2.7 131.185 C 2.923 131.185 3.106 131.009 3.106 130.793 L 3.106 129.618 C 3.106 129.403 2.923 129.226 2.7 129.226 Z M 2.7 125.311 L 2.7 125.703 L -0.557 125.703 L -0.557 125.311 C -0.557 125.095 -0.74 124.92 -0.965 124.92 C -1.189 124.92 -1.372 125.095 -1.372 125.311 L -1.372 125.703 L -1.778 125.703 C -2.231 125.703 -2.589 126.055 -2.589 126.486 L -2.593 131.968 C -2.593 132.401 -2.228 132.751 -1.778 132.751 L 3.921 132.751 C 4.369 132.751 4.734 132.399 4.734 131.968 L 4.734 126.486 C 4.734 126.055 4.369 125.703 3.921 125.703 L 3.513 125.703 L 3.513 125.311 C 3.513 125.095 3.33 124.92 3.106 124.92 C 2.883 124.92 2.7 125.095 2.7 125.311 Z M 3.513 131.968 L -1.372 131.968 C -1.595 131.968 -1.778 131.792 -1.778 131.576 L -1.778 127.661 L 3.921 127.661 L 3.921 131.576 C 3.921 131.792 3.737 131.968 3.513 131.968 Z"" style=""""></path>
                                 </g>
-                                   ";
+                                 ";
 
                     compiledLines += $"<g" +
                                      $" eventName=\"{lifeEvent.Name}\" " +
@@ -710,7 +708,7 @@ namespace API
                                     $" x=\"0\" y=\"0\" >" +
                                     $"<rect" +
                                     $" width=\"2\"" +
-                                    $" height=\"124\"" +
+                                    $" height=\"{lineHeight}\"" +
                                     $" style=\"fill:#fff200;\"" +
                                     //$" x=\"0\"" +
                                     //$" y=\"0\" " +
@@ -722,7 +720,6 @@ namespace API
 
                 return compiledLines;
             }
-
 
             //gets line position given a date
             //finds most closest time slice, else return 0 means none found
@@ -754,6 +751,7 @@ namespace API
                 return 0;
 
             }
+
 
             string GenerateRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
             {
@@ -798,6 +796,7 @@ namespace API
 
                 return rowHtml;
             }
+
 
             string GenerateYearRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
             {
@@ -873,6 +872,7 @@ namespace API
                 return rowHtml;
             }
 
+
             // Get dasa color based on nature & number of events
             string GetEventColor(EventNature? eventNature)
             {
@@ -897,6 +897,7 @@ namespace API
                 return colorId;
             }
 
+
             //wraps a list of svg elements inside 1 main svg element
             //if width not set defaults to 1000px, and height to 1000px
             string WrapSvgElements(string combinedSvgString, int svgWidth = 1000, int svgTotalHeight = 1000)
@@ -915,13 +916,14 @@ namespace API
                 return svgBody;
             }
 
+
             //generates time slices for dasa
             List<Time> GetTimeSlices()
             {
                 //get time slices used to get events
                 var startTime = inputPerson.GetBirthDateTime(); //start time is birth time
                 var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
-                List<Time> timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
+                var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
 
                 return timeSlices;
             }

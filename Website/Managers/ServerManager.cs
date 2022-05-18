@@ -1,7 +1,10 @@
-﻿using Genso.Astrology.Library;
+﻿using System.Net;
+using Genso.Astrology.Library;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting.Internal;
 using Newtonsoft.Json;
 
 namespace Website
@@ -26,14 +29,15 @@ namespace Website
         public const string GetFemaleListApi = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetPersonDasaReport = "https://vedastroapi.azurewebsites.net/api/getpersondasareport";
+        public const string GetPersonDasaReportLocal = "http://localhost:7071/api/getpersondasareport";
         public const string GetEventsApi = "https://vedastroapi.azurewebsites.net/api/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
-        public const string GoogleGeoLocationApiKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg"; //marked for deletetion
+        public const string GoogleGeoLocationApiKey = "AIzaSyDVrV2b91dJpdeWMmMAwU92j2ZEyO8uOqg"; //marked for deletion
         public const string GoogleGeoLocationApiKey2 = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
         /// <summary>
         /// link to js file used for google sign in function
         /// </summary>
-        public const string GoogleSignInJs = "https://apis.google.com/js/platform.js"; 
+        public const string GoogleSignInJs = "https://apis.google.com/js/platform.js";
         public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
 
 
@@ -55,7 +59,7 @@ namespace Website
 
             //raw message can be JSON or XML
             //try parse as XML if fail then as JSON
-            try { return XElement.Parse(rawMessage);}
+            try { return XElement.Parse(rawMessage); }
             catch (Exception)
             {
                 //try to parse data as JSON

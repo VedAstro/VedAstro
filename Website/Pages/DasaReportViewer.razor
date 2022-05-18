@@ -77,6 +77,8 @@
         //attach handlers now that component is loaded
         //attach mouse handler to auto move cursor line & update time legend
         await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
+        //init touch for the dasa chart
+        await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);
     }
 
     /// <summary>

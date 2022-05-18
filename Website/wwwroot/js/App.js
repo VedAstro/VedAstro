@@ -428,7 +428,7 @@ function autoMoveCursorLine(mouse) {
 function autoUpdateTimeLegend(mouse) {
 
     //go through all the elements until found the one with events
-    var length = mouse.path.length;
+    //var length = mouse.path.length;
     var elementFound = false;
     var elementIndex = 0; //start with 0
     var eventName = null;
@@ -463,4 +463,42 @@ function autoUpdateTimeLegend(mouse) {
     $("#TimeCursorLegend").html(`${eventName} - ${stdTime} - AGE : ${age}`);
 
 }
+
+//element passed in is the element where touch will be detected
+function InitTouchLib(element) {
+
+    //var myElement = document.getElementById('myElement')
+
+    // create a simple instance
+    // by default, it only adds horizontal recognizers
+    window.hammerJs = new Hammer(element, { touchAction: 'auto' });
+
+    // listen to events...
+    window.hammerJs.on("panleft panright tap", function (ev) {
+
+        //when dragging the dasa report, this will stop
+        //from detecting as out of element
+        if (ev.center.x == 0) { return; }
+
+        //converting the touch event into a mouse event
+        var mouse = {
+            clientX: ev.center.x,
+            clientY: ev.center.y, 
+            path: ev.srcEvent.path
+        };
+
+        //and calling the event handlers
+        //that a mouse would normally fire
+        autoMoveCursorLine(mouse);
+        autoUpdateTimeLegend(mouse);
+    });
+
+    //window.hammerJs = new Hammer(myElement, myOptions);
+
+//window.hammerJs.on('pan', function (ev) {
+//    console.log(ev);
+//});
+}
+
+
 

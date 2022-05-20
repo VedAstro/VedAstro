@@ -49,7 +49,7 @@
                     <div class="accordion-body">
                         <div class="vstack gap-3">
                             @*LIFE EVENTS*@
-                            <LifeEventEditor @ref="_lifeEventEditor"/>
+                            <LifeEventEditor @ref="_lifeEventEditor" />
                             <div>
                                 <label>Notes</label>
                                 <textarea @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person" style="min-height:132px;">
@@ -126,13 +126,18 @@
     private Mode PageMode { get; set; }
 
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         //decide if page should be editor or creator
         PageMode = PersonHash == null ? Mode.Creator : Mode.Editor;
 
+        //little delay to let page elements load up
+        //otherwise render page will encounter nulls
+        await Task.Delay(100);
+
         await RenderPage();
     }
+
 
     /// <summary>
     /// Renders page based on page mode set during init
@@ -173,7 +178,7 @@
 
         //geolocation only needs to be set in Editor mode
         //in Creator mode it will auto set after timeout
-        if (!IsCreator)
+        if (!IsCreator) //editor mode
         {
             var geoLocation = new
             {
@@ -184,6 +189,7 @@
             _geoLocationInput.UpdateData(geoLocation);
         }
 
+        //life events
         var emptyList = new List<LifeEvent>();
         var lifeEventList = IsCreator ? emptyList : _person.LifeEventList;
         await _lifeEventEditor.SetData(lifeEventList);
@@ -206,15 +212,23 @@
         var xmlData = _person.ToXml();
         var result = ServerManager.WriteToServer(ServerManager.AddPersonApi, xmlData);
 
-        //let user know person has been added
-        await _globalVariable.Alert.ShowSuccess($"{_nameInput} added successfully!");
-
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete
         StateHasChanged();
 
         //page ready
         await _globalVariable.LoadingMessage.Hide();
+
+        //let user know person has been added
+        var alertData = new
+        {
+            icon = "success",
+            title = $"{_nameInput} added successfully!",
+            showConfirmButton = false,
+            timer = 4500 //4.5 seconds seems just nice
+        };
+        await _jsRuntime.ShowAlert(alertData);
+        //await _globalVariable.Alert.ShowSuccess($"{_nameInput} added successfully!");
 
         //send user to person list page after period of time
         await Task.Delay(100);

@@ -218,6 +218,24 @@ function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
 }
 
+//shows an email 
+async function ShowLeaveEmailAlert() {
+
+    //show alert to get email
+    const { value: email } = await Swal.fire({
+        title: 'Leave your email',
+        input: 'email',
+        inputPlaceholder: 'Enter your email address'
+    });
+
+    if (email) {
+        Swal.fire('Thanks', 'We will update you soon..', 'success');
+    }
+
+    //send email inputed to caller
+    return email;
+
+}
 
 
 //█▀█ █▀█ █▀█ █▀▀ █▀█ █▀▀ █▀ █▀   █▄▄ ▄▀█ █▀█

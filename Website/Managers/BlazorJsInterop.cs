@@ -47,8 +47,39 @@ namespace Website
 
 
 
+        
+        //▄▀█ █░░ █▀▀ █▀█ ▀█▀
+        //█▀█ █▄▄ ██▄ █▀▄ ░█░
+        //FUNCTIONS CALLING SWEET ALERT JS LIB
 
-        /** FUNCTIONS **/
+        /// <summary>
+        /// Shows alerts on page using SweetAlert js lib 
+        /// this call is equivalent to
+        /// Note: create altertdata as anonymous type exactly like js version
+        /// 
+        /// Swal.fire({
+        /// title: 'Error!',
+        /// text: 'Do you want to continue',
+        /// icon: 'error',
+        /// confirmButtonText: 'Cool'
+        /// })
+        /// 
+        /// </summary>
+        public static async Task ShowAlert(this IJSRuntime jsRuntime, object alertData) => await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+        
+        /// <summary>
+        /// Shows leave email alert box and returns the email as string
+        /// note: uses sweet alert js
+        /// </summary>
+        public static async Task<string> ShowLeaveEmailAlert(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("ShowLeaveEmailAlert");
+
+
+
+
+
+        
+        //█▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
+        //█▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
         /// <summary>
         /// Uses jQuery to hide the inputed HTML element
@@ -111,9 +142,13 @@ namespace Website
         }
 
         public static async Task AddClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("addClassWrapper", element, classNames);
+        
         public static async Task<double> ElementWidth(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<double>("getElementWidth", element);
+        
         public static async Task<double> AddWidthToEveryChild(this IJSRuntime jsRuntime, ElementReference element, double valueToAdd) => await jsRuntime.InvokeAsync<double>("addWidthToEveryChild", element, valueToAdd);
+        
         public static async Task<T> Prop<T>(this IJSRuntime jsRuntime, ElementReference element, string propName) => await jsRuntime.InvokeAsync<T>("getPropWrapper", element, propName);
+        
         public static async Task SetProp(this IJSRuntime jsRuntime, ElementReference element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
     }
 

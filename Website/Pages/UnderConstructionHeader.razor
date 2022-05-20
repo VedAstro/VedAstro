@@ -1,0 +1,41 @@
+﻿@using Genso.Astrology.Library
+@using System.Xml.Linq
+
+
+<PageTop Title="Under Construction" IconName="noto-v1:construction">
+    <Description>
+        Below page is under construction. It might not work!
+        Leave your email, to get notified when page is ready.
+    </Description>
+    <ButtonsRow>
+        <IconButton IconName="ic:baseline-connect-without-contact" ButtonText="Leave Email" OnClickCallback="OnClickLeaveEmail" ClickUrl="@PageRoute.PersonList"></IconButton>
+    </ButtonsRow>
+</PageTop>
+
+
+
+@code {
+
+
+    [Parameter]
+    public string PageName { get; set; }
+
+    private async Task OnClickLeaveEmail()
+    {
+        //get email from user via js sweet alert lib
+        var emailFromAlert = await _jsRuntime.ShowLeaveEmailAlert();
+
+        //send email as message to API server for storage
+        //package message data to be sent
+        var textXml = new XElement("Text", $"LeaveEmailAlert from page: {PageName}");
+        var timestampXml = new XElement("Timestamp", DateTimeOffset.Now.ToString(Time.GetDateTimeFormat()));
+        var emailXml = new XElement("Email", emailFromAlert);
+        var userIdXml = new XElement("UserId", await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        var messageXml = new XElement("Message", userIdXml, emailXml, timestampXml, textXml);
+
+        //send message to API server
+        await ServerManager.WriteToServer(ServerManager.AddMessageApi, messageXml);
+
+
+    }
+}

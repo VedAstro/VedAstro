@@ -45,7 +45,10 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title fw-bold">Bitcoin (BTC)</h5>
+                    <h5 class="card-title fw-bold">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span>
+                        Bitcoin
+                    </h5>
                     <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
                 </div>
             </div>
@@ -59,7 +62,10 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title fw-bold">Litecoin (LTC)</h5>
+                    <h5 class="card-title fw-bold">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span>
+                        Litecoin
+                    </h5>
                     <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
                 </div>
             </div>
@@ -72,31 +78,68 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title fw-bold">Ethereum (ETH)</h5>
+                    <h5 class="card-title fw-bold">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span>
+                        Ethereum
+                    </h5>
                     <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@*
-    <div class="container">
-    <div class="row">
-    <div class="col">Bitcoin (BTC)</div>
-    <div class="col"></div>
-    <div class="col"><img src=""/></div>
-    </div>
-    <div class="row">
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"><img src="images/luno-ltc-donate.png"/></div>
-    </div>
-    <div class="row">
-    <div class="col"></div>
-    <div class="col"></div>
-    <div class="col"><img src="images/luno-eth-donate.png"/></div>
-    </div>
-    </div>*@
+</div>@*
+    <table class="table table-sm text-muted border">
+                      <thead>
+                        <tr>
+                          <th scope="col">CRYPTOCURRENCY</th>
+                          <th scope="col">WALLET ADDRESS</th>
+                          <th scope="col">QR</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!--BTC ROW-->
+                        <tr>
+                          <th scope="row">
+                              <span height="25px;" alt="LTC" class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span> Bitcoin
+                          </th>
+                          <td>
+                            <span id="copy-btc-wallet" class="d-none d-lg-inline-block">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</span>
+                            <i class="far fa-copy ripple clipboard" role="button" data-mdb-clipboard-target="#copy-btc-wallet"></i>
+                          </td>
+                          <td class="fw-bold"><img src="images/luno-btc-donate.png" class="img-fluid rounded-start"></td>
+                        </tr>
+                        <!--BTC ROW-->
+
+                      <!--LTC ROW-->
+                        <tr>
+                          <th scope="row">
+                              <span height="25px;" alt="LTC" class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span> Litecoin
+                          </th>
+                          <td>
+                            <span id="copy-ltc-wallet" class="d-none d-lg-inline-block">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</span>
+                            <i class="far fa-copy ripple clipboard" role="button" data-mdb-clipboard-target="#copy-btc-wallet"></i>
+                          </td>
+                          <td class="fw-bold"><img src="images/luno-ltc-donate.png" class="img-fluid rounded-start"></td>
+                        </tr>
+                        <!--LTC ROW-->
+
+                      <!--ETH ROW-->
+                        <tr>
+                          <th scope="row">
+                              <span height="25px;" alt="LTC" class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span> Ethereum
+                          </th>
+                          <td>
+                            <span id="copy-ltc-wallet" class="d-none d-lg-inline-block">0x92d275C0e511853baE90560a2928f784AEfE3144</span>
+                            <i class="far fa-copy ripple clipboard" role="button" data-mdb-clipboard-target="#copy-btc-wallet"></i>
+                          </td>
+                          <td class="fw-bold"><img src="images/luno-eth-donate.png" class="img-fluid rounded-start"></td>
+                        </tr>
+                        <!--ETH ROW-->
+
+
+                      </tbody>
+
+                    </table>*@
 
 
 @code {

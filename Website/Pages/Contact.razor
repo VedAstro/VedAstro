@@ -20,7 +20,7 @@
     <IconButton OnClickCallback="@OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
 </div>
 
-@*Default Hiden Thank you message*@
+@*Default hidden Thank you message*@
 <div style="display: none;" @ref="_thankYouMessageElement">
     <h3>
         Thank you for your message.<br />
@@ -48,7 +48,7 @@
         //package message data to be sent
         var textXml = new XElement("Text", _messageInput);
         var timestampXml = new XElement("Timestamp", DateTimeOffset.Now.ToString(Time.GetDateTimeFormat()));
-        var emailXml = new XElement("Message", _emailInput);
+        var emailXml = new XElement("Email", _emailInput);
         var userIdXml = new XElement("UserId", await WebsiteTools.GetUserIdAsync(_jsRuntime));
         var messageXml = new XElement("Message", userIdXml, emailXml, timestampXml, textXml);
         await _jsRuntime.AddToProgressBar(10);

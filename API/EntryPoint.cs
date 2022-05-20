@@ -261,7 +261,7 @@ namespace API
                 var personListXml = APITools.BlobClientToXml(personListClient);
 
                 //get only female ppl into a list
-                var maleList = from person in personListXml.Root?.Elements()
+                var femaleList = from person in personListXml.Root?.Elements()
                                where
                                    person.Element("Gender")?.Value == "Female"
                                    &&
@@ -269,7 +269,7 @@ namespace API
                                select person;
 
                 //send female list to caller
-                responseMessage = new XElement("Root", maleList).ToString();
+                responseMessage = new XElement("Root", femaleList).ToString();
 
             }
             catch (Exception e)

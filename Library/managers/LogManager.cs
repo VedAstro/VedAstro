@@ -124,6 +124,7 @@ namespace Genso.Astrology.Library
                 if (LogFile == null) return;
 
                 //get the data from the exception
+                //this fills the fields declared above
                 ExtractDataFromException();
 
                 //put together the new error record

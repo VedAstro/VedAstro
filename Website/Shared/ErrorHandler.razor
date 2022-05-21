@@ -1,0 +1,46 @@
+﻿@*Simple wrapper class to catch all errors in mainlayout
+    Note: wrapper is used to get access to OnErrorAsync*@
+
+@inherits ErrorBoundary
+
+@*always show content even when error*@
+@ChildContent
+
+@*@if (CurrentException is null)
+    {
+    @ChildContent
+    }
+    else if (ErrorContent is not null)
+    {
+    @ErrorContent(CurrentException)
+    }
+    else
+    {
+    <div>Oh no, there was a problem!</div>
+    }*@
+
+@code {
+
+
+    /// <summary>
+    /// Function that is called on error
+    /// Has access to the exception caused it all.
+    /// </summary>
+    [Parameter]
+    public EventCallback<Exception> OnError { get; set; }
+
+
+    /// <summary>
+    /// When an exception occurs it will call here first
+    /// Will call handler if specified
+    /// </summary>
+    protected override async Task OnErrorAsync(Exception exception)
+    {
+        //if custom onclick has been specified than use that
+        if (OnError.HasDelegate)
+        {
+            await OnError.InvokeAsync(exception);
+        }
+    }
+
+}

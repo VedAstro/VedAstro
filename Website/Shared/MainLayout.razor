@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿@using Website.Managers
+@inherits LayoutComponentBase
 
 @*
     NOTE : Components here are loaded same time as page,
@@ -13,13 +14,17 @@
     </div>
     @* this is where global loading message gets created*@
     <Website.Pages.LoadingMessage @ref="_globalVariable.LoadingMessage" />
-
     <main>
         <article class="content px-4 mb-5">
-            @Body
+            @*Custom component to handle all errors properly*@
+            <ErrorHandler OnError="OnError">
+                @Body
+            </ErrorHandler>
         </article>
     </main>
 </div>
+
+
 
 
 @code
@@ -27,16 +32,16 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        try
-        {
-            //log visit everytime page is rendered
-            await WebsiteTools.LogVisitor(_jsRuntime);
-        }
-        catch (Exception e)
-        {
-            //if fail exit silently, not priority
-            Console.WriteLine("BLZ: LogVisitor: Failed!");
-        }
+        //log visit everytime page is rendered
+        await WebsiteLogManager.LogVisitor(_jsRuntime);
     }
 
+    /// <summary>
+    /// Log error to server
+    /// </summary>
+    private void OnError(Exception exception) => WebsiteLogManager.LogError(_jsRuntime, exception);
 }
+
+
+
+

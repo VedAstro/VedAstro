@@ -126,84 +126,6 @@ namespace Website
         }
 
 
-        /// <summary>
-        /// Tries to ID the user, and sends a log of the visit to API server
-        /// Called from MainLayout everytime page is loaded
-        /// Note: Does not log any url with localhost
-        /// </summary>
-        public static async Task LogVisitor(IJSRuntime jsRuntime)
-        {
-            //get url user is on
-            var urlString = await jsRuntime.InvokeAsync<string>("getUrl");
-            //if URL is localhost ignore & end here
-            if (urlString.Contains("localhost")) { return; }
-            //place url in xml
-            var urlXml = new XElement("Url", urlString);
-            var userIdXml = new XElement("UserId", await GetUserIdAsync(jsRuntime));
-
-            //find out if new visitor just arriving or old one browsing
-            var uniqueId = await GetVisitorIdFromCookie();
-            var isNewVisitor = uniqueId == null;
-
-            //based on visitor write the log
-            //this is done to minimize excessive logging
-            if (isNewVisitor) { await NewVisitor(); }
-            else { await OldVisitor(); }
-
-
-            //-------------- FUNCTIONS -------------------------
-
-            //all possible details are logged
-            async Task NewVisitor()
-            {
-
-                //get visitor data & format it nicely for storage
-                var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
-                var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
-                var visitorId = Tools.GenerateId();
-                var uniqueIdXml = new XElement("UniqueId", visitorId);
-                var locationXml = await ServerManager.ReadFromServer(ServerManager.GetGeoLocation, "Location");
-                var visitorElement = new XElement("Visitor");
-                visitorElement.Add(userIdXml, uniqueIdXml, urlXml, timeStampXml, locationXml, browserDataXml);
-
-                //send to API for save keeping
-                var result = await ServerManager.WriteToServer(ServerManager.AddVisitorApi, visitorElement);
-
-                //mark visitor with id inside cookie
-                await SetNewVisitorIdInCookie(visitorId);
-
-                //check result, display error if needed
-                if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }
-            }
-
-            //only needed details are logged
-            async Task OldVisitor()
-            {
-
-                //get visitor data & format it nicely for storage
-                var visitorElement = new XElement("Visitor");
-                var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
-                var uniqueIdXml = new XElement("UniqueId", uniqueId); //use id generated above
-                visitorElement.Add(userIdXml, uniqueIdXml, urlXml, timeStampXml);
-
-                //send to API for save keeping
-                var result = await ServerManager.WriteToServer(ServerManager.AddVisitorApi, visitorElement);
-
-                //check result, display error if needed
-                if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }
-            }
-
-
-
-            //----------- LOCAL FUNCTIONS ----------
-
-            //returns null if no id found
-            async Task<string> GetVisitorIdFromCookie() => await jsRuntime.InvokeAsync<string>("getCookiesWrapper", "uniqueId");
-
-            async Task SetNewVisitorIdInCookie(string id) => await jsRuntime.InvokeVoidAsync("setCookiesWrapper", "uniqueId", id);
-
-        }
-
 
         /// <summary>
         /// This method is called from JS when user signs in
@@ -440,6 +362,6 @@ namespace Website
 
         //█▀▀ ▀▄▀ ▀█▀ █▀▀ █▄░█ █▀ █ █▀█ █▄░█   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //██▄ █░█ ░█░ ██▄ █░▀█ ▄█ █ █▄█ █░▀█   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-        
+
     }
 }

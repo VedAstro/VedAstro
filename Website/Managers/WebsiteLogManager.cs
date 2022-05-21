@@ -48,6 +48,10 @@ namespace Website.Managers
         public static async Task LogError(IJSRuntime jsRuntime, Exception exception)
         {
 
+            //if URL is localhost ignore & end here
+            var urlString = await jsRuntime.InvokeAsync<string>("getUrl");
+            if (urlString.Contains("localhost")) { return; }
+
             //get all visitor data
             var visitorXml = await GetVisitorDataXml(jsRuntime);
 

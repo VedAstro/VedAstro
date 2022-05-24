@@ -165,6 +165,25 @@ namespace API
                 return new XElement("Person");
             }
         }
+        
+        
+        public static XElement FindVisitorById(XDocument visitorListXml, string visitorId)
+        {
+            try
+            {
+                var uniqueVisitorList = from visitorXml in visitorListXml.Root?.Elements()
+                                                        where visitorXml.Element("UniqueId")?.Value == visitorId
+                                                        select visitorXml;
+
+                return uniqueVisitorList.FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                //if fail log it and return empty xelement
+                //todo log failure
+                return new XElement("Visitor");
+            }
+        }
 
         /// <summary>
         /// Find all person's xml element by user id

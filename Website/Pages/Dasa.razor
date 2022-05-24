@@ -74,10 +74,22 @@
     private bool _isResultReady = false; //marks if the page ready to loaded
 
 
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
-    //--------------------OVERRIDES
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try();
 
-    protected override async Task OnInitializedAsync()
+    private async Task OnClickCalculate() => await InvokeAsync(async () => await DoCalculation()).Try();
+
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
+    private async Task InitPage()
     {
 
         //show loading box
@@ -90,18 +102,17 @@
 
         //hide loading box
         await _globalVariable.LoadingMessage.Hide();
-
     }
 
 
-    private async Task OnClickCalculate()
+    private async Task DoCalculation()
     {
         await _globalVariable.LoadingMessage.Show();
 
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
 
-        await _jsRuntime.AddToProgressBar( 5);
+        await _jsRuntime.AddToProgressBar(5);
 
         //set data into dasa viewer
         await _dasaReportViewer.SetData(SelectedPerson);
@@ -111,5 +122,7 @@
 
         await _globalVariable.LoadingMessage.Hide();
     }
+
+
 
 }

@@ -55,9 +55,12 @@
     private MarkupString DasaReportSvg { get; set; } = new("");
 
 
-
-
-    //METHODS
+    
+    
+    
+    
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     /// <summary>
     /// Sets the data that is processed and fill the content
@@ -129,9 +132,7 @@
         var rawMessage = response.Content.ReadAsStreamAsync().Result;
 
         return rawMessage;
-
     }
-
 
     /// <summary>
     /// Packages the data into ready form for the HTTP client to use in final sending stage
@@ -151,6 +152,5 @@
         //return packaged data to caller
         return new StringContent(dataString, encoding, mediaType);
     }
-
 
 }

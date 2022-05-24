@@ -21,13 +21,26 @@
     const string TableId = "PersonListTable"; //change only needed here
 
 
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER 
+
     //code executed after page has been rendered
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //generate table
-        if (firstRender) { await GenerateTable(); }
+        if (firstRender)
+        {
+            await InvokeAsync(async () => await GenerateTable()).Try();
+        }
     }
 
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     private async Task GenerateTable()
     {
@@ -43,9 +56,6 @@
         await _globalVariable.LoadingMessage.Hide();
 
     }
-
-
-    //--------------------EVENT HANDLERS
 
 
 }

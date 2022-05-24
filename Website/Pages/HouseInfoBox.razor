@@ -21,23 +21,25 @@
     [Parameter]
     public int HouseNumber { get; set; }
 
-    private string? _houseDetails,_houseLord, _houseSign, _planetsInHouse;
+    private string? _houseDetails, _houseLord, _houseSign, _planetsInHouse;
     private bool _lordExalted, _lordDebilitated;
 
 
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    //METHODS
+    protected override void OnInitialized() => UpdateData();
 
-    protected override void OnInitialized()
-    {
-        UpdateData();
-    }
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     public void UpdateData()
     {
-        var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName) HouseNumber, Time);
-
+        var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName)HouseNumber, Time);
 
         //get house details and save it for view
         _houseDetails = AstronomicalCalculator.GetHouseDetails(HouseNumber, Time);
@@ -45,10 +47,13 @@
         _planetsInHouse = GetPlanetsInHouse();
         //_houseStrenght = AstronomicalCalculator.GetAllHousesOrderedByStrength()
         _houseSign = AstronomicalCalculator.GetHouseSignName(HouseNumber, Time).ToString();
-    //_houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign();
+        //_houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign();
 
         _lordExalted = AstronomicalCalculator.IsPlanetExaltated(lordOfHouse, Time);
         _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, Time);
+
+        //update changes to view
+        this.StateHasChanged();
     }
 
     private string? GetPlanetsInHouse()
@@ -62,7 +67,6 @@
         }
 
         return combinedNames;
-
     }
 
 

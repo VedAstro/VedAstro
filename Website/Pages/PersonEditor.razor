@@ -111,8 +111,6 @@
 
 
 
-
-
     //--------------------PROPERTIES
 
     /// <summary>
@@ -121,14 +119,43 @@
     private Mode PageMode { get; set; }
 
 
-    protected override void OnAfterRender(bool firstRender)
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try();
+
+
+    private async Task OnClickDeleteButton() => await InvokeAsync(async () => await DeletePerson()).Try();
+
+    /// <summary>
+    /// Function that is called on click of button
+    /// </summary>
+    private async Task OnClickSubmitButton()
     {
-        //throw new Exception("OnAfterRender");
+
+        //button does different stuff based on page mode
+        if (IsCreator)
+        {
+            //SubmitNewPerson();
+            await InvokeAsync(async () => await SubmitNewPerson()).Try();
+        }
+        else
+        {
+            //UpdateExistingPerson();
+            await InvokeAsync(async () => await UpdateExistingPerson()).Try();
+        }
     }
 
-    protected override async Task OnInitializedAsync()
-    {
 
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    private async Task InitPage()
+    {
         //decide if page should be editor or creator
         PageMode = PersonHash == null ? Mode.Creator : Mode.Editor;
 
@@ -138,11 +165,6 @@
 
         await RenderPage();
     }
-
-
-
-    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
 
     /// <summary>
@@ -314,31 +336,5 @@
     }
 
 
-    //-------------------EVENT HANDLERS
-
-    private async Task OnClickDeleteButton()
-    {
-        await InvokeAsync(async () => await DeletePerson()).Try();
-    }
-
-
-    /// <summary>
-    /// Function that is called on click of button
-    /// </summary>
-    private async Task OnClickSubmitButton()
-    {
-
-        //button does different stuff based on page mode
-        if (IsCreator)
-        {
-            //SubmitNewPerson();
-            await InvokeAsync(async () => await SubmitNewPerson()).Try();
-        }
-        else
-        {
-            //UpdateExistingPerson();
-            await InvokeAsync(async () => await UpdateExistingPerson()).Try();
-        }
-    }
 
 }

@@ -53,18 +53,23 @@
 
     CompatibilityReport? _report = null; //when needs to be show before init
 
+
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
     //generate the report
-    protected override async Task OnInitializedAsync()
-    {
-        //show loading box
-        await _globalVariable.LoadingMessage.Show();
-
-        _report = await GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
-
-    }
+    protected override async Task OnInitializedAsync() => _report = await GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
 
     //hide the loading message that was open in init
     protected override async Task OnAfterRenderAsync(bool firstRender) => await _globalVariable.LoadingMessage.Hide();
+
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     private static string GetNatureColor(EventNature nature)
     {
@@ -78,14 +83,18 @@
                 return "Black";
         }
     }
-    private static string GetScoreColor(double score) => score > 50 ? "Green" : "Red";
 
+    private static string GetScoreColor(double score) => score > 50 ? "Green" : "Red";
 
     /// <summary>
     /// Gets CompatibilityReport from API server
     /// </summary>
-    private static async Task<CompatibilityReport?> GetCompatibilityReport(string male, string female)
+    private async Task<CompatibilityReport?> GetCompatibilityReport(string male, string female)
     {
+
+        //show loading box
+        await _globalVariable.LoadingMessage.Show();
+
         //prepare request to API server
         var url = $"{ServerManager.GetMatchReportApi}?male={male}&female={female}";
 

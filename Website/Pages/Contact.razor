@@ -36,10 +36,18 @@
     private ElementReference _thankYouMessageElement;
 
 
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
     private async void OnClickSendButton()
     {
         await InvokeAsync(async () => await SendMessage()).Try();
     }
+
+
 
 
 
@@ -48,7 +56,7 @@
 
     private async Task SendMessage()
     {
-    //loading box show
+        //loading box show
         await _globalVariable.LoadingMessage.Show();
 
         await _jsRuntime.AddToProgressBar(10);

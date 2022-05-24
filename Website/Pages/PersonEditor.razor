@@ -1,6 +1,7 @@
 ﻿@attribute [Route(PageRoute.PersonEditor)]
 @attribute [Route(PageRoute.PersonEditorParam)]
 
+
 @using Genso.Astrology.Library
 @using System.Xml.Linq
 
@@ -99,12 +100,6 @@
     //gets page mode that was decided earlier
     private bool IsCreator => PageMode == Mode.Creator;
 
-    /// <summary>
-    /// Function that is called on click of button
-    /// Note: using delegate so that can change function based on page mode
-    /// </summary>
-    private Action OnClickSubmitButton { get; set; }
-
     string? _hourMinInput, _dateInput, _timeZonInput;
 
     string _nameInput = "";
@@ -126,8 +121,14 @@
     private Mode PageMode { get; set; }
 
 
+    protected override void OnAfterRender(bool firstRender)
+    {
+        //throw new Exception("OnAfterRender");
+    }
+
     protected override async Task OnInitializedAsync()
     {
+
         //decide if page should be editor or creator
         PageMode = PersonHash == null ? Mode.Creator : Mode.Editor;
 
@@ -137,6 +138,11 @@
 
         await RenderPage();
     }
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
 
     /// <summary>
@@ -194,14 +200,12 @@
         var lifeEventList = IsCreator ? emptyList : _person.LifeEventList;
         await _lifeEventEditor.SetData(lifeEventList);
 
-        //button does different stuff based on page mode
-        OnClickSubmitButton = IsCreator ? SubmitNewPerson : UpdateExistingPerson;
 
         this.StateHasChanged();
     }
 
     //sends the newly created person to API server
-    private async void SubmitNewPerson()
+    private async Task SubmitNewPerson()
     {
         await _globalVariable.LoadingMessage.Show();
 
@@ -257,11 +261,11 @@
         return new Person(_nameInput, birthTime, gender, await WebsiteTools.GetUserIdAsync(_jsRuntime), _notesInput, lifeEventList);
 
         //----------LOCAL FUNCTION ---------------------
-
     }
 
-    private async void UpdateExistingPerson()
+    private async Task UpdateExistingPerson()
     {
+
         //show loading message
         await _globalVariable.LoadingMessage.Show();
 
@@ -272,7 +276,7 @@
         await WebsiteTools.UpdatePerson(_person, _originalPersonHash);
 
         //let user know person has been updates
-        await _globalVariable.Alert.ShowSuccess($"{_nameInput} updated successfully!");
+        await _globalVariable.Alert.ShowSuccess($" updated successfully!");
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete
@@ -286,13 +290,7 @@
         _navigation.NavigateTo(PageRoute.PersonList);
     }
 
-
-
-
-
-    //-------------------EVENT HANDLERS
-
-    private async Task OnClickDeleteButton()
+    private async Task DeletePerson()
     {
         //show loading message
         await _globalVariable.LoadingMessage.Show();
@@ -316,6 +314,31 @@
     }
 
 
+    //-------------------EVENT HANDLERS
 
+    private async Task OnClickDeleteButton()
+    {
+        await InvokeAsync(async () => await DeletePerson()).Try();
+    }
+
+
+    /// <summary>
+    /// Function that is called on click of button
+    /// </summary>
+    private async Task OnClickSubmitButton()
+    {
+
+        //button does different stuff based on page mode
+        if (IsCreator)
+        {
+            //SubmitNewPerson();
+            await InvokeAsync(async () => await SubmitNewPerson()).Try();
+        }
+        else
+        {
+            //UpdateExistingPerson();
+            await InvokeAsync(async () => await UpdateExistingPerson()).Try();
+        }
+    }
 
 }

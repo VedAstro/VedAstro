@@ -5,6 +5,8 @@ using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using Website.Managers;
+using Website.Pages;
 
 namespace Website
 {
@@ -127,31 +129,6 @@ namespace Website
 
 
 
-        /// <summary>
-        /// This method is called from JS when user signs in
-        /// </summary>
-        [JSInvokable]
-        public static void InvokeOnUserSignIn()
-        {
-            //remember user signed in
-            GoogleUserSignedIn = true;
-            //let others know
-            OnUserSignIn?.Invoke();
-        }
-
-
-        /// <summary>
-        /// This method is called from JS when user signs out
-        /// </summary>
-        [JSInvokable]
-        public static void InvokeOnUserSignOut()
-        {
-            //remember user signed out
-            GoogleUserSignedIn = false;
-            //let others know
-            OnUserSignOut?.Invoke();
-        }
-
 
         /// <summary>
         /// Tries to get user login state, else returns public user id.
@@ -201,6 +178,16 @@ namespace Website
             var personListRootXml = await ServerManager.WriteToServer(ServerManager.GetPersonListApi, new XElement("UserId", userId));
             var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
             return personList;
+        }
+        /// <summary>
+        /// Gets all visitor list from API server
+        /// </summary>
+        public static async Task<List<XElement>> GetVisitorList(string userId)
+        {
+            var visitorListRootXml = await ServerManager.WriteToServer(ServerManager.GetVisitorList, new XElement("UserId", userId));
+            //var visitorList = visitorListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+            var visitorList = visitorListRootXml.Elements().ToList();
+            return visitorList;
         }
 
         public static async Task<List<Person>> GetMalePeopleList(string userId)
@@ -360,8 +347,84 @@ namespace Website
 
 
 
+        //█▀▀ ▄▀█ █░░ █░░ █▀▀ █▀▄   █▀▀ █▀█ █▀█ █▀▄▀█   ░░█ █▀
+        //█▄▄ █▀█ █▄▄ █▄▄ ██▄ █▄▀   █▀░ █▀▄ █▄█ █░▀░█   █▄█ ▄█
+
+        #region called from js
+
+        /// <summary>
+        /// This method is called from JS when user signs in
+        /// </summary>
+        [JSInvokable]
+        public static void InvokeOnUserSignIn()
+        {
+            //remember user signed in
+            GoogleUserSignedIn = true;
+            //let others know
+            OnUserSignIn?.Invoke();
+        }
+
+        /// <summary>
+        /// This method is called from JS when user signs out
+        /// </summary>
+        [JSInvokable]
+        public static void InvokeOnUserSignOut()
+        {
+            //remember user signed out
+            GoogleUserSignedIn = false;
+            //let others know
+            OnUserSignOut?.Invoke();
+        }
+
+        /// <summary>
+        /// This method is called from JS when user signs out
+        /// </summary>
+        [JSInvokable]
+        public static void OnAppError()
+        {
+            Console.WriteLine("BLZ: OnAppError");
+        }
+
+        #endregion
+
+
+
+
         //█▀▀ ▀▄▀ ▀█▀ █▀▀ █▄░█ █▀ █ █▀█ █▄░█   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //██▄ █░█ ░█░ ██▄ █░▀█ ▄█ █ █▄█ █░▀█   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
+        /// <summary>
+        /// Special function to catch async exceptions, but has to be called correctly
+        /// Note:
+        /// - If caught here overwrites default blazor error handling 
+        /// - Not all await calls need this only the top level needs this,
+        /// example use inside OnClick or OnInitialized will do.
+        /// example: await InvokeAsync(async () => await DeletePerson()).HandleErrors();
+        /// </summary>
+        public static async Task Try(this Task invocation)
+        {
+            try
+            {
+                //try to make call normally
+                await invocation;
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                //if running locally, print error to console
+                Console.WriteLine(e.ToString());
+#else
+                //if Release log error & end silently
+                WebsiteLogManager.LogError(e);
+#endif
+
+
+                //note exception will not go past this point,
+                //even calling throw will do nothing
+                //throw;
+            }
+        }
 
     }
 }

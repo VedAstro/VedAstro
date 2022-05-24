@@ -50,7 +50,7 @@
         //if custom onclick has been specified than use that
         if (OnClickCallback.HasDelegate)
         {
-            OnClickCallback.InvokeAsync();
+            OnClickCallback.InvokeAsync(obj);
         }
         //else if URL has been specified use that
         else if (ClickUrl != "" || ClickUrl != null)

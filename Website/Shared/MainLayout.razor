@@ -16,10 +16,7 @@
     <Website.Pages.LoadingMessage @ref="_globalVariable.LoadingMessage" />
     <main>
         <article class="content px-4 mb-5">
-            @*Custom component to handle all errors properly*@
-            <ErrorHandler OnError="OnError">
-                @Body
-            </ErrorHandler>
+            @Body
         </article>
     </main>
 </div>
@@ -32,16 +29,25 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+        {
+            await _jsRuntime.InvokeVoidAsync("InitErrorCatcher");
+        }
+
         //log visit everytime page is rendered
         await WebsiteLogManager.LogVisitor(_jsRuntime);
     }
 
-    /// <summary>
-    /// Log error to server
-    /// </summary>
-    private void OnError(Exception exception) => WebsiteLogManager.LogError(_jsRuntime, exception);
 }
 
-
-
-
+@*
+<ErrorBoundary>
+    <ChildContent>
+        @Body
+    </ChildContent>
+    <ErrorContent Context="ex">
+        @{ OnError(@ex); } 
+        <p>@ex.Message</p> 
+    </ErrorContent>
+</ErrorBoundary>
+*@

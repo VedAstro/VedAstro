@@ -13,8 +13,6 @@ namespace Website
     /// </summary>
     public class GlobalVariableManager
     {
-        public IJSRuntime JsRuntime { get; set; }
-        public  NavigationManager Navigation { get; set; }
 
 
         //-----------------------------FIELDS

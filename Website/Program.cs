@@ -13,13 +13,27 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 //setup for global variables (to remember state)
 var globalVariable = new GlobalVariableManager();
-//get the services needed and reference them in global var
-globalVariable.JsRuntime = builder.Services.First((s) => s.ServiceType == typeof(IJSRuntime)).ImplementationInstance as IJSRuntime;
-globalVariable.Navigation = builder.Services.First((s) => s.ServiceType == typeof(NavigationManager)).ImplementationInstance as NavigationManager;
 builder.Services.AddSingleton(globalVariable);
 
 //setup for getting location from browser
 builder.Services.AddSingleton<LocationService>();
+
+//ERROR HANDLING
+
+//hide generic error messages only in RELEASE
+//when debugging enable default errors
+//apps published will not show any error while
+//same run locally will show messages
+#if (DEBUG == false)
+//stop default error handling (prints in console log & shows default error message at page bottom)
+builder.Logging.ClearProviders();
+#endif
+
+//add custom error handling (synchronous exceptions only)
+var unhandledExceptionSender = new UnhandledExceptionSender();
+var unhandledExceptionProvider = new UnhandledExceptionProvider(unhandledExceptionSender);
+builder.Logging.AddProvider(unhandledExceptionProvider);
+builder.Services.AddSingleton<IUnhandledExceptionSender>(unhandledExceptionSender);
 
 
 await builder.Build().RunAsync();

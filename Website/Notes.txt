@@ -1,0 +1,41 @@
+﻿
+█░█░█ █▀▀ █▄▄ █▀ █ ▀█▀ █▀▀   █▀▀ █▀█ █▀▄ █▀▀ ░░▄▀ █▀▄ █▀▀ █▀ █ █▀▀ █▄░█   █▄░█ █▀█ ▀█▀ █▀▀ █▀
+▀▄▀▄▀ ██▄ █▄█ ▄█ █ ░█░ ██▄   █▄▄ █▄█ █▄▀ ██▄ ▄▀░░ █▄▀ ██▄ ▄█ █ █▄█ █░▀█   █░▀█ █▄█ ░█░ ██▄ ▄█
+
+
+
+- ERROR HANDLING
+
+Exception in Release is completely hidden, and log is silently sent to API server if possible.
+This is purposely done, becasue exceptions is useless data to the user.
+And most times, exceptions do not crash the application, but only cause minor
+errors that might not even be notice by the user. As such for best user exprience.
+
+Expected & unexpected errors can be caught in a few ways.
+ErrorBoundaries have not been used, since they are better suited 
+for very specific & expected error handling like input validation.
+It will be used when where needed as part of the component/page not app general exceptions.
+All methods below are employed for global error catching & logging in API.
+
+	1.	Add in custom ILogger class in startup as service.
+		this method catches all synchronous errors only!
+		Exceptions from async/await calls will be ignored,
+		the error msg will appear in console log and show blazor default error ui,
+		but these errors will not be caught by the custom ILogger.
+		Why this happens:https://github.com/dotnet/aspnetcore/issues/27716#issuecomment-732115003
+
+	2.	Use InvokeAsync with extension method on Task that wraps all async calls in a try/catch.
+		This works perfectly to catch all exception from async/await.
+		Note after implemeting this, default console log and blazor default error ui will not show!
+		But this means top level await calls must be wrapped! like so
+		await InvokeAsync(async () => await DeletePerson()).HandleErrors();
+
+	3.	Watch the blazor default ui for changes in disply property. (via JS)
+		This is the final backup catcher, theoritically this should not be raised since,
+		all normal exeptions are caught by Logger (method 1) 
+		and all async excepionts are caught by InvokeAsync (method 2).
+		But there is a chance something is missed during dev, and this will catch that.
+		Note: no error messages are available atm, only that an uncaught error has occured.
+		It is possible to add more data like current page and
+		last button clicked before exception.(future implimentation)
+

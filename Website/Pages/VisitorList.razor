@@ -1,0 +1,51 @@
+﻿@using Genso.Astrology.Library
+@using System.Xml.Linq
+@attribute [Route(PageRoute.VisitorList)]
+<PageTitle>Visitor List</PageTitle>
+
+<PageTop Title="Visitor List" IconName="fluent:people-list-20-filled">
+    <Description>List of visitors to the site</Description>
+</PageTop>
+
+@foreach (var visitorXml in @visitorList)
+{
+    <div class="hstack gap-2">
+        <div>@visitorXml.Element("UniqueId").Value</div>
+        <div>@visitorXml.Element("Url").Value</div>
+    </div>
+
+}
+
+
+@code {
+
+    List<XElement> visitorList = new List<XElement>();
+
+    //code executed after page has been rendered
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //generate table
+        if (firstRender) { await GenerateTable(); }
+    }
+
+
+    private async Task GenerateTable()
+    {
+        await _globalVariable.LoadingMessage.Show();
+
+        //get all people from API server
+        visitorList = await WebsiteTools.GetVisitorList("101");
+
+        StateHasChanged();
+
+        //convert objects to json (for js generator library)
+        //and calls js code change table directly
+        //await _jsRuntime.InvokeVoidAsync("generatePersonListTable", TableId, personList.ToArray());
+
+        await _globalVariable.LoadingMessage.Hide();
+
+    }
+
+
+
+}

@@ -7,6 +7,7 @@
     public static class PageRoute
     {
         public const string TaskList = "/tasklist";
+        public const string VisitorList = "/visitorlist";
         public const string TaskEditor = "/taskeditor";
         public const string PersonList = "/personlist";
         public const string PersonEditor = "/personeditor";

@@ -38,8 +38,17 @@
 
     private async void OnClickSendButton()
     {
+        await InvokeAsync(async () => await SendMessage()).Try();
+    }
 
-        //loading box show
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    private async Task SendMessage()
+    {
+    //loading box show
         await _globalVariable.LoadingMessage.Show();
 
         await _jsRuntime.AddToProgressBar(10);
@@ -66,7 +75,5 @@
         await _jsRuntime.AddToProgressBar(20);
         //hide loading box
         await _globalVariable.LoadingMessage.Hide();
-
     }
-
 }

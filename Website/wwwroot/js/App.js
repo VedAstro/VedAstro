@@ -4,6 +4,38 @@
 //PRODUCTIONS FUNCTION IN USE CALLED FROM BLAZOR CODE
 
 
+//Initializes the global error cather, from here error handler in blazor is called.
+//This is only a backup way to know unexpected exception occurred,
+//not really caught & handled
+//Notes:
+//- called from MainLayout after render
+//- needs to be called after index.html has fully loaded 
+//- mainly used for logging global errors to API
+//- from much testing even with ErrorBoundary, only the default blazor error message consistently gets called on error
+//  as such error is known by watching this element's style display property 
+function InitErrorCatcher() {
+
+    //setup call to handler in blazor
+    //call only if style display update
+    var observer = new MutationObserver(function (mutationsList, observer) {
+        for (var mutation of mutationsList) {
+            //changes to style is assumed to be only changes
+            //to display prop when error occurs
+            if (mutation.attributeName == "style") {
+                //call blazor handler
+                DotNet.invokeMethod('Website', 'OnAppError');
+            }
+        }
+    });
+
+    //get the default error element
+    var blazorDefaultErrorElem = $("#blazor-error-ui")[0];
+
+    //attach handler to the element
+    observer.observe(blazorDefaultErrorElem, { attributes: true });
+
+}
+
 //uses UAParser library to extract user data
 function getVisitorData() {
     console.log(`JS: getVisitorData`);

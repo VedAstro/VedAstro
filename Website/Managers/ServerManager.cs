@@ -26,6 +26,7 @@ namespace Website
         public const string GetPersonApi = "https://vedastroapi.azurewebsites.net/api/getperson";
         public const string UpdatePersonApi = "https://vedastroapi.azurewebsites.net/api/updateperson";
         public const string GetTaskListApi = "https://vedastroapi.azurewebsites.net/api/gettasklist";
+        public const string GetVisitorList = "https://vedastroapi.azurewebsites.net/api/getvisitorlist";
         public const string GetFemaleListApi = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetPersonDasaReport = "https://vedastroapi.azurewebsites.net/api/getpersondasareport";

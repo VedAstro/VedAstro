@@ -151,8 +151,10 @@
         catch (Exception e)
         {
             //alert user first with the wrong name
-            _globalVariable.Alert.ShowWarning($"The location \"{LocationName}\", not found!" +
-                                            $"\n Check the spelling or try other nearby place.");
+            var msg = $"The location \"{LocationName}\", not found!" +
+                      $"\n Check the spelling or try other nearby place.";
+            await _jsRuntime.ShowAlert("error", msg, true,timer:0);
+
 
             //change to default location & try again to get coordinates
             LocationName = DefaultLocationCountry;

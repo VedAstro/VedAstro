@@ -30,10 +30,6 @@ namespace Website
 
         //-----------------------------PROPERTIES
 
-        /// <summary>
-        /// Alert box showed at top of page, located in MainLayout
-        /// </summary>
-        public AlertMessage Alert { get; set; }
 
         /// <summary>
         /// LoadingMessage box showed over page when loading, located in MainLayout
@@ -57,7 +53,7 @@ namespace Website
         public async Task WaitTillComponentReady()
         {
             //wait till every component needed is ready
-            while (LoadingMessage == null && Alert == null)
+            while (LoadingMessage == null)
             {
                 Console.WriteLine("WaitForLoadingComplete");
                 await Task.Delay(ComponentWaitDelayMs);

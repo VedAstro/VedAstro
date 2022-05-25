@@ -107,7 +107,8 @@
         var result = await ServerManager.WriteToServer(ServerManager.AddTaskApi, _websiteTask.ToXml());
 
         //let user know task has been added
-        await _globalVariable.Alert.ShowSuccess($"{_name} added successfully!");
+        await _jsRuntime.ShowAlert("success", $"{_name} added successfully!", false,timer:1000);
+
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete

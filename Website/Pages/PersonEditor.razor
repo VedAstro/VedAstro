@@ -166,7 +166,6 @@
         await RenderPage();
     }
 
-
     /// <summary>
     /// Renders page based on page mode set during init
     /// </summary>
@@ -245,16 +244,7 @@
         //page ready
         await _globalVariable.LoadingMessage.Hide();
 
-        //let user know person has been added
-        var alertData = new
-        {
-            icon = "success",
-            title = $"{_nameInput} added successfully!",
-            showConfirmButton = false,
-            timer = 4500 //4.5 seconds seems just nice
-        };
-        await _jsRuntime.ShowAlert(alertData);
-        //await _globalVariable.Alert.ShowSuccess($"{_nameInput} added successfully!");
+        await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
 
         //send user to person list page after period of time
         await Task.Delay(100);
@@ -298,7 +288,7 @@
         await WebsiteTools.UpdatePerson(_person, _originalPersonHash);
 
         //let user know person has been updates
-        await _globalVariable.Alert.ShowSuccess($" updated successfully!");
+        await _jsRuntime.ShowAlert("success", "Updated successfully!", false,timer:1000);
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete
@@ -321,7 +311,8 @@
         await WebsiteTools.DeletePerson(_originalPersonHash);
 
         //let user know person has been updates
-        await _globalVariable.Alert.ShowSuccess($"{_nameInput} deleted successfully!");
+        await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false,timer:1000);
+
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete

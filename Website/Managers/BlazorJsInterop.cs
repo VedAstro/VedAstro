@@ -66,7 +66,20 @@ namespace Website
         /// 
         /// </summary>
         public static async Task ShowAlert(this IJSRuntime jsRuntime, object alertData) => await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
-        
+        public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, bool showConfirmButton, int timer)
+        {
+
+            var alertData = new
+            {
+                icon = icon,
+                title = title,
+                showConfirmButton = showConfirmButton,
+                timer = timer
+            };
+
+            await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+        }
+
         /// <summary>
         /// Shows leave email alert box and returns the email as string
         /// note: uses sweet alert js

@@ -184,16 +184,13 @@
         this.Person = person;
 
 
-        //get needed data from input fields
+        //get needed data from input fields &
         //parse data received from user
         var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
         var startTimeStr = $"{_startHourMinInput} {_startDateInput} {_timeZonInput}";
         var endTimeStr = $"{_endHourMinInput} {_endDateInput} {_timeZonInput}";
-        var stdStartTime = DateTimeOffset.ParseExact(startTimeStr, Time.GetDateTimeFormat(), null);
-        var stdEndTime = DateTimeOffset.ParseExact(endTimeStr, Time.GetDateTimeFormat(), null);
-
-        Time startTime = new Time(stdStartTime, geoLocation);
-        Time endTime = new Time(stdEndTime, geoLocation);
+        Time startTime = new Time(startTimeStr, geoLocation);
+        Time endTime = new Time(endTimeStr, geoLocation);
 
         await _jsRuntime.AddToProgressBar( 5);
 

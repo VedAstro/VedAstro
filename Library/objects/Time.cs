@@ -50,6 +50,21 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
+        /// Creates a new instance of time from STD string (HH:mm dd/MM/yyyy zzz)
+        /// & Geo location
+        /// </summary>
+        public Time(string stdDateTimeText, GeoLocation geoLocation)
+        {
+            var stdDateTime = DateTimeOffset.ParseExact(stdDateTimeText, Time.GetDateTimeFormat(), null);
+
+            //store std time
+            _stdTime = stdDateTime;
+
+            //store geo location for later use
+            _geoLocation = geoLocation;
+        }
+
+        /// <summary>
         /// Creates a new instance of time from LMT
         /// </summary>
         public Time(DateTime lmtDateTime, TimeSpan stdOffset, GeoLocation geoLocation)
@@ -249,10 +264,9 @@ namespace Genso.Astrology.Library
         {
             var timeString = timeXmlElement.Element("StdTime").Value ?? "00:00 01/01/2000 +08:00";
             var locationXml = timeXmlElement.Element("Location");
-            var stdDateTime = DateTimeOffset.ParseExact(timeString, Time.GetDateTimeFormat(), null);
             var geoLocation = GeoLocation.FromXml(locationXml);
 
-            var parsedTime = new Time(stdDateTime, geoLocation);
+            var parsedTime = new Time(timeString, geoLocation);
 
             return parsedTime;
         }

@@ -263,14 +263,13 @@
         //parse data received from user
         var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
         var fullTimeString = $"{_hourMinInput} {_dateInput} {_timeZonInput}";
-        var stdTimeMale = DateTimeOffset.ParseExact(fullTimeString, Time.GetDateTimeFormat(), null);
         var lifeEventList = await _lifeEventEditor.GetData();
 
         //get gender from gender string
         var gender = Enum.Parse<Gender>(_genderInput);
 
         //create a new person from the inputed data
-        var birthTime = new Time(stdTimeMale, geoLocation);
+        var birthTime = new Time(fullTimeString, geoLocation);
         return new Person(_nameInput, birthTime, gender, await WebsiteTools.GetUserIdAsync(_jsRuntime), _notesInput, lifeEventList);
 
         //----------LOCAL FUNCTION ---------------------

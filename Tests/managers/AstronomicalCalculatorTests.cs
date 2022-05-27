@@ -9,9 +9,8 @@ namespace Genso.Astrology.Library.Tests
         [TestMethod()]
         public void GetPlanetRasiSignTest()
         {
-            var endStdTime = DateTimeOffset.ParseExact("06:42 16/04/2021 +08:00", Time.GetDateTimeFormat(), null);
             var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
-            var birthTime = new Time(endStdTime, geoLocation);
+            var birthTime = new Time("06:42 16/04/2021 +08:00", geoLocation);
 
 
             AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, birthTime);
@@ -47,9 +46,8 @@ namespace Genso.Astrology.Library.Tests
         public void GetLunarMonthTest1()
         {
 
-            var endStdTime = DateTimeOffset.ParseExact("15:00 01/01/2022 +08:00", Time.GetDateTimeFormat(), null);
             var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
-            var time = new Time(endStdTime, geoLocation);
+            var time = new Time("15:00 01/01/2022 +08:00", geoLocation);
 
             var lunarMonthTest = AstronomicalCalculator.GetLunarMonth(time);
 
@@ -62,9 +60,8 @@ namespace Genso.Astrology.Library.Tests
         public void GetLunarMonthTest2()
         {
 
-            var endStdTime = DateTimeOffset.ParseExact("15:00 01/03/2022 +08:00", Time.GetDateTimeFormat(), null);
             var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
-            var time = new Time(endStdTime, geoLocation);
+            var time = new Time("15:00 01/03/2022 +08:00", geoLocation);
 
             var lunarMonthTest = AstronomicalCalculator.GetLunarMonth(time);
 
@@ -77,9 +74,8 @@ namespace Genso.Astrology.Library.Tests
         public void GetLunarMonthTest3()
         {
 
-            var endStdTime = DateTimeOffset.ParseExact("15:00 01/01/2021 +08:00", Time.GetDateTimeFormat(), null);
             var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
-            var time = new Time(endStdTime, geoLocation);
+            var time = new Time("15:00 01/01/2021 +08:00", geoLocation);
 
             var lunarMonthTest = AstronomicalCalculator.GetLunarMonth(time);
 
@@ -92,9 +88,8 @@ namespace Genso.Astrology.Library.Tests
         public void GetLunarMonthTest4()
         {
 
-            var endStdTime = DateTimeOffset.ParseExact("15:00 01/01/2020 +08:00", Time.GetDateTimeFormat(), null);
             var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
-            var time = new Time(endStdTime, geoLocation);
+            var time = new Time("15:00 01/01/2020 +08:00", geoLocation);
 
             var lunarMonthTest = AstronomicalCalculator.GetLunarMonth(time);
 

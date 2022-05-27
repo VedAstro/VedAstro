@@ -50,8 +50,8 @@ namespace Compatibility
                 var list = report.PredictionList;
 
                 //print header
-                var maleYear = male.GetBirthDateTime().GetStdDateTimeOffset().Year;
-                var femaleYear = female.GetBirthDateTime().GetStdDateTimeOffset().Year;
+                var maleYear = male.BirthYear;
+                var femaleYear = female.BirthYear;
                 Console.WriteLine($"{maleName}-{maleYear} <> {femaleName}-{femaleYear}");
                 Console.WriteLine("Name#Nature#Description#Extra Info#Male#Female#");
 

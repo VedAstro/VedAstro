@@ -721,7 +721,7 @@ namespace API
 
 
             //prep data
-            var startTime = inputPerson.GetBirthDateTime(); //start time is birth time
+            var startTime = inputPerson.BirthTime; //start time is birth time
             var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
 
             //use the inputed data to get events from API
@@ -1009,7 +1009,7 @@ namespace API
             List<Time> GetTimeSlices()
             {
                 //get time slices used to get events
-                var startTime = inputPerson.GetBirthDateTime(); //start time is birth time
+                var startTime = inputPerson.BirthTime; //start time is birth time
                 var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
                 var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
 

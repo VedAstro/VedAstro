@@ -631,7 +631,7 @@ namespace Genso.Astrology.Library
             // favourable for marriage.
 
             //get birth rulling costellation 
-            var birthRulingConstellation = AstronomicalCalculator.GetMoonConstellation(person.GetBirthDateTime());
+            var birthRulingConstellation = AstronomicalCalculator.GetMoonConstellation(person.BirthTime);
 
             //get current rulling constellation
             var currentRulingConstellation = AstronomicalCalculator.GetMoonConstellation(time);
@@ -815,10 +815,10 @@ namespace Genso.Astrology.Library
             //and such an individual should be mated to one who has similar instincts
 
             //mars in 7th at birth
-            var marsIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Mars, 7);
+            var marsIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Mars, 7);
 
             //venus in 7th at birth
-            var venusIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Venus, 7);
+            var venusIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Venus, 7);
 
             //occuring if all conditions met
             var occuring = marsIn7th && venusIn7th;
@@ -833,10 +833,10 @@ namespace Genso.Astrology.Library
             // And such an individual should not be mated to a person with strong sex instincts.
 
             //Mercury in 7th at birth
-            var mercuryIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Mercury, 7);
+            var mercuryIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Mercury, 7);
 
             //Jupiter in 7th at birth
-            var jupiterIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Jupiter, 7);
+            var jupiterIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Jupiter, 7);
 
             //occuring if either conditions met
             var occuring = mercuryIn7th || jupiterIn7th;
@@ -851,15 +851,15 @@ namespace Genso.Astrology.Library
             // husband will be subservient to the wife carrying out all her orders.
 
             //lagna is leo
-            var leoIsLagna = AstronomicalCalculator.GetHouseSignName(1, person.GetBirthDateTime()) == ZodiacName.Leo;
+            var leoIsLagna = AstronomicalCalculator.GetHouseSignName(1, person.BirthTime) == ZodiacName.Leo;
 
             //is 7th lord saturn
-            var isLord7thSaturn = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.GetBirthDateTime()) ==
+            var isLord7thSaturn = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.BirthTime) ==
                                   PlanetName.Saturn;
 
             //is saturn in 2nd
             var isSaturnIn2nd =
-                AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Saturn, 2);
+                AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Saturn, 2);
 
 
             //occuring conditions met
@@ -875,15 +875,15 @@ namespace Genso.Astrology.Library
             // unless Saturn happens to be either lord of Lagna or lord of the 7th.
 
             //is saturn in 7th house
-            var isSaturnIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Saturn, 7);
+            var isSaturnIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Saturn, 7);
 
             //saturn is not lord of lagna
             var saturnNotLagnaLord =
-                AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.GetBirthDateTime()) != PlanetName.Saturn;
+                AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.BirthTime) != PlanetName.Saturn;
 
             //saturn is not lord of 7th
             var saturnNot7thLord =
-                AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.GetBirthDateTime()) != PlanetName.Saturn;
+                AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.BirthTime) != PlanetName.Saturn;
 
 
             //occuring conditions met
@@ -900,13 +900,13 @@ namespace Genso.Astrology.Library
             //misunderstandings and separation.
 
             //is mars in 7th house
-            var isMarsIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Mars, 7);
+            var isMarsIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Mars, 7);
 
             //no benefics aspecting 7th house
-            var beneficsNotAspect7th = !AstronomicalCalculator.IsBeneficPlanetAspectHouse(HouseName.House7, person.GetBirthDateTime());
+            var beneficsNotAspect7th = !AstronomicalCalculator.IsBeneficPlanetAspectHouse(HouseName.House7, person.BirthTime);
 
             //no benefics located in 7th
-            var beneficNotFoundIn7th = !AstronomicalCalculator.IsBeneficPlanetInHouse(7, person.GetBirthDateTime());
+            var beneficNotFoundIn7th = !AstronomicalCalculator.IsBeneficPlanetInHouse(7, person.BirthTime);
 
             //occuring conditions met
             var occuring = isMarsIn7th && beneficsNotAspect7th && beneficNotFoundIn7th;
@@ -924,18 +924,18 @@ namespace Genso.Astrology.Library
             //NOTE : *is intepreted as in the same house at the same time
 
             //is sun & venus in 5th
-            var isSunIn5th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Sun, 5);
-            var isVenusIn5th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Venus, 5);
+            var isSunIn5th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Sun, 5);
+            var isVenusIn5th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Venus, 5);
             var sunAndVenusIn5th = isSunIn5th && isVenusIn5th;
 
             //is sun & venus in 7th
-            var isSunIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Sun, 7);
-            var isVenusIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Venus, 7);
+            var isSunIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Sun, 7);
+            var isVenusIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Venus, 7);
             var sunAndVenusIn7th = isSunIn7th && isVenusIn7th;
 
             //is sun & venus in 9th
-            var isSunIn9th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Sun, 9);
-            var isVenusIn9th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Venus, 9);
+            var isSunIn9th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Sun, 9);
+            var isVenusIn9th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Venus, 9);
             var sunAndVenusIn9th = isSunIn9th && isVenusIn9th;
 
 
@@ -954,12 +954,12 @@ namespace Genso.Astrology.Library
 
 
             //get lord of 7th and 1st house
-            var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.GetBirthDateTime());
-            var lord1 = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.GetBirthDateTime());
+            var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.BirthTime);
+            var lord1 = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.BirthTime);
 
             //get the relationship
             var lord7And1Relationship = AstronomicalCalculator.GetPlanetCombinedRelationshipWithPlanet(lord7, lord1,
-                person.GetBirthDateTime());
+                person.BirthTime);
 
             //occuring only if best friends or normal friends nothing else
             var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.AdhiMitra) ||
@@ -979,12 +979,12 @@ namespace Genso.Astrology.Library
 
 
             //get lord of 7th and 1st house
-            var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.GetBirthDateTime());
-            var lord1 = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.GetBirthDateTime());
+            var lord7 = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, person.BirthTime);
+            var lord1 = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.BirthTime);
 
             //get the relationship
             var lord7And1Relationship = AstronomicalCalculator.GetPlanetCombinedRelationshipWithPlanet(lord7, lord1,
-                person.GetBirthDateTime());
+                person.BirthTime);
 
             //occuring only if bitter enemies or normal enemies nothing else
             var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.AdhiSatru) ||
@@ -1001,7 +1001,7 @@ namespace Genso.Astrology.Library
             //coldness and not warmth.
 
             //is saturn in 7th house
-            var isSaturnIn7th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), PlanetName.Saturn, 7);
+            var isSaturnIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Saturn, 7);
 
             //occuring conditions met
             var occuring = isSaturnIn7th;
@@ -1502,7 +1502,7 @@ namespace Genso.Astrology.Library
                 var navamsaLagnaLord = AstronomicalCalculator.GetLordOfZodiacSign(navamsaLagnaSign);
 
                 //get ordinary sign of navamsa lagna lord
-                var ordinarySignOfNavamsaLagnaLord = AstronomicalCalculator.GetPlanetRasiSign(navamsaLagnaLord, person.GetBirthDateTime()).GetSignName();
+                var ordinarySignOfNavamsaLagnaLord = AstronomicalCalculator.GetPlanetRasiSign(navamsaLagnaLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 1
                 var house1Sign = AstronomicalCalculator.GetHouseSignName(1, time);
@@ -1533,7 +1533,7 @@ namespace Genso.Astrology.Library
                 var navamsa7thLord = AstronomicalCalculator.GetLordOfZodiacSign(navamsa7thSign);
 
                 //get ordinary sign of navamsa 7th lord
-                var ordinarySignOfNavamsa7thLord = AstronomicalCalculator.GetPlanetRasiSign(navamsa7thLord, person.GetBirthDateTime()).GetSignName();
+                var ordinarySignOfNavamsa7thLord = AstronomicalCalculator.GetPlanetRasiSign(navamsa7thLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 7
                 var house7Sign = AstronomicalCalculator.GetHouseSignName(7, time);
@@ -7746,73 +7746,73 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.SunInAries)]
         public static Prediction SunInAries(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Aries
         };
         [EventCalculator(EventName.SunInTaurus)]
         public static Prediction SunInTaurus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Taurus
         };
         [EventCalculator(EventName.SunInGemini)]
         public static Prediction SunInGemini(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Gemini
         };
         [EventCalculator(EventName.SunInCancer)]
         public static Prediction SunInCancer(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Cancer
         };
         [EventCalculator(EventName.SunInLeo)]
         public static Prediction SunInLeo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Leo
         };
         [EventCalculator(EventName.SunInVirgo)]
         public static Prediction SunInVirgo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Virgo
         };
         [EventCalculator(EventName.SunInLibra)]
         public static Prediction SunInLibra(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Libra
         };
         [EventCalculator(EventName.SunInScorpio)]
         public static Prediction SunInScorpio(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Scorpio
         };
         [EventCalculator(EventName.SunInSagittarius)]
         public static Prediction SunInSagittarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Sagittarius
         };
         [EventCalculator(EventName.SunInCapricornus)]
         public static Prediction SunInCapricornus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Capricornus
         };
         [EventCalculator(EventName.SunInAquarius)]
         public static Prediction SunInAquarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Aquarius
         };
         [EventCalculator(EventName.SunInPisces)]
         public static Prediction SunInPisces(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
                 .GetSignName() == ZodiacName.Pisces
         };
 
@@ -7820,73 +7820,73 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.MoonInAries)]
         public static Prediction MoonInAries(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Aries
         };
         [EventCalculator(EventName.MoonInTaurus)]
         public static Prediction MoonInTaurus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Taurus
         };
         [EventCalculator(EventName.MoonInGemini)]
         public static Prediction MoonInGemini(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Gemini
         };
         [EventCalculator(EventName.MoonInCancer)]
         public static Prediction MoonInCancer(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Cancer
         };
         [EventCalculator(EventName.MoonInLeo)]
         public static Prediction MoonInLeo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Leo
         };
         [EventCalculator(EventName.MoonInVirgo)]
         public static Prediction MoonInVirgo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Virgo
         };
         [EventCalculator(EventName.MoonInLibra)]
         public static Prediction MoonInLibra(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Libra
         };
         [EventCalculator(EventName.MoonInScorpio)]
         public static Prediction MoonInScorpio(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Scorpio
         };
         [EventCalculator(EventName.MoonInSagittarius)]
         public static Prediction MoonInSagittarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Sagittarius
         };
         [EventCalculator(EventName.MoonInCapricornus)]
         public static Prediction MoonInCapricornus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Capricornus
         };
         [EventCalculator(EventName.MoonInAquarius)]
         public static Prediction MoonInAquarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Aquarius
         };
         [EventCalculator(EventName.MoonInPisces)]
         public static Prediction MoonInPisces(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
                 .GetSignName() == ZodiacName.Pisces
         };
 
@@ -7894,73 +7894,73 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.MarsInAries)]
         public static Prediction MarsInAries(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Aries
         };
         [EventCalculator(EventName.MarsInTaurus)]
         public static Prediction MarsInTaurus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Taurus
         };
         [EventCalculator(EventName.MarsInGemini)]
         public static Prediction MarsInGemini(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Gemini
         };
         [EventCalculator(EventName.MarsInCancer)]
         public static Prediction MarsInCancer(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Cancer
         };
         [EventCalculator(EventName.MarsInLeo)]
         public static Prediction MarsInLeo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Leo
         };
         [EventCalculator(EventName.MarsInVirgo)]
         public static Prediction MarsInVirgo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Virgo
         };
         [EventCalculator(EventName.MarsInLibra)]
         public static Prediction MarsInLibra(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Libra
         };
         [EventCalculator(EventName.MarsInScorpio)]
         public static Prediction MarsInScorpio(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Scorpio
         };
         [EventCalculator(EventName.MarsInSagittarius)]
         public static Prediction MarsInSagittarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Sagittarius
         };
         [EventCalculator(EventName.MarsInCapricornus)]
         public static Prediction MarsInCapricornus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Capricornus
         };
         [EventCalculator(EventName.MarsInAquarius)]
         public static Prediction MarsInAquarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Aquarius
         };
         [EventCalculator(EventName.MarsInPisces)]
         public static Prediction MarsInPisces(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
                 .GetSignName() == ZodiacName.Pisces
         };
 
@@ -7969,73 +7969,73 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.MercuryInAries)]
         public static Prediction MercuryInAries(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Aries
         };
         [EventCalculator(EventName.MercuryInTaurus)]
         public static Prediction MercuryInTaurus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Taurus
         };
         [EventCalculator(EventName.MercuryInGemini)]
         public static Prediction MercuryInGemini(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Gemini
         };
         [EventCalculator(EventName.MercuryInCancer)]
         public static Prediction MercuryInCancer(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Cancer
         };
         [EventCalculator(EventName.MercuryInLeo)]
         public static Prediction MercuryInLeo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Leo
         };
         [EventCalculator(EventName.MercuryInVirgo)]
         public static Prediction MercuryInVirgo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Virgo
         };
         [EventCalculator(EventName.MercuryInLibra)]
         public static Prediction MercuryInLibra(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Libra
         };
         [EventCalculator(EventName.MercuryInScorpio)]
         public static Prediction MercuryInScorpio(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Scorpio
         };
         [EventCalculator(EventName.MercuryInSagittarius)]
         public static Prediction MercuryInSagittarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Sagittarius
         };
         [EventCalculator(EventName.MercuryInCapricornus)]
         public static Prediction MercuryInCapricornus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Capricornus
         };
         [EventCalculator(EventName.MercuryInAquarius)]
         public static Prediction MercuryInAquarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Aquarius
         };
         [EventCalculator(EventName.MercuryInPisces)]
         public static Prediction MercuryInPisces(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
                 .GetSignName() == ZodiacName.Pisces
         };
 
@@ -8044,73 +8044,73 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.JupiterInAries)]
         public static Prediction JupiterInAries(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Aries
         };
         [EventCalculator(EventName.JupiterInTaurus)]
         public static Prediction JupiterInTaurus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Taurus
         };
         [EventCalculator(EventName.JupiterInGemini)]
         public static Prediction JupiterInGemini(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Gemini
         };
         [EventCalculator(EventName.JupiterInCancer)]
         public static Prediction JupiterInCancer(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Cancer
         };
         [EventCalculator(EventName.JupiterInLeo)]
         public static Prediction JupiterInLeo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Leo
         };
         [EventCalculator(EventName.JupiterInVirgo)]
         public static Prediction JupiterInVirgo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Virgo
         };
         [EventCalculator(EventName.JupiterInLibra)]
         public static Prediction JupiterInLibra(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Libra
         };
         [EventCalculator(EventName.JupiterInScorpio)]
         public static Prediction JupiterInScorpio(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Scorpio
         };
         [EventCalculator(EventName.JupiterInSagittarius)]
         public static Prediction JupiterInSagittarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Sagittarius
         };
         [EventCalculator(EventName.JupiterInCapricornus)]
         public static Prediction JupiterInCapricornus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Capricornus
         };
         [EventCalculator(EventName.JupiterInAquarius)]
         public static Prediction JupiterInAquarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Aquarius
         };
         [EventCalculator(EventName.JupiterInPisces)]
         public static Prediction JupiterInPisces(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
                 .GetSignName() == ZodiacName.Pisces
         };
 
@@ -8119,73 +8119,73 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.VenusInAries)]
         public static Prediction VenusInAries(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Aries
         };
         [EventCalculator(EventName.VenusInTaurus)]
         public static Prediction VenusInTaurus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Taurus
         };
         [EventCalculator(EventName.VenusInGemini)]
         public static Prediction VenusInGemini(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Gemini
         };
         [EventCalculator(EventName.VenusInCancer)]
         public static Prediction VenusInCancer(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Cancer
         };
         [EventCalculator(EventName.VenusInLeo)]
         public static Prediction VenusInLeo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Leo
         };
         [EventCalculator(EventName.VenusInVirgo)]
         public static Prediction VenusInVirgo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Virgo
         };
         [EventCalculator(EventName.VenusInLibra)]
         public static Prediction VenusInLibra(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Libra
         };
         [EventCalculator(EventName.VenusInScorpio)]
         public static Prediction VenusInScorpio(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Scorpio
         };
         [EventCalculator(EventName.VenusInSagittarius)]
         public static Prediction VenusInSagittarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Sagittarius
         };
         [EventCalculator(EventName.VenusInCapricornus)]
         public static Prediction VenusInCapricornus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Capricornus
         };
         [EventCalculator(EventName.VenusInAquarius)]
         public static Prediction VenusInAquarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Aquarius
         };
         [EventCalculator(EventName.VenusInPisces)]
         public static Prediction VenusInPisces(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
                 .GetSignName() == ZodiacName.Pisces
         };
 
@@ -8194,73 +8194,73 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.SaturnInAries)]
         public static Prediction SaturnInAries(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Aries
         };
         [EventCalculator(EventName.SaturnInTaurus)]
         public static Prediction SaturnInTaurus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Taurus
         };
         [EventCalculator(EventName.SaturnInGemini)]
         public static Prediction SaturnInGemini(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Gemini
         };
         [EventCalculator(EventName.SaturnInCancer)]
         public static Prediction SaturnInCancer(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Cancer
         };
         [EventCalculator(EventName.SaturnInLeo)]
         public static Prediction SaturnInLeo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Leo
         };
         [EventCalculator(EventName.SaturnInVirgo)]
         public static Prediction SaturnInVirgo(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Virgo
         };
         [EventCalculator(EventName.SaturnInLibra)]
         public static Prediction SaturnInLibra(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Libra
         };
         [EventCalculator(EventName.SaturnInScorpio)]
         public static Prediction SaturnInScorpio(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Scorpio
         };
         [EventCalculator(EventName.SaturnInSagittarius)]
         public static Prediction SaturnInSagittarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Sagittarius
         };
         [EventCalculator(EventName.SaturnInCapricornus)]
         public static Prediction SaturnInCapricornus(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Capricornus
         };
         [EventCalculator(EventName.SaturnInAquarius)]
         public static Prediction SaturnInAquarius(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Aquarius
         };
         [EventCalculator(EventName.SaturnInPisces)]
         public static Prediction SaturnInPisces(Time time, Person person) => new()
         {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime())
+            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
                 .GetSignName() == ZodiacName.Pisces
         };
 
@@ -8381,344 +8381,344 @@ namespace Genso.Astrology.Library
         #region GOCHARA
 
         [EventCalculator(EventName.SunGocharaInHouse1)]
-        public static Prediction SunGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 1) };
+        public static Prediction SunGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 1) };
 
         [EventCalculator(EventName.SunGocharaInHouse2)]
-        public static Prediction SunGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 2) };
+        public static Prediction SunGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 2) };
 
         [EventCalculator(EventName.SunGocharaInHouse3)]
-        public static Prediction SunGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 3) };
+        public static Prediction SunGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 3) };
 
         [EventCalculator(EventName.SunGocharaInHouse4)]
-        public static Prediction SunGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 4) };
+        public static Prediction SunGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 4) };
 
         [EventCalculator(EventName.SunGocharaInHouse5)]
-        public static Prediction SunGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 5) };
+        public static Prediction SunGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 5) };
 
         [EventCalculator(EventName.SunGocharaInHouse6)]
-        public static Prediction SunGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 6) };
+        public static Prediction SunGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 6) };
 
         [EventCalculator(EventName.SunGocharaInHouse7)]
-        public static Prediction SunGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 7) };
+        public static Prediction SunGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 7) };
 
         [EventCalculator(EventName.SunGocharaInHouse8)]
-        public static Prediction SunGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 8) };
+        public static Prediction SunGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 8) };
 
         [EventCalculator(EventName.SunGocharaInHouse9)]
-        public static Prediction SunGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 9) };
+        public static Prediction SunGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 9) };
 
         [EventCalculator(EventName.SunGocharaInHouse10)]
-        public static Prediction SunGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 10) };
+        public static Prediction SunGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 10) };
 
         [EventCalculator(EventName.SunGocharaInHouse11)]
-        public static Prediction SunGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 11) };
+        public static Prediction SunGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 11) };
 
         [EventCalculator(EventName.SunGocharaInHouse12)]
-        public static Prediction SunGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Sun, 12) };
+        public static Prediction SunGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 12) };
 
         //MOON
         [EventCalculator(EventName.MoonGocharaInHouse1)]
-        public static Prediction MoonGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 1) };
+        public static Prediction MoonGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 1) };
 
         [EventCalculator(EventName.MoonGocharaInHouse2)]
-        public static Prediction MoonGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 2) };
+        public static Prediction MoonGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 2) };
 
         [EventCalculator(EventName.MoonGocharaInHouse3)]
-        public static Prediction MoonGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 3) };
+        public static Prediction MoonGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 3) };
 
         [EventCalculator(EventName.MoonGocharaInHouse4)]
-        public static Prediction MoonGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 4) };
+        public static Prediction MoonGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 4) };
 
         [EventCalculator(EventName.MoonGocharaInHouse5)]
-        public static Prediction MoonGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 5) };
+        public static Prediction MoonGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 5) };
 
         [EventCalculator(EventName.MoonGocharaInHouse6)]
-        public static Prediction MoonGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 6) };
+        public static Prediction MoonGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 6) };
 
         [EventCalculator(EventName.MoonGocharaInHouse7)]
-        public static Prediction MoonGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 7) };
+        public static Prediction MoonGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 7) };
 
         [EventCalculator(EventName.MoonGocharaInHouse8)]
-        public static Prediction MoonGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 8) };
+        public static Prediction MoonGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 8) };
 
         [EventCalculator(EventName.MoonGocharaInHouse9)]
-        public static Prediction MoonGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 9) };
+        public static Prediction MoonGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 9) };
 
         [EventCalculator(EventName.MoonGocharaInHouse10)]
-        public static Prediction MoonGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 10) };
+        public static Prediction MoonGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 10) };
 
         [EventCalculator(EventName.MoonGocharaInHouse11)]
-        public static Prediction MoonGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 11) };
+        public static Prediction MoonGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 11) };
 
         [EventCalculator(EventName.MoonGocharaInHouse12)]
-        public static Prediction MoonGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Moon, 12) };
+        public static Prediction MoonGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Moon, 12) };
 
 
         //MARS
         [EventCalculator(EventName.MarsGocharaInHouse1)]
-        public static Prediction MarsGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 1) };
+        public static Prediction MarsGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 1) };
 
         [EventCalculator(EventName.MarsGocharaInHouse2)]
-        public static Prediction MarsGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 2) };
+        public static Prediction MarsGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 2) };
 
         [EventCalculator(EventName.MarsGocharaInHouse3)]
-        public static Prediction MarsGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 3) };
+        public static Prediction MarsGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 3) };
 
         [EventCalculator(EventName.MarsGocharaInHouse4)]
-        public static Prediction MarsGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 4) };
+        public static Prediction MarsGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 4) };
 
         [EventCalculator(EventName.MarsGocharaInHouse5)]
-        public static Prediction MarsGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 5) };
+        public static Prediction MarsGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 5) };
 
         [EventCalculator(EventName.MarsGocharaInHouse6)]
-        public static Prediction MarsGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 6) };
+        public static Prediction MarsGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 6) };
 
         [EventCalculator(EventName.MarsGocharaInHouse7)]
-        public static Prediction MarsGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 7) };
+        public static Prediction MarsGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 7) };
 
         [EventCalculator(EventName.MarsGocharaInHouse8)]
-        public static Prediction MarsGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 8) };
+        public static Prediction MarsGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 8) };
 
         [EventCalculator(EventName.MarsGocharaInHouse9)]
-        public static Prediction MarsGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 9) };
+        public static Prediction MarsGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 9) };
 
         [EventCalculator(EventName.MarsGocharaInHouse10)]
-        public static Prediction MarsGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 10) };
+        public static Prediction MarsGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 10) };
 
         [EventCalculator(EventName.MarsGocharaInHouse11)]
-        public static Prediction MarsGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 11) };
+        public static Prediction MarsGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 11) };
 
         [EventCalculator(EventName.MarsGocharaInHouse12)]
-        public static Prediction MarsGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mars, 12) };
+        public static Prediction MarsGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mars, 12) };
 
 
 
         //MERCURY
         [EventCalculator(EventName.MercuryGocharaInHouse1)]
-        public static Prediction MercuryGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 1) };
+        public static Prediction MercuryGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 1) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse2)]
-        public static Prediction MercuryGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 2) };
+        public static Prediction MercuryGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 2) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse3)]
-        public static Prediction MercuryGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 3) };
+        public static Prediction MercuryGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 3) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse4)]
-        public static Prediction MercuryGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 4) };
+        public static Prediction MercuryGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 4) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse5)]
-        public static Prediction MercuryGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 5) };
+        public static Prediction MercuryGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 5) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse6)]
-        public static Prediction MercuryGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 6) };
+        public static Prediction MercuryGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 6) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse7)]
-        public static Prediction MercuryGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 7) };
+        public static Prediction MercuryGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 7) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse8)]
-        public static Prediction MercuryGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 8) };
+        public static Prediction MercuryGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 8) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse9)]
-        public static Prediction MercuryGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 9) };
+        public static Prediction MercuryGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 9) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse10)]
-        public static Prediction MercuryGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 10) };
+        public static Prediction MercuryGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 10) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse11)]
-        public static Prediction MercuryGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 11) };
+        public static Prediction MercuryGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 11) };
 
         [EventCalculator(EventName.MercuryGocharaInHouse12)]
-        public static Prediction MercuryGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Mercury, 12) };
+        public static Prediction MercuryGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Mercury, 12) };
 
 
         //JUPITER
         [EventCalculator(EventName.JupiterGocharaInHouse1)]
-        public static Prediction JupiterGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 1) };
+        public static Prediction JupiterGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 1) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse2)]
-        public static Prediction JupiterGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 2) };
+        public static Prediction JupiterGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 2) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse3)]
-        public static Prediction JupiterGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 3) };
+        public static Prediction JupiterGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 3) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse4)]
-        public static Prediction JupiterGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 4) };
+        public static Prediction JupiterGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 4) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse5)]
-        public static Prediction JupiterGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 5) };
+        public static Prediction JupiterGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 5) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse6)]
-        public static Prediction JupiterGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 6) };
+        public static Prediction JupiterGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 6) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse7)]
-        public static Prediction JupiterGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 7) };
+        public static Prediction JupiterGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 7) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse8)]
-        public static Prediction JupiterGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 8) };
+        public static Prediction JupiterGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 8) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse9)]
-        public static Prediction JupiterGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 9) };
+        public static Prediction JupiterGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 9) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse10)]
-        public static Prediction JupiterGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 10) };
+        public static Prediction JupiterGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 10) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse11)]
-        public static Prediction JupiterGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 11) };
+        public static Prediction JupiterGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 11) };
 
         [EventCalculator(EventName.JupiterGocharaInHouse12)]
-        public static Prediction JupiterGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Jupiter, 12) };
+        public static Prediction JupiterGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Jupiter, 12) };
 
 
         //VENUS
         [EventCalculator(EventName.VenusGocharaInHouse1)]
-        public static Prediction VenusGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 1) };
+        public static Prediction VenusGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 1) };
 
         [EventCalculator(EventName.VenusGocharaInHouse2)]
-        public static Prediction VenusGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 2) };
+        public static Prediction VenusGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 2) };
 
         [EventCalculator(EventName.VenusGocharaInHouse3)]
-        public static Prediction VenusGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 3) };
+        public static Prediction VenusGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 3) };
 
         [EventCalculator(EventName.VenusGocharaInHouse4)]
-        public static Prediction VenusGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 4) };
+        public static Prediction VenusGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 4) };
 
         [EventCalculator(EventName.VenusGocharaInHouse5)]
-        public static Prediction VenusGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 5) };
+        public static Prediction VenusGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 5) };
 
         [EventCalculator(EventName.VenusGocharaInHouse6)]
-        public static Prediction VenusGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 6) };
+        public static Prediction VenusGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 6) };
 
         [EventCalculator(EventName.VenusGocharaInHouse7)]
-        public static Prediction VenusGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 7) };
+        public static Prediction VenusGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 7) };
 
         [EventCalculator(EventName.VenusGocharaInHouse8)]
-        public static Prediction VenusGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 8) };
+        public static Prediction VenusGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 8) };
 
         [EventCalculator(EventName.VenusGocharaInHouse9)]
-        public static Prediction VenusGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 9) };
+        public static Prediction VenusGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 9) };
 
         [EventCalculator(EventName.VenusGocharaInHouse10)]
-        public static Prediction VenusGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 10) };
+        public static Prediction VenusGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 10) };
 
         [EventCalculator(EventName.VenusGocharaInHouse11)]
-        public static Prediction VenusGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 11) };
+        public static Prediction VenusGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 11) };
 
         [EventCalculator(EventName.VenusGocharaInHouse12)]
-        public static Prediction VenusGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Venus, 12) };
+        public static Prediction VenusGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Venus, 12) };
 
 
         //SATURN
         [EventCalculator(EventName.SaturnGocharaInHouse1)]
-        public static Prediction SaturnGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 1) };
+        public static Prediction SaturnGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 1) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse2)]
-        public static Prediction SaturnGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 2) };
+        public static Prediction SaturnGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 2) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse3)]
-        public static Prediction SaturnGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 3) };
+        public static Prediction SaturnGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 3) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse4)]
-        public static Prediction SaturnGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 4) };
+        public static Prediction SaturnGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 4) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse5)]
-        public static Prediction SaturnGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 5) };
+        public static Prediction SaturnGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 5) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse6)]
-        public static Prediction SaturnGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 6) };
+        public static Prediction SaturnGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 6) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse7)]
-        public static Prediction SaturnGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 7) };
+        public static Prediction SaturnGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 7) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse8)]
-        public static Prediction SaturnGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 8) };
+        public static Prediction SaturnGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 8) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse9)]
-        public static Prediction SaturnGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 9) };
+        public static Prediction SaturnGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 9) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse10)]
-        public static Prediction SaturnGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 10) };
+        public static Prediction SaturnGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 10) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse11)]
-        public static Prediction SaturnGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 11) };
+        public static Prediction SaturnGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 11) };
 
         [EventCalculator(EventName.SaturnGocharaInHouse12)]
-        public static Prediction SaturnGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Saturn, 12) };
+        public static Prediction SaturnGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Saturn, 12) };
 
 
         //RAHU
         [EventCalculator(EventName.RahuGocharaInHouse1)]
-        public static Prediction RahuGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 1) };
+        public static Prediction RahuGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 1) };
 
         [EventCalculator(EventName.RahuGocharaInHouse2)]
-        public static Prediction RahuGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 2) };
+        public static Prediction RahuGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 2) };
 
         [EventCalculator(EventName.RahuGocharaInHouse3)]
-        public static Prediction RahuGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 3) };
+        public static Prediction RahuGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 3) };
 
         [EventCalculator(EventName.RahuGocharaInHouse4)]
-        public static Prediction RahuGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 4) };
+        public static Prediction RahuGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 4) };
 
         [EventCalculator(EventName.RahuGocharaInHouse5)]
-        public static Prediction RahuGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 5) };
+        public static Prediction RahuGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 5) };
 
         [EventCalculator(EventName.RahuGocharaInHouse6)]
-        public static Prediction RahuGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 6) };
+        public static Prediction RahuGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 6) };
 
         [EventCalculator(EventName.RahuGocharaInHouse7)]
-        public static Prediction RahuGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 7) };
+        public static Prediction RahuGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 7) };
 
         [EventCalculator(EventName.RahuGocharaInHouse8)]
-        public static Prediction RahuGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 8) };
+        public static Prediction RahuGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 8) };
 
         [EventCalculator(EventName.RahuGocharaInHouse9)]
-        public static Prediction RahuGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 9) };
+        public static Prediction RahuGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 9) };
 
         [EventCalculator(EventName.RahuGocharaInHouse10)]
-        public static Prediction RahuGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 10) };
+        public static Prediction RahuGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 10) };
 
         [EventCalculator(EventName.RahuGocharaInHouse11)]
-        public static Prediction RahuGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 11) };
+        public static Prediction RahuGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 11) };
 
         [EventCalculator(EventName.RahuGocharaInHouse12)]
-        public static Prediction RahuGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Rahu, 12) };
+        public static Prediction RahuGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Rahu, 12) };
 
 
         //KETU
         [EventCalculator(EventName.KetuGocharaInHouse1)]
-        public static Prediction KetuGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 1) };
+        public static Prediction KetuGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 1) };
 
         [EventCalculator(EventName.KetuGocharaInHouse2)]
-        public static Prediction KetuGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 2) };
+        public static Prediction KetuGocharaInHouse2(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 2) };
 
         [EventCalculator(EventName.KetuGocharaInHouse3)]
-        public static Prediction KetuGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 3) };
+        public static Prediction KetuGocharaInHouse3(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 3) };
 
         [EventCalculator(EventName.KetuGocharaInHouse4)]
-        public static Prediction KetuGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 4) };
+        public static Prediction KetuGocharaInHouse4(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 4) };
 
         [EventCalculator(EventName.KetuGocharaInHouse5)]
-        public static Prediction KetuGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 5) };
+        public static Prediction KetuGocharaInHouse5(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 5) };
 
         [EventCalculator(EventName.KetuGocharaInHouse6)]
-        public static Prediction KetuGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 6) };
+        public static Prediction KetuGocharaInHouse6(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 6) };
 
         [EventCalculator(EventName.KetuGocharaInHouse7)]
-        public static Prediction KetuGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 7) };
+        public static Prediction KetuGocharaInHouse7(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 7) };
 
         [EventCalculator(EventName.KetuGocharaInHouse8)]
-        public static Prediction KetuGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 8) };
+        public static Prediction KetuGocharaInHouse8(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 8) };
 
         [EventCalculator(EventName.KetuGocharaInHouse9)]
-        public static Prediction KetuGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 9) };
+        public static Prediction KetuGocharaInHouse9(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 9) };
 
         [EventCalculator(EventName.KetuGocharaInHouse10)]
-        public static Prediction KetuGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 10) };
+        public static Prediction KetuGocharaInHouse10(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 10) };
 
         [EventCalculator(EventName.KetuGocharaInHouse11)]
-        public static Prediction KetuGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 11) };
+        public static Prediction KetuGocharaInHouse11(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 11) };
 
         [EventCalculator(EventName.KetuGocharaInHouse12)]
-        public static Prediction KetuGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.GetBirthDateTime(), time, PlanetName.Ketu, 12) };
+        public static Prediction KetuGocharaInHouse12(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Ketu, 12) };
 
         #endregion
 
@@ -8730,10 +8730,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8745,10 +8745,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8760,10 +8760,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8775,10 +8775,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8790,10 +8790,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8805,10 +8805,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8820,10 +8820,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8835,10 +8835,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8850,10 +8850,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8865,10 +8865,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8880,10 +8880,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8895,10 +8895,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesSunDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Sun;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8915,10 +8915,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8930,10 +8930,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8945,10 +8945,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8960,10 +8960,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8975,10 +8975,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -8990,10 +8990,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9005,10 +9005,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9020,10 +9020,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9035,10 +9035,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9050,10 +9050,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9065,10 +9065,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9080,10 +9080,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesMoonDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Moon;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Moon;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9100,10 +9100,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9115,10 +9115,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9130,10 +9130,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9145,10 +9145,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9160,10 +9160,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9175,10 +9175,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9190,10 +9190,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9205,10 +9205,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9220,10 +9220,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9235,10 +9235,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9250,10 +9250,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9265,10 +9265,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesMarsDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mars;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mars;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9284,10 +9284,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9299,10 +9299,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9314,10 +9314,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9329,10 +9329,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9344,10 +9344,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9359,10 +9359,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9374,10 +9374,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9389,10 +9389,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9404,10 +9404,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9419,10 +9419,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9434,10 +9434,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9449,10 +9449,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesRahuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Rahu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Rahu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Rahu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9469,10 +9469,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9484,10 +9484,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9499,10 +9499,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9514,10 +9514,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9529,10 +9529,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9544,10 +9544,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9559,10 +9559,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9574,10 +9574,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9589,10 +9589,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9604,10 +9604,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9619,10 +9619,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9634,10 +9634,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesJupiterDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Jupiter;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9655,10 +9655,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9670,10 +9670,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9685,10 +9685,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9700,10 +9700,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9715,10 +9715,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9730,10 +9730,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9745,10 +9745,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9760,10 +9760,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9775,10 +9775,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9790,10 +9790,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9805,10 +9805,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9820,10 +9820,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesSaturnDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Saturn;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9839,10 +9839,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9854,10 +9854,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9869,10 +9869,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9884,10 +9884,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9899,10 +9899,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9914,10 +9914,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9929,10 +9929,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9944,10 +9944,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9959,10 +9959,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9974,10 +9974,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -9989,10 +9989,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10004,10 +10004,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesMercuryDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Mercury;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Mercury;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10023,10 +10023,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10038,10 +10038,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10053,10 +10053,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10068,10 +10068,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10083,10 +10083,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10098,10 +10098,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10113,10 +10113,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10128,10 +10128,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10143,10 +10143,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10158,10 +10158,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10173,10 +10173,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10188,10 +10188,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesKetuDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Ketu, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Ketu;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Ketu;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10209,10 +10209,10 @@ namespace Genso.Astrology.Library
         public static Prediction AriesVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aries;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aries;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10224,10 +10224,10 @@ namespace Genso.Astrology.Library
         public static Prediction TaurusVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Taurus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Taurus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10239,10 +10239,10 @@ namespace Genso.Astrology.Library
         public static Prediction GeminiVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Gemini;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Gemini;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10254,10 +10254,10 @@ namespace Genso.Astrology.Library
         public static Prediction CancerVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Cancer;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Cancer;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10269,10 +10269,10 @@ namespace Genso.Astrology.Library
         public static Prediction LeoVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Leo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Leo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10284,10 +10284,10 @@ namespace Genso.Astrology.Library
         public static Prediction VirgoVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Virgo;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Virgo;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10299,10 +10299,10 @@ namespace Genso.Astrology.Library
         public static Prediction LibraVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Libra;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Libra;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10314,10 +10314,10 @@ namespace Genso.Astrology.Library
         public static Prediction ScorpioVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Scorpio;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Scorpio;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10329,10 +10329,10 @@ namespace Genso.Astrology.Library
         public static Prediction SagittariusVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Sagittarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Sagittarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10344,10 +10344,10 @@ namespace Genso.Astrology.Library
         public static Prediction CapricornusVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Capricornus;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Capricornus;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10359,10 +10359,10 @@ namespace Genso.Astrology.Library
         public static Prediction AquariusVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Aquarius;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Aquarius;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10374,10 +10374,10 @@ namespace Genso.Astrology.Library
         public static Prediction PiscesVenusDasa(Time time, Person person)
         {
             //planet in sign at birth
-            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.GetBirthDateTime()).GetSignName() == ZodiacName.Pisces;
+            var planetInSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime).GetSignName() == ZodiacName.Pisces;
 
             //current dasa is of planet
-            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == PlanetName.Venus;
+            var planetDasaOcurring = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Venus;
 
             //occuring if all conditions met
             var occuring = planetInSign && planetDasaOcurring;
@@ -10393,7 +10393,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10412,7 +10412,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10431,7 +10431,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10450,7 +10450,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10469,7 +10469,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10488,7 +10488,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10507,7 +10507,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10526,7 +10526,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10545,7 +10545,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Sun;
@@ -10569,7 +10569,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10588,7 +10588,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10607,7 +10607,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10626,7 +10626,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10645,7 +10645,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10664,7 +10664,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10683,7 +10683,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10702,7 +10702,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10721,7 +10721,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Moon;
@@ -10745,7 +10745,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10764,7 +10764,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10783,7 +10783,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10802,7 +10802,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10821,7 +10821,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10840,7 +10840,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10859,7 +10859,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10878,7 +10878,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10897,7 +10897,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mars;
@@ -10922,7 +10922,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -10941,7 +10941,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -10960,7 +10960,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -10979,7 +10979,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -10998,7 +10998,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -11017,7 +11017,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -11036,7 +11036,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -11055,7 +11055,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -11074,7 +11074,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Rahu;
@@ -11098,7 +11098,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11117,7 +11117,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11136,7 +11136,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11155,7 +11155,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11174,7 +11174,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11193,7 +11193,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11212,7 +11212,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11231,7 +11231,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11250,7 +11250,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Jupiter;
@@ -11274,7 +11274,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11293,7 +11293,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11312,7 +11312,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11331,7 +11331,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11350,7 +11350,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11369,7 +11369,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11388,7 +11388,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11407,7 +11407,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11426,7 +11426,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Saturn;
@@ -11450,7 +11450,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11469,7 +11469,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11488,7 +11488,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11507,7 +11507,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11526,7 +11526,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11545,7 +11545,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11564,7 +11564,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11583,7 +11583,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11602,7 +11602,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Mercury;
@@ -11626,7 +11626,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11645,7 +11645,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11664,7 +11664,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11683,7 +11683,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11702,7 +11702,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11721,7 +11721,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11740,7 +11740,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11759,7 +11759,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11778,7 +11778,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Ketu;
@@ -11801,7 +11801,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaSunBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var dasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11820,7 +11820,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaMoonBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11839,7 +11839,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaMarsBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11858,7 +11858,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaRahuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11877,7 +11877,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaJupiterBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11896,7 +11896,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaSaturnBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11915,7 +11915,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaMercuryBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11934,7 +11934,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaKetuBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11953,7 +11953,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusDasaVenusBhukti(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check dasa
             var isCorrectDasa = currentDasaBhuktiAntaram.Dasa == PlanetName.Venus;
@@ -11977,7 +11977,7 @@ namespace Genso.Astrology.Library
         public static Prediction SunAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Sun;
@@ -11992,7 +11992,7 @@ namespace Genso.Astrology.Library
         public static Prediction MoonAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Moon;
@@ -12007,7 +12007,7 @@ namespace Genso.Astrology.Library
         public static Prediction MarsAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Mars;
@@ -12022,7 +12022,7 @@ namespace Genso.Astrology.Library
         public static Prediction RahuAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Rahu;
@@ -12037,7 +12037,7 @@ namespace Genso.Astrology.Library
         public static Prediction JupiterAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Jupiter;
@@ -12052,7 +12052,7 @@ namespace Genso.Astrology.Library
         public static Prediction SaturnAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Saturn;
@@ -12067,7 +12067,7 @@ namespace Genso.Astrology.Library
         public static Prediction MercuryAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Mercury;
@@ -12082,7 +12082,7 @@ namespace Genso.Astrology.Library
         public static Prediction KetuAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Ketu;
@@ -12097,7 +12097,7 @@ namespace Genso.Astrology.Library
         public static Prediction VenusAntaram(Time time, Person person)
         {
             //get dasas for current time
-            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time);
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
             //check antaram
             var isCorrectDasa = currentDasaBhuktiAntaram.Antaram == PlanetName.Venus;
@@ -12121,17 +12121,17 @@ namespace Genso.Astrology.Library
 
 
             //get lord 6th house
-            var lord6th = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, person.GetBirthDateTime());
+            var lord6th = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, person.BirthTime);
 
             //is lord 6th dasa occuring
-            var isLord6thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == lord6th;
+            var isLord6thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lord6th;
 
 
             //get lord 8th house
-            var lord8th = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, person.GetBirthDateTime());
+            var lord8th = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, person.BirthTime);
 
             //is lord 8th dasa occuring
-            var isLord8thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == lord8th;
+            var isLord8thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lord8th;
 
 
             //occuring if one of the conditions met
@@ -12149,17 +12149,17 @@ namespace Genso.Astrology.Library
             // give rise to good.
 
             //get lord 5th house
-            var lord5th = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, person.GetBirthDateTime());
+            var lord5th = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, person.BirthTime);
 
             //is lord 5th dasa occuring
-            var isLord5thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == lord5th;
+            var isLord5thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lord5th;
 
 
             //get lord 9th house
-            var lord9th = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, person.GetBirthDateTime());
+            var lord9th = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, person.BirthTime);
 
             //is lord 8th dasa occuring
-            var isLord9thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa == lord9th;
+            var isLord9thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lord9th;
 
 
             //occuring if one of the conditions met
@@ -12177,25 +12177,25 @@ namespace Genso.Astrology.Library
             // the 12th and the 2nd from each other respectively.
 
             //get bukti lord
-            var buhktiLord = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Bhukti;
+            var buhktiLord = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Bhukti;
 
             //get dasa lord = 
-            var dasaLord = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.GetBirthDateTime(), time).Dasa;
+            var dasaLord = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa;
 
             //condition 1
             //is bukti lord in 6th house at birth
-            var bhuktiLordIn6th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), buhktiLord, 6);
+            var bhuktiLordIn6th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, buhktiLord, 6);
             //is dasa lord in 8th house at birth
-            var dasaLordIn8th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), dasaLord, 8);
+            var dasaLordIn8th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, dasaLord, 8);
             //check if both planets are in bad houses at the same time
             var buhktiDasaIn6And8 = bhuktiLordIn6th && dasaLordIn8th;
 
 
             //condition 2
             //is bukti lord in 12th house at birth
-            var bhuktiLordIn12th = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), buhktiLord, 12);
+            var bhuktiLordIn12th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, buhktiLord, 12);
             //is dasa lord in 2nd house at birth
-            var dasaLordIn2nd = AstronomicalCalculator.IsPlanetInHouse(person.GetBirthDateTime(), dasaLord, 2);
+            var dasaLordIn2nd = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, dasaLord, 2);
             //check if both planets are in bad houses at the same time
             var buhktiDasaIn12And2 = bhuktiLordIn12th && dasaLordIn2nd;
 

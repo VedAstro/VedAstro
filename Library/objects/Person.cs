@@ -24,6 +24,7 @@ namespace Genso.Astrology.Library
         public string Notes { get; set; }
         public Gender Gender { get; set; }
         public Time BirthTime { get; set; }
+
         /// <summary>
         /// List of events that mark important moments in a persons life
         /// This is used later by calculators like Dasa to show against astrological predictions
@@ -47,10 +48,10 @@ namespace Genso.Astrology.Library
 
         //PUBLIC PROPERTIES
 
-        /// <summary>
-        /// Todo deprecated use BirthTime
-        /// </summary>
-        public Time GetBirthDateTime() => BirthTime;
+        ///// <summary>
+        ///// Todo deprecated use BirthTime
+        ///// </summary>
+        //public Time BirthTime => BirthTime;
 
         /// <summary>
         /// Get the place of birth
@@ -71,7 +72,12 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets STD birth year for person
         /// </summary>
-        public int BirthYear => this.GetBirthDateTime().GetStdDateTimeOffset().Year;
+        public int BirthYear => this.BirthTime.GetStdDateTimeOffset().Year;
+
+        /// <summary>
+        /// Gets STD birth time zone for person
+        /// </summary>
+        public string BirthTimeZone => this.BirthTime.GetStdDateTimeOffset().ToString("zzz");
 
         /// <summary>
         /// Gets this person's age at the inputed time (using year from STD time)
@@ -95,7 +101,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Used by tabulator JS, when person is converted to json
         /// </summary>
-        public string BirthTimeString => this.GetBirthDateTime().GetStdDateTimeOffsetText();
+        public string BirthTimeString => this.BirthTime.GetStdDateTimeOffsetText();
 
 
 
@@ -153,7 +159,7 @@ namespace Genso.Astrology.Library
             var name = new XElement("Name", this.Name);
             var notes = new XElement("Notes", this.Notes);
             var gender = new XElement("Gender", this.Gender.ToString());
-            var birthTime = new XElement("BirthTime", this.GetBirthDateTime().ToXml());
+            var birthTime = new XElement("BirthTime", this.BirthTime.ToXml());
             var userId = new XElement("UserId", this.UserId);
             var lifeEventListXml = getLifeEventListXml(LifeEventList);
 

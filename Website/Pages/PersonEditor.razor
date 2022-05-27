@@ -190,15 +190,16 @@
         _genderInput = IsCreator ? "Male" : _person.Gender.ToString();
 
         //auto fill time zone based on system time
-        var personBirthTimeOffset = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("zzz");
+        var personBirthTimeOffset = _person.BirthTimeZone;
         var systemTimeOffset = DateTimeOffset.Now.ToString("zzz");
         _timeZonInput = IsCreator ? systemTimeOffset : personBirthTimeOffset;
 
-        var birthTimeHourMin = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("hh:mm");
+        //TODO change to Person.BirthHourMinute
+        var birthTimeHourMin = _person.BirthTime.GetStdDateTimeOffset().ToString("hh:mm");
         var defaultHourMin = "00:00";
         _hourMinInput = IsCreator ? defaultHourMin : birthTimeHourMin;
 
-        var birthTimeDate = _person.GetBirthDateTime().GetStdDateTimeOffset().ToString("dd/MM/yyyy");
+        var birthTimeDate = _person.BirthTime.GetStdDateTimeOffset().ToString("dd/MM/yyyy");
         var defaultDate = "10/10/1990";
         _dateInput = IsCreator ? defaultDate : birthTimeDate;
 

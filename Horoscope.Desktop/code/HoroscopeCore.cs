@@ -32,8 +32,8 @@ namespace Horoscope.Desktop
         public static List<Prediction> GetPrediction(Person person, EventTag tag)
         {
             //note: modified to use birth time as start & end time
-            var startStdTime = person.GetBirthDateTime().GetStdDateTimeOffset();
-            var endStdTime = person.GetBirthDateTime().GetStdDateTimeOffset();
+            var startStdTime = person.BirthTime.GetStdDateTimeOffset();
+            var endStdTime = person.BirthTime.GetStdDateTimeOffset();
 
             var location = person.GetBirthLocation();
 

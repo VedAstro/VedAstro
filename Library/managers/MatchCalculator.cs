@@ -266,8 +266,8 @@ namespace Genso.Astrology.Library
             // promotes well-being and increases longevity.
 
             //get ruling sign
-            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime());
-            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime());
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime);
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime);
 
             //show extra info
             prediction.MaleInfo = maleConstellation.ToString();
@@ -299,8 +299,8 @@ namespace Genso.Astrology.Library
 
 
             //get constellation
-            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime());
-            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime());
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime);
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime);
 
             //get nadi
             var maleNadi = getNadi(maleConstellation.GetConstellationName());
@@ -319,8 +319,8 @@ namespace Genso.Astrology.Library
                 //The evil due to Nadi Kuta can be ignored subject to the following conditions:
 
                 //a.The same planet is lord of the Janma Rasis of both the male and the female,
-                var maleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName());
-                var femaleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName());
+                var maleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName());
+                var femaleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName());
                 var sameJanmaLord = maleJanmaLord == femaleJanmaLord;
 
                 //b.The lords of the Janma Rasi of the couple are friends.
@@ -403,8 +403,8 @@ namespace Genso.Astrology.Library
 
 
             //get constellation
-            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime());
-            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime());
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime);
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime);
 
             //get guna
             var maleGuna = getGuna(maleConstellation.GetConstellationName());
@@ -540,8 +540,8 @@ namespace Genso.Astrology.Library
             };
 
             //get ruling sign
-            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName();
-            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName();
+            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //get grade
             var maleGrade = getGrade(maleRuleSign);
@@ -631,8 +631,8 @@ namespace Genso.Astrology.Library
 
             //1. Get Details
 
-            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime()).GetConstellationName();
-            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime()).GetConstellationName();
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime).GetConstellationName();
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime).GetConstellationName();
 
 
             //get group names
@@ -838,8 +838,8 @@ namespace Genso.Astrology.Library
             // boy and girl whos Janma Nakshatras belong to the same pair unless the
             // are other relieving factors.
 
-            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime()).GetConstellationName();
-            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime()).GetConstellationName();
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime).GetConstellationName();
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime).GetConstellationName();
 
             //show user
             prediction.MaleInfo = maleConstellation.ToString();
@@ -918,8 +918,8 @@ namespace Genso.Astrology.Library
             };
 
 
-            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime()).GetConstellationName();
-            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime()).GetConstellationName();
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime).GetConstellationName();
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime).GetConstellationName();
 
 
             //get group names
@@ -1063,8 +1063,8 @@ namespace Genso.Astrology.Library
 
 
             //get ruling sign
-            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName();
-            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName();
+            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //show the names of the sign to user
             prediction.MaleInfo = maleRuleSign.ToString();
@@ -1230,8 +1230,8 @@ namespace Genso.Astrology.Library
 
 
             //get ruling sign
-            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName();
-            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName();
+            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //get lords of sign
             var maleLord = AstronomicalCalculator.GetLordOfZodiacSign(maleRuleSign);
@@ -1314,8 +1314,8 @@ namespace Genso.Astrology.Library
 
 
             //get ruling sign
-            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName();
-            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName();
+            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //count from female to male
             var femaleToMale = AstronomicalCalculator.CountFromSignToSign(femaleRuleSign, maleRuleSign);
@@ -1427,8 +1427,8 @@ namespace Genso.Astrology.Library
             if (maleRuleSign == femaleRuleSign)
             {
                 //get male & female constellation number
-                var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime()).GetConstellationNumber();
-                var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime()).GetConstellationNumber();
+                var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime).GetConstellationNumber();
+                var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime).GetConstellationNumber();
 
                 //male constellation number should precede (lower number)
                 if (maleConstellation < femaleConstellation)
@@ -1463,8 +1463,8 @@ namespace Genso.Astrology.Library
             if (prediction.Nature == EventNature.Bad)
             {
                 //a.The same planet is lord of the Janma Rasis of both the male and the female,
-                var maleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName());
-                var femaleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName());
+                var maleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName());
+                var femaleJanmaLord = AstronomicalCalculator.GetLordOfZodiacSign(AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName());
                 var sameJanmaLord = maleJanmaLord == femaleJanmaLord;
 
                 //b.The lords of the Janma Rasi of the couple are friends.
@@ -1510,8 +1510,8 @@ namespace Genso.Astrology.Library
             // the 9th from that of the girl. According to some authorities the distance
             // should be more than 7 constellations.
             //get ruling sign
-            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime());
-            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime());
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime);
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime);
 
             //show user
             prediction.MaleInfo = maleConstellation.ToString();
@@ -1550,8 +1550,8 @@ namespace Genso.Astrology.Library
             // agreement is found.
 
             //get ruling sign
-            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName();
-            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName();
+            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
 
             //show user
             prediction.MaleInfo = maleRuleSign.ToString();
@@ -1583,10 +1583,10 @@ namespace Genso.Astrology.Library
         {
 
             //get birth moon sign & lagna, details needed for prediction
-            var maleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.GetBirthDateTime()).GetSignName();
-            var femaleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.GetBirthDateTime()).GetSignName();
-            var maleLagna = AstronomicalCalculator.GetHouseSignName(1, male.GetBirthDateTime());
-            var femaleLagna = AstronomicalCalculator.GetHouseSignName(1, female.GetBirthDateTime());
+            var maleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
+            var femaleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
+            var maleLagna = AstronomicalCalculator.GetHouseSignName(1, male.BirthTime);
+            var femaleLagna = AstronomicalCalculator.GetHouseSignName(1, female.BirthTime);
 
             //If the Janma Rasi (Moon sign) of the wife (or husband) happens to be the Lagna of the husband (or wife)
             var femaleMoonSignIsMaleLagna = femaleSign == maleLagna;
@@ -1595,10 +1595,10 @@ namespace Genso.Astrology.Library
 
             //or if the Lagna of the wife (or husband) happens to be the 7th from the position of the
             //lord of the 7th (in the other)
-            var female7thLord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, female.GetBirthDateTime());
-            var male7thLord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, male.GetBirthDateTime());
-            var female7LordSign = AstronomicalCalculator.GetPlanetRasiSign(female7thLord, female.GetBirthDateTime()).GetSignName();
-            var male7LordSign = AstronomicalCalculator.GetPlanetRasiSign(male7thLord, male.GetBirthDateTime()).GetSignName();
+            var female7thLord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, female.BirthTime);
+            var male7thLord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, male.BirthTime);
+            var female7LordSign = AstronomicalCalculator.GetPlanetRasiSign(female7thLord, female.BirthTime).GetSignName();
+            var male7LordSign = AstronomicalCalculator.GetPlanetRasiSign(male7thLord, male.BirthTime).GetSignName();
             var femaleLagna7thFromMaleLord = AstronomicalCalculator.CountFromSignToSign(male7LordSign, femaleLagna) == 7;
             var maleLagna7thFromFemaleLord = AstronomicalCalculator.CountFromSignToSign(female7LordSign, maleLagna) == 7;
             var lagna7thFromLord = femaleLagna7thFromMaleLord || maleLagna7thFromFemaleLord;
@@ -1627,8 +1627,8 @@ namespace Genso.Astrology.Library
         {
 
             //get kuja dosha score for male & female
-            var maleScore = getTotalDosaScore(male.GetBirthDateTime());
-            var femaleScore = getTotalDosaScore(female.GetBirthDateTime());
+            var maleScore = getTotalDosaScore(male.BirthTime);
+            var femaleScore = getTotalDosaScore(female.BirthTime);
 
             //interpret results 
             var results = interpretScore(maleScore, femaleScore);
@@ -1963,8 +1963,8 @@ namespace Genso.Astrology.Library
             // and Visakha (last quarter) for husband's younger brother.
 
             //get female constellation
-            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.GetBirthDateTime());
-            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.GetBirthDateTime());
+            var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime);
+            var maleConstellation = AstronomicalCalculator.GetMoonConstellation(male.BirthTime);
 
             //Moola (first quarter) for husband's father;
             //the boy or girl born in the first quarter of Moola is to be

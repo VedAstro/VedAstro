@@ -71,7 +71,7 @@ degrees of a sign, Mars and the Sun produce results."
   with Muhurtha methods this is maintained.
 
 
- ## Zoom functionality in Dasa View Box
+## Zoom functionality in Dasa View Box
 
   - Option 1 : generate a high res image (svg/html) and zoom horitontally into it
               - very fast
@@ -83,14 +83,15 @@ degrees of a sign, Mars and the Sun produce results."
 
   - Option 3 : Generate multiple preset zooms, than place them on top of each other,
                and only make visible what is needed via selector
-              - complicated, neesd documentation
+              - complicated, needs documentation
               - easy touch screen implimentation
               - very fast
 
 Thus Option 3 was choosen.
 
 ## Astrology Library: Use of Struct vs Class
-- structs are used to reduce overhead from large collections
+-   Structs are used to reduce overhead from large collections, exp. List<>
+
 
 ## Person Get Hash uses MD5
 - default hashing is inconsistent, MD5 is used
@@ -98,3 +99,9 @@ Thus Option 3 was choosen.
   could result in errors, needs to be updated
 - NOTE : all default hashing is instance specific (FOR STRINGS ONLY so far), works as id in 1 enviroment, 
 but with Client + Server config, hashes become different, needs changing to MD5
+
+
+## Not Obvious Code Conventions
+-   In class/struct that only represent data and not computation, use direct property naming without modifiers like "Get" or "Set".
+    Example: Person struct should be "Person.BirthTime" and not "Person.GetBirthTime()"
+        

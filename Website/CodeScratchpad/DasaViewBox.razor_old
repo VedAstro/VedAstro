@@ -143,7 +143,7 @@
                         @if (age == 0)
                         {
                             //get number of days to next year
-                            var daysToYearEnd = Tools.GetDaysToNextYear(Person.GetBirthDateTime());
+                            var daysToYearEnd = Tools.GetDaysToNextYear(Person.BirthTime);
 
                             //use these number of days to generate reduced year width
                             _yearElementWidth = DaysToWidth(daysToYearEnd);
@@ -402,7 +402,7 @@
     {
         var currentTime = Time.Now(person.GetBirthLocation());
 
-        var difference = currentTime.Subtract(person.GetBirthDateTime());
+        var difference = currentTime.Subtract(person.BirthTime);
 
         var days = difference.TotalDays;
 
@@ -424,7 +424,7 @@
     /// <summary>
     /// TODO Comment Please
     /// </summary>
-    private int GetYearFromPersonAge(int age, Person person) => person.GetBirthDateTime().GetStdDateTimeOffset().Year + age;
+    private int GetYearFromPersonAge(int age, Person person) => person.BirthTime.GetStdDateTimeOffset().Year + age;
 
 
     /// <summary>
@@ -501,7 +501,7 @@
         async Task<List<Event>?> getEvents(EventTag tag, double precisionHours)
         {
             //prep data
-            var startTime = Person.GetBirthDateTime(); //start time is birth time
+            var startTime = Person.BirthTime; //start time is birth time
             var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
 
             //get events from API server

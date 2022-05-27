@@ -1614,7 +1614,7 @@ namespace Genso.Astrology.Library
         {
             int dayRulingConstellationNumber = GetMoonConstellation(time).GetConstellationNumber();
 
-            int birthRulingConstellationNumber = GetMoonConstellation(person.GetBirthDateTime()).GetConstellationNumber();
+            int birthRulingConstellationNumber = GetMoonConstellation(person.BirthTime).GetConstellationNumber();
 
             int counter = 0;
 
@@ -1682,7 +1682,7 @@ namespace Genso.Astrology.Library
 
             //get zodiac name & convert to its number
             var dayMoonSignNumber = (int)GetMoonSignName(time);
-            var birthMoonSignNumber = (int)GetMoonSignName(person.GetBirthDateTime());
+            var birthMoonSignNumber = (int)GetMoonSignName(person.BirthTime);
 
 
             //Need to count from birthMoonSign to dayMoonSign

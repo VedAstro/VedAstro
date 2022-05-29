@@ -487,7 +487,7 @@ namespace API
                 var startTime = Time.FromXml(startTimeXml);
                 var endTimeXml = rootXml.Element("EndTime").Elements().First();
                 var endTime = Time.FromXml(endTimeXml);
-                var daysPerPixel = int.Parse(rootXml.Element("DaysPerPixel").Value);
+                var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel").Value);
 
 
                 //get the person instance by hash
@@ -1112,12 +1112,11 @@ namespace API
 
         }
 
-
         /// <summary>
         /// The massive method that generates every inch of the dasa svg report
         /// Note : the number of days a pixel is the zoom level
         /// </summary>
-        private static async Task<string> GetDasaReportSvgFromApi2(Person inputPerson, Time startTime, Time endTime, int daysPerPixel)
+        private static async Task<string> GetDasaReportSvgFromApi2(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
         {
 
             //px width & height of each slice of time
@@ -1164,8 +1163,15 @@ namespace API
             var padding = 2;//space between rows
             int yearY = 0, yearH = 11;
             compiledRow += GenerateYearRowSvg(dasaEventList, timeSlices, eventsPrecision, yearY, 0, yearH);
-            int monthY = yearY + yearH + padding, monthH = 11;
-            compiledRow += GenerateMonthRowSvg(dasaEventList, timeSlices, eventsPrecision, monthY, 0, monthH);
+            //only show month row when there is space,
+            //below 1.3 days/px, anything above month names get crammed in
+            int monthY = yearY, monthH = yearH;
+            if (daysPerPixel <= 1.3)
+            {
+                monthY = yearY + yearH + padding;
+                monthH = 11;
+                compiledRow += GenerateMonthRowSvg(dasaEventList, timeSlices, eventsPrecision, monthY, 0, monthH);
+            }
             int dasaY = monthY + monthH + padding;
             compiledRow += GenerateRowSvg(dasaEventList, timeSlices, eventsPrecision, dasaY, 0, _heightPerSlice);
             int bhuktiY = dasaY + _heightPerSlice + padding;
@@ -1225,7 +1231,7 @@ namespace API
                                      $" eventName=\"{lifeEvent.Name}\" " +
                                      $" age=\"{inputPerson.GetAge(startTime.Year)}\" " +
                                      $" stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
-                                                                               //$" transform=\"matrix(1, 0, 0, 1, {positionX}, 0)\"" +
+                                     $" transform=\"matrix(1, 0, 0, 1, {positionX}, 0)\"" +
                                     $" x=\"0\" y=\"0\" >" +
                                         $"<rect" +
                                         $" width=\"2\"" +
@@ -1587,8 +1593,6 @@ namespace API
 
 
         }
-
-
 
         public static async Task<List<Event>?> GetDasaEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
             => await EventsByTag(EventTag.Dasa, _eventsPrecision, startTime, endTime, person);

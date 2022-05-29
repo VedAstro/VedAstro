@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
@@ -15,6 +16,7 @@ namespace Genso.Astrology.Library
     /// </summary>
     public class LifeEvent : IToXml
     {
+        private string _name;
 
 
         //░█▀▀▄ ─█▀▀█ ▀▀█▀▀ ─█▀▀█ 
@@ -25,10 +27,16 @@ namespace Genso.Astrology.Library
         //type to Json when interoperating with JS
 
         /// <summary>
-        /// Custom name of the event
+        /// Custom name of the event auto formatted to be HTML save
+        /// Note: since all view of this in HTML, special charters
+        /// like "&" will cause errors otherwise 
         /// </summary>
         [JsonPropertyName("Name")]
-        public string Name { get; set; }
+        public string Name  
+        {
+            get => HttpUtility.HtmlEncode(_name);
+            set => _name = value;
+        }
 
         /// <summary>
         /// Must follow standard time formatting 
@@ -85,6 +93,7 @@ namespace Genso.Astrology.Library
 
             //this 2 way naming convention is to support xml data coming from
             //Tabulator JS that makes first letter small, so for that case this is
+            //example: support both StartTime & startTime
             lifeEventParsed.Name = test(lifeEventXml.Element("Name")?.Value) ? lifeEventXml.Element("Name").Value : lifeEventXml.Element("name").Value;
             lifeEventParsed.StartTime = test(lifeEventXml.Element("StartTime")?.Value) ? lifeEventXml.Element("StartTime").Value : lifeEventXml.Element("startTime").Value;
             lifeEventParsed.EndTime = test(lifeEventXml.Element("EndTime")?.Value) ? lifeEventXml.Element("EndTime").Value : lifeEventXml.Element("endTime").Value;

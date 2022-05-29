@@ -235,17 +235,21 @@ namespace Genso.Astrology.Library
             return lmtTimeString;
         }
 
+        /// <summary>
+        /// Note root element is "Time"
+        /// </summary>
         public XElement ToXml()
         {
-            var timeHoler = new XElement("Time");
+            var timeHolder = new XElement("Time");
             var timeString = this.GetStdDateTimeOffsetText();
             var timeValue = new XElement("StdTime", timeString);
             var location = this.GetGeoLocation().ToXml();
 
-            timeHoler.Add(timeValue, location);
+            timeHolder.Add(timeValue, location);
 
-            return timeHoler;
+            return timeHolder;
         }
+
         /// <summary>
         /// The root element is expected to be name of Type
         /// Note: Special method done to implement IToXml
@@ -284,6 +288,7 @@ namespace Genso.Astrology.Library
 
         public int GetStdYear() => this.GetStdDateTimeOffset().Year;
         public int GetStdMonth() => this.GetStdDateTimeOffset().Month;
+        public int GetStdDay() => this.GetStdDateTimeOffset().Day;
 
 
         

@@ -497,8 +497,8 @@ namespace API
 
                 //from person get svg report
                 //time range to generate is from beginning of year to end
-                var timeZone = foundPerson.BirthTimeZone;
-                var geoLocation = foundPerson.GetBirthLocation();
+                //var timeZone = foundPerson.BirthTimeZone;
+                //var geoLocation = foundPerson.GetBirthLocation();
                 //Time startTime = new Time($"00:00 01/01/2022 {timeZone}", geoLocation);
                 //Time endTime = new Time($"00:00 31/12/2022 {timeZone}", geoLocation);
                 var dasaReportSvgString = await GetDasaReportSvgFromApi2(foundPerson, startTime, endTime, daysPerPixel);
@@ -1133,15 +1133,8 @@ namespace API
             // 120 years @ 14 day/px
             // 1 year @ 1 day/px 
             double eventsPrecision = Tools.DaysToHours(daysPerPixel);
-            //double eventsPrecision = Tools.DaysToHours(1);
-
-
             double _timeSlicePrecision = eventsPrecision;
 
-
-            //var location = inputPerson.GetBirthLocation();
-            //var startTime = new Time(); //start time is birth time
-            //var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
 
             //use the inputed data to get events from API
             //note: below methods access the data internally
@@ -1164,7 +1157,7 @@ namespace API
             int yearY = 0, yearH = 11;
             compiledRow += GenerateYearRowSvg(dasaEventList, timeSlices, eventsPrecision, yearY, 0, yearH);
             //only show month row when there is space,
-            //below 1.3 days/px, anything above month names get crammed in
+            //only below 1.3 days/px, anything above month names get crammed in
             int monthY = yearY, monthH = yearH;
             if (daysPerPixel <= 1.3)
             {
@@ -1219,10 +1212,10 @@ namespace API
 
                     //note: this is the icon below the life event line to magnify it
                     var iconWidth = 12;
-                    var iconX = $"-{12}"; //use negative to move center under line
+                    var iconX = $"-{iconWidth}"; //use negative to move center under line
                     var iconSvg = $@"
                                     <g transform=""matrix(2, 0, 0, 2, {iconX}, {lineHeight})"">
-                                        <rect style=""fill: rgb(255, 242, 0); stroke: rgb(0, 0, 0); stroke-width: 0.495978px;"" x=""0"" y=""0"" width=""{iconWidth}"" height=""9.941"" rx=""2.5"" ry=""2.5""/>
+                                        <rect style=""fill:{GetColor(lifeEvent.Nature)}; stroke:black; stroke-width: 0.5px;"" x=""0"" y=""0"" width=""{iconWidth}"" height=""9.95"" rx=""2.5"" ry=""2.5""/>
                                         <path d=""M 7.823 5.279 L 6.601 5.279 C 6.377 5.279 6.194 5.456 6.194 5.671 L 6.194 6.846 C 6.194 7.062 6.377 7.238 6.601 7.238 L 7.823 7.238 C 8.046 7.238 8.229 7.062 8.229 6.846 L 8.229 5.671 C 8.229 5.456 8.046 5.279 7.823 5.279 Z M 7.823 1.364 L 7.823 1.756 L 4.566 1.756 L 4.566 1.364 C 4.566 1.148 4.383 0.973 4.158 0.973 C 3.934 0.973 3.751 1.148 3.751 1.364 L 3.751 1.756 L 3.345 1.756 C 2.892 1.756 2.534 2.108 2.534 2.539 L 2.53 8.021 C 2.53 8.454 2.895 8.804 3.345 8.804 L 9.044 8.804 C 9.492 8.804 9.857 8.452 9.857 8.021 L 9.857 2.539 C 9.857 2.108 9.492 1.756 9.044 1.756 L 8.636 1.756 L 8.636 1.364 C 8.636 1.148 8.453 0.973 8.229 0.973 C 8.006 0.973 7.823 1.148 7.823 1.364 Z M 8.636 8.021 L 3.751 8.021 C 3.528 8.021 3.345 7.845 3.345 7.629 L 3.345 3.714 L 9.044 3.714 L 9.044 7.629 C 9.044 7.845 8.86 8.021 8.636 8.021 Z"" />
                                     </g>";
 
@@ -1236,15 +1229,32 @@ namespace API
                                         $"<rect" +
                                         $" width=\"2\"" +
                                         $" height=\"{lineHeight}\"" +
-                                        $" style=\"fill:#fff200;\"" +
+                                        $" style=\"" +
+                                        $" fill:{GetColor(lifeEvent.Nature)};" +
+                                        //border
+                                        $" stroke-width:0.5px;" +
+                                        $" stroke:#000;" +
+                                        $"\"" +
                                         $" />"
                                          + iconSvg +
                                     "</g>";
 
+                    //stroke-width: 0.6px; fill: rgb(168, 0, 0); fill - rule: nonzero; stroke: rgb(0, 0, 0);
                 }
 
 
                 return compiledLines;
+
+                string GetColor(string nature)
+                {
+                    switch (nature)
+                    {
+                        case "Good": return "#42f706";
+                        //case "Neutral": return "";
+                        case "Bad": return "#a80000";
+                        default: throw new Exception($"Invalid Nature: {nature}");
+                    }
+                }
             }
 
             //gets line position given a date

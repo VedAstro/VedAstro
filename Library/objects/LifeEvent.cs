@@ -45,7 +45,8 @@ namespace Genso.Astrology.Library
         public string StartTime { get; set; }
 
         /// <summary>
-        /// Must follow standard time formatting 
+        /// Must follow standard time formatting
+        /// TODO MARKED FOR DELETION
         /// </summary>
         [JsonPropertyName("EndTime")]
         public string EndTime { get; set; }

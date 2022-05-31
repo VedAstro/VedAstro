@@ -1750,18 +1750,18 @@ namespace Genso.Astrology.Library
                 //based on the relationship between planet & occupied sign set the relationship
                 switch (houseSignRelation)
                 {
-                    case PlanetToSignRelationship.Swavarga:
+                    case PlanetToSignRelationship.OwnVarga:
                         planetInOwn = true;
                         break;
-                    case PlanetToSignRelationship.AdhiMitravarga:
-                    case PlanetToSignRelationship.Mitravarga:
+                    case PlanetToSignRelationship.BestFriendVarga:
+                    case PlanetToSignRelationship.FriendVarga:
                         planetInFriendly = true;
                         break;
-                    case PlanetToSignRelationship.Samavarga:
+                    case PlanetToSignRelationship.NeutralVarga:
                         planetInNeutral = true;
                         break;
-                    case PlanetToSignRelationship.Satruvarga:
-                    case PlanetToSignRelationship.AdhiSatruvarga:
+                    case PlanetToSignRelationship.EnemyVarga:
+                    case PlanetToSignRelationship.BitterEnemyVarga:
                         planetInEnemy = true;
                         break;
                     default:

@@ -236,12 +236,13 @@ function loadJs(sourceUrl) {
 function InjectIntoElement(element, valueToInject) {
 
     //convert string to html node
-    const template = document.createElement("template");
+    var template = document.createElement("template");
     template.innerHTML = valueToInject;
-    const node = template.content.firstElementChild;
+    var nodeToInject = template.content.firstElementChild;
 
     //place new node in parent
-    element.appendChild(node);
+    element.innerHTML = ''; //clear current children if any
+    element.appendChild(nodeToInject);
 }
 
 //async delay for specified time in ms

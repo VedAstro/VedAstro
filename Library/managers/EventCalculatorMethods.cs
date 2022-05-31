@@ -443,9 +443,9 @@ namespace Genso.Astrology.Library
                 var relationship = AstronomicalCalculator.GetPlanetRelationshipWithSign(PlanetName.Moon, moonSign.GetSignName(), time);
 
                 //check if sign is benefic 
-                var isBenefic = relationship == PlanetToSignRelationship.Swavarga || //Swavarga - own varga
-                                relationship == PlanetToSignRelationship.Mitravarga || //Mitravarga - friendly varga
-                                relationship == PlanetToSignRelationship.AdhiMitravarga; //Adhi Mitravarga - Intimate friend varga
+                var isBenefic = relationship == PlanetToSignRelationship.OwnVarga || //Swavarga - own varga
+                                relationship == PlanetToSignRelationship.FriendVarga || //Mitravarga - friendly varga
+                                relationship == PlanetToSignRelationship.BestFriendVarga; //Adhi Mitravarga - Intimate friend varga
 
                 //if not benefic, end here as not occuring
                 if (isBenefic == false) { return false; }
@@ -456,9 +456,9 @@ namespace Genso.Astrology.Library
                 var navamsaRelationship = AstronomicalCalculator.GetPlanetRelationshipWithSign(PlanetName.Moon, moonNavamsaSign, time);
 
                 //check if sign is benefic 
-                var isBeneficNavamsa = navamsaRelationship == PlanetToSignRelationship.Swavarga || //Swavarga - own varga
-                                navamsaRelationship == PlanetToSignRelationship.Mitravarga || //Mitravarga - friendly varga
-                                navamsaRelationship == PlanetToSignRelationship.AdhiMitravarga; //Adhi Mitravarga - Intimate friend varga
+                var isBeneficNavamsa = navamsaRelationship == PlanetToSignRelationship.OwnVarga || //Swavarga - own varga
+                                navamsaRelationship == PlanetToSignRelationship.FriendVarga || //Mitravarga - friendly varga
+                                navamsaRelationship == PlanetToSignRelationship.BestFriendVarga; //Adhi Mitravarga - Intimate friend varga
 
                 //if not benefic, end here as not occuring
                 if (isBeneficNavamsa == false) { return false; }

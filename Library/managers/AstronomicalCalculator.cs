@@ -3123,7 +3123,7 @@ namespace Genso.Astrology.Library
             if (planetName == lordOfSign)
             {
                 //return own varga, swavarga
-                return PlanetToSignRelationship.Swavarga;
+                return PlanetToSignRelationship.OwnVarga;
             }
 
             //else, get relationship between input planet and lord of sign
@@ -3133,15 +3133,15 @@ namespace Genso.Astrology.Library
             switch (relationshipToLordOfSign)
             {
                 case PlanetToPlanetRelationship.AdhiMitra:
-                    return PlanetToSignRelationship.AdhiMitravarga;
+                    return PlanetToSignRelationship.BestFriendVarga;
                 case PlanetToPlanetRelationship.Mitra:
-                    return PlanetToSignRelationship.Mitravarga;
+                    return PlanetToSignRelationship.FriendVarga;
                 case PlanetToPlanetRelationship.AdhiSatru:
-                    return PlanetToSignRelationship.AdhiSatruvarga;
+                    return PlanetToSignRelationship.BitterEnemyVarga;
                 case PlanetToPlanetRelationship.Satru:
-                    return PlanetToSignRelationship.Satruvarga;
+                    return PlanetToSignRelationship.EnemyVarga;
                 case PlanetToPlanetRelationship.Sama:
-                    return PlanetToSignRelationship.Samavarga;
+                    return PlanetToSignRelationship.NeutralVarga;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -4787,37 +4787,37 @@ namespace Genso.Astrology.Library
                     }
 
                     //in Swavarga 30 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.Swavarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.OwnVarga)
                     {
                         totalSaptavargajaBalaInShashtiamsa = totalSaptavargajaBalaInShashtiamsa + 30;
                     }
 
                     //in Adhi Mitravarga 22.5 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.AdhiMitravarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.BestFriendVarga)
                     {
                         totalSaptavargajaBalaInShashtiamsa = totalSaptavargajaBalaInShashtiamsa + 22.5;
                     }
 
                     //in Mitravarga 15 · Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.Mitravarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.FriendVarga)
                     {
                         totalSaptavargajaBalaInShashtiamsa = totalSaptavargajaBalaInShashtiamsa + 15;
                     }
 
                     //in Samavarga 7.5 Shashtiamsas ~
-                    if (planetToSignRelationship == PlanetToSignRelationship.Samavarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.NeutralVarga)
                     {
                         totalSaptavargajaBalaInShashtiamsa = totalSaptavargajaBalaInShashtiamsa + 7.5;
                     }
 
                     //in Satruvarga 3.75 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.Satruvarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.EnemyVarga)
                     {
                         totalSaptavargajaBalaInShashtiamsa = totalSaptavargajaBalaInShashtiamsa + 3.75;
                     }
 
                     //in Adhi Satruvarga 1.875 Shashtiamsas.
-                    if (planetToSignRelationship == PlanetToSignRelationship.AdhiSatruvarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.BitterEnemyVarga)
                     {
                         totalSaptavargajaBalaInShashtiamsa = totalSaptavargajaBalaInShashtiamsa + 1.875;
                     }
@@ -4930,37 +4930,37 @@ namespace Genso.Astrology.Library
                     }
 
                     //in Swavarga 30 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.Swavarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.OwnVarga)
                     {
                         totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 30;
                     }
 
                     //in Adhi Mitravarga 22.5 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.AdhiMitravarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.BestFriendVarga)
                     {
                         totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 22.5;
                     }
 
                     //in Mitravarga 15 · Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.Mitravarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.FriendVarga)
                     {
                         totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 15;
                     }
 
                     //in Samavarga 7.5 Shashtiamsas ~
-                    if (planetToSignRelationship == PlanetToSignRelationship.Samavarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.NeutralVarga)
                     {
                         totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 7.5;
                     }
 
                     //in Satruvarga 3.75 Shashtiamsas;
-                    if (planetToSignRelationship == PlanetToSignRelationship.Satruvarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.EnemyVarga)
                     {
                         totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 3.75;
                     }
 
                     //in Adhi Satruvarga 1.875 Shashtiamsas.
-                    if (planetToSignRelationship == PlanetToSignRelationship.AdhiSatruvarga)
+                    if (planetToSignRelationship == PlanetToSignRelationship.BitterEnemyVarga)
                     {
                         totalShadvargaBalaInShashtiamsa = totalShadvargaBalaInShashtiamsa + 1.875;
                     }
@@ -6406,9 +6406,9 @@ namespace Genso.Astrology.Library
             //check if it is a good aspect
             var aspectNature = AstronomicalCalculator.GetPlanetRelationshipWithHouse(receivingAspect, transmitingAspect, time);
 
-            var isGood = aspectNature == PlanetToSignRelationship.Swavarga || //Swavarga - own varga
-                         aspectNature == PlanetToSignRelationship.Mitravarga || //Mitravarga - friendly varga
-                         aspectNature == PlanetToSignRelationship.AdhiMitravarga; //Adhi Mitravarga - Intimate friend varga
+            var isGood = aspectNature == PlanetToSignRelationship.OwnVarga || //Swavarga - own varga
+                         aspectNature == PlanetToSignRelationship.FriendVarga || //Mitravarga - friendly varga
+                         aspectNature == PlanetToSignRelationship.BestFriendVarga; //Adhi Mitravarga - Intimate friend varga
 
 
             //if is aspecting and it is good, then occuring (true)

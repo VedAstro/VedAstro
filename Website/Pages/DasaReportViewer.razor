@@ -16,22 +16,41 @@
 </style>
 
 
-<div class="vstack gap-1">
+<div class="vstack gap-1" style="width: fit-content;">
     <div style="background-color: cadetblue;" class="fw-bold" id="TimeCursorLegend"></div>
+    <div class="hstack gap-2">
+        <div>
+            <label>Start</label>
+            <input @bind="_startYearInput" type="text" class="form-control">
+        </div>
+        <div>
+            <label>End</label>
+            <input @bind="_endYearInput" type="text" class="form-control">
+        </div>
+        <div>
+            <label>Day/Px</label>
+            <input @bind="_daysPerPixelInput" type="text" class="form-control">
+        </div>
+
+        <IconButton OnClickCallback="@OnClickRefreshButton" ButtonText="Refresh" IconName="bi:send-check" />
+    </div>
     @*ID set because used by auto move cursor line handler*@
-    <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll;">@DasaReportSvg</div>
+    <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll; height: 215px;">@DasaReportSvg</div>
 </div>
 
 
 @code {
 
+    string? _startYearInput, _endYearInput;
+    double _daysPerPixelInput = 12;
+
     /// <summary>
     /// One precision value for generating all dasa components,
     /// because misalignment occurs if use different precision
     /// </summary>
-    static double _eventsPrecision = Tools.DaysToHours(14);
+    //static double _eventsPrecision = Tools.DaysToHours(14);
 
-    double _timeSlicePrecision = _eventsPrecision;
+    //double _timeSlicePrecision = _eventsPrecision;
 
     ElementReference _dasaViewBox;
 
@@ -55,10 +74,10 @@
     private MarkupString DasaReportSvg { get; set; } = new("");
 
 
-    
-    
-    
-    
+
+
+
+
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
@@ -70,18 +89,41 @@
         //save inputed data
         this.Person = person;
 
-        //generate dasa report in svg from server
-        var finalSvg = await GetDasaReportSvgFromApi(person);
+        //to minimize UX friction, default time range for dasa view is used first
+        //user can adjust later, birth year to current year plus 2 is default for now
+        _startYearInput = person.BirthYear.ToString();
+        _endYearInput = (DateTimeOffset.Now.Year + 2).ToString();
 
-        //inject new svg into page via JS for a more responsive progress update
-        //doing it in blazor, causes progress bar freeze while updating
-        await _jsRuntime.InjectIntoElement(_dasaViewBox, finalSvg);
+        await DrawReport();
 
         //attach handlers now that component is loaded
         //attach mouse handler to auto move cursor line & update time legend
         await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
         //init touch for the dasa chart
         await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);
+
+
+        //needed to show changes to inputs
+        StateHasChanged();
+    }
+
+    private async Task DrawReport()
+    {
+        //generate dasa report in svg from server
+        var startTime = new Time($"00:00 01/01/{_startYearInput} {Person.BirthTimeZone}", Person.GetBirthLocation());
+        var endTime = new Time($"11:59 31/12/{_endYearInput} {Person.BirthTimeZone}", Person.GetBirthLocation());
+
+        var yearsBetween = endTime.Subtract(startTime).TotalDays / 365;
+        var maxWidth = 1000;
+        var daysPerPixel = Math.Round(yearsBetween * 0.8, 3);
+        //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
+        _daysPerPixelInput = daysPerPixel;
+        var finalSvg = await GetDasaReportSvgFromApi(this.Person, startTime, endTime, _daysPerPixelInput);
+
+        //inject new svg into page via JS for a more responsive progress update
+        //doing it in blazor, causes progress bar freeze while updating
+        await _jsRuntime.InjectIntoElement(_dasaViewBox, finalSvg);
+
     }
 
     /// <summary>
@@ -90,15 +132,19 @@
     /// -previously used generate in blazor client,
     ///  but for speed (10s gain) sake moved to server to do heavy lifting
     /// </summary>
-    private async Task<string> GetDasaReportSvgFromApi(Person inputPerson)
+    private async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
     {
         //since majority of time spent will be waiting for API to do calculation
         //and receiving the image is fast, so just start an auto progress bar
         _jsRuntime.ProgressBarSlowAutoUpdate(); //do not await to let control go to next
 
         var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+        var startTimeXml = new XElement("StartTime", startTime.ToXml());
+        var endTimeXml = new XElement("EndTime", endTime.ToXml());
+        var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixel);
+        var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-        var svgStream = await WriteToServerStreamResponse(ServerManager.GetPersonDasaReport, personHashXml);
+        var svgStream = await WriteToServerStreamResponse(ServerManager.GetPersonDasaReport, rootXml);
 
         //todo just send as string to remove lags of using stream
         // convert stream to string
@@ -151,6 +197,16 @@
 
         //return packaged data to caller
         return new StringContent(dataString, encoding, mediaType);
+    }
+
+    private async Task OnClickRefreshButton(MouseEventArgs obj)
+    {
+        await _globalVariable.LoadingMessage.Show();
+
+        await DrawReport();
+
+        await _globalVariable.LoadingMessage.Hide();
+
     }
 
 }

@@ -364,61 +364,6 @@ namespace API
             return okObjectResult;
         }
 
-        /// <summary>
-        /// Generates a new SVG dasa report given a person hash
-        /// </summary>
-        [FunctionName("getpersondasareportOLD")]
-        public static async Task<IActionResult> GetPersonDasaReportOLD(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-                //get dasa report for sending
-                var dasaReportSvg = await GetDasaReportSvgForIncomingRequest(incomingRequest);
-
-                //send image back to caller
-                var x = streamToByteArray(dasaReportSvg);
-                return new FileContentResult(x, "image/svg+xml");
-
-            }
-            catch (Exception e)
-            {
-                //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-
-            //
-
-            async Task<Stream> GetDasaReportSvgForIncomingRequest(HttpRequestMessage req)
-            {
-                //get hash that will be used find the person
-                var requestData = APITools.ExtractDataFromRequest(req);
-                var originalHash = int.Parse(requestData.Value);
-
-                //get the person instance by hash
-                var personListXml = APITools.BlobClientToXml(personListClient);
-                var foundPersonXml = APITools.FindPersonByHash(personListXml, originalHash);
-                var foundPerson = Person.FromXml(foundPersonXml);
-
-                //from person get svg report
-                var dasaReportSvgString = await GetDasaReportSvgFromApi(foundPerson);
-
-                //convert svg string to stream for sending
-                //todo check if using really needed here
-                var stream = GenerateStreamFromString(dasaReportSvgString);
-
-                return stream;
-            }
-
-        }
 
         /// <summary>
         /// Generates a new SVG dasa report given a person hash
@@ -496,12 +441,7 @@ namespace API
                 var foundPerson = Person.FromXml(foundPersonXml);
 
                 //from person get svg report
-                //time range to generate is from beginning of year to end
-                //var timeZone = foundPerson.BirthTimeZone;
-                //var geoLocation = foundPerson.GetBirthLocation();
-                //Time startTime = new Time($"00:00 01/01/2022 {timeZone}", geoLocation);
-                //Time endTime = new Time($"00:00 31/12/2022 {timeZone}", geoLocation);
-                var dasaReportSvgString = await GetDasaReportSvgFromApi2(foundPerson, startTime, endTime, daysPerPixel);
+                var dasaReportSvgString = await GenerateDasaReportSvg(foundPerson, startTime, endTime, daysPerPixel);
 
 
                 //convert svg string to stream for sending
@@ -794,336 +734,16 @@ namespace API
 
         /// <summary>
         /// The massive method that generates every inch of the dasa svg report
-        /// </summary>
-        private static async Task<string> GetDasaReportSvgFromApi(Person inputPerson)
-        {
-
-            //px width & height of each slice of time
-            //used when generating dasa rows
-            //note: changes needed only here
-            int _widthPerSlice = 1;
-            int _heightPerSlice = 50;
-            //the height for all lines, cursor, now & life events line
-            var lineHeight = 170;
-
-
-            // One precision value for generating all dasa components,
-            // because misalignment occurs if use different precision
-            double _eventsPrecision = Tools.DaysToHours(14);
-
-            double _timeSlicePrecision = _eventsPrecision;
-
-
-            //prep data
-            var startTime = inputPerson.BirthTime; //start time is birth time
-            var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
-
-            //use the inputed data to get events from API
-            //note: below methods access the data internally
-            var dasaEventList = await GetDasaEvents(_eventsPrecision, startTime, endTime, inputPerson);
-            var bhuktiEventList = await GetBhuktiEvents(_eventsPrecision, startTime, endTime, inputPerson);
-            var antaramEventList = await GetAntaramEvents(_eventsPrecision, startTime, endTime, inputPerson);
-
-            //generate rows and pump them final svg string
-            var dasaSvgWidth = 0; //will be filled when calling row generator
-            var compiledRow = "";
-
-            //generate time slice only once for all rows
-            var timeSlices = GetTimeSlices();
-
-            //save a copy of the number of time slices used to calculate the svg total width later
-            dasaSvgWidth = timeSlices.Count;
-
-            //note: y axis positions are manually set
-            compiledRow += GenerateYearRowSvg(dasaEventList, timeSlices, _eventsPrecision, 0);
-            compiledRow += GenerateRowSvg(dasaEventList, timeSlices, _eventsPrecision, 12);
-            compiledRow += GenerateRowSvg(bhuktiEventList, timeSlices, _eventsPrecision, 65);
-            compiledRow += GenerateRowSvg(antaramEventList, timeSlices, _eventsPrecision, 118);
-
-            //add in the cursor line
-            compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
-
-            //get now line position
-            var nowLinePosition = GetLinePosition(timeSlices, DateTimeOffset.Now);
-            compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:blue;\" x=\"0\" y=\"0\" transform=\"matrix(1, 0, 0, 1, {nowLinePosition}, 0)\" />";
-
-            //wait!, add in life events also
-            compiledRow += GetLifeEventLinesSvg(inputPerson);
-
-            //compile the final svg
-            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, (_heightPerSlice * 3) + 60); //little wiggle room
-
-            return finalSvg;
-
-
-
-            //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
-            //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
-
-
-            //gets person's life events as lines for the dasa chart
-            string GetLifeEventLinesSvg(Person person)
-            {
-                var compiledLines = "";
-
-                foreach (var lifeEvent in person.LifeEventList)
-                {
-
-                    //get start time of life event and find the position of it in slices (same as now line)
-                    //so that this life event line can be placed exactly on the report where it happened
-                    var startTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.GetDateTimeFormat(), null);
-                    var position = GetLinePosition(timeSlices, startTime);
-
-                    //note: this is the icon below the life event line to magnify it
-                    var iconSvg = @"
-                                <g style="""" transform=""matrix(1.976054, 0, 0, 2.056383, -0.672014, -84.991478)"">
-                                <rect style=""fill: rgb(255, 242, 0); stroke: rgb(0, 0, 0); stroke-width: 0.495978px;"" x=""-5.177"" y=""124"" width=""12.477"" height=""9.941"" rx=""2.479"" ry=""2.479""></rect>
-                                <path d=""M 2.7 129.226 L 1.478 129.226 C 1.254 129.226 1.071 129.403 1.071 129.618 L 1.071 130.793 C 1.071 131.009 1.254 131.185 1.478 131.185 L 2.7 131.185 C 2.923 131.185 3.106 131.009 3.106 130.793 L 3.106 129.618 C 3.106 129.403 2.923 129.226 2.7 129.226 Z M 2.7 125.311 L 2.7 125.703 L -0.557 125.703 L -0.557 125.311 C -0.557 125.095 -0.74 124.92 -0.965 124.92 C -1.189 124.92 -1.372 125.095 -1.372 125.311 L -1.372 125.703 L -1.778 125.703 C -2.231 125.703 -2.589 126.055 -2.589 126.486 L -2.593 131.968 C -2.593 132.401 -2.228 132.751 -1.778 132.751 L 3.921 132.751 C 4.369 132.751 4.734 132.399 4.734 131.968 L 4.734 126.486 C 4.734 126.055 4.369 125.703 3.921 125.703 L 3.513 125.703 L 3.513 125.311 C 3.513 125.095 3.33 124.92 3.106 124.92 C 2.883 124.92 2.7 125.095 2.7 125.311 Z M 3.513 131.968 L -1.372 131.968 C -1.595 131.968 -1.778 131.792 -1.778 131.576 L -1.778 127.661 L 3.921 127.661 L 3.921 131.576 C 3.921 131.792 3.737 131.968 3.513 131.968 Z"" style=""""></path>
-                                </g>
-                                 ";
-
-                    compiledLines += $"<g" +
-                                     $" eventName=\"{lifeEvent.Name}\" " +
-                                     $" age=\"{inputPerson.GetAge(startTime.Year)}\" " +
-                                     $" stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
-                                     $" transform=\"matrix(1, 0, 0, 1, {position}, 0)\"" +
-                                    $" x=\"0\" y=\"0\" >" +
-                                    $"<rect" +
-                                    $" width=\"2\"" +
-                                    $" height=\"{lineHeight}\"" +
-                                    $" style=\"fill:#fff200;\"" +
-                                    //$" x=\"0\"" +
-                                    //$" y=\"0\" " +
-                                    $" />" + iconSvg +
-                                    "</g>";
-
-                }
-
-
-                return compiledLines;
-            }
-
-            //gets line position given a date
-            //finds most closest time slice, else return 0 means none found
-            int GetLinePosition(List<Time> timeSliceList, DateTimeOffset inputTime)
-            {
-                var nowYear = inputTime.Year;
-                var nowMonth = inputTime.Month;
-
-                //go through the list and find where the slice is closest to now
-                var slicePosition = 0;
-                foreach (var time in timeSliceList)
-                {
-
-                    //if same year and same month then send this slice position
-                    //as the correct one
-                    var sameYear = time.GetStdYear() == nowYear;
-                    var sameMonth = time.GetStdMonth() == nowMonth;
-                    if (sameMonth && sameYear)
-                    {
-                        return slicePosition;
-                    }
-
-                    //move to next slice position
-                    slicePosition++;
-                }
-
-                //if control reaches here then now time not found in time slices
-                //this is possible when viewing old charts as such set now line to 0
-                return 0;
-
-            }
-
-
-            string GenerateRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var prevEventName = EventName.EmptyEvent;
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    var foundEvent = foundEventList[0];
-
-                    //if current event is different than event has changed, so draw a black line
-                    var isNewEvent = prevEventName != foundEvent.Name;
-                    var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
-                    prevEventName = foundEvent.Name;
-
-                    //generate and add to row
-                    //the hard coded attribute names used here are used in App.js
-                    var rect = $"<rect " +
-                               $"eventName=\"{foundEvent?.FormattedName}\" " +
-                               $"age=\"{inputPerson.GetAge(slice)}\" " +
-                               $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                               $"x=\"{horizontalPosition}\" " +
-                               $"width=\"{_widthPerSlice}\" " +
-                               $"height=\"{_heightPerSlice}\" " +
-                               $"fill=\"{color}\" />";
-
-                    //set position for next element
-                    horizontalPosition += _widthPerSlice;
-
-                    rowHtml += rect;
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //svg tag here acts as group, svg nesting
-                rowHtml = $"<svg y=\"{yAxis}\" >{rowHtml}</svg>";
-
-                return rowHtml;
-            }
-
-
-            string GenerateYearRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis)
-            {
-
-
-                //generate the row for each time slice
-                var rowHtml = "";
-                var previousYear = 0;
-                var yearBoxWidthCount = 0;
-                int rectWidth = 0;
-                int newX = 0;
-                foreach (var slice in timeSlices)
-                {
-
-                    //only generate new year box when year changes
-                    var yearChanged = previousYear != slice.GetStdYear();
-
-                    //if year changed
-                    if (yearChanged)
-                    {
-                        //and it is in the beginning
-                        if (previousYear == 0)
-                        {
-                            yearBoxWidthCount = 0; //reset width
-                        }
-                        else
-                        {
-                            //generate previous year data first before resetting
-                            newX += rectWidth; //use previous rect width to position this
-                            rectWidth = yearBoxWidthCount * _widthPerSlice; //calculate new rect width
-
-                            var rect = $"<g x=\"{newX}\" y=\"{20}\" transform=\"matrix(1, 0, 0, 1, {newX}, 0)\">" +
-                                                $"<rect " +
-                                                    $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{11}\" rx=\"0\" ry=\"0\"" + $"style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
-                                                    $"<text x=\"0\" y=\"18.034\" fill=\"white\" " +
-                                                        $"style=\"fill: rgb(255, 255, 255); font-size: 10.2278px; font-weight: 700; line-height: 36.3655px; white-space: pre;\"" +
-                                                        $"transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
-                                                        $"x=\"0\" y=\"18.034\" bx:origin=\"0.511627 0.5\">" +
-                                                        $"{previousYear}" + //previous year generate at begin of new year
-                                                    $"</text>" +
-                                             $"</g>";
-
-
-                            //add to final return
-                            rowHtml += rect;
-
-                            //reset width
-                            yearBoxWidthCount = 0;
-
-                        }
-                    }
-                    //year same as before
-                    else
-                    {
-                        //update width only, position is same
-                        //as when created the year box
-                        //yearBoxWidthCount *= _widthPerSlice;
-
-                    }
-
-                    //update previous year for next slice
-                    previousYear = slice.GetStdYear();
-
-                    yearBoxWidthCount++;
-
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //svg tag here acts as group, svg nesting
-                //rowHtml = $"<svg y=\"{yAxis}\" >{rowHtml}</svg>";
-
-                return rowHtml;
-            }
-
-
-            // Get dasa color based on nature & number of events
-            string GetEventColor(EventNature? eventNature)
-            {
-                var colorId = "gray";
-
-                if (eventNature == null) { return colorId; }
-
-                //set color id based on nature
-                switch (eventNature)
-                {
-                    case EventNature.Good:
-                        colorId = "green";
-                        break;
-                    case EventNature.Neutral:
-                        colorId = "";
-                        break;
-                    case EventNature.Bad:
-                        colorId = "red";
-                        break;
-                }
-
-                return colorId;
-            }
-
-
-            //wraps a list of svg elements inside 1 main svg element
-            //if width not set defaults to 1000px, and height to 1000px
-            string WrapSvgElements(string combinedSvgString, int svgWidth = 1000, int svgTotalHeight = 1000)
-            {
-
-                //create the final svg that will be displayed
-                var svgTotalWidth = svgWidth + 10; //add little for wiggle room
-                var svgBody = $"<svg id=\"DasaViewHolder\" " +
-                              $"style=\"" +
-                              $"width:{svgTotalWidth}px;" +
-                              $"height:{svgTotalHeight}px;" +
-                              $"\" " +
-                              $"xmlns=\"http://www.w3.org/2000/svg\">" +
-                              $"{combinedSvgString}</svg>";
-
-                return svgBody;
-            }
-
-
-            //generates time slices for dasa
-            List<Time> GetTimeSlices()
-            {
-                //get time slices used to get events
-                var startTime = inputPerson.BirthTime; //start time is birth time
-                var endTime = startTime.AddYears(120); //end time is 120 years from birth (dasa cycle)
-                var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
-
-                return timeSlices;
-            }
-
-        }
-
-        /// <summary>
-        /// The massive method that generates every inch of the dasa svg report
         /// Note : the number of days a pixel is the zoom level
         /// </summary>
-        private static async Task<string> GetDasaReportSvgFromApi2(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
+        private static async Task<string> GenerateDasaReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
         {
 
             //px width & height of each slice of time
             //used when generating dasa rows
             //note: changes needed only here
             int _widthPerSlice = 1;
-            int _heightPerSlice = 50;
+            int _heightPerSlice = 25;
             //var lineHeight = 170;
 
 
@@ -1141,6 +761,7 @@ namespace API
             var dasaEventList = await GetDasaEvents(eventsPrecision, startTime, endTime, inputPerson);
             var bhuktiEventList = await GetBhuktiEvents(eventsPrecision, startTime, endTime, inputPerson);
             var antaramEventList = await GetAntaramEvents(eventsPrecision, startTime, endTime, inputPerson);
+            var gocharaEventList = await GetGocharaEvents(eventsPrecision, startTime, endTime, inputPerson);
 
             //generate rows and pump them final svg string
             var dasaSvgWidth = 0; //will be filled when calling row generator
@@ -1158,6 +779,7 @@ namespace API
             compiledRow += GenerateYearRowSvg(dasaEventList, timeSlices, eventsPrecision, yearY, 0, yearH);
             //only show month row when there is space,
             //only below 1.3 days/px, anything above month names get crammed in
+            //FORMULA USED: above element position + its height + padding = next row position
             int monthY = yearY, monthH = yearH;
             if (daysPerPixel <= 1.3)
             {
@@ -1171,6 +793,8 @@ namespace API
             compiledRow += GenerateRowSvg(bhuktiEventList, timeSlices, eventsPrecision, bhuktiY, 0, _heightPerSlice);
             int antaramY = bhuktiY + _heightPerSlice + padding;
             compiledRow += GenerateRowSvg(antaramEventList, timeSlices, eventsPrecision, antaramY, 0, _heightPerSlice);
+            int gocharaY = antaramY + _heightPerSlice + padding;
+            compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0);
 
 
             //the height for all lines, cursor, now & life events line
@@ -1251,7 +875,8 @@ namespace API
                     {
                         case "Good": return "#42f706";
                         //case "Neutral": return "";
-                        case "Bad": return "#a80000";
+                        //case "Bad": return "#a80000";
+                        case "Bad": return "#ff5656";
                         default: throw new Exception($"Invalid Nature: {nature}");
                     }
                 }
@@ -1364,6 +989,70 @@ namespace API
                     horizontalPosition += _widthPerSlice;
 
                     rowHtml += rect;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+
+                return rowHtml;
+            }
+
+            string GenerateGocharaSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis)
+            {
+                //generate the row for each time slice
+                var rowHtml = "";
+                var horizontalPosition = 0; //distance from left
+                var verticalPosition = 0; //distance from top
+                var prevEventName = EventName.EmptyEvent;
+
+                //height of each row
+                var rowHeight = 10;
+
+                //generate 1px (rect) per time slice
+                foreach (var slice in timeSlices)
+                {
+                    //get event that occurred at this time slice
+                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
+                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
+                    //if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
+                    //var foundEvent = foundEventList[0];
+
+                    foreach (var foundEvent in foundEventList)
+                    {
+                        ////if current event is different than event has changed, so draw a black line
+                        //var isNewEvent = prevEventName != foundEvent.Name;
+                        //var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
+                        //prevEventName = foundEvent.Name;
+                        var color = GetEventColor(foundEvent?.Nature);
+
+                        //generate and add to row
+                        //the hard coded attribute names used here are used in App.js
+                        var rect = $"<rect " +
+                                   $"eventName=\"{foundEvent?.FormattedName}\" " +
+                                   $"age=\"{inputPerson.GetAge(slice)}\" " +
+                                   $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                                   $"x=\"{horizontalPosition}\" " +
+                                   $"y=\"{verticalPosition}\" " +
+                                   $"width=\"{_widthPerSlice}\" " +
+                                   $"height=\"{rowHeight}\" " +
+                                   $"fill=\"{color}\" />";
+
+                        rowHtml += rect;
+
+                        //increment vertical position for next
+                        //element to be placed beneath this one
+                        var spaceBetweenRow = 1;
+                        verticalPosition += rowHeight + spaceBetweenRow;
+                    }
+
+                    //set position for next element in time slice
+                    horizontalPosition += _widthPerSlice;
+
+                    //reset vertical position for next time slice
+                    verticalPosition = 0;
 
                 }
 
@@ -1584,12 +1273,17 @@ namespace API
             string WrapSvgElements(string combinedSvgString, int svgWidth = 1000, int svgTotalHeight = 1000)
             {
 
+                var svgBackgroundColor = "#f0f9ff";
+
                 //create the final svg that will be displayed
                 var svgTotalWidth = svgWidth + 10; //add little for wiggle room
-                var svgBody = $"<svg id=\"DasaViewHolder\" " +
-                              $"style=\"" +
-                              $"width:{svgTotalWidth}px;" +
-                              $"height:{svgTotalHeight}px;" +
+                var svgBody = $"<svg id=\"DasaViewHolder\"" +
+                              $" width=\"100%\"" +
+                              $" height=\"100%\"" +
+                              $" style=\"" +
+                              //$"width:{svgTotalWidth}px;" +
+                              //$"height:{svgTotalHeight}px;" +
+                              $"background:{svgBackgroundColor};" +
                               $"\" " +
                               $"xmlns=\"http://www.w3.org/2000/svg\">" +
                               $"{combinedSvgString}</svg>";
@@ -1612,6 +1306,9 @@ namespace API
 
         public static async Task<List<Event>?> GetAntaramEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
             => await EventsByTag(EventTag.Antaram, _eventsPrecision, startTime, endTime, person);
+
+        public static async Task<List<Event>?> GetGocharaEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
+            => await EventsByTag(EventTag.Gochara, _eventsPrecision, startTime, endTime, person);
 
         /// <summary>
         /// gets events from server filtered by event tag

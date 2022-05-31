@@ -5,32 +5,32 @@
         /// <summary>
         /// Swavarga - own varga
         /// </summary>
-        Swavarga = 1,
+        OwnVarga = 1,
 
         /// <summary>
         /// Adhi Mitravarga - Intimate friend varga
         /// </summary>
-        AdhiMitravarga = 2,
+        BestFriendVarga = 2,
 
         /// <summary>
         /// Mitravarga - friendly varga
         /// </summary>
-        Mitravarga = 3,
+        FriendVarga = 3,
 
         /// <summary>
-        /// Samavarga - neutral's varga
+        /// Sama Varga - neutral's varga
         /// </summary>
-        Samavarga = 4,
+        NeutralVarga = 4,
 
         /// <summary>
         /// Satruvarga - enemy's varga
         /// </summary>
-        Satruvarga = 5,
+        EnemyVarga = 5,
 
         /// <summary>
         /// Adhi Satruvarga - Bitter enemy varga
         /// </summary>
-        AdhiSatruvarga = 6,
+        BitterEnemyVarga = 6,
 
         /// <summary>
         /// Special position Note: use special calculator

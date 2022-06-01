@@ -743,7 +743,7 @@ namespace API
             //used when generating dasa rows
             //note: changes needed only here
             int _widthPerSlice = 1;
-            int _heightPerSlice = 25;
+            int _heightPerSlice = 20;
             //var lineHeight = 170;
 
 
@@ -777,13 +777,15 @@ namespace API
             var padding = 2;//space between rows
             int yearY = 0, yearH = 11;
             compiledRow += GenerateYearRowSvg(dasaEventList, timeSlices, eventsPrecision, yearY, 0, yearH);
+            int decadeY = yearY + yearH + padding, decadeH = 11;
+            compiledRow += GenerateDecadeRowSvg(dasaEventList, timeSlices, eventsPrecision, decadeY, 0, decadeH);
             //only show month row when there is space,
             //only below 1.3 days/px, anything above month names get crammed in
             //FORMULA USED: above element position + its height + padding = next row position
-            int monthY = yearY, monthH = yearH;
+            int monthY = decadeY, monthH = decadeH;
             if (daysPerPixel <= 1.3)
             {
-                monthY = yearY + yearH + padding;
+                monthY = decadeY + decadeH + padding;
                 monthH = 11;
                 compiledRow += GenerateMonthRowSvg(dasaEventList, timeSlices, eventsPrecision, monthY, 0, monthH);
             }
@@ -794,11 +796,11 @@ namespace API
             int antaramY = bhuktiY + _heightPerSlice + padding;
             compiledRow += GenerateRowSvg(antaramEventList, timeSlices, eventsPrecision, antaramY, 0, _heightPerSlice);
             int gocharaY = antaramY + _heightPerSlice + padding;
-            compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0);
-
+            compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0, out int gocharaHeight);
 
             //the height for all lines, cursor, now & life events line
-            var lineHeight = antaramY + _heightPerSlice + padding;
+            //place below the last row
+            var lineHeight = gocharaY + gocharaHeight + padding;
 
             //add in the cursor line
             compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
@@ -811,7 +813,7 @@ namespace API
             compiledRow += GetLifeEventLinesSvg(inputPerson, lineHeight);
 
             //compile the final svg
-            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, (_heightPerSlice * 3) + 60); //little wiggle room
+            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth); //little wiggle room
 
             return finalSvg;
 
@@ -884,6 +886,7 @@ namespace API
 
             //gets line position given a date
             //finds most closest time slice, else return 0 means none found
+            //note: tries to get nearest day first, then tries month to nearest year
             int GetLinePosition(List<Time> timeSliceList, DateTimeOffset inputTime)
             {
                 //if nearest day is possible then end here
@@ -893,6 +896,11 @@ namespace API
                 //else try get nearest month
                 var nearestMonth = GetNearestMonth();
                 if (nearestMonth != 0) { return nearestMonth; }
+
+                //else try get nearest year
+                var nearestYear = GetNearestYear();
+                if (nearestYear != 0) { return nearestYear; }
+
 
                 //if control reaches here then now time not found in time slices
                 //this is possible when viewing old charts as such set now line to 0
@@ -940,6 +948,29 @@ namespace API
                         var sameYear = time.GetStdYear() == nowYear;
                         var sameMonth = time.GetStdMonth() == nowMonth;
                         if (sameMonth && sameYear && sameDay)
+                        {
+                            return slicePosition;
+                        }
+
+                        //move to next slice position
+                        slicePosition++;
+                    }
+
+                    return 0;
+                }
+                int GetNearestYear()
+                {
+                    var nowYear = inputTime.Year;
+
+                    //go through the list and find where the slice is closest to now
+                    var slicePosition = 0;
+                    foreach (var time in timeSliceList)
+                    {
+
+                        //if same year and same month then send this slice position
+                        //as the correct one
+                        var sameYear = time.GetStdYear() == nowYear;
+                        if (sameYear)
                         {
                             return slicePosition;
                         }
@@ -1000,7 +1031,10 @@ namespace API
                 return rowHtml;
             }
 
-            string GenerateGocharaSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis)
+            //height not known until generated
+            //returns the final dynamic height of this gochara row
+            string GenerateGocharaSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis,
+                int xAxis, out int gocharaHeight)
             {
                 //generate the row for each time slice
                 var rowHtml = "";
@@ -1009,7 +1043,11 @@ namespace API
                 var prevEventName = EventName.EmptyEvent;
 
                 //height of each row
-                var rowHeight = 10;
+                var rowHeight = 15;
+
+                //used to determine final height
+                var highestTimeSlice = 0;
+                var multipleEventCount = 0;
 
                 //generate 1px (rect) per time slice
                 foreach (var slice in timeSlices)
@@ -1019,6 +1057,7 @@ namespace API
                     var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
                     //if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
                     //var foundEvent = foundEventList[0];
+
 
                     foreach (var foundEvent in foundEventList)
                     {
@@ -1046,6 +1085,8 @@ namespace API
                         //element to be placed beneath this one
                         var spaceBetweenRow = 1;
                         verticalPosition += rowHeight + spaceBetweenRow;
+
+                        multipleEventCount++; //include this in count
                     }
 
                     //set position for next element in time slice
@@ -1054,12 +1095,20 @@ namespace API
                     //reset vertical position for next time slice
                     verticalPosition = 0;
 
+                    //safe only the highest row
+                    var thisSliceHeight = multipleEventCount * rowHeight;
+                    highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
+                    multipleEventCount = 0; //reset
+
                 }
 
                 //wrap all the rects inside a svg so they can me moved together
-                //svg tag here acts as group, svg nesting
+                //note: use group instead of svg because editing capabilities
                 rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
 
+                //send height of tallest time slice aka the
+                //final height of this gochara row to caller
+                gocharaHeight = highestTimeSlice;
 
                 return rowHtml;
             }
@@ -1142,6 +1191,83 @@ namespace API
 
                 return rowHtml;
             }
+            
+            string GenerateDecadeRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis, int rowHeight)
+            {
+
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousYear = 0; //start 0 for first draw
+                var yearBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                //int rowHeight = 11;
+
+                var beginYear = timeSlices[0].GetStdYear();
+                var endYear = beginYear + 10; //decade
+
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new year box when year changes or at
+                    //end of time slices to draw the last year box
+                    var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var yearChanged = previousYear != slice.GetStdYear();
+                    if (yearChanged || lastTimeSlice)
+                    { 
+                        //is this slice end year
+                        var isEndYear = endYear == slice.GetStdYear();
+                        if (isEndYear)
+                        {
+                            //generate previous year data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = yearBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{beginYear} - {endYear}" + //previous year generate at begin of new year
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            yearBoxWidthCount = 0;
+
+                            //set new begin & end
+                            beginYear = endYear + 1;
+                            endYear = beginYear + 10;
+
+                        }
+
+                    }
+
+                    //update previous year for next slice
+                    previousYear = slice.GetStdYear();
+
+                    yearBoxWidthCount++;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+            }
+            
 
             string GenerateMonthRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis, int rowHeight)
             {
@@ -1270,6 +1396,7 @@ namespace API
 
             //wraps a list of svg elements inside 1 main svg element
             //if width not set defaults to 1000px, and height to 1000px
+            //height is set auto because hard to determine
             string WrapSvgElements(string combinedSvgString, int svgWidth = 1000, int svgTotalHeight = 1000)
             {
 
@@ -1281,7 +1408,7 @@ namespace API
                               $" width=\"100%\"" +
                               $" height=\"100%\"" +
                               $" style=\"" +
-                              //$"width:{svgTotalWidth}px;" +
+                              $"width:{svgTotalWidth}px;" +
                               //$"height:{svgTotalHeight}px;" +
                               $"background:{svgBackgroundColor};" +
                               $"\" " +

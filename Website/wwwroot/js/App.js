@@ -270,6 +270,31 @@ async function ShowLeaveEmailAlert() {
 
 }
 
+//Gets a mouses x axis relative inside the given element
+//used to get mouse location on Dasa view
+function GetMouseXInElement(mouseEventData, elementId) {
+
+    //gets the measurements of the dasa view holder
+    //the element where cursor line will be moving
+    //TODO read val from global var
+    let holderMeasurements = $(elementId)[0].getBoundingClientRect();
+
+    //calculate mouse X relative to dasa view box
+    let relativeMouseX = mouseEventData.clientX - holderMeasurements.left;
+    let relativeMouseY = mouseEventData.clientY - holderMeasurements.top; //when mouse leaves top
+    let relativeMouseYb = mouseEventData.clientY - holderMeasurements.bottom; //when mouse leaves bottom
+
+    //if mouse out of element element, hide cursor and end here
+    let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
+
+    if (mouseOut) {
+        return 0;
+    } else {
+        return relativeMouseX;
+    }
+
+}
+
 
 //█▀█ █▀█ █▀█ █▀▀ █▀█ █▀▀ █▀ █▀   █▄▄ ▄▀█ █▀█
 //█▀▀ █▀▄ █▄█ █▄█ █▀▄ ██▄ ▄█ ▄█   █▄█ █▀█ █▀▄
@@ -385,23 +410,6 @@ function getGoogleUserIdToken() {
 //██▄ ▀▄▀ ██▄ █░▀█ ░█░   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄
 
 
-//attached to event viewer to update time legend
-function mouseOverEventsViewHandler(mouse) {
-
-    //only continue if mouse is exactly over 
-    //a time slice (svg rect element), else end here
-    let timeSlice = mouse.path[0];
-    let isTimeSlice = timeSlice.localName == "rect";
-    if (!isTimeSlice) { return; }
-
-    //get details from inside the time slice
-    var eventName = timeSlice.getAttribute("eventname");
-    var stdTime = timeSlice.getAttribute("stdtime");
-
-    //place data into view
-    $("#TimeCursorLegend").html(`${eventName} - ${stdTime}`);
-
-}
 
 //called by sign in button & page refresh
 //note : this function's name is hardwired in Blazor
@@ -444,30 +452,21 @@ function onClickGoogleSignOutButton() {
 //used to auto update cursor line & time legend
 async function onMouseMoveDasaViewEventHandler(mouse) {
 
-    //auto update time legend first then move cursor line
-    //else cursor line will obstruct reading event slice rect 
-    autoUpdateTimeLegend(mouse);
-    //note: delay needed to reduce cursor line obstructing rate,
-    //though it does happen when mouse move very slowly.
-    await delay(100);
-    autoMoveCursorLine(mouse);
+    //get relative position of mouse in Dasa view
+    var relativeMouseX = GetMouseXInElement(mouse, "#DasaViewHolder");
+
+    //move cursor line 1st for responsiveness
+    autoMoveCursorLine(relativeMouseX);
+
+    //update time legend
+    autoUpdateTimeLegend(relativeMouseX);
 }
 
-function autoMoveCursorLine(mouse) {
+function autoMoveCursorLine(relativeMouseX) {
 
-    //gets the measurements of the dasa view holder
-    //the element where cursor line will be moving
-    //TODO read val from global var
-    let holderMeasurements = $("#DasaViewHolder")[0].getBoundingClientRect();
 
-    //calculate mouse X relative to dasa view box
-    let relativeMouseX = mouse.clientX - holderMeasurements.left;
-    let relativeMouseY = mouse.clientY - holderMeasurements.top; //when mouse leaves top
-    let relativeMouseYb = mouse.clientY - holderMeasurements.bottom; //when mouse leaves bottom
-
-    //if mouse out of element element, hide cursor and end here
-    let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
-    if (mouseOut) { $("#CursorLine").hide(); return; }
+    //if outside element (0 value), hide cursor and end here
+    if (relativeMouseX == 0) { $("#CursorLine").hide(); return; }
     else { $("#CursorLine").show(); }
 
     //move vertical line to under mouse inside dasa view box
@@ -476,42 +475,58 @@ function autoMoveCursorLine(mouse) {
 }
 
 //attached to dasa viewer to update time legend 
-function autoUpdateTimeLegend(mouse) {
+function autoUpdateTimeLegend(relativeMouseX) {
 
-    //go through all the elements until found the one with events
-    //var length = mouse.path.length;
-    var elementFound = false;
-    var elementIndex = 0; //start with 0
-    var eventName = null;
-    var elementUnderMouse = null;
+    //x axis is rounded because axis value in rect is whole numbers
+    //and it has to be exact match to get it
+    var mouseRoundedX = Math.round(relativeMouseX);
 
-
-    //note : this done because the element containing
-    //the data is parent of element that starts event
-    while (!elementFound) {
-
-        //get any element under mouse and try to get values from it
-        elementUnderMouse = mouse.path[elementIndex];
-
-        //get details from inside the time slice
-        eventName = elementUnderMouse.getAttribute("eventname");
-
-        //if found, stop looking
-        if (eventName != null) { elementFound = true; }
-        //if not found, move to element higher in mouse path tree
-        else { ++elementIndex; }
-
-        //only go up 3 levels
-        if (elementIndex > 3) { return; }
-    }
-
-    //get details from inside the time slice
-    var stdTime = elementUnderMouse.getAttribute("stdtime");
-    var age = elementUnderMouse.getAttribute("age");
+    //use the mouse position to get dasa elements also at said position
+    //note: faster and less erroneous than using mouse.path 
+    var allElementsAtX = $(`[x=${mouseRoundedX}]`);
 
 
-    //place data into view
-    $("#TimeCursorLegend").html(`${eventName} - ${stdTime} - AGE : ${age}`);
+    $("#GocharaLegend").empty();
+
+    //extract event data out and place it in legend
+    allElementsAtX.each(function () {
+
+        //based on the type of the event 
+        var type = this.getAttribute("type");
+        eventName = this.getAttribute("eventname");
+        var color = this.getAttribute("fill");
+
+        switch (type) {
+            case "Dasa":
+                $("#DasaLegend").text(`${eventName}`);
+                $("#DasaLegend").css("color", `${color}`);
+                //add in time & age
+                var stdTime = this.getAttribute("stdtime");
+                var age = this.getAttribute("age");
+                $("#DateLegend").text(`${stdTime}`);
+                $("#AgeLegend").text(`${age}`);
+
+                break;
+            case "Bhukti":
+                $("#BhuktiLegend").text(`${eventName}`);
+                $("#BhuktiLegend").css("color", `${color}`);
+                break;
+            case "Antaram":
+                $("#AntaramLegend").text(`${eventName}`);
+                $("#AntaramLegend").css("color", `${color}`);
+                break;
+            case "Gochara":
+                var $newdiv1 = $("<span></span>");
+                $newdiv1.text(`${eventName}`);
+                $newdiv1.css("color", `${color}`);
+                $("#GocharaLegend").append($newdiv1);
+                break;
+            default:
+                return;
+        }
+
+    });
+
 
 }
 
@@ -534,7 +549,7 @@ function InitTouchLib(element) {
         //converting the touch event into a mouse event
         var mouse = {
             clientX: ev.center.x,
-            clientY: ev.center.y, 
+            clientY: ev.center.y,
             path: ev.srcEvent.path
         };
 
@@ -546,9 +561,9 @@ function InitTouchLib(element) {
 
     //window.hammerJs = new Hammer(myElement, myOptions);
 
-//window.hammerJs.on('pan', function (ev) {
-//    console.log(ev);
-//});
+    //window.hammerJs.on('pan', function (ev) {
+    //    console.log(ev);
+    //});
 }
 
 

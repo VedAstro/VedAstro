@@ -796,9 +796,9 @@ namespace API
 
 
             int dasaY = headerY;
-            compiledRow += GenerateRowSvg(dasaEventList, timeSlices, dasaY, 0, _heightPerSlice);
+            compiledRow += GenerateDasaRowSvg(dasaEventList, timeSlices, dasaY, 0, _heightPerSlice);
             int bhuktiY = dasaY + _heightPerSlice + padding;
-            compiledRow += GenerateRowSvg(bhuktiEventList, timeSlices, bhuktiY, 0, _heightPerSlice);
+            compiledRow += GenerateBhuktiRowSvg(bhuktiEventList, timeSlices, bhuktiY, 0, _heightPerSlice);
             int antaramY = bhuktiY + _heightPerSlice + padding;
             compiledRow += GenerateAntaramRowSvg(antaramEventList, timeSlices, antaramY, 0, _heightPerSlice);
             int gocharaY = antaramY + _heightPerSlice + padding;
@@ -1016,9 +1016,10 @@ namespace API
                     //generate and add to row
                     //the hard coded attribute names used here are used in App.js
                     var rect = $"<rect " +
-                               $"eventName=\"{foundEvent?.FormattedName}\" " +
+                               $"type=\"Antaram\" " +
+                               $"eventname=\"{foundEvent?.FormattedName}\" " +
                                $"age=\"{inputPerson.GetAge(slice)}\" " +
-                               $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                               $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
                                $"x=\"{horizontalPosition}\" " +
                                $"width=\"{_widthPerSlice}\" " +
                                $"height=\"{rowHeight}\" " +
@@ -1038,7 +1039,7 @@ namespace API
 
                 return rowHtml;
             }
-            string GenerateRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            string GenerateDasaRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
                 //generate the row for each time slice
                 var rowHtml = "";
@@ -1062,9 +1063,57 @@ namespace API
                     //generate and add to row
                     //the hard coded attribute names used here are used in App.js
                     var rect = $"<rect " +
-                               $"eventName=\"{foundEvent?.FormattedName}\" " +
+                               $"type=\"Dasa\" " +
+                               $"eventname=\"{foundEvent?.FormattedName}\" " +
                                $"age=\"{inputPerson.GetAge(slice)}\" " +
-                               $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                               $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                               $"x=\"{horizontalPosition}\" " +
+                               $"width=\"{_widthPerSlice}\" " +
+                               $"height=\"{rowHeight}\" " +
+                               $"fill=\"{color}\" />";
+
+                    //set position for next element
+                    horizontalPosition += _widthPerSlice;
+
+                    rowHtml += rect;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+
+                return rowHtml;
+            }
+            string GenerateBhuktiRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+                //generate the row for each time slice
+                var rowHtml = "";
+                var horizontalPosition = 0; //distance from left
+                var prevEventName = EventName.EmptyEvent;
+
+                //generate 1px (rect) per time slice
+                foreach (var slice in timeSlices)
+                {
+                    //get event that occurred at this time slice
+                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
+                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
+                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
+                    var foundEvent = foundEventList[0];
+
+                    //if current event is different than event has changed, so draw a black line
+                    var isNewEvent = prevEventName != foundEvent.Name;
+                    var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
+                    prevEventName = foundEvent.Name;
+
+                    //generate and add to row
+                    //the hard coded attribute names used here are used in App.js
+                    var rect = $"<rect " +
+                               $"type=\"Bhukti\" " +
+                               $"eventname=\"{foundEvent?.FormattedName}\" " +
+                               $"age=\"{inputPerson.GetAge(slice)}\" " +
+                               $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
                                $"x=\"{horizontalPosition}\" " +
                                $"width=\"{_widthPerSlice}\" " +
                                $"height=\"{rowHeight}\" " +
@@ -1124,9 +1173,10 @@ namespace API
                         //generate and add to row
                         //the hard coded attribute names used here are used in App.js
                         var rect = $"<rect " +
-                                   $"eventName=\"{foundEvent?.FormattedName}\" " +
+                                   $"type=\"Gochara\" " +
+                                   $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                                   $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
                                    $"x=\"{horizontalPosition}\" " +
                                    $"y=\"{verticalPosition}\" " +
                                    $"width=\"{_widthPerSlice}\" " +

@@ -705,7 +705,7 @@ namespace API
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
 
-        public static List<Event> CalculateEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precision, XDocument dataEventdatalistXml)
+        private static List<Event> CalculateEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precision, XDocument dataEventdatalistXml)
         {
 
             //parse each raw event data in list
@@ -1606,22 +1606,22 @@ namespace API
 
         }
 
-        public static async Task<List<Event>?> GetDasaEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
+        private static async Task<List<Event>?> GetDasaEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
             => await EventsByTag(EventTag.Dasa, _eventsPrecision, startTime, endTime, person);
 
-        public static async Task<List<Event>?> GetBhuktiEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
+        private static async Task<List<Event>?> GetBhuktiEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
             => await EventsByTag(EventTag.Bhukti, _eventsPrecision, startTime, endTime, person);
 
-        public static async Task<List<Event>?> GetAntaramEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
+        private static async Task<List<Event>?> GetAntaramEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
             => await EventsByTag(EventTag.Antaram, _eventsPrecision, startTime, endTime, person);
 
-        public static async Task<List<Event>?> GetGocharaEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
+        private static async Task<List<Event>?> GetGocharaEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
             => await EventsByTag(EventTag.Gochara, _eventsPrecision, startTime, endTime, person);
 
         /// <summary>
         /// gets events from server filtered by event tag
         /// </summary>
-        public static async Task<List<Event>?> EventsByTag(EventTag tag, double precisionHours, Time startTime, Time endTime, Person person)
+        private static async Task<List<Event>?> EventsByTag(EventTag tag, double precisionHours, Time startTime, Time endTime, Person person)
         {
 
             //get events from API server
@@ -1650,7 +1650,7 @@ namespace API
         /// <summary>
         /// Gets Muhurtha events from API
         /// </summary>
-        public static async Task<List<Event>> GetEventsFromApi(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours)
+        private static async Task<List<Event>> GetEventsFromApi(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours)
         {
             //prepare data to send to API
             var root = new XElement("Root");
@@ -1684,7 +1684,7 @@ namespace API
             //return resultsParsed;
         }
 
-        public static byte[] streamToByteArray(Stream input)
+        private static byte[] streamToByteArray(Stream input)
         {
             //reset stream position
             input.Position = 0;
@@ -1693,7 +1693,7 @@ namespace API
             return ms.ToArray();
         }
 
-        public static Stream GenerateStreamFromString(string s)
+        private static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);

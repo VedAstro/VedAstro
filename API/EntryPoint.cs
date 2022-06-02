@@ -773,30 +773,37 @@ namespace API
             //save a copy of the number of time slices used to calculate the svg total width later
             dasaSvgWidth = timeSlices.Count;
 
-            //note: y axis positions are manually set
+            var beginYear = timeSlices[0].GetStdYear();
+            var endYear = timeSlices.Last().GetStdYear();
+            var difYears = endYear - beginYear;
+
+            var headerGenerator = new List<Func<List<Time>, int, int, int, string>>();
+            if (difYears >= 10) { headerGenerator.Add(GenerateDecadeRowSvg); }
+            if (difYears is >= 5 and < 10) { headerGenerator.Add(Generate5YearRowSvg); }
+            if (daysPerPixel <= 15) { headerGenerator.Add(GenerateYearRowSvg); }
+            if (daysPerPixel <= 1.3) { headerGenerator.Add(GenerateMonthRowSvg); }
+
+
             var padding = 2;//space between rows
-            int yearY = 0, yearH = 11;
-            compiledRow += GenerateYearRowSvg(dasaEventList, timeSlices, eventsPrecision, yearY, 0, yearH);
-            int decadeY = yearY + yearH + padding, decadeH = 11;
-            compiledRow += GenerateDecadeRowSvg(dasaEventList, timeSlices, eventsPrecision, decadeY, 0, decadeH);
-            //only show month row when there is space,
-            //only below 1.3 days/px, anything above month names get crammed in
-            //FORMULA USED: above element position + its height + padding = next row position
-            int monthY = decadeY, monthH = decadeH;
-            if (daysPerPixel <= 1.3)
+            int headerY = 0, headerHeight = 11;
+            foreach (var generator in headerGenerator)
             {
-                monthY = decadeY + decadeH + padding;
-                monthH = 11;
-                compiledRow += GenerateMonthRowSvg(dasaEventList, timeSlices, eventsPrecision, monthY, 0, monthH);
+                compiledRow += generator(timeSlices, headerY, 0, headerHeight);
+
+                //update for next generator
+                headerY = headerY + headerHeight + padding;
             }
-            int dasaY = monthY + monthH + padding;
-            compiledRow += GenerateRowSvg(dasaEventList, timeSlices, eventsPrecision, dasaY, 0, _heightPerSlice);
+
+
+            int dasaY = headerY;
+            compiledRow += GenerateRowSvg(dasaEventList, timeSlices, dasaY, 0, _heightPerSlice);
             int bhuktiY = dasaY + _heightPerSlice + padding;
-            compiledRow += GenerateRowSvg(bhuktiEventList, timeSlices, eventsPrecision, bhuktiY, 0, _heightPerSlice);
+            compiledRow += GenerateRowSvg(bhuktiEventList, timeSlices, bhuktiY, 0, _heightPerSlice);
             int antaramY = bhuktiY + _heightPerSlice + padding;
-            compiledRow += GenerateRowSvg(antaramEventList, timeSlices, eventsPrecision, antaramY, 0, _heightPerSlice);
+            compiledRow += GenerateAntaramRowSvg(antaramEventList, timeSlices, antaramY, 0, _heightPerSlice);
             int gocharaY = antaramY + _heightPerSlice + padding;
             compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0, out int gocharaHeight);
+
 
             //the height for all lines, cursor, now & life events line
             //place below the last row
@@ -984,7 +991,54 @@ namespace API
             }
 
 
-            string GenerateRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis, int rowHeight)
+            string GenerateAntaramRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+                //generate the row for each time slice
+                var rowHtml = "";
+                var horizontalPosition = 0; //distance from left
+                var prevEventName = EventName.EmptyEvent;
+
+                //generate 1px (rect) per time slice
+                foreach (var slice in timeSlices)
+                {
+                    //get event that occurred at this time slice
+                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
+                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
+                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
+                    var foundEvent = foundEventList[0];
+
+                    //if current event is different than event has changed, so draw a black line
+                    var isNewEvent = prevEventName != foundEvent.Name;
+                    var borderRoomAvailable = daysPerPixel <= 10; //above 10px/day borders look ugly
+                    var color = isNewEvent && borderRoomAvailable ? "black" : GetEventColor(foundEvent?.Nature);
+                    prevEventName = foundEvent.Name;
+
+                    //generate and add to row
+                    //the hard coded attribute names used here are used in App.js
+                    var rect = $"<rect " +
+                               $"eventName=\"{foundEvent?.FormattedName}\" " +
+                               $"age=\"{inputPerson.GetAge(slice)}\" " +
+                               $"stdTime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                               $"x=\"{horizontalPosition}\" " +
+                               $"width=\"{_widthPerSlice}\" " +
+                               $"height=\"{rowHeight}\" " +
+                               $"fill=\"{color}\" />";
+
+                    //set position for next element
+                    horizontalPosition += _widthPerSlice;
+
+                    rowHtml += rect;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+
+                return rowHtml;
+            }
+            string GenerateRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
                 //generate the row for each time slice
                 var rowHtml = "";
@@ -1113,7 +1167,7 @@ namespace API
                 return rowHtml;
             }
 
-            string GenerateYearRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis, int rowHeight)
+            string GenerateYearRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
 
                 //generate the row for each time slice
@@ -1191,8 +1245,8 @@ namespace API
 
                 return rowHtml;
             }
-            
-            string GenerateDecadeRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis, int rowHeight)
+
+            string GenerateDecadeRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
 
                 //generate the row for each time slice
@@ -1215,7 +1269,7 @@ namespace API
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
                     var yearChanged = previousYear != slice.GetStdYear();
                     if (yearChanged || lastTimeSlice)
-                    { 
+                    {
                         //is this slice end year
                         var isEndYear = endYear == slice.GetStdYear();
                         if (isEndYear)
@@ -1268,8 +1322,85 @@ namespace API
                 return rowHtml;
             }
             
+            string Generate5YearRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
 
-            string GenerateMonthRowSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis, int rowHeight)
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousYear = 0; //start 0 for first draw
+                var yearBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                //int rowHeight = 11;
+
+                const int yearRange = 5;
+
+                var beginYear = timeSlices[0].GetStdYear();
+                var endYear = beginYear + yearRange;
+
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new year box when year changes or at
+                    //end of time slices to draw the last year box
+                    var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var yearChanged = previousYear != slice.GetStdYear();
+                    if (yearChanged || lastTimeSlice)
+                    {
+                        //is this slice end year
+                        var isEndYear = endYear == slice.GetStdYear();
+                        if (isEndYear)
+                        {
+                            //generate previous year data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = yearBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{beginYear} - {endYear}" + //previous year generate at begin of new year
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            yearBoxWidthCount = 0;
+
+                            //set new begin & end
+                            beginYear = endYear + 1;
+                            endYear = beginYear + yearRange;
+
+                        }
+
+                    }
+
+                    //update previous year for next slice
+                    previousYear = slice.GetStdYear();
+
+                    yearBoxWidthCount++;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+            }
+
+            string GenerateMonthRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
 
                 //generate the row for each time slice
@@ -1408,7 +1539,7 @@ namespace API
                               $" width=\"100%\"" +
                               $" height=\"100%\"" +
                               $" style=\"" +
-                              $"width:{svgTotalWidth}px;" +
+                              $"width:{svgTotalWidth}px;" + //note: if width not hard set, parent div clips it
                               //$"height:{svgTotalHeight}px;" +
                               $"background:{svgBackgroundColor};" +
                               $"\" " +

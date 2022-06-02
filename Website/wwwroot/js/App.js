@@ -516,7 +516,7 @@ function autoUpdateTimeLegend(relativeMouseX) {
                 $("#AntaramLegend").css("color", `${color}`);
                 break;
             case "Gochara":
-                var $newdiv1 = $("<span></span>");
+                var $newdiv1 = $(`<li class=\"list-group-item\"></li>`);
                 $newdiv1.text(`${eventName}`);
                 $newdiv1.css("color", `${color}`);
                 $("#GocharaLegend").append($newdiv1);

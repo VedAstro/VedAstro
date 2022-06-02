@@ -35,16 +35,21 @@
     </div>
     @*ID set because used by auto move cursor line handler*@
     <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll; height: 280px;">@DasaReportSvg</div>
-@*    <div style="background-color: cadetblue;" class="fw-bold hstack"><p id="TimeCursorLegend"></p></div>*@    
-    <ul class="list-group" style="font-weight: bold;">
-        <li class="list-group-item active" aria-current="true">Time : <span id="DateLegend"></span></li>
-        <li class="list-group-item">Age : <span id="AgeLegend"></span></li>
-        <li class="list-group-item">Dasa : <span id="DasaLegend"></span></li>
-        <li class="list-group-item">Bhukti : <span id="BhuktiLegend"></span></li>
-        <li class="list-group-item">Antaram : <span id="AntaramLegend"></span></li>
-        <li class="list-group-item">Gochara : <span id="GocharaLegend"></span></li>
-    </ul>
 
+
+    <div class="hstack gap-2" style="font-weight: bold; font-size: 14px;">
+        <ul class="list-group" >
+            <li class="list-group-item active" aria-current="true">Time : <span id="DateLegend"></span></li>
+            <li class="list-group-item">Age : <span id="AgeLegend"></span></li>
+            <li class="list-group-item">Dasa : <span id="DasaLegend"></span></li>
+            <li class="list-group-item">Bhukti : <span id="BhuktiLegend"></span></li>
+            <li class="list-group-item">Antaram : <span id="AntaramLegend"></span></li>
+        </ul>
+        <ul class="list-group"  style="height: 190px;">
+            <li class="list-group-item active" aria-current="true">Gochara</li>
+            <span id="GocharaLegend"></span>
+        </ul>
+    </div>
 </div>
 
 

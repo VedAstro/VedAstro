@@ -26,6 +26,7 @@ namespace API
 
         //hard coded links to files stored in storage
         private const string PersonListXml = "vedastro-site-data/PersonList.xml";
+        private const string CachedDasaReportXml = "vedastro-site-data/CachedDasaReport.xml";
         private const string MessageListXml = "vedastro-site-data/MessageList.xml";
         private const string TaskListXml = "vedastro-site-data/TaskList.xml";
         private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
@@ -403,7 +404,7 @@ namespace API
             try
             {
                 //get dasa report for sending
-                var dasaReportSvg = await GetDasaReportSvgForIncomingRequest(incomingRequest);
+                var dasaReportSvg = await GetDasaReportSvgForIncomingRequest(incomingRequest, personListClient);
 
                 //send image back to caller
                 var x = streamToByteArray(dasaReportSvg);
@@ -423,33 +424,47 @@ namespace API
 
             //
 
-            async Task<Stream> GetDasaReportSvgForIncomingRequest(HttpRequestMessage req)
+        }
+
+        /// <summary>
+        /// Generates a new SVG dasa report given a person hash (cached)
+        /// Call normally as method above
+        /// NOTE:
+        /// no specific time used standard 120 years only
+        /// each cache is 120 years at a specific resolution (days per pixel)
+        /// It is done so that cache is not clogged with individual time slice and resolution
+        /// </summary>
+        [FunctionName("getpersondasareportcached")]
+        public static async Task<IActionResult> GetPersonDasaReportCached(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient,
+            [Blob(CachedDasaReportXml, FileAccess.ReadWrite)] BlobClient cachedDasaReportXmlClient)
+        {
+            var responseMessage = "";
+
+            try
             {
-                //get all the data needed out of the incoming request
-                var rootXml = APITools.ExtractDataFromRequest(req);
-                var personHash = int.Parse(rootXml.Element("PersonHash").Value);
-                var startTimeXml = rootXml.Element("StartTime").Elements().First();
-                var startTime = Time.FromXml(startTimeXml);
-                var endTimeXml = rootXml.Element("EndTime").Elements().First();
-                var endTime = Time.FromXml(endTimeXml);
-                var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel").Value);
+                //get dasa report for sending
+                var dasaReportSvg = await GetDasaReportSvgForIncomingRequestCached(incomingRequest, personListClient, cachedDasaReportXmlClient);
 
+                //send image back to caller
+                var x = streamToByteArray(dasaReportSvg);
+                return new FileContentResult(x, "image/svg+xml");
 
-                //get the person instance by hash
-                var personListXml = APITools.BlobClientToXml(personListClient);
-                var foundPersonXml = APITools.FindPersonByHash(personListXml, personHash);
-                var foundPerson = Person.FromXml(foundPersonXml);
-
-                //from person get svg report
-                var dasaReportSvgString = await GenerateDasaReportSvg(foundPerson, startTime, endTime, daysPerPixel);
-
-
-                //convert svg string to stream for sending
-                //todo check if using really needed here
-                var stream = GenerateStreamFromString(dasaReportSvgString);
-
-                return stream;
             }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                responseMessage = APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+
+            //
+
 
         }
 
@@ -703,6 +718,112 @@ namespace API
 
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+        private static async Task<Stream> GetDasaReportSvgForIncomingRequest(HttpRequestMessage req, BlobClient personListClient)
+        {
+            //get all the data needed out of the incoming request
+            var rootXml = APITools.ExtractDataFromRequest(req);
+            var personHash = int.Parse(rootXml.Element("PersonHash").Value);
+            var startTimeXml = rootXml.Element("StartTime").Elements().First();
+            var startTime = Time.FromXml(startTimeXml);
+            var endTimeXml = rootXml.Element("EndTime").Elements().First();
+            var endTime = Time.FromXml(endTimeXml);
+            var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel").Value);
+
+
+            //get the person instance by hash
+            var personListXml = APITools.BlobClientToXml(personListClient);
+            var foundPersonXml = APITools.FindPersonByHash(personListXml, personHash);
+            var foundPerson = Person.FromXml(foundPersonXml);
+
+            //from person get svg report
+            var dasaReportSvgString = await GenerateDasaReportSvg(foundPerson, startTime, endTime, daysPerPixel);
+
+
+            //convert svg string to stream for sending
+            //todo check if using really needed here
+            var stream = GenerateStreamFromString(dasaReportSvgString);
+
+            return stream;
+        }
+        private static async Task<Stream> GetDasaReportSvgForIncomingRequestCached(HttpRequestMessage req, BlobClient personListClient, BlobClient cachedReportsClient)
+        {
+            //get all the data needed out of the incoming request
+            var rootXml = APITools.ExtractDataFromRequest(req);
+            var personHash = int.Parse(rootXml.Element("PersonHash").Value);
+            var startTimeXml = rootXml.Element("StartTime").Elements().First();
+            var startTime = Time.FromXml(startTimeXml);
+            var endTimeXml = rootXml.Element("EndTime").Elements().First();
+            var endTime = Time.FromXml(endTimeXml);
+            var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel").Value);
+
+
+            //get the person instance by hash
+            var personListXml = APITools.BlobClientToXml(personListClient);
+            var foundPersonXml = APITools.FindPersonByHash(personListXml, personHash);
+            var foundPerson = Person.FromXml(foundPersonXml);
+
+
+            //use svg from cache if it exists else,
+            //make new one save it in cache & send that
+            var cachedSvg = GetCachedDasaReportSvg(foundPerson, daysPerPixel, cachedReportsClient);
+            if (cachedSvg != "") { return GenerateStreamFromString(cachedSvg); } //convert svg string to stream for sending
+
+
+            //if control reaches here, then no cache
+            //generate new report (compute)
+            var dasaReportSvgString = await GenerateDasaReportSvg(foundPerson, startTime, endTime, daysPerPixel);
+            //save it in cache for future calls
+            SetCachedDasaReportSvg(foundPerson, daysPerPixel, cachedReportsClient, dasaReportSvgString); //don't wait let it go (tested saved 1.5s)
+            //convert svg string to stream for sending
+            var stream = GenerateStreamFromString(dasaReportSvgString);
+
+            return stream;
+
+        }
+
+        /// <summary>
+        /// Returns empty string if no cache found
+        /// </summary>
+        private static string GetCachedDasaReportSvg(Person inputPerson, double daysPerPixel, BlobClient cachedReportsClient)
+        {
+            //get cached reports from storage
+            var reportListXml = APITools.BlobClientToXml(cachedReportsClient);
+
+            //get only the report specified
+            var foundList = from report in reportListXml.Root?.Elements()
+                where
+                    report.Element("PersonHash")?.Value == inputPerson.Hash.ToString()
+                    &&
+                    report.Element("DaysPerPixel")?.Value == daysPerPixel.ToString()
+                            select report;
+
+            //only allowed 1 cache
+            if (foundList.Count() > 1) { throw new Exception("Duplicate Dasa Report Cache!"); }
+
+            //if none found return empty str
+            if (!foundList.Any()) { return ""; }
+            else
+            {
+                return foundList.First().Element("SvgReport").Value;
+            }
+        }
+
+        private static async Task SetCachedDasaReportSvg(Person inputPerson, double daysPerPixel, BlobClient cachedReportsClient, string svgString)
+        {
+
+            var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+            var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixel);
+            var svgReportXml = new XElement("SvgReport", svgString);
+            var reportXml = new XElement("Report", personHashXml, daysPerPixelXml, svgReportXml);
+
+            //add new visitor to main list
+            var taskListXml = APITools.AddXElementToXDocument(cachedReportsClient, reportXml);
+
+            //upload modified list to storage
+            await APITools.OverwriteBlobData(cachedReportsClient, taskListXml);
+
+        }
 
 
         private static List<Event> CalculateEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precision, XDocument dataEventdatalistXml)

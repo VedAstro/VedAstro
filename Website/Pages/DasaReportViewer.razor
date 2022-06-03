@@ -38,14 +38,14 @@
 
 
     <div class="hstack gap-2" style="font-weight: bold; font-size: 14px;">
-        <ul class="list-group" >
+        <ul class="list-group">
             <li class="list-group-item active" aria-current="true">Time : <span id="DateLegend"></span></li>
             <li class="list-group-item">Age : <span id="AgeLegend"></span></li>
             <li class="list-group-item">Dasa : <span id="DasaLegend"></span></li>
             <li class="list-group-item">Bhukti : <span id="BhuktiLegend"></span></li>
             <li class="list-group-item">Antaram : <span id="AntaramLegend"></span></li>
         </ul>
-        <ul class="list-group"  style="height: 190px;">
+        <ul class="list-group" style="height: 190px;">
             <li class="list-group-item active" aria-current="true">Gochara</li>
             <span id="GocharaLegend"></span>
         </ul>
@@ -150,6 +150,9 @@
         //doing it in blazor, causes progress bar freeze while updating
         await _jsRuntime.InjectIntoElement(_dasaViewBox, finalSvg);
 
+        //attach tooltip lib for life events
+        //note: needed on each draw
+        await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
     }
 
     /// <summary>

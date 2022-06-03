@@ -855,7 +855,7 @@ namespace API
                     //put together icon + line + event data
                     compiledLines += $"<g" +
                                      $" eventName=\"{lifeEvent.Name}\" " +
-                                     $" age=\"{inputPerson.GetAge(startTime.Year)}\" " +
+                                     $" class=\"LifeEventLines\" " + //atm used for tooltip logic
                                      $" stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
                                      $" transform=\"matrix(1, 0, 0, 1, {positionX}, 0)\"" +
                                     $" x=\"0\" y=\"0\" >" +

@@ -73,6 +73,17 @@ function addEventListenerWrapper(element, eventName, functionName) {
     element.addEventListener(eventName, window[functionName]);
 };
 
+//Jquery to attach event listener by class and ID (CSS selector)
+function addEventListenerByClass(className, eventName, functionName) {
+    console.log(`JS: addEventListenerByClass : ${eventName} : ${functionName}`);
+
+    //attach listener to each element
+    $(className).each(function () {
+        this.addEventListener(eventName, window[functionName]);
+    });
+
+};
+
 //gets current page url
 function getUrl() {
     console.log(`JS: getUrl`);
@@ -292,6 +303,28 @@ function GetMouseXInElement(mouseEventData, elementId) {
     } else {
         return relativeMouseX;
     }
+
+}
+
+//gets all life event lines by class
+//and attaches tooltip event on it to
+//show data of the event on mouse hover
+//uses Tippy js lib, needs to be called everytime
+//new elements are created, because attach by direct
+//element reference not class
+function InitLifeEventLineToolTip() {
+
+    $(".LifeEventLines").each(function() {
+
+        var evName = this.getAttribute("eventname");
+
+        tippy(this, {
+            content: evName,
+            placement: 'bottom',
+            arrow: true,
+        });
+
+    });
 
 }
 
@@ -565,6 +598,4 @@ function InitTouchLib(element) {
     //    console.log(ev);
     //});
 }
-
-
 

@@ -113,6 +113,7 @@ namespace Website
         /// Uses jQuery to attach a function by name to a HTML element event
         /// </summary>
         public static async Task AddEventListener(this IJSRuntime jsRuntime, ElementReference element, string eventName, string eventHandlerName) => await jsRuntime.InvokeVoidAsync("addEventListenerWrapper", element, eventName, eventHandlerName);
+        public static async Task AddEventListener(this IJSRuntime jsRuntime, string jquerySelector, string eventName, string eventHandlerName) => await jsRuntime.InvokeVoidAsync("addEventListenerByClass", jquerySelector, eventName, eventHandlerName);
 
         /// <summary>
         /// Calls the js function specified and returns function data JSON to XML

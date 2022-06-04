@@ -33,7 +33,7 @@ namespace API
         /// <summary>
         /// Default success message sent to caller
         /// </summary>
-        private static string PassMessageXml = new XElement("Status", "Pass").ToString();
+        private static readonly OkObjectResult PassMessage = new(new XElement("Status", "Pass").ToString());
 
 
 
@@ -65,7 +65,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -93,13 +93,13 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);
 
-                responseMessage = PassMessageXml;
+                return PassMessage;
 
             }
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -127,13 +127,13 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(messageListClient, messageListXml);
 
-                responseMessage = PassMessageXml;
+                return PassMessage;
 
             }
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -160,13 +160,13 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(taskListClient, taskListXml);
 
-                responseMessage = PassMessageXml;
+                return PassMessage;
 
             }
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -193,13 +193,13 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, taskListXml);
 
-                responseMessage = PassMessageXml;
+                return PassMessage;
 
             }
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -238,7 +238,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -281,7 +281,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -320,7 +320,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -356,7 +356,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -414,7 +414,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -423,6 +423,38 @@ namespace API
             return okObjectResult;
 
             //
+
+        }
+
+        /// <summary>
+        /// Generates a new SVG dasa report given a person hash
+        /// PRIVATE METHOD TO DEBUG AND TEST
+        /// Exp call: <PersonHash>374117709</PersonHash
+        /// </summary>
+        [FunctionName("refreshdasareportcache")]
+        public static async Task<IActionResult> RefreshDasaReportCacheApi(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient,
+            [Blob(CachedDasaReportXml, FileAccess.ReadWrite)] BlobClient cachedReportsClient
+            )
+        {
+            var responseMessage = "";
+
+            try
+            {
+                var personHashXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var personHash = int.Parse(personHashXml.Value);
+
+                await RefreshDasaReportCache(APITools.GetPersonFromHash(personHash, personListClient), cachedReportsClient);
+
+                return PassMessage;
+
+            }
+            catch (Exception e)
+            {
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
 
         }
 
@@ -447,24 +479,14 @@ namespace API
                 //get dasa report for sending
                 var dasaReportSvg = await GetDasaReportSvgForIncomingRequestCached(incomingRequest, personListClient, cachedDasaReportXmlClient);
 
-                //send image back to caller
-                var x = streamToByteArray(dasaReportSvg);
-                return new FileContentResult(x, "image/svg+xml");
+                return new OkObjectResult(dasaReportSvg.ToString());
 
             }
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-
-            //
-
 
         }
 
@@ -496,13 +518,13 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);
 
-                responseMessage = PassMessageXml;
+                return PassMessage;
 
             }
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -541,13 +563,13 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);
 
-                responseMessage = PassMessageXml;
+                return PassMessage;
 
             }
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -586,13 +608,13 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, visitorLogXml);
 
-                responseMessage = PassMessageXml;
+                return PassMessage;
 
             }
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -626,7 +648,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -654,7 +676,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -703,7 +725,7 @@ namespace API
             catch (Exception e)
             {
                 //format error nicely to show user
-                responseMessage = APITools.FormatErrorReply(e);
+                return APITools.FormatErrorReply(e);
             }
 
 
@@ -718,6 +740,64 @@ namespace API
 
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+        /// <summary>
+        /// Generate ready made cache resolutions and saves it
+        /// Note: will only return after cache has been saved
+        /// </summary>
+        private static async Task RefreshDasaReportCache(Person person, BlobClient cachedReportsClient)
+        {
+            //existing cache has to be cleared first here
+            await ClearExistingCacheForUser(person.Hash, cachedReportsClient);
+
+            //if control reaches here, then no cache
+            //generate new report (compute)
+            var startTime = person.BirthTime;
+            var endTime = startTime.AddYears(120);
+
+            var daysPerPixel = new List<double> { 44, 22, 2 };
+
+
+            Parallel.ForEach(daysPerPixel, async dayPx =>
+            {
+                var dasaReportSvgString = await GenerateDasaReportSvg(person, startTime, endTime, dayPx);
+                //save it in cache for future calls
+                //note : needs to await, because caller expects it reports saved on call end
+                await SetCachedDasaReportSvg(person.Hash, dayPx, cachedReportsClient, dasaReportSvgString);
+            });
+
+            //foreach (var dayPx in daysPerPixel)
+            //{
+            //    var dasaReportSvgString = await GenerateDasaReportSvg(person, startTime, endTime, dayPx);
+            //    //save it in cache for future calls
+            //    //note : needs to await, because caller expects it reports saved on call end
+            //    await SetCachedDasaReportSvg(person.Hash, dayPx, cachedReportsClient, dasaReportSvgString);
+            //}
+
+
+        }
+
+        private static async Task ClearExistingCacheForUser(int personHash, BlobClient cachedReportsClient)
+        {
+            var cachedReportXml = APITools.BlobClientToXml(cachedReportsClient);
+
+            //get only the report specified
+            var foundList = from report in cachedReportXml.Root?.Elements()
+                where
+                    report.Element("PersonHash")?.Value == personHash.ToString()
+                select report;
+
+
+            //delete each resolution if any
+            foreach (var reportXml in foundList)
+            {
+                reportXml.Remove();
+            }
+
+            //upload modified list to storage
+            await APITools.OverwriteBlobData(cachedReportsClient, cachedReportXml);
+
+        }
 
         private static async Task<Stream> GetDasaReportSvgForIncomingRequest(HttpRequestMessage req, BlobClient personListClient)
         {
@@ -746,73 +826,66 @@ namespace API
 
             return stream;
         }
-        private static async Task<Stream> GetDasaReportSvgForIncomingRequestCached(HttpRequestMessage req, BlobClient personListClient, BlobClient cachedReportsClient)
+
+        /// <summary>
+        /// note: start time & end time hard set 120 years here
+        /// </summary>
+        private static async Task<XElement> GetDasaReportSvgForIncomingRequestCached(HttpRequestMessage req, BlobClient personListClient, BlobClient cachedReportsClient)
         {
             //get all the data needed out of the incoming request
-            var rootXml = APITools.ExtractDataFromRequest(req);
-            var personHash = int.Parse(rootXml.Element("PersonHash").Value);
-            var startTimeXml = rootXml.Element("StartTime").Elements().First();
-            var startTime = Time.FromXml(startTimeXml);
-            var endTimeXml = rootXml.Element("EndTime").Elements().First();
-            var endTime = Time.FromXml(endTimeXml);
-            var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel").Value);
-
+            var personHashXml = APITools.ExtractDataFromRequest(req);
+            var personHash = int.Parse(personHashXml.Value);
 
             //get the person instance by hash
-            var personListXml = APITools.BlobClientToXml(personListClient);
-            var foundPersonXml = APITools.FindPersonByHash(personListXml, personHash);
-            var foundPerson = Person.FromXml(foundPersonXml);
+            var foundPerson = APITools.GetPersonFromHash(personHash, personListClient);
 
 
+            TryAgain:
             //use svg from cache if it exists else,
             //make new one save it in cache & send that
-            var cachedSvg = GetCachedDasaReportSvg(foundPerson, daysPerPixel, cachedReportsClient);
-            if (cachedSvg != "") { return GenerateStreamFromString(cachedSvg); } //convert svg string to stream for sending
+            var cacheFound = GetCachedDasaReportSvg(foundPerson, cachedReportsClient, out var cachedReportsXml);
+            if (cacheFound) { return cachedReportsXml; } 
 
 
             //if control reaches here, then no cache
             //generate new report (compute)
-            var dasaReportSvgString = await GenerateDasaReportSvg(foundPerson, startTime, endTime, daysPerPixel);
-            //save it in cache for future calls
-            SetCachedDasaReportSvg(foundPerson, daysPerPixel, cachedReportsClient, dasaReportSvgString); //don't wait let it go (tested saved 1.5s)
-            //convert svg string to stream for sending
-            var stream = GenerateStreamFromString(dasaReportSvgString);
+            await RefreshDasaReportCache(foundPerson, cachedReportsClient);
 
-            return stream;
+            //try again
+            goto TryAgain;
 
         }
 
         /// <summary>
-        /// Returns empty string if no cache found
+        /// Returns false if no cache found
         /// </summary>
-        private static string GetCachedDasaReportSvg(Person inputPerson, double daysPerPixel, BlobClient cachedReportsClient)
+        private static bool GetCachedDasaReportSvg(Person inputPerson, BlobClient cachedReportsClient, out XElement cachedReports)
         {
             //get cached reports from storage
             var reportListXml = APITools.BlobClientToXml(cachedReportsClient);
 
             //get only the report specified
             var foundList = from report in reportListXml.Root?.Elements()
-                where
-                    report.Element("PersonHash")?.Value == inputPerson.Hash.ToString()
-                    &&
-                    report.Element("DaysPerPixel")?.Value == daysPerPixel.ToString()
+                            where
+                                report.Element("PersonHash")?.Value == inputPerson.Hash.ToString()
                             select report;
 
+            cachedReports = new XElement("Root", foundList);
+
             //only allowed 1 cache
-            if (foundList.Count() > 1) { throw new Exception("Duplicate Dasa Report Cache!"); }
+            //if (foundList.Count() > 1) { throw new Exception("Duplicate Dasa Report Cache!"); }
 
             //if none found return empty str
-            if (!foundList.Any()) { return ""; }
-            else
-            {
-                return foundList.First().Element("SvgReport").Value;
-            }
+            //if (!foundList.Any()) { return ""; }
+
+            //return true if found cache, else false
+            return foundList.Any();
         }
 
-        private static async Task SetCachedDasaReportSvg(Person inputPerson, double daysPerPixel, BlobClient cachedReportsClient, string svgString)
+        private static async Task SetCachedDasaReportSvg(int personHash, double daysPerPixel, BlobClient cachedReportsClient, string svgString)
         {
 
-            var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+            var personHashXml = new XElement("PersonHash", personHash);
             var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixel);
             var svgReportXml = new XElement("SvgReport", svgString);
             var reportXml = new XElement("Report", personHashXml, daysPerPixelXml, svgReportXml);
@@ -1492,7 +1565,7 @@ namespace API
 
                 return rowHtml;
             }
-            
+
             string Generate5YearRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
 
@@ -1711,7 +1784,7 @@ namespace API
                               $" height=\"100%\"" +
                               $" style=\"" +
                               $"width:{svgTotalWidth}px;" + //note: if width not hard set, parent div clips it
-                              //$"height:{svgTotalHeight}px;" +
+                                                            //$"height:{svgTotalHeight}px;" +
                               $"background:{svgBackgroundColor};" +
                               $"\" " +
                               $"xmlns=\"http://www.w3.org/2000/svg\">" +
@@ -1785,7 +1858,8 @@ namespace API
                 Tools.AnyTypeToXml(precisionHours));
 
             //get person list from storage
-            var eventDataListClient = await GetFileFromContainer("EventDataList.xml", "vedastro-site-data");
+            //todo clean hardcoded file name
+            var eventDataListClient = await APITools.GetFileFromContainer("EventDataList.xml", "vedastro-site-data");
             var eventDataListXml = APITools.BlobClientToXml(eventDataListClient);
 
 
@@ -1830,22 +1904,6 @@ namespace API
         //█▀█ █▄ █▄█ █▀▄ ██▄   ▄█ ░█░ █▄█ █▀▄ █▀█ █▄█ ██▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
 
-        private static async Task<BlobClient> GetFileFromContainer(string fileName, string blobContainerName)
-        {
-            //get the connection string stored separately (for security reasons)
-            var storageConnectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
-
-            //get image from storage
-            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
-            var fileBlobClient = blobContainerClient.GetBlobClient(fileName);
-
-            return fileBlobClient;
-
-            //var returnStream = new MemoryStream();
-            //await fileBlobClient.DownloadToAsync(returnStream);
-
-            //return returnStream;
-        }
 
 
     }

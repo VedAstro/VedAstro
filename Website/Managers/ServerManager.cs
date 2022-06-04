@@ -30,6 +30,7 @@ namespace Website
         public const string GetFemaleListApi = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetPersonDasaReport = "https://vedastroapi.azurewebsites.net/api/getpersondasareport";
+        public const string GetPersonDasaReportCached = "https://vedastroapi.azurewebsites.net/api/getpersondasareportcached";
         public const string GetPersonDasaReportLocal = "http://localhost:7071/api/getpersondasareport";
         public const string GetEventsApi = "https://vedastroapi.azurewebsites.net/api/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
@@ -100,11 +101,36 @@ namespace Website
             }
         }
 
+        /// <summary>
+        /// Send xml as string to server and returns stream as response
+        /// </summary>
+        public static async Task<Stream> WriteToServerStreamResponse(string apiUrl, XElement xmlData)
+        {
+            //prepare the data to be sent
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+
+            httpRequestMessage.Content = XmLtoHttpContent(xmlData);
+
+            //get the data sender
+            using var client = new HttpClient();
+
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+            //send the data on its way
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+            //extract the content of the reply data
+            var rawMessage = response.Content.ReadAsStreamAsync().Result;
+
+            return rawMessage;
+        }
 
 
         /// <summary>
         /// Send xml as string to server and returns xml as response
         /// Note: xml is not checked here, just converted
+        /// NOTEl: No timeout! Will wait forever
         /// </summary>
         public static async Task<XElement> WriteToServer(string apiUrl, XElement xmlData)
         {
@@ -119,7 +145,8 @@ namespace Website
             //tell sender to wait for complete reply before exiting
             var waitForContent = HttpCompletionOption.ResponseContentRead;
 
-            //send the data on its way
+            //send the data on its way (wait forever no timeout)
+            client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
             var response = await client.SendAsync(httpRequestMessage, waitForContent);
 
             //extract the content of the reply data

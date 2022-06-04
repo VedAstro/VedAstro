@@ -45,6 +45,8 @@ namespace Website
         /// </summary>
         public DateTimeOffset SystemTimeNow => DateTimeOffset.Now;
 
+        public XElement CachedDasaReport { get; set; }
+
         /// <summary>
         /// Hold the control till components have been loaded
         /// Poll time 10ms

@@ -10,6 +10,7 @@ using Azure.Storage.Blobs;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace API
@@ -127,7 +128,7 @@ namespace API
         /// todo receiver using this data expect XML, so when receiving such data as below will raise parse alarm
         /// todo so when changing to XML, look for receivers and update their error catching mechanism
         /// </summary> 
-        public static string FormatErrorReply(Exception e)
+        public static OkObjectResult FormatErrorReply(Exception e)
         {
             var responseMessage = "";
 
@@ -138,7 +139,7 @@ namespace API
             responseMessage += $"#StackTrace#\n{e.StackTrace}\n";
             responseMessage += $"#StackTrace#\n{e.TargetSite}\n";
 
-            return responseMessage;
+            return new OkObjectResult(responseMessage);
         }
 
         /// <summary>
@@ -165,8 +166,26 @@ namespace API
                 return new XElement("Person");
             }
         }
-        
-        
+
+
+        public static async Task<BlobClient> GetFileFromContainer(string fileName, string blobContainerName)
+        {
+            //get the connection string stored separately (for security reasons)
+            var storageConnectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+            var fileBlobClient = blobContainerClient.GetBlobClient(fileName);
+
+            return fileBlobClient;
+
+            //var returnStream = new MemoryStream();
+            //await fileBlobClient.DownloadToAsync(returnStream);
+
+            //return returnStream;
+        }
+
+
         public static XElement FindVisitorById(XDocument visitorListXml, string visitorId)
         {
             try
@@ -199,5 +218,13 @@ namespace API
         }
 
 
+        public static Person GetPersonFromHash(int personHash,BlobClient personListClient)
+        {
+            var personListXml = APITools.BlobClientToXml(personListClient);
+            var foundPersonXml = APITools.FindPersonByHash(personListXml, personHash);
+            var foundPerson = Person.FromXml(foundPersonXml);
+
+            return foundPerson;
+        }
     }
 }

@@ -226,5 +226,46 @@ namespace API
 
             return foundPerson;
         }
+
+        public static async Task<List<EventData>> GetEventDataList()
+        {
+            var eventDataListClient = await APITools.GetFileFromContainer("EventDataList.xml", "vedastro-site-data");
+            var eventDataListXml = APITools.BlobClientToXml(eventDataListClient);
+
+
+            //parse each raw event data in list
+            var eventDataList = new List<EventData>();
+            foreach (var eventData in eventDataListXml.Root.Elements())
+            {
+                //add it to the return list
+                eventDataList.Add(EventData.ToXml(eventData));
+            }
+
+            return eventDataList;
+        }
+
+
+        public static List<Event> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag, List<EventData> eventDataList)
+        {
+
+            //get all event data/types which has the inputed tag (FILTER)
+            var eventDataListFiltered = DatabaseManager.GetEventDataListByTag(tag, eventDataList);
+
+
+            //start calculating events
+            var eventList = EventManager.GetEventsInTimePeriod(startTime.GetStdDateTimeOffset(), endTime.GetStdDateTimeOffset(), geoLocation, person, eventsPrecision, eventDataListFiltered);
+
+
+            //sort the list by time before sending view
+            var orderByAscResult = from dasaEvent in eventList
+                orderby dasaEvent.StartTime.GetStdDateTimeOffset()
+                select dasaEvent;
+
+
+            //send sorted events to view
+            return orderByAscResult.ToList();
+
+        }
+
     }
 }

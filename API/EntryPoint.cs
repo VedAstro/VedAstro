@@ -407,7 +407,7 @@ namespace API
                 var dasaReportSvg = await GetDasaReportSvgForIncomingRequest(incomingRequest, personListClient);
 
                 //send image back to caller
-                var x = streamToByteArray(dasaReportSvg);
+                var x = StreamToByteArray(dasaReportSvg);
                 return new FileContentResult(x, "image/svg+xml");
 
             }
@@ -685,56 +685,7 @@ namespace API
             return okObjectResult;
         }
 
-        [FunctionName("getevents")]
-        public static async Task<IActionResult> GetEvents(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob("vedastro-site-data/EventDataList.xml", FileAccess.ReadWrite)] BlobClient eventDataListClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-
-                //get person list from storage
-                var eventDataListXml = APITools.BlobClientToXml(eventDataListClient);
-
-                //get data needed to generate events
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-
-                //parse it
-                var person = Person.FromXml(requestData.Element("Person"));
-                var startTime = Time.FromXml(requestData.Element("StartTime").Element("Time"));
-                var endTime = Time.FromXml(requestData.Element("EndTime").Element("Time"));
-                var location = GeoLocation.FromXml(requestData.Element("Location"));
-                var tag = Tools.XmlToAnyType<EventTag>(requestData.Element(typeof(EventTag).FullName));
-                var precision = Tools.XmlToAnyType<double>(requestData.Element(typeof(double).FullName));
-
-                //calculate events from the data received
-                var events = CalculateEvents(startTime, endTime, location, person, tag, precision, eventDataListXml);
-
-                //convert events to XML for sending
-                var rootXml = new XElement("Root");
-                foreach (var _event in events)
-                {
-                    rootXml.Add(_event.ToXml());
-                }
-
-                responseMessage = rootXml.ToString();
-
-            }
-            catch (Exception e)
-            {
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-        }
-
-
+        
 
 
 
@@ -879,6 +830,7 @@ namespace API
             return foundList.Any();
         }
         
+
         private static async Task SetCachedDasaReportSvg(int personHash, double daysPerPixel, BlobClient cachedReportsClient, string svgString)
         {
 
@@ -896,109 +848,29 @@ namespace API
         }
 
 
-        private static List<Event> CalculateEvents(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precision, XDocument dataEventdatalistXml)
-        {
-
-            //parse each raw event data in list
-            var eventDataList = new List<EventData>();
-            foreach (var eventData in dataEventdatalistXml.Root.Elements())
-            {
-                //add it to the return list
-                eventDataList.Add(EventData.ToXml(eventData));
-            }
-
-            //get all event data/types which has the inputed tag (FILTER)
-            var eventDataListFiltered = DatabaseManager.GetEventDataListByTag(tag, eventDataList);
-
-            //TODO event generation time logging enable when can
-            ////debug to measure event calculation time
-            //var watch = Stopwatch.StartNew();
-
-            //start calculating events
-            var eventList = EventManager.GetEventsInTimePeriod(startTime.GetStdDateTimeOffset(), endTime.GetStdDateTimeOffset(), location, person, precision, eventDataListFiltered);
-
-            //watch.Stop();
-            //LogManager.Debug($"Events computed in: { watch.Elapsed.TotalSeconds}s");
-
-            return eventList;
-        }
-
-        /// <summary>
-        /// The massive method that generates every inch of the dasa svg report
-        /// Note : the number of days a pixel is the zoom level
-        /// </summary>
         private static async Task<string> GenerateDasaReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
         {
-
-            //px width & height of each slice of time
-            //used when generating dasa rows
-            //note: changes needed only here
-            int _widthPerSlice = 1;
-            int _heightPerSlice = 20;
-            //var lineHeight = 170;
-
-
             // One precision value for generating all dasa components,
             // because misalignment occurs if use different precision
             // note: precision = time slice count, each slice = 1 pixel (zoom level)
             // 120 years @ 14 day/px
             // 1 year @ 1 day/px 
-            double eventsPrecision = Tools.DaysToHours(daysPerPixel);
-            double _timeSlicePrecision = eventsPrecision;
+            double eventsPrecisionHours = Tools.DaysToHours(daysPerPixel);
+            double _timeSlicePrecision = eventsPrecisionHours;
 
-
-            //use the inputed data to get events from API
-            //note: below methods access the data internally
-            var dasaEventList = await GetDasaEvents(eventsPrecision, startTime, endTime, inputPerson);
-            var bhuktiEventList = await GetBhuktiEvents(eventsPrecision, startTime, endTime, inputPerson);
-            var antaramEventList = await GetAntaramEvents(eventsPrecision, startTime, endTime, inputPerson);
-            var gocharaEventList = await GetGocharaEvents(eventsPrecision, startTime, endTime, inputPerson);
-
-            //generate rows and pump them final svg string
-            var dasaSvgWidth = 0; //will be filled when calling row generator
-            var compiledRow = "";
 
             //generate time slice only once for all rows
-            var timeSlices = GetTimeSlices();
-
-            //save a copy of the number of time slices used to calculate the svg total width later
-            dasaSvgWidth = timeSlices.Count;
-
-            var beginYear = timeSlices[0].GetStdYear();
-            var endYear = timeSlices.Last().GetStdYear();
-            var difYears = endYear - beginYear;
-
-            var headerGenerator = new List<Func<List<Time>, int, int, int, string>>();
-            if (difYears >= 10) { headerGenerator.Add(GenerateDecadeRowSvg); }
-            if (difYears is >= 5 and < 10) { headerGenerator.Add(Generate5YearRowSvg); }
-            if (daysPerPixel <= 15) { headerGenerator.Add(GenerateYearRowSvg); }
-            if (daysPerPixel <= 1.3) { headerGenerator.Add(GenerateMonthRowSvg); }
+            var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
 
 
-            var padding = 2;//space between rows
-            int headerY = 0, headerHeight = 11;
-            foreach (var generator in headerGenerator)
-            {
-                compiledRow += generator(timeSlices, headerY, 0, headerHeight);
-
-                //update for next generator
-                headerY = headerY + headerHeight + padding;
-            }
-
-
-            int dasaY = headerY;
-            compiledRow += GenerateDasaRowSvg(dasaEventList, timeSlices, dasaY, 0, _heightPerSlice);
-            int bhuktiY = dasaY + _heightPerSlice + padding;
-            compiledRow += GenerateBhuktiRowSvg(bhuktiEventList, timeSlices, bhuktiY, 0, _heightPerSlice);
-            int antaramY = bhuktiY + _heightPerSlice + padding;
-            compiledRow += GenerateAntaramRowSvg(antaramEventList, timeSlices, antaramY, 0, _heightPerSlice);
-            int gocharaY = antaramY + _heightPerSlice + padding;
-            compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0, out int gocharaHeight);
+            var compiledRow = await GenerateRowsSvg(inputPerson, daysPerPixel, startTime, endTime, timeSlices, eventsPrecisionHours);
 
 
             //the height for all lines, cursor, now & life events line
             //place below the last row
-            var lineHeight = gocharaY + gocharaHeight + padding;
+            var totalHeight = 197; //hard set for now
+            var padding = 2;//space between rows
+            var lineHeight = totalHeight + padding;
 
             //add in the cursor line
             compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
@@ -1011,6 +883,8 @@ namespace API
             compiledRow += GetLifeEventLinesSvg(inputPerson, lineHeight);
 
             //compile the final svg
+            //save a copy of the number of time slices used to calculate the svg total width later
+            var dasaSvgWidth = timeSlices.Count;
             var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth); //little wiggle room
 
             return finalSvg;
@@ -1182,6 +1056,104 @@ namespace API
             }
 
 
+            //wraps a list of svg elements inside 1 main svg element
+            //if width not set defaults to 1000px, and height to 1000px
+            //height is set auto because hard to determine
+            string WrapSvgElements(string combinedSvgString, int svgWidth = 1000, int svgTotalHeight = 1000)
+            {
+
+                var svgBackgroundColor = "#f0f9ff";
+
+                //create the final svg that will be displayed
+                var svgTotalWidth = svgWidth + 10; //add little for wiggle room
+                var svgBody = $"<svg id=\"DasaViewHolder\"" +
+                              $" width=\"100%\"" +
+                              $" height=\"100%\"" +
+                              $" style=\"" +
+                              $"width:{svgTotalWidth}px;" + //note: if width not hard set, parent div clips it
+                                                            //$"height:{svgTotalHeight}px;" +
+                              $"background:{svgBackgroundColor};" +
+                              $"\" " +
+                              $"xmlns=\"http://www.w3.org/2000/svg\">" +
+                              $"{combinedSvgString}</svg>";
+
+                return svgBody;
+            }
+
+
+        }
+
+
+        private static async Task<string> GenerateRowsSvg(Person inputPerson, double daysPerPixel, Time startTime, Time endTime, List<Time> timeSlices, double eventsPrecision)
+        {
+            //px width & height of each slice of time
+            //used when generating dasa rows
+            //note: changes needed only here
+            int _widthPerSlice = 1;
+            int _heightPerSlice = 20;
+            //var lineHeight = 170;
+
+            //use the inputed data to get events from API
+            //note: below methods access the data internally
+            var eventDataList = await APITools.GetEventDataList();
+            
+            var dasaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Dasa, eventDataList);
+            var bhuktiEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Bhukti, eventDataList);
+            var antaramEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Antaram, eventDataList);
+            var gocharaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Gochara, eventDataList);
+
+
+            //generate rows and pump them final svg string
+            var dasaSvgWidth = 0; //will be filled when calling row generator
+            var compiledRow = "";
+
+
+            var beginYear = timeSlices[0].GetStdYear();
+            var endYear = timeSlices.Last().GetStdYear();
+            var difYears = endYear - beginYear;
+
+            var headerGenerator = new List<Func<List<Time>, int, int, int, string>>();
+            if (difYears >= 10) { headerGenerator.Add(GenerateDecadeRowSvg); }
+            if (difYears is >= 5 and < 10) { headerGenerator.Add(Generate5YearRowSvg); }
+            if (daysPerPixel <= 15) { headerGenerator.Add(GenerateYearRowSvg); }
+            if (daysPerPixel <= 1.3) { headerGenerator.Add(GenerateMonthRowSvg); }
+
+
+            var padding = 2;//space between rows
+            int headerY = 0, headerHeight = 11;
+            foreach (var generator in headerGenerator)
+            {
+                compiledRow += generator(timeSlices, headerY, 0, headerHeight);
+
+                //update for next generator
+                headerY = headerY + headerHeight + padding;
+            }
+
+
+            int dasaY = headerY;
+            compiledRow += GenerateDasaRowSvg(dasaEventList, timeSlices, dasaY, 0, _heightPerSlice);
+            int bhuktiY = dasaY + _heightPerSlice + padding;
+            compiledRow += GenerateBhuktiRowSvg(bhuktiEventList, timeSlices, bhuktiY, 0, _heightPerSlice);
+            int antaramY = bhuktiY + _heightPerSlice + padding;
+            compiledRow += GenerateAntaramRowSvg(antaramEventList, timeSlices, antaramY, 0, _heightPerSlice);
+            int gocharaY = antaramY + _heightPerSlice + padding;
+            compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0, out int gocharaHeight);
+
+            //future passed to caller to draw line
+            var totalHeight = gocharaY + gocharaHeight;
+
+
+
+            return compiledRow;
+
+
+
+            
+            //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
+            //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
+
+
+
             string GenerateAntaramRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
                 //generate the row for each time slice
@@ -1327,8 +1299,7 @@ namespace API
 
             //height not known until generated
             //returns the final dynamic height of this gochara row
-            string GenerateGocharaSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis,
-                int xAxis, out int gocharaHeight)
+            string GenerateGocharaSvg(List<Event> eventList, List<Time> timeSlices, double precisionHours, int yAxis, int xAxis, out int gocharaHeight)
             {
                 //generate the row for each time slice
                 var rowHtml = "";
@@ -1740,7 +1711,6 @@ namespace API
                 }
             }
 
-
             // Get dasa color based on nature & number of events
             string GetEventColor(EventNature? eventNature)
             {
@@ -1765,118 +1735,10 @@ namespace API
                 return colorId;
             }
 
-
-            //wraps a list of svg elements inside 1 main svg element
-            //if width not set defaults to 1000px, and height to 1000px
-            //height is set auto because hard to determine
-            string WrapSvgElements(string combinedSvgString, int svgWidth = 1000, int svgTotalHeight = 1000)
-            {
-
-                var svgBackgroundColor = "#f0f9ff";
-
-                //create the final svg that will be displayed
-                var svgTotalWidth = svgWidth + 10; //add little for wiggle room
-                var svgBody = $"<svg id=\"DasaViewHolder\"" +
-                              $" width=\"100%\"" +
-                              $" height=\"100%\"" +
-                              $" style=\"" +
-                              $"width:{svgTotalWidth}px;" + //note: if width not hard set, parent div clips it
-                                                            //$"height:{svgTotalHeight}px;" +
-                              $"background:{svgBackgroundColor};" +
-                              $"\" " +
-                              $"xmlns=\"http://www.w3.org/2000/svg\">" +
-                              $"{combinedSvgString}</svg>";
-
-                return svgBody;
-            }
-
-
-            //generates time slices for dasa
-            List<Time> GetTimeSlices() => EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
-
-
         }
 
-        private static async Task<List<Event>?> GetDasaEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
-            => await EventsByTag(EventTag.Dasa, _eventsPrecision, startTime, endTime, person);
 
-        private static async Task<List<Event>?> GetBhuktiEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
-            => await EventsByTag(EventTag.Bhukti, _eventsPrecision, startTime, endTime, person);
-
-        private static async Task<List<Event>?> GetAntaramEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
-            => await EventsByTag(EventTag.Antaram, _eventsPrecision, startTime, endTime, person);
-
-        private static async Task<List<Event>?> GetGocharaEvents(double _eventsPrecision, Time startTime, Time endTime, Person person)
-            => await EventsByTag(EventTag.Gochara, _eventsPrecision, startTime, endTime, person);
-
-        /// <summary>
-        /// gets events from server filtered by event tag
-        /// </summary>
-        private static async Task<List<Event>?> EventsByTag(EventTag tag, double precisionHours, Time startTime, Time endTime, Person person)
-        {
-
-            //get events from API server
-            var dasaEventsUnsorted =
-                await GetEventsFromApi(
-                    startTime,
-                    endTime,
-                    //birth location always as current place,
-                    //since place does not matter for Dasa
-                    person.GetBirthLocation(),
-                    person,
-                    tag,
-                    precisionHours);
-
-
-            //sort the list by time before sending view
-            var orderByAscResult = from dasaEvent in dasaEventsUnsorted
-                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset()
-                                   select dasaEvent;
-
-
-            //send sorted events to view
-            return orderByAscResult.ToList();
-        }
-
-        /// <summary>
-        /// Gets Muhurtha events from API
-        /// </summary>
-        private static async Task<List<Event>> GetEventsFromApi(Time startTime, Time endTime, GeoLocation location, Person person, EventTag tag, double precisionHours)
-        {
-            //prepare data to send to API
-            var root = new XElement("Root");
-
-            root.Add(
-                new XElement("StartTime", startTime.ToXml()),
-                new XElement("EndTime", endTime.ToXml()),
-                location.ToXml(),
-                person.ToXml(),
-                Tools.AnyTypeToXml(tag),
-                Tools.AnyTypeToXml(precisionHours));
-
-            //get person list from storage
-            //todo clean hardcoded file name
-            var eventDataListClient = await APITools.GetFileFromContainer("EventDataList.xml", "vedastro-site-data");
-            var eventDataListXml = APITools.BlobClientToXml(eventDataListClient);
-
-
-            //calculate events from the data received
-            var events = CalculateEvents(startTime, endTime, location, person, tag, precisionHours, eventDataListXml);
-
-            return events;
-
-            ////send to api and get results
-            //var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsApi, root);
-
-
-            ////parse raw results
-            //List<Event> resultsParsed = Event.FromXml(resultsRaw);
-
-            ////send to caller
-            //return resultsParsed;
-        }
-
-        private static byte[] streamToByteArray(Stream input)
+        private static byte[] StreamToByteArray(Stream input)
         {
             //reset stream position
             input.Position = 0;
@@ -1894,12 +1756,6 @@ namespace API
             stream.Position = 0;
             return stream;
         }
-
-
-
-        //▄▀█ ▀█ █░█ █▀█ █▀▀   █▀ ▀█▀ █▀█ █▀█ ▄▀█ █▀▀ █▀▀   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
-        //█▀█ █▄ █▄█ █▀▄ ██▄   ▄█ ░█░ █▄█ █▀▄ █▀█ █▄█ ██▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
-
 
 
 

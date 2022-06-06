@@ -783,9 +783,9 @@ namespace API
 
             //get only the report specified
             var foundList = from report in cachedReportXml.Root?.Elements()
-                where
-                    report.Element("PersonHash")?.Value == personHash.ToString()
-                select report;
+                            where
+                                report.Element("PersonHash")?.Value == personHash.ToString()
+                            select report;
 
 
             //delete each resolution if any
@@ -812,13 +812,10 @@ namespace API
 
 
             //get the person instance by hash
-            var personListXml = APITools.BlobClientToXml(personListClient);
-            var foundPersonXml = APITools.FindPersonByHash(personListXml, personHash);
-            var foundPerson = Person.FromXml(foundPersonXml);
+            var foundPerson = APITools.GetPersonFromHash(personHash, personListClient);
 
             //from person get svg report
             var dasaReportSvgString = await GenerateDasaReportSvg(foundPerson, startTime, endTime, daysPerPixel);
-
 
             //convert svg string to stream for sending
             //todo check if using really needed here
@@ -840,11 +837,11 @@ namespace API
             var foundPerson = APITools.GetPersonFromHash(personHash, personListClient);
 
 
-            TryAgain:
+        TryAgain:
             //use svg from cache if it exists else,
             //make new one save it in cache & send that
             var cacheFound = GetCachedDasaReportSvg(foundPerson, cachedReportsClient, out var cachedReportsXml);
-            if (cacheFound) { return cachedReportsXml; } 
+            if (cacheFound) { return cachedReportsXml; }
 
 
             //if control reaches here, then no cache
@@ -855,7 +852,7 @@ namespace API
             goto TryAgain;
 
         }
-
+        
         /// <summary>
         /// Returns false if no cache found
         /// </summary>
@@ -881,7 +878,7 @@ namespace API
             //return true if found cache, else false
             return foundList.Any();
         }
-
+        
         private static async Task SetCachedDasaReportSvg(int personHash, double daysPerPixel, BlobClient cachedReportsClient, string svgString)
         {
 

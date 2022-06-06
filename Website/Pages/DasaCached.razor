@@ -1,0 +1,128 @@
+﻿@page "/dasacached"
+@using Genso.Astrology.Library
+
+<UnderConstructionHeader PageName="Dasa" />
+
+
+<div class="vstack gap-2">
+    @*PERSON SELECTOR*@
+    <div>
+        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonName="SelectedPersonName" />
+    </div>
+    @*CALCULATE BTN*@
+    <div>
+        <button @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
+    </div>
+    <hr>
+    @*DASA VIEW BOX*@
+    <div>
+        <DasaReportViewerCached @ref="_dasaReportViewer" />
+    </div>
+    <hr>
+    @*PLANET INFO LIST*@
+    <div>
+        @if (_isResultReady)
+        {
+            <h4 class="mt-2">Planets</h4>
+            <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
+                <PlanetInfoBox PlanetName="PlanetName.Sun" Time="@SelectedPerson.BirthTime" />
+                <PlanetInfoBox PlanetName="PlanetName.Moon" Time="@SelectedPerson.BirthTime" />
+                <PlanetInfoBox PlanetName="PlanetName.Mercury" Time="@SelectedPerson.BirthTime" />
+                <PlanetInfoBox PlanetName="PlanetName.Mars" Time="@SelectedPerson.BirthTime" />
+                <PlanetInfoBox PlanetName="PlanetName.Jupiter" Time="@SelectedPerson.BirthTime" />
+                <PlanetInfoBox PlanetName="PlanetName.Saturn" Time="@SelectedPerson.BirthTime" />
+                <PlanetInfoBox PlanetName="PlanetName.Venus" Time="@SelectedPerson.BirthTime" />
+            </div>
+        }
+    </div>
+    @*HOUSE INFO LIST*@
+    <div>
+        @if (_isResultReady)
+        {
+            <h4 class="mt-2">Houses</h4>
+            <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
+                <HouseInfoBox HouseNumber="1" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="2" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="3" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="4" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="5" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="6" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="7" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="8" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="9" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="10" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="11" Time="@SelectedPerson.BirthTime" />
+                <HouseInfoBox HouseNumber="12" Time="@SelectedPerson.BirthTime" />
+            </div>
+        }
+    </div>
+</div>
+
+
+
+@code {
+
+    //--------------------FIELDS
+
+    private PeopleSelectorBox? _peopleSelectorBox;
+    private DasaReportViewerCached? _dasaReportViewer;
+
+    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
+    public string? SelectedPersonName { get; set; }
+    public Person SelectedPerson { get; set; }
+    public GeoLocation SelectedLocation { get; set; }
+    private bool _isResultReady = false; //marks if the page ready to loaded
+
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try();
+
+    private async Task OnClickCalculate() => await InvokeAsync(async () => await DoCalculation()).Try();
+
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
+    private async Task InitPage()
+    {
+
+        //show loading box
+        await _globalVariable.LoadingMessage.Show();
+
+        //set people list into people selector
+        //note : without above first call _peopleSelectorBox is null
+        PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        _peopleSelectorBox.SetData(PersonList);
+
+        //hide loading box
+        await _globalVariable.LoadingMessage.Hide();
+    }
+
+
+    private async Task DoCalculation()
+    {
+        await _globalVariable.LoadingMessage.Show();
+
+        //get data from inputs and save it for use by other components
+        SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
+
+        await _jsRuntime.AddToProgressBar(5);
+
+        //set data into dasa viewer
+        await _dasaReportViewer.SetData(SelectedPerson);
+
+        //mark page as ready to show results
+        _isResultReady = true;
+
+        await _globalVariable.LoadingMessage.Hide();
+    }
+
+
+
+}

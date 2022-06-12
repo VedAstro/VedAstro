@@ -6,9 +6,9 @@ Find out more @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps
 
 # Links
 - [Quick Guide](https://purple-flower-03ae64d1e.1.azurestaticapps.net/quickguide) learn how to use
-- [Report](https://purple-flower-03ae64d1e.1.azurestaticapps.net/reportbugs) problems you find when using software
-- [Share](https://purple-flower-03ae64d1e.1.azurestaticapps.net/featurerequest) your ideas for new or better features 
-- [Fix](https://purple-flower-03ae64d1e.1.azurestaticapps.net/featurerequestlist) bugs & implement features
+- [Report](https://purple-flower-03ae64d1e.1.azurestaticapps.net/contact) problems you find when using software
+- [Share](https://purple-flower-03ae64d1e.1.azurestaticapps.net/contact) your ideas for new or better features 
+- [Fix](https://purple-flower-03ae64d1e.1.azurestaticapps.net/contact) bugs & implement features
 - [Donate](https://purple-flower-03ae64d1e.1.azurestaticapps.net/donate) to support programming & server costs
 
 # Project Architecture
@@ -17,8 +17,8 @@ Find out more @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps
 
 ## Core Library
 ```
-            CREATION OF AN EVENT/PREDICTION
 
+            CREATION OF AN EVENT/PREDICTION
 
 STEP 1
 
@@ -29,21 +29,21 @@ These static methods are the logic to check
 if an event occured. No astro calculation done at this stage.
 This is the linking process of the logic and data.
 
-                 -------+
-                        |
-+-----------------+     |
-| Event Data (xml)|     |
-+-----------------+     |
-         +              |
-+------------------+    |
-|Event Names (Enum)|    +-----> Event Data (Instance)
-+------------------+    |
-         +              |
-+------------------+    |
-|Calculator Methods|    |
-+------------------+    |
-                        |
-                  ------+
+                      -------+
+                             |
+     +-----------------+     |
+     | Event Data (xml)|     |
+     +-----------------+     |
+              +              |
+     +------------------+    |
+     |Event Names (Enum)|    +-----> Event Data (Instance)
+     +------------------+    |
+              +              |
+     +------------------+    |
+     |Calculator Methods|    |
+     +------------------+    |
+                             |
+                       ------+
 
 
 STEP 2
@@ -58,14 +58,15 @@ throughout the progam.
 
 
 
-      Event Data    +    Time Range
-         List               List
-                    |
-                    |
-                    |
-                    v
+              Event Data    +    Time Range
+                 List               List
+                            |
+                            |
+                            |
+                            v
 
-                Event List
+                        Event List
+
 
 ```
 

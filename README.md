@@ -1,8 +1,8 @@
 [![Azure Static Web Apps CI/CD](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-purple-flower-03ae64d1e.yml/badge.svg)](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-purple-flower-03ae64d1e.yml)
 
-# Vedic Astrolger
-A non-profit, opensource project to provide Vedic astrological tools for the public.
-Check it out @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.net/)
+# What is this?
+A non-profit, opensource project to make Vedic Astrological tools easily available to all.
+Find out more @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.net/)
 
 # Links
 - [Quick Guide](https://purple-flower-03ae64d1e.1.azurestaticapps.net/quickguide) learn how to use
@@ -12,7 +12,64 @@ Check it out @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.
 - [Donate](https://purple-flower-03ae64d1e.1.azurestaticapps.net/donate) to support programming & server costs
 
 # Project Architecture
+#### Key design notes to understand the internals of the program better.
 
+
+## Core Library
+```
+            CREATION OF AN EVENT/PREDICTION
+
+
+STEP 1
+
+Hard coded event data like name is stored in XML file.
+A copy of the event name is stored as Enum to link
+Calculator Methods with data from XML.
+These static methods are the logic to check
+if an event occured. No astro calculation done at this stage.
+This is the linking process of the logic and data.
+
+                 -------+
+                        |
++-----------------+     |
+| Event Data (xml)|     |
++-----------------+     |
+         +              |
++------------------+    |
+|Event Names (Enum)|    +-----> Event Data (Instance)
++------------------+    |
+         +              |
++------------------+    |
+|Calculator Methods|    |
++------------------+    |
+                        |
+                  ------+
+
+
+STEP 2
+
+From the above step, list of Event Data is generated.
+Is occuring logic of each Event Data is called with time slices,
+generated from a start time & end time (inputed at runtime).
+An Event is created if IsOccuring is true.
+This's a merger of Time and EventData to create an
+Event at a specific time. This Event is then used
+throughout the progam.
+
+
+
+      Event Data    +    Time Range
+         List               List
+                    |
+                    |
+                    |
+                    v
+
+                Event List
+
+```
+
+## Website
 ```
 +--------+          +------------------------+                +------------------+
 |  User  | <------+ |        Website         | -------------> |        API       |
@@ -54,6 +111,7 @@ So as not to waste time, the API route has been decided since it has been proven
 
 - Built on reference to, Hindu Predictive Astrology pg. 254
 
+- Asthavarga bindus are different from shadbala and it is to be implemented soon.
 - Asthavarga bindus are not yet account for, asthavarga good or bad nature of the planet.
   It is assumed that Shadbala system can compensate for it.
 

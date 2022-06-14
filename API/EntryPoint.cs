@@ -1091,7 +1091,6 @@ namespace API
             //note: changes needed only here
             int _widthPerSlice = 1;
             int _heightPerSlice = 20;
-            //var lineHeight = 170;
 
             //use the inputed data to get events from API
             //note: below methods access the data internally
@@ -1113,9 +1112,10 @@ namespace API
             var difYears = endYear - beginYear;
 
             var headerGenerator = new List<Func<List<Time>, int, int, int, string>>();
-            if (difYears >= 10) { headerGenerator.Add(GenerateDecadeRowSvg); }
+            var showYearRow = daysPerPixel <= 15;
+            if (difYears >= 10 && !showYearRow) { headerGenerator.Add(GenerateDecadeRowSvg); }
             if (difYears is >= 5 and < 10) { headerGenerator.Add(Generate5YearRowSvg); }
-            if (daysPerPixel <= 15) { headerGenerator.Add(GenerateYearRowSvg); }
+            if (showYearRow) { headerGenerator.Add(GenerateYearRowSvg); }
             if (daysPerPixel <= 1.3) { headerGenerator.Add(GenerateMonthRowSvg); }
 
 
@@ -1141,7 +1141,6 @@ namespace API
 
             //future passed to caller to draw line
             var totalHeight = gocharaY + gocharaHeight;
-
 
 
             return compiledRow;
@@ -1388,7 +1387,6 @@ namespace API
                 var yearBoxWidthCount = 0;
                 int rectWidth = 0;
                 int childAxisX = 0;
-                //int rowHeight = 11;
 
                 foreach (var slice in timeSlices)
                 {
@@ -1467,10 +1465,10 @@ namespace API
                 var yearBoxWidthCount = 0;
                 int rectWidth = 0;
                 int childAxisX = 0;
-                //int rowHeight = 11;
+                const int decade = 10;
 
                 var beginYear = timeSlices[0].GetStdYear();
-                var endYear = beginYear + 10; //decade
+                var endYear = beginYear + decade; //decade
 
 
                 foreach (var slice in timeSlices)
@@ -1482,7 +1480,9 @@ namespace API
                     var yearChanged = previousYear != slice.GetStdYear();
                     if (yearChanged || lastTimeSlice)
                     {
-                        //is this slice end year
+                        //is this slice end year & last month (month for accuracy, otherwise border at jan not december)
+                        //todo begging of box is not beginning of year, possible solution month
+                        //var isLastMonth = slice.GetStdMonth() is 10 or 11 or 12; //use oct & nov in-case december is not generated at low precision 
                         var isEndYear = endYear == slice.GetStdYear();
                         if (isEndYear)
                         {
@@ -1514,7 +1514,7 @@ namespace API
 
                             //set new begin & end
                             beginYear = endYear + 1;
-                            endYear = beginYear + 10;
+                            endYear = beginYear + decade;
 
                         }
 
@@ -1714,9 +1714,7 @@ namespace API
             // Get dasa color based on nature & number of events
             string GetEventColor(EventNature? eventNature)
             {
-                var colorId = "gray";
-
-                if (eventNature == null) { return colorId; }
+                var colorId = "blue";
 
                 //set color id based on nature
                 switch (eventNature)
@@ -1725,7 +1723,7 @@ namespace API
                         colorId = "green";
                         break;
                     case EventNature.Neutral:
-                        colorId = "";
+                        colorId = "grey";
                         break;
                     case EventNature.Bad:
                         colorId = "red";

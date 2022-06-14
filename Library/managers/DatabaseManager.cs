@@ -74,8 +74,8 @@ namespace Genso.Astrology.Library
 
             return filteredEventDataList;
         }
-
-
+        
+        
         /// <summary>
         /// Gets a list of all persons from database
         /// Note: element names used here corespond to the ones found in the XML file

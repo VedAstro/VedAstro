@@ -33,7 +33,7 @@ namespace Genso.Astrology.Library
         //mainly created for access from WPF binding
         public EventName Name { get; }
         public string FormattedName => Format.FormatName(this);
-        public EventNature Nature { get; }
+        public EventNature Nature { get; private set; }
         public string Description { get; }
         public string Strength { get; set; }
         public List<EventTag> EventTags { get; }
@@ -43,14 +43,18 @@ namespace Genso.Astrology.Library
         /** PUBLIC METHODS **/
         public bool IsEventOccuring(Time time, Person person)
         {
-            //calculate prediction
-            var prediction = _eventCalculator(time, person);
+            //do calculation for this event to get prediction data
+            var predictionData = _eventCalculator(time, person);
 
+            //extract the data out and store it for later use
             //is prediction occuring
-            bool isEventOccuring = prediction.Occuring;
+            bool isEventOccuring = predictionData.Occuring;
 
-            //store prediction strength for later
-            Strength = prediction.Strength;
+            //prediction strength
+            Strength = predictionData.Strength;
+
+            //override even nature from xml if specified
+            Nature = predictionData.NatureOverride == EventNature.Empty ? Nature : predictionData.NatureOverride;
 
             //let caller know if occuring
             return isEventOccuring;
@@ -61,9 +65,9 @@ namespace Genso.Astrology.Library
         public EventNature GetNature() => Nature;
 
         public string GetDescription() => Description;
-        public string GetStrength() => Strength;
-    
 
+        public string GetStrength() => Strength;
+        
         public List<EventTag> GetEventTags() => EventTags;
 
 

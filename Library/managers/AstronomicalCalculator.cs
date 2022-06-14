@@ -1084,8 +1084,8 @@ namespace Genso.Astrology.Library
                     return true;
                 default:
                     return false;
-            } 
-           
+            }
+
         }
 
         /// <summary>
@@ -1102,14 +1102,14 @@ namespace Genso.Astrology.Library
                     return true;
                 default:
                     return false;
-            } 
-           
+            }
+
         }
 
         /// <summary>
         /// Common signs- Gemini, Virgo, Sagitarius, Pisces.
         /// </summary>
-        public static  bool IsCommonSign(ZodiacName sunSign)
+        public static bool IsCommonSign(ZodiacName sunSign)
         {
             switch (sunSign)
             {
@@ -1120,14 +1120,26 @@ namespace Genso.Astrology.Library
                     return true;
                 default:
                     return false;
-            } 
-           
+            }
+
         }
 
 
         #endregion
 
 
+        /// <summary>
+        /// Gets a planets permenant relationship.
+        /// Based on : Hindu Predictive Astrology, pg. 21
+        /// Note:
+        /// - Rahu & Ketu are not mentioned in any permenant relatioship by Raman.
+        ///   But some websites do mention this. As such Raman's take is taken as final.
+        ///   Since there's so far no explanation by Raman on Rahu & Ketu permenant relation it
+        ///   is assumed that such relationship is not needed and to make them up for conveniece sake
+        ///   could result in wrong prediction down the line.
+        ///   But temporary relationship are mentioned by Raman for Rahu & Ketu, so explicitly use
+        ///   Temperary relationship where needed.
+        /// </summary>
         public static PlanetToPlanetRelationship GetPlanetPermanentRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet)
         {
 
@@ -1250,6 +1262,15 @@ namespace Genso.Astrology.Library
                     planetInEnemies = saturnEnemies.Contains(secondaryPlanet);
 
                 }
+
+                //for Rahu & Ketu special exception
+                if (mainPlanet == PlanetName.Rahu || mainPlanet == PlanetName.Ketu)
+                {
+                    throw new Exception("No Permenant Relation for Rahu and Ketu, use Temporary Relation!");
+                }
+
+
+
 
                 //return planet relationship based on where planet is found
                 if (planetInFriends)
@@ -2467,7 +2488,7 @@ namespace Genso.Astrology.Library
             //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
             //but predictive results points to Gemini (30°0'0"), so rounding is implemented
             var middleLongitude = specifiedHouse.GetMiddleLongitude();
-            var roundedMiddleLongitude = Angle.FromDegrees(Math.Round(middleLongitude.TotalDegrees,4)); //rounded to 5 places for accuracy
+            var roundedMiddleLongitude = Angle.FromDegrees(Math.Round(middleLongitude.TotalDegrees, 4)); //rounded to 5 places for accuracy
             var houseSignName = AstronomicalCalculator.GetZodiacSignAtLongitude(roundedMiddleLongitude).GetSignName();
 
             //for sake of testing, if sign is changed due to rounding, then log it
@@ -5343,7 +5364,7 @@ namespace Genso.Astrology.Library
                         //unlikely chance, log error & set inputed planet as winner (random)
                         LogManager.Error($"Planets same longitude! Not expected, random result used!");
                         winnerPlanet = inputedPlanet; losserPlanet = checkingPlanet;
-                    } 
+                    }
 
                     //When two planets are in war, get the sum of the various Balas, viv., Sthanabala, the
                     // Dikbala and the Kalabala (up to Horabala) described hitherto of the fighting planets. Find out the
@@ -7716,7 +7737,348 @@ namespace Genso.Astrology.Library
             }
 
 
-            
+
+        }
+
+        /// <summary>
+        /// METHOD NOT VERIFIED
+        /// This methods perpose is to define the final good or bad
+        /// nature of planet in antaram.
+        ///
+        /// For now only data from chapter "Key-planets for Each Sign"
+        /// If this proves to be inacurate, add more checks in this method.
+        /// - bindu points
+        /// 
+        /// Similar to method GetDasaInfoForAscendant
+        /// Data from pg 80 of Key-planets for Each Sign in Hindu Predictive Astrology
+        /// TODO meant to determine nature of antram
+        /// </summary>
+        public static EventNature GetPlanetAntaramNature(Person person, PlanetName planet)
+        {
+            //todo account for rahu & ketu
+            //rahu & ketu not sure for now, just return neutral
+            if (planet == PlanetName.Rahu || planet == PlanetName.Ketu) { return EventNature.Neutral; }
+
+            //get nature from person's lagna
+            var planetNature = GetNatureFromLagna();
+
+            //if nature is neutral then use nature of relation to current house
+            //assumed that bad relation to sign is bad planet (todo upgrade to bindu points)
+            //note: generaly speaking a neutral planet shloud not exist, either good or bad
+            if (planetNature == EventNature.Neutral)
+            {
+                var _planetCurrentHouse = GetHousePlanetIsIn(person.BirthTime, planet);
+
+                var _currentHouseRelation = GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planet, person.BirthTime);
+
+                switch (_currentHouseRelation)
+                {
+                    case PlanetToSignRelationship.BestFriendVarga:
+                    case PlanetToSignRelationship.FriendVarga:
+                    case PlanetToSignRelationship.OwnVarga:
+                    case PlanetToSignRelationship.Moolatrikona:
+                        return EventNature.Good;
+                    case PlanetToSignRelationship.NeutralVarga:
+                        return EventNature.Neutral;
+                    case PlanetToSignRelationship.EnemyVarga:
+                    case PlanetToSignRelationship.BitterEnemyVarga:
+                        return EventNature.Bad;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            //else return nature from lagna
+            return planetNature;
+
+
+            //LOCAL FUNCTIONS
+
+            EventNature GetNatureFromLagna()
+            {
+                var personLagna = GetHouseSignName(1, person.BirthTime);
+
+                //get list of good and bad planets for a lagna
+                dynamic planetData = GetPlanetData(personLagna);
+                List<PlanetName> goodPlanets = planetData.Good;
+                List<PlanetName> badPlanets = planetData.Bad;
+
+                //check good planets first
+                if (goodPlanets.Contains(planet))
+                {
+                    return EventNature.Good;
+                }
+
+                //check bad planets next
+                if (badPlanets.Contains(planet))
+                {
+                    return EventNature.Bad;
+                }
+
+                //if control reaches here, then planet not
+                //listed as good or bad, so just say neutral
+                return EventNature.Neutral;
+            }
+
+            // data from chapter "Key-planets for Each Sign"
+            object GetPlanetData(ZodiacName lagna)
+            {
+                List<PlanetName> good = null;
+                List<PlanetName> bad = null;
+
+                switch (lagna)
+                {
+                    //Aries - Saturn, Mercury and Venus are ill-disposed.
+                    // Jupiter and the Sun are auspicious. The mere combination
+                    // of Jupiler and Saturn produces no beneficial results. Jupiter
+                    // is the Yogakaraka or the planet producing success. If Venus
+                    // becomes a maraka, he will not kill the native but planets like
+                    // Saturn will bring about death to the person.
+                    case ZodiacName.Aries:
+                        good = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Sun };
+                        bad = new List<PlanetName>() { PlanetName.Saturn, PlanetName.Mercury, PlanetName.Venus };
+                        break;
+                    //Taurus - Saturn is the most auspicious and powerful
+                    // planet. Jupiter, Venus and the Moon are evil planets. Saturn
+                    // alone produces Rajayoga. The native will be killed in the
+                    // periods and sub-periods of Jupiter, Venus and the Moon if
+                    // they get death-inflicting powers.
+                    case ZodiacName.Taurus:
+                        good = new List<PlanetName>() { PlanetName.Saturn };
+                        bad = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Venus, PlanetName.Moon };
+                        break;
+                    //Gemini - Mars, Jupiter and the Sun are evil. Venus alone
+                    // is most beneficial and in conjunction with Saturn in good signs
+                    // produces and excellent career of much fame. Combination
+                    // of Saturn and Jupiter produces similar results as in Aries.
+                    // Venus and Mercury, when well associated, cause Rajayoga.
+                    // The Moon will not kill the person even though possessed of
+                    // death-inflicting powers.
+                    case ZodiacName.Gemini:
+                        good = new List<PlanetName>() { PlanetName.Venus };
+                        bad = new List<PlanetName>() { PlanetName.Mars, PlanetName.Jupiter, PlanetName.Sun };
+                        break;
+                    //Cancer - Venus and Mercury are evil. Jupiter and Mars
+                    // give beneficial results. Mars is the Rajayogakaraka
+                    // (conferor of name and fame). The combination of Mars and Jupiter
+                    // also causes Rajayoga (combination for political success). The
+                    // Sun does not kill the person although possessed of maraka
+                    // powers. Venus and other inauspicious planets kill the native.
+                    // Mars in combination with the Moon or Jupiter in favourable
+                    // houses especially the 1st, the 5th, the 9th and the 10th
+                    // produces much reputation.
+                    case ZodiacName.Cancer:
+                        good = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Mars };
+                        bad = new List<PlanetName>() { PlanetName.Venus, PlanetName.Mercury };
+                        break;
+                    //Leo - Mars is the most auspicious and favourable planet.
+                    // The combination of Venus and Jupiter does not cause Rajayoga
+                    // but the conjunction of Jupiter and Mars in favourable
+                    // houses produce Rajayoga. Saturn, Venus and Mercury are
+                    // evil. Saturn does not kill the native when he has the maraka
+                    // power but Mercury and other evil planets inflict death when
+                    // they get maraka powers.
+                    case ZodiacName.Leo:
+                        good = new List<PlanetName>() { PlanetName.Mars };
+                        bad = new List<PlanetName>() { PlanetName.Saturn, PlanetName.Venus, PlanetName.Mercury };
+                        break;
+                    //Virgo - Venus alone is the most powerful. Mercury and
+                    // Venus when combined together cause Rajayoga. Mars and
+                    // the Moon are evil. The Sun does not kill the native even if
+                    // be becomes a maraka but Venus, the Moon and Jupiter will
+                    // inflict death when they are possessed of death-infticting power.
+                    case ZodiacName.Virgo:
+                        good = new List<PlanetName>() { PlanetName.Venus };
+                        bad = new List<PlanetName>() { PlanetName.Mars, PlanetName.Moon };
+                        break;
+                    // Libra - Saturn alone causes Rajayoga. Jupiter, the Sun
+                    // and Mars are inauspicious. Mercury and Saturn produce good.
+                    // The conjunction of the Moon and Mercury produces Rajayoga.
+                    // Mars himself will not kill the person. Jupiter, Venus
+                    // and Mars when possessed of maraka powers certainly kill the
+                    // nalive.
+                    case ZodiacName.Libra:
+                        good = new List<PlanetName>() { PlanetName.Saturn, PlanetName.Mercury };
+                        bad = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Sun, PlanetName.Mars };
+                        break;
+                    //Scorpio - Jupiter is beneficial. The Sun and the Moon
+                    // produce Rajayoga. Mercury and Venus are evil. Jupiter,
+                    // even if be becomes a maraka, does not inflict death. Mercury
+                    // and other evil planets, when they get death-inlflicting powers,
+                    // do not certainly spare the native.
+                    case ZodiacName.Scorpio:
+                        good = new List<PlanetName>() { PlanetName.Jupiter };
+                        bad = new List<PlanetName>() { PlanetName.Mercury, PlanetName.Venus };
+                        break;
+                    //Sagittarius - Mars is the best planet and in conjunction
+                    // with Jupiter, produces much good. The Sun and Mars also
+                    // produce good. Venus is evil. When the Sun and Mars
+                    // combine together they produce Rajayoga. Saturn does not
+                    // bring about death even when he is a maraka. But Venus
+                    // causes death when be gets jurisdiction as a maraka planet.
+                    case ZodiacName.Sagittarius:
+                        good = new List<PlanetName>() { PlanetName.Mars };
+                        bad = new List<PlanetName>() { PlanetName.Venus };
+                        break;
+                    //Capricornus - Venus is the most powerful planet and in
+                    // conjunction with Mercury produces Rajayoga. Mars, Jupiter
+                    // and the Moon are evil.
+                    case ZodiacName.Capricornus:
+                        good = new List<PlanetName>() { PlanetName.Venus };
+                        bad = new List<PlanetName>() { PlanetName.Mars, PlanetName.Jupiter, PlanetName.Moon };
+                        break;
+                    //Aquarius - Venus alone is auspicious. The combination of
+                    // Venus and Mars causes Rajayoga. Jupiter and the Moon are
+                    // evil.
+                    case ZodiacName.Aquarius:
+                        good = new List<PlanetName>() { PlanetName.Venus };
+                        bad = new List<PlanetName>() { PlanetName.Jupiter, PlanetName.Moon };
+                        break;
+                    //Pisces - The Moon and Mars are auspicious. Mars is
+                    // most powerful. Mars with the Moon or Jupiter causes Rajayoga.
+                    // Saturn, Venus, the Sun and Mercury are evil. Mars
+                    // himself does not kill the person even if he is a maraka.
+                    case ZodiacName.Pisces:
+                        good = new List<PlanetName>() { PlanetName.Moon, PlanetName.Mars };
+                        bad = new List<PlanetName>() { PlanetName.Saturn, PlanetName.Venus, PlanetName.Sun, PlanetName.Mercury };
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+
+                return new { Good = good, Bad = bad };
+
+            }
+        }
+
+
+        /// <summary>
+        /// Get general planetary info for person's dasa (hardcoded table)
+        /// It is intended to be used to intpreate dasa predictions
+        /// as such should be displayed next to dasa chart.
+        /// This method is direct translation from the book.
+        /// Similar to method GetPlanetDasaNature
+        /// Data from pg 80 of Key-planets for Each Sign in Hindu Predictive Astrology
+        /// </summary>
+        public static string GetDasaInfoForAscendant(ZodiacName acesendatName)
+        {
+            //As soon as tbc Dasas and Bhuktis are determined, the next
+            //step would be to find out the good and evil planets for each
+            //ascendant so that in applyios the principles to decipher the
+            //future history of man, the student may be able to carefully
+            //analyse the intensilty or good or evil combinations and proceed
+            //further with his predictions when applying the results of
+            //Dasas and other combinations.
+
+            switch (acesendatName)
+            {
+                case ZodiacName.Aries:
+                    return @"
+                        Aries - Saturn, Mercury and Venus are ill-disposed.
+                        Jupiter and the Sun are auspicious. The mere combination
+                        of Jupiler and Saturn produces no beneficial results. Jupiter
+                        is the Yogakaraka or the planet producing success. If Venus
+                        becomes a maraka, he will not kill the native but planets like
+                        Saturn will bring about death to the person.
+                        ";
+                case ZodiacName.Taurus:
+                    return @"
+                        Taurus - Saturn is the most auspicious and powerful
+                        planet. Jupiter, Venus and the Moon are evil planets. Saturn
+                        alone produces Rajayoga. The native will be killed in the
+                        periods and sub-periods of Jupiter, Venus and the Moon if
+                        they get death-inflicting powers.
+                        ";
+                case ZodiacName.Gemini:
+                    return @"
+                        Gemini - Mars, Jupiter and the Sun are evil. Venus alone
+                        is most beneficial and in conjunction with Saturn in good signs
+                        produces and excellent career of much fame. Combination
+                        of Saturn and Jupiter produces similar results as in Aries.
+                        Venus and Mercury, when well associated, cause Rajayoga.
+                        The Moon will not kill the person even though possessed of
+                        death-inflicting powers.
+                        ";
+                case ZodiacName.Cancer:
+                    return @"
+                        Cancer - Venus and Mercury are evil. Jupiter and Mars
+                        give beneficial results. Mars is the Rajayogakaraka
+                        (conferor of name and fame). The combination of Mars and Jupiter
+                        also causes Rajayoga (combination for political success). The
+                        Sun does not kill the person although possessed of maraka
+                        powers. Venus and other inauspicious planets kill the native.
+                        Mars in combination with the Moon or Jupiter in favourable
+                        houses especially the 1st, the 5th, the 9th and the 10th
+                        produces much reputation.
+                        ";
+                case ZodiacName.Leo:
+                    return @"
+                        Leo - Mars is the most auspicious and favourable planet.
+                        The combination of Venus and Jupiter does not cause Rajayoga
+                        but the conjunction of Jupiter and Mars in favourable
+                        houses produce Rajayoga. Saturn, Venus and Mercury are
+                        evil. Saturn does not kill the native when he has the maraka
+                        power but Mercury and other evil planets inflict death when
+                        they get maraka powers.
+                        ";
+                case ZodiacName.Virgo:
+                    return @"
+                        Virgo - Venus alone is the most powerful. Mercury and
+                        Venus when combined together cause Rajayoga. Mars and
+                        the Moon are evil. The Sun does not kill the native even if
+                        be becomes a maraka but Venus, the Moon and Jupiter will
+                        inflict death when they are possessed of death-infticting power.
+                        ";
+                case ZodiacName.Libra:
+                    return @"
+                        Libra - Saturn alone causes Rajayoga. Jupiter, the Sun
+                        and Mars are inauspicious. Mercury and Saturn produce good.
+                        The conjunction of the Moon and Mercury produces Rajayoga.
+                        Mars himself will not kill the person. Jupiter, Venus
+                        and Mars when possessed of maraka powers certainly kill the
+                        nalive.
+                        ";
+                case ZodiacName.Scorpio:
+                    return @"
+                        Scorpio - Jupiter is beneficial. The Sun and the Moon
+                        produce Rajayoga. Mercury and Venus are evil. Jupiter,
+                        even if be becomes a maraka, does not inflict death. Mercury
+                        and other evil planets, when they get death-inlflicting powers,
+                        do not certainly spare the native.
+                        ";
+                case ZodiacName.Sagittarius:
+                    return @"
+                        Sagittarius - Mars is the best planet and in conjunction
+                        with Jupiter, produces much good. The Sun and Mars also
+                        produce good. Venus is evil. When the Sun and Mars
+                        combine together they produce Rajayoga. Saturn does not
+                        bring about death even when he is a maraka. But Venus
+                        causes death when be gets jurisdiction as a maraka planet.
+                        ";
+                case ZodiacName.Capricornus:
+                    return @"
+                        Capricornus - Venus is the most powerful planet and in
+                        conjunction with Mercury produces Rajayoga. Mars, Jupiter
+                        and the Moon are evil.
+                        ";
+                case ZodiacName.Aquarius:
+                    return @"
+                        Aquarius - Venus alone is auspicious. The combination of
+                        Venus and Mars causes Rajayoga. Jupiter and the Moon are
+                        evil.
+                        ";
+                case ZodiacName.Pisces:
+                    return @"
+                        Pisces - The Moon and Mars are auspicious. Mars is
+                        most powerful. Mars with the Moon or Jupiter causes Rajayoga.
+                        Saturn, Venus, the Sun and Mercury are evil. Mars
+                        himself does not kill the person even if he is a maraka.
+                        ";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(acesendatName), acesendatName, null);
+            }
+
         }
     }
 

@@ -13,6 +13,13 @@
         public string Strength { get; set; }
 
         /// <summary>
+        /// if specified overrides event nature from XML file
+        /// will default to Empty when not set
+        /// note: implemented to allow calculator method to modify final event nature
+        /// </summary>
+        public EventNature NatureOverride { get; set; }
+
+        /// <summary>
         /// Defaults set here
         /// </summary>
         public Prediction()

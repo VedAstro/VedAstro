@@ -11985,7 +11985,10 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Sun);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature};
         }
 
         [EventCalculator(EventName.MoonAntaram)]
@@ -12000,7 +12003,10 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Moon);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         [EventCalculator(EventName.MarsAntaram)]
@@ -12015,7 +12021,10 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Mars);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         [EventCalculator(EventName.RahuAntaram)]
@@ -12030,7 +12039,11 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            //TODO rahu & ketu will always return neutral
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Rahu);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         [EventCalculator(EventName.JupiterAntaram)]
@@ -12045,7 +12058,10 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Jupiter);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         [EventCalculator(EventName.SaturnAntaram)]
@@ -12060,7 +12076,10 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Saturn);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         [EventCalculator(EventName.MercuryAntaram)]
@@ -12075,7 +12094,10 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature( person, PlanetName.Mercury);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         [EventCalculator(EventName.KetuAntaram)]
@@ -12090,7 +12112,11 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            //TODO rahu & ketu will always return neutral
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Ketu);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         [EventCalculator(EventName.VenusAntaram)]
@@ -12105,7 +12131,10 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = isCorrectDasa;
 
-            return new() { Occuring = occuring };
+            //override nature of antaram based on planet
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Venus);
+
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         #endregion

@@ -23,9 +23,9 @@ namespace Genso.Astrology.Library
         /** PUBLIC METHODS **/
 
         /// <summary>
-        /// Get list of events occurig in a time periode for all the
+        /// Get list of events occuring in a time period for all the
         /// inputed event types aka "event data"
-        /// Note : Cancelation token caught here
+        /// Note : Cancellation token caught here
         /// </summary>
         public static List<Event> GetEventsInTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
         {
@@ -49,7 +49,7 @@ namespace Genso.Astrology.Library
             {
                 Parallel.ForEach(eventDataList, (eventData) =>
                 {
-                    //get list of occuring events for a sigle event type
+                    //get list of occuring events for a single event type
                     var eventListForThisEvent = GetListOfEventsByEventDataParallel(eventData, person, timeList);
                     //TODO Progress show code WIP
                     //count++;
@@ -172,8 +172,8 @@ namespace Genso.Astrology.Library
         /// Get a list of events in a time period for a single event type aka "event data"
         /// Decision on when event starts & ends is also done here
         /// Note :
-        /// 1.thread cancelation checked & thrown here (caught by caller)
-        /// 2.method is operated in paralled threaded way (inside) for performance gains
+        /// 1.thread cancellation checked & thrown here (caught by caller)
+        /// 2.method is operated in parallel threaded way (inside) for performance gains
         /// </summary>
         private static List<Event> GetListOfEventsByEventDataParallel(EventData eventData, Person person, List<Time> timeList)
         {
@@ -187,7 +187,7 @@ namespace Genso.Astrology.Library
             return eventList;
 
 
-            //----------------------FUNCTIONS--------------------------
+            //----------------------LOCAL FUNCTIONS--------------------------
 
             //takes time list and checks if event is occurig for each time slice,
             //and returns it in dictionary list, done in parallel

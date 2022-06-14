@@ -29,7 +29,11 @@
         <IconButton OnClickCallback="@OnClickRefreshButton" ButtonText="Refresh" IconName="bi:send-check" />
     </div>
     @*ID set because used by auto move cursor line handler*@
-    <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll; height: 280px;">@DasaReportSvg</div>
+    <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll; height: 280px;">
+        <div style="display: none;" @ref="zoom1"></div>
+        <div style="display: none;" @ref="zoom2"></div>
+        <div style="display: none;" @ref="zoom3"></div>
+    </div>
 
 
     <div class="hstack gap-2" style="font-weight: bold; font-size: 14px;">
@@ -61,6 +65,9 @@
     //double _timeSlicePrecision = _eventsPrecision;
 
     ElementReference _dasaViewBox;
+    ElementReference zoom1;
+    ElementReference zoom2;
+    ElementReference zoom3;
 
     //px width & height of each slice of time
     //used when generating dasa rows
@@ -140,11 +147,13 @@
         await InjectSvgIntoPage(finalSvg);
     }
 
-    private async Task InjectSvgIntoPage(string finalSvg)
+    private async Task InjectSvgIntoPage(List<string> svgList)
     {
         //inject new svg into page via JS for a more responsive progress update
         //doing it in blazor, causes progress bar freeze while updating
-        await _jsRuntime.InjectIntoElement(_dasaViewBox, finalSvg);
+        await _jsRuntime.InjectIntoElement(zoom1, svgList[0]);
+        await _jsRuntime.InjectIntoElement(zoom2, svgList[1]);
+        await _jsRuntime.InjectIntoElement(zoom3, svgList[2]);
 
         //attach tooltip lib for life events
         //note: needed on each draw
@@ -157,7 +166,7 @@
     /// -previously used generate in blazor client,
     ///  but for speed (10s gain) sake moved to server to do heavy lifting
     /// </summary>
-    private async Task<string> GetDasaReportSvgFromApi(int personHash)
+    private async Task<List<string>> GetDasaReportSvgFromApi(int personHash)
     {
         //since majority of time spent will be waiting for API to do calculation
         //and receiving the image is fast, so just start an auto progress bar
@@ -173,9 +182,15 @@
 
         //first element is expected to be lowest rest
         var lowestRes = rootXml.Elements().First();
-        var svgText = lowestRes.Element("SvgReport").Value;
+        var returnList = new List<string>();
+        foreach (var reportXml in rootXml.Elements())
+        {
+            returnList.Add(reportXml.Element("SvgReport").Value);
+        }
+        //var svgText = lowestRes.Element("SvgReport").Value;
 
-        return svgText;
+
+        return returnList;
     }
 
 
@@ -200,16 +215,36 @@
 
     private async Task OnClickRefreshButton(MouseEventArgs obj)
     {
-        await _globalVariable.LoadingMessage.Show();
+        //await _globalVariable.LoadingMessage.Show();
 
         //zoom level translates directly to index (lowest res at top highest rest at bottom)
         var zoomLevel = int.Parse(SelectedZoomName);
-        var reportAtSpecifiedZoom = _globalVariable.CachedDasaReport.Elements().ElementAt(zoomLevel);
-        var svgText = reportAtSpecifiedZoom.Element("SvgReport").Value; ;
+        //var reportAtSpecifiedZoom = _globalVariable.CachedDasaReport.Elements().ElementAt(zoomLevel);
+        //var svgText = reportAtSpecifiedZoom.Element("SvgReport").Value; ;
 
-        await InjectSvgIntoPage(svgText);
+        switch (zoomLevel)
+        {
+            case 0:
+                await _jsRuntime.Show(zoom1); 
+                await _jsRuntime.Hide(zoom2); 
+                await _jsRuntime.Hide(zoom3); 
+                break;
+            case 1:
+                await _jsRuntime.Hide(zoom1); 
+                await _jsRuntime.Show(zoom2); 
+                await _jsRuntime.Hide(zoom3); 
+                break;
+            case 2:
+                await _jsRuntime.Hide(zoom1); 
+                await _jsRuntime.Hide(zoom2); 
+                await _jsRuntime.Show(zoom3); 
+                break;
+        }
 
-        await _globalVariable.LoadingMessage.Hide();
+
+       // await InjectSvgIntoPage(svgText);
+
+        //await _globalVariable.LoadingMessage.Hide();
 
     }
 

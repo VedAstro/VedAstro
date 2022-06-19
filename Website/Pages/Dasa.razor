@@ -5,10 +5,15 @@
 
 
 <div class="vstack gap-2">
-    @*PERSON SELECTOR*@
+    @*PERSON SELECTOR
+        note: selector placed here because multiple components use it
+    *@
     <div>
         <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonName="SelectedPersonName" />
     </div>
+    <MonthYearSelectorBox LabelText="Start"  @ref="_startTimeSelector"/>
+    <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector"/>
+
     @*CALCULATE BTN*@
     <div>
         <button @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
@@ -72,16 +77,18 @@
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }
     private bool _isResultReady = false; //marks if the page ready to loaded
+    private MonthYearSelectorBox _startTimeSelector;
+    private MonthYearSelectorBox _endTimeSelector;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
+
     protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try();
 
     private async Task OnClickCalculate() => await InvokeAsync(async () => await DoCalculation()).Try();
-
 
 
 
@@ -109,18 +116,46 @@
     {
         await _globalVariable.LoadingMessage.Show();
 
+
         //get data from inputs and save it for use by other components
         SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
 
         await _jsRuntime.AddToProgressBar(5);
 
         //set data into dasa viewer
-        await _dasaReportViewer.SetData(SelectedPerson);
+        dynamic timeRange = ComputeStartEndTimeFromInput();
+        await _dasaReportViewer.SetData(SelectedPerson, timeRange.Start, timeRange.End);
 
         //mark page as ready to show results
         _isResultReady = true;
 
         await _globalVariable.LoadingMessage.Hide();
+    }
+
+    private object ComputeStartEndTimeFromInput()
+    {
+        var startMonthYear = _startTimeSelector.GetSelectedTimeText();
+        var x = $"00:00 01/{startMonthYear} {SelectedPerson.BirthTimeZone}";
+        var startTime = new Time(x, SelectedPerson.GetBirthLocation());
+
+        var endMonthYear = _endTimeSelector.GetSelectedTimeText();
+        var y = $"11:59 {GetLastDay(endMonthYear)}/{endMonthYear} {SelectedPerson.BirthTimeZone}";
+        var endTime = new Time(y, SelectedPerson.GetBirthLocation());
+
+        return new { Start = startTime, End = endTime };
+
+        //gets last day of any month at any time
+        int GetLastDay(string monthYearText)
+        {
+            //split month and year
+            string[] splited = monthYearText.Split('/');
+            var month = int.Parse(splited[0]);
+            var year =int.Parse(splited[1]);
+
+            int daysInMonth = DateTime.DaysInMonth(year: year, month: month);
+            return daysInMonth;
+
+        }
     }
 
 

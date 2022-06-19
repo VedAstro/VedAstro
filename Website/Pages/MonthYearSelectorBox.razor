@@ -1,0 +1,79 @@
+﻿@*A simple box to select time from month & year*@
+
+
+<div>
+    <label>@LabelText</label>
+    <div class="hstack gap-2" style="min-width: 156px;width: fit-content;">
+        <select @ref="_monthDropdown" @bind="SelectedStartMonth" class="form-control">
+            <option value="01">Jan</option>
+            <option value="02">Feb</option>
+            <option value="03">Mar</option>
+            <option value="04">Apr</option>
+            <option value="05">May</option>
+            <option value="06">Jun</option>
+            <option value="07">Jul</option>
+            <option value="08">Aug</option>
+            <option value="09">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
+        </select>
+        <select @ref="_yearDropdown" @bind="SelectedStartYear" class="form-control">
+            @foreach (var year in YearList)
+            {
+                <option value="@year">@year</option>
+            }
+        </select>
+    </div>
+</div>
+
+
+@code {
+
+
+    /// <summary>
+    /// Text that will be displayed above input
+    /// </summary>
+    [Parameter]
+    public string? LabelText { get; set; }
+
+
+    public string? SelectedStartMonth { get; set; }
+    public string? SelectedStartYear { get; set; }
+    private ElementReference _monthDropdown;
+    private ElementReference _yearDropdown;
+
+    public List<int> YearList => GetYearList();
+
+
+
+    /// <summary>
+    /// Returns selected month and year as "mm/yyyy"
+    /// Note: returns partial for easy plugin to existing format
+    /// </summary>
+    /// <returns></returns>
+    public string GetSelectedTimeText()
+    {
+        var compiledText = $"{SelectedStartMonth}/{SelectedStartYear}";
+        return compiledText;
+    }
+
+
+    //list used to show in year drop down
+    private static List<int> GetYearList()
+    {
+
+        var returnList = new List<int>();
+
+        int startYear = 1800;
+
+        for (int i = 0; i < 1000; i++)
+        {
+            returnList.Add(++startYear);
+        }
+
+        return returnList;
+    }
+
+
+}

@@ -17,23 +17,14 @@
 
 
 <div class="vstack gap-1" style="width: fit-content;">
-    <div class="hstack gap-2">
-        <div>
-            <label>Start</label>
-            <input @bind="_startYearInput" type="text" class="form-control">
-        </div>
-        <div>
-            <label>End</label>
-            <input @bind="_endYearInput" type="text" class="form-control">
-        </div>
+@*    <div class="hstack gap-2">
         <div>
             <label>Day/Px</label>
             <input @bind="_daysPerPixelInput" type="text" class="form-control">
         </div>
-
         <IconButton OnClickCallback="@OnClickRefreshButton" ButtonText="Refresh" IconName="bi:send-check" />
     </div>
-    @*ID set because used by auto move cursor line handler*@
+*@    @*ID set because used by auto move cursor line handler*@
     <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll; height: 280px;">@DasaReportSvg</div>
 
 
@@ -55,7 +46,6 @@
 
 @code {
 
-    string? _startYearInput, _endYearInput;
     double _daysPerPixelInput = 30;
 
     /// <summary>
@@ -98,18 +88,14 @@
     /// <summary>
     /// Sets the data that is processed and fill the content
     /// </summary>
-    public async Task SetData(Person person)
+    public async Task SetData(Person person, Time startTime, Time endTime)
     {
         //save inputed data
         this.Person = person;
 
-        //to minimize UX friction, default time range for dasa view is used first
-        //user can adjust later, birth year to current year plus 2 is default for now
-        _startYearInput = this.Person.BirthYear.ToString();
-        _endYearInput = (this.Person.BirthYear + 120).ToString();
-
-
-        await DrawReport(GetDayPerPixel());
+        //auto calculate precision
+        var daysPerPixel = GetDayPerPixel(startTime, endTime);
+        await DrawReport(startTime, endTime, daysPerPixel);
 
         //attach handlers now that component is loaded
         //attach mouse handler to auto move cursor line & update time legend
@@ -122,12 +108,10 @@
         StateHasChanged();
     }
 
-    private double GetDayPerPixel()
+    private double GetDayPerPixel(Time start, Time end)
     {
 
-        var dif = double.Parse(_endYearInput) - double.Parse(_startYearInput);
-        dif++; //add 1 to count the years it self 2020 -2021 = 365*2
-        var daysBetween = dif * 365;
+        var daysBetween = end.Subtract(start).TotalDays;
         var maxWidth = 1000;
         var daysPerPixel = Math.Round(daysBetween / maxWidth, 3); //small val = higher precision
                                                                   //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
@@ -137,12 +121,9 @@
 
     }
 
-    private async Task DrawReport(double daysPerPixel = 0)
+    private async Task DrawReport(Time startTime, Time endTime, double daysPerPixel = 0)
     {
         //generate dasa report in svg from server
-        var startTime = new Time($"00:00 01/01/{_startYearInput} {Person.BirthTimeZone}", Person.GetBirthLocation());
-        var endTime = new Time($"11:59 31/12/{_endYearInput} {Person.BirthTimeZone}", Person.GetBirthLocation());
-
         _daysPerPixelInput = daysPerPixel != 0 ? daysPerPixel : _daysPerPixelInput; //if not defined, use input
         var finalSvg = await GetDasaReportSvgFromApi(this.Person, startTime, endTime, _daysPerPixelInput);
 
@@ -228,14 +209,5 @@
         return new StringContent(dataString, encoding, mediaType);
     }
 
-    private async Task OnClickRefreshButton(MouseEventArgs obj)
-    {
-        await _globalVariable.LoadingMessage.Show();
-
-        await DrawReport(GetDayPerPixel());
-
-        await _globalVariable.LoadingMessage.Hide();
-
-    }
 
 }

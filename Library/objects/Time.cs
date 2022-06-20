@@ -288,7 +288,11 @@ namespace Genso.Astrology.Library
 
         public int GetStdYear() => this.GetStdDateTimeOffset().Year;
         public int GetStdMonth() => this.GetStdDateTimeOffset().Month;
-        public int GetStdDay() => this.GetStdDateTimeOffset().Day;
+        
+        /// <summary>
+        /// Gets date in month 1-31
+        /// </summary>
+        public int GetStdDate() => this.GetStdDateTimeOffset().Day;
 
 
         

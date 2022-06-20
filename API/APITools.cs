@@ -227,8 +227,13 @@ namespace API
             return foundPerson;
         }
 
+        /// <summary>
+        /// Get parsed EventDataList from Azure storage
+        /// Note: Event data list needed to calculate events
+        /// </summary>
         public static async Task<List<EventData>> GetEventDataList()
         {
+            //get data list from Azure storage
             var eventDataListClient = await APITools.GetFileFromContainer("EventDataList.xml", "vedastro-site-data");
             var eventDataListXml = APITools.BlobClientToXml(eventDataListClient);
 

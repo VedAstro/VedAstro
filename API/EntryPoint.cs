@@ -830,7 +830,6 @@ namespace API
             return foundList.Any();
         }
 
-
         private static async Task SetCachedDasaReportSvg(int personHash, double daysPerPixel, BlobClient cachedReportsClient, string svgString)
         {
 
@@ -863,13 +862,13 @@ namespace API
             //generate time slice only once for all rows
             var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
 
-            //generate the events row & header row, year, month
+            //generate the events row & time header row
             var compiledRow = await GenerateRowsSvg(inputPerson, daysPerPixel, startTime, endTime, timeSlices, eventsPrecisionHours);
 
 
             //the height for all lines, cursor, now & life events line
             //place below the last row
-            var totalHeight = 220; //hard set for now
+            var totalHeight = 250; //hard set for now
             var padding = 2;//space between rows
             var lineHeight = totalHeight + padding;
 
@@ -1017,7 +1016,7 @@ namespace API
 
                         //if same year and same month then send this slice position
                         //as the correct one
-                        var sameDay = time.GetStdDay() == nowDay;
+                        var sameDay = time.GetStdDate() == nowDay;
                         var sameYear = time.GetStdYear() == nowYear;
                         var sameMonth = time.GetStdMonth() == nowMonth;
                         if (sameMonth && sameYear && sameDay)
@@ -1084,20 +1083,24 @@ namespace API
 
         }
 
-
         /// <summary>
         /// Generates the event & header part of the dasa report
         /// </summary>
         private static async Task<string> GenerateRowsSvg(Person inputPerson, double daysPerPixel, Time startTime, Time endTime, List<Time> timeSlices, double eventsPrecision)
         {
+
             //px width & height of each slice of time
             //used when generating dasa rows
             //note: changes needed only here
-            int _widthPerSlice = 1;
-            int _heightPerSlice = 20;
+            const int _widthPerSlice = 1;
+            const int _heightPerSlice = 20;
 
-            //use the inputed data to get events from API
-            //note: below methods access the data internally
+
+            //STEP 1 : GENERATE TIME HEADER ROWS
+            var compiledRow = GenerateTimeHeaderRow(timeSlices, daysPerPixel, _widthPerSlice, out int headerY);
+
+
+            //STEP 2 : GENERATE EVENT ROWS
             var eventDataList = await APITools.GetEventDataList();
 
             var dasaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Dasa, eventDataList);
@@ -1107,34 +1110,8 @@ namespace API
             var tarabalaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Tarabala, eventDataList);
 
 
-            //generate rows and pump them final svg string
-            var dasaSvgWidth = 0; //will be filled when calling row generator
-            var compiledRow = "";
-
-
-            var beginYear = timeSlices[0].GetStdYear();
-            var endYear = timeSlices.Last().GetStdYear();
-            var difYears = endYear - beginYear;
-
-            var headerGenerator = new List<Func<List<Time>, int, int, int, string>>();
-            var showYearRow = daysPerPixel <= 15;
-            if (difYears >= 10 && !showYearRow) { headerGenerator.Add(GenerateDecadeRowSvg); }
-            if (difYears is >= 5 and < 10) { headerGenerator.Add(Generate5YearRowSvg); }
-            if (showYearRow) { headerGenerator.Add(GenerateYearRowSvg); }
-            if (daysPerPixel <= 1.3) { headerGenerator.Add(GenerateMonthRowSvg); }
-
 
             var padding = 2;//space between rows
-            int headerY = 0, headerHeight = 11;
-            foreach (var generator in headerGenerator)
-            {
-                compiledRow += generator(timeSlices, headerY, 0, headerHeight);
-
-                //update for next generator
-                headerY = headerY + headerHeight + padding;
-            }
-
-
             int dasaY = headerY;
             compiledRow += GenerateEventRowSvg(dasaEventList, timeSlices, dasaY, 0, _heightPerSlice, "Dasa");
             int bhuktiY = dasaY + _heightPerSlice + padding;
@@ -1186,152 +1163,6 @@ namespace API
                     //the hard coded attribute names used here are used in App.js
                     var rect = $"<rect " +
                                $"type=\"{eventType}\" " +
-                               $"eventname=\"{foundEvent?.FormattedName}\" " +
-                               $"age=\"{inputPerson.GetAge(slice)}\" " +
-                               $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                               $"x=\"{horizontalPosition}\" " +
-                               $"width=\"{_widthPerSlice}\" " +
-                               $"height=\"{rowHeight}\" " +
-                               $"fill=\"{color}\" />";
-
-                    //set position for next element
-                    horizontalPosition += _widthPerSlice;
-
-                    rowHtml += rect;
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //svg tag here acts as group, svg nesting
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-
-
-                return rowHtml;
-            }
-
-
-            string GenerateAntaramRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var prevEventName = EventName.EmptyEvent;
-
-                //generate 1px (rect) per time slice
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    var foundEvent = foundEventList[0];
-
-                    //if current event is different than event has changed, so draw a black line
-                    var isNewEvent = prevEventName != foundEvent.Name;
-                    var borderRoomAvailable = daysPerPixel <= 10; //above 10px/day borders look ugly
-                    var color = isNewEvent && borderRoomAvailable ? "black" : GetEventColor(foundEvent?.Nature);
-                    prevEventName = foundEvent.Name;
-
-                    //generate and add to row
-                    //the hard coded attribute names used here are used in App.js
-                    var rect = $"<rect " +
-                               $"type=\"Antaram\" " +
-                               $"eventname=\"{foundEvent?.FormattedName}\" " +
-                               $"age=\"{inputPerson.GetAge(slice)}\" " +
-                               $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                               $"x=\"{horizontalPosition}\" " +
-                               $"width=\"{_widthPerSlice}\" " +
-                               $"height=\"{rowHeight}\" " +
-                               $"fill=\"{color}\" />";
-
-                    //set position for next element
-                    horizontalPosition += _widthPerSlice;
-
-                    rowHtml += rect;
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //svg tag here acts as group, svg nesting
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-
-
-                return rowHtml;
-            }
-
-            string GenerateDasaRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var prevEventName = EventName.EmptyEvent;
-
-                //generate 1px (rect) per time slice
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    var foundEvent = foundEventList[0];
-
-                    //if current event is different than event has changed, so draw a black line
-                    var isNewEvent = prevEventName != foundEvent.Name;
-                    var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
-                    prevEventName = foundEvent.Name;
-
-                    //generate and add to row
-                    //the hard coded attribute names used here are used in App.js
-                    var rect = $"<rect " +
-                               $"type=\"Dasa\" " +
-                               $"eventname=\"{foundEvent?.FormattedName}\" " +
-                               $"age=\"{inputPerson.GetAge(slice)}\" " +
-                               $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                               $"x=\"{horizontalPosition}\" " +
-                               $"width=\"{_widthPerSlice}\" " +
-                               $"height=\"{rowHeight}\" " +
-                               $"fill=\"{color}\" />";
-
-                    //set position for next element
-                    horizontalPosition += _widthPerSlice;
-
-                    rowHtml += rect;
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //svg tag here acts as group, svg nesting
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-
-
-                return rowHtml;
-            }
-
-            string GenerateBhuktiRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var prevEventName = EventName.EmptyEvent;
-
-                //generate 1px (rect) per time slice
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    var foundEvent = foundEventList[0];
-
-                    //if current event is different than event has changed, so draw a black line
-                    var isNewEvent = prevEventName != foundEvent.Name;
-                    var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
-                    prevEventName = foundEvent.Name;
-
-                    //generate and add to row
-                    //the hard coded attribute names used here are used in App.js
-                    var rect = $"<rect " +
-                               $"type=\"Bhukti\" " +
                                $"eventname=\"{foundEvent?.FormattedName}\" " +
                                $"age=\"{inputPerson.GetAge(slice)}\" " +
                                $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
@@ -1436,6 +1267,64 @@ namespace API
 
                 return rowHtml;
             }
+
+            // Get dasa color based on nature & number of events
+            string GetEventColor(EventNature? eventNature)
+            {
+                var colorId = "blue";
+
+                //set color id based on nature
+                switch (eventNature)
+                {
+                    case EventNature.Good:
+                        colorId = "green";
+                        break;
+                    case EventNature.Neutral:
+                        colorId = "grey";
+                        break;
+                    case EventNature.Bad:
+                        colorId = "red";
+                        break;
+                }
+
+                return colorId;
+            }
+
+        }
+
+        private static string GenerateTimeHeaderRow(List<Time> timeSlices, double daysPerPixel, int _widthPerSlice, out int headerY)
+        {
+            //generate rows and pump them final svg string
+            var dasaSvgWidth = 0; //will be filled when calling row generator
+            var compiledRow = "";
+
+            var beginYear = timeSlices[0].GetStdYear();
+            var endYear = timeSlices.Last().GetStdYear();
+            var difYears = endYear - beginYear;
+
+            //header rows are dynamically generated as needed, hence the extra logic below
+            var headerGenerator = new List<Func<List<Time>, int, int, int, string>>();
+            var showYearRow = daysPerPixel <= 15;
+            if (difYears >= 10 && !showYearRow) { headerGenerator.Add(GenerateDecadeRowSvg); }
+            if (difYears is >= 5 and < 10) { headerGenerator.Add(Generate5YearRowSvg); }
+            if (showYearRow) { headerGenerator.Add(GenerateYearRowSvg); }
+            if (daysPerPixel <= 1.3) { headerGenerator.Add(GenerateMonthRowSvg); }
+            if (daysPerPixel <= 0.07) { headerGenerator.Add(GenerateDateRowSvg); }
+
+
+            var padding = 2;//space between rows
+            headerY = 0;
+            int headerHeight = 11;
+            foreach (var generator in headerGenerator)
+            {
+                compiledRow += generator(timeSlices, headerY, 0, headerHeight);
+
+                //update for next generator
+                headerY = headerY + headerHeight + padding;
+            }
+
+            return compiledRow;
+
 
             string GenerateYearRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
@@ -1769,27 +1658,85 @@ namespace API
                     }
                 }
             }
-
-            // Get dasa color based on nature & number of events
-            string GetEventColor(EventNature? eventNature)
+            
+            string GenerateDateRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
-                var colorId = "blue";
 
-                //set color id based on nature
-                switch (eventNature)
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousDate = 0; //start 0 for first draw
+                var dateBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                //int rowHeight = 11;
+
+                foreach (var slice in timeSlices)
                 {
-                    case EventNature.Good:
-                        colorId = "green";
-                        break;
-                    case EventNature.Neutral:
-                        colorId = "grey";
-                        break;
-                    case EventNature.Bad:
-                        colorId = "red";
-                        break;
+
+                    //only generate new date box when date changes or at
+                    //end of time slices to draw the last date box
+                    var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var dateChanged = previousDate != slice.GetStdDate();
+                    if (dateChanged || lastTimeSlice)
+                    {
+                        //and it is in the beginning
+                        if (previousDate == 0)
+                        {
+                            dateBoxWidthCount = 0; //reset width
+                        }
+                        else
+                        {
+                            //generate previous date data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = dateBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{previousDate}" + //previous date generate at begin of new date
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            dateBoxWidthCount = 0;
+
+                        }
+                    }
+                    //year same as before
+                    else
+                    {
+                        //update width only, position is same
+                        //as when created the year box
+                        //yearBoxWidthCount *= _widthPerSlice;
+
+                    }
+
+                    //update previous date for next slice
+                    previousDate = slice.GetStdDate();
+
+                    dateBoxWidthCount++;
+
+
                 }
 
-                return colorId;
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+
             }
 
         }

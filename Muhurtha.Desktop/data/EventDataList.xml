@@ -1,20 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!--This file has to be manually uploaded to Azure for use by API-->
 <Root>
 	<!--This is the DATA list for MUHURTHA-->
-	<!--<Event>
-    <Id>1</Id>
-    <Name>GoodTarabala</Name>
-    <Nature>Good</Nature>
-    <Description>Good Tarabala, good strength of constellation</Description>
-    <Tag>Personal</Tag>
-  </Event>-->
-	<!--<Event>
-    <Id>2</Id>
-    <Name>BadTarabala</Name>
-    <Nature>Bad</Nature>
-    <Description>Bad Tarabala, bad strength of constellation</Description>
-    <Tag>Personal</Tag>
-  </Event>-->
 	<Event>
 		<Id>3</Id>
 		<Name>GoodChandrabala</Name>
@@ -115,13 +102,6 @@
 		</Description>
 		<Tag>General</Tag>
 	</Event>
-	<!--<Event>
-    <Id>16</Id>
-    <Name>CustomEvent</Name>
-    <Nature>Good</Nature>
-    <Description>Good tarabala &amp; good chandrabala</Description>
-    <Tag>Debug</Tag>
-  </Event>-->
 	<Event>
 		<Id>17</Id>
 		<Name>KarthariDosha</Name>
@@ -1087,7 +1067,7 @@
 			Janma: danger to body
 			1st Paryaya or cycle : the evil suggested holds good in full
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>106</Id>
@@ -1097,7 +1077,7 @@
 			Janma: danger to body
 			2nd Paryaya or cycle : the evil is said to be only fifty percent.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>107</Id>
@@ -1107,7 +1087,7 @@
 			Janma: danger to body
 			3rd Paryaya or cycle : the evil is said to be almost negligible
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 	<Event>
@@ -1118,7 +1098,7 @@
 			Sampat: wealth and prosperity
 			1st Paryaya or cycle : the good suggested holds good in full
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>109</Id>
@@ -1128,7 +1108,7 @@
 			Sampat: wealth and prosperity
 			2nd Paryaya or cycle : the good is said to be only fifty percent.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>110</Id>
@@ -1138,7 +1118,7 @@
 			Sampat: wealth and prosperity
 			3rd Paryaya or cycle : the good is said to be almost negligible
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 	<Event>
@@ -1153,7 +1133,7 @@
 			for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
 			even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>112</Id>
@@ -1167,7 +1147,7 @@
 			for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
 			even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>113</Id>
@@ -1181,7 +1161,7 @@
 			for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
 			even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 	<Event>
@@ -1192,7 +1172,7 @@
 			Kshema: prosperity
 			1st Paryaya or cycle : the good suggested holds good in full
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>115</Id>
@@ -1202,7 +1182,7 @@
 			Kshema: prosperity
 			2nd Paryaya or cycle : the good is said to be only fifty percent.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>116</Id>
@@ -1212,7 +1192,7 @@
 			Kshema: prosperity
 			3rd Paryaya or cycle : the good is said to be almost negligible
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 	<Event>
@@ -1223,7 +1203,7 @@
 			Pratyak: obstacles
 			1st Paryaya or cycle : the evil suggested holds good in full
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>118</Id>
@@ -1233,7 +1213,7 @@
 			Pratyak: obstacles
 			2nd Paryaya or cycle : the evil is said to be only fifty percent.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>119</Id>
@@ -1243,7 +1223,7 @@
 			Pratyak: obstacles
 			3rd Paryaya or cycle : the evil is said to be almost negligible
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 	<Event>
@@ -1254,7 +1234,7 @@
 			Sadhana: realisation of ambitions
 			1st Paryaya or cycle : the good suggested holds good in full
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>121</Id>
@@ -1264,7 +1244,7 @@
 			Sadhana: realisation of ambitions
 			2nd Paryaya or cycle : the good is said to be only fifty percent.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>122</Id>
@@ -1274,7 +1254,7 @@
 			Sadhana: realisation of ambitions
 			3rd Paryaya or cycle : the good is said to be almost negligible
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 	<Event>
@@ -1289,7 +1269,7 @@
 			for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
 			even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>124</Id>
@@ -1303,7 +1283,7 @@
 			for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
 			even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>125</Id>
@@ -1317,7 +1297,7 @@
 			for all important undertakings - long journeys, marriage, starting of an enterprise, etc.,
 			even if such a star happens to fall in the 3rd-cycle, unless there are other counteracting factors.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 	<Event>
@@ -1328,7 +1308,7 @@
 			Mitra: good
 			1st Paryaya or cycle : the good suggested holds good in full
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>127</Id>
@@ -1338,7 +1318,7 @@
 			Mitra: good
 			2nd Paryaya or cycle : the good is said to be only fifty percent.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>128</Id>
@@ -1348,7 +1328,7 @@
 			Mitra: good
 			3rd Paryaya or cycle : the good is said to be almost negligible
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 	<Event>
@@ -1359,7 +1339,7 @@
 			Parama Mitra: very favourable
 			1st Paryaya or cycle : the good suggested holds good in full
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>130</Id>
@@ -1369,7 +1349,7 @@
 			Parama Mitra: very favourable
 			2nd Paryaya or cycle : the good is said to be only fifty percent.
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
 		<Id>131</Id>
@@ -1379,7 +1359,7 @@
 			Parama Mitra: very favourable
 			3rd Paryaya or cycle : the good is said to be almost negligible
 		</Description>
-		<Tag>Personal</Tag>
+		<Tag>Personal,Tarabala</Tag>
 	</Event>
 
 

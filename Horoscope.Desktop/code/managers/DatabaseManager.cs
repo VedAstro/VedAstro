@@ -17,13 +17,13 @@ namespace Horoscope.Desktop
 
 
         /// <summary>
-        /// Gets a list of all prediction data from database
-        /// Note: element names used here corespond to the ones found in the XML file
+        /// Gets a list of all prediction data from EventDataList file.
+        /// Note: element names used here correspond to the ones found in the XML file
         ///       if change here, than change in XML as well
         /// </summary>
         public static List<EventData> GetPredictionDataList(string filePath)
         {
-            //get the event data list in a structed form xml file
+            //get the event data list in a structured form xml file
             Data eventDataListFile = new Data(filePath);
 
             //create a place to store the list
@@ -40,9 +40,9 @@ namespace Horoscope.Desktop
                 Enum.TryParse(nameString, out EventName name);
                 var natureString = eventData.Element("Nature").Value;
                 Enum.TryParse(natureString, out EventNature nature);
-                var description = getDescription(eventData.Element("Description").Value); //with proper formating
+                var description = getDescription(eventData.Element("Description").Value); //with proper formatting
                 var tagString = eventData.Element("Tag").Value;
-                var tagList = getEventTags(tagString);
+                var tagList = getEventTags(tagString); //multiple tags are possible ',' separated
                 //todo needs to be moved to a better place
                 var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
 
@@ -57,17 +57,18 @@ namespace Horoscope.Desktop
             //return the list to caller
             return eventDataList;
 
-            //Gets a list of tags in string form & changes it a structed list of tags
+            //Gets a list of tags in string form & changes it a structured list of tags
+            //Multiple tags can be used by 1 event, separated by comma in in the Tag element
             List<EventTag> getEventTags(string rawTags)
             {
                 //create a place to store the parsed tags
                 var returnTags = new List<EventTag>();
 
-                //split the string by comma "," (tag seperator)
-                var splittedRawTags = rawTags.Split(',');
+                //split the string by comma "," (tag separator)
+                var splitedRawTags = rawTags.Split(',');
 
                 //parse each raw tag
-                foreach (var rawTag in splittedRawTags)
+                foreach (var rawTag in splitedRawTags)
                 {
                     //parse
                     var result = Enum.TryParse(rawTag, out EventTag eventTag);

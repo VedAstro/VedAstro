@@ -685,7 +685,7 @@ namespace API
             return okObjectResult;
         }
 
-        
+
 
 
 
@@ -803,7 +803,7 @@ namespace API
             goto TryAgain;
 
         }
-        
+
         /// <summary>
         /// Returns false if no cache found
         /// </summary>
@@ -829,7 +829,7 @@ namespace API
             //return true if found cache, else false
             return foundList.Any();
         }
-        
+
 
         private static async Task SetCachedDasaReportSvg(int personHash, double daysPerPixel, BlobClient cachedReportsClient, string svgString)
         {
@@ -847,7 +847,9 @@ namespace API
 
         }
 
-
+        /// <summary>
+        /// Massive method that generates dasa report in SVG
+        /// </summary>
         private static async Task<string> GenerateDasaReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
         {
             // One precision value for generating all dasa components,
@@ -858,21 +860,20 @@ namespace API
             double eventsPrecisionHours = Tools.DaysToHours(daysPerPixel);
             double _timeSlicePrecision = eventsPrecisionHours;
 
-
             //generate time slice only once for all rows
             var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, _timeSlicePrecision);
 
-
+            //generate the events row & header row, year, month
             var compiledRow = await GenerateRowsSvg(inputPerson, daysPerPixel, startTime, endTime, timeSlices, eventsPrecisionHours);
 
 
             //the height for all lines, cursor, now & life events line
             //place below the last row
-            var totalHeight = 197; //hard set for now
+            var totalHeight = 220; //hard set for now
             var padding = 2;//space between rows
             var lineHeight = totalHeight + padding;
 
-            //add in the cursor line
+            //add in the cursor line (moves with cursor via JS)
             compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
 
             //get now line position
@@ -1084,6 +1085,9 @@ namespace API
         }
 
 
+        /// <summary>
+        /// Generates the event & header part of the dasa report
+        /// </summary>
         private static async Task<string> GenerateRowsSvg(Person inputPerson, double daysPerPixel, Time startTime, Time endTime, List<Time> timeSlices, double eventsPrecision)
         {
             //px width & height of each slice of time
@@ -1095,11 +1099,12 @@ namespace API
             //use the inputed data to get events from API
             //note: below methods access the data internally
             var eventDataList = await APITools.GetEventDataList();
-            
+
             var dasaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Dasa, eventDataList);
             var bhuktiEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Bhukti, eventDataList);
             var antaramEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Antaram, eventDataList);
             var gocharaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Gochara, eventDataList);
+            var tarabalaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Tarabala, eventDataList);
 
 
             //generate rows and pump them final svg string
@@ -1131,13 +1136,15 @@ namespace API
 
 
             int dasaY = headerY;
-            compiledRow += GenerateDasaRowSvg(dasaEventList, timeSlices, dasaY, 0, _heightPerSlice);
+            compiledRow += GenerateEventRowSvg(dasaEventList, timeSlices, dasaY, 0, _heightPerSlice, "Dasa");
             int bhuktiY = dasaY + _heightPerSlice + padding;
-            compiledRow += GenerateBhuktiRowSvg(bhuktiEventList, timeSlices, bhuktiY, 0, _heightPerSlice);
+            compiledRow += GenerateEventRowSvg(bhuktiEventList, timeSlices, bhuktiY, 0, _heightPerSlice, "Bhukti");
             int antaramY = bhuktiY + _heightPerSlice + padding;
-            compiledRow += GenerateAntaramRowSvg(antaramEventList, timeSlices, antaramY, 0, _heightPerSlice);
-            int gocharaY = antaramY + _heightPerSlice + padding;
-            compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0, out int gocharaHeight);
+            compiledRow += GenerateEventRowSvg(antaramEventList, timeSlices, antaramY, 0, _heightPerSlice, "Antaram");
+            int tarabalaY = antaramY + _heightPerSlice + padding;
+            compiledRow += GenerateEventRowSvg(tarabalaEventList, timeSlices, tarabalaY, 0, _heightPerSlice, "Tarabala");
+            int gocharaY = tarabalaY + _heightPerSlice + padding;
+            compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0, out int gocharaHeight); //because height changes
 
             //future passed to caller to draw line
             var totalHeight = gocharaY + gocharaHeight;
@@ -1147,10 +1154,60 @@ namespace API
 
 
 
-            
+
             //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
             //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
+
+
+            string GenerateEventRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight, string eventType)
+            {
+                //generate the row for each time slice
+                var rowHtml = "";
+                var horizontalPosition = 0; //distance from left
+                var prevEventName = EventName.EmptyEvent;
+
+                //generate 1px (rect) per time slice
+                foreach (var slice in timeSlices)
+                {
+                    //get event that occurred at this time slice
+                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
+                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
+                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
+                    var foundEvent = foundEventList[0];
+
+                    //if current event is different than event has changed, so draw a black line
+                    var isNewEvent = prevEventName != foundEvent.Name;
+                    var borderRoomAvailable = daysPerPixel <= 10; //above 10px/day borders look ugly
+                    var color = isNewEvent && borderRoomAvailable ? "black" : GetEventColor(foundEvent?.Nature);
+                    prevEventName = foundEvent.Name;
+
+                    //generate and add to row
+                    //the hard coded attribute names used here are used in App.js
+                    var rect = $"<rect " +
+                               $"type=\"{eventType}\" " +
+                               $"eventname=\"{foundEvent?.FormattedName}\" " +
+                               $"age=\"{inputPerson.GetAge(slice)}\" " +
+                               $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                               $"x=\"{horizontalPosition}\" " +
+                               $"width=\"{_widthPerSlice}\" " +
+                               $"height=\"{rowHeight}\" " +
+                               $"fill=\"{color}\" />";
+
+                    //set position for next element
+                    horizontalPosition += _widthPerSlice;
+
+                    rowHtml += rect;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+
+                return rowHtml;
+            }
 
 
             string GenerateAntaramRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
@@ -1201,6 +1258,7 @@ namespace API
 
                 return rowHtml;
             }
+
             string GenerateDasaRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
                 //generate the row for each time slice
@@ -1248,6 +1306,7 @@ namespace API
 
                 return rowHtml;
             }
+
             string GenerateBhuktiRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
                 //generate the row for each time slice

@@ -162,3 +162,17 @@ but with Client + Server config, hashes become different, needs changing to MD5
 -   In class/struct that only represent data and not computation, use direct property naming without modifiers like "Get" or "Set".
     Example: Person struct should be "Person.BirthTime" and not "Person.GetBirthTime()"
         
+
+## EventDataList.xml
+-   2 of these files exist, 1 local in MuhurthaCore for desktop version.
+    The other online in VedAstro Azure storage for use by API.
+    Both files need to be in sync, if forgot to sync. Use file with latest update.
+-   Future todo simplify into 1 file. Local MuhurthaCore can be deprecated.
+
+## Event/Prediction Multiple Tags
+-   Generally 1 tag for 1 event, add only when needed.
+-   Multiple tags can be used by 1 event, separated by "," in in the Tag element
+-   Done so that event can be accessed for multiple uses.
+    Example, Tarabala Events is taged for Personal & Tarabala.
+-   Needs to be added with care and where absolutely needed,
+    else could get very confusing.

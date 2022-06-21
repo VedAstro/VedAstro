@@ -961,7 +961,17 @@ namespace API
             //note: tries to get nearest day first, then tries month to nearest year
             int GetLinePosition(List<Time> timeSliceList, DateTimeOffset inputTime)
             {
-                //if nearest day is possible then end here
+
+                var nowHour = inputTime.Hour;
+                var nowDay = inputTime.Day;
+                var nowYear = inputTime.Year;
+                var nowMonth = inputTime.Month;
+
+                //if nearest hour is possible then end here
+                var nearestHour = GetNearestHour();
+                if (nearestHour != 0) { return nearestHour; }
+
+                //else try get nearest day
                 var nearestDay = GetNearestDay();
                 if (nearestDay != 0) { return nearestDay; }
 
@@ -980,9 +990,6 @@ namespace API
 
                 int GetNearestMonth()
                 {
-                    var nowYear = inputTime.Year;
-                    var nowMonth = inputTime.Month;
-
                     //go through the list and find where the slice is closest to now
                     var slicePosition = 0;
                     foreach (var time in timeSliceList)
@@ -1003,12 +1010,9 @@ namespace API
 
                     return 0;
                 }
+
                 int GetNearestDay()
                 {
-                    var nowDay = inputTime.Day;
-                    var nowYear = inputTime.Year;
-                    var nowMonth = inputTime.Month;
-
                     //go through the list and find where the slice is closest to now
                     var slicePosition = 0;
                     foreach (var time in timeSliceList)
@@ -1030,9 +1034,34 @@ namespace API
 
                     return 0;
                 }
+
+                int GetNearestHour()
+                {
+                    //go through the list and find where the slice is closest to now
+                    var slicePosition = 0;
+                    foreach (var time in timeSliceList)
+                    {
+
+                        //if same year and same month then send this slice position
+                        //as the correct one
+                        var sameHour = time.GetStdDateTimeOffset().Hour == nowHour;
+                        var sameDay = time.GetStdDate() == nowDay;
+                        var sameYear = time.GetStdYear() == nowYear;
+                        var sameMonth = time.GetStdMonth() == nowMonth;
+                        if (sameDay && sameHour && sameMonth && sameYear)
+                        {
+                            return slicePosition;
+                        }
+
+                        //move to next slice position
+                        slicePosition++;
+                    }
+
+                    return 0;
+                }
+
                 int GetNearestYear()
                 {
-                    var nowYear = inputTime.Year;
 
                     //go through the list and find where the slice is closest to now
                     var slicePosition = 0;

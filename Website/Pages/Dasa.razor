@@ -8,9 +8,7 @@
     @*PERSON SELECTOR
         note: selector placed here because multiple components use it
     *@
-    <div>
-        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonName="SelectedPersonName" />
-    </div>
+    <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonHash="SelectedPersonHash" />
     <MonthYearSelectorBox LabelText="Start"  @ref="_startTimeSelector"/>
     <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector"/>
 
@@ -73,7 +71,7 @@
     private DasaReportViewer? _dasaReportViewer;
 
     public List<Person>? PersonList { get; set; } //data from URL not necessary provided
-    public string? SelectedPersonName { get; set; }
+    public string? SelectedPersonHash { get; set; }
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }
     private bool _isResultReady = false; //marks if the page ready to loaded
@@ -118,7 +116,7 @@
 
 
         //get data from inputs and save it for use by other components
-        SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
+        SelectedPerson = PersonList.Find(p => p.GetHashCode() == int.Parse(SelectedPersonHash)); 
 
         await _jsRuntime.AddToProgressBar(5);
 

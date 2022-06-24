@@ -5,7 +5,7 @@
 
 <div>
     <label>@Label</label>
-    <select @bind="SelectedPersonName" class="form-control">
+    <select @bind="SelectedPersonHash" class="form-control" style="width: fit-content;min-width: 273px;">
         <option value="">Select Name</option>
         @DropDownOptionsHtml
     </select>
@@ -16,8 +16,6 @@
 
     //DEFAULTS
     const string DefaultLabel = "Person";
-
-
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
 
 
@@ -28,26 +26,22 @@
     /// Get selected person name
     /// </summary>
     [Parameter]
-    public string SelectedPersonName
+    public string SelectedPersonHash
     {
-        get => _selectedPersonName;
+        get => _selectedPersonHash;
         set
         {
             //this stops update loops
-            if (_selectedPersonName == value) return;
-            _selectedPersonName = value;
+            if (_selectedPersonHash == value) return;
+            _selectedPersonHash = value;
             //update value in parent page
-            SelectedPersonNameChanged.InvokeAsync(value);
+            SelectedPersonHashChanged.InvokeAsync(value);
         }
     }
 
-    private string _selectedPersonName = "";
+    private string _selectedPersonHash = "0";
 
 
-    /// <summary>
-    /// Set list to show in drop down
-    /// </summary>
-    //private List<Person>? PersonList { get; set; } //data from URL not necessary provided
 
     /// <summary>
     /// Text that is shown above list
@@ -56,9 +50,9 @@
     public string? Label { get; set; } = DefaultLabel;
 
 
-    //below are needed for 2-way binding between page & component to work
+    //below prop needed for 2-way binding between page & component to work
     [Parameter]
-    public EventCallback<string> SelectedPersonNameChanged { get; set; }
+    public EventCallback<string> SelectedPersonHashChanged { get; set; }
 
 
     public void SetData(List<Person> personList)
@@ -68,7 +62,7 @@
         //generate drop down options in html
         foreach (var person in personList)
         {
-            html += $"<option value=\"{person.GetName()}\">{person.GetName()} - {person.BirthYear}</option>";
+            html += $"<option value=\"{person.GetHashCode()}\">{person.GetName()} - {person.BirthYear}</option>";
         }
 
         //set drop down list into view

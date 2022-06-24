@@ -19,14 +19,7 @@
             <option value="12">Dec</option>
         </select>
         <input @bind="_yearInput" type="number" class="form-control">
-
-@*        <select @ref="_yearDropdown" @bind="SelectedStartYear" class="form-control">
-            @foreach (var year in YearList)
-            {
-                <option value="@year">@year</option>
-            }
-        </select>
-*@    </div>
+    </div>
 </div>
 
 
@@ -40,7 +33,7 @@
     public string? LabelText { get; set; }
 
     //default to current year and month
-    private int _yearInput = DateTimeOffset.Now.Year; 
+    private int _yearInput = DateTimeOffset.Now.Year;
     private string? _selectedMonth = DateTimeOffset.Now.Month.ToString();
 
 

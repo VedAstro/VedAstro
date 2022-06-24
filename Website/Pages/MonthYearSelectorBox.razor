@@ -4,7 +4,7 @@
 <div>
     <label>@LabelText</label>
     <div class="hstack gap-2" style="min-width: 156px;width: fit-content;">
-        <select @ref="_monthDropdown" @bind="SelectedStartMonth" class="form-control">
+        <select @ref="_monthDropdown" @bind="_selectedMonth" class="form-control">
             <option value="01">Jan</option>
             <option value="02">Feb</option>
             <option value="03">Mar</option>
@@ -18,13 +18,15 @@
             <option value="11">Nov</option>
             <option value="12">Dec</option>
         </select>
-        <select @ref="_yearDropdown" @bind="SelectedStartYear" class="form-control">
+        <input @bind="_yearInput" type="number" class="form-control">
+
+@*        <select @ref="_yearDropdown" @bind="SelectedStartYear" class="form-control">
             @foreach (var year in YearList)
             {
                 <option value="@year">@year</option>
             }
         </select>
-    </div>
+*@    </div>
 </div>
 
 
@@ -37,9 +39,11 @@
     [Parameter]
     public string? LabelText { get; set; }
 
+    //default to current year and month
+    private int _yearInput = DateTimeOffset.Now.Year; 
+    private string? _selectedMonth = DateTimeOffset.Now.Month.ToString();
 
-    public string? SelectedStartMonth { get; set; }
-    public string? SelectedStartYear { get; set; }
+
     private ElementReference _monthDropdown;
     private ElementReference _yearDropdown;
 
@@ -54,7 +58,7 @@
     /// <returns></returns>
     public string GetSelectedTimeText()
     {
-        var compiledText = $"{SelectedStartMonth}/{SelectedStartYear}";
+        var compiledText = $"{_selectedMonth}/{_yearInput}";
         return compiledText;
     }
 

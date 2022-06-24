@@ -868,7 +868,7 @@ namespace API
 
             //the height for all lines, cursor, now & life events line
             //place below the last row
-            var totalHeight = 250; //hard set for now
+            var totalHeight = 240; //hard set for now
             var padding = 2;//space between rows
             var lineHeight = totalHeight + padding;
 
@@ -1122,7 +1122,7 @@ namespace API
             //used when generating dasa rows
             //note: changes needed only here
             const int _widthPerSlice = 1;
-            const int _heightPerSlice = 20;
+            const int _heightPerSlice = 15;
 
 
             //STEP 1 : GENERATE TIME HEADER ROWS
@@ -1137,6 +1137,7 @@ namespace API
             var antaramEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Antaram, eventDataList);
             var gocharaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Gochara, eventDataList);
             var tarabalaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Tarabala, eventDataList);
+            var chandrabalaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Chandrabala, eventDataList);
 
 
 
@@ -1149,7 +1150,9 @@ namespace API
             compiledRow += GenerateEventRowSvg(antaramEventList, timeSlices, antaramY, 0, _heightPerSlice, "Antaram");
             int tarabalaY = antaramY + _heightPerSlice + padding;
             compiledRow += GenerateEventRowSvg(tarabalaEventList, timeSlices, tarabalaY, 0, _heightPerSlice, "Tarabala");
-            int gocharaY = tarabalaY + _heightPerSlice + padding;
+            int chandrabalaY = tarabalaY + _heightPerSlice + padding;
+            compiledRow += GenerateEventRowSvg(chandrabalaEventList, timeSlices, chandrabalaY, 0, _heightPerSlice, "Chandrabala");
+            int gocharaY = chandrabalaY + _heightPerSlice + padding;
             compiledRow += GenerateGocharaSvg(gocharaEventList, timeSlices, eventsPrecision, gocharaY, 0, out int gocharaHeight); //because height changes
 
             //future passed to caller to draw line

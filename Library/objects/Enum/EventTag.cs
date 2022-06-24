@@ -28,6 +28,7 @@ namespace Genso.Astrology.Library
         Bhukti,
         Antaram,
         DasaSpecialRules,
-        Tarabala
+        Tarabala,
+        Chandrabala
     }
 }

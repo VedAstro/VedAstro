@@ -1,36 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--This file has to be manually uploaded to Azure for use by API-->
 <Root>
+
 	<!--This is the DATA list for MUHURTHA-->
 	<Event>
-		<Id>3</Id>
-		<Name>GoodChandrabala</Name>
-		<Nature>Good</Nature>
-		<Description>
-			To be at its best, the Moon should not
-			occupy in the election chart, a position that happens to
-			represent the 6th, 8th or 12th from the persons Janma Rasi
-		</Description>
-		<Tag>Personal</Tag>
-	</Event>
-	<Event>
-		<Id>4</Id>
-		<Name>BadChandrabala</Name>
-		<Nature>Bad</Nature>
-		<Description>
-			To be at its best, the Moon should not
-			occupy in the election chart, a position that happens to
-			represent the 6th, 8th or 12th from the persons Janma Rasi
-
-			Exceptions:
-			Chandrashtama (8th) shows no evil when the Moon is waxing and
-			occupies a benefic sign and a benefic Navamsa, or when there is
-			Tarabala. The sting is lost when the Moon and the 8th lord are friends.
-		</Description>
-		<Tag>Personal</Tag>
-	</Event>
-	<Event>
-		<Id>12</Id>
 		<Name>AmritaSiddhaYoga</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -41,7 +14,6 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>13</Id>
 		<Name>PanchangaSuddhi</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -72,7 +44,6 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>14</Id>
 		<Name>UgraYoga</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -85,7 +56,6 @@
 		<Tag>Medical</Tag>
 	</Event>
 	<Event>
-		<Id>15</Id>
 		<Name>SuryaSankramana</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -103,7 +73,6 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>17</Id>
 		<Name>KarthariDosha</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -115,7 +84,6 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>18</Id>
 		<Name>ShashtashtaRiphagathaChandraDosha</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -126,7 +94,6 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>19</Id>
 		<Name>SagrahaChandraDosha</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -137,7 +104,6 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>20</Id>
 		<Name>UdayasthaSuddhi</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -151,7 +117,6 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>21</Id>
 		<Name>SiddhaYoga</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -161,14 +126,14 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>22</Id>
+
 		<Name>SakunaKarana</Name>
 		<Nature>Good</Nature>
 		<Description>For getting initiations into mantras Sakini Karana is propitious</Description>
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>23</Id>
+
 		<Name>BadNithyaYoga</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -179,7 +144,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>24</Id>
+
 		<Name>LagnaThyajya</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -195,7 +160,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+
 		<Name>GoodPanchaka</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -216,7 +181,6 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>26</Id>
 		<Name>BadPanchaka</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -236,35 +200,34 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>27</Id>
 		<Name>BadTaraChandraPanchaka</Name>
 		<Nature>Bad</Nature>
 		<Description>Very bad time for any important works. Bad tarabala, bad chandrabala and bad panchaka.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>28</Id>
+
 		<Name>GoodTaraChandraPanchaka</Name>
 		<Nature>Good</Nature>
 		<Description>Very good time for any important works. Good tarabala, good chandrabala and good panchaka.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>29</Id>
+
 		<Name>BadTaraChandra</Name>
 		<Nature>Bad</Nature>
 		<Description>Generally bad time for important works. Bad tarabala &amp; bad chandrabala </Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>30</Id>
+
 		<Name>GoodTaraChandra</Name>
 		<Nature>Good</Nature>
 		<Description>Generally good time for important works. Good tarabala &amp; good chandrabala </Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>31</Id>
+
 		<Name>BhriguShatka</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -275,7 +238,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>32</Id>
+
 		<Name>Kujasthama</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -287,7 +250,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>33</Id>
+
 		<Name>GoodHairCutting</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -301,7 +264,7 @@
 		<Tag>HairNailCutting</Tag>
 	</Event>
 	<Event>
-		<Id>34</Id>
+
 		<Name>GoodNailCutting</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -311,7 +274,7 @@
 		<Tag>HairNailCutting</Tag>
 	</Event>
 	<Event>
-		<Id>35</Id>
+
 		<Name>FixedConstellationRuling</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -323,7 +286,7 @@
 		<Tag>RulingConstellation</Tag>
 	</Event>
 	<Event>
-		<Id>36</Id>
+
 		<Name>SoftConstellationRuling</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -334,7 +297,7 @@
 		<Tag>RulingConstellation</Tag>
 	</Event>
 	<Event>
-		<Id>37</Id>
+
 		<Name>LightConstellationRuling</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -345,7 +308,7 @@
 		<Tag>RulingConstellation</Tag>
 	</Event>
 	<Event>
-		<Id>38</Id>
+
 		<Name>SharpConstellationRuling</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -356,7 +319,7 @@
 		<Tag>RulingConstellation</Tag>
 	</Event>
 	<Event>
-		<Id>39</Id>
+
 		<Name>MovableConstellationRuling</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -367,7 +330,7 @@
 		<Tag>RulingConstellation</Tag>
 	</Event>
 	<Event>
-		<Id>40</Id>
+
 		<Name>DreadfulConstellationRuling</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -378,7 +341,7 @@
 		<Tag>RulingConstellation</Tag>
 	</Event>
 	<Event>
-		<Id>41</Id>
+
 		<Name>MixedConstellationRuling</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -388,7 +351,7 @@
 		<Tag>RulingConstellation</Tag>
 	</Event>
 	<Event>
-		<Id>42</Id>
+
 		<Name>BadForStartingAllAgriculture</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -397,7 +360,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>43</Id>
+
 		<Name>LagnaLordIsWeekdayLord</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -406,7 +369,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>44</Id>
+
 		<Name>GoodLunarDayAgriculture</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -415,7 +378,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>45</Id>
+
 		<Name>BadLagnaForAllAgriculture</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -425,7 +388,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>46</Id>
+
 		<Name>GoodYogaForAllAgriculture</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -438,7 +401,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>47</Id>
+
 		<Name>GoodAnySeedsSowing</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -451,7 +414,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>48</Id>
+
 		<Name>Ekadashi</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -460,7 +423,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>49</Id>
+
 		<Name>NotAuspiciousDay</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -470,7 +433,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>50</Id>
+
 		<Name>GoodPlanetsInLagna</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -479,7 +442,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>51</Id>
+
 		<Name>GoodForPlantingFloweringPlants</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -489,7 +452,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>52</Id>
+
 		<Name>GoodForPlantingGarlic</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -499,7 +462,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>53</Id>
+
 		<Name>GoodForPlantingPeachAndOthers</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -509,7 +472,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>54</Id>
+
 		<Name>GoodForPlantingTomatoesAndOthers</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -520,7 +483,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>55</Id>
+
 		<Name>GoodForPlantingGrains</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -530,7 +493,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>56</Id>
+
 		<Name>GoodForPlantingOnionAndOthers</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -540,7 +503,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>57</Id>
+
 		<Name>GoodForPlantingPepperAndOthers</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -550,7 +513,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>58</Id>
+
 		<Name>GoodForPlantingPotatoAndOthers</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -560,7 +523,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>59</Id>
+
 		<Name>GoodForPlantingGrainsAndOthers</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -570,7 +533,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>60</Id>
+
 		<Name>GoodForPlantingPumpkinsAndOthers</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -580,7 +543,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>61</Id>
+
 		<Name>GoodForPlantingTrees</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -590,7 +553,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>62</Id>
+
 		<Name>GoodForPlantingSugarcane</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -600,7 +563,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>63</Id>
+
 		<Name>GoodForPlantingFlowerSeeds</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -611,7 +574,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>64</Id>
+
 		<Name>GoodForPlantingFruitTrees</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -623,7 +586,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>65</Id>
+
 		<Name>GoodForPlantingFlowerTrees</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -633,7 +596,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>66</Id>
+
 		<Name>GoodForPlantingFlowers</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -643,7 +606,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>67</Id>
+
 		<Name>GoodForPlantingFlowerCuttings</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -653,7 +616,7 @@
 		<Tag>Agriculture</Tag>
 	</Event>
 	<Event>
-		<Id>68</Id>
+
 		<Name>GoodRullingConstellation</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -663,7 +626,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>69</Id>
+
 		<Name>BadRullingConstellation</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -688,7 +651,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>70</Id>
+
 		<Name>GoodTakingInjections</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -700,7 +663,7 @@
 		<Tag>Medical</Tag>
 	</Event>
 	<Event>
-		<Id>71</Id>
+
 		<Name>GoodSellingForProfit</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -714,7 +677,7 @@
 		<Tag>BuyingSelling</Tag>
 	</Event>
 	<Event>
-		<Id>72</Id>
+
 		<Name>BavaKarana</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -723,7 +686,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>73</Id>
+
 		<Name>TaitulaKarana</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -732,7 +695,7 @@
 		<Tag>Marriage</Tag>
 	</Event>
 	<Event>
-		<Id>74</Id>
+
 		<Name>BhadraKarana</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -742,7 +705,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>75</Id>
+
 		<Name>JanmaNakshatraRulling</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -757,7 +720,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>76</Id>
+
 		<Name>SunIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -765,7 +728,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>77</Id>
+
 		<Name>MoonIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -773,7 +736,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>78</Id>
+
 		<Name>MarsIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -781,7 +744,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>79</Id>
+
 		<Name>MercuryIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -789,7 +752,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>80</Id>
+
 		<Name>JupiterIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -797,7 +760,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>81</Id>
+
 		<Name>VenusIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -805,7 +768,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>82</Id>
+
 		<Name>SaturnIsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -813,7 +776,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>83</Id>
+
 		<Name>House1IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -821,7 +784,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>84</Id>
+
 		<Name>House2IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -829,7 +792,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>85</Id>
+
 		<Name>House3IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -837,7 +800,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>86</Id>
+
 		<Name>House4IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -845,7 +808,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>87</Id>
+
 		<Name>House5IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -853,7 +816,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>88</Id>
+
 		<Name>House6IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -861,7 +824,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>89</Id>
+
 		<Name>House7IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -869,7 +832,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>90</Id>
+
 		<Name>House8IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -877,7 +840,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>91</Id>
+
 		<Name>House9IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -885,7 +848,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>92</Id>
+
 		<Name>House10IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -893,7 +856,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>93</Id>
+
 		<Name>House11IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -901,7 +864,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>94</Id>
+
 		<Name>House12IsStrong</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -909,7 +872,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>95</Id>
+
 		<Name>BadForBuyingToolsUtensilsJewellery</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -923,7 +886,7 @@
 		<Tag>BuyingSelling</Tag>
 	</Event>
 	<Event>
-		<Id>95</Id>
+
 		<Name>GoodForBuyingBrassVessels</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -936,7 +899,7 @@
 		<Tag>BuyingSelling</Tag>
 	</Event>
 	<Event>
-		<Id>96</Id>
+
 		<Name>GoodForBuyingCopperVessels</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -949,7 +912,7 @@
 		<Tag>BuyingSelling</Tag>
 	</Event>
 	<Event>
-		<Id>97</Id>
+
 		<Name>GoodForBuyingSteelIronVessels</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -962,7 +925,7 @@
 		<Tag>BuyingSelling</Tag>
 	</Event>
 	<Event>
-		<Id>98</Id>
+
 		<Name>GoodForBuyingSilverVessels</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -975,7 +938,7 @@
 		<Tag>BuyingSelling</Tag>
 	</Event>
 	<Event>
-		<Id>99</Id>
+
 		<Name>GoodForBuyingJewellery</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -986,7 +949,7 @@
 		<Tag>BuyingSelling</Tag>
 	</Event>
 	<Event>
-		<Id>100</Id>
+
 		<Name>GoodPlanetsIn11th</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -996,7 +959,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>101</Id>
+
 		<Name>GoodPlanetsInKendra</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1007,7 +970,7 @@
 		<Tag>General</Tag>
 	</Event>
 	<Event>
-		<Id>102</Id>
+
 		<Name>Sunrise</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1027,7 +990,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>103</Id>
+
 		<Name>Sunset</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1047,7 +1010,7 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 	<Event>
-		<Id>104</Id>
+
 		<Name>Midday</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1058,9 +1021,40 @@
 		<Tag>Astronomical</Tag>
 	</Event>
 
-	<!--Tarabala Start-->
+
+
+
+	<!--CHANDRABALA-->
 	<Event>
-		<Id>105</Id>
+		<Name>GoodChandrabala</Name>
+		<Nature>Good</Nature>
+		<Description>
+			To be at its best, the Moon should not
+			occupy in the election chart, a position that happens to
+			represent the 6th, 8th or 12th from the persons Janma Rasi
+		</Description>
+		<Tag>Personal,Chandrabala</Tag>
+	</Event>
+	<Event>
+		<Name>BadChandrabala</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			To be at its best, the Moon should not
+			occupy in the election chart, a position that happens to
+			represent the 6th, 8th or 12th from the persons Janma Rasi
+
+			Exceptions:
+			Chandrashtama (8th) shows no evil when the Moon is waxing and
+			occupies a benefic sign and a benefic Navamsa, or when there is
+			Tarabala. The sting is lost when the Moon and the 8th lord are friends.
+		</Description>
+		<Tag>Personal,Chandrabala</Tag>
+	</Event>
+
+
+	<!--TARABALA-->
+	<Event>
+
 		<Name>TarabalaJanmaStrong</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1070,7 +1064,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>106</Id>
+
 		<Name>TarabalaJanmaMiddling</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1080,7 +1074,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>107</Id>
+
 		<Name>TarabalaJanmaWeak</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1091,7 +1085,7 @@
 	</Event>
 
 	<Event>
-		<Id>108</Id>
+
 		<Name>TarabalaSampatStrong</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1101,7 +1095,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>109</Id>
+
 		<Name>TarabalaSampatMiddling</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1111,7 +1105,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>110</Id>
+
 		<Name>TarabalaSampatWeak</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1122,7 +1116,7 @@
 	</Event>
 
 	<Event>
-		<Id>111</Id>
+
 		<Name>TarabalaVipatStrong</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1136,7 +1130,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>112</Id>
+
 		<Name>TarabalaVipatMiddling</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1150,7 +1144,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>113</Id>
+
 		<Name>TarabalaVipatWeak</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1165,7 +1159,7 @@
 	</Event>
 
 	<Event>
-		<Id>114</Id>
+
 		<Name>TarabalaKshemaStrong</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1175,7 +1169,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>115</Id>
+
 		<Name>TarabalaKshemaMiddling</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1185,7 +1179,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>116</Id>
+
 		<Name>TarabalaKshemaWeak</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1196,7 +1190,7 @@
 	</Event>
 
 	<Event>
-		<Id>117</Id>
+
 		<Name>TarabalaPratyakStrong</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1206,7 +1200,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>118</Id>
+
 		<Name>TarabalaPratyakMiddling</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1216,7 +1210,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>119</Id>
+
 		<Name>TarabalaPratyakWeak</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1227,7 +1221,7 @@
 	</Event>
 
 	<Event>
-		<Id>120</Id>
+
 		<Name>TarabalaSadhanaStrong</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1237,7 +1231,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>121</Id>
+
 		<Name>TarabalaSadhanaMiddling</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1247,7 +1241,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>122</Id>
+
 		<Name>TarabalaSadhanaWeak</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1258,7 +1252,7 @@
 	</Event>
 
 	<Event>
-		<Id>123</Id>
+
 		<Name>TarabalaNaidhanaStrong</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1272,7 +1266,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>124</Id>
+
 		<Name>TarabalaNaidhanaMiddling</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1286,7 +1280,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>125</Id>
+
 		<Name>TarabalaNaidhanaWeak</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1301,7 +1295,7 @@
 	</Event>
 
 	<Event>
-		<Id>126</Id>
+
 		<Name>TarabalaMitraStrong</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1311,7 +1305,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>127</Id>
+
 		<Name>TarabalaMitraMiddling</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1321,7 +1315,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>128</Id>
+
 		<Name>TarabalaMitraWeak</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1332,7 +1326,7 @@
 	</Event>
 
 	<Event>
-		<Id>129</Id>
+
 		<Name>TarabalaParamaMitraStrong</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1342,7 +1336,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>130</Id>
+
 		<Name>TarabalaParamaMitraMiddling</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1352,7 +1346,7 @@
 		<Tag>Personal,Tarabala</Tag>
 	</Event>
 	<Event>
-		<Id>131</Id>
+
 		<Name>TarabalaParamaMitraWeak</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1365,7 +1359,7 @@
 
 	<!--Others-->
 	<Event>
-		<Id>132</Id>
+
 		<Name>Papashadvargas</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1378,7 +1372,7 @@
 
 	<!--Buying & Selling-->
 	<Event>
-		<Id>133</Id>
+
 		<Name>GoodMoonSignForSelling</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -1388,7 +1382,7 @@
 		<Tag>BuyingSelling</Tag>
 	</Event>
 	<Event>
-		<Id>134</Id>
+
 		<Name>GoodWeekdayForSelling</Name>
 		<Nature>Good</Nature>
 		<Description>
@@ -3694,7 +3688,8 @@
 	<Event>
 		<Name>SunDasaMarsBhukti</Name>
 		<Nature>Good</Nature>
-		<Description>Mars' sub-period-4 months, 6 days.
+		<Description>
+			Mars' sub-period-4 months, 6 days.
 			Rheumatic and similar troubles, quarrels, danger of
 			enteric fever, dysentery, troubles to relatives, loss of money
 			by thefts or wasteful expenses, failures, acquisition of wealth
@@ -3708,7 +3703,8 @@
 	<Event>
 		<Name>SunDasaRahuBhukti</Name>
 		<Nature>Good</Nature>
-		<Description>Rahu's sub-period -10 months, 24 days.
+		<Description>
+			Rahu's sub-period -10 months, 24 days.
 			Many troubles, changes according to the position of Rahu,
 			family disputes, journeys, pang of death, trouble from
 			relatives and enemies, loss of peace or mental misery, loss of
@@ -3720,7 +3716,8 @@
 	<Event>
 		<Name>SunDasaJupiterBhukti</Name>
 		<Nature>Good</Nature>
-		<Description>Jupiter's sub-perlod-9 months, 18 days.
+		<Description>
+			Jupiter's sub-perlod-9 months, 18 days.
 			Benefits from friends and acquaintances, increase in education,
 			employment in high circles, association with people of
 			high rank, success through obstacles, birth of a child, wealth
@@ -4500,7 +4497,7 @@
 		<Name>MercuryDasaMercuryBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Mercury's sub-period - 2 years, 4 months, 27 
+			Mercury's sub-period - 2 years, 4 months, 27
 			Acquisition of beautiful house and apparel. money through
 			relatives, success in every undertaking, the birth of a brother
 			or sister. increase in family, gain in business, good mind

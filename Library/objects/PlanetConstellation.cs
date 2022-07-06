@@ -18,7 +18,6 @@ namespace Genso.Astrology.Library
         private readonly ConstellationName _name;
         private readonly int _quarter;
         private readonly Angle _degreeInConstellation;
-        //private readonly double _bodyPosition;
 
 
         //CTOR
@@ -109,6 +108,7 @@ namespace Genso.Astrology.Library
 
         public override string ToString()
         {
+            //todo can add degrees in constellation if needed
             return $"{_name} - {_quarter}";
         }
 

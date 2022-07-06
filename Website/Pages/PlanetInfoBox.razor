@@ -4,7 +4,11 @@
 <ul style="font-size: small;" class="list-group me-2 my-2">
     <li class="list-group-item active" aria-current="true">@PlanetName.ToString()</li>
     <li class="list-group-item">Shadbala Pinda : @_shadbalaPinda</li>
-    <li class="list-group-item">Current House : @_planetCurrentHouse</li>
+    <li class="list-group-item">Aspect Strength : @_planetAspectStrength</li>
+    <li class="list-group-item">House : @_planetCurrentHouse</li>
+    <li class="list-group-item">Sign : @_planetCurrentSign</li>
+    <li class="list-group-item">Navamsa Sign : @_planetCurrentNavamsaSign</li>
+    <li class="list-group-item">Constellation : @_planetCurrentConstellation</li>
     <li class="list-group-item">Relation to House: @_currentHouseRelation</li>
     <li class="list-group-item">Malefic Aspect: @(_isPlanetAspectedByMaleficPlanets?"Yes":"No")</li>
     <li class="list-group-item">Malefic Conjuct: @(_isPlanetConjunctWithMaleficPlanets?"Yes":"No")</li>
@@ -19,7 +23,11 @@
     private bool _isPageReady = false; //marks if the page ready to loaded
 
     private double _shadbalaPinda;
+    private double _planetAspectStrength;
     private int _planetCurrentHouse;
+    private string _planetCurrentSign;
+    private string _planetCurrentConstellation;
+    private string _planetCurrentNavamsaSign;
     private PlanetToSignRelationship _currentHouseRelation;
     private bool _isPlanetAspectedByMaleficPlanets;
     private bool _isPlanetConjunctWithMaleficPlanets;
@@ -34,9 +42,22 @@
     {
         //get planet details and save it for view
         _shadbalaPinda = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName, Time).ToDouble();
+        _planetAspectStrength = AstronomicalCalculator.GetPlanetDrikBala(PlanetName, Time).ToDouble();
+
+
         _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(Time, PlanetName);
+        
+        _planetCurrentSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName, Time).ToString();
+        
+        _planetCurrentNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(PlanetName, Time).ToString();
+        
+        _planetCurrentConstellation = AstronomicalCalculator.GetPlanetConstellation(Time, PlanetName).ToString();
+        
+        
         _currentHouseRelation = AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, PlanetName, Time);
+        
         _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(PlanetName, Time);
+        
         _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(PlanetName, Time);
 
     }

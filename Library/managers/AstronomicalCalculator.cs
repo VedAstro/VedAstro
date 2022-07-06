@@ -249,7 +249,7 @@ namespace Genso.Astrology.Library
         /// Gets info about the constellation at a given longitude, ie. Constellation Name,
         /// Quarter, Degrees in constellation, etc.
         /// </summary>
-        public static PlanetConstellation GetPlanetConstellation(Angle planetLongitude)
+        public static PlanetConstellation GetConstellationAtLongitude(Angle planetLongitude)
         {
 
             //CACHE MECHANISM
@@ -1622,13 +1622,21 @@ namespace Genso.Astrology.Library
 
         }
 
-        public static PlanetConstellation GetMoonConstellation(Time time)
-        {
-            //get position of moon in longitude
-            Angle moonLongitude = GetPlanetNirayanaLongitude(time, PlanetName.Moon);
+        /// <summary>
+        /// Gets constellation behind the moon (shortcut function)
+        /// </summary>
+        public static PlanetConstellation GetMoonConstellation(Time time) => GetPlanetConstellation(time, PlanetName.Moon);
 
-            //return the constellation behind the moon
-            return GetPlanetConstellation(moonLongitude);
+        /// <summary>
+        /// Gets the constellation behind a planet at a given time
+        /// </summary>
+        public static PlanetConstellation GetPlanetConstellation(Time time, PlanetName planet)
+        {
+            //get position of planet in longitude
+            var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
+
+            //return the constellation behind the planet
+            return GetConstellationAtLongitude(planetLongitude);
         }
 
         public static Tarabala GetTarabala(Time time, Person person)

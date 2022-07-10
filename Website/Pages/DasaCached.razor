@@ -7,7 +7,7 @@
 <div class="vstack gap-2">
     @*PERSON SELECTOR*@
     <div>
-        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonName="SelectedPersonName" />
+        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonHash="SelectedPersonName" />
     </div>
     @*CALCULATE BTN*@
     <div>
@@ -67,7 +67,7 @@
     private PeopleSelectorBox? _peopleSelectorBox;
     private DasaReportViewerCached? _dasaReportViewer;
 
-    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
+    //public List<Person>? PersonList { get; set; } //data from URL not necessary provided
     public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }
@@ -92,16 +92,16 @@
     private async Task InitPage()
     {
 
-        //show loading box
-        await _globalVariable.LoadingMessage.Show();
+        ////show loading box
+        //await _globalVariable.LoadingMessage.Show();
 
-        //set people list into people selector
-        //note : without above first call _peopleSelectorBox is null
-        PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
-        _peopleSelectorBox.SetData(PersonList);
+        ////set people list into people selector
+        ////note : without above first call _peopleSelectorBox is null
+        //PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        //_peopleSelectorBox.SetData(PersonList);
 
-        //hide loading box
-        await _globalVariable.LoadingMessage.Hide();
+        ////hide loading box
+        //await _globalVariable.LoadingMessage.Hide();
     }
 
 
@@ -110,7 +110,7 @@
         await _globalVariable.LoadingMessage.Show();
 
         //get data from inputs and save it for use by other components
-        SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
+        SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
 
         await _jsRuntime.AddToProgressBar(5);
 

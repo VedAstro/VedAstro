@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Genso.Astrology.Library;
 
-namespace Horoscope.Desktop
+namespace Website
 {
     public static class HoroscopeCore
     {
@@ -29,7 +25,7 @@ namespace Horoscope.Desktop
         /** PUBLIC METHODS **/
         public static List<Person> GetAllPeopleList() => DatabaseManager.GetPersonList(PersonFilePath);
 
-        public static List<Prediction> GetPrediction(Person person)
+        public static async Task<List<HoroscopePrediction>> GetPrediction(Person person, Stream predictionDataList)
         {
             //note: modified to use birth time as start & end time
             var startStdTime = person.BirthTime.GetStdDateTimeOffset();
@@ -38,25 +34,22 @@ namespace Horoscope.Desktop
             var location = person.GetBirthLocation();
 
             //get list of event data to check for event
-            var eventDataList = DatabaseManager.GetPredictionDataList(PredictionFilePath);
-
-            //pass thread canceler General, so that methods inside can be stopped if needed
-            EventManager.threadCanceler = threadCanceler;
+            var eventDataList = DatabaseManager.GetPredictionDataList(predictionDataList);
 
             //start calculating predictions
             var predictionList = GetListOfPredictionInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute1, eventDataList);
 
             //fire event to let others know event calculation is done
-            EventCalculationCompleted.Invoke();
+            //EventCalculationCompleted.Invoke();
 
             return predictionList;
         }
 
         /// <summary>
-        /// Get list of predictions occurrig in a time periode for all the
+        /// Get list of predictions occurring in a time period for all the
         /// inputed prediction types aka "prediction data"
         /// </summary>
-        public static List<Prediction> GetListOfPredictionInTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
+        public static List<HoroscopePrediction> GetListOfPredictionInTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
         {
             //get data to instantiate muhurtha time period
             //get start & end times
@@ -65,7 +58,7 @@ namespace Horoscope.Desktop
 
 
             //initialize empty list of event to return
-            List<Prediction> eventList = new();
+            List<HoroscopePrediction> eventList = new();
 
             //split time into slices based on precision
             List<Time> timeList = GetTimeListFromRange(startTime, endTime, precisionInHours);
@@ -99,7 +92,7 @@ namespace Horoscope.Desktop
             catch (Exception e) when (e.InnerException.GetType() == typeof(OperationCanceledException))
             {
                 //return empty list
-                return new List<Prediction>();
+                return new List<HoroscopePrediction>();
             }
 
 
@@ -125,12 +118,12 @@ namespace Horoscope.Desktop
         /// <summary>
         /// Get a list of events in a time period for a single event type aka "event data"
         /// Decision on when event starts & ends is also done here
-        /// Event Data + Time = Prediction
+        /// Event Data + Time = HoroscopePrediction
         /// </summary>
-        private static List<Prediction> GetPredictionListByEventData(EventData eventData, Person person, List<Time> timeList)
+        private static List<HoroscopePrediction> GetPredictionListByEventData(EventData eventData, Person person, List<Time> timeList)
         {
             //declare empty event list to fill
-            var eventList = new List<Prediction>();
+            var eventList = new List<HoroscopePrediction>();
 
             //set previous time as false for first time instance
             var eventOccuredInPreviousTime = false;
@@ -175,7 +168,7 @@ namespace Horoscope.Desktop
                 else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
                 {
                     //add previous event to list
-                    var newEvent = new Prediction(eventData.GetName(),
+                    var newEvent = new HoroscopePrediction(eventData.GetName(),
                         eventData.GetNature(),
                         eventData.GetDescription(),
                         eventData.GetStrength(),
@@ -196,7 +189,7 @@ namespace Horoscope.Desktop
                 if (eventIsOccuringNow == true & time == lastInstanceOfTime)
                 {
                     //add current event to list
-                    var newEvent2 = new Prediction(eventData.GetName(),
+                    var newEvent2 = new HoroscopePrediction(eventData.GetName(),
                         eventData.GetNature(),
                         eventData.GetDescription(),
                         eventData.GetStrength(),

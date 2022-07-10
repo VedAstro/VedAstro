@@ -16,8 +16,8 @@
 
 
 <div class="vstack gap-3">
-    <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonName="@SelectedMale" Label="Male" />
-    <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonName="@SelectedFemale" Label="Female" />
+    <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonHash="@SelectedMale" Label="Male" />
+    <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonHash="@SelectedFemale" Label="Female" />
     <IconButton IconName="uim:process" ButtonText="Calculate" ClickUrl="@($"{PageRoute.MatchReport}/{SelectedMale}/{SelectedFemale}")"></IconButton>
 </div>
 
@@ -43,8 +43,8 @@
             await _globalVariable.LoadingMessage.Show();
 
             //get male list from api server & save it for later
-            _malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime)));
-            _femalePeopleSelector.SetData(await WebsiteTools.GetFemalePeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime)));
+            //_malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime)));
+            //_femalePeopleSelector.SetData(await WebsiteTools.GetFemalePeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime)));
 
             //hide loading box
             await _globalVariable.LoadingMessage.Hide();

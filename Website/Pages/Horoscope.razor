@@ -1,18 +1,71 @@
 ﻿@page "/horoscope"
+@using System.Xml.Linq
+@using QuickGrid
+@inject HttpClient _client
 
-<PageTitle>Read your Horoscope</PageTitle>
+<PageTitle>Horoscope</PageTitle>
 
-<h1>Counter</h1>
+<div class="vstack gap-4">
 
-<p role="status">Current count: @_currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    <div class="hstack gap-3">
+        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonHash="SelectedPersonHash" />
+        <button class="btn btn-primary" style="align-self: end;" @onclick="CalculateButtonClicked">Calculate</button>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prediction in _horoscopePredictions)
+            {
+                <tr>
+                    <td>@prediction.Name</td>
+                    <td>@prediction.Description</td>
+                    <td>@prediction.Strength</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
 
 @code {
-    private int _currentCount = 0;
 
-    private void IncrementCount()
+    private PeopleSelectorBox? _peopleSelectorBox;
+    public string? SelectedPersonHash { get; set; }
+    private List<HoroscopePrediction> _horoscopePredictions = new();
+
+
+
+    private async Task CalculateButtonClicked()
     {
-        _currentCount++;
+        //todo progress bar does not move, because computation hogs progress calc 
+        //await _globalVariable.LoadingMessage.DisableProgressBar();
+        await _globalVariable.LoadingMessage.Show();
+
+        await CalculateAndUpdateEvents();
+
+        await _globalVariable.LoadingMessage.Hide();
     }
+
+    private async Task CalculateAndUpdateEvents()
+    {
+        //get person from person dropdown
+        var person = _peopleSelectorBox.GetSelectedPerson();
+
+        //get main horoscope prediction file
+        var predictionDataList = await _client.GetStreamAsync("data/PredictionDataList.xml");
+
+        //calculate predictions for current person (client side)
+        _horoscopePredictions = await HoroscopeCore.GetPrediction(person, predictionDataList);
+
+        StateHasChanged();
+    }
+
 }

@@ -163,13 +163,12 @@ namespace Horoscope.Desktop
         {
             //get all the needed values
             var person = gui.MainGrid.EventOptions.SelectedPerson;
-            var tag = gui.MainGrid.EventOptions.SelectedTag;
 
             //pass thread canceler MuhurthaCore, so that methods inside can be stopped if needed
             HoroscopeCore.threadCanceler = (CancellationToken)threadCanceler;
 
             //calculate events from values
-            var events = HoroscopeCore.GetPrediction(person, tag);
+            var events = HoroscopeCore.GetPrediction(person);
 
             //set event into view
             gui.MainGrid.EventView.EventList = events;

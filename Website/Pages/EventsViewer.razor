@@ -18,7 +18,7 @@
 <div class="vstack gap-2">
     @*PERSON SELECTOR*@
     <div>
-        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonName="SelectedPersonName" />
+        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonHash="SelectedPersonName" />
     </div>
     <div class="hstack">
         <div class="col-5">
@@ -72,7 +72,7 @@
     private GeoLocationInput _geoLocationInput;
     public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
-    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
+    //public List<Person>? PersonList { get; set; } //data from URL not necessary provided
     private PeopleSelectorBox? _peopleSelectorBox;
 
 
@@ -120,8 +120,8 @@
 
         //set people list into people selector
         //note : without above first call _peopleSelectorBox is null
-        PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
-        _peopleSelectorBox.SetData(PersonList);
+        //PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        //_peopleSelectorBox.SetData(PersonList);
 
         //set defaults
         _startHourMinInput = "00:00";
@@ -156,7 +156,7 @@
 
 
         //get data from inputs and save it for use by other components
-        SelectedPerson = PersonList.Find(p => p.GetName() == SelectedPersonName); //TODO: find person by hash not name only
+        SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
 
         await _jsRuntime.AddToProgressBar( 5);
 

@@ -17,6 +17,36 @@
     //DEFAULTS
     const string DefaultLabel = "Person";
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
+    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
+
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try();
+
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
+    private async Task InitPage()
+    {
+
+        //show loading box
+        await _globalVariable.LoadingMessage.Show();
+
+        //set people list into people selector
+        //note : without above first call _peopleSelectorBox is null
+        PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        this.FillDropDown(PersonList);
+
+        //hide loading box
+        await _globalVariable.LoadingMessage.Hide();
+    }
 
 
 
@@ -55,7 +85,7 @@
     public EventCallback<string> SelectedPersonHashChanged { get; set; }
 
 
-    public void SetData(List<Person> personList)
+    private void FillDropDown(List<Person> personList)
     {
         var html = "";
 
@@ -71,6 +101,11 @@
         //need to propagate changes
         this.StateHasChanged();
 
+    }
+
+    public Person GetSelectedPerson()
+    {
+        return PersonList.Find(p => p.GetHashCode() == int.Parse(SelectedPersonHash));
     }
 
 }

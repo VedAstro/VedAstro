@@ -6,11 +6,11 @@
 
 <div class="vstack gap-2">
     @*PERSON SELECTOR
-        note: selector placed here because multiple components use it
+    note: selector placed here because multiple components use it
     *@
     <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonHash="SelectedPersonHash" />
-    <MonthYearSelectorBox LabelText="Start"  @ref="_startTimeSelector"/>
-    <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector"/>
+    <MonthYearSelectorBox LabelText="Start" @ref="_startTimeSelector" />
+    <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
 
     @*CALCULATE BTN*@
     <div>
@@ -68,10 +68,10 @@
     //--------------------FIELDS
 
     private PeopleSelectorBox? _peopleSelectorBox;
+    public string? SelectedPersonHash { get; set; }
+
     private DasaReportViewer? _dasaReportViewer;
 
-    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
-    public string? SelectedPersonHash { get; set; }
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }
     private bool _isResultReady = false; //marks if the page ready to loaded
@@ -96,17 +96,17 @@
 
     private async Task InitPage()
     {
+        //todo below marked for deletion 10/1/2022
+        ////show loading box
+        //await _globalVariable.LoadingMessage.Show();
 
-        //show loading box
-        await _globalVariable.LoadingMessage.Show();
+        ////set people list into people selector
+        ////note : without above first call _peopleSelectorBox is null
+        //PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        //_peopleSelectorBox.SetData(PersonList);
 
-        //set people list into people selector
-        //note : without above first call _peopleSelectorBox is null
-        PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
-        _peopleSelectorBox.SetData(PersonList);
-
-        //hide loading box
-        await _globalVariable.LoadingMessage.Hide();
+        ////hide loading box
+        //await _globalVariable.LoadingMessage.Hide();
     }
 
 
@@ -114,9 +114,8 @@
     {
         await _globalVariable.LoadingMessage.Show();
 
-
         //get data from inputs and save it for use by other components
-        SelectedPerson = PersonList.Find(p => p.GetHashCode() == int.Parse(SelectedPersonHash)); 
+        SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
 
         await _jsRuntime.AddToProgressBar(5);
 
@@ -148,7 +147,7 @@
             //split month and year
             string[] splited = monthYearText.Split('/');
             var month = int.Parse(splited[0]);
-            var year =int.Parse(splited[1]);
+            var year = int.Parse(splited[1]);
 
             int daysInMonth = DateTime.DaysInMonth(year: year, month: month);
             return daysInMonth;

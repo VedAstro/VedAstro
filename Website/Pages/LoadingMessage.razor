@@ -18,7 +18,7 @@
 
 
 <div @ref="_loadingMessage" style="display: none;">
-    <div class="modal fade show" tabindex="-1" role="dialog" style="display: block; left: 90px;" aria-modal="true" >
+    <div class="modal fade show" tabindex="-1" role="dialog" style="display: block; left: 90px;" aria-modal="true">
         <div class="modal-dialog modal-dialog-centered" style="width: fit-content;" role="document">
             <div class="modal-content">
                 <div class="modal-body align-content-center" style="text-align: center;">
@@ -93,9 +93,9 @@
 
         _isOpen = true;
 
-        
-    //---------------- FUNCTIONS-------------
-       
+
+        //---------------- FUNCTIONS-------------
+
         async Task RunAfterDelay(int delayMs)
         {
             //wait a little for progress to be set by caller
@@ -136,4 +136,9 @@
         _isOpen = false;
     }
 
+
+    /// <summary>
+    /// Sets Progress bar
+    /// </summary>
+    public async Task SetProgress(int val) => await _jsRuntime.AddToProgressBar(val);
 }

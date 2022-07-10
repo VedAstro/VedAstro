@@ -61,6 +61,9 @@
         //get main horoscope prediction file
         var predictionDataList = await _client.GetStreamAsync("data/PredictionDataList.xml");
 
+        Console.WriteLine("PREDICTION STREAM!");
+        Console.WriteLine(predictionDataList.Length);
+
         //calculate predictions for current person (client side)
         _horoscopePredictions = await HoroscopeCore.GetPrediction(person, predictionDataList);
 

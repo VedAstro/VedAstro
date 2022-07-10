@@ -7,16 +7,12 @@
     <RootNamespace>Website</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <Compile Remove="Pages\Horoscope.razor\**" />
     <Content Remove="Pages\Horoscope.razor\**" />
     <EmbeddedResource Remove="Pages\Horoscope.razor\**" />
     <None Remove="Pages\Horoscope.razor\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="wwwroot\data\PredictionDataList.xml" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <PackageReference Include="AspNetMonsters.Blazor.Geolocation" Version="0.5.0-preview1" />
@@ -30,12 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Library\Library.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\data\PredictionDataList.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

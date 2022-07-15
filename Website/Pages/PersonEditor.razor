@@ -12,23 +12,10 @@
             <label>Name</label>
             <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
         </div>
-        
+
         @*TIME ROW*@
         <div>
-            <div class="row">
-                <div class="col-5">
-                    <label>Birth Time (24h)</label>
-                    <input @bind="_hourMinInput" type="text" class="form-control" placeholder="06:42">
-                </div>
-                <div class="col-5">
-                    <label>Date</label>
-                    <input @bind="_dateInput" type="text" class="form-control" placeholder="16/04/2021">
-                </div>
-                <div class="col">
-                    <label>Timezone</label>
-                    <input @bind="_timeZonInput" type="text" class="form-control" placeholder="+08:00">
-                </div>
-            </div>
+            <TimeInput @ref="_timeInput"/>
         </div>
 
         <GeoLocationInput @ref="_geoLocationInput" />
@@ -39,7 +26,7 @@
                 <option value="Female">Female</option>
             </select>
         </div>
-        
+
         @*ADVANCED*@
         <div class="accordion" id="advancedTabAccordion">
             <div class="accordion-item">
@@ -102,8 +89,7 @@
     //gets page mode that was decided earlier
     private bool IsCreator => PageMode == Mode.Creator;
 
-    string? _hourMinInput, _dateInput, _timeZonInput;
-
+    TimeInput _timeInput;
     string _nameInput = "";
     string _notesInput = "";
     string _genderInput = "";
@@ -194,16 +180,15 @@
         //auto fill time zone based on system time
         var personBirthTimeOffset = _person.BirthTimeZone;
         var systemTimeOffset = DateTimeOffset.Now.ToString("zzz");
-        _timeZonInput = IsCreator ? systemTimeOffset : personBirthTimeOffset;
+        _timeInput.TimeZone = IsCreator ? systemTimeOffset : personBirthTimeOffset;
 
-        //TODO change to Person.BirthHourMinute
-        var birthTimeHourMin = _person.BirthTime.GetStdDateTimeOffset().ToString("hh:mm");
+        var birthTimeHourMin = _person.BirthHourMinute;
         var defaultHourMin = "00:00";
-        _hourMinInput = IsCreator ? defaultHourMin : birthTimeHourMin;
+        _timeInput.HourMin = IsCreator ? defaultHourMin : birthTimeHourMin;
 
-        var birthTimeDate = _person.BirthTime.GetStdDateTimeOffset().ToString("dd/MM/yyyy");
+        var birthTimeDate = _person.BirthDateMonthYear;
         var defaultDate = "10/10/1990";
-        _dateInput = IsCreator ? defaultDate : birthTimeDate;
+        _timeInput.Date = IsCreator ? defaultDate : birthTimeDate;
 
 
         //geolocation only needs to be set in Editor mode
@@ -264,7 +249,7 @@
 
         //parse data received from user
         var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
-        var fullTimeString = $"{_hourMinInput} {_dateInput} {_timeZonInput}";
+        var fullTimeString = _timeInput.FullTimeString;
         var lifeEventList = await _lifeEventEditor.GetData();
 
         //get gender from gender string
@@ -290,7 +275,7 @@
         await WebsiteTools.UpdatePerson(_person, _originalPersonHash);
 
         //let user know person has been updates
-        await _jsRuntime.ShowAlert("success", "Updated successfully!", false,timer:1000);
+        await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete
@@ -313,7 +298,7 @@
         await WebsiteTools.DeletePerson(_originalPersonHash);
 
         //let user know person has been updates
-        await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false,timer:1000);
+        await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);
 
 
         //refresh the page variables

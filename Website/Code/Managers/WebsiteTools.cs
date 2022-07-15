@@ -253,6 +253,7 @@ namespace Website
         public static async Task UpdatePerson(Person person, int originalPersonHash)
         {
             var updatedPersonXml = person.ToXml();
+            Console.WriteLine(updatedPersonXml.ToString());
             var oriPersonHashXml = new XElement("PersonHash", originalPersonHash);
             var rootXml = new XElement("Root");
             rootXml.Add(oriPersonHashXml, updatedPersonXml);

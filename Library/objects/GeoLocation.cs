@@ -74,7 +74,7 @@ namespace Genso.Astrology.Library
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
-            var hash1 = Tools.GetHashCode(this._name);
+            var hash1 = Tools.GetStringHashCode(this._name);
             var hash2 = _longitude.GetHashCode();
             var hash3 = _latitude.GetHashCode();
 

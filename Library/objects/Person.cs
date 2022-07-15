@@ -76,8 +76,21 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Gets STD birth time zone for person
+        /// exp : +08:00
         /// </summary>
         public string BirthTimeZone => this.BirthTime.GetStdDateTimeOffset().ToString("zzz");
+
+        /// <summary>
+        /// Gets STD birth hour minute for person (24H format)
+        /// exp: 15:30
+        /// </summary>
+        public string BirthHourMinute => this.BirthTime.GetStdDateTimeOffset().ToString("HH:mm");//note "HH" is 24H format vs "hh" is 12H format 
+
+        /// <summary>
+        /// Gets STD birth Date Month Year for person
+        /// exp: 31/12/1999
+        /// </summary>
+        public string BirthDateMonthYear => BirthTime.GetStdDateTimeOffset().ToString("dd/MM/yyyy");//note "MM" is month, not "mm"
 
         /// <summary>
         /// Gets this person's age at the inputed time (using year from STD time)
@@ -141,7 +154,7 @@ namespace Genso.Astrology.Library
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
-            var hash1 = Tools.GetHashCode(this.Name);
+            var hash1 = Tools.GetStringHashCode(this.Name);
             var hash2 = BirthTime.GetHashCode();
 
             //take out negative before returning
@@ -217,14 +230,17 @@ namespace Genso.Astrology.Library
                     var returnList = new List<LifeEvent>();
                     foreach (var lifeEventXml in lifeEventListXml)
                     {
-                        returnList.Add(LifeEvent.FromXml(lifeEventXml));
+                         returnList.Add(LifeEvent.FromXml(lifeEventXml));
                     }
 
                     return returnList;
 
                 }
                 //if fail, probably xml doesn't exist so just send empty list
-                catch (Exception) { return new List<LifeEvent>(); }
+                catch (Exception ex) {
+                    Console.WriteLine(ex);
+                    Console.WriteLine("No Valid Life Events Found! Empty list used!");//debug
+                    return new List<LifeEvent>(); }
             }
         }
 

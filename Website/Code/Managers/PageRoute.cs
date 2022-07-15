@@ -21,6 +21,7 @@
         public const string Match = "/match";
         public const string MatchReport = "/matchreport";
         public const string SunRiseSetTime = "/sunrisesettime";
+        public const string AddLifeEvent = "/addlifeevent";
         public static string LocalMeanTime = "/localmeantime";
         public static string Dasa = "/dasa";
         public static string QuickGuide = "/quickguide";

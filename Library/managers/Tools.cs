@@ -271,7 +271,7 @@ namespace Genso.Astrology.Library
         /// If null returns 0
         /// Note: MD5 (System.Security.Cryptography) not used because not supported in Blazor WASM
         /// </summary>
-        public static int GetHashCode(string stringToHash)
+        public static int GetStringHashCode(string stringToHash)
         {
             if (stringToHash == null)
             {

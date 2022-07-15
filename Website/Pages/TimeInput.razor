@@ -1,0 +1,61 @@
+﻿<div class="row">
+    <div class="col-5">
+        <label>Birth Time (24h)</label>
+        <input @bind="HourMin" type="text" class="form-control" placeholder="06:42">
+    </div>
+    <div class="col-5">
+        <label>Date</label>
+        <input @bind="Date" type="text" class="form-control" placeholder="16/04/2021">
+    </div>
+    <div class="col">
+        <label>Timezone</label>
+        <input @bind="TimeZone" type="text" class="form-control" placeholder="+08:00">
+    </div>
+</div>
+
+
+@code {
+
+    public string? HourMin
+    {
+        get => _hourMin;
+        set
+        {
+            _hourMin = value;
+            StateHasChanged();
+        }
+    }
+
+    public string? Date
+    {
+        get => _date;
+        set
+        {
+            _date = value;
+            StateHasChanged();
+        }
+    }
+
+    public string? TimeZone
+    {
+        get => _timeZone;
+        set
+        {
+            _timeZone = value;
+            StateHasChanged();
+        }
+    }
+
+    public string? FullTimeString
+    {
+        get => $"{HourMin} {Date} {TimeZone}";
+        set { return; }
+    }
+
+    //string? _hourMinInput, _dateInput, _timeZonInput;
+
+
+    private string? _hourMin = "00:00";
+    private string? _date = "31/12/2020";
+    private string? _timeZone =  DateTimeOffset.Now.ToString("zzz");
+}

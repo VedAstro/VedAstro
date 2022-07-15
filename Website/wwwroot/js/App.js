@@ -189,9 +189,9 @@ function generateLifeEventListTable(tableId, tableData) {
             { column: "name", dir: "asc" },
         ],
         columns: [                 //define the table columns
-            { title: "Event Name", field: "Name", editor: "input", hozAlign: "center" },
-            { title: "Start Time", field: "StartTime", editor: "input", hozAlign: "center" },
-            { title: "End Time", field: "EndTime", editor: "input", hozAlign: "center" },
+            { title: "Name", field: "Name", editor: "input", hozAlign: "center" },
+            { title: "Time", field: "StartTime", editor: "input", hozAlign: "center" },
+            { title: "Description", field: "Description", editor: "input", hozAlign: "center" },
             { title: "Nature", field: "Nature", editor: "input", hozAlign: "center" },
             //code to delete button for row
             {
@@ -213,7 +213,7 @@ function getLifeEventsListTableData() {
 function addNewLifeEventToTable() {
 
     var addToTopOfTable = true;
-    window.lifeEventsListTable.addData([{ Name: "New Life Event", StartTime: "00:00 10/10/2020 +08:00", EndTime: "00:00 10/10/2020 +08:00", Nature: "Good" }], addToTopOfTable);
+    window.lifeEventsListTable.addData([{ Name: "New Life Event", StartTime: "00:00 10/10/2020 +08:00", Description: "Description", Nature: "Good" }], addToTopOfTable);
 }
 
 //async sleep millisecond

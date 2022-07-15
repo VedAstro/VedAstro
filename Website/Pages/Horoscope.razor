@@ -8,7 +8,7 @@
 
 
     <div class="hstack gap-3">
-        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonHash="SelectedPersonHash" />
+        <PeopleSelectorBox @ref="_peopleSelectorBox"/>
         <button class="btn btn-primary" style="align-self: end;" @onclick="CalculateButtonClicked">Calculate</button>
     </div>
 
@@ -37,7 +37,6 @@
 @code {
 
     private PeopleSelectorBox? _peopleSelectorBox;
-    public string? SelectedPersonHash { get; set; }
     private List<HoroscopePrediction> _horoscopePredictions = new();
 
 

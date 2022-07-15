@@ -99,7 +99,7 @@ namespace Website
         {
             //get hash of all the fields & combine them
             var hash1 = _name.GetHashCode();
-            var hash2 = Tools.GetHashCode(_description);
+            var hash2 = Tools.GetStringHashCode(_description);
             var hash3 = _nature.GetHashCode();
             var hash4 = _startTime.GetHashCode();
             var hash5 = _endTime.GetHashCode();

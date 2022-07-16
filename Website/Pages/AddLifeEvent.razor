@@ -6,16 +6,16 @@
 <div class="vstack gap-2">
     <PeopleSelectorBox @ref="_peopleSelectorBox" />
     <div>
-        <label>Name</label>
+        <label class="form-label">Name</label>
         <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
     </div>
     <div>
-        <label>Description</label>
+        <label class="form-label">Description</label>
         <input @bind="_descriptionInput" type="text" class="form-control" placeholder="More info...">
     </div>
-    <label>Nature</label>
+    <label class="form-label">Nature</label>
     <select @bind="_natureInputValue" style="width: fit-content;min-width: 273px;">
-        <option value="Good">Good</option>
+        <option value="Good" selected>Good</option>
         <option value="Bad">Bad</option>
         <option value="Neutral">Neutral</option>
     </select>
@@ -34,7 +34,7 @@
     private string? _nameInput;
     private string? _descriptionInput;
     private TimeInput _timeInput;
-    private string? _natureInputValue;
+    private string? _natureInputValue = "Good"; //without this, defaults to empty string
 
 
     private async Task AddButtonClicked()
@@ -43,14 +43,14 @@
 
         //create an life event from the inputed data
         var _inputedLifeEvent = new LifeEvent
-        {
-            Name = _nameInput,
-            Description = _descriptionInput,
-            StartTime = _timeInput.FullTimeString,
-            Nature = _natureInputValue
-        };
+            {
+                Name = _nameInput,
+                Description = _descriptionInput,
+                StartTime = _timeInput.FullTimeString,
+                Nature = _natureInputValue
+            };
 
-    //add life event to existing person
+        //add life event to existing person
         var selectedPerson = _peopleSelectorBox.GetSelectedPerson();
         var hashBeforeAdd = selectedPerson.Hash;
         selectedPerson.LifeEventList.Add(_inputedLifeEvent);

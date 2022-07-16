@@ -14,15 +14,15 @@
 <div class="form-group">
     <div class="row">
         <div class="col-6">
-            <label>Birth Location</label>
+            <label class="form-label">Birth Location</label>
             <input @ref="_locationNameInput" @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control">
         </div>
         <div class="col">
-            <label>Longitude</label>
+            <label class="form-label">Longitude</label>
             <input @ref="_longitudeInput" @bind="Longitude" type="text" class="form-control" placeholder="103.82">
         </div>
         <div class="col">
-            <label>Latitude</label>
+            <label class="form-label">Latitude</label>
             <input @ref="_latitudeInput" @bind="Latitude"  type="text" class="form-control" placeholder="1.352">
         </div>
     </div>

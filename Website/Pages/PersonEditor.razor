@@ -9,7 +9,7 @@
 <div class="container">
     <div class="vstack gap-3" style="max-width:826px;">
         <div>
-            <label>Name</label>
+            <label class="form-label">Name</label>
             <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
         </div>
 
@@ -20,7 +20,7 @@
 
         <GeoLocationInput @ref="_geoLocationInput" />
         <div>
-            <label>Gender</label>
+            <label class="form-label">Gender</label>
             <select @bind="_genderInput" class="form-control">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -41,7 +41,7 @@
                             @*LIFE EVENTS*@
                             <LifeEventEditor @ref="_lifeEventEditor" />
                             <div>
-                                <label>Notes</label>
+                                <label class="form-label">Notes</label>
                                 <textarea @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person" style="min-height:132px;">
                                 </textarea>
 

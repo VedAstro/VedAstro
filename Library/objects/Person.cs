@@ -228,9 +228,14 @@ namespace Genso.Astrology.Library
                 {
                     var lifeEventListXml = personXml.Element("LifeEventList")?.Elements();
                     var returnList = new List<LifeEvent>();
-                    foreach (var lifeEventXml in lifeEventListXml)
+                    
+                    //is null when no life events exist for user, so to avoid exception this is
+                    if (lifeEventListXml != null)
                     {
-                         returnList.Add(LifeEvent.FromXml(lifeEventXml));
+                        foreach (var lifeEventXml in lifeEventListXml)
+                        {
+                            returnList.Add(LifeEvent.FromXml(lifeEventXml));
+                        }
                     }
 
                     return returnList;

@@ -1,15 +1,16 @@
-﻿<div class="row">
+﻿@using Genso.Astrology.Library
+<div class="row">
     <div class="col-5">
-        <label>Birth Time (24h)</label>
-        <input @bind="HourMin" type="text" class="form-control" placeholder="06:42">
+        <label class="form-label" >Time (24h)</label>
+        <input class="form-control" @bind="HourMin" type="text" placeholder="16:20">
     </div>
     <div class="col-5">
-        <label>Date</label>
-        <input @bind="Date" type="text" class="form-control" placeholder="16/04/2021">
+        <label class="form-label" >Date</label>
+        <input class="form-control" @bind="Date" type="text" placeholder="16/04/2021">
     </div>
     <div class="col">
-        <label>Timezone</label>
-        <input @bind="TimeZone" type="text" class="form-control" placeholder="+08:00">
+        <label class="form-label">Timezone</label>
+        <input class="form-control" @bind="TimeZone" type="text" placeholder="+08:00">
     </div>
 </div>
 
@@ -52,10 +53,8 @@
         set { return; }
     }
 
-    //string? _hourMinInput, _dateInput, _timeZonInput;
 
-
-    private string? _hourMin = "00:00";
-    private string? _date = "31/12/2020";
-    private string? _timeZone =  DateTimeOffset.Now.ToString("zzz");
+    private string? _hourMin = DateTime.Today.ToString("HH:mm");
+    private string? _date = DateTime.Today.ToString("dd/MM/yyyy");
+    private string? _timeZone = DateTimeOffset.Now.ToString("zzz");
 }

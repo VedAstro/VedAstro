@@ -1,4 +1,4 @@
-﻿@page "/matchreport/{MaleName}/{FemaleName}"
+﻿@page "/matchreport/{MaleHash}/{FemaleHash}"
 @using Genso.Astrology.Library.Compatibility
 @using Genso.Astrology.Library
 
@@ -47,9 +47,12 @@
 
     //VARIABLES
     [Parameter]
-    public string? MaleName { get; set; } //data from URL not necessary provided
+    public string? MaleHash { get; set; } //data from URL not necessary provided
     [Parameter]
-    public string? FemaleName { get; set; } //data from URL not necessary provided
+    public string? FemaleHash { get; set; } //data from URL not necessary provided
+
+    string MaleName;
+    string FemaleName;
 
     CompatibilityReport? _report = null; //when needs to be show before init
 
@@ -60,7 +63,7 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
     //generate the report
-    protected override async Task OnInitializedAsync() => _report = await GetCompatibilityReport(MaleName ?? "", FemaleName ?? "");
+    protected override async Task OnInitializedAsync() => _report = await GetCompatibilityReport(MaleHash ?? "", FemaleHash ?? "");
 
     //hide the loading message that was open in init
     protected override async Task OnAfterRenderAsync(bool firstRender) => await _globalVariable.LoadingMessage.Hide();
@@ -89,14 +92,16 @@
     /// <summary>
     /// Gets CompatibilityReport from API server
     /// </summary>
-    private async Task<CompatibilityReport?> GetCompatibilityReport(string male, string female)
+    private async Task<CompatibilityReport?> GetCompatibilityReport(string maleHash, string femaleHash)
     {
 
         //show loading box
         await _globalVariable.LoadingMessage.Show();
 
         //prepare request to API server
-        var url = $"{ServerManager.GetMatchReportApi}?male={male}&female={female}";
+        MaleName = (await WebsiteTools.GetPersonFromHash(maleHash)).Name;
+        FemaleName = (await WebsiteTools.GetPersonFromHash(femaleHash)).Name;
+        var url = $"{ServerManager.GetMatchReportApi}?male={maleHash}&female={femaleHash}";
 
         //get report from server
         var matchReportXml = await ServerManager.ReadFromServer(url);

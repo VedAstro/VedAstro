@@ -97,28 +97,29 @@ namespace API
         /// <summary>
         /// Extracts names from the query URL
         /// </summary>
-        public static async Task<object> ExtractNames(HttpRequest request)
+        public static async Task<object> ExtractMaleFemaleHash(HttpRequest request)
         {
-            string male = request.Query["male"];
-            string female = request.Query["female"];
+            string maleHash = request.Query["male"];
+            string femaleHash = request.Query["female"];
 
             string requestBody = await new StreamReader(request.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            male = male ?? data?.male;
-            female = female ?? data?.female;
+            maleHash = maleHash ?? data?.male;
+            femaleHash = femaleHash ?? data?.female;
 
-            return new { Male = male, Female = female };
+            //convert to int
+            return new { Male = int.Parse(maleHash), Female = int.Parse(femaleHash) };
 
         }
 
-        public static CompatibilityReport GetCompatibilityReport(string maleName, string femaleName, Data personList)
+        public static CompatibilityReport GetCompatibilityReport(int maleHash, int femaleHash, Data personList)
         {
             //get all the people
             var peopleList = DatabaseManager.GetPersonList(personList);
 
             //filter out the male and female ones we want
-            var male = peopleList.Find(person => person.GetName() == maleName);
-            var female = peopleList.Find(person => person.GetName() == femaleName);
+            var male = peopleList.Find(person => person.Hash == maleHash);
+            var female = peopleList.Find(person => person.Hash == femaleHash);
 
             return MatchCalculator.GetCompatibilityReport(male, female);
         }

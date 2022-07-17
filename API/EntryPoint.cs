@@ -43,7 +43,7 @@ namespace API
 
 
         [FunctionName("getmatchreport")]
-        public static async Task<IActionResult> Match(
+        public static async Task<IActionResult> GetMatchReport(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             [Blob(PersonListXml, FileAccess.Read)] Stream personListRead,
             ILogger log)
@@ -53,13 +53,13 @@ namespace API
             try
             {
                 //get name of male & female
-                dynamic names = await APITools.ExtractNames(req);
+                dynamic maleFemaleHash = await APITools.ExtractMaleFemaleHash(req);
 
                 //get list of all people
                 var personList = new Data(personListRead);
 
                 //generate compatibility report
-                CompatibilityReport compatibilityReport = APITools.GetCompatibilityReport(names.Male, names.Female, personList);
+                CompatibilityReport compatibilityReport = APITools.GetCompatibilityReport(maleFemaleHash.Male, maleFemaleHash.Female, personList);
                 responseMessage = compatibilityReport.ToXml().ToString();
             }
             catch (Exception e)
@@ -70,7 +70,6 @@ namespace API
 
 
             var okObjectResult = new OkObjectResult(responseMessage);
-            //okObjectResult.ContentTypes.Add("text/html");
             return okObjectResult;
         }
 

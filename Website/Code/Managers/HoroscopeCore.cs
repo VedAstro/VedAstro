@@ -134,7 +134,7 @@ namespace Website
             var lastInstanceOfTime = timeList.Last();
 
             //loop through time list 
-            //note: loop must be done in sequencial order, to detect correct start & end time
+            //note: loop must be done in sequential order, to detect correct start & end time
             foreach (var time in timeList)
             {
                 // used for canceling calculation by outside thread (user cancel halfway)
@@ -142,7 +142,7 @@ namespace Website
                 threadCanceler.ThrowIfCancellationRequested();
 
                 //debug print
-                Console.Write($"\r Checking time:{time} : {eventData.GetName()}");
+                //Console.Write($"\r Checking time:{time} : {eventData.GetName()}");
 
                 //get flag of event occuring now
                 var eventIsOccuringNow = eventData.IsEventOccuring(time, person);
@@ -164,7 +164,7 @@ namespace Website
                     //update flag
                     eventOccuredInPreviousTime = true;
                 }
-                //if event is not occuring now but occured before
+                //if event is not occuring now but occurred before
                 else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
                 {
                     //add previous event to list

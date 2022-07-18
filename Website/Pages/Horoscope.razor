@@ -17,7 +17,7 @@
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Info</th>
+                <th style="min-width: 123px;">Info</th>
             </tr>
         </thead>
         <tbody>
@@ -57,11 +57,8 @@
         //get person from person dropdown
         var person = _peopleSelectorBox.GetSelectedPerson();
 
-        //get main horoscope prediction file
+        //get main horoscope prediction file (located in wwwroot)
         var predictionDataList = await _client.GetStreamAsync("data/PredictionDataList.xml");
-
-        Console.WriteLine("PREDICTION STREAM!");
-        Console.WriteLine(predictionDataList.Length);
 
         //calculate predictions for current person (client side)
         _horoscopePredictions = await HoroscopeCore.GetPrediction(person, predictionDataList);

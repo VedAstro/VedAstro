@@ -51,7 +51,7 @@ namespace Genso.Astrology.Library
             bool isEventOccuring = predictionData.Occuring;
 
             //prediction strength
-            Strength = predictionData.Strength;
+            Strength = predictionData.Info;
 
             //override even nature from xml if specified
             Nature = predictionData.NatureOverride == EventNature.Empty ? Nature : predictionData.NatureOverride;

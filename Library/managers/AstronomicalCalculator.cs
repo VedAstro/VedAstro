@@ -4386,7 +4386,10 @@ namespace Genso.Astrology.Library
                 //Get total Shadbala Pinda
                 var total = sthanaBala + digBala + kalaBala + chestaBala + naisargikaBala + drikBala;
 
-                return total;
+                //round it 2 decimal places
+                var roundedTotal = new Shashtiamsa(Math.Round(total.ToDouble(), 2));
+
+                return roundedTotal;
             }
 
         }
@@ -6637,6 +6640,23 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
+        /// Gets list of evil/malefic planets in a sign
+        /// </summary>
+        public static List<PlanetName> GetMaleficPlanetListInSign(ZodiacName sign, Time time)
+        {
+            //get all the planets in the sign
+            var planetsInSign = AstronomicalCalculator.GetPlanetInSign(sign, time);
+
+            //get all evil planets
+            var evilPlanets = AstronomicalCalculator.GetMaleficPlanetList(time);
+
+            //get evil planets in sign
+            var evilFound = planetsInSign.FindAll(planet => evilPlanets.Contains(planet));
+
+            return evilFound;
+        }
+
+        /// <summary>
         /// Checks if any good/benefic planets are in a sign
         /// </summary>
         public static bool IsBeneficPlanetInSign(ZodiacName sign, Time time)
@@ -6649,6 +6669,23 @@ namespace Genso.Astrology.Library
 
             //check if any planet in sign is an good one
             var goodFound = planetsInSign.FindAll(planet => goodPlanets.Contains(planet)).Any();
+
+            return goodFound;
+        }
+
+        /// <summary>
+        /// Gets any good/benefic planets in a sign
+        /// </summary>
+        public static List<PlanetName> GetBeneficPlanetListInSign(ZodiacName sign, Time time)
+        {
+            //get all the planets in the sign
+            var planetsInSign = AstronomicalCalculator.GetPlanetInSign(sign, time);
+
+            //get all good planets
+            var goodPlanets = AstronomicalCalculator.GetBeneficPlanetList(time);
+
+            //gets all good planets in this sign
+            var goodFound = planetsInSign.FindAll(planet => goodPlanets.Contains(planet));
 
             return goodFound;
         }

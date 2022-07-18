@@ -1,16 +1,16 @@
 ﻿namespace Genso.Astrology.Library
 {
     /// <summary>
-    /// Simple data type to enclose a prediction.
+    /// Simple data type to enclose the data coming out of a calculator.
     /// Prediction = did it occur & the strength 
     /// </summary>
-    public class Prediction
+    public class CalculatorResult
     {
         /// <summary>
         /// Indication if prediction is occurring
         /// </summary>
         public bool Occuring { get; set; }
-        public string Strength { get; set; }
+        public string Info { get; set; }
 
         /// <summary>
         /// if specified overrides event nature from XML file
@@ -22,20 +22,20 @@
         /// <summary>
         /// Defaults set here
         /// </summary>
-        public Prediction()
+        public CalculatorResult()
         {
-            Strength = "0";
+            Info = "";
         }
 
         /// <summary>
         /// Return an Not Occuring Prediction
         /// </summary>
-        public static Prediction NotOccuring()
+        public static CalculatorResult NotOccuring()
         {
-            var prediction = new Prediction()
+            var prediction = new CalculatorResult()
             {
                 Occuring = false,
-                Strength = "0"
+                Info = ""
             };
 
             return prediction;
@@ -43,12 +43,12 @@
         /// <summary>
         /// Return an Occuring Prediction
         /// </summary>
-        public static Prediction IsOccuring()
+        public static CalculatorResult IsOccuring()
         {
-            var prediction = new Prediction()
+            var prediction = new CalculatorResult()
             {
                 Occuring = true,
-                Strength = "-"
+                Info = ""
             };
 
             return prediction;

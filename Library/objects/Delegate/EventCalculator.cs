@@ -1,4 +1,4 @@
 ﻿namespace Genso.Astrology.Library
 {
-    public delegate Prediction EventCalculator(Time time, Person person);
+    public delegate CalculatorResult EventCalculator(Time time, Person person);
 }

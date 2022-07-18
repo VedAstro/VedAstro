@@ -169,15 +169,8 @@ namespace Website
                 {
                     //add previous event to list
                     var newEvent = new HoroscopePrediction(eventData.GetName(),
-                        eventData.GetNature(),
                         eventData.GetDescription(),
-                        eventData.GetStrength(),
-                        eventStartTime,
-                        eventEndTime);
-
-                    //if event is duration is 0 minute, raise alarm
-                    if (newEvent.GetDurationMinutes() <= 0) { LogManager.Debug("Event duration is 0!"); }
-
+                        eventData.GetStrength());
 
                     eventList.Add(newEvent);
 
@@ -190,14 +183,9 @@ namespace Website
                 {
                     //add current event to list
                     var newEvent2 = new HoroscopePrediction(eventData.GetName(),
-                        eventData.GetNature(),
                         eventData.GetDescription(),
-                        eventData.GetStrength(),
-                        eventStartTime,
-                        eventEndTime);
+                        eventData.GetStrength());
 
-                    //if event is duration is 0 minute, raise alarm
-                    if (newEvent2.GetDurationMinutes() <= 0) { LogManager.Debug("Event duration is 0!"); }
 
                     eventList.Add(newEvent2);
                 }

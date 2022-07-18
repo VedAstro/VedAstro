@@ -6,29 +6,22 @@ namespace Website
 
     /// <summary>
     /// Simple class to encapsulate a HoroscopePrediction (data)
-    /// TODO another HoroscopePrediction class better naming?
     /// </summary>
     public class HoroscopePrediction : IHasName
     {
         //FIELDS
         private readonly EventName _name;
         private readonly string _description;
-        private readonly string _strength;
-        private readonly EventNature _nature;
-        private readonly Time _startTime;
-        private readonly Time _endTime;
+        private readonly string _info;
 
 
         //CTOR
-        public HoroscopePrediction(EventName name, EventNature nature, string description, string strength, Time startTime, Time endTime)
+        public HoroscopePrediction(EventName name, string description, string info)
         {
             //initialize fields
             _name = name;
-            _nature = nature;
             _description = description;
-            _strength = strength;
-            _startTime = startTime;
-            _endTime = endTime;
+            _info = info;
         }
 
 
@@ -37,24 +30,14 @@ namespace Website
         //Note: Created mainly for ease of use with WPF binding
         public EventName Name => _name;
         public string Description => _description;
-        public string Strength => _strength;
-        public EventNature Nature => _nature;
-        public Time StartTime => _startTime;
-        public Time EndTime => _endTime;
-        public int Duration => GetDurationMinutes();
+        public string Info => _info;
+        public string FormattedName => Format.FormatName(this);
+
 
 
 
         //PUBLIC METHODS
         public EventName GetName() => _name;
-
-        public EventNature GetNature() => _nature;
-
-        public Time GetStartTime() => _startTime;
-
-        public string GetDescription() => _description;
-
-        public Time GetEndTime() => _endTime;
 
 
         //PRIVATE METHODS
@@ -100,27 +83,33 @@ namespace Website
             //get hash of all the fields & combine them
             var hash1 = _name.GetHashCode();
             var hash2 = Tools.GetStringHashCode(_description);
-            var hash3 = _nature.GetHashCode();
-            var hash4 = _startTime.GetHashCode();
-            var hash5 = _endTime.GetHashCode();
 
-            return hash1 + hash2 + hash3 + hash4 + hash5;
+            return hash1 + hash2;
         }
 
         public override string ToString()
         {
-            return $"{GetName()} - {_nature} - {_startTime} - {_endTime} - {GetDurationMinutes()}";
+            return $"{FormattedName} - {Description} - {Info}";
         }
 
 
-        /// <summary>
-        /// Gets the duration of the event from start to end time
-        /// </summary>
-        public int GetDurationMinutes()
-        {
-            var difference = GetEndTime().GetStdDateTimeOffset() - GetStartTime().GetStdDateTimeOffset();
 
-            return (int)difference.TotalMinutes;
+        /// <summary>
+        /// Searches all text in prediction for input
+        /// </summary>
+        public bool Contains(string searchText)
+        {
+            //place all text together
+            var compiledText = $"{FormattedName} {Description} {Info}";
+
+            //change all to small caps
+            compiledText = compiledText.ToLower();
+
+            //do the searching
+            string pattern = @"\b" + Regex.Escape(searchText) + @"\b"; //searches only words
+            var searchResult = Regex.Match(compiledText, pattern, RegexOptions.IgnoreCase).Success;
+            return searchResult;
+
         }
     }
 }

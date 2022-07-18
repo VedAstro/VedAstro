@@ -7652,7 +7652,7 @@ namespace Genso.Astrology.Library
             var occuring = maleficFound;
 
             var malefics = AstronomicalCalculator.GetMaleficPlanetListInSign(sign11fromArudha, time);
-            var info = $"Malefic:{string.Join(",", malefics)}";
+            var info = $"Malefic: {string.Join(" , ", malefics)}"; //space needed for word search
             return new CalculatorResult() { Occuring = occuring, Info = info };
         }
 
@@ -7679,7 +7679,7 @@ namespace Genso.Astrology.Library
             var occuring = beneficFound;
 
             var benefics = AstronomicalCalculator.GetBeneficPlanetListInSign(sign11fromArudha, time);
-            var info = $"Benefic:{string.Join(",", benefics)}";
+            var info = $"Benefic: {string.Join(" , ", benefics)}"; //space needed for word search
             return new CalculatorResult() { Occuring = occuring, Info = info };
         }
 
@@ -8262,7 +8262,7 @@ namespace Genso.Astrology.Library
             var occuring = geminiRising && evilPlanetFound;
             
             //extra info
-            var info = $"Malefic:{string.Join(",", evilPlanets)}";
+            var info = $"Malefic: {string.Join(" , ", evilPlanets)}"; //space needed for word search
             return new CalculatorResult() { Occuring = occuring, Info = info };
         }
 

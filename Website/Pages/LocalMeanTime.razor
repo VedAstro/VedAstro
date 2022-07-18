@@ -13,7 +13,7 @@
 <h5>LMT: @_lmtString</h5>
 <h5>STD: @_stdString</h5>
 
-<GeoLocationInput @bind-LocationName="_locationName" @bind-Longitude="_longitude" @bind-Latitude="_latitude" />
+<GeoLocationInput @ref="_geoLocationInput" />
 
 <div style="margin-top: 50px" class="row">
     <button @onclick="UpdateLocalMeanTime" class="btn btn-primary">Update</button>
@@ -24,9 +24,7 @@
 
     string? _lmtString = "";
     string? _stdString = "";
-    string? _locationName = "";
-    double _longitude;
-    double _latitude;
+    private GeoLocationInput _geoLocationInput;
 
 
     //auto update "time" after location is updated
@@ -45,7 +43,7 @@
     private void UpdateLocalMeanTime()
     {
         //parse location received from user
-        var geoLocation = new GeoLocation(_locationName, _longitude, _latitude);
+        var geoLocation = _geoLocationInput.GetGeoLocation();
 
         //get time now
         var timeNow = Time.Now(geoLocation);

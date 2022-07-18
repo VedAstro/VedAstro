@@ -5,6 +5,7 @@
 
 @using Microsoft.AspNetCore.Components
 @using System.Xml.Linq
+@using Genso.Astrology.Library
 
 
 @inject LocationService _locationService
@@ -97,8 +98,29 @@
 
 
 
-    //Location locationCoordinates;
+    //PUBLIC METHODS
 
+    public GeoLocation GetGeoLocation()
+    {
+        return new GeoLocation(this.LocationName, this.Longitude, this.Latitude);
+    }
+
+    /// <summary>
+    /// Updates all the fields in the component
+    /// Note: Does not call state has changed
+    /// </summary>
+    public void UpdateData(dynamic newData)
+    {
+        LocationName = newData.LocationName;
+        Longitude = newData.Longitude;
+        Latitude = newData.Latitude;
+    }
+
+
+
+
+
+    //PRIVATE METHODS
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -107,7 +129,7 @@
         if (firstRender)
         {
             //wait 1s before checking if it has been filled by user or other logic
-            await Task.Delay(1000);
+            await Task.Delay(1500);
             if (LocationName == "" || LocationName == null) { await AutoSetLocation(); }
         }
 
@@ -127,7 +149,6 @@
         await _globalVariable.LoadingMessage.Hide();
 
     }
-
 
     /// <summary>
     /// Takes location name and gets the coordinates
@@ -171,7 +192,6 @@
 
     }
 
-
     /// <summary>
     /// Gets location from browser & sets the input boxes
     /// </summary>
@@ -202,17 +222,6 @@
 
 
 
-    }
-
-    /// <summary>
-    /// Updates all the fields in the component
-    /// Note: Does not call state has changed
-    /// </summary>
-    public void UpdateData(dynamic newData)
-    {
-        LocationName = newData.LocationName;
-        Longitude = newData.Longitude;
-        Latitude = newData.Latitude;
     }
 
 }

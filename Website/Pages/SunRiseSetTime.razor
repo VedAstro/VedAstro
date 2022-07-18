@@ -45,7 +45,7 @@
     private void UpdateSunRiseSetTime()
     {
         //parse location received from user
-        var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
+        var geoLocation = _geoLocationInput.GetGeoLocation();
 
         //get time now
         var timeNow = Time.Now(geoLocation);

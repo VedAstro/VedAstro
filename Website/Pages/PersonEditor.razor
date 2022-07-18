@@ -248,7 +248,7 @@
     {
 
         //parse data received from user
-        var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
+        var geoLocation = _geoLocationInput.GetGeoLocation();
         var fullTimeString = _timeInput.FullTimeString;
         var lifeEventList = await _lifeEventEditor.GetData();
 

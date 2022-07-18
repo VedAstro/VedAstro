@@ -186,7 +186,7 @@
 
         //get needed data from input fields &
         //parse data received from user
-        var geoLocation = new GeoLocation(_geoLocationInput.LocationName, _geoLocationInput.Longitude, _geoLocationInput.Latitude);
+        var geoLocation = _geoLocationInput.GetGeoLocation();
         var startTimeStr = $"{_startHourMinInput} {_startDateInput} {_timeZonInput}";
         var endTimeStr = $"{_endHourMinInput} {_endDateInput} {_timeZonInput}";
         Time startTime = new Time(startTimeStr, geoLocation);

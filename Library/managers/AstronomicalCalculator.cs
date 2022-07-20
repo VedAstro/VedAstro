@@ -4726,6 +4726,11 @@ namespace Genso.Astrology.Library
         /// Sapthavargajabala: This is the strength of a
         /// planet due to its residence in the seven sub-divisions
         /// according to its relation with the dispositor.
+        ///
+        /// Saptavargaja bala means the strength a
+        /// planet gets by virtue of its disposition in a friendly,
+        /// neutral or inimical Rasi, Hora, Drekkana, Sapthamsa,
+        /// Navamsa, Dwadasamsa and Thrimsamsa.
         /// </summary>
         public static Shashtiamsa GetPlanetSaptavargajaBala(PlanetName planetName, Time time)
         {

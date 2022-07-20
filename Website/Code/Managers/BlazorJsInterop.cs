@@ -95,14 +95,24 @@ namespace Website
         //█▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
         /// <summary>
-        /// Uses jQuery to hide the inputed HTML element
+        /// Uses jQuery to show element via blazor reference
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync("showWrapper", element);
+        /// <summary>
+        /// Uses jQuery to show element via selector (#ID,.class)
+        /// </summary>
+        public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync("showWrapper", elementSelector);
+
 
         /// <summary>
-        /// Uses jQuery to hide the inputed HTML element
+        /// Uses jQuery to hide element via blazor reference
         /// </summary>
         public static async Task Hide(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync("hideWrapper", element);
+
+        /// <summary>
+        /// Uses jQuery to hide element via selector (#ID,.class)
+        /// </summary>
+        public static async Task Hide(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync("hideWrapper", elementSelector);
 
         /// <summary>
         /// Injects html/svg into an element

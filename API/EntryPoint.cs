@@ -940,14 +940,18 @@ namespace API
                 }
 
 
-                return compiledLines;
+                //wrap in a group so that can be hidden/shown as needed
+                var wrapperGroup = $"<g id=\"LifeEventLinesHolder\">{compiledLines}</g>";
 
+                return wrapperGroup;
+
+                //todo need to unify event color
                 string GetColor(string nature)
                 {
                     switch (nature)
                     {
                         case "Good": return "#42f706";
-                        //case "Neutral": return "";
+                        case "Neutral": return "grey";
                         //case "Bad": return "#a80000";
                         case "Bad": return "#ff5656";
                         default: throw new Exception($"Invalid Nature: {nature}");
@@ -1783,6 +1787,7 @@ namespace API
                 return rowHtml;
             }
 
+            //todo need to unify event color
             // Get dasa color based on nature & number of events
             string GetEventColor(EventNature? eventNature)
             {

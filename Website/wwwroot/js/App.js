@@ -44,12 +44,14 @@ function getVisitorData() {
 }
 
 //Jquery to show inputed element
+//by class and ID (CSS selector)
 function showWrapper(element) {
     console.log(`JS: showWrapper`);
     $(element).show();
 };
 
 //Jquery to hide inputed element
+//by class and ID (CSS selector)
 function hideWrapper(element) {
     console.log(`JS: hideWrapper`);
     $(element).hide();
@@ -74,11 +76,11 @@ function addEventListenerWrapper(element, eventName, functionName) {
 };
 
 //Jquery to attach event listener by class and ID (CSS selector)
-function addEventListenerByClass(className, eventName, functionName) {
+function addEventListenerByClass(selector, eventName, functionName) {
     console.log(`JS: addEventListenerByClass : ${eventName} : ${functionName}`);
 
     //attach listener to each element
-    $(className).each(function () {
+    $(selector).each(function () {
         this.addEventListener(eventName, window[functionName]);
     });
 

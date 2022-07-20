@@ -5666,7 +5666,6 @@ namespace Genso.Astrology.Library
 
         #endregion
 
-
         #region Lord of the 11th House Occupying Different Houses
 
         [EventCalculator(EventName.House11LordInHouse1)]
@@ -5952,6 +5951,7 @@ namespace Genso.Astrology.Library
 
         #endregion
 
+
         #region Different Signs Ascending
 
         [EventCalculator(EventName.AriesRising)]
@@ -6113,10 +6113,9 @@ namespace Genso.Astrology.Library
         #endregion
 
 
-        //Planets in the 1-7th House
-        #region MyRegion
+        //Planets in the 1-12th House
 
-        //Planets in the First House
+        #region Planets in the 1st House
 
         [EventCalculator(EventName.SunInHouse1)]
         public static CalculatorResult SunInHouse1Occuring(Time time, Person person)
@@ -6226,8 +6225,9 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring, Info = strength };
         }
 
+        #endregion
 
-        //Planets in the 2nd House
+        #region Planets in the 2nd House
 
         [EventCalculator(EventName.SunInHouse2)]
         public static CalculatorResult SunInHouse2Occuring(Time time, Person person)
@@ -6335,7 +6335,9 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring, Info = strength };
         }
 
-        //Planets in the 3rd House
+        #endregion
+
+        #region Planets in the 3rd House
 
         [EventCalculator(EventName.SunInHouse3)]
         public static CalculatorResult SunInHouse3Occuring(Time time, Person person)
@@ -6429,7 +6431,9 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring, Info = strength };
         }
 
-        //Planets in the 4th House
+        #endregion
+
+        #region Planets in the 4th House
 
         [EventCalculator(EventName.SunInHouse4)]
         public static CalculatorResult SunInHouse4Occuring(Time time, Person person)
@@ -6521,7 +6525,9 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring, Info = strength };
         }
 
-        //Planets in the 5th House
+        #endregion
+
+        #region Planets in the 5th House
 
         [EventCalculator(EventName.SunInHouse5)]
         public static CalculatorResult SunInHouse5Occuring(Time time, Person person)
@@ -6622,7 +6628,9 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring, Info = strength };
         }
 
-        //Planets in the 6th House
+        #endregion
+
+        #region Planets in the 6th House
 
         [EventCalculator(EventName.SunInHouse6)]
         public static CalculatorResult SunInHouse6Occuring(Time time, Person person)
@@ -7710,7 +7718,6 @@ namespace Genso.Astrology.Library
 
 
         #endregion
-
 
 
         #region PLANETS IN SIGN

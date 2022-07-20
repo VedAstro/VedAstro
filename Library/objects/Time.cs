@@ -35,7 +35,11 @@ namespace Genso.Astrology.Library
         private const string DateTimeFormat = "HH:mm dd/MM/yyyy zzz"; //define date time format
         private const string DateTimeFormat2 = "HH:mm:ss dd/MM/yyyy zzz"; //define date time format include seconds for unit testing
 
-
+        /// <summary>
+        /// Returns an Empty Time instance meant to be used as null/void filler
+        /// for debugging and generating empty dasa svg lines
+        /// </summary>
+        public static Time Empty = new("00:00 01/01/2000 +08:00", GeoLocation.Empty);
 
         /// <summary>
         /// Creates a new instance of time from STD & Geo location

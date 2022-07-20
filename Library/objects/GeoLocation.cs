@@ -16,6 +16,13 @@ namespace Genso.Astrology.Library
     [Serializable()]
     public struct GeoLocation : IGeoLocation, IToXml
     {
+        /// <summary>
+        /// Returns an Empty Time instance meant to be used as null/void filler
+        /// for debugging and generating empty dasa svg lines
+        /// </summary>
+        public static GeoLocation Empty = new("Empty", 101, 4.59); //ipoh
+
+
         //FIELDS
         private readonly string _name;
         private readonly double _longitude;

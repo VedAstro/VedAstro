@@ -1,15 +1,27 @@
-﻿@page "/horoscope"
-@using System.Xml.Linq
+﻿@attribute [Route(PageRoute.Horoscope)]
+
 @inject HttpClient _client
 
+
 <PageTitle>Horoscope</PageTitle>
+<PageTop Title="Horoscope" IconName="fluent:book-star-20-filled">
+    <Description>Astrological predictions of a person's horoscope</Description>
+    <ButtonsRow>
+        <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
+        <IconButton IconName="fluent:people-list-24-filled" ButtonText="Person List" ClickUrl="@PageRoute.PersonList"></IconButton>
+    </ButtonsRow>
+</PageTop>
+ 
+
 
 <div class="vstack gap-4">
 
 
     <div class="hstack gap-3">
         <PeopleSelectorBox @ref="_peopleSelectorBox"/>
-        <button class="btn btn-primary" style="align-self: end;" @onclick="CalculateButtonClicked">Calculate</button>
+@*        <button class="btn btn-primary" style="align-self: end;" @onclick="CalculateButtonClicked">Calculate</button>
+*@        <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked" ></IconButton>
+
     </div>
     <div class="hstack gap-3">
         <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">

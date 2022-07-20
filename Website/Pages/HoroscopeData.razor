@@ -1,0 +1,79 @@
+﻿@using Genso.Astrology.Library
+@attribute [Route(PageRoute.HoroscopeData)]
+
+
+<PageTitle>Horoscope Data</PageTitle>
+
+<PageTop Title="Horoscope Data" IconName="carbon:graphical-data-flow">
+    <Description>Raw astrological info of a person's horoscope</Description>
+    <ButtonsRow>
+        <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
+        <IconButton IconName="fluent:people-list-24-filled" ButtonText="Person List" ClickUrl="@PageRoute.PersonList"></IconButton>
+    </ButtonsRow>
+</PageTop>
+
+<div class="vstack gap-3">
+    <PeopleSelectorBox @ref="_peopleSelectorBox" />
+    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="DoCalculation"></IconButton>
+</div>
+
+
+<hr>
+    @*PLANET INFO LIST*@
+<div>
+    @if (_isResultReady)
+    {
+        <h4 class="mt-2">Planets</h4>
+        <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
+            <PlanetInfoBox PlanetName="PlanetName.Sun" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Moon" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Mercury" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Mars" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Jupiter" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Saturn" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Venus" Time="@SelectedPerson.BirthTime" />
+        </div>
+    }
+</div>
+@*HOUSE INFO LIST*@
+<div>
+    @if (_isResultReady)
+    {
+        <h4 class="mt-2">Houses</h4>
+        <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
+            <HouseInfoBox HouseNumber="1" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="2" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="3" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="4" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="5" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="6" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="7" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="8" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="9" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="10" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="11" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="12" Time="@SelectedPerson.BirthTime" />
+        </div>
+    }
+</div>
+
+@code {
+
+    private bool _isResultReady = false; //marks if the page ready to loaded
+    private PeopleSelectorBox _peopleSelectorBox;
+    private Person SelectedPerson;
+
+
+    private async Task DoCalculation()
+    {
+        //todo loading box not working
+
+        //get data from inputs and save it for use by other components
+        SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
+
+        //mark page as ready to show results
+        _isResultReady = true;
+
+    }
+
+}

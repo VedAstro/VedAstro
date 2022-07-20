@@ -8,7 +8,7 @@
     @*PERSON SELECTOR
     note: selector placed here because multiple components use it
     *@
-    <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonHash="SelectedPersonHash" />
+    <PeopleSelectorBox @ref="_peopleSelectorBox" />
     <MonthYearSelectorBox LabelText="Start" @ref="_startTimeSelector" />
     <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
 
@@ -68,7 +68,6 @@
     //--------------------FIELDS
 
     private PeopleSelectorBox? _peopleSelectorBox;
-    public string? SelectedPersonHash { get; set; }
 
     private DasaReportViewer? _dasaReportViewer;
 

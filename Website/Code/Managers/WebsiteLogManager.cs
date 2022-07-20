@@ -27,7 +27,7 @@ namespace Website.Managers
                 //since in local errors will show in console
                 //and also not to clog server's error log
 #if DEBUG
-                Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
+                Console.WriteLine("BLZ: LogVisitor: DEBUG mode, skipped logging to server");
                 return;
 #endif
 
@@ -62,6 +62,7 @@ namespace Website.Managers
             //and also not to clog server's error log
 #if DEBUG
             Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
+            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
             return;
 #endif
 
@@ -99,6 +100,7 @@ namespace Website.Managers
             //and also not to clog server's error log
 #if DEBUG
             Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
+            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
             return;
 #endif
 

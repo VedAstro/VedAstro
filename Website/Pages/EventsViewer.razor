@@ -18,7 +18,7 @@
 <div class="vstack gap-2">
     @*PERSON SELECTOR*@
     <div>
-        <PeopleSelectorBox @ref="_peopleSelectorBox" @bind-SelectedPersonHash="SelectedPersonName" />
+        <PeopleSelectorBox @ref="_peopleSelectorBox" />
     </div>
     <div class="hstack">
         <div class="col-5">
@@ -70,7 +70,6 @@
     string? _startHourMinInput, _startDateInput, _timeZonInput;
     string? _endHourMinInput, _endDateInput;
     private GeoLocationInput _geoLocationInput;
-    public string? SelectedPersonName { get; set; }
     public Person SelectedPerson { get; set; }
     //public List<Person>? PersonList { get; set; } //data from URL not necessary provided
     private PeopleSelectorBox? _peopleSelectorBox;

@@ -17,13 +17,14 @@
         public const string About = "/about";
         public const string Contact = "/contact";
         public const string Horoscope = "/horoscope";
+        public const string HoroscopeData = "/horoscopedata";
         public const string Muhurtha = "/muhurtha";
         public const string Match = "/match";
         public const string MatchReport = "/matchreport";
         public const string SunRiseSetTime = "/sunrisesettime";
         public const string AddLifeEvent = "/addlifeevent";
-        public static string LocalMeanTime = "/localmeantime";
-        public static string Dasa = "/dasa";
-        public static string QuickGuide = "/quickguide";
+        public const string LocalMeanTime = "/localmeantime";
+        public const string Dasa = "/dasa";
+        public const string QuickGuide = "/quickguide";
     }
 }

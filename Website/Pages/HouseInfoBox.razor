@@ -29,8 +29,16 @@
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
+    protected override async Task OnInitializedAsync()
+    {
+        //todo loading box not working
+        await _globalVariable.LoadingMessage.Show();
 
-    protected override void OnInitialized() => UpdateData();
+        UpdateData();
+
+        await _globalVariable.LoadingMessage.Hide();
+
+    }
 
 
 
@@ -39,6 +47,7 @@
 
     public void UpdateData()
     {
+
         var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName)HouseNumber, Time);
 
         //get house details and save it for view

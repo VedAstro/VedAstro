@@ -875,6 +875,7 @@
         GoodYogaForRepairs,
         GoodYogaForRepairs2,
         Lord2Dasa,
-        Lord3Dasa
+        Lord3Dasa,
+        Lord5And9DasaBhukti
     }
 }

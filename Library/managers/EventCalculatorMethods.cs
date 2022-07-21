@@ -12116,6 +12116,42 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        [EventCalculator(EventName.Lord5And9DasaBhukti)]
+        public static CalculatorResult Lord5And9DasaBhukti(Time time, Person person)
+        {
+            //The sub-period of the lord of the 5th in the major
+            //period of the lord of the 9th or vice versa is supposed to
+            //produce good effects.
+
+
+            //get lord 5th house
+            var lord5th = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, person.BirthTime);
+            //get lord 9th house
+            var lord9th = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, person.BirthTime);
+
+            //is lord 5th dasa occuring
+            var isLord5thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lord5th;
+            var isLord5thBhukti = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Bhukti == lord5th;
+
+            //is lord 9th dasa occuring
+            var isLord9thDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lord9th;
+            var isLord9thBhukti = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Bhukti == lord9th;
+
+            //condition 1
+            //bhukti 5th lord & dasa 9th lord
+            var condition1 = isLord5thBhukti && isLord9thDasa;
+
+            //condition 2
+            //dasa 5th lord & bhukti 9th lord
+            var condition2 = isLord5thDasa && isLord9thBhukti;
+
+
+            //occuring if one of the conditions met
+            var occuring = condition1 || condition2;
+
+            return new() { Occuring = occuring };
+        }
+
         [EventCalculator(EventName.BhuktiDasaLordInBadHouses)]
         public static CalculatorResult BhuktiDasaLordInBadHouses(Time time, Person person)
         {

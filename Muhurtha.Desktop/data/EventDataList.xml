@@ -4860,6 +4860,16 @@
 			give rise to good.
 		</Description>
 		<Tag>DasaSpecialRules</Tag>
+	</Event>	
+	<Event>
+		<Name>Lord5And9DasaBhukti</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The sub-period of the lord of the 5th in the major
+			period of the lord of the 9th or vice versa is supposed to
+			produce good effects.
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
 	</Event>
 	<Event>
 		<Name>BhuktiDasaLordInBadHouses</Name>

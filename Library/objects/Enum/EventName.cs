@@ -873,6 +873,8 @@
         BadWeekDayForBuilding,
         BadWeekDayForRepairs,
         GoodYogaForRepairs,
-        GoodYogaForRepairs2
+        GoodYogaForRepairs2,
+        Lord2Dasa,
+        Lord3Dasa
     }
 }

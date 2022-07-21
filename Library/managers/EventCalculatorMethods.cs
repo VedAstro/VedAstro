@@ -12058,7 +12058,7 @@ namespace Genso.Astrology.Library
 
         #endregion
 
-        #region DASA GENERAL RULES
+        #region DASA SPECIAL RULES
 
         [EventCalculator(EventName.Lord6And8Dasa)]
         public static CalculatorResult Lord6And8Dasa(Time time, Person person)
@@ -12116,7 +12116,6 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
-
         [EventCalculator(EventName.BhuktiDasaLordInBadHouses)]
         public static CalculatorResult BhuktiDasaLordInBadHouses(Time time, Person person)
         {
@@ -12153,6 +12152,43 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
+
+        [EventCalculator(EventName.Lord2Dasa)]
+        public static CalculatorResult Lord2Dasa(Time time, Person person)
+        {
+            //Lord of the 2nd in his Dasa gives wealth
+
+            //get lord 2nd house
+            var lordHouse2 = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, person.BirthTime);
+
+            //is lord 2nd dasa occuring
+            var isLord2Dasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lordHouse2;
+
+            //occuring if one of the conditions met
+            var occuring = isLord2Dasa;
+
+            return new() { Occuring = occuring };
+        }
+        
+        [EventCalculator(EventName.Lord3Dasa)]
+        public static CalculatorResult Lord3Dasa(Time time, Person person)
+        {
+            //Lord of the 3rd during his Dasa gives new friends,
+            // help to brothers, leadership, and physical pain (if afflicted).
+
+            //get lord 3rd house
+            var lordHouse3 = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, person.BirthTime);
+
+            //is lord 3rd dasa occuring
+            var isLord3Dasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lordHouse3;
+
+            //occuring if one of the conditions met
+            var occuring = isLord3Dasa;
+
+            return new() { Occuring = occuring };
+        }
+
+
 
         #endregion
 

@@ -4839,7 +4839,7 @@
 	</Event>
 
 
-	<!--Dasa General Rules-->
+	<!--Dasa Special Rules-->
 	<Event>
 		<Name>Lord6And8Dasa</Name>
 		<Nature>Bad</Nature>
@@ -4868,6 +4868,23 @@
 			Unfavourable results will be realised when the sub-lord
 			and the major lord are situated in the 6th and the 8th or
 			the 12th and the 2nd from each other respectively.
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>Lord2Dasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			Lord of the 2nd in his Dasa gives wealth
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>Lord3Dasa</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Lord of the 3rd during his Dasa gives new friends,
+			help to brothers, leadership, and physical pain (if afflicted).
 		</Description>
 		<Tag>DasaSpecialRules</Tag>
 	</Event>

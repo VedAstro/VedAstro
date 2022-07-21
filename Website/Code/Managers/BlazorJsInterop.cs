@@ -88,9 +88,17 @@ namespace Website
 
 
 
+        //TIPPY TOOLTIP LIBRARY
+
+        /// <summary>
+        /// Uses tooltip lib to attach tooltip to an element via selector or blazor reference  
+        /// </summary>
+        public static async Task Tippy(this IJSRuntime jsRuntime, object elementRef, object tooltipData) => 
+            await jsRuntime.InvokeVoidAsync("tippy", elementRef, tooltipData);
 
 
-        
+
+
         //█▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
         //█▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 

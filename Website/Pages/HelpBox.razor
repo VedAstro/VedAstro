@@ -1,0 +1,40 @@
+﻿
+@*Small Help box with tooltip showing info*@
+
+
+<div class="hstack gap-2 align-content-center">
+    <h4 class="mt-2">@Label</h4>
+    <div @ref="helpIconHolder" >
+        <span class="iconify" data-icon="icon-park:help" data-width="22"></span>
+    </div>
+</div>
+
+
+@code {
+    /// <summary>
+    /// Text that is shown next help icon
+    /// </summary>
+    [Parameter]
+    public string Label { get; set; }
+
+    /// <summary>
+    /// Text that goes inside tooltip
+    /// </summary>
+    [Parameter]
+    public string HelpText { get; set; }
+
+    private ElementReference helpIconHolder;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //setup the tooltip
+        //- html for multi line
+        //- interactive for selecting text
+        var tooltipData = new { content = HelpText, interactive= true,  allowHTML = true  };
+
+        //attach tooltip lib to element
+        await _jsRuntime.Tippy(helpIconHolder, tooltipData);
+    }
+
+}

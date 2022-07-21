@@ -1,5 +1,6 @@
 ﻿@page "/dasa"
 @using Genso.Astrology.Library
+@using Website.Code
 
 <UnderConstructionHeader PageName="Dasa" />
 
@@ -19,6 +20,7 @@
     <hr>
     @*DASA VIEW BOX*@
     <div>
+        <HelpBox Label="Dasa" HelpText="@HelpText.Dasa"></HelpBox>
         <DasaReportViewer @ref="_dasaReportViewer" />
     </div>
     <hr>

@@ -323,7 +323,7 @@ function InitLifeEventLineToolTip() {
         tippy(this, {
             content: evName,
             placement: 'bottom',
-            arrow: true,
+            arrow: true
         });
 
     });

@@ -872,7 +872,18 @@ namespace API
             var lineHeight = totalHeight + padding;
 
             //add in the cursor line (moves with cursor via JS)
-            compiledRow += $"<rect id=\"CursorLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:#000000;\" x=\"0\" y=\"0\" />";
+            //note: template cursor line us duplicated to dynamic generate legend box
+            compiledRow += $@"
+                        <g id=""CursorLine"" x=""0"" y=""0"">
+		                    <rect width=""2"" height=""{lineHeight}"" style=""fill:#000000;"" x=""0"" y=""0""></rect>
+		                    <g id=""CursorLineLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
+                                <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""145"" height=""15"" rx=""2"" ry=""2""></rect>
+			                    <text style=""fill: rgb(255, 255, 255); font-size: 11px; font-weight:400; white-space: pre;"" x=""14"" y=""11"">Template</text>
+                                <circle cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""red""></circle>
+                            </g>
+                        </g>
+                        ";
+
 
             //get now line position
             var nowLinePosition = GetLinePosition(timeSlices, DateTimeOffset.Now);
@@ -1132,7 +1143,7 @@ namespace API
 
             //STEP 2 : GENERATE EVENT ROWS
             compiledRow += await Generate2(eventsPrecision, startTime, endTime, inputPerson, headerY, timeSlices, daysPerPixel);
-            
+
 
             return compiledRow;
 
@@ -1507,7 +1518,7 @@ namespace API
                     }
                 }
             }
-            
+
             string GenerateDateRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
             {
 
@@ -1600,7 +1611,7 @@ namespace API
 
             //rows are dynamically generated as needed, hence the extra logic below
             //list of rows to generate
-            var listX =  new List<Tuple<string, List<Event>>>();
+            var listX = new List<Tuple<string, List<Event>>>();
 
             //1 GENERATE DATA FOR EVENT ROWS
             //based on logic add each row
@@ -1643,11 +1654,11 @@ namespace API
                 //set y axis (horizontal) for next row
                 yAxis = yAxis + finalHeight + padding;
             }
-            
+
             //3 ADD IN GOCHARA
             //future passed to caller to draw line
             //var totalHeight = yAxis + gocharaHeight;
-            var totalHeight = yAxis ;
+            var totalHeight = yAxis;
 
 
 
@@ -1792,7 +1803,7 @@ namespace API
 
                 return rowHtml;
             }
-            
+
             //height not known until generated
             //returns the final dynamic height of this gochara row
             string GenerateMultipleRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int finalHeight, string eventType)
@@ -1836,7 +1847,7 @@ namespace API
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
                                    $"x=\"{horizontalPosition}\" " +
-                                   $"y=\"{verticalPosition}\" " +
+                                   $"y=\"{yAxis + verticalPosition}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                    $"width=\"{_widthPerSlice}\" " +
                                    $"height=\"{rowHeight}\" " +
                                    $"fill=\"{color}\" />";
@@ -1866,7 +1877,8 @@ namespace API
 
                 //wrap all the rects inside a svg so they can me moved together
                 //note: use group instead of svg because editing capabilities
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+                //rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, 0)\">{rowHtml}</g>";
 
                 //send height of tallest time slice aka the
                 //final height of this gochara row to caller

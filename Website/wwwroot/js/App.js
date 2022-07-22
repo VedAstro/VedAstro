@@ -316,7 +316,7 @@ function GetMouseXInElement(mouseEventData, elementId) {
 //element reference not class
 function InitLifeEventLineToolTip() {
 
-    $(".LifeEventLines").each(function() {
+    $(".LifeEventLines").each(function () {
 
         var evName = this.getAttribute("eventname");
 
@@ -510,7 +510,7 @@ function autoMoveCursorLine(relativeMouseX) {
 }
 
 //attached to dasa viewer to update time legend 
-function autoUpdateTimeLegend(relativeMouseX) {
+function autoUpdateTimeLegendOld(relativeMouseX) {
 
     //x axis is rounded because axis value in rect is whole numbers
     //and it has to be exact match to get it
@@ -528,9 +528,10 @@ function autoUpdateTimeLegend(relativeMouseX) {
 
         //based on the type of the event 
         var type = this.getAttribute("type");
-        eventName = this.getAttribute("eventname");
+        var eventName = this.getAttribute("eventname");
         var color = this.getAttribute("fill");
 
+        //based on event type insert into right place
         switch (type) {
             case "Dasa":
                 $("#DasaLegend").text(`${eventName}`);
@@ -559,6 +560,72 @@ function autoUpdateTimeLegend(relativeMouseX) {
             default:
                 return;
         }
+
+    });
+
+
+}
+
+//generates the time legend shown next to dasa cursor line
+function autoUpdateTimeLegend(relativeMouseX) {
+
+    //x axis is rounded because axis value in rect is whole numbers
+    //and it has to be exact match to get it
+    var mouseRoundedX = Math.round(relativeMouseX);
+
+    //use the mouse position to get all dasa rect
+    //dasa elements at same X position inside the dasa svg
+    //note: faster and less erroneous than using mouse.path
+    var children = $("#DasaViewHolder").children();
+    var allElementsAtX = children.find(`[x=${mouseRoundedX}]`);
+
+    //template used to generate legend rows
+    var holderTemplateId = `#CursorLineLegendTemplate`;
+
+    //delete previously generated legend rows
+    $(".CursorLineLegendClone").remove();
+
+
+    //extract event data out and place it in legend
+    allElementsAtX.each(function () {
+
+        //based on the type of the event 
+        var type = this.getAttribute("type");
+
+        //if no type exist, wrong elm skip it
+        if (!type) { return; }
+
+        //extract other data out of the rect
+        var eventName = this.getAttribute("eventname");
+        var color = this.getAttribute("fill");
+        var yAxis = this.getAttribute("y");
+
+        //create time legend at top only for first element
+        if (allElementsAtX[0] === this) {
+            var newTimeLegend = $(holderTemplateId).clone();
+            newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
+            newTimeLegend.appendTo("#CursorLine"); //place new legend into parent
+            newTimeLegend.show();//make cloned visible
+            newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis - 15})`); //above 1st row
+            var stdTime = this.getAttribute("stdtime");
+            var age = this.getAttribute("age");
+            newTimeLegend.children("text").text(`${stdTime} - AGE ${age}`);
+            newTimeLegend.children("circle").hide();
+        }
+
+        //make a copy of template for this event
+        var newLegendRow = $(holderTemplateId).clone();
+        newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
+        newLegendRow.appendTo("#CursorLine"); //place new legend into parent
+        newLegendRow.show();//make cloned visible
+        //position the group holding the legend over the event row which the legend represents
+        newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis})`);
+
+        //set event name text & color element
+        var textElm = newLegendRow.children("text");
+        var circleElm = newLegendRow.children("circle");
+        textElm.text(`${eventName}`);
+        circleElm.attr("fill", `${color}`);
 
     });
 

@@ -4898,6 +4898,38 @@
 		</Description>
 		<Tag>DasaSpecialRules</Tag>
 	</Event>
+	<Event>
+		<Name>LagnaLordDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			When Lagna (Ascendant) is powerful, during the Dasa
+			of lord of Lagna, favourable results can be expected to occur
+			- such as rise in profession, good health and general prosperity.
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>Saturn4thDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			The Dasa period of Saturn, if it happens to be the 4th
+			Dasa, will be unfavourable.
+			If Saturn is strong and favorably disposed,
+			the evil effects get considerably modified.
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>Jupiter6thDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			The Dasa period of Jupiter will be unfavourable if it
+			happens to be the 6th Dasa.
+			If Saturn is strong and favorably disposed,
+			the evil effects get considerably modified.
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
 
 
 	<!--HOUSE BUILDING-->

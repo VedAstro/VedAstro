@@ -7122,6 +7122,41 @@ namespace Genso.Astrology.Library
 
         #region Dasa Calcuations
 
+
+        public static int GetCurrentDasaCountFromBirth(Time birthTime, Time currentTime)
+        {
+            //get dasa planet at birth (birth time = current time)
+            var birthDasaPlanet = GetCurrentDasaBhuktiAntaram(birthTime, birthTime).Dasa;
+
+            var currentDasaPlanet = GetCurrentDasaBhuktiAntaram(birthTime, currentTime).Dasa;
+
+
+            //count from birth dasa planet to current dasa planet
+            var dasaCount = 1; //minimum 1
+
+            //start with birth dasa planet,
+            //incase current & birth dasa planet is same
+            PlanetName nextPlanet = birthDasaPlanet;
+
+            TryAgain:
+            //planet found, stop counting
+            if (nextPlanet == currentDasaPlanet)
+            {
+                return dasaCount;
+            }
+            //else planet not found,
+            else
+            {
+                //change to next planet 
+                nextPlanet = GetNextDasaPlanet(nextPlanet);
+                //increase count
+                dasaCount++;
+                //try checking again if it is same planet
+                goto TryAgain;
+            }
+
+        }
+
         /// <summary>
         /// Gets the occuring dasa, bhukti & antaram for a person at the given time
         /// </summary>
@@ -8015,7 +8050,7 @@ namespace Genso.Astrology.Library
         {
             //As soon as tbc Dasas and Bhuktis are determined, the next
             //step would be to find out the good and evil planets for each
-            //ascendant so that in applyios the principles to decipher the
+            //ascendant so that in applying the principles to decipher the
             //future history of man, the student may be able to carefully
             //analyse the intensilty or good or evil combinations and proceed
             //further with his predictions when applying the results of

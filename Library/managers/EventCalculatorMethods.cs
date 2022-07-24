@@ -4260,7 +4260,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House1LordInHouse4Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House4, time);
-            
+
             //INFO CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4286,7 +4286,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House1LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House6, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4325,7 +4325,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House1LordInHouse9Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House9, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4349,7 +4349,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House1LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House11, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4362,7 +4362,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House1LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House12, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4509,7 +4509,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House2LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House11, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4522,7 +4522,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House2LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House12, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4564,7 +4564,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House3LordInHouse3Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House3, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4660,7 +4660,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House3LordInHouse11Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House11, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4673,7 +4673,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House3LordInHouse12Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House12, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -4750,7 +4750,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult House4LordInHouse6Occuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House6, time);
-            
+
             //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(lord, time);
@@ -7315,7 +7315,7 @@ namespace Genso.Astrology.Library
             var occurring = evilInHouse2 || aspectedByEvil;
 
             var info = $"Lord:{lord}";
-            return new CalculatorResult() { Occuring = occurring, Info = info};
+            return new CalculatorResult() { Occuring = occurring, Info = info };
 
         }
 
@@ -8267,7 +8267,7 @@ namespace Genso.Astrology.Library
 
             //both must be true for event to occur
             var occuring = geminiRising && evilPlanetFound;
-            
+
             //extra info
             var info = $"Malefic: {string.Join(" , ", evilPlanets)}"; //space needed for word search
             return new CalculatorResult() { Occuring = occuring, Info = info };
@@ -8289,7 +8289,7 @@ namespace Genso.Astrology.Library
 
             //both must be true for event to occur
             var occuring = ariesRising && evilPlanetFound;
-            
+
             //extra info
             var info = $"Malefic:Saturn, Moon";
             return new CalculatorResult() { Occuring = occuring, Info = info };
@@ -11907,7 +11907,7 @@ namespace Genso.Astrology.Library
             //override nature of antaram based on planet
             var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Sun);
 
-            return new() { Occuring = occuring, NatureOverride = planetNature};
+            return new() { Occuring = occuring, NatureOverride = planetNature };
         }
 
         [EventCalculator(EventName.MoonAntaram)]
@@ -12014,7 +12014,7 @@ namespace Genso.Astrology.Library
             var occuring = isCorrectDasa;
 
             //override nature of antaram based on planet
-            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature( person, PlanetName.Mercury);
+            var planetNature = AstronomicalCalculator.GetPlanetAntaramNature(person, PlanetName.Mercury);
 
             return new() { Occuring = occuring, NatureOverride = planetNature };
         }
@@ -12205,7 +12205,7 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
-        
+
         [EventCalculator(EventName.Lord3Dasa)]
         public static CalculatorResult Lord3Dasa(Time time, Person person)
         {
@@ -12223,6 +12223,66 @@ namespace Genso.Astrology.Library
 
             return new() { Occuring = occuring };
         }
+
+        [EventCalculator(EventName.LagnaLordDasa)]
+        public static CalculatorResult LagnaLordDasa(Time time, Person person)
+        {
+            //todo powerful not accounted for, future added it in
+
+            //When Lagna (Ascendant) is powerful, during the Dasa
+            // of lord of Lagna, favourable results can be expected to occur
+            // - such as rise in profession, good health and general prosperity.
+
+            //get lord of 1st house
+            var lordHouse1 = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, person.BirthTime);
+
+            //is lord 1st house dasa occuring
+            var isLord1Dasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == lordHouse1;
+
+            //occuring if one of the conditions met
+            var occuring = isLord1Dasa;
+
+            return new() { Occuring = occuring };
+        }
+
+
+        [EventCalculator(EventName.Saturn4thDasa)]
+        public static CalculatorResult Saturn4thDasa(Time time, Person person)
+        {
+            //The Dasa period of Saturn, if it happens to be the 4th
+            // Dasa, will be unfavourable. If Saturn is strong and favourably disposed,
+            // the evil effects get considerably modified.
+
+            //is saturn dasa occuring
+            var isSaturnDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Saturn;
+
+            //is the 4th dasa
+            var is4thDasa = AstronomicalCalculator.GetCurrentDasaCountFromBirth(person.BirthTime, time) == 4;
+
+            //occuring if one of the conditions met
+            var occuring = isSaturnDasa && is4thDasa;
+
+            return new() { Occuring = occuring };
+        }
+
+        [EventCalculator(EventName.Jupiter6thDasa)]
+        public static CalculatorResult Jupiter6thDasa(Time time, Person person)
+        {
+            //The Dasa period of Jupiter will be unfavourable if it
+            // happens to be the 6th Dasa.
+
+            //is jupiter dasa occuring
+            var isJupiterDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Jupiter;
+
+            //is the 6th dasa
+            var is6thDasa = AstronomicalCalculator.GetCurrentDasaCountFromBirth(person.BirthTime, time) == 6;
+
+            //occuring if one of the conditions met
+            var occuring = isJupiterDasa && is6thDasa;
+
+            return new() { Occuring = occuring };
+        }
+
 
 
 
@@ -12244,7 +12304,7 @@ namespace Genso.Astrology.Library
             //get lunar current lunar month
             var lunarMonth = AstronomicalCalculator.GetLunarMonth(time);
 
-            if (lunarMonth is LunarMonth.Jaistam or LunarMonth.Ashadam or LunarMonth.Bhadrapadam 
+            if (lunarMonth is LunarMonth.Jaistam or LunarMonth.Ashadam or LunarMonth.Bhadrapadam
                 or LunarMonth.Aswijam or LunarMonth.Margasiram or LunarMonth.Pooshiam or LunarMonth.Phalgunam)
             {
                 return CalculatorResult.IsOccuring();
@@ -12258,7 +12318,7 @@ namespace Genso.Astrology.Library
         // The lunar months of Chaitra, Vaisakha, Sravana,
         // Kartika and Magha are the best.
 
-        
+
         [EventCalculator(EventName.GoodSunSignForBuilding)]
         public static CalculatorResult GoodSunSignForBuilding(Time time, Person person)
         {
@@ -12274,7 +12334,7 @@ namespace Genso.Astrology.Library
             var occuring = isFixedSign || isMovableSign;
 
             //if conrtol reaches here then event is ocuring
-            return new CalculatorResult(){Occuring = occuring};
+            return new CalculatorResult() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.BadSunSignForBuilding)]
@@ -12291,7 +12351,7 @@ namespace Genso.Astrology.Library
             var occuring = isCommonSign;
 
             //if conrtol reaches here then event is ocuring
-            return new CalculatorResult(){Occuring = occuring};
+            return new CalculatorResult() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.GoodLunarDayForBuilding)]
@@ -12364,7 +12424,7 @@ namespace Genso.Astrology.Library
             //occuring when moon is wanning
             var occuring = moonPhase == MoonPhase.DarkHalf;
 
-            return new CalculatorResult(){Occuring = occuring};
+            return new CalculatorResult() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.BadWeekDayForBuilding)]
@@ -12431,7 +12491,7 @@ namespace Genso.Astrology.Library
             //if either is true
             var occuring = isFridayLagnaTaurusLibra || isMondayLagnaCancer;
 
-            return new CalculatorResult() {Occuring = occuring};
+            return new CalculatorResult() { Occuring = occuring };
 
         }
 

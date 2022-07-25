@@ -7,34 +7,121 @@
     <Description>List of visitors to the site</Description>
 </PageTop>
 
-@foreach (var visitorXml in @visitorList)
-{
-    <div class="hstack gap-2">
-        <div>@visitorXml.Element("UniqueId").Value</div>
-        <div>@visitorXml.Element("Url").Value</div>
-    </div>
 
+@switch (whatToShow)
+{
+    case "uniqueVisitorList":
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>UserId</th>
+                <th>UniqueId</th>
+                <th>Url</th>
+                <th>TimeStamp</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Browser</th>
+                <th>Os</th>
+                <th>device</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var visitorXml in uniqueVisitorList)
+            {
+                <tr>
+                    <td>@visitorXml.Element("UserId").Value</td>
+                    <td>@visitorXml.Element("UniqueId").Value</td>
+                    <td>@visitorXml.Element("Url").Value</td>
+                    <td>@visitorXml.Element("TimeStamp").Value</td>
+                    <td>@visitorXml.Element("Location")?.Element("country")?.Value</td>
+                    <td>@visitorXml.Element("Location")?.Element("city")?.Value</td>
+                    <td>@visitorXml.Element("BrowserData").Element("browser").Element("name").Value</td>
+                    <td>@visitorXml.Element("BrowserData").Element("os").Element("name").Value</td>
+                    <td>@visitorXml.Element("BrowserData").Element("device").Value</td>
+                    <td>
+                        <IconButton ButtonText="Trail" OnClickCallback="() => RenderVisitorTrailList(visitorXml)"></IconButton>
+                    </td>
+                </tr>
+            }
+
+            </tbody>
+        </table>
+        break;
+    case "visitorTrailList":
+        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="RenderUniqueVisitorList"></IconButton>
+        
+        <div class="hstack gap-2">
+            <div>@clickedVisitorXml.Element("Location").Element("country").Value</div>
+            <div>@clickedVisitorXml.Element("Location").Element("city").Value</div>
+            <div>@clickedVisitorXml.Element("BrowserData").Element("browser").Element("name").Value</div>
+            <div>@clickedVisitorXml.Element("BrowserData").Element("os").Element("name").Value</div>
+            <div>@clickedVisitorXml.Element("BrowserData").Element("device").Value</div>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+            <tr>
+                <th>UserId</th>
+                <th>UniqueId</th>
+                <th>Url</th>
+                <th>TimeStamp</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var visitorXml in visitorTrailList)
+            {
+                <tr>
+                    <td>@visitorXml.Element("UserId").Value</td>
+                    <td>@visitorXml.Element("UniqueId").Value</td>
+                    <td>@visitorXml.Element("Url").Value</td>
+                    <td>@visitorXml.Element("TimeStamp").Value</td>
+                </tr>
+            }
+
+            </tbody>
+        </table>
+        break;
+    default:
+        <p>Do Nothing</p>
+        break;
 }
+
+
 
 
 @code {
 
-    List<XElement> visitorList = new List<XElement>();
+    List<XElement> uniqueVisitorList = new List<XElement>();
+    List<XElement> visitorTrailList = new List<XElement>();
+    List<XElement> rawVisitorList = new List<XElement>();
+    string whatToShow = "";
+    XElement clickedVisitorXml;
 
     //code executed after page has been rendered
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //generate table
-        if (firstRender) { await GenerateTable(); }
+        if (firstRender) { await RenderUniqueVisitorList(); }
     }
 
 
-    private async Task GenerateTable()
+    private async Task RenderUniqueVisitorList()
     {
         await _globalVariable.LoadingMessage.Show();
 
         //get all people from API server
-        visitorList = await WebsiteTools.GetVisitorList("101");
+        rawVisitorList = await WebsiteTools.GetVisitorList("101");
+
+        //filter list to show unique visitors only
+        //"Location" & "BrowserData" only exist in unique 1st visit
+        uniqueVisitorList = (from xElement in rawVisitorList
+                             where
+                                 xElement.Element("Location") != null &&
+                                 xElement.Element("BrowserData") != null
+                             select xElement).ToList();
+
+        whatToShow = "uniqueVisitorList";
 
         StateHasChanged();
 
@@ -47,5 +134,20 @@
     }
 
 
+    private void RenderVisitorTrailList(XElement visitorXml)
+    {
+        clickedVisitorXml = visitorXml;
+        var uniqueIdClicked = clickedVisitorXml.Element("UniqueId")?.Value;
+
+        //filter list to show all visits made by this unique ID
+        visitorTrailList = (from xElement in rawVisitorList
+                             where xElement.Element("UniqueId")?.Value == uniqueIdClicked
+                             select xElement).ToList();
+
+        whatToShow = "visitorTrailList";
+
+        StateHasChanged();
+
+    }
 
 }

@@ -185,7 +185,6 @@ namespace Website
         public static async Task<List<XElement>> GetVisitorList(string userId)
         {
             var visitorListRootXml = await ServerManager.WriteToServer(ServerManager.GetVisitorList, new XElement("UserId", userId));
-            //var visitorList = visitorListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
             var visitorList = visitorListRootXml.Elements().ToList();
             return visitorList;
         }

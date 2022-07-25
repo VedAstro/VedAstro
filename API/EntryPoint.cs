@@ -179,8 +179,6 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
         {
-            var responseMessage = "";
-
             try
             {
                 //get new visitor data out of incoming request 
@@ -201,10 +199,6 @@ namespace API
                 return APITools.FormatErrorReply(e);
             }
 
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
         [FunctionName("getmalelist")]
@@ -266,15 +260,15 @@ namespace API
                 var visitorLogXml = APITools.BlobClientToXml(visitorLogClient);
 
                 //get all unique visitor elements only
-                var uniqueVisitorList = from visitorXml in visitorLogXml.Root?.Elements()
-                                        where
-                                            //note: location tag only exists for new visitor log,
-                                            //so use that to get unique list
-                                            visitorXml.Element("Location") != null
-                                        select visitorXml;
+                //var uniqueVisitorList = from visitorXml in visitorLogXml.Root?.Elements()
+                //                        where
+                //                            //note: location tag only exists for new visitor log,
+                //                            //so use that to get unique list
+                //                            visitorXml.Element("Location") != null
+                //                        select visitorXml;
 
                 //send list to caller
-                responseMessage = new XElement("Root", uniqueVisitorList).ToString();
+                responseMessage = visitorLogXml.ToString();
 
             }
             catch (Exception e)
@@ -589,8 +583,8 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
         {
-            var responseMessage = "";
 
+            throw new NotImplementedException();
             try
             {
                 //get unedited hash & updated person details from incoming request
@@ -616,10 +610,6 @@ namespace API
                 return APITools.FormatErrorReply(e);
             }
 
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
         [FunctionName("getpersonlist")]

@@ -285,7 +285,8 @@ async function ShowLeaveEmailAlert() {
 
 //Gets a mouses x axis relative inside the given element
 //used to get mouse location on Dasa view
-function GetMouseXInElement(mouseEventData, elementId) {
+//returns 0 when mouse is out
+function GetMousePositionInElement(mouseEventData, elementId) {
 
     //gets the measurements of the dasa view holder
     //the element where cursor line will be moving
@@ -297,13 +298,18 @@ function GetMouseXInElement(mouseEventData, elementId) {
     let relativeMouseY = mouseEventData.clientY - holderMeasurements.top; //when mouse leaves top
     let relativeMouseYb = mouseEventData.clientY - holderMeasurements.bottom; //when mouse leaves bottom
 
-    //if mouse out of element element, hide cursor and end here
+    //if mouse out of element element, set 0 as indicator
     let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
 
     if (mouseOut) {
         return 0;
     } else {
-        return relativeMouseX;
+
+        var mouse = {
+            xAxis: relativeMouseX,
+            yAxis: relativeMouseY
+        };
+        return mouse;
     }
 
 }
@@ -488,21 +494,20 @@ function onClickGoogleSignOutButton() {
 async function onMouseMoveDasaViewEventHandler(mouse) {
 
     //get relative position of mouse in Dasa view
-    var relativeMouseX = GetMouseXInElement(mouse, "#DasaViewHolder");
+    var mousePosition = GetMousePositionInElement(mouse, "#DasaViewHolder");
+
+    //if mouse is out of dasa view hide cursor and end here
+    if (mousePosition == 0) { $("#CursorLine").hide(); return; }
+    else { $("#CursorLine").show(); }
 
     //move cursor line 1st for responsiveness
-    autoMoveCursorLine(relativeMouseX);
+    autoMoveCursorLine(mousePosition.xAxis);
 
     //update time legend
-    autoUpdateTimeLegend(relativeMouseX);
+    autoUpdateTimeLegend(mousePosition);
 }
 
 function autoMoveCursorLine(relativeMouseX) {
-
-
-    //if outside element (0 value), hide cursor and end here
-    if (relativeMouseX == 0) { $("#CursorLine").hide(); return; }
-    else { $("#CursorLine").show(); }
 
     //move vertical line to under mouse inside dasa view box
     $("#CursorLine").attr('transform', `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`);
@@ -567,11 +572,16 @@ function autoUpdateTimeLegendOld(relativeMouseX) {
 }
 
 //generates the time legend shown next to dasa cursor line
-function autoUpdateTimeLegend(relativeMouseX) {
+//notes: a template row always exists in code,
+//in client JS side uses template to create the rows from cloning it
+//and modifying its prop as needed, as such any major edit needs to
+//be done in API code
+function autoUpdateTimeLegend(mousePosition) {
 
     //x axis is rounded because axis value in rect is whole numbers
     //and it has to be exact match to get it
-    var mouseRoundedX = Math.round(relativeMouseX);
+    var mouseRoundedX = Math.round(mousePosition.xAxis);
+    var mouseRoundedY = Math.round(mousePosition.yAxis);
 
     //use the mouse position to get all dasa rect
     //dasa elements at same X position inside the dasa svg
@@ -589,6 +599,7 @@ function autoUpdateTimeLegend(relativeMouseX) {
     //extract event data out and place it in legend
     allElementsAtX.each(function () {
 
+        //1 GET DATA
         //based on the type of the event 
         var type = this.getAttribute("type");
 
@@ -598,8 +609,9 @@ function autoUpdateTimeLegend(relativeMouseX) {
         //extract other data out of the rect
         var eventName = this.getAttribute("eventname");
         var color = this.getAttribute("fill");
-        var yAxis = this.getAttribute("y");
+        var yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
 
+        //2 TIME & AGE LEGEND
         //create time legend at top only for first element
         if (allElementsAtX[0] === this) {
             var newTimeLegend = $(holderTemplateId).clone();
@@ -613,6 +625,7 @@ function autoUpdateTimeLegend(relativeMouseX) {
             newTimeLegend.children("circle").hide();
         }
 
+        //3 GENERATE EVENT ROW
         //make a copy of template for this event
         var newLegendRow = $(holderTemplateId).clone();
         newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
@@ -627,10 +640,129 @@ function autoUpdateTimeLegend(relativeMouseX) {
         textElm.text(`${eventName}`);
         circleElm.attr("fill", `${color}`);
 
+        //4 GENERATE DESCRIPTION ROW LOGIC
+        //check if mouse in within row of this event (y axis)
+        var elementTopY = yAxis;
+        var elementBottomY = yAxis + 15;
+        if (mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY) {
+            //highlight event name row 
+            textElm.css("fill", "red");
+            textElm.css("font-weight", "600");
+
+            //fill description box about event
+            var eventDesc = getEventDescription(eventName);
+            var wrappedDescText = createSVGtext(eventDesc, 175, 24);
+            $(wrappedDescText).appendTo("#CursorLineLegendDescription");
+        }
+
+
     });
 
 
 }
+
+function getEventDescription(eventName) {
+
+    console.log(eventName);
+
+    var xmlDoc;
+    var parser = new DOMParser();
+
+
+    fetch('https://www.vedastro.tk/data/EventDataList.xml', { mode: 'no-cors' })
+        .then((response) => response.text())
+        .then(
+            (data) => {
+                //console.log(data);
+                xmlDoc = parser.parseFromString(data, "text/xml");
+
+                var xml = $(xmlDoc);
+                var events = xml.find('Event');
+
+                //var x = events.filter(evt => $(evt).children('Name').eq(0).val() === eventName);
+
+                var results = events.filter(function () {
+                    var y = $(this).children('Name').eq(0).text();
+                    return y === eventName;
+                });
+
+                var eventDescription = results.eq(0).children('Description').eq(0).text();
+
+                return eventDescription;
+                //console.log(x);
+                console.log(eventDescription);
+
+            });
+
+
+}
+
+//fetch("https://www.vedastro.tk/data/EventDataList.xml")
+//    .then((res) => { return res.blob(); })
+//    .then((data) => {
+//        var a = document.createElement("a");
+//        a.href = window.URL.createObjectURL(data);
+//        a.download = "FILENAME";
+//        a.click();
+//    });
+
+//fire event in Blazor, that user just signed in
+//var x = DotNet.invokeMethod('Website', 'GetEventDescription', eventName);
+//return x;
+
+
+//return "When Lagna (Ascendant) is powerful, during the Dasa of lord of Lagna, favourable results can be expected to occur - such as rise in profession, good health and general prosperity.";
+
+
+//  This function attempts to create a new svg "text" element, chopping
+//  it up into "tspan" pieces, if the caption is too long
+function createSVGtext(caption, x, y) {
+    var svgText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    svgText.setAttributeNS(null, 'x', x);
+    svgText.setAttributeNS(null, 'y', y);
+    svgText.setAttributeNS(null, 'font-size', 10);
+    svgText.setAttributeNS(null, 'fill', '#FFFFFF');         //  White text
+    svgText.setAttributeNS(null, 'text-anchor', 'left');   //  Center the text
+
+    //  The following two variables should really be passed as parameters
+    var MAXIMUM_CHARS_PER_LINE = 30;
+    var LINE_HEIGHT = 10;
+
+    var words = caption.split(" ");
+    var line = "";
+
+    for (var n = 0; n < words.length; n++) {
+        var testLine = line + words[n] + " ";
+        if (testLine.length > MAXIMUM_CHARS_PER_LINE) {
+            //  Add a new <tspan> element
+            var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+            svgTSpan.setAttributeNS(null, 'x', x);
+            svgTSpan.setAttributeNS(null, 'y', y);
+
+            var tSpanTextNode = document.createTextNode(line);
+            svgTSpan.appendChild(tSpanTextNode);
+            svgText.appendChild(svgTSpan);
+
+            line = words[n] + " ";
+            y += LINE_HEIGHT;
+        }
+        else {
+            line = testLine;
+        }
+    }
+
+    var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    svgTSpan.setAttributeNS(null, 'x', x);
+    svgTSpan.setAttributeNS(null, 'y', y);
+
+    var tSpanTextNode = document.createTextNode(line);
+    svgTSpan.appendChild(tSpanTextNode);
+
+    svgText.appendChild(svgTSpan);
+
+    return svgText;
+}
+
 
 //element passed in is the element where touch will be detected
 function InitTouchLib(element) {
@@ -657,7 +789,9 @@ function InitTouchLib(element) {
 
         //and calling the event handlers
         //that a mouse would normally fire
+        alert("todo touch not implemented!!!");
         autoMoveCursorLine(mouse);
+        //todo call to this method is out dated
         autoUpdateTimeLegend(mouse);
     });
 

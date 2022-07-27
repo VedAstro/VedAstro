@@ -650,7 +650,7 @@ function autoUpdateTimeLegend(mousePosition) {
             textElm.css("font-weight", "600");
 
             //fill description box about event
-            var eventDesc = getEventDescription(eventName);
+            var eventDesc = getEventDescription(eventName.replace(/ /g, ""));
             var wrappedDescText = createSVGtext(eventDesc, 175, 24);
             $(wrappedDescText).appendTo("#CursorLineLegendDescription");
         }
@@ -661,9 +661,15 @@ function autoUpdateTimeLegend(mousePosition) {
 
 }
 
-function getEventDescription(eventName) {
+async function getEventDescription(eventName) {
 
     console.log(eventName);
+
+
+    ////fire event in Blazor, that user just signed in
+    //var x = await DotNet.invokeMethodAsync('Website', 'GetEventDescription', eventName);
+    //return x;
+
 
     var xmlDoc;
     var parser = new DOMParser();
@@ -706,9 +712,6 @@ function getEventDescription(eventName) {
 //        a.click();
 //    });
 
-//fire event in Blazor, that user just signed in
-//var x = DotNet.invokeMethod('Website', 'GetEventDescription', eventName);
-//return x;
 
 
 //return "When Lagna (Ascendant) is powerful, during the Dasa of lord of Lagna, favourable results can be expected to occur - such as rise in profession, good health and general prosperity.";

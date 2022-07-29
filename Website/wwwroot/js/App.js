@@ -650,9 +650,12 @@ function autoUpdateTimeLegend(mousePosition) {
             textElm.css("font-weight", "600");
 
             //fill description box about event
-            var eventDesc = getEventDescription(eventName.replace(/ /g, ""));
-            var wrappedDescText = createSVGtext(eventDesc, 175, 24);
-            $(wrappedDescText).appendTo("#CursorLineLegendDescription");
+            getEventDescription(eventName.replace(/ /g, ""))
+                .then((eventDesc) => {
+                    var wrappedDescText = createSVGtext(eventDesc, 175, 24);
+                    $("#CursorLineLegendDescription").empty(); //clear previous desc
+                    $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
+                });
         }
 
 
@@ -674,32 +677,32 @@ async function getEventDescription(eventName) {
     var xmlDoc;
     var parser = new DOMParser();
 
+    var url = `${window.location.origin}/data/EventDataList.xml`;
 
-    fetch('https://www.vedastro.tk/data/EventDataList.xml', { mode: 'no-cors' })
-        .then((response) => response.text())
-        .then(
-            (data) => {
-                //console.log(data);
-                xmlDoc = parser.parseFromString(data, "text/xml");
+    var eventDescription;
 
-                var xml = $(xmlDoc);
-                var events = xml.find('Event');
+    var response = await fetch(url, { mode: 'no-cors' });
+    var data = await response.text();
 
-                //var x = events.filter(evt => $(evt).children('Name').eq(0).val() === eventName);
+    //console.log(data);
+    xmlDoc = parser.parseFromString(data, "text/xml");
 
-                var results = events.filter(function () {
-                    var y = $(this).children('Name').eq(0).text();
-                    return y === eventName;
-                });
+    var xml = $(xmlDoc);
+    var events = xml.find('Event');
 
-                var eventDescription = results.eq(0).children('Description').eq(0).text();
+    //var x = events.filter(evt => $(evt).children('Name').eq(0).val() === eventName);
 
-                return eventDescription;
-                //console.log(x);
-                console.log(eventDescription);
+    var results = events.filter(function () {
+        var y = $(this).children('Name').eq(0).text();
+        return y === eventName;
+    });
 
-            });
+    eventDescription = results.eq(0).children('Description').eq(0).text();
+    //console.log(x);
+    console.log(eventDescription);
 
+
+    return eventDescription;
 
 }
 

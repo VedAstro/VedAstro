@@ -700,7 +700,7 @@ namespace API
 
             Parallel.ForEach(daysPerPixel, async dayPx =>
             {
-                var dasaReportSvgString = await GenerateDasaReportSvg(person, startTime, endTime, dayPx);
+                var dasaReportSvgString = await GenerateMainDasaReportSvg(person, startTime, endTime, dayPx);
                 //save it in cache for future calls
                 //note : needs to await, because caller expects it reports saved on call end
                 await SetCachedDasaReportSvg(person.Hash, dayPx, cachedReportsClient, dasaReportSvgString);
@@ -755,7 +755,7 @@ namespace API
             var foundPerson = APITools.GetPersonFromHash(personHash, personListClient);
 
             //from person get svg report
-            var dasaReportSvgString = await GenerateDasaReportSvg(foundPerson, startTime, endTime, daysPerPixel);
+            var dasaReportSvgString = await GenerateMainDasaReportSvg(foundPerson, startTime, endTime, daysPerPixel);
 
             //convert svg string to stream for sending
             //todo check if using really needed here
@@ -838,7 +838,7 @@ namespace API
         /// <summary>
         /// Massive method that generates dasa report in SVG
         /// </summary>
-        private static async Task<string> GenerateDasaReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
+        private static async Task<string> GenerateMainDasaReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
         {
             // One precision value for generating all dasa components,
             // because misalignment occurs if use different precision
@@ -862,16 +862,20 @@ namespace API
             var lineHeight = totalHeight + padding;
 
             //add in the cursor line (moves with cursor via JS)
-            //note: template cursor line us duplicated to dynamic generate legend box
+            //note: template cursor line is duplicated to dynamically generate legend box
             compiledRow += $@"
                         <g id=""CursorLine"" x=""0"" y=""0"">
 		                    <rect width=""2"" height=""{lineHeight}"" style=""fill:#000000;"" x=""0"" y=""0""></rect>
 		                    <g id=""CursorLineLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
-                                <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""145"" height=""15"" rx=""2"" ry=""2""></rect>
-			                    <text style=""fill: rgb(255, 255, 255); font-size: 11px; font-weight:400; white-space: pre;"" x=""14"" y=""11"">Template</text>
+                                <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
+			                    <text style=""fill:#FFFFFF; font-size:11px; font-weight:400; white-space: pre;"" x=""14"" y=""11"">Template</text>
                                 <circle cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""red""></circle>
                             </g>
-                        </g>
+                            <g>
+			                    <rect style=""fill: blue; opacity: 0.8;"" x=""170"" y=""11.244"" width=""130"" height=""145"" rx=""2"" ry=""2""></rect>
+                                <g id=""CursorLineLegendDescription""></g>
+		                    </g>
+                       </g>
                         ";
 
 

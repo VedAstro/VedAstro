@@ -4,11 +4,13 @@
 <ul style="font-size: small; min-width: 228px;" class="list-group me-2 my-2">
     <li class="list-group-item active" aria-current="true">House @HouseNumber</li>
     <li class="list-group-item">Details : @_houseDetails</li>
+    <li class="list-group-item">Strength : @_houseStrength Shashtiamsas</li>
     <li class="list-group-item">Sign : @_houseSign</li>
     <li class="list-group-item">Lord : @_houseLord</li>
     <li class="list-group-item">Lord Exalted: @(_lordExalted?"Yes":"No")</li>
     <li class="list-group-item">Lord Debilitated: @(_lordDebilitated?"Yes":"No")</li>
     <li class="list-group-item">Planets Inside: @_planetsInHouse</li>
+    <li class="list-group-item">Planets Aspecting: @_planetsAspectingHouse</li>
 </ul>
 
 
@@ -21,7 +23,7 @@
     [Parameter]
     public int HouseNumber { get; set; }
 
-    private string? _houseDetails, _houseLord, _houseSign, _planetsInHouse;
+    private string? _houseDetails, _houseLord, _houseSign, _planetsInHouse, _planetsAspectingHouse, _houseStrength;
     private bool _lordExalted, _lordDebilitated;
 
 
@@ -53,8 +55,10 @@
         //get house details and save it for view
         _houseDetails = AstronomicalCalculator.GetHouseDetails(HouseNumber, Time);
         _houseLord = lordOfHouse.ToString();
-        _planetsInHouse = GetPlanetsInHouse();
-        //_houseStrenght = AstronomicalCalculator.GetAllHousesOrderedByStrength()
+        _planetsInHouse = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(HouseNumber, Time));
+        _planetsAspectingHouse = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)HouseNumber, Time));
+        var rawHouseStrength = AstronomicalCalculator.GetBhavabala((HouseName)HouseNumber, Time).ToDouble();
+        _houseStrength = Math.Round(rawHouseStrength,2).ToString();
         _houseSign = AstronomicalCalculator.GetHouseSignName(HouseNumber, Time).ToString();
         //_houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign();
 
@@ -65,18 +69,7 @@
         this.StateHasChanged();
     }
 
-    private string? GetPlanetsInHouse()
-    {
-        var planetList = AstronomicalCalculator.GetPlanetsInHouse(HouseNumber, Time);
 
-        var combinedNames = "";
-        foreach (var planet in planetList)
-        {
-            combinedNames += planet.ToString() + ", ";
-        }
-
-        return combinedNames;
-    }
 
 
 }

@@ -38,13 +38,25 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets a list of planet excluding rahu & ketu, used for looping through planets
         /// </summary>
-        public static readonly List<PlanetName> AllPlanets = new List<PlanetName>()
+        public static readonly List<PlanetName> All7Planets = new List<PlanetName>()
         {
-            PlanetName.Sun, PlanetName.Moon,
-            PlanetName.Mars, PlanetName.Mercury,
-            PlanetName.Jupiter, PlanetName.Venus,
-            PlanetName.Saturn
+            Sun, Moon,
+            Mars, Mercury,
+            Jupiter, Venus,
+            Saturn
         };
+
+        /// <summary>
+        /// Gets a list of planet WITH rahu & ketu, used for looping through planets
+        /// </summary>
+        public static readonly List<PlanetName> All9Planets = new List<PlanetName>()
+        {
+            Sun, Moon,
+            Mars, Mercury,
+            Jupiter, Venus,
+            Saturn, Rahu, Ketu
+        };
+        
 
 
         //DATA FIELDS
@@ -67,23 +79,23 @@ namespace Genso.Astrology.Library
             switch (name)
             {
                 case "Sun":
-                    return PlanetName.Sun;
+                    return Sun;
                 case "Moon":
-                    return PlanetName.Moon;
+                    return Moon;
                 case "Mars":
-                    return PlanetName.Mars;
+                    return Mars;
                 case "Mercury":
-                    return PlanetName.Mercury;
+                    return Mercury;
                 case "Jupiter":
-                    return PlanetName.Jupiter;
+                    return Jupiter;
                 case "Venus":
-                    return PlanetName.Venus;
+                    return Venus;
                 case "Saturn":
-                    return PlanetName.Saturn;
+                    return Saturn;
                 case "Ketu":
-                    return PlanetName.Ketu;
+                    return Ketu;
                 case "Rahu":
-                    return PlanetName.Rahu;
+                    return Rahu;
             }
 
 
@@ -113,7 +125,7 @@ namespace Genso.Astrology.Library
         //METHOD OVERRIDES
         public override string ToString()
         {
-            return this._planetName.ToString();
+            return _planetName.ToString();
         }
 
         public override bool Equals(object obj)
@@ -125,7 +137,7 @@ namespace Genso.Astrology.Library
                 var value = (PlanetName)obj;
 
                 //Check equality
-                bool returnValue = (this.GetHashCode() == value.GetHashCode());
+                bool returnValue = (GetHashCode() == value.GetHashCode());
 
                 return returnValue;
             }

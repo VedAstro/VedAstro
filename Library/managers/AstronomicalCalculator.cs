@@ -2031,6 +2031,9 @@ namespace Genso.Astrology.Library
 
         }
 
+        /// <summary>
+        /// Calculates & creates all houses as list
+        /// </summary>
         public static List<House> GetHouses(Time time)
         {
             //CACHE MECHANISM
@@ -4139,6 +4142,18 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
+        /// Gets all planets the transmiting aspect to inputed planet
+        /// </summary>
+        public static List<PlanetName> GetPlanetsAspectingPlanet(Time time, PlanetName receivingAspect)
+        {
+            //check if all planets is aspecting inputed planet
+            var aspectFound = PlanetName.All9Planets.FindAll(transmitPlanet => IsPlanetAspectedByPlanet(receivingAspect, transmitPlanet, time));
+
+            return aspectFound;
+
+        }
+
+        /// <summary>
         /// Gets houses aspected by the inputed planet
         /// </summary>
         public static List<HouseName> GetHousesInAspect(PlanetName planet, Time time)
@@ -4160,6 +4175,32 @@ namespace Genso.Astrology.Library
             //return the houses aspected by input planet
             return housesAspected;
 
+        }
+
+        /// <summary>
+        /// Gets all planets aspecting inputed house
+        /// </summary>
+        public static List<PlanetName> GetPlanetsAspectingHouse(HouseName inputHouse, Time time)
+        {
+            //create empty list
+            var returnPlanetList = new List<PlanetName>();
+
+            //check each planet if aspecting house
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                //get houses
+                var housesInAspect = GetHousesInAspect(planet, time);
+
+                //check if any house is a match
+                var houseMatch = housesInAspect.FindAll(house => house == inputHouse).Any();
+                if (houseMatch)
+                {
+                    returnPlanetList.Add(planet);
+                }
+            }
+
+
+            return returnPlanetList;
         }
 
         /// <summary>
@@ -4243,7 +4284,7 @@ namespace Genso.Astrology.Library
                 var planetStrenghtList = new Dictionary<double, PlanetName>();
 
                 //create a list with planet names & its strength (unsorted)
-                foreach (var planet in PlanetName.AllPlanets)
+                foreach (var planet in PlanetName.All7Planets)
                 {
                     //get planet strength in rupas
                     var strength = GetPlanetShadbalaPinda(planet, time).ToRupa();
@@ -4425,7 +4466,7 @@ namespace Genso.Astrology.Library
             var sp = new Dictionary<PlanetName, int>();
 
 
-            foreach (var p in PlanetName.AllPlanets)
+            foreach (var p in PlanetName.All7Planets)
             {
                 if (AstronomicalCalculator.IsPlanetBenefic(p, time))
                 {
@@ -4439,9 +4480,9 @@ namespace Genso.Astrology.Library
             }
 
 
-            foreach (var i in PlanetName.AllPlanets)
+            foreach (var i in PlanetName.All7Planets)
             {
-                foreach (var j in PlanetName.AllPlanets)
+                foreach (var j in PlanetName.All7Planets)
                 {
                     //Finding Drishti Kendra or Aspect Angle
                     var planetNirayanaLongitude = AstronomicalCalculator.GetPlanetNirayanaLongitude(time, j).TotalDegrees;
@@ -4462,11 +4503,11 @@ namespace Genso.Astrology.Library
 
             var DrikBala = new Dictionary<PlanetName, double>();
 
-            foreach (var i in PlanetName.AllPlanets)
+            foreach (var i in PlanetName.All7Planets)
             {
                 bala = 0;
 
-                foreach (var j in PlanetName.AllPlanets)
+                foreach (var j in PlanetName.All7Planets)
                 {
                     bala = bala + (sp[j] * drishti[j.ToString() + i.ToString()]);
 
@@ -5261,7 +5302,7 @@ namespace Genso.Astrology.Library
 
                 //Yuddha Bala requires all planet's pre kala bala
                 //so calculate pre kala bala for all planets first
-                foreach (var planet in PlanetName.AllPlanets)
+                foreach (var planet in PlanetName.All7Planets)
                 {
                     //calculate pre kala bala
                     var preKalaBala = GetPreKalaBala(planet, time);
@@ -6179,7 +6220,7 @@ namespace Genso.Astrology.Library
 
                     bala = 0;
 
-                    foreach (var planet in PlanetName.AllPlanets)
+                    foreach (var planet in PlanetName.All7Planets)
                     {
 
                         bala = bala + (sp[planet] * drishti[planet.ToString() + house.ToString()]);
@@ -6200,7 +6241,7 @@ namespace Genso.Astrology.Library
                     var _sp = new Dictionary<PlanetName, int>();
 
                     //assign initial negative or positive value based on benefic or malefic planet
-                    foreach (var p in PlanetName.AllPlanets)
+                    foreach (var p in PlanetName.All7Planets)
                     {
                         //Though in the earlier pages Mercury is defined either as a subba
                         //(benefic) or papa (malefic) according to its association is with a benefic or
@@ -6235,7 +6276,7 @@ namespace Genso.Astrology.Library
 
                     double drishtiKendra;
 
-                    foreach (var planet in PlanetName.AllPlanets)
+                    foreach (var planet in PlanetName.All7Planets)
                     {
                         foreach (var houseNo in House.AllHouses)
                         {
@@ -6741,7 +6782,6 @@ namespace Genso.Astrology.Library
             var evilAspectFound = evilPlanets.FindAll(evilPlanet =>
                 IsPlanetAspectedByPlanet(lord, evilPlanet, time)).Any();
             return evilAspectFound;
-
 
         }
 
@@ -8165,6 +8205,7 @@ namespace Genso.Astrology.Library
             }
 
         }
+
     }
 
 }

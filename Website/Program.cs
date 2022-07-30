@@ -6,6 +6,7 @@ using Microsoft.JSInterop;
 using Website;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
@@ -36,7 +37,13 @@ builder.Logging.AddProvider(unhandledExceptionProvider);
 builder.Services.AddSingleton<IUnhandledExceptionSender>(unhandledExceptionSender);
 
 
-await builder.Build().RunAsync();
+//The last thing that the Main method does is to take all of the configuration
+//specified with the WebAssemblyHostBuilder and call its Build method. This will
+//create an instance of a WebAssemblyHost which is the heart of your Blazor app.
+//It contains all of the application configuration and services needed to run your app.
+var webAssemblyHost = builder.Build();
+
+await webAssemblyHost.RunAsync();
 
 
 

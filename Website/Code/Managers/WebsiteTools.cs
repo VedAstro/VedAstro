@@ -76,8 +76,6 @@ namespace Website
             }
         }
 
-
-
         public static async Task<dynamic> GetAddressLocation(string address)
         {
             //create the request url for Google API
@@ -104,7 +102,6 @@ namespace Website
 
         }
 
-
         /// <summary>
         /// gets the name of the place given th coordinates, uses Google API
         /// </summary>
@@ -127,9 +124,6 @@ namespace Website
 
         }
 
-
-
-
         /// <summary>
         /// Tries to get user login state, else returns public user id.
         /// Note: Public User Id is the standard id all unregistered visitors get
@@ -148,7 +142,6 @@ namespace Website
 
             return userId;
         }
-
 
         /// <summary>
         /// if try limit is expired then returns false
@@ -179,6 +172,7 @@ namespace Website
             var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
             return personList;
         }
+       
         /// <summary>
         /// Gets all visitor list from API server
         /// </summary>
@@ -283,7 +277,6 @@ namespace Website
         public static async Task<List<Event>?> GetAntaramEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person)
             => await EventsByTag(EventTag.Antaram, _eventsPrecision, startTime, endTime, _jsRuntime, person);
 
-
         /// <summary>
         /// gets events from server filtered by event tag
         /// </summary>
@@ -345,6 +338,22 @@ namespace Website
             return resultsParsed;
         }
 
+        /// <summary>
+        /// Converts any list to comma separated string
+        /// Note: calls ToString();
+        /// </summary>
+        public static string? ListToString<T>(List<T> list)
+        {
+            var combinedNames = "";
+            foreach (var item in list)
+            {
+                combinedNames += item.ToString() + ", ";
+            }
+
+            return combinedNames;
+        }
+
+
 
 
         //█▀▀ ▄▀█ █░░ █░░ █▀▀ █▀▄   █▀▀ █▀█ █▀█ █▀▄▀█   ░░█ █▀
@@ -384,6 +393,58 @@ namespace Website
         {
             Console.WriteLine("BLZ: OnAppError");
         }
+
+
+        /// <summary>
+        /// Gets event's description from file stored in static website
+        /// </summary>
+        [JSInvokable]
+        public static string GetEventDescription(string eventName)
+        {
+            Console.WriteLine("BLZ:GetEventDescription");
+
+
+
+            //get the data sender
+            //using var client = new HttpClient();
+            ////tell sender to wait for complete reply before exiting
+            //var waitForContent = HttpCompletionOption.ResponseContentRead;
+            ////send the data on its way (wait forever no timeout)
+            //client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
+            ////get main horoscope prediction file (located in wwwroot)
+            ////var eventDataListStream = await client.GetStreamAsync("/data/EventDataList.xml");
+            //var eventDataListStream = await client.GetStreamAsync("https://www.vedastro.tk/data/EventDataList.xml");
+            //Console.WriteLine(eventDataListStream.Length);
+
+
+            return "Test";
+
+
+            //parse event data list file
+            //var eventDataListXml = XDocument.Load(eventDataListStream);
+
+            //find the event description by the name
+            //var desc = (from eventXml in eventDataListXml.Root.Elements()
+                //where eventXml.Element("Name").Value == eventName
+                //select eventXml.Element("Description").Value).FirstOrDefault();
+
+            //Console.WriteLine(desc);
+
+            //return desc;
+            ////parse each raw event data in list
+            //var eventDataList = new List<EventData>();
+            //foreach (var eventData in eventDataListXml.Root.Elements())
+            //{
+            //    //add it to the return list
+            //    eventDataList.Add(EventData.ToXml(eventData));
+            //}
+
+            //return eventDataList;
+
+
+        }
+
+
 
         #endregion
 

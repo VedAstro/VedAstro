@@ -5,15 +5,15 @@
     <label class="form-label">@LabelText</label>
     <div class="hstack gap-2" style="min-width: 156px;width: fit-content;">
         <select @ref="_monthDropdown" @bind="_selectedMonth" class="form-control">
-            <option value="01">Jan</option>
-            <option value="02">Feb</option>
-            <option value="03">Mar</option>
-            <option value="04">Apr</option>
-            <option value="05">May</option>
-            <option value="06">Jun</option>
-            <option value="07">Jul</option>
-            <option value="08">Aug</option>
-            <option value="09">Sep</option>
+            <option value="1">Jan</option>
+            <option value="2">Feb</option>
+            <option value="3">Mar</option>
+            <option value="4">Apr</option>
+            <option value="5">May</option>
+            <option value="6">Jun</option>
+            <option value="7">Jul</option>
+            <option value="8">Aug</option>
+            <option value="9">Sep</option>
             <option value="10">Oct</option>
             <option value="11">Nov</option>
             <option value="12">Dec</option>
@@ -51,7 +51,23 @@
     /// <returns></returns>
     public string GetSelectedTimeText()
     {
+        //add 0 in front of single digit month for correct parsing
+        switch (_selectedMonth)
+        {
+            case "1":_selectedMonth = "01"; break;
+            case "2":_selectedMonth = "02"; break;
+            case "3":_selectedMonth = "03"; break;
+            case "4":_selectedMonth = "04"; break;
+            case "5":_selectedMonth = "05"; break;
+            case "6":_selectedMonth = "06"; break;
+            case "7":_selectedMonth = "07"; break;
+            case "8":_selectedMonth = "08"; break;
+            case "9":_selectedMonth = "09"; break;
+        }
+
+        //combine with year text
         var compiledText = $"{_selectedMonth}/{_yearInput}";
+
         return compiledText;
     }
 

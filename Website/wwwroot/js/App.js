@@ -596,6 +596,10 @@ function autoUpdateTimeLegend(mousePosition) {
     $(".CursorLineLegendClone").remove();
 
 
+    //count good and bad events for summary row
+    var goodCount = 0;
+    var badCount = 0;
+    var yAxis = 0;
     //extract event data out and place it in legend
     allElementsAtX.each(function () {
 
@@ -609,12 +613,18 @@ function autoUpdateTimeLegend(mousePosition) {
         //extract other data out of the rect
         var eventName = this.getAttribute("eventname");
         var color = this.getAttribute("fill");
-        var yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
+        yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
+
+        //count good and bad events for summary row
+        if (color == "red") { badCount++; }
+        if (color == "green") { goodCount++; }
+
 
         //2 TIME & AGE LEGEND
         //create time legend at top only for first element
         if (allElementsAtX[0] === this) {
             var newTimeLegend = $(holderTemplateId).clone();
+            newTimeLegend.removeAttr('id'); //remove the clone template id
             newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
             newTimeLegend.appendTo("#CursorLine"); //place new legend into parent
             newTimeLegend.show();//make cloned visible
@@ -628,6 +638,7 @@ function autoUpdateTimeLegend(mousePosition) {
         //3 GENERATE EVENT ROW
         //make a copy of template for this event
         var newLegendRow = $(holderTemplateId).clone();
+        newLegendRow.removeAttr('id'); //remove the clone template id
         newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
         newLegendRow.appendTo("#CursorLine"); //place new legend into parent
         newLegendRow.show();//make cloned visible
@@ -658,12 +669,31 @@ function autoUpdateTimeLegend(mousePosition) {
                 });
         }
 
-
     });
+
+
+    //5 GENERATE LAST SUMMARY ROW
+    //generate summary row at the bottom
+    //make a copy of template for this event
+    var newSummaryRow = $(holderTemplateId).clone();
+    newSummaryRow.removeAttr('id'); //remove the clone template id
+    newSummaryRow.addClass("CursorLineLegendClone"); //to delete it on next run
+    newSummaryRow.appendTo("#CursorLine"); //place new legend into parent
+    newSummaryRow.show();//make cloned visible
+    //position the group holding the legend over the event row which the legend represents
+    newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis + 2 + 15})`);
+
+    //set event name text & color element
+    var textElm = newSummaryRow.children("text");
+    var totalScore = goodCount + -Math.abs(badCount);
+    textElm.text(`${totalScore} Good:${goodCount} Bad:${badCount}`);
+    newSummaryRow.children("circle").hide();
 
 
 }
 
+//gets events from EventDataList.xml
+//and injects them into dasa view
 async function getEventDescription(eventName) {
 
     console.log(eventName);

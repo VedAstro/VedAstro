@@ -660,6 +660,9 @@ function autoUpdateTimeLegend(mousePosition) {
             textElm.css("fill", "red");
             textElm.css("font-weight", "600");
 
+            //todo
+            //$("CursorLineLegendDescriptionHolder").show(); //make holder visible
+
             //fill description box about event
             getEventDescription(eventName.replace(/ /g, ""))
                 .then((eventDesc) => {
@@ -667,6 +670,9 @@ function autoUpdateTimeLegend(mousePosition) {
                     $("#CursorLineLegendDescription").empty(); //clear previous desc
                     $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
                 });
+        } else {
+            //todo
+            //$("CursorLineLegendDescriptionHolder").hide(); //hide holder 
         }
 
     });

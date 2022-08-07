@@ -82,7 +82,7 @@ namespace Website
             var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={ServerManager.GoogleGeoLocationApiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
 
             //get location data from GoogleAPI
-            var rawReplyXml = await ServerManager.ReadFromServer(url);
+            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url);
 
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
@@ -112,7 +112,7 @@ namespace Website
 
 
             //get location data from GoogleAPI
-            var rawReplyXml = await ServerManager.ReadFromServer(url);
+            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url);
 
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
@@ -168,7 +168,7 @@ namespace Website
         /// </summary>
         public static async Task<List<Person>> GetPeopleList(string userId)
         {
-            var personListRootXml = await ServerManager.WriteToServer(ServerManager.GetPersonListApi, new XElement("UserId", userId));
+            var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, new XElement("UserId", userId));
             var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
             return personList;
         }
@@ -178,20 +178,20 @@ namespace Website
         /// </summary>
         public static async Task<List<XElement>> GetVisitorList(string userId)
         {
-            var visitorListRootXml = await ServerManager.WriteToServer(ServerManager.GetVisitorList, new XElement("UserId", userId));
+            var visitorListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetVisitorList, new XElement("UserId", userId));
             var visitorList = visitorListRootXml.Elements().ToList();
             return visitorList;
         }
 
         public static async Task<List<Person>> GetMalePeopleList(string userId)
         {
-            var rawMaleListXml = await ServerManager.WriteToServer(ServerManager.GetMaleListApi, new XElement("UserId", userId));
+            var rawMaleListXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMaleListApi, new XElement("UserId", userId));
             return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
         }
 
         public static async Task<List<Person>> GetFemalePeopleList(string userId)
         {
-            var rawMaleListXml = await ServerManager.WriteToServer(ServerManager.GetFemaleListApi, new XElement("UserId", userId));
+            var rawMaleListXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetFemaleListApi, new XElement("UserId", userId));
             return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
         }
 
@@ -222,7 +222,7 @@ namespace Website
             {
                 //send newly created person to API server
                 var xmlData = Tools.AnyTypeToXml(personHash);
-                var result = await ServerManager.WriteToServer(ServerManager.GetPersonApi, xmlData);
+                var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData);
 
                 var personXml = result.Element("Person");
 
@@ -237,7 +237,7 @@ namespace Website
         public static async Task DeletePerson(int personHash)
         {
             var personHashXml = new XElement("PersonHash", personHash);
-            var result = await ServerManager.WriteToServer(ServerManager.DeletePersonApi, personHashXml);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePersonApi, personHashXml);
 
             //check result, display error if needed
             if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Delete Person API\n{result.Value}"); }
@@ -250,7 +250,7 @@ namespace Website
             var oriPersonHashXml = new XElement("PersonHash", originalPersonHash);
             var rootXml = new XElement("Root");
             rootXml.Add(oriPersonHashXml, updatedPersonXml);
-            var result = await ServerManager.WriteToServer(ServerManager.UpdatePersonApi, rootXml);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.UpdatePersonApi, rootXml);
 
             //check result, display error if needed
             if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Update Person API\n{result.Value}"); }
@@ -326,7 +326,7 @@ namespace Website
 
 
             //send to api and get results
-            var resultsRaw = await ServerManager.WriteToServer(ServerManager.GetEventsApi, root);
+            var resultsRaw = await ServerManager.WriteToServerXmlReply(ServerManager.GetEventsApi, root);
 
 
             //parse raw results
@@ -365,9 +365,10 @@ namespace Website
         /// This method is called from JS when user signs in
         /// </summary>
         [JSInvokable]
-        public static void InvokeOnUserSignIn()
+        public static void InvokeOnUserSignIn(object profileData)
         {
             //remember user signed in
+            //todo user sign in store profile data
             GoogleUserSignedIn = true;
             //let others know
             OnUserSignIn?.Invoke();

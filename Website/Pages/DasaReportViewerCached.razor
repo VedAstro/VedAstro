@@ -175,7 +175,7 @@
         var personHashXml = new XElement("PersonHash", personHash);
 
         //note: getting cached version hard set 120 years
-        var rootXml = await ServerManager.WriteToServer(ServerManager.GetPersonDasaReportCached, personHashXml);
+        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonDasaReportCached, personHashXml);
 
         //save a copy in global var
         _globalVariable.CachedDasaReport = rootXml;

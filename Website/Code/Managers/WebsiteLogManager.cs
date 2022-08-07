@@ -169,7 +169,7 @@ namespace Website.Managers
             var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
             var visitorId = Tools.GenerateId();
             var uniqueIdXml = new XElement("UniqueId", visitorId);
-            var locationXml = await ServerManager.ReadFromServer(ServerManager.GetGeoLocation, "Location");
+            var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, "Location");
             var visitorElement = new XElement("Visitor");
             visitorElement.Add(userIdXml, uniqueIdXml, urlXml, timeStampXml, locationXml, browserDataXml);
 
@@ -206,7 +206,7 @@ namespace Website.Managers
         private static async Task SendLogToServer(XElement visitorElement)
         {
             //send to API for save keeping
-            var result = await ServerManager.WriteToServer(ServerManager.AddVisitorApi, visitorElement);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddVisitorApi, visitorElement);
 
             //check result, display error if needed
             if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }

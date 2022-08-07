@@ -71,7 +71,7 @@
         await _jsRuntime.AddToProgressBar(10);
 
         //send message to API server
-        await ServerManager.WriteToServer(ServerManager.AddMessageApi, messageXml);
+        await ServerManager.WriteToServerXmlReply(ServerManager.AddMessageApi, messageXml);
         await _jsRuntime.AddToProgressBar(20);
 
 

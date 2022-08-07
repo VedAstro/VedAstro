@@ -1,4 +1,5 @@
-﻿@page "/matchreport/{MaleHash}/{FemaleHash}"
+﻿@attribute [Route(PageRoute.MatchReportParam)]
+
 @using Genso.Astrology.Library.Compatibility
 @using Genso.Astrology.Library
 
@@ -112,7 +113,7 @@
         var url = $"{ServerManager.GetMatchReportApi}?male={maleHash}&female={femaleHash}";
 
         //get report from server
-        var matchReportXml = await ServerManager.ReadFromServer(url);
+        var matchReportXml = await ServerManager.ReadFromServerXmlReply(url);
 
         //parse report
         var matchReport = CompatibilityReport.FromXml(matchReportXml);

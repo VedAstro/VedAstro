@@ -223,7 +223,7 @@
 
         //send newly created person to API server
         var xmlData = _person.ToXml();
-        var result = ServerManager.WriteToServer(ServerManager.AddPersonApi, xmlData);
+        var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData);
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete

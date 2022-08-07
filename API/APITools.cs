@@ -235,9 +235,7 @@ namespace API
         public static async Task<List<EventData>> GetEventDataList()
         {
             //get data list from Azure storage
-            var eventDataListClient = await APITools.GetFileFromContainer("EventDataList.xml", "vedastro-site-data");
-            var eventDataListXml = APITools.BlobClientToXml(eventDataListClient);
-
+            var eventDataListXml = await GetXmlFileFromAzureStorage("EventDataList.xml", "vedastro-site-data");
 
             //parse each raw event data in list
             var eventDataList = new List<EventData>();
@@ -273,5 +271,15 @@ namespace API
 
         }
 
+        /// <summary>
+        /// Gets XML file from Azure blob storage
+        /// </summary>
+        public static async Task<XDocument> GetXmlFileFromAzureStorage(string fileName, string blobContainerName)
+        {
+            var fileClient = await APITools.GetFileFromContainer(fileName, blobContainerName);
+            var xmlFile = APITools.BlobClientToXml(fileClient);
+
+            return xmlFile;
+        }
     }
 }

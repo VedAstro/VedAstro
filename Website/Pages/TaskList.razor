@@ -38,7 +38,7 @@
         await _globalVariable.LoadingMessage.Show();
 
         //get all task from API server
-        var tasksListXml = await ServerManager.ReadFromServer(ServerManager.GetTaskListApi);
+        var tasksListXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetTaskListApi);
 
         //convert xml to objects
         var taskList = new List<WebsiteTask>();

@@ -4,8 +4,10 @@
     else becomes a new task creator
 *@
 
-@page "/taskeditor/{TaskHash}"
-@page "/taskeditor"
+@attribute [Route(PageRoute.TaskEditor)]
+@attribute [Route(PageRoute.TaskEditorParam)]
+
+
 
 @using Genso.Astrology.Library
 @using Task = System.Threading.Tasks.Task
@@ -104,7 +106,7 @@
         _websiteTask.Date = Tools.GetNowSystemTimeText();
 
         //send new task to api server
-        var result = await ServerManager.WriteToServer(ServerManager.AddTaskApi, _websiteTask.ToXml());
+        var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddTaskApi, _websiteTask.ToXml());
 
         //let user know task has been added
         await _jsRuntime.ShowAlert("success", $"{_name} added successfully!", false,timer:1000);

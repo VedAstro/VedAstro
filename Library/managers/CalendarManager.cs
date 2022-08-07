@@ -33,7 +33,7 @@ namespace Genso.Astrology.Library
         {
             // If modifying these scopes, delete your previously saved credentials
             // at ~/.credentials/calendar-dotnet-quickstart.json
-            string[] Scopes = { CalendarService.Scope.Calendar };
+            string[] Scopes = {  CalendarService.Scope.Calendar };
             string ApplicationName = "MuhurthaCalendarAPI";
 
             UserCredential credential;
@@ -70,7 +70,7 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Adds a list of event to google calendar
-        /// Note: Cancelation token is raised & caught here
+        /// Note: Cancellation token is raised & caught here
         /// </summary>
         public static void AddEventsToCalenderGoogle(List<Event> eventToAddList, String calendarId, bool enableReminders, string customEventName)
         {

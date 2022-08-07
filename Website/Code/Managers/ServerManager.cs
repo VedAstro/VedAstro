@@ -31,6 +31,7 @@ namespace Website
         public const string GetFemaleListApi = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetPersonDasaReport = "https://vedastroapi.azurewebsites.net/api/getpersondasareport";
+        public const string GetPersonEventsReport = "https://vedastroapi.azurewebsites.net/api/getpersoneventsreport";
         public const string GetPersonDasaReportCached = "https://vedastroapi.azurewebsites.net/api/getpersondasareportcached";
         public const string GetPersonDasaReportLocal = "http://localhost:7071/api/getpersondasareport";
         public const string GetEventsApi = "https://vedastroapi.azurewebsites.net/api/getevents";
@@ -52,7 +53,7 @@ namespace Website
         /// Note: if JSON auto adds "Root" as first element, unless specified
         /// for XML data root element name is ignored
         /// </summary>
-        public static async Task<XElement> ReadFromServer(string apiUrl, string rootElementName = "Root")
+        public static async Task<XElement> ReadFromServerXmlReply(string apiUrl, string rootElementName = "Root")
         {
             //send request to API server
             var result = await RequestServer(apiUrl);
@@ -105,7 +106,7 @@ namespace Website
         /// <summary>
         /// Send xml as string to server and returns stream as response
         /// </summary>
-        public static async Task<Stream> WriteToServerStreamResponse(string apiUrl, XElement xmlData)
+        public static async Task<Stream> WriteToServerStreamReply(string apiUrl, XElement xmlData)
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
@@ -127,13 +128,12 @@ namespace Website
             return rawMessage;
         }
 
-
         /// <summary>
         /// Send xml as string to server and returns xml as response
         /// Note: xml is not checked here, just converted
         /// NOTEl: No timeout! Will wait forever
         /// </summary>
-        public static async Task<XElement> WriteToServer(string apiUrl, XElement xmlData)
+        public static async Task<XElement> WriteToServerXmlReply(string apiUrl, XElement xmlData)
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
@@ -164,7 +164,6 @@ namespace Website
 
 
 
-
         //PRIVATE METHODS
         /// <summary>
         /// Packages the data into ready form for the HTTP client to use in final sending stage
@@ -184,6 +183,8 @@ namespace Website
             //return packaged data to caller
             return new StringContent(dataString, encoding, mediaType);
         }
+        
+
 
     }
 }

@@ -13,6 +13,16 @@
 
 <div class="container">
 
+    
+    <h4 class="fw-bold">How To Use?</h4>
+    <p class="text-justify" style="max-width:@GlobalVariableManager.MaxWidth;">
+        <span class="fw-bold">Step 1:</span> Sign In, to save your data for later use.<br/>
+        <span class="fw-bold">Step 2:</span> Goto <a href="@PageRoute.PersonList" class="link-primary">Person List</a>
+                                            page and create a new Person profile.<br/>
+        <span class="fw-bold">Step 3:</span> Goto <a href="@PageRoute.CalculatorList" class="link-primary">Calculator List</a> page and
+        choose a calculator, example  <a href="@PageRoute.Match" class="link-primary">Match</a>.<br/>
+    </p>
+
 
     <h4 class="fw-bold">What is a calculator?</h4>
     <p class="text-justify" style="max-width:@GlobalVariableManager.MaxWidth;">
@@ -87,9 +97,3 @@
     </div>*@
 
 
-@code
-{
-    private void OnClickButton1() => _navigation.NavigateTo("/match");
-    private void OnClickButton2() => _navigation.NavigateTo("/muhurtha");
-
-}

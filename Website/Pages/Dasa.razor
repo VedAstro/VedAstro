@@ -1,4 +1,4 @@
-﻿@page "/dasa"
+﻿@attribute [Route(PageRoute.Dasa)]
 @using Genso.Astrology.Library
 @using Website.Code
 
@@ -122,7 +122,22 @@
 
         //set data into dasa viewer
         dynamic timeRange = ComputeStartEndTimeFromInput();
-        await _dasaReportViewer.SetData(SelectedPerson, timeRange.Start, timeRange.End);
+
+        var startTime = timeRange.Start;
+        var endTime = timeRange.End;
+
+        var daysPerPixel = DasaReportViewer.GetDayPerPixel(startTime, endTime);
+        //generate the events row & time header row
+        var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara };
+        //only show tara chandra when zoomed in
+        if (daysPerPixel <= 0.08)
+        {
+            inputedEventTags.Add(EventTag.Tarabala);
+            inputedEventTags.Add(EventTag.Chandrabala);
+        }
+        inputedEventTags.Add(EventTag.DasaSpecialRules);
+
+        await _dasaReportViewer.SetData(SelectedPerson, startTime, endTime, inputedEventTags);
 
         //mark page as ready to show results
         _isResultReady = true;

@@ -1,5 +1,9 @@
 ﻿
 
+using System;
+using System.Collections.Generic;
+using System.Xml.Linq;
+
 namespace Genso.Astrology.Library
 {
     /// <summary>
@@ -30,5 +34,63 @@ namespace Genso.Astrology.Library
         DasaSpecialRules,
         Tarabala,
         Chandrabala
+    }
+
+    public static class EventTagExtensions
+    {
+
+        /// <summary>
+        /// Note: Root element must be named EventTag
+        /// </summary>
+        public static EventTag FromXml(XElement eventTagXml)
+        {
+            //converts string to enum instance
+            Enum.TryParse(eventTagXml.Value, out EventTag eventTag);
+
+            return eventTag; 
+        }
+
+        /// <summary>
+        /// Note: Root element must be named EventTagList
+        /// </summary>
+        public static List<EventTag> FromXmlList(XElement eventTagListXml)
+        {
+            var returnList = new List<EventTag>();
+            foreach (var eventTagXml in eventTagListXml.Elements())
+            {
+                returnList.Add(EventTagExtensions.FromXml(eventTagXml));
+            }
+            return returnList;
+        }
+
+        /// <summary>
+        /// Note: Root element must be named EventTagList
+        /// </summary>
+        public static XElement ToXmlList(List<EventTag> eventTagList)
+        {
+            var eventTagListXml = new XElement("EventTagList");
+
+            foreach (var eventTag in eventTagList)
+            {
+                eventTagListXml.Add(eventTag.ToXml());
+            }
+
+            return eventTagListXml;
+        }
+
+
+
+        /// <summary>
+        /// Note root element is "EventTag"
+        /// </summary>
+        public static XElement ToXml(this EventTag _eventTag)
+        {
+            var holder = new XElement("EventTag", _eventTag.ToString());
+
+            return holder;
+        }
+
+
+
     }
 }

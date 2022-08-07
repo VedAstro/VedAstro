@@ -3,107 +3,35 @@
 @using Tools = Genso.Astrology.Library.Tools
 @using System.Text
 
-<style>
-
-
-    #DasaViewHolder {
-        text-align: center;
-        color: ivory;
-        z-index: 1;
-        cursor: pointer;
-    }
-
-</style>
 
 
 <div class="vstack gap-1" style="width: fit-content;">
-    @*    <div class="hstack gap-2">
-    <div>
-    <label>Day/Px</label>
-    <input @bind="_daysPerPixelInput" type="text" class="form-control">
-    </div>
-    <IconButton OnClickCallback="@OnClickRefreshButton" ButtonText="Refresh" IconName="bi:send-check" />
-    </div>
-    *@    @*ID set because used by auto move cursor line handler*@
-    <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll; height: 280px;">@DasaReportSvg</div>
+    @*ID set because used by auto move cursor line handler*@
+    <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll; height: 280px;"></div>
 
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" @onchange="Callback" checked>
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" @onchange="OnChangeLifeEventCheckBox" checked>
         <label class="form-check-label" for="flexCheckChecked">
-            Life Events
+            Show Life Events
         </label>
     </div>
-
-@*    <div class="hstack gap-2" style="font-weight: bold; font-size: 14px;">
-        <ul class="list-group">
-            <li class="list-group-item active" aria-current="true">Time : <span id="DateLegend"></span></li>
-            <li class="list-group-item">Age : <span id="AgeLegend"></span></li>
-            <li class="list-group-item">Dasa : <span id="DasaLegend"></span></li>
-            <li class="list-group-item">Bhukti : <span id="BhuktiLegend"></span></li>
-            <li class="list-group-item">Antaram : <span id="AntaramLegend"></span></li>
-        </ul>
-        <ul class="list-group" style="height: 190px;">
-            <li class="list-group-item active" aria-current="true">Gochara</li>
-            <span id="GocharaLegend"></span>
-        </ul>
-    </div>
-*@
 </div>
 
 
 @code {
 
-    double _daysPerPixelInput = 30;
-    bool checkedValue;
-
-    /// <summary>
-    /// One precision value for generating all dasa components,
-    /// because misalignment occurs if use different precision
-    /// </summary>
-    //static double _eventsPrecision = Tools.DaysToHours(14);
-
-    //double _timeSlicePrecision = _eventsPrecision;
-
     ElementReference _dasaViewBox;
 
-    //px width & height of each slice of time
-    //used when generating dasa rows
-    //note: changes needed only here
-    int _widthPerSlice = 1;
-    int _heightPerSlice = 35;
 
-
-
-    //PROPERTIES
-    private Person Person { get; set; }
-
-    private List<Event>? DasaEventList { get; set; }
-
-    private List<Event>? BhuktiEventList { get; set; }
-
-    private List<Event>? AntaramEventList { get; set; }
-
-    private MarkupString DasaReportSvg { get; set; } = new("");
-
-
-
-
-
-
-    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     /// <summary>
     /// Sets the data that is processed and fill the content
     /// </summary>
-    public async Task SetData(Person person, Time startTime, Time endTime)
+    public async Task SetData(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
-        //save inputed data
-        this.Person = person;
-
         //auto calculate precision
         var daysPerPixel = GetDayPerPixel(startTime, endTime);
-        await DrawReport(startTime, endTime, daysPerPixel);
+        await DrawReport(startTime, endTime, inputedEventTags, daysPerPixel);
 
         //attach handlers now that component is loaded
         //attach mouse handler to auto move cursor line & update time legend
@@ -114,111 +42,80 @@
 
         //needed to show changes to inputs
         StateHasChanged();
+
+
+        //LOCAL FUNCTIONS
+
+        async Task DrawReport(Time startTime, Time endTime, List<EventTag> inputedEventTags, double daysPerPixel = 0)
+        {
+            //generate dasa report in svg from server
+            double _daysPerPixelInput = 30;
+            _daysPerPixelInput = daysPerPixel != 0 ? daysPerPixel : _daysPerPixelInput; //if not defined, use input
+            var finalSvg = await GetDasaReportSvgFromApi(person, startTime, endTime, _daysPerPixelInput, inputedEventTags);
+
+            //inject new svg into page via JS for a more responsive progress update
+            //doing it in blazor, causes progress bar freeze while updating
+            await _jsRuntime.InjectIntoElement(_dasaViewBox, finalSvg);
+
+            //attach tooltip lib for life events
+            //note: needed on each draw
+            await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
+        }
+
+        /// <summary>
+        /// Contacts API and gets Person Dasa Report in svg string
+        /// Note:
+        /// -previously used generate in blazor client,
+        ///  but for speed (10s gain) sake moved to server to do heavy lifting
+        /// </summary>
+        async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
+        {
+            //since majority of time spent will be waiting for API to do calculation
+            //and receiving the image is fast, so just start an auto progress bar
+            _jsRuntime.ProgressBarSlowAutoUpdate(); //do not await to let control go to next
+
+            var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+            var startTimeXml = new XElement("StartTime", startTime.ToXml());
+            var endTimeXml = new XElement("EndTime", endTime.ToXml());
+            var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixel);
+            var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
+            var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+            //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
+            var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml);
+
+            //todo just send as string to remove lags of using stream
+            // convert stream to string
+            svgStream.Position = 0; //reset position otherwise can be null value out
+            var reader = new StreamReader(svgStream);
+            var svgText = await reader.ReadToEndAsync();
+
+            return svgText;
+        }
+
     }
 
-    private double GetDayPerPixel(Time start, Time end)
+
+
+    /// <summary>
+    /// calculates the precision of the events to fit inside 1000px width
+    /// </summary>
+    public static double GetDayPerPixel(Time start, Time end)
     {
+        const int maxWidth = 1000; //px
 
         var daysBetween = end.Subtract(start).TotalDays;
-        var maxWidth = 1000;
         var daysPerPixel = Math.Round(daysBetween / maxWidth, 3); //small val = higher precision
                                                                   //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
                                                                   //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
 
         return daysPerPixel;
-
-    }
-
-    private async Task DrawReport(Time startTime, Time endTime, double daysPerPixel = 0)
-    {
-        //generate dasa report in svg from server
-        _daysPerPixelInput = daysPerPixel != 0 ? daysPerPixel : _daysPerPixelInput; //if not defined, use input
-        var finalSvg = await GetDasaReportSvgFromApi(this.Person, startTime, endTime, _daysPerPixelInput);
-
-        //inject new svg into page via JS for a more responsive progress update
-        //doing it in blazor, causes progress bar freeze while updating
-        await _jsRuntime.InjectIntoElement(_dasaViewBox, finalSvg);
-
-        //attach tooltip lib for life events
-        //note: needed on each draw
-        await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
-    }
-
-    /// <summary>
-    /// Contacts API and gets Person Dasa Report in svg string
-    /// Note:
-    /// -previously used generate in blazor client,
-    ///  but for speed (10s gain) sake moved to server to do heavy lifting
-    /// </summary>
-    private async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, double daysPerPixel)
-    {
-        //since majority of time spent will be waiting for API to do calculation
-        //and receiving the image is fast, so just start an auto progress bar
-        _jsRuntime.ProgressBarSlowAutoUpdate(); //do not await to let control go to next
-
-        var personHashXml = new XElement("PersonHash", inputPerson.Hash);
-        var startTimeXml = new XElement("StartTime", startTime.ToXml());
-        var endTimeXml = new XElement("EndTime", endTime.ToXml());
-        var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixel);
-        var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, daysPerPixelXml);
-        //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-        var svgStream = await WriteToServerStreamResponse(ServerManager.GetPersonDasaReport, rootXml);
-
-        //todo just send as string to remove lags of using stream
-        // convert stream to string
-        svgStream.Position = 0; //reset position otherwise can be null value out
-        var reader = new StreamReader(svgStream);
-        var svgText = await reader.ReadToEndAsync();
-
-        return svgText;
-    }
-
-    /// <summary>
-    /// Send xml as string to server and returns stream as response
-    /// </summary>
-    public static async Task<Stream> WriteToServerStreamResponse(string apiUrl, XElement xmlData)
-    {
-        //prepare the data to be sent
-        var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-
-        httpRequestMessage.Content = XmLtoHttpContent(xmlData);
-
-        //get the data sender
-        using var client = new HttpClient();
-
-        //tell sender to wait for complete reply before exiting
-        var waitForContent = HttpCompletionOption.ResponseContentRead;
-
-        //send the data on its way
-        var response = await client.SendAsync(httpRequestMessage, waitForContent);
-
-        //extract the content of the reply data
-        var rawMessage = response.Content.ReadAsStreamAsync().Result;
-
-        return rawMessage;
-    }
-
-    /// <summary>
-    /// Packages the data into ready form for the HTTP client to use in final sending stage
-    /// </summary>
-    private static StringContent XmLtoHttpContent(XElement data)
-    {
-        //gets the main XML data as a string
-        var dataString = Tools.XmlToString(data);
-
-        //specify the data encoding
-        var encoding = Encoding.UTF8;
-
-        //specify the type of the data sent
-        //plain text, stops auto formatting
-        var mediaType = "plain/text";
-
-        //return packaged data to caller
-        return new StringContent(dataString, encoding, mediaType);
     }
 
 
-    private async Task Callback(ChangeEventArgs obj)
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
     {
         //based on checked value hide or show
         if ((bool)obj.Value)
@@ -230,5 +127,7 @@
             await _jsRuntime.Hide("#LifeEventLinesHolder");
         }
     }
+
+
 
 }

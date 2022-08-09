@@ -9,33 +9,35 @@
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
         <IconButton IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
+        <IconButton IconName="icon-park:help" ButtonText="FAQ" ClickUrl="@($"{PageRoute.Horoscope}/#HelpSection")"></IconButton>
     </ButtonsRow>
 </PageTop>
 
 
 
-<div class="vstack gap-4">
+<div class="vstack gap-3">
 
+    <PeopleSelectorBox @ref="_peopleSelectorBox" />
+    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"></IconButton>
 
-    <div class="hstack gap-3">
-        <PeopleSelectorBox @ref="_peopleSelectorBox" />
-        <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"></IconButton>
-    </div>
+    <hr />
 
-    <div class="hstack gap-3">
-        <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
-        <button class="btn btn-primary" style="align-self: end;" @onclick="SearchButtonClicked">Search</button>
-    </div>
+    @*Only show table and search after button clicked*@
+    <div @ref="holder" class="vstack gap-2" style="display: none;">
+        <div class="hstack gap-3">
+            <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
+            <button class="btn btn-primary" style="align-self: end;" @onclick="SearchButtonClicked">Search</button>
+        </div>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
             <tr>
                 <th>Name</th>
                 <th>Description</th>
                 <th style="min-width: 123px;">Info</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             @foreach (var prediction in _filteredHoroscopePredictions)
             {
                 <tr>
@@ -44,8 +46,34 @@
                     <td>@prediction.Info</td>
                 </tr>
             }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+
+    </div>
+
+    @*HELP SECTION*@
+    
+    <div id="HelpSection">
+        
+        <h2>Help</h2>
+        <hr />
+        <h4 class="fw-bold">Where are these predictions from?</h4>
+        <p class="text-justify" style="max-width:@GlobalVariableManager.MaxWidth;">
+            Prediction data come from books by renowned astrologer B.V. Raman.
+            Books such as <span class="fw-bold">How to Judge Horoscope</span> and
+            <span class="fw-bold">Hindu Predictive Astrology</span>,
+            were used to make this calculator.
+        </p>
+
+        <h4 class="fw-bold">How to use these predictions?</h4>
+        <p class="text-justify" style="max-width:@GlobalVariableManager.MaxWidth;">
+            For accurate predictions, results must be duly modified
+            or qualified according to the affliction or otherwise of the
+            planets concerned. For example, predictions involving planets with
+            high strength (Bhava Bala), is often accurate.
+        </p>
+
+    </div>
 
 </div>
 
@@ -56,6 +84,7 @@
     private List<HoroscopePrediction> _filteredHoroscopePredictions = new();
     private string _searchInput = "";
 
+    private ElementReference holder;
 
 
     private async Task SearchButtonClicked()
@@ -75,6 +104,9 @@
         await _globalVariable.LoadingMessage.Show();
 
         await CalculateAndUpdateEvents();
+
+        //make table and search visible
+        await _jsRuntime.Show(holder);
 
         await _globalVariable.LoadingMessage.Hide();
     }

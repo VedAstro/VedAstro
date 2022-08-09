@@ -30,6 +30,9 @@ namespace API
         private const string MessageListXml = "vedastro-site-data/MessageList.xml";
         private const string TaskListXml = "vedastro-site-data/TaskList.xml";
         private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
+        private const string ContainerName = "vedastro-site-data";
+
+
         /// <summary>
         /// Default success message sent to caller
         /// </summary>
@@ -75,8 +78,7 @@ namespace API
 
         [FunctionName("addperson")]
         public static async Task<IActionResult> AddPerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
@@ -86,10 +88,7 @@ namespace API
                 var newPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new person to main list
-                var personListXml = APITools.AddXElementToXDocument(personListClient, newPersonXml);
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(personListClient, personListXml);
+                await APITools.AddXElementToXDocument(newPersonXml, "PersonList.xml", ContainerName);
 
                 return PassMessage;
 
@@ -107,7 +106,6 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(MessageListXml, FileAccess.ReadWrite)] BlobClient messageListClient)
         {
-            var responseMessage = "";
 
             try
             {
@@ -129,11 +127,6 @@ namespace API
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
         [FunctionName("addtask")]

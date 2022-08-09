@@ -36,6 +36,7 @@ namespace API
             await blobClient.UploadAsync(dataStream, overwrite: true);
         }
 
+        //todo use new method below for shorter code & consistency
         /// <summary>
         /// Adds an XML element to XML document in blob form
         /// </summary>
@@ -49,6 +50,25 @@ namespace API
 
             return personListXml;
         }
+
+        /// <summary>
+        /// Adds an XML element to XML document in by file & container name
+        /// and saves files directly to blob store
+        /// </summary>
+        public static async Task AddXElementToXDocument(XElement dataXml, string fileName, string containerName)
+        {
+            //get user data list file  (UserDataList.xml) Azure storage
+            var fileClient = await GetFileFromContainer(fileName, containerName);
+
+            //add new log to main list
+            var updatedListXml = AddXElementToXDocument(fileClient, dataXml);
+
+            //upload modified list to storage
+            await OverwriteBlobData(fileClient, updatedListXml);
+
+        }
+
+
 
         /// <summary>
         /// Extracts data coming in from API caller

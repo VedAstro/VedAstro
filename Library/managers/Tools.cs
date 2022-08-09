@@ -53,30 +53,7 @@ namespace Genso.Astrology.Library
 
             return new XElement(typeName, enumValueStr);
         }
-
-        ///// <summary>
-        ///// Converts only Enums in XML as form to it's instance
-        ///// Note, used to transfer data via internet Client to API Server
-        ///// </summary>
-        //public static T XmlToEnum<T>(XElement xml) where T : struct, Enum
-        //{
-        //    //get the name of the Enum
-        //    var typeName = nameof(T);
-
-        //    //make sure the XML enclosing type has the same name
-        //    if (xml.Name == typeName)
-        //    {
-        //        //get the value and parse it
-        //        var rawVal = xml.Value;
-        //        //TODO CLEAN UP
-        //        var x = Enum.Parse<T>(rawVal);
-        //        var y = (T)Enum.Parse(typeof(T), rawVal);
-        //        return x;
-        //    }
-
-        //    //raise error since not XML type and Input type mismatch
-        //    throw new Exception($"Can't parse XML to {typeName}");
-        //}
+        
 
         /// <summary>
         /// - Type is a value typ

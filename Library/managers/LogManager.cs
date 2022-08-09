@@ -144,7 +144,6 @@ namespace Genso.Astrology.Library
                 void ExtractDataFromException()
                 {
 
-
                     //extract the data from the error
                     StackTrace st = new StackTrace(e, true);
 

@@ -103,7 +103,7 @@
 
         ////set people list into people selector
         ////note : without above first call _peopleSelectorBox is null
-        //PersonList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        //PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id);
         //_peopleSelectorBox.SetData(PersonList);
 
         ////hide loading box

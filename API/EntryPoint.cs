@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using Azure.Storage.Blobs;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -36,7 +37,10 @@ namespace API
         /// <summary>
         /// Default success message sent to caller
         /// </summary>
-        private static readonly OkObjectResult PassMessage = new(new XElement("Status", "Pass").ToString());
+        private static OkObjectResult PassMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msg)).ToString());
+        private static OkObjectResult PassMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msgXml)).ToString());
+        private static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
+        private static OkObjectResult FailMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msgXml)).ToString());
 
 
 
@@ -90,7 +94,7 @@ namespace API
                 //add new person to main list
                 await APITools.AddXElementToXDocument(newPersonXml, "PersonList.xml", ContainerName);
 
-                return PassMessage;
+                return PassMessage();
 
             }
             catch (Exception e)
@@ -119,7 +123,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(messageListClient, messageListXml);
 
-                return PassMessage;
+                return PassMessage();
 
             }
             catch (Exception e)
@@ -134,8 +138,6 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(TaskListXml, FileAccess.ReadWrite)] BlobClient taskListClient)
         {
-            var responseMessage = "";
-
             try
             {
                 //get new task data out of incoming request 
@@ -147,7 +149,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(taskListClient, taskListXml);
 
-                return PassMessage;
+                return PassMessage();
 
             }
             catch (Exception e)
@@ -156,10 +158,6 @@ namespace API
                 return APITools.FormatErrorReply(e);
             }
 
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
         [FunctionName("addvisitor")]
@@ -178,7 +176,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, taskListXml);
 
-                return PassMessage;
+                return PassMessage();
 
             }
             catch (Exception e)
@@ -463,7 +461,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);
 
-                return PassMessage;
+                return PassMessage();
 
             }
             catch (Exception e)
@@ -490,7 +488,6 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
-            var responseMessage = "";
 
             try
             {
@@ -508,7 +505,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(personListClient, personListXml);
 
-                return PassMessage;
+                return PassMessage();
 
             }
             catch (Exception e)
@@ -518,9 +515,6 @@ namespace API
             }
 
 
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
         /// <summary>
@@ -553,7 +547,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, visitorLogXml);
 
-                return PassMessage;
+                return PassMessage();
 
             }
             catch (Exception e)
@@ -627,6 +621,38 @@ namespace API
         }
 
 
+        [FunctionName("SignInGoogle")]
+        public static async Task<IActionResult> SignInGoogle(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+
+            //get ID Token/JWT from received request
+            var tokenXml = APITools.ExtractDataFromRequest(incomingRequest);
+            var jwtToken = tokenXml.Value;
+
+            try
+            {
+                //validate the the token & get data to id the user
+                var validPayload = await GoogleJsonWebSignature.ValidateAsync(jwtToken);
+
+                //use the email to get the user's record (or make new one if don't exist)
+                var userData = await Storage.GetUserData(validPayload);
+
+                //todo add login to users log (browser, location, time)
+                //todo maybe better in client
+                //userData.AddLoginLog();
+                //save updated user data
+
+                //send user data as xml in with pass status
+                return PassMessage(userData.ToXml());
+            }
+            //if any failure, reply as in valid login & log the event
+            catch (Exception e)
+            {
+                await Log.Error(e);
+                return FailMessage("Login Failed");
+            }
+        }
 
 
 

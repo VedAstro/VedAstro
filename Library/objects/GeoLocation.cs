@@ -72,10 +72,14 @@ namespace Genso.Astrology.Library
             }
         }
 
+        /// <summary>
+        /// Prints name of location with coordinates
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             //return location name
-            return _name;
+            return $"{_name} {_longitude} {_latitude}";
         }
 
         public override int GetHashCode()

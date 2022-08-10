@@ -1,52 +1,57 @@
-﻿@*<button @onclick="OnClickButton" class="btn btn-primary">@_buttonText</button>
-*@
+﻿@using Website
+@using System.Text.Json.Nodes
+@using System.Xml.Linq
+@using Genso.Astrology.Library
+@inject ILocalStorage LocalStorage
+
 
 <style>
 
     #GoogleSignInButton {
         text-align: -webkit-center;
         position: relative;
-        top: 16px;
+        top: -14px;
     }
 
 </style>
 
-
+@*Colored box behind login/logout button*@
 <div class="rounded" style="background: rgba(0, 255, 255, 0.1)">
 
-    @*default show Sign In button*@
-    <div @ref="_googleSignInButton" id="GoogleSignInButton" @onclick="OnClickSignInButton" class="g-signin2" data-onsuccess="onSignInSuccessHandler" data-theme="dark"></div>
+    @if (AppData.CurrentUser != UserData.Empty)
+    {
+        <div class="vstack gap-1" style="padding: 6px;">
+            <span class="" style="align-self: center;padding: 10px; color: white;">@($"Hi, {AppData.CurrentUser?.Name}")</span>
+            @*default hide Sign Out button*@
+            <button @onclick="OnClickSignOutButton" class="btn btn-primary">Sign Out</button>
+        </div>
+    }
+    else
+    {
+        @*default show Sign In button*@
 
-    <div class="vstack gap-1" style="padding: 6px;">
-        <span class="" style="align-self: center;padding: 10px; color: white;">@_greetText</span>
-        @*default hide Sign Out button*@
-        <button @ref="_googleSignOutButton" style="display: none" onclick="onClickGoogleSignOutButton()" class="btn btn-primary">Sign Out</button>
-    </div>
+        <div id="g_id_onload"
+         data-client_id="1088062163573-is0ud5h4skblrdu7vlcpp3jskn7odbl7.apps.googleusercontent.com"
+         data-context="signin"
+         data-ux_mode="popup"
+         data-callback="OnGoogleSignInSuccessHandler"
+         data-auto_prompt="false">
+        </div>
 
+        <div class="g_id_signin"
+         data-type="standard"
+         data-shape="pill"
+         data-theme="outline"
+         data-text="signin"
+         data-size="large"
+         data-logo_alignment="center"
+         data-width="150"
+         id="GoogleSignInButton">
+        </div>
+    }
 </div>
 
 @code {
-
-
-    //▒█▀▀▀ ▀█▀ ▒█▀▀▀ ▒█░░░ ▒█▀▀▄ ▒█▀▀▀█ 　 ░█▀▀█ ▒█▄░▒█ ▒█▀▀▄ 　 ▒█▀▀█ ▒█▀▀█ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▀█
-    //▒█▀▀▀ ▒█░ ▒█▀▀▀ ▒█░░░ ▒█░▒█ ░▀▀▀▄▄ 　 ▒█▄▄█ ▒█▒█▒█ ▒█░▒█ 　 ▒█▄▄█ ▒█▄▄▀ ▒█░░▒█ ▒█▄▄█ ░▀▀▀▄▄
-    //▒█░░░ ▄█▄ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▀ ▒█▄▄▄█ 　 ▒█░▒█ ▒█░░▀█ ▒█▄▄▀ 　 ▒█░░░ ▒█░▒█ ▒█▄▄▄█ ▒█░░░ ▒█▄▄▄█
-
-
-    private string _greetText = "";
-
-    /// <summary>
-    /// Set when sign in button clicked,
-    /// reset to false on page reload
-    /// used to check if page needs refresh
-    /// </summary>
-    private bool _signInClicked = false;
-
-    private ElementReference _googleSignInButton;
-
-    private ElementReference _googleSignOutButton;
-
-
 
 
 
@@ -56,51 +61,76 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //google sign in code must be only loaded after
-        //special sign in google button has been rendered
-        if (firstRender) { await _jsRuntime.InvokeVoidAsync("loadJs", ServerManager.GoogleSignInJs); }
+        if (firstRender)
+        {
+            //google sign in code must be only loaded after
+            //special google button has been rendered
+            await _jsRuntime.InvokeVoidAsync("loadJs", ServerManager.GoogleSignInJs);
+
+            //makes this components instance available in JS,
+            //to be used later when user clicks sign in button
+            await _jsRuntime.InvokeVoidAsync("SignInButtonInstance", DotNetObjectReference.Create(this));
+        }
     }
 
 
-    protected override void OnInitialized()
+    /// <summary>
+    /// This method is called from JS when user signs in
+    /// note: works because SignInButtonInstance was called earlier
+    /// </summary>
+    [JSInvokable]
+    public async Task OnGoogleSignInSuccessHandler(JsonNode credentialResponse)
     {
-        //attach handlers
-        WebsiteTools.OnUserSignIn += OnUserSignIn;
-        WebsiteTools.OnUserSignOut += OnUserSignOut; ;
+
+#if DEBUG
+    Console.WriteLine("BLZ: OnGoogleSignInSuccessHandler");
+#endif
+
+        //todo show loading box
+
+        //get the ID Token/JWT from the response
+        var idToken = (string)credentialResponse["credential"]!;
+
+        //send token to api for verification
+        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.SignInGoogle, new XElement("Token", idToken));
+
+        //check if reply is pass or fail
+        var isPass = ServerManager.IsReplyPass(rootXml);
+
+        if (isPass)
+        {
+            //get payload containing user data
+            var userDataXml = ServerManager.GetPayload(rootXml);
+
+            //initialize user data & store it for access by the rest of the app
+            AppData.CurrentUser = UserData.FromXml(userDataXml);
+
+            //store in browser localstorage
+            await LocalStorage.SetProperty("UserData", AppData.CurrentUser.ToXml().ToString());
+
+            //refresh page
+            WebsiteTools.ReloadPage(_navigation);
+        }
+        else
+        {
+            //TODO
+            //show login failed message to user
+            //note: this failure is already logged in API
+        }
+
+
     }
 
-    /// <summary>
-    /// gets called only after logout success, page reload
-    /// </summary>
-    private async Task OnUserSignOut() => WebsiteTools.ReloadPage(_navigation);
-
-    /// <summary>
-    /// gets called by page refresh & button click sign in
-    /// </summary>
-    private async Task OnUserSignIn()
+    private void OnClickSignOutButton()
     {
-        //reload page if coming from sign in button
-        if (_signInClicked) { WebsiteTools.ReloadPage(_navigation); }
+        //clear local storage of user data
+        //since login status is basically the existence of user data in localstorage
+        //removing it removes user's login
+        LocalStorage.RemoveProperty("UserData");
 
-        //hide sign in button
-        await _jsRuntime.Hide(_googleSignInButton);
-
-        //show sign out button
-        await _jsRuntime.Show(_googleSignOutButton);
-
-        //if signed in set greet text
-        var userName = await _jsRuntime.InvokeAsync<string>("getGoogleUserName");
-        _greetText = $"Hi, {userName}";
-
-        StateHasChanged();
+        //refresh page
+        WebsiteTools.ReloadPage(_navigation);
 
     }
-
-
-    /// <summary>
-    /// Called when button clicked, then mark as sign in clicked
-    /// used later to know if page needs refresh
-    /// </summary>
-    private void OnClickSignInButton(MouseEventArgs obj) => _signInClicked = true;
 
 }

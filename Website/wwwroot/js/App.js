@@ -337,6 +337,20 @@ function InitLifeEventLineToolTip() {
 }
 
 
+//functions used by localstorage manager in Blazor
+var getProperty = key => key in localStorage ? JSON.parse(localStorage[key]) : null;
+var removeProperty = key => key in localStorage ? localStorage.removeItem(key) : null;
+var setProperty = (key, value) => { localStorage[key] = JSON.stringify(value); };
+var watchProperty = async (instance, handlerName) => {
+    window.addEventListener('storage', (e) => {
+        instance.invokeMethodAsync(handlerName);
+    });
+};
+
+
+
+
+
 //█▀█ █▀█ █▀█ █▀▀ █▀█ █▀▀ █▀ █▀   █▄▄ ▄▀█ █▀█
 //█▀▀ █▀▄ █▄█ █▄█ █▀▄ ██▄ ▄█ ▄█   █▄█ █▀█ █▀▄
 
@@ -430,64 +444,20 @@ function GetProgressBarValue() {
 //█▀▀ █▀█ █▀█ █▀▀ █░░ █▀▀   █░░ █▀█ █▀▀ █ █▄░█
 //█▄█ █▄█ █▄█ █▄█ █▄▄ ██▄   █▄▄ █▄█ █▄█ █ █░▀█
 
-function getGoogleUserName() {
-    console.log(`JS: getGoogleUserName`);
-    return window.googleUserName;
-};
 
-function getGoogleUserEmail() {
-    console.log(`JS: googleUserEmail`);
-    return window.googleUserEmail;
-};
 
-function getGoogleUserIdToken() {
-    console.log(`JS: googleUserIdToken`);
-    return window.googleUserIdToken;
-};
+//makes a reference to SignInButton instance, to be used when user clicks sign in
+var SignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
+//wrapper function to forward call to blazor
+//note : this function's name is hardwired in Blazor HTML
+var OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
+
 
 
 
 //█▀▀ █░█ █▀▀ █▄░█ ▀█▀   █░█ ▄▀█ █▄░█ █▀▄ █░░ █▀▀ █▀█
 //██▄ ▀▄▀ ██▄ █░▀█ ░█░   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄
 
-
-
-//called by sign in button & page refresh
-//note : this function's name is hardwired in Blazor
-function onSignInSuccessHandler(googleUser) {
-
-    console.log(`JS: onSignInSuccessHandler`);
-
-    //get the google user's details and save it to be accessed by Blazor
-    var profile = googleUser.getBasicProfile();
-    window.googleUserName = profile.getName();
-    window.googleUserEmail = profile.getEmail();
-    var id_token = googleUser.getAuthResponse().id_token;
-    window.googleUserIdToken = profile.getId();
-
-
-    //fire event in Blazor, that user just signed in
-    DotNet.invokeMethod('Website', 'InvokeOnUserSignIn');
-}
-
-//called by sign out button does the actual sign out process
-function onClickGoogleSignOutButton() {
-
-    console.log(`JS: onSignOutEventHandler`);
-
-    //do the sign out
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut();
-
-    //reset sign in details
-    window.googleUserName = "";
-    window.googleUserEmail = "";
-    window.googleUserIdToken = "";
-
-    //fire event in Blazor, that user just signed out
-    DotNet.invokeMethod('Website', 'InvokeOnUserSignOut');
-
-}
 
 //fired when mouse moves over dasa view box
 //used to auto update cursor line & time legend

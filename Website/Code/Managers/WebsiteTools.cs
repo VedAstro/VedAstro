@@ -23,31 +23,6 @@ namespace Website
         //░█─── ▄█▄ ░█▄▄▄ ░█▄▄█ ░█▄▄▀ ░█▄▄▄█ 　 ░█─░█ ░█──▀█ ░█▄▄▀ 　 ░█─── ░█─░█ ░█▄▄▄█ ░█─── ░█▄▄▄█
 
 
-        /// <summary>
-        /// Event fired just after user has signed in
-        /// </summary>
-        public static event AsyncEventHandler OnUserSignIn;
-
-
-        /// <summary>
-        /// Event fired just after user has signed out
-        /// </summary>
-        public static event AsyncEventHandler OnUserSignOut;
-
-        /// <summary>
-        /// Is true when only when Google Sign In success
-        /// False when Google Sign Out success
-        /// </summary>
-        public static bool GoogleUserSignedIn { get; set; }
-
-
-        /// <summary>
-        /// Default User ID for all before they sign in
-        /// </summary>
-        public const string PublicUserId = "101";
-
-
-
 
         //░█▀▄▀█ ░█▀▀▀ ▀▀█▀▀ ░█─░█ ░█▀▀▀█ ░█▀▀▄ ░█▀▀▀█ 
         //░█░█░█ ░█▀▀▀ ─░█── ░█▀▀█ ░█──░█ ░█─░█ ─▀▀▀▄▄ 
@@ -128,40 +103,40 @@ namespace Website
         /// Tries to get user login state, else returns public user id.
         /// Note: Public User Id is the standard id all unregistered visitors get
         /// </summary>
-        public static async Task<string> GetUserIdAsync(IJSRuntime jsRuntime)
-        {
-            //wait here a little if user has not signed in
-            //5 X 200 delay = 1 sec wait time max
-            var signInSuccess = await WaitTillGoogleSignInSuccess(5, 200);
+        //public static async Task<string> GetUserIdAsync(IJSRuntime jsRuntime)
+        //{
+        //    //wait here a little if user has not signed in
+        //    //5 X 200 delay = 1 sec wait time max
+        //    var signInSuccess = await WaitTillGoogleSignInSuccess(5, 200);
 
-            //if sign in failed use Public Id
-            if (!signInSuccess) { Console.WriteLine("BLZ: GetUserIdAsync: Public ID Assigned"); return PublicUserId; }
+        //    //if sign in failed use Public Id
+        //    if (!signInSuccess) { Console.WriteLine("BLZ: GetUserIdAsync: Public ID Assigned"); return PublicUserId; }
 
-            //get user Id from variable in JS scope
-            var userId = await jsRuntime.InvokeAsync<string>("getGoogleUserIdToken");
+        //    //get user Id from variable in JS scope
+        //    var userId = AppData.CurrentUser?.Id;
 
-            return userId;
-        }
+        //    return userId;
+        //}
 
         /// <summary>
         /// if try limit is expired then returns false
         /// try limit 5 X 200 delay = 1 sec wait time max
         /// </summary>
-        public static async Task<bool> WaitTillGoogleSignInSuccess(int tryLimit, int delay)
-        {
-            var count = 0;
-            while (!GoogleUserSignedIn && count < tryLimit)
-            {
-                Console.WriteLine("BLZ: GetUserIdAsync: Waiting For Sign In");
-                await Task.Delay(delay);
-                count++;
-            }
+        //public static async Task<bool> WaitTillGoogleSignInSuccess(int tryLimit, int delay)
+        //{
+        //    var count = 0;
+        //    while (!AppData.CurrentUser && count < tryLimit)
+        //    {
+        //        Console.WriteLine("BLZ: GetUserIdAsync: Waiting For Sign In");
+        //        await Task.Delay(delay);
+        //        count++;
+        //    }
 
-            if (!GoogleUserSignedIn && count == tryLimit) { return false; }
+        //    if (!GoogleUserSignedIn && count == tryLimit) { return false; }
 
-            //if control reaches here than, user sign in success
-            return true;
-        }
+        //    //if control reaches here than, user sign in success
+        //    return true;
+        //}
 
         /// <summary>
         /// Gets all people list from API server
@@ -361,30 +336,6 @@ namespace Website
 
         #region called from js
 
-        /// <summary>
-        /// This method is called from JS when user signs in
-        /// </summary>
-        [JSInvokable]
-        public static void InvokeOnUserSignIn(object profileData)
-        {
-            //remember user signed in
-            //todo user sign in store profile data
-            GoogleUserSignedIn = true;
-            //let others know
-            OnUserSignIn?.Invoke();
-        }
-
-        /// <summary>
-        /// This method is called from JS when user signs out
-        /// </summary>
-        [JSInvokable]
-        public static void InvokeOnUserSignOut()
-        {
-            //remember user signed out
-            GoogleUserSignedIn = false;
-            //let others know
-            OnUserSignOut?.Invoke();
-        }
 
         /// <summary>
         /// This method is called from JS when user signs out

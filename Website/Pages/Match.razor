@@ -43,8 +43,8 @@
             await _globalVariable.LoadingMessage.Show();
 
             //get male list from api server & save it for later
-            //_malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime)));
-            //_femalePeopleSelector.SetData(await WebsiteTools.GetFemalePeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime)));
+            //_malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(AppData.CurrentUser?.Id));
+            //_femalePeopleSelector.SetData(await WebsiteTools.GetFemalePeopleList(AppData.CurrentUser?.Id));
 
             //hide loading box
             await _globalVariable.LoadingMessage.Hide();

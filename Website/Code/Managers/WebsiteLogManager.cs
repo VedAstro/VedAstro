@@ -137,7 +137,7 @@ namespace Website.Managers
             var urlString = await jsRuntime.InvokeAsync<string>("getUrl");
             //place url in xml
             var urlXml = new XElement("Url", urlString);
-            var userIdXml = new XElement("UserId", await WebsiteTools.GetUserIdAsync(jsRuntime));
+            var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
 
             //find out if new visitor just arriving or old one browsing
             var uniqueId = await GetVisitorIdFromCookie();

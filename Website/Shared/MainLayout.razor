@@ -1,4 +1,7 @@
 ﻿@using Website.Managers
+@using Genso.Astrology.Library
+@using System.Xml.Linq
+@inject ILocalStorage LocalStorage
 @inherits LayoutComponentBase
 
 @*
@@ -7,25 +10,50 @@
     Thus page must check & wait during init.
 *@
 
+@*
+    This makes sure MainLayout is loaded first.
+    Else loading of other components start at the same time
+    Use this pause to load needed data for app to run
+*@
+@if (_mainPageInitDone)
+{
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+        @* this is where global loading message gets created*@
+        <Website.Pages.LoadingMessage @ref="_globalVariable.LoadingMessage" />
+        <main>
+            <article class="content px-4 mb-5">
+                @Body
+            </article>
+        </main>
     </div>
-    @* this is where global loading message gets created*@
-    <Website.Pages.LoadingMessage @ref="_globalVariable.LoadingMessage" />
-    <main>
-        <article class="content px-4 mb-5">
-            @Body
-        </article>
-    </main>
-</div>
-
+}
 
 
 
 @code
 {
+    bool _mainPageInitDone;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //NOTE
+        //control comes here after Program, all needed initialization
+        //done here before page/components are loaded
+
+        //retrieve login status from previous visit if available
+        await TryGetPreviousLogin();
+
+        //other components can start loading now
+        _mainPageInitDone = true;
+    }
+
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -38,7 +66,25 @@
         await WebsiteLogManager.LogVisitor(_jsRuntime);
     }
 
+    private async Task TryGetPreviousLogin()
+    {
+        //check if login already exist in localstorage
+        var userDataXml = await LocalStorage.GetProperty<string>("UserData");
+
+        if (userDataXml != null)
+        {
+#if DEBUG
+        Console.WriteLine("BLZ: Using Previous Login Data");
+#endif
+            AppData.CurrentUser = UserData.FromXml(XElement.Parse(userDataXml));
+        }
+    }
+
+
 }
+
+
+
 
 @*
 <ErrorBoundary>
@@ -46,8 +92,8 @@
         @Body
     </ChildContent>
     <ErrorContent Context="ex">
-        @{ OnError(@ex); } 
-        <p>@ex.Message</p> 
+        @{ OnError(@ex); }
+        <p>@ex.Message</p>
     </ErrorContent>
 </ErrorBoundary>
 *@

@@ -66,7 +66,7 @@
         var textXml = new XElement("Text", _messageInput);
         var timestampXml = new XElement("Timestamp", DateTimeOffset.Now.ToString(Time.GetDateTimeFormat()));
         var emailXml = new XElement("Email", _emailInput);
-        var userIdXml = new XElement("UserId", await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
         var messageXml = new XElement("Message", userIdXml, emailXml, timestampXml, textXml);
         await _jsRuntime.AddToProgressBar(10);
 

@@ -10,33 +10,62 @@
     </ButtonsRow>
 </PageTop>
 
+@if (personList.Any())
+{
 
-<div class="container mt-3">
-    <div id="@TableId"></div>
-</div>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Birth Date & Time</th>
+            <th>Location</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var person in personList)
+        {
+            <tr>
+                <td @onclick="() => PersonNameClicked(person)">@person.Name</td>
+                <td>@person.BirthTimeString</td>
+                <td>@person.GetBirthLocation().ToString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="fw-bold">No person profiles found.<br/> Click "Add Person" to get started.</p>
+}
+
 
 @code {
 
     //FIELDS
     const string TableId = "PersonListTable"; //change only needed here
 
+    List<Person> personList = new List<Person>();
+
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER 
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
     //code executed after page has been rendered
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    //generate table
+    //    if (firstRender)
+    //    {
+    //        await InvokeAsync(async () => await GenerateTable()).Try();
+    //    }
+    //}
+
+    protected override async Task OnInitializedAsync()
     {
-        //generate table
-        if (firstRender)
-        {
-            await InvokeAsync(async () => await GenerateTable()).Try();
-        }
+        await GenerateTable();
     }
-
-
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -44,18 +73,25 @@
 
     private async Task GenerateTable()
     {
-        await _globalVariable.LoadingMessage.Show();
+        //todo needs to be updated
+        //await _globalVariable.LoadingMessage.Show();
 
         //get all people from API server
-        var personList = await WebsiteTools.GetPeopleList(await WebsiteTools.GetUserIdAsync(_jsRuntime));
+        personList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id);
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly
-        await _jsRuntime.InvokeVoidAsync("generatePersonListTable", TableId, personList.ToArray());
+        //await _jsRuntime.InvokeVoidAsync("generatePersonListTable", TableId, personList.ToArray());
 
-        await _globalVariable.LoadingMessage.Hide();
+        //todo needs to be updated
+        //await _globalVariable.LoadingMessage.Hide();
 
     }
 
+
+    private void PersonNameClicked(Person person)
+    {
+        _navigation.NavigateTo($"{PageRoute.PersonEditor}/{person.Hash}");
+    }
 
 }

@@ -41,7 +41,9 @@ namespace Website
         /// <summary>
         /// link to js file used for google sign in function
         /// </summary>
-        public const string GoogleSignInJs = "https://apis.google.com/js/platform.js";
+        public const string GoogleSignInJsOld = "https://apis.google.com/js/platform.js";
+        public const string GoogleSignInJs = "https://accounts.google.com/gsi/client";
+        public const string SignInGoogle = "https://coldpicsapi.azurewebsites.net/api/SignInGoogle";
         public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
 
 
@@ -162,6 +164,16 @@ namespace Website
 
         }
 
+
+        /// <summary>
+        /// Checks if Status is Pass or Fail in Root xml
+        /// </summary>
+        public static bool IsReplyPass(XElement rootXml) => rootXml.Element("Status")?.Value == "Pass";
+
+        /// <summary>
+        /// Gets first child element in "Payload" element
+        /// </summary>
+        public static XElement? GetPayload(XElement rootXml) => rootXml.Element("Payload")?.Elements()?.FirstOrDefault();
 
 
         //PRIVATE METHODS

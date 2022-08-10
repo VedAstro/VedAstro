@@ -6,6 +6,8 @@
 
 <PageTitle>@_pageTitle</PageTitle>
 
+<IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="() => _navigation.NavigateTo(PageRoute.PersonList)"></IconButton>
+
 <div class="container">
     <div class="vstack gap-3" style="max-width:826px;">
         <div>
@@ -257,7 +259,7 @@
 
         //create a new person from the inputed data
         var birthTime = new Time(fullTimeString, geoLocation);
-        return new Person(_nameInput, birthTime, gender, await WebsiteTools.GetUserIdAsync(_jsRuntime), _notesInput, lifeEventList);
+        return new Person(_nameInput, birthTime, gender, AppData.CurrentUser?.Id, _notesInput, lifeEventList);
 
         //----------LOCAL FUNCTION ---------------------
     }

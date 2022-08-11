@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
@@ -620,10 +621,8 @@ namespace API
             return okObjectResult;
         }
 
-
         [FunctionName("SignInGoogle")]
-        public static async Task<IActionResult> SignInGoogle(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        public static async Task<IActionResult> SignInGoogle([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             //get ID Token/JWT from received request
@@ -634,9 +633,12 @@ namespace API
             {
                 //validate the the token & get data to id the user
                 var validPayload = await GoogleJsonWebSignature.ValidateAsync(jwtToken);
+                var userId = validPayload.Subject; //Unique Google User ID
+                var userName = validPayload.Name;
+                var userEmail = validPayload.Email;
 
                 //use the email to get the user's record (or make new one if don't exist)
-                var userData = await Storage.GetUserData(validPayload);
+                var userData = await Storage.GetUserData(userId, userName, userEmail);
 
                 //todo add login to users log (browser, location, time)
                 //todo maybe better in client
@@ -644,6 +646,7 @@ namespace API
                 //save updated user data
 
                 //send user data as xml in with pass status
+                //so that client can generate hash and use it
                 return PassMessage(userData.ToXml());
             }
             //if any failure, reply as in valid login & log the event
@@ -654,6 +657,40 @@ namespace API
             }
         }
 
+        [FunctionName("SignInFacebook")]
+        public static async Task<IActionResult> SignInFacebook(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+
+            try
+            {
+                //get accessToken from received request
+                var tokenXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var accessToken = tokenXml.Value;
+
+                //validate the the token & get user data
+                var url = $"https://graph.facebook.com/me/?fields=id,name,email&access_token={accessToken}";
+                var reply = await GetRequest(url);
+                var jsonText = await reply.Content.ReadAsStringAsync();
+                var json = JsonNode.Parse(jsonText);
+                var userId = json["id"].ToString();
+                var userName = json["name"].ToString();
+                var userEmail = json["email"].ToString();
+
+                //use the email to get the user's record (or make new one if don't exist)
+                var userData = await Storage.GetUserData(userId, userName, userEmail);
+
+                //send user data as xml in with pass status
+                //so that client can generate hash and use it
+                return PassMessage(userData.ToXml());
+            }
+            //if any failure, reply as in valid login & log the event
+            catch (Exception e)
+            {
+                await Log.Error(e);
+                return FailMessage("Login Failed");
+            }
+        }
 
 
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -682,7 +719,24 @@ namespace API
 
         }
 
-        
+
+        private static async Task<HttpResponseMessage> GetRequest(string receiverAddress)
+        {
+            //prepare the data to be sent
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+            //get the data sender
+            using var client = new HttpClient();
+
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+            //send the data on its way
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+            //return the raw reply to caller
+            return response;
+        }
 
         /// <summary>
         /// processes incoming xml request and outputs events svg report

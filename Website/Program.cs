@@ -28,7 +28,7 @@ namespace Website
             builder.Services.AddSingleton<LocationService>();
 
             //service used to place data in browser's localstorage
-            builder.Services.AddSingleton<ILocalStorage, LocalStorageManager>();
+            //builder.Services.AddSingleton<ILocalStorage, LocalStorageManager>();
 
 
 

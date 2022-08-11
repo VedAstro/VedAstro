@@ -15,7 +15,7 @@
             <thead class="table-dark">
             <tr>
                 <th>UserId</th>
-                <th>UniqueId</th>
+                <th>VisitorId</th>
                 <th>Url</th>
                 <th>TimeStamp</th>
                 <th>Country</th>
@@ -31,7 +31,7 @@
             {
                 <tr>
                     <td>@visitorXml.Element("UserId").Value</td>
-                    <td>@visitorXml.Element("UniqueId").Value</td>
+                    <td>@visitorXml.Element("VisitorId").Value</td>
                     <td>@visitorXml.Element("Url").Value</td>
                     <td>@visitorXml.Element("TimeStamp").Value</td>
                     <td>@visitorXml.Element("Location")?.Element("country")?.Value</td>
@@ -63,7 +63,7 @@
             <thead class="table-dark">
             <tr>
                 <th>UserId</th>
-                <th>UniqueId</th>
+                <th>VisitorId</th>
                 <th>Url</th>
                 <th>TimeStamp</th>
             </tr>
@@ -73,7 +73,7 @@
             {
                 <tr>
                     <td>@visitorXml.Element("UserId").Value</td>
-                    <td>@visitorXml.Element("UniqueId").Value</td>
+                    <td>@visitorXml.Element("VisitorId").Value</td>
                     <td>@visitorXml.Element("Url").Value</td>
                     <td>@visitorXml.Element("TimeStamp").Value</td>
                 </tr>
@@ -137,11 +137,11 @@
     private void RenderVisitorTrailList(XElement visitorXml)
     {
         clickedVisitorXml = visitorXml;
-        var uniqueIdClicked = clickedVisitorXml.Element("UniqueId")?.Value;
+        var visitorIdClicked = clickedVisitorXml.Element("VisitorId")?.Value;
 
         //filter list to show all visits made by this unique ID
         visitorTrailList = (from xElement in rawVisitorList
-                             where xElement.Element("UniqueId")?.Value == uniqueIdClicked
+                             where xElement.Element("VisitorId")?.Value == visitorIdClicked
                              select xElement).ToList();
 
         whatToShow = "visitorTrailList";

@@ -18,18 +18,18 @@ public static class Storage
 
 
     /// <summary>
-    /// Gets user data given google valid payload, if user does
+    /// Gets user data, if user does
     /// not exist makes a new one & returns that
+    /// Note : email is used to find user, not hash or id
     /// </summary>
-    public static async Task<UserData> GetUserData(GoogleJsonWebSignature.Payload payload)
+    public static async Task<UserData> GetUserData(string id, string name, string email)
     {
         //get user data list file  (UserDataList.xml) Azure storage
         var userDataListXml = await APITools.GetXmlFileFromAzureStorage(UserDataListXml, BlobContainerName);
 
         //look for user with matching email
-        var userEmail = payload.Email;
         var foundUserXml = userDataListXml.Root?.Elements()
-            .Where(userDataXml => userDataXml.Element("Email")?.Value == userEmail)?
+            .Where(userDataXml => userDataXml.Element("Email")?.Value == email)?
             .FirstOrDefault();
 
         //if user found, initialize xml and send that
@@ -39,7 +39,7 @@ public static class Storage
         else
         {
             //create new user from google's data
-            var newUser = new UserData(payload);
+            var newUser = new UserData(id, name, email);
 
             //add new user xml to main list
             await APITools.AddXElementToXDocument(newUser.ToXml(), UserDataListXml, BlobContainerName);
@@ -50,5 +50,5 @@ public static class Storage
 
     }
 
-    
+
 }

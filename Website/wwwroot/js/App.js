@@ -57,18 +57,6 @@ function hideWrapper(element) {
     $(element).hide();
 };
 
-//function to get cookies given a name
-function getCookiesWrapper(cookieName) {
-    console.log(`JS: getCookiesWrapper`);
-    return Cookies.get(cookieName);
-};
-
-//function to set cookies given a name
-function setCookiesWrapper(cookieName, cookieValue) {
-    console.log(`JS: setCookiesWrapper`);
-    return Cookies.set(cookieName, cookieValue);
-};
-
 //Jquery to attach event listener to inputed element
 function addEventListenerWrapper(element, eventName, functionName) {
     console.log(`JS: addEventListenerWrapper : ${eventName} : ${functionName}`);
@@ -445,12 +433,17 @@ function GetProgressBarValue() {
 //█▄█ █▄█ █▄█ █▄█ █▄▄ ██▄   █▄▄ █▄█ █▄█ █ █░▀█
 
 
-
 //makes a reference to SignInButton instance, to be used when user clicks sign in
+//called in Blazor, after component render
 var SignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
-//wrapper function to forward call to blazor
-//note : this function's name is hardwired in Blazor HTML
+//wrapper function to forward call to blazor (hardwired in Blazor HTML)
 var OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
+
+
+//called from Blazor when custom login button clicked
+var facebookLogin = () => FB.login(callBackFB, { scope: 'email' });
+//wrapper function to forward call to blazor (hardwired in Blazor HTML)
+var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('OnFacebookSignInSuccessHandler', response);
 
 
 
@@ -672,14 +665,6 @@ function autoUpdateTimeLegend(mousePosition) {
 //and injects them into dasa view
 async function getEventDescription(eventName) {
 
-    console.log(eventName);
-
-
-    ////fire event in Blazor, that user just signed in
-    //var x = await DotNet.invokeMethodAsync('Website', 'GetEventDescription', eventName);
-    //return x;
-
-
     var xmlDoc;
     var parser = new DOMParser();
 
@@ -711,19 +696,6 @@ async function getEventDescription(eventName) {
     return eventDescription;
 
 }
-
-//fetch("https://www.vedastro.tk/data/EventDataList.xml")
-//    .then((res) => { return res.blob(); })
-//    .then((data) => {
-//        var a = document.createElement("a");
-//        a.href = window.URL.createObjectURL(data);
-//        a.download = "FILENAME";
-//        a.click();
-//    });
-
-
-
-//return "When Lagna (Ascendant) is powerful, during the Dasa of lord of Lagna, favourable results can be expected to occur - such as rise in profession, good health and general prosperity.";
 
 
 //  This function attempts to create a new svg "text" element, chopping

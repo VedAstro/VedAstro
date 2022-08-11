@@ -7,30 +7,15 @@ namespace Genso.Astrology.Library
     /// <summary>
     /// Simple class to hold user data
     /// </summary>
-    public class UserData   
-    {
+    public class UserData
+    {        
         /// <summary>
         /// Empty instance of User with id 101
         /// </summary>
         public static UserData Empty = new UserData("101", "", "", "", "", "");
 
 
-
-        /// <summary>
-        /// Creates a new user from google sign in data
-        /// </summary>
-        public UserData(GoogleJsonWebSignature.Payload payload)
-        {
-
-            Id = payload.Subject; // The unique ID of the user's Google Account
-            Name = payload.Name;
-            Email = payload.Email;
-            Picture = payload.Picture;
-            FamilyName = payload.FamilyName;
-            Locale = payload.Locale;
-        }
-
-        public UserData(string id, string name, string email, string familyName, string locale, string picture)
+        public UserData(string id = "", string name = "", string email = "", string familyName = "", string locale = "", string picture = "")
         {
             Id = id;
             Name = name;
@@ -51,12 +36,12 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Converts XML to instance, root element is UserData
         /// </summary>
-        public static UserData FromXml(XElement userDataXml)
+        public static UserData? FromXml(XElement userDataXml)
         {
             var userData = new UserData(
                 id: userDataXml.Element("Id")?.Value,
                 name: userDataXml.Element("Name")?.Value,
-                email: userDataXml.Element("Email")?.Value, 
+                email: userDataXml.Element("Email")?.Value,
                 familyName: userDataXml.Element("FamilyName")?.Value,
                 locale: userDataXml.Element("Locale")?.Value,
                 picture: userDataXml.Element("Picture")?.Value);
@@ -116,17 +101,19 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
-        /// Name & Email are used to generate Hash
+        /// ID & Email are used to generate Hash
+        /// since name could change not used
         /// </summary>
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
-            var hash1 = Tools.GetStringHashCode(this.Name);
+            var hash1 = Tools.GetStringHashCode(this.Id);
             var hash2 = Tools.GetStringHashCode(this.Email);
 
             //take out negative before returning
             return Math.Abs(hash1 + hash2);
         }
+
 
 
     }

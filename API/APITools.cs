@@ -212,7 +212,7 @@ namespace API
             try
             {
                 var uniqueVisitorList = from visitorXml in visitorListXml.Root?.Elements()
-                                                        where visitorXml.Element("UniqueId")?.Value == visitorId
+                                                        where visitorXml.Element("VisitorId")?.Value == visitorId
                                                         select visitorXml;
 
                 return uniqueVisitorList.FirstOrDefault();

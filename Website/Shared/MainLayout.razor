@@ -1,7 +1,6 @@
 ﻿@using Website.Managers
 @using Genso.Astrology.Library
 @using System.Xml.Linq
-@inject ILocalStorage LocalStorage
 @inherits LayoutComponentBase
 
 @*
@@ -69,9 +68,9 @@
     private async Task TryGetPreviousLogin()
     {
         //check if login already exist in localstorage
-        var userDataXml = await LocalStorage.GetProperty<string>("UserData");
+        var userDataXml = await _jsRuntime.GetProperty("UserData");
 
-        if (userDataXml != null)
+        if (userDataXml is not null or "")
         {
 #if DEBUG
         Console.WriteLine("BLZ: Using Previous Login Data");

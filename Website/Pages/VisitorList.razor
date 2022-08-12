@@ -11,73 +11,76 @@
 @switch (whatToShow)
 {
     case "uniqueVisitorList":
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped text-nowrap">
             <thead class="table-dark">
-            <tr>
-                <th>UserId</th>
-                <th>VisitorId</th>
-                <th>Url</th>
-                <th>TimeStamp</th>
-                <th>Country</th>
-                <th>City</th>
-                <th>Browser</th>
-                <th>Os</th>
-                <th>device</th>
-                <th>Action</th>
-            </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Url</th>
+                    <th>TimeStamp</th>
+                    <th>Country</th>
+                    <th>City</th>
+                    <th>Browser</th>
+                    <th>Os</th>
+                    <th>device</th>
+                    <th>Action</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var visitorXml in uniqueVisitorList)
-            {
-                <tr>
-                    <td>@visitorXml.Element("UserId").Value</td>
-                    <td>@visitorXml.Element("VisitorId").Value</td>
-                    <td>@visitorXml.Element("Url").Value</td>
-                    <td>@visitorXml.Element("TimeStamp").Value</td>
-                    <td>@visitorXml.Element("Location")?.Element("country")?.Value</td>
-                    <td>@visitorXml.Element("Location")?.Element("city")?.Value</td>
-                    <td>@visitorXml.Element("BrowserData").Element("browser").Element("name").Value</td>
-                    <td>@visitorXml.Element("BrowserData").Element("os").Element("name").Value</td>
-                    <td>@visitorXml.Element("BrowserData").Element("device").Value</td>
-                    <td>
-                        <IconButton ButtonText="Trail" OnClickCallback="() => RenderVisitorTrailList(visitorXml)"></IconButton>
-                    </td>
-                </tr>
-            }
+                @foreach (var visitorXml in uniqueVisitorList)
+                {
+                    <tr>
+                        <td>User:@visitorXml.Element("UserId")?.Value<br/>Visitor:@visitorXml.Element("VisitorId")?.Value</td>
+                        <td>@visitorXml.Element("Url")?.Value</td>
+                        <td>@visitorXml.Element("TimeStamp")?.Value</td>
+                        <td>@visitorXml.Element("Location")?.Element("country")?.Value</td>
+                        <td>@visitorXml.Element("Location")?.Element("city")?.Value</td>
+                        <td>@visitorXml.Element("BrowserData")?.Element("browser")?.Element("name")?.Value</td>
+                        <td>@visitorXml.Element("BrowserData")?.Element("os")?.Element("name")?.Value</td>
+                        <td>@visitorXml.Element("BrowserData")?.Element("device")?.Value</td>
+                        <td>
+                            <div>
+                                <IconButton ButtonText="Trail Visitor ID" OnClickCallback="() => RenderVisitorTrailList(visitorXml)"></IconButton>
+                                <IconButton ButtonText="Trail User ID" OnClickCallback="() => RenderUserTrailList(visitorXml)"></IconButton>
+                            </div>
+                        </td>
+                    </tr>
+                }
 
             </tbody>
         </table>
         break;
     case "visitorTrailList":
         <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="RenderUniqueVisitorList"></IconButton>
-        
+
         <div class="hstack gap-2">
-            <div>@clickedVisitorXml.Element("Location").Element("country").Value</div>
-            <div>@clickedVisitorXml.Element("Location").Element("city").Value</div>
-            <div>@clickedVisitorXml.Element("BrowserData").Element("browser").Element("name").Value</div>
-            <div>@clickedVisitorXml.Element("BrowserData").Element("os").Element("name").Value</div>
-            <div>@clickedVisitorXml.Element("BrowserData").Element("device").Value</div>
+            <div>@clickedVisitorXml.Element("Location")?.Element("country")?.Value</div>
+            <div>@clickedVisitorXml.Element("Location")?.Element("city")?.Value</div>
+            <div>@clickedVisitorXml.Element("BrowserData")?.Element("browser")?.Element("name")?.Value</div>
+            <div>@clickedVisitorXml.Element("BrowserData")?.Element("os")?.Element("name")?.Value</div>
+            <div>@clickedVisitorXml.Element("BrowserData")?.Element("device")?.Value</div>
         </div>
 
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
-            <tr>
-                <th>UserId</th>
-                <th>VisitorId</th>
-                <th>Url</th>
-                <th>TimeStamp</th>
-            </tr>
+                <tr>
+                    <th>UserId</th>
+                    <th>VisitorId</th>
+                    <th>Url</th>
+                    <th>Button</th>
+                    <th>TimeStamp</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var visitorXml in visitorTrailList)
-            {
-                <tr>
-                    <td>@visitorXml.Element("UserId").Value</td>
-                    <td>@visitorXml.Element("VisitorId").Value</td>
-                    <td>@visitorXml.Element("Url").Value</td>
-                    <td>@visitorXml.Element("TimeStamp").Value</td>
-                </tr>
-            }
+                @foreach (var visitorXml in visitorTrailList)
+                {
+                    <tr>
+                        <td>@visitorXml.Element("UserId")?.Value</td>
+                        <td>@visitorXml.Element("VisitorId")?.Value</td>
+                        <td>@visitorXml.Element("Url")?.Value</td>
+                        <td>@visitorXml.Element("ButtonText")?.Value</td>
+                        <td>@visitorXml.Element("TimeStamp")?.Value</td>
+                    </tr>
+                }
 
             </tbody>
         </table>
@@ -111,15 +114,31 @@
         await _globalVariable.LoadingMessage.Show();
 
         //get all people from API server
-        rawVisitorList = await WebsiteTools.GetVisitorList("101");
+        rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id);
 
-        //filter list to show unique visitors only
-        //"Location" & "BrowserData" only exist in unique 1st visit
-        uniqueVisitorList = (from xElement in rawVisitorList
-                             where
-                                 xElement.Element("Location") != null &&
-                                 xElement.Element("BrowserData") != null
-                             select xElement).ToList();
+
+        var uniqueVisitorIds = (rawVisitorList.Select(x => x.Element("VisitorId")?.Value).Distinct()).ToList();
+
+        //remove old data
+        uniqueVisitorList.Clear();
+
+        foreach (var visitorId in uniqueVisitorIds)
+        {
+            //get all visitor xml by visitor id
+            var x = rawVisitorList.Where(x => x.Element("VisitorId")?.Value == visitorId);
+            //pick out the element with browser data to represent others
+            //"Location" & "BrowserData" only exist in unique 1st visit
+            var y = (from xElement in x
+                     where
+                         xElement.Element("Location") != null &&
+                         xElement.Element("BrowserData") != null
+                     select xElement).FirstOrDefault();
+
+            //if none found, use back 1 from top list
+            y = y ?? x.FirstOrDefault();
+            uniqueVisitorList.Add(y);
+        }
+
 
         whatToShow = "uniqueVisitorList";
 
@@ -141,8 +160,24 @@
 
         //filter list to show all visits made by this unique ID
         visitorTrailList = (from xElement in rawVisitorList
-                             where xElement.Element("VisitorId")?.Value == visitorIdClicked
-                             select xElement).ToList();
+                            where xElement.Element("VisitorId")?.Value == visitorIdClicked
+                            select xElement).ToList();
+
+        whatToShow = "visitorTrailList";
+
+        StateHasChanged();
+
+    }
+    
+    private void RenderUserTrailList(XElement visitorXml)
+    {
+        clickedVisitorXml = visitorXml;
+        var userIdClicked = clickedVisitorXml.Element("UserId")?.Value;
+
+        //filter list to show all visits made by this unique ID
+        visitorTrailList = (from xElement in rawVisitorList
+                            where xElement.Element("UserId")?.Value == userIdClicked
+                            select xElement).ToList();
 
         whatToShow = "visitorTrailList";
 

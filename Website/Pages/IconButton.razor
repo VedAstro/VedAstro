@@ -1,4 +1,5 @@
-﻿
+﻿@using Website.Managers
+
 <style>
     .iconButton {
         width: fit-content;
@@ -47,12 +48,15 @@
     /// Default button click will send page to URL link if provided
     /// else exit silently
     /// </summary>
-    private void OnClickButton(MouseEventArgs obj)
+    private async Task OnClickButton(MouseEventArgs obj)
     {
+        //log this
+        await WebsiteLogManager.LogClick(_jsRuntime,ButtonText);
+
         //if custom onclick has been specified than use that
         if (OnClickCallback.HasDelegate)
         {
-            OnClickCallback.InvokeAsync(obj);
+            await OnClickCallback.InvokeAsync(obj);
         }
         //else if URL has been specified use that
         else if (ClickUrl != "" || ClickUrl != null)

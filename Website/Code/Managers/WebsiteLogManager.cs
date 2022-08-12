@@ -63,11 +63,6 @@ namespace Website.Managers
             return;
 #endif
 
-            //if URL is localhost ignore & end here
-            //todo below code might not be needed if above works fine
-            var urlString = await jsRuntime.InvokeAsync<string>("getUrl");
-            if (urlString.Contains("localhost")) { return; }
-
             //get all visitor data
             var visitorXml = await GetVisitorDataXml(jsRuntime);
 
@@ -110,7 +105,9 @@ namespace Website.Managers
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
-            visitorXml.Add(errorXml);
+            var userId = new XElement("UserId", AppData.CurrentUser);
+            var visitorId = new XElement("VisitorId", AppData.VisitorId);
+            visitorXml.Add(userId, visitorId, errorXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -118,11 +115,34 @@ namespace Website.Managers
             Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
         }
 
+        /// <summary>
+        /// Logs a button click
+        /// </summary>
+        public static async Task LogClick(IJSRuntime jsRuntime, string? buttonText)
+        {
+            //if running code locally, end here
+            //since in local errors will show in console
+            //and also not to clog server's error log
+#if DEBUG
+            Console.WriteLine("BLZ: LogVisitor: DEBUG mode, skipped logging to server");
+            return;
+#endif
+
+            //get basic visitor data
+            var visitorXml = await GetVisitorDataXml(jsRuntime);
+
+            //add in button click data
+            visitorXml.Add(new XElement("ButtonText", buttonText));
+
+            //send to server for storage
+            await SendLogToServer(visitorXml);
+
+        }
+
 
 
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
 
         private static async Task<XElement> GetVisitorDataXml(IJSRuntime jsRuntime)
         {
@@ -150,20 +170,19 @@ namespace Website.Managers
         //all possible details are logged
         private static async Task<XElement> NewVisitor(XElement userIdXml, XElement urlXml, IJSRuntime jsRuntime)
         {
+            //since new visitor generate new id & store it
+            var visitorId = Tools.GenerateId();
+            AppData.VisitorId = visitorId; //app memory for this session use
+            await jsRuntime.SetProperty("VisitorId", visitorId); //local storage, so can id user on return
 
             //get visitor data & format it nicely for storage
             var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
             var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
-            var visitorId = Tools.GenerateId();
             var visitorIdXml = new XElement("VisitorId", visitorId);
             var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, "Location");
             var visitorElement = new XElement("Visitor");
             visitorElement.Add(userIdXml, visitorIdXml, urlXml, timeStampXml, locationXml, browserDataXml);
 
-
-            //mark visitor with id inside local storage
-            //so can id user on return
-            await jsRuntime.SetProperty("VisitorId", visitorId);
 
             return visitorElement;
         }

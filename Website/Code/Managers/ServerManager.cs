@@ -20,6 +20,7 @@ namespace Website
         public const string AddLifeEventApi = "https://vedastroapi.azurewebsites.net/api/addlifeevent";
         public const string AddMessageApi = "https://vedastroapi.azurewebsites.net/api/addmessage";
         public const string DeletePersonApi = "https://vedastroapi.azurewebsites.net/api/deleteperson";
+        public const string DeleteVisitorByUserId = "https://vedastroapi.azurewebsites.net/api/deletevisitorbyuserid";
         public const string AddTaskApi = "https://vedastroapi.azurewebsites.net/api/addtask";
         public const string AddVisitorApi = "https://vedastroapi.azurewebsites.net/api/addvisitor";
         public const string GetMaleListApi = "https://vedastroapi.azurewebsites.net/api/getmalelist";

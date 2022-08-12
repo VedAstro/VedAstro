@@ -169,7 +169,7 @@ namespace API
         /// Note:- Person's hash is computed on the fly to reduce coupling
         ///      - If any error occur, it will return empty person tag
         /// </summary>
-        public static XElement FindPersonByHash(XDocument personListXml, int originalHash)
+        public static async Task<XElement> FindPersonByHash(XDocument personListXml, int originalHash)
         {
             try
             {
@@ -183,7 +183,7 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                //todo log failure
+                await Log.Error(e);
                 return new XElement("Person");
             }
         }
@@ -239,10 +239,10 @@ namespace API
         }
 
 
-        public static Person GetPersonFromHash(int personHash,BlobClient personListClient)
+        public static async Task<Person> GetPersonFromHash(int personHash,BlobClient personListClient)
         {
             var personListXml = APITools.BlobClientToXml(personListClient);
-            var foundPersonXml = APITools.FindPersonByHash(personListXml, personHash);
+            var foundPersonXml = await APITools.FindPersonByHash(personListXml, personHash);
             var foundPerson = Person.FromXml(foundPersonXml);
 
             return foundPerson;

@@ -53,8 +53,7 @@ namespace API
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> GetMatchReport(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            [Blob(PersonListXml, FileAccess.Read)] Stream personListRead,
-            ILogger log)
+            [Blob(PersonListXml, FileAccess.Read)] Stream personListRead)
         {
             string responseMessage;
 
@@ -72,6 +71,8 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -100,6 +101,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -129,6 +133,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -155,6 +162,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -182,6 +192,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -217,6 +230,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -260,6 +276,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -299,6 +318,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -335,6 +357,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -393,6 +418,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -400,7 +428,7 @@ namespace API
 
         }
 
-       
+
 
         /// <summary>
         /// Generates a new SVG dasa report given a person hash (cached)
@@ -428,6 +456,9 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -442,7 +473,6 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
-            var responseMessage = "";
 
             try
             {
@@ -453,7 +483,7 @@ namespace API
 
                 //get the person record that needs to be updated
                 var personListXml = APITools.BlobClientToXml(personListClient);
-                var personToUpdate = APITools.FindPersonByHash(personListXml, originalHash);
+                var personToUpdate = await APITools.FindPersonByHash(personListXml, originalHash);
 
                 //delete the previous person record,
                 //and insert updated record in the same place
@@ -467,14 +497,13 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
 
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
         /// <summary>
@@ -498,7 +527,7 @@ namespace API
 
                 //get the person record that needs to be deleted
                 var personListXml = APITools.BlobClientToXml(personListClient);
-                var personToDelete = APITools.FindPersonByHash(personListXml, originalHash);
+                var personToDelete = await APITools.FindPersonByHash(personListXml, originalHash);
 
                 //delete the person record,
                 personToDelete.Remove();
@@ -511,11 +540,12 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
+
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
-
-
         }
 
         /// <summary>
@@ -525,34 +555,38 @@ namespace API
         /// Theoretically anybody who gets the hash of the person,
         /// can delete the record by calling this API
         /// </summary>
-        [FunctionName("deletevisitor")]
-        public static async Task<IActionResult> DeleteVisitor(
+        [FunctionName("deletevisitorbyuserid")]
+        public static async Task<IActionResult> DeleteVisitorByUserId(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
         {
 
-            throw new NotImplementedException();
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var visitorId = requestData.Value;
+                var userIdXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var userId = userIdXml.Value;
 
-                //get the person record that needs to be deleted
-                var visitorLogXml = APITools.BlobClientToXml(visitorLogClient);
-                var visitorToDelete = APITools.FindVisitorById(visitorLogXml, visitorId);
+                //get all visitor elements that needs to be deleted
+                var visitorListXml = APITools.BlobClientToXml(visitorLogClient);
+                var visitorLogsToDelete = visitorListXml.Elements().Where(x => x.Element("UserId")?.Value == userId);
 
-                //delete the person record,
-                visitorToDelete.Remove();
+                //delete each record
+                foreach (var visitorXml in visitorLogsToDelete)
+                {
+                    visitorXml.Remove();
+                }
 
                 //upload modified list to storage
-                await APITools.OverwriteBlobData(visitorLogClient, visitorLogXml);
+                await APITools.OverwriteBlobData(visitorLogClient, visitorListXml);
 
                 return PassMessage();
 
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -583,6 +617,8 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -611,6 +647,8 @@ namespace API
             }
             catch (Exception e)
             {
+                //log error
+                await Log.Error(e);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -756,7 +794,7 @@ namespace API
 
 
             //get the person instance by hash
-            var foundPerson = APITools.GetPersonFromHash(personHash, personListClient);
+            var foundPerson = await APITools.GetPersonFromHash(personHash, personListClient);
 
             //from person get svg report
             var eventsReportSvgString = await GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
@@ -779,7 +817,7 @@ namespace API
             var personHash = int.Parse(personHashXml.Value);
 
             //get the person instance by hash
-            var foundPerson = APITools.GetPersonFromHash(personHash, personListClient);
+            var foundPerson = await APITools.GetPersonFromHash(personHash, personListClient);
 
 
         TryAgain:
@@ -839,12 +877,12 @@ namespace API
             await APITools.OverwriteBlobData(cachedReportsClient, taskListXml);
 
         }
-        
+
 
         /// <summary>
         /// Massive method that generates dasa report in SVG
         /// </summary>
-        private static async Task<string> GenerateMainEventsReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel,List<EventTag> inputedEventTags)
+        private static async Task<string> GenerateMainEventsReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
         {
             // One precision value for generating all dasa components,
             // because misalignment occurs if use different precision

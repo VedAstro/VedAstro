@@ -22,6 +22,20 @@
     }
 </style>
 
+@if (_selectedUserId != "")
+{
+    <div class="hstack gap-3">
+        <p class="fw-bold">Selected User:@_selectedUserId</p>
+        <IconButton ButtonText="Delete All" OnClickCallback="()=>DeleteVisitorByUserId(_selectedUserId)"></IconButton>
+    </div>
+}
+@if (_selectedVisitorId != "")
+{
+    <div class="hstack gap-3">
+        <p class="fw-bold">Selected Visitor:@_selectedVisitorId</p>
+        <IconButton ButtonText="Delete All" OnClickCallback="()=>DeleteVisitorByVisitorId(_selectedVisitorId)"></IconButton>
+    </div>
+}
 
 <table class="table table-bordered text-nowrap">
     <thead class="table-dark">
@@ -58,12 +72,12 @@
 
 @code {
 
+    string _selectedUserId = "";
+    string _selectedVisitorId = "";
     // Visitor list that is manipulated for showing
     List<XElement> sortedVisitorList = new List<XElement>();
-
     //Raw unmodified visitor list from server
     List<XElement> rawVisitorList = new List<XElement>();
-
 
 
     protected override async Task OnInitializedAsync()
@@ -79,8 +93,13 @@
 
     }
 
+
     private async Task ShowAllVisitorLog()
     {
+        //reset selection if any
+        _selectedVisitorId = "";
+        _selectedUserId = "";
+
         //make it visible
         sortedVisitorList = rawVisitorList.ToList();
 
@@ -89,6 +108,10 @@
     }
     private async Task ShowUniqueVisitors()
     {
+        //reset selection if any
+        _selectedVisitorId = "";
+        _selectedUserId = "";
+
 
         var uniqueVisitorIds = (rawVisitorList.Select(x => x.Element("VisitorId")?.Value).Distinct()).ToList();
 
@@ -117,6 +140,10 @@
     }
     private async Task ShowUniqueUsers()
     {
+        //reset selection if any
+        _selectedVisitorId = "";
+        _selectedUserId = "";
+
 
         var uniqueUserIds = (rawVisitorList.Select(x => x.Element("UserId")?.Value).Distinct()).ToList();
 
@@ -144,10 +171,13 @@
     }
 
 
-
     private async Task FilterByUserId(string? userId)
     {
         await _globalVariable.LoadingMessage.Show();
+
+        //set selected user id for display & deleting
+        _selectedUserId = userId;
+        _selectedVisitorId = ""; //hide the other
 
         //filter list to show all visits made by this unique ID
         sortedVisitorList = (from xElement in rawVisitorList
@@ -163,6 +193,11 @@
     private async Task FilterByVisitorId(string? visitorId)
     {
         await _globalVariable.LoadingMessage.Show();
+
+        //set selected user id for display & deleting
+        _selectedVisitorId = visitorId;
+        _selectedUserId = ""; //hide the other
+
 
         //filter list to show all visits made by this unique ID
         sortedVisitorList = (from xElement in rawVisitorList
@@ -231,6 +266,50 @@
 
         await _jsRuntime.ShowAlert(alertData);
 
+
+    }
+
+    private async Task DeleteVisitorByUserId(string userId)
+    {
+        //convert list to xml for sending
+        var userIdXml = new XElement("UserId", userId);
+
+        var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteVisitorByUserId, userIdXml);
+
+        if (ServerManager.IsReplyPass(result))
+        {
+            //delete local copy so that no need to refresh from server
+            rawVisitorList.RemoveAll(x => x.Element("UserId")?.Value == userId);
+            await ShowAllVisitorLog();
+
+            await _jsRuntime.ShowAlert("success", $"{userId} deleted successfully!", false, timer: 1000);
+        }
+        else
+        {
+            await _jsRuntime.ShowAlert("error", $"{userId} delete failed!", false, timer: 1000);
+        }
+
+    }
+
+    private async Task DeleteVisitorByVisitorId(string visitorId)
+    {
+        //convert list to xml for sending
+        var visitorIdXml = new XElement("VisitorId", visitorId);
+
+        var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteVisitorByVisitorId, visitorIdXml);
+
+        if (ServerManager.IsReplyPass(result))
+        {
+            //delete local copy so that no need to refresh from server
+            rawVisitorList.RemoveAll(x => x.Element("VisitorId")?.Value == visitorId);
+            await ShowAllVisitorLog();
+
+            await _jsRuntime.ShowAlert("success", $"{visitorId} deleted successfully!", false, timer: 1000);
+        }
+        else
+        {
+            await _jsRuntime.ShowAlert("error", $"{visitorId} delete failed!", false, timer: 1000);
+        }
 
     }
 

@@ -43,7 +43,7 @@ namespace Website.Managers
             catch (Exception e)
             {
                 //if fail exit silently, not priority
-                Console.WriteLine($"BLZ: LogVisitor: Failed! \n{e.Message}");
+                Console.WriteLine($"BLZ: LogVisitor: Failed! \n{e.Message}\n{e.StackTrace}");
             }
 
         }
@@ -177,11 +177,13 @@ namespace Website.Managers
 
             //get visitor data & format it nicely for storage
             var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
+            var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
+            var originUrlXml = new XElement("OriginUrl", await jsRuntime.InvokeAsync<string>("getOriginUrl"));
             var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
             var visitorIdXml = new XElement("VisitorId", visitorId);
             var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, "Location");
             var visitorElement = new XElement("Visitor");
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, timeStampXml, locationXml, browserDataXml);
+            visitorElement.Add(userIdXml, visitorIdXml, urlXml, timeStampXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
 
 
             return visitorElement;

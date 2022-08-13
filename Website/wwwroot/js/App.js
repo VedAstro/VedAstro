@@ -43,6 +43,19 @@ function getVisitorData() {
     return parser.getResult();
 }
 
+//gets data about screen from browser for logging
+function getScreenData() {
+    var screenData = {
+        "Orientation": window.screen.orientation.type,
+        "Width": window.screen.width,
+        "Height": window.screen.height,
+        "ColorDepth": window.screen.colorDepth
+    }
+    return screenData;
+}
+//get previous website for logging
+var getOriginUrl = () => document.referrer;
+
 //Jquery to show inputed element
 //by class and ID (CSS selector)
 function showWrapper(element) {

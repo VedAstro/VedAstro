@@ -1,126 +1,99 @@
-﻿@using Genso.Astrology.Library
-@using System.Xml.Linq
+﻿@using System.Xml.Linq
 @attribute [Route(PageRoute.VisitorList)]
 <PageTitle>Visitor List</PageTitle>
-
 <PageTop Title="Visitor List" IconName="fluent:people-list-20-filled">
     <Description>List of visitors to the site</Description>
+    <ButtonsRow>
+        <IconButton ButtonText="Reset" OnClickCallback="ShowAllVisitorLog"></IconButton>
+        <IconButton ButtonText="Unique Visitor" OnClickCallback="ShowUniqueVisitors"></IconButton>
+        <IconButton ButtonText="Unique User" OnClickCallback="ShowUniqueUsers"></IconButton>
+    </ButtonsRow>
 </PageTop>
 
-
-@switch (whatToShow)
-{
-    case "uniqueVisitorList":
-        <table class="table table-bordered table-striped text-nowrap">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Url</th>
-                    <th>TimeStamp</th>
-                    <th>Country</th>
-                    <th>City</th>
-                    <th>Browser</th>
-                    <th>Os</th>
-                    <th>device</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var visitorXml in uniqueVisitorList)
-                {
-                    <tr>
-                        <td>User:@visitorXml.Element("UserId")?.Value<br/>Visitor:@visitorXml.Element("VisitorId")?.Value</td>
-                        <td>@visitorXml.Element("Url")?.Value</td>
-                        <td>@visitorXml.Element("TimeStamp")?.Value</td>
-                        <td>@visitorXml.Element("Location")?.Element("country")?.Value</td>
-                        <td>@visitorXml.Element("Location")?.Element("city")?.Value</td>
-                        <td>@visitorXml.Element("BrowserData")?.Element("browser")?.Element("name")?.Value</td>
-                        <td>@visitorXml.Element("BrowserData")?.Element("os")?.Element("name")?.Value</td>
-                        <td>@visitorXml.Element("BrowserData")?.Element("device")?.Value</td>
-                        <td>
-                            <div>
-                                <IconButton ButtonText="Trail Visitor ID" OnClickCallback="() => RenderVisitorTrailList(visitorXml)"></IconButton>
-                                <IconButton ButtonText="Trail User ID" OnClickCallback="() => RenderUserTrailList(visitorXml)"></IconButton>
-                            </div>
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
-        </table>
-        break;
-    case "visitorTrailList":
-        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="RenderUniqueVisitorList"></IconButton>
-
-        <div class="hstack gap-2">
-            <div>@clickedVisitorXml.Element("Location")?.Element("country")?.Value</div>
-            <div>@clickedVisitorXml.Element("Location")?.Element("city")?.Value</div>
-            <div>@clickedVisitorXml.Element("BrowserData")?.Element("browser")?.Element("name")?.Value</div>
-            <div>@clickedVisitorXml.Element("BrowserData")?.Element("os")?.Element("name")?.Value</div>
-            <div>@clickedVisitorXml.Element("BrowserData")?.Element("device")?.Value</div>
-        </div>
-
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>UserId</th>
-                    <th>VisitorId</th>
-                    <th>Url</th>
-                    <th>Button</th>
-                    <th>TimeStamp</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var visitorXml in visitorTrailList)
-                {
-                    <tr>
-                        <td>@visitorXml.Element("UserId")?.Value</td>
-                        <td>@visitorXml.Element("VisitorId")?.Value</td>
-                        <td>@visitorXml.Element("Url")?.Value</td>
-                        <td>@visitorXml.Element("ButtonText")?.Value</td>
-                        <td>@visitorXml.Element("TimeStamp")?.Value</td>
-                    </tr>
-                }
-
-            </tbody>
-        </table>
-        break;
-    default:
-        <p>Do Nothing</p>
-        break;
-}
+<style>
+    /*Makes table fit screen width*/
+    table {
+        table-layout: fixed;
+    }
+    /*Hides row overflow*/
+    td {
+        overflow: hidden;
+        white-space: nowrap;
+    }
+</style>
 
 
+<table class="table table-bordered text-nowrap">
+    <thead class="table-dark">
+        <tr>
+            <th>UserId</th>
+            <th>VisitorId</th>
+            <th style="width: 277px;">Url</th>
+            <th>TimeStamp</th>
+            <th>Location</th>
+            <th>IP</th>
+            <th>Device</th>
+            <th>Error</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var visitorXml in sortedVisitorList)
+        {
+            <tr>
+                <td class="link-primary" @onclick="@(()=> FilterByUserId(visitorXml.Element("UserId")?.Value))">@visitorXml.Element("UserId")?.Value</td>
+                <td class="link-primary" @onclick="@(()=> FilterByVisitorId(visitorXml.Element("VisitorId")?.Value))">@visitorXml.Element("VisitorId")?.Value</td>
+                <td>@visitorXml.Element("Url")?.Value</td>
+                <td>@visitorXml.Element("ButtonText")?.Value</td>
+                <td>@visitorXml.Element("TimeStamp")?.Value</td>
+                <td>@visitorXml.Element("Location")?.Element("city")?.Value,@visitorXml.Element("Location")?.Element("country")?.Value</td>
+                <td>@visitorXml.Element("Location")?.Element("ip")?.Value</td>
+                <td>@visitorXml.Element("BrowserData")?.Element("browser")?.Element("name")?.Value|@visitorXml.Element("BrowserData")?.Element("os")?.Element("name")?.Value|@visitorXml.Element("BrowserData")?.Element("device")?.Value</td>
+                <td>@visitorXml.Element("Error")?.Element("Message")?.Value</td>
+                <td class="link-primary" @onclick="@(()=> ViewVisitor(visitorXml))">View</td>
+            </tr>
+        }
 
+    </tbody>
+</table>
 
 @code {
 
-    List<XElement> uniqueVisitorList = new List<XElement>();
-    List<XElement> visitorTrailList = new List<XElement>();
+    // Visitor list that is manipulated for showing
+    List<XElement> sortedVisitorList = new List<XElement>();
+
+    //Raw unmodified visitor list from server
     List<XElement> rawVisitorList = new List<XElement>();
-    string whatToShow = "";
-    XElement clickedVisitorXml;
-
-    //code executed after page has been rendered
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        //generate table
-        if (firstRender) { await RenderUniqueVisitorList(); }
-    }
 
 
-    private async Task RenderUniqueVisitorList()
+
+    protected override async Task OnInitializedAsync()
     {
         await _globalVariable.LoadingMessage.Show();
 
         //get all people from API server
         rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id);
 
+        await ShowAllVisitorLog();
+
+        await _globalVariable.LoadingMessage.Hide();
+
+    }
+
+    private async Task ShowAllVisitorLog()
+    {
+        //make it visible
+        sortedVisitorList = rawVisitorList.ToList();
+
+        StateHasChanged();
+
+    }
+    private async Task ShowUniqueVisitors()
+    {
 
         var uniqueVisitorIds = (rawVisitorList.Select(x => x.Element("VisitorId")?.Value).Distinct()).ToList();
 
         //remove old data
-        uniqueVisitorList.Clear();
+        sortedVisitorList.Clear();
 
         foreach (var visitorId in uniqueVisitorIds)
         {
@@ -136,52 +109,128 @@
 
             //if none found, use back 1 from top list
             y = y ?? x.FirstOrDefault();
-            uniqueVisitorList.Add(y);
+            sortedVisitorList.Add(y);
         }
-
-
-        whatToShow = "uniqueVisitorList";
 
         StateHasChanged();
 
-        //convert objects to json (for js generator library)
-        //and calls js code change table directly
-        //await _jsRuntime.InvokeVoidAsync("generatePersonListTable", TableId, personList.ToArray());
+    }
+    private async Task ShowUniqueUsers()
+    {
+
+        var uniqueUserIds = (rawVisitorList.Select(x => x.Element("UserId")?.Value).Distinct()).ToList();
+
+        //remove old data
+        sortedVisitorList.Clear();
+
+        foreach (var visitorId in uniqueUserIds)
+        {
+            //get all visitor xml by visitor id
+            var x = rawVisitorList.Where(x => x.Element("UserId")?.Value == visitorId);
+            //pick out the element with browser data to represent others
+            //"Location" & "BrowserData" only exist in unique 1st visit
+            var y = (from xElement in x
+                     where
+                         xElement.Element("Location") != null &&
+                         xElement.Element("BrowserData") != null
+                     select xElement).FirstOrDefault();
+
+            //if none found, use back 1 from top list
+            y = y ?? x.FirstOrDefault();
+            sortedVisitorList.Add(y);
+        }
+
+        StateHasChanged();
+    }
+
+
+
+    private async Task FilterByUserId(string? userId)
+    {
+        await _globalVariable.LoadingMessage.Show();
+
+        //filter list to show all visits made by this unique ID
+        sortedVisitorList = (from xElement in rawVisitorList
+                             where xElement.Element("UserId")?.Value == userId
+                             select xElement).ToList();
+
+        StateHasChanged();
 
         await _globalVariable.LoadingMessage.Hide();
 
     }
 
-
-    private void RenderVisitorTrailList(XElement visitorXml)
+    private async Task FilterByVisitorId(string? visitorId)
     {
-        clickedVisitorXml = visitorXml;
-        var visitorIdClicked = clickedVisitorXml.Element("VisitorId")?.Value;
+        await _globalVariable.LoadingMessage.Show();
 
         //filter list to show all visits made by this unique ID
-        visitorTrailList = (from xElement in rawVisitorList
-                            where xElement.Element("VisitorId")?.Value == visitorIdClicked
-                            select xElement).ToList();
-
-        whatToShow = "visitorTrailList";
+        sortedVisitorList = (from xElement in rawVisitorList
+                             where xElement.Element("VisitorId")?.Value == visitorId
+                             select xElement).ToList();
 
         StateHasChanged();
+
+        await _globalVariable.LoadingMessage.Hide();
 
     }
-    
-    private void RenderUserTrailList(XElement visitorXml)
+
+    private async Task ViewVisitor(XElement visitorXml)
     {
-        clickedVisitorXml = visitorXml;
-        var userIdClicked = clickedVisitorXml.Element("UserId")?.Value;
+        await _globalVariable.LoadingMessage.Show();
 
-        //filter list to show all visits made by this unique ID
-        visitorTrailList = (from xElement in rawVisitorList
-                            where xElement.Element("UserId")?.Value == userIdClicked
-                            select xElement).ToList();
 
-        whatToShow = "visitorTrailList";
+        var userId = visitorXml.Element("UserId")?.Value;
+        var visitorId = visitorXml.Element("VisitorId")?.Value;
+        var url = visitorXml.Element("Url")?.Value;
+        var originUrl = visitorXml.Element("OriginUrl")?.Value;
+        var timeStamp = visitorXml.Element("TimeStamp")?.Value;
+        var organization = visitorXml.Element("Location")?.Element("organization")?.Value;
+        var city = visitorXml.Element("Location")?.Element("city")?.Value;
+        var region = visitorXml.Element("Location")?.Element("region")?.Value;
+        var ip = visitorXml.Element("Location")?.Element("ip")?.Value;
+        var country = visitorXml.Element("Location")?.Element("country")?.Value;
+        var timezone = visitorXml.Element("Location")?.Element("timezone")?.Value;
+        var browser = visitorXml.Element("BrowserData")?.Element("browser")?.Element("name")?.Value;
+        var osName = visitorXml.Element("BrowserData")?.Element("os")?.Element("name")?.Value;
+        var osVersion = visitorXml.Element("BrowserData")?.Element("os")?.Element("version")?.Value;
+        var deviceModel = visitorXml.Element("BrowserData")?.Element("device")?.Element("model")?.Value;
+        var deviceVendor = visitorXml.Element("BrowserData")?.Element("device")?.Element("vender")?.Value;
+        var deviceType = visitorXml.Element("BrowserData")?.Element("device")?.Element("type")?.Value;
+        var errorMessage = visitorXml.Element("Error")?.Element("Message")?.Value;
+        var errorTime = visitorXml.Element("Error")?.Element("Time")?.Value;
+        var buttonText = visitorXml.Element("ButtonText")?.Value;
+        var screenWidth = visitorXml.Element("ScreenData")?.Element("Width")?.Value;
+        var screenHeight = visitorXml.Element("ScreenData")?.Element("Height")?.Value;
+        var screenOrientation = visitorXml.Element("ScreenData")?.Element("Orientation")?.Value;
+        var screenColorDepth = visitorXml.Element("ScreenData")?.Element("ColorDepth")?.Value;
 
-        StateHasChanged();
+        var alertData = new
+        {
+            html = $@"<ul class=""list-group"">
+                        <li class=""list-group-item active"" aria-current=""true"">Visitor</li>
+                        <li class=""list-group-item"">{userId}</li>
+                        <li class=""list-group-item"">{visitorId}</li>
+                        <li class=""list-group-item"">{buttonText} {url}</li>
+                        <li class=""list-group-item"">{originUrl}</li>
+                        <li class=""list-group-item"">{timeStamp}</li>
+                        <li class=""list-group-item"">{organization}</li>
+                        <li class=""list-group-item"">{city} {region} {country}</li>
+                        <li class=""list-group-item"">{ip}</li>
+                        <li class=""list-group-item"">{timezone}</li>
+                        <li class=""list-group-item"">{screenWidth}x{screenHeight} {screenOrientation} {screenColorDepth}</li>
+                        <li class=""list-group-item"">{browser} {osVersion} {osName}</li>
+                        <li class=""list-group-item"">{deviceType} {deviceVendor} {deviceModel}</li>
+                        <li class=""list-group-item"">{errorTime}</li>
+                        <li class=""list-group-item"">{errorMessage}</li>
+                     </ul>"
+        };
+
+        await _globalVariable.LoadingMessage.Hide();
+
+
+        await _jsRuntime.ShowAlert(alertData);
+
 
     }
 

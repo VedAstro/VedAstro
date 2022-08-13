@@ -55,7 +55,7 @@ namespace Website
         /// <summary>
         /// Shows alerts on page using SweetAlert js lib 
         /// this call is equivalent to
-        /// Note: create altertdata as anonymous type exactly like js version
+        /// Note: create alter data as anonymous type exactly like js version
         /// 
         /// Swal.fire({
         /// title: 'Error!',
@@ -77,7 +77,7 @@ namespace Website
                 timer = timer
             };
 
-            await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+            await jsRuntime.ShowAlert(alertData);
         }
 
         /// <summary>

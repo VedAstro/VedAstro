@@ -122,10 +122,11 @@
 
         //set data into dasa viewer
         dynamic timeRange = ComputeStartEndTimeFromInput();
-
         var startTime = timeRange.Start;
         var endTime = timeRange.End;
 
+        //note: we calculate days per pixel here as to auto show/hide some events
+        //normally would not be needed
         var daysPerPixel = DasaReportViewer.GetDayPerPixel(startTime, endTime);
         //generate the events row & time header row
         var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara };

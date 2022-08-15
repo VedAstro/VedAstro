@@ -4271,7 +4271,7 @@ namespace Genso.Astrology.Library
         /// which has the greatest Sbadbala, influences the
         /// bhava most.
         /// </summary>
-        public static PlanetName[] GetAllPlanetOrderedByStrength(Time time)
+        public static List<PlanetName> GetAllPlanetOrderedByStrength(Time time)
         {
 
             //CACHE MECHANISM
@@ -4279,7 +4279,7 @@ namespace Genso.Astrology.Library
 
 
             //UNDERLYING FUNCTION
-            PlanetName[] _getAllPlanetOrderedByStrength()
+            List<PlanetName> _getAllPlanetOrderedByStrength()
             {
                 var planetStrenghtList = new Dictionary<double, PlanetName>();
 
@@ -4302,12 +4302,12 @@ namespace Genso.Astrology.Library
                 var keys_sorted = planetStrenghtList.Keys.ToList();
                 keys_sorted.Sort();
 
-                PlanetName[] sortedArray = new PlanetName[7];
-                var count = 6;
+                //PlanetName[] sortedArray = new PlanetName[7];
+                var sortedArray = new List<PlanetName>();
                 foreach (var key in keys_sorted)
                 {
-                    sortedArray[count] = planetStrenghtList[key];
-                    count--;
+                    //strongest planet added first
+                    sortedArray.Add(planetStrenghtList[key]);
                 }
 
                 return sortedArray;

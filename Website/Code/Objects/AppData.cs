@@ -7,6 +7,8 @@ namespace Website
     /// </summary>
     public static class AppData
     {
+        public const string MaxContentWidthPx = "443px";
+
         /// <summary>
         /// Represents the currently logged in User
         /// If null then nobody logged in

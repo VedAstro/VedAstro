@@ -10,7 +10,7 @@
     </div>
     <div class="col">
         <label class="form-label">Timezone</label>
-        <input class="form-control" @bind="TimeZone" type="text" placeholder="+08:00">
+        <input style="max-width: 86px;" class="form-control" @bind="TimeZone" type="text" placeholder="+08:00">
     </div>
 </div>
 
@@ -47,6 +47,9 @@
         }
     }
 
+    /// <summary>
+    /// Gets parseable time string
+    /// </summary>
     public string? FullTimeString
     {
         get => $"{HourMin} {Date} {TimeZone}";
@@ -57,4 +60,11 @@
     private string? _hourMin = DateTime.Today.ToString("HH:mm");
     private string? _date = DateTime.Today.ToString("dd/MM/yyyy");
     private string? _timeZone = DateTimeOffset.Now.ToString("zzz");
+
+
+    /// <summary>
+    /// Creates a new time instance with inputed time data
+    /// </summary>
+    public Time GetTime(GeoLocation geoLocation) => new(this.FullTimeString, geoLocation);
+
 }

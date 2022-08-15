@@ -251,14 +251,14 @@
 
         //parse data received from user
         var geoLocation = _geoLocationInput.GetGeoLocation();
-        var fullTimeString = _timeInput.FullTimeString;
         var lifeEventList = await _lifeEventEditor.GetData();
 
         //get gender from gender string
         var gender = Enum.Parse<Gender>(_genderInput);
 
         //create a new person from the inputed data
-        var birthTime = new Time(fullTimeString, geoLocation);
+        var birthTime = _timeInput.GetTime(geoLocation);
+        //var birthTime = new Time(fullTimeString, geoLocation);
         return new Person(_nameInput, birthTime, gender, AppData.CurrentUser?.Id, _notesInput, lifeEventList);
 
         //----------LOCAL FUNCTION ---------------------

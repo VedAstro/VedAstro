@@ -3931,7 +3931,8 @@ namespace Genso.Astrology.Library
         [EventCalculator(EventName.SunIsStrong)]
         public static CalculatorResult IsSunIsStrongOccuring(Time time, Person person)
         {
-            var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Sun;
+            var strongestPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0];
+            var occuring = strongestPlanet == PlanetName.Sun;
 
             //STRENGTH CALCULATION
             var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);

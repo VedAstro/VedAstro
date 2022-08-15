@@ -1,17 +1,26 @@
 ﻿@using Genso.Astrology.Library
 @attribute [Route(PageRoute.AddLifeEvent)]
 
+<PageTitle>Life Event</PageTitle>
+<PageTop Title="Life Event" IconName="ic:twotone-event">
+    <Description>Life events is shown in Dasa chart. Find astrological reason for bad or good events in your life.</Description>
+    @*    <ButtonsRow>
+    <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
+    </ButtonsRow>
+    *@
+</PageTop>
+
 
 @*Person selector*@
-<div class="vstack gap-2">
+<div class="vstack gap-2" style="max-width: @AppData.MaxContentWidthPx;">
     <PeopleSelectorBox @ref="_peopleSelectorBox" />
     <div>
-        <label class="form-label">Name</label>
-        <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+        <label class="form-label">Event Name</label>
+        <input @bind="_nameInput" type="text" class="form-control" placeholder="Marriage">
     </div>
     <div>
         <label class="form-label">Description</label>
-        <input @bind="_descriptionInput" type="text" class="form-control" placeholder="More info...">
+        <input @bind="_descriptionInput" type="text" class="form-control" placeholder="Marriage did not last">
     </div>
     <label class="form-label">Nature</label>
     <select class="form-control"  @bind="_natureInputValue" style="width: fit-content;min-width: 273px;">
@@ -23,7 +32,7 @@
         <TimeInput @ref="_timeInput" />
     </div>
 
-    <button class="btn btn-primary" style="align-self: end;" @onclick="AddButtonClicked">Save</button>
+    <button class="btn btn-primary" style="align-self: end;" @onclick="AddButtonClicked">Add</button>
 </div>
 
 

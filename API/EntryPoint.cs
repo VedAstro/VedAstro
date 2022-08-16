@@ -349,7 +349,7 @@ namespace API
 
                 //get the person record by hash
                 var personListXml = APITools.BlobClientToXml(personListClient);
-                var foundPerson = APITools.FindPersonByHash(personListXml, originalHash);
+                var foundPerson = await APITools.FindPersonByHash(personListXml, originalHash);
 
                 //send person to caller
                 responseMessage = new XElement("Root", foundPerson).ToString();

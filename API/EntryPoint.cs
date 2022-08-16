@@ -2178,7 +2178,7 @@ namespace API
             }
 
             //height not known until generated
-            //returns the final dynamic height of this gochara row
+            //returns the final dynamic height of this event row
             string GenerateMultipleRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int finalHeight, string eventType)
             {
                 //generate the row for each time slice
@@ -2215,7 +2215,7 @@ namespace API
                                    $"type=\"{eventType}\" " +
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
+                                   $"stdtime=\"{slice.GetStdDateTimeOffset():HH:mm dd/MM/yyyy}\" " + //show only date
                                    $"x=\"{horizontalPosition}\" " +
                                    $"y=\"{yAxis + verticalPosition}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                    $"width=\"{_widthPerSlice}\" " +

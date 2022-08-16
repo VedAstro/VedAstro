@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Genso.Astrology.Library;
 
 namespace API;
 
@@ -99,7 +100,7 @@ public static class Log
     /// Gets now time in UTC +8:00
     /// </summary>
     /// <returns></returns>
-    private static DateTimeOffset GetNow()
+    private static string GetNow()
     {
         //create utc 8
         var utc8 = new TimeSpan(8, 0, 0);
@@ -109,7 +110,7 @@ public static class Log
         var utc8Time = nowTime.ToOffset(utc8);
 
         //return converted time to caller
-        return utc8Time;
+        return utc8Time.ToString(Time.GetDateTimeFormat());
     }
 
 

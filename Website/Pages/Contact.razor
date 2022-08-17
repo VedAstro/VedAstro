@@ -8,7 +8,7 @@
     <Description>Contact us anytime. You can report a bug, suggest a feature or just say Hi. We'll always reply.</Description>
 </PageTop>
 
-<div @ref="_messageFormElement" class="vstack gap-2" style="max-width:@GlobalVariableManager.MaxWidth;">
+<div @ref="_messageFormElement" class="vstack gap-2" style="max-width:@AppData.MaxWidth;">
     <div>
         <label for="emailInputId">Email</label>
         <input @bind="_emailInput" type="text" id="emailInputId" class="form-control" placeholder="john@example.com">

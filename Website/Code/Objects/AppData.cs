@@ -7,7 +7,6 @@ namespace Website
     /// </summary>
     public static class AppData
     {
-        public const string MaxContentWidthPx = "443px";
 
         /// <summary>
         /// Represents the currently logged in User
@@ -21,5 +20,16 @@ namespace Website
         /// Used to log user flow
         /// </summary>
         public static string? VisitorId { get; set; }
+
+
+        //-----------------------------FIELDS
+
+
+        /// <summary>
+        /// Hard coded max width used in pages 
+        /// </summary>
+        public const string MaxWidth = "693px";
+        public const string MaxContentWidthPx = "443px";
+
     }
 }

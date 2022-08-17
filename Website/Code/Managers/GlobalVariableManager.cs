@@ -13,19 +13,11 @@ namespace Website
     /// </summary>
     public class GlobalVariableManager
     {
-
-
-        //-----------------------------FIELDS
-
         /// <summary>
         /// Time spent waiting before checking if components are ready
         /// </summary>
         private const int ComponentWaitDelayMs = 10;
 
-        /// <summary>
-        /// Hard coded max width used in pages 
-        /// </summary>
-        public const string MaxWidth = "693px";
 
 
         //-----------------------------PROPERTIES

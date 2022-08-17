@@ -439,5 +439,10 @@ namespace Website
             }
         }
 
+        /// <summary>
+        /// Gets now system time string in standardized format
+        /// </summary>
+        public static string NowTime() => DateTimeOffset.Now.ToString(Time.GetDateTimeFormat());
+
     }
 }

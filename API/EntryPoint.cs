@@ -5,17 +5,14 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using System.Web;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
 using Google.Apis.Auth;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Logging;
 
 namespace API
 {
@@ -52,7 +49,7 @@ namespace API
 
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> GetMatchReport(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous,"post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(PersonListXml, FileAccess.Read)] Stream personListRead)
         {
             string responseMessage;
@@ -60,19 +57,22 @@ namespace API
             try
             {
                 //get name of male & female
-                dynamic maleFemaleHash = await APITools.ExtractMaleFemaleHash(req);
+                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var maleHash = int.Parse(rootXml.Element("MaleHash").Value);
+                var femaleHash = int.Parse(rootXml.Element("FemaleHash").Value);
+
 
                 //get list of all people
                 var personList = new Data(personListRead);
 
                 //generate compatibility report
-                CompatibilityReport compatibilityReport = APITools.GetCompatibilityReport(maleFemaleHash.Male, maleFemaleHash.Female, personList);
+                CompatibilityReport compatibilityReport = APITools.GetCompatibilityReport(maleHash, femaleHash, personList);
                 responseMessage = compatibilityReport.ToXml().ToString();
             }
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -102,7 +102,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -134,7 +134,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -163,7 +163,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -193,7 +193,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -231,7 +231,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -277,7 +277,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -288,6 +288,18 @@ namespace API
 
             return okObjectResult;
         }
+
+        /// <summary>
+        /// Function for debugging purposes
+        /// </summary>
+        [FunctionName("getipaddress")]
+        public static async Task<IActionResult> GetIpAddress(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
+            HttpRequestMessage incomingRequest)
+        {
+            return PassMessage(incomingRequest.GetCallerIp().ToString());
+        }
+
 
         [FunctionName("getfemalelist")]
         public static async Task<IActionResult> GetFemaleList(
@@ -319,7 +331,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -358,7 +370,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -408,6 +420,7 @@ namespace API
 
             try
             {
+
                 //get dasa report for sending
                 var dasaReportSvg = await GetEventReportSvgForIncomingRequest(incomingRequest, personListClient);
 
@@ -419,7 +432,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -457,7 +470,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -498,7 +511,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -541,7 +554,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
@@ -579,7 +592,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -619,7 +632,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -651,7 +664,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -681,7 +694,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
@@ -723,7 +736,7 @@ namespace API
             //if any failure, reply as in valid login & log the event
             catch (Exception e)
             {
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
                 return FailMessage("Login Failed");
             }
         }
@@ -758,7 +771,7 @@ namespace API
             //if any failure, reply as in valid login & log the event
             catch (Exception e)
             {
-                await Log.Error(e);
+                await Log.Error(e, incomingRequest);
                 return FailMessage("Login Failed");
             }
         }

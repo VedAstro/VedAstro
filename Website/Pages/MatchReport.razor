@@ -2,6 +2,7 @@
 
 @using Genso.Astrology.Library.Compatibility
 @using Genso.Astrology.Library
+@using System.Xml.Linq
 
 <PageTitle>Match Report</PageTitle>
 
@@ -107,13 +108,13 @@
         //show loading box
         await _globalVariable.LoadingMessage.Show();
 
-        //prepare request to API server
+        //show names on page
         MaleName = (await WebsiteTools.GetPersonFromHash(maleHash)).Name;
         FemaleName = (await WebsiteTools.GetPersonFromHash(femaleHash)).Name;
-        var url = $"{ServerManager.GetMatchReportApi}?male={maleHash}&female={femaleHash}";
 
         //get report from server
-        var matchReportXml = await ServerManager.ReadFromServerXmlReply(url);
+        var rootXml = new XElement("Root", new XElement("MaleHash", maleHash), new XElement("FemaleHash", femaleHash));
+        var matchReportXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMatchReportApi, rootXml);
 
         //parse report
         var matchReport = CompatibilityReport.FromXml(matchReportXml);

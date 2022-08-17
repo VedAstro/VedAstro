@@ -28,7 +28,7 @@
         //send email as message to API server for storage
         //package message data to be sent
         var textXml = new XElement("Text", $"LeaveEmailAlert from page: {PageName}");
-        var timestampXml = new XElement("Timestamp", DateTimeOffset.Now.ToString(Time.GetDateTimeFormat()));
+        var timestampXml = new XElement("Timestamp", WebsiteTools.NowTime());
         var emailXml = new XElement("Email", emailFromAlert);
         var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
         var messageXml = new XElement("Message", userIdXml, emailXml, timestampXml, textXml);

@@ -1,11 +1,11 @@
 using System;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 
 namespace API;
-
 
 /// <summary>
 /// Custom logger for API, not initialization needed auto log to AppLog.xml file
@@ -21,16 +21,25 @@ public static class Log
 
     /// <summary>
     /// Logs an error directly to AppLog.xml
+    /// note: request can be null
     /// </summary>
-    public static async Task Error(Exception exception)
+    public static async Task Error(Exception exception, HttpRequestMessage req)
     {
         //get data out of exception
-        var errorData = ExtractDataFromException(exception);
+        var errorXml = ExtractDataFromException(exception);
+
+        //get caller data for more debug info
+        var ipAddress = req?.GetCallerIp().ToString() ?? "no ip";
+
+        errorXml.Add(new XElement("Caller IP", ipAddress));
+        errorXml.Add(new XElement("Url", req?.RequestUri));
+        errorXml.Add(new XElement("Request Body"), APITools.RequestToXmlString(req));
 
         //add error data to main app log file
-        await APITools.AddXElementToXDocument(errorData, AppLogXml, ContainerName);
+        await APITools.AddXElementToXDocument(errorXml, AppLogXml, ContainerName);
 
     }
+
 
 
     //PRIVATE FUNCTIONS

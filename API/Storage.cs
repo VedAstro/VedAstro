@@ -1,9 +1,6 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using Genso.Astrology.Library;
-using Google.Apis.Auth;
 
 namespace API;
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
@@ -110,9 +109,10 @@ namespace API
 
         /// <summary>
         /// Simply converts incoming request to raw string
-        /// No parsing is done here 
+        /// No parsing is done here
+        /// note: null request return empty string
         /// </summary>
-        public static string RequestToXmlString(HttpRequestMessage rawData) => rawData.Content.ReadAsStringAsync().Result;
+        public static string RequestToXmlString(HttpRequestMessage rawData) => rawData?.Content?.ReadAsStringAsync().Result ?? "";
 
         /// <summary>
         /// Extracts names from the query URL
@@ -183,7 +183,7 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                await Log.Error(e);
+                await Log.Error(e, null);
                 return new XElement("Person");
             }
         }

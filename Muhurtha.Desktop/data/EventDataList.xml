@@ -199,33 +199,31 @@
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
-	<Event>
+	<!--MARKED FOR DELETION BECAUSE NEW VIEW DOESN NEED IT, CREATED FOR GOOGLE CALENDAR-->
+	<!--<Event>
 		<Name>BadTaraChandraPanchaka</Name>
 		<Nature>Bad</Nature>
 		<Description>Very bad time for any important works. Bad tarabala, bad chandrabala and bad panchaka.</Description>
 		<Tag>Personal</Tag>
-	</Event>
-	<Event>
-
+	</Event>-->
+	<!--<Event>
 		<Name>GoodTaraChandraPanchaka</Name>
 		<Nature>Good</Nature>
 		<Description>Very good time for any important works. Good tarabala, good chandrabala and good panchaka.</Description>
 		<Tag>Personal</Tag>
-	</Event>
-	<Event>
-
+	</Event>-->
+	<!--<Event>
 		<Name>BadTaraChandra</Name>
 		<Nature>Bad</Nature>
 		<Description>Generally bad time for important works. Bad tarabala &amp; bad chandrabala </Description>
 		<Tag>Personal</Tag>
-	</Event>
-	<Event>
-
+	</Event>-->
+	<!--<Event>
 		<Name>GoodTaraChandra</Name>
 		<Nature>Good</Nature>
 		<Description>Generally good time for important works. Good tarabala &amp; good chandrabala </Description>
 		<Tag>Personal</Tag>
-	</Event>
+	</Event>-->
 	<Event>
 
 		<Name>BhriguShatka</Name>

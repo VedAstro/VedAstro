@@ -164,6 +164,7 @@ but with Client + Server config, hashes become different, needs changing to MD5
         
 
 ## EventDataList.xml
+-   3 files exist now, azure storage, desktop, wwwroot (TODO delete all but wwwroot)
 -   2 of these files exist, 1 local in MuhurthaCore for desktop version.
     The other online in VedAstro Azure storage for use by API.
     Both files need to be in sync, if forgot to sync. Use file with latest update.

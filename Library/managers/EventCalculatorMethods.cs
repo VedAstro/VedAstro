@@ -529,95 +529,98 @@ namespace Genso.Astrology.Library
             }
         }
 
-        [EventCalculator(EventName.BadTaraChandraPanchaka)]
-        public static CalculatorResult IsBadTaraChandraPanchakaOccuring(Time time, Person person)
-        {
-            //bad tarabala
-            var badTarabala = IsBadTarabalaOccuring(time, person).Occuring;
 
-            //bad chandrabala
-            var badChandrabala = IsBadChandrabalaOccuring(time, person).Occuring;
+        //MARKED FOR DELETION BECAUSE NEW VIEW DOESN NEED IT, CREATED FOR GOOGLE CALENDAR
 
-            //bad panchaka
-            var badPanchaka = IsBadPanchakaOccuring(time, person).Occuring;
+        //[EventCalculator(EventName.BadTaraChandraPanchaka)]
+        //public static CalculatorResult IsBadTaraChandraPanchakaOccuring(Time time, Person person)
+        //{
+        //    //bad tarabala
+        //    var badTarabala = IsBadTarabalaOccuring(time, person).Occuring;
 
+        //    //bad chandrabala
+        //    var badChandrabala = IsBadChandrabalaOccuring(time, person).Occuring;
 
-            if (badTarabala && badChandrabala && badPanchaka)
-            {
-                return CalculatorResult.IsOccuring();
-            }
-            else
-            {
-                return CalculatorResult.NotOccuring();
-            }
-
-        }
-
-        [EventCalculator(EventName.GoodTaraChandraPanchaka)]
-        public static CalculatorResult IsGoodTaraChandraPanchakaOccuring(Time time, Person person)
-        {
-            //good tarabala
-            var goodTarabala = IsGoodTarabalaOccuring(time, person).Occuring;
-
-            //good chandrabala
-            var goodChandrabala = IsGoodChandrabalaOccuring(time, person).Occuring;
-
-            //good panchaka
-            var goodPanchaka = IsGoodPanchakaOccuring(time, person).Occuring;
+        //    //bad panchaka
+        //    var badPanchaka = IsBadPanchakaOccuring(time, person).Occuring;
 
 
-            if (goodTarabala && goodChandrabala && goodPanchaka)
-            {
-                return CalculatorResult.IsOccuring();
-            }
-            else
-            {
-                return CalculatorResult.NotOccuring();
-            }
+        //    if (badTarabala && badChandrabala && badPanchaka)
+        //    {
+        //        return CalculatorResult.IsOccuring();
+        //    }
+        //    else
+        //    {
+        //        return CalculatorResult.NotOccuring();
+        //    }
 
-        }
+        //}
 
-        [EventCalculator(EventName.GoodTaraChandra)]
-        public static CalculatorResult IsGoodTaraChandraOccuring(Time time, Person person)
-        {
-            //good tarabala
-            var goodTarabala = IsGoodTarabalaOccuring(time, person).Occuring;
+        //[EventCalculator(EventName.GoodTaraChandraPanchaka)]
+        //public static CalculatorResult IsGoodTaraChandraPanchakaOccuring(Time time, Person person)
+        //{
+        //    //good tarabala
+        //    var goodTarabala = IsGoodTarabalaOccuring(time, person).Occuring;
 
-            //good chandrabala
-            var goodChandrabala = IsGoodChandrabalaOccuring(time, person).Occuring;
+        //    //good chandrabala
+        //    var goodChandrabala = IsGoodChandrabalaOccuring(time, person).Occuring;
 
-
-            if (goodTarabala && goodChandrabala)
-            {
-                return CalculatorResult.IsOccuring();
-            }
-            else
-            {
-                return CalculatorResult.NotOccuring();
-            }
-
-        }
-
-        [EventCalculator(EventName.BadTaraChandra)]
-        public static CalculatorResult IsBadTaraChandraOccuring(Time time, Person person)
-        {
-            //bad tarabala
-            var badTarabala = IsBadTarabalaOccuring(time, person).Occuring;
-
-            //bad chandrabala
-            var badChandrabala = IsBadChandrabalaOccuring(time, person).Occuring;
+        //    //good panchaka
+        //    var goodPanchaka = IsGoodPanchakaOccuring(time, person).Occuring;
 
 
-            if (badTarabala && badChandrabala)
-            {
-                return CalculatorResult.IsOccuring();
-            }
-            else
-            {
-                return CalculatorResult.NotOccuring();
-            }
+        //    if (goodTarabala && goodChandrabala && goodPanchaka)
+        //    {
+        //        return CalculatorResult.IsOccuring();
+        //    }
+        //    else
+        //    {
+        //        return CalculatorResult.NotOccuring();
+        //    }
 
-        }
+        //}
+
+        //[EventCalculator(EventName.GoodTaraChandra)]
+        //public static CalculatorResult IsGoodTaraChandraOccuring(Time time, Person person)
+        //{
+        //    //good tarabala
+        //    var goodTarabala = IsGoodTarabalaOccuring(time, person).Occuring;
+
+        //    //good chandrabala
+        //    var goodChandrabala = IsGoodChandrabalaOccuring(time, person).Occuring;
+
+
+        //    if (goodTarabala && goodChandrabala)
+        //    {
+        //        return CalculatorResult.IsOccuring();
+        //    }
+        //    else
+        //    {
+        //        return CalculatorResult.NotOccuring();
+        //    }
+
+        //}
+
+        //[EventCalculator(EventName.BadTaraChandra)]
+        //public static CalculatorResult IsBadTaraChandraOccuring(Time time, Person person)
+        //{
+        //    //bad tarabala
+        //    var badTarabala = IsBadTarabalaOccuring(time, person).Occuring;
+
+        //    //bad chandrabala
+        //    var badChandrabala = IsBadChandrabalaOccuring(time, person).Occuring;
+
+
+        //    if (badTarabala && badChandrabala)
+        //    {
+        //        return CalculatorResult.IsOccuring();
+        //    }
+        //    else
+        //    {
+        //        return CalculatorResult.NotOccuring();
+        //    }
+
+        //}
 
         [EventCalculator(EventName.JanmaNakshatraRulling)]
         public static CalculatorResult IsJanmaNakshatraRullingOccuring(Time time, Person person)

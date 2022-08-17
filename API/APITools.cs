@@ -255,6 +255,7 @@ namespace API
         public static async Task<List<EventData>> GetEventDataList()
         {
             //get data list from Azure storage
+            //TODO NEEDS TO BE CHANGED TO WWW ROOT VERSION OF THE FILE
             var eventDataListXml = await GetXmlFileFromAzureStorage("EventDataList.xml", "vedastro-site-data");
 
             //parse each raw event data in list

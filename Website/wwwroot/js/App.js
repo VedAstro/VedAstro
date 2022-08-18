@@ -270,18 +270,15 @@ async function ShowLeaveEmailAlert() {
 
     //show alert to get email
     const { value: email } = await Swal.fire({
-        title: 'Leave your email',
+        title: 'Notify me on update',
         input: 'email',
         inputPlaceholder: 'Enter your email address'
     });
 
-    if (email) {
-        Swal.fire('Thanks', 'We will update you soon..', 'success');
-    }
+    if (email) { Swal.fire('Thanks', 'We will update you soon..', 'success'); }
 
     //send email inputed to caller
     return email;
-
 }
 
 //Gets a mouses x axis relative inside the given element
@@ -674,37 +671,34 @@ function autoUpdateTimeLegend(mousePosition) {
 
 }
 
+//needs to be run once before get event description method is used
+//loads xml file located in wwwroot to xml global data
+async function LoadEventDataListFile() {
+
+    var url = `${window.location.origin}/data/EventDataList.xml`;
+    var response = await fetch(url, { mode: 'no-cors' });
+    var dataListStr = await response.text();
+
+    //parse as XML, to search through
+    //and save as global data for access later
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(dataListStr, "text/xml");
+    window.EventDataListXml = $(xmlDoc); //jquery for use with .filter
+}
+
 //gets events from EventDataList.xml
 //and injects them into dasa view
 async function getEventDescription(eventName) {
 
-    var xmlDoc;
-    var parser = new DOMParser();
+    //search for matching event name
+    var eventXmlList = window.EventDataListXml.find('Event'); //get all event elements
+    var results = eventXmlList.filter(
+        function () {
+            var eventNameXml = $(this).children('Name').eq(0);
+            return eventNameXml.text() === eventName;
+        });
 
-    var url = `${window.location.origin}/data/EventDataList.xml`;
-
-    var eventDescription;
-
-    var response = await fetch(url, { mode: 'no-cors' });
-    var data = await response.text();
-
-    //console.log(data);
-    xmlDoc = parser.parseFromString(data, "text/xml");
-
-    var xml = $(xmlDoc);
-    var events = xml.find('Event');
-
-    //var x = events.filter(evt => $(evt).children('Name').eq(0).val() === eventName);
-
-    var results = events.filter(function () {
-        var y = $(this).children('Name').eq(0).text();
-        return y === eventName;
-    });
-
-    eventDescription = results.eq(0).children('Description').eq(0).text();
-    //console.log(x);
-    console.log(eventDescription);
-
+    var eventDescription = results.eq(0).children('Description').eq(0).text();
 
     return eventDescription;
 
@@ -786,7 +780,7 @@ function InitTouchLib(element) {
 
         //and calling the event handlers
         //that a mouse would normally fire
-        alert("todo touch not implemented!!!");
+       // alert("todo touch not implemented!!!");
         autoMoveCursorLine(mouse);
         //todo call to this method is out dated
         autoUpdateTimeLegend(mouse);

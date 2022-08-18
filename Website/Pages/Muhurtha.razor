@@ -1,16 +1,147 @@
 ﻿@attribute [Route(PageRoute.Muhurtha)]
 @using Genso.Astrology.Library
-@using System.Xml.Linq
-
 
 <PageTitle>Muhurtha</PageTitle>
 
 <UnderConstructionHeader PageName="Muhurtha" />
 
-<EventsViewer />
+<PageTop Title="Muhurtha" IconName="ic:twotone-event">
+    <Description>Electional astrology help to find a good time for auspicious events.
+        Find out the right time for wedding, job interview and etc.</Description>
+    @*    <ButtonsRow>
+    <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
+    </ButtonsRow>
+    *@
+</PageTop>
+
+<div class="vstack gap-3" style="width: @AppData.MaxContentWidthPx">
+    <PeopleSelectorBox @ref="_peopleSelectorBox" />
+
+    <TimeInput @ref="_startTimeInput" />
+    <TimeInput @ref="_endTimeInput" />
+
+    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
+
+    <div class="container-fluid">
+        <div class="form-check">
+                <input class="form-check-input" @bind="_dasaCheckBox" type="checkbox">
+                <label class="form-check-label">Dasa</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_bhuktiCheckBox" type="checkbox">
+                <label class="form-check-label">Bhukti</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_antaramCheckBox" type="checkbox">
+                <label class="form-check-label">Antaram</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_gocharaCheckBox" type="checkbox">
+                <label class="form-check-label">Gochara</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_personalCheckBox" type="checkbox">
+                <label class="form-check-label">Personal</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_generalCheckBox" type="checkbox">
+                <label class="form-check-label">General</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_buildingCheckBox" type="checkbox">
+                <label class="form-check-label">Building</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_agricultureCheckBox" type="checkbox">
+                <label class="form-check-label">Agriculture</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_astronomicalCheckBox" type="checkbox">
+                <label class="form-check-label">Astronomical</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_rulingConstellationCheckBox" type="checkbox">
+                <label class="form-check-label">Ruling Constellation</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" @bind="_hairNailCuttingCheckBox" type="checkbox">
+                <label class="form-check-label">Cutting Hair/Nails</label>
+            </div>
+    </div>
+
+</div>
+
+
+<hr>
+@*DASA VIEW BOX*@
+<div>
+    <HelpBox Label="Events" HelpText="@HelpText.Dasa"></HelpBox>
+    <DasaReportViewer @ref="_dasaReportViewer" />
+</div>
 
 
 @code {
 
+    private bool _dasaCheckBox, _bhuktiCheckBox, _antaramCheckBox, _gocharaCheckBox, _personalCheckBox;
+    private bool _generalCheckBox, _buildingCheckBox, _agricultureCheckBox, _astronomicalCheckBox, _rulingConstellationCheckBox;
+    private bool _hairNailCuttingCheckBox;
+
+    private TimeInput _startTimeInput;
+    private TimeInput _endTimeInput;
+
+    private PeopleSelectorBox? _peopleSelectorBox;
+    private DasaReportViewer? _dasaReportViewer;
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {   //default set time to end of day
+            _endTimeInput.HourMin = "23:59";
+        }
+    }
+
+    private async Task OnClickCalculate()
+    {
+        await _globalVariable.LoadingMessage.Show();
+
+        //get needed input data
+        var selectedPerson = _peopleSelectorBox.GetSelectedPerson();
+        var startTime = _startTimeInput.GetTime(selectedPerson.GetBirthLocation());
+        var endTime = _endTimeInput.GetTime(selectedPerson.GetBirthLocation());
+        var getSelectedEventTypes = GetSelectedEventTypes();
+
+        //inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.Personal, EventTag.General };
+        await _dasaReportViewer.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
+
+
+        await _globalVariable.LoadingMessage.Hide();
+    }
+
+    private List<EventTag> GetSelectedEventTypes()
+    {
+        var returnList = new List<EventTag>();
+
+
+        if (_dasaCheckBox) { returnList.Add(EventTag.Dasa); }
+        if (_bhuktiCheckBox) { returnList.Add(EventTag.Bhukti); }
+        if (_antaramCheckBox) { returnList.Add(EventTag.Antaram); }
+        if (_gocharaCheckBox) { returnList.Add(EventTag.Gochara); }
+        if (_rulingConstellationCheckBox) { returnList.Add(EventTag.RulingConstellation); }
+        if (_personalCheckBox) { returnList.Add(EventTag.Personal); }
+        if (_generalCheckBox) { returnList.Add(EventTag.General); }
+        if (_agricultureCheckBox) { returnList.Add(EventTag.Agriculture); }
+        if (_astronomicalCheckBox) { returnList.Add(EventTag.Astronomical); }
+        if (_buildingCheckBox) { returnList.Add(EventTag.Building); }
+        if (_hairNailCuttingCheckBox) { returnList.Add(EventTag.HairNailCutting); }
+
+        return returnList;
+    }
 
 }

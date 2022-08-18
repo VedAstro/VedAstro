@@ -3,17 +3,15 @@
 @using Tools = Genso.Astrology.Library.Tools
 @using System.Text
 
-
+@*TODO RENAME TO EVENT REPORT VIEWER*@
 
 <div class="vstack gap-1" style="width: fit-content;">
     @*ID set because used by auto move cursor line handler*@
-    <div class="container-xxl" @ref="_dasaViewBox" style="overflow-x: scroll; height: 280px;"></div>
+    <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox" style="overflow-x: scroll; height: 500px;"></div>
 
     <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" @onchange="OnChangeLifeEventCheckBox" checked>
-        <label class="form-check-label" for="flexCheckChecked">
-            Show Life Events
-        </label>
+        <label class="form-check-label" for="flexCheckChecked">Show Life Events</label>
     </div>
 </div>
 
@@ -33,9 +31,12 @@
         var daysPerPixel = GetDayPerPixel(startTime, endTime);
         await DrawReport(startTime, endTime, inputedEventTags, daysPerPixel);
 
-        //attach handlers now that component is loaded
+        //ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
+
         //attach mouse handler to auto move cursor line & update time legend
+        await _jsRuntime.InvokeVoidAsync("LoadEventDataListFile"); //load event description file 1st
         await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
+
         //init touch for the dasa chart
         await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);
 

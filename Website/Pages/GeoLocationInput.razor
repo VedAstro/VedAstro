@@ -11,21 +11,20 @@
 @inject LocationService _locationService
 
 
-
-<div class="form-group">
-    <div class="row">
-        <div class="col-6">
-            <label class="form-label">Birth Location</label>
-            <input @ref="_locationNameInput" @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control">
-        </div>
-        <div class="col">
-            <label class="form-label">Longitude</label>
-            <input @ref="_longitudeInput" @bind="Longitude" type="text" class="form-control" placeholder="103.82">
-        </div>
-        <div class="col">
-            <label class="form-label">Latitude</label>
-            <input @ref="_latitudeInput" @bind="Latitude"  type="text" class="form-control" placeholder="1.352">
-        </div>
+<div class="hstack gap-2">
+    <div style="width: fit-content;">
+        <label class="form-label">
+            Birth Location<HelpBox SmallIcon="true" HelpText="@HelpText.GeoLocationName"></HelpBox>
+        </label>
+        <input style="width: 265px;" @ref="_locationNameInput" @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control">
+    </div>
+    <div style="width: fit-content;">
+        <label class="form-label">Longitude</label>
+        <input @ref="_longitudeInput" @bind="Longitude" type="text" class="form-control" placeholder="103.82">
+    </div>
+    <div style="width: fit-content;">
+        <label class="form-label">Latitude</label>
+        <input @ref="_latitudeInput" @bind="Latitude" type="text" class="form-control" placeholder="1.352">
     </div>
 </div>
 
@@ -174,7 +173,7 @@
             //alert user first with the wrong name
             var msg = $"The location \"{LocationName}\", not found!" +
                       $"\n Check the spelling or try other nearby place.";
-            await _jsRuntime.ShowAlert("error", msg, true,timer:0);
+            await _jsRuntime.ShowAlert("error", msg, true, timer: 0);
 
 
             //change to default location & try again to get coordinates

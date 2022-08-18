@@ -982,7 +982,7 @@ namespace API
 
                     //get start time of life event and find the position of it in slices (same as now line)
                     //so that this life event line can be placed exactly on the report where it happened
-                    var startTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.GetDateTimeFormat(), null);
+                    var startTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.DateTimeFormat, null);
                     var positionX = GetLinePosition(timeSlices, startTime);
 
                     //note: this is the icon below the life event line to magnify it

@@ -32,8 +32,14 @@ namespace Genso.Astrology.Library
 
         //CONSTANT FIELDS
         private static readonly DateTimeFormatInfo FormatInfo = GetDateTimeFormatInfo();
-        private const string DateTimeFormat = "HH:mm dd/MM/yyyy zzz"; //define date time format
-        private const string DateTimeFormat2 = "HH:mm:ss dd/MM/yyyy zzz"; //define date time format include seconds for unit testing
+        /// <summary>
+        /// HH:mm dd/MM/yyyy zzz
+        /// </summary>
+        public const string DateTimeFormat = "HH:mm dd/MM/yyyy zzz"; //define date time format
+        /// <summary>
+        /// HH:mm:ss dd/MM/yyyy zzz
+        /// </summary>
+        public const string DateTimeFormatSeconds = "HH:mm:ss dd/MM/yyyy zzz"; //used in logging
 
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler
@@ -59,7 +65,7 @@ namespace Genso.Astrology.Library
         /// </summary>
         public Time(string stdDateTimeText, GeoLocation geoLocation)
         {
-            var stdDateTime = DateTimeOffset.ParseExact(stdDateTimeText, Time.GetDateTimeFormat(), null);
+            var stdDateTime = DateTimeOffset.ParseExact(stdDateTimeText, Time.DateTimeFormat, null);
 
             //store std time
             _stdTime = stdDateTime;
@@ -178,19 +184,6 @@ namespace Genso.Astrology.Library
             return _stdTime;
         }
 
-        /// <summary>
-        /// Formatting used for parsing/printing date time,  HH:mm dd/MM/yyyy zzz 
-        /// </summary>
-        /// <returns></returns>
-        public static string GetDateTimeFormat() => DateTimeFormat;
-
-        /// <summary>
-        /// Formating used for parsing date time,  HH:mm:ss dd/MM/yyyy zzz (includes seconds)
-        /// Note: Created for acurate unit testing 
-        /// </summary>
-        /// <returns></returns>
-        public static string GetDateTimeFormat2() => DateTimeFormat2;
-
         public static DateTimeFormatInfo GetDateTimeFormatInfo()
         {
             //NOTE: custom time format is standardized here
@@ -200,7 +193,7 @@ namespace Genso.Astrology.Library
             var formatInfo = new DateTimeFormatInfo();
 
             //define format pattern
-            formatInfo.FullDateTimePattern = GetDateTimeFormat();
+            formatInfo.FullDateTimePattern = DateTimeFormat;
 
 
             //return format info to caller

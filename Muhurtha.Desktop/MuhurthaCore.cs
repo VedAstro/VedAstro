@@ -60,8 +60,8 @@ namespace Muhurtha.Desktop
 
         public static List<Event> GetEvents(string startTime, string endTime, GeoLocation location, Person person, EventTag tag, double precision)
         {
-            var startStdTime = DateTimeOffset.ParseExact(startTime, Time.GetDateTimeFormat(), null);
-            var endStdTime = DateTimeOffset.ParseExact(endTime, Time.GetDateTimeFormat(), null);
+            var startStdTime = DateTimeOffset.ParseExact(startTime, Time.DateTimeFormat, null);
+            var endStdTime = DateTimeOffset.ParseExact(endTime, Time.DateTimeFormat, null);
 
             //get all event data/types which has the inputed tag
             var eventDataList = DatabaseManager.GetEventDataListByTag(tag, dataEventdatalistXml);
@@ -90,8 +90,8 @@ namespace Muhurtha.Desktop
         public static List<Event> FindCombinedEvents(string startTime, string endTime, GeoLocation location, Person person, List<EventData> eventsToFind)
         {
             //todo move it into Time object
-            var startStdTime = DateTimeOffset.ParseExact(startTime, Time.GetDateTimeFormat(), null);
-            var endStdTime = DateTimeOffset.ParseExact(endTime, Time.GetDateTimeFormat(), null);
+            var startStdTime = DateTimeOffset.ParseExact(startTime, Time.DateTimeFormat, null);
+            var endStdTime = DateTimeOffset.ParseExact(endTime, Time.DateTimeFormat, null);
 
             //debug to measure event calculation time
             var watch = Stopwatch.StartNew();

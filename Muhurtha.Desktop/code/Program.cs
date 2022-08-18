@@ -347,8 +347,8 @@ namespace Muhurtha.Desktop
             gui.MainGrid.ViewEventOptions.LocationList ??= MuhurthaCore.GetAllLocationList();
 
             //set default start & end times
-            var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
-            var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
+            var todayStart = DateTime.Today.ToString(Time.DateTimeFormat);
+            var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.DateTimeFormat);
             gui.MainGrid.ViewEventOptions.StartTimeText ??= todayStart;
             gui.MainGrid.ViewEventOptions.EndTimeText ??= todayEnd;
 
@@ -368,8 +368,8 @@ namespace Muhurtha.Desktop
             gui.MainGrid.FindEventOptions.LocationList ??= MuhurthaCore.GetAllLocationList();
 
             //set default start & end times to begining and end of the day
-            var todayStart = DateTime.Today.ToString(Time.GetDateTimeFormat());
-            var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.GetDateTimeFormat());
+            var todayStart = DateTime.Today.ToString(Time.DateTimeFormat);
+            var todayEnd = DateTime.Today.AddHours(23.999).ToString(Time.DateTimeFormat);
             gui.MainGrid.FindEventOptions.StartTimeText ??= todayStart;
             gui.MainGrid.FindEventOptions.EndTimeText ??= todayEnd;
 

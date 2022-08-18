@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
-using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace Website.Managers
@@ -179,7 +178,7 @@ namespace Website.Managers
             var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
             var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
             var originUrlXml = new XElement("OriginUrl", await jsRuntime.InvokeAsync<string>("getOriginUrl"));
-            var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
+            var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeSecondsText());
             var visitorIdXml = new XElement("VisitorId", visitorId);
             var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, "Location");
             var visitorElement = new XElement("Visitor");
@@ -195,7 +194,7 @@ namespace Website.Managers
 
             //get visitor data & format it nicely for storage
             var visitorElement = new XElement("Visitor");
-            var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeText());
+            var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeSecondsText());
             var visitorIdXml = new XElement("VisitorId", visitorId); //use id generated above
             visitorElement.Add(userIdXml, visitorIdXml, urlXml, timeStampXml);
 
@@ -262,7 +261,7 @@ namespace Website.Managers
                 new XElement("SourceLineNumber", line),
                 new XElement("SourceColNumber", columnNumber),
                 new XElement("MethodName", methodName),
-                new XElement("Time", GetNow())
+                new XElement("Time", Tools.GetNowSystemTimeSecondsText())
             );
 
 
@@ -270,22 +269,7 @@ namespace Website.Managers
         }
 
 
-        /// <summary>
-        /// Gets now time in UTC +8:00
-        /// </summary>
-        /// <returns></returns>
-        private static DateTimeOffset GetNow()
-        {
-            //create utc 8
-            var utc8 = new TimeSpan(8, 0, 0);
-            //get now time in utc 0
-            var nowTime = DateTimeOffset.Now.ToUniversalTime();
-            //convert time utc 0 to utc 8
-            var utc8Time = nowTime.ToOffset(utc8);
-
-            //return converted time to caller
-            return utc8Time;
-        }
+        
 
 
     }

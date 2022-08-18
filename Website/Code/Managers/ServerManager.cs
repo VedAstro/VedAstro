@@ -1,10 +1,6 @@
-﻿using System.Net;
-using Genso.Astrology.Library;
+﻿using Genso.Astrology.Library;
 using System.Text;
-using System.Text.Json.Nodes;
 using System.Xml.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting.Internal;
 using Newtonsoft.Json;
 
 namespace Website

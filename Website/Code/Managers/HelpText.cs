@@ -1,4 +1,4 @@
-﻿namespace Website.Code
+﻿namespace Website
 {
 
     /// <summary>
@@ -6,6 +6,9 @@
     /// </summary>
     public static class HelpText
     {
+        public const string GeoLocationName = @"Enter city, state or country name, it will autofill logitude and latitude";
+        public const string Gender = @"Gender is used in calculation like marriage compatibilty.";
+
         public const string Dasa =
             @"
 

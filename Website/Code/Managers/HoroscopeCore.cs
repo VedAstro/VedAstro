@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Genso.Astrology.Library;
+﻿using Genso.Astrology.Library;
 
 namespace Website
 {

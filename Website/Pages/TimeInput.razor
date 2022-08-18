@@ -1,14 +1,15 @@
 ﻿@using Genso.Astrology.Library
-<div class="row">
-    <div class="col-5">
-        <label class="form-label" >Time (24h)</label>
-        <input class="form-control" @bind="HourMin" type="text" placeholder="16:20">
+
+<div class="hstack gap-2">
+    <div style="width: fit-content;">
+        <label class="form-label" >Time (24H)</label>
+        <input style="max-width: 72px;" class="form-control" @bind="HourMin" type="text" placeholder="16:20">
     </div>
-    <div class="col-5">
+    <div style="width: fit-content;">
         <label class="form-label" >Date</label>
-        <input class="form-control" @bind="Date" type="text" placeholder="16/04/2021">
+        <input style="max-width: 117px;" class="form-control" @bind="Date" type="text" placeholder="16/04/2021">
     </div>
-    <div class="col">
+    <div style="width: fit-content;">
         <label class="form-label">Timezone</label>
         <input style="max-width: 86px;" class="form-control" @bind="TimeZone" type="text" placeholder="+08:00">
     </div>

@@ -1,12 +1,7 @@
-﻿using System.Text.Json.Nodes;
-using System.Xml;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
-using Website.Managers;
-using Website.Pages;
 
 namespace Website
 {
@@ -442,7 +437,7 @@ namespace Website
         /// <summary>
         /// Gets now system time string in standardized format
         /// </summary>
-        public static string NowTime() => DateTimeOffset.Now.ToString(Time.GetDateTimeFormat());
+        public static string NowTime() => DateTimeOffset.Now.ToString(Time.DateTimeFormat);
 
     }
 }

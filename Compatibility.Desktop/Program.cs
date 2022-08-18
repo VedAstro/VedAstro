@@ -20,8 +20,8 @@ namespace Compatibility
 
             //var geoLocation = new GeoLocation("Ipoh", 101, 4.59); //todo check if change in location changes much
 
-            //var stdTimeMale = DateTimeOffset.ParseExact("23:33 19/03/1989 +08:00", Time.GetDateTimeFormat(), null);
-            //var stdTimeFemale = DateTimeOffset.ParseExact("10:27 14/02/1995 +08:00", Time.GetDateTimeFormat(), null);
+            //var stdTimeMale = DateTimeOffset.ParseExact("23:33 19/03/1989 +08:00", Time.DateTimeFormat, null);
+            //var stdTimeFemale = DateTimeOffset.ParseExact("10:27 14/02/1995 +08:00", Time.DateTimeFormat, null);
 
             //var male = new Person("Male", new Time(stdTimeMale, geoLocation));
             //var female = new Person("Female", new Time(stdTimeFemale, geoLocation));

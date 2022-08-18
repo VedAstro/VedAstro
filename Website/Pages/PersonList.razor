@@ -13,7 +13,7 @@
 @if (personList.Any())
 {
 
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-hover">
         <thead class="table-dark">
         <tr>
             <th>Name</th>
@@ -24,8 +24,8 @@
         <tbody>
         @foreach (var person in personList)
         {
-            <tr>
-                <td @onclick="() => PersonNameClicked(person)">@person.Name</td>
+            <tr style="cursor: pointer;" @onclick="() => PersonNameClicked(person)">
+                <td>@person.Name</td>
                 <td>@person.BirthTimeString</td>
                 <td>@person.GetBirthLocation().ToString()</td>
             </tr>

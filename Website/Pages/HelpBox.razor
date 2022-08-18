@@ -1,21 +1,40 @@
-﻿
-@*Small Help box with tooltip showing info*@
+﻿@*Small Help box with tooltip showing info*@
 
-
-<div class="hstack gap-2 align-content-center">
-    <h4 class="mt-2">@Label</h4>
-    <div @ref="helpIconHolder" >
-        <span class="iconify" data-icon="icon-park:help" data-width="22"></span>
+@if (Label != "")
+{
+    <div class="hstack gap-2 align-content-center">
+        <h4 class="mt-2">@Label</h4>
+        <div @ref="helpIconHolder">
+            <span class="iconify" data-icon="icon-park:help" data-width="@(SmallIcon?smallIconSize:bigIconSize)"></span>
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div @ref="helpIconHolder" style="float: right; margin-left: 8px;margin-top: -2px;">
+        <span class="iconify" data-icon="icon-park:help" data-width="@(SmallIcon?smallIconSize:bigIconSize)"></span>
+    </div>
+}
+
 
 
 @code {
+
     /// <summary>
     /// Text that is shown next help icon
     /// </summary>
     [Parameter]
-    public string Label { get; set; }
+    public string Label { get; set; } = "";
+    
+    /// <summary>
+    /// Set true if for small icon size 19px next to form labels
+    /// default false, not need to be set 
+    /// </summary>
+    [Parameter]
+    public bool SmallIcon { get; set; } = false;
+
+    private string smallIconSize = "19";
+    private string bigIconSize = "22";
 
     /// <summary>
     /// Text that goes inside tooltip
@@ -31,7 +50,7 @@
         //setup the tooltip
         //- html for multi line
         //- interactive for selecting text
-        var tooltipData = new { content = HelpText, interactive= true,  allowHTML = true  };
+        var tooltipData = new { content = HelpText, interactive = true, allowHTML = true };
 
         //attach tooltip lib to element
         await _jsRuntime.Tippy(helpIconHolder, tooltipData);

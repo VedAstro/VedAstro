@@ -1,15 +1,27 @@
 ﻿@attribute [Route(PageRoute.PersonEditor)]
 @attribute [Route(PageRoute.PersonEditorParam)]
 
-
 @using Genso.Astrology.Library
+
+@*<style>
+    TODO custom table hover color
+    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+        background-color: aqua !important;
+    }
+    .table {
+        border-color: #747474 !important;
+    }
+    .table-hover tbody tr:hover td {
+        background: aqua;
+    }
+</style>*@
 
 <PageTitle>@_pageTitle</PageTitle>
 
 <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="() => _navigation.NavigateTo(PageRoute.PersonList)"></IconButton>
 
 <div class="container">
-    <div class="vstack gap-3" style="max-width:826px;">
+    <div class="vstack gap-3" style="max-width:@AppData.MaxContentWidthPx">
         <div>
             <label class="form-label">Name</label>
             <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
@@ -22,7 +34,10 @@
 
         <GeoLocationInput @ref="_geoLocationInput" />
         <div>
-            <label class="form-label">Gender</label>
+            <label class="form-label">
+                Gender
+                <HelpBox SmallIcon="true" HelpText="@HelpText.Gender"></HelpBox>
+            </label>
             <select @bind="_genderInput" class="form-control">
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>

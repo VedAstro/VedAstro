@@ -175,7 +175,7 @@ namespace Genso.Astrology.Library
             //specify variables to find the events to delete
             eventRequest.Q = searchText;
             //all events after this time
-            eventRequest.TimeMin = DateTimeOffset.ParseExact(startDate, Time.GetDateTimeFormat(), null).DateTime;
+            eventRequest.TimeMin = DateTimeOffset.ParseExact(startDate, Time.DateTimeFormat, null).DateTime;
 
             //execute request
             var result = eventRequest.Execute();

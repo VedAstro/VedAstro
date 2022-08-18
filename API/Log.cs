@@ -107,8 +107,8 @@ public static class Log
 
     /// <summary>
     /// Gets now time in UTC +8:00
+    /// Because server time is uncertain, all change to UTC8
     /// </summary>
-    /// <returns></returns>
     private static string GetNow()
     {
         //create utc 8
@@ -119,7 +119,7 @@ public static class Log
         var utc8Time = nowTime.ToOffset(utc8);
 
         //return converted time to caller
-        return utc8Time.ToString(Time.GetDateTimeFormat());
+        return utc8Time.ToString(Time.DateTimeFormatSeconds);
     }
 
 

@@ -49,7 +49,7 @@
         var timeNow = Time.Now(geoLocation);
 
         //show lmt time as string
-        _lmtString = timeNow.GetLmtDateTimeOffset().ToString(Time.GetDateTimeFormat());
+        _lmtString = timeNow.GetLmtDateTimeOffset().ToString(Time.DateTimeFormat);
         _stdString = timeNow.GetStdDateTimeOffsetText();
     }
 

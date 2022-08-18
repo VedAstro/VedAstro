@@ -241,7 +241,11 @@ namespace Genso.Astrology.Library
         /// Gets the time now in the system in text form
         /// formatted with standard style (HH:mm dd/MM/yyyy zzz) 
         /// </summary>
-        public static string GetNowSystemTimeText() => DateTimeOffset.Now.ToString(Time.GetDateTimeFormat());
+        public static string GetNowSystemTimeText() => DateTimeOffset.Now.ToString(Time.DateTimeFormat);
+        /// <summary>
+        /// Gets the time now in the system in text form with seconds (HH:mm:ss dd/MM/yyyy zzz) 
+        /// </summary>
+        public static string GetNowSystemTimeSecondsText() => DateTimeOffset.Now.ToString(Time.DateTimeFormatSeconds);
 
         /// <summary>
         /// Custom hash generator for Strings. Returns consistent/deterministic values

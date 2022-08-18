@@ -1,9 +1,6 @@
 using AspNetMonsters.Blazor.Geolocation;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.JSInterop;
-using Website;
 
 namespace Website
 {

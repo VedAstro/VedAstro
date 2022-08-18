@@ -52,14 +52,13 @@
                 <option value="Female">Female</option>
             </select>
         </div>
-    </div>
-    <div class="hstack gap-3">
+        
         @*ADVANCED TAB*@
-        <div class="accordion" id="advancedTabAccordion">
+        <div class="accordion" id="advancedTabAccordion" style="width: @AppData.MaxWidth">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        <strong>Advanced</strong>
+                        <strong>Advanced</strong><HelpBox SmallIcon="true" HelpText="@HelpText.PersonAdvanced"></HelpBox>
                     </button>
                 </h2>
                 <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#advancedTabAccordion">
@@ -88,6 +87,9 @@
             }
             <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
         </div>
+    </div>
+    <div class="hstack gap-3">
+        
     </div>
 
 </div>

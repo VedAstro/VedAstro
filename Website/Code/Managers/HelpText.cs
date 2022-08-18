@@ -8,6 +8,7 @@
     {
         public const string GeoLocationName = @"Enter city, state or country name, it will autofill longitude and latitude";
         public const string Gender = @"Gender is used in calculation like marriage compatibilty.";
+        public const string PersonAdvanced = @"This is optional";
 
         public const string Dasa =
             @"

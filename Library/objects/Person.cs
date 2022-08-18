@@ -116,6 +116,10 @@ namespace Genso.Astrology.Library
         /// </summary>
         public string BirthTimeString => this.BirthTime.GetStdDateTimeOffsetText();
 
+        /// <summary>
+        /// Gets now time at birth location of person (STD time)
+        /// </summary>
+        public DateTimeOffset StdTimeNowAtBirthLocation => DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset);
 
 
         //OVERRIDES METHODS

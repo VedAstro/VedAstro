@@ -90,9 +90,12 @@ namespace Genso.Astrology.Library
 
         }
 
+        /// <summary>
+        /// Gets now time (STD) at this time's location/offset 
+        /// </summary>
+        public DateTimeOffset StdTimeNowAtOffset=> DateTimeOffset.Now.ToOffset(this.GetStdDateTimeOffset().Offset);
 
 
-        
         //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▄█ █▄█ █▄▄ █ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 

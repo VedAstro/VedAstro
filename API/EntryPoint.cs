@@ -49,7 +49,7 @@ namespace API
 
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> GetMatchReport(
-            [HttpTrigger(AuthorizationLevel.Anonymous,"post", Route = null)] HttpRequestMessage incomingRequest,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(PersonListXml, FileAccess.Read)] Stream personListRead)
         {
             string responseMessage;
@@ -598,7 +598,7 @@ namespace API
             }
 
         }
-        
+
         [FunctionName("deletevisitorbyvisitorid")]
         public static async Task<IActionResult> DeleteVisitorByVisitorId(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
@@ -614,15 +614,15 @@ namespace API
                 //get all visitor elements that needs to be deleted
                 var visitorListXml = APITools.BlobClientToXml(visitorLogClient);
                 var visitorLogsToDelete = (from xml in visitorListXml.Root?.Elements()
-                    where xml.Element("VisitorId")?.Value == visitorId
-                    select xml).ToList();
+                                           where xml.Element("VisitorId")?.Value == visitorId
+                                           select xml).ToList();
 
                 //delete each record
                 foreach (var visitorXml in visitorLogsToDelete)
                 {
                     visitorXml.Remove();
-                } 
-                
+                }
+
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, visitorListXml);
 
@@ -843,7 +843,7 @@ namespace API
             var foundPerson = await APITools.GetPersonFromHash(personHash, personListClient);
 
             //from person get svg report
-            var eventsReportSvgString = await GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+            var eventsReportSvgString = GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
             //convert svg string to stream for sending
             //todo check if using really needed here
@@ -928,7 +928,7 @@ namespace API
         /// <summary>
         /// Massive method that generates dasa report in SVG
         /// </summary>
-        private static async Task<string> GenerateMainEventsReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
+        private static string GenerateMainEventsReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
         {
             // One precision value for generating all dasa components,
             // because misalignment occurs if use different precision
@@ -939,11 +939,11 @@ namespace API
             var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, eventsPrecisionHours);
 
 
-            var compiledRow = await GenerateRowsSvg(inputPerson, daysPerPixel, startTime, endTime, timeSlices, eventsPrecisionHours, inputedEventTags);
+            var compiledRow = GenerateRowsSvg(inputPerson, daysPerPixel, startTime, endTime, timeSlices, eventsPrecisionHours, inputedEventTags, out int totalHeight);
 
             //the height for all lines, cursor, now & life events line
             //place below the last row
-            var totalHeight = 240; //hard set for now
+            //var totalHeight = 240; //hard set for now
             var padding = 2; //space between rows
             var lineHeight = totalHeight + padding;
 
@@ -953,16 +953,20 @@ namespace API
 
 
             //get now line position
-            var nowLinePosition = GetLinePosition(timeSlices, DateTimeOffset.Now);
+            var nowLinePosition = GetLinePosition(timeSlices, startTime.StdTimeNowAtOffset);
             compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:blue;\" x=\"0\" y=\"0\" transform=\"matrix(1, 0, 0, 1, {nowLinePosition}, 0)\" />";
 
             //wait!, add in life events also
-            compiledRow += GetLifeEventLinesSvg(inputPerson, lineHeight);
+            //use offset of input time, this makes sure life event lines
+            //are placed on event chart correctly, since event chart is based on input offset
+            var inputOffset = startTime.GetStdDateTimeOffset().Offset;
+            compiledRow += GetLifeEventLinesSvg(inputPerson, lineHeight, inputOffset);
 
             //compile the final svg
             //save a copy of the number of time slices used to calculate the svg total width later
             var dasaSvgWidth = timeSlices.Count;
-            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth); //little wiggle room
+            var svgTotalHeight = totalHeight + 10;//final height of SVG element
+            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, svgTotalHeight); //little wiggle room
 
             return finalSvg;
 
@@ -973,7 +977,7 @@ namespace API
 
 
             //gets person's life events as lines for the dasa chart
-            string GetLifeEventLinesSvg(Person person, int lineHeight)
+            string GetLifeEventLinesSvg(Person person, int lineHeight, TimeSpan inputOffset)
             {
                 var compiledLines = "";
 
@@ -982,39 +986,15 @@ namespace API
 
                     //get start time of life event and find the position of it in slices (same as now line)
                     //so that this life event line can be placed exactly on the report where it happened
-                    var startTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.DateTimeFormat, null);
-                    var positionX = GetLinePosition(timeSlices, startTime);
+                    var lifeEvtTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.DateTimeFormat, null);
+                    var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to input offset, to match chart
+                    var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
 
-                    //note: this is the icon below the life event line to magnify it
-                    var iconWidth = 12;
-                    var iconX = $"-{iconWidth}"; //use negative to move center under line
-                    var iconSvg = $@"
-                                    <g transform=""matrix(2, 0, 0, 2, {iconX}, {lineHeight})"">
-                                        <rect style=""fill:{GetColor(lifeEvent.Nature)}; stroke:black; stroke-width: 0.5px;"" x=""0"" y=""0"" width=""{iconWidth}"" height=""9.95"" rx=""2.5"" ry=""2.5""/>
-                                        <path d=""M 7.823 5.279 L 6.601 5.279 C 6.377 5.279 6.194 5.456 6.194 5.671 L 6.194 6.846 C 6.194 7.062 6.377 7.238 6.601 7.238 L 7.823 7.238 C 8.046 7.238 8.229 7.062 8.229 6.846 L 8.229 5.671 C 8.229 5.456 8.046 5.279 7.823 5.279 Z M 7.823 1.364 L 7.823 1.756 L 4.566 1.756 L 4.566 1.364 C 4.566 1.148 4.383 0.973 4.158 0.973 C 3.934 0.973 3.751 1.148 3.751 1.364 L 3.751 1.756 L 3.345 1.756 C 2.892 1.756 2.534 2.108 2.534 2.539 L 2.53 8.021 C 2.53 8.454 2.895 8.804 3.345 8.804 L 9.044 8.804 C 9.492 8.804 9.857 8.452 9.857 8.021 L 9.857 2.539 C 9.857 2.108 9.492 1.756 9.044 1.756 L 8.636 1.756 L 8.636 1.364 C 8.636 1.148 8.453 0.973 8.229 0.973 C 8.006 0.973 7.823 1.148 7.823 1.364 Z M 8.636 8.021 L 3.751 8.021 C 3.528 8.021 3.345 7.845 3.345 7.629 L 3.345 3.714 L 9.044 3.714 L 9.044 7.629 C 9.044 7.845 8.86 8.021 8.636 8.021 Z"" />
-                                    </g>";
+                    //if line is not in report time range, don't generate it
+                    if (positionX == 0) { continue;}
 
                     //put together icon + line + event data
-                    compiledLines += $"<g" +
-                                     $" eventName=\"{lifeEvent.Name}\" " +
-                                     $" class=\"LifeEventLines\" " + //atm used for tooltip logic
-                                     $" stdTime=\"{startTime:dd/MM/yyyy}\" " + //show only date
-                                     $" transform=\"matrix(1, 0, 0, 1, {positionX}, 0)\"" +
-                                    $" x=\"0\" y=\"0\" >" +
-                                        $"<rect" +
-                                        $" width=\"2\"" +
-                                        $" height=\"{lineHeight}\"" +
-                                        $" style=\"" +
-                                        $" fill:{GetColor(lifeEvent.Nature)};" +
-                                        //border
-                                        $" stroke-width:0.5px;" +
-                                        $" stroke:#000;" +
-                                        $"\"" +
-                                        $" />"
-                                         + iconSvg +
-                                    "</g>";
-
-                    //stroke-width: 0.6px; fill: rgb(168, 0, 0); fill - rule: nonzero; stroke: rgb(0, 0, 0);
+                    compiledLines += GenerateLifeEventLine(lifeEvent, lineHeight, lifeEvtTime, positionX);
                 }
 
 
@@ -1023,21 +1003,63 @@ namespace API
 
                 return wrapperGroup;
 
-                //todo need to unify event color
-                string GetColor(string nature)
-                {
-                    switch (nature)
-                    {
-                        case "Good": return "#42f706";
-                        case "Neutral": return "grey";
-                        //case "Bad": return "#a80000";
-                        case "Bad": return "#ff5656";
-                        default: throw new Exception($"Invalid Nature: {nature}");
-                    }
-                }
+
             }
 
         }
+
+        //todo need to unify event color
+        public static string GetColor(string nature)
+        {
+            switch (nature)
+            {
+                case "Good": return "#42f706";
+                case "Neutral": return "grey";
+                //case "Bad": return "#a80000";
+                case "Bad": return "#ff5656";
+                default: throw new Exception($"Invalid Nature: {nature}");
+            }
+        }
+
+        /// <summary>
+        /// Generates individual life event line svg
+        /// </summary>
+        public static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime,
+            int positionX)
+        {
+
+            //note: this is the icon below the life event line to magnify it
+            var iconWidth = 12;
+            var iconX = $"-{iconWidth}"; //use negative to move center under line
+            var iconSvg = $@"
+                                    <g transform=""matrix(2, 0, 0, 2, {iconX}, {lineHeight})"">
+                                        <rect style=""fill:{GetColor(lifeEvent.Nature)}; stroke:black; stroke-width: 0.5px;"" x=""0"" y=""0"" width=""{iconWidth}"" height=""9.95"" rx=""2.5"" ry=""2.5""/>
+                                        <path d=""M 7.823 5.279 L 6.601 5.279 C 6.377 5.279 6.194 5.456 6.194 5.671 L 6.194 6.846 C 6.194 7.062 6.377 7.238 6.601 7.238 L 7.823 7.238 C 8.046 7.238 8.229 7.062 8.229 6.846 L 8.229 5.671 C 8.229 5.456 8.046 5.279 7.823 5.279 Z M 7.823 1.364 L 7.823 1.756 L 4.566 1.756 L 4.566 1.364 C 4.566 1.148 4.383 0.973 4.158 0.973 C 3.934 0.973 3.751 1.148 3.751 1.364 L 3.751 1.756 L 3.345 1.756 C 2.892 1.756 2.534 2.108 2.534 2.539 L 2.53 8.021 C 2.53 8.454 2.895 8.804 3.345 8.804 L 9.044 8.804 C 9.492 8.804 9.857 8.452 9.857 8.021 L 9.857 2.539 C 9.857 2.108 9.492 1.756 9.044 1.756 L 8.636 1.756 L 8.636 1.364 C 8.636 1.148 8.453 0.973 8.229 0.973 C 8.006 0.973 7.823 1.148 7.823 1.364 Z M 8.636 8.021 L 3.751 8.021 C 3.528 8.021 3.345 7.845 3.345 7.629 L 3.345 3.714 L 9.044 3.714 L 9.044 7.629 C 9.044 7.845 8.86 8.021 8.636 8.021 Z"" />
+                                    </g>";
+
+            //put together icon + line + event data
+            var lifeEventLine = $"<g" +
+                             $" eventName=\"{lifeEvent.Name}\" " +
+                             $" class=\"LifeEventLines\" " + //atm used for tooltip logic
+                             $" stdTime=\"{lifeEvtTime:dd/MM/yyyy}\" " + //show only date
+                             $" transform=\"matrix(1, 0, 0, 1, {positionX}, 0)\"" +
+                            $" x=\"0\" y=\"0\" >" +
+                                $"<rect" +
+                                $" width=\"2\"" +
+                                $" height=\"{lineHeight}\"" +
+                                $" style=\"" +
+                                $" fill:{GetColor(lifeEvent.Nature)};" +
+                                //border
+                                $" stroke-width:0.5px;" +
+                                $" stroke:#000;" +
+                                $"\"" +
+                                $" />"
+                                 + iconSvg +
+                            "</g>";
+
+            return lifeEventLine;
+        }
+
 
         /// <summary>
         /// add in the cursor line (moves with cursor via JS)
@@ -1061,12 +1083,15 @@ namespace API
                         ";
         }
 
-        //gets line position given a date
-        //finds most closest time slice, else return 0 means none found
-        //note: tries to get nearest day first, then tries month to nearest year
+        /// <summary>
+        /// gets line position given a date
+        /// finds most closest time slice, else return 0 means none found
+        /// note:
+        /// - make sure offset in time list and input time matches
+        /// - tries to get nearest day first, then tries month to nearest year
+        /// </summary>
         public static int GetLinePosition(List<Time> timeSliceList, DateTimeOffset inputTime)
         {
-
             var nowHour = inputTime.Hour;
             var nowDay = inputTime.Day;
             var nowYear = inputTime.Year;
@@ -1219,8 +1244,8 @@ namespace API
         /// <summary>
         /// Generates the event & header part of the dasa report
         /// </summary>
-        private static async Task<string> GenerateRowsSvg(Person inputPerson, double daysPerPixel, Time startTime,
-            Time endTime, List<Time> timeSlices, double precisionInHours, List<EventTag> inputedEventTags)
+        private static string GenerateRowsSvg(Person inputPerson, double daysPerPixel, Time startTime,
+            Time endTime, List<Time> timeSlices, double precisionInHours, List<EventTag> inputedEventTags, out int totalHeight)
         {
 
             //px width & height of each slice of time
@@ -1233,13 +1258,19 @@ namespace API
 
 
             //STEP 2 : GENERATE EVENT ROWS
-            compiledRow += await GenerateEventRows(precisionInHours, startTime, endTime, inputPerson, headerY, timeSlices, daysPerPixel, inputedEventTags);
+            compiledRow += GenerateEventRows(
+                precisionInHours,
+                startTime,
+                endTime,
+                inputPerson,
+                headerY,
+                timeSlices,
+                daysPerPixel,
+                inputedEventTags,
+                out totalHeight);
 
 
             return compiledRow;
-
-
-
 
 
         }
@@ -2005,13 +2036,12 @@ namespace API
         /// <summary>
         /// Generate rows based on inputed events
         /// </summary>
-        private static async Task<string> GenerateEventRows(double eventsPrecision, Time startTime, Time endTime,
-            Person inputPerson, int headerY, List<Time> timeSlices, double daysPerPixel, List<EventTag> inputedEventTags)
+        private static string GenerateEventRows(double eventsPrecision, Time startTime, Time endTime,
+            Person inputPerson, int headerY, List<Time> timeSlices, double daysPerPixel, List<EventTag> inputedEventTags, out int totalHeight)
         {
             const int _widthPerSlice = 1;
 
-            var eventDataList = await APITools.GetEventDataList();
-
+            var eventDataList = APITools.GetEventDataList().Result;
 
             //rows are dynamically generated as needed, hence the extra logic below
             //list of rows to generate
@@ -2044,7 +2074,7 @@ namespace API
             //3 ADD IN GOCHARA
             //future passed to caller to draw line
             //var totalHeight = yAxis + gocharaHeight;
-            var totalHeight = yAxis;
+            totalHeight = yAxis;
 
 
 

@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.JSInterop;
 
-namespace Website.Managers
+namespace Website
 {
 
     /// <summary>

@@ -64,10 +64,9 @@
 
         //package message data to be sent
         var textXml = new XElement("Text", _messageInput);
-        var timestampXml = new XElement("Timestamp", DateTimeOffset.Now.ToString(Time.DateTimeFormat));
         var emailXml = new XElement("Email", _emailInput);
         var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
-        var messageXml = new XElement("Message", userIdXml, emailXml, timestampXml, textXml);
+        var messageXml = new XElement("Message", userIdXml, emailXml, WebsiteTools.TimeStampXml, textXml);
         await _jsRuntime.AddToProgressBar(10);
 
         //send message to API server

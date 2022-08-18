@@ -44,6 +44,9 @@
         //control comes here after Program, all needed initialization
         //done here before page/components are loaded
 
+        //save current page url, (if error used for logging)
+        AppData.CurrentPage = _navigation.Uri;
+
         //retrieve login status from previous visit if available
         await TryGetPreviousLogin();
 
@@ -64,6 +67,9 @@
         await WebsiteLogManager.LogVisitor(_jsRuntime);
     }
 
+    /// <summary>
+    /// Checks if previous login data exist in browser's local storage
+    /// </summary>
     private async Task TryGetPreviousLogin()
     {
         //check if login already exist in localstorage

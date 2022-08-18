@@ -21,6 +21,11 @@ namespace Website
         /// </summary>
         public static string? VisitorId { get; set; }
 
+        /// <summary>
+        /// Url of current page, set by layout when loading
+        /// </summary>
+        public static string? CurrentPage { get; set; }
+
 
         //-----------------------------FIELDS
 

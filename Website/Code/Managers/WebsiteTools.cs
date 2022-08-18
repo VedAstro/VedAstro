@@ -427,17 +427,17 @@ namespace Website
                 WebsiteLogManager.LogError(e);
 #endif
 
-
                 //note exception will not go past this point,
                 //even calling throw will do nothing
                 //throw;
             }
         }
 
-        /// <summary>
-        /// Gets now system time string in standardized format
-        /// </summary>
-        public static string NowTime() => DateTimeOffset.Now.ToString(Time.DateTimeFormat);
 
+        /// <summary>
+        /// Gets now time with seconds in wrapped in xml element
+        /// used for logging
+        /// </summary>
+        public static XElement TimeStampXml => new("TimeStamp", Tools.GetNowSystemTimeSecondsText());
     }
 }

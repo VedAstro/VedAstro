@@ -12,6 +12,7 @@ namespace Website
     public static class WebsiteLogManager
     {
 
+
         /// <summary>
         /// Tries to ID the user, and sends a log of the visit to API server
         /// Called from MainLayout everytime page is loaded
@@ -106,7 +107,8 @@ namespace Website
             var visitorXml = new XElement("Visitor");
             var userId = new XElement("UserId", AppData.CurrentUser);
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
-            visitorXml.Add(userId, visitorId, errorXml);
+            var urlXml = new XElement("Url", AppData.CurrentPage);
+            visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -178,11 +180,10 @@ namespace Website
             var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
             var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
             var originUrlXml = new XElement("OriginUrl", await jsRuntime.InvokeAsync<string>("getOriginUrl"));
-            var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeSecondsText());
             var visitorIdXml = new XElement("VisitorId", visitorId);
             var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, "Location");
             var visitorElement = new XElement("Visitor");
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, timeStampXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
+            visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
 
 
             return visitorElement;
@@ -194,9 +195,8 @@ namespace Website
 
             //get visitor data & format it nicely for storage
             var visitorElement = new XElement("Visitor");
-            var timeStampXml = new XElement("TimeStamp", Tools.GetNowSystemTimeSecondsText());
             var visitorIdXml = new XElement("VisitorId", visitorId); //use id generated above
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, timeStampXml);
+            visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampXml);
 
             return visitorElement;
         }
@@ -260,8 +260,7 @@ namespace Website
                 new XElement("FileName", fileName),
                 new XElement("SourceLineNumber", line),
                 new XElement("SourceColNumber", columnNumber),
-                new XElement("MethodName", methodName),
-                new XElement("Time", Tools.GetNowSystemTimeSecondsText())
+                new XElement("MethodName", methodName)
             );
 
 

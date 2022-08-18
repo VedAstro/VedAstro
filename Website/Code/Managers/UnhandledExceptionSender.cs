@@ -7,6 +7,9 @@ namespace Website
         event EventHandler<Exception> UnhandledExceptionThrown;
     }
 
+    /// <summary>
+    /// TODO Explanation needed
+    /// </summary>
     public class UnhandledExceptionSender : ILogger, IUnhandledExceptionSender
     {
 

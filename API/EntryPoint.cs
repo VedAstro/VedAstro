@@ -965,7 +965,7 @@ namespace API
             //compile the final svg
             //save a copy of the number of time slices used to calculate the svg total width later
             var dasaSvgWidth = timeSlices.Count;
-            var svgTotalHeight = totalHeight + 10;//final height of SVG element
+            var svgTotalHeight = totalHeight + 30;//add space for life event icon
             var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, svgTotalHeight); //little wiggle room
 
             return finalSvg;
@@ -1059,7 +1059,6 @@ namespace API
 
             return lifeEventLine;
         }
-
 
         /// <summary>
         /// add in the cursor line (moves with cursor via JS)
@@ -1214,11 +1213,10 @@ namespace API
             }
         }
 
-
         //wraps a list of svg elements inside 1 main svg element
         //if width not set defaults to 1000px, and height to 1000px
         //height is set auto because hard to determine
-        public static string WrapSvgElements(string combinedSvgString, int svgWidth = 1000, int svgTotalHeight = 1000)
+        public static string WrapSvgElements(string combinedSvgString, int svgWidth, int svgTotalHeight)
         {
 
             var svgBackgroundColor = "#f0f9ff";
@@ -1226,11 +1224,12 @@ namespace API
             //create the final svg that will be displayed
             var svgTotalWidth = svgWidth + 10; //add little for wiggle room
             var svgBody = $"<svg id=\"DasaViewHolder\"" +
-                          $" width=\"100%\"" +
-                          $" height=\"100%\"" +
+                          //$" width=\"100%\"" +
+                          //$" height=\"100%\"" +
                           $" style=\"" +
-                          $"width:{svgTotalWidth}px;" + //note: if width not hard set, parent div clips it
-                                                        //$"height:{svgTotalHeight}px;" +
+                          //note: if width & height not hard set, parent div clips it
+                          $"width:{svgTotalWidth}px;" + 
+                          $"height:{svgTotalHeight}px;" +
                           $"background:{svgBackgroundColor};" +
                           $"\" " +
                           $"xmlns=\"http://www.w3.org/2000/svg\">" +
@@ -1238,8 +1237,6 @@ namespace API
 
             return svgBody;
         }
-
-
 
         /// <summary>
         /// Generates the event & header part of the dasa report

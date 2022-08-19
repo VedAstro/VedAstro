@@ -6,8 +6,10 @@
 <UnderConstructionHeader PageName="Muhurtha" />
 
 <PageTop Title="Muhurtha" IconName="ic:twotone-event">
-    <Description>Electional astrology help to find a good time for auspicious events.
-        Find out the right time for wedding, job interview and etc.</Description>
+    <Description>
+        Electional astrology help to find a good time for auspicious events.
+        Find out the right time for wedding, job interview and etc.
+    </Description>
     @*    <ButtonsRow>
     <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
     </ButtonsRow>
@@ -24,49 +26,49 @@
 
     <div class="container-fluid">
         <div class="form-check">
-                <input class="form-check-input" @bind="_dasaCheckBox" type="checkbox">
-                <label class="form-check-label">Dasa</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_bhuktiCheckBox" type="checkbox">
-                <label class="form-check-label">Bhukti</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_antaramCheckBox" type="checkbox">
-                <label class="form-check-label">Antaram</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_gocharaCheckBox" type="checkbox">
-                <label class="form-check-label">Gochara</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_personalCheckBox" type="checkbox">
-                <label class="form-check-label">Personal</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_generalCheckBox" type="checkbox">
-                <label class="form-check-label">General</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_buildingCheckBox" type="checkbox">
-                <label class="form-check-label">Building</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_agricultureCheckBox" type="checkbox">
-                <label class="form-check-label">Agriculture</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_astronomicalCheckBox" type="checkbox">
-                <label class="form-check-label">Astronomical</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_rulingConstellationCheckBox" type="checkbox">
-                <label class="form-check-label">Ruling Constellation</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" @bind="_hairNailCuttingCheckBox" type="checkbox">
-                <label class="form-check-label">Cutting Hair/Nails</label>
-            </div>
+            <input class="form-check-input" @bind="_dasaCheckBox" type="checkbox">
+            <label class="form-check-label">Dasa</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_bhuktiCheckBox" type="checkbox">
+            <label class="form-check-label">Bhukti</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_antaramCheckBox" type="checkbox">
+            <label class="form-check-label">Antaram</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_gocharaCheckBox" type="checkbox">
+            <label class="form-check-label">Gochara</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_personalCheckBox" type="checkbox">
+            <label class="form-check-label">Personal</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_generalCheckBox" type="checkbox">
+            <label class="form-check-label">General</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_buildingCheckBox" type="checkbox">
+            <label class="form-check-label">Building</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_agricultureCheckBox" type="checkbox">
+            <label class="form-check-label">Agriculture</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_astronomicalCheckBox" type="checkbox">
+            <label class="form-check-label">Astronomical</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_rulingConstellationCheckBox" type="checkbox">
+            <label class="form-check-label">Ruling Constellation</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" @bind="_hairNailCuttingCheckBox" type="checkbox">
+            <label class="form-check-label">Cutting Hair/Nails</label>
+        </div>
     </div>
 
 </div>
@@ -97,7 +99,7 @@
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-    
+
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -109,6 +111,10 @@
 
     private async Task OnClickCalculate()
     {
+
+        //only continue if passed input field validation
+        if (!ValidationPassed()) { return; }
+
         await _globalVariable.LoadingMessage.Show();
 
         //get needed input data
@@ -123,6 +129,27 @@
 
         await _globalVariable.LoadingMessage.Hide();
     }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private bool ValidationPassed()
+    {
+        var isValid = true;
+
+        //TEST 1
+        //if person not selected, invalid
+        if (!_peopleSelectorBox.IsPersonSelected)
+        {
+            //mark invalid & alert user
+            isValid = false;
+            var msg = $"Select person name!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+        }
+
+        return isValid;
+    }
+
 
     private List<EventTag> GetSelectedEventTypes()
     {

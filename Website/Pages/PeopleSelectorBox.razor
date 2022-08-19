@@ -69,7 +69,8 @@
         }
     }
 
-    private string _selectedPersonHash = "0";
+    private const string NotSelectedPersonHash = "0";
+    private string _selectedPersonHash = NotSelectedPersonHash;
 
 
 
@@ -107,5 +108,11 @@
     {
         return PersonList.Find(p => p.GetHashCode() == int.Parse(SelectedPersonHash));
     }
+
+
+    /// <summary>
+    /// True if a person has been selected else false
+    /// </summary>
+    public bool IsPersonSelected => SelectedPersonHash != NotSelectedPersonHash;
 
 }

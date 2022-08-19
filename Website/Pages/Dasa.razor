@@ -112,6 +112,10 @@
 
     private async Task DoCalculation()
     {
+
+        //only continue if passed input field validation
+        if (!ValidationPassed()) { return; }
+
         await _globalVariable.LoadingMessage.Show();
 
         //get data from inputs and save it for use by other components
@@ -144,6 +148,29 @@
 
         await _globalVariable.LoadingMessage.Hide();
     }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private bool ValidationPassed()
+    {
+        var isValid = true;
+
+        //TEST 1
+        //if person not selected, invalid
+        if (!_peopleSelectorBox.IsPersonSelected)
+        {
+            //mark invalid & alert user
+            isValid = false;
+            var msg = $"Select person name!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+        }
+
+
+
+        return isValid;
+    }
+
 
     private object ComputeStartEndTimeFromInput()
     {

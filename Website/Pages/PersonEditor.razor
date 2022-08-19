@@ -52,7 +52,7 @@
                 <option value="Female">Female</option>
             </select>
         </div>
-        
+
         @*ADVANCED TAB*@
         <div class="accordion" id="advancedTabAccordion" style="width: @AppData.MaxWidth">
             <div class="accordion-item">
@@ -77,7 +77,7 @@
                 </div>
             </div>
         </div>
-        
+
         @*BUTTONS*@
         <div style="margin-top: 50px" class="hstack row gap-2">
             @*Only show delete button in Editor mode*@
@@ -87,9 +87,6 @@
             }
             <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
         </div>
-    </div>
-    <div class="hstack gap-3">
-        
     </div>
 
 </div>
@@ -246,6 +243,9 @@
     //sends the newly created person to API server
     private async Task SubmitNewPerson()
     {
+        //only continue if passed input field validation
+        if (!ValidationPassed()) { return; }
+
         await _globalVariable.LoadingMessage.Show();
 
         //make a new person from the details in the input
@@ -255,10 +255,6 @@
         var xmlData = _person.ToXml();
         var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData);
 
-        //refresh the page variables
-        //todo marked for deletion, test without = no difference > delete
-        StateHasChanged();
-
         //page ready
         await _globalVariable.LoadingMessage.Hide();
 
@@ -267,6 +263,37 @@
         //send user to person list page after period of time
         await Task.Delay(100);
         _navigation.NavigateTo(PageRoute.PersonList);
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private bool ValidationPassed()
+    {
+        var isValid = true;
+
+        //TEST 1
+        //check that name is filled
+        if (_nameInput is null or "")
+        {
+            //mark invalid & alert user
+            isValid = false;
+            var msg = $"Name field cannot be empty!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+        }
+
+        //TEST 2
+        //check if time fields are parseable
+        var timeInputPassed = DateTimeOffset.TryParse(_timeInput.FullTimeString, out var x);
+        if (!timeInputPassed)
+        {
+            //mark invalid & alert user
+            isValid = false;
+            var msg = $"Birth time is invalid, check date time format!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+        }
+
+        return isValid;
     }
 
     /// <summary>

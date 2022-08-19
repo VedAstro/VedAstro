@@ -66,6 +66,9 @@
 
     private async Task DoCalculation()
     {
+        //only continue if passed input field validation
+        if (!ValidationPassed()) { return; }
+
         //todo loading box not working
 
         //get data from inputs and save it for use by other components
@@ -74,6 +77,27 @@
         //mark page as ready to show results
         _isResultReady = true;
 
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private bool ValidationPassed()
+    {
+        var isValid = true;
+
+        //TEST 1
+        //if person not selected, invalid
+        if (!_peopleSelectorBox.IsPersonSelected)
+        {
+            //mark invalid & alert user
+            isValid = false;
+            var msg = $"Select person name!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+        }
+
+
+        return isValid;
     }
 
 }

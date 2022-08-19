@@ -18,7 +18,7 @@
 <div class="vstack gap-3">
     <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonHash="@SelectedMale" Label="Male" />
     <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonHash="@SelectedFemale" Label="Female" />
-    <IconButton IconName="uim:process" ButtonText="Calculate" ClickUrl="@($"{PageRoute.MatchReport}/{SelectedMale}/{SelectedFemale}")"></IconButton>
+    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 </div>
 
 
@@ -54,5 +54,46 @@
 
         }
     }
+
+    private void OnClickCalculate()
+    {
+        //only continue if passed input field validation
+        if (!ValidationPassed()) { return; }
+
+        //navigate page to match report
+        _navigation.NavigateTo($"{PageRoute.MatchReport}/{SelectedMale}/{SelectedFemale}");
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private bool ValidationPassed()
+    {
+        var isValid = true;
+
+        //TEST 1
+        //if person not selected, invalid
+        if (!_malePeopleSelector.IsPersonSelected)
+        {
+            //mark invalid & alert user
+            isValid = false;
+            var msg = $"Select male person name!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+        }
+
+        //TEST 2
+        //if person not selected, invalid
+        if (!_femalePeopleSelector.IsPersonSelected)
+        {
+            //mark invalid & alert user
+            isValid = false;
+            var msg = $"Select female person name!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+        }
+
+
+        return isValid;
+    }
+
 
 }

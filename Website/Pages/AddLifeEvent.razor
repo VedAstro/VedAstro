@@ -23,7 +23,7 @@
         <input @bind="_descriptionInput" type="text" class="form-control" placeholder="Marriage did not last">
     </div>
     <label class="form-label">Nature</label>
-    <select class="form-control"  @bind="_natureInputValue" style="width: fit-content;min-width: 273px;">
+    <select class="form-control" @bind="_natureInputValue" style="width: fit-content;min-width: 273px;">
         <option value="Good" selected>Good</option>
         <option value="Bad">Bad</option>
         <option value="Neutral">Neutral</option>
@@ -32,7 +32,7 @@
         <TimeInput @ref="_timeInput" />
     </div>
 
-    <button class="btn btn-primary" style="align-self: end;" @onclick="AddButtonClicked">Add</button>
+    <IconButton IconName="entypo:save" ButtonText="Add" OnClickCallback="AddButtonClicked"></IconButton>
 </div>
 
 

@@ -26,7 +26,7 @@
     <div @ref="holder" class="vstack gap-2" style="display: none;">
         <div class="hstack gap-3">
             <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
-            <button class="btn btn-primary" style="align-self: end;" @onclick="SearchButtonClicked">Search</button>
+            <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
         </div>
 
         <table class="table table-bordered table-striped">

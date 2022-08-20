@@ -7,13 +7,13 @@
 
 <PageTop Title="Muhurtha" IconName="ic:twotone-event">
     <Description>
-        Electional astrology help to find a good time for auspicious events.
+        Electional astrology helps to find a good time for auspicious events.
         Find out the right time for wedding, job interview and etc.
     </Description>
-    @*    <ButtonsRow>
-    <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
+    <ButtonsRow>
+        <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
+        <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
-    *@
 </PageTop>
 
 <div class="vstack gap-3" style="width: @AppData.MaxContentWidthPx">
@@ -76,13 +76,63 @@
 
 <hr>
 @*DASA VIEW BOX*@
-<div>
+<div style="margin-bottom: 50px">
     <HelpBox Label="Events" HelpText="@HelpText.Dasa"></HelpBox>
     <DasaReportViewer @ref="_dasaReportViewer" />
 </div>
 
 
+@*HELP SECTION*@
+<PageHelpSection @ref="_helpSection">
+    <Content>
+        <h4 class="fw-bold">Muhurtha vs. Horoscope</h4>
+        <p class="text-justify">
+            What is meant by Muhurtha? How far is it superior to horoscopy? These
+            are important questions which we shall try to answer here.
+            Horoscopy reads what is indicated by the planetary positions at the time
+            of birth being the resultant of one's previous karma. In other words, it
+            has to do only with what one has brought with him the sum-total of one's
+            inheritance - physical, mental and material. Here we do nothing more
+            than read simply a technical letter as if it were written in planetary and
+            other symbols.
+        </p>
+        <p class="text-justify">
+            Muhurtha, on the other hand, is much more important. It
+            gives valuable directions by following which the person will be enabled
+            to remove, neutralize, counteract or overcome the evils indicated by the
+            horoscopic chart. Horoscopy is diagnostic. It merely points out the ills
+            but prescribes no remedies. Muhurtha is prescriptive as well as
+            preventive. It tells how by undertaking ventures at auspicious times one
+            can ward off the evils and ensure success.
+        </p>
+        <p class="text-justify">
+            Suppose break in education
+            is indicated by the position of evil planets in the fourth house from the
+            Ascendant and by the affliction of Jupiter, lord of education and
+            Mercury, lord of intelligence. These planetary conjunctions indicate want
+            of education in a man as a result of his karma in previous states of
+            existence. Muhurtha says that the obstructions to educational progress
+            by the planetary conjunctions indicated at the time of birth can be
+            minimized by fixing an auspicious time* for commencing the education.
+            Suppose evil planets in the fifth house indicate loss of children. Then
+            Muhurtha comes to his help first by asking him to marry at a certain
+            auspicious time when ethereal currents released from the planets will be
+            so powerful as to minimize or modify the afflictions to the extent that the
+            birth and survival of at least some children may be ensured.
+        </p>
+        <p class="text-justify">
+            Thus Muhurtha helps one to minimize or modify the evils of our past Karma to
+            a considerable extent. I must warn my readers not to imagine that
+            Muhurtha is the masterkey to all wealth and happiness. Muhurtha tells
+            us when to do a certain thing if failure is to be avoided.
+        <p class="fst-italic fw-light">(Source Credit: Muhurtha by B.V.Raman)</p></p>
+
+    </Content>
+</PageHelpSection>
+
+
 @code {
+    private PageHelpSection _helpSection;
 
     private bool _dasaCheckBox, _bhuktiCheckBox, _antaramCheckBox, _gocharaCheckBox, _personalCheckBox;
     private bool _generalCheckBox, _buildingCheckBox, _agricultureCheckBox, _astronomicalCheckBox, _rulingConstellationCheckBox;

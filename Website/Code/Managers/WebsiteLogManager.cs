@@ -125,7 +125,7 @@ namespace Website
             //since in local errors will show in console
             //and also not to clog server's error log
 #if DEBUG
-            Console.WriteLine("BLZ: LogVisitor: DEBUG mode, skipped logging to server");
+            Console.WriteLine("BLZ: LogClick: DEBUG mode, skipped logging to server");
             return;
 #endif
 
@@ -134,6 +134,30 @@ namespace Website
 
             //add in button click data
             visitorXml.Add(new XElement("ButtonText", buttonText));
+
+            //send to server for storage
+            await SendLogToServer(visitorXml);
+
+        }
+
+        /// <summary>
+        /// Logs an alert shown to user
+        /// </summary>
+        public static async Task LogAlert(IJSRuntime jsRuntime, string? alertMessage)
+        {
+            //if running code locally, end here
+            //since in local errors will show in console
+            //and also not to clog server's error log
+#if DEBUG
+            Console.WriteLine("BLZ: LogAlert: DEBUG mode, skipped logging to server");
+            return;
+#endif
+
+            //get basic visitor data
+            var visitorXml = await GetVisitorDataXml(jsRuntime);
+
+            //add in button click data
+            visitorXml.Add(new XElement("AlertMessage", alertMessage));
 
             //send to server for storage
             await SendLogToServer(visitorXml);

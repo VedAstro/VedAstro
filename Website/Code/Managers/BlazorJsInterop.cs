@@ -66,13 +66,28 @@ namespace Website
         /// })
         /// 
         /// </summary>
-        public static async Task ShowAlert(this IJSRuntime jsRuntime, object alertData) => await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+        public static async Task ShowAlert(this IJSRuntime jsRuntime, object alertData)
+        {
+            //log this
+            string alertMessage = ((dynamic)alertData)?.title ?? "";
+            await WebsiteLogManager.LogAlert(jsRuntime, alertMessage);
+
+            await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+        }
 
         /// <summary>
         /// Shows alert with return data for alerts with confirm button
         /// will return SweetAlertResult json object
         /// </summary>
-        public static async Task<JsonElement> ShowAlertResult(this IJSRuntime jsRuntime, object alertData) => await jsRuntime.InvokeAsync<JsonElement>("Swal.fire", alertData);
+        public static async Task<JsonElement> ShowAlertResult(this IJSRuntime jsRuntime, object alertData)
+        {
+            //log this
+            string alertMessage = ((dynamic)alertData)?.title ?? "";
+            await WebsiteLogManager.LogAlert(jsRuntime, alertMessage);
+
+            return await jsRuntime.InvokeAsync<JsonElement>("Swal.fire", alertData);
+        }
+
         public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, bool showConfirmButton, int timer)
         {
 

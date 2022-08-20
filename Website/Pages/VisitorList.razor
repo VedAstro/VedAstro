@@ -43,6 +43,8 @@
             <th>UserId</th>
             <th>VisitorId</th>
             <th style="width: 277px;">Url</th>
+            <th>ButtonText</th>
+            <th>AlertMessage</th>
             <th>TimeStamp</th>
             <th>Location</th>
             <th>IP</th>
@@ -58,6 +60,7 @@
                 <td class="link-primary" @onclick="@(()=> FilterByVisitorId(visitorXml.Element("VisitorId")?.Value))">@visitorXml.Element("VisitorId")?.Value</td>
                 <td>@visitorXml.Element("Url")?.Value</td>
                 <td>@visitorXml.Element("ButtonText")?.Value</td>
+                <td>@visitorXml.Element("AlertMessage")?.Value</td>
                 <td>@visitorXml.Element("TimeStamp")?.Value</td>
                 <td>@visitorXml.Element("Location")?.Element("city")?.Value,@visitorXml.Element("Location")?.Element("country")?.Value</td>
                 <td>@visitorXml.Element("Location")?.Element("ip")?.Value</td>
@@ -214,7 +217,7 @@
     {
         await _globalVariable.LoadingMessage.Show();
 
-
+        //extract all the available data out of log record to be showed
         var userId = visitorXml.Element("UserId")?.Value;
         var visitorId = visitorXml.Element("VisitorId")?.Value;
         var url = visitorXml.Element("Url")?.Value;
@@ -235,6 +238,7 @@
         var errorMessage = visitorXml.Element("Error")?.Element("Message")?.Value;
         var errorTime = visitorXml.Element("Error")?.Element("Time")?.Value;
         var buttonText = visitorXml.Element("ButtonText")?.Value;
+        var alertMessage = visitorXml.Element("AlertMessage")?.Value;
         var screenWidth = visitorXml.Element("ScreenData")?.Element("Width")?.Value;
         var screenHeight = visitorXml.Element("ScreenData")?.Element("Height")?.Value;
         var screenOrientation = visitorXml.Element("ScreenData")?.Element("Orientation")?.Value;
@@ -247,6 +251,7 @@
                         <li class=""list-group-item"">{userId}</li>
                         <li class=""list-group-item"">{visitorId}</li>
                         <li class=""list-group-item"">{buttonText} {url}</li>
+                        <li class=""list-group-item"">{alertMessage}</li>
                         <li class=""list-group-item"">{originUrl}</li>
                         <li class=""list-group-item"">{timeStamp}</li>
                         <li class=""list-group-item"">{organization}</li>

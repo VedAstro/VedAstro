@@ -345,6 +345,13 @@ var watchProperty = async (instance, handlerName) => {
     });
 };
 
+//Uses Bootstrap Jquery plugin to toggle any collapsible component by id
+var toggleAccordion = (id) => $(id).collapse("toggle");
+
+var showAccordion = (id) => $(id).collapse("show");
+
+//scrolls element by id into view
+var scrollIntoView = (id) => $(id)[0].scrollIntoView();
 
 
 

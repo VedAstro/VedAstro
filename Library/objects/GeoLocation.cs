@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
@@ -119,5 +121,6 @@ namespace Genso.Astrology.Library
 
             return new GeoLocation(name, longitude, latitude);
         }
+
     }
 }

@@ -7,8 +7,10 @@
     public static class HelpText
     {
         public const string GeoLocationName = @"Enter city, state or country name, it will autofill longitude and latitude";
-        public const string Gender = @"Gender is used in calculation like marriage compatibilty.";
+        public const string Gender = @"Gender is used in predicting marriage compatibilty and horoscope.";
         public const string PersonAdvanced = @"This is optional";
+        public const string DateInput = @"Format Example: 5th January 2020 is 05/01/2020";
+        public const string TimezoneInput = @"Standard timezone used at location (UTC/GMT)";
 
         public const string Dasa =
             @"

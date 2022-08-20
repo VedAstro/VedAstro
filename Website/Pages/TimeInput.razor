@@ -2,16 +2,22 @@
 
 <div class="hstack gap-2">
     <div style="width: fit-content;">
-        <label class="form-label" >Time (24H)</label>
+        <label class="form-label">Time (24H)</label>
         <input style="max-width: 72px;" class="form-control" @bind="HourMin" type="text" placeholder="16:20">
     </div>
     <div style="width: fit-content;">
-        <label class="form-label" >Date</label>
+        <label class="form-label">
+            Date
+            <HelpBox SmallIcon="true" HelpText="@HelpText.DateInput"></HelpBox>
+        </label>
         <input style="max-width: 117px;" class="form-control" @bind="Date" type="text" placeholder="16/04/2021">
     </div>
     <div style="width: fit-content;">
-        <label class="form-label">Timezone</label>
-        <input style="max-width: 86px;" class="form-control" @bind="TimeZone" type="text" placeholder="+08:00">
+        <label class="form-label">
+            Timezone
+            <HelpBox SmallIcon="true" HelpText="@HelpText.TimezoneInput"></HelpBox>
+        </label>
+        <input style="max-width: 86px;" class="form-control" @bind="TimeZone" type="text">
     </div>
 </div>
 
@@ -45,17 +51,15 @@
         {
             _timeZone = value;
             StateHasChanged();
+            //mark timezone input as modified
+            IsAutoTimezone = false;
         }
     }
 
     /// <summary>
     /// Gets parseable time string
     /// </summary>
-    public string? FullTimeString
-    {
-        get => $"{HourMin} {Date} {TimeZone}";
-        set { return; }
-    }
+    public string? FullTimeString => $"{HourMin} {Date} {TimeZone}";
 
 
     private string? _hourMin = DateTime.Today.ToString("HH:mm");
@@ -63,9 +67,29 @@
     private string? _timeZone = DateTimeOffset.Now.ToString("zzz");
 
 
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //auto set time zone to current user's location
+            //set underlying value as not to fire update event
+            _timeZone = DateTimeOffset.Now.ToString("zzz");
+            //mark time zone has auto set
+            IsAutoTimezone = true;
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
     /// <summary>
     /// Creates a new time instance with inputed time data
     /// </summary>
     public Time GetTime(GeoLocation geoLocation) => new(this.FullTimeString, geoLocation);
+
+    /// <summary>
+    /// Returns true if time zone field was set by auto and not changed by user
+    /// if user modified it, will return false
+    /// </summary>
+    public bool IsAutoTimezone { get; private set; }
 
 }

@@ -69,16 +69,16 @@
     /// </summary>
     private bool ValidationPassed()
     {
-        var isValid = true;
 
         //TEST 1
         //if person not selected, invalid
         if (!_malePeopleSelector.IsPersonSelected)
         {
             //mark invalid & alert user
-            isValid = false;
             var msg = $"Select male person name!";
             _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            return false;
+
         }
 
         //TEST 2
@@ -86,13 +86,16 @@
         if (!_femalePeopleSelector.IsPersonSelected)
         {
             //mark invalid & alert user
-            isValid = false;
             var msg = $"Select female person name!";
             _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            return false;
         }
 
 
-        return isValid;
+        //if control reaches here than, it's valid
+        return true;
+
+
     }
 
 

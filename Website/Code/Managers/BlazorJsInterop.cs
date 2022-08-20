@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -66,6 +67,12 @@ namespace Website
         /// 
         /// </summary>
         public static async Task ShowAlert(this IJSRuntime jsRuntime, object alertData) => await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+
+        /// <summary>
+        /// Shows alert with return data for alerts with confirm button
+        /// will return SweetAlertResult json object
+        /// </summary>
+        public static async Task<JsonElement> ShowAlertResult(this IJSRuntime jsRuntime, object alertData) => await jsRuntime.InvokeAsync<JsonElement>("Swal.fire", alertData);
         public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, bool showConfirmButton, int timer)
         {
 

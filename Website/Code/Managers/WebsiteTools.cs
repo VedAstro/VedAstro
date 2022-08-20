@@ -94,6 +94,36 @@ namespace Website
 
         }
 
+        public static async Task<string> GetTimezoneOffset(GeoLocation _geoLocation, DateTimeOffset timeAtLocation)
+        {
+            //use timestamp to account for historic timezone changes
+            var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
+            var longitude = _geoLocation.GetLongitude();
+            var latitude = _geoLocation.GetLatitude();
+
+            //create the request url for Google API
+            var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={ServerManager.GoogleGeoLocationApiKey}");
+
+
+            //get location data from GoogleAPI
+            //< TimeZoneResponse >
+            //  < status > OK </ status >
+            //  < raw_offset > 28800.0000000 </ raw_offset >
+            //  < dst_offset > 0.0000000 </ dst_offset >
+            //  < time_zone_id > Asia / Kuala_Lumpur </ time_zone_id >
+            //  < time_zone_name > Malaysia Time </ time_zone_name >
+            //</ TimeZoneResponse >
+            var timeZoneResponseXml = await ServerManager.ReadFromServerXmlReply(url);
+
+            //extract out the timezone offset
+            var offsetSeconds = double.Parse(timeZoneResponseXml?.Element("raw_offset")?.Value);
+            var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromSeconds(offsetSeconds)).ToString("zzz");
+
+            return parsedOffsetString;
+
+        }
+
+
         /// <summary>
         /// Tries to get user login state, else returns public user id.
         /// Note: Public User Id is the standard id all unregistered visitors get

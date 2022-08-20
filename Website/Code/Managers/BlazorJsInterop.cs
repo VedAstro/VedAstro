@@ -68,11 +68,10 @@ namespace Website
         /// </summary>
         public static async Task ShowAlert(this IJSRuntime jsRuntime, object alertData)
         {
-            //log this
-            string alertMessage = ((dynamic)alertData)?.title ?? "";
-            await WebsiteLogManager.LogAlert(jsRuntime, alertMessage);
+            //log this, don't await to reduce lag
+            WebsiteLogManager.LogAlert(jsRuntime, alertData);
 
-            await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+             await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
         }
 
         /// <summary>
@@ -81,9 +80,8 @@ namespace Website
         /// </summary>
         public static async Task<JsonElement> ShowAlertResult(this IJSRuntime jsRuntime, object alertData)
         {
-            //log this
-            string alertMessage = ((dynamic)alertData)?.title ?? "";
-            await WebsiteLogManager.LogAlert(jsRuntime, alertMessage);
+            //log this, don't await to reduce lag
+            WebsiteLogManager.LogAlert(jsRuntime, alertData);
 
             return await jsRuntime.InvokeAsync<JsonElement>("Swal.fire", alertData);
         }

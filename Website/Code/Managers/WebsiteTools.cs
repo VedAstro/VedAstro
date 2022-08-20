@@ -363,12 +363,13 @@ namespace Website
 
 
         /// <summary>
-        /// This method is called from JS when user signs out
+        /// This method is called from JS when blazor default error box is shown (#blazor-error-ui)
         /// </summary>
         [JSInvokable]
         public static void OnAppError()
         {
-            Console.WriteLine("BLZ: OnAppError");
+            //log it
+            WebsiteLogManager.LogError("Blazor Error Box Shown");
         }
 
 

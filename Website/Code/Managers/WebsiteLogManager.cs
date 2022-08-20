@@ -79,6 +79,37 @@ namespace Website
         }
 
         /// <summary>
+        /// Log error when there is no exception data
+        /// used when #blazor-error-ui is shown
+        /// </summary>
+        public static void LogError(string errorMsg)
+        {
+
+            //if running code locally, end here
+            //since in local errors will show in console
+            //and also not to clog server's error log
+#if DEBUG
+            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
+            Console.WriteLine($"{errorMsg}\n{AppData.CurrentPage}");
+            return;
+#endif
+            //place error data into visitor tag
+            //this is done because visitor data might hold clues to error
+            var visitorXml = new XElement("Visitor");
+            var userId = new XElement("UserId", AppData.CurrentUser);
+            var visitorId = new XElement("VisitorId", AppData.VisitorId);
+            var urlXml = new XElement("Url", AppData.CurrentPage);
+            var errorXml = new XElement("Error", new XElement("Message", errorMsg));
+            visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampXml);
+
+            //send to server for storage
+            SendLogToServer(visitorXml);
+
+            Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
+
+        }
+
+        /// <summary>
         /// Makes a log of the exception in API server
         /// This version doesn't use user data, only exception data is sent to server
         /// Because no access to JS runtime from here, todo user data can be moved to blazor side
@@ -143,7 +174,7 @@ namespace Website
         /// <summary>
         /// Logs an alert shown to user
         /// </summary>
-        public static async Task LogAlert(IJSRuntime jsRuntime, string? alertMessage)
+        public static async Task LogAlert(IJSRuntime jsRuntime, dynamic alertData)
         {
             //if running code locally, end here
             //since in local errors will show in console
@@ -152,6 +183,16 @@ namespace Website
             Console.WriteLine("BLZ: LogAlert: DEBUG mode, skipped logging to server");
             return;
 #endif
+            string alertMessage = "";
+            try
+            {
+                alertMessage = ((dynamic)alertData)?.title ?? "";
+            }
+            catch (Exception)
+            {
+                // only visitor list page uses "html" and not "title",
+                // so if can't get it skip it
+            }
 
             //get basic visitor data
             var visitorXml = await GetVisitorDataXml(jsRuntime);
@@ -292,7 +333,7 @@ namespace Website
         }
 
 
-        
+
 
 
     }

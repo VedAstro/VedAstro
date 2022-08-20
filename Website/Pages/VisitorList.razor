@@ -215,7 +215,6 @@
 
     private async Task ViewVisitor(XElement visitorXml)
     {
-        await _globalVariable.LoadingMessage.Show();
 
         //extract all the available data out of log record to be showed
         var userId = visitorXml.Element("UserId")?.Value;
@@ -266,11 +265,9 @@
                      </ul>"
         };
 
-        await _globalVariable.LoadingMessage.Hide();
 
 
         await _jsRuntime.ShowAlert(alertData);
-
 
     }
 

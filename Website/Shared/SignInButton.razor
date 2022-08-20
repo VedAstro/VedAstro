@@ -101,6 +101,9 @@
     Console.WriteLine("BLZ: OnGoogleSignInSuccessHandler");
 #endif
 
+        //log this
+        await WebsiteLogManager.LogClick(_jsRuntime, "Google Sign In");
+
         //todo show loading box
 
         //get the ID Token/JWT from the response
@@ -199,7 +202,13 @@
     /// <summary>
     /// Starts facebook login process
     /// </summary>
-    private void OnClickSignInFacebook() => _jsRuntime.InvokeVoidAsync("facebookLogin");
+    private void OnClickSignInFacebook()
+    {
+        //log this
+        WebsiteLogManager.LogClick(_jsRuntime, "Facebook Sign In");
+
+        _jsRuntime.InvokeVoidAsync("facebookLogin");
+    }
 
 
 }

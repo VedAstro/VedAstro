@@ -9,7 +9,7 @@
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
         <IconButton IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
-        <IconButton IconName="carbon:help" ButtonText="FAQ" ClickUrl="@($"{PageRoute.Horoscope}/#HelpSection")"></IconButton>
+        <IconButton IconName="bx:book-reader" ButtonText="Help" ClickUrl="@($"{PageRoute.Horoscope}/#HelpSection")"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -52,28 +52,60 @@
     </div>
 
     @*HELP SECTION*@
+    <div class="accordion" id="advancedTabAccordion" style="width: @AppData.MaxWidth">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    <span style="margin-right: 7px;" class="iconify" data-icon="bx:book-reader" data-width="35"></span>
+                    <strong style="font-size: 25px;">Help</strong>
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#advancedTabAccordion">
+                <div class="accordion-body">
+                    <div class="vstack">
+                        <h4 class="fw-bold">Where are these predictions from?</h4>
+                        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+                            Prediction data come from books by renowned astrologer B.V. Raman.
+                            Books such as <span class="fw-bold">How to Judge Horoscope</span> and
+                            <span class="fw-bold">Hindu Predictive Astrology</span>,
+                            were used to make this calculator.
+                        </p>
 
-    <div id="HelpSection">
-
-        <h2>Help</h2>
-        <hr />
-        <h4 class="fw-bold">Where are these predictions from?</h4>
-        <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-            Prediction data come from books by renowned astrologer B.V. Raman.
-            Books such as <span class="fw-bold">How to Judge Horoscope</span> and
-            <span class="fw-bold">Hindu Predictive Astrology</span>,
-            were used to make this calculator.
-        </p>
-
-        <h4 class="fw-bold">How to use these predictions?</h4>
-        <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-            For accurate predictions, results must be duly modified
-            or qualified according to the affliction or otherwise of the
-            planets concerned. For example, predictions involving planets with
-            high strength (Bhava Bala), is often accurate.
-        </p>
-
+                        <h4 class="fw-bold">How to use these predictions?</h4>
+                        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+                            For accurate predictions, results must be duly modified
+                            or qualified according to the affliction or otherwise of the
+                            planets concerned. For example, predictions involving planets with
+                            high strength (Bhava Bala), is often accurate.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    @* <div id="HelpSection">
+
+    <h2><span style="margin-top: -10px;" class="iconify" data-icon="carbon:help" data-width="35"></span> Help</h2>
+    <hr />
+
+    <h4 class="fw-bold m">Where are these predictions from?</h4>
+    <p class="text-justify mb-3" style="max-width:@AppData.MaxWidth;">
+    Prediction data come from books by renowned astrologer B.V. Raman.
+    Books such as <span class="fw-bold">How to Judge Horoscope</span> and
+    <span class="fw-bold">Hindu Predictive Astrology</span>,
+    were used to make this calculator.
+    </p>
+
+    <h4 class="fw-bold">How to use these predictions?</h4>
+    <p class="text-justify mb-3" style="max-width:@AppData.MaxWidth;">
+    For accurate predictions, results must be duly modified
+    or qualified according to the affliction or otherwise of the
+    planets concerned. For example, predictions involving planets with
+    high strength (Bhava Bala), is often accurate.
+    </p>
+
+    </div>*@
 
 </div>
 

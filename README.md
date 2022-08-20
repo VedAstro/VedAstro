@@ -1,7 +1,7 @@
 [![Azure Static Web Apps CI/CD](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-purple-flower-03ae64d1e.yml/badge.svg)](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-purple-flower-03ae64d1e.yml)
 
 # What is this?
-A non-profit, opensource project to make Vedic Astrological tools easily available to all.
+A non-profit, open source project to make Vedic Astrological tools easily available to all.
 Find out more @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.net/)
 
 # Links

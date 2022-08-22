@@ -25,6 +25,22 @@ namespace Genso.Astrology.Library
             return nameWithSpace;
         }
 
+        /// <summary>
+        /// Input the camel case name enum
+        /// Exp: "MaryJane" to "Mary Jane"
+        /// Gets human readable event name
+        /// </summary>
+        public static string FormatName(dynamic obj)
+        {
+            //convert enum name to string
+            var nameWithoutSpaces = obj.ToString();
+
+            //add spaces in between camel case letters
+            var nameWithSpace = SplitCamelCase(nameWithoutSpaces);
+
+            return nameWithSpace;
+        }
+
         //PRIVATE METHODS
         private static string SplitCamelCase(string str)
         {

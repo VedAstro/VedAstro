@@ -7,6 +7,7 @@
     public static class PageRoute
     {
         public const string TaskList = "/tasklist";
+        public const string Debug = "/Debug";
         public const string BirthTimeFinder = "/BirthTimeFinder";
         public const string VisitorListOld = "/visitorlistold";
         public const string VisitorList = "/visitorlist";

@@ -85,14 +85,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //get all people from API server
         rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id);
 
         await ShowAllVisitorLog();
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 
@@ -176,7 +176,7 @@
 
     private async Task FilterByUserId(string? userId)
     {
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //set selected user id for display & deleting
         _selectedUserId = userId;
@@ -189,13 +189,13 @@
 
         StateHasChanged();
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 
     private async Task FilterByVisitorId(string? visitorId)
     {
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //set selected user id for display & deleting
         _selectedVisitorId = visitorId;
@@ -209,7 +209,7 @@
 
         StateHasChanged();
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 

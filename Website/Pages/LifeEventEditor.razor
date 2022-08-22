@@ -35,26 +35,26 @@
     private async Task OnClickAddButton()
     {
         //show loading message
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
 
 
         //page ready
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 
     public async Task SetData(List<LifeEvent> lifeEventList)
     {
         //show loading message
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly
         await _jsRuntime.InvokeVoidAsync("generateLifeEventListTable", TableId, lifeEventList.ToArray());
 
         //page ready
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 

@@ -37,7 +37,7 @@
     {
 
         //show loading box
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //set people list into people selector
         //note : without above first call _peopleSelectorBox is null
@@ -45,7 +45,7 @@
         this.FillDropDown(PersonList);
 
         //hide loading box
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
     }
 
 

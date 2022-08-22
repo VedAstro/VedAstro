@@ -74,7 +74,7 @@ else
     private async Task GenerateTable()
     {
         //todo needs to be updated
-        //await _globalVariable.LoadingMessage.Show();
+        //_jsRuntime.ShowLoading();
 
         //get all people from API server
         personList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id);
@@ -84,7 +84,7 @@ else
         //await _jsRuntime.InvokeVoidAsync("generatePersonListTable", TableId, personList.ToArray());
 
         //todo needs to be updated
-        //await _globalVariable.LoadingMessage.Hide();
+        //_jsRuntime.HideAlert();
 
     }
 

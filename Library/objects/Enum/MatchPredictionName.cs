@@ -1,9 +1,9 @@
 ﻿namespace Genso.Astrology.Library.Compatibility
 {
     /// <summary>
-    /// Represents the name of the prediction method
+    /// Represents the name of the match prediction method
     /// </summary>
-    public enum Name
+    public enum MatchPredictionName
     {
         /// <summary>
         /// default value when not assigned

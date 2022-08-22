@@ -35,7 +35,7 @@
 
     private async Task GenerateTable()
     {
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //get all task from API server
         var tasksListXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetTaskListApi);
@@ -48,7 +48,7 @@
         //and calls js code change table directly
         await _jsRuntime.InvokeVoidAsync("generateWebsiteTaskListTable", TableId, taskList.ToArray());
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 

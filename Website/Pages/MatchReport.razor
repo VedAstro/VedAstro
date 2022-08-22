@@ -10,6 +10,7 @@
     <Description>Below is the results.</Description>
     <ButtonsRow>
         <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" ClickUrl="@PageRoute.Match"></IconButton>
+        <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -18,27 +19,27 @@
 @if (_report != null)
 {
 
-    <h1>@MaleName + @FemaleName = Score <b style="color:@GetScoreColor(_report.KutaScore);">@_report.KutaScore/100</b></h1>
+    <h3>@MaleName + @FemaleName = Score <b style="color:@GetScoreColor(_report.KutaScore);">@_report.KutaScore/100</b></h3>
 
-    <table class="table table-striped table-hover">
-        <thead>
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
             <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Nature</th>
-                <th scope="col">Info</th>
-                <th scope="col">MaleInfo</th>
-                <th scope="col">FemaleInfo</th>
+                <th scope="col"><span class="hstack gap-2">Name<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportName"></HelpBox></span></th>
+                <th scope="col"><span class="hstack gap-2">Result<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportResult"></HelpBox></span></th>
+                <th scope="col"><span class="hstack gap-2">Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportInfo"></HelpBox></span></th>
+                <th scope="col"><span class="hstack gap-2">Male Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportMale"></HelpBox></span></th>
+                <th scope="col"><span class="hstack gap-2">Female Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportFemale"></HelpBox></span></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var prediction in _report.PredictionList)
             {
                 //if no prediction then don't print
-                @if (prediction.Name == Name.Empty) { continue; }
+                @if (prediction.Name == MatchPredictionName.Empty) { continue; }
 
                 <tr>
                     <td scope="row">
-                        <b>@prediction.Name</b>
+                        <b>@prediction.FormattedName <HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportFemale"></HelpBox></b>
                         <p><small>@prediction.Description</small></p>
                     </td>
                     <td style="color:@GetNatureColor(prediction.Nature);"><b>@prediction.Nature</b></td>
@@ -51,6 +52,29 @@
     </table>
 
 }
+
+@*HELP SECTION*@
+<PageHelpSection @ref="_helpSection">
+    <Content>
+        <h4 class="fw-bold">Where are these predictions from?</h4>
+        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+            In selecting horoscopes for marriage purposes, three factors have to be
+            carefully considered. They are: -
+            (a) The longevity of the bride and the bridegroom.
+            (b) The larger strength of the 7th and 8th houses.
+            (c) Agreeability in regard to the Kutas or pooruththam.
+        </p>
+
+        <h4 class="fw-bold">How to use these predictions?</h4>
+        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+            When there is no longevity in the case of bride, the horoscope must be
+            rejected even though the 7th house may be strong or the requsite
+            number of units are available. Likewise when the 7th house is weak and
+            is considerably blemished, the horoscope to be matched should have
+            antidotes or counteracting influences.
+        </p>
+    </Content>
+</PageHelpSection>
 
 
 @code {
@@ -66,6 +90,7 @@
 
     CompatibilityReport? _report = null; //when needs to be show before init
 
+    private PageHelpSection _helpSection;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -76,7 +101,7 @@
     protected override async Task OnInitializedAsync() => _report = await GetCompatibilityReport(MaleHash ?? "", FemaleHash ?? "");
 
     //hide the loading message that was open in init
-    protected override async Task OnAfterRenderAsync(bool firstRender) => await _globalVariable.LoadingMessage.Hide();
+    protected override async Task OnAfterRenderAsync(bool firstRender) => _jsRuntime.HideAlert();
 
 
 
@@ -106,7 +131,7 @@
     {
 
         //show loading box
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //show names on page
         MaleName = (await WebsiteTools.GetPersonFromHash(maleHash)).Name;

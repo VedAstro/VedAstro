@@ -16,7 +16,7 @@ namespace Genso.Astrology.Library.Compatibility
         private string _femaleInfo = "";
         private string _description = "";
 
-        public CompatibilityPrediction(Name name, EventNature nature, string maleInfo, string femaleInfo, string info, string description)
+        public CompatibilityPrediction(MatchPredictionName name, EventNature nature, string maleInfo, string femaleInfo, string info, string description)
         {
             Name = name;
             Nature = nature;
@@ -34,7 +34,7 @@ namespace Genso.Astrology.Library.Compatibility
 
 
         //PUBLIC PROPERTIES
-        public Name Name { get; set; }
+        public MatchPredictionName Name { get; set; }
 
         public string Description
         {
@@ -82,6 +82,8 @@ namespace Genso.Astrology.Library.Compatibility
             }
         }
 
+        public string FormattedName => Format.FormatName(this.Name);
+
 
         //PUBLIC METHODS
 
@@ -93,7 +95,7 @@ namespace Genso.Astrology.Library.Compatibility
 
         public CompatibilityPrediction FromXml(XElement xml)
         {
-            var name = Enum.Parse<Name>(xml.Element("Name")?.Value);
+            var name = Enum.Parse<MatchPredictionName>(xml.Element("Name")?.Value);
             var nature = Enum.Parse<EventNature>(xml.Element("Nature")?.Value);
             var maleInfo = xml.Element("MaleInfo")?.Value;
             var femaleInfo = xml.Element("FemaleInfo")?.Value;

@@ -30,7 +30,7 @@
             <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
         </div>
 
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped table-hover">
             <thead class="table-dark">
             <tr>
                 <th>Name</th>
@@ -103,14 +103,14 @@
 
         //todo progress bar does not move, because computation hogs progress calc
         //await _globalVariable.LoadingMessage.DisableProgressBar();
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         await CalculateAndUpdateEvents();
 
         //make table and search visible
         await _jsRuntime.Show(holder);
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
     }
 
     /// <summary>

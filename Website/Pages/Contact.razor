@@ -57,7 +57,7 @@
     private async Task SendMessage()
     {
         //loading box show
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         await _jsRuntime.AddToProgressBar(10);
 
@@ -81,6 +81,6 @@
 
         await _jsRuntime.AddToProgressBar(20);
         //hide loading box
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
     }
 }

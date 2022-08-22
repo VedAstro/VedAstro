@@ -97,7 +97,7 @@
 
     private async Task OnClickSubmit(MouseEventArgs obj)
     {
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //pack details from input together
         _websiteTask.Name = _name;
@@ -112,12 +112,8 @@
         await _jsRuntime.ShowAlert("success", $"{_name} added successfully!", false,timer:1000);
 
 
-        //refresh the page variables
-        //todo marked for deletion, test without = no difference > delete
-        StateHasChanged();
-
         //page ready
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
         //send user to task list page after period of time
         await Task.Delay(100);

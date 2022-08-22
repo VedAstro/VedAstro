@@ -5,7 +5,7 @@
 <PageTitle>Find Marriage Match</PageTitle>
 
 <PageTop Title="Match" IconName="bi:arrow-through-heart-fill">
-    <Description>Check marriage compatibility between horoscopes</Description>
+    <Description>Check marriage compatibility between horoscopes. 16 Astrological factors are used to make this accurate prediction</Description>
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
         <IconButton IconName="fluent:people-list-24-filled" ButtonText="Person List" ClickUrl="@PageRoute.PersonList"></IconButton>
@@ -40,14 +40,14 @@
         if (firstRender)
         {
             //show loading box
-            await _globalVariable.LoadingMessage.Show();
+            _jsRuntime.ShowLoading();
 
             //get male list from api server & save it for later
             //_malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(AppData.CurrentUser?.Id));
             //_femalePeopleSelector.SetData(await WebsiteTools.GetFemalePeopleList(AppData.CurrentUser?.Id));
 
             //hide loading box
-            await _globalVariable.LoadingMessage.Hide();
+            _jsRuntime.HideAlert();
 
             //called last because will loop back
             this.StateHasChanged();

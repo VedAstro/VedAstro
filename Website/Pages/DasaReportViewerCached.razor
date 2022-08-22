@@ -215,7 +215,7 @@
 
     private async Task OnClickRefreshButton(MouseEventArgs obj)
     {
-        //await _globalVariable.LoadingMessage.Show();
+        //_jsRuntime.ShowLoading();
 
         //zoom level translates directly to index (lowest res at top highest rest at bottom)
         var zoomLevel = int.Parse(SelectedZoomName);
@@ -244,7 +244,7 @@
 
        // await InjectSvgIntoPage(svgText);
 
-        //await _globalVariable.LoadingMessage.Hide();
+        //_jsRuntime.HideAlert();
 
     }
 

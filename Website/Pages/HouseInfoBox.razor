@@ -34,11 +34,11 @@
     protected override async Task OnInitializedAsync()
     {
         //todo loading box not working
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         UpdateData();
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 

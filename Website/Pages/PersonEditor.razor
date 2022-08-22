@@ -245,7 +245,7 @@
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { return; }
 
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //make a new person from the details in the input
         _person = await GetPersonInstanceFromInput();
@@ -255,7 +255,7 @@
         var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData);
 
         //page ready
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
         await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
 
@@ -305,10 +305,10 @@
                 //let user know timezone needs to be corrected
                 var alertData = new
                 {
-                    icon = "info",
-                    title = "Timezone Auto Correction",
+                    icon = "question",
+                    title = $"Are you sure timezone is right?",
                     text = $"Timezone in \"{_geoLocationInput.LocationName}\" should be \"{birthLocationTimezone}\", not \"{currentTimezone}\"." +
-                           $"\n Click cancel, to manually correct timezone.",
+                           $"\n Click Auto Correct to update & continue. Cancel to manually edit.",
                     showCancelButton = true,
                     confirmButtonColor = "#3085d6",
                     cancelButtonColor = "#d33",
@@ -363,7 +363,7 @@
         if (!(await IsValidationPassed())) { return; }
 
         //show loading message
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //make a new person from the details in the input
         _person = await GetPersonInstanceFromInput();
@@ -375,7 +375,7 @@
         await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
 
         //page ready
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
         //send user to task list page after period of time
         await Task.Delay(100);
@@ -385,7 +385,7 @@
     private async Task DeletePerson()
     {
         //show loading message
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //tell API to delete person, using hash as id
         await WebsiteTools.DeletePerson(_originalPersonHash);
@@ -399,7 +399,7 @@
         this.StateHasChanged();
 
         //page ready
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
         //send user to task list page after period of time
         await Task.Delay(100);

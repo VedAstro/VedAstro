@@ -111,7 +111,7 @@
 
     private async Task RenderUniqueVisitorList()
     {
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //get all people from API server
         rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id);
@@ -148,7 +148,7 @@
         //and calls js code change table directly
         //await _jsRuntime.InvokeVoidAsync("generatePersonListTable", TableId, personList.ToArray());
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 

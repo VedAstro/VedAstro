@@ -78,9 +78,9 @@ namespace Genso.Astrology.Library
                     //  Rasi Kuta add Graha Maitri are present.
 
                     //get the needed prediction
-                    var streeDeerga = list.Find(pr => pr.Name == Name.StreeDeergha);
-                    var rasiKuta = list.Find(pr => pr.Name == Name.RasiKuta);
-                    var grahaMaitram = list.Find(pr => pr.Name == Name.GrahaMaitram);
+                    var streeDeerga = list.Find(pr => pr.Name == MatchPredictionName.StreeDeergha);
+                    var rasiKuta = list.Find(pr => pr.Name == MatchPredictionName.RasiKuta);
+                    var grahaMaitram = list.Find(pr => pr.Name == MatchPredictionName.GrahaMaitram);
 
                     //if prediction is bad and exception can be applied
                     var streeDeergaIsBad = streeDeerga.Nature == EventNature.Bad;
@@ -114,11 +114,11 @@ namespace Genso.Astrology.Library
                     //  and Mahendra Kuta are present.
 
                     //get the needed prediction
-                    var rajju = list.Find(pr => pr.Name == Name.Rajju);
-                    var grahaMaitram = list.Find(pr => pr.Name == Name.GrahaMaitram);
-                    var rasiKuta = list.Find(pr => pr.Name == Name.RasiKuta);
-                    var dinaKuta = list.Find(pr => pr.Name == Name.DinaKuta);
-                    var mahendra = list.Find(pr => pr.Name == Name.Mahendra);
+                    var rajju = list.Find(pr => pr.Name == MatchPredictionName.Rajju);
+                    var grahaMaitram = list.Find(pr => pr.Name == MatchPredictionName.GrahaMaitram);
+                    var rasiKuta = list.Find(pr => pr.Name == MatchPredictionName.RasiKuta);
+                    var dinaKuta = list.Find(pr => pr.Name == MatchPredictionName.DinaKuta);
+                    var mahendra = list.Find(pr => pr.Name == MatchPredictionName.Mahendra);
 
 
                     //if prediction is bad and exception can be applied
@@ -157,9 +157,9 @@ namespace Genso.Astrology.Library
                     // (a) The Rasi and Rajju Kuta prevail
 
                     //get the needed prediction
-                    var nadiKuta = list.Find(pr => pr.Name == Name.NadiKuta);
-                    var rasiKuta = list.Find(pr => pr.Name == Name.RasiKuta);
-                    var rajju = list.Find(pr => pr.Name == Name.Rajju);
+                    var nadiKuta = list.Find(pr => pr.Name == MatchPredictionName.NadiKuta);
+                    var rasiKuta = list.Find(pr => pr.Name == MatchPredictionName.RasiKuta);
+                    var rajju = list.Find(pr => pr.Name == MatchPredictionName.Rajju);
 
                     //if prediction is bad and exception can be applied
                     var nadiKutaIsBad = nadiKuta.Nature == EventNature.Bad;
@@ -201,43 +201,43 @@ namespace Genso.Astrology.Library
                     //based on prediction name add together the score
                     switch (prediction.Name)
                     {
-                        case Name.Mahendra:
+                        case MatchPredictionName.Mahendra:
                             break;
-                        case Name.NadiKuta:
+                        case MatchPredictionName.NadiKuta:
                             report.KutaScore += 8;
                             break;
-                        case Name.GunaKuta:
+                        case MatchPredictionName.GunaKuta:
                             report.KutaScore += 6;
                             break;
-                        case Name.Varna:
+                        case MatchPredictionName.Varna:
                             report.KutaScore += 1;
                             break;
-                        case Name.Yoni:
+                        case MatchPredictionName.Yoni:
                             report.KutaScore += 4;
                             break;
-                        case Name.Vedha:
+                        case MatchPredictionName.Vedha:
                             break;
-                        case Name.VasyaKuta:
+                        case MatchPredictionName.VasyaKuta:
                             report.KutaScore += 2;
                             break;
-                        case Name.GrahaMaitram:
+                        case MatchPredictionName.GrahaMaitram:
                             report.KutaScore += 5;
                             break;
-                        case Name.RasiKuta:
+                        case MatchPredictionName.RasiKuta:
                             report.KutaScore += 7;
                             break;
-                        case Name.StreeDeergha:
+                        case MatchPredictionName.StreeDeergha:
                             break;
-                        case Name.DinaKuta:
+                        case MatchPredictionName.DinaKuta:
                             report.KutaScore += 3;
                             break;
-                        case Name.KujaDosa:
+                        case MatchPredictionName.KujaDosa:
                             break;
-                        case Name.Rajju:
+                        case MatchPredictionName.Rajju:
                             break;
-                        case Name.LagnaAnd7thGood:
+                        case MatchPredictionName.LagnaAnd7thGood:
                             break;
-                        case Name.BadConstellation:
+                        case MatchPredictionName.BadConstellation:
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -256,7 +256,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.Mahendra,
+                Name = MatchPredictionName.Mahendra,
                 Description = "well-being and longevity"
             };
 
@@ -293,7 +293,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.NadiKuta,
+                Name = MatchPredictionName.NadiKuta,
                 Description = "nervous energy compatibility (important)"
             };
 
@@ -397,7 +397,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.GunaKuta,
+                Name = MatchPredictionName.GunaKuta,
                 Description = "temperament and character compatibility"
             };
 
@@ -535,7 +535,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.Varna,
+                Name = MatchPredictionName.Varna,
                 Description = "spiritual/ego compatibility"
             };
 
@@ -625,7 +625,7 @@ namespace Genso.Astrology.Library
 
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.Yoni,
+                Name = MatchPredictionName.Yoni,
                 Description = "sex compatibility"
             };
 
@@ -828,7 +828,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.Vedha,
+                Name = MatchPredictionName.Vedha,
                 Description = "birth constellations compatibility"
             };
 
@@ -913,7 +913,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.Rajju,
+                Name = MatchPredictionName.Rajju,
                 Description = "strength/duration of married life (important)"
             };
 
@@ -1039,7 +1039,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.VasyaKuta,
+                Name = MatchPredictionName.VasyaKuta,
                 Description = "degree of magnetic control"
             };
 
@@ -1224,7 +1224,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.GrahaMaitram,
+                Name = MatchPredictionName.GrahaMaitram,
                 Description = "happiness, mental compatibility (important)"
             };
 
@@ -1308,7 +1308,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.RasiKuta,
+                Name = MatchPredictionName.RasiKuta,
                 Description = "rasi compatibility"
             };
 
@@ -1502,7 +1502,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.StreeDeergha,
+                Name = MatchPredictionName.StreeDeergha,
                 Description = "husband well being, longevity and prosperity"
             };
 
@@ -1539,7 +1539,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CompatibilityPrediction
             {
-                Name = Name.DinaKuta,
+                Name = MatchPredictionName.DinaKuta,
                 Description = "day to day living compatibility"
             };
 
@@ -1571,7 +1571,6 @@ namespace Genso.Astrology.Library
             else
             {
                 prediction.Nature = EventNature.Bad;
-
             }
 
             prediction.Info = $"remainder is {remainder}";
@@ -1611,7 +1610,7 @@ namespace Genso.Astrology.Library
             var prediction = new CompatibilityPrediction();
             if (occuring)
             {
-                prediction.Name = Name.LagnaAnd7thGood;
+                prediction.Name = MatchPredictionName.LagnaAnd7thGood;
                 prediction.Nature = EventNature.Good;
                 prediction.Info = "marriage stable, mutual understanding and affection";
                 prediction.Description = "special combination";
@@ -1891,7 +1890,7 @@ namespace Genso.Astrology.Library
             {
                 var prediction = new CompatibilityPrediction
                 {
-                    Name = Name.KujaDosa,
+                    Name = MatchPredictionName.KujaDosa,
                     Description = "if bad, may cause death/bad health to spouse"
                 };
 
@@ -2010,9 +2009,65 @@ namespace Genso.Astrology.Library
             //if any of the above conditions met only then, fill in name & description
             if (prediction.Info != "")
             {
-                prediction.Name = Name.BadConstellation;
+                prediction.Name = MatchPredictionName.BadConstellation;
                 prediction.Description = "Evil constellation, if present analyse horoscope";
             }
+
+            return prediction;
+
+        }
+
+        public static CompatibilityPrediction SexualIncompatibility(Person male, Person female)
+        {
+            //When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts and
+            //such an individual should be mated to one who has similar instincts and not a person having Mercury or Jupiter in the 7th,
+            //as this makes one under-sexed. When sexual incompatibility sets in marriage,
+            //life proves charmless and friction arises between the couple.
+
+            var prediction = new CompatibilityPrediction();
+
+            //get the data needed
+            var maleStrongSex = EventCalculatorMethods.MarsVenusIn7th(male.BirthTime, male).Occuring;
+            var femaleStrongSex = EventCalculatorMethods.MarsVenusIn7th(female.BirthTime, female).Occuring;
+            var maleUnderSex = EventCalculatorMethods.MercuryOrJupiterIn7th(male.BirthTime, male).Occuring;
+            var femaleUnderSex = EventCalculatorMethods.MercuryOrJupiterIn7th(female.BirthTime, female).Occuring;
+            
+            //both strong and under-sexed are present skip this prediction
+            //note: this is just a precaution not to make any prediction
+            //if conflict, this is open to improvement 
+            var maleBoth = maleStrongSex && maleUnderSex;
+            var femaleBoth = femaleStrongSex && femaleUnderSex;
+            if (maleBoth || femaleBoth)
+            {
+                return prediction;
+            }
+
+            //check if occuring
+            if (maleStrongSex && femaleStrongSex)
+            {
+                prediction.Nature = EventNature.Good;
+                prediction.Info = "both horoscope Mars & Venus In 7th (strong sex)";
+            }
+
+            if (maleUnderSex && femaleUnderSex)
+            {
+                prediction.Nature = EventNature.Good;
+                prediction.Info = "both horoscope Mercury Or Jupiter In 7th (under-sexed)";
+            }
+
+            if (maleUnderSex && femaleStrongSex)
+            {
+                prediction.Nature = EventNature.Bad;
+                prediction.Info = "male under-sexed & female strong sex";
+            }
+
+            if (maleStrongSex && femaleUnderSex)
+            {
+                prediction.Nature = EventNature.Bad;
+                prediction.Info = "male strong sex & female under-sexed";
+            }
+
+
 
             return prediction;
 

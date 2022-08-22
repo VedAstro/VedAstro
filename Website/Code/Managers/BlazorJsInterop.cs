@@ -73,6 +73,17 @@ namespace Website
 
              await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
         }
+        
+        /// <summary>
+        /// Closes any currently showing SweetAlert
+        /// </summary>
+        public static void HideAlert(this IJSRuntime jsRuntime)
+        {
+            //log this, don't await to reduce lag
+            WebsiteLogManager.LogData(jsRuntime, "Alert Close");
+
+            jsRuntime.InvokeVoidAsync("Swal.close");
+        }
 
         /// <summary>
         /// Shows alert with return data for alerts with confirm button
@@ -100,13 +111,35 @@ namespace Website
             await jsRuntime.ShowAlert(alertData);
         }
 
+
         /// <summary>
         /// Shows leave email alert box and returns the email as string
         /// note: uses sweet alert js
         /// </summary>
         public static async Task<string> ShowLeaveEmailAlert(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("ShowLeaveEmailAlert");
 
+        /// <summary>
+        /// Shows loading box with auto progress bar using sweetalert
+        /// note: hide using HideAlert()
+        /// </summary>
+        public static void ShowLoading(this IJSRuntime jsRuntime)
+        {
 
+            var alertData = new
+            {
+                showConfirmButton = false,
+                width = "280px",
+                padding = "1px",
+                allowOutsideClick = false,
+                allowEscapeKey = false,
+                stopKeydownPropagation = true,
+                keydownListenerCapture = true,
+                html = "<img src=\"images/loading-animation-progress.gif\" />"
+
+            };
+
+             jsRuntime.ShowAlert(alertData);
+        }
 
         //TIPPY TOOLTIP LIBRARY
 

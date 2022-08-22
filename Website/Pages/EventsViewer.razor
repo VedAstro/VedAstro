@@ -115,7 +115,7 @@
     {
 
         //show loading box
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //set people list into people selector
         //note : without above first call _peopleSelectorBox is null
@@ -131,7 +131,7 @@
         _timeZonInput = DateTimeOffset.Now.ToString("zzz");
 
         //hide loading box
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
     }
 
@@ -150,7 +150,7 @@
     private async Task OnClickCalculate(MouseEventArgs obj)
     {
         //show loading box
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
 
 
@@ -166,7 +166,7 @@
         await _jsRuntime.AddToProgressBar( 5);
 
         //hide loading box
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
 
     }

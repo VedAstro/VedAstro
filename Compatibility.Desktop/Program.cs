@@ -59,7 +59,7 @@ namespace Compatibility
                 foreach (var prediction in list)
                 {
                     //if prediction is empty, than skip it
-                    if (prediction.Name == Name.Empty) { continue; }
+                    if (prediction.Name == MatchPredictionName.Empty) { continue; }
                     Console.WriteLine($"{prediction.Name}#{prediction.Nature}#{prediction.Description}#{prediction.Info}#{prediction.MaleInfo}#{prediction.FemaleInfo}");
                 }
 

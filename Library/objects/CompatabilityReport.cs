@@ -90,7 +90,7 @@ namespace Genso.Astrology.Library.Compatibility
 
                 foreach (var xElement in xmlData.Elements())
                 {
-                    var name = Enum.Parse<Name>(xElement.Element("Name")?.Value);
+                    var name = Enum.Parse<MatchPredictionName>(xElement.Element("Name")?.Value);
                     var nature = Enum.Parse<EventNature>(xElement.Element("Nature")?.Value);
                     var maleInfo = xElement.Element("MaleInfo")?.Value;
                     var femaleInfo = xElement.Element("FemaleInfo")?.Value;

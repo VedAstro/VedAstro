@@ -140,12 +140,12 @@
     private async Task OnLocationNameUpdated(FocusEventArgs obj)
     {
         //show loading to user
-        await _globalVariable.LoadingMessage.Show();
+        //_jsRuntime.ShowLoading();
 
         await SetCoordinatesFromNameInput();
 
         //hide loading from user
-        await _globalVariable.LoadingMessage.Hide();
+        //_jsRuntime.HideAlert();
 
     }
 

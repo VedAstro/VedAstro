@@ -93,7 +93,7 @@
     {
 
         ////show loading box
-        //await _globalVariable.LoadingMessage.Show();
+        //_jsRuntime.ShowLoading();
 
         ////set people list into people selector
         ////note : without above first call _peopleSelectorBox is null
@@ -101,13 +101,13 @@
         //_peopleSelectorBox.SetData(PersonList);
 
         ////hide loading box
-        //await _globalVariable.LoadingMessage.Hide();
+        //_jsRuntime.HideAlert();
     }
 
 
     private async Task DoCalculation()
     {
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //get data from inputs and save it for use by other components
         SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
@@ -120,7 +120,7 @@
         //mark page as ready to show results
         _isResultReady = true;
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
     }
 
 

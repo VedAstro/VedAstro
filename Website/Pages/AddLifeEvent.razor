@@ -48,7 +48,7 @@
 
     private async Task AddButtonClicked()
     {
-        await _globalVariable.LoadingMessage.Show();
+        _jsRuntime.ShowLoading();
 
         //create an life event from the inputed data
         var _inputedLifeEvent = new LifeEvent
@@ -69,7 +69,7 @@
 
 
         //page ready
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
 
         //show message to user
         await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);

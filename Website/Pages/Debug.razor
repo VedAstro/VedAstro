@@ -1,0 +1,39 @@
+﻿@attribute [Route(PageRoute.Debug)]
+
+<IconButton ButtonText="Show Loading" OnClickCallback="Callback"></IconButton>
+<IconButton ButtonText="Hide Loading" OnClickCallback="Callback2"></IconButton>
+
+@code {
+
+    private async Task Callback()
+    {
+         
+
+
+        var alertData = new
+        {
+            showConfirmButton = false,
+            width = "280px",
+            padding = "1px",
+            allowOutsideClick = false,
+            allowEscapeKey = false,
+            stopKeydownPropagation = true,
+            keydownListenerCapture = true,
+            html = "<img src=\"images/loading-animation-progress.gif\" />"
+
+        };
+
+        _jsRuntime.ShowAlert(alertData);
+
+        //await Task.Delay(1000);
+
+        //_jsRuntime.InvokeVoidAsync("Swal.close");
+
+    }
+    private void Callback2()
+    {
+         _jsRuntime.InvokeVoidAsync("Swal.showLoading");
+
+    }
+
+}

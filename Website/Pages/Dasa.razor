@@ -4,6 +4,16 @@
 @*<UnderConstructionHeader PageName="Dasa" />
 *@
 
+<PageTitle>Dasa</PageTitle>
+<PageTop Title="Dasa" IconName="fluent:book-star-20-filled">
+    <Description>Astrological predictions of a person's horoscope</Description>
+    <ButtonsRow>
+        <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
+        <IconButton IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
+        <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+    </ButtonsRow>
+</PageTop>
+
 
 
 <div class="vstack gap-2">
@@ -15,9 +25,8 @@
     <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
 
     @*CALCULATE BTN*@
-    <div>
-        <button @onclick="OnClickCalculate" class="btn btn-primary">Calculate</button>
-    </div>
+    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
+
     <hr>
     @*DASA VIEW BOX*@
     <div>
@@ -64,11 +73,32 @@
     </div>
 </div>
 
+@*HELP SECTION*@
+<PageHelpSection @ref="_helpSection">
+    <Content>
+        <h4 class="fw-bold">Where are these predictions from?</h4>
+        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+            Prediction data come from books by renowned astrologer B.V. Raman.
+            Books such as <span class="fw-bold">How to Judge Horoscope</span> and
+            <span class="fw-bold">Hindu Predictive Astrology</span>,
+            were used to make this calculator.
+        </p>
+
+        <h4 class="fw-bold">How to use these predictions?</h4>
+        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+            For accurate predictions, results must be duly modified
+            or qualified according to the affliction or otherwise of the
+            planets concerned. For example, predictions involving planets with
+            high strength (Bhava Bala), is often accurate.
+        </p>
+    </Content>
+</PageHelpSection>
 
 
 @code {
 
     //--------------------FIELDS
+    private PageHelpSection _helpSection;
 
     private PeopleSelectorBox? _peopleSelectorBox;
 
@@ -100,7 +130,7 @@
     {
         //todo below marked for deletion 10/1/2022
         ////show loading box
-        //await _globalVariable.LoadingMessage.Show();
+        //_jsRuntime.ShowLoading();
 
         ////set people list into people selector
         ////note : without above first call _peopleSelectorBox is null
@@ -108,18 +138,17 @@
         //_peopleSelectorBox.SetData(PersonList);
 
         ////hide loading box
-        //await _globalVariable.LoadingMessage.Hide();
+        //_jsRuntime.HideAlert();
     }
 
 
     private async Task DoCalculation()
     {
-
         //only continue if passed input field validation
         if (!ValidationPassed()) { return; }
 
-        await _globalVariable.LoadingMessage.Show();
-
+        _jsRuntime.ShowLoading();
+        
         //get data from inputs and save it for use by other components
         SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
 
@@ -148,7 +177,7 @@
         //mark page as ready to show results
         _isResultReady = true;
 
-        await _globalVariable.LoadingMessage.Hide();
+        _jsRuntime.HideAlert();
     }
 
     /// <summary>

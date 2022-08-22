@@ -16,6 +16,8 @@
         public const string MatchReportInfo = @"Extra astrological info for the given result";
         public const string MatchReportMale = @"Extra astrological info regarding male horoscope";
         public const string MatchReportFemale = @"Extra astrological info regarding female horoscope";
+        public const string AskAstrologerQuestion = @"Common questions to ask the astrologer";
+        public const string AskAstrologerDetails = @"Give extra info regarding your question.";
 
         public const string Dasa =
             @"

@@ -5,7 +5,7 @@
 <PageTitle>Contact</PageTitle>
 
 <PageTop Title="Contact us" IconName="fluent:chat-mail-20-filled">
-    <Description>Contact us anytime. You can report a bug, suggest a feature or just say Hi. We'll always reply.</Description>
+    <Description>You can report a bug, suggest a feature or just say Hi. We'll always reply.</Description>
 </PageTop>
 
 <div @ref="_messageFormElement" class="vstack gap-2" style="max-width:@AppData.MaxWidth;">
@@ -59,19 +59,14 @@
         //loading box show
         _jsRuntime.ShowLoading();
 
-        await _jsRuntime.AddToProgressBar(10);
-
-
-        //package message data to be sent
+    //package message data to be sent
         var textXml = new XElement("Text", _messageInput);
         var emailXml = new XElement("Email", _emailInput);
         var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
         var messageXml = new XElement("Message", userIdXml, emailXml, WebsiteTools.TimeStampXml, textXml);
-        await _jsRuntime.AddToProgressBar(10);
 
         //send message to API server
         await ServerManager.WriteToServerXmlReply(ServerManager.AddMessageApi, messageXml);
-        await _jsRuntime.AddToProgressBar(20);
 
 
         //hide message form

@@ -97,7 +97,12 @@ namespace Website
             return await jsRuntime.InvokeAsync<JsonElement>("Swal.fire", alertData);
         }
 
-        public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, bool showConfirmButton, int timer)
+        /// <summary>
+        /// Shows alert using sweet alert js
+        /// </summary>
+        /// <param name="timer">milliseconds to auto close alert (optional)</param>
+        /// <returns></returns>
+        public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, bool showConfirmButton, int timer = 0)
         {
 
             var alertData = new

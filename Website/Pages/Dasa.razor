@@ -148,7 +148,7 @@
         if (!ValidationPassed()) { return; }
 
         _jsRuntime.ShowLoading();
-        
+
         //get data from inputs and save it for use by other components
         SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
 
@@ -185,21 +185,19 @@
     /// </summary>
     private bool ValidationPassed()
     {
-        var isValid = true;
-
         //TEST 1
         //if person not selected, invalid
         if (!_peopleSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
-            isValid = false;
             var msg = $"Select person name!";
             _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            return false;
         }
 
 
-
-        return isValid;
+        //if control reaches here than, it's valid
+        return true;
     }
 
 

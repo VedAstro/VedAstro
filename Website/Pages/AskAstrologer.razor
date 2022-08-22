@@ -1,0 +1,136 @@
+﻿@using System.Xml.Linq
+@attribute [Route(PageRoute.AskAstrolger)]
+
+<PageTitle>Ask Astrologer For Free</PageTitle>
+<PageTop Title="Ask Astrologer" IconName="wpf:ask-question">
+    <Description>
+        In our non-profit effort to help people.
+        We provide <span class="fw-bold">FREE</span> vedic astrology service.
+        <br/>Ask astrologer about your finance, marriage, health, etc.
+    </Description>
+    <ButtonsRow>
+        <IconButton IconName="iconoir:donate" ButtonText="Donate" OnClickCallback="() => _navigation.NavigateTo(PageRoute.DonatePayment)"></IconButton>
+        <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+    </ButtonsRow>
+</PageTop>
+
+
+
+<div class="vstack gap-2 mb-5 mt-2" style="max-width: @AppData.MaxContentWidthPx;">
+
+    <div>
+        <label for="emailInputId">Email</label>
+        <input @bind="_emailInput" type="text" id="emailInputId" class="form-control" placeholder="john@example.com">
+    </div>
+
+    <div>
+        <label class="form-label">
+            Question
+            <HelpBox SmallIcon="true" HelpText="@HelpText.AskAstrologerQuestion"></HelpBox>
+        </label>
+        <select @bind="_questionInput" class="form-control">
+            <option value="When is my marriage?">When is my marriage?</option>
+            <option value="Should I get a divorce?">Should I get a divorce?</option>
+            <option value="When is my job promotion?">When is my job promotion?</option>
+            <option value="My good &amp; bad periods in life?">My good &amp; bad periods in life?</option>
+            <option value="Can I invest in risky business?">Can I invest in risky business?</option>
+            <option value="Will I win the lottery?">Will I win the lottery?</option>
+            <option value="Others">Others</option>
+
+        </select>
+    </div>
+
+    <div>
+        <label for="messageInputId">
+            Details
+            <HelpBox SmallIcon="true" HelpText="@HelpText.AskAstrologerDetails"></HelpBox>
+        </label>
+        <textarea style="min-height: 132px;" class="form-control" @bind="_detailsInput" id="messageInputId" placeholder="Enter extra info about your question"></textarea>
+    </div>
+    <IconButton OnClickCallback="SendMessage" ButtonText="Send" IconName="bi:send-check" />
+</div>
+
+
+
+@*HELP SECTION*@
+<PageHelpSection @ref="_helpSection">
+    <Content>
+        <h4 class="fw-bold">How long to get reply?</h4>
+        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+            Our astrologers will try to reply as soon as possible.
+            Please remember, it will take some time for an astrologer to analyse
+            your chart and give you an accurate reading.
+            Depending on your question and the availability of the astrologers the time will differ.
+        </p>
+
+        <h4 class="fw-bold">I'm an Astrologer, can I help?</h4>
+        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+            That's great! We need astrologers like you to help people
+            around the world with the knowledge of Vedic Astrology.
+            Go to our contact page and let us know that you'd like to join.
+        </p>
+    </Content>
+</PageHelpSection>
+
+
+@code {
+    private PageHelpSection _helpSection;
+
+    private string? _questionInput;
+    private string? _detailsInput;
+    private string? _emailInput;
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    private async Task SendMessage()
+    {
+
+        //only continue if passed input field validation
+        if (!ValidationPassed()) { return; }
+
+        //loading box show
+        _jsRuntime.ShowLoading();
+
+        //package message data to be sent
+        var detailsXml = new XElement("Details", _detailsInput);
+        var questionXml = new XElement("Question", _questionInput);
+        var emailXml = new XElement("Email", _emailInput);
+        var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
+        var messageXml = new XElement("Message", userIdXml, emailXml, WebsiteTools.TimeStampXml, detailsXml, questionXml);
+
+        //send message to API server
+        await ServerManager.WriteToServerXmlReply(ServerManager.AddMessageApi, messageXml);
+
+        //hide loading box
+        _jsRuntime.HideAlert();
+
+        await _jsRuntime.ShowAlert("success", "Thank you, our astrologer will contact you soon!", false, 3000);
+
+        //reload page
+        WebsiteTools.ReloadPage(_navigation);
+    }
+
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private bool ValidationPassed()
+    {
+
+        //TEST 1
+        //email is filled
+        if (string.IsNullOrWhiteSpace(_emailInput))
+        {
+            //mark invalid & alert user
+            var msg = $"Please give email for astrologer to contact you!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            return false;
+        }
+
+
+        //if control reaches here than, it's valid
+        return true;
+    }
+}

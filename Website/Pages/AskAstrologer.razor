@@ -6,7 +6,7 @@
     <Description>
         In our non-profit effort to help people.
         We provide <span class="fw-bold">FREE</span> vedic astrology service.
-        <br/>Ask astrologer about your finance, marriage, health, etc.
+        <br />Ask astrologer about your finance, marriage, health, etc.
     </Description>
     <ButtonsRow>
         <IconButton IconName="iconoir:donate" ButtonText="Donate" OnClickCallback="() => _navigation.NavigateTo(PageRoute.DonatePayment)"></IconButton>
@@ -29,13 +29,14 @@
             <HelpBox SmallIcon="true" HelpText="@HelpText.AskAstrologerQuestion"></HelpBox>
         </label>
         <select @bind="_questionInput" class="form-control">
+            <option value="">Select</option>
             <option value="When is my marriage?">When is my marriage?</option>
             <option value="Should I get a divorce?">Should I get a divorce?</option>
             <option value="When is my job promotion?">When is my job promotion?</option>
             <option value="My good &amp; bad periods in life?">My good &amp; bad periods in life?</option>
             <option value="Can I invest in risky business?">Can I invest in risky business?</option>
             <option value="Will I win the lottery?">Will I win the lottery?</option>
-            <option value="Others">Others</option>
+            <option value="Other">Other</option>
 
         </select>
     </div>
@@ -98,7 +99,8 @@
         var questionXml = new XElement("Question", _questionInput);
         var emailXml = new XElement("Email", _emailInput);
         var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
-        var messageXml = new XElement("Message", userIdXml, emailXml, WebsiteTools.TimeStampXml, detailsXml, questionXml);
+        var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
+        var messageXml = new XElement("Message", userIdXml,visitorIdXml, emailXml, WebsiteTools.TimeStampXml, detailsXml, questionXml);
 
         //send message to API server
         await ServerManager.WriteToServerXmlReply(ServerManager.AddMessageApi, messageXml);
@@ -125,7 +127,17 @@
         {
             //mark invalid & alert user
             var msg = $"Please give email for astrologer to contact you!";
-            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            _jsRuntime.ShowAlert("error", msg, true);
+            return false;
+        }
+
+        //TEST 2
+        //email is filled
+        if (string.IsNullOrWhiteSpace(_questionInput))
+        {
+            //mark invalid & alert user
+            var msg = $"Please select a question or choose other";
+            _jsRuntime.ShowAlert("error", msg, true);
             return false;
         }
 

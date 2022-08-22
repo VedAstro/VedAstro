@@ -40,7 +40,7 @@ namespace Genso.Astrology.Library
                     MatchCalculator.LagnaAndHouse7Good(male, female),
                     MatchCalculator.KujaDosa(male, female),
                     MatchCalculator.BadConstellations(male, female),
-                    MatchCalculator.SexualIncompatibility(male, female)
+                    MatchCalculator.SexEnergyCompatibility(male, female)
                 }
             };
 
@@ -1963,7 +1963,7 @@ namespace Genso.Astrology.Library
             var prediction = new CompatibilityPrediction
             {
                 Name = MatchPredictionName.BadConstellation,
-                Description = "evil constellation in spouse's birth chart"
+                Description = "checks if evil constellation is in chart"
             };
 
             //get female constellation
@@ -2021,7 +2021,7 @@ namespace Genso.Astrology.Library
 
         }
 
-        public static CompatibilityPrediction SexualIncompatibility(Person male, Person female)
+        public static CompatibilityPrediction SexEnergyCompatibility(Person male, Person female)
         {
             //When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts and
             //such an individual should be mated to one who has similar instincts and not a person having Mercury or Jupiter in the 7th,
@@ -2030,7 +2030,7 @@ namespace Genso.Astrology.Library
 
             var prediction = new CompatibilityPrediction
             {
-                Name = MatchPredictionName.SexualIncompatibility,
+                Name = MatchPredictionName.SexEnergyCompatibility,
                 Description = "sexual compatibility based on planets in 7th house"
             };
 
@@ -2040,6 +2040,12 @@ namespace Genso.Astrology.Library
             var femaleStrongSex = EventCalculatorMethods.MarsVenusIn7th(female.BirthTime, female).Occuring;
             var maleUnderSex = EventCalculatorMethods.MercuryOrJupiterIn7th(male.BirthTime, male).Occuring;
             var femaleUnderSex = EventCalculatorMethods.MercuryOrJupiterIn7th(female.BirthTime, female).Occuring;
+
+            //fill extra info
+            if (maleStrongSex) { prediction.MaleInfo = "Strong Sex"; }
+            if (femaleStrongSex) { prediction.FemaleInfo = "Strong Sex"; }
+            if (maleUnderSex) { prediction.MaleInfo = "Under-Sexed"; }
+            if (femaleUnderSex) { prediction.FemaleInfo = "Under-Sexed"; }
 
             //both strong and under-sexed are present skip this prediction
             //note: this is just a precaution not to make any prediction

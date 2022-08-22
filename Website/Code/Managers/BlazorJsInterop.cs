@@ -139,7 +139,7 @@ namespace Website
                 allowEscapeKey = false,
                 stopKeydownPropagation = true,
                 keydownListenerCapture = true,
-                html = "<img src=\"images/loading-animation-progress.gif\" />"
+                html = "<img src=\"images/loading-animation-progress-transparent.gif\" />"
 
             };
 

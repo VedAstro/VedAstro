@@ -11,7 +11,7 @@
         public const string PersonAdvanced = @"This is optional";
         public const string DateInput = @"Format Example: 5th January 2020 is 05/01/2020";
         public const string TimezoneInput = @"Standard timezone used at location (UTC/GMT)";
-        public const string MatchReportName = @"Name of the astrological method used";
+        public const string MatchReportName = @"Sanskrit name of the Kutas or Pooruththam which are astrological methods used for calculation";
         public const string MatchReportResult = @"Sumarized result of the calculation";
         public const string MatchReportInfo = @"Extra astrological info for the given result";
         public const string MatchReportMale = @"Extra astrological info regarding male horoscope";

@@ -10,6 +10,7 @@
     <Description>Below is the results.</Description>
     <ButtonsRow>
         <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" ClickUrl="@PageRoute.Match"></IconButton>
+        <IconButton IconName="carbon:report" ButtonText="Advanced Chart" OnClickCallback="() => showAdvanced = !showAdvanced"></IconButton>
         <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
 </PageTop>
@@ -19,16 +20,20 @@
 @if (_report != null)
 {
 
-    <h3>@MaleName + @FemaleName = Score <b style="color:@GetScoreColor(_report.KutaScore);">@_report.KutaScore/100</b></h3>
+    <h3>@MaleName + @FemaleName</h3>
+    <h2>Score <b style="color:@GetScoreColor(_report.KutaScore);">@_report.KutaScore/100</b></h2>
 
     <table class="table table-striped table-hover table-bordered">
         <thead class="table-dark">
             <tr>
                 <th scope="col"><span class="hstack gap-2">Name<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportName"></HelpBox></span></th>
                 <th scope="col"><span class="hstack gap-2">Result<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportResult"></HelpBox></span></th>
-                <th scope="col"><span class="hstack gap-2">Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportInfo"></HelpBox></span></th>
-                <th scope="col"><span class="hstack gap-2">Male Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportMale"></HelpBox></span></th>
-                <th scope="col"><span class="hstack gap-2">Female Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportFemale"></HelpBox></span></th>
+                @if (showAdvanced)
+                {
+                    <th scope="col"><span class="hstack gap-2">Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportInfo"></HelpBox></span></th>
+                    <th scope="col"><span class="hstack gap-2">Male Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportMale"></HelpBox></span></th>
+                    <th scope="col"><span class="hstack gap-2">Female Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportFemale"></HelpBox></span></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -39,13 +44,16 @@
 
                 <tr>
                     <td scope="row">
-                        <b>@prediction.FormattedName <HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportFemale"></HelpBox></b>
-                        <p><small>@prediction.Description</small></p>
+                        <b>@prediction.FormattedName</b>
+                        <p style="margin: 0px;" ><small>@prediction.Description</small></p>
                     </td>
                     <td style="color:@GetNatureColor(prediction.Nature);"><b>@prediction.Nature</b></td>
-                    <td>@prediction.Info</td>
-                    <td>@prediction.MaleInfo</td>
-                    <td>@prediction.FemaleInfo</td>
+                    @if (showAdvanced)
+                    {
+                        <td>@prediction.Info</td>
+                        <td>@prediction.MaleInfo</td>
+                        <td>@prediction.FemaleInfo</td>
+                    }
                 </tr>
             }
         </tbody>
@@ -56,16 +64,18 @@
 @*HELP SECTION*@
 <PageHelpSection @ref="_helpSection">
     <Content>
-        <h4 class="fw-bold">Where are these predictions from?</h4>
+        <h4 class="fw-bold">Three Factors</h4>
         <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
             In selecting horoscopes for marriage purposes, three factors have to be
             carefully considered. They are: -
-            (a) The longevity of the bride and the bridegroom.
-            (b) The larger strength of the 7th and 8th houses.
-            (c) Agreeability in regard to the Kutas or pooruththam.
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item">The longevity of the bride and the bridegroom.</li>
+                <li class="list-group-item">The larger strength of the 7th and 8th houses.</li>
+                <li class="list-group-item">Agreeability in regard to the Kutas or Pooruththam.</li>
+            </ol>
         </p>
 
-        <h4 class="fw-bold">How to use these predictions?</h4>
+        <h4 class="fw-bold">Longevity</h4>
         <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
             When there is no longevity in the case of bride, the horoscope must be
             rejected even though the 7th house may be strong or the requsite
@@ -85,6 +95,8 @@
     [Parameter]
     public string? FemaleHash { get; set; } //data from URL not necessary provided
 
+    //if true shows extra info columns
+    bool showAdvanced = false;
     string MaleName;
     string FemaleName;
 
@@ -99,10 +111,6 @@
 
     //generate the report
     protected override async Task OnInitializedAsync() => _report = await GetCompatibilityReport(MaleHash ?? "", FemaleHash ?? "");
-
-    //hide the loading message that was open in init
-    protected override async Task OnAfterRenderAsync(bool firstRender) => _jsRuntime.HideAlert();
-
 
 
 
@@ -143,6 +151,8 @@
 
         //parse report
         var matchReport = CompatibilityReport.FromXml(matchReportXml);
+
+        _jsRuntime.HideAlert();
 
         //return parsed report to caller
         return matchReport;

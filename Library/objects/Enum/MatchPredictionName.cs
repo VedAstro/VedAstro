@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Represents the name of the match prediction method
+    /// Only used in specialized match calculators
     /// </summary>
     public enum MatchPredictionName
     {
@@ -23,6 +24,7 @@
         KujaDosa,
         Rajju,
         LagnaAnd7thGood,
-        BadConstellation
+        BadConstellation,
+        SexualIncompatibility
     }
 }

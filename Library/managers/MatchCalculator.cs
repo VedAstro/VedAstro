@@ -39,8 +39,8 @@ namespace Genso.Astrology.Library
                     MatchCalculator.YoniKuta(male, female),//4
                     MatchCalculator.LagnaAndHouse7Good(male, female),
                     MatchCalculator.KujaDosa(male, female),
-                    MatchCalculator.BadConstellations(male, female)
-
+                    MatchCalculator.BadConstellations(male, female),
+                    MatchCalculator.SexualIncompatibility(male, female)
                 }
             };
 
@@ -1953,13 +1953,18 @@ namespace Genso.Astrology.Library
 
         public static CompatibilityPrediction BadConstellations(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction();
-
             // Almost all authors agree that certain parts of Moola, Astesha, Jyeshta and Visakha are destructive
             // constellations -
             // Aslesha (first quarter) for husband's mother;
             // Jyeshta (first quarter) for girl's husband's elder brother;
             // and Visakha (last quarter) for husband's younger brother.
+
+
+            var prediction = new CompatibilityPrediction
+            {
+                Name = MatchPredictionName.BadConstellation,
+                Description = "evil constellation in spouse's birth chart"
+            };
 
             //get female constellation
             var femaleConstellation = AstronomicalCalculator.GetMoonConstellation(female.BirthTime);
@@ -2005,12 +2010,11 @@ namespace Genso.Astrology.Library
                 prediction.Info = "cause evil to husband's younger brother";
             }
 
-
-            //if any of the above conditions met only then, fill in name & description
-            if (prediction.Info != "")
+            //if no conditions above met, then it is good
+            if (prediction.Info == "")
             {
-                prediction.Name = MatchPredictionName.BadConstellation;
-                prediction.Description = "Evil constellation, if present analyse horoscope";
+                prediction.Nature = EventNature.Good;
+                prediction.Info = "No evil constellation in either person";
             }
 
             return prediction;
@@ -2024,14 +2028,19 @@ namespace Genso.Astrology.Library
             //as this makes one under-sexed. When sexual incompatibility sets in marriage,
             //life proves charmless and friction arises between the couple.
 
-            var prediction = new CompatibilityPrediction();
+            var prediction = new CompatibilityPrediction
+            {
+                Name = MatchPredictionName.SexualIncompatibility,
+                Description = "sexual compatibility based on planets in 7th house"
+            };
+
 
             //get the data needed
             var maleStrongSex = EventCalculatorMethods.MarsVenusIn7th(male.BirthTime, male).Occuring;
             var femaleStrongSex = EventCalculatorMethods.MarsVenusIn7th(female.BirthTime, female).Occuring;
             var maleUnderSex = EventCalculatorMethods.MercuryOrJupiterIn7th(male.BirthTime, male).Occuring;
             var femaleUnderSex = EventCalculatorMethods.MercuryOrJupiterIn7th(female.BirthTime, female).Occuring;
-            
+
             //both strong and under-sexed are present skip this prediction
             //note: this is just a precaution not to make any prediction
             //if conflict, this is open to improvement 
@@ -2067,6 +2076,12 @@ namespace Genso.Astrology.Library
                 prediction.Info = "male strong sex & female under-sexed";
             }
 
+            //if no conditions above met, then set as neutral
+            if (prediction.Info == "")
+            {
+                prediction.Nature = EventNature.Neutral;
+                prediction.Info = "No evil or good, neutral result";
+            }
 
 
             return prediction;

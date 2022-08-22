@@ -5,7 +5,7 @@
 <PageTitle>Horoscope Data</PageTitle>
 
 <PageTop Title="Horoscope Data" IconName="carbon:graphical-data-flow">
-    <Description>Raw astrological info of a person's horoscope</Description>
+    <Description>Raw astrological info of a person's horoscope. This is useful to make advanced predictions.</Description>
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
         <IconButton IconName="fluent:people-list-24-filled" ButtonText="Person List" ClickUrl="@PageRoute.PersonList"></IconButton>
@@ -69,7 +69,7 @@
         //only continue if passed input field validation
         if (!ValidationPassed()) { return; }
 
-        //todo loading box not working
+        _jsRuntime.ShowLoading();
 
         //get data from inputs and save it for use by other components
         SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
@@ -77,6 +77,7 @@
         //mark page as ready to show results
         _isResultReady = true;
 
+        _jsRuntime.HideAlert();
     }
 
     /// <summary>

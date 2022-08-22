@@ -1,4 +1,5 @@
 ﻿using Genso.Astrology.Library;
+using Microsoft.AspNetCore.Components;
 
 namespace Website
 {
@@ -7,6 +8,12 @@ namespace Website
     /// </summary>
     public static class AppData
     {
+
+        /// <summary>
+        /// Shortcut text to show credit
+        /// </summary>
+        public static MarkupString HinduPredictiveAstrologyCredit = new("<p class=\"fst-italic fw-light\"><small>(Source Credit: Hindu Predictive Astrology by B.V.Raman)</small></p>");
+        public static MarkupString MuhurthaCredit = new("<p class=\"fst-italic fw-light\"><small>(Source Credit: Muhurtha by B.V.Raman)</small></p>");
 
         /// <summary>
         /// Represents the currently logged in User

@@ -5,11 +5,13 @@
 *@
 
 <PageTitle>Dasa</PageTitle>
-<PageTop Title="Dasa" IconName="fluent:book-star-20-filled">
-    <Description>Astrological predictions of a person's horoscope</Description>
+<PageTop Title="Dasa and Bhukti" IconName="fluent:book-star-20-filled">
+    <Description>
+        Dasas are major periods in which the indications of the planets are realised.
+        Know good and bad periods of your life years ahead.
+    </Description>
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
-        <IconButton IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
         <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
 </PageTop>
@@ -27,17 +29,21 @@
     @*CALCULATE BTN*@
     <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 
-    <hr>
-    @*DASA VIEW BOX*@
-    <div>
-        <HelpBox Label="Dasa" HelpText="@HelpText.Dasa"></HelpBox>
-        <DasaReportViewer @ref="_dasaReportViewer" />
+    @*hide until ready but initialized as well*@
+    <div style="@(_isResultReady?"":"display:none;")">
+        <hr>
+        @*DASA VIEW BOX*@
+        <div>
+            <HelpBox Label="Dasa" HelpText="@HelpText.Dasa"></HelpBox>
+            <DasaReportViewer @ref="_dasaReportViewer" />
+        </div>
     </div>
-    <hr>
-    @*PLANET INFO LIST*@
-    <div>
-        @if (_isResultReady)
-        {
+
+    @if (_isResultReady)
+    {
+        <hr>
+        @*PLANET INFO LIST*@
+        <div>
             <h4 class="mt-2">Planets</h4>
             <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
                 <PlanetInfoBox PlanetName="PlanetName.Sun" Time="@SelectedPerson.BirthTime" />
@@ -48,12 +54,9 @@
                 <PlanetInfoBox PlanetName="PlanetName.Saturn" Time="@SelectedPerson.BirthTime" />
                 <PlanetInfoBox PlanetName="PlanetName.Venus" Time="@SelectedPerson.BirthTime" />
             </div>
-        }
-    </div>
-    @*HOUSE INFO LIST*@
-    <div>
-        @if (_isResultReady)
-        {
+        </div>
+        @*HOUSE INFO LIST*@
+        <div>
             <h4 class="mt-2">Houses</h4>
             <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
                 <HouseInfoBox HouseNumber="1" Time="@SelectedPerson.BirthTime" />
@@ -69,28 +72,44 @@
                 <HouseInfoBox HouseNumber="11" Time="@SelectedPerson.BirthTime" />
                 <HouseInfoBox HouseNumber="12" Time="@SelectedPerson.BirthTime" />
             </div>
-        }
-    </div>
+        </div>
+
+    }
 </div>
 
 @*HELP SECTION*@
 <PageHelpSection @ref="_helpSection">
     <Content>
-        <h4 class="fw-bold">Where are these predictions from?</h4>
+
+        <h4 class="fw-bold">Purpose?</h4>
         <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
-            Prediction data come from books by renowned astrologer B.V. Raman.
-            Books such as <span class="fw-bold">How to Judge Horoscope</span> and
-            <span class="fw-bold">Hindu Predictive Astrology</span>,
-            were used to make this calculator.
+            The vexed question of timing events is solved to a great
+            extent by the Dasa system. From a scientific point of view,
+            we cannot say with any sort of definiteness, upon what basis
+            each planet is allotted a certain number of years as its term of Dasa.
+            But in actual practice, the Dasa system yields very satisfactory result
         </p>
 
-        <h4 class="fw-bold">How to use these predictions?</h4>
-        <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
-            For accurate predictions, results must be duly modified
-            or qualified according to the affliction or otherwise of the
-            planets concerned. For example, predictions involving planets with
-            high strength (Bhava Bala), is often accurate.
+        <h4 class="fw-bold">What Dasa system do you use?</h4>
+        <p class="text-justify mb-4" style="max-width: @AppData.MaxWidth;">
+            There are any number of Dasas in general use,
+            but we propose to deal with Vimshottari. In the
+            choice of any particular type of Dasa, the criterion must be
+            that of experience and Vimshottari has answered this test.
         </p>
+
+        <h4 class="fw-bold">How to calculate?</h4>
+        <p class="text-justify mb-4" style="max-width: @AppData.MaxWidth;">
+            The position of the Moon at birth is important in the
+            calculation of the Dasas. Every constellation covers 13.3°
+            degrees of the zodiacal space. Each nakshatra has a planet
+            assigned as its lord and the Dasa at birth is determined rather
+            indicated by the constellation occupied by the Moon at the
+            moment of birth.
+        </p>
+
+        @AppData.HinduPredictiveAstrologyCredit
+
     </Content>
 </PageHelpSection>
 

@@ -63,6 +63,10 @@
         {
             //this stops update loops
             if (_selectedPersonHash == value) return;
+
+            //log this, don't await to reduce lag
+            WebsiteLogManager.LogData(_jsRuntime, $"Selected Person:{value}");
+
             _selectedPersonHash = value;
             //update value in parent page
             SelectedPersonHashChanged.InvokeAsync(value);
@@ -113,6 +117,6 @@
     /// <summary>
     /// True if a person has been selected else false
     /// </summary>
-    public bool IsPersonSelected => SelectedPersonHash != NotSelectedPersonHash;
+    public bool IsPersonSelected => SelectedPersonHash != NotSelectedPersonHash && SelectedPersonHash != null && SelectedPersonHash != "";
 
 }

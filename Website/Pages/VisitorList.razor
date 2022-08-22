@@ -236,8 +236,7 @@
         var deviceType = visitorXml.Element("BrowserData")?.Element("device")?.Element("type")?.Value;
         var errorMessage = visitorXml.Element("Error")?.Element("Message")?.Value;
         var errorTime = visitorXml.Element("Error")?.Element("Time")?.Value;
-        var buttonText = visitorXml.Element("ButtonText")?.Value;
-        var alertMessage = visitorXml.Element("AlertMessage")?.Value;
+        var data = visitorXml.Element("Data")?.Value;
         var screenWidth = visitorXml.Element("ScreenData")?.Element("Width")?.Value;
         var screenHeight = visitorXml.Element("ScreenData")?.Element("Height")?.Value;
         var screenOrientation = visitorXml.Element("ScreenData")?.Element("Orientation")?.Value;
@@ -249,8 +248,8 @@
                         <li class=""list-group-item active"" aria-current=""true"">Visitor</li>
                         <li class=""list-group-item"">{userId}</li>
                         <li class=""list-group-item"">{visitorId}</li>
-                        <li class=""list-group-item"">{buttonText} {url}</li>
-                        <li class=""list-group-item"">{alertMessage}</li>
+                        <li class=""list-group-item"">{url}</li>
+                        <li class=""list-group-item"">{data}</li>
                         <li class=""list-group-item"">{originUrl}</li>
                         <li class=""list-group-item"">{timeStamp}</li>
                         <li class=""list-group-item"">{organization}</li>

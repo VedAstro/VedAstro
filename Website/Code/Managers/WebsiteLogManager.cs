@@ -48,7 +48,6 @@ namespace Website
 
         }
 
-
         /// <summary>
         /// Makes a log of the exception in API server
         /// </summary>
@@ -160,14 +159,7 @@ namespace Website
             return;
 #endif
 
-            //get basic visitor data
-            var visitorXml = await GetVisitorDataXml(jsRuntime);
-
-            //add in button click data
-            visitorXml.Add(new XElement("ButtonText", buttonText));
-
-            //send to server for storage
-            await SendLogToServer(visitorXml);
+            await LogData(jsRuntime, $"Button Text:{buttonText}");
 
         }
 
@@ -183,7 +175,7 @@ namespace Website
             Console.WriteLine("BLZ: LogAlert: DEBUG mode, skipped logging to server");
             return;
 #endif
-            string alertMessage = "";
+            var alertMessage = "";
             try
             {
                 alertMessage = ((dynamic)alertData)?.title ?? "";
@@ -194,17 +186,33 @@ namespace Website
                 // so if can't get it skip it
             }
 
+            await LogData(jsRuntime, $"Alert Message:{alertMessage}");
+
+        }
+
+        /// <summary>
+        /// Simple method to log general data to API
+        /// note: will not run debug
+        /// </summary>
+        public static async Task LogData(IJSRuntime jsRuntime, string data)
+        {
+            //if running code locally, end here
+            //since in local errors will show in console
+            //and also not to clog server's error log
+#if DEBUG
+            Console.WriteLine("BLZ: LogAlert: DEBUG mode, skipped logging to server");
+            return;
+#endif
+
             //get basic visitor data
             var visitorXml = await GetVisitorDataXml(jsRuntime);
 
             //add in button click data
-            visitorXml.Add(new XElement("AlertMessage", alertMessage));
+            visitorXml.Add(new XElement("Data", data));
 
             //send to server for storage
             await SendLogToServer(visitorXml);
-
         }
-
 
 
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -331,10 +339,6 @@ namespace Website
 
             return newRecord;
         }
-
-
-
-
 
     }
 }

@@ -954,7 +954,7 @@ namespace API
 
             //get now line position
             var nowLinePosition = GetLinePosition(timeSlices, startTime.StdTimeNowAtOffset);
-            compiledRow += $"<rect id=\"NowVerticalLine\" width=\"2\" height=\"{lineHeight}\" style=\"fill:blue;\" x=\"0\" y=\"0\" transform=\"matrix(1, 0, 0, 1, {nowLinePosition}, 0)\" />";
+            compiledRow += GetNowLine(lineHeight, nowLinePosition);
 
             //wait!, add in life events also
             //use offset of input time, this makes sure life event lines
@@ -966,6 +966,8 @@ namespace API
             //save a copy of the number of time slices used to calculate the svg total width later
             var dasaSvgWidth = timeSlices.Count;
             var svgTotalHeight = totalHeight + 30;//add space for life event icon
+            //add border around svg element
+            compiledRow += $"<rect width=\"{dasaSvgWidth}\" height=\"{svgTotalHeight}\" style=\"stroke-width: 2; fill: none; paint-order: stroke; stroke:#333;\"></rect>";
             var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, svgTotalHeight); //little wiggle room
 
             return finalSvg;
@@ -991,7 +993,7 @@ namespace API
                     var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
 
                     //if line is not in report time range, don't generate it
-                    if (positionX == 0) { continue;}
+                    if (positionX == 0) { continue; }
 
                     //put together icon + line + event data
                     compiledLines += GenerateLifeEventLine(lifeEvent, lineHeight, lifeEvtTime, positionX);
@@ -1075,10 +1077,22 @@ namespace API
                                 <circle cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""red""></circle>
                             </g>
                             <g id=""CursorLineLegendDescriptionHolder"" style=""display:none;"">
-			                    <rect style=""fill: blue; opacity: 0.8;"" x=""170"" y=""11.244"" width=""130"" height=""145"" rx=""2"" ry=""2""></rect>
+			                    <rect style=""fill: blue; opacity: 0.8;"" x=""170"" y=""11.244"" width=""150"" height=""{lineHeight-10}"" rx=""2"" ry=""2""></rect>
                                 <g id=""CursorLineLegendDescription""></g>
 		                    </g>
                        </g>
+                        ";
+        }
+        public static string GetNowLine(int lineHeight, int nowLinePosition)
+        {
+            return $@"
+                       <g id=""NowVerticalLine"" x=""0"" y=""0"" transform=""matrix(1, 0, 0, 1, {nowLinePosition}, 0)"">
+		                    <rect width=""2"" height=""{lineHeight}"" style="" fill:blue; stroke-width:0.5px; stroke:#000;""></rect>
+		                    <g transform=""matrix(2, 0, 0, 2, -12, 188)"">
+			                    <rect style=""fill:blue; stroke:black; stroke-width: 0.5px;"" x=""0"" y=""0"" width=""12"" height=""9.95"" rx=""2.5"" ry=""2.5""></rect>
+			                    <text style=""fill: rgb(255, 255, 255); font-size: 4.1px; white-space: pre;"" x=""1.135"" y=""6.367"">NOW</text>
+		                    </g>
+	                    </g>
                         ";
         }
 
@@ -1228,7 +1242,7 @@ namespace API
                           //$" height=\"100%\"" +
                           $" style=\"" +
                           //note: if width & height not hard set, parent div clips it
-                          $"width:{svgTotalWidth}px;" + 
+                          $"width:{svgTotalWidth}px;" +
                           $"height:{svgTotalHeight}px;" +
                           $"background:{svgBackgroundColor};" +
                           $"\" " +

@@ -640,8 +640,8 @@ function autoUpdateTimeLegend(mousePosition) {
             textElm.css("fill", "red");
             textElm.css("font-weight", "600");
 
-            //todo
-            //$("CursorLineLegendDescriptionHolder").show(); //make holder visible
+            //make holder visible
+            $("#CursorLineLegendDescriptionHolder").show();
 
             //fill description box about event
             getEventDescription(eventName.replace(/ /g, ""))
@@ -787,7 +787,7 @@ function InitTouchLib(element) {
 
         //and calling the event handlers
         //that a mouse would normally fire
-       // alert("todo touch not implemented!!!");
+        // alert("todo touch not implemented!!!");
         autoMoveCursorLine(mouse);
         //todo call to this method is out dated
         autoUpdateTimeLegend(mouse);

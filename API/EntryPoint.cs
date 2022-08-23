@@ -947,10 +947,6 @@ namespace API
             var padding = 2; //space between rows
             var lineHeight = totalHeight + padding;
 
-            //add in the cursor line (moves with cursor via JS)
-            //note: template cursor line is duplicated to dynamically generate legend box
-            compiledRow += GetTimeCursorLine(lineHeight);
-
 
             //get now line position
             var nowLinePosition = GetLinePosition(timeSlices, startTime.StdTimeNowAtOffset);
@@ -961,6 +957,11 @@ namespace API
             //are placed on event chart correctly, since event chart is based on input offset
             var inputOffset = startTime.GetStdDateTimeOffset().Offset;
             compiledRow += GetLifeEventLinesSvg(inputPerson, lineHeight, inputOffset);
+
+            //add in the cursor line (moves with cursor via JS)
+            //note: - template cursor line is duplicated to dynamically generate legend box
+            //      - placed last so that show on top of others
+            compiledRow += GetTimeCursorLine(lineHeight);
 
             //compile the final svg
             //save a copy of the number of time slices used to calculate the svg total width later
@@ -1088,7 +1089,7 @@ namespace API
             return $@"
                        <g id=""NowVerticalLine"" x=""0"" y=""0"" transform=""matrix(1, 0, 0, 1, {nowLinePosition}, 0)"">
 		                    <rect width=""2"" height=""{lineHeight}"" style="" fill:blue; stroke-width:0.5px; stroke:#000;""></rect>
-		                    <g transform=""matrix(2, 0, 0, 2, -12, 188)"">
+		                    <g transform=""matrix(2, 0, 0, 2, -12, {lineHeight})"">
 			                    <rect style=""fill:blue; stroke:black; stroke-width: 0.5px;"" x=""0"" y=""0"" width=""12"" height=""9.95"" rx=""2.5"" ry=""2.5""></rect>
 			                    <text style=""fill: rgb(255, 255, 255); font-size: 4.1px; white-space: pre;"" x=""1.135"" y=""6.367"">NOW</text>
 		                    </g>
@@ -2070,7 +2071,7 @@ namespace API
 
 
             //2 STACK & GENERATED ROWS FROM ABOVE DATA
-            var padding = 2;//space between rows
+            var padding = 1;//space between rows
             var compiledRow = "";
 
             int yAxis = headerY;
@@ -2243,6 +2244,7 @@ namespace API
 
                 //height of each row
                 var rowHeight = 15;
+                var spaceBetweenRow = 1;
 
                 //used to determine final height
                 var highestTimeSlice = 0;
@@ -2280,7 +2282,6 @@ namespace API
 
                         //increment vertical position for next
                         //element to be placed beneath this one
-                        var spaceBetweenRow = 1;
                         verticalPosition += rowHeight + spaceBetweenRow;
 
                         multipleEventCount++; //include this in count
@@ -2292,8 +2293,8 @@ namespace API
                     //reset vertical position for next time slice
                     verticalPosition = 0;
 
-                    //safe only the highest row
-                    var thisSliceHeight = multipleEventCount * rowHeight;
+                    //safe only the highest row (last row in to be added)
+                    var thisSliceHeight = multipleEventCount * (rowHeight + spaceBetweenRow);
                     highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
                     multipleEventCount = 0; //reset
 

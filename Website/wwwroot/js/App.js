@@ -556,6 +556,17 @@ function autoUpdateTimeLegendOld(relativeMouseX) {
 //in client JS side uses template to create the rows from cloning it
 //and modifying its prop as needed, as such any major edit needs to
 //be done in API code
+
+$(document).on('loadEventDescription', function (event, eventName) {
+    //fill description box about event
+    getEventDescription(eventName.replace(/ /g, ""))
+        .then((eventDesc) => {
+            var wrappedDescText = createSVGtext(eventDesc, 175, 24);
+            $("#CursorLineLegendDescription").empty(); //clear previous desc
+            $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
+        });
+});
+
 function autoUpdateTimeLegend(mousePosition) {
 
     //x axis is rounded because axis value in rect is whole numbers
@@ -643,13 +654,9 @@ function autoUpdateTimeLegend(mousePosition) {
             //make holder visible
             $("#CursorLineLegendDescriptionHolder").show();
 
-            //fill description box about event
-            getEventDescription(eventName.replace(/ /g, ""))
-                .then((eventDesc) => {
-                    var wrappedDescText = createSVGtext(eventDesc, 175, 24);
-                    $("#CursorLineLegendDescription").empty(); //clear previous desc
-                    $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
-                });
+            $(document).trigger('loadEventDescription', eventName);
+            
+            
         } else {
             //todo
             //$("CursorLineLegendDescriptionHolder").hide(); //hide holder 

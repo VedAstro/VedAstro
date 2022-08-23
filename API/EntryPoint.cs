@@ -1078,7 +1078,7 @@ namespace API
                                 <circle cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""red""></circle>
                             </g>
                             <g id=""CursorLineLegendDescriptionHolder"" style=""display:none;"">
-			                    <rect style=""fill: blue; opacity: 0.8;"" x=""170"" y=""11.244"" width=""150"" height=""{lineHeight-10}"" rx=""2"" ry=""2""></rect>
+			                    <rect style=""fill: blue; opacity: 0.8;"" x=""170"" y=""11.244"" width=""150"" height=""{lineHeight - 10}"" rx=""2"" ry=""2""></rect>
                                 <g id=""CursorLineLegendDescription""></g>
 		                    </g>
                        </g>
@@ -2243,20 +2243,20 @@ namespace API
                 var prevEventName = EventName.EmptyEvent;
 
                 //height of each row
-                var rowHeight = 15;
+                var singleRowHeight = 15;
                 var spaceBetweenRow = 1;
 
                 //used to determine final height
                 var highestTimeSlice = 0;
                 var multipleEventCount = 0;
 
-                //generate 1px (rect) per time slice
+                //generate 1px (rect) per time slice (horizontal)
                 foreach (var slice in timeSlices)
                 {
                     //get events that occurred at this time slice
                     var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
 
-                    //generate rect for each event & stack from top to bottom
+                    //generate rect for each event & stack from top to bottom (vertical)
                     foreach (var foundEvent in foundEventList)
                     {
                         ////if current event is different than event has changed, so draw a black line
@@ -2275,14 +2275,14 @@ namespace API
                                    $"x=\"{horizontalPosition}\" " +
                                    $"y=\"{yAxis + verticalPosition}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                    $"width=\"{_widthPerSlice}\" " +
-                                   $"height=\"{rowHeight}\" " +
+                                   $"height=\"{singleRowHeight}\" " +
                                    $"fill=\"{color}\" />";
 
                         rowHtml += rect;
 
                         //increment vertical position for next
                         //element to be placed beneath this one
-                        verticalPosition += rowHeight + spaceBetweenRow;
+                        verticalPosition += singleRowHeight + spaceBetweenRow;
 
                         multipleEventCount++; //include this in count
                     }
@@ -2293,8 +2293,9 @@ namespace API
                     //reset vertical position for next time slice
                     verticalPosition = 0;
 
-                    //safe only the highest row (last row in to be added)
-                    var thisSliceHeight = multipleEventCount * (rowHeight + spaceBetweenRow);
+                    //safe only the highest row (last row in to be added) used for calculating final height
+                    var multipleRowH = (multipleEventCount * (singleRowHeight + spaceBetweenRow)) - spaceBetweenRow; //minus 1 to compensate for last row
+                    var thisSliceHeight = multipleEventCount > 1 ? multipleRowH : singleRowHeight; //different height calc for multiple & single row
                     highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
                     multipleEventCount = 0; //reset
 

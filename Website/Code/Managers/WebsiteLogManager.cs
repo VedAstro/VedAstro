@@ -48,34 +48,6 @@ namespace Website
 
         }
 
-        /// <summary>
-        /// Makes a log of the exception in API server
-        /// </summary>
-        public static async Task LogError(IJSRuntime jsRuntime, Exception exception)
-        {
-            //if running code locally, end here
-            //since in local errors will show in console
-            //and also not to clog server's error log
-#if DEBUG
-            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
-            return;
-#endif
-
-            //get all visitor data
-            var visitorXml = await GetVisitorDataXml(jsRuntime);
-
-            //convert exception into nice xml
-            var errorXml = ExtractDataFromException(exception);
-
-            //place error data into visitor tag
-            //this is done because visitor data might hold clues to error
-            visitorXml.Add(errorXml);
-
-            //send to server for storage
-            await SendLogToServer(visitorXml);
-
-        }
 
         /// <summary>
         /// Log error when there is no exception data
@@ -110,9 +82,6 @@ namespace Website
 
         /// <summary>
         /// Makes a log of the exception in API server
-        /// This version doesn't use user data, only exception data is sent to server
-        /// Because no access to JS runtime from here, todo user data can be moved to blazor side
-        /// then full logging can be done
         /// </summary>
         public static async Task LogError(Exception exception)
         {
@@ -135,7 +104,7 @@ namespace Website
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
-            var userId = new XElement("UserId", AppData.CurrentUser);
+            var userId = new XElement("UserId", AppData.CurrentUser?.Id);
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var urlXml = new XElement("Url", AppData.CurrentPage);
             visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampXml);
@@ -175,18 +144,19 @@ namespace Website
             Console.WriteLine("BLZ: LogAlert: DEBUG mode, skipped logging to server");
             return;
 #endif
-            var alertMessage = "";
+            //all alerts except loading box, visitor list popup (use of html instead of title)
             try
             {
-                alertMessage = ((dynamic)alertData)?.title ?? "";
+                //todo loading box is not logged, because of over logging (possible fix, wrapper class to handle )
+                var alertMessage = ((dynamic)alertData)?.title ?? "";
+                await LogData(jsRuntime, $"Alert Message:{alertMessage}");
             }
             catch (Exception)
             {
-                // only visitor list page uses "html" and not "title",
+                // only visitor list page & loading box uses "html" and not "title",
                 // so if can't get it skip it
             }
 
-            await LogData(jsRuntime, $"Alert Message:{alertMessage}");
 
         }
 

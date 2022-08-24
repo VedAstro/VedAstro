@@ -79,8 +79,9 @@ namespace Website
         /// </summary>
         public static void HideAlert(this IJSRuntime jsRuntime)
         {
+            //todo disable for now because over logging
             //log this, don't await to reduce lag
-            WebsiteLogManager.LogData(jsRuntime, "Alert Close");
+            //WebsiteLogManager.LogData(jsRuntime, "Alert Close");
 
             jsRuntime.InvokeVoidAsync("Swal.close");
         }

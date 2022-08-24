@@ -83,7 +83,7 @@ namespace Website
         /// <summary>
         /// Makes a log of the exception in API server
         /// </summary>
-        public static async Task LogError(Exception exception)
+        public static async Task LogError(Exception exception, string extraInfo = "")
         {
 
             //if running code locally, end here
@@ -106,8 +106,9 @@ namespace Website
             var visitorXml = new XElement("Visitor");
             var userId = new XElement("UserId", AppData.CurrentUser?.Id);
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
+            var dataXml = new XElement("Data", extraInfo);
             var urlXml = new XElement("Url", AppData.CurrentPage);
-            visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampXml);
+            visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, WebsiteTools.TimeStampXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);

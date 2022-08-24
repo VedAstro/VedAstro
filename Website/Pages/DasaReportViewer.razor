@@ -7,7 +7,7 @@
 
 <div class="vstack gap-1" style="width: fit-content;">
     @*ID set because used by auto move cursor line handler*@
-    <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox"></div>
+    <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox" style="margin-left: -11px;"></div>
 
     <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" @onchange="OnChangeLifeEventCheckBox" checked>
@@ -27,22 +27,39 @@
     /// </summary>
     public async Task SetData(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
-        //auto calculate precision
-        var daysPerPixel = GetDayPerPixel(startTime, endTime);
-        await DrawReport(startTime, endTime, inputedEventTags, daysPerPixel);
+        try
+        {
+            //auto calculate precision
+            var daysPerPixel = GetDayPerPixel(startTime, endTime);
+            await DrawReport(startTime, endTime, inputedEventTags, daysPerPixel);
 
-        //ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
+            //ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
 
-        //attach mouse handler to auto move cursor line & update time legend
-        await _jsRuntime.InvokeVoidAsync("LoadEventDataListFile"); //load event description file 1st
-        await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
+            //attach mouse handler to auto move cursor line & update time legend
+            await _jsRuntime.InvokeVoidAsync("LoadEventDataListFile"); //load event description file 1st
+            await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
 
-        //init touch for the dasa chart
-        await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);
+            //init touch for the dasa chart
+            await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);
 
 
-        //needed to show changes to inputs
-        StateHasChanged();
+            //needed to show changes to inputs
+            StateHasChanged();
+
+        }
+        catch (Exception e)
+        {
+            //log error, don't await to reduce lag
+            WebsiteLogManager.LogError(e, "Error from SetData()");
+
+            //let user know critical failure
+            await _jsRuntime.ShowAlert("error", "Something went wrong. Please wait page will auto refresh.", false, 2500);
+
+            //refresh page
+            WebsiteTools.ReloadPage(_navigation);
+
+
+        }
 
 
         //LOCAL FUNCTIONS

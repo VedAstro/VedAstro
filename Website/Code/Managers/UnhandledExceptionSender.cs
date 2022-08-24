@@ -76,7 +76,7 @@ namespace Website
             /// </summary>
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
-                WebsiteLogManager.LogError(exception);
+                WebsiteLogManager.LogError(exception, "Error from UnhandledExceptionProvider.Log()");
             }
 
             public IDisposable BeginScope<TState>(TState state)

@@ -2,14 +2,14 @@
 
 # What is this?
 A non-profit, open source project to make Vedic Astrological tools easily available to all.
-Find out more @ [VedAstro.org](https://purple-flower-03ae64d1e.1.azurestaticapps.net/)
+Find out more @ [VedAstro.org](https://vedastro.org/)
 
 # Links
-- [Quick Guide](https://purple-flower-03ae64d1e.1.azurestaticapps.net/quickguide) learn how to use
-- [Report](https://purple-flower-03ae64d1e.1.azurestaticapps.net/contact) problems you find when using software
-- [Share](https://purple-flower-03ae64d1e.1.azurestaticapps.net/contact) your ideas for new or better features 
-- [Fix](https://purple-flower-03ae64d1e.1.azurestaticapps.net/contact) bugs & implement features
-- [Donate](https://purple-flower-03ae64d1e.1.azurestaticapps.net/donate) to support programming & server costs
+- [Quick Guide](https://vedastro.org/quickguide) learn how to use
+- [Report](https://vedastro.org/contact) problems you find when using software
+- [Share](https://vedastro.org/contact) your ideas for new or better features 
+- [Fix](https://vedastro.org/contact) bugs & implement features
+- [Donate](https://vedastro.org/donate) to support programming & server costs
 
 # Project Architecture
 #### Key design notes to understand the internals of the program better.

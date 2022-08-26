@@ -11,64 +11,82 @@
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.PersonEditor"></IconButton>
         <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
-@*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="@_helpSection.Show"></IconButton>
-*@    </ButtonsRow>
+    </ButtonsRow>
 </PageTop>
 
-<div class="vstack gap-3" style="width: @AppData.MaxContentWidthPx">
+<div class="vstack gap-3" style="max-width: @AppData.MaxContentWidthPx">
     <PeopleSelectorBox @ref="_peopleSelectorBox" />
 
     <TimeInput @ref="_startTimeInput" />
     <TimeInput @ref="_endTimeInput" />
 
-    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
-
-    <div class="container-fluid">
-        <div class="form-check">
-            <input class="form-check-input" @bind="_dasaCheckBox" type="checkbox">
-            <label class="form-check-label">Dasa</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_bhuktiCheckBox" type="checkbox">
-            <label class="form-check-label">Bhukti</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_antaramCheckBox" type="checkbox">
-            <label class="form-check-label">Antaram</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_gocharaCheckBox" type="checkbox">
-            <label class="form-check-label">Gochara</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_personalCheckBox" type="checkbox">
-            <label class="form-check-label">Personal</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_generalCheckBox" type="checkbox">
-            <label class="form-check-label">General</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_buildingCheckBox" type="checkbox">
-            <label class="form-check-label">Building</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_agricultureCheckBox" type="checkbox">
-            <label class="form-check-label">Agriculture</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_astronomicalCheckBox" type="checkbox">
-            <label class="form-check-label">Astronomical</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_rulingConstellationCheckBox" type="checkbox">
-            <label class="form-check-label">Ruling Constellation</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" @bind="_hairNailCuttingCheckBox" type="checkbox">
-            <label class="form-check-label">Cutting Hair/Nails</label>
+    <h6 class="mt-2 mb-0">Select Type</h6>
+    <div class="border border-1">
+        <div class="d-flex flex-wrap">
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_dasaCheckBox" type="checkbox">
+                    <label class="form-check-label">Dasa <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_bhuktiCheckBox" type="checkbox">
+                    <label class="form-check-label">Bhukti <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_antaramCheckBox" type="checkbox">
+                    <label class="form-check-label">Antaram <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_gocharaCheckBox" type="checkbox">
+                    <label class="form-check-label">Gochara <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_personalCheckBox" type="checkbox">
+                    <label class="form-check-label">Personal <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_generalCheckBox" type="checkbox">
+                    <label class="form-check-label">General <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_agricultureCheckBox" type="checkbox">
+                    <label class="form-check-label">Agriculture</label>
+                </div>
+            </div>
+            <div class="p-2 bd-highlight">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_astronomicalCheckBox" type="checkbox">
+                    <label class="form-check-label">Astronomical</label>
+                </div>
+            </div>
+            <div class="p-2 bd-highlight">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_rulingConstellationCheckBox" type="checkbox">
+                    <label class="form-check-label">Ruling Constellation</label>
+                </div>
+            </div>
+            <div class="p-2 bd-highlight">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_hairNailCuttingCheckBox" type="checkbox">
+                    <label class="form-check-label">Cutting Hair/Nails</label>
+                </div>
+            </div>
         </div>
     </div>
+    
+    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 
 </div>
 
@@ -125,7 +143,7 @@
             Muhurtha is the masterkey to all wealth and happiness. Muhurtha tells
             us when to do a certain thing if failure is to be avoided.
         </p>
-        
+
         @AppData.MuhurthaCredit
 
     </Content>

@@ -18,8 +18,8 @@ namespace Website
 
             //setup for global variables (to remember state)
             //TODO replace with AppData
-            var globalVariable = new GlobalVariableManager();
-            builder.Services.AddSingleton(globalVariable);
+            //var globalVariable = new GlobalVariableManager();
+            //builder.Services.AddSingleton(globalVariable);
 
             //setup for getting location from browser
             builder.Services.AddSingleton<LocationService>();

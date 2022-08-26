@@ -62,40 +62,44 @@
             <div class="p-2">
                 <div class="form-check">
                     <input class="form-check-input" @bind="_agricultureCheckBox" type="checkbox">
-                    <label class="form-check-label">Agriculture</label>
+                    <label class="form-check-label">Agriculture <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
                 </div>
             </div>
             <div class="p-2 bd-highlight">
                 <div class="form-check">
                     <input class="form-check-input" @bind="_astronomicalCheckBox" type="checkbox">
-                    <label class="form-check-label">Astronomical</label>
+                    <label class="form-check-label">Astronomical <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
                 </div>
             </div>
             <div class="p-2 bd-highlight">
                 <div class="form-check">
                     <input class="form-check-input" @bind="_rulingConstellationCheckBox" type="checkbox">
-                    <label class="form-check-label">Ruling Constellation</label>
+                    <label class="form-check-label">Ruling Constellation <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
                 </div>
             </div>
-            <div class="p-2 bd-highlight">
+            <div class="p-2">
                 <div class="form-check">
                     <input class="form-check-input" @bind="_hairNailCuttingCheckBox" type="checkbox">
-                    <label class="form-check-label">Cutting Hair/Nails</label>
+                    <label class="form-check-label">Cutting Hair/Nails <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 
 </div>
 
 
-<hr>
-@*DASA VIEW BOX*@
-<div style="margin-bottom: 50px">
-    <HelpBox Label="Events" HelpText="@HelpText.MuhurthaChart"></HelpBox>
-    <DasaReportViewer @ref="_dasaReportViewer" />
+@*hide until ready but initialized as well*@
+<div style="@(_isResultReady?"":"display:none;")">
+    <hr>
+    @*DASA VIEW BOX*@
+    <div style="margin-bottom: 50px">
+        <HelpBox Label="Events" HelpText="@HelpText.MuhurthaChart"></HelpBox>
+        <DasaReportViewer @ref="_dasaReportViewer" />
+    </div>
+
 </div>
 
 
@@ -151,6 +155,8 @@
 
 
 @code {
+    private bool _isResultReady = false; //marks if the page ready to loaded
+
     private PageHelpSection _helpSection;
 
     private bool _dasaCheckBox, _bhuktiCheckBox, _antaramCheckBox, _gocharaCheckBox, _personalCheckBox;
@@ -186,6 +192,9 @@
 
         _jsRuntime.ShowLoading();
 
+        //mark page as NOT ready (when button clicked 2nd time)
+        _isResultReady = false;
+
         //get needed input data
         var selectedPerson = _peopleSelectorBox.GetSelectedPerson();
         var startTime = _startTimeInput.GetTime(selectedPerson.GetBirthLocation());
@@ -195,6 +204,8 @@
         //inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.Personal, EventTag.General };
         await _dasaReportViewer.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
 
+        //mark page as ready to show results
+        _isResultReady = true;
 
         _jsRuntime.HideAlert();
     }

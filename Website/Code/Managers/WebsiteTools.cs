@@ -302,8 +302,6 @@ namespace Website
                                    select dasaEvent;
 
 
-            await _jsRuntime.AddToProgressBar(10);
-
             //send sorted events to view
             return orderByAscResult.ToList();
         }
@@ -332,7 +330,6 @@ namespace Website
             //parse raw results
             List<Event> resultsParsed = Event.FromXml(resultsRaw);
 
-            await _jsRuntime.AddToProgressBar(10);
 
             //send to caller
             return resultsParsed;

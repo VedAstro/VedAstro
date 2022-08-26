@@ -101,8 +101,7 @@
         //only continue if passed input field validation
         if (!ValidationPassed()) { return; }
 
-        //todo progress bar does not move, because computation hogs progress calc
-        //await _globalVariable.LoadingMessage.DisableProgressBar();
+        //show loading
         _jsRuntime.ShowLoading();
 
         await CalculateAndUpdateEvents();

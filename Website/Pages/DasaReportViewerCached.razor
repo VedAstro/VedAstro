@@ -178,7 +178,7 @@
         var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonDasaReportCached, personHashXml);
 
         //save a copy in global var
-        _globalVariable.CachedDasaReport = rootXml;
+        //_globalVariable.CachedDasaReport = rootXml;
 
         //first element is expected to be lowest rest
         var lowestRes = rootXml.Elements().First();

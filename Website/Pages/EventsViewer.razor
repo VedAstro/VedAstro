@@ -157,13 +157,11 @@
         //get data from inputs and save it for use by other components
         SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
 
-        await _jsRuntime.AddToProgressBar( 5);
 
 
         //set data into dasa viewer
         await SetData(SelectedPerson);
 
-        await _jsRuntime.AddToProgressBar( 5);
 
         //hide loading box
         _jsRuntime.HideAlert();
@@ -191,19 +189,16 @@
         Time startTime = new Time(startTimeStr, geoLocation);
         Time endTime = new Time(endTimeStr, geoLocation);
 
-        await _jsRuntime.AddToProgressBar( 5);
 
         //use the inputed data to get events from API
         //note: below methods access the data internally
         RullingConstellationEventList = await getRullingConstellationEvents(startTime, endTime);
 
-        await _jsRuntime.AddToProgressBar( 5);
 
 
         //generate rows and pump them into the page
         DasaRowItemsSvg = new MarkupString(await GenerateRowSvg(startTime, endTime, RullingConstellationEventList, _eventsPrecision));
 
-        await _jsRuntime.AddToProgressBar( 5);
 
 
         this.StateHasChanged();
@@ -264,7 +259,6 @@
                           $"{rowHtml}</svg>";
 
 
-            await _jsRuntime.AddToProgressBar( 5);
 
             return svgBody;
 
@@ -323,7 +317,6 @@
                                    select dasaEvent;
 
 
-            await _jsRuntime.AddToProgressBar( 10);
 
             //send sorted events to view
             return orderByAscResult.ToList();
@@ -351,7 +344,6 @@
             //parse raw results
             List<Event> resultsParsed = Event.FromXml(resultsRaw);
 
-            await _jsRuntime.AddToProgressBar( 10);
 
             //send to caller
             return resultsParsed;

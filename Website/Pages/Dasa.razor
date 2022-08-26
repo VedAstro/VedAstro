@@ -214,10 +214,12 @@
 
         _jsRuntime.ShowLoading();
 
+        //mark page as NOT ready (when button clicked 2nd time)
+        _isResultReady = false;
+
         //get data from inputs and save it for use by other components
         SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
 
-        await _jsRuntime.AddToProgressBar(5);
 
         //set data into dasa viewer
         dynamic timeRange = ComputeStartEndTimeFromInput();

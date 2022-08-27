@@ -94,12 +94,12 @@ namespace Website
 
         }
 
-        public static async Task<string> GetTimezoneOffset(GeoLocation _geoLocation, DateTimeOffset timeAtLocation)
+        public static async Task<string> GetTimezoneOffset(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
             //use timestamp to account for historic timezone changes
             var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
-            var longitude = _geoLocation.GetLongitude();
-            var latitude = _geoLocation.GetLatitude();
+            var longitude = geoLocation.GetLongitude();
+            var latitude = geoLocation.GetLatitude();
 
             //create the request url for Google API
             var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={ServerManager.GoogleGeoLocationApiKey}");
@@ -453,6 +453,11 @@ namespace Website
 #else
                 //if Release log error & end silently
                 WebsiteLogManager.LogError(e, "Error from WebsiteTools.Try()");
+
+                //TODO get access to js
+                //let user know error
+
+                //refresh page
 #endif
 
                 //note exception will not go past this point,
@@ -467,5 +472,6 @@ namespace Website
         /// used for logging
         /// </summary>
         public static XElement TimeStampXml => new("TimeStamp", Tools.GetNowSystemTimeSecondsText());
+
     }
 }

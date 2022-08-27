@@ -22,6 +22,7 @@ namespace Website
             //builder.Services.AddSingleton(globalVariable);
 
             //setup for getting location from browser
+            //used by geolocation input
             builder.Services.AddSingleton<LocationService>();
 
             //service used to place data in browser's localstorage

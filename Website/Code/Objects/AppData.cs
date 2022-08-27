@@ -15,7 +15,6 @@ namespace Website
         public static MarkupString HinduPredictiveAstrologyCredit = new("<p class=\"fst-italic fw-light\"><small>(Source Credit: Hindu Predictive Astrology by B.V.Raman)</small></p>");
         public static MarkupString MuhurthaCredit = new("<p class=\"fst-italic fw-light\"><small>(Source Credit: Muhurtha by B.V.Raman)</small></p>");
 
-        public const string AddPersonGuideVideo = "https://youtu.be/RDUPsFOrr3c";
 
         /// <summary>
         /// Represents the currently logged in User
@@ -44,6 +43,5 @@ namespace Website
         /// </summary>
         public const string MaxWidth = "693px";
         public const string MaxContentWidthPx = "443px";
-
     }
 }

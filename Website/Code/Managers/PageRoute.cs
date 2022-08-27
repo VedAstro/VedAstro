@@ -39,5 +39,6 @@
         public const string PatreonPage = "https://patreon.com/vedastro";
         public const string KoFiPage = "https://ko-fi.com/vedastro";
         public const string PaypalMePage = "https://paypal.me/VedAstroOrg";
+        public const string AddPersonGuideVideo = "https://youtu.be/RDUPsFOrr3c";
     }
 }

@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    var _ = { label: 0, sent: function () { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
@@ -76,9 +76,25 @@ window['AspNetMonsters']['Blazor'] = window['AspNetMonsters']['Blazor'] || {};
 window['AspNetMonsters']['Blazor']['Geolocation'] = window['AspNetMonsters']['Blazor']['Geolocation'] || {};
 window['AspNetMonsters']['Blazor']['Geolocation']['GetLocation'] = function (requestId) {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            dispatchResponse(requestId, position.coords);
-        });
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                dispatchResponse(requestId, position.coords);
+            },
+            //
+            // pass error callback function to return a value to Blazor when something goes wrong
+            // like when user deny location permision
+            function (positionError) {
+                dispatchResponse(requestId, {
+                    latitude: 0,
+                    longitude: 0,
+                    altitude: 0,
+                    accuracy: 0,
+                    altitudeAccuracy: 0,
+                    heading: 0,
+                    speed: 0
+                });
+            }
+        );
     }
     else {
         return "No location finding";

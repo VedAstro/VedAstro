@@ -7,7 +7,6 @@
 @using System.Xml.Linq
 @using Genso.Astrology.Library
 
-
 @inject LocationService _locationService
 
 
@@ -205,22 +204,30 @@
             Longitude = (double)locationCoordinates.Longitude;
             Latitude = (double)locationCoordinates.Latitude;
 
+            //if no location data available set default location
+            //will return 0 when permission not given
+            if (Longitude == 0 && Latitude == 0) { goto SetDefault; }
+
             //set gotten location name into view
             LocationName = await WebsiteTools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude);
 
+            //exit
+            return;
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            //if fail set default location name
-            LocationName = DefaultLocationCountry;
-
-            //update coordinates based on name
-            await SetCoordinatesFromNameInput();
-
+            //if errors occur, set default name
         }
 
+
+    SetDefault:
+        //if fail set default location name
+        LocationName = DefaultLocationCountry;
+
+        //update coordinates based on name
+        await SetCoordinatesFromNameInput();
 
 
     }
 
-}
+    }

@@ -353,6 +353,9 @@ var showAccordion = (id) => $(id).collapse("show");
 //scrolls element by id into view
 var scrollIntoView = (id) => $(id)[0].scrollIntoView();
 
+var addClassWrapper = (element, classString) => $(element).addClass(classString);
+var toggleClassWrapper = (element, classString) => $(element).toggleClass(classString);
+var removeClassWrapper = (element, classString) => $(element).removeClass(classString);
 
 
 

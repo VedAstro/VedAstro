@@ -112,11 +112,6 @@ function isElementUnderElement(topElement, underElement) {
 //CALLED BY BLAZOR WRAPPER CLASS
 
 
-window.addClassWrapper = function (element, classString) {
-    console.log(`JS: addClassWrapper : ${classString}`);
-    $(element).addClass(classString);
-};
-
 
 function getPropWrapper(element, propName) {
     console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);

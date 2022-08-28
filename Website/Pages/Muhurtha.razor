@@ -215,19 +215,29 @@
     /// </summary>
     private bool ValidationPassed()
     {
-        var isValid = true;
 
         //TEST 1
         //if person not selected, invalid
         if (!_peopleSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
-            isValid = false;
             var msg = $"Select person name!";
             _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            return false;
         }
 
-        return isValid;
+        //TEST 2
+        //check if at-least 1 event is selected
+        if (!GetSelectedEventTypes().Any())
+        {
+            //mark invalid & alert user
+            var msg = $"Select at least 1 Event Type!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            return false;
+        }
+
+        //if control reaches here than validation passed
+        return true;
     }
 
 

@@ -6033,12 +6033,12 @@ progress {
 }
 
 .content-menu {
-    color: #e1ebff;
+    color: #1b6ec2;
 }
 
     .content-menu:hover {
-        background-color: #e9ebf0;
-        color: #e1ebff;
+        background-color: #0d6efd;
+        color: #1b6ec2;
     }
 
 .content-body .nav-link {

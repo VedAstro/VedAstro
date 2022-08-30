@@ -1,5 +1,7 @@
-﻿using Genso.Astrology.Library;
+﻿using System.Xml.Linq;
+using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
+using Website.Pages;
 
 namespace Website
 {
@@ -33,6 +35,20 @@ namespace Website
         /// Url of current page, set by layout when loading
         /// </summary>
         public static string? CurrentPage { get; set; }
+
+        /// <summary>
+        /// Place where global event data list is stored for quick access
+        /// loaded in main layout
+        /// </summary>
+        public static List<XElement> PredictionDataList { get; set; }
+
+        /// <summary>
+        /// Place where global event data list is stored for quick access
+        /// loaded in main layout
+        /// </summary>
+        public static List<XElement> EventDataList { get; set; }
+
+        public static SearchResult SearchPage { get; set; }
 
 
         //-----------------------------FIELDS

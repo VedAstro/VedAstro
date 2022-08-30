@@ -33,7 +33,7 @@ namespace Website
             var location = person.GetBirthLocation();
 
             //get list of event data to check for event
-            var eventDataList = DatabaseManager.GetPredictionDataList(predictionDataList);
+            var eventDataList = DatabaseManager.GetEventDataList(predictionDataList);
 
             //start calculating predictions
             var predictionList = GetListOfPredictionInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute1, eventDataList);

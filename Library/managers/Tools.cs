@@ -182,32 +182,6 @@ namespace Genso.Astrology.Library
         }
 
 
-        /// <summary>
-        /// Gets a list of tags in string form & changes it a structed list of tags
-        /// </summary>
-        public static List<EventTag> StringToEventTagList(string tagString)
-        {
-            //create a place to store the parsed tags
-            var returnTags = new List<EventTag>();
-
-            //split the string by comma "," (tag seperator)
-            var splittedRawTags = tagString.Split(',');
-
-            //parse each raw tag
-            foreach (var rawTag in splittedRawTags)
-            {
-                //parse
-                var result = Enum.TryParse(rawTag, out EventTag eventTag);
-                //raise error if could not parse
-                if (!result) throw new Exception("Event tag not found!");
-
-                //add the parsed tag to the return list
-                returnTags.Add(eventTag);
-            }
-
-            return returnTags;
-        }
-
 
         /// <summary>
         /// Converts days to hours
@@ -293,6 +267,35 @@ namespace Genso.Astrology.Library
         //█▀▀ ▄▀▄ ░░█░░ █▀▀ █░░█ ▀▀█ ▀█▀ █░░█ █░░█ 　 █░▀░█ █▀▀ ░░█░░ █▀▀█ █░░█ █░░█ ▀▀█ 
         //▀▀▀ ▀░▀ ░░▀░░ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀░░▀ 　 ▀░░░▀ ▀▀▀ ░░▀░░ ▀░░▀ ▀▀▀▀ ▀▀▀░ ▀▀▀
 
+
+        /// <summary>
+        /// Find the first offset in the string that might contain the characters
+        /// in `needle`, in any order. Returns -1 if not found.
+        /// <para>This function can return false positives</para>
+        /// </summary>
+        public static bool FindCluster(this string? haystack, string? needle)
+        {
+            if (haystack == null) return false;
+            if (needle == null) return false;
+
+            if (haystack.Length < needle.Length) return false;
+
+            long sum = needle.ToCharArray().Sum(c => c);
+            long rolling = haystack.ToCharArray().Take(needle.Length).Sum(c => c);
+
+            var idx = 0;
+            var head = needle.Length;
+            while (rolling != sum)
+            {
+                if (head >= haystack.Length) return false;
+                rolling -= haystack[idx];
+                rolling += haystack[head];
+                head++;
+                idx++;
+            }
+
+            return true;
+        }
 
     }
 

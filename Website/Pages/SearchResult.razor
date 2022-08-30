@@ -1,0 +1,154 @@
+﻿@using Genso.Astrology.Library
+@using System.Xml.Linq
+@using System.Text.RegularExpressions
+@attribute [Route(PageRoute.SearchResult)]
+@inject HttpClient Client
+
+<PageTitle>Search Vedic Astrology</PageTitle>
+
+<PageTop Title="Search Astrology" IconName="fluent:document-table-search-24-filled">
+    <Description>Search all astrological combination or predictions that have been programmed into VedAstro</Description>
+</PageTop>
+
+@if (_resultReady)
+{
+    <h4 class="mb-3">Found "@resultCount" results for "@SearchText"</h4>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Nature</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prediction in foundPrediction)
+            {
+                <tr>
+                    <td>@Format.FormatName(prediction.Element("Name")?.Value)</td>
+                    <td>@prediction.Element("Description")?.Value</td>
+                    <td>@prediction.Element("Nature")?.Value</td>
+                </tr>
+            }
+            @foreach (var prediction in foundEvent)
+            {
+                <tr>
+                    <td>@Format.FormatName(prediction.Element("Name")?.Value)</td>
+                    <td>@prediction.Element("Description")?.Value</td>
+                    <td>@prediction.Element("Nature")?.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h4>No results found. Try fewer keywords for more results.</h4>
+}
+
+
+@code {
+
+    public string? SearchText = "";
+
+    private int resultCount = 0;
+    private bool _resultReady = false;
+    private bool filesLoaded = false;
+
+
+    IEnumerable<XElement> foundPrediction = new List<XElement>();
+    IEnumerable<XElement> foundEvent = new List<XElement>();
+
+
+    //makes this page instance available to others
+    protected override void OnInitialized() => AppData.SearchPage = this;
+
+
+    private async Task LoadFiles()
+    {
+        //this data is used later search for fast loading
+        AppData.PredictionDataList = await GetXmlFile("data/PredictionDataList.xml");
+        AppData.EventDataList = await GetXmlFile("data/EventDataList.xml");
+
+        //mark as loaded so on next search won't reload
+        filesLoaded = true;
+
+        async Task<List<XElement>> GetXmlFile(string url)
+        {
+            //load xml event data files before hand to be used quickly later for search
+            //get main horoscope prediction file (located in wwwroot)
+            var fileStream = await Client.GetStreamAsync(url);
+
+            //parse raw file to xml doc
+            var document = XDocument.Load(fileStream);
+
+            //get all records in document
+            return document.Root.Elements().ToList();
+        }
+    }
+
+    /// <summary>
+    /// does the search
+    /// </summary>
+    public async Task Search(string searchText)
+    {
+        _jsRuntime.ShowLoading();
+
+        //only load the xml files if not yet loaded
+        if (!filesLoaded) { await LoadFiles(); }
+
+        //little time for loading to pop
+        //note: without it, no loading
+        await Task.Delay(250);
+
+        //show search text
+        SearchText = searchText;
+
+        //search file
+        foundPrediction = AppData.PredictionDataList.Where(IsFound);
+        foundEvent = AppData.EventDataList.Where(IsFound);
+
+        //show search result count
+        resultCount = foundPrediction.Count() + foundEvent.Count();
+
+        //mark as ready to show user
+        _resultReady = true;
+
+        //needed to make changes appear
+        StateHasChanged();
+
+        _jsRuntime.HideLoading();
+
+    }
+
+
+    /// <summary>
+    /// checks x element for matching keyword
+    /// note: for speed purposes we stick with xelement
+    /// </summary>
+    private bool IsFound(XElement x)
+    {
+        //convert the event data to string form
+        var evenDataXmlString = "";
+        foreach (var xElement in x.Elements())
+        {
+            //only name make format it first
+            var text = "";
+            if (xElement.Name == "Name")
+            {
+                text = Format.FormatName(xElement?.Value ?? "");
+            }
+            else
+            {
+                text = $" {xElement.Value}";
+            }
+            evenDataXmlString += text;
+        }
+
+        //convert to lower case and do basic word match
+        return evenDataXmlString.ToLower().Contains(SearchText.ToLower());
+    }
+    
+
+}

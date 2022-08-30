@@ -356,6 +356,8 @@ var scrollIntoView = (id) => $(id)[0].scrollIntoView();
 var addClassWrapper = (element, classString) => $(element).addClass(classString);
 var toggleClassWrapper = (element, classString) => $(element).toggleClass(classString);
 var removeClassWrapper = (element, classString) => $(element).removeClass(classString);
+var getTextWrapper = (element) => $(element).text();
+var getValueWrapper = (element) => $(element).val();
 
 
 

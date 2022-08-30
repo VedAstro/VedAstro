@@ -263,7 +263,7 @@ namespace API
             foreach (var eventData in eventDataListXml.Root.Elements())
             {
                 //add it to the return list
-                eventDataList.Add(EventData.ToXml(eventData));
+                eventDataList.Add(EventData.FromXml(eventData));
             }
 
             return eventDataList;

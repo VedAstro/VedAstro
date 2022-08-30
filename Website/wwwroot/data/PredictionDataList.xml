@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root>
+
+	<!--This is the DATA list for Horoscope-->
+
 	<!--Results of Lord of 1st House Occupying Different Houses-->
 	<Event>
-		<Id>1</Id>
+		
 		<Name>House1LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -13,7 +16,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>2</Id>
+		
 		<Name>House1LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -23,7 +26,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>3</Id>
+		
 		<Name>House1LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -33,7 +36,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>4</Id>
+		
 		<Name>House1LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -43,7 +46,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>5</Id>
+		
 		<Name>House1LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -53,7 +56,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>6</Id>
+		
 		<Name>House1LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -63,7 +66,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>7</Id>
+		
 		<Name>House1LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -74,7 +77,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>8</Id>
+		
 		<Name>House1LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -84,7 +87,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>9</Id>
+		
 		<Name>House1LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -94,14 +97,14 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>10</Id>
+		
 		<Name>House1LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>In addition to the results of the 4th house, there will be professional success, honoured by eminent men, a research scholar or specialisation in that branch of knowledge or profession which is represented by lord of Lagna and the 10th.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>11</Id>
+		
 		<Name>House1LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -111,7 +114,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>12</Id>
+		
 		<Name>House1LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -122,7 +125,7 @@
 	</Event>
 	<!--Results of Lord of 2nd being Situated in Different Houses-->
 	<Event>
-		<Id>13</Id>
+		
 		<Name>House2LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -133,7 +136,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>14</Id>
+		
 		<Name>House2LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -145,7 +148,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>15</Id>
+		
 		<Name>House2LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -155,7 +158,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>16</Id>
+		
 		<Name>House2LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -165,14 +168,14 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>17</Id>
+		
 		<Name>House2LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>Hating family, sensual, not spending money even on children, he lacks manners and etiquette. When the 2nd lord in the 5th is well fortified there will be unexpected acquisition of wealth through lotteries, crosswords, or the favour of rulers.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>18</Id>
+		
 		<Name>House2LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -182,7 +185,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>19</Id>
+		
 		<Name>House2LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -192,7 +195,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>20</Id>
+		
 		<Name>House2LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -202,14 +205,14 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>21</Id>
+		
 		<Name>House2LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>Skilful, ill-health in young age but healthy afterwards, will possess lot of wealth and become happy. When the 2nd lord is well fortified and the 9th lord is in Lagna, the native will have good inheritance. There will also be benefits through different sources according to the nature of the sign and nakshatra held by the 2nd lord.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>22</Id>
+		
 		<Name>House2LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -219,7 +222,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>23</Id>
+		
 		<Name>House2LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -229,7 +232,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>24</Id>
+		
 		<Name>House2LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -240,84 +243,84 @@
 	</Event>
 	<!--Results of Lord of 3rd being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>Earns livelihood by self-exertion, becomes vindictive, lean and tall body, brave and courageous, always sickly and serving others. When well fortified he will become an expert in dancing, music and acting, and the means of livelihood will be primarily fine arts. He will earn a good name as an actor.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>This is an unfavourable position as it makes the subject rather unscrupulous unless there are other favourable combinations. He will make advances on the women and wealth of others. Likes mean deeds and is generally devoid of happiness. He is likely to lose his younger brothers.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>Brave, surrounded by friends, relatives, blessed with good children, wealthy, happy and contented. The 3rd lord well disposed in the 3rd, 6th or 11th indicates a number of younger brothers. When the 3rd lord happens to be Mars and occupies the 3rd, then, generally, the native will lose all his younger brothers. Saturn will also give similar effects. The Sun in a similar position will kill elder brothers.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord of the 3rd is in the 4th, life will be happy on the whole. He becomes rich and learned. But the wife will be cruel-hearted and mean. When the lord of the 3rd is well fortified in the 4th and the lords of Lagna and 9th are rendered weak, his brothers will survive him. He will have step-brothers if the 9th lord is strong. When Mars is weak he will lose his lands and he will have to live in others' houses. Evil results will be minimised if the 3rd house is beneficially disposed.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>Much pleasure will not be derived from children. Financially well off in life. Friction will prevail in the domestic life. If the 3rd lord is in the 5th, well disposed, the native will be highly benefited by his brothers. He will carry on agricultural operations on a large scale, or he will be adopted by a rich family. He will also shine well in Government service.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>Hates brothers and relatives and difficulty through them. Becomes rich. Maternal relatives will suffer. Accepts illegal gratifications. When the 3rd lord is in the 6th, well disposed, younger brother joins the Army. One of the brothers will become a successful physician. If the 6th lord also joins the 3rd, the native becomes either a sportsman, physical culturist or an athlete. When the 6th and the 3rd are both afflicted, he will suffer from diseases and be tormented by enemies and he will himself be deceitful.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>May incur the displeasure of rulers or authorities. Many vicissitudes in life. Much suffering in childhood. The union will be unfortunate. Danger while travelling. When the 3rd lord is in the 7th, well fortified, there will be cordial feelings between brothers. When the 7th lord is in Lagna, one of the brothers will settle in a foreign country and he will help the native.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>Involvement in a criminal case or false accusations. Trouble on account of death or bequests, marriage unfortunate, career will not be smooth, victim of misfortune. When the 3rd lord is in the 8th, he will suffer from a serious and dangerous disease and lose his younger brother.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>Fortune will improve after marriage. Father untrustworthy. Long journeys. Sudden and unexpected changes in life. When the 3rd lord is in the 9th, favourably disposed, the native's brother will inherit ancestral property. The native himself will be benefited by his brother. When afflicted, the person will have misunderstandings with his father.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>A quarrelsome and faithless wife. The native will become rich. He will be happy and intelligent. Gain from journeys connected with profession. When the 3rd lord is in the 10th, all the brother, will shine well and they will be helpful to him in all ways</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>Not a very good combination.. Earnings with effort. He becomes vindictive. The body will be unattractive and emaciated. Subservient to or dependent upon others, and liable to surfer from frequent attacks of illness.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House3LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>Sorrow through relatives, gets fortune from marriage, seclusion. Great ups and downs. Unscrupulous father. When the 3rd lord is in the 12th, the youngest brother will be a tyrant. The native becomes poor on account of him.</Description>
@@ -325,84 +328,84 @@
 	</Event>
 	<!--Results of Lord of 4th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person becomes highly learned, but will be afraid to speak in public assemblies. He is likely to lose inherited wealth. According as the fourth lord posited in Lagna is strong, middling or weak, the native will have been born in a rich, mediocre or poor family.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>He will be highly fortunate, courageous and happy. He will have a sarcastic nature. He will inherit property from maternal grandfather.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person will be sickly, generous, a man of character, and will acquire wealth by self-effort. He will suffer from the machinations of step-brothers and step-mother.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>Religiously inclined, will have respect for traditions. He will be rich, respected, happy and sensual.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>Loved and respected by others, devotee of Vishnu, becomes rich by self-effort. Mother comes from a respectable family. The native will acquire vehicles.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>Short-tempered and mean, he will have dissimulating habits, evil thoughts and intentions. He will always be roaming about.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>Generally happy ; will command houses and lands ; will eke out livelihood in distant places or near his birthplace according as the seventh happens to be a movable or fixed sign.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person becomes miserable. Father dies early. He will be either impotent or loose in sex-life. He is also likely to lose landed properties or face litigation.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>Generally a fortunate combination favouring happiness in regard to father and properties.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>Will have political success. He will be an expert chemist. He will vanquish his enemies and make his personality felt by the world. Loss of reputation is posible if the 4th lord is afflicted.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>Self-made, generous, sickly, mother fortunate, but may have a step-mother also. Favours success in selling and buying cattle and lands.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House4LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>Deprived of happiness and properties. Early death to mother, bad finances and generally a miserable existence.</Description>
@@ -411,84 +414,84 @@
 
 	<!--Results of Lord of 5th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the 5th lord is favourably combined and associated, the person commands a number of servants, becomes a Judge, Magistrate or Minister empowered to punish the evil-minded. He will earn the grace of God ; few children ; will have foes and gives happiness to others. If the 5th lord is afflicted, there will be no issues; will invoke kshudra devatas (evil and destructive forces), will be evil-minded and leader of a gang of deceitful persons ; a tale-bearer with a sting. If the lord is moderately good, mixed results will follow.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the 5th lord is favourably disposed, the person will be blessed with a beautiful wife and well-behaving children. There will be gains from Government or King. He will become learned and a good astrologer. Lord weak and afflicted, Poor ; loss of money through Government displeasure ; will be unable to maintain his own family ; will have family troubles and misunderstandings ; becomes a priest in a Siva temple.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>Favourably disposed, many good children and brothers, If unfavourably disposed, loss of children, misunderstandings with brothers and continuous occupational troubles. He will become stingy and a tale bearer.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>If favourably disposed, the person will have a few sons, one of whom will live by agriculture. The mother will live long. May become an adviser to a ruler or his preceptor. The lord, afflicted, causes death of children. The lord, moderately strong, confers daughters and no sons.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>Lord favourably disposed indicates a number of sons ; becomes great in his own line of activity ; otherwise he becomes an expert in Mantrasastra and befriends persons in power. He may also become an expert in mathematics or head of a religious institution. Lord afflicted, contrary results should be anticipated. Children will die; he will not keep to his word; wavering mentality and cruel.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the fifth lord is favourably disposed, the maternal uncle will be a famous man. He will have enmity with his own son. If the lord is afflicted, issues will not be born and he may have to adopt one from maternal uncle's line.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>When the lord is favourably disposed, the native's son lives abroad and attains distinction, wealth and fame. Or he will have a number of issues. He will also become renowned, learned, prosperous, greatly devoted to his master and possesses a charming personality. When-the lord is afflicted, there will be loss of children, one of whom will die abroad after attaining name and fame.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>Paternal property will be lost due to debts. There will be extinction of the family. He will suffer from lung troubles. He will be peevish, unhappy but not poor.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>He will become a teacher or a preceptor. Renovates ancient temples, wells, choultries and gardens. One of the sons attains distinction as an orator or author. If the lord is afflicted, he will earn divine wrath and consequent destruction of fortune.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord is beneficially disposed, a Raja Yoga is formed. Acquires landed property ; earns the goodwill of the rulers, constructs temples and performs religious sacrifices ; one of the sons becomes a gem of the family. If aspected by the Sun the native may join the intelligence department. If the lord is afflicted, faces the wrath of the rulers and contrary results will happen.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>Benefits through sons and success in all undertakings; becomes rich and learned and helps others; will have a number of sons; becomes an author.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House5LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>Quest for knowing the Ultimate Reality will be pronounced. He will lead a life of non-attachment, becomes spiritual, moves from one place to another and ultimately attains Moksha.</Description>
@@ -497,84 +500,84 @@
 
 	<!--Results of Lord of 6th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>Well aspected, the person may Join the army as a soldier or Commander consistent with the strength or otherwise of the disposition. Or he may become a Minister of War or. an official or officer concerned with prisons. He will live in the house of his maternal uncle. If the sixth lord is weak and otherwise afflicted, he will become a robber or a thief or leader of a criminal gang.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>Conjoined with or aspected by benefics the native will have untold suffering in family life and deep sorrows, loss of money through enemies, defective vision, uneven teeth and stammering. If the sixth lord is weak and otherwise ill-disposed in the 2nd, there will be loss of wife in the Dasa or Bhukti of the malefic lord. If Venus is weak, the native will be a celibate and poverty stricken, just able to get a morsel of food when hungry.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>The sixth lord fortified confers enmity with brothers. Or his maternal uncle befriending the native's brother works against the native's interests or the native's brother suffers from frequent ill-health. The 6th lord weak and afflicted, the native will have no younger brothers.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>Well fortified, lives in a dilapidated building. He will have breaks in education and will discard his mother. Maternal uncles will generally be land cultivators. Weak and afflicted: he will quarrel with his mother and ancestral property will be involved in debts. He will work as a menial and lead a miserable life. Troublesome home and domestic affairs and trouble through servants.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>Sickly children. The native wil' be adopted by his maternal uncle and become fortunate-</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>Increase of cousins. Native's maternal uncle becomes famed. If in conjunction with weak Lagnadhipathi, he will suffer from an incurable disease and increase of enmity with kith and kin.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>Generally marries mother's, brother's or father's sister's daughter. The maternal uncle lives in a far-off place (or a foreign country). The wife's character will be doubtful. If the sixth lord is afflicted, he will either divorce his wife early in life or she will die. If the Rasi and Navamsa involved are hermaphrodite ones, he will have a sickly or barren wife. When Lagnadhipati joins the sixth lord in the 7th which happens to be a hermaphrodite sign, the native will be a eunuch and unable to perform the sexual act. There will also be troubles with disrespectable women.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>When fortified, he will have Madhyayu or middle life. When afflicted, he will have plenty of debts and will suffer from loathsome diseases. He will hunt after women other than his own wife and take pleasure in inflicting pain on others.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>Father becomes a judge, if the sixth lord is well fortified. The maternal uncle becomes highly fortunate. There will be misunderstandings between him and his father. There will be benefits from Gnatis or cousins. If afflicted : poverty, sinful acts, misfortunes through relatives, ungrateful towards preceptors and engaged in unrighteous deeds. If moderate : becomes a mason, timber merchant or stone cutter.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>If fortified : Sinful and destructive nature, poses as an orthodox and pious man but really unscrupulous in regard to religious matters. When the lord is weak : dismissal formidable enemies, low life or begging.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>If benefic, eldest brother will be a judge. If ordinary : an elder brother becomes a judge for some time but loses his job. If malefic : poor and wretched life : suffering on account of convictions.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House6LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>Well disposed : difficulty and sorrow through destructive nature; causes harm to others. If afflicted : miserable, hard and wretched existence.</Description>
@@ -583,84 +586,84 @@
 
 	<!--Results of Lord of 7th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native may marry someone he has known since childhood or one who has been brought up in the same house. The wife or husband of the native will be a stable and mature person. He will be intelligent and capable of weighing the pros and cons. Afflictions to the 7th lord may entail constant travelling. If the 7th lord and Venus are afflicted, the native may be sensual and seek clandestine relationship with the opposite sex.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will get wealth from women or through marriage. If afflicted, one may earn money through despicable means as trading in flesh, women, not excluding his wife. He may eat food offered at death-ceremonies (shraddha) and wander about seeking such food. If the second house is a dual sign and afflicted, more than one marriage is likely. If a maraka Dasa is on, the native may die during the period of the seventh lord. The person will have a wavering mind and will always be inclined sensually.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>This disposition gives lucky brothers who may live abroad. If afflicted the native may indulge in adultery with a brother's or sister's married partner. Affliction also gives misfortunes to co-boms. Female issues servive.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>Gives a lucky and happy married partner with many children and comforts. The native may have the benefit of high academic qualification and own many vehicles. If afflicted, domestic harmony may be spoilt through an immature and mean partner. The native may run into endless problems on account of his conveyances. If severely afflicted by the nodes and other malefics, the native's wife's character becomes questionable.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>An early marriage, the partner may hail from an affluent and well-to-do family. The wife or husband will be mature and an advantage to the native. If the 7th lord is weak, there may be no children. If severely afflicted, one may get issues through the adulterous conduct of the wife. If there are both afflictions and benefic influences on the 7th lord, the native may get only female progeny. Trouble to one's office superiors through foreign sources is likely. The native will possess good character.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native may have two marriages with both partners living. One may marry a cousin such as an uncle's daughter. If badly afflicted and the karaka Venus is also ill-disposed, one may suffer from impotency and many other diseases. The native's wife may be sickly and jealous by nature denying the husband happiness from marriage. If Venus is well placed but the 7th lord is afflicted, the native may suffer from piles. If Venus is weak but not afflicted, one may desert or lose one's married partner through some indiscreet act.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>If well placed, the native will have a charming and magnetic personality. Women will flock to him and seek him out for alliance. The wife or husband will be a just and honourable person coming from a family of reputation and social standing. If weak and afflicted, it gives a lonely life devoid of marriage and friends, and loss through marriage negotiations.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>When well placed, marriage may take place with relatives or the partner may be a rich person. Affliction causes the early death of partner while the native may die in distant lands. It gives a sickly and ill-tempered wife or husband leading to estrangement and separation.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>If fortified, the father may live abroad while the native may make his fortune in foreign lands. He will get an accomplished wife who will enable him to lead a righteous life. If afflicted, the father may die early. Married partner may drag the native from the right course (Dharmic) of life and he may waste away his wealth and suffer penury.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native may flourish in a profession abroad or his career may involve constant travelling One will get a devoted and faithful wife or husband. The wife may also be employed and contribute to the native's income. Or, she may help in the advancement of the native's career. If afflicted, wife will be avaricious and over-ambitious but without sufficient capacity. Consequently native's career may suffer and deteriorate.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>There may be more than one marriage or the native may associate with many women. If beneficially disposed, wife may hail from a rich background or bring in much wealth. If afflicted, the native may marry more than once, but one wife may outlive him.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House7LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>There maybe more than one marriage in the native's life. He may marry a second time clandestinely while the first wife is still alive. Or, if afflicted, he may marry a second time after losing the first wife by death or separation. But if the affliction is severe, the wife or husband may die or separate soon after marriage and there may be no second marriage. Death may occur while travelling or abroad. If both karaka and the 7th lord are weak, the native may only dream of women but never marry. The native's wife may hail from a servant's family. He will be close-fisted and generally poor.</Description>
@@ -669,35 +672,35 @@
 
 	<!--Results of Lord of 8th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>Penury and heavy debts will befall the native who has the 8th lord placed in the Ascendant with the Ascendant lord. Misfortune will follow him at every step. If the 8th lord is weak or placed in the 6th, 8th or 12th from Navamsa Lagna, the intensity of misfortune is reduced. If the 8th lord is severely afflicted the native will suffer bodily complaints such as disease and disfiguration. His constitution will be weak and he will have no bodily comforts. He will be the target of the displeasure of his superiors and higher-ups. Trouble from Government will cause him worries.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>The lord of the 8th house in conjunction with the 2nd lord in the 2nd house brings in troubles and problems of all sorts. The native suffers from eye and tooth troubles. He will have to eat unhealthy and tasteless or putrid foods. His domestic life will be filled with discontent and quarrels. His wife will not understand him. This may lead to estrangement and even separation. If longevity is good, he may suffer some severe illness. If the 8th lord is in the 6th, 8th or 12th from Navamsa Lagna, the intensity of the results will be reduced in degree.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord of the 8th house combines with the lord of the 3rd in the 3rd, the third house significations suffer. The native's ears may cause problems or he may go deaf. Misunderstandings will crop up with brothers and sisters leading to quarrels. The native will be beset by all sorts of fears and mental anguish. He may imagine things and suffer from hallucinations. He may involve himself in debts and get into trouble thereby. If malefics afflict the 8th lord in the 3rd with the 3rd lord, the sufferings of the native will be unbearable. But if the 8th iord combines with the 6th or 12th lords, benefic results may come by. He may get a monetary windfall through writing or through the agency of a co born.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the iord of the 8th house joins the 4th lord in the 4th house, the native's mental peace will be shattered Domestic bickerings, financial and other problems will increase. Mother's health may suffer and cause great concern. The native may be beset with problems regarding his house, land and conveyance. If the affliction is heavy his land and immovable property may slip from his hands due to circumstances beyond his control. His conveyances may get lost or be destroyed. His pets may contract diseases and die. Malefics furthering the affliction may force him to seek his fortune abroad where he will meet with all sons of troubles and losses. Reverses in profession and the displeasure of superiors are also likely.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -707,49 +710,49 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord of the 8th house joins the 6th lord in the 6th house, a Rajayoga results. Material affluence, fame and acquisition of objects desired are the good results. But because the 6th house is the house of disease the native may suffer ill-health. If afflicted, the native suffers loss of money through theft and trouble through courts and the police. The evil is intensified if the 8th lord is in a kendra or trikona. The native's maternal uncle may suffer much trouble. If the 6th lord is fortified, he is able to overcome all his troubles and emerge victor. No attempts made by his ill-wishers and enemies to harm him will succeed.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>The lord of the 8th house placed in the 7th house with the 7th lord curtails longevity. The native's wife may suffer ill-heaith. !f afflicted, the native will also suffer from disease. He may go abroad where he will meet with ill-health and problems. If the 7th and 8th lords are strong, the native will undertake foreign journeys on diplomatic missions and distinguish himself.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord of the 8th house occupies the 8th house in strength, the native lives long enjoying happiness. He will acquire lands, conveyance, power and position through the merit acquired in former lives. If the 8th lord is weak, he may have no serious troubles but may not also enjoy any luck or good fortune of significance. The father of the native may die or pass through some crisis. If the 8th lord is afflicted, the native will fail in his undertakings. He will be prompted to do the wrong things and thereby suffer loss.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord of the 8th house joins the 9th lord in the 9th house with malefics, the native may lose his father's property. Misunderstandings with father may arise. If the Sun, the natural significator of father is afflicted, father may die during the period of the 9th lord. If conjoined with benefics, the native acquires his father's property. Relations with father will be harmonious. If the 9th lord is weak, the native suffers ail kinds of hardships, misery and unhappi-ness. His friends and kinsmen may desert him while his superiors will find fault with him. If the 8th lord is in the 6th, 8th or 12th from Navamsa Lagna, the evil results will be greatly reduced.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord of the 8th house is in the 10th house with the 10th lord, the native has slow advancement in career. He faces obstacles and impediments in his activities. In the appropriate period he may be superseded by his subordinates and his merit may go unnoticed. He may resort to deceit and unrighteous means to gain his ends. His thinking will be clouded and his actions will invite the wrath of the government or the law. He may suffer poverty. If the 2nd lord is also afflicted and joins the 8th lord, his reputation may suffer due to involvement in huge debts and inability to repay them. If the 8th lord is placed in the 6th, 8th or 12th from Navamsa Lagna, the intensity of the evil is greatly reduced. The 8th lord in the 10th may also confer unexpected gains due to the death of the superiors or elders.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord of the 8th house combines with the 11th lord in the 11 th house, there may be trouble to close friends. Elder brother may pass through a difficult time. Relations with him will be strained and troubled. Or the elder brother may cause anguish to the native and his family by his unscrupulous behaviour and conduct. Business may suffer losses and run into debts. If benefic planets influence the combinations there will be troubles but the native gets help from friends and elder brother to overcome them. Afflictions will aggravate the malefic results.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House8LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>The position of the 8th lord in the 12th house with the 12th lord gives rise to a Rajayoga. If benefics join the 8th lord, unfavourable results may be expected. Treachery of friends will result in many problems and grief. Unexpected expenditure will arise and there may be pecuniary losses. If the 8th lord is in the 12th house and the 12th lord is favourably placed in a trine or quadrant, the native will gain in religious learning and piety. Some post or seat of authority may be thrust on him with all its attendant paraphernalia. If afflicted by malefics, the native may resort to vicious acts clandestinely. Such acts would include rape, adultery, conterfeiting of money (the 12th house is the house of secrecy end deceit. The 8th house signifies sudden gains of money) and smuggling activities.</Description>
@@ -758,84 +761,84 @@
 
 	<!--Results of Lord of 9th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>When the ninth lord is placed in the first house, the native becomes a self-made man. He earns much money througn his own efforts. If the 9th lord combines with the Lagna lord in the first house and associates with or is aspected by a benefic planet, the native is fortunate with riches and happiness.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>When the ninth lord is placed in the 2nd house beneficially, the native's father is a rich and influential man. The native acquires wealth from the father. Malefics influencing the ninth lord in the 2nd house ruin or destroy paternal property.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the lord of the ninth is placed in the 3rd, the native makes his fortune through writing, speeches and oratorial abilities. The native's father will be a man of moderate means while the native advances his fortune through his co-borns. If malefics afflict the ninth lord in the 3rd house, the native may land in trouble through his writings which may be irrational and even obscene depending upon the nature of affliction. He may be forced to sell his paternal property because of troubles occurring through his writings.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>The ninth lord in the 4th house gives vast landed properties and beautiful bungalows. Or the native may earn through estate and land dealings. His mother will be a rich and fortunate woman. He will inherit his father's immovable properties. If the ninth lord is afflicted in the 4th house, the native may not have any domestic unhappiness. His early life will be crossed by miseries due to a hard-hearted father or disharmony between parents. If Rahu afflicts, mother may be a divorcee or living separately from his father.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>The ninth lord in the fifth house gives a prosperous and famous father. The native's sons may also be very fortunate in life and enjoy success and distinction.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>The ninth lord in the sixth house gives a sickly father afflicted with chronic diseases. If benefics flank such a sixth house, the native may gain wealth through successful termination of father's legal problems, and by way of compensation, costs, etc. If malefics afflict the ninth lord in the sixth house, the native's attempts to make his fortune may be frustrated through litigation involving his father or debts contracted by him.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native may go abroad and prosper there. His father may also prosper in foreign lands. He will get a noble and lucky wife. If ascetic yogas are present in the chart, the native may seek spiritual guidance and fulfilment abroad. If asubhayogas spoil the ninth lord, the father may meet with his death abroad.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native may lose his father early in life. If malefics afflict the eighth house in such a case, he may suffer severe poverty and heavy responsibility due to father's death If benefics influence the ninth lord, the native may inherit substantial paternal property. Afflictions may cause the native to abandon traditions or damage religious institutions and trusts set up by the family.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>The ninth lord in the ninth house gives a long-lived and prosperous father. The native will be religiously inclined and be charitable. He will travel abroad and earn money and distinction thereby. If afflicted by malefics or if the 9th lord occupies the 6th, 8th or 12th from Navamsa Lagna, the native's father will die early.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the ninth lord is in the tenth house, the native will become very famous and powerful. He will be generous and occupy posts of authority. He will earn much wealth and acquire every kind of comfort and luxury. His means of livelihood will be righteous and he will be a law abiding citizen.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will be exceedingly rich. He will have powerful and influential friends. His father will be a well-known and well-placed man- If afflicted, unfaithful friends will destroy the native's wealth through selfish scheming and fraud.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House9LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>The position of the lord of the ninth house in the twelfth house gives a poor background. The native will suffer much and will have to work very hard in life. Even then success may not come to him. He will be religious and noble but always in want. Father may die early leaving the native penniless.</Description>
@@ -845,84 +848,84 @@
 
 	<!--Results of Lord of 10th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>When the lord of the tenth house occupies the Ascendant, the native rises in life by sheer dint of perseverance. He will be self-employed or pursue a profession of independence. When the Lagna and 10th lord combine in the first house the native becomes very famous and a pioneer in his field of work. He founds a public institution and engages himself in social projects.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>The 10th lord in the second house makes the native fortunate. He rises well in life and makes a lot of money. He may engage himself in the family trade and develop it. If malefics afflict the 10th house he will suffer losses and be responsible for winding up the family business. He will prosper in catering and restaurant businesses.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native may have to travel constantly on short-journeys. He will be a speaker or writer of celebrity if the 10th lord is well-placed. His brothers may be instrumental to some extent in advancing his career. If 10th lord is in the 6th, 8th or 12th from Navamsa Lagna or in an unfriendly constellation in the 3rd house, the native's rise in life is slow and beset with obstacles. If the 3rd lord is also afflicted, rivalry between brothers may Ie3d to reversals, obstacles, etc, in the native's career.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will be a lucky man and highly learned in various subjects. He will be famous both for his learning and generosity. If the 10th lord is strong, the native is respected wherever he goes and he receives royal avour. He may engage in agricultural pursuits or in dealings with immovable properties- If the 4th lord, the 9th lord and the 10th are beneficially disposed and related to one another, the native wields great political authority as a president or head of a government. If the 10th lord is depressed, eclipsed, in an inimical sign or afflicted by malefic planets, the native will lose his lands and be forced to take to a life of servitude. The same result obtains if the 10th lord conjoins the 8th lord in the 4th house in a malefic shashtyamsa.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native shines well as a broker and engages in speculation and similar business. If benefics join the lord of the 10th in the 5th house, the native leads a simple and pious life engaging himself in prayers and pious activities. He may become the head of an orphanage or remand home if the 10th lord occupies the 6th, 8th or 12th Navamsa.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person will have an occupation bearing on judiciary, prisons or hospitals. If Saturn aspects the 10th lord, he may have to work all his life in a low-paying jbb with not much prospects. If benefics aspect the 10th lord, he holds a post of authority and will be held in high esteem for his character. If Rahu or afflicted malefics are with the 10th lord, he may suffer disgrace in his career. He may be exposed to criminal action and face imprisonment.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>The 10th lord placed in the 7th house gives a mature wife who will assist the native in his work. He will travel abroad on diplomatic missions. He will be well known for his skill in talking and achieving objectives. He will make profits through partnerships and co-operative ventures. If malefics afflict the 10th lord, the native will be debased in his sexual habits and indulge in every kind of vice.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native has many breaks in career. If the 10th lord is fortified, he will occupy a high office in his field but only for a short time. If a malefic planet afflicts the 10th lord the person has criminal propensities and commits offences. If Jupiter influences the 10th lord by aspect or association in the 8th house, he will become a mystic or spiritual teacher. Saturn here makes the person an undertaker or otherwise employed in burning ghats, graveyards, etc.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>The 10th lord in the 9th house makes the native a spiritual stalwart. He will be a beacon light to spiritual seekers if Jupiter aspects the 10th lord. If both benefics and maiefics aspect the 10th lord, the native is generally fortunate and well-to-do. He follows a hereditary profession or that of a preacher, teacher or healer. The father of the native has a great influence on him. He will be a dutiful son and do many charitable deeds.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the 10th lord is strongly disposed in the 10th, the native can be highly successful in his profession and command respect and honour. If the lord is weak and afflicted, he will have no self-respect, cringing for favours. He will also be a dependent all his life. He will be fickle-minded. If the 10th lord occupies the 6th, 8th or 12th houses from Navamsa, the native's career will be routine and ordinary. If three other planets conjoin the 10th lord in the 10th house, the native becomes an ascetic.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person earns immense riches. Fortunate in every respect he will engage himself in meritorious deeds. He will give employment to hundreds of persons and will be endowed with a high sense of honour. He will have many friends. If the eleventh house comes under affliction, "is friends will turn enemies and cause him every sort of hardship and worry.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House10LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the 10th lord occupies the twelfth house, the native will have to work in a far-off place. He will lack comforts and face many difficulties in life. If beneficially disposed, the native becomes a spiritual seeker. He will be separated from his family and wander about without success if malefics afflict the 10th lord. He will indulge in smuggling and other nefarious activities, Rahu afflicting the 10th lord makes the native a cheat and a criminal. He causes sorrow to his family and relatives.</Description>
@@ -931,63 +934,63 @@
 
 	<!--Results of Lord of 11th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will be born in a rich family. He will earn much wealth. According as the 11th lord in Lagna is strong, middling or weak, the native will be born in a very rich, fairly rich or well-to-do family. He will lose an elder brother early in life.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will live with his elder brothers. Benefics there give harmonious relations. Malefics cause domestic bickerings but common residence. The native will earn through commercial concerns and banking business. Business with friends will bring good profits but if malefics join, the native may suffer heavy losses on account of friends.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person will be a concert-singer or musician and will earn thereby. Gain through brothers is also indicated. He will have many friends and helpful neighbours-Afflictions give contrary results.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>One acquires profits through landed estates, rentals and products of the earth. His mother will be a cultured and distinguished lady. He will be renowned for his learning and scholarship of various subjects. He will live in comfort and enjoy all joys in life. He will have a devoted and charming wife.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will have many children who will come up well in life. He will indulge in speculation and gain much money. If the 11th lord is afflicted, he will be a gambler and indulge in foolish ventures. If 11th lord is beneficially disposed, the native will be pious and observe many resolves and vows which will enhance his prosperity.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person gains money through maternal relatives, litigation and running nursing-homes. If the 11th lord is afflicted in the 6th, the native thrives on setting person against person, involve himself in other peoples' quarrels and anti-social activity. If malefics afflict the 11 th lord, the native may lose through similar sources.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person marries more than once. He prospers in foreign countries. If there are afflictions to the 11th lord, the native carries on liaisons with women of ill-repute. He will indulge in trading in flesh and similar immoral activities. If the 11th lord is fortified, the native marries only once but a rich and influential woman.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native though rich at birth suffers many calamities and loses much of his money. He will suffer from the depracies of thieves, cheats and swindlers. If the 11th lord occupies a malefic constellation, the native will be forced to eke out of his living by begging.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -997,7 +1000,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1007,14 +1010,14 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will have many friends and elder brothers who may help him throughout life. He will have a happy life with the blessings of wife, home, children and comforts.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House11LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>He will suffer losses in business. His eider brother will be ailing and much expenditure will be incurred on account of his illness. The native may also lose an elder brother by death. He will have to pay fines and penalties frequently and will be burdened with many domestic responsibilities.</Description>
@@ -1023,84 +1026,84 @@
 
 	<!--Results of Lord of 12th being Situated in Different Houses-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will have a weak constitution and will be feeble-minded. He will, however, be handsome and sweet-tongued. If the sign is common, the native will generally be travelling about. If the 6th lord joins the 12th lord in Lagna, the native will live long. But if the 8th house is afflicted, he will be short-lived. This also indicates imprisonment and living abroad. If the Lagna and 12th lords exchange signs, the native will be a miser, hated by all and devoid of intelligence.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>The person will suffer financial losses. He may contact debts and get involved in nefarious activity. He will not eat timely meals. His eye-sight will be poor and his family life, marked by lack of harmony. If the twelfth lord is a benefic and in dignity, these evil indications will be greatly reduced and the native will have financial stability. He will be a tactful speaker. If the twelfth lord is ill-disposed, the native indulges in gossip and quarrelling.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>He will be timid and quiet. Loss of a brother is shown. He will be shabbily dressed. If malefics afflict, he may develop ear-ailments. He may have to spend much money on younger brothers. As a writer he may be unsuccessful. He may work in some commonplace job and earn very little. If the 12th lord joins the 2nd lord in the 3rd and is aspected by Jupiter or the 9th lord, one may have more than one wife.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>Early death to mother, mental restlessness, unnecessary worry, enmity of relatives and living abroad are some of the results. Suffering constant harrassment from the landlord, his residence will be in an ordinary house. But if the twelfth lord is well placed, these adverse indications get mitigated to a large extent. If Venus is strong, the native may own his own conveyance but it will always give trouble.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>Either difficulty to beget progeny or unhappiness from children will be experienced. He will be religious-minded and may undertake pilgrimages. Weak-minded and suffering mental aberrations, he feels he is miserable. He will not succeed in agriculture as his crops will suffer from pests and disease.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will be happy and prosperous, live long, enjoy many comforts, possess a healthy and handsome physique, and vanquish his enemies. But he may become involved in litigation which may come to an end to his advantage. But if melefics afflict the 12th lord, the person will be unscrupulous, sinful and ill-tempered, hating his mother suffering from unhappiness on account of his own children. Womanising will land him in distress.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>The wife may come from a poor family. Married life will be unhappy and may end in separation. Later on he will take to asceticism. Weak in health and suffering from phlegmatic troubles, he will be without learning or property.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native will be rich and celebrated, will enjoy a luxurious life with many servants waiting on him. Gain through deaths and legacy is indicated. Interested in occult subjects and devoted to Lord Vishnu, he will be righteous, famous and a gentle speaker being endowed with many good qualities of head and heart.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>Residence abroad and prosperity are shown. He may acquire much property in foreign lands. Honest, generous and large-hearted he may not have any spiritual leanings. Not liking his wife, friends and preceptor, and interested in physical culture, he loses his father early in life.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>Hard-working and having to undertake tedious journeys for his occupation he will be a jailor, doctor or work in the cemetery and such places. He spends money on agricultural pursuits in which he makes profits. The native will derive no happiness or physical comforls from his sons.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>He will engage himself in business, but does not make much profit. He has few friends but many enemies. Troubled by extravagant brothers, some of whom may be invalids, the native's funds may dwindle on this account. He will earn well by trading in pearls, rubies and other precious stones.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>House12LordInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native spends much on religious and righteous purposes. He will have good eye-sight and enjoy pleasures of the couch. He will be engaged in agriculture. If malefics afflict the twelfth lord, the native will be restless and always roaming about.</Description>
@@ -1109,7 +1112,7 @@
 
 	<!--Results of Different Signs Ascending-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>AriesRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1120,7 +1123,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>TaurusRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1131,7 +1134,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>GeminiRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1142,7 +1145,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>CancerRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1153,7 +1156,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>LeoRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1164,7 +1167,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>VirgoRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1175,7 +1178,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>LibraRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1186,7 +1189,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>ScorpioRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1197,7 +1200,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SagittariusRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1208,7 +1211,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>CapricornusRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1219,7 +1222,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>AquariusRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1230,7 +1233,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>PiscesRising</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1244,63 +1247,63 @@
 
 	<!--Planets in the 1 House-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SunInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>Strong moral nature, righteous-minded, ambition and love of power, tends to be well supported by good health and vitality. Cheerfulness and an optimistic temperament help to ensure popularity. It adds respect to the personality and gives lofty motives. If with Saturn or Mars, it indicates scars and a hot constitution. The blood becomes impure and there will be itches all over the body. Fevers, inflammations and eye affections may also be anticipated.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MoonInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>The native becomes fanciful and romantic, a moderate eater. Considerable restlessness is usually tempered by an easy-going disposition. The fortune is generally changing. It makes one an idealist, a great traveller and explorer. If with Saturn, the mind will always be worried. IfMarsiswith the Moon, it indicates menstrual disorders in the case of women. Sociability tends to be a strong feature. He will be successful in professions that bring him into contact with the masses. The Moon in Lagna with Rahu indicates hysterical tendencies and with Jupiter, the mind is elevated.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MarsInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>This gives a hot constitution, courage, self-confidence and enterprise. The native will possess practical ability and love of liberty and independence. He becomes reckless of danger scorning defeat. This gives somewhat of a rash nature. The body will have scars and the appearance will be handsome. The domestic life will be unhappy unless there are other favourable combinations. Abuse of physical resources may lead to ill-health. There is a proneness to accidents. The aspects should be carefully examined. Danger of cuts, burns, etc., are likely.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MercuryInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>This position makes the subject humorous. Quickness of wit and mental ingenuity tend to be strongly marked. The native becomes well-read, particularly in occult studies. In good aspect to Venus, it makes one musical and talented. Adaptability is a striking feature. Mercury makes the man intellectual. If there is a Rahu or Ketu in Lagna, the native suffers a lot of nervous troubles.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>JupiterInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>A magnetic personality is bestowed on the native. An optimistic spirit, jovial disposition and pleasant manners are indicated. The native will have more sons if the 5th house is not affected. Self-indulgence especially in regard to gluttony will affect health. If with Rahu, sms will be committed. Body will be inclined towards corpulence. Lawyers, professors, writers, theologians, etc., come under this planet. The man becomes an influential leader. Diseases may result from impure blood.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>VenusInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>This is a fortunate combination, more so if the ascendant happens to be Capricorn or Aquarius. The native will possess amiability and a cheerful temperament responsive to the emotional side of nature. It gives an appreciation of art. There will be craving for pleasure. Passions will be pronounced. The native will take interest in music, drama and singing. There will be a fondness for scents, flowers, etc. Those born in this sign will be admired by the opposite sex. Generally a good fortune is denoted. Fond of wife or husband, the native will have a magnetic and attractive personality. Marriage may take place early. If afflicted, it indicates discord in married life.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SaturnInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>Foreign customs will be easily copied and imitated. But, if Saturn is not afflicted, there will be much consideration for the welfare or others.Self-confidence is normally justified. Moral stability will also be marked. The disposition is calm, grave and serious. The body will be weak and emaciated. Progress in any venture will be slow but certain. There may be some aversion for responsibility. This position of Saturn makes habits inactive. Loss through negligence and lack of opportunity are possible. The same results will be noticed if the ascendant is aspected by Saturn. Misfortunes are likely in the early part of life.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>RahuInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>The health will be generally unsatisfactory calling for treatment other than by medical methods. It inclines one to the occult and the serious wilfulness of nature is well marked. A hypocritical super-consciousness towards others is likely. It makes one appear rather odd and eccentric. This combination is usually bad for marriage. Rahu will generally partake of the characteristics of Saturn.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>KetuInHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>Psychic powers are likely. It denotes a weak constitution and an emaciated figure. Instability and deceitfulness may influence the character. Morbid imagination, strange appetites, tendency to excitability and wandering disposition become pronouncedly marked. Married life will be unhappy unless there are other favourable configurations.</Description>
@@ -1309,63 +1312,63 @@
 
 	<!--Planets in the 2 House-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SunInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>This is not quite a favourable situation. Losses will occur by offending the authorities. He will have a diseased face. He will obtain money by industrious effort. The nature of the income depends on the nature of the sign. He will be stubborn and peevish</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MoonInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>He will have a large family and will enjoy much happiness. Money will also be obtained through females. The financial position will be somewhat variable, will have a fair complexion. Dhundiraja, a noted astrological writer of yore, says that when the Moon is in the 2nd house, the native will be reserved and not much sociable, squint eyed and much admired.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MarsInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>Becomes quarrelsome. Good earning powers but usually miserly. Much money is accumulated. A good conversationalist. He will befriend evil-minded persons, be unsympathetic and pick up quarrels with all.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MercuryInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>Learned in religious and philosophical lore. Denotes gain by lecturing, business and commercial affairs. Becomes rich. Highly intelligent. He spends money on charities and moral purposes. Clever in earning money and careful and thrifty.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>JupiterInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>Becomes a poet, a great writer, astrologer or even a scientist. Increases the chances for success. He accumulates fortune, good wife and family surroundings. He will not quarrel with others. Money will be acquired through things indicated by the signs ruled by Jupiter.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>VenusInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>Large family. Money usually comes readily by favours from others. Eats good food, possesses conveyances. Handsome appearance, skilful and pleasant, will marry a good wife or husband. Health and wealth are indicated in a large measure.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SaturnInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>Saturn, unless the second is Libra, Capricorn or Aquarius, tends to make earning an uphill struggle. Much work with little gain. Harsh speech, unsocial, sorrowful and roaming about aimlessly the person comes across many opportunities but seldom takes advantage of them. In family life he will be unhappy. He will gain by dealing with metals, storage, mines, labour, etc. He will be unpopular.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>RahuInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>Peevish, diseased face, friction in family life, danger to eye-sight. Financial affairs uncertain unless other favourable combinations occur. If Jupiter aspects the second house, then earnings will be good. Money is gained through friends and business.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>KetuInHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>Bad speaker. Loss through fraud and deception. There will be liability in financial affairs. Success in spiritualism, navigation, mystical arts, hospital, etc., may be expected.</Description>
@@ -1374,63 +1377,63 @@
 
 	<!--Planets in the 3 House-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SunInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>Makes the person courageous. The mind becomes resourceful and restive, successful. Bad for brothers if afflicted. Discredit through letters. Position of the Sun in the 3rd is one of the strong points in a horoscope.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MoonInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>Generally changes in occupation are indicated, fond of travelling and active minded. Wife will be fair. The subject possesses.good knowledge. Rather indifferent to spiritual values of life. Subordinate to wife. Attached to children. If however the Moon is waning, cruel, miserable, impious and unscrupulous. An unfavourable position for peace of mind, if afflicted.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MarsInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>This position is bad for brothers and sisters. Liability to danger and accidents by journeys. Brave, Worried on account of family misunderstandings. Reckless, pioneering and unprincipled. May be troubled with ear defects or even deafness. If the house is further afflicted, it shows thoughts of suicide or violent tendencies.If the third is Capricorn, Aries or Scorpio, the evil effects will be largely modified.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MercuryInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>Will do good deeds for the benefit of others but he will not himself be happy. The mind is sharp. Fond of reading and study ; when once he undertakes a work he does it to the finish and will never get discouraged. Tactful and diplomatic. He will befriend businessmen and merchants. He will generally be successful in trade and speculation. A number of brothers and sisters. Independent views. Liked by friends and relatives. When Mercury is afflicted the native is inclined to nervous break-down. Gain through third house affairs.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>JupiterInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>This is also a good position. The mind is optimistic and philosophical. Will have many good brothers. Becomes a miser. Does not love family and children. The body gets heated and he suffers from ill-health. He may be devoid of gratitude if Jupiter is afflicted. He does not have many friends. Does not take advantage of opportunities. Adapts himself to conventionalities.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>VenusInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>The mental quality is good but health will be poor, lacking in vitality. He will take delight in singing, music, dancing and fine arts. Financially he will not be very successful. If Venus is afflicted, miserly, mean, poor and highly sensual. He becomes funky and interested in scandals. Brothers will be good. Not much happiness from children.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SaturnInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>Brave and courageous, wealthy, loss of brothers, eccentric and cruel. Sorrow through brothers ; honoured by rulers ; may become head or president of local boards, municipalities, etc. He will protect many people. One peculiarity of this combination is that success attends him only after he has suffered disappointments and reverses. The tendency of the mind is towards gloom, anxiety and misgivings. The mental condition improves with age. If Saturn is afflicted, the despondency is likely to run into mental affliction.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>RahuInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>Brave for outward appearances. Sudden and unexpected news. The combination is generally bad for brothers. He may incur severe criticism on account of his views and ideas.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>KetuInHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>Strong and adventurous but funky. Disturbs the mind with hallucinations.</Description>
@@ -1439,7 +1442,7 @@
 
 	<!--Planets in the 4 House-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SunInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1451,7 +1454,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MoonInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1463,7 +1466,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MarsInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1475,7 +1478,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MercuryInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1487,7 +1490,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>JupiterInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1498,7 +1501,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>VenusInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1509,7 +1512,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SaturnInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1521,7 +1524,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>RahuInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1530,7 +1533,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>KetuInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1542,7 +1545,7 @@
 
 	<!--Planets in the 5 House-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SunInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1553,7 +1556,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MoonInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1565,7 +1568,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MarsInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1577,7 +1580,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MercuryInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1588,7 +1591,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>JupiterInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1599,7 +1602,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>VenusInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1610,7 +1613,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SaturnInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1621,7 +1624,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>RahuInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1631,7 +1634,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>KetuInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
@@ -1643,63 +1646,63 @@
 
 	<!--Planets in the 6 House-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SunInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MoonInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MarsInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MercuryInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>JupiterInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>VenusInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SaturnInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>RahuInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>KetuInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description></Description>
@@ -1709,7 +1712,7 @@
 
 	<!--CUSTOM-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>GeminiRisingWithEvilPlanet</Name>
 		<Nature>Bad</Nature>
 		<Description>
@@ -1718,7 +1721,7 @@
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>AriesRisingWithEvilPlanet</Name>
 		<Nature>Bad</Nature>
 		<Description>Mental affliction and derangement are also likely since Saturn and the Moon are in Aries.</Description>
@@ -1728,140 +1731,140 @@
 
 	<!--House 2 - Other Important Combinations-->
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2WithEvilInHouse</Name>
 		<Nature>Bad</Nature>
 		<Description>If the second lord is in the 2nd with evil planets or aspected by him, he will be poor.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SaturnIn2WithVenus</Name>
 		<Nature>Neutral</Nature>
 		<Description>Ordinary wealth is indicated if Saturn is in the 2nd aspected by Venus.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MoonMarsIn2WithSaturnAspect</Name>
 		<Nature>Bad</Nature>
 		<Description>If the Moon and Mars reside in the 2nd bhava and Saturn aspects it, he suffers from a peculiar skin disease.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MercuryAndEvilIn2WithMoonAspect</Name>
 		<Nature>Bad</Nature>
 		<Description>The situation of Mercury in the 2nd with another evil planet aspected by the Moon is bad for saving money. Even if there is any ancestral wealth, it will be spent—rather wasted on extravagant purposes.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>SunIn2WithNoSaturnAspect</Name>
 		<Nature>Good</Nature>
 		<Description>The Sun in the 2nd without being aspected by Saturn is favorable for a steady fortune.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MoonIn2WithMercuryAspect</Name>
 		<Nature>Good</Nature>
 		<Description>The Moon being placed in the 2nd and aspected by Mercury is favorable for earning money by self-exertion.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2And3In6WithEvilPlanet</Name>
 		<Nature>Bad</Nature>
 		<Description>He will be poor if lords of the 2nd and 3rd are in the 6th with or aspected by evil planets.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse1</Name>
 		<Nature>Neutral</Nature>
 		<Description>If the second lord is in the first — One earns money by his own exertions and generally by manual labour. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse1AndLord1InHouse2</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the second — Riches will be acquired without effort if the 1st and 2nd lords have exchanged their houses. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse3</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the third — Loss from relatives, brothers and gain from travels and journeys. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the fourth - Through mother, inheritance. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the fifth — Ancestral properties, speculation and chance games. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the sixth — Broker's business, loss from relatives. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the seventh — Gain after marriage but loss from sickness, etc., of wife. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the eighth — Legacies and enemies. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the ninth — From father, voyages and shipping. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the tenth — Profession, eminent people, government favours. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>Lord2InHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>In the eleventh — From different means. (source of income)</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>MaleficIn11FromArudha</Name>
 		<Nature>Bad</Nature>
 		<Description>Unjust means of earning because malefic planets in the 11th from Arudha Lagna.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
-		<Id>25</Id>
+		
 		<Name>BeneficIn11FromArudha</Name>
 		<Nature>Good</Nature>
 		<Description>Just means of earning because benefic planets in the 11th from Arudha Lagna.</Description>

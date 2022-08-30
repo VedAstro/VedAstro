@@ -7,6 +7,8 @@
     public static class PageRoute
     {
         public const string TaskList = "/tasklist";
+        public const string SearchResult = "/SearchResult";
+        public const string SearchResultParam = "/SearchResult/{SearchText}";
         public const string Debug = "/Debug";
         public const string AskAstrolger = "/AskAstrolger";
         public const string BirthTimeFinder = "/BirthTimeFinder";
@@ -30,6 +32,7 @@
         public const string MatchReportParam = "/matchreport/{MaleHash}/{FemaleHash}";
         public const string SunRiseSetTime = "/sunrisesettime";
         public const string AddLifeEvent = "/addlifeevent";
+        public const string AddPerson = "/AddPerson";
         public const string LocalMeanTime = "/localmeantime";
         public const string Dasa = "/dasa";
         public const string QuickGuide = "/quickguide";
@@ -40,5 +43,6 @@
         public const string KoFiPage = "https://ko-fi.com/vedastro";
         public const string PaypalMePage = "https://paypal.me/VedAstroOrg";
         public const string AddPersonGuideVideo = "https://youtu.be/RDUPsFOrr3c";
+        public const string BlogWhyVedic = "/Blog/WhyVedic";
     }
 }

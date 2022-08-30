@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
@@ -72,6 +74,88 @@ namespace Genso.Astrology.Library
 
 
 
+        /// <summary>
+        /// Converts XML to Instance
+        /// </summary>
+        public static EventData FromXml(XElement eventData)
+        {
+            //extract the individual data out & convert it to the correct type
+            var nameString = eventData.Element("Name")?.Value;
+            Enum.TryParse(nameString, out EventName name);
+            var natureString = eventData.Element("Nature")?.Value;
+            Enum.TryParse(natureString, out EventNature nature);
+            var description = getDescription(eventData.Element("Description")?.Value); //with proper formatting
+            var tagString = eventData.Element("Tag")?.Value;
+            var tagList = getEventTags(tagString); //multiple tags are possible ',' separated
+            var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
+
+            //place the data into an event data structure
+            var eventX = new EventData(name, nature, description, tagList, calculatorMethod);
+
+            return eventX;
+
+
+            //Gets a list of tags in string form & changes it a structured list of tags
+            //Multiple tags can be used by 1 event, separated by comma in in the Tag element
+            List<EventTag> getEventTags(string rawTags)
+            {
+                //create a place to store the parsed tags
+                var returnTags = new List<EventTag>();
+
+                //split the string by comma "," (tag separator)
+                var splitedRawTags = rawTags.Split(',');
+
+                //parse each raw tag
+                foreach (var rawTag in splitedRawTags)
+                {
+                    //parse
+                    var result = Enum.TryParse(rawTag, out EventTag eventTag);
+                    //raise error if could not parse
+                    if (!result) throw new Exception("Event tag not found!");
+
+                    //add the parsed tag to the return list
+                    returnTags.Add(eventTag);
+                }
+
+                return returnTags;
+            }
+
+            //little function to format the description coming from the file
+            //so that the description wraps nicely when rendered
+            string getDescription(string rawDescription)
+            {
+                //remove new line
+                //var cleaned1 = rawDescription.Replace("\n", "").Replace("\r", "");
+
+                //remove double spaces
+                //RegexOptions options = RegexOptions.None;
+                //Regex regex = new Regex("[ ]{3,}", options);
+                //var cleaned2 = regex.Replace(cleaned1, " ");
+                var cleaned = Regex.Replace(rawDescription, @"\s+", " ");
+
+                return cleaned;
+            }
+
+
+        }
+
+        /// <summary>
+        /// Searches all text in prediction for input
+        /// </summary>
+        public bool Contains(string searchText)
+        {
+            //place all text together
+            var compiledText = $"{FormattedName} {Description} {Nature} {string.Join(",", EventTags)}";
+
+            //do the searching
+            string pattern = @"\b" + Regex.Escape(searchText) + @"\b"; //searches only words
+            var searchResult = Regex.Match(compiledText, pattern, RegexOptions.IgnoreCase).Success;
+            return searchResult;
+
+        }
+
+
+
         /** METHOD OVERRIDES **/
         public override bool Equals(object value)
         {
@@ -120,22 +204,6 @@ namespace Genso.Astrology.Library
             return !(left == right);
         }
 
-        public static EventData ToXml(XElement eventData)
-        {
-            //extract the individual data out & convert it to the correct type
-            var nameString = eventData.Element("Name").Value;
-            Enum.TryParse(nameString, out EventName name);
-            var natureString = eventData.Element("Nature").Value;
-            Enum.TryParse(natureString, out EventNature nature);
-            var description = eventData.Element("Description").Value;
-            var tagString = eventData.Element("Tag").Value;
-            var tagList = Tools.StringToEventTagList(tagString);
-            var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
-
-            //place the data into an event data structure
-            var eventX = new EventData(name, nature, description, tagList, calculatorMethod);
-
-            return eventX;
-        }
+        
     }
 }

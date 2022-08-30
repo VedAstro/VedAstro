@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿
+
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">VedAstro</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -30,12 +33,6 @@
                 <span class="iconify" data-icon="iconoir:donate" data-width="30"></span> Donate
             </NavLink>
         </div>
-        @*        <div style="cursor: pointer;" class="nav-item px-3" @onclick="OnClickAccountNav">
-        <NavLink class="nav-link gap-2" >
-        <span class="iconify" data-icon="mdi:account-details" data-width="30"></span> Account
-        </NavLink>
-        </div>
-        *@
         <div @ref="_personListHolder" class="nav-item px-3">
             <NavLink class="nav-link gap-2" href="@PageRoute.PersonList">
                 <span class="iconify" data-icon="fluent:people-list-20-filled" data-width="30"></span> Person List

@@ -1,6 +1,8 @@
 ﻿@using Genso.Astrology.Library
 @using System.Xml.Linq
 @inherits LayoutComponentBase
+@inject HttpClient Client
+
 
 @*
     NOTE : Components here are loaded same time as page,
@@ -15,26 +17,89 @@
 *@
 @if (_mainPageInitDone)
 {
+    <!-- sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-logo"><span></span></a>
+            <a href="#" class="sidebar-logo-text">Ved<span>Astro</span></a>
+        </div><!-- sidebar-header -->
+        <div class="sidebar-search">
+            <div class="search-body">
+                <i data-feather="search"></i>
+                <input @ref="searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
+            </div><!-- search-body -->
+        </div><!-- sidebar-search -->
+        <div class="sidebar-body">
+            <nav class="nav-sidebar">
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.Home)" class="nav-link active">
+                    <span class="iconify" data-icon="ant-design:home-twotone" data-width="25"></span><span>Home</span>
+                </a>
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.QuickGuide)" class="nav-link">
+                    <span class="iconify" data-icon="cil:book" data-width="25"></span><span>Quick Guide</span>
+                </a>
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.AskAstrolger)" class="nav-link">
+                    <span class="iconify" data-icon="wpf:ask-question" data-width="25"></span><span>Ask Astrologer</span>
+                </a>
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.CalculatorList)" class="nav-link">
+                    <span class="iconify" data-icon="bi:calculator" data-width="25"></span><span>Calculators</span>
+                </a>
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.PersonList)" class="nav-link">
+                    <span class="iconify" data-icon="fluent:people-list-20-filled" data-width="25"></span><span>Person List</span>
+                </a>
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.Donate)" class="nav-link">
+                    <span class="iconify" data-icon="iconoir:donate" data-width="25"></span><span>Donate</span>
+                </a>
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.Contact)" class="nav-link">
+                    <span class="iconify" data-icon="ci:mail" data-width="24"></span><span>Contact</span>
+                </a>
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.About)" class="nav-link">
+                    <span class="iconify" data-icon="akar-icons:info" data-width="25"></span><span>About</span>
+                </a>
+                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.Contact)" class="nav-link">
+                    <span class="iconify" data-icon="codicon:feedback" data-width="25"></span><span>Give Feedback</span>
+                </a>
 
-    <div class="page">
-        <div class="sidebar">
-            <NavMenu />
-        </div>
-        <main>
-            <article class="content px-4 mb-5">
-                @Body
-            </article>
-        </main>
+            </nav>
+            @*<hr>
+        <nav class="nav-sidebar">
+        </nav>*@
+        </div><!-- sidebar-body -->
+
+        <div class="sidebar-footer">
+            <a href="" class="avatar online"><span class="avatar-initial">s</span></a>
+            <div class="avatar-body">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h6>Samantha Doe</h6>
+                    <a href="" class="footer-menu"><i class="ri-settings-4-line"></i></a>
+                </div>
+                <span>Superuser/Administrator</span>
+            </div><!-- avatar-body -->
+        </div><!-- sidebar-footer -->
     </div>
+
+
+    <div class="content">
+        <!-- content-header -->
+        <div class="content-header" style="position: absolute;top: -16px;left: -9px;">
+            <a id="contentMenu" href="#" class="content-menu d-none d-lg-flex"><i data-feather="menu"></i></a>
+            <a id="mobileMenu" href="#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+        </div>
+
+        <!-- content-body -->
+        <div class="content-body">
+            @Body
+        </div>
+    </div>
+
 }
 
 
 
 @code
 {
+    IJSObjectReference? _module;
     bool _mainPageInitDone;
-
-
+    private ElementReference searchInput;
 
     protected override async Task OnInitializedAsync()
     {
@@ -50,19 +115,22 @@
 
         //other components can start loading now
         _mainPageInitDone = true;
+
     }
 
-
-
+    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await _jsRuntime.InvokeVoidAsync("InitErrorCatcher");
-        }
+            //load js script for date time picker
+            _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/MainLayout.js");
 
-        //log visit everytime page is rendered
-        await WebsiteLogManager.LogVisitor(_jsRuntime);
+            await _jsRuntime.InvokeVoidAsync("InitErrorCatcher");
+
+            //log visit only 1 once when page is rendered
+            await WebsiteLogManager.LogVisitor(_jsRuntime);
+        }
     }
 
     /// <summary>
@@ -76,26 +144,30 @@
         if (userDataXml is not null or "")
         {
 #if DEBUG
-        Console.WriteLine("BLZ: Using Previous Login Data");
+    Console.WriteLine("BLZ: Using Previous Login Data");
 #endif
             AppData.CurrentUser = UserData.FromXml(XElement.Parse(userDataXml));
         }
     }
 
+    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
+    {
+        //only start search when user press Enter
+        if (keyEventArgs.Key != "Enter") return;
+
+        //get search text
+        var text = await _jsRuntime.GetValue(searchInput);
+
+        //go home when no text
+        if (text.Length == 0) { _navigation.NavigateTo(PageRoute.Home); return; }
+
+        //show search page & input the search text
+        _navigation.NavigateTo(PageRoute.SearchResult);
+        await Task.Delay(250);//little time for page to load (needed else fails)
+        await AppData.SearchPage.Search(text);
+    }
 
 }
 
 
 
-
-@*
-<ErrorBoundary>
-    <ChildContent>
-        @Body
-    </ChildContent>
-    <ErrorContent Context="ex">
-        @{ OnError(@ex); }
-        <p>@ex.Message</p>
-    </ErrorContent>
-</ErrorBoundary>
-*@

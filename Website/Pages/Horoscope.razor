@@ -1,6 +1,6 @@
 ﻿@attribute [Route(PageRoute.Horoscope)]
 
-@inject HttpClient _client
+@inject HttpClient Client
 
 
 <PageTitle>Horoscope</PageTitle>
@@ -140,7 +140,7 @@
         var person = _peopleSelectorBox.GetSelectedPerson();
 
         //get main horoscope prediction file (located in wwwroot)
-        var predictionDataList = await _client.GetStreamAsync("data/PredictionDataList.xml");
+        var predictionDataList = await Client.GetStreamAsync("data/PredictionDataList.xml");
 
         //calculate predictions for current person (client side)
         _horoscopePredictions = await HoroscopeCore.GetPrediction(person, predictionDataList);

@@ -6,6 +6,7 @@ namespace Website
 
     /// <summary>
     /// Simple class to encapsulate a HoroscopePrediction (data)
+    /// Note : EventData + Time = HoroscopePrediction
     /// </summary>
     public class HoroscopePrediction : IHasName
     {
@@ -101,9 +102,6 @@ namespace Website
         {
             //place all text together
             var compiledText = $"{FormattedName} {Description} {Info}";
-
-            //change all to small caps
-            compiledText = compiledText.ToLower();
 
             //do the searching
             string pattern = @"\b" + Regex.Escape(searchText) + @"\b"; //searches only words

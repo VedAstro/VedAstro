@@ -146,6 +146,9 @@ namespace Website
 
              jsRuntime.ShowAlert(alertData);
         }
+        
+        public static void HideLoading(this IJSRuntime jsRuntime) => jsRuntime.HideAlert();
+
 
         //TIPPY TOOLTIP LIBRARY
 
@@ -182,7 +185,6 @@ namespace Website
         /// Uses jQuery to show element via selector (#ID,.class)
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync("showWrapper", elementSelector);
-
 
         /// <summary>
         /// Uses jQuery to hide element via blazor reference
@@ -248,7 +250,8 @@ namespace Website
         public static async Task AddClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("addClassWrapper", element, classNames);
         public static async Task RemoveClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("removeClassWrapper", element, classNames);
         public static async Task ToggleClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("toggleClassWrapper", element, classNames);
-        
+        public static async Task ToggleClass(this IJSRuntime jsRuntime, string jquerySelector, string classNames) => await jsRuntime.InvokeVoidAsync("toggleClassWrapper", jquerySelector, classNames);
+
         public static async Task<double> ElementWidth(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<double>("getElementWidth", element);
         
         public static async Task<double> AddWidthToEveryChild(this IJSRuntime jsRuntime, ElementReference element, double valueToAdd) => await jsRuntime.InvokeAsync<double>("addWidthToEveryChild", element, valueToAdd);
@@ -258,6 +261,12 @@ namespace Website
         public static async Task SetProp(this IJSRuntime jsRuntime, ElementReference element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
 
         public static void OpenNewTab(this IJSRuntime jsRuntime, string url) => jsRuntime.InvokeVoidAsync("open", url, "_blank");
+
+        /// <summary>
+        /// Jquery .text()
+        /// </summary>
+        public static async Task<string> GetText(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>("getTextWrapper", element);
+        public static async Task<string> GetValue(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>("getValueWrapper", element);
 
 
     }

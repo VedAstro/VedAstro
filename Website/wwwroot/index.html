@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VedAstro | Vedic Astrology</title>
@@ -89,13 +89,23 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@1.5.5/build/vanilla-calendar.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@1.5.5/build/vanilla-calendar.min.js"></script>
 
+    <!--awesome font files-->
+    <script src="https://kit.fontawesome.com/018dafad4c.js" crossorigin="anonymous"></script>
+    
+    <!--Feather Icons : used in nav menu-->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+    <!--Perfect scrollbar js : used in nav menu-->
+    <!--<script src="https://cdn.jsdelivr.net/npm/perfect-scrollbar@1.5.5/dist/perfect-scrollbar.common.min.js"></script>-->
+
     <!--Application Logic, Must run last since it uses the libraries-->
     <script src="js/App.js"></script>
     <script src="js/Debug.js"></script>
 
 </head>
-<body style="max-width: 1316px; background-color: #a3bff11c; ">
+<body class="animate skin-red">
 
+    <!--inside this div all page is generated-->
     <div id="app">
         <!--loading box shown while blazor is loading-->
         <img style="position: absolute; left: 39%; top: 30%;" src="images/loading-animation-progress-transparent.gif" />

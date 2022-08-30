@@ -1,0 +1,19 @@
+﻿@*A simple page specialized for adding new Person profiles fast & easy*@
+@attribute [Route(PageRoute.AddPerson)]
+
+<PageTitle>Add New Person Profile</PageTitle>
+
+<PageTop Title="Add New Person" IconName="icomoon-free:profile">
+    <Description>
+        Person's birth info for astronomical calculation
+    </Description>
+    <ButtonsRow>
+        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="() => _navigation.NavigateTo(PageRoute.PersonList)"></IconButton>
+        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
+    </ButtonsRow>
+</PageTop>
+
+
+@code {
+
+}

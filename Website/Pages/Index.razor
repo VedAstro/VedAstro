@@ -4,19 +4,14 @@
 <PageTitle>VedAstro | Vedic Astrologer</PageTitle>
 
 <style>
-    .card-title {
+   /* .card-title {
         font-weight: bolder;
-    }
+    }*/
 
     .backgroudImg {
         background-image: url("images/zodiac-wheel-faded-2.png");
         background-repeat: no-repeat;
     }
-
-/*    .card {
-        min-height: 216px;
-    }
-*/
 
 </style>
 
@@ -39,84 +34,77 @@
     </div>
 </div>
 
+<style>
+    /*to make card look clickable*/
+    .card:hover {
+        border: 2px solid #3E7DC0 !important;
+    }
+</style>
 
-<div class="container px-4 py-5" id="icon-grid">
-    <h2 class="pb-2 border-bottom">Free Calculators</h2>
-
-    <div style="margin-top: -54px;" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
-                <div class="col-sm">
-            <div class="card rounded-3 border shadow-lg">
+<div class="py-4" id="icon-grid">
+    <h3 class="pb-2 border-bottom">
+        Calculators <button @onclick="() => _navigation.NavigateTo(PageRoute.CalculatorList)" type="button" class="btn btn-sm btn-outline-secondary">View All</button>
+    </h3>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-4">
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.Match)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/match-card.jpg" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">Match</h5>
-                    <p class="card-text">Check compatibility between horoscopes</p>
-                    <a href="@PageRoute.Match" class="btn btn-primary">Calculate</a>
+                    <p class="card-text">Check compatibility between two horoscopes</p>
                 </div>
             </div>
         </div>
-        <div class="col-sm">
-            <div class="card rounded-3 border shadow-lg">
-                <div class="card-body">
-                    <h5 class="card-title">Dasa</h5>
-                    <p class="card-text">Know good and bad periods of your life years ahead.</p>
-                    <a href="@PageRoute.Dasa" class="btn btn-primary">Calculate</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card rounded-3 border shadow-lg">
+
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.Horoscope)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/horoscope-card.jpg" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">Horoscope</h5>
-                    <p class="card-text">Shows all possible prediction for a person from birth time.</p>
-                    <a href="@PageRoute.Horoscope" class="btn btn-primary">Calculate</a>
+                    <p class="card-text">Shows all possible prediction for a person's life.</p>
                 </div>
             </div>
         </div>
-        <div class="col-sm">
-            <div class="card rounded-3 border shadow-lg">
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.Dasa)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/dasa-card.jpg" class="card-img-top">
                 <div class="card-body">
-                    <h5 class="card-title">Journal</h5>
-                    <p class="card-text">Astrological journal to understand your life events.</p>
-                    <a href="@PageRoute.AddLifeEvent" class="btn btn-primary">Add</a>
+                    <h5 class="card-title">Dasa</h5>
+       
+                    <p class="card-text">Know good and bad periods of your life years ahead.</p>
                 </div>
             </div>
         </div>
-        <div class="col-sm">
-            <div class="card rounded-3 border shadow-lg">
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.Muhurtha)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/muhurtha-card.jpg" class="card-img-top">
                 <div class="card-body">
-                    <h5 class="card-title">Horoscope Data</h5>
-                    <p class="card-text">Raw astrological horoscope data</p>
-                    <a href="@PageRoute.HoroscopeData" class="btn btn-primary">Calculate</a>
+                    <h5 class="card-title">Muhurtha</h5>
+                    <p class="card-text">Find a good time for buying car, travel, studies, etc..</p>
                 </div>
             </div>
         </div>
-        <div class="col-sm">
-            <div class="card rounded-3 border shadow-lg">
-                <div class="card-body">
-                    <h5 class="card-title">Local Mean Time</h5>
-                    <p class="card-text">Actual time at a place based on coordinates</p>
-                    <a href="@PageRoute.LocalMeanTime" class="btn btn-primary">Calculate</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm">
-            <div class="card rounded-3 border shadow-lg">
-                <div class="card-body">
-                    <h5 class="card-title">Sunrise Time</h5>
-                    <p class="card-text">Accurate Sunrise/Sunset Time at any place</p>
-                    <a href="@PageRoute.SunRiseSetTime" class="btn btn-primary">Calculate</a>
-                </div>
-            </div>
-        </div>
+    </div>
 
+    <h3 class="pb-2 border-bottom mt-5">Blog Articles</h3>
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="images/why-vedic.webp" class="img-fluid rounded-start">
+            </div>
+            <div class="col-md-8" @onclick="() => _navigation.NavigateTo(PageRoute.BlogWhyVedic)" style="cursor: pointer;">
+                <div class="card-body">
+                    <h5 class="card-title">Why Not Mayan Astrology?</h5>
+                    <p class="card-text">
+                        So this begs the question, "Why 'Vedic' Astrology? Why not Mayan Astrology? Or Egyptian or Greek?".
+                        The simple answer is, for some reason Vedic records survived...
+                    </p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-@*
-<div class="container mt-5">
-    <div class="row">
-    </div>
-
-</div>*@
-
 
 
 @code {

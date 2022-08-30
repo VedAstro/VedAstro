@@ -7,6 +7,7 @@
     public static class PageRoute
     {
         public const string TaskList = "/tasklist";
+        public const string MessageList = "/MessageList";
         public const string SearchResult = "/SearchResult";
         public const string SearchResultParam = "/SearchResult/{SearchText}";
         public const string Debug = "/Debug";

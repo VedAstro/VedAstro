@@ -1,0 +1,12 @@
+﻿@using Genso.Astrology.Library
+@attribute [Route(PageRoute.MessageList)]
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        //get all task from API server
+        var messageListXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetTaskListApi);
+    }
+
+}

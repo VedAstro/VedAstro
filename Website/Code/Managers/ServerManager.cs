@@ -20,12 +20,15 @@ namespace Website
         public const string DeleteVisitorByVisitorId = "https://vedastroapi.azurewebsites.net/api/deletevisitorbyvisitorid";
         public const string AddTaskApi = "https://vedastroapi.azurewebsites.net/api/addtask";
         public const string AddVisitorApi = "https://vedastroapi.azurewebsites.net/api/addvisitor";
+        
         public const string GetMaleListApi = "https://vedastroapi.azurewebsites.net/api/getmalelist";
         public const string GetPersonListApi = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
         public const string GetPersonApi = "https://vedastroapi.azurewebsites.net/api/getperson";
+        
         public const string UpdatePersonApi = "https://vedastroapi.azurewebsites.net/api/updateperson";
         public const string GetTaskListApi = "https://vedastroapi.azurewebsites.net/api/gettasklist";
         public const string GetVisitorList = "https://vedastroapi.azurewebsites.net/api/getvisitorlist";
+        public const string GetMessageList = "https://vedastroapi.azurewebsites.net/api/getmessagelist";
         public const string GetFemaleListApi = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetPersonDasaReport = "https://vedastroapi.azurewebsites.net/api/getpersondasareport";
@@ -38,7 +41,6 @@ namespace Website
         /// <summary>
         /// link to js file used for google sign in function
         /// </summary>
-        public const string GoogleSignInJsOld = "https://apis.google.com/js/platform.js";
         public const string GoogleSignInJs = "https://accounts.google.com/gsi/client";
         public const string SignInGoogle = "https://vedastroapi.azurewebsites.net/api/SignInGoogle";
         public const string SignInFacebook = "https://vedastroapi.azurewebsites.net/api/SignInFacebook";

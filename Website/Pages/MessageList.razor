@@ -1,12 +1,47 @@
 ﻿@using Genso.Astrology.Library
+@using System.Xml.Linq
 @attribute [Route(PageRoute.MessageList)]
+
+
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>UserId</th>
+            <th>Email</th>
+            <th>Timestamp</th>
+            <th>Text</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var message in _messageListXml)
+        {
+            <tr>
+                <td>@message.Element("UserId")?.Value</td>
+                <td>@message.Element("Email")?.Value</td>
+                <td>@message.Element("Timestamp")?.Value</td>
+                <td>@message.Element("Text")?.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
 
 @code {
 
+
+    List<XElement> _messageListXml = new List<XElement>();
+
     protected override async Task OnInitializedAsync()
     {
-        //get all task from API server
-        var messageListXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetTaskListApi);
+        _jsRuntime.ShowLoading();
+
+        //get all message list from API server
+        var rawDoc = await ServerManager.ReadFromServerXmlReply(ServerManager.GetMessageList);
+        _messageListXml = rawDoc.Elements().ToList();
+
+        _jsRuntime.HideLoading();
     }
 
 }

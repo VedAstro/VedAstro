@@ -30,6 +30,7 @@ namespace API
         private const string TaskListXml = "vedastro-site-data/TaskList.xml";
         private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
         private const string ContainerName = "vedastro-site-data";
+        private const string PersonListFile = "PersonList.xml";
 
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace API
                 var newPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new person to main list
-                await APITools.AddXElementToXDocument(newPersonXml, "PersonList.xml", ContainerName);
+                await APITools.AddXElementToXDocument(newPersonXml, PersonListFile, ContainerName);
 
                 return PassMessage();
 
@@ -689,6 +690,36 @@ namespace API
 
                 //send task list to caller
                 responseMessage = taskListXml.ToString();
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+
+            return okObjectResult;
+        }
+
+        [FunctionName("getmessagelist")]
+        public static async Task<IActionResult> GetMessageList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
+            [Blob(MessageListXml, FileAccess.ReadWrite)] BlobClient messageListClient)
+        {
+            var responseMessage = "";
+
+            try
+            {
+                //get message list from storage
+                var messageListXml = APITools.BlobClientToXml(messageListClient);
+
+                //send task list to caller
+                responseMessage = messageListXml.ToString();
 
             }
             catch (Exception e)

@@ -23,6 +23,8 @@
 <div>
     @if (_isResultReady)
     {
+        <PlanetStrengthChart Time="@SelectedPerson.BirthTime" />
+
         <h4 class="mt-2">Planets</h4>
         <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
             <PlanetInfoBox PlanetName="PlanetName.Sun" Time="@SelectedPerson.BirthTime" />
@@ -70,6 +72,10 @@
         if (!ValidationPassed()) { return; }
 
         _jsRuntime.ShowLoading();
+        await Task.Delay(450); //little delay for loading to pop
+
+        //hide on second calculate
+        _isResultReady = false;
 
         //get data from inputs and save it for use by other components
         SelectedPerson = _peopleSelectorBox.GetSelectedPerson();

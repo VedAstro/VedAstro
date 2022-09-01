@@ -661,8 +661,8 @@ function autoUpdateTimeLegend(mousePosition) {
             $("#CursorLineLegendDescriptionHolder").show();
 
             $(document).trigger('loadEventDescription', eventName);
-            
-            
+
+
         } else {
             //todo
             //$("CursorLineLegendDescriptionHolder").hide(); //hide holder 
@@ -813,3 +813,67 @@ function InitTouchLib(element) {
     //});
 }
 
+function DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venus) {
+
+    //delete previous chart if any
+    if (window.PlanetStrengthChart != null) { window.PlanetStrengthChart.destroy(); }
+
+    var xValues = ["Sun", "Moon", "Mercury", "Mars", "Jupiter", "Saturn", "Venus"];
+    var yValues = [sun, moon, mercury, mars, jupiter, saturn, venus];
+    var barColors = ["red", "green", "blue", "orange", "brown", "orange", "brown"];
+
+    //this chart elm ID is hard coded in Blazor
+    //note: stored in window so that can delete it on redraw
+    window.PlanetStrengthChart = new Chart("myChart",
+        {
+            type: "bar",
+            data: {
+                xAxisID: "Planets",
+                yAxisID: "Strength",
+                labels: xValues,
+                datasets: [
+                    {
+                        data: yValues,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(255, 159, 64, 0.7)',
+                            'rgba(255, 205, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(201, 203, 207, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        min: round(Math.min.apply(this, yValues) - 50),
+                        max: round(Math.max.apply(this, yValues) + 50)
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    }
+                }
+            }
+        });
+
+
+    //make the chart more beautiful if your stepSize is 5
+    function round(x) {
+        return Math.ceil(x / 5) * 5;
+    }
+}

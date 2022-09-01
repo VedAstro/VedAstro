@@ -1,0 +1,62 @@
+﻿@using Genso.Astrology.Library
+
+
+
+<h4>Planet Strength Chart</h4>
+<canvas class="rounded border" id="myChart" style="max-width: 400px; max-height: 247px;  background: #f5f5f9;"></canvas>
+
+@code {
+
+    [Parameter]
+    public Time Time
+    {
+        get => _time;
+        set
+        {
+            _time = value;
+            StateHasChanged();
+        }
+    }
+
+
+    private double _shadbalaPindaSun;
+    private double _shadbalaPindaMoon;
+    private double _shadbalaPindaMercury;
+    private double _shadbalaPindaMars;
+    private double _shadbalaPindaJupiter;
+    private double _shadbalaPindaSaturn;
+    private double _shadbalaPindaVenus;
+    private Time _time;
+
+    protected override void OnInitialized()
+    {
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //get planet details and save it for view
+        _shadbalaPindaSun = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, Time).ToDouble();
+        _shadbalaPindaMoon = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, Time).ToDouble();
+        _shadbalaPindaMercury = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, Time).ToDouble();
+        _shadbalaPindaMars = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, Time).ToDouble();
+        _shadbalaPindaJupiter = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, Time).ToDouble();
+        _shadbalaPindaSaturn = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, Time).ToDouble();
+        _shadbalaPindaVenus = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, Time).ToDouble();
+
+        //generate JS bar chart with calculated values
+        //note : done here so needed element is available
+        //sun, moon, mercury, mars, jupiter, saturn, venus
+        await _jsRuntime.InvokeVoidAsync("DrawPlanetStrengthChart",
+            _shadbalaPindaSun,
+            _shadbalaPindaMoon,
+            _shadbalaPindaMercury,
+            _shadbalaPindaMars,
+            _shadbalaPindaJupiter,
+            _shadbalaPindaSaturn,
+            _shadbalaPindaVenus
+            );
+
+
+    }
+
+}

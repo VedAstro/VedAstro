@@ -1,9 +1,16 @@
 ﻿@using Genso.Astrology.Library
 
 
-
-<h4>Planet Strength Chart</h4>
-<canvas class="rounded border" id="myChart" style="max-width: 400px; max-height: 247px;  background: #f5f5f9;"></canvas>
+<div class="g-4 row row-cols-1 row-cols-md-2">
+    <div>
+        <h5>Planet Strength</h5>
+        <canvas class="rounded border" id="PlanetChart" style="max-width: 400px; max-height: 247px; background: #f5f5f9;"></canvas>
+    </div>
+    <div>
+        <h5>House Strength</h5>
+        <canvas class="rounded border" id="HouseChart" style="max-width: 400px; max-height: 247px; background: #f5f5f9;"></canvas>
+    </div>
+</div>
 
 @code {
 
@@ -28,12 +35,12 @@
     private double _shadbalaPindaVenus;
     private Time _time;
 
-    protected override void OnInitialized()
-    {
-    }
+    private double _house1, _house2, _house3, _house4, _house5, _house6, _house7, _house8, _house9, _house10, _house11, _house12;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+
+        //PLANET
         //get planet details and save it for view
         _shadbalaPindaSun = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, Time).ToDouble();
         _shadbalaPindaMoon = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, Time).ToDouble();
@@ -55,6 +62,40 @@
             _shadbalaPindaSaturn,
             _shadbalaPindaVenus
             );
+
+
+        //HOUSE
+        _house1 = AstronomicalCalculator.GetBhavabala((HouseName)1, Time).ToDouble();
+        _house2 = AstronomicalCalculator.GetBhavabala((HouseName)2, Time).ToDouble();
+        _house3 = AstronomicalCalculator.GetBhavabala((HouseName)3, Time).ToDouble();
+        _house4 = AstronomicalCalculator.GetBhavabala((HouseName)4, Time).ToDouble();
+        _house5 = AstronomicalCalculator.GetBhavabala((HouseName)5, Time).ToDouble();
+        _house6 = AstronomicalCalculator.GetBhavabala((HouseName)6, Time).ToDouble();
+        _house7 = AstronomicalCalculator.GetBhavabala((HouseName)7, Time).ToDouble();
+        _house8 = AstronomicalCalculator.GetBhavabala((HouseName)8, Time).ToDouble();
+        _house9 = AstronomicalCalculator.GetBhavabala((HouseName)9, Time).ToDouble();
+        _house10 = AstronomicalCalculator.GetBhavabala((HouseName)10, Time).ToDouble();
+        _house11 = AstronomicalCalculator.GetBhavabala((HouseName)11, Time).ToDouble();
+        _house12 = AstronomicalCalculator.GetBhavabala((HouseName)12, Time).ToDouble();
+
+        //generate JS bar chart with calculated values
+        //note : done here so needed element is available
+        //sun, moon, mercury, mars, jupiter, saturn, venus
+        await _jsRuntime.InvokeVoidAsync("DrawHouseStrengthChart",
+            _house1,
+            _house2,
+            _house3,
+            _house4,
+            _house5,
+            _house6,
+            _house7,
+            _house8,
+            _house9,
+            _house10,
+            _house11,
+            _house12
+            );
+
 
 
     }

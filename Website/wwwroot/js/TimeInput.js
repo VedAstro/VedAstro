@@ -71,7 +71,10 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
             },
             //update year & month immediately even though not yet click date
             //allows user to change only month or year
-            clickMonth(e, month) { monthInputElm.value = month; },
+            clickMonth(e, month) {
+                var with0 = ('0' + month).slice(-2);//change 9 to 09
+                monthInputElm.value = with0;
+            },
             clickYear(e, year) { yearInputElm.value = year; }
         },
     });

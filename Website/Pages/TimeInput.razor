@@ -1,5 +1,4 @@
-﻿@implements IAsyncDisposable
-@using Genso.Astrology.Library
+﻿@using Genso.Astrology.Library
 
 <style>
     #CalendarPickerHolder input{
@@ -10,15 +9,13 @@
 <div class="hstack gap-2">
     <div style="width: fit-content;">
         <label class="form-label">Time</label>
-        <input @onclick="OnClickDateTimeInput" id="TimeInput" style="max-width: 65px;" class="form-control" @bind="HourMin" type="text" placeholder="16:20">
-        @*this is where js date picker will be created*@
-        <div @ref="CalendarPickerHolder" class="vanilla-calendar visually-hidden" style="position: absolute; z-index: 999;" id="CalendarPickerHolder"></div>
+        <input id="TimeInput" style="max-width: 65px;" class="form-control" @bind="HourMin" type="text" placeholder="16:20">
     </div>
     <div style="width: fit-content;">
         <label class="form-label">
             Date
         </label>
-        <input @onclick="OnClickDateTimeInput" id="DateInput" style="max-width: 125px;margin-left: -5px;" class="form-control" @bind="Date" type="text" placeholder="16/04/2021">
+        <input id="DateInput" style="max-width: 125px;margin-left: -5px;" class="form-control" @bind="Date" type="text" placeholder="16/04/2021">
     </div>
     <div style="width: fit-content;">
         <label class="form-label">
@@ -75,9 +72,6 @@
     private string? _date = DateTime.Today.ToString("dd/MM/yyyy");
     private string? _timeZone = DateTimeOffset.Now.ToString("zzz");
 
-    IJSObjectReference module;
-    private ElementReference CalendarPickerHolder;
-
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -90,9 +84,6 @@
 
             //mark time zone has auto set
             IsAutoTimezone = true;
-
-            //load js script for date time picker
-            module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/TimeInput.js");
         }
     }
 
@@ -107,22 +98,4 @@
     /// </summary>
     public bool IsAutoTimezone { get; private set; }
 
-    private async Task OnClickDateTimeInput()
-    {
-        //toggle picker
-        await _jsRuntime.ToggleClass(CalendarPickerHolder,"visually-hidden");
-    }
-
-    /// <summary>
-    /// using a module, we need to make sure we explicitly dispose of it for garbage collection.
-    /// If we don't, the JSRuntime will continue holding a reference to our module for the lifetime of the application.
-    /// To do this, our component must implement IAsyncDisposable, then we can dispose of our module in the DisposeAsync method.
-    /// </summary>
-    async ValueTask IAsyncDisposable.DisposeAsync()
-    {
-        if (module is not null)
-        {
-            await module.DisposeAsync();
-        }
-    }
 }

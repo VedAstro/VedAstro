@@ -358,6 +358,7 @@ var toggleClassWrapper = (element, classString) => $(element).toggleClass(classS
 var removeClassWrapper = (element, classString) => $(element).removeClass(classString);
 var getTextWrapper = (element) => $(element).text();
 var getValueWrapper = (element) => $(element).val();
+var setValueWrapper = (element, value) => $(element).val(value);
 
 
 

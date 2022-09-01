@@ -11,20 +11,24 @@
 
 
 <div class="hstack gap-2">
-    <div style="width: fit-content;">
+    <div class="w-100"> @*fill parent width*@
         <label class="form-label">
-            Birth Location<HelpBox SmallIcon="true" HelpText="@HelpText.GeoLocationName"></HelpBox>
+            @LabelText<HelpBox SmallIcon="true" HelpText="@HelpText.GeoLocationName"></HelpBox>
         </label>
-        <input style="width: 265px;" @ref="_locationNameInput" @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control">
+        @*make input wider if without*@
+        <input @ref="_locationNameInput" @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control">
     </div>
-    <div style="width: fit-content;">
-        <label class="form-label">Longitude</label>
-        <input @ref="_longitudeInput" @bind="Longitude" type="text" class="form-control" placeholder="103.82">
-    </div>
-    <div style="width: fit-content;">
-        <label class="form-label">Latitude</label>
-        <input @ref="_latitudeInput" @bind="Latitude" type="text" class="form-control" placeholder="1.352">
-    </div>
+    @if (!HideLongLat)
+    {
+        <div style="width: fit-content;">
+            <label class="form-label">Longitude</label>
+            <input @ref="_longitudeInput" @bind="Longitude" type="text" class="form-control" placeholder="103.82">
+        </div>
+        <div style="width: fit-content;">
+            <label class="form-label">Latitude</label>
+            <input @ref="_latitudeInput" @bind="Latitude" type="text" class="form-control" placeholder="1.352">
+        </div>
+    }
 </div>
 
 
@@ -39,6 +43,18 @@
     private double _longitude;
     private double _latitude;
 
+
+    /// <summary>
+    /// Text shown next to 
+    /// </summary>
+    [Parameter]
+    public string LabelText { get; set; } = "Location";
+
+    /// <summary>
+    /// If true hides, long lat fields, else defaults to visible
+    /// </summary>
+    [Parameter]
+    public bool HideLongLat { get; set; } = false;
 
     //PARAMETERS
 
@@ -171,7 +187,7 @@
         {
             //alert user first with the wrong name
             var msg = $"The location \"{LocationName}\", not found!" +
-                      $"\n Check the spelling or try other nearby place.";
+                      $"\n Check spelling or try other nearby place.";
             await _jsRuntime.ShowAlert("error", msg, true, timer: 0);
 
 

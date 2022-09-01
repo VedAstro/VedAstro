@@ -94,6 +94,10 @@ namespace Website
 
         }
 
+        /// <summary>
+        /// Given a location & time, will use Google Timezone API
+        /// to get accurate time zone that was/is used
+        /// </summary>
         public static async Task<string> GetTimezoneOffset(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
         {
             //use timestamp to account for historic timezone changes

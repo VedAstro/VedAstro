@@ -187,6 +187,10 @@ namespace Genso.Astrology.Library
             return _stdTime;
         }
 
+        /// <summary>
+        /// NOTE: custom time format is standardized here
+        /// Example : 11:59 30/12/2018 +02:00
+        /// </summary>
         public static DateTimeFormatInfo GetDateTimeFormatInfo()
         {
             //NOTE: custom time format is standardized here

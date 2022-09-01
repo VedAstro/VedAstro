@@ -41,7 +41,7 @@ namespace Genso.Astrology.Library
             Gender = gender;
             UserId = userId;
             Notes = notes;
-            LifeEventList = lifeEventList;
+            LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
         }
 
 

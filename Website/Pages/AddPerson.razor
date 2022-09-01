@@ -1,11 +1,13 @@
-﻿@*A simple page specialized for adding new Person profiles fast & easy*@
+﻿@using Genso.Astrology.Library
+@*A simple page specialized for adding new Person profiles fast & easy*@
 @attribute [Route(PageRoute.AddPerson)]
+
 
 <PageTitle>Add New Person Profile</PageTitle>
 
 <PageTop Title="Add New Person" IconName="icomoon-free:profile">
     <Description>
-        Person's birth info for astronomical calculation
+        Add new Person's birth info for astronomical calculation
     </Description>
     <ButtonsRow>
         <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="() => _navigation.NavigateTo(PageRoute.PersonList)"></IconButton>
@@ -13,7 +15,126 @@
     </ButtonsRow>
 </PageTop>
 
+<div class="vstack gap-3" style="max-width:286px">
+    <div>
+        <label>Name</label>
+        <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+    </div>
+    <TimeInput2 @ref="_timeInput" LabelText="Birth Time" />
+    <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
+    <div>
+        <label>
+            Gender
+            <HelpBox SmallIcon="true" HelpText="@HelpText.Gender"></HelpBox>
+        </label>
+        <select @bind="_genderInput" class="form-control">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+    </div>
+    <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
+
+</div>
 
 @code {
+    TimeInput2 _timeInput;
+    private string? _nameInput;
+    private GeoLocationInput _geoLocationInput;
+    private string? _genderInput = "Male"; //since Male is first in combobox
+    private Person _person;
+
+
+    /// <summary>
+    /// Function that is called on save click of button
+    /// </summary>
+    private async Task OnClickSubmitButton()
+    {
+
+        await InvokeAsync(async () => await SubmitNewPerson()).Try();
+    }
+
+    //sends the newly created person to API server
+    private async Task SubmitNewPerson()
+    {
+        _jsRuntime.ShowLoading();
+
+        //auto set correct Timezone based on location & birth date
+        _timeInput.TimeZone = await WebsiteTools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), await _timeInput.GetDateTimeOffset());
+
+        //only continue if passed input field validation
+        if (!(await IsValidationPassed())) { return; }
+
+        //make a new person from the details in the input
+        _person = await GetPersonInstanceFromInput();
+
+        //send newly created person to API server
+        var xmlData = _person.ToXml();
+        var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData);
+
+        //page ready
+        _jsRuntime.HideAlert();
+
+        await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
+
+        //send user to person list page after period of time
+        await Task.Delay(100);
+        _navigation.NavigateTo(PageRoute.PersonList);
+
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private async Task<bool> IsValidationPassed()
+    {
+        //it is possible for validation to throw exception
+        try
+        {
+            //TEST 1
+            //check that name is filled
+            if (String.IsNullOrWhiteSpace(_nameInput))
+            {
+                //mark invalid & alert user
+                var msg = $"Name field cannot be empty!";
+                _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+                return false;
+            }
+
+        }
+        catch (Exception)
+        {
+            //mark invalid & alert user
+            const string msg = $"Something went wrong, refresh page and try again!";
+            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            return false;
+        }
+
+        //if control reaches here than, it's valid
+        return true;
+
+    }
+
+    /// <summary>
+    /// Using the details in the inputs makes a new Person instance
+    /// Note : Input fields do not use binding because implementing
+    /// separated time fields is erroneous
+    /// </summary>
+    private async Task<Person> GetPersonInstanceFromInput()
+    {
+
+        //parse data received from user
+        var geoLocation = _geoLocationInput.GetGeoLocation();
+        //var lifeEventList = await _lifeEventEditor.GetData();
+
+        //get gender from gender string
+        var gender = Enum.Parse<Gender>(_genderInput);
+
+        //create a new person from the inputed data
+        var birthTime = await _timeInput.GetTime(geoLocation);
+        //var birthTime = new Time(fullTimeString, geoLocation);
+        return new Person(_nameInput, birthTime, gender, AppData.CurrentUser?.Id, "");
+
+        //----------LOCAL FUNCTION ---------------------
+    }
 
 }

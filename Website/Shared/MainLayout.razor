@@ -82,10 +82,11 @@
 
     <div class="content">
         <!-- content-header -->
-        @*don't show until mobile view (md)*@
-        <div class="content-header d-md-none border-bottom my-0 mx-4 py-0 px-2">
-            <a id="contentMenu" href="#" class="content-menu d-none d-lg-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
-            <a id="mobileMenu" href="#" class="content-menu d-lg-none border mb-2"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
+        <div class="content-header border-bottom my-0 mx-4 py-0 px-2 pb-2">
+            @*visible in Desktop view todo shoe menu fold icon line-md:menu-fold-left*@
+            <a id="contentMenu" href="#" class="content-menu d-none d-md-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
+            @*visible in Mobile view*@
+            <a id="mobileMenu" href="#" class="content-menu d-md-none border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
         </div>
 
         <!-- content-body -->

@@ -19,34 +19,47 @@
     //FIELDS
 
     [Parameter]
-    public Time Time { get; set; }
+    public Time Time
+    {
+        get => _time;
+        set
+        {
+            _time = value;
+            //needed for updates to be shown on 2nd click
+            _isDirty = true;
+        }
+    }
+
     [Parameter]
     public int HouseNumber { get; set; }
 
     private string? _houseDetails, _houseLord, _houseSign, _planetsInHouse, _planetsAspectingHouse, _houseStrength;
     private bool _lordExalted, _lordDebilitated;
+    private Time _time;
+    bool _isDirty = false;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized() => CalculateUpdateData();
+
+    protected override void OnAfterRender(bool firstRender)
     {
-        _jsRuntime.ShowLoading();
-
-        UpdateData();
-
-        _jsRuntime.HideAlert();
-
+        //only update if Time value has been updated (to stop loop)
+        if (_isDirty)
+        {
+            _isDirty = false; //reset
+            CalculateUpdateData();
+        }
     }
-
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-    public void UpdateData()
+    public void CalculateUpdateData()
     {
 
         var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName)HouseNumber, Time);
@@ -57,15 +70,15 @@
         _planetsInHouse = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(HouseNumber, Time));
         _planetsAspectingHouse = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)HouseNumber, Time));
         var rawHouseStrength = AstronomicalCalculator.GetBhavabala((HouseName)HouseNumber, Time).ToDouble();
-        _houseStrength = Math.Round(rawHouseStrength,2).ToString();
+        _houseStrength = Math.Round(rawHouseStrength, 2).ToString();
         _houseSign = AstronomicalCalculator.GetHouseSignName(HouseNumber, Time).ToString();
         //_houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign();
 
         _lordExalted = AstronomicalCalculator.IsPlanetExaltated(lordOfHouse, Time);
         _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, Time);
 
-        //update changes to view
-        this.StateHasChanged();
+        //needed to update values
+        StateHasChanged();
     }
 
 

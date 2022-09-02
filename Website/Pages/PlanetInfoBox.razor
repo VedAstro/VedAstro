@@ -19,7 +19,20 @@
 
 @code {
     [Parameter]
-    public Time Time { get; set; }
+    public Time Time
+    {
+        get => _time;
+        set
+        {
+            _time = value;
+            //needed for updates to be shown on 2nd click
+            _isDirty = true;
+        }
+    }
+
+    private Time _time;
+    bool _isDirty = false;
+
     [Parameter]
     public PlanetName PlanetName { get; set; }
     private bool _isPageReady = false; //marks if the page ready to loaded
@@ -35,12 +48,21 @@
     private bool _isPlanetConjunctWithMaleficPlanets;
 
 
-    protected override void OnInitialized()
+    protected override void OnInitialized() => CalculateUpdateData();
+
+    protected override void OnAfterRender(bool firstRender)
     {
-        UpdateData();
+        //only update if Time value has been updated (to stop loop)
+        if (_isDirty)
+        {
+            _isDirty = false; //reset
+            CalculateUpdateData();
+        }
     }
 
-    public void UpdateData()
+
+
+    public void CalculateUpdateData()
     {
         //get planet details and save it for view
         _shadbalaPinda = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName, Time).ToDouble();
@@ -48,23 +70,25 @@
         _planetAspectStrength = AstronomicalCalculator.GetPlanetDrikBala(PlanetName, Time).ToDouble();
 
         _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(Time, PlanetName);
-        
+
         _planetCurrentSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName, Time).ToString();
-        
+
         _planetCurrentNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(PlanetName, Time).ToString();
-        
+
         _planetCurrentConstellation = AstronomicalCalculator.GetPlanetConstellation(Time, PlanetName).ToString();
 
         _currentHouseRelation = AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, PlanetName, Time);
-        
+
         _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(PlanetName, Time);
-        
+
         _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(PlanetName, Time);
 
         _conjunctPlanets = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, PlanetName));
 
         _aspectingPlanets = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, PlanetName));
 
+        //needed to update values
+        StateHasChanged();
     }
 
 

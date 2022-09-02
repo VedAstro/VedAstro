@@ -892,9 +892,9 @@ function DrawHouseStrengthChart(_house1,
     _house12) {
 
     //delete previous chart if any
-    if (window.HouseStrengthChart != null) { window.PlanetStrengthChart.destroy(); }
+    if (window.HouseStrengthChart != null) { window.HouseStrengthChart.destroy(); }
 
-    var xValues = ["House 1", "House 2", "House 3", "House 4", "House 5", "House 6", "House 7", "House 8", "House 9", "House 10", "House 11", "House 12"];
+    var xValues = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
     var yValues = [_house1,
         _house2,
         _house3,

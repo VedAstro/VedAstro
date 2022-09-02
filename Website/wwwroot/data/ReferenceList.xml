@@ -82,11 +82,124 @@
 	</Event>
 	<Event>
 		<Name>Ketu</Name>
-		<Description>
-			Hermaphrodite, malefic, religious,
-			sectarian principles, pride, selfishness, occultism,
-			mendicancy.
-		</Description>
+		<Description>Hermaphrodite, malefic, religious,sectarian principles, pride, selfishness, occultism,mendicancy.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+
+
+	<!--Karakas-->
+	<Event>
+		<Name>Karaka</Name>
+		<Description>Each planet is supposed to be the Karaka, or indicator of certain events in life.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Sun</Name>
+		<Description>Karaka of father</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Moon</Name>
+		<Description>Karaka of mother</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Mars</Name>
+		<Description>Karaka of brother</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Mercury</Name>
+		<Description>Karaka of profession</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Jupiter</Name>
+		<Description>Karaka of children</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Venus</Name>
+		<Description>Karaka of wife or husband</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Saturn</Name>
+		<Description>Karaka of longevity</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Rahu</Name>
+		<Description>Karaka of maternal relations</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Ketu</Name>
+		<Description>Karaka of paternal relations.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+
+
+
+	<!--The Twelve Houses-->
+	<Event>
+		<Name>House 1</Name>
+		<Description>Build, body, appearance</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 2</Name>
+		<Description>Family, source of death, property, vision.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 3</Name>
+		<Description>Intelligence, brothers, sisters.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 4</Name>
+		<Description>Vehicles, general happiness, education, mother and landed properties.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 5</Name>
+		<Description>Fame, children.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 6</Name>
+		<Description>Debts, diseases, misery, enemies. </Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 7</Name>
+		<Description>Wife or husband, tact, death.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 8</Name>
+		<Description>Longevity, gifts</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 9</Name>
+		<Description>God, guru, father, travel, piety.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 10</Name>
+		<Description>Occupation, Karma, philosophical knowledge.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 11</Name>
+		<Description>Gains.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>House 12</Name>
+		<Description>Losses, moksha.</Description>
 		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
 	</Event>
 

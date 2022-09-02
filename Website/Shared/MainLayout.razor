@@ -82,11 +82,12 @@
 
     <div class="content">
         <!-- content-header -->
-        <div class="content-header border-bottom my-0 mx-4 py-0 px-2 pb-2">
+        <div class="content-header border-bottom my-0 mx-4 py-0 px-2 pb-2 hstack gap-2">
             @*visible in Desktop view todo shoe menu fold icon line-md:menu-fold-left*@
-            <a id="contentMenu" href="#" class="content-menu d-none d-md-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
+            <a id="DesktopMenuBtn" href="#" class="content-menu d-none d-md-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
             @*visible in Mobile view*@
-            <a id="mobileMenu" href="#" class="content-menu d-md-none border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
+            <a id="MobileMenuBtn" href="#" class="content-menu d-md-none border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
+            <a id="DarkModeButton" @onclick="@(() => _jsRuntime.InvokeVoidAsync("window.DarkMode.toggle"))" class="content-menu border"><span class="iconify" data-icon="material-symbols:dark-mode-outline-rounded" data-width="100"></span></a>
         </div>
 
         <!-- content-body -->
@@ -134,6 +135,10 @@
 
             //log visit only 1 once when page is rendered
             await WebsiteLogManager.LogVisitor(_jsRuntime);
+
+            //attach tooltip lib to dark mode & nav button element
+            await _jsRuntime.Tippy("#DarkModeButton", new { content = "Night Mode"});
+            await _jsRuntime.Tippy("#DesktopMenuBtn", new { content = "Hide Menu"});
         }
     }
 

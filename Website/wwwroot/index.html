@@ -29,7 +29,7 @@
 
     <!-- Project css -->
     <link href="css/app.css" rel="stylesheet" />
-    <link href="Website.styles.css" rel="stylesheet" />
+    <link href="Website.styles.css" rel="stylesheet" /> <!--compiled-->
 
     <!--Library for getting location from browser, used in GeoLocationInput-->
     <script src="js/Location.js"></script>
@@ -88,8 +88,6 @@
     <!-- DATE PICKER  (Vanilla Calendar) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@1.5.5/build/vanilla-calendar.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@uvarov.frontend/vanilla-calendar@1.5.5/build/vanilla-calendar.min.js"></script>
-    <!--<script src="js/vanilla-calendar.js"></script>-->
-    <!--<script src="js/vanilla-calendar.min.js"></script>-->
     <!--awesome font files-->
     <script src="https://kit.fontawesome.com/018dafad4c.js" crossorigin="anonymous"></script>
 
@@ -99,13 +97,17 @@
     <!--Chart JS  : used in planet strength chart-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
+    <!-- JS Dark Mode button-->
+    <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
     <!--Application Logic, Must run last since it uses the libraries-->
     <script src="js/App.js"></script>
     <script src="js/Debug.js"></script>
 
-</head>
-<body class="animate skin-red">
 
+</head>
+
+<body class="animate skin-red">
     <!--inside this div all page is generated-->
     <div id="app">
         <!--loading box shown while blazor is loading-->

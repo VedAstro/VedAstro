@@ -70,3 +70,11 @@ a, .btn-link {
         content: "An error has occurred."
     }
 
+
+/*
+    Custom CSS below to make Darkmode.JS work properly with bootstrap
+    Note placed here because night overlay is placed outside 
+*/
+.darkmode-layer, .darkmode-toggle {
+    z-index: 500 !important;
+}

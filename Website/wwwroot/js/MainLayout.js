@@ -1,4 +1,25 @@
-﻿$(function () {
+﻿
+/*
+      Customized JS for initializing Darkmode.js
+ */
+
+const options = {
+    mixColor: '#fff', // default: '#fff'
+    backgroundColor: '#fff',  // default: '#fff'
+    buttonColorDark: '#100f2c',  // default: '#100f2c'
+    buttonColorLight: '#fff', // default: '#fff'
+    saveInCookies: true, // default: true,
+    autoMatchOsTheme: false // default: true
+}
+
+window.DarkMode = new Darkmode(options);
+
+
+/*
+      Customized JS for handling nav bar
+ */
+
+$(function () {
     'use script'
 
     feather.replace();
@@ -132,7 +153,7 @@
     });
 
     // content menu
-    $('#contentMenu').on('click', function (e) {
+    $('#DesktopMenuBtn').on('click', function (e) {
         e.preventDefault();
         $('.sidebar').toggleClass('minimized');
 
@@ -140,7 +161,7 @@
     });
 
     // mobile menu
-    $('#mobileMenu').on('click', function (e) {
+    $('#MobileMenuBtn').on('click', function (e) {
         e.preventDefault();
         $('body').toggleClass('sidebar-show');
     });

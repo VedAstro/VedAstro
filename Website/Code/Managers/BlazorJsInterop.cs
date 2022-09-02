@@ -157,6 +157,8 @@ namespace Website
         /// </summary>
         public static async Task Tippy(this IJSRuntime jsRuntime, object elementRef, object tooltipData) => 
             await jsRuntime.InvokeVoidAsync("tippy", elementRef, tooltipData);
+        public static async Task Tippy(this IJSRuntime jsRuntime, string cssSelector, object tooltipData) => 
+            await jsRuntime.InvokeVoidAsync("tippy", cssSelector, tooltipData);
 
 
 

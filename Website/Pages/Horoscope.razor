@@ -15,16 +15,26 @@
 
 
 
-<div class="vstack gap-3">
+<div>
 
-    <PeopleSelectorBox @ref="_peopleSelectorBox" />
-    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"></IconButton>
+    <div class="d-flex flex-wrap">
+        <div class="vstack gap-3">
+            <PeopleSelectorBox @ref="_peopleSelectorBox" />
+            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"></IconButton>
+        </div>
+        <div class="alert alert-warning d-flex align-items-center w-50" role="alert">
+            <span class="iconify bi flex-shrink-0 me-2" data-icon="ant-design:warning-twotone" data-width="50"></span>
+            <div>
+                <strong>Remember!</strong><br />
+                Results here need to be combined with <a href="@PageRoute.HoroscopeData"><span class="fw-bold">Astrological Data</span></a> to get accurate predictions.
+            </div>
+        </div>
+    </div>
 
-   
 
     @*Only show table and search after button clicked*@
     <div @ref="holder" class="vstack gap-2" style="display: none;">
-        <hr/>
+        <hr />
         <div class="hstack gap-3">
             <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
             <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
@@ -32,21 +42,21 @@
 
         <table class="table table-bordered table-striped table-hover">
             <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th style="min-width: 123px;">Info</th>
-            </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th style="min-width: 123px;">Info</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var prediction in _filteredHoroscopePredictions)
-            {
-                <tr>
-                    <td>@prediction.FormattedName</td>
-                    <td>@prediction.Description</td>
-                    <td>@prediction.Info</td>
-                </tr>
-            }
+                @foreach (var prediction in _filteredHoroscopePredictions)
+                {
+                    <tr>
+                        <td>@prediction.FormattedName</td>
+                        <td>@prediction.Description</td>
+                        <td>@prediction.Info</td>
+                    </tr>
+                }
             </tbody>
         </table>
 

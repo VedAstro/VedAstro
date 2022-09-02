@@ -140,6 +140,34 @@
 	</Event>
 
 
+	<!--Kinds of Houses-->
+	<Event>
+		<Name>Kendras</Name>
+		<Description>
+			The 4th, the 7th and the 10th the Kendras or angles or quadrants.
+			Planets in angles generally become fairly strong.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Trikonas</Name>
+		<Description>
+			The 1st, the 5th and the 9th houses are Trikonas or trines.
+			Planets in succeedent houses slightly strong.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Panaparas</Name>
+		<Description>The 2nd, the 8th and the 11th are the Panaparas or succeedent house</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Apoklimas</Name>
+		<Description>3rd, the 6th, the 9th and the 12th houses are Apoklimas or cadent houses.</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+
 
 	<!--The Twelve Houses-->
 	<Event>

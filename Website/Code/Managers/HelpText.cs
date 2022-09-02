@@ -20,5 +20,8 @@
         public const string AskAstrologerDetails = @"Give extra info regarding your question";
         public const string DasaChart = @"This chart shows accurate Dasa, Bhukti, Antaram and Gochara for person's life";
         public const string MuhurthaChart = @"This chart shows when good and bad muhurtha events will happen";
+        public const string SearchReference = @"Astrological facts used for quick reference";
+        public const string SearchPredictions = @"These are horoscope predictions that have been programmed into VedAstro";
+        public const string SearchEvents = @"These are Muhurtha events that have been programmed into VedAstro";
     }
 }

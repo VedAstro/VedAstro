@@ -14,33 +14,82 @@
 {
     <h4 class="mb-3">Found "@resultCount" results for "@SearchText"</h4>
 
-    <table class="table table-bordered table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Nature</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var prediction in foundPrediction)
-            {
-                <tr>
-                    <td>@Format.FormatName(prediction.Element("Name")?.Value)</td>
-                    <td>@prediction.Element("Description")?.Value</td>
-                    <td>@prediction.Element("Nature")?.Value</td>
-                </tr>
-            }
-            @foreach (var prediction in foundEvent)
-            {
-                <tr>
-                    <td>@Format.FormatName(prediction.Element("Name")?.Value)</td>
-                    <td>@prediction.Element("Description")?.Value</td>
-                    <td>@prediction.Element("Nature")?.Value</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                Reference <HelpBox HelpText="@HelpText.SearchReference" SmallIcon="true"></HelpBox>
+            </button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+                Horoscope Predictions <HelpBox HelpText="@HelpText.SearchPredictions" SmallIcon="true"></HelpBox>
+            </button>
+            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
+                Muhurtha Events <HelpBox HelpText="@HelpText.SearchEvents" SmallIcon="true"></HelpBox>
+            </button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="vstack gap-4 py-2">
+                @foreach (var prediction in foundReference)
+                {
+                    <div class="card shadow">
+                        <div class="card-header hstack">
+                            <h6 class="mb-0">
+                                @Format.FormatName(prediction.Element("Name")?.Value)
+                            </h6>
+                            <span class="fw-light mx-3" style="font-size: 13px;">
+                                @prediction.Element("Source")?.Value
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@prediction.Element("Description")?.Value</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="vstack gap-4 py-2">
+                @foreach (var prediction in foundPrediction)
+                {
+                    <div class="card shadow">
+                        <div class="card-header hstack">
+                            <h6 class="mb-0">
+                                @Format.FormatName(prediction.Element("Name")?.Value)
+                            </h6>
+                            <span class="fw-light mx-3" style="font-size: 13px;">
+                                @prediction.Element("Nature")?.Value  @prediction.Element("Source")?.Value
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@prediction.Element("Description")?.Value</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+            <div class="vstack gap-4 py-2">
+                @foreach (var prediction in foundEvent)
+                {
+                    <div class="card shadow">
+                        <div class="card-header hstack">
+                            <h6 class="mb-0">
+                                @Format.FormatName(prediction.Element("Name")?.Value)
+                            </h6>
+                            <span class="fw-light mx-3" style="font-size: 13px;">
+                                @prediction.Element("Nature")?.Value  @prediction.Element("Source")?.Value
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@prediction.Element("Description")?.Value</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
 }
 else
 {
@@ -59,6 +108,7 @@ else
 
     IEnumerable<XElement> foundPrediction = new List<XElement>();
     IEnumerable<XElement> foundEvent = new List<XElement>();
+    IEnumerable<XElement> foundReference = new List<XElement>();
 
 
     //makes this page instance available to others
@@ -70,6 +120,7 @@ else
         //this data is used later search for fast loading
         AppData.PredictionDataList = await GetXmlFile("data/PredictionDataList.xml");
         AppData.EventDataList = await GetXmlFile("data/EventDataList.xml");
+        AppData.ReferenceList = await GetXmlFile("data/ReferenceList.xml");
 
         //mark as loaded so on next search won't reload
         filesLoaded = true;
@@ -108,6 +159,7 @@ else
         //search file
         foundPrediction = AppData.PredictionDataList.Where(IsFound);
         foundEvent = AppData.EventDataList.Where(IsFound);
+        foundReference = AppData.ReferenceList.Where(IsFound);
 
         //show search result count
         resultCount = foundPrediction.Count() + foundEvent.Count();
@@ -130,6 +182,7 @@ else
     private bool IsFound(XElement x)
     {
         //convert the event data to string form
+        //note: all 1st level children are converted
         var evenDataXmlString = "";
         foreach (var xElement in x.Elements())
         {
@@ -149,6 +202,6 @@ else
         //convert to lower case and do basic word match
         return evenDataXmlString.ToLower().Contains(SearchText.ToLower());
     }
-    
+
 
 }

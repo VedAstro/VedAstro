@@ -48,6 +48,12 @@ namespace Website
         /// </summary>
         public static List<XElement> EventDataList { get; set; }
 
+        /// <summary>
+        /// global ReferenceList.xml data list is stored for quick access
+        /// loaded in main layout
+        /// </summary>
+        public static List<XElement> ReferenceList { get; set; }
+
         public static SearchResult SearchPage { get; set; }
 
 

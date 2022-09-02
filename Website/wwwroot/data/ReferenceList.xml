@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+
+	<!--
+	Reference Book is the compilation of important astronomical facts for quick access by search
+	-->
+
+	<!--Planetary Nature and Indications-->
+	<Event>
+		<Name>Sun</Name>
+		<Description>
+			Masculine, malefic, copper colour, philosophical
+			tendency, royal, ego, father, sons, patrimony, self reliance, political power, windy and bilious temperament,
+			month, places of worship, money-lenders, goldsmith, bones, fires,
+			coronation chambers, doctoring
+			capacity.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Moon</Name>
+		<Description>
+			Mind, mother, benefic when
+			waxing, malefic when waning, feminine, white colour,
+			women, sea-men, pearls, gems, water, fishermen,
+			stubbornness, romances, bath-rooms, blood, popularity,
+			human responsibilities.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Mars</Name>
+		<Description>
+			Brothers, masculine,
+			blood-red colour, malefic, refined taste, base metals,
+			vegetation, rotten things, orators, ambassadors,
+			military activities, commerce, aerial journeys, weaving,
+			public speakers.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Mercury</Name>
+		<Description>
+			Benefic if well associated,
+			hermaphrodite, green colour, mercantile activity,
+			public speakers, cold nervous, intelligence.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Jupiter</Name>
+		<Description>
+			Masculine, benefic, bright yellow colour, devotion,
+			progeny, truthfulness, religious fervour, philosophical
+			wisdom, corpulence.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Venus</Name>
+		<Description>
+			Feminine, benefic, mixture of all colours, wife, love affairs, sensual pleasure,
+			family bliss, harems of ill-fame, vitality.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Saturn</Name>
+		<Description>
+			Malefic,hermaphrodite, dark colour, stubbornness, impetuosity,
+			demoralisation, windy diseases, despondency, gambling.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Rahu</Name>
+		<Description>
+			Malefic, feminine, renunciation, corruption, epidemics.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Ketu</Name>
+		<Description>
+			Hermaphrodite, malefic, religious,
+			sectarian principles, pride, selfishness, occultism,
+			mendicancy.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+
+
+	<!--Peculiarities of the Signs-->
+	<Event>
+		<Name>Aries</Name>
+		<Description>
+			Aries - Movable,odd, masculine, cruel, fiery, of short ascension, rising by hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Taurus</Name>
+		<Description>
+			Taurus - Fixed, even, feminine, mild,earthy, fruitful, of short ascension, rising by hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Gemini</Name>
+		<Description>
+			Gemini - Common, odd, masculine, cruel, airy, barren, of short ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Cancer</Name>
+		<Description>
+			Cancer - Even, movable, feminine, mild, watery, of long ascension, rising by the hinder part and fruitful.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Leo</Name>
+		<Description>
+			Leo - Fixed, odd, masculine, cruel, fiery, of long ascension, barren, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Virgo</Name>
+		<Description>
+			Virgo - Common, even, feminine, mild, earthy, of long ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Libra</Name>
+		<Description>
+			Libra - Movable, odd, masculine, cruel, airy, of long ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Scorpio</Name>
+		<Description>
+			Scorpio - Fixed, even, feminine, mild, watery, of long ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Sagittarius</Name>
+		<Description>
+			Sagittarius - Common, odd, masculine, cruel, fiery, of long ascension, rising by the hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Capricorn</Name>
+		<Description>
+			Capricorn - Movable, even, feminine, mild, earthy, of long ascension, rising by hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Aquarius</Name>
+		<Description>
+			Aquarius - Fixed, odd, masculine, cruel, fruitful, airy, of short ascension, rising by the head.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+	<Event>
+		<Name>Pisces</Name>
+		<Description>
+			Pisces - Common, feminine water, even, mild, of short ascension, rising by head and hinder part.
+		</Description>
+		<Source>Astrology For Beginners - 1992 - B.V. Raman</Source>
+	</Event>
+</Root>

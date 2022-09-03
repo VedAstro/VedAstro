@@ -193,9 +193,12 @@ namespace Website
                     await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true, 0);
                     await jsRuntime.LoadPage(PageRoute.Home);
                 }
+
+                //throw exception to stop execution
+                //and let user be reloaded to home via alert
+                throw;
             }
 
-            return new XElement("");
         }
 
 

@@ -235,9 +235,10 @@ namespace Website
                     goto TryAgain;
                 }
 
-                //this is for compilation sake, when error occurs
-                //no connection error is already shown by now
-                return Person.Empty;
+                //we need to throw the exception to stop execution
+                //to show error alert which will reload to home
+                //since at this point it is unrecoverable
+                throw;
             }
 
 

@@ -9,7 +9,7 @@
 <PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill">
     <Description>Below is the results.</Description>
     <ButtonsRow>
-        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" ClickUrl="@PageRoute.Match"></IconButton>
+        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
         <IconButton IconName="carbon:report" ButtonText="Advanced Chart" OnClickCallback="() => showAdvanced = !showAdvanced"></IconButton>
         <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>

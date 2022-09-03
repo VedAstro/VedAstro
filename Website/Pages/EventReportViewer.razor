@@ -86,9 +86,6 @@
         /// </summary>
         async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
         {
-            //since majority of time spent will be waiting for API to do calculation
-            //and receiving the image is fast, so just start an auto progress bar
-            _jsRuntime.ProgressBarSlowAutoUpdate(); //do not await to let control go to next
 
             var personHashXml = new XElement("PersonHash", inputPerson.Hash);
             var startTimeXml = new XElement("StartTime", startTime.ToXml());

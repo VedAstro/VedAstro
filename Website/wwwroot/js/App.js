@@ -53,7 +53,11 @@ function getScreenData() {
     }
     return screenData;
 }
+
 //get previous website for logging
+//so far only shows previous if on
+//first visit from another page 
+//todo test window.location.origin also possible to use
 var getOriginUrl = () => document.referrer;
 
 //Jquery to show inputed element

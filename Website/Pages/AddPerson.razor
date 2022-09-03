@@ -10,9 +10,9 @@
         Add new Person's birth info for astronomical calculation
     </Description>
     <ButtonsRow>
-        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="() => _navigation.NavigateTo(PageRoute.PersonList)"></IconButton>
-        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
-    </ButtonsRow>
+        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+@*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
+*@    </ButtonsRow>
 </PageTop>
 
 <div class="vstack gap-3" style="max-width:286px">

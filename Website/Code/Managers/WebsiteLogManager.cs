@@ -225,12 +225,11 @@ namespace Website
             //get visitor data & format it nicely for storage
             var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
             var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
-            var originUrlXml = new XElement("OriginUrl", await jsRuntime.InvokeAsync<string>("getOriginUrl"));
+            var originUrlXml = new XElement("OriginUrl", await jsRuntime.GetOriginUrl());
             var visitorIdXml = new XElement("VisitorId", visitorId);
             var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation,null,"Location");
             var visitorElement = new XElement("Visitor");
             visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
-
 
             return visitorElement;
         }

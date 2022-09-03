@@ -22,8 +22,6 @@ window.DarkMode = new Darkmode(options);
 $(function () {
     'use script'
 
-    feather.replace();
-
     //const sb = new PerfectScrollbar('.sidebar-body', {
     //    suppressScrollX: true
     //});

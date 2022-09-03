@@ -17,36 +17,6 @@ namespace Website
     {
 
 
-        //█▀█ █▀█ █▀█ █▀▀ █▀█ █▀▀ █▀ █▀   █▄▄ ▄▀█ █▀█
-        //█▀▀ █▀▄ █▄█ █▄█ █▀▄ ██▄ ▄█ ▄█   █▄█ █▀█ █▀▄
-
-        /// <summary>
-        /// Adds input value to current progress bar
-        /// </summary>
-        public static async Task AddToProgressBar(this IJSRuntime jsRuntime, int value) => await jsRuntime.InvokeVoidAsync("AddToProgressBar", value);
-
-        /// <summary>
-        /// Adds input value to current progress bar
-        /// </summary>
-        public static async Task SetProgressBar(this IJSRuntime jsRuntime, int value) => await jsRuntime.InvokeVoidAsync("SetProgressBar", value);
-
-        /// <summary>
-        /// Gets value of progress bar now
-        /// </summary>
-        public static async Task<double> GetProgressBarValue(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<double>("GetProgressBarValue");
-
-        /// <summary>
-        /// Resets the progress bar to 0
-        /// </summary>
-        public static async Task ResetProgressBar(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("ResetProgressBar");
-
-        /// <summary>
-        /// Automatically slowly updates the progress bar till 100% (simulation)
-        /// </summary>
-        public static async Task ProgressBarSlowAutoUpdate(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("ProgressBarSlowAutoUpdate");
-
-
-
 
 
         //▄▀█ █░░ █▀▀ █▀█ ▀█▀
@@ -309,6 +279,18 @@ namespace Website
                 await jsRuntime.ShowAlert("error", AlertText.NoInternet, true, 0);
             }
         }
+
+        /// <summary>
+        /// Gets the previous page/origin url from JS
+        /// </summary>
+        public static async Task<string> GetOriginUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("getOriginUrl");
+        
+        /// <summary>
+        /// Equal to pressing Back button
+        /// </summary>
+        public static async Task GoBack(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("history.back");
+
+
     }
 
 }

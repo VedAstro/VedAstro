@@ -20,7 +20,7 @@
         <label>Name</label>
         <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
     </div>
-    <TimeInput2 @ref="_timeInput" LabelText="Birth Time" />
+    <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
     <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
     <div>
         <label>
@@ -37,7 +37,7 @@
 </div>
 
 @code {
-    TimeInput2 _timeInput;
+    TimeInputSimple _timeInput;
     private string? _nameInput;
     private GeoLocationInput _geoLocationInput;
     private string? _genderInput = "Male"; //since Male is first in combobox
@@ -59,7 +59,7 @@
         _jsRuntime.ShowLoading();
 
         //auto set correct Timezone based on location & birth date
-        _timeInput.TimeZone = await WebsiteTools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), await _timeInput.GetDateTimeOffset());
+        _timeInput.TimeZone = await WebsiteTools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), await _timeInput.GetDateTimeOffset(), _jsRuntime);
 
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { return; }
@@ -69,7 +69,7 @@
 
         //send newly created person to API server
         var xmlData = _person.ToXml();
-        var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData);
+        var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, _jsRuntime);
 
         //page ready
         _jsRuntime.HideAlert();
@@ -95,8 +95,7 @@
             if (String.IsNullOrWhiteSpace(_nameInput))
             {
                 //mark invalid & alert user
-                var msg = $"Name field cannot be empty!";
-                _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+                _jsRuntime.ShowAlert("error", AlertText.NoName, true, timer: 0);
                 return false;
             }
 
@@ -104,8 +103,7 @@
         catch (Exception)
         {
             //mark invalid & alert user
-            const string msg = $"Something went wrong, refresh page and try again!";
-            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            _jsRuntime.ShowAlert("error", AlertText.ValidationError, true, timer: 0);
             return false;
         }
 

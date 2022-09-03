@@ -78,7 +78,7 @@ else
         //_jsRuntime.ShowLoading();
 
         //get all people from API server
-        personList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id);
+        personList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly

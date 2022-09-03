@@ -89,7 +89,7 @@
         _jsRuntime.ShowLoading();
 
         //get all people from API server
-        rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id);
+        rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id, _jsRuntime);
 
         await ShowAllVisitorLog();
 
@@ -276,7 +276,7 @@
         //convert list to xml for sending
         var userIdXml = new XElement("UserId", userId);
 
-        var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteVisitorByUserId, userIdXml);
+        var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteVisitorByUserId, userIdXml, _jsRuntime);
 
         if (ServerManager.IsReplyPass(result))
         {
@@ -298,7 +298,7 @@
         //convert list to xml for sending
         var visitorIdXml = new XElement("VisitorId", visitorId);
 
-        var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteVisitorByVisitorId, visitorIdXml);
+        var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteVisitorByVisitorId, visitorIdXml, _jsRuntime);
 
         if (ServerManager.IsReplyPass(result))
         {

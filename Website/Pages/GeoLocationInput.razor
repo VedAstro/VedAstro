@@ -181,7 +181,7 @@
         try
         {
             //get longitude & latitude for location
-            coordinates = await WebsiteTools.GetAddressLocation(LocationName);
+            coordinates = await WebsiteTools.GetAddressLocation(LocationName, _jsRuntime);
         }
         catch (Exception e)
         {
@@ -225,7 +225,7 @@
             if (Longitude == 0 && Latitude == 0) { goto SetDefault; }
 
             //set gotten location name into view
-            LocationName = await WebsiteTools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude);
+            LocationName = await WebsiteTools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude, _jsRuntime);
 
             //exit
             return;

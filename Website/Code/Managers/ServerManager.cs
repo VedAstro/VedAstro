@@ -1,6 +1,9 @@
-﻿using Genso.Astrology.Library;
+﻿using System.Net;
+using Genso.Astrology.Library;
 using System.Text;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Newtonsoft.Json;
 
 namespace Website
@@ -20,11 +23,11 @@ namespace Website
         public const string DeleteVisitorByVisitorId = "https://vedastroapi.azurewebsites.net/api/deletevisitorbyvisitorid";
         public const string AddTaskApi = "https://vedastroapi.azurewebsites.net/api/addtask";
         public const string AddVisitorApi = "https://vedastroapi.azurewebsites.net/api/addvisitor";
-        
+
         public const string GetMaleListApi = "https://vedastroapi.azurewebsites.net/api/getmalelist";
         public const string GetPersonListApi = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
         public const string GetPersonApi = "https://vedastroapi.azurewebsites.net/api/getperson";
-        
+
         public const string UpdatePersonApi = "https://vedastroapi.azurewebsites.net/api/updateperson";
         public const string GetTaskListApi = "https://vedastroapi.azurewebsites.net/api/gettasklist";
         public const string GetVisitorList = "https://vedastroapi.azurewebsites.net/api/getvisitorlist";
@@ -55,8 +58,11 @@ namespace Website
         /// Note: if JSON auto adds "Root" as first element, unless specified
         /// for XML data root element name is ignored
         /// </summary>
-        public static async Task<XElement> ReadFromServerXmlReply(string apiUrl, string rootElementName = "Root")
+        public static async Task<XElement> ReadFromServerXmlReply(string apiUrl, IJSRuntime? jsRuntime, string rootElementName = "Root")
         {
+            //if js runtime available & browser offline show error
+            jsRuntime?.CheckInternet();
+
             //send request to API server
             var result = await RequestServer(apiUrl);
 
@@ -108,8 +114,11 @@ namespace Website
         /// <summary>
         /// Send xml as string to server and returns stream as response
         /// </summary>
-        public static async Task<Stream> WriteToServerStreamReply(string apiUrl, XElement xmlData)
+        public static async Task<Stream> WriteToServerStreamReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
+            //if js runtime available & browser offline show error
+            jsRuntime?.CheckInternet();
+
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
 
@@ -135,33 +144,68 @@ namespace Website
         /// Note: xml is not checked here, just converted
         /// NOTEl: No timeout! Will wait forever
         /// </summary>
-        public static async Task<XElement> WriteToServerXmlReply(string apiUrl, XElement xmlData)
+        public static async Task<XElement> WriteToServerXmlReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
-            //prepare the data to be sent
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+            //if js runtime available & browser offline show error
+            jsRuntime?.CheckInternet();
 
-            httpRequestMessage.Content = XmLtoHttpContent(xmlData);
+            string rawMessage = "";
+            HttpResponseMessage response;
 
-            //get the data sender
-            using var client = new HttpClient();
+            try
+            {
+                //prepare the data to be sent
+                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
 
-            //tell sender to wait for complete reply before exiting
-            var waitForContent = HttpCompletionOption.ResponseContentRead;
+                httpRequestMessage.Content = XmLtoHttpContent(xmlData);
 
-            //send the data on its way (wait forever no timeout)
-            client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
-            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+                //get the data sender
+                using var client = new HttpClient();
 
-            //extract the content of the reply data
-            var rawMessage = response.Content.ReadAsStringAsync().Result;
+                //tell sender to wait for complete reply before exiting
+                var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+                //send the data on its way (wait forever no timeout)
+                client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
+                response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+                //extract the content of the reply data
+                rawMessage = response.Content.ReadAsStringAsync().Result;
+            }
+            //failure here is internet connection related
+            catch (Exception e)
+            {
+                if (jsRuntime is not null) { await jsRuntime.ShowAlert("error", AlertText.NoInternet, true, 0); }
+                return new XElement("");
+            }
 
             //problems might occur when parsing
             //try to parse as XML
             try { return XElement.Parse(rawMessage); }
 
-            //else raise alarm and show raw message in debugger
-            catch (Exception) { Console.WriteLine($"Raw Unparseable Data:\n{rawMessage}"); throw; }
+            //note: failure here could be for several very likely reasons,
+            //so it is important to properly check and handled here for best UX
+            catch (Exception e)
+            {
+                //log error, don't await to reduce lag
+                WebsiteLogManager.LogError(e, $"Error from WriteToServerXmlReply()\n{response.StatusCode}");
 
+
+                //if possible show error to user & reload page
+                if (jsRuntime is not null)
+                {
+                    //let user know critical failure
+                    await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true, 0);
+
+                    await jsRuntime.LoadPage(PageRoute.Home);
+
+                    //refresh page
+                    //WebsiteTools.ReloadPage(navigation);
+
+                }
+            }
+
+            return new XElement("");
         }
 
 
@@ -195,7 +239,7 @@ namespace Website
             //return packaged data to caller
             return new StringContent(dataString, encoding, mediaType);
         }
-        
+
 
 
     }

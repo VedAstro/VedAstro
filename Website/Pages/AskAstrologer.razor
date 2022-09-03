@@ -103,12 +103,13 @@
         var messageXml = new XElement("Message", userIdXml,visitorIdXml, emailXml, WebsiteTools.TimeStampXml, detailsXml, questionXml);
 
         //send message to API server
-        await ServerManager.WriteToServerXmlReply(ServerManager.AddMessageApi, messageXml);
+        await ServerManager.WriteToServerXmlReply(ServerManager.AddMessageApi, messageXml, _jsRuntime);
 
         //hide loading box
         _jsRuntime.HideAlert();
 
-        await _jsRuntime.ShowAlert("success", "Thank you, our astrologer will contact you soon!", false, 3000);
+        //let user know, with ok confirmation so user see message
+        await _jsRuntime.ShowAlert("success", AlertText.AskAstrologer, true);
 
         //reload page
         WebsiteTools.ReloadPage(_navigation);

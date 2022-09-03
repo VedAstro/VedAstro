@@ -53,12 +53,10 @@
             WebsiteLogManager.LogError(e, "Error from SetData()");
 
             //let user know critical failure
-            await _jsRuntime.ShowAlert("error", "Something went wrong. Please wait page will auto refresh.", false, 2500);
+            await _jsRuntime.ShowAlert("error", AlertText.ErrorWillRefresh, false, 3500);
 
             //refresh page
             WebsiteTools.ReloadPage(_navigation);
-
-
         }
 
 
@@ -99,7 +97,7 @@
             var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
             var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
             //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-            var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml);
+            var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml, _jsRuntime);
 
             //todo just send as string to remove lags of using stream
             // convert stream to string

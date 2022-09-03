@@ -46,13 +46,13 @@ namespace Website
             }
         }
 
-        public static async Task<dynamic> GetAddressLocation(string address)
+        public static async Task<dynamic> GetAddressLocation(string address, IJSRuntime jsRuntime)
         {
             //create the request url for Google API
             var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={ServerManager.GoogleGeoLocationApiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
 
             //get location data from GoogleAPI
-            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url);
+            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url,jsRuntime);
 
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
@@ -75,14 +75,14 @@ namespace Website
         /// <summary>
         /// gets the name of the place given th coordinates, uses Google API
         /// </summary>
-        public static async Task<string> CoordinateToAddress(decimal longitude, decimal latitude)
+        public static async Task<string> CoordinateToAddress(decimal longitude, decimal latitude, IJSRuntime jsRuntime)
         {
             //create the request url for Google API
             var url = string.Format($"https://maps.googleapis.com/maps/api/geocode/xml?latlng={latitude},{longitude}&key={ServerManager.GoogleGeoLocationApiKey}");
 
 
             //get location data from GoogleAPI
-            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url);
+            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url,jsRuntime);
 
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
@@ -98,7 +98,7 @@ namespace Website
         /// Given a location & time, will use Google Timezone API
         /// to get accurate time zone that was/is used
         /// </summary>
-        public static async Task<string> GetTimezoneOffset(GeoLocation geoLocation, DateTimeOffset timeAtLocation)
+        public static async Task<string> GetTimezoneOffset(GeoLocation geoLocation, DateTimeOffset timeAtLocation, IJSRuntime jsRuntime)
         {
             //use timestamp to account for historic timezone changes
             var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
@@ -117,7 +117,7 @@ namespace Website
             //  < time_zone_id > Asia / Kuala_Lumpur </ time_zone_id >
             //  < time_zone_name > Malaysia Time </ time_zone_name >
             //</ TimeZoneResponse >
-            var timeZoneResponseXml = await ServerManager.ReadFromServerXmlReply(url);
+            var timeZoneResponseXml = await ServerManager.ReadFromServerXmlReply(url, jsRuntime);
 
             //extract out the timezone offset
             var offsetSeconds = double.Parse(timeZoneResponseXml?.Element("raw_offset")?.Value);
@@ -170,32 +170,32 @@ namespace Website
         /// <summary>
         /// Gets all people list from API server
         /// </summary>
-        public static async Task<List<Person>> GetPeopleList(string userId)
+        public static async Task<List<Person>> GetPeopleList(string userId, IJSRuntime jsRuntime)
         {
-            var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, new XElement("UserId", userId));
+            var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, new XElement("UserId", userId), jsRuntime);
             var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
             return personList;
         }
-       
+
         /// <summary>
         /// Gets all visitor list from API server
         /// </summary>
-        public static async Task<List<XElement>> GetVisitorList(string userId)
+        public static async Task<List<XElement>> GetVisitorList(string userId, IJSRuntime jsRuntime)
         {
-            var visitorListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetVisitorList, new XElement("UserId", userId));
+            var visitorListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetVisitorList, new XElement("UserId", userId), jsRuntime);
             var visitorList = visitorListRootXml.Elements().ToList();
             return visitorList;
         }
 
-        public static async Task<List<Person>> GetMalePeopleList(string userId)
+        public static async Task<List<Person>> GetMalePeopleList(string userId, IJSRuntime jsRuntime)
         {
-            var rawMaleListXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMaleListApi, new XElement("UserId", userId));
+            var rawMaleListXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMaleListApi, new XElement("UserId", userId), jsRuntime);
             return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
         }
 
-        public static async Task<List<Person>> GetFemalePeopleList(string userId)
+        public static async Task<List<Person>> GetFemalePeopleList(string userId, IJSRuntime jsRuntime)
         {
-            var rawMaleListXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetFemaleListApi, new XElement("UserId", userId));
+            var rawMaleListXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetFemaleListApi, new XElement("UserId", userId), jsRuntime);
             return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
         }
 
@@ -204,9 +204,9 @@ namespace Website
         /// Note: - uses API to get latest data
         ///       - will retry forever till result comes
         /// </summary>
-        public static async Task<Person> GetPersonFromHash(string personHash)
+        public static async Task<Person> GetPersonFromHash(string personHash, IJSRuntime jsRuntime)
         {
-            //timeout implemented because calls have known to fail
+            //timeout implemented because calls have known to fail with stable connection
             var timeoutMs = 500;
             Person personFromHash;
         TryAgain:
@@ -217,8 +217,17 @@ namespace Website
             }
             catch (Exception e)
             {
-                Console.WriteLine($"BLZ: GetPersonFromHash: {timeoutMs}ms Timeout!!");
-                goto TryAgain;
+                //if internet connection is fine, try again
+                var isOnline = await jsRuntime.IsOnline();
+                if (isOnline)
+                {
+                    Console.WriteLine($"BLZ: GetPersonFromHash: {timeoutMs}ms Timeout!!");
+                    goto TryAgain;
+                }
+
+                //this is for compilation sake, when error occurs
+                //no connection error is already shown by now
+                return Person.Empty;
             }
 
 
@@ -226,7 +235,7 @@ namespace Website
             {
                 //send newly created person to API server
                 var xmlData = Tools.AnyTypeToXml(personHash);
-                var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData);
+                var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
 
                 var personXml = result.Element("Person");
 
@@ -238,26 +247,30 @@ namespace Website
 
         }
 
-        public static async Task DeletePerson(int personHash)
+        public static async Task DeletePerson(int personHash, IJSRuntime jsRuntime)
         {
             var personHashXml = new XElement("PersonHash", personHash);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePersonApi, personHashXml);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePersonApi, personHashXml, jsRuntime);
 
             //check result, display error if needed
             if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Delete Person API\n{result.Value}"); }
         }
 
-        public static async Task UpdatePerson(Person person, int originalPersonHash)
+        public static async Task UpdatePerson(Person person, int originalPersonHash, IJSRuntime jsRuntime)
         {
             var updatedPersonXml = person.ToXml();
             Console.WriteLine(updatedPersonXml.ToString());
             var oriPersonHashXml = new XElement("PersonHash", originalPersonHash);
             var rootXml = new XElement("Root");
             rootXml.Add(oriPersonHashXml, updatedPersonXml);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.UpdatePersonApi, rootXml);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.UpdatePersonApi, rootXml, jsRuntime);
 
             //check result, display error if needed
-            if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Update Person API\n{result.Value}"); }
+            if (result.Value != "Pass")
+            {
+                WebsiteLogManager.LogError($"Update Person API Fail\n{result.Value}");
+                await jsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
+            }
 
         }
 
@@ -328,7 +341,7 @@ namespace Website
 
 
             //send to api and get results
-            var resultsRaw = await ServerManager.WriteToServerXmlReply(ServerManager.GetEventsApi, root);
+            var resultsRaw = await ServerManager.WriteToServerXmlReply(ServerManager.GetEventsApi, root, _jsRuntime);
 
 
             //parse raw results
@@ -404,8 +417,8 @@ namespace Website
 
             //find the event description by the name
             //var desc = (from eventXml in eventDataListXml.Root.Elements()
-                //where eventXml.Element("Name").Value == eventName
-                //select eventXml.Element("Description").Value).FirstOrDefault();
+            //where eventXml.Element("Name").Value == eventName
+            //select eventXml.Element("Description").Value).FirstOrDefault();
 
             //Console.WriteLine(desc);
 

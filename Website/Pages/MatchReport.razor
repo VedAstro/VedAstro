@@ -195,12 +195,12 @@
         _jsRuntime.ShowLoading();
 
         //show names on page
-        MaleName = (await WebsiteTools.GetPersonFromHash(maleHash)).Name;
-        FemaleName = (await WebsiteTools.GetPersonFromHash(femaleHash)).Name;
+        MaleName = (await WebsiteTools.GetPersonFromHash(maleHash, _jsRuntime)).Name;
+        FemaleName = (await WebsiteTools.GetPersonFromHash(femaleHash, _jsRuntime)).Name;
 
         //get report from server
         var rootXml = new XElement("Root", new XElement("MaleHash", maleHash), new XElement("FemaleHash", femaleHash));
-        var matchReportXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMatchReportApi, rootXml);
+        var matchReportXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMatchReportApi, rootXml, _jsRuntime);
 
         //parse report
         var matchReport = CompatibilityReport.FromXml(matchReportXml);

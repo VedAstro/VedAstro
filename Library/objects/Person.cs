@@ -12,6 +12,11 @@ namespace Genso.Astrology.Library
     /// </summary>
     public struct Person : IToXml
     {
+        /// <summary>
+        /// Empty instance for null use cases
+        /// </summary>
+        public static Person Empty = new Person();
+
         //DATA FIELDS
         public string Name { get; set; }
         /// <summary>

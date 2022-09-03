@@ -35,7 +35,7 @@
         @*DASA VIEW BOX*@
         <div>
             <HelpBox Label="Dasa" HelpText="@HelpText.DasaChart"></HelpBox>
-            <DasaReportViewer @ref="_dasaReportViewer" />
+            <EventReportViewer @ref="_dasaReportViewer" />
         </div>
     </div>
 
@@ -167,7 +167,7 @@
 
     private PeopleSelectorBox? _peopleSelectorBox;
 
-    private DasaReportViewer? _dasaReportViewer;
+    private EventReportViewer? _dasaReportViewer;
 
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }
@@ -228,7 +228,7 @@
 
         //note: we calculate days per pixel here as to auto show/hide some events
         //normally would not be needed
-        var daysPerPixel = DasaReportViewer.GetDayPerPixel(startTime, endTime);
+        var daysPerPixel = EventReportViewer.GetDayPerPixel(startTime, endTime);
         //generate the events row & time header row
         var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara };
         ////only show tara chandra when zoomed in

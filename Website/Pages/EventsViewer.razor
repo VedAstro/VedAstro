@@ -338,7 +338,7 @@
 
 
             //send to api and get results
-            var resultsRaw = await ServerManager.WriteToServerXmlReply(ServerManager.GetEventsApi, root);
+            var resultsRaw = await ServerManager.WriteToServerXmlReply(ServerManager.GetEventsApi, root, _jsRuntime);
 
 
             //parse raw results

@@ -41,7 +41,7 @@
 
         //set people list into people selector
         //note : without above first call _peopleSelectorBox is null
-        PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id);
+        PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
         this.FillDropDown(PersonList);
 
         //hide loading box

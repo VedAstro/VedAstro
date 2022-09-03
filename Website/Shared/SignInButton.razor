@@ -110,7 +110,7 @@
         var idToken = (string)credentialResponse["credential"]!;
 
         //send token to api for verification
-        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.SignInGoogle, new XElement("Token", idToken));
+        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.SignInGoogle, new XElement("Token", idToken), _jsRuntime);
 
         //check if reply is pass or fail
         var isPass = ServerManager.IsReplyPass(rootXml);
@@ -171,7 +171,7 @@
         var accessToken = (string)(authResponse["accessToken"])!;
 
         //send token to api for verification
-        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.SignInFacebook, new XElement("Token", accessToken));
+        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.SignInFacebook, new XElement("Token", accessToken), _jsRuntime);
 
         //check if reply is pass or fail
         var isPass = ServerManager.IsReplyPass(rootXml);

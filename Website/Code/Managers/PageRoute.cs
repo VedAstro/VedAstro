@@ -40,6 +40,7 @@
         public const string DasaCached = "/DasaCached";
         public const string FeatureList = "/featurelist";
         public const string Home = "/";
+        public const string HttpHome = "https://www.vedastro.org";
         public const string PatreonPage = "https://patreon.com/vedastro";
         public const string KoFiPage = "https://ko-fi.com/vedastro";
         public const string PaypalMePage = "https://paypal.me/VedAstroOrg";

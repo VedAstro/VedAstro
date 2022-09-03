@@ -65,7 +65,7 @@
         selectedPerson.LifeEventList.Add(_inputedLifeEvent);
 
         //update person in API by hash
-        await WebsiteTools.UpdatePerson(selectedPerson, hashBeforeAdd);
+        await WebsiteTools.UpdatePerson(selectedPerson, hashBeforeAdd, _jsRuntime);
 
 
         //page ready

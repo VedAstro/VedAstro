@@ -97,7 +97,7 @@
     @*DASA VIEW BOX*@
     <div style="margin-bottom: 50px">
         <HelpBox Label="Events" HelpText="@HelpText.MuhurthaChart"></HelpBox>
-        <DasaReportViewer @ref="_dasaReportViewer" />
+        <EventReportViewer @ref="_eventReportViewer" />
     </div>
 
 </div>
@@ -167,7 +167,7 @@
     private TimeInput _endTimeInput;
 
     private PeopleSelectorBox? _peopleSelectorBox;
-    private DasaReportViewer? _dasaReportViewer;
+    private EventReportViewer? _eventReportViewer;
 
 
 
@@ -202,7 +202,7 @@
         var getSelectedEventTypes = GetSelectedEventTypes();
 
         //inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.Personal, EventTag.General };
-        await _dasaReportViewer.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
+        await _eventReportViewer.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
 
         //mark page as ready to show results
         _isResultReady = true;

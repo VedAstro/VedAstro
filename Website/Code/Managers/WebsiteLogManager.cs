@@ -186,6 +186,8 @@ namespace Website
         }
 
 
+
+
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
@@ -225,7 +227,7 @@ namespace Website
             var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
             var originUrlXml = new XElement("OriginUrl", await jsRuntime.InvokeAsync<string>("getOriginUrl"));
             var visitorIdXml = new XElement("VisitorId", visitorId);
-            var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, "Location");
+            var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation,null,"Location");
             var visitorElement = new XElement("Visitor");
             visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
 
@@ -251,7 +253,8 @@ namespace Website
         private static async Task SendLogToServer(XElement visitorElement)
         {
             //send to API for save keeping
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddVisitorApi, visitorElement);
+            //note:js runtime passed as null, so no internet checking done
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddVisitorApi, visitorElement, null);
 
             //check result, display error if needed
             if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }

@@ -48,7 +48,7 @@ namespace Website
 
 
 
-        
+
         //▄▀█ █░░ █▀▀ █▀█ ▀█▀
         //█▀█ █▄▄ ██▄ █▀▄ ░█░
         //FUNCTIONS CALLING SWEET ALERT JS LIB
@@ -71,9 +71,9 @@ namespace Website
             //log this, don't await to reduce lag
             WebsiteLogManager.LogAlert(jsRuntime, alertData);
 
-             await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+            await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
         }
-        
+
         /// <summary>
         /// Closes any currently showing SweetAlert
         /// </summary>
@@ -101,18 +101,33 @@ namespace Website
         /// <summary>
         /// Shows alert using sweet alert js
         /// </summary>
-        /// <param name="timer">milliseconds to auto close alert (optional)</param>
-        /// <returns></returns>
-        public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, bool showConfirmButton, int timer = 0)
+        /// <param name="timer">milliseconds to auto close alert, if 0 then won't close which is default (optional)</param>
+        /// <param name="useHtml">If true title can be HTML, default is false (optional)</param>
+        public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, bool showConfirmButton, int timer = 0, bool useHtml = false)
         {
+            object alertData;
 
-            var alertData = new
+            if (useHtml)
             {
-                icon = icon,
-                title = title,
-                showConfirmButton = showConfirmButton,
-                timer = timer
-            };
+                alertData = new
+                {
+                    icon = icon,
+                    html = title,
+                    showConfirmButton = showConfirmButton,
+                    timer = timer
+                };
+            }
+            else
+            {
+                alertData = new
+                {
+                    icon = icon,
+                    title = title,
+                    showConfirmButton = showConfirmButton,
+                    timer = timer
+                };
+            }
+
 
             await jsRuntime.ShowAlert(alertData);
         }
@@ -144,9 +159,9 @@ namespace Website
 
             };
 
-             jsRuntime.ShowAlert(alertData);
+            jsRuntime.ShowAlert(alertData);
         }
-        
+
         public static void HideLoading(this IJSRuntime jsRuntime) => jsRuntime.HideAlert();
 
 
@@ -155,9 +170,9 @@ namespace Website
         /// <summary>
         /// Uses tooltip lib to attach tooltip to an element via selector or blazor reference  
         /// </summary>
-        public static async Task Tippy(this IJSRuntime jsRuntime, object elementRef, object tooltipData) => 
+        public static async Task Tippy(this IJSRuntime jsRuntime, object elementRef, object tooltipData) =>
             await jsRuntime.InvokeVoidAsync("tippy", elementRef, tooltipData);
-        public static async Task Tippy(this IJSRuntime jsRuntime, string cssSelector, object tooltipData) => 
+        public static async Task Tippy(this IJSRuntime jsRuntime, string cssSelector, object tooltipData) =>
             await jsRuntime.InvokeVoidAsync("tippy", cssSelector, tooltipData);
 
 
@@ -171,7 +186,7 @@ namespace Website
         /// Calls given handler when localstorage data changes
         /// </summary>
         public static async Task RemoveProperty<T>(this IJSRuntime jsRuntime, T instance, string handlerName) where T : class
-            => await jsRuntime.InvokeVoidAsync("watchProperty",DotNetObjectReference.Create(instance), handlerName);
+            => await jsRuntime.InvokeVoidAsync("watchProperty", DotNetObjectReference.Create(instance), handlerName);
 
 
 
@@ -201,7 +216,7 @@ namespace Website
         /// <summary>
         /// Injects html/svg into an element
         /// </summary>
-        public static async Task InjectIntoElement(this IJSRuntime jsRuntime, ElementReference _dasaViewBox, string value) => await jsRuntime.InvokeVoidAsync("InjectIntoElement",_dasaViewBox, value);
+        public static async Task InjectIntoElement(this IJSRuntime jsRuntime, ElementReference _dasaViewBox, string value) => await jsRuntime.InvokeVoidAsync("InjectIntoElement", _dasaViewBox, value);
 
         /// <summary>
         /// Uses jQuery to attach a function by name to a HTML element event
@@ -234,7 +249,7 @@ namespace Website
 
             }
             //if array place one by one into final xml
-            else if(rawJson is JsonArray jsonArray)
+            else if (rawJson is JsonArray jsonArray)
             {
                 finalXml = new XElement(rootElementName);
                 foreach (var tableData in jsonArray)
@@ -255,11 +270,11 @@ namespace Website
         public static async Task ToggleClass(this IJSRuntime jsRuntime, string jquerySelector, string classNames) => await jsRuntime.InvokeVoidAsync("toggleClassWrapper", jquerySelector, classNames);
 
         public static async Task<double> ElementWidth(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<double>("getElementWidth", element);
-        
+
         public static async Task<double> AddWidthToEveryChild(this IJSRuntime jsRuntime, ElementReference element, double valueToAdd) => await jsRuntime.InvokeAsync<double>("addWidthToEveryChild", element, valueToAdd);
-        
+
         public static async Task<T> Prop<T>(this IJSRuntime jsRuntime, ElementReference element, string propName) => await jsRuntime.InvokeAsync<T>("getPropWrapper", element, propName);
-        
+
         public static async Task SetProp(this IJSRuntime jsRuntime, ElementReference element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
 
         public static void OpenNewTab(this IJSRuntime jsRuntime, string url) => jsRuntime.InvokeVoidAsync("open", url, "_blank");
@@ -273,7 +288,27 @@ namespace Website
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>("getValueWrapper", jquerySelector);
         public static async Task SetValue(this IJSRuntime jsRuntime, string jquerySelector, object value) => await jsRuntime.InvokeVoidAsync("setValueWrapper", jquerySelector, value);
 
+        /// <summary>
+        /// Load page to given url using JS, reloads Blazor app as well, good for error recovery
+        /// </summary>
+        public static async Task LoadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync("window.location.assign", url);
 
+        /// <summary>
+        /// Checks if browser is online
+        /// </summary>
+        public static async Task<bool> IsOnline(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<bool>("IsOnline");
+
+        /// <summary>
+        /// If not online shows error
+        /// </summary>
+        public static async Task CheckInternet(this IJSRuntime jsRuntime)
+        {
+            var isOnline = await jsRuntime.IsOnline();
+            if (!isOnline)
+            {
+                await jsRuntime.ShowAlert("error", AlertText.NoInternet, true, 0);
+            }
+        }
     }
 
 }

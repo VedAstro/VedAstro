@@ -206,9 +206,17 @@ namespace Website
         /// </summary>
         public static async Task<Person> GetPersonFromHash(string personHash, IJSRuntime jsRuntime)
         {
-            //timeout implemented because calls have known to fail with stable connection
-            var timeoutMs = 500;
+            //timeout implemented because calls have
+            //known to fail with stable connection
+            var timeoutMs = 650;
+
+            //if can't be recovered within limit
+            //then code related error
+            var tryLimit = 3; 
+            var tryCount = 0;
+
             Person personFromHash;
+
         TryAgain:
             try
             {
@@ -218,10 +226,12 @@ namespace Website
             catch (Exception e)
             {
                 //if internet connection is fine, try again
+                //also keep within try max, to stop looping
                 var isOnline = await jsRuntime.IsOnline();
-                if (isOnline)
+                if (isOnline && tryCount <= tryLimit)
                 {
                     Console.WriteLine($"BLZ: GetPersonFromHash: {timeoutMs}ms Timeout!!");
+                    tryCount++;
                     goto TryAgain;
                 }
 
@@ -233,7 +243,6 @@ namespace Website
 
             async Task<Person> DoWork()
             {
-                //send newly created person to API server
                 var xmlData = Tools.AnyTypeToXml(personHash);
                 var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
 

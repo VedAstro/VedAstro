@@ -150,7 +150,7 @@ namespace Website
             jsRuntime?.CheckInternet();
 
             string rawMessage = "";
-            HttpResponseMessage response;
+            HttpResponseMessage response = null;
 
             try
             {
@@ -171,37 +171,27 @@ namespace Website
 
                 //extract the content of the reply data
                 rawMessage = response.Content.ReadAsStringAsync().Result;
+                
+                //problems might occur when parsing
+                //try to parse as XML
+                return XElement.Parse(rawMessage);
             }
-            //failure here is internet connection related
-            catch (Exception e)
-            {
-                if (jsRuntime is not null) { await jsRuntime.ShowAlert("error", AlertText.NoInternet, true, 0); }
-                return new XElement("");
-            }
-
-            //problems might occur when parsing
-            //try to parse as XML
-            try { return XElement.Parse(rawMessage); }
 
             //note: failure here could be for several very likely reasons,
             //so it is important to properly check and handled here for best UX
+            //- server unexpected failure
+            //- server unreachable
             catch (Exception e)
             {
                 //log error, don't await to reduce lag
-                WebsiteLogManager.LogError(e, $"Error from WriteToServerXmlReply()\n{response.StatusCode}");
-
+                WebsiteLogManager.LogError(e, $"Error from WriteToServerXmlReply()\n{response?.StatusCode}");
 
                 //if possible show error to user & reload page
                 if (jsRuntime is not null)
                 {
-                    //let user know critical failure
+                    //failure here can't be recovered, so best choice is to refresh page to home
                     await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true, 0);
-
                     await jsRuntime.LoadPage(PageRoute.Home);
-
-                    //refresh page
-                    //WebsiteTools.ReloadPage(navigation);
-
                 }
             }
 

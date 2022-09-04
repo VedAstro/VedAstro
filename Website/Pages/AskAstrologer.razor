@@ -127,8 +127,7 @@
         if (string.IsNullOrWhiteSpace(_emailInput))
         {
             //mark invalid & alert user
-            var msg = $"Please give email for astrologer to contact you!";
-            _jsRuntime.ShowAlert("error", msg, true);
+            _jsRuntime.ShowAlert("error", AlertText.AskAstrologerEmail, true);
             return false;
         }
 

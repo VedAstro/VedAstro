@@ -170,6 +170,15 @@
     private EventReportViewer? _eventReportViewer;
 
 
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
+    private async Task OnClickCalculate() => await InvokeAsync(async () => await _OnClickCalculate()).Try(_jsRuntime);
+
+
+
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
@@ -184,7 +193,7 @@
         }
     }
 
-    private async Task OnClickCalculate()
+    private async Task _OnClickCalculate()
     {
 
         //only continue if passed input field validation
@@ -202,7 +211,7 @@
         var getSelectedEventTypes = GetSelectedEventTypes();
 
         //inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.Personal, EventTag.General };
-        await _eventReportViewer.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
+        await _eventReportViewer?.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -221,8 +230,7 @@
         if (!_peopleSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
-            var msg = $"Select person name!";
-            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            _jsRuntime.ShowAlert("error", AlertText.NoName, true);
             return false;
         }
 

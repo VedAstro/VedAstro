@@ -42,13 +42,7 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    private async void OnClickSendButton()
-    {
-        await InvokeAsync(async () => await SendMessage()).Try();
-    }
-
-
-
+    private async void OnClickSendButton() => await InvokeAsync(async () => await SendMessage()).Try(_jsRuntime);
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀

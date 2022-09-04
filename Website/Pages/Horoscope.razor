@@ -96,7 +96,23 @@
     private PageHelpSection _helpSection;
 
 
-    private async Task SearchButtonClicked()
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+    private async Task SearchButtonClicked() => await InvokeAsync(async () => await _SearchButtonClicked()).Try(_jsRuntime);
+    private async Task CalculateButtonClicked() => await InvokeAsync(async () => await _CalculateButtonClicked()).Try(_jsRuntime);
+
+
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
+    private async Task _SearchButtonClicked()
     {
         //if no search text means reset (no filter applied)
         if (_searchInput == "") { _filteredHoroscopePredictions = _horoscopePredictions.ToList(); return; }
@@ -106,7 +122,7 @@
     }
 
 
-    private async Task CalculateButtonClicked()
+    private async Task _CalculateButtonClicked()
     {
         //only continue if passed input field validation
         if (!ValidationPassed()) { return; }
@@ -135,8 +151,7 @@
         {
             //mark invalid & alert user
             isValid = false;
-            var msg = $"Select person name!";
-            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            _jsRuntime.ShowAlert("error", AlertText.NoName, true);
         }
 
 

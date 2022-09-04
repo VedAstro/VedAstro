@@ -181,9 +181,9 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try();
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try(_jsRuntime);
 
-    private async Task OnClickCalculate() => await InvokeAsync(async () => await DoCalculation()).Try();
+    private async Task OnClickCalculate() => await InvokeAsync(async () => await _OnClickCalculate()).Try(_jsRuntime);
 
 
 
@@ -207,7 +207,7 @@
     }
 
 
-    private async Task DoCalculation()
+    private async Task _OnClickCalculate()
     {
         //only continue if passed input field validation
         if (!ValidationPassed()) { return; }
@@ -257,8 +257,7 @@
         if (!_peopleSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
-            var msg = $"Select person name!";
-            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            _jsRuntime.ShowAlert("error", AlertText.NoName, true, timer: 0);
             return false;
         }
 

@@ -1,5 +1,6 @@
 ﻿@using Genso.Astrology.Library
 @using System.Xml.Linq
+@using Microsoft.Extensions.FileSystemGlobbing.Internal
 @inherits LayoutComponentBase
 @inject HttpClient Client
 
@@ -106,7 +107,39 @@
     bool _mainPageInitDone;
     private ElementReference searchInput;
 
-    protected override async Task OnInitializedAsync()
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    private async Task _OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //load js script for date time picker
+            _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/MainLayout.js");
+
+            await _jsRuntime.InvokeVoidAsync("InitErrorCatcher");
+
+            //log visit only 1 once when page is rendered
+            await WebsiteLogManager.LogVisitor(_jsRuntime);
+
+            //attach tooltip lib to dark mode & nav button element
+            await _jsRuntime.Tippy("#DarkModeButton", new { content = "Night Mode" });
+            await _jsRuntime.Tippy("#DesktopMenuBtn", new { content = "Hide Menu" });
+        }
+    }
+
+    private async Task _OnInitialized()
     {
         //NOTE
         //control comes here after Program, all needed initialization
@@ -120,26 +153,6 @@
 
         //other components can start loading now
         _mainPageInitDone = true;
-
-    }
-
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            //load js script for date time picker
-            _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/MainLayout.js");
-
-            await _jsRuntime.InvokeVoidAsync("InitErrorCatcher");
-
-            //log visit only 1 once when page is rendered
-            await WebsiteLogManager.LogVisitor(_jsRuntime);
-
-            //attach tooltip lib to dark mode & nav button element
-            await _jsRuntime.Tippy("#DarkModeButton", new { content = "Night Mode"});
-            await _jsRuntime.Tippy("#DesktopMenuBtn", new { content = "Hide Menu"});
-        }
     }
 
     /// <summary>

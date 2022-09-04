@@ -465,7 +465,7 @@ namespace Website
         /// example use inside OnClick or OnInitialized will do.
         /// example: await InvokeAsync(async () => await DeletePerson()).HandleErrors();
         /// </summary>
-        public static async Task Try(this Task invocation)
+        public static async Task Try(this Task invocation, IJSRuntime jsRuntime)
         {
             try
             {
@@ -480,6 +480,10 @@ namespace Website
 #else
                 //if Release log error & end silently
                 WebsiteLogManager.LogError(e, "Error from WebsiteTools.Try()");
+
+                //failure here can't be recovered, so best choice is to refresh page to home
+                await jsRuntime?.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true);
+                await jsRuntime?.LoadPage(PageRoute.Home);
 
                 //TODO get access to js
                 //let user know error

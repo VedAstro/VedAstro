@@ -21,14 +21,13 @@
     ElementReference _dasaViewBox;
 
 
-
     /// <summary>
     /// Sets the data that is processed and fill the content
     /// </summary>
     public async Task SetData(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
-        try
-        {
+        //try
+        //{
             //auto calculate precision
             var daysPerPixel = GetDayPerPixel(startTime, endTime);
             await DrawReport(startTime, endTime, inputedEventTags, daysPerPixel);
@@ -46,18 +45,19 @@
             //needed to show changes to inputs
             StateHasChanged();
 
-        }
-        catch (Exception e)
-        {
-            //log error, don't await to reduce lag
-            WebsiteLogManager.LogError(e, "Error from SetData()");
+        //}
+        ////this exception seems to occur in 
+        //catch (Exception e)
+        //{
+        //    //log error, don't await to reduce lag
+        //    WebsiteLogManager.LogError(e, "Error from SetData()");
 
-            //let user know critical failure
-            await _jsRuntime.ShowAlert("error", AlertText.ErrorWillRefresh, false, 3500);
+        //    //let user know critical failure
+        //    await _jsRuntime.ShowAlert("error", AlertText.ErrorWillRefresh, false, 3500);
 
-            //refresh page
-            WebsiteTools.ReloadPage(_navigation);
-        }
+        //    //refresh page
+        //    WebsiteTools.ReloadPage(_navigation);
+        //}
 
 
         //LOCAL FUNCTIONS
@@ -107,8 +107,6 @@
 
     }
 
-
-
     /// <summary>
     /// calculates the precision of the events to fit inside 1000px width
     /// </summary>
@@ -124,10 +122,8 @@
         return daysPerPixel;
     }
 
-
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
     private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
     {
         //based on checked value hide or show

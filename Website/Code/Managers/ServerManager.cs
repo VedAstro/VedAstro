@@ -151,6 +151,7 @@ namespace Website
 
             string rawMessage = "";
             HttpResponseMessage response = null;
+            var statusCode ="";
 
             try
             {
@@ -168,9 +169,11 @@ namespace Website
                 //send the data on its way (wait forever no timeout)
                 client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
                 response = await client.SendAsync(httpRequestMessage, waitForContent);
+                statusCode = response?.StatusCode.ToString();
 
                 //extract the content of the reply data
-                rawMessage = response.Content.ReadAsStringAsync().Result;
+                //todo await instead of result testing needed
+                rawMessage = response?.Content.ReadAsStringAsync().Result ?? "";
                 
                 //problems might occur when parsing
                 //try to parse as XML
@@ -184,7 +187,7 @@ namespace Website
             catch (Exception e)
             {
                 //log error, don't await to reduce lag
-                WebsiteLogManager.LogError(e, $"Error from WriteToServerXmlReply()\n{response?.StatusCode}");
+                WebsiteLogManager.LogError(e, $"Error from WriteToServerXmlReply()\n{statusCode}");
 
                 //if possible show error to user & reload page
                 if (jsRuntime is not null)

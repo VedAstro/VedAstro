@@ -44,17 +44,23 @@
     private Person _person;
 
 
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
     /// <summary>
     /// Function that is called on save click of button
     /// </summary>
-    private async Task OnClickSubmitButton()
-    {
+    private async Task OnClickSubmitButton() => await InvokeAsync(async () => await _OnClickSubmitButton()).Try(_jsRuntime);
 
-        await InvokeAsync(async () => await SubmitNewPerson()).Try();
-    }
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     //sends the newly created person to API server
-    private async Task SubmitNewPerson()
+    private async Task _OnClickSubmitButton()
     {
         _jsRuntime.ShowLoading();
 
@@ -95,7 +101,7 @@
             if (String.IsNullOrWhiteSpace(_nameInput))
             {
                 //mark invalid & alert user
-                _jsRuntime.ShowAlert("error", AlertText.NoName, true, timer: 0);
+                await _jsRuntime.ShowAlert("error", AlertText.NoName, true);
                 return false;
             }
 
@@ -103,7 +109,7 @@
         catch (Exception)
         {
             //mark invalid & alert user
-            _jsRuntime.ShowAlert("error", AlertText.ValidationError, true, timer: 0);
+            await _jsRuntime.ShowAlert("error", AlertText.ValidationError, true);
             return false;
         }
 

@@ -20,36 +20,6 @@
     public List<Person>? PersonList { get; set; } //data from URL not necessary provided
 
 
-    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
-
-    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try();
-
-
-
-
-    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
-
-    private async Task InitPage()
-    {
-
-        //show loading box
-        _jsRuntime.ShowLoading();
-
-        //set people list into people selector
-        //note : without above first call _peopleSelectorBox is null
-        PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
-        this.FillDropDown(PersonList);
-
-        //hide loading box
-        _jsRuntime.HideAlert();
-    }
-
-
-
     //PARAMETERS
 
     /// <summary>
@@ -77,7 +47,6 @@
     private string _selectedPersonHash = NotSelectedPersonHash;
 
 
-
     /// <summary>
     /// Text that is shown above list
     /// </summary>
@@ -88,6 +57,39 @@
     //below prop needed for 2-way binding between page & component to work
     [Parameter]
     public EventCallback<string> SelectedPersonHashChanged { get; set; }
+
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
+
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
+    private async Task _OnInitialized()
+    {
+
+        //show loading box
+        _jsRuntime.ShowLoading();
+
+        //set people list into people selector
+        //note : without above first call _peopleSelectorBox is null
+        PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
+        this.FillDropDown(PersonList);
+
+        //hide loading box
+        _jsRuntime.HideAlert();
+    }
+
+
+
+
 
 
     private void FillDropDown(List<Person> personList)

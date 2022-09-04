@@ -141,36 +141,16 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try();
-
-
-    private async Task OnClickDeleteButton() => await InvokeAsync(async () => await DeletePerson()).Try();
-
-    /// <summary>
-    /// Function that is called on click of button
-    /// </summary>
-    private async Task OnClickSubmitButton()
-    {
-
-        //button does different stuff based on page mode
-        if (IsCreator)
-        {
-            //SubmitNewPerson();
-            await InvokeAsync(async () => await SubmitNewPerson()).Try();
-        }
-        else
-        {
-            //UpdateExistingPerson();
-            await InvokeAsync(async () => await UpdateExistingPerson()).Try();
-        }
-    }
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
+    private async Task OnClickDeleteButton() => await InvokeAsync(async () => await _OnClickDeleteButton()).Try(_jsRuntime);
+    private async Task OnClickSubmitButton() => await InvokeAsync(async () => await _OnClickSubmitButton()).Try(_jsRuntime);
 
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-    private async Task InitPage()
+    private async Task _OnInitialized()
     {
         //decide if page should be editor or creator
         PageMode = PersonHash == null ? Mode.Creator : Mode.Editor;
@@ -181,6 +161,27 @@
 
         await RenderPage();
     }
+
+
+    /// <summary>
+    /// Function that is called on click of button
+    /// </summary>
+    private async Task _OnClickSubmitButton()
+    {
+
+        //button does different stuff based on page mode
+        if (IsCreator)
+        {
+            //SubmitNewPerson();
+            await SubmitNewPerson();
+        }
+        else
+        {
+            //UpdateExistingPerson();
+            await UpdateExistingPerson();
+        }
+    }
+
 
     /// <summary>
     /// Renders page based on page mode set during init
@@ -278,8 +279,7 @@
             if (String.IsNullOrWhiteSpace(_nameInput))
             {
                 //mark invalid & alert user
-                var msg = $"Name field cannot be empty!";
-                _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+                _jsRuntime.ShowAlert("error", AlertText.NoName, true, timer: 0);
                 return false;
             }
 
@@ -393,7 +393,7 @@
         _navigation.NavigateTo(PageRoute.PersonList);
     }
 
-    private async Task DeletePerson()
+    private async Task _OnClickDeleteButton()
     {
         //show loading message
         _jsRuntime.ShowLoading();

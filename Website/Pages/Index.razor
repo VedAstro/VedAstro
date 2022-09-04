@@ -84,6 +84,24 @@
                 </div>
             </div>
         </div>
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.HoroscopeData)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/horoscope-data-card.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">Horoscope Data</h5>
+                    <p class="card-text">Raw astrological info to help you make accurate prediction</p>
+                </div>
+            </div>
+        </div>
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.AddLifeEvent)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/add-life-event-card.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">Journal</h5>
+                    <p class="card-text">Astrological journal to help understand your life events</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <h3 class="pb-2 border-bottom mt-5">Blog Articles</h3>

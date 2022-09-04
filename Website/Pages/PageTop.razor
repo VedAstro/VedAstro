@@ -7,7 +7,8 @@
     <p class="fs-5 col-md-8" style="max-width: @AppData.MaxContentWidthPx;">@Description</p>
     @if (ButtonsRow != null)
     {
-        <div class="hstack gap-4">
+        @*flex wrap needed to make button wrap nicely in mobile*@
+        <div class="hstack gap-4 d-flex flex-wrap">
             @ButtonsRow
         </div>
     }

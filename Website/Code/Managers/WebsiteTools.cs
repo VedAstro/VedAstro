@@ -52,7 +52,7 @@ namespace Website
             var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={ServerManager.GoogleGeoLocationApiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
 
             //get location data from GoogleAPI
-            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url,jsRuntime);
+            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url, jsRuntime);
 
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
@@ -82,7 +82,7 @@ namespace Website
 
 
             //get location data from GoogleAPI
-            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url,jsRuntime);
+            var rawReplyXml = await ServerManager.ReadFromServerXmlReply(url, jsRuntime);
 
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
@@ -212,7 +212,7 @@ namespace Website
 
             //if can't be recovered within limit
             //then code related error
-            var tryLimit = 3; 
+            var tryLimit = 3;
             var tryCount = 0;
 
             Person personFromHash;
@@ -238,7 +238,7 @@ namespace Website
                 //we need to throw the exception to stop execution
                 //to show error alert which will reload to home
                 //since at this point it is unrecoverable
-                throw;
+                throw new ApiCommunicationFailed($"Error in GetPersonFromHash()", e);
             }
 
 
@@ -474,21 +474,38 @@ namespace Website
             }
             catch (Exception e)
             {
+
+                //based on error show the appropriate message
+                switch (e)
+                {
+                    //no internet just, just show dialog box and do nothing
+                    case NoInternetError:
+                        await jsRuntime.ShowAlert("error", AlertText.NoInternet, true);
+                        break;
+
+                    //here we have internet but somehow failed when talking to API server
+                    //possible cause:
+                    // - code mismatch between client & server
+                    // - slow or unstable internet connection
+                    //best choice is to redirect 
+                    case ApiCommunicationFailed:
+                        await jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem, true);
+                        break;
+
+                    //failure here can't be recovered, so best choice is to refresh page to home
+                    //redirect with reload to clear memory & restart app
+                    default:
+                        await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true);
+                        await jsRuntime.LoadPage(PageRoute.Home);
+                        break;
+                }
+
 #if DEBUG
                 //if running locally, print error to console
                 Console.WriteLine(e.ToString());
 #else
                 //if Release log error & end silently
                 WebsiteLogManager.LogError(e, "Error from WebsiteTools.Try()");
-
-                //failure here can't be recovered, so best choice is to refresh page to home
-                await jsRuntime?.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true);
-                await jsRuntime?.LoadPage(PageRoute.Home);
-
-                //TODO get access to js
-                //let user know error
-
-                //refresh page
 #endif
 
                 //note exception will not go past this point,

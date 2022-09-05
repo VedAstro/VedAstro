@@ -33,7 +33,8 @@ namespace Genso.Astrology.Library
         Antaram,
         DasaSpecialRules,
         Tarabala,
-        Chandrabala
+        Chandrabala,
+        Travel
     }
 
     public static class EventTagExtensions

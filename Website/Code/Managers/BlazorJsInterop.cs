@@ -269,15 +269,14 @@ namespace Website
         public static async Task<bool> IsOnline(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<bool>("IsOnline");
 
         /// <summary>
-        /// If not online shows error
+        /// Raises exception if not online
+        /// else lets control pass through silently
+        /// Note: exception is designed to be caught by central error handler
         /// </summary>
         public static async Task CheckInternet(this IJSRuntime jsRuntime)
         {
             var isOnline = await jsRuntime.IsOnline();
-            if (!isOnline)
-            {
-                await jsRuntime.ShowAlert("error", AlertText.NoInternet, true, 0);
-            }
+            if (!isOnline) { throw new NoInternetError(); }
         }
 
         /// <summary>

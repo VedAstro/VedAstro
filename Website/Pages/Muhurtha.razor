@@ -83,6 +83,18 @@
                     <label class="form-check-label">Cutting Hair/Nails <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
                 </div>
             </div>
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_buildingCheckBox" type="checkbox">
+                    <label class="form-check-label">House Building <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                </div>
+            </div>
+            <div class="p-2">
+                <div class="form-check">
+                    <input class="form-check-input" @bind="_travelCheckBox" type="checkbox">
+                    <label class="form-check-label">Travel <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -159,7 +171,7 @@
 
     private PageHelpSection _helpSection;
 
-    private bool _dasaCheckBox, _bhuktiCheckBox, _antaramCheckBox, _gocharaCheckBox, _personalCheckBox;
+    private bool _dasaCheckBox, _bhuktiCheckBox, _antaramCheckBox, _gocharaCheckBox, _personalCheckBox, _travelCheckBox;
     private bool _generalCheckBox, _buildingCheckBox, _agricultureCheckBox, _astronomicalCheckBox, _rulingConstellationCheckBox;
     private bool _hairNailCuttingCheckBox;
 
@@ -211,7 +223,7 @@
         var getSelectedEventTypes = GetSelectedEventTypes();
 
         //inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.Personal, EventTag.General };
-        await _eventReportViewer?.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
+        await _eventReportViewer.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -239,8 +251,7 @@
         if (!GetSelectedEventTypes().Any())
         {
             //mark invalid & alert user
-            var msg = $"Select at least 1 Event Type!";
-            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            _jsRuntime.ShowAlert("error", AlertText.SelectEventType, true);
             return false;
         }
 
@@ -265,6 +276,7 @@
         if (_astronomicalCheckBox) { returnList.Add(EventTag.Astronomical); }
         if (_buildingCheckBox) { returnList.Add(EventTag.Building); }
         if (_hairNailCuttingCheckBox) { returnList.Add(EventTag.HairNailCutting); }
+        if (_travelCheckBox) { returnList.Add(EventTag.Travel); }
 
         return returnList;
     }

@@ -163,12 +163,18 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
     //generate the report
-    protected override async Task OnInitializedAsync() => _report = await GetCompatibilityReport(MaleHash ?? "", FemaleHash ?? "");
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
+
 
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    private async Task _OnInitialized()
+    {
+        _report = await GetCompatibilityReport(MaleHash ?? "", FemaleHash ?? "");
+    }
 
     private static string GetNatureColor(EventNature nature)
     {

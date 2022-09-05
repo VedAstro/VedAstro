@@ -11,7 +11,8 @@
 
 
 <div class="hstack gap-2">
-    <div class="w-100"> @*fill parent width*@
+    <div class="w-100">
+        @*fill parent width*@
         <label class="form-label">
             @LabelText<HelpBox SmallIcon="true" HelpText="@HelpText.GeoLocationName"></HelpBox>
         </label>
@@ -45,7 +46,7 @@
 
 
     /// <summary>
-    /// Text shown next to 
+    /// Text shown next to
     /// </summary>
     [Parameter]
     public string LabelText { get; set; } = "Location";
@@ -112,6 +113,17 @@
 
 
 
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
+
+
+
+
+
     //PUBLIC METHODS
 
     public GeoLocation GetGeoLocation()
@@ -132,11 +144,9 @@
 
 
 
-
-
     //PRIVATE METHODS
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private async Task _OnAfterRender(bool firstRender)
     {
         //try to auto set location gotten from
         //browser if no location name set within 1 second

@@ -30,19 +30,18 @@
 
 
 
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
+    private async Task OnClickAddLifeEvent() => await InvokeAsync(async () => await _OnClickAddLifeEvent()).Try(_jsRuntime);
+
+
+
+
     //-------------------EVENT HANDLERS
 
-    private async Task OnClickAddButton()
-    {
-        //show loading message
-        _jsRuntime.ShowLoading();
-
-
-
-        //page ready
-        _jsRuntime.HideAlert();
-
-    }
 
     public async Task SetData(List<LifeEvent> lifeEventList)
     {
@@ -82,7 +81,7 @@
     }
 
 
-    private async Task OnClickAddLifeEvent(MouseEventArgs obj)
+    private async Task _OnClickAddLifeEvent()
     {
         //call js to add data
         await _jsRuntime.InvokeVoidAsync("addNewLifeEventToTable");

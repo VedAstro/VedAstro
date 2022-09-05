@@ -69,6 +69,16 @@
 @code {
 
 
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
+    private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
+    private async Task OnClickSignInFacebook() => await InvokeAsync(async () => await _OnClickSignInFacebook()).Try(_jsRuntime);
+
+
+
 
     //▒█▀▄▀█ ▒█▀▀▀ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▀▀█
     //▒█▒█▒█ ▒█▀▀▀ ░▒█░░ ▒█▀▀█ ▒█░░▒█ ▒█░▒█ ░▀▀▀▄▄
@@ -130,16 +140,15 @@
             WebsiteTools.ReloadPage(_navigation);
         }
         else
-        {
-            //TODO
-            //show login failed message to user
-            //note: this failure is already logged in API
+        {    //show login failed message to user
+             //note: this failure is already logged in API
+            await _jsRuntime.ShowAlert("error", AlertText.LoginFailed, true);
         }
 
 
     }
 
-    private async Task OnClickSignOutButton()
+    private async Task _OnClickSignOutButton()
     {
         //log this
         await WebsiteLogManager.LogClick(_jsRuntime, "Sign Out");
@@ -155,7 +164,6 @@
     }
 
 
-
     /// <summary>
     /// This method is called from JS when user signs in
     /// note: works because SignInButtonInstance was called earlier
@@ -165,7 +173,12 @@
     {
         var authResponse = response["authResponse"];
         //login failed, let user know, and exit here
-        if (authResponse == null) { return; }
+        if (authResponse == null)
+        {
+            WebsiteLogManager.LogError(AlertText.FacebookLoginFail);
+            await _jsRuntime.ShowAlert("error", AlertText.LoginFailed, true);
+            return;
+        }
 
         //login success, get token out
         var accessToken = (string)(authResponse["accessToken"])!;
@@ -192,22 +205,21 @@
         }
         else
         {
-            //TODO
             //show login failed message to user
             //note: this failure is already logged in API
+            await _jsRuntime.ShowAlert("error", AlertText.LoginFailed, true);
         }
     }
-
 
     /// <summary>
     /// Starts facebook login process
     /// </summary>
-    private void OnClickSignInFacebook()
+    private async Task _OnClickSignInFacebook()
     {
         //log this
         WebsiteLogManager.LogClick(_jsRuntime, "Facebook Sign In");
 
-        _jsRuntime.InvokeVoidAsync("facebookLogin");
+        await _jsRuntime.InvokeVoidAsync("facebookLogin");
     }
 
 

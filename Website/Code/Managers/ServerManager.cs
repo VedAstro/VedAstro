@@ -62,16 +62,20 @@ namespace Website
         {
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
+            string rawMessage = "";
 
-            //send request to API server
-            var result = await RequestServer(apiUrl);
+            try
+            {
+                //send request to API server
+                var result = await RequestServer(apiUrl);
 
-            //parse data reply
-            var rawMessage = result.Content.ReadAsStringAsync().Result;
+                //parse data reply
+                rawMessage = result.Content.ReadAsStringAsync().Result;
 
-            //raw message can be JSON or XML
-            //try parse as XML if fail then as JSON
-            try { return XElement.Parse(rawMessage); }
+                //raw message can be JSON or XML
+                //try parse as XML if fail then as JSON
+                return XElement.Parse(rawMessage);
+            }
             catch (Exception)
             {
                 //try to parse data as JSON
@@ -83,8 +87,7 @@ namespace Website
                 //unparseable data, let user know
                 catch (Exception e)
                 {
-                    Console.WriteLine(rawMessage);
-                    throw;
+                    throw new ApiCommunicationFailed($"ReadFromServerXmlReply()\n{rawMessage}", e);
                 }
             }
 
@@ -119,24 +122,34 @@ namespace Website
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
 
-            //prepare the data to be sent
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+            try
+            {
+                //prepare the data to be sent
+                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
 
-            httpRequestMessage.Content = XmLtoHttpContent(xmlData);
+                httpRequestMessage.Content = XmLtoHttpContent(xmlData);
 
-            //get the data sender
-            using var client = new HttpClient();
+                //get the data sender
+                using var client = new HttpClient();
 
-            //tell sender to wait for complete reply before exiting
-            var waitForContent = HttpCompletionOption.ResponseContentRead;
+                //tell sender to wait for complete reply before exiting
+                var waitForContent = HttpCompletionOption.ResponseContentRead;
 
-            //send the data on its way
-            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+                //send the data on its way
+                var response = await client.SendAsync(httpRequestMessage, waitForContent);
 
-            //extract the content of the reply data
-            var rawMessage = response.Content.ReadAsStreamAsync().Result;
+                //extract the content of the reply data
+                var rawMessage = response.Content.ReadAsStreamAsync().Result;
 
-            return rawMessage;
+                return rawMessage;
+
+            }
+            //rethrow specialized exception to be handled by caller
+            catch (Exception e)
+            {
+                throw new ApiCommunicationFailed($"WriteToServerStreamReply()", e);
+            }
+
         }
 
         /// <summary>
@@ -150,8 +163,7 @@ namespace Website
             jsRuntime?.CheckInternet();
 
             string rawMessage = "";
-            HttpResponseMessage response = null;
-            var statusCode ="";
+            var statusCode = "";
 
             try
             {
@@ -168,13 +180,13 @@ namespace Website
 
                 //send the data on its way (wait forever no timeout)
                 client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
-                response = await client.SendAsync(httpRequestMessage, waitForContent);
+                var response = await client.SendAsync(httpRequestMessage, waitForContent);
                 statusCode = response?.StatusCode.ToString();
 
                 //extract the content of the reply data
                 //todo await instead of result testing needed
                 rawMessage = response?.Content.ReadAsStringAsync().Result ?? "";
-                
+
                 //problems might occur when parsing
                 //try to parse as XML
                 return XElement.Parse(rawMessage);
@@ -186,24 +198,10 @@ namespace Website
             //- server unreachable
             catch (Exception e)
             {
-                //log error, don't await to reduce lag
-                WebsiteLogManager.LogError(e, $"Error from WriteToServerXmlReply()\n{statusCode}");
-
-                //if possible show error to user & reload page
-                if (jsRuntime is not null)
-                {
-                    //failure here can't be recovered, so best choice is to refresh page to home
-                    await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true, 0);
-                    await jsRuntime.LoadPage(PageRoute.Home);
-                }
-
-                //throw exception to stop execution
-                //and let user be reloaded to home via alert
-                throw;
+                throw new ApiCommunicationFailed($"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}", e);
             }
 
         }
-
 
         /// <summary>
         /// Checks if Status is Pass or Fail in Root xml

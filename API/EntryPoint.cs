@@ -1312,9 +1312,7 @@ namespace API
                 inputedEventTags,
                 out totalHeight);
 
-
             return compiledRow;
-
 
         }
 
@@ -1335,7 +1333,7 @@ namespace API
             if (showYearRow) { headerGenerator.Add(GenerateYearRowSvg); }
             if (daysPerPixel <= 1.3) { headerGenerator.Add(GenerateMonthRowSvg); }
             if (daysPerPixel <= 0.07) { headerGenerator.Add(GenerateDateRowSvg); }
-
+            if (daysPerPixel <= 0.001) { headerGenerator.Add(GenerateHourRowSvg); }
 
             var padding = 2;//space between rows
             headerY = 0;
@@ -1739,21 +1737,82 @@ namespace API
 
                         }
                     }
-                    //year same as before
-                    else
-                    {
-                        //update width only, position is same
-                        //as when created the year box
-                        //yearBoxWidthCount *= _widthPerSlice;
-
-                    }
 
                     //update previous date for next slice
                     previousDate = slice.GetStdDate();
 
                     dateBoxWidthCount++;
 
+                }
 
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+
+            }
+
+            string GenerateHourRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousHour = -1; //so that hour 0 is counted
+                var hourBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                //int rowHeight = 11;
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new date box when hour changes or at
+                    //end of time slices to draw the last hour box
+                    var isLastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var hourChanged = previousHour != slice.GetStdHour();
+                    if (hourChanged || isLastTimeSlice)
+                    {
+                        //and it is in the beginning
+                        if (previousHour == -1)
+                        {
+                            hourBoxWidthCount = 0; //reset width
+                        }
+                        else
+                        {
+                            //generate previous hour data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = hourBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{previousHour}" + //previous hour generate at begin of new hour
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            hourBoxWidthCount = 0;
+
+                        }
+                    }
+
+                    //update previous hour for next slice
+                    previousHour = slice.GetStdHour();
+
+                    hourBoxWidthCount++;
                 }
 
                 //wrap all the rects inside a svg so they can me moved together
@@ -2114,20 +2173,18 @@ namespace API
                 yAxis = yAxis + finalHeight + padding;
             }
 
-            //3 ADD IN GOCHARA
-            //future passed to caller to draw line
-            //var totalHeight = yAxis + gocharaHeight;
+            //3 LET CALLER KNOW FINAL HEIGHT
             totalHeight = yAxis;
 
-
-
             return compiledRow;
+
+
 
             //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
             //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
 
-
+            //TODO marked for deletion
             string GenerateSingleEventRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight, string eventType)
             {
                 //generate the row for each time slice
@@ -2183,6 +2240,7 @@ namespace API
 
             //height not known until generated
             //returns the final dynamic height of this gochara row
+            //TODO marked for deletion
             string GenerateGocharaSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int gocharaHeight, string eventType)
             {
                 //generate the row for each time slice
@@ -2302,7 +2360,7 @@ namespace API
                                    $"type=\"{eventType}\" " +
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdtime=\"{slice.GetStdDateTimeOffset():HH:mm dd/MM/yyyy}\" " + //show only date
+                                   $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\"" +
                                    $"x=\"{horizontalPosition}\" " +
                                    $"y=\"{yAxis + verticalPosition}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                    $"width=\"{_widthPerSlice}\" " +
@@ -2335,7 +2393,7 @@ namespace API
                 //wrap all the rects inside a svg so they can be moved together
                 //note: use group instead of svg because editing capabilities
                 //rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, 0)\">{rowHtml}</g>";
+                rowHtml = $"<g class=\"EventListHolder\" transform=\"matrix(1, 0, 0, 1, {xAxis}, 0)\">{rowHtml}</g>";
 
                 //send height of tallest time slice aka the
                 //final height of this gochara row to caller
@@ -2386,8 +2444,6 @@ namespace API
             stream.Position = 0;
             return stream;
         }
-
-
 
     }
 }

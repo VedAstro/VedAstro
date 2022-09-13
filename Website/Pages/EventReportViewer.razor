@@ -3,9 +3,9 @@
 @using Tools = Genso.Astrology.Library.Tools
 @using System.Text
 
-@*TODO RENAME TO EVENT REPORT VIEWER*@
 
-<div class="vstack gap-1" style="width: fit-content;">
+@*dark mode is disabled for chart with mix-blend-mode*@
+<div class="vstack gap-1" style="width: fit-content; mix-blend-mode: difference;">
     @*ID set because used by auto move cursor line handler*@
     <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox" style="margin-left: -11px;"></div>
 
@@ -121,6 +121,7 @@
 
         return daysPerPixel;
     }
+
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█

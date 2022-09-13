@@ -298,9 +298,13 @@ namespace Genso.Astrology.Library
         /// </summary>
         public int GetStdDate() => this.GetStdDateTimeOffset().Day;
 
+        /// <summary>
+        /// Gets hour in 0 - 23
+        /// </summary>
+        public int GetStdHour() => this.GetStdDateTimeOffset().Hour;
 
-        
-        
+
+
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 

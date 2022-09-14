@@ -14,50 +14,19 @@
 
 <div class="vstack gap-3">
     <PeopleSelectorBox @ref="_peopleSelectorBox" />
-    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="DoCalculation"></IconButton>
+    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 </div>
-
 
 <hr>
-    @*PLANET INFO LIST*@
-<div>
-    @if (_isResultReady)
-    {
-        <StrengthChart Time="@SelectedPerson.BirthTime" />
 
-        <h4 class="mt-2">Planets</h4>
-        <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
-            <PlanetInfoBox PlanetName="PlanetName.Sun" Time="@SelectedPerson.BirthTime" />
-            <PlanetInfoBox PlanetName="PlanetName.Moon" Time="@SelectedPerson.BirthTime" />
-            <PlanetInfoBox PlanetName="PlanetName.Mercury" Time="@SelectedPerson.BirthTime" />
-            <PlanetInfoBox PlanetName="PlanetName.Mars" Time="@SelectedPerson.BirthTime" />
-            <PlanetInfoBox PlanetName="PlanetName.Jupiter" Time="@SelectedPerson.BirthTime" />
-            <PlanetInfoBox PlanetName="PlanetName.Saturn" Time="@SelectedPerson.BirthTime" />
-            <PlanetInfoBox PlanetName="PlanetName.Venus" Time="@SelectedPerson.BirthTime" />
-        </div>
-    }
-</div>
-@*HOUSE INFO LIST*@
-<div>
-    @if (_isResultReady)
-    {
-        <h4 class="mt-2">Houses</h4>
-        <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
-            <HouseInfoBox HouseNumber="1" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="2" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="3" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="4" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="5" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="6" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="7" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="8" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="9" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="10" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="11" Time="@SelectedPerson.BirthTime" />
-            <HouseInfoBox HouseNumber="12" Time="@SelectedPerson.BirthTime" />
-        </div>
-    }
-</div>
+@if (_isResultReady)
+{
+    <StrengthChart Time="@SelectedPerson.BirthTime" />
+    <hr>
+    <PlanetHouseInfoViewer Time="@SelectedPerson.BirthTime"/>
+}
+
+
 
 @code {
 
@@ -66,10 +35,25 @@
     private Person SelectedPerson;
 
 
-    private async Task DoCalculation()
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
+    private async Task OnClickCalculate() => await InvokeAsync(async () => await _OnClickCalculate()).Try(_jsRuntime);
+
+
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
+    private async Task _OnClickCalculate()
     {
         //only continue if passed input field validation
-        if (!ValidationPassed()) { return; }
+        if (!await ValidationPassed()) { return; }
 
         _jsRuntime.ShowLoading();
         await Task.Delay(450); //little delay for loading to pop
@@ -89,21 +73,19 @@
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
-    private bool ValidationPassed()
+    private async Task<bool> ValidationPassed()
     {
-        var isValid = true;
 
         //TEST 1
         //if person not selected, invalid
         if (!_peopleSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
-            isValid = false;
-            _jsRuntime.ShowAlert("error", AlertText.NoName, true);
+            await _jsRuntime.ShowAlert("error", AlertText.NoName, true);
+            return false;
         }
 
-
-        return isValid;
+        return true;
     }
 
 }

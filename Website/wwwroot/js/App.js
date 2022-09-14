@@ -173,6 +173,59 @@ function generatePersonListTable(tableId, tableData) {
 
 }
 
+
+function generatePlanetDataTable(tableId, tableData) {
+
+    //set table data
+    var table = new Tabulator(`#${tableId}`, {
+
+        data: tableData,           //load row data from array
+        editable: false,
+        layout: "fitDataTable",      //fit columns to width of table
+        tooltips: true,            //show tool tips on cells
+        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        history: false,             //allow undo and redo actions on the table
+        pagination: false,       //paginate the data
+        movableColumns: false,      //allow column order to be changed
+        resizableRows: false,       //allow row order to be changed
+        initialSort: [             //set the initial sort order of the data
+            { column: "planet", dir: "asc" },
+        ],
+        columns: [                 //define the table columns
+            { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass:"PlanetColumn"},
+            { title: "Shadbala Pinda", field: "shadbalaPinda", hozAlign: "center", responsive: 0 },
+            { title: "Planet Aspect Strength", field: "planetAspectStrength", hozAlign: "center", responsive: 0 },
+            { title: "Planet Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
+            { title: "Planet Current Sign", field: "planetCurrentSign", hozAlign: "center", responsive: 0 },
+            { title: "Planet Current Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
+            { title: "Planet Current Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
+            { title: "Current House Relation", field: "currentHouseRelation", hozAlign: "center", responsive: 0 },
+            { title: "Is Planet Aspected By Malefic Planets", field: "isPlanetAspectedByMaleficPlanets", hozAlign: "center", responsive: 0 },
+            { title: "Is Planet Conjunct With Malefic Planets", field: "isPlanetConjunctWithMaleficPlanets", hozAlign: "center", responsive: 0 },
+            { title: "Conjunct Planets", field: "conjunctPlanets", hozAlign: "center", responsive: 0 },
+            { title: "Aspecting Planets", field: "aspectingPlanets", hozAlign: "center", responsive: 0 },
+        ],
+    });
+
+    //handler when table row is clicked
+    //table.on("rowClick", function (e, row) {
+    //    //get person name
+    //    let personHash = row._row.data.hash;
+    //    //send user to person editor page with clicked person
+    //    window.location.href = `/personeditor/${personHash}`;
+    //});
+
+    ////same as click handler but for touch
+    //table.on("rowTap", function (e, row) {
+    //    //get person name
+    //    let personHash = row._row.data.hash;
+    //    //send user to person editor page with clicked person
+    //    window.location.href = `/personeditor/${personHash}`;
+    //});
+
+}
+
+
 //Generates a table using Tabulator table library
 //id to where table will be generated needs to be inputed
 function generateLifeEventListTable(tableId, tableData) {

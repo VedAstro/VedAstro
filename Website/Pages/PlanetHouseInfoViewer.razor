@@ -1,0 +1,130 @@
+﻿@using Genso.Astrology.Library
+
+<style>
+    /*highlights frozen planet column*/
+    .PlanetColumn {
+        background-color: #1b6ec2 !important;
+        color: white;
+    }
+</style>
+
+<div style="min-height: 150px; width:100%; margin-bottom:100px;" id="@TableId"></div>
+
+
+@code {
+    [Parameter]
+    public Time Time
+    {
+        get => _time;
+        set
+        {
+            _time = value;
+            //needed for updates to be shown on 2nd click
+            _isDirty = true;
+        }
+    }
+    const string TableId = "PlanetDataTable"; //change only needed here
+
+    private Time _time;
+    bool _isDirty = false;
+
+
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
+    //protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    private async Task _OnAfterRender(bool firstRender)
+    {
+        //js needed to make table fixed header scroll
+        //await _jsRuntime.InvokeVoidAsync("InitPlanetHouseDataViewer");
+
+        //get planet data
+        var planetData = GetPlanetData();
+
+
+        //convert objects to json (for js generator library)
+        //and calls js code change table directly
+        await _jsRuntime.InvokeVoidAsync("generatePlanetDataTable", TableId, planetData);
+
+    }
+
+
+    public List<object> GetPlanetData()
+    {
+
+        var returnList = new List<object>();
+
+        foreach (var planet in PlanetName.All9Planets)
+        {
+            returnList.Add(getData(planet));
+        }
+
+        return returnList;
+
+        object getData(PlanetName planetName)
+        {
+            //find out if planet is rahu or ketu, because not all calculations supported
+            var isRahuKetu = planetName == PlanetName.Rahu || planetName == PlanetName.Ketu;
+
+
+            //get planet details and save it for view
+            var _shadbalaPinda = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, Time).ToDouble();
+
+            var _planetAspectStrength =isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetDrikBala(planetName, Time).ToDouble();
+
+            var _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName);
+
+            var _planetCurrentSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, Time).ToString();
+
+            var _planetCurrentNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, Time).ToString();
+
+            var _planetCurrentConstellation = AstronomicalCalculator.GetPlanetConstellation(Time, planetName).ToString();
+
+            var _currentHouseRelation = isRahuKetu ? 0 :AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, Time);
+
+            var _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(planetName, Time);
+
+            var _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(planetName, Time);
+
+            var _conjunctPlanets = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, planetName));
+
+            var _aspectingPlanets = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
+
+            return new
+            {
+                Planet = planetName.ToString(),
+                ShadbalaPinda = _shadbalaPinda,
+                PlanetAspectStrength = _planetAspectStrength,
+                PlanetCurrentHouse = _planetCurrentHouse,
+                PlanetCurrentSign = _planetCurrentSign,
+                PlanetCurrentNavamsaSign = _planetCurrentNavamsaSign,
+                PlanetCurrentConstellation = _planetCurrentConstellation,
+                CurrentHouseRelation = Format.FormatName(_currentHouseRelation.ToString()),
+                IsPlanetAspectedByMaleficPlanets = _isPlanetAspectedByMaleficPlanets,
+                IsPlanetConjunctWithMaleficPlanets = _isPlanetConjunctWithMaleficPlanets,
+                ConjunctPlanets = _conjunctPlanets,
+                AspectingPlanets = _aspectingPlanets
+            };
+        }
+
+    }
+
+    //private async Task _OnAfterRender(bool firstRender)
+    //{
+    //    //js needed to make table fixed header scroll
+    //    await _jsRuntime.InvokeVoidAsync("InitPlanetHouseDataViewer");
+
+    //}
+
+
+
+}

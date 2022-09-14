@@ -38,10 +38,20 @@ namespace Website
         /// </summary>
         public static async Task ShowAlert(this IJSRuntime jsRuntime, object alertData)
         {
-            //log this, don't await to reduce lag
-            WebsiteLogManager.LogAlert(jsRuntime, alertData);
+            try
+            {
+                //log this, don't await to reduce lag
+                WebsiteLogManager.LogAlert(jsRuntime, alertData);
 
-            await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+                await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+            }
+            //above code will fail when called during app start, because haven't load lib
+            //as such catch failure and silently ignore
+            catch (Exception e)
+            {
+                Console.WriteLine($"BLZ: ShowAlert Not Yet Load Lib Silent Fail!");
+            }
+
         }
 
         /// <summary>
@@ -283,7 +293,7 @@ namespace Website
         /// Gets the previous page/origin url from JS
         /// </summary>
         public static async Task<string> GetOriginUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("getOriginUrl");
-        
+
         /// <summary>
         /// Equal to pressing Back button
         /// </summary>

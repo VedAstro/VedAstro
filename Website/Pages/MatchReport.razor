@@ -20,7 +20,7 @@
 @if (_report != null)
 {
 
-    <div class="container mb-4">
+    <div class="container mb-4 border">
         <div class="row justify-content-start">
             <div class="col-2">
                 Couple
@@ -496,21 +496,34 @@
         return matchReport;
     }
 
+    /// <summary>
+    /// based on marriage score give out summary text
+    /// </summary>
     private string GetSummaryText(double reportKutaScore)
     {
-        if (reportKutaScore <= 50)
+        if (reportKutaScore <= 30)
         {
-            return "Marriage not recommended";
+            return "Very bad compatibility, not recommended";
+        }
+
+        if (reportKutaScore > 30 && reportKutaScore <= 50)
+        {
+            return "Bad compatibility, not best";
         }
 
         if (reportKutaScore > 50 && reportKutaScore <= 60)
         {
-            return "Marriage average, not best";
+            return "Average compatibility, not best";
         }
 
-        if (reportKutaScore > 60)
+        if (reportKutaScore > 60 && reportKutaScore <= 80)
         {
             return "Good marriage compatibility";
+        }
+
+        if (reportKutaScore > 80)
+        {
+            return "Best marriage compatibility";
         }
 
         return "";

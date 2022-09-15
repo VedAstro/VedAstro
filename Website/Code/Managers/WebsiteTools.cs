@@ -495,8 +495,17 @@ namespace Website
                     //failure here can't be recovered, so best choice is to refresh page to home
                     //redirect with reload to clear memory & restart app
                     default:
-                        await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true);
-                        await jsRuntime.LoadPage(PageRoute.Home);
+                        //note : for unknown reason, when app starts multiple failures occur, for now
+                        if (AppData.FailureCount > 3)
+                        {
+                            await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true);
+                            await jsRuntime.LoadPage(PageRoute.Home);
+                        }
+                        else
+                        {
+                            AppData.FailureCount++;
+                            Console.WriteLine($"BLZ: Failure Count: {AppData.FailureCount}");
+                        }
                         break;
                 }
 

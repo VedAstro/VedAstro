@@ -11,7 +11,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horoscope.Desktop", "Horosc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{317ADC97-8BF1-49D5-880F-07818908FCE3}"
 	ProjectSection(SolutionItems) = preProject
+		Books\A Manual of Hindu Astrology (1935).pdf = Books\A Manual of Hindu Astrology (1935).pdf
+		Books\Astrology For Beginners (1992).pdf = Books\Astrology For Beginners (1992).pdf
+		Books\Bhava And Graha Balas.pdf = Books\Bhava And Graha Balas.pdf
+		Books\Bhavartha Ratnakara (1947).pdf = Books\Bhavartha Ratnakara (1947).pdf
+		Books\Hindu Predictive Astrology.pdf = Books\Hindu Predictive Astrology.pdf
+		Books\How to Judge Horoscope - Vol1.pdf = Books\How to Judge Horoscope - Vol1.pdf
+		Books\How to Judge Horoscope - Vol2.pdf = Books\How to Judge Horoscope - Vol2.pdf
+		Books\Muhurtha.pdf = Books\Muhurtha.pdf
+		Books\My Experiences in Astrology.pdf = Books\My Experiences in Astrology.pdf
+		Books\Notable Horoscopes (1998).pdf = Books\Notable Horoscopes (1998).pdf
+		Books\Planetary Influences on Human Affairs.pdf = Books\Planetary Influences on Human Affairs.pdf
+		Books\Prasna Marga Pt1.pdf = Books\Prasna Marga Pt1.pdf
+		Books\Prasna Marga Pt2.pdf = Books\Prasna Marga Pt2.pdf
 		README.md = README.md
+		Books\Three Hundred Important Combinations.pdf = Books\Three Hundred Important Combinations.pdf
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Website", "Website\Website.csproj", "{E2BF92A7-D6E5-4D1E-940B-4040707C51DE}"

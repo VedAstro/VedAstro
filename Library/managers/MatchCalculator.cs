@@ -212,7 +212,7 @@ namespace Genso.Astrology.Library
                         case MatchPredictionName.Varna:
                             report.KutaScore += 1;
                             break;
-                        case MatchPredictionName.Yoni:
+                        case MatchPredictionName.YoniKuta:
                             report.KutaScore += 4;
                             break;
                         case MatchPredictionName.Vedha:
@@ -625,7 +625,7 @@ namespace Genso.Astrology.Library
 
             var prediction = new CompatibilityPrediction
             {
-                Name = MatchPredictionName.Yoni,
+                Name = MatchPredictionName.YoniKuta,
                 Description = "sex compatibility"
             };
 

@@ -17,7 +17,6 @@
     //DEFAULTS
     const string DefaultLabel = "Person";
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
-    public List<Person>? PersonList { get; set; } //data from URL not necessary provided
 
 
     //PARAMETERS
@@ -77,11 +76,19 @@
 
         //show loading box
         _jsRuntime.ShowLoading();
+        await Task.Delay(200); //delay for alert to pop
 
-        //set people list into people selector
-        //note : without above first call _peopleSelectorBox is null
-        PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
-        this.FillDropDown(PersonList);
+
+        //check if people list already loaded before
+        if (AppData.PersonList == null)
+        {
+            //set people list into people selector
+            //note : without above first call _peopleSelectorBox is null
+            AppData.PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
+        }
+
+        //else use already available list
+        this.FillDropDown(AppData.PersonList);
 
         //hide loading box
         _jsRuntime.HideAlert();
@@ -112,7 +119,7 @@
 
     public Person GetSelectedPerson()
     {
-        return PersonList.Find(p => p.GetHashCode() == int.Parse(SelectedPersonHash));
+        return AppData.PersonList.Find(p => p.GetHashCode() == int.Parse(SelectedPersonHash));
     }
 
 

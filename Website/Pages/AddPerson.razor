@@ -11,8 +11,9 @@
     </Description>
     <ButtonsRow>
         <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-@*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
-*@    </ButtonsRow>
+        @*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
+        *@
+    </ButtonsRow>
 </PageTop>
 
 <div class="vstack gap-3" style="max-width:286px">
@@ -76,6 +77,9 @@
         //send newly created person to API server
         var xmlData = _person.ToXml();
         var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, _jsRuntime);
+
+        //clear stored person list
+        AppData.PersonList = null;
 
         //page ready
         _jsRuntime.HideAlert();

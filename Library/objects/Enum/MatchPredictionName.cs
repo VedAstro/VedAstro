@@ -14,7 +14,7 @@
         NadiKuta,
         GunaKuta,
         Varna,
-        Yoni,
+        YoniKuta,
         Vedha,
         VasyaKuta,
         GrahaMaitram,

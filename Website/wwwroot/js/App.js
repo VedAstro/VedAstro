@@ -192,7 +192,7 @@ function generatePlanetDataTable(tableId, tableData) {
             { column: "planet", dir: "asc" },
         ],
         columns: [                 //define the table columns
-            { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass:"PlanetColumn"},
+            { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
             { title: "Shadbala Pinda", field: "shadbalaPinda", hozAlign: "center", responsive: 0 },
             { title: "Planet Aspect Strength", field: "planetAspectStrength", hozAlign: "center", responsive: 0 },
             { title: "Planet Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
@@ -417,6 +417,20 @@ var getTextWrapper = (element) => $(element).text();
 var getValueWrapper = (element) => $(element).val();
 var setValueWrapper = (element, value) => $(element).val(value);
 var IsOnline = () => window.navigator.onLine;
+
+
+//scrolls to div on page and flashes div using JS
+function scrollToDiv(elemId) {
+
+    //scroll to element
+    document.getElementById(elemId).scrollIntoView();
+
+    //use JS to attarct attention to div
+    var idString = `#${elmId}`;
+    $(idString).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+
+    $(idString).fadeTo(100, 0.3, function () { $(this).fadeTo(500, 1.0); });
+}
 
 
 

@@ -256,6 +256,9 @@
         var xmlData = _person.ToXml();
         var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, _jsRuntime);
 
+        //clear stored person list
+        AppData.PersonList = null;
+
         //page ready
         _jsRuntime.HideAlert();
 
@@ -385,6 +388,9 @@
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
 
+        //clear stored person list
+        AppData.PersonList = null;
+
         //page ready
         _jsRuntime.HideAlert();
 
@@ -404,6 +410,8 @@
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);
 
+        //clear stored person list
+        AppData.PersonList = null;
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete

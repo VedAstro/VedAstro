@@ -11,6 +11,8 @@ namespace Website
     public static class AppData
     {
 
+        public static int FailureCount = 0;
+
         /// <summary>
         /// Shortcut text to show credit
         /// </summary>
@@ -55,6 +57,7 @@ namespace Website
         public static List<XElement> ReferenceList { get; set; }
 
         public static SearchResult SearchPage { get; set; }
+        public static List<Person> PersonList { get; set; }
 
 
         //-----------------------------FIELDS

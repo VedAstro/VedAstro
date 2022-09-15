@@ -58,16 +58,20 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
                     calendarDatepickerPopupEl.classList.add('visually-hidden');
                 }
 
-                //format the selected date for blazor
-                const choppedTimeData = dates[0].split("-");
-                var year = choppedTimeData[0];
-                var month = choppedTimeData[1];
-                var day = choppedTimeData[2];
+                //check needed because random clicks get through
+                if (dates[0] !== undefined) {
+                    //format the selected date for blazor
+                    const choppedTimeData = dates[0].split("-");
+                    var year = choppedTimeData[0];
+                    var month = choppedTimeData[1];
+                    var day = choppedTimeData[2];
 
-                //inject the values into the text input
-                dateInputElm.value = day;
-                monthInputElm.value = month;
-                yearInputElm.value = year;
+                    //inject the values into the text input
+                    dateInputElm.value = day;
+                    monthInputElm.value = month;
+                    yearInputElm.value = year;
+                }
+
             },
             //update year & month immediately even though not yet click date
             //allows user to change only month or year
@@ -100,7 +104,7 @@ export function togglePopup(e) {
     const calendar = e.target.closest(calendarPickerHolderId);
 
     var timeInput = (input && !input.classList.contains('input_focus'));
-    if ( timeInput || calendar) {
+    if (timeInput || calendar) {
         calendarDatepickerPopupEl.classList.remove('visually-hidden');
     } else {
         calendarDatepickerPopupEl.classList.add('visually-hidden');

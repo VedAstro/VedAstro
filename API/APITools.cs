@@ -56,7 +56,7 @@ namespace API
         /// </summary>
         public static async Task AddXElementToXDocument(XElement dataXml, string fileName, string containerName)
         {
-            //get user data list file  (UserDataList.xml) Azure storage
+            //get user data list file (UserDataList.xml) Azure storage
             var fileClient = await GetFileFromContainer(fileName, containerName);
 
             //add new log to main list
@@ -212,8 +212,8 @@ namespace API
             try
             {
                 var uniqueVisitorList = from visitorXml in visitorListXml.Root?.Elements()
-                                                        where visitorXml.Element("VisitorId")?.Value == visitorId
-                                                        select visitorXml;
+                                        where visitorXml.Element("VisitorId")?.Value == visitorId
+                                        select visitorXml;
 
                 return uniqueVisitorList.FirstOrDefault();
             }
@@ -231,15 +231,15 @@ namespace API
         public static IEnumerable<XElement> FindPersonByUserId(XDocument personListXml, string userId)
         {
             var foundPersonListXml = from person in personListXml.Root?.Elements()
-                where
-                    person.Element("UserId")?.Value == userId
-                select person;
+                                     where
+                                         person.Element("UserId")?.Value == userId
+                                     select person;
 
             return foundPersonListXml;
         }
 
 
-        public static async Task<Person> GetPersonFromHash(int personHash,BlobClient personListClient)
+        public static async Task<Person> GetPersonFromHash(int personHash, BlobClient personListClient)
         {
             var personListXml = APITools.BlobClientToXml(personListClient);
             var foundPersonXml = await APITools.FindPersonByHash(personListXml, personHash);
@@ -283,8 +283,8 @@ namespace API
 
             //sort the list by time before sending view
             var orderByAscResult = from dasaEvent in eventList
-                orderby dasaEvent.StartTime.GetStdDateTimeOffset()
-                select dasaEvent;
+                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset()
+                                   select dasaEvent;
 
 
             //send sorted events to view

@@ -31,6 +31,7 @@ namespace API
         private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
         private const string ContainerName = "vedastro-site-data";
         private const string PersonListFile = "PersonList.xml";
+        private const string RecycleBinFile = "RecycleBin.xml";
 
 
         /// <summary>
@@ -542,6 +543,9 @@ namespace API
                 //get the person record that needs to be deleted
                 var personListXml = APITools.BlobClientToXml(personListClient);
                 var personToDelete = await APITools.FindPersonByHash(personListXml, originalHash);
+
+                //add deleted person to recycle bin 
+                await APITools.AddXElementToXDocument(personToDelete, RecycleBinFile, ContainerName);
 
                 //delete the person record,
                 personToDelete.Remove();

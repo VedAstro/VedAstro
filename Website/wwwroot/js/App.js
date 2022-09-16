@@ -188,9 +188,6 @@ function generatePlanetDataTable(tableId, tableData) {
         pagination: false,       //paginate the data
         movableColumns: false,      //allow column order to be changed
         resizableRows: false,       //allow row order to be changed
-        initialSort: [             //set the initial sort order of the data
-            { column: "planet", dir: "asc" },
-        ],
         columns: [                 //define the table columns
             { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
             { title: "Shadbala Pinda", field: "shadbalaPinda", hozAlign: "center", responsive: 0 },
@@ -200,10 +197,55 @@ function generatePlanetDataTable(tableId, tableData) {
             { title: "Planet Current Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
             { title: "Planet Current Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
             { title: "Current House Relation", field: "currentHouseRelation", hozAlign: "center", responsive: 0 },
-            { title: "Is Planet Aspected By Malefic Planets", field: "isPlanetAspectedByMaleficPlanets", hozAlign: "center", responsive: 0 },
-            { title: "Is Planet Conjunct With Malefic Planets", field: "isPlanetConjunctWithMaleficPlanets", hozAlign: "center", responsive: 0 },
+            { title: "Is Planet Aspected By Malefic Planets", field: "isPlanetAspectedByMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
+            { title: "Is Planet Conjunct With Malefic Planets", field: "isPlanetConjunctWithMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
             { title: "Conjunct Planets", field: "conjunctPlanets", hozAlign: "center", responsive: 0 },
             { title: "Aspecting Planets", field: "aspectingPlanets", hozAlign: "center", responsive: 0 },
+        ],
+    });
+
+    //handler when table row is clicked
+    //table.on("rowClick", function (e, row) {
+    //    //get person name
+    //    let personHash = row._row.data.hash;
+    //    //send user to person editor page with clicked person
+    //    window.location.href = `/personeditor/${personHash}`;
+    //});
+
+    ////same as click handler but for touch
+    //table.on("rowTap", function (e, row) {
+    //    //get person name
+    //    let personHash = row._row.data.hash;
+    //    //send user to person editor page with clicked person
+    //    window.location.href = `/personeditor/${personHash}`;
+    //});
+
+}
+
+function generateHouseDataTable(tableId, tableData) {
+
+    //set table data
+    var table = new Tabulator(`#${tableId}`, {
+
+        data: tableData,           //load row data from array
+        editable: false,
+        layout: "fitDataTable",      //fit columns to width of table
+        tooltips: true,            //show tool tips on cells
+        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        history: false,             //allow undo and redo actions on the table
+        pagination: false,       //paginate the data
+        movableColumns: false,      //allow column order to be changed
+        resizableRows: false,       //allow row order to be changed
+        columns: [                 //define the table columns
+            { title: "House", field: "house", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
+            { title: "House Strength", field: "houseStrength", hozAlign: "center", responsive: 0 },
+            { title: "House Sign", field: "houseSign", hozAlign: "center", responsive: 0 },
+            { title: "House Navamsa Sign", field: "houseNavamsaSign", hozAlign: "center", responsive: 0 },
+            { title: "House Lord", field: "houseLord", hozAlign: "center", responsive: 0 },
+            { title: "Lord Exalted", field: "lordExalted", hozAlign: "center", formatter: "tickCross", responsive: 0 },
+            { title: "Lord Debilitated", field: "lordDebilitated", hozAlign: "center", formatter: "tickCross", responsive: 0 },
+            { title: "Planets In House", field: "planetsInHouse", hozAlign: "center", responsive: 0 },
+            { title: "Planets Aspecting House", field: "planetsAspectingHouse", hozAlign: "center", responsive: 0 },
         ],
     });
 

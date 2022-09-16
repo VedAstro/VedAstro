@@ -23,5 +23,11 @@
         public const string SearchReference = @"Astrological facts used for quick reference";
         public const string SearchPredictions = @"These are horoscope predictions that have been programmed into VedAstro";
         public const string SearchEvents = @"These are Muhurtha events that have been programmed into VedAstro";
+        public const string HouseStrength = @"Bhava Bala is the potency or
+                                             strength of the house or bhava or signification.Each bhava signifies
+                                             or indicates certain events or functions.If it attains certain strength,
+                                            the native will enjoy the indications of the bhava fully, otherwise he will not sufficiently enjoy them.";
+        public const string PlanetStrength = @"Total strength (Shadbala Pinda) of each planet, we add together its Sthana bala (Positional Strength),
+                                                Dik bala (Directional Strength), Kala Bala (Temporal Strength), Chesta bala (Motional Strength) and Naisargika bala (Natural Strength), Drik bala (Aspect Strength)";
     }
 }

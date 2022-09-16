@@ -59,7 +59,7 @@ namespace Genso.Astrology.Library
 
         public override string ToString()
         {
-            return $"{_signName}:{_degreesInSign}";
+            return $"{_signName} : {_degreesInSign}";
         }
     }
 }

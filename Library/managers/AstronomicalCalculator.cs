@@ -4390,7 +4390,7 @@ namespace Genso.Astrology.Library
         /// 'Chesta Bala and Naisargika Bala. And the Graha's
         /// Drik Bala must be added to or subtracted from the
         /// above sum according as it is positive or negative.
-        /// The resul.t obtained is the Shadbala Pinda of the
+        /// The result obtained is the Shadbala Pinda of the
         /// planet in Shashtiamsas.
         ///
         /// Note: Rahu & Ketu is not supported, possible fix?

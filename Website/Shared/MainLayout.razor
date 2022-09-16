@@ -26,8 +26,10 @@
         </div><!-- sidebar-header -->
         <div class="sidebar-search">
             <div class="search-body">
-                <span class="iconify" data-icon="bx:search-alt" data-width="24"></span>
                 <input @ref="searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
+                <div @onclick="OnClickSearchIcon" style="cursor: pointer;">
+                    <span class="iconify" data-icon="bx:search-alt" data-width="24"></span>
+                </div>
             </div><!-- search-body -->
         </div><!-- sidebar-search -->
         <div class="sidebar-body">
@@ -68,13 +70,14 @@
 
         <div class="sidebar-footer">
             @**@
-@*            <a href="" class="avatar online"><span class="avatar-initial">s</span></a>
-*@            <div class="avatar-body">
+            @*            <a href="" class="avatar online"><span class="avatar-initial">s</span></a>
+        *@            <div class="avatar-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <SignInButton />
-@*                    <h6></h6>
-                    <a href="" class="footer-menu"><i class="ri-settings-4-line"></i></a>
-*@                </div>
+                    @*                    <h6></h6>
+                <a href="" class="footer-menu"><i class="ri-settings-4-line"></i></a>
+                *@
+                </div>
                 @*<span>Superuser/Administrator</span>*@
             </div><!-- avatar-body -->
         </div><!-- sidebar-footer -->
@@ -180,6 +183,12 @@
         //only start search when user press Enter
         if (keyEventArgs.Key != "Enter") return;
 
+        await PerformSearch();
+
+    }
+
+    private async Task PerformSearch()
+    {
         //get search text
         var text = await _jsRuntime.GetValue(searchInput);
 
@@ -192,6 +201,7 @@
         await AppData.SearchPage.Search(text);
     }
 
+    private async Task OnClickSearchIcon() => await PerformSearch();
 }
 
 

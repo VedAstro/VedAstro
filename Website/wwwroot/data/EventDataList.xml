@@ -274,7 +274,7 @@
 	<Event>
 
 		<Name>FixedConstellationRuling</Name>
-		<Nature>Neutral</Nature>
+		<Nature>Good</Nature>
 		<Description>
 			Rohini, Uttara, Uttarashadha and Uttarabhadra are supposed to be fixed
 			constellations and they are favourable for coronations, laying the
@@ -286,7 +286,7 @@
 	<Event>
 
 		<Name>SoftConstellationRuling</Name>
-		<Nature>Neutral</Nature>
+		<Nature>Good</Nature>
 		<Description>
 			Chitta, Anuradha, Mrigasira and Revati are soft constellations. They are
 			good for wearing new apparel, learning dancing, music and fine arts,
@@ -297,7 +297,7 @@
 	<Event>
 
 		<Name>LightConstellationRuling</Name>
-		<Nature>Neutral</Nature>
+		<Nature>Good</Nature>
 		<Description>
 			Aswini, Pushya, Hasta and Abhijit are light constellations, and they can
 			be selected for putting ornamentation, pleasures and sports,
@@ -308,7 +308,7 @@
 	<Event>
 
 		<Name>SharpConstellationRuling</Name>
-		<Nature>Neutral</Nature>
+		<Nature>Bad</Nature>
 		<Description>
 			Moola, Jyestha, Aridra and Aslesha are sharp in nature and they are
 			favourable for incantations, invoking spirits, for imprisonment, murders,
@@ -319,7 +319,7 @@
 	<Event>
 
 		<Name>MovableConstellationRuling</Name>
-		<Nature>Neutral</Nature>
+		<Nature>Good</Nature>
 		<Description>
 			Saravana, Dhanishta, Satabhisha, Punarvasu and Swati are movable
 			stars and they are auspicious for acquiring vehicles, for gardening and
@@ -330,7 +330,7 @@
 	<Event>
 
 		<Name>DreadfulConstellationRuling</Name>
-		<Nature>Neutral</Nature>
+		<Nature>Bad</Nature>
 		<Description>
 			Pubba, Poorvashadha and Poorvabhadra, Bharani and Makha are
 			dreadful stars and they are suitable for nefarious schemes, poisoning,
@@ -341,7 +341,7 @@
 	<Event>
 
 		<Name>MixedConstellationRuling</Name>
-		<Nature>Neutral</Nature>
+		<Nature>Good</Nature>
 		<Description>
 			Krittika and Visakha are mixed constellations and during their
 			influences, works of day-to-day importance can be undertaken.

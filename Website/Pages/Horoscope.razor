@@ -129,6 +129,7 @@
 
         //show loading
         _jsRuntime.ShowLoading();
+        await Task.Delay(250); //delay to pop alert
 
         await CalculateAndUpdateEvents();
 

@@ -5,8 +5,7 @@
 
 <PageTop Title="Muhurtha" IconName="ic:twotone-event">
     <Description>
-        Muhurtha is sanskrit for "Good Time". Also known as
-        electional astrology helps to find a good time for auspicious events.
+        Muhurtha is sanskrit for "Good Time" or "Electional Astrology".
         Find out the right time for wedding, job interview and etc.
     </Description>
     <ButtonsRow>
@@ -60,83 +59,99 @@
             <TimeInput @ref="_startTimeInput" />
             <TimeInput @ref="_endTimeInput" />
 
-            <h6 class="mt-2 mb-0">Select Type</h6>
-            <div class="border border-1">
-                <div class="d-flex flex-wrap">
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_dasaCheckBox" type="checkbox">
-                            <label class="form-check-label">Dasa <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Event Type</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Event List</button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h6 class="mt-2 mb-0">Select Type</h6>
+                    <div class="border border-1">
+                        <div class="d-flex flex-wrap">
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_dasaCheckBox" type="checkbox">
+                                    <label class="form-check-label">Dasa <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_bhuktiCheckBox" type="checkbox">
+                                    <label class="form-check-label">Bhukti <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_antaramCheckBox" type="checkbox">
+                                    <label class="form-check-label">Antaram <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_gocharaCheckBox" type="checkbox">
+                                    <label class="form-check-label">Gochara <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_personalCheckBox" type="checkbox">
+                                    <label class="form-check-label">Personal <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_generalCheckBox" type="checkbox">
+                                    <label class="form-check-label">General <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_agricultureCheckBox" type="checkbox">
+                                    <label class="form-check-label">Agriculture <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_astronomicalCheckBox" type="checkbox">
+                                    <label class="form-check-label">Astronomical <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_rulingConstellationCheckBox" type="checkbox">
+                                    <label class="form-check-label">Ruling Constellation <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_hairNailCuttingCheckBox" type="checkbox">
+                                    <label class="form-check-label">Cutting Hair/Nails <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_buildingCheckBox" type="checkbox">
+                                    <label class="form-check-label">House Building <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" @bind="_travelCheckBox" type="checkbox">
+                                    <label class="form-check-label">Travel <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_bhuktiCheckBox" type="checkbox">
-                            <label class="form-check-label">Bhukti <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_antaramCheckBox" type="checkbox">
-                            <label class="form-check-label">Antaram <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_gocharaCheckBox" type="checkbox">
-                            <label class="form-check-label">Gochara <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_personalCheckBox" type="checkbox">
-                            <label class="form-check-label">Personal <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_generalCheckBox" type="checkbox">
-                            <label class="form-check-label">General <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_agricultureCheckBox" type="checkbox">
-                            <label class="form-check-label">Agriculture <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2 bd-highlight">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_astronomicalCheckBox" type="checkbox">
-                            <label class="form-check-label">Astronomical <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2 bd-highlight">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_rulingConstellationCheckBox" type="checkbox">
-                            <label class="form-check-label">Ruling Constellation <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_hairNailCuttingCheckBox" type="checkbox">
-                            <label class="form-check-label">Cutting Hair/Nails <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_buildingCheckBox" type="checkbox">
-                            <label class="form-check-label">House Building <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="form-check">
-                            <input class="form-check-input" @bind="_travelCheckBox" type="checkbox">
-                            <label class="form-check-label">Travel <HelpBox HelpText="All dasa events are included" SmallIcon="true"></HelpBox></label>
-                        </div>
-                    </div>
+
                 </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
             </div>
+
 
             <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 
@@ -153,6 +168,11 @@
         <HelpBox Label="Events" HelpText="@HelpText.MuhurthaChart"></HelpBox>
         <EventReportViewer @ref="_eventReportViewer" />
     </div>
+    @if (_isResultReady)
+    {
+        <hr>
+        <StrengthChart Time="@SelectedPerson.BirthTime" />
+    }
 
 </div>
 
@@ -209,6 +229,8 @@
 
 
 @code {
+    private Person SelectedPerson;
+
     private bool _isResultReady = false; //marks if the page ready to loaded
 
     private PageHelpSection _helpSection;
@@ -266,13 +288,15 @@
         _isResultReady = false;
 
         //get needed input data
-        var selectedPerson = _peopleSelectorBox.GetSelectedPerson();
-        var startTime = _startTimeInput.GetTime(selectedPerson.GetBirthLocation());
-        var endTime = _endTimeInput.GetTime(selectedPerson.GetBirthLocation());
+        //get data from inputs and save it for use by other components
+        SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
+        //var selectedPerson = _peopleSelectorBox.GetSelectedPerson();
+        var startTime = _startTimeInput.GetTime(SelectedPerson.GetBirthLocation());
+        var endTime = _endTimeInput.GetTime(SelectedPerson.GetBirthLocation());
         var getSelectedEventTypes = GetSelectedEventTypes();
 
         //inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.Personal, EventTag.General };
-        await _eventReportViewer.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
+        await _eventReportViewer.SetData(SelectedPerson, startTime, endTime, getSelectedEventTypes);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -287,19 +311,19 @@
         if (!ValidationPassedEasy()) { return; }
 
         _jsRuntime.ShowLoading();
-        await Task.Delay(200); //time for alert to pop
+        await Task.Delay(300); //time for alert to pop
 
         //mark page as NOT ready (when button clicked 2nd time)
         _isResultReady = false;
 
         //get needed input data
-        var selectedPerson = _easyPeopleSelectorBox.GetSelectedPerson();
+        SelectedPerson = _easyPeopleSelectorBox.GetSelectedPerson();
         dynamic x = AutoCalculateTimeRange();
         var startTime = x.start;
         var endTime = x.end;
         var getSelectedEventTypes = GetSelectedEventTypesEasy();
 
-        await _eventReportViewer.SetData(selectedPerson, startTime, endTime, getSelectedEventTypes);
+        await _eventReportViewer.SetData(SelectedPerson, startTime, endTime, getSelectedEventTypes);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -314,23 +338,23 @@
             {
                 case "Day":
                     var today = DateTimeOffset.Now.ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {today}", selectedPerson.GetBirthLocation());
-                    end = new Time($"23:59 {today}", selectedPerson.GetBirthLocation());
+                    start = new Time($"00:00 {today}", SelectedPerson.GetBirthLocation());
+                    end = new Time($"23:59 {today}", SelectedPerson.GetBirthLocation());
                     return new { start = start, end = end };
                 case "Week":
-                    start = new Time($"00:00 {yesterday}", selectedPerson.GetBirthLocation());
+                    start = new Time($"00:00 {yesterday}", SelectedPerson.GetBirthLocation());
                     var weekEnd = (DateTimeOffset.Now.AddDays(7)).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {weekEnd}", selectedPerson.GetBirthLocation());
+                    end = new Time($"23:59 {weekEnd}", SelectedPerson.GetBirthLocation());
                     return new { start = start, end = end };
                 case "Month":
-                    start = new Time($"00:00 {yesterday}", selectedPerson.GetBirthLocation());
+                    start = new Time($"00:00 {yesterday}", SelectedPerson.GetBirthLocation());
                     var monthEnd = (DateTimeOffset.Now.AddDays(30)).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {monthEnd}", selectedPerson.GetBirthLocation());
+                    end = new Time($"23:59 {monthEnd}", SelectedPerson.GetBirthLocation());
                     return new { start = start, end = end };
                 case "Year":
-                    start = new Time($"00:00 {yesterday}", selectedPerson.GetBirthLocation());
+                    start = new Time($"00:00 {yesterday}", SelectedPerson.GetBirthLocation());
                     var yearEnd = (DateTimeOffset.Now.AddDays(365)).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {yearEnd}", selectedPerson.GetBirthLocation());
+                    end = new Time($"23:59 {yearEnd}", SelectedPerson.GetBirthLocation());
                     return new { start = start, end = end };
                 default:
                     return new { };

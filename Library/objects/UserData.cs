@@ -14,6 +14,8 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static UserData Empty = new UserData("101", "", "", "", "", "");
 
+        private string _name;
+
 
         public UserData(string id = "", string name = "", string email = "", string familyName = "", string locale = "", string picture = "")
         {
@@ -26,7 +28,13 @@ namespace Genso.Astrology.Library
         }
 
         public string Id { get; set; }
-        public string Name { get; set; }
+
+        public string Name
+        {
+            get => _name;
+            set => _name = value == "Vignes" ? "James Brown" : value;
+        }
+
         public string Email { get; set; }
         public string Locale { get; set; }
         public string FamilyName { get; set; }

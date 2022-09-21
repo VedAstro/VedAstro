@@ -11,7 +11,7 @@ namespace Website
 
         /** CONST FIELDS **/
         //TODO Note ; missing files at these location fail without proper catch
-        private const string PredictionFilePath = "data\\PredictionDataList.xml";
+        private const string PredictionDataListFilePath = "data/PredictionDataList.xml";
         private const string PersonFilePath = "data\\PersonList.xml";
 
 
@@ -24,7 +24,10 @@ namespace Website
         /** PUBLIC METHODS **/
         public static List<Person> GetAllPeopleList() => DatabaseManager.GetPersonList(PersonFilePath);
 
-        public static async Task<List<HoroscopePrediction>> GetPrediction(Person person, Stream predictionDataList)
+        /// <summary>
+        /// TODO MARKED FOR DELETION, OLD METHOD USED FOR CALCULATING HOROSCOPE IN CLIENT SIDE
+        /// </summary>
+        public static async Task<List<HoroscopePrediction>> GetPrediction(Person person)
         {
             //note: modified to use birth time as start & end time
             var startStdTime = person.BirthTime.GetStdDateTimeOffset();
@@ -33,13 +36,11 @@ namespace Website
             var location = person.GetBirthLocation();
 
             //get list of event data to check for event
-            var eventDataList = DatabaseManager.GetEventDataList(predictionDataList);
+            var xElements = await WebsiteTools.GetXmlFile(PredictionDataListFilePath);
+            var eventDataList = EventData.FromXmlList(xElements);
 
             //start calculating predictions
             var predictionList = GetListOfPredictionInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute1, eventDataList);
-
-            //fire event to let others know event calculation is done
-            //EventCalculationCompleted.Invoke();
 
             return predictionList;
         }
@@ -62,29 +63,15 @@ namespace Website
             //split time into slices based on precision
             List<Time> timeList = GetTimeListFromRange(startTime, endTime, precisionInHours);
 
-            var sync = new object();//to lock thread access to list
-
-            //var count = 0;
             try
             {
-                Parallel.ForEach(eventDataList, (eventData) =>
+                foreach (var eventData in eventDataList)
                 {
-                    //get list of occuring events for a sigle event type
+                    //get list of occuring events for a single event type
                     var eventListForThisEvent = GetPredictionListByEventData(eventData, person, timeList);
-                    //TODO Progress show code WIP
-                    //count++;
-                    //double percentDone = ((double)count / (double)eventDataList.Count) * 100.0;
-                    //debug print
-                    //Console.Write($"\r Completed : {percentDone}%");
-
-                    //adding to list needs to be synced for thread safety
-                    lock (sync)
-                    {
-                        //add events to main list of event
-                        eventList.AddRange(eventListForThisEvent);
-
-                    }
-                });
+                    //add events to main list of event
+                    eventList.AddRange(eventListForThisEvent);
+                }
 
             }
             //catches only exceptions that idicates that user canceled the calculation (caller lost interest in the result)

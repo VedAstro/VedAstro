@@ -19,6 +19,12 @@ namespace API
     /// </summary>
     public static class APITools
     {
+        //used in muhurtha
+        private const string UrlEventDataListXml = "https://www.vedastro.org/data/EventDataList.xml";
+
+        //used in horoscope
+        private const string UrlPredictionDataListXml = "https://www.vedastro.org/data/PredictionDataList.xml";
+
 
         /// <summary>
         /// Overwrites new XML data to a blob file
@@ -249,13 +255,13 @@ namespace API
         }
 
         /// <summary>
-        /// Get parsed EventDataList from Azure storage
+        /// Get parsed EventDataList.xml from wwwroot file / static site
         /// Note: Event data list needed to calculate events
         /// </summary>
         public static async Task<List<EventData>> GetEventDataList()
         {
             //get data list from Static Website storage
-            var eventDataListXml = await GetXmlFile("https://www.vedastro.org/data/EventDataList.xml");
+            var eventDataListXml = await GetXmlFile(APITools.UrlEventDataListXml);
 
             //parse each raw event data in list
             var eventDataList = new List<EventData>();
@@ -267,22 +273,46 @@ namespace API
 
             return eventDataList;
 
-            async Task<List<XElement>> GetXmlFile(string url)
+        }
+
+        /// <summary>
+        /// Get parsed PredictionDataList.xml from wwwroot file / static site
+        /// </summary>
+        public static async Task<List<EventData>> GetPredictionDataList()
+        {
+            //get data list from Static Website storage
+            var predictionDataListXml = await GetXmlFile(APITools.UrlPredictionDataListXml);
+
+            //parse each raw event data in list
+            var predictionDataList = new List<EventData>();
+            foreach (var predictionDataXml in predictionDataListXml)
             {
-                //get the data sender
-                using var client = new HttpClient();
-
-                //load xml event data files before hand to be used quickly later for search
-                //get main horoscope prediction file (located in wwwroot)
-                var fileStream = await client.GetStreamAsync(url);
-
-                //parse raw file to xml doc
-                var document = XDocument.Load(fileStream);
-
-                //get all records in document
-                return document.Root.Elements().ToList();
+                //add it to the return list
+                predictionDataList.Add(EventData.FromXml(predictionDataXml));
             }
 
+            return predictionDataList;
+
+        }
+
+
+        /// <summary>
+        /// Gets XML file from any URL and parses it into xelement list
+        /// </summary>
+        public static async Task<List<XElement>> GetXmlFile(string url)
+        {
+            //get the data sender
+            using var client = new HttpClient();
+
+            //load xml event data files before hand to be used quickly later for search
+            //get main horoscope prediction file (located in wwwroot)
+            var fileStream = await client.GetStreamAsync(url);
+
+            //parse raw file to xml doc
+            var document = XDocument.Load(fileStream);
+
+            //get all records in document
+            return document.Root.Elements().ToList();
         }
 
 
@@ -318,6 +348,154 @@ namespace API
 
             return xmlFile;
         }
+
+
+        public static async Task<List<HoroscopePrediction>> GetPrediction(Person person)
+        {
+            //note: modified to use birth time as start & end time
+            var startStdTime = person.BirthTime;
+            var endStdTime = person.BirthTime;
+
+            var location = person.GetBirthLocation();
+
+            //get list of prediction event data to check for event (file from wwwroot)
+            var eventDataList = await GetPredictionDataList();
+
+            //start calculating predictions
+            var predictionList = GetListOfPredictionInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute1, eventDataList);
+
+
+            return predictionList;
+        }
+
+        /// <summary>
+        /// Get list of predictions occurring in a time period for all the
+        /// inputed prediction types aka "prediction data"
+        /// </summary>
+        public static List<HoroscopePrediction> GetListOfPredictionInTimePeriod(Time startStdTime, Time endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
+        {
+            //get data to instantiate muhurtha time period
+            //get start & end times
+
+            //initialize empty list of event to return
+            List<HoroscopePrediction> eventList = new();
+
+            //split time into slices based on precision
+            var timeList = GetTimeListFromRange(startStdTime, endStdTime, precisionInHours);
+
+            try
+            {
+                foreach (var eventData in eventDataList)
+                {
+                    //get list of occuring events for a single event type
+                    var eventListForThisEvent = GetPredictionListByEventData(eventData, person, timeList);
+                    //add events to main list of event
+                    eventList.AddRange(eventListForThisEvent);
+                }
+
+            }
+            //catches only exceptions that indicates that user canceled the calculation (caller lost interest in the result)
+            catch (Exception e) when (e.InnerException.GetType() == typeof(OperationCanceledException))
+            {
+                //return empty list
+                return new List<HoroscopePrediction>();
+            }
+
+
+            //return calculated event list
+            return eventList;
+        }
+
+        public static List<Time> GetTimeListFromRange(Time startTime, Time endTime, double precisionInHours)
+        {
+            //declare return value
+            var timeList = new List<Time>();
+
+            //create list
+            for (var day = startTime; day.GetStdDateTimeOffset() <= endTime.GetStdDateTimeOffset(); day = day.AddHours(precisionInHours))
+            {
+                timeList.Add(day);
+            }
+
+            //return value
+            return timeList;
+        }
+
+        /// <summary>
+        /// Get a list of events in a time period for a single event type aka "event data"
+        /// Decision on when event starts & ends is also done here
+        /// Event Data + Time = HoroscopePrediction
+        /// </summary>
+        private static List<HoroscopePrediction> GetPredictionListByEventData(EventData eventData, Person person, List<Time> timeList)
+        {
+            //declare empty event list to fill
+            var eventList = new List<HoroscopePrediction>();
+
+            //set previous time as false for first time instance
+            var eventOccuredInPreviousTime = false;
+
+            //declare start & end times
+            Time eventStartTime = new Time();
+            Time eventEndTime = new Time();
+            var lastInstanceOfTime = timeList.Last();
+
+            //loop through time list 
+            //note: loop must be done in sequential order, to detect correct start & end time
+            foreach (var time in timeList)
+            {
+                //debug print
+                //Console.Write($"\r Checking time:{time} : {eventData.GetName()}");
+
+                //get flag of event occuring now
+                var eventIsOccuringNow = eventData.IsEventOccuring(time, person);
+
+                //if event is occuring now & not in previous time
+                if (eventIsOccuringNow == true & eventOccuredInPreviousTime == false)
+                {
+                    //save new start & end time
+                    eventStartTime = time;
+                    eventEndTime = time;
+                    //update flag
+                    eventOccuredInPreviousTime = true;
+                }
+                //if event is occuring now & in previous time
+                else if (eventIsOccuringNow == true & eventOccuredInPreviousTime == true)
+                {
+                    //update end time only
+                    eventEndTime = time;
+                    //update flag
+                    eventOccuredInPreviousTime = true;
+                }
+                //if event is not occuring now but occurred before
+                else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
+                {
+                    //add previous event to list
+                    var newEvent = new HoroscopePrediction(eventData.GetName(),
+                        eventData.GetDescription(),
+                        eventData.GetStrength());
+
+                    eventList.Add(newEvent);
+
+                    //set flag
+                    eventOccuredInPreviousTime = false;
+                }
+
+                //if event is occuring now & it is the last time
+                if (eventIsOccuringNow == true & time == lastInstanceOfTime)
+                {
+                    //add current event to list
+                    var newEvent2 = new HoroscopePrediction(eventData.GetName(),
+                        eventData.GetDescription(),
+                        eventData.GetStrength());
+
+
+                    eventList.Add(newEvent2);
+                }
+            }
+
+            return eventList;
+        }
+
 
 
     }

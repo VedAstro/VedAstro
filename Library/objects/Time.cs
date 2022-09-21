@@ -4,18 +4,6 @@ using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
-    //Time : Instance of Time
-    //TODO MARK FOR DELETION
-    internal interface ITime
-    {
-        //string ToStdTimeFormat();
-        //string ToLmtTimeFormat();//11:59 30/12/2018 +02:00
-        Time AddHours(double granularityHours);
-        Time SubtractHours(double granularityHours);
-        DateTimeOffset GetLmtDateTimeOffset();
-        string GetStdDateTimeOffsetText();
-        DateTimeOffset GetStdDateTimeOffset();
-    }
 
 
     /// <summary>
@@ -24,7 +12,7 @@ namespace Genso.Astrology.Library
     /// IMMUTABLE CLASS
     /// </summary>
     [Serializable()]
-    public struct Time : ITime, IToXml
+    public struct Time : IToXml
     {
         //FIELDS
         private readonly DateTimeOffset _stdTime;
@@ -226,7 +214,7 @@ namespace Genso.Astrology.Library
         {
             return _geoLocation;
         }
-
+        
         public string GetLmtDateTimeOffsetText()
         {
             //convert internal STD time to LMT
@@ -238,7 +226,7 @@ namespace Genso.Astrology.Library
             //return time string caller
             return lmtTimeString;
         }
-
+        
         /// <summary>
         /// Note root element is "Time"
         /// </summary>

@@ -362,20 +362,6 @@ namespace Website
             return resultsParsed;
         }
 
-        /// <summary>
-        /// Converts any list to comma separated string
-        /// Note: calls ToString();
-        /// </summary>
-        public static string? ListToString<T>(List<T> list)
-        {
-            var combinedNames = "";
-            foreach (var item in list)
-            {
-                combinedNames += item.ToString() + ", ";
-            }
-
-            return combinedNames;
-        }
 
 
 
@@ -530,5 +516,27 @@ namespace Website
         /// </summary>
         public static XElement TimeStampXml => new("TimeStamp", Tools.GetNowSystemTimeSecondsText());
 
+        /// <summary>
+        /// Gets XML file from any URL and parses it into xelement list
+        /// </summary>
+        public static async Task<List<XElement>> GetXmlFile(string url, HttpClient? client = null)
+        {
+            //if client not specified then make new one
+            if (client == null)
+            {
+                client = new HttpClient();
+                client.BaseAddress = AppData.BaseAddres;
+            }
+
+            //load xml event data files before hand to be used quickly later for search
+            //get main horoscope prediction file (located in wwwroot)
+            var fileStream = await client.GetStreamAsync(url);
+
+            //parse raw file to xml doc
+            var document = XDocument.Load(fileStream);
+
+            //get all records in document
+            return document.Root.Elements().ToList();
+        }
     }
 }

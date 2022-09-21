@@ -42,7 +42,8 @@ namespace Website
         /// Place where global event data list is stored for quick access
         /// loaded in main layout
         /// </summary>
-        public static List<XElement> PredictionDataList { get; set; }
+        public static List<XElement>? PredictionDataList { get; set; }
+        public static Stream? PredictionDataListStream { get; set; }
 
         /// <summary>
         /// Place where global event data list is stored for quick access
@@ -68,5 +69,41 @@ namespace Website
         /// </summary>
         public const string MaxWidth = "693px";
         public const string MaxContentWidthPx = "443px";
+
+
+        /// <summary>
+        /// if data already loaded then return the that one,
+        /// else get a new one from server
+        /// </summary>
+        public static async Task<Stream?> GetPredictionDataStreamCached()
+        {
+            //return already loaded if available
+            if (AppData.PredictionDataListStream != null) return AppData.PredictionDataListStream;
+            
+            //else get fresh copy from server
+            var client = new HttpClient();
+            client.BaseAddress = AppData.BaseAddres;
+            AppData.PredictionDataListStream = await client.GetStreamAsync("data/PredictionDataList.xml");
+            return AppData.PredictionDataListStream;
+        }
+
+        /// <summary>
+        /// Base address currently used by App,
+        /// could be http://localhost or https://vedastro.org
+        /// </summary>
+        public static Uri? BaseAddres;
+
+        public static async Task<List<XElement>?> GetPredictionDataListCached()
+        {
+            //return already loaded if available
+            if (AppData.PredictionDataList != null) return AppData.PredictionDataList;
+
+            //else get fresh copy from server
+            AppData.PredictionDataList = await WebsiteTools.GetXmlFile("data/PredictionDataList.xml");
+            return AppData.PredictionDataList;
+
+        }
+
+
     }
 }

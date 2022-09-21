@@ -86,8 +86,8 @@
             //get house details and save it for view
             var _houseDetails = AstronomicalCalculator.GetHouseDetails(houseNumber, Time);
             var _houseLord = lordOfHouse.ToString();
-            var _planetsInHouse = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(houseNumber, Time));
-            var _planetsAspectingHouse = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)houseNumber, Time));
+            var _planetsInHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(houseNumber, Time));
+            var _planetsAspectingHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)houseNumber, Time));
             var rawHouseStrength = AstronomicalCalculator.GetBhavabala((HouseName)houseNumber, Time).ToDouble();
             var _houseStrength = Math.Round(rawHouseStrength, 2).ToString();
             var _houseSign = AstronomicalCalculator.GetHouseSignName(houseNumber, Time).ToString();
@@ -150,9 +150,9 @@
 
             var _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(planetName, Time);
 
-            var _conjunctPlanets = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, planetName));
+            var _conjunctPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, planetName));
 
-            var _aspectingPlanets = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
+            var _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
 
             return new
             {

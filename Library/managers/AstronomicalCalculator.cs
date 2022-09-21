@@ -7178,7 +7178,7 @@ namespace Genso.Astrology.Library
             //incase current & birth dasa planet is same
             PlanetName nextPlanet = birthDasaPlanet;
 
-            TryAgain:
+        TryAgain:
             //planet found, stop counting
             if (nextPlanet == currentDasaPlanet)
             {

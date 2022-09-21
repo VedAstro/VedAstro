@@ -84,6 +84,43 @@ namespace API
             return okObjectResult;
         }
 
+        [FunctionName("gethoroscope")]
+        public static async Task<IActionResult> GetHoroscope(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
+            HttpRequestMessage incomingRequest,
+            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
+        {
+            string responseMessage;
+
+            try
+            {
+                //get name of male & female
+                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var personHash = int.Parse(rootXml.Value);
+
+                //generate compatibility report
+                var person = await APITools.GetPersonFromHash(personHash, personListClient);
+
+                //calculate predictions for current person
+                var predictionList = await APITools.GetPrediction(person);
+
+                //convert list to xml string in root elm
+                responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+            return okObjectResult;
+
+        }
+
         [FunctionName("addperson")]
         public static async Task<IActionResult> AddPerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)

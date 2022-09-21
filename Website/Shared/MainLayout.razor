@@ -151,6 +151,9 @@
         //save current page url, (if error used for logging)
         AppData.CurrentPage = _navigation.Uri;
 
+        //used later to create HTTP client with correct base address
+        AppData.BaseAddres = new Uri(_navigation.BaseUri);
+
         //retrieve login status from previous visit if available
         await TryGetPreviousLogin();
 

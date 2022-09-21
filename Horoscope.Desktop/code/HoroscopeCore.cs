@@ -53,7 +53,7 @@ namespace Horoscope.Desktop
         }
 
         /// <summary>
-        /// Get list of predictions occurrig in a time periode for all the
+        /// Get list of predictions occurring in a time period for all the
         /// inputed prediction types aka "prediction data"
         /// </summary>
         public static List<Prediction> GetListOfPredictionInTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)

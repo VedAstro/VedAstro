@@ -5,18 +5,11 @@ using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
-    //TODO MARKED FOR DELETION, LOOKS LIKE A REMANENT OF A GONE CODING DESIGN
-    internal interface IGeoLocation
-    {
-        string GetName();
-        double GetLongitude();
-        double GetLatitude();
-    }
 
 
     //IMMUTABLE CLASS
     [Serializable()]
-    public struct GeoLocation : IGeoLocation, IToXml
+    public struct GeoLocation : IToXml
     {
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler

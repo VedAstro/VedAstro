@@ -1,4 +1,6 @@
-﻿@attribute [Route(PageRoute.Horoscope)]
+﻿@using System.Xml.Linq
+@using Genso.Astrology.Library
+@attribute [Route(PageRoute.Horoscope)]
 
 @inject HttpClient Client
 
@@ -31,24 +33,26 @@
         </div>
     </div>
 
+    
+    @if (_isReady)
+    {
+        @*Only show table and search after button clicked*@
+        <div class="vstack gap-2">
+            <hr />
+            <div class="hstack gap-3">
+                <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
+                <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
+            </div>
 
-    @*Only show table and search after button clicked*@
-    <div @ref="holder" class="vstack gap-2" style="display: none;">
-        <hr />
-        <div class="hstack gap-3">
-            <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
-            <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
-        </div>
-
-        <table class="table table-bordered table-striped table-hover">
-            <thead class="table-dark">
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark">
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
                     <th style="min-width: 123px;">Info</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach (var prediction in _filteredHoroscopePredictions)
                 {
                     <tr>
@@ -57,10 +61,12 @@
                         <td>@prediction.Info</td>
                     </tr>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-    </div>
+        </div>
+    }
+    
 
     @*HELP SECTION*@
     <PageHelpSection @ref="_helpSection">
@@ -88,13 +94,13 @@
 @code {
 
     private PeopleSelectorBox? _peopleSelectorBox;
-    private List<HoroscopePrediction> _horoscopePredictions = new();
-    private List<HoroscopePrediction> _filteredHoroscopePredictions = new();
+    private List<HoroscopePrediction>? _horoscopePredictions;
+    private List<HoroscopePrediction>? _filteredHoroscopePredictions;
     private string _searchInput = "";
 
-    private ElementReference holder;
     private PageHelpSection _helpSection;
 
+    private bool _isReady = false;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -102,7 +108,7 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
     private async Task SearchButtonClicked() => await InvokeAsync(async () => await _SearchButtonClicked()).Try(_jsRuntime);
-    private async Task CalculateButtonClicked() => await InvokeAsync(async () => await _CalculateButtonClicked()).Try(_jsRuntime);
+    private async Task CalculateButtonClicked() => await InvokeAsync(async () => await _CalculateAndUpdateEvents()).Try(_jsRuntime);
 
 
 
@@ -122,55 +128,50 @@
     }
 
 
-    private async Task _CalculateButtonClicked()
-    {
-        //only continue if passed input field validation
-        if (!ValidationPassed()) { return; }
-
-        //show loading
-        _jsRuntime.ShowLoading();
-        await Task.Delay(250); //delay to pop alert
-
-        await CalculateAndUpdateEvents();
-
-        //make table and search visible
-        await _jsRuntime.Show(holder);
-
-        _jsRuntime.HideAlert();
-    }
-
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
-    private bool ValidationPassed()
+    private async Task<bool> ValidationPassed()
     {
-        var isValid = true;
 
         //TEST 1
         //if person not selected, invalid
         if (!_peopleSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
-            isValid = false;
-            _jsRuntime.ShowAlert("error", AlertText.NoName, true);
+            await _jsRuntime.ShowAlert("error", AlertText.NoName, true);
+            return false;
         }
 
-
-        return isValid;
+        return true;
     }
 
 
-    private async Task CalculateAndUpdateEvents()
+    private async Task _CalculateAndUpdateEvents()
     {
+        //only continue if passed input field validation
+        if (!await ValidationPassed()) { return; }
+
+        _jsRuntime.ShowLoading();
+        await Task.Delay(200); //todo move to inside loading box
+
+        _isReady = false;
+
         //get person from person dropdown
         var person = _peopleSelectorBox.GetSelectedPerson();
 
-        //get main horoscope prediction file (located in wwwroot)
-        var predictionDataList = await Client.GetStreamAsync("data/PredictionDataList.xml");
+        //get horoscope predictions from API server
+        var personHashXml = new XElement("PersonHash", person.Hash);
+        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetHoroscope, personHashXml, _jsRuntime);
 
-        //calculate predictions for current person (client side)
-        _horoscopePredictions = await HoroscopeCore.GetPrediction(person, predictionDataList);
+        //parse xml horoscope predictions
+        _horoscopePredictions = HoroscopePrediction.FromXmlList(rootXml);
+
         _filteredHoroscopePredictions = _horoscopePredictions.ToList(); //make a copy for search
+
+        _jsRuntime.HideAlert();
+
+        _isReady = true;
 
         StateHasChanged();
     }

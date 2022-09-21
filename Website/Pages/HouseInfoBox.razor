@@ -67,8 +67,8 @@
         //get house details and save it for view
         _houseDetails = AstronomicalCalculator.GetHouseDetails(HouseNumber, Time);
         _houseLord = lordOfHouse.ToString();
-        _planetsInHouse = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(HouseNumber, Time));
-        _planetsAspectingHouse = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)HouseNumber, Time));
+        _planetsInHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(HouseNumber, Time));
+        _planetsAspectingHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)HouseNumber, Time));
         var rawHouseStrength = AstronomicalCalculator.GetBhavabala((HouseName)HouseNumber, Time).ToDouble();
         _houseStrength = Math.Round(rawHouseStrength, 2).ToString();
         _houseSign = AstronomicalCalculator.GetHouseSignName(HouseNumber, Time).ToString();

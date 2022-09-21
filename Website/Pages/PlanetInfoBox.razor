@@ -83,9 +83,9 @@
 
         _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(PlanetName, Time);
 
-        _conjunctPlanets = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, PlanetName));
+        _conjunctPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, PlanetName));
 
-        _aspectingPlanets = WebsiteTools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, PlanetName));
+        _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, PlanetName));
 
         //needed to update values
         StateHasChanged();

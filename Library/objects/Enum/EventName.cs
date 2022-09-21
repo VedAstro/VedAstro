@@ -2,7 +2,8 @@
 {
     /// <summary>
     /// Staticly typed name list of events,
-    /// This is not the primarly list, not all events here will be checked, only events in the XML list are checked
+    /// This is not the primary list, not all events here will be checked,
+    /// only events in the XML list are checked
     /// Not all events here have to have a method
     /// </summary>
     public enum EventName

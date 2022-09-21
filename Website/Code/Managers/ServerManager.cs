@@ -16,6 +16,7 @@ namespace Website
     {
 
         public const string AddPersonApi = "https://vedastroapi.azurewebsites.net/api/addperson";
+        public const string GetHoroscope = "https://vedastroapi.azurewebsites.net/api/gethoroscope";
         public const string AddLifeEventApi = "https://vedastroapi.azurewebsites.net/api/addlifeevent";
         public const string AddMessageApi = "https://vedastroapi.azurewebsites.net/api/addmessage";
         public const string DeletePersonApi = "https://vedastroapi.azurewebsites.net/api/deleteperson";

@@ -53,7 +53,22 @@ namespace Genso.Astrology.Library
 
             return new XElement(typeName, enumValueStr);
         }
-        
+
+        /// <summary>
+        /// Converts any type that implements IToXml to XML, it will use Type's own ToXml() converter
+        /// Note, used to transfer data via internet Client to API Server
+        /// Placed inside "Root" xml
+        /// </summary>
+        public static XElement AnyTypeToXmlList<T>(List<T> xmlList) where T : IToXml
+        {
+            var rootXml = new XElement("Root");
+            foreach (var xmlItem in xmlList)
+            {
+                rootXml.Add(AnyTypeToXml(xmlItem));
+            }
+            return rootXml;
+        }
+
 
         /// <summary>
         /// - Type is a value typ
@@ -261,6 +276,21 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static string GenerateId() => Guid.NewGuid().ToString("N");
 
+
+        /// <summary>
+        /// Converts any list to comma separated string
+        /// Note: calls ToString();
+        /// </summary>
+        public static string ListToString<T>(List<T> list)
+        {
+            var combinedNames = "";
+            foreach (var item in list)
+            {
+                combinedNames += item.ToString() + ", ";
+            }
+
+            return combinedNames;
+        }
 
 
         //█▀▀ █░█ ▀▀█▀▀ █▀▀ █▀▀▄ █▀▀ ░▀░ █▀▀█ █▀▀▄ 　 █▀▄▀█ █▀▀ ▀▀█▀▀ █░░█ █▀▀█ █▀▀▄ █▀▀ 

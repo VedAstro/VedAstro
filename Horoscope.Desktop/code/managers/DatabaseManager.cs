@@ -15,7 +15,6 @@ namespace Horoscope.Desktop
     {
 
 
-
         /// <summary>
         /// Gets a list of all prediction data from EventDataList file.
         /// Note: element names used here correspond to the ones found in the XML file
@@ -33,75 +32,21 @@ namespace Horoscope.Desktop
             var rawEventDataList = eventDataListFile.GetAllRecords();
 
             //parse each raw event data in list
-            foreach (var eventData in rawEventDataList)
+            foreach (var eventDataXml in rawEventDataList)
             {
-                //extract the individual data out & convert it to the correct type
-                var nameString = eventData.Element("Name").Value;
-                Enum.TryParse(nameString, out EventName name);
-                var natureString = eventData.Element("Nature").Value;
-                Enum.TryParse(natureString, out EventNature nature);
-                var description = getDescription(eventData.Element("Description").Value); //with proper formatting
-                var tagString = eventData.Element("Tag").Value;
-                var tagList = getEventTags(tagString); //multiple tags are possible ',' separated
-                //todo needs to be moved to a better place
-                var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
-
-                //place the data into an event data structure
-                var eventX = new EventData(name, nature, description, tagList, calculatorMethod);
-
                 //add it to the return list
-                eventDataList.Add(eventX);
+                eventDataList.Add(EventData.FromXml(eventDataXml));
             }
 
 
             //return the list to caller
             return eventDataList;
-
-            //Gets a list of tags in string form & changes it a structured list of tags
-            //Multiple tags can be used by 1 event, separated by comma in in the Tag element
-            List<EventTag> getEventTags(string rawTags)
-            {
-                //create a place to store the parsed tags
-                var returnTags = new List<EventTag>();
-
-                //split the string by comma "," (tag separator)
-                var splitedRawTags = rawTags.Split(',');
-
-                //parse each raw tag
-                foreach (var rawTag in splitedRawTags)
-                {
-                    //parse
-                    var result = Enum.TryParse(rawTag, out EventTag eventTag);
-                    //raise error if could not parse
-                    if (!result) throw new Exception("Event tag not found!");
-
-                    //add the parsed tag to the return list
-                    returnTags.Add(eventTag);
-                }
-
-                return returnTags;
-            }
-
-            //little function to format the description coming from the file
-            //so that the description wraps nicely when rendered
-            string getDescription(string rawDescription)
-            {
-                //remove new line
-                //var cleaned1 = rawDescription.Replace("\n", "").Replace("\r", "");
-
-                //remove double spaces
-                //RegexOptions options = RegexOptions.None;
-                //Regex regex = new Regex("[ ]{3,}", options);
-                //var cleaned2 = regex.Replace(cleaned1, " ");
-                var cleaned = Regex.Replace(rawDescription, @"\s+", " ");
-
-                return cleaned;
-            }
+            
         }
 
         /// <summary>
         /// Gets a list of all persons from database
-        /// Note: element names used here corespond to the ones found in the XML file
+        /// Note: element names used here correspond to the ones found in the XML file
         ///       if change here, than change in XML as well
         /// </summary>
         public static List<Person> GetPersonList(string filePath)
@@ -118,27 +63,13 @@ namespace Horoscope.Desktop
             //parse each raw person data in list
             foreach (var personXml in rawPersonList)
             {
-                //extract the individual data out & convert it to the correct type
-                var nameString = personXml.Element("Name").Value;
-                var birthTime = getBirthTime(personXml.Element("BirthTime"));
-                var rawGender = personXml.Element("Gender").Value;
-                Enum.TryParse(rawGender, out Gender gender);
-
-                //place the data into an event data structure
-                var person = new Person(nameString, birthTime, gender);
-
                 //add it to the return list
-                eventDataList.Add(person);
+                eventDataList.Add(Person.FromXml(personXml));
             }
 
 
             //return the list to caller
             return eventDataList;
-
-            //--------------FUNCTIONS
-            //converts xml representative of birth time to object instance of it
-            Time getBirthTime(XElement birthTimeXml) => Time.FromXml(birthTimeXml.Element("Time"));
-
         }
 
 

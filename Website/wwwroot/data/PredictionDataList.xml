@@ -51,7 +51,7 @@
 		<Nature>Neutral</Nature>
 		<Description>
 			The first child does not survive, not much happiness from children, short tempered, subservient and serving others.
-			If fortified : In the good graces of rulers or powerful political parties and likely to be absorbed into trade or diplomatic services. He will propitiate deities consistent with the indications of the fifth lord.
+			If fortified , In the good graces of rulers or powerful political parties and likely to be absorbed into trade or diplomatic services. He will propitiate deities consistent with the indications of the fifth lord.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -91,7 +91,7 @@
 		<Name>House1LordInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Generally fortunate, protector of others, religious; if a Hindu—worshipper of Vishnu, good orator, happiness on account of wife and children; and rich.
+			Generally fortunate, protector of others, religious, if a Hindu—worshipper of Vishnu, good orator, happiness on account of wife and children, and rich.
 			Provided the lord is well disposed, he will inherit good ancestral and paternal property. The father will be famous, philanthropic and god-fearing.
 		</Description>
 		<Tag>Personal</Tag>
@@ -373,7 +373,7 @@
 		
 		<Name>House4LordInHouse7</Name>
 		<Nature>Neutral</Nature>
-		<Description>Generally happy ; will command houses and lands ; will eke out livelihood in distant places or near his birthplace according as the seventh happens to be a movable or fixed sign.</Description>
+		<Description>Generally happy , will command houses and lands , will eke out livelihood in distant places or near his birthplace according as the seventh happens to be a movable or fixed sign.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -417,14 +417,14 @@
 		
 		<Name>House5LordInHouse1</Name>
 		<Nature>Neutral</Nature>
-		<Description>If the 5th lord is favourably combined and associated, the person commands a number of servants, becomes a Judge, Magistrate or Minister empowered to punish the evil-minded. He will earn the grace of God ; few children ; will have foes and gives happiness to others. If the 5th lord is afflicted, there will be no issues; will invoke kshudra devatas (evil and destructive forces), will be evil-minded and leader of a gang of deceitful persons ; a tale-bearer with a sting. If the lord is moderately good, mixed results will follow.</Description>
+		<Description>If the 5th lord is favourably combined and associated, the person commands a number of servants, becomes a Judge, Magistrate or Minister empowered to punish the evil-minded. He will earn the grace of God , few children , will have foes and gives happiness to others. If the 5th lord is afflicted, there will be no issues, will invoke kshudra devatas (evil and destructive forces), will be evil-minded and leader of a gang of deceitful persons , a tale-bearer with a sting. If the lord is moderately good, mixed results will follow.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
 		
 		<Name>House5LordInHouse2</Name>
 		<Nature>Neutral</Nature>
-		<Description>If the 5th lord is favourably disposed, the person will be blessed with a beautiful wife and well-behaving children. There will be gains from Government or King. He will become learned and a good astrologer. Lord weak and afflicted, Poor ; loss of money through Government displeasure ; will be unable to maintain his own family ; will have family troubles and misunderstandings ; becomes a priest in a Siva temple.</Description>
+		<Description>If the 5th lord is favourably disposed, the person will be blessed with a beautiful wife and well-behaving children. There will be gains from Government or King. He will become learned and a good astrologer. Lord weak and afflicted, Poor , loss of money through Government displeasure , will be unable to maintain his own family , will have family troubles and misunderstandings , becomes a priest in a Siva temple.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -445,7 +445,7 @@
 		
 		<Name>House5LordInHouse5</Name>
 		<Nature>Neutral</Nature>
-		<Description>Lord favourably disposed indicates a number of sons ; becomes great in his own line of activity ; otherwise he becomes an expert in Mantrasastra and befriends persons in power. He may also become an expert in mathematics or head of a religious institution. Lord afflicted, contrary results should be anticipated. Children will die; he will not keep to his word; wavering mentality and cruel.</Description>
+		<Description>Lord favourably disposed indicates a number of sons , becomes great in his own line of activity , otherwise he becomes an expert in Mantrasastra and befriends persons in power. He may also become an expert in mathematics or head of a religious institution. Lord afflicted, contrary results should be anticipated. Children will die, he will not keep to his word, wavering mentality and cruel.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -480,14 +480,14 @@
 		
 		<Name>House5LordInHouse10</Name>
 		<Nature>Neutral</Nature>
-		<Description>If the lord is beneficially disposed, a Raja Yoga is formed. Acquires landed property ; earns the goodwill of the rulers, constructs temples and performs religious sacrifices ; one of the sons becomes a gem of the family. If aspected by the Sun the native may join the intelligence department. If the lord is afflicted, faces the wrath of the rulers and contrary results will happen.</Description>
+		<Description>If the lord is beneficially disposed, a Raja Yoga is formed. Acquires landed property , earns the goodwill of the rulers, constructs temples and performs religious sacrifices , one of the sons becomes a gem of the family. If aspected by the Sun the native may join the intelligence department. If the lord is afflicted, faces the wrath of the rulers and contrary results will happen.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
 		
 		<Name>House5LordInHouse11</Name>
 		<Nature>Neutral</Nature>
-		<Description>Benefits through sons and success in all undertakings; becomes rich and learned and helps others; will have a number of sons; becomes an author.</Description>
+		<Description>Benefits through sons and success in all undertakings, becomes rich and learned and helps others, will have a number of sons, becomes an author.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -524,7 +524,7 @@
 		
 		<Name>House6LordInHouse4</Name>
 		<Nature>Neutral</Nature>
-		<Description>Well fortified, lives in a dilapidated building. He will have breaks in education and will discard his mother. Maternal uncles will generally be land cultivators. Weak and afflicted: he will quarrel with his mother and ancestral property will be involved in debts. He will work as a menial and lead a miserable life. Troublesome home and domestic affairs and trouble through servants.</Description>
+		<Description>Well fortified, lives in a dilapidated building. He will have breaks in education and will discard his mother. Maternal uncles will generally be land cultivators. Weak and afflicted, he will quarrel with his mother and ancestral property will be involved in debts. He will work as a menial and lead a miserable life. Troublesome home and domestic affairs and trouble through servants.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -559,28 +559,28 @@
 		
 		<Name>House6LordInHouse9</Name>
 		<Nature>Neutral</Nature>
-		<Description>Father becomes a judge, if the sixth lord is well fortified. The maternal uncle becomes highly fortunate. There will be misunderstandings between him and his father. There will be benefits from Gnatis or cousins. If afflicted : poverty, sinful acts, misfortunes through relatives, ungrateful towards preceptors and engaged in unrighteous deeds. If moderate : becomes a mason, timber merchant or stone cutter.</Description>
+		<Description>Father becomes a judge, if the sixth lord is well fortified. The maternal uncle becomes highly fortunate. There will be misunderstandings between him and his father. There will be benefits from Gnatis or cousins. If afflicted , poverty, sinful acts, misfortunes through relatives, ungrateful towards preceptors and engaged in unrighteous deeds. If moderate , becomes a mason, timber merchant or stone cutter.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
 		
 		<Name>House6LordInHouse10</Name>
 		<Nature>Neutral</Nature>
-		<Description>If fortified : Sinful and destructive nature, poses as an orthodox and pious man but really unscrupulous in regard to religious matters. When the lord is weak : dismissal formidable enemies, low life or begging.</Description>
+		<Description>If fortified , Sinful and destructive nature, poses as an orthodox and pious man but really unscrupulous in regard to religious matters. When the lord is weak , dismissal formidable enemies, low life or begging.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
 		
 		<Name>House6LordInHouse11</Name>
 		<Nature>Neutral</Nature>
-		<Description>If benefic, eldest brother will be a judge. If ordinary : an elder brother becomes a judge for some time but loses his job. If malefic : poor and wretched life : suffering on account of convictions.</Description>
+		<Description>If benefic, eldest brother will be a judge. If ordinary , an elder brother becomes a judge for some time but loses his job. If malefic , poor and wretched life , suffering on account of convictions.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
 		
 		<Name>House6LordInHouse12</Name>
 		<Nature>Neutral</Nature>
-		<Description>Well disposed : difficulty and sorrow through destructive nature; causes harm to others. If afflicted : miserable, hard and wretched existence.</Description>
+		<Description>Well disposed , difficulty and sorrow through destructive nature, causes harm to others. If afflicted , miserable, hard and wretched existence.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 
@@ -705,7 +705,7 @@
 		<Nature>Neutral</Nature>
 		<Description>
 			If the lord of the 8th is in the 5th with the 5th lord, the children of the native may get into trouble. They may commit some crime and invite situations that could affect the native's reputation. Or the native and his father may develop misunderstandings. The native's child may fall sick and suffer thereby. If the affliction is heavy, a child may die as soon as it is born or cause much grief to the native due to some incurable physical affliction or mental retardation. The native may also suffer much bodily ill-health. If the 8th lord is in the 6th, 12th or 8th from Navamsa Lagna, the evil results are greatly mitigated. But if fortified in a kendra (quadrant) or trikona (trine), the evil results are intensified. Since the 5th house is the buddhisthana, the native may also suffer nervous debility or breakdown or mental aberration.
-			When the 9th lord conjoins the 8th lord in the 5th house and the Lagna lord is debilitated, the native has neither knowledge nor wealth ; he is hostile, lustful and ill-temprered. He tends to be crafty, reviles God and pious men and is himself treated with contempt by his wife and children.
+			When the 9th lord conjoins the 8th lord in the 5th house and the Lagna lord is debilitated, the native has neither knowledge nor wealth , he is hostile, lustful and ill-temprered. He tends to be crafty, reviles God and pious men and is himself treated with contempt by his wife and children.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -1116,7 +1116,7 @@
 		<Description>
 			Mental Tendencies.—Independent thinking, courageous and sensitive.
 			Physical Tendencies.—Middle stature, ruddy complexion, sharp sight, long face and neck, head broad at the temples and narrow at chin, brown or light and curly, mark or scar on the head or temples, teeth well-set and round eyes.
-			General Tendencies.—Those born in Mesha are lovers of scientific thought. They are enterprising and ambitious. They have the ability to plan. They dislike being guided by others ; are intense when interested, vehement when excited. They are rather stubborn, but often frank. Quick tempered, they resent imposition and are liable to go to extremes. Their constitution will be hot. They love beauty, art and elegance. They have practical ideas. If Aries is afflicted they suffer from diseases pertaining to the head. Mental affliction and derangement are also likely if Saturn and the Moon are in Aries.
+			General Tendencies.—Those born in Mesha are lovers of scientific thought. They are enterprising and ambitious. They have the ability to plan. They dislike being guided by others , are intense when interested, vehement when excited. They are rather stubborn, but often frank. Quick tempered, they resent imposition and are liable to go to extremes. Their constitution will be hot. They love beauty, art and elegance. They have practical ideas. If Aries is afflicted they suffer from diseases pertaining to the head. Mental affliction and derangement are also likely if Saturn and the Moon are in Aries.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -1127,7 +1127,7 @@
 		<Description>
 			Mental Tendencies.—Obstinate, proud and ambitious , easily accessible to adulation but affectionate and loving, sometimes unreasonable, prejudiced and stubborn.
 			Physical Tendencies.—The stature of the person born in this sign will be short and often tending towards corpulence, lips thick and complexion swarthy, square build of the body. Face beautiful, eyes and ears large, full forehead, hands plump and broad.
-			General Tendencies.—If they are not listened to attentively, people born in this sign will act like a bull. They are self-reliant; They have their own principles and ways and a piercing intellect. They have a great deal of endurance, latent power and energy. They always put their ideas into practice. Their physical powers and mental endurance are indeed noteworthy. They are fond of pleasure, they love beauty and music. They possess a magnetic personality. They think they are born for exercising authority. They generally suffer from nervous complaints after the fiftieth year. With regard to children much happiness is not indicated. The late Prof. B. Suryanarain Rao was a typical example of Taurus ascending.
+			General Tendencies.—If they are not listened to attentively, people born in this sign will act like a bull. They are self-reliant, They have their own principles and ways and a piercing intellect. They have a great deal of endurance, latent power and energy. They always put their ideas into practice. Their physical powers and mental endurance are indeed noteworthy. They are fond of pleasure, they love beauty and music. They possess a magnetic personality. They think they are born for exercising authority. They generally suffer from nervous complaints after the fiftieth year. With regard to children much happiness is not indicated. The late Prof. B. Suryanarain Rao was a typical example of Taurus ascending.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -1399,7 +1399,7 @@
 		
 		<Name>MercuryInHouse3</Name>
 		<Nature>Neutral</Nature>
-		<Description>Will do good deeds for the benefit of others but he will not himself be happy. The mind is sharp. Fond of reading and study ; when once he undertakes a work he does it to the finish and will never get discouraged. Tactful and diplomatic. He will befriend businessmen and merchants. He will generally be successful in trade and speculation. A number of brothers and sisters. Independent views. Liked by friends and relatives. When Mercury is afflicted the native is inclined to nervous break-down. Gain through third house affairs.</Description>
+		<Description>Will do good deeds for the benefit of others but he will not himself be happy. The mind is sharp. Fond of reading and study , when once he undertakes a work he does it to the finish and will never get discouraged. Tactful and diplomatic. He will befriend businessmen and merchants. He will generally be successful in trade and speculation. A number of brothers and sisters. Independent views. Liked by friends and relatives. When Mercury is afflicted the native is inclined to nervous break-down. Gain through third house affairs.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -1420,7 +1420,7 @@
 		
 		<Name>SaturnInHouse3</Name>
 		<Nature>Neutral</Nature>
-		<Description>Brave and courageous, wealthy, loss of brothers, eccentric and cruel. Sorrow through brothers ; honoured by rulers ; may become head or president of local boards, municipalities, etc. He will protect many people. One peculiarity of this combination is that success attends him only after he has suffered disappointments and reverses. The tendency of the mind is towards gloom, anxiety and misgivings. The mental condition improves with age. If Saturn is afflicted, the despondency is likely to run into mental affliction.</Description>
+		<Description>Brave and courageous, wealthy, loss of brothers, eccentric and cruel. Sorrow through brothers , honoured by rulers , may become head or president of local boards, municipalities, etc. He will protect many people. One peculiarity of this combination is that success attends him only after he has suffered disappointments and reverses. The tendency of the mind is towards gloom, anxiety and misgivings. The mental condition improves with age. If Saturn is afflicted, the despondency is likely to run into mental affliction.</Description>
 		<Tag>Personal</Tag>
 	</Event>
 	<Event>
@@ -1456,9 +1456,9 @@
 		<Name>MoonInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Possesses house derives happiness from relatives; will he cheerful and contented
-			becomes important as a leader or ruler ; proud and somewhat quarrelsome. The position indicates
-			early separation from the mother if the Moon is afflicted; will be fond of sensual pleasures, unless
+			Possesses house derives happiness from relatives, will he cheerful and contented
+			becomes important as a leader or ruler , proud and somewhat quarrelsome. The position indicates
+			early separation from the mother if the Moon is afflicted, will be fond of sensual pleasures, unless
 			aspected by Jupiter.
 		</Description>
 		<Tag>Personal</Tag>
@@ -1492,8 +1492,8 @@
 		<Name>JupiterInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Philosophically inclined, learned, happy, possesses the favour of the ruling class; a
-			terror to his enemies; religiously inclined, respected and fortunate; peaceful domestic environments;
+			Philosophically inclined, learned, happy, possesses the favour of the ruling class, a
+			terror to his enemies, religiously inclined, respected and fortunate, peaceful domestic environments,
 			great spiritual advancement.
 		</Description>
 		<Tag>Personal</Tag>
@@ -1504,7 +1504,7 @@
 		<Nature>Neutral</Nature>
 		<Description>
 			Well versed in music, polished manners, deep attachment to mother, many friends,
-			conveyances and houses; religious by inclined: successful achievement of desires. This is a
+			conveyances and houses, religious by inclined, successful achievement of desires. This is a
 			favourable yoga for affairs of a domestic nature, concord and happiness.
 		</Description>
 		<Tag>Personal</Tag>
@@ -1514,9 +1514,9 @@
 		<Name>SaturnInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Sickly during early years; deprived of mother and unhappy; suffers from windy and
-			phlegmatic complaints; lethargic temperament; will not inherit any property; will have troubles from
-			houses and vehicles; disliked by relatives; desire to live a very secluded life; unfavourable for
+			Sickly during early years, deprived of mother and unhappy, suffers from windy and
+			phlegmatic complaints, lethargic temperament, will not inherit any property, will have troubles from
+			houses and vehicles, disliked by relatives, desire to live a very secluded life, unfavourable for
 			domestic or family affairs, unless beneficially aspected or associated.
 		</Description>
 		<Tag>Personal</Tag>
@@ -1526,7 +1526,7 @@
 		<Name>RahuInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Foolish in behaviour; few friends; will be subjected to fraud; or guilty of fraudulent action.
+			Foolish in behaviour, few friends, will be subjected to fraud, or guilty of fraudulent action.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -1535,7 +1535,7 @@
 		<Name>KetuInHouse4</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Will be deprived of mother, properties and happiness; lives in a foreign place. There
+			Will be deprived of mother, properties and happiness, lives in a foreign place. There
 			will be exceptional experiences at the end of life. There will be reversals and sudden changes.
 		</Description>
 		<Tag>Personal</Tag>
@@ -1548,7 +1548,7 @@
 		<Nature>Neutral</Nature>
 		<Description>
 			This combination deprises the person of children, riches and happiness. His life
-			will be short. He will suffer from heart disease, will roam about in forest regions; a mountaineer.
+			will be short. He will suffer from heart disease, will roam about in forest regions, a mountaineer.
 			This position also denotes difficult child-birth.
 		</Description>
 		<Tag>Personal</Tag>
@@ -1570,7 +1570,7 @@
 		<Name>MarsInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Miserable for his wife, friends and children ; always disturbed in thoughts;
+			Miserable for his wife, friends and children , always disturbed in thoughts,
 			impressive, rash, weak- minded, back-biter and unhappy. He will suffer from colic and suffers
 			misfortunes through children. Too much attached to sex pleasures and consequently loss of health.
 			Dangerous child-birth may be predicted in a woman's chart.
@@ -1583,8 +1583,8 @@
 		<Nature>Neutral</Nature>
 		<Description>
 			Learned and happy, will have
-			a number of children. The person may become an adviser or a minister ; highly intelligent and
-			learned in Mantrasastras ; inclined to too much of sex pleasure and consequently lacking in vitality.
+			a number of children. The person may become an adviser or a minister , highly intelligent and
+			learned in Mantrasastras , inclined to too much of sex pleasure and consequently lacking in vitality.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -1595,7 +1595,7 @@
 		<Description>
 			Learned in logic and law, mantrasastra, highly intelligent, preceptor or adviser to a
 			king and great discriminating power. He will have good friends and vehicles and decorous manners.
-			A number of children ; god-fearing ; happy with children and friends.
+			A number of children , god-fearing , happy with children and friends.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -1604,8 +1604,8 @@
 		<Name>VenusInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Poetic; possesses a number of friends and beautiful children ; happiness through
-			offspring ; wise and discriminating; acquires wealth ; respected by the State. This position also
+			Poetic, possesses a number of friends and beautiful children , happiness through
+			offspring , wise and discriminating, acquires wealth , respected by the State. This position also
 			indicates more of female children and success in speculation.
 		</Description>
 		<Tag>Personal</Tag>
@@ -1615,7 +1615,7 @@
 		<Name>SaturnInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Evil-minded and stupid ; sickly and weak; poor and hated by others. This
+			Evil-minded and stupid , sickly and weak, poor and hated by others. This
 			combination denotes sorrows through children. Fortune will be variable and not steady and he will
 			have a hyprocritical nature. Quarrels with friends and relatives and sorrow in domestic life.
 		</Description>
@@ -1626,8 +1626,8 @@
 		<Name>RahuInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Suffers from colic; mistaken by others and unfriended; will lose a number of
-			children; hard-hearted and unconventional; heart trouble.
+			Suffers from colic, mistaken by others and unfriended, will lose a number of
+			children, hard-hearted and unconventional, heart trouble.
 		</Description>
 		<Tag>Personal</Tag>
 	</Event>
@@ -1636,7 +1636,7 @@
 		<Name>KetuInHouse5</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Loss of children; trouble in the stomach, strange and peculiar experiences in
+			Loss of children, trouble in the stomach, strange and peculiar experiences in
 			connection with emotions and feelings. Later on in life, inclination towards spirituality.
 		</Description>
 		<Tag>Personal</Tag>
@@ -1649,7 +1649,7 @@
 		<Description>
 			The Sun.—The person becomes a good politician,
 			famous and successful. Not very good for health. Sun
-			afflicted : Long and troublesome illness. Sun fortified :
+			afflicted , Long and troublesome illness. Sun fortified ,
 			Good administrative ability, few enemies, wealthy and
 			generally successful in all endeavours. Affliction by Saturn
 			is not desirable as it indicates heart-trouble or frequent
@@ -1663,11 +1663,11 @@
 		<Nature>Neutral</Nature>
 		<Description>
 			The Moon.—Indicates Balarishta or much ill-health
-			during early childhood. Affliction by Mars and Saturn :
+			during early childhood. Affliction by Mars and Saturn ,
 			curious and incurable diseases and revengeful enemies.
 			Moon strongly denotes ability and success in subordinate
 			positions. If the sixth is a fixed sign, the person will suffer
-			from stone in the bladder; he will be submissive to women ;
+			from stone in the bladder, he will be submissive to women ,
 			weak sexual connection and stomach troubles. Afflicted in
 			common signs, danger from lung troubles. He will have
 			success as a caterer.
@@ -1680,7 +1680,7 @@
 		<Description>
 			Mars — Highly passionate, victorious and successful as
 			a ruler or politician. He will have worries from near
-			relatives. Mars afflicted : accidents, losses and troubles
+			relatives. Mars afflicted , accidents, losses and troubles
 			through employees. If Saturn is the afflicting planet, death
 			may be due to operation or injury by animals. If Rahu
 			afflicts Mars, death may be due to suicide. If Ketu, he will
@@ -1692,7 +1692,7 @@
 		<Name>MercuryInHouse6</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mercury.—Quarrelsome and showy but yet respected ;
+			Mercury.—Quarrelsome and showy but yet respected ,
 			interrupted education. If afflicted, mental troubles and
 			danger of nervous breakdown. If afflicted by Mars and Rahu or Saturn and Rahu, there is danger of insanity
 			through excitement, troubles with servants and a tendency
@@ -1717,7 +1717,7 @@
 		<Nature>Neutral</Nature>
 		<Description>
 			Venus.—No enemies, corrupted by young women,
-			favourable for getting favours from women. If afflicted :
+			favourable for getting favours from women. If afflicted ,
 			health affected by too much sexual indulgence, fond of
 			other women and licentious.
 		</Description>
@@ -1729,7 +1729,7 @@
 		<Description>
 			Saturn.—Quarrelsome, obstinate, voracious eater,
 			foeless, courageous. If afflicted, sickness through privation
-			or neglect; troubles through subordinates. If Mars is the
+			or neglect, troubles through subordinates. If Mars is the
 			afflicting planet, dangerous illness and operations. If Rahu
 			afflicts, the person suffers from hysteria. Saturn wellaspected denotes gains through contract work, mining
 			masonry, etc.
@@ -1796,7 +1796,7 @@
 		<Name>MarsInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mars :—The native will be hen-pecked by his wife and
+			Mars ,—The native will be hen-pecked by his wife and
 			submissive to women. Married life will have clashes and tensions
 			or there may be two wives. The native will be rash and indulge in
 			speculation. He will be intelligent, tactless, stubborn, peevish and
@@ -1808,7 +1808,7 @@
 		<Name>MercuryInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mercury :—A man of virtue and geniality, he will dress well
+			Mercury ,—A man of virtue and geniality, he will dress well
 			and tastefully. He will have profound knowledge of law. He will
 			be skilled in business and trade tactics. He will have writing
 			ability and success through it early in life. Early marriage to a rich
@@ -1823,7 +1823,7 @@
 		<Name>JupiterInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Jupiter:—Diplomatic and kind-hearted the native gets a
+			Jupiter,—Diplomatic and kind-hearted the native gets a
 			virtuous, good-looking and chaste wife. He will get good
 			education and gains through marriage. He will be sensitive to
 			others' feelings. He has a speculative mind and is a good
@@ -1837,7 +1837,7 @@
 		<Name>VenusInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Venus: — Fond of quarrelling, sensuous and passionate, the
+			Venus, — Fond of quarrelling, sensuous and passionate, the
 			native has unhealthy habits, and a happy marriage and devoted
 			wife. He is fond of pleasure and drink, is suave and charming
 			with winning manners. He has a magnetic personality. He has
@@ -1864,7 +1864,7 @@
 		<Name>RahuInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Rahu :—The native brings ill-repute to family, if a female. He
+			Rahu ,—The native brings ill-repute to family, if a female. He
 			will be unconventional and heterodox. He will have affairs with
 			outcaste women or foreigners. His wife suffers from womb
 			disorders. He eats good and rich food, has luxurious habits and
@@ -1876,7 +1876,7 @@
 		<Name>KetuInHouse7</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Ketu :—The native has an unhappy marriage with a
+			Ketu ,—The native has an unhappy marriage with a
 			shrewish wife. He is passionate, sinful, lusts after widows. His
 			wife is sickly. The native suffers from cancer in the abdomen or
 			uterus, if a female. He will suffer humiliation and loss of virility.
@@ -1890,7 +1890,7 @@
 		<Name>SunInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Sun :—If the Sun occupies the 8th house in exaltation,
+			The Sun ,—If the Sun occupies the 8th house in exaltation,
 			the native lives long. He will be charming and an eloquent
 			speaker. If the Sun is afflicted, he will be troubled with sores, in
 			the face and head and be disgruntled in life. His eyes will be weak.
@@ -1907,7 +1907,7 @@
 		<Name>MoonInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Moon :—The native with the Moon in the 8th is subject
+			The Moon ,—The native with the Moon in the 8th is subject
 			to mental aberration. He is apprehensive and suffers from
 			psychological complexes. He will be capricious and unhealthy.
 			The native may lose his mother in infancy or boyhood. His built
@@ -1924,7 +1924,7 @@
 		<Name>MarsInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mars :— The native will be short-lived unless there are
+			Mars ,— The native will be short-lived unless there are
 			other alleviating factors, and he may suffer the loss of wife (or
 			husband). He will have very few children. He may seek to
 			gratify his passions by resorting to extra-marital life. He will
@@ -1953,7 +1953,7 @@
 		<Name>JupiterInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Jupiter :—The native will be unhappy but generous hearted.
+			Jupiter ,—The native will be unhappy but generous hearted.
 			He will live long. He will have difficulty in speech. He may do
 			ignoble deeds but pretend to be noble. He may have liaisons
 			with widows. He will have dirty habits and suffer from colitis. He
@@ -1967,7 +1967,7 @@
 		<Name>VenusInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Venus:-The position of Venus in the 8th gives many
+			Venus,-The position of Venus in the 8th gives many
 			blessings. The native will come by much wealth. He will live a
 			life of comfort and possess all the conveniences for such life.
 			The native's mother may suffer danger. The native himself may
@@ -1984,7 +1984,7 @@
 		<Name>SaturnInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Saturn :—Saturn in the 8th house gives good longevity but
+			Saturn ,—Saturn in the 8th house gives good longevity but
 			many responsibilities in life. The native will discharge his duties
 			through sheer perseverance against odds which will be many.
 			He will have defective eyes. He will have very few children. He
@@ -2003,7 +2003,7 @@
 		<Name>RahuInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Rahu :—The native will suffer from public censure and
+			Rahu ,—The native will suffer from public censure and
 			humiliation. He will be troubled by many ailments. He will be
 			vicious, quarrelsome and unscrupulous. If the Moon conjoins
 			with a malefic planet and Rahu is in the 8th, 12th or 5th house,
@@ -2015,7 +2015,7 @@
 		<Name>KetuInHouse8</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Ketu : — If Ketu in the 8th is aspected by a benefic, the
+			Ketu , — If Ketu in the 8th is aspected by a benefic, the
 			native will enjoy much wealth and live long. If Ketu is afflicted,
 			the native covets others' wealth and women. He will suffer from
 			diseases due to disorders in the excretory system and also
@@ -2030,7 +2030,7 @@
 		<Name>SunInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Sun : The native may change his faith if the Sun is
+			The Sun , The native may change his faith if the Sun is
 			afflicted. He displays hostile feelings towards his father, lacking
 			respect for elders and spiritual preceptors. But if the Son is not
 			afflicted, the person will be a dutiful son having regard for
@@ -2045,7 +2045,7 @@
 		<Name>MoonInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Moon: The native will be fortunate and prosperous. He
+			The Moon, The native will be fortunate and prosperous. He
 			will have many sons, friends and kinsmen. He will be principled
 			and generous-minded. If Saturn, Mars and Mercury aspect the
 			Moon, the native will become a ruler. If the Moon combines with
@@ -2062,7 +2062,7 @@
 		<Name>MarsInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mars : The native will wield authority and be affluent. He will
+			Mars , The native will wield authority and be affluent. He will
 			have children and be happy. He will not be a dutiful son but
 			otherwise generous and famous for his good qualities, if either
 			Jupiter or Mercury conjoin Mars, the native will be learned in
@@ -2078,7 +2078,7 @@
 		<Name>MercuryInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mercury : The native will acquire much education and
+			Mercury , The native will acquire much education and
 			wealth. He will be a great scholar. He will be interested in
 			theosophy and metaphysics. He will have a scientific mind, and
 			fond of music and pleasure if Venus joins Mercury. Jupiter with
@@ -2092,7 +2092,7 @@
 		<Name>JupiterInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Jupiter: The native may become an exponent of law,
+			Jupiter, The native may become an exponent of law,
 			philosophy, etc. if Jupiter is aspected by benefic planets he
 			acquires much immovable property. He will be fond of his
 			brothers, if the Moon and Mars influence Jupiter he will become
@@ -2108,7 +2108,7 @@
 		<Name>VenusInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Venus : The native is born fortunate and endowed with
+			Venus , The native is born fortunate and endowed with
 			fame, learning, children, wife and generally every kind of
 			happiness. The Sun with Venus makes one sauve and polished
 			in speech but one may suffer from many physical complaints.
@@ -2127,7 +2127,7 @@
 		<Name>SaturnInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Saturn : The native will lead a lonely life and may not marry.
+			Saturn , The native will lead a lonely life and may not marry.
 			He will be well known for his valour on the battle field. The Sun
 			with Saturn causes serious conflicts with the father and also with
 			his own children. He may suffer from growths or lumps in the
@@ -2142,7 +2142,7 @@
 		<Name>RahuInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Rahu : The native will have a nagging and domineering wife.
+			Rahu , The native will have a nagging and domineering wife.
 			He will be impolite and miserly, suffering from emaciation and
 			generally inclined to be of loose morals. He will hate his father
 			and revile God and religion. But he may become famous and
@@ -2154,7 +2154,7 @@
 		<Name>KetuInHouse9</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Ketu : The native will be short-tempered and may get upset
+			Ketu , The native will be short-tempered and may get upset
 			over trifles. He will be eloquent but employ this ability to
 			scandalize others. Fond of pomp and show, haughty and
 			arrogant, he will, however, be valorous. Often treating his
@@ -2171,7 +2171,7 @@
 		<Name>SunInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Sun : The native is successful in all that he undertakes.
+			The Sun , The native is successful in all that he undertakes.
 			He will be strong and happy. He will have sons, vehicles, fame,
 			intelligence, money and power. He will be employed in
 			government service. He will acquire ancestral wealth. He will be
@@ -2189,7 +2189,7 @@
 		<Name>MoonInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Moon : The native will be religious, wealthy, intelligent
+			The Moon , The native will be religious, wealthy, intelligent
 			and bold. He will succeed in all his endeavors. He will obtain corn,
 			ornaments, women and will be skilled in the arts. He
 			will be of a helpful nature and virtuous. Jupiter with the Moon
@@ -2205,7 +2205,7 @@
 		<Name>MarsInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mars : Other combinations favouring the native may become
+			Mars , Other combinations favouring the native may become
 			a cruel ruler. He will be fond of praise and may take bold steps in
 			governing. He will be rash. He will earn much money. If Mercury
 			joins Mars, the person will be a skilled scientist or technician
@@ -2220,7 +2220,7 @@
 		<Name>MercuryInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mercury: He will be a happy and straightforward person. He
+			Mercury, He will be a happy and straightforward person. He
 			will be a scholar in many subjects and engaged in acquiring
 			more knowledge and fame. He will be successful in all his
 			endeavours. He will have defective eyesight but profound
@@ -2236,7 +2236,7 @@
 		<Name>JupiterInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Jupiter : The native will be a high official in the government.
+			Jupiter , The native will be a high official in the government.
 			Rich, virtuous, steadfast in his spiritual or religious life, wise and
 			happy, he will be guided by high principles. If Jupiter and Venus
 			combine in the 10th house, the person is held in esteem by the
@@ -2252,7 +2252,7 @@
 		<Name>VenusInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Venus : The native earns through houses and buildings. He
+			Venus , The native earns through houses and buildings. He
 			will be highly influential and has many women working for him.
 			He will be social, friendly and renowned. If Venus combines with
 			Saturn, the native will profit from cosmetics and articles used by
@@ -2266,7 +2266,7 @@
 		<Name>SaturnInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Saturn : The native becomes a ruler or minister. He will be
+			Saturn , The native becomes a ruler or minister. He will be
 			an agriculturist, brave, rich and famous. He will be dispassionate
 			in nature and will work for the downtrodden masses. He will be
 			judicious and work in the capacity of a judge. The native visits
@@ -2285,7 +2285,7 @@
 		<Name>RahuInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Rahu : There is a tendency to lusts after widows. He will be
+			Rahu , There is a tendency to lusts after widows. He will be
 			a skilled artist with a flair for poetry and literature. He travels
 			widely and is learned. He will be famous and will engage himself
 			in business. He will have limited issues. Bold and somewhat
@@ -2297,7 +2297,7 @@
 		<Name>KetuInHouse10</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Ketu : The native will be strong, bold and well-known. He
+			Ketu , The native will be strong, bold and well-known. He
 			will commit vile deeds and be impure in his resolves. He will face
 			many obstacles in all his undertakings. He will be very clever. If
 			beneficially disposed, the native will be happy,religious, well read in 
@@ -2312,7 +2312,7 @@
 		<Name>SunInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Sun :—The person lives for a long time and becomes
+			The Sun ,—The person lives for a long time and becomes
 			wealthy. He will have wife, children and many servants. He gets
 			royal and governmental favours, and achieves success without
 			much effort. He will be sagacious and principled.
@@ -2323,7 +2323,7 @@
 		<Name>MoonInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Moon :—One will be noble, generous and blessed
+			The Moon ,—One will be noble, generous and blessed
 			with riches, wife and children. Introspective by nature and
 			quiet-going, he will become famous making good profits in
 			business. He will acquire vast lands and be helped in his
@@ -2335,7 +2335,7 @@
 		<Name>MarsInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mars :- The native will be an eloquent and forceful speaker,
+			Mars ,- The native will be an eloquent and forceful speaker,
 			clever and rich but lustful, will acquire landed Properties and
 			wield considerable influence in top circles.
 		</Description>
@@ -2345,7 +2345,7 @@
 		<Name>MercuryInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mercury:—One becomes learned in many sciences. He will
+			Mercury,—One becomes learned in many sciences. He will
 			possess a keen and sharp intellect, will be wealthy, truthful and
 			happy, will have many faithful servants and will prosper in
 			engineering ventures.
@@ -2356,7 +2356,7 @@
 		<Name>JupiterInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Jupiter:—The native will be long-lived. He will have a limited
+			Jupiter,—The native will be long-lived. He will have a limited
 			number of issues, will be bold and wealthy with a piercing
 			intellect and will become renowned. He will be fond of music, will
 			accumulate riches and will have many friends.
@@ -2367,7 +2367,7 @@
 		<Name>VenusInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Venus :— He will be of a wandering nature, will make
+			Venus ,— He will be of a wandering nature, will make
 			immense profits possessing all kinds of comforts and luxuries.
 			He will have a weakness for women and long for their company.
 			He will be popular having many friends.
@@ -2378,7 +2378,7 @@
 		<Name>SaturnInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Saturn :—The native earns through employing many men
+			Saturn ,—The native earns through employing many men
 			and women. He will have few friends, will be fond of enjoyment
 			and will earn through Government sources. He will have a long
 			and healthy life, and will be involved in politics commanding
@@ -2390,8 +2390,8 @@
 		<Name>RahuInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Rahu :-—The native distinguishes himself in the army or
-			navy, will become famous, wealthy and learned ; will have
+			Rahu ,-—The native distinguishes himself in the army or
+			navy, will become famous, wealthy and learned , will have
 			few children, will suffer from ear afflictions and will earn much
 			wealth in foreign countries.
 		</Description>
@@ -2401,7 +2401,7 @@
 		<Name>KetuInHouse11</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Ketu :—The native will have the habit of hoarding. He
+			Ketu ,—The native will have the habit of hoarding. He
 			may get monetary wind-fall through speculation such as lottery,
 			horse-racing and the stock exchange. Noble and possessed
 			of many good qualities of head and heart, he will succeed in
@@ -2416,7 +2416,7 @@
 		<Name>SunInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Sun: The native may take to an immoral life and
+			The Sun, The native may take to an immoral life and
 			engage himself in vile occupations. He will not be quite
 			successful in his life and may feel neglected by all. He will suffer
 			the loss of some limb and have weak eye-sight. He will,
@@ -2428,7 +2428,7 @@
 		<Name>MoonInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			The Moon : The native may suffer from some deformity. He
+			The Moon , The native may suffer from some deformity. He
 			will be narrow-minded, hard-hearted and mischievous. He
 			prefers to lead on obscure life in solitude. Eye-sight will be
 			weak. If the Moon is waning and combines with Saturn, sloth
@@ -2440,7 +2440,7 @@
 		<Name>MarsInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mars : The person may lose his wife. He will be selfish,
+			Mars , The person may lose his wife. He will be selfish,
 			hateful and suffer diseases due to excess of heat in the body.
 			He is liable to deception and may lose his money. If Mars and
 			Saturn occupy the 12th and the 2nd houses respectively, the
@@ -2456,7 +2456,7 @@
 		<Name>MercuryInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Mercury: Capricious and wayward, the person will indulge in
+			Mercury, Capricious and wayward, the person will indulge in
 			extra-marital relations and suffer penury, and perverted thinking
 			will make him unhappy. He will also have a few children.
 		</Description>
@@ -2466,7 +2466,7 @@
 		<Name>JupiterInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Jupiter: The native may deride religion and be evil-minded.
+			Jupiter, The native may deride religion and be evil-minded.
 			He will commit fearful deeds and lead a lascivious life. Later on
 			he repents and reforms himself. The native will always be
 			anxious about his vehicles, ornaments and clothes.
@@ -2477,7 +2477,7 @@
 		<Name>VenusInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Venus : Desertion by relatives ; hankering after comforts
+			Venus , Desertion by relatives , hankering after comforts
 			without success and penury will make the native's life miserable.
 			He will indulge in lying and associates with low women.
 			His eye-sight will be poor. If Venus is exalted, contrary results
@@ -2489,7 +2489,7 @@
 		<Name>SaturnInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Saturn : The native will be dull-headed and lose all his
+			Saturn , The native will be dull-headed and lose all his
 			money. He will have squint eyes and a deformed limb, make
 			many enemies, suffer losses in trade, be a pessimist and
 			commits sins in secret.
@@ -2500,7 +2500,7 @@
 		<Name>RahuInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Rahu : The native will be prosperous, immoral, but of a
+			Rahu , The native will be prosperous, immoral, but of a
 			helpful nature. He will have eye troubles. If the Sun is in the 7th,
 			Mars is in the 10th and Rahu is in the 12th Bhava, the native's
 			father will die early.
@@ -2511,7 +2511,7 @@
 		<Name>KetuInHouse12</Name>
 		<Nature>Neutral</Nature>
 		<Description>
-			Ketu : The native will have a restless and wandering mind
+			Ketu , The native will have a restless and wandering mind
 			and leave his country of birth. The lower classes will befriend
 			him. All his inherited property may be lost.
 		</Description>
@@ -2933,7 +2933,7 @@
 		<Nature>Good</Nature>
 		<Description>
 			Cancer - Wise, powerful, charming, influenced by women,
-			wealthy, kind, good, a bit stout, sensitive; impetuous, unprofitable
+			wealthy, kind, good, a bit stout, sensitive, impetuous, unprofitable
 			voyages, meditative, much immovable property,scientist, middle stature,
 			prudent, frugal, piercing. conventional.
 		</Description>
@@ -2957,7 +2957,7 @@
 		<Description>
 			Virgo - Lovely complexion, almond eyes, modest, sunken
 			shoulders and arms, charming, attractive, principled, affluent,
-			comfortable, soft body, sweet speech, honest; truthful,
+			comfortable, soft body, sweet speech, honest, truthful,
 			modest, virtuous. intelligent. phlegmatic, fond of women.
 			acute insight, conceited in self-estimation, pensive, conversationalist,
 			many daughters, loquacious, astrologer and
@@ -2971,7 +2971,7 @@
 		<Nature>Good</Nature>
 		<Description>
 			Libra - Reverence and respect for learned and holy people,
-			saints and gods; tall, raised nose, thin, deformed limbs,
+			saints and gods, tall, raised nose, thin, deformed limbs,
 			sickly constitution, rejected by kinsmen, intelligent, principled,
 			wealthy. business-like, obliging, love for arts, far-seeing,
 			idealistic, clever, mutable, amicable, losses through women,
@@ -3143,7 +3143,7 @@
 		<Description>
 			Sagittarius - Gentlemanly, many foes, famous minister.
 			statesman, open, frank, pleasure loving, few children, liable
-			to extremes, conservative. indifferent, exacting, impatient;
+			to extremes, conservative. indifferent, exacting, impatient,
 			severe, quarrelsome. litigation troubles, good citizen.
 		</Description>
 		<Tag>Horoscope</Tag>
@@ -3349,7 +3349,7 @@
 		<Name>JupiterInCancer</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Cancer - Well read, dignified. wealthy. comfortable:
+			Cancer - Well read, dignified. wealthy. comfortable,
 			intelligent, swarthy complexion, inclined to social gossip,
 			mathematician, faithful.
 		</Description>
@@ -3692,14 +3692,14 @@
 	<!--
 	TODO Astrology for Beginners pg 37
 	//Results of Exaltation
-	Sun : Learned, religious, strong, placid, charitable.
-	Moon : Rich, sedulous, a man of letters. Mars :
+	Sun , Learned, religious, strong, placid, charitable.
+	Moon , Rich, sedulous, a man of letters. Mars ,
 	Possessing great fervour, educated, famous, princely.
-	Mercury : Learneu, cheerful, fortunate, respected.
-	Jupiter : Chief of men, strong, respected, given to
-	anger, supporting a larg number of men. Venus :
+	Mercury , Learneu, cheerful, fortunate, respected.
+	Jupiter , Chief of men, strong, respected, given to
+	anger, supporting a larg number of men. Venus ,
 	Charitable, lives to a good old age, many qualities.
-	Saturn :Skilful, c~aritable, opulence, long life, loving
-	husband. Rahu or Ketu : Wealthy.-->
+	Saturn ,Skilful, c~aritable, opulence, long life, loving
+	husband. Rahu or Ketu , Wealthy.-->
 
 </Root>

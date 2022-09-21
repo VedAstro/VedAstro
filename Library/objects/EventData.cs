@@ -204,6 +204,25 @@ namespace Genso.Astrology.Library
             return !(left == right);
         }
 
-        
+
+        /// <summary>
+        /// Converts an XML list of Event Data to instance List
+        /// </summary>
+        public static List<EventData> FromXmlList(List<XElement> eventDataListXml)
+        {
+            //create a place to store the list
+            List<EventData> eventDataList = new List<EventData>();
+
+            //parse each raw event data in list
+            foreach (var eventDataXml in eventDataListXml)
+            {
+
+                //add it to the return list
+                eventDataList.Add(EventData.FromXml(eventDataXml));
+            }
+
+            //return the list to caller
+            return eventDataList;
+        }
     }
 }

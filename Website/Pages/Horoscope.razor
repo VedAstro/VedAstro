@@ -33,58 +33,82 @@
         </div>
     </div>
 
-    
     @if (_isReady)
     {
-        @*Only show table and search after button clicked*@
-        <div class="vstack gap-2">
-            <hr />
-            <div class="hstack gap-3">
-                <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
-                <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
+        <hr />
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Prediction</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Data</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="vstack gap-2 p-2">
+
+                    @*SEARCH*@
+                    <div class="hstack gap-3">
+                        <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
+                        <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
+                    </div>
+
+                    @*LIST OF PREDICTIONS*@
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th style="min-width: 123px;">Info</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var prediction in _filteredHoroscopePredictions)
+                        {
+                            <tr>
+                                <td>@prediction.FormattedName</td>
+                                <td>@prediction.Description</td>
+                                <td>@prediction.Info</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="vstack gap-3">
 
-            <table class="table table-bordered table-striped table-hover">
-                <thead class="table-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th style="min-width: 123px;">Info</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var prediction in _filteredHoroscopePredictions)
-                {
-                    <tr>
-                        <td>@prediction.FormattedName</td>
-                        <td>@prediction.Description</td>
-                        <td>@prediction.Info</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
+                    <StrengthChart Time="@SelectedPerson.BirthTime" />
+                    <hr>
+                    <PlanetHouseInfoViewer Time="@SelectedPerson.BirthTime" />
 
+                </div>
+            </div>
         </div>
+
     }
-    
+
+
 
     @*HELP SECTION*@
     <PageHelpSection @ref="_helpSection">
         <Content>
-            <h4 class="fw-bold">Where are these predictions from?</h4>
-            <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
-                Prediction data come from books by renowned astrologer B.V. Raman.
-                Books such as <span class="fw-bold">How to Judge Horoscope</span> and
-                <span class="fw-bold">Hindu Predictive Astrology</span>,
-                were used to make this calculator.
-            </p>
-
             <h4 class="fw-bold">How to use these predictions?</h4>
             <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
                 For accurate predictions, results must be duly modified
                 or qualified according to the affliction or otherwise of the
                 planets concerned. For example, predictions involving planets with
                 high strength (Bhava Bala), is often accurate.
+            </p>
+            
+            <h4 class="fw-bold">Where are these predictions from?</h4>
+            <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
+                Prediction data come from books by renowned astrologer B.V. Raman.
+                Books such as <span class="fw-bold">How to Judge Horoscope</span> and
+                <span class="fw-bold">Hindu Predictive Astrology</span>,
+                were used to make this calculator.
             </p>
         </Content>
     </PageHelpSection>
@@ -97,6 +121,7 @@
     private List<HoroscopePrediction>? _horoscopePredictions;
     private List<HoroscopePrediction>? _filteredHoroscopePredictions;
     private string _searchInput = "";
+    private Person SelectedPerson;
 
     private PageHelpSection _helpSection;
 
@@ -158,10 +183,10 @@
         _isReady = false;
 
         //get person from person dropdown
-        var person = _peopleSelectorBox.GetSelectedPerson();
+        SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
 
         //get horoscope predictions from API server
-        var personHashXml = new XElement("PersonHash", person.Hash);
+        var personHashXml = new XElement("PersonHash", SelectedPerson.Hash);
         var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetHoroscope, personHashXml, _jsRuntime);
 
         //parse xml horoscope predictions

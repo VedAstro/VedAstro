@@ -35,9 +35,7 @@
                 Score
             </div>
             <div class="col-4">
-                <h4>
-                    <b style="color: @GetScoreColor(_report.KutaScore);">@_report.KutaScore%</b>
-                </h4>
+                <b style="color: @GetScoreColor(_report.KutaScore);font-size: 33px;">@_report.KutaScore%</b>
             </div>
         </div>
         <div class="row justify-content-start">
@@ -71,17 +69,20 @@
 
                 <tr>
                     <td scope="row">
-                        <b>@prediction.FormattedName</b><button type="button" @onclick="@(() => _jsRuntime.InvokeVoidAsync("scrollToDiv", @prediction.Name.ToString()))" class="btn btn-sm btn-outline-primary mx-2">More Info</button>
-                        <p style="margin: 0px;"><small>@prediction.Description</small></p>
+                        <b style="font-size: 22px;">@prediction.FormattedName</b>
+                        <p style="margin: 0px; font-size: 15px;">@prediction.Description</p>
+                        <button 
+                            type="button" 
+                            @onclick="@(() => _jsRuntime.InvokeVoidAsync("scrollToDiv", @prediction.Name.ToString()))" 
+                            class="btn btn-sm btn-outline-primary my-1">More Info</button>
                     </td>
+
                     <td>
-                        <h4 style="color: @GetNatureColor(prediction.Nature);">
-                            <b>@prediction.Nature</b>
-                        </h4>
-                        <small style=" color: #4e4e4e; ">
+                        <b style="color: @GetNatureColor(prediction.Nature); font-size: 22px;">@prediction.Nature</b>
+                        <div style="color: #616161; font-size: 14px;">
                             @prediction.Info
                             <div class="hstack gap-2">[male: @prediction.MaleInfo, female: @prediction.FemaleInfo]</div>
-                        </small>
+                        </div>
                     </td>
                 </tr>
             }

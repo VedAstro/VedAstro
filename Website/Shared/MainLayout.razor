@@ -91,7 +91,7 @@
             <a id="DesktopMenuBtn" href="#" class="content-menu d-none d-md-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
             @*visible in Mobile view*@
             <a id="MobileMenuBtn" href="#" class="content-menu d-md-none border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
-            <a id="DarkModeButton" @onclick="@(() => _jsRuntime.InvokeVoidAsync("window.DarkMode.toggle"))" class="content-menu border"><span class="iconify" data-icon="material-symbols:dark-mode-outline-rounded" data-width="100"></span></a>
+            <a id="DarkModeButton" @onclick="OnClickDarkModeButton" class="content-menu border"><span class="iconify" data-icon="material-symbols:dark-mode-outline-rounded" data-width="100"></span></a>
         </div>
 
         <!-- content-body -->
@@ -211,6 +211,15 @@
     }
 
     private async Task OnClickSearchIcon() => await PerformSearch();
+
+    private async Task OnClickDarkModeButton()
+    {
+        //using JS lib toggle the dark mode
+        await _jsRuntime.InvokeVoidAsync("window.DarkMode.toggle");
+
+        //get value from JS and save it
+        AppData.DarkMode = await _jsRuntime.InvokeAsync<bool>("window.DarkMode.isActivated");
+    }
 }
 
 

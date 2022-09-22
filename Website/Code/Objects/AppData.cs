@@ -120,5 +120,7 @@ namespace Website
         /// Return true if User ID is 101
         /// </summary>
         public static bool IsGuestUser => AppData.CurrentUser?.Id == UserData.Empty.Id;
+
+        public static bool DarkMode { get; set; } = false;
     }
 }

@@ -4,8 +4,11 @@
 @using System.Text
 
 
-@*dark mode is disabled for chart with mix-blend-mode*@
-<div class="vstack gap-1" style="width: fit-content; mix-blend-mode: difference;">
+@*
+    dark mode is disabled for chart with mix-blend-mode
+    note: extra logic to remove filter in normal mode
+*@
+<div class="vstack gap-1" style="width: fit-content; @(AppData.DarkMode?"mix-blend-mode: difference;":"")">
     @*ID set because used by auto move cursor line handler*@
     <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox" style="margin-left: -11px;"></div>
 
@@ -28,25 +31,25 @@
     {
         //try
         //{
-            //auto calculate precision
-            var daysPerPixel = GetDayPerPixel(startTime, endTime);
-            await DrawReport(startTime, endTime, inputedEventTags, daysPerPixel);
+        //auto calculate precision
+        var daysPerPixel = GetDayPerPixel(startTime, endTime);
+        await DrawReport(startTime, endTime, inputedEventTags, daysPerPixel);
 
-            //ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
+        //ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
 
-            //attach mouse handler to auto move cursor line & update time legend
-            await _jsRuntime.InvokeVoidAsync("LoadEventDataListFile"); //load event description file 1st
-            await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
+        //attach mouse handler to auto move cursor line & update time legend
+        await _jsRuntime.InvokeVoidAsync("LoadEventDataListFile"); //load event description file 1st
+        await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
 
-            //init touch for the dasa chart
-            await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);
+        //init touch for the dasa chart
+        await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);
 
 
-            //needed to show changes to inputs
-            StateHasChanged();
+        //needed to show changes to inputs
+        StateHasChanged();
 
         //}
-        ////this exception seems to occur in 
+        ////this exception seems to occur in
         //catch (Exception e)
         //{
         //    //log error, don't await to reduce lag

@@ -561,5 +561,22 @@ namespace Website
             //get all records in document
             return document.Root.Elements().ToList();
         }
+
+        /// <summary>
+        /// Tries to get visitor ID from browser else makes new Visitor ID
+        /// also update is new visitor flag
+        /// </summary>
+        public static async Task<string?> TryGetVisitorId(IJSRuntime jsRuntime)
+        {
+            //find out if new visitor just arriving or old one browsing
+            var visitorId = await jsRuntime.GetProperty("VisitorId"); //local storage
+            AppData.IsNewVisitor = visitorId is null or "";
+
+            //generate new ID if not found
+            if (AppData.IsNewVisitor) { AppData.VisitorId = Tools.GenerateId(); }
+
+            //return new or saved ID
+            return AppData.VisitorId;
+        }
     }
 }

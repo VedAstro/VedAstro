@@ -154,6 +154,12 @@
         //used later to create HTTP client with correct base address
         AppData.BaseAddres = new Uri(_navigation.BaseUri);
 
+        //get visitor ID if available
+        AppData.VisitorId = await WebsiteTools.TryGetVisitorId(_jsRuntime);
+
+        //get & save origin url
+        AppData.OriginUrl = await _jsRuntime.GetOriginUrl();
+
         //retrieve login status from previous visit if available
         await TryGetPreviousLogin();
 

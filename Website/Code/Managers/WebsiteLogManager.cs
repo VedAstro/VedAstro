@@ -199,15 +199,12 @@ namespace Website
             var urlXml = new XElement("Url", urlString);
             var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
 
-            //find out if new visitor just arriving or old one browsing
-            var visitorId = await jsRuntime.GetProperty("VisitorId"); //local storage
-            var isNewVisitor = visitorId is null or "";
 
             //based on visitor type create the right record data to log
             //this is done to minimize excessive logging
-            var visitorXml = isNewVisitor
+            var visitorXml = AppData.IsNewVisitor
                 ? await NewVisitor(userIdXml, urlXml, jsRuntime)
-                : await OldVisitor(userIdXml, urlXml, visitorId);
+                : OldVisitor(userIdXml, urlXml);
 
 
             return visitorXml;
@@ -217,31 +214,30 @@ namespace Website
         //all possible details are logged
         private static async Task<XElement> NewVisitor(XElement userIdXml, XElement urlXml, IJSRuntime jsRuntime)
         {
-            //since new visitor generate new id & store it
-            var visitorId = Tools.GenerateId();
-            AppData.VisitorId = visitorId; //app memory for this session use
-            await jsRuntime.SetProperty("VisitorId", visitorId); //local storage, so can id user on return
-
             //get visitor data & format it nicely for storage
             var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
             var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
-            var originUrlXml = new XElement("OriginUrl", await jsRuntime.GetOriginUrl());
-            var visitorIdXml = new XElement("VisitorId", visitorId);
+            var originUrlXml = new XElement("OriginUrl", AppData.OriginUrl);
+            var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
             var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation,null,"Location");
             var visitorElement = new XElement("Visitor");
             visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
+
+            //mark new visitor as already logged for first time
+            AppData.IsNewVisitor = false;
 
             return visitorElement;
         }
 
         //only needed details are logged
-        private static async Task<XElement> OldVisitor(XElement userIdXml, XElement urlXml, string visitorId)
+        private static XElement OldVisitor(XElement userIdXml, XElement urlXml)
         {
 
             //get visitor data & format it nicely for storage
             var visitorElement = new XElement("Visitor");
-            var visitorIdXml = new XElement("VisitorId", visitorId); //use id generated above
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampXml);
+            var originUrlXml = new XElement("OriginUrl", AppData.OriginUrl);
+            var visitorIdXml = new XElement("VisitorId", AppData.VisitorId); //use id generated above
+            visitorElement.Add(userIdXml, visitorIdXml, originUrlXml, urlXml, WebsiteTools.TimeStampXml);
 
             return visitorElement;
         }

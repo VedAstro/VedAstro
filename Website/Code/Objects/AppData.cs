@@ -106,5 +106,14 @@ namespace Website
         }
 
 
+        /// <summary>
+        /// If true new Visitor is first visit (theoretically)
+        /// </summary>
+        public static bool IsNewVisitor { get; set; } = false;
+
+        /// <summary>
+        /// Origin URL set by MainLayout
+        /// </summary>
+        public static string OriginUrl { get; set; }
     }
 }

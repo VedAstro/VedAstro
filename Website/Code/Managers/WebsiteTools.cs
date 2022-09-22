@@ -572,7 +572,12 @@ namespace Website
             AppData.IsNewVisitor = visitorId is null or "";
 
             //generate new ID if not found
-            if (AppData.IsNewVisitor) { visitorId = Tools.GenerateId(); }
+            if (AppData.IsNewVisitor)
+            {
+                visitorId = Tools.GenerateId();
+                //save new Visitor ID browser local storage
+                await jsRuntime.SetProperty("VisitorId", visitorId);
+            }
 
             //return new or saved ID
             return visitorId;

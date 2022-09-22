@@ -10,7 +10,6 @@
     <Description>Below is the results.</Description>
     <ButtonsRow>
         <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-        <IconButton IconName="carbon:report" ButtonText="Advanced Chart" OnClickCallback="() => showAdvanced = !showAdvanced"></IconButton>
         <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
 </PageTop>
@@ -37,7 +36,7 @@
             </div>
             <div class="col-4">
                 <h4>
-                    <b style="color: @GetScoreColor(_report.KutaScore);">@_report.KutaScore/100</b>
+                    <b style="color: @GetScoreColor(_report.KutaScore);">@_report.KutaScore%</b>
                 </h4>
             </div>
         </div>
@@ -51,29 +50,17 @@
                 </h4>
             </div>
         </div>
-        @* <div class="row border">
-    <div class="col">Couple</div>
-    <div class="col"></div>
-    <div class="w-100"></div>
-    <div class="col">Score</div>
-    <div class="col"><b style="color: @GetScoreColor(_report.KutaScore);">@_report.KutaScore/100</b></div>
-    <div class="w-100"></div>
-    <div class="col">Summary</div>
-    <div class="col">@GetSummaryText(_report.KutaScore)</div>
-    </div>*@
     </div>
 
     <table class="table table-striped table-hover table-bordered">
         <thead class="table-dark">
             <tr>
                 <th scope="col"><span class="hstack gap-2">Name<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportName"></HelpBox></span></th>
-                <th scope="col"><span class="hstack gap-2">Result<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportResult"></HelpBox></span></th>
-                @if (showAdvanced)
-                {
-                    <th scope="col"><span class="hstack gap-2">Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportInfo"></HelpBox></span></th>
-                    <th scope="col"><span class="hstack gap-2">Male Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportMale"></HelpBox></span></th>
-                    <th scope="col"><span class="hstack gap-2">Female Info<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportFemale"></HelpBox></span></th>
-                }
+                <th scope="col">
+                    <span class="hstack gap-2">
+                        Result<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportResult"></HelpBox>
+                    </span>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -87,13 +74,15 @@
                         <b>@prediction.FormattedName</b><button type="button" @onclick="@(() => _jsRuntime.InvokeVoidAsync("scrollToDiv", @prediction.Name.ToString()))" class="btn btn-sm btn-outline-primary mx-2">More Info</button>
                         <p style="margin: 0px;"><small>@prediction.Description</small></p>
                     </td>
-                    <td style="color:@GetNatureColor(prediction.Nature);"><b>@prediction.Nature</b></td>
-                    @if (showAdvanced)
-                    {
-                        <td>@prediction.Info</td>
-                        <td>@prediction.MaleInfo</td>
-                        <td>@prediction.FemaleInfo</td>
-                    }
+                    <td>
+                        <h4 style="color: @GetNatureColor(prediction.Nature);">
+                            <b>@prediction.Nature</b>
+                        </h4>
+                        <small style=" color: #4e4e4e; ">
+                            @prediction.Info
+                            <div class="hstack gap-2">[male: @prediction.MaleInfo, female: @prediction.FemaleInfo]</div>
+                        </small>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -172,7 +161,7 @@
             This is important as suggesting the degree of magnetic
             control or amenability the wife or husband would be able to exercise on
             the other. For Aries - Leo and Scorpio are amenable. For Taurus -
-            Cancer and Libra; for Gemini - Virgo; for Cancer - Scorpo and
+            Cancer and Libra; for Gemini - Virgo; for Cancer - Scorpio and
             Sagittarius; for Leo - Libra; for Virgo - Pisces and Gemini; for Libra -
             Capricorn and Virgo; for Scorpio - Cancer; for Sagittarius - Pisces; for
             Capricorn - Aries and Aquarius; for Aquarius - Aries; arid for Pisces -

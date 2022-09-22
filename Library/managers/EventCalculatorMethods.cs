@@ -484,8 +484,8 @@ namespace Genso.Astrology.Library
                 var relationship =
                     AstronomicalCalculator.GetPlanetCombinedRelationshipWithPlanet(PlanetName.Moon, lord8th, time);
 
-                var isFriends = relationship == PlanetToPlanetRelationship.AdhiMitra ||
-                                relationship == PlanetToPlanetRelationship.Mitra;
+                var isFriends = relationship == PlanetToPlanetRelationship.BestFriend ||
+                                relationship == PlanetToPlanetRelationship.Friend;
 
                 return isFriends;
             }
@@ -965,8 +965,8 @@ namespace Genso.Astrology.Library
                 person.BirthTime);
 
             //occuring only if best friends or normal friends nothing else
-            var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.AdhiMitra) ||
-                           (lord7And1Relationship == PlanetToPlanetRelationship.Mitra);
+            var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.BestFriend) ||
+                           (lord7And1Relationship == PlanetToPlanetRelationship.Friend);
 
             return new() { Occuring = occuring };
         }
@@ -990,8 +990,8 @@ namespace Genso.Astrology.Library
                 person.BirthTime);
 
             //occuring only if bitter enemies or normal enemies nothing else
-            var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.AdhiSatru) ||
-                           (lord7And1Relationship == PlanetToPlanetRelationship.Satru);
+            var occuring = (lord7And1Relationship == PlanetToPlanetRelationship.BitterEnemy) ||
+                           (lord7And1Relationship == PlanetToPlanetRelationship.Enemy);
 
             return new() { Occuring = occuring };
         }

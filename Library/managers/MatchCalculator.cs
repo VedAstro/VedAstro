@@ -96,7 +96,7 @@ namespace Genso.Astrology.Library
                             Description = streeDeerga.Description,
                             FemaleInfo = streeDeerga.FemaleInfo,
                             MaleInfo = streeDeerga.MaleInfo,
-                            Info = "bad Stree-Deerga is ignored, due to good Rasi Kuta and Graha Maitri",
+                            Info = "bad Stree-Deerga is neutralized by good Rasi Kuta and Graha Maitri",
                             Nature = EventNature.Neutral
                         };
 
@@ -138,7 +138,7 @@ namespace Genso.Astrology.Library
                             Description = rajju.Description,
                             FemaleInfo = rajju.FemaleInfo,
                             MaleInfo = rajju.MaleInfo,
-                            Info = "bad Rajju Kuta is ignored, due to good Graha Maitri, Rasi, Dina and Mahendra",
+                            Info = "bad Rajju Kuta is neutralized by good Graha Maitri, Rasi, Dina and Mahendra",
                             Nature = EventNature.Neutral
                         };
 
@@ -175,7 +175,7 @@ namespace Genso.Astrology.Library
                             Description = nadiKuta.Description,
                             FemaleInfo = nadiKuta.FemaleInfo,
                             MaleInfo = nadiKuta.MaleInfo,
-                            Info = "bad Nadi Kuta is ignored, due to good Rasi Kuta and Rajju",
+                            Info = "bad Nadi Kuta is neutralized by good Rasi Kuta and Rajju",
                             Nature = EventNature.Neutral
                         };
 
@@ -325,13 +325,13 @@ namespace Genso.Astrology.Library
 
                 //b.The lords of the Janma Rasi of the couple are friends.
                 var relationship = AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(maleJanmaLord, femaleJanmaLord);
-                var janmaIsFriend = relationship is PlanetToPlanetRelationship.AdhiMitra or PlanetToPlanetRelationship.Mitra;
+                var janmaIsFriend = relationship is PlanetToPlanetRelationship.BestFriend or PlanetToPlanetRelationship.Friend;
 
                 //if any above exceptions met, change prediction
                 if (sameJanmaLord || janmaIsFriend)
                 {
                     prediction.Nature = EventNature.Neutral;
-                    prediction.Info = "bad, but exception by Janma Rasi lord same/friend";
+                    prediction.Info = "bad, but neutralized by friendly Janma Rasi lord";
                 }
                 else
                 {
@@ -362,7 +362,7 @@ namespace Genso.Astrology.Library
                     case ConstellationName.Moola:
                     case ConstellationName.Satabhisha:
                     case ConstellationName.Poorvabhadra:
-                        return "Vatha";
+                        return "Vatha (wind)";
 
                     case ConstellationName.Bharani:
                     case ConstellationName.Mrigasira:
@@ -373,7 +373,7 @@ namespace Genso.Astrology.Library
                     case ConstellationName.Poorvashada:
                     case ConstellationName.Dhanishta:
                     case ConstellationName.Uttarabhadra:
-                        return "Pittha";
+                        return "Pitha (bile)";
 
                     case ConstellationName.Krithika:
                     case ConstellationName.Rohini:
@@ -384,7 +384,7 @@ namespace Genso.Astrology.Library
                     case ConstellationName.Uttarashada:
                     case ConstellationName.Sravana:
                     case ConstellationName.Revathi:
-                        return "Sleshma";
+                        return "Sleshma (phlegm)";
 
 
                     default:
@@ -428,7 +428,7 @@ namespace Genso.Astrology.Library
             if (maleGuna == femaleGuna)
             {
                 prediction.Nature = EventNature.Good;
-                prediction.Info = "same Guna";
+                prediction.Info = $"both are same {femaleGuna.ToString()} Guna";
             }
 
             // Manusha or a Deva man should not marry a Rakshasa girl unless there
@@ -436,7 +436,7 @@ namespace Genso.Astrology.Library
             else if (manIsManushaDeva && girlIsRakshasa)
             {
                 prediction.Nature = EventNature.Bad;
-                prediction.Info = "Manusha/Deva man not marry a Rakshasa girl unless there are other neutralizing factors.";
+                prediction.Info = "Manusha/Deva boy cannot marry a Rakshasa girl unless there are other neutralizing factors";
             }
 
             // But marriage between a Rakshasa man
@@ -444,7 +444,7 @@ namespace Genso.Astrology.Library
             else if (femaleIsManushaDeva && maleIsRakshasa)
             {
                 prediction.Nature = EventNature.Bad;
-                prediction.Info = "marriage between a Rakshasa man and a Deva/Manusha girl is passable.";
+                prediction.Info = "marriage between a Rakshasa boy and a Deva/Manusha girl is passable";
             }
 
             // If marriage is brought about
@@ -470,7 +470,7 @@ namespace Genso.Astrology.Library
                     Description = prediction.Description,
                     FemaleInfo = prediction.FemaleInfo,
                     MaleInfo = prediction.MaleInfo,
-                    Info = "female star is more than 14th from male's, evil may be ignored",
+                    Info = "evil maybe ignored, female star is more than 14th from male's",
                     Nature = EventNature.Neutral
                 };
 
@@ -1203,13 +1203,13 @@ namespace Genso.Astrology.Library
             if (maleControlFemale)
             {
                 prediction.Nature = EventNature.Good;
-                prediction.Info = "Male control Female";
+                prediction.Info = "male controls female";
 
             }
             else if (femaleControlMale)
             {
                 prediction.Nature = EventNature.Good;
-                prediction.Info = "Female control Male";
+                prediction.Info = "female controls male";
             }
             else
             {
@@ -1248,16 +1248,16 @@ namespace Genso.Astrology.Library
             var femaleToMaleRelation = AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(femaleLord, maleLord);
 
             //show user
-            prediction.MaleInfo = maleToFemaleRelation.ToString();
-            prediction.FemaleInfo = femaleToMaleRelation.ToString();
+            prediction.MaleInfo = maleToFemaleRelation.ToString() + " Sign";
+            prediction.FemaleInfo = femaleToMaleRelation.ToString() + " Sign";
 
             //rename relationship for readability
-            var isMaleFriend = maleToFemaleRelation is PlanetToPlanetRelationship.AdhiMitra or PlanetToPlanetRelationship.Mitra;
-            var isFemaleFriend = femaleToMaleRelation is PlanetToPlanetRelationship.AdhiMitra or PlanetToPlanetRelationship.Mitra;
-            var isMaleEnemy = maleToFemaleRelation is PlanetToPlanetRelationship.AdhiSatru or PlanetToPlanetRelationship.Satru;
-            var isFemaleEnemy = femaleToMaleRelation is PlanetToPlanetRelationship.AdhiSatru or PlanetToPlanetRelationship.Satru;
-            var isMaleNeutral = maleToFemaleRelation is PlanetToPlanetRelationship.Sama;
-            var isFemaleNeutral = femaleToMaleRelation is PlanetToPlanetRelationship.Sama;
+            var isMaleFriend = maleToFemaleRelation is PlanetToPlanetRelationship.BestFriend or PlanetToPlanetRelationship.Friend;
+            var isFemaleFriend = femaleToMaleRelation is PlanetToPlanetRelationship.BestFriend or PlanetToPlanetRelationship.Friend;
+            var isMaleEnemy = maleToFemaleRelation is PlanetToPlanetRelationship.BitterEnemy or PlanetToPlanetRelationship.Enemy;
+            var isFemaleEnemy = femaleToMaleRelation is PlanetToPlanetRelationship.BitterEnemy or PlanetToPlanetRelationship.Enemy;
+            var isMaleNeutral = maleToFemaleRelation is PlanetToPlanetRelationship.Neutral;
+            var isFemaleNeutral = femaleToMaleRelation is PlanetToPlanetRelationship.Neutral;
             var maleOrFemaleFriend = isMaleFriend || isFemaleFriend;
             var maleOrFemaleNeutral = isMaleNeutral || isFemaleNeutral;
 
@@ -1469,7 +1469,7 @@ namespace Genso.Astrology.Library
 
                 //b.The lords of the Janma Rasi of the couple are friends.
                 var relationship = AstronomicalCalculator.GetPlanetPermanentRelationshipWithPlanet(maleJanmaLord, femaleJanmaLord);
-                var janmaIsFriend = relationship is PlanetToPlanetRelationship.AdhiMitra or PlanetToPlanetRelationship.Mitra;
+                var janmaIsFriend = relationship is PlanetToPlanetRelationship.BestFriend or PlanetToPlanetRelationship.Friend;
 
                 //if any above exceptions met, change prediction
                 if (sameJanmaLord || janmaIsFriend)
@@ -1481,7 +1481,7 @@ namespace Genso.Astrology.Library
                         Description = prediction.Description,
                         FemaleInfo = prediction.FemaleInfo,
                         MaleInfo = prediction.MaleInfo,
-                        Info = "bad, but exception by Janma Rasi lord same/friend",
+                        Info = "bad, but neutralized by friendly Janma Rasi lord",
                         Nature = EventNature.Neutral
                     };
 
@@ -1909,7 +1909,7 @@ namespace Genso.Astrology.Library
                 if (differenceIsBelowThreshold)
                 {
                     prediction.Nature = EventNature.Good;
-                    prediction.Info = "dosha in both are equal or nearly so, match is good";
+                    prediction.Info = "match is good, dosha in both are equal or close";
                 }
                 else
                 {
@@ -2014,7 +2014,7 @@ namespace Genso.Astrology.Library
             if (prediction.Info == "")
             {
                 prediction.Nature = EventNature.Good;
-                prediction.Info = "No evil constellation in either person";
+                prediction.Info = "no evil constellation in either person";
             }
 
             return prediction;
@@ -2086,7 +2086,7 @@ namespace Genso.Astrology.Library
             if (prediction.Info == "")
             {
                 prediction.Nature = EventNature.Neutral;
-                prediction.Info = "No evil or good, neutral result";
+                prediction.Info = "no evil or good, neutral result";
             }
 
 

@@ -1151,7 +1151,7 @@ namespace Genso.Astrology.Library
             PlanetToPlanetRelationship _getPlanetPermanentRelationshipWithPlanet()
             {
                 //if main planet & secondary planet is same, then it is own plant (same planet), end here
-                if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.Own; }
+                if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.SamePlanet; }
 
 
                 bool planetInEnemies = false;
@@ -1275,15 +1275,15 @@ namespace Genso.Astrology.Library
                 //return planet relationship based on where planet is found
                 if (planetInFriends)
                 {
-                    return PlanetToPlanetRelationship.Mitra;
+                    return PlanetToPlanetRelationship.Friend;
                 }
                 if (planetInNeutrals)
                 {
-                    return PlanetToPlanetRelationship.Sama;
+                    return PlanetToPlanetRelationship.Neutral;
                 }
                 if (planetInEnemies)
                 {
-                    return PlanetToPlanetRelationship.Satru;
+                    return PlanetToPlanetRelationship.Enemy;
                 }
 
 
@@ -3164,15 +3164,15 @@ namespace Genso.Astrology.Library
             //return relation ship with sign based on relationship with lord of sign
             switch (relationshipToLordOfSign)
             {
-                case PlanetToPlanetRelationship.AdhiMitra:
+                case PlanetToPlanetRelationship.BestFriend:
                     return PlanetToSignRelationship.BestFriendVarga;
-                case PlanetToPlanetRelationship.Mitra:
+                case PlanetToPlanetRelationship.Friend:
                     return PlanetToSignRelationship.FriendVarga;
-                case PlanetToPlanetRelationship.AdhiSatru:
+                case PlanetToPlanetRelationship.BitterEnemy:
                     return PlanetToSignRelationship.BitterEnemyVarga;
-                case PlanetToPlanetRelationship.Satru:
+                case PlanetToPlanetRelationship.Enemy:
                     return PlanetToSignRelationship.EnemyVarga;
-                case PlanetToPlanetRelationship.Sama:
+                case PlanetToPlanetRelationship.Neutral:
                     return PlanetToSignRelationship.NeutralVarga;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -3189,7 +3189,7 @@ namespace Genso.Astrology.Library
         public static PlanetToPlanetRelationship GetPlanetCombinedRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
         {
             //if main planet & secondary planet is same, then it is own plant (same planet), end here
-            if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.Own; }
+            if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.SamePlanet; }
 
             //get planet's permanent relationship
             PlanetToPlanetRelationship planetPermanentRelationship = GetPlanetPermanentRelationshipWithPlanet(mainPlanet, secondaryPlanet);
@@ -3198,40 +3198,40 @@ namespace Genso.Astrology.Library
             PlanetToPlanetRelationship planetTemporaryRelationship = GetPlanetTemporaryRelationshipWithPlanet(mainPlanet, secondaryPlanet, time);
 
             //Tatkalika Mitra + Naisargika Mitra = Adhi Mitras
-            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Mitra && planetPermanentRelationship == PlanetToPlanetRelationship.Mitra)
+            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Friend && planetPermanentRelationship == PlanetToPlanetRelationship.Friend)
             {
                 //they both become intimate friends (Adhi Mitras).
-                return PlanetToPlanetRelationship.AdhiMitra;
+                return PlanetToPlanetRelationship.BestFriend;
             }
 
             //Tatkalika Mitra + Naisargika Satru = Sama
-            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Mitra && planetPermanentRelationship == PlanetToPlanetRelationship.Satru)
+            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Friend && planetPermanentRelationship == PlanetToPlanetRelationship.Enemy)
             {
-                return PlanetToPlanetRelationship.Sama;
+                return PlanetToPlanetRelationship.Neutral;
             }
 
             //Tatkalika Mitra + Naisargika Sama = Mitra
-            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Mitra && planetPermanentRelationship == PlanetToPlanetRelationship.Sama)
+            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Friend && planetPermanentRelationship == PlanetToPlanetRelationship.Neutral)
             {
-                return PlanetToPlanetRelationship.Mitra;
+                return PlanetToPlanetRelationship.Friend;
             }
 
             //Tatkalika Satru + Naisargika Satru = Adhi Satru
-            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Satru && planetPermanentRelationship == PlanetToPlanetRelationship.Satru)
+            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Enemy && planetPermanentRelationship == PlanetToPlanetRelationship.Enemy)
             {
-                return PlanetToPlanetRelationship.AdhiSatru;
+                return PlanetToPlanetRelationship.BitterEnemy;
             }
 
             //Tatkalika Satru + Naisargika Mitra = Sama
-            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Satru && planetPermanentRelationship == PlanetToPlanetRelationship.Mitra)
+            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Enemy && planetPermanentRelationship == PlanetToPlanetRelationship.Friend)
             {
-                return PlanetToPlanetRelationship.Sama;
+                return PlanetToPlanetRelationship.Neutral;
             }
 
             //Tatkalika Satru + Naisargika Sama = Satru
-            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Satru && planetPermanentRelationship == PlanetToPlanetRelationship.Sama)
+            if (planetTemporaryRelationship == PlanetToPlanetRelationship.Enemy && planetPermanentRelationship == PlanetToPlanetRelationship.Neutral)
             {
-                return PlanetToPlanetRelationship.Satru;
+                return PlanetToPlanetRelationship.Enemy;
             }
 
             throw new Exception("Combined planet relationship not found, error!");
@@ -3262,7 +3262,7 @@ namespace Genso.Astrology.Library
         public static PlanetToPlanetRelationship GetPlanetTemporaryRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
         {
             //if main planet & secondary planet is same, then it is own plant (same planet), end here
-            if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.Own; }
+            if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.SamePlanet; }
 
 
             //1.0 get planet's friends
@@ -3275,12 +3275,12 @@ namespace Genso.Astrology.Library
             if (planetFoundInFriendList)
             {
                 //return relationship as friend
-                return PlanetToPlanetRelationship.Mitra;
+                return PlanetToPlanetRelationship.Friend;
             }
 
             //if planet is not a friend then it is an enemy
             //return relationship as enemy
-            return PlanetToPlanetRelationship.Satru;
+            return PlanetToPlanetRelationship.Enemy;
         }
 
         //public static List<PlanetName> GetPlanetTemporaryEnemyList(PlanetName planetName, Time time)
@@ -6458,8 +6458,8 @@ namespace Genso.Astrology.Library
 
             //check if it is a good aspect
             var aspectNature = AstronomicalCalculator.GetPlanetCombinedRelationshipWithPlanet(receivingAspect, transmitingAspect, time);
-            var isGood = aspectNature == PlanetToPlanetRelationship.AdhiMitra ||
-                         aspectNature == PlanetToPlanetRelationship.Mitra;
+            var isGood = aspectNature == PlanetToPlanetRelationship.BestFriend ||
+                         aspectNature == PlanetToPlanetRelationship.Friend;
 
             //if is aspecting and it is good, then occuring (true)
             return isAspecting && isGood;

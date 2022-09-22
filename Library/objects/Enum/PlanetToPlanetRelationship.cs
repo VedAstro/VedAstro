@@ -11,33 +11,38 @@
     public enum PlanetToPlanetRelationship
     {
         /// <summary>
-        /// Same planet
+        /// Same Planet
         /// </summary>
-        Own,
+        SamePlanet,
 
         /// <summary>
-        /// Intimate friend
+        /// Best Friend
+        /// Adhi Mitra
         /// </summary>
-        AdhiMitra,
+        BestFriend,
 
         /// <summary>
         /// Friend
+        /// Mitra
         /// </summary>
-        Mitra,
+        Friend,
 
         /// <summary>
-        /// Bitter enemy
+        /// Bitter Enemy
+        /// Adhi Satru
         /// </summary>
-        AdhiSatru,
+        BitterEnemy,
 
         /// <summary>
         /// Enemy
+        /// Satru
         /// </summary>
-        Satru,
+        Enemy,
 
         /// <summary>
         /// Neutral
+        /// Sama
         /// </summary>
-        Sama
+        Neutral
     }
 }

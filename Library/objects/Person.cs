@@ -165,9 +165,10 @@ namespace Genso.Astrology.Library
             //get hash of all the fields & combine them
             var hash1 = Tools.GetStringHashCode(this.Name);
             var hash2 = BirthTime.GetHashCode();
+            var hash3 = Tools.GetStringHashCode(this.UserId);
 
             //take out negative before returning
-            return Math.Abs(hash1 + hash2);
+            return Math.Abs(hash1 + hash2 + hash3);
         }
 
 
@@ -237,7 +238,7 @@ namespace Genso.Astrology.Library
                 {
                     var lifeEventListXml = personXml.Element("LifeEventList")?.Elements();
                     var returnList = new List<LifeEvent>();
-                    
+
                     //is null when no life events exist for user, so to avoid exception this is
                     if (lifeEventListXml != null)
                     {
@@ -251,10 +252,12 @@ namespace Genso.Astrology.Library
 
                 }
                 //if fail, probably xml doesn't exist so just send empty list
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Console.WriteLine(ex);
                     Console.WriteLine("No Valid Life Events Found! Empty list used!");//debug
-                    return new List<LifeEvent>(); }
+                    return new List<LifeEvent>();
+                }
             }
         }
 

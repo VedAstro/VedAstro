@@ -365,8 +365,11 @@
 
         //create a new person from the inputed data
         var birthTime = _timeInput.GetTime(geoLocation);
-        //var birthTime = new Time(fullTimeString, geoLocation);
-        return new Person(_nameInput, birthTime, gender, AppData.CurrentUser?.Id, _notesInput, lifeEventList);
+        //if user not signed in, use their visitor id as user ID
+        //done so that public list is not clouded
+        var userId = AppData.CurrentUser?.Id == UserData.Empty.Id ? AppData.VisitorId : AppData.CurrentUser?.Id;
+        return new Person(_nameInput, birthTime, gender, userId, _notesInput, lifeEventList);
+
 
         //----------LOCAL FUNCTION ---------------------
     }

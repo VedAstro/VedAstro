@@ -30,8 +30,9 @@ namespace Website
         /// A copy of this visitor's ID, set when logging new visit
         /// Different from User Id in current user
         /// Used to log user flow
+        /// Note: defaults to empty string
         /// </summary>
-        public static string? VisitorId { get; set; }
+        public static string? VisitorId { get; set; } = "";
 
         /// <summary>
         /// Url of current page, set by layout when loading
@@ -58,7 +59,7 @@ namespace Website
         public static List<XElement> ReferenceList { get; set; }
 
         public static SearchResult SearchPage { get; set; }
-        public static List<Person> PersonList { get; set; }
+        public static List<Person>? PersonList { get; set; }
 
 
         //-----------------------------FIELDS

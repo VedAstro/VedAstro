@@ -169,13 +169,36 @@ namespace Website
 
         /// <summary>
         /// Gets all people list from API server
+        /// This is the central place all person list is gotten for a User ID
+        /// NOTE: if User ID is Guest ID 101, then person profile under
+        /// Visitor ID is also auto added to return list if any
         /// </summary>
-        public static async Task<List<Person>> GetPeopleList(string userId, IJSRuntime jsRuntime)
+        public static async Task<List<Person>?> GetPeopleList(string userId, IJSRuntime jsRuntime)
         {
+
             var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, new XElement("UserId", userId), jsRuntime);
             var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+
+            //if guest user, include person list from visitor ID if any
+            //this is done because any person profile saved without login will be
+            //stored under Visitor ID
+            var isGuestUser = AppData.CurrentUser?.Id == UserData.Empty.Id;
+            if (isGuestUser)
+            {
+                //get list for visitor ID instead of User Id
+                personListRootXml = await ServerManager.WriteToServerXmlReply(
+                     ServerManager.GetPersonListApi, new XElement("UserId", AppData.VisitorId), jsRuntime);
+                var tempList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+
+                //combine with previous list
+                if (tempList.Any()) { personList.AddRange(tempList); }
+            }
+
+
             return personList;
         }
+
+
 
         /// <summary>
         /// Gets all visitor list from API server

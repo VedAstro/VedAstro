@@ -7,36 +7,37 @@
     <Description>This is a list of all person profiles available, you can also add or edit persons.</Description>
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-@*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
-*@    </ButtonsRow>
+        @*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
+        *@
+    </ButtonsRow>
 </PageTop>
 
-@if (personList.Any())
+@if (_isReady)
 {
 
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
-        <tr>
-            <th>Name</th>
-            <th>Birth Date & Time</th>
-            <th>Location</th>
-        </tr>
+            <tr>
+                <th>Name</th>
+                <th>Birth Date & Time</th>
+                <th>Location</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var person in personList)
-        {
-            <tr style="cursor: pointer;" @onclick="() => PersonNameClicked(person)">
-                <td>@person.Name</td>
-                <td>@person.BirthTimeString</td>
-                <td>@person.GetBirthLocation().ToString()</td>
-            </tr>
-        }
+            @foreach (var person in AppData.PersonList)
+            {
+                <tr style="cursor: pointer;" @onclick="() => PersonNameClicked(person)">
+                    <td>@person.Name</td>
+                    <td>@person.BirthTimeString</td>
+                    <td>@person.GetBirthLocation().ToString()</td>
+                </tr>
+            }
         </tbody>
     </table>
 }
 else
 {
-    <p class="fw-bold">No person profiles found.<br/> Click "Add Person" to get started.</p>
+    <p class="fw-bold">No person profiles found.<br /> Click "Add Person" to get started.</p>
 }
 
 
@@ -45,7 +46,7 @@ else
     //FIELDS
     const string TableId = "PersonListTable"; //change only needed here
 
-    List<Person> personList = new List<Person>();
+    private bool _isReady = false;
 
 
 
@@ -74,19 +75,22 @@ else
 
     private async Task GenerateTable()
     {
-        //todo needs to be updated
-        //_jsRuntime.ShowLoading();
+        _jsRuntime.ShowLoading();
+        await Task.Delay(250);
+
+        _isReady = false;
 
         //get all people from API server
-        personList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
+        //check if people list already loaded before
+        AppData.PersonList ??= await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly
         //await _jsRuntime.InvokeVoidAsync("generatePersonListTable", TableId, personList.ToArray());
 
-        //todo needs to be updated
-        //_jsRuntime.HideAlert();
+        _isReady = true;
 
+        _jsRuntime.HideAlert();
     }
 
 

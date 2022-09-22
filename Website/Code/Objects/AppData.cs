@@ -80,7 +80,7 @@ namespace Website
         {
             //return already loaded if available
             if (AppData.PredictionDataListStream != null) return AppData.PredictionDataListStream;
-            
+
             //else get fresh copy from server
             var client = new HttpClient();
             client.BaseAddress = AppData.BaseAddres;
@@ -115,5 +115,10 @@ namespace Website
         /// Origin URL set by MainLayout
         /// </summary>
         public static string OriginUrl { get; set; }
+
+        /// <summary>
+        /// Return true if User ID is 101
+        /// </summary>
+        public static bool IsGuestUser => AppData.CurrentUser?.Id == UserData.Empty.Id;
     }
 }

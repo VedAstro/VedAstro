@@ -182,8 +182,7 @@ namespace Website
             //if guest user, include person list from visitor ID if any
             //this is done because any person profile saved without login will be
             //stored under Visitor ID
-            var isGuestUser = AppData.CurrentUser?.Id == UserData.Empty.Id;
-            if (isGuestUser)
+            if (AppData.IsGuestUser)
             {
                 //get list for visitor ID instead of User Id
                 personListRootXml = await ServerManager.WriteToServerXmlReply(
@@ -573,10 +572,10 @@ namespace Website
             AppData.IsNewVisitor = visitorId is null or "";
 
             //generate new ID if not found
-            if (AppData.IsNewVisitor) { AppData.VisitorId = Tools.GenerateId(); }
+            if (AppData.IsNewVisitor) { visitorId = Tools.GenerateId(); }
 
             //return new or saved ID
-            return AppData.VisitorId;
+            return visitorId;
         }
     }
 }

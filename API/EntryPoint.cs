@@ -330,13 +330,14 @@ namespace API
 
         /// <summary>
         /// Function for debugging purposes
+        /// Call to see if return correct IP
         /// </summary>
         [FunctionName("getipaddress")]
         public static async Task<IActionResult> GetIpAddress(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
             HttpRequestMessage incomingRequest)
         {
-            return PassMessage(incomingRequest.GetCallerIp().ToString());
+            return PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip");
         }
 
 
@@ -2177,12 +2178,13 @@ namespace API
         }
 
         /// <summary>
-        /// Generate rows based on inputed events
+        /// Generate rows based of inputed events
         /// </summary>
         private static string GenerateEventRows(double eventsPrecision, Time startTime, Time endTime,
             Person inputPerson, int headerY, List<Time> timeSlices, double daysPerPixel, List<EventTag> inputedEventTags, out int totalHeight)
         {
             const int _widthPerSlice = 1;
+            const int _singleRowHeight = 15;
 
             var eventDataList = APITools.GetEventDataList().Result;
 
@@ -2205,6 +2207,7 @@ namespace API
             var padding = 1;//space between rows
             var compiledRow = "";
 
+            var summaryRowData = new Dictionary<int, double>();
             int yAxis = headerY;
             foreach (var tuple in listX)
             {
@@ -2213,6 +2216,14 @@ namespace API
                 //set y axis (horizontal) for next row
                 yAxis = yAxis + finalHeight + padding;
             }
+
+            //4 GENERATE SUMMARY ROW
+            //convert value coming into percentage based on min & max
+            //this will make setting color based on value easier & accurate
+            var maxValue = summaryRowData.Values.Max();
+            var minValue = summaryRowData.Values.Min();
+            compiledRow += GenerateSummaryRow(yAxis);
+            yAxis += 15;//add in height of summary row
 
             //3 LET CALLER KNOW FINAL HEIGHT
             totalHeight = yAxis;
@@ -2223,6 +2234,52 @@ namespace API
 
             //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
             //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
+
+            string GenerateSummaryRow(int yAxis)
+            {
+
+                var rowHtml = "";
+                foreach (var summarySlice in summaryRowData)
+                {
+                    var rect = $"<rect " +
+                               $"type=\"Summary\" " +
+                               //$"eventname=\"{foundEvent?.FormattedName}\" " +
+                               //$"age=\"{inputPerson.GetAge(slice)}\" " +
+                               //$"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\"" +
+                               $"x=\"{summarySlice.Key}\" " +
+                               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                               $"width=\"{_widthPerSlice}\" " +
+                               $"height=\"{_singleRowHeight}\" " +
+                               $"fill=\"{GetSummaryColor(summarySlice.Value)}\" />";
+
+                    //add rect to row
+                    rowHtml += rect;
+                }
+
+                //return compiled rects as 1 row
+                return rowHtml;
+            }
+
+            string GetSummaryColor(double value)
+            {
+                string colorHex;
+
+                //convert value coming into percentage based on min & max
+                if (value >= 0) //good
+                {
+                    var color255 = (int)value.Remap(0, maxValue, 0, 255);
+                    colorHex = $"{color255:X}";//convert from 255 to FF
+                    return $"#{colorHex}FF{colorHex}"; //green
+                }
+                else //bad
+                {
+                    var color255 = (int)value.Remap(minValue, 0, 0, 255);
+                    colorHex = $"{color255:X}";//convert from 255 to FF
+                    return $"#FF{colorHex}{colorHex}"; //red
+                }
+
+            }
+
 
 
             //TODO marked for deletion
@@ -2373,7 +2430,6 @@ namespace API
                 var prevEventName = EventName.EmptyEvent;
 
                 //height of each row
-                var singleRowHeight = 15;
                 var spaceBetweenRow = 1;
 
                 //used to determine final height
@@ -2401,18 +2457,36 @@ namespace API
                                    $"type=\"{eventType}\" " +
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\"" +
+                                   $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\" " +
                                    $"x=\"{horizontalPosition}\" " +
                                    $"y=\"{yAxis + verticalPosition}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                    $"width=\"{_widthPerSlice}\" " +
-                                   $"height=\"{singleRowHeight}\" " +
+                                   $"height=\"{_singleRowHeight}\" " +
                                    $"fill=\"{color}\" />";
 
+                        //add rect to return list
                         rowHtml += rect;
+
+                        //every time a rect is added, we keep track of it in a list to generate the summary row at last
+                        //based on event nature minus or plus
+                        double natureScore = 0;
+                        switch (foundEvent?.Nature)
+                        {
+                            case EventNature.Good:
+                                natureScore = 1;
+                                break;
+                            case EventNature.Bad:
+                                natureScore = -1;
+                                break;
+                        }
+                        //compile nature score
+                        //if doesn't exist assign 0
+                        summaryRowData[horizontalPosition] = natureScore + (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition] : 0);
+
 
                         //increment vertical position for next
                         //element to be placed beneath this one
-                        verticalPosition += singleRowHeight + spaceBetweenRow;
+                        verticalPosition += _singleRowHeight + spaceBetweenRow;
 
                         multipleEventCount++; //include this in count
                     }
@@ -2424,8 +2498,8 @@ namespace API
                     verticalPosition = 0;
 
                     //safe only the highest row (last row in to be added) used for calculating final height
-                    var multipleRowH = (multipleEventCount * (singleRowHeight + spaceBetweenRow)) - spaceBetweenRow; //minus 1 to compensate for last row
-                    var thisSliceHeight = multipleEventCount > 1 ? multipleRowH : singleRowHeight; //different height calc for multiple & single row
+                    var multipleRowH = (multipleEventCount * (_singleRowHeight + spaceBetweenRow)) - spaceBetweenRow; //minus 1 to compensate for last row
+                    var thisSliceHeight = multipleEventCount > 1 ? multipleRowH : _singleRowHeight; //different height calc for multiple & single row
                     highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
                     multipleEventCount = 0; //reset
 
@@ -2433,7 +2507,6 @@ namespace API
 
                 //wrap all the rects inside a svg so they can be moved together
                 //note: use group instead of svg because editing capabilities
-                //rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
                 rowHtml = $"<g class=\"EventListHolder\" transform=\"matrix(1, 0, 0, 1, {xAxis}, 0)\">{rowHtml}</g>";
 
                 //send height of tallest time slice aka the

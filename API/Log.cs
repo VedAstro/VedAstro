@@ -29,7 +29,7 @@ public static class Log
         var errorXml = ExtractDataFromException(exception);
 
         //get caller data for more debug info
-        var ipAddress = req?.GetCallerIp().ToString() ?? "no ip";
+        var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
 
         errorXml.Add(new XElement("Caller IP", ipAddress));
         errorXml.Add(new XElement("Url", req?.RequestUri));

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
@@ -325,6 +327,56 @@ namespace Genso.Astrology.Library
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Remap from 1 range to another
+        /// </summary>
+        public static float Remap(this float from, float fromMin, float fromMax, float toMin, float toMax)
+        {
+            var fromAbs = from - fromMin;
+            var fromMaxAbs = fromMax - fromMin;
+
+            var normal = fromAbs / fromMaxAbs;
+
+            var toMaxAbs = toMax - toMin;
+            var toAbs = toMaxAbs * normal;
+
+            var to = toAbs + toMin;
+
+            return to;
+        }
+        
+        /// <summary>
+        /// Remap from 1 range to another
+        /// </summary>
+        public static double Remap(this double from, double fromMin, double fromMax, double toMin, double toMax)
+        {
+            var fromAbs = from - fromMin;
+            var fromMaxAbs = fromMax - fromMin;
+
+            var normal = fromAbs / fromMaxAbs;
+
+            var toMaxAbs = toMax - toMin;
+            var toAbs = toMaxAbs * normal;
+
+            var to = toAbs + toMin;
+
+            return to;
+        }
+
+        /// <summary>
+        /// Gets public IP address of client sending the http request
+        /// </summary>
+        public static IPAddress GetCallerIp(this HttpRequestMessage request)
+        {
+            IPAddress result = null;
+            if (request.Headers.TryGetValues("X-Forwarded-For", out IEnumerable<string> values))
+            {
+                var ipn = values.FirstOrDefault().Split(new char[] { ',' }).FirstOrDefault().Split(new char[] { ':' }).FirstOrDefault();
+                IPAddress.TryParse(ipn, out result);
+            }
+            return result;
         }
 
     }

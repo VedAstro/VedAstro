@@ -1940,7 +1940,8 @@ namespace API
                     rowHtml += rect;
                 }
 
-                //return compiled rects as 1 row
+                //return compiled rects as 1 row in a group for easy debugging & edits
+                rowHtml = $"<g id=\"SummaryRow\">{rowHtml}</g>";
                 return rowHtml;
             }
 
@@ -2025,87 +2026,6 @@ namespace API
                 return rowHtml;
             }
 
-            //height not known until generated
-            //returns the final dynamic height of this gochara row
-            //TODO marked for deletion
-            string GenerateGocharaSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int gocharaHeight, string eventType)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var verticalPosition = 0; //distance from top
-                var prevEventName = EventName.EmptyEvent;
-
-                //height of each row
-                var rowHeight = 15;
-
-                //used to determine final height
-                var highestTimeSlice = 0;
-                var multipleEventCount = 0;
-
-                //generate 1px (rect) per time slice
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    //if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    //var foundEvent = foundEventList[0];
-
-
-                    foreach (var foundEvent in foundEventList)
-                    {
-                        ////if current event is different than event has changed, so draw a black line
-                        //var isNewEvent = prevEventName != foundEvent.Name;
-                        //var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
-                        //prevEventName = foundEvent.Name;
-                        var color = GetEventColor(foundEvent?.Nature);
-
-                        //generate and add to row
-                        //the hard coded attribute names used here are used in App.js
-                        var rect = $"<rect " +
-                                   $"eventname=\"{foundEvent?.FormattedName}\" " +
-                                   $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                                   $"x=\"{horizontalPosition}\" " +
-                                   $"y=\"{verticalPosition}\" " +
-                                   $"width=\"{widthPerSlice}\" " +
-                                   $"height=\"{rowHeight}\" " +
-                                   $"fill=\"{color}\" />";
-
-                        rowHtml += rect;
-
-                        //increment vertical position for next
-                        //element to be placed beneath this one
-                        var spaceBetweenRow = 1;
-                        verticalPosition += rowHeight + spaceBetweenRow;
-
-                        multipleEventCount++; //include this in count
-                    }
-
-                    //set position for next element in time slice
-                    horizontalPosition += widthPerSlice;
-
-                    //reset vertical position for next time slice
-                    verticalPosition = 0;
-
-                    //safe only the highest row
-                    var thisSliceHeight = multipleEventCount * rowHeight;
-                    highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
-                    multipleEventCount = 0; //reset
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //note: use group instead of svg because editing capabilities
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-
-                //send height of tallest time slice aka the
-                //final height of this gochara row to caller
-                gocharaHeight = highestTimeSlice;
-
-                return rowHtml;
-            }
 
             //height not known until generated
             //returns the final dynamic height of this event row
@@ -2115,7 +2035,6 @@ namespace API
                 var rowHtml = "";
                 var horizontalPosition = 0; //distance from left
                 var verticalPosition = 0; //distance from top
-                var prevEventName = EventName.EmptyEvent;
 
                 //height of each row
                 var spaceBetweenRow = 1;
@@ -2166,8 +2085,8 @@ namespace API
                                 natureScore = -1;
                                 break;
                         }
-                        //compile nature score
-                        //if doesn't exist assign 0
+
+                        //compile nature score for making summary row later (defaults to 0)
                         summaryRowData[horizontalPosition] = natureScore + (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition] : 0);
 
 

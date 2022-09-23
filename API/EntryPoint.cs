@@ -1955,7 +1955,7 @@ namespace API
                 {
                     var color255 = (int)value.Remap(0, maxValue, 0, 255);
                     if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return white color
-                    if (color255 >= 230) { return "#00DD00"; } //if very close to 255, return solid color (DD to make it darker)
+                    if (color255 >= 220) { return "#00FF00"; } //if very close to 255, return solid color
                     colorHex = $"{color255:X}";//convert from 255 to FF
                     return $"#{colorHex}FF{colorHex}"; //green
                 }
@@ -1963,7 +1963,7 @@ namespace API
                 {
                     var color255 = (int)value.Remap(minValue, 0, 0, 255);
                     if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return white color
-                    if (color255 >= 230) { return "#DD0000"; } //if very close to 255, return solid color (DD to make it darker)
+                    if (color255 >= 220) { return "#DD0000"; } //if very close to 255, return solid color (DD to make it darker)
                     colorHex = $"{color255:X}";//convert from 255 to FF
                     return $"#FF{colorHex}{colorHex}"; //red
                 }

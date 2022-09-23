@@ -613,69 +613,7 @@ function autoMoveCursorLine(relativeMouseX) {
 
 }
 
-//attached to dasa viewer to update time legend 
-function autoUpdateTimeLegendOld(relativeMouseX) {
-
-    //x axis is rounded because axis value in rect is whole numbers
-    //and it has to be exact match to get it
-    var mouseRoundedX = Math.round(relativeMouseX);
-
-    //use the mouse position to get dasa elements also at said position
-    //note: faster and less erroneous than using mouse.path 
-    var allElementsAtX = $(`[x=${mouseRoundedX}]`);
-
-
-    $("#GocharaLegend").empty();
-
-    //extract event data out and place it in legend
-    allElementsAtX.each(function () {
-
-        //based on the type of the event 
-        var type = this.getAttribute("type");
-        var eventName = this.getAttribute("eventname");
-        var color = this.getAttribute("fill");
-
-        //based on event type insert into right place
-        switch (type) {
-            case "Dasa":
-                $("#DasaLegend").text(`${eventName}`);
-                $("#DasaLegend").css("color", `${color}`);
-                //add in time & age
-                var stdTime = this.getAttribute("stdtime");
-                var age = this.getAttribute("age");
-                $("#DateLegend").text(`${stdTime}`);
-                $("#AgeLegend").text(`${age}`);
-
-                break;
-            case "Bhukti":
-                $("#BhuktiLegend").text(`${eventName}`);
-                $("#BhuktiLegend").css("color", `${color}`);
-                break;
-            case "Antaram":
-                $("#AntaramLegend").text(`${eventName}`);
-                $("#AntaramLegend").css("color", `${color}`);
-                break;
-            case "Gochara":
-                var $newdiv1 = $(`<li class=\"list-group-item\"></li>`);
-                $newdiv1.text(`${eventName}`);
-                $newdiv1.css("color", `${color}`);
-                $("#GocharaLegend").append($newdiv1);
-                break;
-            default:
-                return;
-        }
-
-    });
-
-
-}
-
-//generates the time legend shown next to dasa cursor line
-//notes: a template row always exists in code,
-//in client JS side uses template to create the rows from cloning it
-//and modifying its prop as needed, as such any major edit needs to
-//be done in API code
-
+//event fired from autoUpdateTimeLegend
 $(document).on('loadEventDescription', function (event, eventName) {
     //fill description box about event
     getEventDescription(eventName.replace(/ /g, ""))
@@ -689,6 +627,10 @@ $(document).on('loadEventDescription', function (event, eventName) {
 //SVG Event Chart Time Legend generator
 //this is where the whole time legend that follows
 //the mouse when placed on chart is generated
+//notes: a template row always exists in code,
+//in client JS side uses template to create the rows from cloning it
+//and modifying its prop as needed, as such any major edit needs to
+//be done in API code
 function autoUpdateTimeLegend(mousePosition) {
 
     //x axis is rounded because axis value in rect is whole numbers
@@ -718,14 +660,11 @@ function autoUpdateTimeLegend(mousePosition) {
     allElementsAtX.each(function () {
 
         //1 GET DATA
-        //based on the type of the event 
-        var type = this.getAttribute("type");
-
-        //if no type exist, wrong elm skip it
-        if (!type) { return; }
-
         //extract other data out of the rect
         var eventName = this.getAttribute("eventname");
+        //if no "eventname" exist, wrong elm skip it
+        if (!eventName) { return; }
+
         var color = this.getAttribute("fill");
         yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
 

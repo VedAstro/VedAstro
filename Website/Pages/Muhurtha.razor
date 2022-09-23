@@ -35,6 +35,7 @@
                     <option value="Medical">Medical</option>
                     <option value="Travel">Travel</option>
                     <option value="Building">House Building</option>
+                    <option value="Gochara">Gochara</option>
                 </select>
             </div>
             <div>
@@ -447,7 +448,10 @@
                 returnList.Add(EventTag.Personal);
                 returnList.Add(EventTag.RulingConstellation);
                 break;
-
+            case "Gochara":
+                returnList.Add(EventTag.Personal);
+                returnList.Add(EventTag.Gochara);
+                break;
             case "Travel":
                 returnList.Add(EventTag.Personal);
                 returnList.Add(EventTag.General);

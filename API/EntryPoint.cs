@@ -1867,315 +1867,6 @@ namespace API
 
         }
 
-        private static async Task<string> Generate2(double eventsPrecision, Time startTime, Time endTime,
-            Person inputPerson, int headerY, List<Time> timeSlices, double daysPerPixel)
-        {
-            const int _widthPerSlice = 1;
-
-            var eventDataList = await APITools.GetEventDataList();
-
-
-            //rows are dynamically generated as needed, hence the extra logic below
-            //list of rows to generate
-            var listX = new List<Tuple<string, List<Event>>>();
-
-            //1 GENERATE DATA FOR EVENT ROWS
-            //based on logic add each row
-            var dasaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Dasa, eventDataList);
-            listX.Add(new Tuple<string, List<Event>>("Dasa", dasaEventList));
-
-            var bhuktiEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Bhukti, eventDataList);
-            listX.Add(new Tuple<string, List<Event>>("Bhukti", bhuktiEventList));
-
-            var antaramEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Antaram, eventDataList);
-            listX.Add(new Tuple<string, List<Event>>("Antaram", antaramEventList));
-
-            var gocharaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Gochara, eventDataList);
-            listX.Add(new Tuple<string, List<Event>>("Gochara", gocharaEventList));
-
-            //only show tara chandra when zoomed in
-            if (daysPerPixel <= 0.08)
-            {
-                var tarabalaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Tarabala, eventDataList);
-                listX.Add(new Tuple<string, List<Event>>("Tarabala", tarabalaEventList));
-
-                var chandrabalaEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.Chandrabala, eventDataList);
-                listX.Add(new Tuple<string, List<Event>>("Chandrabala", chandrabalaEventList));
-            }
-
-            var dasaSpecialList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, EventTag.DasaSpecialRules, eventDataList);
-            listX.Add(new Tuple<string, List<Event>>("DasaSpecialRules", dasaSpecialList));
-
-
-
-            //2 STACK & GENERATED ROWS FROM ABOVE DATA
-            var padding = 2;//space between rows
-            var compiledRow = "";
-
-            int yAxis = headerY;
-            foreach (var tuple in listX)
-            {
-                //generate svg for each row & add to final row
-                compiledRow += GenerateMultipleRowSvg(tuple.Item2, timeSlices, yAxis, 0, out int finalHeight, tuple.Item1);
-                //set y axis (horizontal) for next row
-                yAxis = yAxis + finalHeight + padding;
-            }
-
-            //3 ADD IN GOCHARA
-            //future passed to caller to draw line
-            //var totalHeight = yAxis + gocharaHeight;
-            var totalHeight = yAxis;
-
-
-
-            return compiledRow;
-
-            //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
-            //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
-
-
-
-            string GenerateSingleEventRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight, string eventType)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var prevEventName = EventName.EmptyEvent;
-
-                //generate 1px (rect) per time slice
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    var foundEvent = foundEventList.Any() ? foundEventList[0] : Event.Empty; //if no event exist use empty event as filler todo maybe filler not needed
-
-                    //if current event is different than event has changed, so draw a black line
-                    var isNewEvent = prevEventName != foundEvent.Name;
-                    var borderRoomAvailable = daysPerPixel <= 10; //above 10px/day borders look ugly
-                    var color = isNewEvent && borderRoomAvailable ? "black" : GetEventColor(foundEvent?.Nature);
-                    prevEventName = foundEvent.Name;
-
-                    //only if event is not empty
-                    if (foundEvent.Name != EventName.EmptyEvent)
-                    {
-                        //generate and add to row
-                        //the hard coded attribute names used here are used in App.js
-                        var rect = $"<rect " +
-                                   $"type=\"{eventType}\" " +
-                                   $"eventname=\"{foundEvent?.FormattedName}\" " +
-                                   $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                                   $"x=\"{horizontalPosition}\" " +
-                                   $"width=\"{_widthPerSlice}\" " +
-                                   $"height=\"{rowHeight}\" " +
-                                   $"fill=\"{color}\" />";
-
-                        rowHtml += rect;
-                    }
-
-                    //set position for next element
-                    horizontalPosition += _widthPerSlice;
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //svg tag here acts as group, svg nesting
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-
-
-                return rowHtml;
-            }
-
-            //height not known until generated
-            //returns the final dynamic height of this gochara row
-            string GenerateGocharaSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int gocharaHeight, string eventType)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var verticalPosition = 0; //distance from top
-                var prevEventName = EventName.EmptyEvent;
-
-                //height of each row
-                var rowHeight = 15;
-
-                //used to determine final height
-                var highestTimeSlice = 0;
-                var multipleEventCount = 0;
-
-                //generate 1px (rect) per time slice
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    //if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    //var foundEvent = foundEventList[0];
-
-
-                    foreach (var foundEvent in foundEventList)
-                    {
-                        ////if current event is different than event has changed, so draw a black line
-                        //var isNewEvent = prevEventName != foundEvent.Name;
-                        //var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
-                        //prevEventName = foundEvent.Name;
-                        var color = GetEventColor(foundEvent?.Nature);
-
-                        //generate and add to row
-                        //the hard coded attribute names used here are used in App.js
-                        var rect = $"<rect " +
-                                   $"type=\"{eventType}\" " +
-                                   $"eventname=\"{foundEvent?.FormattedName}\" " +
-                                   $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                                   $"x=\"{horizontalPosition}\" " +
-                                   $"y=\"{verticalPosition}\" " +
-                                   $"width=\"{_widthPerSlice}\" " +
-                                   $"height=\"{rowHeight}\" " +
-                                   $"fill=\"{color}\" />";
-
-                        rowHtml += rect;
-
-                        //increment vertical position for next
-                        //element to be placed beneath this one
-                        var spaceBetweenRow = 1;
-                        verticalPosition += rowHeight + spaceBetweenRow;
-
-                        multipleEventCount++; //include this in count
-                    }
-
-                    //set position for next element in time slice
-                    horizontalPosition += _widthPerSlice;
-
-                    //reset vertical position for next time slice
-                    verticalPosition = 0;
-
-                    //safe only the highest row
-                    var thisSliceHeight = multipleEventCount * rowHeight;
-                    highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
-                    multipleEventCount = 0; //reset
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //note: use group instead of svg because editing capabilities
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-
-                //send height of tallest time slice aka the
-                //final height of this gochara row to caller
-                gocharaHeight = highestTimeSlice;
-
-                return rowHtml;
-            }
-
-            //height not known until generated
-            //returns the final dynamic height of this gochara row
-            string GenerateMultipleRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int finalHeight, string eventType)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var verticalPosition = 0; //distance from top
-                var prevEventName = EventName.EmptyEvent;
-
-                //height of each row
-                var rowHeight = 15;
-
-                //used to determine final height
-                var highestTimeSlice = 0;
-                var multipleEventCount = 0;
-
-                //generate 1px (rect) per time slice
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    //if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    //var foundEvent = foundEventList[0];
-
-
-                    foreach (var foundEvent in foundEventList)
-                    {
-                        ////if current event is different than event has changed, so draw a black line
-                        //var isNewEvent = prevEventName != foundEvent.Name;
-                        //var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
-                        //prevEventName = foundEvent.Name;
-                        var color = GetEventColor(foundEvent?.Nature);
-
-                        //generate and add to row
-                        //the hard coded attribute names used here are used in App.js
-                        var rect = $"<rect " +
-                                   $"type=\"{eventType}\" " +
-                                   $"eventname=\"{foundEvent?.FormattedName}\" " +
-                                   $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                                   $"x=\"{horizontalPosition}\" " +
-                                   $"y=\"{yAxis + verticalPosition}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                                   $"width=\"{_widthPerSlice}\" " +
-                                   $"height=\"{rowHeight}\" " +
-                                   $"fill=\"{color}\" />";
-
-                        rowHtml += rect;
-
-                        //increment vertical position for next
-                        //element to be placed beneath this one
-                        var spaceBetweenRow = 1;
-                        verticalPosition += rowHeight + spaceBetweenRow;
-
-                        multipleEventCount++; //include this in count
-                    }
-
-                    //set position for next element in time slice
-                    horizontalPosition += _widthPerSlice;
-
-                    //reset vertical position for next time slice
-                    verticalPosition = 0;
-
-                    //safe only the highest row
-                    var thisSliceHeight = multipleEventCount * rowHeight;
-                    highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
-                    multipleEventCount = 0; //reset
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //note: use group instead of svg because editing capabilities
-                //rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, 0)\">{rowHtml}</g>";
-
-                //send height of tallest time slice aka the
-                //final height of this gochara row to caller
-                finalHeight = highestTimeSlice;
-
-                return rowHtml;
-            }
-
-            //todo need to unify event color
-            // Get dasa color based on nature & number of events
-            string GetEventColor(EventNature? eventNature)
-            {
-                var colorId = "blue";
-
-                //set color id based on nature
-                switch (eventNature)
-                {
-                    case EventNature.Good:
-                        colorId = "green";
-                        break;
-                    case EventNature.Neutral:
-                        colorId = "grey";
-                        break;
-                    case EventNature.Bad:
-                        colorId = "red";
-                        break;
-                }
-
-                return colorId;
-            }
-        }
 
         /// <summary>
         /// Generate rows based of inputed events
@@ -2183,43 +1874,40 @@ namespace API
         private static string GenerateEventRows(double eventsPrecision, Time startTime, Time endTime,
             Person inputPerson, int headerY, List<Time> timeSlices, double daysPerPixel, List<EventTag> inputedEventTags, out int totalHeight)
         {
-            const int _widthPerSlice = 1;
-            const int _singleRowHeight = 15;
+            const int widthPerSlice = 1;
+            const int singleRowHeight = 15;
 
             var eventDataList = APITools.GetEventDataList().Result;
 
             //rows are dynamically generated as needed, hence the extra logic below
             //list of rows to generate
-            var listX = new List<Tuple<string, List<Event>>>();
+            var eventList = new List<Event>();
 
             //1 GENERATE DATA FOR EVENT ROWS
-            //based on logic add each row
-
             foreach (var eventTag in inputedEventTags)
             {
                 var tempEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag, eventDataList);
-                listX.Add(new Tuple<string, List<Event>>(eventTag.ToString(), tempEventList));
-
+                eventList.AddRange(tempEventList);
             }
 
+            //order list to show small events at bottom row
+            //event tag with most goes to top
+            //eventList = eventList.OrderBy(o => o.Count).ToList();
 
             //2 STACK & GENERATED ROWS FROM ABOVE DATA
             var padding = 1;//space between rows
             var compiledRow = "";
 
-            var summaryRowData = new Dictionary<int, double>();
+            //note: summary data is filled when generating rows
+            var summaryRowData = new Dictionary<int, double>();//x axis & total nature score
             int yAxis = headerY;
-            foreach (var tuple in listX)
-            {
-                //generate svg for each row & add to final row
-                compiledRow += GenerateMultipleRowSvg(tuple.Item2, timeSlices, yAxis, 0, out int finalHeight, tuple.Item1);
-                //set y axis (horizontal) for next row
-                yAxis = yAxis + finalHeight + padding;
-            }
+            //generate svg for each row & add to final row
+            compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
+            //set y axis (horizontal) for next row
+            yAxis = yAxis + finalHeight + padding;
 
             //4 GENERATE SUMMARY ROW
-            //convert value coming into percentage based on min & max
-            //this will make setting color based on value easier & accurate
+            //min & max used to calculate color later
             var maxValue = summaryRowData.Values.Max();
             var minValue = summaryRowData.Values.Min();
             compiledRow += GenerateSummaryRow(yAxis);
@@ -2242,14 +1930,10 @@ namespace API
                 foreach (var summarySlice in summaryRowData)
                 {
                     var rect = $"<rect " +
-                               $"type=\"Summary\" " +
-                               //$"eventname=\"{foundEvent?.FormattedName}\" " +
-                               //$"age=\"{inputPerson.GetAge(slice)}\" " +
-                               //$"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\"" +
                                $"x=\"{summarySlice.Key}\" " +
                                $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                               $"width=\"{_widthPerSlice}\" " +
-                               $"height=\"{_singleRowHeight}\" " +
+                               $"width=\"{widthPerSlice}\" " +
+                               $"height=\"{singleRowHeight}\" " +
                                $"fill=\"{GetSummaryColor(summarySlice.Value)}\" />";
 
                     //add rect to row
@@ -2265,15 +1949,21 @@ namespace API
                 string colorHex;
 
                 //convert value coming into percentage based on min & max
+                //this will make setting color based on value easier & accurate
+
                 if (value >= 0) //good
                 {
                     var color255 = (int)value.Remap(0, maxValue, 0, 255);
+                    if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return white color
+                    if (color255 >= 230) { return "#00DD00"; } //if very close to 255, return solid color (DD to make it darker)
                     colorHex = $"{color255:X}";//convert from 255 to FF
                     return $"#{colorHex}FF{colorHex}"; //green
                 }
                 else //bad
                 {
                     var color255 = (int)value.Remap(minValue, 0, 0, 255);
+                    if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return white color
+                    if (color255 >= 230) { return "#DD0000"; } //if very close to 255, return solid color (DD to make it darker)
                     colorHex = $"{color255:X}";//convert from 255 to FF
                     return $"#FF{colorHex}{colorHex}"; //red
                 }
@@ -2311,12 +2001,11 @@ namespace API
                         //generate and add to row
                         //the hard coded attribute names used here are used in App.js
                         var rect = $"<rect " +
-                                   $"type=\"{eventType}\" " +
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
                                    $"x=\"{horizontalPosition}\" " +
-                                   $"width=\"{_widthPerSlice}\" " +
+                                   $"width=\"{widthPerSlice}\" " +
                                    $"height=\"{rowHeight}\" " +
                                    $"fill=\"{color}\" />";
 
@@ -2324,7 +2013,7 @@ namespace API
                     }
 
                     //set position for next element
-                    horizontalPosition += _widthPerSlice;
+                    horizontalPosition += widthPerSlice;
 
                 }
 
@@ -2375,13 +2064,12 @@ namespace API
                         //generate and add to row
                         //the hard coded attribute names used here are used in App.js
                         var rect = $"<rect " +
-                                   $"type=\"{eventType}\" " +
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
                                    $"x=\"{horizontalPosition}\" " +
                                    $"y=\"{verticalPosition}\" " +
-                                   $"width=\"{_widthPerSlice}\" " +
+                                   $"width=\"{widthPerSlice}\" " +
                                    $"height=\"{rowHeight}\" " +
                                    $"fill=\"{color}\" />";
 
@@ -2396,7 +2084,7 @@ namespace API
                     }
 
                     //set position for next element in time slice
-                    horizontalPosition += _widthPerSlice;
+                    horizontalPosition += widthPerSlice;
 
                     //reset vertical position for next time slice
                     verticalPosition = 0;
@@ -2421,7 +2109,7 @@ namespace API
 
             //height not known until generated
             //returns the final dynamic height of this event row
-            string GenerateMultipleRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int finalHeight, string eventType)
+            string GenerateMultipleRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int finalHeight)
             {
                 //generate the row for each time slice
                 var rowHtml = "";
@@ -2454,14 +2142,13 @@ namespace API
                         //generate and add to row
                         //the hard coded attribute names used here are used in App.js
                         var rect = $"<rect " +
-                                   $"type=\"{eventType}\" " +
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\" " +
                                    $"x=\"{horizontalPosition}\" " +
                                    $"y=\"{yAxis + verticalPosition}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                                   $"width=\"{_widthPerSlice}\" " +
-                                   $"height=\"{_singleRowHeight}\" " +
+                                   $"width=\"{widthPerSlice}\" " +
+                                   $"height=\"{singleRowHeight}\" " +
                                    $"fill=\"{color}\" />";
 
                         //add rect to return list
@@ -2486,20 +2173,20 @@ namespace API
 
                         //increment vertical position for next
                         //element to be placed beneath this one
-                        verticalPosition += _singleRowHeight + spaceBetweenRow;
+                        verticalPosition += singleRowHeight + spaceBetweenRow;
 
                         multipleEventCount++; //include this in count
                     }
 
                     //set position for next element in time slice
-                    horizontalPosition += _widthPerSlice;
+                    horizontalPosition += widthPerSlice;
 
                     //reset vertical position for next time slice
                     verticalPosition = 0;
 
                     //safe only the highest row (last row in to be added) used for calculating final height
-                    var multipleRowH = (multipleEventCount * (_singleRowHeight + spaceBetweenRow)) - spaceBetweenRow; //minus 1 to compensate for last row
-                    var thisSliceHeight = multipleEventCount > 1 ? multipleRowH : _singleRowHeight; //different height calc for multiple & single row
+                    var multipleRowH = (multipleEventCount * (singleRowHeight + spaceBetweenRow)) - spaceBetweenRow; //minus 1 to compensate for last row
+                    var thisSliceHeight = multipleEventCount > 1 ? multipleRowH : singleRowHeight; //different height calc for multiple & single row
                     highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
                     multipleEventCount = 0; //reset
 

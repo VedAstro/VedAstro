@@ -614,7 +614,13 @@ function autoMoveCursorLine(relativeMouseX) {
 }
 
 //event fired from autoUpdateTimeLegend
-$(document).on('loadEventDescription', function (event, eventName) {
+$(document).on('loadEventDescription', LoadEventDescription);
+
+function LoadEventDescription(event, eventName) {
+
+    //off events while firing
+    $(document).off('loadEventDescription');
+
     //fill description box about event
     getEventDescription(eventName.replace(/ /g, ""))
         .then((eventDesc) => {
@@ -622,8 +628,11 @@ $(document).on('loadEventDescription', function (event, eventName) {
             $("#CursorLineLegendDescription").empty(); //clear previous desc
             $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
         });
-});
 
+    //turn events back on
+    $(document).on('loadEventDescription', LoadEventDescription);
+
+}
 //SVG Event Chart Time Legend generator
 //this is where the whole time legend that follows
 //the mouse when placed on chart is generated
@@ -729,7 +738,7 @@ function autoUpdateTimeLegend(mousePosition) {
             //make holder visible
             $("#CursorLineLegendDescriptionHolder").show();
 
-            //note: using trigger to make it smoother
+            //note: using trigger to make it easy to skip multiple clogging events
             $(document).trigger('loadEventDescription', eventName);
 
             //update previous hover event

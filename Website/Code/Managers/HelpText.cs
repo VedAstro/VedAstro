@@ -7,7 +7,7 @@
     public static class HelpText
     {
         public const string GeoLocationName = @"Enter city or state name";
-        public const string DasaTimeRange = @"Select size of Dasa report";
+        public const string DasaTimeRange = @"Select period in life for report";
         public const string Gender = @"Gender is used in predicting marriage compatibilty and horoscope";
         public const string PersonAdvanced = @"This is optional";
         public const string DateInput = @"Format Example: 5th January 2020 is 05/01/2020";

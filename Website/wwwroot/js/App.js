@@ -713,6 +713,7 @@ function autoUpdateTimeLegend(mousePosition) {
     var goodCount = 0;
     var badCount = 0;
     var yAxis = 0;
+    var showDescription = false;//default description not shown
     //extract event data out and place it in legend
     allElementsAtX.each(function () {
 
@@ -729,8 +730,8 @@ function autoUpdateTimeLegend(mousePosition) {
         yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
 
         //count good and bad events for summary row
-        if (color == "red") { badCount++; }
-        if (color == "green") { goodCount++; }
+        if (color === "red") { badCount++; }
+        if (color === "green") { goodCount++; }
 
 
         //2 TIME & AGE LEGEND
@@ -777,6 +778,8 @@ function autoUpdateTimeLegend(mousePosition) {
             //highlight event name row 
             textElm.css("fill", "red");
             textElm.css("font-weight", "600");
+            //if mouse within show description box
+            showDescription = true;
         }
 
         //if mouse within row AND the event has changed
@@ -792,9 +795,17 @@ function autoUpdateTimeLegend(mousePosition) {
 
             //update previous hover event
             window.previousHoverEventName = eventName;
-        } 
+        }
 
     });
+
+    //auto show/hide description box based on mouse position
+    if (showDescription) {
+        $("#CursorLineLegendDescriptionHolder").show();
+    } else {
+        $("#CursorLineLegendDescriptionHolder").hide();
+    }
+
 
 
     //5 GENERATE LAST SUMMARY ROW
@@ -810,8 +821,7 @@ function autoUpdateTimeLegend(mousePosition) {
 
     //set event name text & color element
     var textElm = newSummaryRow.children("text");
-    var totalScore = goodCount + -Math.abs(badCount);
-    textElm.text(`${totalScore} Good:${goodCount} Bad:${badCount}`);
+    textElm.text(`Good:${goodCount} Bad:${badCount}`);
     newSummaryRow.children("circle").hide();
 
 }

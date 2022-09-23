@@ -18,64 +18,105 @@
 
 
 
-<div class="vstack gap-2">
-    @*PERSON SELECTOR
-    note: selector placed here because multiple components use it
-    *@
-    <PeopleSelectorBox @ref="_peopleSelectorBox" />
-    <MonthYearSelectorBox LabelText="Start" @ref="_startTimeSelector" />
-    <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="easy-tab" data-bs-toggle="tab" data-bs-target="#easy" type="button" role="tab" aria-controls="easy" aria-selected="true">Easy</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">Advanced</button>
+    </li>
+</ul>
 
-    @*CALCULATE BTN*@
-    <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
+@*all border except top*@
+<div class="tab-content border-end border-bottom border-start" id="myTabContent">
+    <div class="tab-pane fade show active" id="easy" role="tabpanel" aria-labelledby="easy-tab">
+        <div class="vstack gap-3 p-3">
+            <PeopleSelectorBox @ref="_easyPeopleSelectorBox" />
 
-    @*hide until ready but initialized as well*@
-    <div style="@(_isResultReady?"":"display:none;")">
-        <hr>
-        @*DASA VIEW BOX*@
-        <div>
-            <HelpBox Label="Dasa" HelpText="@HelpText.DasaChart"></HelpBox>
-            <EventReportViewer @ref="_dasaReportViewer" />
+            <div>
+                <label class="form-label">Time Range<HelpBox SmallIcon="true" HelpText="@HelpText.DasaTimeRange"></HelpBox></label>
+                <select @bind="_selectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
+                    <option value="FullLife">Full Life</option>
+                    <option value="Age1to30">Age 1 to 30</option>
+                    <option value="Age30to60">Age 30 to 60</option>
+                    <option value="Age60to90">Age 60 to 90</option>
+                    <option value="Age90to120">Age 90 to 120</option>
+                </select>
+            </div>
+
+            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculateEasy"></IconButton>
+
+        </div>
+
+
+    </div>
+    <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+        <div class="vstack gap-3 p-3">
+            @*PERSON SELECTOR
+            note: selector placed here because multiple components use it
+            *@
+            <PeopleSelectorBox @ref="_peopleSelectorBox" />
+            <MonthYearSelectorBox LabelText="Start" @ref="_startTimeSelector" />
+            <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
+
+            @*CALCULATE BTN*@
+            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
         </div>
     </div>
-
-    @if (_isResultReady)
-    {
-        <hr>
-        @*PLANET INFO LIST*@
-        <div>
-            <h4 class="mt-2">Planets</h4>
-            <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
-                <PlanetInfoBox PlanetName="PlanetName.Sun" Time="@SelectedPerson.BirthTime" />
-                <PlanetInfoBox PlanetName="PlanetName.Moon" Time="@SelectedPerson.BirthTime" />
-                <PlanetInfoBox PlanetName="PlanetName.Mercury" Time="@SelectedPerson.BirthTime" />
-                <PlanetInfoBox PlanetName="PlanetName.Mars" Time="@SelectedPerson.BirthTime" />
-                <PlanetInfoBox PlanetName="PlanetName.Jupiter" Time="@SelectedPerson.BirthTime" />
-                <PlanetInfoBox PlanetName="PlanetName.Saturn" Time="@SelectedPerson.BirthTime" />
-                <PlanetInfoBox PlanetName="PlanetName.Venus" Time="@SelectedPerson.BirthTime" />
-            </div>
-        </div>
-        @*HOUSE INFO LIST*@
-        <div>
-            <h4 class="mt-2">Houses</h4>
-            <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
-                <HouseInfoBox HouseNumber="1" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="2" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="3" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="4" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="5" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="6" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="7" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="8" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="9" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="10" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="11" Time="@SelectedPerson.BirthTime" />
-                <HouseInfoBox HouseNumber="12" Time="@SelectedPerson.BirthTime" />
-            </div>
-        </div>
-
-    }
 </div>
+
+<hr>
+
+@*hide until ready but initialized as well*@
+<div style="@(_isResultReady?"":"display:none;")">
+    @*DASA VIEW BOX*@
+    <div>
+        <HelpBox Label="Dasa" HelpText="@HelpText.DasaChart"></HelpBox>
+        <EventReportViewer @ref="_dasaReportViewer" />
+    </div>
+</div>
+
+@if (_isResultReady)
+{
+    <hr>
+    @*PLANET INFO LIST*@
+    <div>
+        <h4 class="mt-2">Planets</h4>
+        <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
+            <PlanetInfoBox PlanetName="PlanetName.Sun" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Moon" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Mercury" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Mars" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Jupiter" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Saturn" Time="@SelectedPerson.BirthTime" />
+            <PlanetInfoBox PlanetName="PlanetName.Venus" Time="@SelectedPerson.BirthTime" />
+        </div>
+    </div>
+    @*HOUSE INFO LIST*@
+    <div>
+        <h4 class="mt-2">Houses</h4>
+        <div class="container-xxl d-flex flex-nowrap" style="overflow-x: scroll">
+            <HouseInfoBox HouseNumber="1" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="2" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="3" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="4" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="5" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="6" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="7" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="8" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="9" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="10" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="11" Time="@SelectedPerson.BirthTime" />
+            <HouseInfoBox HouseNumber="12" Time="@SelectedPerson.BirthTime" />
+        </div>
+    </div>
+}
+
+
+
+
+
+
 
 @*HELP SECTION*@
 <PageHelpSection @ref="_helpSection">
@@ -163,9 +204,12 @@
 @code {
 
     //--------------------FIELDS
+    private string _selectedTimeRange = "FullLife";
+
     private PageHelpSection _helpSection;
 
     private PeopleSelectorBox? _peopleSelectorBox;
+    private PeopleSelectorBox? _easyPeopleSelectorBox;
 
     private EventReportViewer? _dasaReportViewer;
 
@@ -184,6 +228,7 @@
     protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try(_jsRuntime);
 
     private async Task OnClickCalculate() => await InvokeAsync(async () => await _OnClickCalculate()).Try(_jsRuntime);
+    private async Task OnClickCalculateEasy() => await InvokeAsync(async () => await _OnClickCalculateEasy()).Try(_jsRuntime);
 
 
 
@@ -205,7 +250,6 @@
         ////hide loading box
         //_jsRuntime.HideAlert();
     }
-
 
     private async Task _OnClickCalculate()
     {
@@ -247,6 +291,70 @@
         _jsRuntime.HideAlert();
     }
 
+    private async Task _OnClickCalculateEasy()
+    {
+        //only continue if passed input field validation
+        if (!EasyValidationPassed()) { return; }
+
+        _jsRuntime.ShowLoading();
+
+        //mark page as NOT ready (when button clicked 2nd time)
+        _isResultReady = false;
+
+        //get data from inputs and save it for use by other components
+        SelectedPerson = _easyPeopleSelectorBox.GetSelectedPerson();
+
+
+        //set data into dasa viewer
+        dynamic timeRange = AutoCalculateTimeRange();
+        var startTime = timeRange.start;
+        var endTime = timeRange.end;
+
+        //generate the events row & time header row
+        var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
+
+        await _dasaReportViewer.SetData(SelectedPerson, startTime, endTime, dasaEventTags);
+
+        //mark page as ready to show results
+        _isResultReady = true;
+
+        _jsRuntime.HideAlert();
+
+        //LOCAL FUNCTIONS
+        object AutoCalculateTimeRange()
+        {
+            Time start, end;
+            var birthTime = SelectedPerson.BirthTime;
+
+            switch (_selectedTimeRange)
+            {
+                case "Age1to30":
+                    start = birthTime;
+                    end = start.AddYears(30);
+                    return new { start = start, end = end };
+                case "Age30to60":
+                    start = birthTime.AddYears(30);
+                    end = start.AddYears(60);
+                    return new { start = start, end = end };
+                case "Age60to90":
+                    start = birthTime.AddYears(60);
+                    end = start.AddYears(90);
+                    return new { start = start, end = end };
+                case "Age90to120":
+                    start = birthTime.AddYears(90);
+                    end = start.AddYears(90);
+                    return new { start = start, end = end };
+                case "FullLife":
+                    start = birthTime;
+                    end = start.AddYears(120);
+                    return new { start = start, end = end };
+                default:
+                    return new { };
+            }
+        }
+
+    }
+
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
@@ -255,6 +363,24 @@
         //TEST 1
         //if person not selected, invalid
         if (!_peopleSelectorBox.IsPersonSelected)
+        {
+            //mark invalid & alert user
+            _jsRuntime.ShowAlert("error", AlertText.NoName, true, timer: 0);
+            return false;
+        }
+
+
+        //if control reaches here than, it's valid
+        return true;
+    }
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private bool EasyValidationPassed()
+    {
+        //TEST 1
+        //if person not selected, invalid
+        if (!_easyPeopleSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
             _jsRuntime.ShowAlert("error", AlertText.NoName, true, timer: 0);

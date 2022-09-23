@@ -173,7 +173,6 @@ function generatePersonListTable(tableId, tableData) {
 
 }
 
-
 function generatePlanetDataTable(tableId, tableData) {
 
     //set table data
@@ -687,6 +686,9 @@ $(document).on('loadEventDescription', function (event, eventName) {
         });
 });
 
+//SVG Event Chart Time Legend generator
+//this is where the whole time legend that follows
+//the mouse when placed on chart is generated
 function autoUpdateTimeLegend(mousePosition) {
 
     //x axis is rounded because axis value in rect is whole numbers
@@ -766,21 +768,31 @@ function autoUpdateTimeLegend(mousePosition) {
         //check if mouse in within row of this event (y axis)
         var elementTopY = yAxis;
         var elementBottomY = yAxis + 15;
-        if (mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY) {
+        var mouseWithinRow = mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY;
+        //if event name is still the same then don't load description again
+        var notSameEvent = window.previousHoverEventName !== eventName;
+
+        //if mouse is in event's row then highlight that row
+        if (mouseWithinRow) {
             //highlight event name row 
             textElm.css("fill", "red");
             textElm.css("font-weight", "600");
+        }
+
+        //if mouse within row AND the event has changed
+        //then generate a new description
+        //note: this is slow, so done only when absolutely needed
+        if (mouseWithinRow && notSameEvent) {
 
             //make holder visible
             $("#CursorLineLegendDescriptionHolder").show();
 
+            //note: using trigger to make it smoother
             $(document).trigger('loadEventDescription', eventName);
 
-
-        } else {
-            //todo
-            //$("CursorLineLegendDescriptionHolder").hide(); //hide holder 
-        }
+            //update previous hover event
+            window.previousHoverEventName = eventName;
+        } 
 
     });
 
@@ -801,7 +813,6 @@ function autoUpdateTimeLegend(mousePosition) {
     var totalScore = goodCount + -Math.abs(badCount);
     textElm.text(`${totalScore} Good:${goodCount} Bad:${badCount}`);
     newSummaryRow.children("circle").hide();
-
 
 }
 

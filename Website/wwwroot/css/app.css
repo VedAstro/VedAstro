@@ -78,3 +78,18 @@ a, .btn-link {
 .darkmode-layer, .darkmode-toggle {
     z-index: 500 !important;
 }
+
+/*modify bootstrap tabs for whole website*/
+.nav .nav-item button {
+    background: #f5f9fd;
+    color: #495057; /*so that button is not blue*/
+}
+#myTabContent {
+    background: #f5f9fd;
+}
+
+/*make selected tab words bold*/
+.nav .nav-item .active {
+    font-weight: bold;
+}
+

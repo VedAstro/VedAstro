@@ -1003,6 +1003,7 @@ namespace API
         /// </summary>
         private static string GenerateMainEventsReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
         {
+            //1 CALCULATE DATA
             // One precision value for generating all dasa components,
             // because misalignment occurs if use different precision
             // note: precision = time slice count, each slice = 1 pixel (zoom level)
@@ -1012,38 +1013,57 @@ namespace API
             var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, eventsPrecisionHours);
 
 
+            //2 MAKE EVENT ROWS
             var compiledRow = GenerateRowsSvg(inputPerson, daysPerPixel, startTime, endTime, timeSlices, eventsPrecisionHours, inputedEventTags, out int totalHeight);
 
+
+            //3 MAKE NOW LINE
             //the height for all lines, cursor, now & life events line
             //place below the last row
-            //var totalHeight = 240; //hard set for now
             var padding = 2; //space between rows
             var lineHeight = totalHeight + padding;
-
 
             //get now line position
             var nowLinePosition = GetLinePosition(timeSlices, startTime.StdTimeNowAtOffset);
             compiledRow += GetNowLine(lineHeight, nowLinePosition);
 
+
+            //4 MAKE LIFE EVENTS
             //wait!, add in life events also
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
             var inputOffset = startTime.GetStdDateTimeOffset().Offset;
-            compiledRow += GetLifeEventLinesSvg(inputPerson, lineHeight, inputOffset);
+            var lifeEventHeight = lineHeight + 7; //give more space between life event and last row
+            compiledRow += GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset);
 
+
+            //5 WRAP IN GROUP
+            //place all content except border & cursor time legend inside group for padding
+            var contentPadding = 2;
+            compiledRow = $"<g class=\"EventChartContent\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledRow}</g>";
+
+
+            //6 MAKE CURSOR LINE
             //add in the cursor line (moves with cursor via JS)
             //note: - template cursor line is duplicated to dynamically generate legend box
             //      - placed last so that show on top of others
-            compiledRow += GetTimeCursorLine(lineHeight);
+            var svgTotalHeight = totalHeight + 35;//add space for life event icon
+            compiledRow += GetTimeCursorLine(svgTotalHeight);
 
-            //compile the final svg
+
+            //7 ADD BORDER
             //save a copy of the number of time slices used to calculate the svg total width later
             var dasaSvgWidth = timeSlices.Count;
-            var svgTotalHeight = totalHeight + 30;//add space for life event icon
             //add border around svg element
-            compiledRow += $"<rect width=\"{dasaSvgWidth}\" height=\"{svgTotalHeight}\" style=\"stroke-width: 2; fill: none; paint-order: stroke; stroke:#333;\"></rect>";
-            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, svgTotalHeight); //little wiggle room
+            //note:compensate for padding, makes border fit nicely around content
+            var borderWidth = dasaSvgWidth + contentPadding;
+            var roundedBorder = 3;
+            compiledRow += $"<rect class=\"EventChartBorder\" rx=\"{roundedBorder}\" width=\"{borderWidth}\" height=\"{svgTotalHeight}\" style=\"stroke-width: 1; fill: none; paint-order: stroke; stroke:#333;\"></rect>";
 
+
+            //8 DONE!
+            //put all stuff in final SVG tag
+            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, svgTotalHeight); //little wiggle room
             return finalSvg;
 
 
@@ -1081,21 +1101,26 @@ namespace API
 
 
             }
-
         }
 
-        //todo need to unify event color
+        /// <summary>
+        /// Get color based on nature
+        /// </summary>
+        public static string GetColor(EventNature? eventNature) => GetColor(eventNature.ToString());
+        /// <summary>
+        /// Get color based on nature
+        /// </summary>
         public static string GetColor(string nature)
         {
             switch (nature)
             {
-                case "Good": return "#42f706";
-                case "Neutral": return "grey";
-                //case "Bad": return "#a80000";
-                case "Bad": return "#ff5656";
+                case "Good": return "#00FF00"; //green
+                case "Neutral": return "#D3D3D3"; //grey
+                case "Bad": return "#FF0000"; //red
                 default: throw new Exception($"Invalid Nature: {nature}");
             }
         }
+
 
         /// <summary>
         /// Generates individual life event line svg
@@ -1144,12 +1169,26 @@ namespace API
         {
             return $@"
                         <g id=""CursorLine"" x=""0"" y=""0"">
-		                    <rect width=""2"" height=""{lineHeight}"" style=""fill:#000000;"" x=""0"" y=""0""></rect>
+                            <!--place where asset icons are stored-->
+                            <g id=""CursorLineLegendIcons"" style=""display:none;"">
+                                <circle id=""CursorLineCircleIcon"" cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""red""></circle>
+                                <g id=""CursorLineClockIcon"" fill=""#fff"" transform=""matrix(0.5, 0, 0, 0.5, 2, 3)"" width=""12"" height=""12"">
+				                    <path d=""M10 0a10 10 0 1 0 10 10A10 10 0 0 0 10 0zm2.5 14.5L9 11V4h2v6l3 3z""/>
+			                    </g>
+                            </g>
+
+                            <g id=""IBeam"">
+			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""0""></rect>
+			                    <rect width=""2"" height=""{lineHeight}"" style=""fill:#000000;"" x=""0"" y=""0""></rect>
+			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""{lineHeight-2}""></rect>
+		                    </g>
 		                    <g id=""CursorLineLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
                                 <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
 			                    <text style=""fill:#FFFFFF; font-size:11px; font-weight:400; white-space: pre;"" x=""14"" y=""11"">Template</text>
-                                <circle cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""red""></circle>
+                                <use xlink:href=""#CursorLineCircleIcon""></use>                                
                             </g>
+                            <!--place where dynamic event names are placed by JS-->
+                            <g id=""CursorLineLegendHolder"" transform=""matrix(1, 0, 0, 1, 0, 4)""></g>
                             <g id=""CursorLineLegendDescriptionHolder"" style=""display:none;"">
 			                    <rect style=""fill: blue; opacity: 0.8;"" x=""170"" y=""11.244"" width=""150"" height=""{lineHeight - 10}"" rx=""2"" ry=""2""></rect>
                                 <g id=""CursorLineLegendDescription""></g>
@@ -1311,7 +1350,7 @@ namespace API
 
             //create the final svg that will be displayed
             var svgTotalWidth = svgWidth + 10; //add little for wiggle room
-            var svgBody = $"<svg id=\"DasaViewHolder\"" +
+            var svgBody = $"<svg id=\"EventChartHolder\"" +
                           //$" width=\"100%\"" +
                           //$" height=\"100%\"" +
                           $" style=\"" +
@@ -1319,8 +1358,10 @@ namespace API
                           $"width:{svgTotalWidth}px;" +
                           $"height:{svgTotalHeight}px;" +
                           $"background:{svgBackgroundColor};" +
-                          $"\" " +
+                          $"\" " +//end of style tag
                           $"xmlns=\"http://www.w3.org/2000/svg\">" +
+                          $"xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + //much needed for use tags to work
+                          //$"<title>{chartTitle}</title>" + //title visible in browser when open direct
                           $"{combinedSvgString}</svg>";
 
             return svgBody;
@@ -1874,25 +1915,22 @@ namespace API
         private static string GenerateEventRows(double eventsPrecision, Time startTime, Time endTime,
             Person inputPerson, int headerY, List<Time> timeSlices, double daysPerPixel, List<EventTag> inputedEventTags, out int totalHeight)
         {
+            //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
             const int singleRowHeight = 15;
-
             var eventDataList = APITools.GetEventDataList().Result;
 
             //rows are dynamically generated as needed, hence the extra logic below
             //list of rows to generate
             var eventList = new List<Event>();
 
-            //1 GENERATE DATA FOR EVENT ROWS
+            //calculate events for each tag
             foreach (var eventTag in inputedEventTags)
             {
                 var tempEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag, eventDataList);
                 eventList.AddRange(tempEventList);
             }
 
-            //order list to show small events at bottom row
-            //event tag with most goes to top
-            //eventList = eventList.OrderBy(o => o.Count).ToList();
 
             //2 STACK & GENERATED ROWS FROM ABOVE DATA
             var padding = 1;//space between rows
@@ -1940,6 +1978,15 @@ namespace API
                     rowHtml += rect;
                 }
 
+                //add in "Summary" label above row
+                float aboveRow = yAxis - singleRowHeight - padding;
+                rowHtml += $@"
+                    <g transform=""matrix(1, 0, 0, 1, 0, {aboveRow})"">
+				        <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""68"" height=""15"" rx=""2"" ry=""2""/>
+				        <text style=""fill:#FFFFFF; font-size:11px; font-weight:400;"" x=""16"" y=""11"">Summary</text>
+				        <path transform=""matrix(0.045, 0, 0, 0.045, -14, -4)"" fill=""#fff"" d=""M437 122c-15 2-26 5-38 10-38 16-67 51-75 91-4 17-4 36 0 54 10 48 47 86 95 98 11 2 15 3 30 3s19-1 30-3c48-12 86-50 96-98 3-18 3-37 0-54-10-47-48-86-95-98-10-2-16-3-29-3h-14zm66 59c2 2 3 3 4 6s1 17 0 20c-2 7-11 9-15 2-1-2-1-3-1-7v-5h-37-37s8 11 18 23l21 25c1 2 1 5 1 7-1 1-10 13-21 26l-19 24c0 1 13 1 37 1h37v-5c0-6 1-9 5-11 5-2 11 1 11 8 1 1 1 6 1 10-1 7-1 8-2 10s-3 4-7 4h-52-50l-2-1c-4-3-5-7-3-11 0 0 11-14 24-29l22-28-22-28c-13-16-24-29-24-30-2-3-1-7 2-9 2-3 2-3 55-3h51l3 1z"" stroke=""none"" fill-rule=""nonzero""/>
+			        </g>";
+
                 //return compiled rects as 1 row in a group for easy debugging & edits
                 rowHtml = $"<g id=\"SummaryRow\">{rowHtml}</g>";
                 return rowHtml;
@@ -1972,61 +2019,6 @@ namespace API
             }
 
 
-
-            //TODO marked for deletion
-            string GenerateSingleEventRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, int rowHeight, string eventType)
-            {
-                //generate the row for each time slice
-                var rowHtml = "";
-                var horizontalPosition = 0; //distance from left
-                var prevEventName = EventName.EmptyEvent;
-
-                //generate 1px (rect) per time slice
-                foreach (var slice in timeSlices)
-                {
-                    //get event that occurred at this time slice
-                    //if more than 1 event raise alarm, since 1px (rect) is equal to 1 event at a time 
-                    var foundEventList = eventList.FindAll(tempEvent => tempEvent.IsOccurredAtTime(slice));
-                    if (foundEventList.Count > 1) throw new Exception("Only 1 event in 1 time slice!");
-                    var foundEvent = foundEventList.Any() ? foundEventList[0] : Event.Empty; //if no event exist use empty event as filler todo maybe filler not needed
-
-                    //if current event is different than event has changed, so draw a black line
-                    var isNewEvent = prevEventName != foundEvent.Name;
-                    var borderRoomAvailable = daysPerPixel <= 10; //above 10px/day borders look ugly
-                    var color = isNewEvent && borderRoomAvailable ? "black" : GetEventColor(foundEvent?.Nature);
-                    prevEventName = foundEvent.Name;
-
-                    //only if event is not empty
-                    if (foundEvent.Name != EventName.EmptyEvent)
-                    {
-                        //generate and add to row
-                        //the hard coded attribute names used here are used in App.js
-                        var rect = $"<rect " +
-                                   $"eventname=\"{foundEvent?.FormattedName}\" " +
-                                   $"age=\"{inputPerson.GetAge(slice)}\" " +
-                                   $"stdtime=\"{slice.GetStdDateTimeOffset():dd/MM/yyyy}\" " + //show only date
-                                   $"x=\"{horizontalPosition}\" " +
-                                   $"width=\"{widthPerSlice}\" " +
-                                   $"height=\"{rowHeight}\" " +
-                                   $"fill=\"{color}\" />";
-
-                        rowHtml += rect;
-                    }
-
-                    //set position for next element
-                    horizontalPosition += widthPerSlice;
-
-                }
-
-                //wrap all the rects inside a svg so they can me moved together
-                //svg tag here acts as group, svg nesting
-                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
-
-
-                return rowHtml;
-            }
-
-
             //height not known until generated
             //returns the final dynamic height of this event row
             string GenerateMultipleRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int finalHeight)
@@ -2056,7 +2048,7 @@ namespace API
                         //var isNewEvent = prevEventName != foundEvent.Name;
                         //var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
                         //prevEventName = foundEvent.Name;
-                        var color = GetEventColor(foundEvent?.Nature);
+                        var color = GetColor(foundEvent?.Nature);
 
                         //generate and add to row
                         //the hard coded attribute names used here are used in App.js
@@ -2122,28 +2114,6 @@ namespace API
                 return rowHtml;
             }
 
-            //todo need to unify event color
-            // Get dasa color based on nature & number of events
-            string GetEventColor(EventNature? eventNature)
-            {
-                var colorId = "blue";
-
-                //set color id based on nature
-                switch (eventNature)
-                {
-                    case EventNature.Good:
-                        colorId = "green";
-                        break;
-                    case EventNature.Neutral:
-                        colorId = "grey";
-                        break;
-                    case EventNature.Bad:
-                        colorId = "red";
-                        break;
-                }
-
-                return colorId;
-            }
         }
 
         private static byte[] StreamToByteArray(Stream input)

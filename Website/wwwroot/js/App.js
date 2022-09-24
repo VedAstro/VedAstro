@@ -593,7 +593,7 @@ var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('On
 async function onMouseMoveDasaViewEventHandler(mouse) {
 
     //get relative position of mouse in Dasa view
-    var mousePosition = GetMousePositionInElement(mouse, "#DasaViewHolder");
+    var mousePosition = GetMousePositionInElement(mouse, "#EventChartHolder");
 
     //if mouse is out of dasa view hide cursor and end here
     if (mousePosition == 0) { $("#CursorLine").hide(); return; }
@@ -624,6 +624,8 @@ function LoadEventDescription(event, eventName) {
     //fill description box about event
     getEventDescription(eventName.replace(/ /g, ""))
         .then((eventDesc) => {
+            //if no description than hide box & end here
+            if (!eventDesc) { window.showDescription = false; return; }
             var wrappedDescText = createSVGtext(eventDesc, 175, 24);
             $("#CursorLineLegendDescription").empty(); //clear previous desc
             $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
@@ -650,7 +652,7 @@ function autoUpdateTimeLegend(mousePosition) {
     //use the mouse position to get all dasa rect
     //dasa elements at same X position inside the dasa svg
     //note: faster and less erroneous than using mouse.path
-    var children = $("#DasaViewHolder").children();
+    var children = $("#EventChartHolder").children();
     var allElementsAtX = children.find(`[x=${mouseRoundedX}]`);
 
     //template used to generate legend rows
@@ -664,7 +666,7 @@ function autoUpdateTimeLegend(mousePosition) {
     var goodCount = 0;
     var badCount = 0;
     var yAxis = 0;
-    var showDescription = false;//default description not shown
+    window.showDescription = false;//default description not shown
     //extract event data out and place it in legend
     allElementsAtX.each(function () {
 
@@ -688,13 +690,23 @@ function autoUpdateTimeLegend(mousePosition) {
             var newTimeLegend = $(holderTemplateId).clone();
             newTimeLegend.removeAttr('id'); //remove the clone template id
             newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
-            newTimeLegend.appendTo("#CursorLine"); //place new legend into parent
+            newTimeLegend.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
             newTimeLegend.show();//make cloned visible
             newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis - 15})`); //above 1st row
-            var stdTime = this.getAttribute("stdtime");
+            //split time to remove timezone from event
+            var stdTimeFull = this.getAttribute("stdtime");
+            var stdTimeSplit = stdTimeFull.split(" ");
+            var hourMin = stdTimeSplit[0];
+            var date = stdTimeSplit[1];
+            var timezone = stdTimeSplit[2];
             var age = this.getAttribute("age");
-            newTimeLegend.children("text").text(`${stdTime} - AGE ${age}`);
-            newTimeLegend.children("circle").hide();
+            newTimeLegend.children("text").text(`${hourMin} ${date}  AGE: ${age}`);
+            //replace circle with clock icon
+            newTimeLegend.children("use").attr("xlink:href","#CursorLineClockIcon");
+
+
+            //refresh SVG to show appended circle
+            //$("#DasaViewBox").html($("#DasaViewBox").html());
         }
 
         //3 GENERATE EVENT ROW
@@ -702,14 +714,14 @@ function autoUpdateTimeLegend(mousePosition) {
         var newLegendRow = $(holderTemplateId).clone();
         newLegendRow.removeAttr('id'); //remove the clone template id
         newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
-        newLegendRow.appendTo("#CursorLine"); //place new legend into parent
+        newLegendRow.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
         newLegendRow.show();//make cloned visible
         //position the group holding the legend over the event row which the legend represents
         newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis})`);
 
         //set event name text & color element
         var textElm = newLegendRow.children("text");
-        var circleElm = newLegendRow.children("circle");
+        var circleElm = newLegendRow.children("use");
         textElm.text(`${eventName}`);
         circleElm.attr("fill", `${color}`);
 
@@ -723,11 +735,13 @@ function autoUpdateTimeLegend(mousePosition) {
 
         //if mouse is in event's row then highlight that row
         if (mouseWithinRow) {
-            //highlight event name row 
-            textElm.css("fill", "red");
-            textElm.css("font-weight", "600");
+            //highlight event name row
+            var backgroundElm = newLegendRow.children("rect");
+            backgroundElm.css("fill", "white");
+            textElm.css("fill", "black");
+            textElm.css("font-weight", "700");
             //if mouse within show description box
-            showDescription = true;
+            window.showDescription = true;
         }
 
         //if mouse within row AND the event has changed
@@ -748,7 +762,7 @@ function autoUpdateTimeLegend(mousePosition) {
     });
 
     //auto show/hide description box based on mouse position
-    if (showDescription) {
+    if (window.showDescription) {
         $("#CursorLineLegendDescriptionHolder").show();
     } else {
         $("#CursorLineLegendDescriptionHolder").hide();
@@ -762,15 +776,15 @@ function autoUpdateTimeLegend(mousePosition) {
     var newSummaryRow = $(holderTemplateId).clone();
     newSummaryRow.removeAttr('id'); //remove the clone template id
     newSummaryRow.addClass("CursorLineLegendClone"); //to delete it on next run
-    newSummaryRow.appendTo("#CursorLine"); //place new legend into parent
+    newSummaryRow.appendTo("#CursorLineLegendHolder"); //place new legend into parent
     newSummaryRow.show();//make cloned visible
     //position the group holding the legend over the event row which the legend represents
     newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis + 2 + 15})`);
 
     //set event name text & color element
     var textElm = newSummaryRow.children("text");
-    textElm.text(`Good:${goodCount} Bad:${badCount}`);
-    newSummaryRow.children("circle").hide();
+    textElm.text(`Good : ${goodCount} Bad : ${badCount}`);
+    newSummaryRow.children("use").hide();
 
 }
 
@@ -790,7 +804,7 @@ async function LoadEventDataListFile() {
 }
 
 //gets events from EventDataList.xml
-//and injects them into dasa view
+//for viewing in time legend
 async function getEventDescription(eventName) {
 
     //search for matching event name
@@ -803,7 +817,9 @@ async function getEventDescription(eventName) {
 
     var eventDescription = results.eq(0).children('Description').eq(0).text();
 
-    return eventDescription;
+    //remove tabs and new line to make easy detection of empty string
+    let cleaned = eventDescription.replace(/ {4}|[\t\n\r]/gm, '');
+    return cleaned;
 
 }
 

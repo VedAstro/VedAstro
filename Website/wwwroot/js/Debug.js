@@ -181,13 +181,6 @@ window.setElementStyleLeft = function (element, leftValue) {
     console.log(`JS: setElementStyleLeft : ${leftValue}`);
 };
 
-window.initDasaViewBoxVerticalLine = function () {
-    window.dasaViewHolder = document.querySelector('#DasaViewHolder');
-    window.dasaViewVerticaLine = document.querySelector('.vt');
-    console.log(`JS: initDasaViewBoxVerticalLine : window.dasaViewHolder : ${window.dasaViewHolder}`);
-    console.log(`JS: initDasaViewBoxVerticalLine : window.dasaViewVerticaLine : ${window.dasaViewVerticaLine}`);
-
-};
 
 window.saveYearDivUnderTimeCursor = function (referenceParent) {
     console.log(`JS: saveYearDivUnderTimeCursor`);

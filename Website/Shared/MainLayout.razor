@@ -217,8 +217,14 @@
         //using JS lib toggle the dark mode
         await _jsRuntime.InvokeVoidAsync("window.DarkMode.toggle");
 
-        //get value from JS and save it
+        //get value from JS and save it, for others if needed
         AppData.DarkMode = await _jsRuntime.InvokeAsync<bool>("window.DarkMode.isActivated");
+
+        //special for event chart, if exist on page change vis JS for instant correction
+        //note : this makes chart appear normal in dark/normal mode
+        var value = AppData.DarkMode ? "difference" : "normal";
+        await _jsRuntime.SetCss("#DasaViewBox", "mix-blend-mode", value);
+
     }
 }
 

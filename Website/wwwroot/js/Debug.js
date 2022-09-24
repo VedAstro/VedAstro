@@ -112,17 +112,21 @@ function isElementUnderElement(topElement, underElement) {
 //CALLED BY BLAZOR WRAPPER CLASS
 
 
-
 function getPropWrapper(element, propName) {
     console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);
     let propVal = $(element).prop(propName);
     return propVal;
 };
 
-
+//TODO NEED TO MOVE TO APP JS
 window.setPropWrapper = function (element, propName, propVal) {
     $(element).prop(propName, propVal);
     console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
+    return propVal;
+};
+window.setCssWrapper = function (element, propName, propVal) {
+    $(element).css(propName, propVal);
+    console.log(`JS: setCssWrapper : ${propName} : ${propVal}`);
     return propVal;
 };
 

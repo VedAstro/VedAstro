@@ -160,6 +160,9 @@ namespace Website
         //ACCESS BROWSERS LOCAL STORAGE
 
         public static async Task<string> GetProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeAsync<string>("getProperty", propName);
+        /// <summary>
+        /// Set data into browser local storage
+        /// </summary>
         public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value) => await jsRuntime.InvokeVoidAsync("setProperty", propName, value);
         public static async Task RemoveProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeVoidAsync("removeProperty", propName);
         /// <summary>
@@ -253,9 +256,21 @@ namespace Website
 
         public static async Task<double> AddWidthToEveryChild(this IJSRuntime jsRuntime, ElementReference element, double valueToAdd) => await jsRuntime.InvokeAsync<double>("addWidthToEveryChild", element, valueToAdd);
 
-        public static async Task<T> Prop<T>(this IJSRuntime jsRuntime, ElementReference element, string propName) => await jsRuntime.InvokeAsync<T>("getPropWrapper", element, propName);
+        public static async Task<T> GetProp<T>(this IJSRuntime jsRuntime, ElementReference element, string propName) => await jsRuntime.InvokeAsync<T>("getPropWrapper", element, propName);
 
+        /// <summary>
+        /// wrapper for JQuery .prop() 
+        /// </summary>
         public static async Task SetProp(this IJSRuntime jsRuntime, ElementReference element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
+        /// <summary>
+        /// wrapper for JQuery .prop() 
+        /// </summary>
+        public static async Task SetProp(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
+        
+        /// <summary>
+        /// wrapper for JQuery .css() 
+        /// </summary>
+        public static async Task SetCss(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setCssWrapper", element, propName, propVal);
 
         public static void OpenNewTab(this IJSRuntime jsRuntime, string url) => jsRuntime.InvokeVoidAsync("open", url, "_blank");
 

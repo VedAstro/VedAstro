@@ -150,11 +150,31 @@ namespace Website
         /// <summary>
         /// Uses tooltip lib to attach tooltip to an element via selector or blazor reference  
         /// </summary>
-        public static async Task Tippy(this IJSRuntime jsRuntime, object elementRef, object tooltipData) =>
-            await jsRuntime.InvokeVoidAsync("tippy", elementRef, tooltipData);
-        public static async Task Tippy(this IJSRuntime jsRuntime, string cssSelector, object tooltipData) =>
-            await jsRuntime.InvokeVoidAsync("tippy", cssSelector, tooltipData);
+        public static async Task Tippy(this IJSRuntime jsRuntime, object elementRef, object tooltipData)
+        {
+            try
+            {
+                await jsRuntime.InvokeVoidAsync("tippy", elementRef, tooltipData);
+            }
+            catch (Exception e)
+            {
+                //not important ignore if fail
+                Console.WriteLine("BLZ: Tippy Silent Fail!");
+            }
+        }
 
+        public static async Task Tippy(this IJSRuntime jsRuntime, string cssSelector, object tooltipData)
+        {
+            try
+            {
+                await jsRuntime.InvokeVoidAsync("tippy", cssSelector, tooltipData);
+            }
+            catch (Exception e)
+            {
+                //not important ignore if fail
+                Console.WriteLine("BLZ: Tippy Silent Fail!");
+            }
+        }
 
 
         //ACCESS BROWSERS LOCAL STORAGE

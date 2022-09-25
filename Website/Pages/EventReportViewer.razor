@@ -37,6 +37,9 @@
         //attach mouse handler to auto move cursor line & update time legend
         await _jsRuntime.InvokeVoidAsync("LoadEventDataListFile"); //load event description file 1st
         await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
+        
+        //attach handler to auto hide time legend
+        await _jsRuntime.AddEventListener("#EventChartHolder", "mouseleave", "onMouseLeaveEventChart");
 
         //init touch for the dasa chart
         await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);

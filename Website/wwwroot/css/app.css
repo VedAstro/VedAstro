@@ -81,15 +81,15 @@ a, .btn-link {
 
 /*modify bootstrap tabs for whole website*/
 .nav .nav-item button {
-    background: #f5f9fd;
-    color: #495057; /*so that button is not blue*/
+    background: #f5f9fd !important;
+    color: #495057 !important; /*so that button is not blue*/
 }
 #myTabContent {
-    background: #f5f9fd;
+    background: #f5f9fd !important;
 }
 
 /*make selected tab words bold*/
 .nav .nav-item .active {
-    font-weight: bold;
+    font-weight: bold !important;
 }
 

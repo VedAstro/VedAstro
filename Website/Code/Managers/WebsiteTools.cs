@@ -121,7 +121,11 @@ namespace Website
 
             //extract out the timezone offset
             var offsetSeconds = double.Parse(timeZoneResponseXml?.Element("raw_offset")?.Value);
-            var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromSeconds(offsetSeconds)).ToString("zzz");
+            //offset needs to be "whole" minutes, else fail
+            //purposely hard cast to int to remove not whole minutes
+            var notWhole = TimeSpan.FromSeconds(offsetSeconds).TotalMinutes;
+            var offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole)); 
+            var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
 
             return parsedOffsetString;
 

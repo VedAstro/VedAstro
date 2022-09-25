@@ -588,6 +588,12 @@ var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('On
 //██▄ ▀▄▀ ██▄ █░▀█ ░█░   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄
 
 
+//on mouse leave event chart, auto hide time legend
+//attached by Blazor
+async function onMouseLeaveEventChart(mouse) {
+    $("#CursorLine").hide();
+}
+
 //fired when mouse moves over dasa view box
 //used to auto update cursor line & time legend
 async function onMouseMoveDasaViewEventHandler(mouse) {

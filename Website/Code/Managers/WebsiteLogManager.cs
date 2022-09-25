@@ -219,7 +219,7 @@ namespace Website
             var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
             var originUrlXml = new XElement("OriginUrl", AppData.OriginUrl);
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
-            var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation,null,"Location");
+            var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, null, "Location");
             var visitorElement = new XElement("Visitor");
             visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
 
@@ -247,12 +247,22 @@ namespace Website
         /// </summary>
         private static async Task SendLogToServer(XElement visitorElement)
         {
-            //send to API for save keeping
-            //note:js runtime passed as null, so no internet checking done
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddVisitorApi, visitorElement, null);
+            try
+            {
+                //send to API for save keeping
+                //note:js runtime passed as null, so no internet checking done
+                var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddVisitorApi, visitorElement, null);
+                
+                //check result, display error if needed
+                if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }
 
-            //check result, display error if needed
-            if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }
+            }
+            catch (Exception e)
+            {
+                //not important if fail, keep quite
+                Console.WriteLine("BLZ: SendLogToServer Silent Fail");
+            }
+
 
         }
 

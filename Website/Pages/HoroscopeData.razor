@@ -55,8 +55,7 @@
         //only continue if passed input field validation
         if (!await ValidationPassed()) { return; }
 
-        _jsRuntime.ShowLoading();
-        await Task.Delay(450); //little delay for loading to pop
+       await _jsRuntime.ShowLoading();
 
         //hide on second calculate
         _isResultReady = false;

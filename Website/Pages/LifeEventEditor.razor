@@ -46,7 +46,7 @@
     public async Task SetData(List<LifeEvent> lifeEventList)
     {
         //show loading message
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly

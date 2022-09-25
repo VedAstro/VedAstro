@@ -75,8 +75,7 @@ else
 
     private async Task GenerateTable()
     {
-        _jsRuntime.ShowLoading();
-        await Task.Delay(250);
+       await _jsRuntime.ShowLoading();
 
         _isReady = false;
 

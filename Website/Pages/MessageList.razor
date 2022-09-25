@@ -48,7 +48,7 @@
 
     private async Task _OnInitialized()
     {
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //get all message list from API server
         var rawDoc = await ServerManager.ReadFromServerXmlReply(ServerManager.GetMessageList, _jsRuntime);

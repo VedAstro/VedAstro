@@ -280,8 +280,7 @@
         //only continue if passed input field validation
         if (!ValidationPassed()) { return; }
 
-        _jsRuntime.ShowLoading();
-        await Task.Delay(200); //time for alert to pop
+       await _jsRuntime.ShowLoading();
 
         //mark page as NOT ready (when button clicked 2nd time)
         _isResultReady = false;
@@ -309,7 +308,7 @@
         //only continue if passed input field validation
         if (!ValidationPassedEasy()) { return; }
 
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
         await Task.Delay(300); //time for alert to pop
 
         //mark page as NOT ready (when button clicked 2nd time)

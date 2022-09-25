@@ -123,7 +123,7 @@ namespace Website
         /// Shows loading box with auto progress bar using sweetalert
         /// note: hide using HideAlert()
         /// </summary>
-        public static void ShowLoading(this IJSRuntime jsRuntime)
+        public static async Task ShowLoading(this IJSRuntime jsRuntime)
         {
 
             var alertData = new
@@ -139,7 +139,11 @@ namespace Website
 
             };
 
+            //don't wait here
             jsRuntime.ShowAlert(alertData);
+
+            //needed time to pop
+            await Task.Delay(500);
         }
 
         public static void HideLoading(this IJSRuntime jsRuntime) => jsRuntime.HideAlert();

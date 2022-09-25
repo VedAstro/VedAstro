@@ -86,7 +86,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //get all people from API server
         rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id, _jsRuntime);
@@ -177,7 +177,7 @@
 
     private async Task FilterByUserId(string? userId)
     {
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //set selected user id for display & deleting
         _selectedUserId = userId;
@@ -196,7 +196,7 @@
 
     private async Task FilterByVisitorId(string? visitorId)
     {
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //set selected user id for display & deleting
         _selectedVisitorId = visitorId;

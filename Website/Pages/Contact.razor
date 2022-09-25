@@ -51,7 +51,7 @@
     private async Task SendMessage()
     {
         //loading box show
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
     //package message data to be sent
         var textXml = new XElement("Text", _messageInput);

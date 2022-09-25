@@ -153,11 +153,15 @@
 
     private async Task _SearchButtonClicked()
     {
+       await _jsRuntime.ShowLoading();
+
         //if no search text means reset (no filter applied)
         if (_searchInput == "") { _filteredHoroscopePredictions = _horoscopePredictions.ToList(); return; }
 
         //else search by text
         _filteredHoroscopePredictions = _horoscopePredictions.FindAll(x => x.Contains(_searchInput));
+
+        _jsRuntime.HideLoading();
     }
 
 
@@ -185,8 +189,7 @@
         //only continue if passed input field validation
         if (!await ValidationPassed()) { return; }
 
-        _jsRuntime.ShowLoading();
-        await Task.Delay(200); //todo move to inside loading box
+       await _jsRuntime.ShowLoading();
 
         _isReady = false;
 

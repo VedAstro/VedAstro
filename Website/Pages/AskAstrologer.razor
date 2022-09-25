@@ -92,7 +92,7 @@
         if (!ValidationPassed()) { return; }
 
         //loading box show
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //package message data to be sent
         var detailsXml = new XElement("Details", _detailsInput);

@@ -467,7 +467,7 @@
     {
 
         //show loading box
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //show names on page
         MaleName = (await WebsiteTools.GetPersonFromHash(maleHash, _jsRuntime)).Name;

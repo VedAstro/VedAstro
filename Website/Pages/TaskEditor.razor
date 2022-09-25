@@ -97,7 +97,7 @@
 
     private async Task OnClickSubmit(MouseEventArgs obj)
     {
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //pack details from input together
         _websiteTask.Name = _name;

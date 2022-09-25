@@ -132,7 +132,7 @@ else
     /// </summary>
     public async Task Search(string searchText)
     {
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //only load the xml files if not yet loaded
         if (!filesLoaded) { await LoadFiles(); }

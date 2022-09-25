@@ -75,8 +75,7 @@
     {
 
         //show loading box
-        _jsRuntime.ShowLoading();
-        await Task.Delay(200); //delay for alert to pop
+       await _jsRuntime.ShowLoading();
 
         //check if people list already loaded before
         AppData.PersonList ??= await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);

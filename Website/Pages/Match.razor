@@ -40,7 +40,7 @@
         if (firstRender)
         {
             //show loading box
-            _jsRuntime.ShowLoading();
+           await _jsRuntime.ShowLoading();
 
             //get male list from api server & save it for later
             //_malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(AppData.CurrentUser?.Id));

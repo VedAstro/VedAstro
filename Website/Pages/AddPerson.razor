@@ -63,7 +63,7 @@
     //sends the newly created person to API server
     private async Task _OnClickSubmitButton()
     {
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //auto set correct Timezone based on location & birth date
         _timeInput.TimeZone = await WebsiteTools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), await _timeInput.GetDateTimeOffset(), _jsRuntime);

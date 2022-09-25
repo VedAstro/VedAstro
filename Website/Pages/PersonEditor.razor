@@ -247,7 +247,7 @@
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { return; }
 
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //make a new person from the details in the input
         _person = await GetPersonInstanceFromInput();
@@ -380,7 +380,7 @@
         if (!(await IsValidationPassed())) { return; }
 
         //show loading message
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //make a new person from the details in the input
         _person = await GetPersonInstanceFromInput();
@@ -405,7 +405,7 @@
     private async Task _OnClickDeleteButton()
     {
         //show loading message
-        _jsRuntime.ShowLoading();
+       await _jsRuntime.ShowLoading();
 
         //tell API to delete person, using hash as id
         await WebsiteTools.DeletePerson(_originalPersonHash, _jsRuntime);

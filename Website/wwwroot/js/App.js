@@ -702,7 +702,7 @@ function autoUpdateTimeLegend(mousePosition) {
             var age = this.getAttribute("age");
             newTimeLegend.children("text").text(`${hourMin} ${date}  AGE: ${age}`);
             //replace circle with clock icon
-            newTimeLegend.children("use").attr("xlink:href","#CursorLineClockIcon");
+            newTimeLegend.children("use").attr("xlink:href", "#CursorLineClockIcon");
 
 
             //refresh SVG to show appended circle
@@ -920,7 +920,6 @@ function DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venu
 
     var xValues = ["Sun", "Moon", "Mercury", "Mars", "Jupiter", "Saturn", "Venus"];
     var yValues = [sun, moon, mercury, mars, jupiter, saturn, venus];
-    var barColors = ["red", "green", "blue", "orange", "brown", "orange", "brown"];
 
     //this chart elm ID is hard coded in Blazor
     //note: stored in window so that can delete it on redraw
@@ -957,6 +956,7 @@ function DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venu
                 ]
             },
             options: {
+                animation: false,// disables all animations
                 scales: {
                     y: {
                         min: round(Math.min.apply(this, yValues) - 50),
@@ -1041,6 +1041,7 @@ function DrawHouseStrengthChart(_house1,
                 ]
             },
             options: {
+                animation: false,// disables all animations
                 scales: {
                     y: {
                         min: round(Math.min.apply(this, yValues) - 50),

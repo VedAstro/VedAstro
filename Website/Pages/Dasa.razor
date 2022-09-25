@@ -229,13 +229,16 @@
         //only continue if passed input field validation
         if (!ValidationPassed()) { return; }
 
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
         //mark page as NOT ready (when button clicked 2nd time)
         _isResultReady = false;
 
         //get data from inputs and save it for use by other components
         SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
+
+        //put person name into tab title for easy multi-tabbing
+        await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
 
 
         //set data into dasa viewer
@@ -269,7 +272,7 @@
         //only continue if passed input field validation
         if (!EasyValidationPassed()) { return; }
 
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
         //mark page as NOT ready (when button clicked 2nd time)
         _isResultReady = false;
@@ -277,6 +280,8 @@
         //get data from inputs and save it for use by other components
         SelectedPerson = _easyPeopleSelectorBox.GetSelectedPerson();
 
+        //put person name into tab title for easy multi-tabbing
+        await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
 
         //set data into dasa viewer
         dynamic timeRange = AutoCalculateTimeRange();

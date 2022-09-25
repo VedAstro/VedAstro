@@ -124,6 +124,11 @@ window.setPropWrapper = function (element, propName, propVal) {
     console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
     return propVal;
 };
+window.setAttrWrapper = function (element, propName, propVal) {
+    $(element).attr(propName, propVal);
+    console.log(`JS: setAttrWrapper : ${propName} : ${propVal}`);
+    return propVal;
+};
 window.setCssWrapper = function (element, propName, propVal) {
     $(element).css(propName, propVal);
     console.log(`JS: setCssWrapper : ${propName} : ${propVal}`);

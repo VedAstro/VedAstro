@@ -67,6 +67,14 @@ function showWrapper(element) {
     $(element).show();
 };
 
+function setTitleWrapper(newTitle) {
+    console.log(`JS: showWrapper`);
+    //this has to be done like this for it to work
+    $(function () {
+        $(document).attr("title", newTitle);
+    });
+};
+
 //Jquery to hide inputed element
 //by class and ID (CSS selector)
 function hideWrapper(element) {

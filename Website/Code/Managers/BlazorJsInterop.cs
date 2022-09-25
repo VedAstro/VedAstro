@@ -196,6 +196,11 @@ namespace Website
             => await jsRuntime.InvokeVoidAsync("watchProperty", DotNetObjectReference.Create(instance), handlerName);
 
 
+        /// <summary>
+        /// Sets new page/tab title
+        /// </summary>
+        public static async Task SetTitle(this IJSRuntime jsRuntime, string newTitle) => await jsRuntime.InvokeVoidAsync("setTitleWrapper", newTitle);
+
 
 
         //█▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
@@ -290,6 +295,11 @@ namespace Website
         /// wrapper for JQuery .prop() 
         /// </summary>
         public static async Task SetProp(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
+
+        /// <summary>
+        /// wrapper for JQuery .attr() 
+        /// </summary>
+        public static async Task SetAttr(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setAttrWrapper", element, propName, propVal);
         
         /// <summary>
         /// wrapper for JQuery .css() 

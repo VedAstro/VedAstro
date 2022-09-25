@@ -71,10 +71,11 @@
                     <td scope="row">
                         <b style="font-size: 22px;">@prediction.FormattedName</b>
                         <p style="margin: 0px; font-size: 15px;">@prediction.Description</p>
-                        <button 
-                            type="button" 
-                            @onclick="@(() => _jsRuntime.InvokeVoidAsync("scrollToDiv", @prediction.Name.ToString()))" 
-                            class="btn btn-sm btn-outline-primary my-1">More Info</button>
+                        <button type="button"
+                        @onclick="@(() => _jsRuntime.InvokeVoidAsync("scrollToDiv", @prediction.Name.ToString()))"
+                        class="btn btn-sm btn-outline-primary my-1">
+                            More Info
+                        </button>
                     </td>
 
                     <td>
@@ -467,11 +468,14 @@
     {
 
         //show loading box
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
         //show names on page
         MaleName = (await WebsiteTools.GetPersonFromHash(maleHash, _jsRuntime)).Name;
         FemaleName = (await WebsiteTools.GetPersonFromHash(femaleHash, _jsRuntime)).Name;
+
+        //put person name into tab title for easy multi-tabbing
+        await _jsRuntime.SetTitle($"{MaleName} + {FemaleName}");
 
         //get report from server
         var rootXml = new XElement("Root", new XElement("MaleHash", maleHash), new XElement("FemaleHash", femaleHash));

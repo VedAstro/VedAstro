@@ -7,7 +7,7 @@
 
 <PageTitle>Horoscope</PageTitle>
 <PageTop Title="Horoscope" IconName="fluent:book-star-20-filled">
-    <Description>Astrological predictions of a person's horoscope.<br/>Over +370 planetary combinations are checked.</Description>
+    <Description>Astrological predictions of a person's horoscope.<br />Over +370 planetary combinations are checked.</Description>
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
         <IconButton IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
@@ -40,13 +40,13 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
-                    <Icon IconName="majesticons:scroll-text-line"/>
+                    <Icon IconName="majesticons:scroll-text-line" />
                     Prediction
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                    <Icon IconName="bi:clipboard-data-fill"/>
+                    <Icon IconName="bi:clipboard-data-fill" />
                     Data
                 </button>
             </li>
@@ -64,33 +64,33 @@
                     @*LIST OF PREDICTIONS*@
                     <table class="table table-bordered table-striped table-hover">
                         <thead class="table-dark">
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th style="min-width: 123px;">Info</th>
-                        </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th style="min-width: 123px;">Info</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @foreach (var prediction in _filteredHoroscopePredictions)
-                        {
-                            <tr>
-                                <td>@prediction.FormattedName</td>
-                                <td>@prediction.Description</td>
-                                <td>@prediction.Info</td>
-                            </tr>
-                        }
+                            @foreach (var prediction in _filteredHoroscopePredictions)
+                            {
+                                <tr>
+                                    <td>@prediction.FormattedName</td>
+                                    <td>@prediction.Description</td>
+                                    <td>@prediction.Info</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
-            
+
             @*DATA CHART*@
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div class="vstack gap-3">
 
-                    <StrengthChart Time="@SelectedPerson.BirthTime" />
+                    <StrengthChart Time="@_selectedPerson.BirthTime" />
                     <hr>
-                    <PlanetHouseInfoViewer Time="@SelectedPerson.BirthTime" />
+                    <PlanetHouseInfoViewer Time="@_selectedPerson.BirthTime" />
 
                 </div>
             </div>
@@ -110,7 +110,7 @@
                 planets concerned. For example, predictions involving planets with
                 high strength (Bhava Bala), is often accurate.
             </p>
-            
+
             <h4 class="fw-bold">Where are these predictions from?</h4>
             <p class="text-justify mb-4" style="max-width:@AppData.MaxWidth;">
                 Prediction data come from books by renowned astrologer B.V. Raman.
@@ -129,7 +129,7 @@
     private List<HoroscopePrediction>? _horoscopePredictions;
     private List<HoroscopePrediction>? _filteredHoroscopePredictions;
     private string _searchInput = "";
-    private Person SelectedPerson;
+    private Person _selectedPerson;
 
     private PageHelpSection _helpSection;
 
@@ -153,7 +153,7 @@
 
     private async Task _SearchButtonClicked()
     {
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
         //if no search text means reset (no filter applied)
         if (_searchInput == "") { _filteredHoroscopePredictions = _horoscopePredictions.ToList(); return; }
@@ -189,15 +189,19 @@
         //only continue if passed input field validation
         if (!await ValidationPassed()) { return; }
 
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
+        //hide data while loading
         _isReady = false;
 
         //get person from person dropdown
-        SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
+        _selectedPerson = _peopleSelectorBox.GetSelectedPerson();
+
+        //put person name into tab title for easy multi-tabbing
+        await _jsRuntime.SetTitle($"Horoscope | {_selectedPerson.Name}");
 
         //get horoscope predictions from API server
-        var personHashXml = new XElement("PersonHash", SelectedPerson.Hash);
+        var personHashXml = new XElement("PersonHash", _selectedPerson.Hash);
         var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetHoroscope, personHashXml, _jsRuntime);
 
         //parse xml horoscope predictions

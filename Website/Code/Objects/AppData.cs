@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Website.Pages;
 
 namespace Website
@@ -10,6 +11,7 @@ namespace Website
     /// </summary>
     public static class AppData
     {
+        //-----------------------------FIELDS
 
         public static int FailureCount = 0;
 
@@ -18,7 +20,6 @@ namespace Website
         /// </summary>
         public static MarkupString HinduPredictiveAstrologyCredit = new("<p class=\"fst-italic fw-light\"><small>(Source Credit: Hindu Predictive Astrology by B.V.Raman)</small></p>");
         public static MarkupString MuhurthaCredit = new("<p class=\"fst-italic fw-light\"><small>(Source Credit: Muhurtha by B.V.Raman)</small></p>");
-
 
         /// <summary>
         /// Represents the currently logged in User
@@ -44,6 +45,7 @@ namespace Website
         /// loaded in main layout
         /// </summary>
         public static List<XElement>? PredictionDataList { get; set; }
+        
         public static Stream? PredictionDataListStream { get; set; }
 
         /// <summary>
@@ -59,53 +61,9 @@ namespace Website
         public static List<XElement> ReferenceList { get; set; }
 
         public static SearchResult SearchPage { get; set; }
+        
         public static List<Person>? PersonList { get; set; }
-
-
-        //-----------------------------FIELDS
-
-
-        /// <summary>
-        /// Hard coded max width used in pages 
-        /// </summary>
-        public const string MaxWidth = "693px";
-        public const string MaxContentWidthPx = "443px";
-
-
-        /// <summary>
-        /// if data already loaded then return the that one,
-        /// else get a new one from server
-        /// </summary>
-        public static async Task<Stream?> GetPredictionDataStreamCached()
-        {
-            //return already loaded if available
-            if (AppData.PredictionDataListStream != null) return AppData.PredictionDataListStream;
-
-            //else get fresh copy from server
-            var client = new HttpClient();
-            client.BaseAddress = AppData.BaseAddres;
-            AppData.PredictionDataListStream = await client.GetStreamAsync("data/PredictionDataList.xml");
-            return AppData.PredictionDataListStream;
-        }
-
-        /// <summary>
-        /// Base address currently used by App,
-        /// could be http://localhost or https://vedastro.org
-        /// </summary>
-        public static Uri? BaseAddres;
-
-        public static async Task<List<XElement>?> GetPredictionDataListCached()
-        {
-            //return already loaded if available
-            if (AppData.PredictionDataList != null) return AppData.PredictionDataList;
-
-            //else get fresh copy from server
-            AppData.PredictionDataList = await WebsiteTools.GetXmlFile("data/PredictionDataList.xml");
-            return AppData.PredictionDataList;
-
-        }
-
-
+        
         /// <summary>
         /// If true new Visitor is first visit (theoretically)
         /// </summary>
@@ -122,5 +80,62 @@ namespace Website
         public static bool IsGuestUser => AppData.CurrentUser?.Id == UserData.Empty.Id;
 
         public static bool DarkMode { get; set; } = false;
+
+        /// <summary>
+        /// Hard coded max width used in pages 
+        /// </summary>
+        public const string MaxWidth = "693px";
+
+        public const string MaxContentWidthPx = "443px";
+        
+        /// <summary>
+        /// Base address currently used by App,
+        /// could be http://localhost or https://vedastro.org
+        /// </summary>
+        public static Uri? BaseAddress;
+
+
+        /// <summary>
+        /// if data already loaded then return the that one,
+        /// else get a new one from server
+        /// </summary>
+        public static async Task<Stream?> GetPredictionDataStreamCached()
+        {
+            //return already loaded if available
+            if (AppData.PredictionDataListStream != null) return AppData.PredictionDataListStream;
+
+            //else get fresh copy from server
+            var client = new HttpClient();
+            client.BaseAddress = AppData.BaseAddress;
+            AppData.PredictionDataListStream = await client.GetStreamAsync("data/PredictionDataList.xml");
+            return AppData.PredictionDataListStream;
+        }
+
+        public static async Task<List<XElement>?> GetPredictionDataListCached()
+        {
+            //return already loaded if available
+            if (AppData.PredictionDataList != null) return AppData.PredictionDataList;
+
+            //else get fresh copy from server
+            AppData.PredictionDataList = await WebsiteTools.GetXmlFile("data/PredictionDataList.xml");
+            return AppData.PredictionDataList;
+
+        }
+
+        /// <summary>
+        /// Gets currently set Dark Mode from JS lib and sets in AppData
+        /// </summary>
+        public static async Task UpdateDarkMode(IJSRuntime jsRuntime)
+        {
+            try
+            {
+                //get value from JS and save it, for others if needed
+                AppData.DarkMode = await jsRuntime.InvokeAsync<bool>("window.DarkMode.isActivated");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("BLZ: Update dark mode silent fail!");
+            }
+        }
     }
 }

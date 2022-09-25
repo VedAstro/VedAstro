@@ -17,9 +17,13 @@
         <label class="form-label">Event Name</label>
         <input @bind="_nameInput" type="text" class="form-control" placeholder="Marriage">
     </div>
-    <div>
+@*    <div>
         <label class="form-label">Description</label>
-        <input @bind="_descriptionInput" type="text" class="form-control" placeholder="Marriage did not last">
+        <input @bind="_descriptionInput" type="text" class="form-control" placeholder="">
+    </div>
+*@    <div class="form-floating">
+        <textarea @bind="_descriptionInput" class="form-control" placeholder="Marriage did not last" id="floatingTextarea2" style="height: 100px"></textarea>
+        <label for="floatingTextarea2">Description</label>
     </div>
     <label class="form-label">Nature</label>
     <select class="form-control" @bind="_natureInputValue" style="width: fit-content;min-width: 273px;">

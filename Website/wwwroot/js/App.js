@@ -680,8 +680,8 @@ function autoUpdateTimeLegend(mousePosition) {
         yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
 
         //count good and bad events for summary row
-        if (color === "red") { badCount++; }
-        if (color === "green") { goodCount++; }
+        if (color === "#FF0000") { badCount++; }
+        if (color === "#00FF00") { goodCount++; }
 
 
         //2 TIME & AGE LEGEND
@@ -779,12 +779,13 @@ function autoUpdateTimeLegend(mousePosition) {
     newSummaryRow.appendTo("#CursorLineLegendHolder"); //place new legend into parent
     newSummaryRow.show();//make cloned visible
     //position the group holding the legend over the event row which the legend represents
-    newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis + 2 + 15})`);
+    newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis + 1 + 15})`);
 
     //set event name text & color element
     var textElm = newSummaryRow.children("text");
-    textElm.text(`Good : ${goodCount} Bad : ${badCount}`);
-    newSummaryRow.children("use").hide();
+    textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
+    //change icon to summary icon
+    newSummaryRow.children("use").attr("xlink:href", "#CursorLineSumIcon");
 
 }
 

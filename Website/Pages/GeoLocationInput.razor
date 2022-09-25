@@ -204,7 +204,7 @@
             //alert user first with the wrong name
             var msg = $"The location \"{LocationName}\", not found!" +
                       $"\n Check spelling or try other nearby place.";
-            await _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            await _jsRuntime.ShowAlert("error", msg, true);
 
 
             //change to default location & try again to get coordinates

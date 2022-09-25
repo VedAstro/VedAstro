@@ -152,7 +152,7 @@
         AppData.CurrentPage = _navigation.Uri;
 
         //used later to create HTTP client with correct base address
-        AppData.BaseAddres = new Uri(_navigation.BaseUri);
+        AppData.BaseAddress = new Uri(_navigation.BaseUri);
 
         //get visitor ID if available
         AppData.VisitorId = await WebsiteTools.TryGetVisitorId(_jsRuntime);
@@ -217,8 +217,8 @@
         //using JS lib toggle the dark mode
         await _jsRuntime.InvokeVoidAsync("window.DarkMode.toggle");
 
-        //get value from JS and save it, for others if needed
-        AppData.DarkMode = await _jsRuntime.InvokeAsync<bool>("window.DarkMode.isActivated");
+        //get dark mode value and store it for use by event chart
+        await AppData.UpdateDarkMode(_jsRuntime);
 
         //special for event chart, if exist on page change vis JS for instant correction
         //note : this makes chart appear normal in dark/normal mode

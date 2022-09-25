@@ -547,7 +547,7 @@ namespace Website
             if (client == null)
             {
                 client = new HttpClient();
-                client.BaseAddress = AppData.BaseAddres;
+                client.BaseAddress = AppData.BaseAddress;
             }
 
             //load xml event data files before hand to be used quickly later for search

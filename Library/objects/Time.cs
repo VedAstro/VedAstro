@@ -410,5 +410,23 @@ namespace Genso.Astrology.Library
 
         public static bool operator <=(Time a, Time b) => a.GetStdDateTimeOffset() <= b.GetStdDateTimeOffset();
 
+        /// <summary>
+        /// Check if an inputed STD time string is valid,
+        /// returns default time if not parseable
+        /// </summary>
+        public static bool TryParseStd(string stdDateTimeText, out DateTimeOffset parsed)
+        {
+            try
+            {
+                parsed = DateTimeOffset.ParseExact(stdDateTimeText, Time.DateTimeFormat, null);
+                return true;
+            }
+            catch (Exception)
+            {
+               //failure for any reason, return false
+               parsed = new DateTimeOffset();
+               return false;
+            }
+        }
     }
 }

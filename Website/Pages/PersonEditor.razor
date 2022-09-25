@@ -282,18 +282,18 @@
             if (String.IsNullOrWhiteSpace(_nameInput))
             {
                 //mark invalid & alert user
-                _jsRuntime.ShowAlert("error", AlertText.NoName, true, timer: 0);
+                await _jsRuntime.ShowAlert("error", AlertText.NoName, true);
                 return false;
             }
 
             //TEST 2
             //check if time fields are parseable
-            var timeInputPassed = DateTimeOffset.TryParse(_timeInput.FullTimeString, out var parsedInputTime);
+            var timeInputPassed = Time.TryParseStd(_timeInput.FullTimeString, out var parsedInputTime);
             if (!timeInputPassed)
             {
                 //mark invalid & alert user
                 const string msg = $"Birth time is invalid, check date time format!";
-                _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+                await _jsRuntime.ShowAlert("error", msg, true);
                 return false;
             }
 
@@ -339,7 +339,7 @@
         {
             //mark invalid & alert user
             const string msg = $"Something went wrong, refresh page and try again!";
-            _jsRuntime.ShowAlert("error", msg, true, timer: 0);
+            await _jsRuntime.ShowAlert("error", msg, true);
             return false;
         }
 

@@ -1025,7 +1025,13 @@ namespace API
 
             //get now line position
             var nowLinePosition = GetLinePosition(timeSlices, startTime.StdTimeNowAtOffset);
-            compiledRow += GetNowLine(lineHeight, nowLinePosition);
+            var nowLineHeight = lineHeight + 6; //space between icon & last row
+            compiledRow += GetNowLine(nowLineHeight, nowLinePosition);
+
+            //5 WRAP IN GROUP
+            //place all content except border & cursor time legend inside group for padding
+            var contentPadding = 2;
+            compiledRow = $"<g class=\"EventChartContent\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledRow}</g>";
 
 
             //4 MAKE LIFE EVENTS
@@ -1033,14 +1039,9 @@ namespace API
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
             var inputOffset = startTime.GetStdDateTimeOffset().Offset;
-            var lifeEventHeight = lineHeight + 7; //give more space between life event and last row
+            var lifeEventHeight = lineHeight + 6; //space between icon & last row
             compiledRow += GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset);
 
-
-            //5 WRAP IN GROUP
-            //place all content except border & cursor time legend inside group for padding
-            var contentPadding = 2;
-            compiledRow = $"<g class=\"EventChartContent\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledRow}</g>";
 
 
             //6 MAKE CURSOR LINE
@@ -1175,6 +1176,7 @@ namespace API
                                 <g id=""CursorLineClockIcon"" fill=""#fff"" transform=""matrix(0.5, 0, 0, 0.5, 2, 3)"" width=""12"" height=""12"">
 				                    <path d=""M10 0a10 10 0 1 0 10 10A10 10 0 0 0 10 0zm2.5 14.5L9 11V4h2v6l3 3z""/>
 			                    </g>
+                                <path id=""CursorLineSumIcon"" transform=""matrix(0.045, 0, 0, 0.045, -14, -4)"" fill=""#fff"" d=""M437 122c-15 2-26 5-38 10-38 16-67 51-75 91-4 17-4 36 0 54 10 48 47 86 95 98 11 2 15 3 30 3s19-1 30-3c48-12 86-50 96-98 3-18 3-37 0-54-10-47-48-86-95-98-10-2-16-3-29-3h-14zm66 59c2 2 3 3 4 6s1 17 0 20c-2 7-11 9-15 2-1-2-1-3-1-7v-5h-37-37s8 11 18 23l21 25c1 2 1 5 1 7-1 1-10 13-21 26l-19 24c0 1 13 1 37 1h37v-5c0-6 1-9 5-11 5-2 11 1 11 8 1 1 1 6 1 10-1 7-1 8-2 10s-3 4-7 4h-52-50l-2-1c-4-3-5-7-3-11 0 0 11-14 24-29l22-28-22-28c-13-16-24-29-24-30-2-3-1-7 2-9 2-3 2-3 55-3h51l3 1z"" stroke=""none"" fill-rule=""nonzero""/>
                             </g>
 
                             <g id=""IBeam"">
@@ -1359,7 +1361,7 @@ namespace API
                           $"height:{svgTotalHeight}px;" +
                           $"background:{svgBackgroundColor};" +
                           $"\" " +//end of style tag
-                          $"xmlns=\"http://www.w3.org/2000/svg\">" +
+                          $"xmlns=\"http://www.w3.org/2000/svg\" " +
                           $"xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + //much needed for use tags to work
                           //$"<title>{chartTitle}</title>" + //title visible in browser when open direct
                           $"{combinedSvgString}</svg>";
@@ -1981,7 +1983,7 @@ namespace API
                 //add in "Summary" label above row
                 float aboveRow = yAxis - singleRowHeight - padding;
                 rowHtml += $@"
-                    <g transform=""matrix(1, 0, 0, 1, 0, {aboveRow})"">
+                    <g id=""SummaryLabel"" transform=""matrix(1, 0, 0, 1, 0, {aboveRow})"">
 				        <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""68"" height=""15"" rx=""2"" ry=""2""/>
 				        <text style=""fill:#FFFFFF; font-size:11px; font-weight:400;"" x=""16"" y=""11"">Summary</text>
 				        <path transform=""matrix(0.045, 0, 0, 0.045, -14, -4)"" fill=""#fff"" d=""M437 122c-15 2-26 5-38 10-38 16-67 51-75 91-4 17-4 36 0 54 10 48 47 86 95 98 11 2 15 3 30 3s19-1 30-3c48-12 86-50 96-98 3-18 3-37 0-54-10-47-48-86-95-98-10-2-16-3-29-3h-14zm66 59c2 2 3 3 4 6s1 17 0 20c-2 7-11 9-15 2-1-2-1-3-1-7v-5h-37-37s8 11 18 23l21 25c1 2 1 5 1 7-1 1-10 13-21 26l-19 24c0 1 13 1 37 1h37v-5c0-6 1-9 5-11 5-2 11 1 11 8 1 1 1 6 1 10-1 7-1 8-2 10s-3 4-7 4h-52-50l-2-1c-4-3-5-7-3-11 0 0 11-14 24-29l22-28-22-28c-13-16-24-29-24-30-2-3-1-7 2-9 2-3 2-3 55-3h51l3 1z"" stroke=""none"" fill-rule=""nonzero""/>

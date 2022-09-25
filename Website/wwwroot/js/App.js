@@ -680,8 +680,9 @@ function autoUpdateTimeLegend(mousePosition) {
         yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
 
         //count good and bad events for summary row
-        if (color === "#FF0000") { badCount++; }
-        if (color === "#00FF00") { goodCount++; }
+        var eventNatureName = "";// used later for icon color
+        if (color === "#FF0000") { eventNatureName = "Bad", badCount++; }
+        if (color === "#00FF00") { eventNatureName = "Good", goodCount++; }
 
 
         //2 TIME & AGE LEGEND
@@ -703,10 +704,6 @@ function autoUpdateTimeLegend(mousePosition) {
             newTimeLegend.children("text").text(`${hourMin} ${date}  AGE: ${age}`);
             //replace circle with clock icon
             newTimeLegend.children("use").attr("xlink:href", "#CursorLineClockIcon");
-
-
-            //refresh SVG to show appended circle
-            //$("#DasaViewBox").html($("#DasaViewBox").html());
         }
 
         //3 GENERATE EVENT ROW
@@ -721,9 +718,9 @@ function autoUpdateTimeLegend(mousePosition) {
 
         //set event name text & color element
         var textElm = newLegendRow.children("text");
-        var circleElm = newLegendRow.children("use");
+        var iconElm = newLegendRow.children("use");
         textElm.text(`${eventName}`);
-        circleElm.attr("fill", `${color}`);
+        iconElm.attr("xlink:href", `#CursorLine${eventNatureName}Icon`); //set icon color based on nature
 
         //4 GENERATE DESCRIPTION ROW LOGIC
         //check if mouse in within row of this event (y axis)

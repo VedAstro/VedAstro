@@ -1172,7 +1172,8 @@ namespace API
                         <g id=""CursorLine"" x=""0"" y=""0"">
                             <!--place where asset icons are stored-->
                             <g id=""CursorLineLegendIcons"" style=""display:none;"">
-                                <circle id=""CursorLineCircleIcon"" cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""red""></circle>
+                                <circle id=""CursorLineBadIcon"" cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""red""></circle>
+                                <circle id=""CursorLineGoodIcon"" cx=""6.82"" cy=""7.573"" r=""4.907"" fill=""green""></circle>
                                 <g id=""CursorLineClockIcon"" fill=""#fff"" transform=""matrix(0.5, 0, 0, 0.5, 2, 3)"" width=""12"" height=""12"">
 				                    <path d=""M10 0a10 10 0 1 0 10 10A10 10 0 0 0 10 0zm2.5 14.5L9 11V4h2v6l3 3z""/>
 			                    </g>
@@ -1187,7 +1188,8 @@ namespace API
 		                    <g id=""CursorLineLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
                                 <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
 			                    <text style=""fill:#FFFFFF; font-size:11px; font-weight:400; white-space: pre;"" x=""14"" y=""11"">Template</text>
-                                <use xlink:href=""#CursorLineCircleIcon""></use>                                
+                                <!--icon set dynamic by JS-->
+                                <use xlink:href=""""></use>                                
                             </g>
                             <!--place where dynamic event names are placed by JS-->
                             <g id=""CursorLineLegendHolder"" transform=""matrix(1, 0, 0, 1, 0, 4)""></g>

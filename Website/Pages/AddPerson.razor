@@ -63,7 +63,7 @@
     //sends the newly created person to API server
     private async Task _OnClickSubmitButton()
     {
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
         //auto set correct Timezone based on location & birth date
         _timeInput.TimeZone = await WebsiteTools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), await _timeInput.GetDateTimeOffset(), _jsRuntime);
@@ -86,9 +86,9 @@
 
         await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
 
-        //send user to person list page after period of time
-        await Task.Delay(100);
-        _navigation.NavigateTo(PageRoute.PersonList);
+        //wait a little and send user back to previous page
+        await Task.Delay(500);
+        _jsRuntime.GoBack();
 
     }
 

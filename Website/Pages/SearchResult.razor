@@ -132,7 +132,7 @@ else
     /// </summary>
     public async Task Search(string searchText)
     {
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
         //only load the xml files if not yet loaded
         if (!filesLoaded) { await LoadFiles(); }
@@ -143,6 +143,9 @@ else
 
         //show search text
         SearchText = searchText;
+
+        //put search text  into tab title for easy multi-tabbing
+        await _jsRuntime.SetTitle($"Search | {SearchText}");
 
         //search file
         foundPrediction = (await AppData.GetPredictionDataListCached()).Where(IsFound);

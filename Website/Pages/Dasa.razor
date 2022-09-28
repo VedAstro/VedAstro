@@ -426,6 +426,8 @@
 
     private async Task OnClickSavedTab()
     {
+        await _jsRuntime.ShowLoading();
+
         //reload list before showing
         //load a list of saved charts
         _allChartNameList = await _dasaChartViewer?.GetSavedChartNameList()!;
@@ -434,6 +436,8 @@
         {
             await _jsRuntime.ShowAlert("info", "No saved charts, click save chart first.", false, 3000);
         }
+        
+        _jsRuntime.HideLoading();
 
     }
 

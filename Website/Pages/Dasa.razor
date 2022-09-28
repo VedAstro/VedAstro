@@ -432,6 +432,7 @@
         //load a list of saved charts
         _allChartNameList = await _dasaChartViewer?.GetSavedChartNameList()!;
 
+        //if no saved charts let user know
         if (!_allChartNameList.Any())
         {
             await _jsRuntime.ShowAlert("info", "No saved charts, click save chart first.", false, 3000);

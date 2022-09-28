@@ -23,5 +23,6 @@ namespace Website
         public const string SelectEventType = "Select at least 1 Event Type!";
         public const string LoginFailed = "Login failed\nPlease try again";
         public const string FacebookLoginFail = "Error in OnFacebookSignInSuccessHandler where authResponse is null";
+        public const string NoSavedCharts = "No saved charts, calculate a chart and save it to view here.";
     }
 }

@@ -90,7 +90,11 @@
         {
             //google sign in code must be only loaded after
             //special google button has been rendered
-            await _jsRuntime.LoadJs(ServerManager.GoogleSignInJs);
+            await _jsRuntime.InvokeVoidAsync("loadJs", ServerManager.GoogleSignInJs);
+
+            //await _jsRuntime.LoadJs(ServerManager.GoogleSignInJs);
+            //await _jsRuntime.InvokeAsync<IJSObjectReference>
+            //    ("import", ServerManager.GoogleSignInJs);
 
             //makes this components instance available in JS,
             //to be used later when user clicks sign in button

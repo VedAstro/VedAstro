@@ -1,4 +1,4 @@
-﻿@using Genso.Astrology.Library
+@using Genso.Astrology.Library
 @using System.Xml.Linq
 @using Tools = Genso.Astrology.Library.Tools
 @using System.Text
@@ -11,33 +11,111 @@
     *@
     <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
 
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" @onchange="OnChangeLifeEventCheckBox" checked>
-        <label class="form-check-label" for="flexCheckChecked">Show Life Events</label>
+    @*bottom chart options row*@
+    <div class="d-flex">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" @onchange="OnChangeLifeEventCheckBox" checked>
+            <label class="form-check-label" for="flexCheckChecked">Show Life Events</label>
+        </div>
+        <IconButton IconName="entypo:save" OnClickCallback="OnClickSaveChart" />
     </div>
 </div>
 
 
 @code {
+    private Person SelectedPerson { get; set; }
 
     ElementReference _dasaViewBox;
+    public Time StartTime { get; set; }
+    public Time EndTime { get; set; }
+    public List<EventTag> InputedEventTags { get; set; }
 
+    /// <summary>
+    /// Raw SVG string of the latest chart
+    /// </summary>
+    string _finalSvg;
 
     /// <summary>
     /// Sets the data that is processed and fill the content
     /// </summary>
-    public async Task SetData(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
+    public async Task ShowChart(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
-        //auto calculate precision
-        var daysPerPixel = GetDayPerPixel(startTime, endTime);
-        await DrawReport(startTime, endTime, inputedEventTags, daysPerPixel);
+        //saved to be accessed later
+        SelectedPerson = person;
+        StartTime = startTime;
+        EndTime = endTime;
+        InputedEventTags = inputedEventTags;
 
-        //ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
+
+        //1 GENERATE CHART IN SVG FROM SERVER
+        //saved for later use by Chart Saver
+        _finalSvg = await GetDasaReportSvgFromApi(person, startTime, endTime, inputedEventTags);
+
+        //2 LOAD CHART INTO PAGE
+        await LoadChartIntoPage(_finalSvg);
+
+
+
+
+        //LOCAL FUNCTIONS
+
+
+        /// <summary>
+        /// Contacts API and gets Person Dasa Report in svg string
+        /// Note:
+        /// -previously used generate in blazor client,
+        ///  but for speed (10s gain) sake moved to server to do heavy lifting
+        /// </summary>
+        async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
+        {
+            //auto calculate precision
+            var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
+            //if not defined, use input
+            double daysPerPixelInput = 30;
+            daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
+
+
+            var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+            var startTimeXml = new XElement("StartTime", startTime.ToXml());
+            var endTimeXml = new XElement("EndTime", endTime.ToXml());
+            var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
+            var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
+            var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+            //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
+            var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml, _jsRuntime);
+
+            //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
+            // convert stream to string
+            svgStream.Position = 0; //reset position otherwise can be null value out
+            var reader = new StreamReader(svgStream);
+            var svgText = await reader.ReadToEndAsync();
+
+            return svgText;
+        }
+
+    }
+
+    /// <summary>
+    /// Given an SVG as string, it will inject it into page & attach
+    /// the needed JS handlers for animation
+    /// </summary>
+    private async Task LoadChartIntoPage(string rawSvgChart)
+    {
+
+        //inject new svg into page via JS for a more responsive progress update
+        //doing it in blazor, causes progress bar freeze while updating
+        await _jsRuntime.InjectIntoElement(_dasaViewBox, rawSvgChart);
+
+        //attach tooltip lib for life events
+        //note: needed on each draw
+        await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
+
+        //2 ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
 
         //attach mouse handler to auto move cursor line & update time legend
         await _jsRuntime.InvokeVoidAsync("LoadEventDataListFile"); //load event description file 1st
         await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
-        
+
         //attach handler to auto hide time legend
         await _jsRuntime.AddEventListener("#EventChartHolder", "mouseleave", "onMouseLeaveEventChart");
 
@@ -48,55 +126,8 @@
         //so that event chart is set properly
         await AppData.UpdateDarkMode(_jsRuntime);
 
-
         //needed to show changes to inputs
         StateHasChanged();
-
-
-        //LOCAL FUNCTIONS
-
-        async Task DrawReport(Time startTime, Time endTime, List<EventTag> inputedEventTags, double daysPerPixel = 0)
-        {
-            //generate dasa report in svg from server
-            double _daysPerPixelInput = 30;
-            _daysPerPixelInput = daysPerPixel != 0 ? daysPerPixel : _daysPerPixelInput; //if not defined, use input
-            var finalSvg = await GetDasaReportSvgFromApi(person, startTime, endTime, _daysPerPixelInput, inputedEventTags);
-
-            //inject new svg into page via JS for a more responsive progress update
-            //doing it in blazor, causes progress bar freeze while updating
-            await _jsRuntime.InjectIntoElement(_dasaViewBox, finalSvg);
-
-            //attach tooltip lib for life events
-            //note: needed on each draw
-            await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
-        }
-
-        /// <summary>
-        /// Contacts API and gets Person Dasa Report in svg string
-        /// Note:
-        /// -previously used generate in blazor client,
-        ///  but for speed (10s gain) sake moved to server to do heavy lifting
-        /// </summary>
-        async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
-        {
-
-            var personHashXml = new XElement("PersonHash", inputPerson.Hash);
-            var startTimeXml = new XElement("StartTime", startTime.ToXml());
-            var endTimeXml = new XElement("EndTime", endTime.ToXml());
-            var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixel);
-            var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
-            var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
-            //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-            var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml, _jsRuntime);
-
-            //todo just send as string to remove lags of using stream
-            // convert stream to string
-            svgStream.Position = 0; //reset position otherwise can be null value out
-            var reader = new StreamReader(svgStream);
-            var svgText = await reader.ReadToEndAsync();
-
-            return svgText;
-        }
 
     }
 
@@ -115,7 +146,6 @@
         return daysPerPixel;
     }
 
-
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
@@ -131,6 +161,51 @@
         }
     }
 
+    private async Task OnClickSaveChart()
+    {
+        await _jsRuntime.ShowLoading();
 
+        //a name to uniquely identify this chart
+        var chartName = $"{SelectedPerson}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart"; //"Chart" important used later to find
+        await _jsRuntime.SetProperty(chartName, _finalSvg);
+
+        _jsRuntime.HideLoading();
+
+        //show message to user
+        await _jsRuntime.ShowAlert("success", $"Chart saved successfully!", false, 2600);
+
+    }
+
+    /// <summary>
+    /// when user clicked tab saved tab, refresh saved list immediately
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<string>> GetSavedChartNameList()
+    {
+        //get all latest keys from browser
+        var allKeys = await _jsRuntime.InvokeAsync<List<string>>("getAllLocalStorageKeys");
+
+        //find the keys that hold the needed charts
+        var filtered = allKeys.Where(x => x.Contains("Chart")).ToList();
+
+        return filtered;
+    }
+
+    /// <summary>
+    /// Given a saved chart name in local storage, it will load it into page
+    /// </summary>
+    public async Task ShowSavedChart(string selectedChartName)
+    {
+        await _jsRuntime.ShowLoading();
+
+        //get raw chart
+        _finalSvg = await _jsRuntime.GetProperty(selectedChartName);
+
+        //load chart into page
+        await LoadChartIntoPage(_finalSvg);
+
+        _jsRuntime.HideLoading();
+
+    }
 
 }

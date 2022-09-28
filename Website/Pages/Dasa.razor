@@ -1,4 +1,4 @@
-﻿@attribute [Route(PageRoute.Dasa)]
+@attribute [Route(PageRoute.Dasa)]
 @using Genso.Astrology.Library
 
 @*<UnderConstructionHeader PageName="Dasa" />
@@ -24,6 +24,9 @@
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">Advanced</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button @onclick="OnClickSavedTab" class="nav-link" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button" role="tab" aria-controls="saved" aria-selected="false">Saved</button>
     </li>
 </ul>
 
@@ -63,6 +66,22 @@
             <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
         </div>
     </div>
+    <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
+        <div class="vstack gap-3 p-3">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
+                <select class="form-select" @bind="_selectedChartName" id="inputGroupSelect01">
+                    <option selected>Choose...</option>
+                    @foreach (var chartName in _allChartNameList)
+                    {
+                        <option value="@chartName">@chartName</option>
+                    }
+                </select>
+            </div>
+            @*CALCULATE BTN*@
+            <IconButton IconName="ant-design:folder-view-outlined" ButtonText="Show" OnClickCallback="OnClickShowSaved"></IconButton>
+        </div>
+    </div>
 </div>
 
 <hr>
@@ -72,7 +91,7 @@
     @*DASA VIEW BOX*@
     <div>
         <HelpBox Label="Dasa" HelpText="@HelpText.DasaChart"></HelpBox>
-        <EventReportViewer @ref="_dasaReportViewer" />
+        <EventReportViewer @ref="_dasaChartViewer" />
     </div>
 </div>
 
@@ -178,13 +197,14 @@
 
     //--------------------FIELDS
     private string _selectedTimeRange = "FullLife";
+    private string _selectedChartName = "";
 
     private PageHelpSection _helpSection;
 
     private PeopleSelectorBox? _peopleSelectorBox;
     private PeopleSelectorBox? _easyPeopleSelectorBox;
 
-    private EventReportViewer? _dasaReportViewer;
+    private EventReportViewer? _dasaChartViewer;
 
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }
@@ -198,31 +218,31 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await InitPage()).Try(_jsRuntime);
+    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitializedAsync()).Try(_jsRuntime);
 
     private async Task OnClickCalculate() => await InvokeAsync(async () => await _OnClickCalculate()).Try(_jsRuntime);
+    private async Task OnClickShowSaved() => await InvokeAsync(async () => await _OnClickShowSaved()).Try(_jsRuntime);
     private async Task OnClickCalculateEasy() => await InvokeAsync(async () => await _OnClickCalculateEasy()).Try(_jsRuntime);
-
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
-
-    private async Task InitPage()
+    
+    private async Task _OnInitializedAsync()
     {
-        //todo below marked for deletion 10/1/2022
         ////show loading box
-        //_jsRuntime.ShowLoading();
-
-        ////set people list into people selector
-        ////note : without above first call _peopleSelectorBox is null
-        //PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id);
-        //_peopleSelectorBox.SetData(PersonList);
+        //await _jsRuntime.ShowLoading();
 
         ////hide loading box
         //_jsRuntime.HideAlert();
+
     }
+
+    /// <summary>
+    /// Saves current chart to local storage
+    /// </summary>
+    /// <returns></returns>
+    private async Task _OnClickShowSaved() => await _dasaChartViewer?.ShowSavedChart(_selectedChartName)!;
 
     private async Task _OnClickCalculate()
     {
@@ -240,26 +260,16 @@
         //put person name into tab title for easy multi-tabbing
         await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
 
-
         //set data into dasa viewer
         dynamic timeRange = ComputeStartEndTimeFromInput();
         var startTime = timeRange.Start;
         var endTime = timeRange.End;
 
-        //note: we calculate days per pixel here as to auto show/hide some events
-        //normally would not be needed
-        var daysPerPixel = EventReportViewer.GetDayPerPixel(startTime, endTime);
         //generate the events row & time header row
-        var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara };
-        ////only show tara chandra when zoomed in
-        //if (daysPerPixel <= 0.08)
-        //{
-        //    inputedEventTags.Add(EventTag.Tarabala);
-        //    inputedEventTags.Add(EventTag.Chandrabala);
-        //}
-        inputedEventTags.Add(EventTag.DasaSpecialRules);
+        var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
 
-        await _dasaReportViewer.SetData(SelectedPerson, startTime, endTime, inputedEventTags);
+        //pump data into chart
+        await _dasaChartViewer.ShowChart(SelectedPerson, startTime, endTime, inputedEventTags);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -291,7 +301,8 @@
         //generate the events row & time header row
         var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
 
-        await _dasaReportViewer.SetData(SelectedPerson, startTime, endTime, dasaEventTags);
+        //pump data into chart
+        await _dasaChartViewer.ShowChart(SelectedPerson, startTime, endTime, dasaEventTags);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -351,6 +362,7 @@
         //if control reaches here than, it's valid
         return true;
     }
+    
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
@@ -369,7 +381,6 @@
         //if control reaches here than, it's valid
         return true;
     }
-
 
     private object ComputeStartEndTimeFromInput()
     {
@@ -398,5 +409,14 @@
     }
 
 
+    private List<string> _allChartNameList = new List<string>();
+
+    private async Task OnClickSavedTab()
+    {
+        //reload list before showing
+        //load a list of saved charts
+        _allChartNameList = await _dasaChartViewer?.GetSavedChartNameList()!;
+
+    }
 
 }

@@ -1,4 +1,4 @@
-﻿
+
 //█▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
 //█▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 //PRODUCTIONS FUNCTION IN USE CALLED FROM BLAZOR CODE
@@ -60,6 +60,9 @@ function getScreenData() {
 //todo test window.location.origin also possible to use
 var getOriginUrl = () => document.referrer;
 
+//return array of local storage keys
+var getAllLocalStorageKeys = () => Object.keys(localStorage);
+
 //Jquery to show inputed element
 //by class and ID (CSS selector)
 function showWrapper(element) {
@@ -74,6 +77,7 @@ function setTitleWrapper(newTitle) {
         $(document).attr("title", newTitle);
     });
 };
+
 
 //Jquery to hide inputed element
 //by class and ID (CSS selector)

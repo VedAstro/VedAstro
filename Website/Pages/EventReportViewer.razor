@@ -12,7 +12,7 @@
     <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
 
     @*bottom chart options row*@
-    <div class="hstack gap-3">
+    <div class="hstack gap-3 mt-2">
         <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
         <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
@@ -236,7 +236,7 @@
         await _jsRuntime.ShowLoading();
 
         //a name to uniquely identify this chart
-        var chartName = $"{SelectedPerson.Hash}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart"; //"Chart" important used later to find
+        var chartName = $"{SelectedPerson.Hash}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart|{SelectedPerson.Name}"; //"Chart" important used later to find
         await _jsRuntime.SetProperty(chartName, _finalSvg);
 
         _jsRuntime.HideLoading();

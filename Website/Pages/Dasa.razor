@@ -16,8 +16,7 @@
     </ButtonsRow>
 </PageTop>
 
-
-
+@*TAB BUTTONS*@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="easy-tab" data-bs-toggle="tab" data-bs-target="#easy" type="button" role="tab" aria-controls="easy" aria-selected="true">Easy</button>
@@ -30,6 +29,7 @@
     </li>
 </ul>
 
+@*TAB CONTENT*@
 @*all border except top*@
 <div class="tab-content border-end border-bottom border-start" id="myTabContent">
     <div class="tab-pane fade show active" id="easy" role="tabpanel" aria-labelledby="easy-tab">
@@ -75,23 +75,7 @@
                     <option selected>Choose...</option>
                     @foreach (var chartName in _allChartNameList)
                     {
-                        <option value="@chartName">@chartName</option>
-                    }
-                </select>
-            </div>
-            @*CALCULATE BTN*@
-            <IconButton IconName="ant-design:folder-view-outlined" ButtonText="Show" OnClickCallback="OnClickShowSaved"></IconButton>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
-        <div class="vstack gap-3 p-3">
-            <div class="input-group mb-3">
-                <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
-                <select class="form-select" @bind="_selectedChartName" id="inputGroupSelect01">
-                    <option selected>Choose...</option>
-                    @foreach (var chartName in _allChartNameList)
-                    {
-                        <option value="@chartName">@chartName</option>
+                        <option value="@chartName">@GetFriendlyChartName(@chartName)</option>
                     }
                 </select>
             </div>
@@ -103,9 +87,9 @@
 
 <hr>
 
+@*DASA VIEW BOX*@
 @*hide until ready but initialized as well*@
 <div style="@(_isResultReady?"":"display:none;")">
-    @*DASA VIEW BOX*@
     <div>
         <HelpBox Label="Dasa" HelpText="@HelpText.DasaChart"></HelpBox>
         <EventReportViewer @ref="_dasaChartViewer" />
@@ -453,4 +437,16 @@
 
     }
 
+    private static string GetFriendlyChartName(string rawName)
+    {
+        //get data out
+        var split = rawName.Split("|");
+        var hash = split[0];
+        var date = split[1];
+        var keyword = split[2];
+        var personName = split[3];
+
+        //construct new name
+        return $"{personName} - {date}";
+    }
 }

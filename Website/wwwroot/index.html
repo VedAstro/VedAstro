@@ -101,13 +101,19 @@
 </head>
 
 <body class="animate skin-red">
-    <!--inside this div all page is generated-->
+
+    <!--
+    PAGE CONTENT
+    inside this div all page is generated
+    -->
     <div id="app">
         <!--loading box shown while blazor is loading-->
         <img style="position: absolute; left: 39%; top: 30%;" src="images/loading-animation-progress-transparent.gif" />
     </div>
 
+
     <!--
+    DEFAULT ERROR
     even though using custom error component in main layout, this exists as backup to show error
     but this element is referenced in .net component lib, so if custom component fails this will kick in
     -->
@@ -116,6 +122,8 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+
+    <!--START BLAZOR-->
     <script src="_framework/blazor.webassembly.js"></script>
 
 

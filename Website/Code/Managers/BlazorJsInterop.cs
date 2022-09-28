@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Components;
@@ -15,8 +15,6 @@ namespace Website
     /// </summary>
     public static class BlazorJsInterop
     {
-
-
 
 
         //▄▀█ █░░ █▀▀ █▀█ ▀█▀
@@ -112,7 +110,6 @@ namespace Website
             await jsRuntime.ShowAlert(alertData);
         }
 
-
         /// <summary>
         /// Shows leave email alert box and returns the email as string
         /// note: uses sweet alert js
@@ -198,10 +195,6 @@ namespace Website
             => await jsRuntime.InvokeVoidAsync("watchProperty", DotNetObjectReference.Create(instance), handlerName);
 
 
-        /// <summary>
-        /// Sets new page/tab title
-        /// </summary>
-        public static async Task SetTitle(this IJSRuntime jsRuntime, string newTitle) => await jsRuntime.InvokeVoidAsync("setTitleWrapper", newTitle);
 
 
 
@@ -236,6 +229,7 @@ namespace Website
         /// Uses jQuery to attach a function by name to a HTML element event
         /// </summary>
         public static async Task AddEventListener(this IJSRuntime jsRuntime, ElementReference element, string eventName, string eventHandlerName) => await jsRuntime.InvokeVoidAsync("addEventListenerWrapper", element, eventName, eventHandlerName);
+
         public static async Task AddEventListener(this IJSRuntime jsRuntime, string jquerySelector, string eventName, string eventHandlerName) => await jsRuntime.InvokeVoidAsync("addEventListenerByClass", jquerySelector, eventName, eventHandlerName);
 
         /// <summary>
@@ -279,8 +273,11 @@ namespace Website
         }
 
         public static async Task AddClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("addClassWrapper", element, classNames);
+
         public static async Task RemoveClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("removeClassWrapper", element, classNames);
+
         public static async Task ToggleClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("toggleClassWrapper", element, classNames);
+
         public static async Task ToggleClass(this IJSRuntime jsRuntime, string jquerySelector, string classNames) => await jsRuntime.InvokeVoidAsync("toggleClassWrapper", jquerySelector, classNames);
 
         public static async Task<double> ElementWidth(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<double>("getElementWidth", element);
@@ -293,6 +290,7 @@ namespace Website
         /// wrapper for JQuery .prop() 
         /// </summary>
         public static async Task SetProp(this IJSRuntime jsRuntime, ElementReference element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
+
         /// <summary>
         /// wrapper for JQuery .prop() 
         /// </summary>
@@ -350,7 +348,28 @@ namespace Website
         /// </summary>
         public static async Task GoBack(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("history.back");
 
+        /// <summary>
+        /// Sets new page/tab title
+        /// </summary>
+        public static async Task SetTitle(this IJSRuntime jsRuntime, string newTitle) => await jsRuntime.InvokeVoidAsync("setTitleWrapper", newTitle);
 
+        /// <summary>
+        /// Load JS file programmatically
+        /// </summary>
+        public static async Task LoadJs(this IJSRuntime jsRuntime, string url)
+        {
+            await jsRuntime.InvokeVoidAsync("loadJs", new { name = "JsInterop", url = url });
+        }
+
+        /// <summary>
+        /// Load JS file programmatically
+        /// </summary>
+        public static async Task<IJSObjectReference> LoadJsBlazor(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeAsync<IJSObjectReference>("import", url);
+        //public static async Task LoadJsBlazorList(this IJSRuntime jsRuntime, List<s> url)
+        //{
+
+        //     await jsRuntime.InvokeAsync<IJSObjectReference>("import", url);
+        //}
     }
 
 }

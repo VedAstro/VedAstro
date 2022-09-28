@@ -1,4 +1,4 @@
-﻿@using Genso.Astrology.Library
+@using Genso.Astrology.Library
 @using System.Xml.Linq
 @using Tools = Genso.Astrology.Library.Tools
 @using System.Text
@@ -13,12 +13,12 @@
 
     @*bottom chart options row*@
     <div class="hstack gap-3">
-        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" />
-        <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" />
+        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
+        <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
         @if (!_nowSavedChart)
         {
-            <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChart" />
+            <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChart" SmallSize="true" />
         }
     </div>
 </div>
@@ -66,7 +66,6 @@
         EndTime = endTime;
         InputedEventTags = inputedEventTags;
 
-
         //1 GENERATE CHART IN SVG FROM SERVER
         //saved for later use by Chart Saver
         _finalSvg = await GetDasaReportSvgFromApi(person, startTime, endTime, inputedEventTags);
@@ -77,9 +76,7 @@
         //set current chart as not from saved version
         _nowSavedChart = false;
 
-
         //LOCAL FUNCTIONS
-
 
         /// <summary>
         /// Contacts API and gets Person Dasa Report in svg string

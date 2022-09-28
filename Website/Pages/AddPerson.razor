@@ -79,7 +79,7 @@
         var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, _jsRuntime);
 
         //clear stored person list
-        AppData.PersonList = null;
+        AppData.ClearPersonList();
 
         //page ready
         _jsRuntime.HideAlert();

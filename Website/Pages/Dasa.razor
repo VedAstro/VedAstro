@@ -47,7 +47,7 @@
                 </select>
             </div>
 
-            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculateEasy"></IconButton>
+            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
 
         </div>
 
@@ -63,7 +63,8 @@
             <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
 
             @*CALCULATE BTN*@
-            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
+            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"></IconButton>
+
         </div>
     </div>
     <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
@@ -103,12 +104,6 @@
     <hr>
     <PlanetHouseInfoViewer Time="@SelectedPerson.BirthTime" />
 }
-
-
-
-
-
-
 
 @*HELP SECTION*@
 <PageHelpSection @ref="_helpSection">
@@ -227,7 +222,7 @@
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-    
+
     private async Task _OnInitializedAsync()
     {
         ////show loading box
@@ -242,7 +237,26 @@
     /// Saves current chart to local storage
     /// </summary>
     /// <returns></returns>
-    private async Task _OnClickShowSaved() => await _dasaChartViewer?.ShowSavedChart(_selectedChartName)!;
+    private async Task _OnClickShowSaved()
+    {
+        //only continue if passed input field validation
+        //if (!ValidationPassed()) { return; }
+
+        //mark page as NOT ready (when button clicked 2nd time)
+        _isResultReady = false;
+
+        //show saved chart
+        await _dasaChartViewer?.ShowSavedChart(_selectedChartName)!;
+
+        //this is needed to generate data charts below
+        //note gets person from ID stored in chart name
+        SelectedPerson = _dasaChartViewer.SelectedPerson;
+
+
+        //mark page as ready to show results
+        _isResultReady = true;
+
+    }
 
     private async Task _OnClickCalculate()
     {
@@ -362,7 +376,7 @@
         //if control reaches here than, it's valid
         return true;
     }
-    
+
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
@@ -408,7 +422,6 @@
         }
     }
 
-
     private List<string> _allChartNameList = new List<string>();
 
     private async Task OnClickSavedTab()
@@ -416,6 +429,11 @@
         //reload list before showing
         //load a list of saved charts
         _allChartNameList = await _dasaChartViewer?.GetSavedChartNameList()!;
+
+        if (!_allChartNameList.Any())
+        {
+            await _jsRuntime.ShowAlert("info", "No saved charts, click save chart first.", false, 3000);
+        }
 
     }
 

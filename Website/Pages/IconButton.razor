@@ -10,9 +10,16 @@
     }
 </style>
 
-<button @onclick="OnClickButton" class="btn btn-primary hstack gap-2 iconButton">
+<button @ref="ElementReference" @onclick="OnClickButton" class="btn btn-primary hstack gap-2 iconButton">
     <span class="iconify" data-icon="@IconName" data-width="25"></span> @ButtonText
 </button>
+@if (ShowDelayWarning)
+{
+    <div class="hstack gap-1" style="align-items: start;margin-top: -10px;">
+        <span class="iconify" data-icon="mdi:snail" data-width="20"></span>
+        <p style="font-size: 13px; color: #8f8f8f;">Warning Slow</p>
+    </div>
+}
 
 @code {
 
@@ -21,6 +28,9 @@
     /// </summary>
     [Parameter]
     public string? ButtonText { get; set; }
+
+    [Parameter]
+    public bool ShowDelayWarning { get; set; } = false;
 
     /// <summary>
     /// Special icon name from icon-sets.iconify.design
@@ -42,6 +52,8 @@
     [Parameter]
     public string? ClickUrl { get; set; }
 
+    public ElementReference ElementReference { get; set; }
+
 
     /// <summary>
     /// Default button click will send page to URL link if provided
@@ -50,7 +62,7 @@
     private async Task OnClickButton(MouseEventArgs obj)
     {
         //log this
-        await WebsiteLogManager.LogClick(_jsRuntime,ButtonText);
+        await WebsiteLogManager.LogClick(_jsRuntime, ButtonText);
 
         //if custom onclick has been specified than use that
         if (OnClickCallback.HasDelegate)

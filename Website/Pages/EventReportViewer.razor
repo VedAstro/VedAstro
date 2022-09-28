@@ -1,4 +1,4 @@
-@using Genso.Astrology.Library
+﻿@using Genso.Astrology.Library
 @using System.Xml.Linq
 @using Tools = Genso.Astrology.Library.Tools
 @using System.Text
@@ -12,34 +12,54 @@
     <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
 
     @*bottom chart options row*@
-    <div class="d-flex">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" @onchange="OnChangeLifeEventCheckBox" checked>
-            <label class="form-check-label" for="flexCheckChecked">Show Life Events</label>
-        </div>
-        <IconButton IconName="entypo:save" OnClickCallback="OnClickSaveChart" />
+    <div class="hstack gap-3">
+        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" />
+        <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" />
+        @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
+        @if (!_nowSavedChart)
+        {
+            <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChart" />
+        }
     </div>
 </div>
 
 
 @code {
-    private Person SelectedPerson { get; set; }
+    private bool _nowSavedChart = false; //set by show chart button
+
+    public Person SelectedPerson { get; set; }
 
     ElementReference _dasaViewBox;
     public Time StartTime { get; set; }
     public Time EndTime { get; set; }
     public List<EventTag> InputedEventTags { get; set; }
 
+    private IconButton _showButton;
+    private IconButton _hideButton;
+
     /// <summary>
     /// Raw SVG string of the latest chart
     /// </summary>
     string _finalSvg;
+
+    bool isDirty = true; //so that it runs on 1st render
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (isDirty)
+        {
+            //default show life event
+            await OnClickShowLifeEvents();
+            isDirty = false;//reset
+        }
+    }
 
     /// <summary>
     /// Sets the data that is processed and fill the content
     /// </summary>
     public async Task ShowChart(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
+
         //saved to be accessed later
         SelectedPerson = person;
         StartTime = startTime;
@@ -54,7 +74,8 @@
         //2 LOAD CHART INTO PAGE
         await LoadChartIntoPage(_finalSvg);
 
-
+        //set current chart as not from saved version
+        _nowSavedChart = false;
 
 
         //LOCAL FUNCTIONS
@@ -96,6 +117,36 @@
     }
 
     /// <summary>
+    /// Given a saved chart name in local storage, it will load it into page
+    /// </summary>
+    public async Task ShowSavedChart(string selectedChartName)
+    {
+
+        await _jsRuntime.ShowLoading();
+
+        //set current chart as from saved version (to hide save button)
+        //only show "Save" button if viewing newly generated chart, so that no erroneous double save
+        _nowSavedChart = true;
+
+        //gets person profile used to generate the saved chart being showed now
+        //extract hash from chart name
+        var raw = selectedChartName.Split("|");
+        var hash = raw[0]; //1st place is hard set hash
+                           //get person from hash
+        SelectedPerson = WebsiteTools.GetPersonFromHashCached(hash);
+
+        //get raw chart
+        _finalSvg = await _jsRuntime.GetProperty(selectedChartName);
+
+        //load chart into page
+        await LoadChartIntoPage(_finalSvg);
+
+        _jsRuntime.HideLoading();
+
+    }
+
+
+    /// <summary>
     /// Given an SVG as string, it will inject it into page & attach
     /// the needed JS handlers for animation
     /// </summary>
@@ -109,6 +160,7 @@
         //attach tooltip lib for life events
         //note: needed on each draw
         await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
+
 
         //2 ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
 
@@ -161,12 +213,33 @@
         }
     }
 
+    private async Task OnClickHideLifeEvents()
+    {
+        //hide & show the relevant buttons
+        await _jsRuntime.Hide(_hideButton.ElementReference);
+        await _jsRuntime.Show(_showButton.ElementReference);
+
+        //hide element
+        await _jsRuntime.Hide("#LifeEventLinesHolder");
+
+    }
+    private async Task OnClickShowLifeEvents()
+    {
+        //hide & show the relevant buttons
+        await _jsRuntime.Hide(_showButton.ElementReference);
+        await _jsRuntime.Show(_hideButton.ElementReference);
+
+        //show element
+        await _jsRuntime.Show("#LifeEventLinesHolder");
+
+    }
+
     private async Task OnClickSaveChart()
     {
         await _jsRuntime.ShowLoading();
 
         //a name to uniquely identify this chart
-        var chartName = $"{SelectedPerson}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart"; //"Chart" important used later to find
+        var chartName = $"{SelectedPerson.Hash}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart"; //"Chart" important used later to find
         await _jsRuntime.SetProperty(chartName, _finalSvg);
 
         _jsRuntime.HideLoading();
@@ -191,21 +264,6 @@
         return filtered;
     }
 
-    /// <summary>
-    /// Given a saved chart name in local storage, it will load it into page
-    /// </summary>
-    public async Task ShowSavedChart(string selectedChartName)
-    {
-        await _jsRuntime.ShowLoading();
 
-        //get raw chart
-        _finalSvg = await _jsRuntime.GetProperty(selectedChartName);
-
-        //load chart into page
-        await LoadChartIntoPage(_finalSvg);
-
-        _jsRuntime.HideLoading();
-
-    }
 
 }

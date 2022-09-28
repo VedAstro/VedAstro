@@ -122,8 +122,9 @@ namespace Website
         /// <summary>
         /// Shows loading box with auto progress bar using sweetalert
         /// note: hide using HideAlert()
+        /// set 0 delay to skip auto wait
         /// </summary>
-        public static async Task ShowLoading(this IJSRuntime jsRuntime)
+        public static async Task ShowLoading(this IJSRuntime jsRuntime, int delayMs = 300)
         {
 
             var alertData = new
@@ -143,7 +144,8 @@ namespace Website
             jsRuntime.ShowAlert(alertData);
 
             //needed time to pop
-            await Task.Delay(500);
+            //skip if set 0
+            if (delayMs > 0) { await Task.Delay(delayMs); }
         }
 
         public static void HideLoading(this IJSRuntime jsRuntime) => jsRuntime.HideAlert();
@@ -300,7 +302,7 @@ namespace Website
         /// wrapper for JQuery .attr() 
         /// </summary>
         public static async Task SetAttr(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setAttrWrapper", element, propName, propVal);
-        
+
         /// <summary>
         /// wrapper for JQuery .css() 
         /// </summary>

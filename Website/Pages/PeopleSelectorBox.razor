@@ -75,13 +75,10 @@
     {
 
         //show loading box
-       await _jsRuntime.ShowLoading();
-
-        //check if people list already loaded before
-        AppData.PersonList ??= await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
+        await _jsRuntime.ShowLoading();
 
         //else use already available list
-        this.FillDropDown(AppData.PersonList);
+        await FillDropDown();
 
         //hide loading box
         _jsRuntime.HideAlert();
@@ -91,10 +88,11 @@
 
 
 
-
-    private void FillDropDown(List<Person>? personList)
+    private async Task FillDropDown()
     {
         var html = "";
+
+        var personList = await AppData.TryGetPersonList(_jsRuntime);
 
         //generate drop down options in html
         foreach (var person in personList)
@@ -110,10 +108,7 @@
 
     }
 
-    public Person GetSelectedPerson()
-    {
-        return AppData.PersonList.Find(p => p.GetHashCode() == int.Parse(SelectedPersonHash));
-    }
+    public Person GetSelectedPerson() => WebsiteTools.GetPersonFromHashCached(SelectedPersonHash);
 
 
     /// <summary>

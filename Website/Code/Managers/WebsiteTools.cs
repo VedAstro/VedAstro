@@ -124,7 +124,7 @@ namespace Website
             //offset needs to be "whole" minutes, else fail
             //purposely hard cast to int to remove not whole minutes
             var notWhole = TimeSpan.FromSeconds(offsetSeconds).TotalMinutes;
-            var offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole)); 
+            var offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole));
             var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
 
             return parsedOffsetString;
@@ -281,6 +281,14 @@ namespace Website
                 return receivedPerson;
             }
 
+        }
+
+        /// <summary>
+        /// NOTE Person list has to be loaded or will fail
+        /// </summary>
+        public static Person GetPersonFromHashCached(string personHash)
+        {
+            return AppData.PersonList.Find(p => p.GetHashCode() == int.Parse(personHash));
         }
 
         public static async Task DeletePerson(int personHash, IJSRuntime jsRuntime)

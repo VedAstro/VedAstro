@@ -62,6 +62,9 @@ namespace Website
 
         public static SearchResult SearchPage { get; set; }
         
+        /// <summary>
+        /// Note access via try get person list
+        /// </summary>
         public static List<Person>? PersonList { get; set; }
         
         /// <summary>
@@ -137,5 +140,16 @@ namespace Website
                 Console.WriteLine("BLZ: Update dark mode silent fail!");
             }
         }
+
+        public static async Task<List<Person>> TryGetPersonList(IJSRuntime _jsRuntime)
+        {
+            //check if people list already loaded before
+            AppData.PersonList ??= await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
+
+            return AppData.PersonList;
+        }
+
+        public static void ClearPersonList() => AppData.PersonList = null;
+
     }
 }

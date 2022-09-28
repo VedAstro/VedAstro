@@ -81,11 +81,7 @@ else
 
         //get all people from API server
         //check if people list already loaded before
-        AppData.PersonList ??= await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
-
-        //convert objects to json (for js generator library)
-        //and calls js code change table directly
-        //await _jsRuntime.InvokeVoidAsync("generatePersonListTable", TableId, personList.ToArray());
+        await AppData.TryGetPersonList(_jsRuntime);
 
         _isReady = true;
 

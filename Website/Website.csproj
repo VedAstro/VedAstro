@@ -5,7 +5,8 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>Website</RootNamespace>
-		 <RunAOTCompilation>true</RunAOTCompilation>
+		<!--AOT disabled because not working in android chrome-->
+		 <!--<RunAOTCompilation>true</RunAOTCompilation>-->
 	</PropertyGroup>
 
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +13,7 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Newtonsoft.Json.Linq;
 
 namespace API
 {
@@ -1183,7 +1184,7 @@ namespace API
                             <g id=""IBeam"">
 			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""0""></rect>
 			                    <rect width=""2"" height=""{lineHeight}"" style=""fill:#000000;"" x=""0"" y=""0""></rect>
-			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""{lineHeight-2}""></rect>
+			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""{lineHeight - 2}""></rect>
 		                    </g>
 		                    <g id=""CursorLineLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
                                 <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
@@ -1935,7 +1936,7 @@ namespace API
                 unsortedEventList.AddRange(tempEventList);
             }
 
-            //sort event by duration
+            //sort event by duration, so that events are ordered nicely in chart
             var eventList = unsortedEventList.OrderByDescending(x => x.Duration).ToList();
 
 
@@ -1972,18 +1973,48 @@ namespace API
             {
 
                 var rowHtml = "";
+                //generate color summary
+                var colorRow = "";
                 foreach (var summarySlice in summaryRowData)
                 {
+                    int xAxis = summarySlice.Key;
+                    double totalNatureScore = summarySlice.Value; //possible negative
+
                     var rect = $"<rect " +
-                               $"x=\"{summarySlice.Key}\" " +
+                               $"x=\"{xAxis}\" " +
                                $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                $"width=\"{widthPerSlice}\" " +
                                $"height=\"{singleRowHeight}\" " +
-                               $"fill=\"{GetSummaryColor(summarySlice.Value)}\" />";
+                               $"fill=\"{GetSummaryColor(totalNatureScore)}\" />";
 
                     //add rect to row
-                    rowHtml += rect;
+                    colorRow += rect;
                 }
+
+                rowHtml += $"<g id=\"ColorRow\">{colorRow}</g>";
+
+
+                //generate graph summary
+                var barChartRow = "";
+                foreach (var summarySlice in summaryRowData)
+                {
+                    int xAxis = summarySlice.Key;
+                    double totalNatureScore = summarySlice.Value; //possible negative
+                    var barHeight = (int)totalNatureScore.Remap(minValue, maxValue, 0, 30);
+                    var rect = $"<rect " +
+                               $"x=\"{xAxis}\" " +
+                               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                               $"width=\"{widthPerSlice}\" " +
+                               $"height=\"{barHeight}\" " +
+                               $"fill=\"black\" />";
+
+                    //add rect to row
+                    barChartRow += rect;
+                }
+
+                //note: chart is flipped 180, to start bar from bottom to top
+                //default hidden
+                rowHtml += $"<g id=\"BarChartRow\" style=\"display:none;\" transform=\"matrix(1, 0, 0, -1, 0, 465)\">{barChartRow}</g>";
 
                 //add in "Summary" label above row
                 float aboveRow = yAxis - singleRowHeight - padding;
@@ -2003,7 +2034,7 @@ namespace API
             {
                 string colorHex;
 
-                //convert value coming into percentage based on min & max
+                //convert value coming in, to a percentage based on min & max
                 //this will make setting color based on value easier & accurate
 
                 if (value >= 0) //good

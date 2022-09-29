@@ -1926,14 +1926,17 @@ namespace API
 
             //rows are dynamically generated as needed, hence the extra logic below
             //list of rows to generate
-            var eventList = new List<Event>();
+            var unsortedEventList = new List<Event>();
 
             //calculate events for each tag
             foreach (var eventTag in inputedEventTags)
             {
                 var tempEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag, eventDataList);
-                eventList.AddRange(tempEventList);
+                unsortedEventList.AddRange(tempEventList);
             }
+
+            //sort event by duration
+            var eventList = unsortedEventList.OrderByDescending(x => x.Duration).ToList();
 
 
             //2 STACK & GENERATED ROWS FROM ABOVE DATA

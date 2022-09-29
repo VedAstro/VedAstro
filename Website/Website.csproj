@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>Website</RootNamespace>
-		<RunAOTCompilation>true</RunAOTCompilation>
+		 <RunAOTCompilation>true</RunAOTCompilation>
 	</PropertyGroup>
 
 

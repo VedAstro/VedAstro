@@ -1034,15 +1034,6 @@ namespace API
             compiledRow = $"<g class=\"EventChartContent\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledRow}</g>";
 
 
-            //4 MAKE LIFE EVENTS
-            //wait!, add in life events also
-            //use offset of input time, this makes sure life event lines
-            //are placed on event chart correctly, since event chart is based on input offset
-            var inputOffset = startTime.GetStdDateTimeOffset().Offset;
-            var lifeEventHeight = lineHeight + 6; //space between icon & last row
-            compiledRow += GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset);
-
-
 
             //6 MAKE CURSOR LINE
             //add in the cursor line (moves with cursor via JS)
@@ -1050,6 +1041,14 @@ namespace API
             //      - placed last so that show on top of others
             var svgTotalHeight = totalHeight + 35;//add space for life event icon
             compiledRow += GetTimeCursorLine(svgTotalHeight);
+
+            //4 MAKE LIFE EVENTS
+            //wait!, add in life events also
+            //use offset of input time, this makes sure life event lines
+            //are placed on event chart correctly, since event chart is based on input offset
+            var inputOffset = startTime.GetStdDateTimeOffset().Offset;
+            var lifeEventHeight = lineHeight + 6; //space between icon & last row
+            compiledRow += GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset);
 
 
             //7 ADD BORDER
@@ -1096,7 +1095,8 @@ namespace API
 
 
                 //wrap in a group so that can be hidden/shown as needed
-                var wrapperGroup = $"<g id=\"LifeEventLinesHolder\">{compiledLines}</g>";
+                //add transform matrix to adjust for border shift
+                var wrapperGroup = $"<g id=\"LifeEventLinesHolder\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledLines}</g>";
 
                 return wrapperGroup;
 

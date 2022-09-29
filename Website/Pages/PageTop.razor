@@ -3,7 +3,7 @@
 *@
 
 <div class="vstack">
-    <h1 class="fw-bold"><span style="margin-top: -10px;" class="iconify" data-icon="@IconName" data-width="50"></span> @Title</h1>
+    <h1 class="fw-bold"><span style="margin-top: -10px;" class="iconify" data-icon="@IconName" data-width="@IconSize"></span> @Title</h1>
     <p class="fs-5 col-md-8" style="max-width: @AppData.MaxContentWidthPx;">@Description</p>
     @if (ButtonsRow != null)
     {
@@ -22,6 +22,12 @@
 
     [Parameter]
     public string? IconName { get; set; }
+
+    /// <summary>
+    /// Default to 50
+    /// </summary>
+    [Parameter]
+    public int? IconSize { get; set; } = 50;
 
     [Parameter]
     public RenderFragment? Description { get; set; }

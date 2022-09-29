@@ -322,10 +322,8 @@ namespace API
             //get all event data/types which has the inputed tag (FILTER)
             var eventDataListFiltered = DatabaseManager.GetEventDataListByTag(tag, eventDataList);
 
-
             //start calculating events
             var eventList = EventManager.GetEventsInTimePeriod(startTime.GetStdDateTimeOffset(), endTime.GetStdDateTimeOffset(), geoLocation, person, eventsPrecision, eventDataListFiltered);
-
 
             //sort the list by time before sending view
             var orderByAscResult = from dasaEvent in eventList

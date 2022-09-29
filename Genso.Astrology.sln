@@ -5,10 +5,6 @@ VisualStudioVersion = 17.1.31911.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library", "Library\Library.csproj", "{13F722B6-DF6B-45E7-A563-9379C05BBE7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Muhurtha.Desktop", "Muhurtha.Desktop\Muhurtha.Desktop.csproj", "{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Horoscope.Desktop", "Horoscope.Desktop\Horoscope.Desktop.csproj", "{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{317ADC97-8BF1-49D5-880F-07818908FCE3}"
 	ProjectSection(SolutionItems) = preProject
 		Books\A Manual of Hindu Astrology (1935).pdf = Books\A Manual of Hindu Astrology (1935).pdf
@@ -32,8 +28,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Website", "Website\Website.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{4B39926B-9DDC-4B45-9737-9DAA5FA88A09}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Compatibility.Desktop", "Compatibility.Desktop\Compatibility.Desktop.csproj", "{AC32CA10-EEB1-437C-9C73-C3C037804A74}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{6FFD46C0-6E1E-4D0B-9F96-152DD9C56790}"
 EndProject
 Global
@@ -49,18 +43,6 @@ Global
 		{13F722B6-DF6B-45E7-A563-9379C05BBE7D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{13F722B6-DF6B-45E7-A563-9379C05BBE7D}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
 		{13F722B6-DF6B-45E7-A563-9379C05BBE7D}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
-		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
-		{85EF1416-CDE9-4C0E-BBE7-2E1806B05E2B}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
-		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
-		{21DC7E64-46F6-4902-8FA0-1F758BF69CA8}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
 		{E2BF92A7-D6E5-4D1E-940B-4040707C51DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2BF92A7-D6E5-4D1E-940B-4040707C51DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2BF92A7-D6E5-4D1E-940B-4040707C51DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -73,12 +55,6 @@ Global
 		{4B39926B-9DDC-4B45-9737-9DAA5FA88A09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4B39926B-9DDC-4B45-9737-9DAA5FA88A09}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
 		{4B39926B-9DDC-4B45-9737-9DAA5FA88A09}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
-		{AC32CA10-EEB1-437C-9C73-C3C037804A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC32CA10-EEB1-437C-9C73-C3C037804A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC32CA10-EEB1-437C-9C73-C3C037804A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC32CA10-EEB1-437C-9C73-C3C037804A74}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC32CA10-EEB1-437C-9C73-C3C037804A74}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
-		{AC32CA10-EEB1-437C-9C73-C3C037804A74}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
 		{6FFD46C0-6E1E-4D0B-9F96-152DD9C56790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6FFD46C0-6E1E-4D0B-9F96-152DD9C56790}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FFD46C0-6E1E-4D0B-9F96-152DD9C56790}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -61,7 +61,7 @@ namespace Website
             //and also not to clog server's error log
 #if DEBUG
             Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            Console.WriteLine($"{errorMsg}\n{AppData.CurrentPage}");
+            Console.WriteLine($"PAGE NAME:{AppData.CurrentPage}\nERROR MESSAGE:{errorMsg}");
             return;
 #endif
             //place error data into visitor tag

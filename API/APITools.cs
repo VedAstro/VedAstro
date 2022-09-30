@@ -18,12 +18,16 @@ namespace API
     /// A collection of general tools used by API
     /// </summary>
     public static class APITools
-    {
-        //used in muhurtha
-        private const string UrlEventDataListXml = "https://www.vedastro.org/data/EventDataList.xml";
+    {        
+        
+        //we use direct storage URL for fast access & solid
+        private const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
 
-        //used in horoscope
-        private const string UrlPredictionDataListXml = "https://www.vedastro.org/data/PredictionDataList.xml";
+        //used in muhurtha events
+        private const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
+
+        //used in horoscope prediction
+        private const string UrlPredictionDataListXml = $"https://{AzureStorage}/data/PredictionDataList.xml";
 
 
         /// <summary>

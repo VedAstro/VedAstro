@@ -91,64 +91,64 @@ $(function () {
         }
     });
 
-    // single level menu
-    $('.nav-sidebar > .nav-link').on('click', function (e) {
-        e.preventDefault();
+    //// single level menu
+    //$('.nav-sidebar > .nav-link').on('click', function (e) {
+    //    e.preventDefault();
 
-        // remove active siblings
-        $(this).addClass('active').siblings().removeClass('active');
+    //    // remove active siblings
+    //    $(this).addClass('active').siblings().removeClass('active');
 
-        // remove active siblings from other nav
-        var ss = $(this).closest('.nav-sidebar').siblings('.nav-sidebar');
-        var sg = $(this).closest('.nav-group').siblings('.nav-group');
+    //    // remove active siblings from other nav
+    //    var ss = $(this).closest('.nav-sidebar').siblings('.nav-sidebar');
+    //    var sg = $(this).closest('.nav-group').siblings('.nav-group');
 
-        ss.find('.active').removeClass('active');
-        ss.find('.show').removeClass('show');
+    //    ss.find('.active').removeClass('active');
+    //    ss.find('.show').removeClass('show');
 
-        sg.find('.active').removeClass('active');
-        sg.find('.show').removeClass('show');
-    });
+    //    sg.find('.active').removeClass('active');
+    //    sg.find('.show').removeClass('show');
+    //});
 
     // two level menu
-    $('.nav-sidebar .nav-item').on('click', '.nav-link', function (e) {
-        e.preventDefault();
+    //$('.nav-sidebar .nav-item').on('click', '.nav-link', function (e) {
+    //    e.preventDefault();
 
-        if ($(this).hasClass('with-sub')) {
-            $(this).parent().toggleClass('show');
-            $(this).parent().siblings().removeClass('show');
-        } else {
-            $(this).parent().addClass('active').siblings().removeClass('active');
-            $(this).parent().siblings().find('.sub-link').removeClass('active');
-        }
+    //    if ($(this).hasClass('with-sub')) {
+    //        $(this).parent().toggleClass('show');
+    //        $(this).parent().siblings().removeClass('show');
+    //    } else {
+    //        $(this).parent().addClass('active').siblings().removeClass('active');
+    //        $(this).parent().siblings().find('.sub-link').removeClass('active');
+    //    }
 
-        var ss = $(this).closest('.nav-sidebar').siblings('.nav-sidebar');
-        var sg = $(this).closest('.nav-group').siblings('.nav-group');
+    //    var ss = $(this).closest('.nav-sidebar').siblings('.nav-sidebar');
+    //    var sg = $(this).closest('.nav-group').siblings('.nav-group');
 
-        ss.find('.active').removeClass('active');
-        ss.find('.show').removeClass('show');
+    //    ss.find('.active').removeClass('active');
+    //    ss.find('.show').removeClass('show');
 
-        sg.find('.active').removeClass('active');
-        sg.find('.show').removeClass('show');
+    //    sg.find('.active').removeClass('active');
+    //    sg.find('.show').removeClass('show');
 
-    });
+    //});
 
-    $('.nav-sub').on('click', '.sub-link', function (e) {
-        e.preventDefault();
+    //$('.nav-sub').on('click', '.sub-link', function (e) {
+    //    e.preventDefault();
 
-        $(this).addClass('active').siblings().removeClass('active');
+    //    $(this).addClass('active').siblings().removeClass('active');
 
-        $(this).closest('.nav-item').addClass('active').siblings().removeClass('active');
-        $(this).closest('.nav-item').siblings().find('.sub-link').removeClass('active');
+    //    $(this).closest('.nav-item').addClass('active').siblings().removeClass('active');
+    //    $(this).closest('.nav-item').siblings().find('.sub-link').removeClass('active');
 
-        $(this).closest('.nav-sidebar').siblings().find('.active').removeClass('active');
-        $(this).closest('.nav-group').siblings().find('.active').removeClass('active');
-    });
+    //    $(this).closest('.nav-sidebar').siblings().find('.active').removeClass('active');
+    //    $(this).closest('.nav-group').siblings().find('.active').removeClass('active');
+    //});
 
-    $('.nav-group-label').on('click', function () {
-        $(this).closest('.nav-group').toggleClass('show');
-        $(this).closest('.nav-group').siblings().removeClass('show');
+    //$('.nav-group-label').on('click', function () {
+    //    $(this).closest('.nav-group').toggleClass('show');
+    //    $(this).closest('.nav-group').siblings().removeClass('show');
 
-    });
+    //});
 
     // content menu
     $('#DesktopMenuBtn').on('click', function (e) {

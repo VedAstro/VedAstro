@@ -34,31 +34,31 @@
         </div><!-- sidebar-search -->
         <div class="sidebar-body">
             <nav class="nav-sidebar">
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.Home)" class="nav-link active">
+                <a @ref="navLink1" @onclick="()=>OnClickNavItem(navLink1, PageRoute.Home)" style="cursor: pointer;" class="nav-link active">
                     <span class="iconify" data-icon="ant-design:home-twotone" data-width="25"></span><span>Home</span>
                 </a>
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.QuickGuide)" class="nav-link">
+                <a @ref="navLink2" @onclick="()=>OnClickNavItem(navLink2, PageRoute.QuickGuide)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="cil:book" data-width="25"></span><span>Quick Guide</span>
                 </a>
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.AskAstrolger)" class="nav-link">
+                <a @ref="navLink3" @onclick="()=>OnClickNavItem(navLink3, PageRoute.AskAstrolger)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="wpf:ask-question" data-width="25"></span><span>Ask Astrologer</span>
                 </a>
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.CalculatorList)" class="nav-link">
+                <a @ref="navLink4" @onclick="()=>OnClickNavItem(navLink4, PageRoute.CalculatorList)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="bi:calculator" data-width="25"></span><span>Calculators</span>
                 </a>
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.PersonList)" class="nav-link">
+                <a @ref="navLink5" @onclick="()=>OnClickNavItem(navLink5, PageRoute.PersonList)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="fluent:people-list-20-filled" data-width="25"></span><span>Person List</span>
                 </a>
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.Donate)" class="nav-link">
+                <a @ref="navLink6" @onclick="()=>OnClickNavItem(navLink6, PageRoute.Donate)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="iconoir:donate" data-width="25"></span><span>Donate</span>
                 </a>
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.Contact)" class="nav-link">
+                <a @ref="navLink7" @onclick="()=>OnClickNavItem(navLink7, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="ci:mail" data-width="24"></span><span>Contact</span>
                 </a>
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.About)" class="nav-link">
+                <a @ref="navLink8" @onclick="()=>OnClickNavItem(navLink8, PageRoute.About)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="akar-icons:info" data-width="25"></span><span>About</span>
                 </a>
-                <a href="" @onclick="() => _navigation.NavigateTo(PageRoute.Contact)" class="nav-link">
+                <a @ref="navLink9" @onclick="()=>OnClickNavItem(navLink9, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="codicon:feedback" data-width="25"></span><span>Give Feedback</span>
                 </a>
 
@@ -67,7 +67,6 @@
         <nav class="nav-sidebar">
         </nav>*@
         </div><!-- sidebar-body -->
-
         <div class="sidebar-footer">
             @**@
             @*            <a href="" class="avatar online"><span class="avatar-initial">s</span></a>
@@ -108,7 +107,7 @@
 {
     IJSObjectReference? _module;
     bool _mainPageInitDone;
-    private ElementReference searchInput;
+    private ElementReference searchInput, navLink1, navLink2, navLink3, navLink4, navLink5, navLink6, navLink7, navLink8, navLink9;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -225,6 +224,32 @@
         var value = AppData.DarkMode ? "difference" : "normal";
         await _jsRuntime.SetCss("#DasaViewBox", "mix-blend-mode", value);
 
+    }
+
+    private async Task OnClickNavItem(ElementReference elementReference, string home)
+    {
+        //remove highlight from all nav (reset)
+        DeselectAll();
+
+        //set proper color for nav menu
+        await _jsRuntime.AddClass(elementReference, "active");
+
+        //goto page
+        _navigation.NavigateTo(home);
+
+        void DeselectAll()
+        {
+             _jsRuntime.RemoveClass(navLink1, "active");
+            _jsRuntime.RemoveClass(navLink2, "active");
+            _jsRuntime.RemoveClass(navLink3, "active");
+            _jsRuntime.RemoveClass(navLink4, "active");
+            _jsRuntime.RemoveClass(navLink5, "active");
+            _jsRuntime.RemoveClass(navLink6, "active");
+            _jsRuntime.RemoveClass(navLink7, "active");
+            _jsRuntime.RemoveClass(navLink8, "active");
+            _jsRuntime.RemoveClass(navLink9, "active");
+
+        }
     }
 }
 

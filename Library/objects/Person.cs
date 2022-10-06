@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -52,11 +52,6 @@ namespace Genso.Astrology.Library
 
 
         //PUBLIC PROPERTIES
-
-        ///// <summary>
-        ///// Todo deprecated use BirthTime
-        ///// </summary>
-        //public Time BirthTime => BirthTime;
 
         /// <summary>
         /// Get the place of birth

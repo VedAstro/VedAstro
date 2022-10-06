@@ -10,6 +10,7 @@ using Azure.Storage.Blobs;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -163,7 +164,7 @@ namespace API
                 var newMessageXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new message to main list
-                var messageListXml = APITools.AddXElementToXDocument(messageListClient, newMessageXml);
+                var messageListXml = await APITools.AddXElementToXDocument(messageListClient, newMessageXml);
 
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(messageListClient, messageListXml);
@@ -192,7 +193,7 @@ namespace API
                 var newTaskXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new task to main list
-                var taskListXml = APITools.AddXElementToXDocument(taskListClient, newTaskXml);
+                var taskListXml = await APITools.AddXElementToXDocument(taskListClient, newTaskXml);
 
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(taskListClient, taskListXml);
@@ -222,7 +223,7 @@ namespace API
                 var newVisitorXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new visitor to main list
-                var taskListXml = APITools.AddXElementToXDocument(visitorLogClient, newVisitorXml);
+                var taskListXml = await APITools.AddXElementToXDocument(visitorLogClient, newVisitorXml);
 
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, taskListXml);
@@ -255,7 +256,7 @@ namespace API
                 var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
 
                 //get person list from storage
-                var personListXml = APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.BlobClientToXml(personListClient);
 
                 //get only male ppl into a list & matching user id
                 var maleList = from person in personListXml.Root?.Elements()
@@ -300,7 +301,7 @@ namespace API
                 var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
 
                 //get visitor log from storage
-                var visitorLogXml = APITools.BlobClientToXml(visitorLogClient);
+                var visitorLogXml = await APITools.BlobClientToXml(visitorLogClient);
 
                 //get all unique visitor elements only
                 //var uniqueVisitorList = from visitorXml in visitorLogXml.Root?.Elements()
@@ -355,7 +356,7 @@ namespace API
                 var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
 
                 //get person list from storage
-                var personListXml = APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.BlobClientToXml(personListClient);
 
                 //get only female ppl into a list
                 var femaleList = from person in personListXml.Root?.Elements()
@@ -401,7 +402,7 @@ namespace API
                 var originalHash = int.Parse(requestData.Value);
 
                 //get the person record by hash
-                var personListXml = APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.BlobClientToXml(personListClient);
                 var foundPerson = await APITools.FindPersonByHash(personListXml, originalHash);
 
                 //send person to caller
@@ -458,10 +459,8 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
-
             try
             {
-
                 //get dasa report for sending
                 var dasaReportSvg = await GetEventReportSvgForIncomingRequest(incomingRequest, personListClient);
 
@@ -484,40 +483,6 @@ namespace API
 
 
 
-        /// <summary>
-        /// Generates a new SVG dasa report given a person hash (cached)
-        /// Call normally as method above
-        /// NOTE:
-        /// no specific time used standard 120 years only
-        /// each cache is 120 years at a specific resolution (days per pixel)
-        /// It is done so that cache is not clogged with individual time slice and resolution
-        /// </summary>
-        [FunctionName("getpersondasareportcached")]
-        public static async Task<IActionResult> GetPersonDasaReportCached(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient,
-            [Blob(CachedDasaReportXml, FileAccess.ReadWrite)] BlobClient cachedDasaReportXmlClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-                //get dasa report for sending
-                var dasaReportSvg = await GetDasaReportSvgForIncomingRequestCached(incomingRequest, personListClient, cachedDasaReportXmlClient);
-
-                return new OkObjectResult(dasaReportSvg.ToString());
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-        }
 
         /// <summary>
         /// Updates a person's record, uses hash to identify person to overwrite
@@ -536,7 +501,7 @@ namespace API
                 var updatedPersonXml = requestData?.Element("Person");
 
                 //get the person record that needs to be updated
-                var personListXml = APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.BlobClientToXml(personListClient);
                 var personToUpdate = await APITools.FindPersonByHash(personListXml, originalHash);
 
                 //delete the previous person record,
@@ -580,7 +545,7 @@ namespace API
                 var originalHash = int.Parse(requestData.Value);
 
                 //get the person record that needs to be deleted
-                var personListXml = APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.BlobClientToXml(personListClient);
                 var personToDelete = await APITools.FindPersonByHash(personListXml, originalHash);
 
                 //add deleted person to recycle bin 
@@ -618,7 +583,7 @@ namespace API
                 var userId = userIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
-                var visitorListXml = APITools.BlobClientToXml(visitorLogClient);
+                var visitorListXml = await APITools.BlobClientToXml(visitorLogClient);
                 var visitorLogsToDelete = visitorListXml.Root?.Elements().Where(x => x.Element("UserId")?.Value == userId).ToList();
 
                 //delete each record
@@ -656,7 +621,7 @@ namespace API
                 var visitorId = visitorIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
-                var visitorListXml = APITools.BlobClientToXml(visitorLogClient);
+                var visitorListXml = await APITools.BlobClientToXml(visitorLogClient);
                 var visitorLogsToDelete = (from xml in visitorListXml.Root?.Elements()
                                            where xml.Element("VisitorId")?.Value == visitorId
                                            select xml).ToList();
@@ -696,7 +661,7 @@ namespace API
                 var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
 
                 //get all person list from storage
-                var personListXml = APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.BlobClientToXml(personListClient);
 
                 //filter out person by user id
                 var filteredList = APITools.FindPersonByUserId(personListXml, userId);
@@ -729,7 +694,7 @@ namespace API
             try
             {
                 //get task list from storage
-                var taskListXml = APITools.BlobClientToXml(taskListClient);
+                var taskListXml = await APITools.BlobClientToXml(taskListClient);
 
                 //send task list to caller
                 responseMessage = taskListXml.ToString();
@@ -759,7 +724,7 @@ namespace API
             try
             {
                 //get message list from storage
-                var messageListXml = APITools.BlobClientToXml(messageListClient);
+                var messageListXml = await APITools.BlobClientToXml(messageListClient);
 
                 //send task list to caller
                 responseMessage = messageListXml.ToString();
@@ -796,7 +761,7 @@ namespace API
                 var userEmail = validPayload.Email;
 
                 //use the email to get the user's record (or make new one if don't exist)
-                var userData = await Storage.GetUserData(userId, userName, userEmail);
+                var userData = await APITools.GetUserData(userId, userName, userEmail);
 
                 //todo add login to users log (browser, location, time)
                 //todo maybe better in client
@@ -836,7 +801,7 @@ namespace API
                 var userEmail = json["email"].ToString();
 
                 //use the email to get the user's record (or make new one if don't exist)
-                var userData = await Storage.GetUserData(userId, userName, userEmail);
+                var userData = await APITools.GetUserData(userId, userName, userEmail);
 
                 //send user data as xml in with pass status
                 //so that client can generate hash and use it
@@ -927,76 +892,7 @@ namespace API
 
         }
 
-        /// <summary>
-        /// note: start time & end time hard set 120 years here
-        /// </summary>
-        private static async Task<XElement> GetDasaReportSvgForIncomingRequestCached(HttpRequestMessage req, BlobClient personListClient, BlobClient cachedReportsClient)
-        {
-            //get all the data needed out of the incoming request
-            var personHashXml = APITools.ExtractDataFromRequest(req);
-            var personHash = int.Parse(personHashXml.Value);
 
-            //get the person instance by hash
-            var foundPerson = await APITools.GetPersonFromHash(personHash, personListClient);
-
-
-        TryAgain:
-            //use svg from cache if it exists else,
-            //make new one save it in cache & send that
-            var cacheFound = GetCachedDasaReportSvg(foundPerson, cachedReportsClient, out var cachedReportsXml);
-            if (cacheFound) { return cachedReportsXml; }
-
-
-            //if control reaches here, then no cache
-            //generate new report (compute)
-            //await RefreshDasaReportCache(foundPerson, cachedReportsClient);
-
-            //try again
-            goto TryAgain;
-
-        }
-
-        /// <summary>
-        /// Returns false if no cache found
-        /// </summary>
-        private static bool GetCachedDasaReportSvg(Person inputPerson, BlobClient cachedReportsClient, out XElement cachedReports)
-        {
-            //get cached reports from storage
-            var reportListXml = APITools.BlobClientToXml(cachedReportsClient);
-
-            //get only the report specified
-            var foundList = from report in reportListXml.Root?.Elements()
-                            where
-                                report.Element("PersonHash")?.Value == inputPerson.Hash.ToString()
-                            select report;
-
-            cachedReports = new XElement("Root", foundList);
-
-            //only allowed 1 cache
-            //if (foundList.Count() > 1) { throw new Exception("Duplicate Dasa Report Cache!"); }
-
-            //if none found return empty str
-            //if (!foundList.Any()) { return ""; }
-
-            //return true if found cache, else false
-            return foundList.Any();
-        }
-
-        private static async Task SetCachedDasaReportSvg(int personHash, double daysPerPixel, BlobClient cachedReportsClient, string svgString)
-        {
-
-            var personHashXml = new XElement("PersonHash", personHash);
-            var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixel);
-            var svgReportXml = new XElement("SvgReport", svgString);
-            var reportXml = new XElement("Report", personHashXml, daysPerPixelXml, svgReportXml);
-
-            //add new visitor to main list
-            var taskListXml = APITools.AddXElementToXDocument(cachedReportsClient, reportXml);
-
-            //upload modified list to storage
-            await APITools.OverwriteBlobData(cachedReportsClient, taskListXml);
-
-        }
 
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -379,6 +380,13 @@ namespace Genso.Astrology.Library
             return result;
         }
 
+        public static string StreamToString(Stream stream)
+        {
+            StreamReader reader = new StreamReader(stream);
+            string text = reader.ReadToEnd();
+
+            return text;
+        }
     }
 
 }

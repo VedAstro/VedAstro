@@ -1,14 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>Website</RootNamespace>
-		<!--AOT disabled because not working in android chrome-->
-		 <!--<RunAOTCompilation>true</RunAOTCompilation>-->
 	</PropertyGroup>
-
+	
+	<PropertyGroup Condition="'$(Flavor)'=='AOT_ON'">
+			<!--AOT disabled because not working in android chrome-->
+			<RunAOTCompilation>true</RunAOTCompilation>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Flavor)'=='AOT_OFF'">
+			<!--AOT disabled because not working in android chrome-->
+			<RunAOTCompilation>false</RunAOTCompilation>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AspNetMonsters.Blazor.Geolocation" Version="0.5.0-preview1" />
 		<PackageReference Include="GoogleMaps.LocationServices" Version="1.2.0.5" />

@@ -120,6 +120,7 @@ namespace API
             }
             catch (Exception e)
             {
+                //todo log the error here
                 Console.WriteLine(e);
                 throw new Exception($"Azure Storage Failure : {blobClient.Name}");
             }

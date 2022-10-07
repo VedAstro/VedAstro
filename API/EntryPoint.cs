@@ -820,28 +820,6 @@ namespace API
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
 
-        private static async Task ClearExistingCacheForUser(int personHash, BlobClient cachedReportsClient)
-        {
-            var cachedReportXml = APITools.BlobClientToXml(cachedReportsClient);
-
-            //get only the report specified
-            var foundList = from report in cachedReportXml.Root?.Elements()
-                            where
-                                report.Element("PersonHash")?.Value == personHash.ToString()
-                            select report;
-
-
-            //delete each resolution if any
-            foreach (var reportXml in foundList)
-            {
-                reportXml.Remove();
-            }
-
-            //upload modified list to storage
-            await APITools.OverwriteBlobData(cachedReportsClient, cachedReportXml);
-
-        }
-
 
         private static async Task<HttpResponseMessage> GetRequest(string receiverAddress)
         {

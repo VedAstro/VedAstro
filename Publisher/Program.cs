@@ -7,6 +7,10 @@ using ByteSizeLib;
 using Microsoft.CodeAnalysis;
 using MimeTypes;
 using Microsoft.Extensions.Configuration;
+using System.Reflection.Metadata;
+using Azure.Storage;
+using System.Security.Cryptography;
+using System.IO;
 
 namespace Publisher
 {
@@ -14,100 +18,139 @@ namespace Publisher
     {
         private static string projectPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website";
         private static string projectFilePath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\Website.csproj";
-        private static string projectBuildPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\publish\\wwwroot";
+        private static string projectBuildPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net6.0\\publish\\wwwroot";
+        private static string? _nukeOld;
 
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Choose wisely");
-            Console.WriteLine("1:Build & Upload All");
-            Console.WriteLine("2:Build & Upload AOT only");
-            Console.WriteLine("3:Upload AOT only (Upload All)");
-            Console.WriteLine("4:Upload AOT only (Upload Changes Only)");
-
-            var choice = Console.ReadLine();
-
-            switch (choice)
+            try
             {
-                case "2": goto AOT;
-                case "3": goto AOT_UPLOAD;
-                case "4": goto AOT_UPLOAD;
-            }
+                Console.WriteLine("Choose wisely");
+                Console.WriteLine("1:Build & Upload All");
+                Console.WriteLine("2:Build & Upload AOT only");
+                Console.WriteLine("3:Upload AOT only");
 
-            //NORMAL BUILD
-            //build the website project
-            BuildProject();
+                var choice = Console.ReadLine();
+                Console.WriteLine("Nuke old website? Y/N");
+                _nukeOld = Console.ReadLine().ToLower();
 
-            //upload to azure
-            await UploadToAzure();
+                switch (choice)
+                {
+                    case "2": goto AOT;
+                    case "3": goto AOT_UPLOAD;
+                }
+
+                //NORMAL BUILD
+                //build the website project
+                BuildProject();
+
+                //upload to azure
+                await UploadToAzure("vedastrowebsitestorage");
 
             //AOT BUILD
             AOT:
-            Console.WriteLine("Now we do AOT");
-            BuildProjectAOT();
+                Console.WriteLine("Now we do AOT");
+                BuildProjectAOT();
 
             AOT_UPLOAD:
-            //upload to azure
-            await UploadToAzureAOT();
+                //upload to azure
+                await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
 
-            Console.WriteLine("DONE!!!");
+                Console.WriteLine("DONE!!!");
 
-            //hold your horses
-            Console.ReadLine();
-        }
+                //hold your horses
+                Console.ReadLine();
 
-
-        private static async Task UploadToAzure()
-        {
-            string containerName = "$web";
-
-            //get secret connection string from secrets.json (security)
-            var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
-            string connectionString = config["vedastrowebsitestorage"];
-
-            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-
-            Console.WriteLine("Nuking old website");
-            //delete all files in website first, so that no problem
-            DeleteAllFilesInContainer(containerClient);
-
-
-            Console.WriteLine("Blasting new website into space");
-            var files = Directory.GetFiles(projectBuildPath, "*.*", SearchOption.AllDirectories);
-            for (var i = 0; i < files.Length; i++)
+            }
+            catch (Exception e)
             {
-                var filePath = files[i];
-                //maintains folder structure
-                var blobName = filePath.Replace(projectBuildPath, "").Replace("\\", "/");
+                Console.WriteLine(e);
+                //hold your horses
+                Console.ReadLine();
 
-                //upload all new website files
-                BlobClient blobClient = containerClient.GetBlobClient(blobName);
-                using (var fs = File.Open(filePath, FileMode.Open))
-                {
-                    //note will not override, folder needs to be cleared before
-                    await blobClient.UploadAsync(fs, new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) });
-                    //await blobClient.UploadAsync(fs, overwrite: true);
-                }
-
-                Console.Write($"\r{i}/{files.Length} Uploaded:{blobName}"); //space to delete extra prev
             }
 
-            Console.WriteLine("Upload Complete");
         }
-        private static async Task UploadToAzureAOT()
+
+
+        //private static async Task UploadToAzure()
+        //{
+        //    string containerName = "$web";
+
+        //    //get secret connection string from secrets.json (security)
+        //    var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+        //    string connectionString = config["vedastrowebsitestorage"];
+
+        //    BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+        //    BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+        //    if (_nukeOld is "y")
+        //    {
+        //        Console.WriteLine("Nuking old website");
+        //        //delete all files in website first, so that no problem
+        //        DeleteAllFilesInContainer(containerClient);
+        //    }
+
+
+        //    Console.WriteLine("Blasting new website into space");
+        //    var files = Directory.GetFiles(projectBuildPath, "*.*", SearchOption.AllDirectories);
+        //    for (var i = 0; i < files.Length; i++)
+        //    {
+        //        var filePath = files[i];
+        //        //maintains folder structure
+        //        var blobName = filePath.Replace(projectBuildPath, "").Replace("\\", "/");
+
+        //        //upload all new website files
+        //        BlobClient blobClient = containerClient.GetBlobClient(blobName);
+        //        using (var fs = File.Open(filePath, FileMode.Open))
+        //        {
+        //            // If the blob already exists
+        //            if (await blobClient.ExistsAsync())
+        //            {
+        //                // Only proceed if modification time of local file is newer
+        //                var blobLastModified = blobClient.GetProperties().Value.LastModified;
+        //                if (blobLastModified > File.GetLastWriteTimeUtc(filePath))
+        //                {
+        //                    //note will overwrite existing
+        //                    await blobClient.UploadAsync(fs, overwrite: true);
+
+        //                    //change content type
+        //                    var blobHttpHeaders = new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) };
+        //                    await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
+        //                    //await blobClient.UploadAsync(fs, overwrite: true);
+        //                    Console.Write($"\r{i}/{files.Length} Uploaded:{blobName}                  "); //space to delete extra prev
+        //                }
+        //                else
+        //                {
+        //                    Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra prev
+        //                }
+
+        //            }
+
+        //        }
+
+
+        //    }
+
+        //    Console.WriteLine("Upload Complete");
+        //}
+        private static async Task UploadToAzure(string connectionStringName)
         {
             string containerName = "$web";
 
             //get secret connection string from secrets.json (security)
             var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
-            string connectionString = config["vedastrowebsitestorage2"]; //NOTE:AOT USES WEBSITE2
+            string connectionString = config[connectionStringName];
 
             BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
-            Console.WriteLine("Nuking old website");
-            //delete all files in website first, so that no problem
-            DeleteAllFilesInContainer(containerClient);
+            if (_nukeOld is "y")
+            {
+                Console.WriteLine("Nuking old website");
+                //delete all files in website first, so that no problem
+                DeleteAllFilesInContainer(containerClient);
+            }
 
 
             Console.WriteLine("Blasting new website into space");
@@ -120,14 +163,48 @@ namespace Publisher
 
                 //upload all new website files
                 BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
                 using (var fs = File.Open(filePath, FileMode.Open))
                 {
-                    //note will not override, folder needs to be cleared before
-                    await blobClient.UploadAsync(fs, new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) });
-                    //await blobClient.UploadAsync(fs, overwrite: true);
+                    long blobLastModifiedTick = 0;
+
+                    // If the blob already exists
+                    if (await blobClient.ExistsAsync())
+                    {
+                        try
+                        {
+                            // Only proceed if modification time of local file is newer
+                            var blobProperties = blobClient.GetProperties().Value;
+                            //var blobLastModifiedRaw = blobProperties.Metadata["lastwritetimeutc"];
+                            blobLastModifiedTick = long.Parse(blobProperties.Metadata["lastmodifiedticks"]);
+                        }
+                        catch (Exception e)
+                        {
+                            // ignored
+                        }
+                    }
+
+                    var localLastModified = File.GetLastWriteTimeUtc(filePath);
+                    var localIsNewer = blobLastModifiedTick < localLastModified.Ticks;
+                    if (localIsNewer)
+                    {
+                        //note will overwrite existing
+                        await blobClient.UploadAsync(fs, overwrite: true);
+
+                        //change content type
+                        var blobHttpHeaders = new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) };
+                        await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
+                        await blobClient.SetMetadataAsync(new Dictionary<string, string>() { { "lastmodifiedticks", localLastModified.Ticks.ToString() } });
+                        Console.Write($"\r{i}/{files.Length} Uploaded:{blobName}                  "); //space to delete extra prev
+                    }
+                    else
+                    {
+                        Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra prev
+                    }
+
+
                 }
 
-                Console.Write($"\r{i}/{files.Length} Uploaded:{blobName}"); //space to delete extra prev
             }
 
             Console.WriteLine("Upload Complete");
@@ -170,7 +247,7 @@ namespace Publisher
             Console.WriteLine("Build Complete");
             PrintBuildSize();
         }
-        
+
         private static void BuildProjectAOT()
         {
             Console.WriteLine("Birthing new AOT website");
@@ -194,7 +271,7 @@ namespace Publisher
             Console.WriteLine("Build Complete");
             PrintBuildSize();
         }
-        
+
         public static long PrintFolderSizeMB(DirectoryInfo d)
         {
             long sizeBytes = 0;
@@ -226,15 +303,23 @@ namespace Publisher
 
         private static void CleanBuildFolder()
         {
-            var di = new DirectoryInfo(projectBuildPath);
-            foreach (var file in di.GetFiles())
+            try
             {
-                file.Delete();
-            }
+                var di = new DirectoryInfo(projectBuildPath);
+                foreach (var file in di.GetFiles())
+                {
+                    file.Delete();
+                }
 
-            foreach (var dir in di.GetDirectories())
+                foreach (var dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+
+            }
+            catch (Exception e)
             {
-                dir.Delete(true);
+                Console.WriteLine("SKIPPED: OLD BUILD DELETE ERROR");
             }
         }
 

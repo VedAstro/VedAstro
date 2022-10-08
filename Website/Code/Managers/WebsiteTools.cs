@@ -56,17 +56,17 @@ namespace Website
 
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
-            var result = locationData.Element("GeocodeResponse").Element("result");
-            var locationElement = result.Element("geometry").Element("location");
-            var lat = Double.Parse(locationElement.Element("lat").Value);
-            var lng = Double.Parse(locationElement.Element("lng").Value);
+            var result = locationData.Element("GeocodeResponse")?.Element("result");
+            var locationElement = result?.Element("geometry")?.Element("location");
+            var lat = double.Parse(locationElement?.Element("lat")?.Value ?? "0");
+            var lng = double.Parse(locationElement?.Element("lng")?.Value ?? "0");
 
             //round coordinates to 3 decimal places
             lat = Math.Round(lat, 3);
             lng = Math.Round(lng, 3);
 
             //get full name with country & state
-            var fullName = result.Element("formatted_address").Value;
+            var fullName = result?.Element("formatted_address")?.Value;
 
             return new { FullName = fullName, Latitude = lat, Longitude = lng };
 

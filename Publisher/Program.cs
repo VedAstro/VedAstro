@@ -11,6 +11,7 @@ using System.Reflection.Metadata;
 using Azure.Storage;
 using System.Security.Cryptography;
 using System.IO;
+using Azure.Core.Pipeline;
 
 namespace Publisher
 {
@@ -18,7 +19,8 @@ namespace Publisher
     {
         private static string projectPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website";
         private static string projectFilePath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\Website.csproj";
-        private static string projectBuildPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net6.0\\publish\\wwwroot";
+        private static string projectBuildPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\publish\\wwwroot";
+        private static string projectBuildPath2 = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\wwwroot";
         private static string? _nukeOld;
 
         static async Task Main(string[] args)
@@ -28,7 +30,10 @@ namespace Publisher
                 Console.WriteLine("Choose wisely");
                 Console.WriteLine("1:Build & Upload All");
                 Console.WriteLine("2:Build & Upload AOT only");
-                Console.WriteLine("3:Upload AOT only");
+                Console.WriteLine("3:Build & Upload Normal only");
+                Console.WriteLine("4:Upload AOT only");
+                Console.WriteLine("5:Upload Normal only");
+                Console.WriteLine("6:Upload AOT & Normal");
 
                 var choice = Console.ReadLine();
                 Console.WriteLine("Nuke old website? Y/N");
@@ -37,7 +42,19 @@ namespace Publisher
                 switch (choice)
                 {
                     case "2": goto AOT;
-                    case "3": goto AOT_UPLOAD;
+                    case "3":
+                        //build the website project
+                        BuildProject();
+                        //upload to azure
+                        await UploadToAzure("vedastrowebsitestorage");
+                        goto END;
+                    case "4": goto AOT_UPLOAD;
+                    case "5": await UploadToAzure("vedastrowebsitestorage"); goto END;
+                    case "6":
+                        await UploadToAzure("vedastrowebsitestorage");
+                        Console.WriteLine("Now we do AOT");
+                        await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
+                        goto END;
                 }
 
                 //NORMAL BUILD
@@ -58,6 +75,7 @@ namespace Publisher
 
                 Console.WriteLine("DONE!!!");
 
+            END:
                 //hold your horses
                 Console.ReadLine();
 
@@ -65,75 +83,14 @@ namespace Publisher
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                //hold your horses
-                Console.ReadLine();
 
             }
 
+            //hold your horses
+            Console.ReadLine();
         }
 
 
-        //private static async Task UploadToAzure()
-        //{
-        //    string containerName = "$web";
-
-        //    //get secret connection string from secrets.json (security)
-        //    var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
-        //    string connectionString = config["vedastrowebsitestorage"];
-
-        //    BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
-        //    BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-
-        //    if (_nukeOld is "y")
-        //    {
-        //        Console.WriteLine("Nuking old website");
-        //        //delete all files in website first, so that no problem
-        //        DeleteAllFilesInContainer(containerClient);
-        //    }
-
-
-        //    Console.WriteLine("Blasting new website into space");
-        //    var files = Directory.GetFiles(projectBuildPath, "*.*", SearchOption.AllDirectories);
-        //    for (var i = 0; i < files.Length; i++)
-        //    {
-        //        var filePath = files[i];
-        //        //maintains folder structure
-        //        var blobName = filePath.Replace(projectBuildPath, "").Replace("\\", "/");
-
-        //        //upload all new website files
-        //        BlobClient blobClient = containerClient.GetBlobClient(blobName);
-        //        using (var fs = File.Open(filePath, FileMode.Open))
-        //        {
-        //            // If the blob already exists
-        //            if (await blobClient.ExistsAsync())
-        //            {
-        //                // Only proceed if modification time of local file is newer
-        //                var blobLastModified = blobClient.GetProperties().Value.LastModified;
-        //                if (blobLastModified > File.GetLastWriteTimeUtc(filePath))
-        //                {
-        //                    //note will overwrite existing
-        //                    await blobClient.UploadAsync(fs, overwrite: true);
-
-        //                    //change content type
-        //                    var blobHttpHeaders = new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) };
-        //                    await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
-        //                    //await blobClient.UploadAsync(fs, overwrite: true);
-        //                    Console.Write($"\r{i}/{files.Length} Uploaded:{blobName}                  "); //space to delete extra prev
-        //                }
-        //                else
-        //                {
-        //                    Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra prev
-        //                }
-
-        //            }
-
-        //        }
-
-
-        //    }
-
-        //    Console.WriteLine("Upload Complete");
-        //}
         private static async Task UploadToAzure(string connectionStringName)
         {
             string containerName = "$web";
@@ -152,59 +109,72 @@ namespace Publisher
                 DeleteAllFilesInContainer(containerClient);
             }
 
+            //always delete _framework folder in storage
+            //not deleting causes errors on run
+            await containerClient.GetBlobClient("_framework").DeleteIfExistsAsync();
+            Console.WriteLine("Old website _framework deleted!");
 
+
+            var selectedBuildPath = projectBuildPath;
             Console.WriteLine("Blasting new website into space");
-            var files = Directory.GetFiles(projectBuildPath, "*.*", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(selectedBuildPath, "*.*", SearchOption.AllDirectories);
+            if (files.Length < 1)
+            {
+                Console.WriteLine("No files in build path 1,Using build path 2");
+                selectedBuildPath = projectBuildPath2; //change once here
+
+                //maintains folder structure
+                files = Directory.GetFiles(selectedBuildPath, "*.*", SearchOption.AllDirectories);
+            }
+
+            Console.WriteLine($"Files Count:{files.Length}");
+
             for (var i = 0; i < files.Length; i++)
             {
                 var filePath = files[i];
                 //maintains folder structure
-                var blobName = filePath.Replace(projectBuildPath, "").Replace("\\", "/");
+                var blobName = filePath.Replace(selectedBuildPath, "").Replace("\\", "/");
 
                 //upload all new website files
                 BlobClient blobClient = containerClient.GetBlobClient(blobName);
 
-                using (var fs = File.Open(filePath, FileMode.Open))
+                await using var fs = File.Open(filePath, FileMode.Open);
+                long blobLastModifiedTick = 0;
+
+                // If the blob already exists
+                if (await blobClient.ExistsAsync())
                 {
-                    long blobLastModifiedTick = 0;
-
-                    // If the blob already exists
-                    if (await blobClient.ExistsAsync())
+                    try
                     {
-                        try
-                        {
-                            // Only proceed if modification time of local file is newer
-                            var blobProperties = blobClient.GetProperties().Value;
-                            //var blobLastModifiedRaw = blobProperties.Metadata["lastwritetimeutc"];
-                            blobLastModifiedTick = long.Parse(blobProperties.Metadata["lastmodifiedticks"]);
-                        }
-                        catch (Exception e)
-                        {
-                            // ignored
-                        }
+                        // Only proceed if modification time of local file is newer
+                        var blobProperties = (await blobClient.GetPropertiesAsync()).Value;
+                        blobLastModifiedTick = long.Parse(blobProperties.Metadata["lastmodifiedticks"]);
                     }
-
-                    var localLastModified = File.GetLastWriteTimeUtc(filePath);
-                    var localIsNewer = blobLastModifiedTick < localLastModified.Ticks;
-                    if (localIsNewer)
+                    catch (Exception e)
                     {
-                        //note will overwrite existing
-                        await blobClient.UploadAsync(fs, overwrite: true);
-
-                        //change content type
-                        var blobHttpHeaders = new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) };
-                        await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
-                        await blobClient.SetMetadataAsync(new Dictionary<string, string>() { { "lastmodifiedticks", localLastModified.Ticks.ToString() } });
-                        Console.Write($"\r{i}/{files.Length} Uploaded:{blobName}                  "); //space to delete extra prev
+                        // ignored
                     }
-                    else
-                    {
-                        Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra prev
-                    }
-
-
                 }
 
+                var localLastModified = File.GetLastWriteTimeUtc(filePath);
+                var localIsNewer = blobLastModifiedTick < localLastModified.Ticks;
+                if (localIsNewer)
+                {
+                    //print name 1st to know which gets stuck
+                    //extra space to delete extra prev
+                    Console.Write($"\r{i}/{files.Length} Uploading:{blobName}                  ");
+
+                    //note will overwrite existing
+                    await blobClient.UploadAsync(fs, overwrite: true, CancellationToken.None);
+                    //change content type
+                    var blobHttpHeaders = new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) };
+                    await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
+                    await blobClient.SetMetadataAsync(new Dictionary<string, string>() { { "lastmodifiedticks", localLastModified.Ticks.ToString() } });
+                }
+                else
+                {
+                    Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra prev
+                }
             }
 
             Console.WriteLine("Upload Complete");
@@ -233,8 +203,6 @@ namespace Publisher
 
             //run build from power shell since correct dir
             var ps = PowerShell.Create();
-            //ps.AddCommand("dotnet").AddParameter("publish").AddParameter(projectFilePath).AddParameter("configuration", "Release"); //build release for publish
-            //ps.AddCommand("dotnet").AddArgument("build");
             ps.AddScript(@"dotnet publish -c Release -p:Flavor=AOT_OFF");
             ps.Invoke();
 
@@ -306,6 +274,25 @@ namespace Publisher
             try
             {
                 var di = new DirectoryInfo(projectBuildPath);
+                foreach (var file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+
+                foreach (var dir in di.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("SKIPPED: OLD BUILD DELETE ERROR");
+            }
+            
+            try
+            {
+                var di = new DirectoryInfo(projectBuildPath2);
                 foreach (var file in di.GetFiles())
                 {
                     file.Delete();

@@ -1,6 +1,7 @@
 using AspNetMonsters.Blazor.Geolocation;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using System.Runtime.CompilerServices;
 
 namespace Website
 {
@@ -55,7 +56,8 @@ builder.Logging.ClearProviders();
             var webAssemblyHost = builder.Build();
 
             //CUSTOM CODE HERE
-            Console.WriteLine("VedAstro V4.20");
+            Console.WriteLine("VedAstro");
+            Console.WriteLine(RuntimeFeature.IsDynamicCodeCompiled?"AOT MODE":"NORMAL MODE");
 
             await webAssemblyHost.RunAsync();
 

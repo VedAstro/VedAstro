@@ -37,10 +37,13 @@ namespace Website
         public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
         public const string GetPersonDasaReport = "https://vedastroapi.azurewebsites.net/api/getpersondasareport";
         public const string GetPersonEventsReport = "https://vedastroapi.azurewebsites.net/api/getpersoneventsreport";
+        public const string GetSavedChartNameList = "https://vedastroapi.azurewebsites.net/api/getsavedchartnamelist";
+        public const string SavePersonEventsReport = "https://vedastroapi.azurewebsites.net/api/savepersoneventsreport";
         public const string GetPersonDasaReportCached = "https://vedastroapi.azurewebsites.net/api/getpersondasareportcached";
         public const string GetPersonDasaReportLocal = "http://localhost:7071/api/getpersondasareport";
         public const string GetEventsApi = "https://vedastroapi.azurewebsites.net/api/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
+        //TODO HIDE API
         public const string GoogleGeoLocationApiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
         /// <summary>
         /// link to js file used for google sign in function

@@ -2,6 +2,7 @@
 
 # What is this?
 A non-profit, open source project to make Vedic Astrological tools easily available to all.
+
 Find out more @ [VedAstro.org](https://vedastro.org/)
 
 # Links
@@ -10,6 +11,13 @@ Find out more @ [VedAstro.org](https://vedastro.org/)
 - [Share](https://vedastro.org/contact) your ideas for new or better features 
 - [Fix](https://vedastro.org/contact) bugs & implement features
 - [Donate](https://vedastro.org/donate) to support programming & server costs
+
+
+# Unexpected errors?
+There are new updates to the VedAstro WebApp almost everyday! Your browsers caches the old version,
+which causes errors as it fails to work with the updated API Server. Do a hard refresh & clear your cache.
+This will solve 99% of the errors you face.
+
 
 # Project Architecture
 #### Key design notes to understand the internals of the program better.

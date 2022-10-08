@@ -17,12 +17,12 @@
 
     
     <h4 class="fw-bold">How To Use?</h4>
-    <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-        <span class="fw-bold">Step 1:</span> Sign In, to save your data for later use.<br/>
-        <span class="fw-bold">Step 2:</span> Goto <a href="@PageRoute.PersonList" class="link-primary">Person List</a>
-                                            page and create a new Person profile.<br/>
-        <span class="fw-bold">Step 3:</span> Goto <a href="@PageRoute.CalculatorList" class="link-primary">Calculator List</a> page and
-        choose a calculator, example  <a href="@PageRoute.Match" class="link-primary">Match</a>.<br/>
+    <p class="text-justify gap-2" style="max-width:@AppData.MaxWidth;">
+        <span class="fw-bold">Step 1:</span> Sign In, to save your data for later use<br/>
+        <span class="fw-bold">Step 2:</span> Go to <a href="@PageRoute.PersonList" class="link-primary fw-bold">Person List</a>
+                                            page and click "Add Person" (birth time &amp; place)<br/>
+        <span class="fw-bold">Step 3:</span> Go to <a href="@PageRoute.CalculatorList" class="link-primary fw-bold">Calculator List</a> page and
+        choose a calculator, for example  <a href="@PageRoute.Match" class="link-primary fw-bold">Match</a><br />
     </p>
 
 
@@ -35,19 +35,17 @@
         Cost of development and hosting VedAstro is paid for by users like you.
     </p>
 
-
-   @* <h4 class="fw-bold">Must I login to use?</h4>
-    <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-        No. VedAstro was designed with ease and speed in mind.So all tools are available 
-        for use without login.But if you don't login, we can't save the data you add. 
-        For example, if you add a Person profile it will only be available the next time you 
-        visit if you login first. Else it will be deleted when you close the page. 
-        We've simplified the login process using Google Sign In. So you don't have to waste 
-        your time creating a new account with boring passwords to remember.
-    </p>*@
+   <h4 class="fw-bold">Unexpected errors?</h4>
+   <p class="text-justify" style="max-width:@AppData.MaxWidth;">
+       There are new updates to the VedAstro WebApp almost <a target="_blank" rel="noopener noreferrer" href="https://github.com/gen-so/Genso.Astrology/commits/master" class="link-primary fw-bold">everyday!</a>
+       Your browsers caches the old version, which causes errors
+       as it fails to work with the updated API Server.
+       Do a hard refresh &amp; clear your cache.
+       This will solve 99% of the errors you face.
+   </p>
 
 
-    <h4 class="fw-bold">Who is this for?</h4>
+   <h4 class="fw-bold">Who is this for?</h4>
     <p class="text-justify" style="max-width:@AppData.MaxWidth;">
         Both an average person and expert astrologer can find VedAstro useful. There are complex calculators 
         like Dasa that experts can use and there are easy to use calculators like Match that require 
@@ -59,15 +57,24 @@
         calculators easily usable by anybody. So if you find any of the calculator too difficult to use, 
         just leave a comment and it might be better the next time you visit.
     </p>
-
-
-    <h4 class="fw-bold">Advanced</h4>
+    
+    <h4 class="fw-bold">Must I login to use?</h4>
     <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-        Under the hood, VedAstro is a Blazor WebAssembly + JS web application. 
+        @*No. VedAstro was designed with ease and speed in mind.So all tools are available 
+        for use without login.But *@If you don't login, we can't save the data you add.
+        For example, if you add a Person profile it will only be available the next time you 
+        visit if you login first. Else it will be deleted when you close &amp; clear cache. 
+        We've simplified the login process using Google &amp; Facebook Sign In. So you don't have to waste 
+        your time creating a new account with boring passwords to remember.
+    </p>
+
+   <h4 class="fw-bold">Info For Coders</h4>
+    <p class="text-justify" style="max-width:@AppData.MaxWidth;">
+        Under the hood, VedAstro is a hybrid Blazor WebAssembly + JS web application. 
         The cloud method of using VedAstro is the recommended way for most users. 
         But if you're feeling adventurous, try out VedAstro in Windows & API. 
         You can find the Windows exe build in our github repo. And for now the best way you can
-        learn to use the API is to read the code in our repo. 
+        learn to use the API is to read the code in our repo. As we have yet to reach the documentation stage of this project.
         If you need help with our API or Code, just drop us a mail.
     </p>
 

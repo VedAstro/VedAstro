@@ -5,7 +5,8 @@
 </h3>
 
 <h3 align="center">
-
+  
+  ![GitHub last commit](https://img.shields.io/github/last-commit/gen-so/Genso.Astrology)
   ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
   [![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
   [![Gitter](https://badges.gitter.im/VedAstro/community.svg)](https://gitter.im/VedAstro/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -14,10 +15,7 @@
 </h3>
 
 
-# What is this?
-A non-profit, open source project to make Vedic Astrological tools easily available to all.
-
-Find out more @ [VedAstro.org](https://vedastro.org/)
+<h1 align="center"><a href="https://www.vedastro.org">VedAstro.org</a></h1>
 
 # Links
 - [Quick Guide](https://vedastro.org/quickguide) learn how to use

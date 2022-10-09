@@ -11,17 +11,20 @@ using System.Reflection.Metadata;
 using Azure.Storage;
 using System.Security.Cryptography;
 using System.IO;
+using Azure;
 using Azure.Core.Pipeline;
+using Azure.Storage.Sas;
+using System.Security.Principal;
 
 namespace Publisher
 {
     internal class Program
     {
         private static string projectPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website";
-        private static string projectFilePath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\Website.csproj";
         private static string projectBuildPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\publish\\wwwroot";
         private static string projectBuildPath2 = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\wwwroot";
         private static string? _nukeOld;
+        private static IConfigurationRoot _config;
 
         static async Task Main(string[] args)
         {
@@ -34,10 +37,15 @@ namespace Publisher
                 Console.WriteLine("4:Upload AOT only");
                 Console.WriteLine("5:Upload Normal only");
                 Console.WriteLine("6:Upload AOT & Normal");
+                Console.WriteLine("7:Build AOT & Normal");
 
                 var choice = Console.ReadLine();
                 Console.WriteLine("Nuke old website? Y/N");
-                _nukeOld = Console.ReadLine().ToLower();
+                _nukeOld = Console.ReadLine()?.ToLower();
+
+                //init config to get app secrets, like upload string
+                _config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+
 
                 switch (choice)
                 {
@@ -55,6 +63,8 @@ namespace Publisher
                         Console.WriteLine("Now we do AOT");
                         await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
                         goto END;
+                    case "7": BuildProject(); BuildProjectAOT(); goto END;
+
                 }
 
                 //NORMAL BUILD
@@ -66,7 +76,7 @@ namespace Publisher
 
             //AOT BUILD
             AOT:
-                Console.WriteLine("Now we do AOT");
+
                 BuildProjectAOT();
 
             AOT_UPLOAD:
@@ -90,14 +100,15 @@ namespace Publisher
             Console.ReadLine();
         }
 
+        private const string _lastmodifiedticks = "lastmodifiedticks";
 
         private static async Task UploadToAzure(string connectionStringName)
         {
+            //place where website root is default saved
             string containerName = "$web";
 
             //get secret connection string from secrets.json (security)
-            var config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
-            string connectionString = config[connectionStringName];
+            string connectionString = _config[connectionStringName];
 
             BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
             BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
@@ -114,13 +125,16 @@ namespace Publisher
             await containerClient.GetBlobClient("_framework").DeleteIfExistsAsync();
             Console.WriteLine("Old website _framework deleted!");
 
+            //wait little for delete to take effect
+            await Task.Delay(3000);
+
 
             var selectedBuildPath = projectBuildPath;
             Console.WriteLine("Blasting new website into space");
             var files = Directory.GetFiles(selectedBuildPath, "*.*", SearchOption.AllDirectories);
             if (files.Length < 1)
             {
-                Console.WriteLine("No files in build path 1,Using build path 2");
+                Console.WriteLine("No files in build path 1, Using build path 2");
                 selectedBuildPath = projectBuildPath2; //change once here
 
                 //maintains folder structure
@@ -132,30 +146,28 @@ namespace Publisher
             for (var i = 0; i < files.Length; i++)
             {
                 var filePath = files[i];
+
                 //maintains folder structure
                 var blobName = filePath.Replace(selectedBuildPath, "").Replace("\\", "/");
 
-                //upload all new website files
-                BlobClient blobClient = containerClient.GetBlobClient(blobName);
-
+                var blobClient = GetNewBlobClientWithMaxRetry(blobName, containerClient);
                 await using var fs = File.Open(filePath, FileMode.Open);
                 long blobLastModifiedTick = 0;
 
-                // If the blob already exists
+                // If the blob already exists, get the last modified tick count in the blobs metadata
                 if (await blobClient.ExistsAsync())
                 {
                     try
                     {
-                        // Only proceed if modification time of local file is newer
                         var blobProperties = (await blobClient.GetPropertiesAsync()).Value;
-                        blobLastModifiedTick = long.Parse(blobProperties.Metadata["lastmodifiedticks"]);
+                        //this line will fail if lastmodifiedticks was not set before
+                        blobLastModifiedTick = long.Parse(blobProperties.Metadata[_lastmodifiedticks]);
                     }
-                    catch (Exception e)
-                    {
-                        // ignored
-                    }
+                    //if fail, blob last tick will be 0, aka outdated
+                    catch { }
                 }
 
+                //if local file is latest, then upload else skip
                 var localLastModified = File.GetLastWriteTimeUtc(filePath);
                 var localIsNewer = blobLastModifiedTick < localLastModified.Ticks;
                 if (localIsNewer)
@@ -169,15 +181,38 @@ namespace Publisher
                     //change content type
                     var blobHttpHeaders = new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) };
                     await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
-                    await blobClient.SetMetadataAsync(new Dictionary<string, string>() { { "lastmodifiedticks", localLastModified.Ticks.ToString() } });
+                    await blobClient.SetMetadataAsync(new Dictionary<string, string>() { { _lastmodifiedticks, localLastModified.Ticks.ToString() } });
                 }
                 else
                 {
-                    Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra prev
+                    //Console.Write($"\r\n");
+                    Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra previous line
                 }
             }
 
-            Console.WriteLine("Upload Complete");
+            Console.WriteLine("\nUpload Complete");
+        }
+
+        /// <summary>
+        /// Makes a new blob client, but with custom retry limit 100
+        /// </summary>
+        private static BlobClient GetNewBlobClientWithMaxRetry(string blobName, BlobContainerClient containerClient)
+        {
+            //make temp blob client to get correct URI for this blob
+            BlobClient blobClientTemp = containerClient.GetBlobClient(blobName);
+
+            //we create another blob client with increased retry limit, reduces failures in slow connection
+            var blobUri = blobClientTemp.Uri;
+            var options = new BlobClientOptions();
+            options.Diagnostics.IsLoggingEnabled = false;
+            options.Diagnostics.IsTelemetryEnabled = false;
+            options.Diagnostics.IsDistributedTracingEnabled = false;
+            options.Retry.MaxRetries = 100;
+            StorageSharedKeyCredential storageSharedKeyCredential =
+                new StorageSharedKeyCredential("vedastrowebsitestorage2", _config["VedAstroWebsiteStorage2Key1"]);
+            var blobClient = new BlobClient(blobUri: blobUri, options: options, credential: storageSharedKeyCredential);
+
+            return blobClient;
         }
 
         private static void DeleteAllFilesInContainer(BlobContainerClient containerClient)
@@ -206,11 +241,8 @@ namespace Publisher
             ps.AddScript(@"dotnet publish -c Release -p:Flavor=AOT_OFF");
             ps.Invoke();
 
-            foreach (PSObject o in ps.Invoke())
-            {
-                Console.WriteLine(o.ToString());
-            }
-
+            //print build output
+            foreach (PSObject o in ps.Invoke()) { Console.WriteLine(o.ToString()); }
 
             Console.WriteLine("Build Complete");
             PrintBuildSize();
@@ -231,10 +263,8 @@ namespace Publisher
             ps.AddScript(@"dotnet publish -c Release -p:Flavor=AOT_ON");
             ps.Invoke();
 
-            foreach (PSObject o in ps.Invoke())
-            {
-                Console.WriteLine(o.ToString());
-            }
+            //print build output
+            foreach (PSObject o in ps.Invoke()) { Console.WriteLine(o.ToString()); }
 
             Console.WriteLine("Build Complete");
             PrintBuildSize();
@@ -289,7 +319,7 @@ namespace Publisher
             {
                 Console.WriteLine("SKIPPED: OLD BUILD DELETE ERROR");
             }
-            
+
             try
             {
                 var di = new DirectoryInfo(projectBuildPath2);

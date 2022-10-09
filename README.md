@@ -1,4 +1,18 @@
-[![Azure Static Web Apps CI/CD](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-icy-bush-05d95811e.yml/badge.svg)](https://github.com/gen-so/Genso.Astrology/actions/workflows/azure-static-web-apps-icy-bush-05d95811e.yml)
+<h3 align="center">
+
+  ![](GithubImages/header-logo.png)
+
+</h3>
+
+<h3 align="center">
+
+  ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
+  [![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
+  [![Gitter](https://badges.gitter.im/VedAstro/community.svg)](https://gitter.im/VedAstro/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+  
+</h3>
+
 
 # What is this?
 A non-profit, open source project to make Vedic Astrological tools easily available to all.

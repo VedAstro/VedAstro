@@ -38,8 +38,8 @@ namespace Website
             //apps published will not show any error while
             //same run locally will show messages
 #if (DEBUG == false)
-//stop default error handling (prints in console log & shows default error message at page bottom)
-builder.Logging.ClearProviders();
+            //stop default error handling (prints in console log & shows default error message at page bottom)
+            builder.Logging.ClearProviders();
 #endif
 
             //add custom error handling (synchronous exceptions only)
@@ -57,7 +57,7 @@ builder.Logging.ClearProviders();
 
             //CUSTOM CODE HERE
             Console.WriteLine("VedAstro");
-            Console.WriteLine(RuntimeFeature.IsDynamicCodeCompiled?"AOT MODE":"NORMAL MODE");
+            Console.WriteLine(RuntimeFeature.IsDynamicCodeSupported ? "INTERPRETED MODE" : "AOT MODE");
 
             await webAssemblyHost.RunAsync();
 

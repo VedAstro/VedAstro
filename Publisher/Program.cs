@@ -128,7 +128,6 @@ namespace Publisher
             //wait little for delete to take effect
             await Task.Delay(3000);
 
-
             var selectedBuildPath = projectBuildPath;
             Console.WriteLine("Blasting new website into space");
             var files = Directory.GetFiles(selectedBuildPath, "*.*", SearchOption.AllDirectories);
@@ -151,10 +150,9 @@ namespace Publisher
                 var blobName = filePath.Replace(selectedBuildPath, "").Replace("\\", "/");
 
                 var blobClient = GetNewBlobClientWithMaxRetry(blobName, containerClient);
-                await using var fs = File.Open(filePath, FileMode.Open);
-                long blobLastModifiedTick = 0;
 
                 // If the blob already exists, get the last modified tick count in the blobs metadata
+                long blobLastModifiedTick = 0;
                 if (await blobClient.ExistsAsync())
                 {
                     try
@@ -177,15 +175,16 @@ namespace Publisher
                     Console.Write($"\r{i}/{files.Length} Uploading:{blobName}                  ");
 
                     //note will overwrite existing
+                    await using var fs = File.Open(filePath, FileMode.Open);
                     await blobClient.UploadAsync(fs, overwrite: true, CancellationToken.None);
-                    //change content type
+                    
+                    //auto correct content type from wrongly set "octet/stream"
                     var blobHttpHeaders = new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) };
                     await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
                     await blobClient.SetMetadataAsync(new Dictionary<string, string>() { { _lastmodifiedticks, localLastModified.Ticks.ToString() } });
                 }
                 else
                 {
-                    //Console.Write($"\r\n");
                     Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra previous line
                 }
             }

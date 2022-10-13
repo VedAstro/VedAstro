@@ -122,8 +122,9 @@ namespace Publisher
 
             //always delete _framework folder in storage
             //not deleting causes errors on run
-            await containerClient.GetBlobClient("_framework").DeleteIfExistsAsync();
-            Console.WriteLine("Old website _framework deleted!");
+            var result = await containerClient.GetBlobClient("_framework").DeleteIfExistsAsync();
+            var msgTemp = result.Value ? "PASS" : "FAIL";
+            Console.WriteLine($"Old website _framework delete {msgTemp}!");
 
             //wait little for delete to take effect
             await Task.Delay(3000);
@@ -150,8 +151,10 @@ namespace Publisher
                 //maintains folder structure
                 var blobName = filePath.Replace(selectedBuildPath, "").Replace("\\", "/");
 
-                var blobClient = GetNewBlobClientWithMaxRetry(blobName, containerClient);
-
+                //var blobClient = GetNewBlobClientWithMaxRetry(blobName, containerClient);
+                var blobClient = containerClient.GetBlobClient(blobName);
+                //var x = await blobClient2.ExistsAsync();
+                
                 // If the blob already exists, get the last modified tick count in the blobs metadata
                 long blobLastModifiedTick = 0;
                 try
@@ -166,7 +169,7 @@ namespace Publisher
                 }
                 //if fail, blob last tick will be 0, aka outdated
                 catch {
-                    Console.WriteLine("Failed to get LastModifiedTick:" + blobName);
+                    //Console.WriteLine("Failed to get LastModifiedTick:" + blobName);
                 }
 
                 //if local file is latest, then upload else skip
@@ -176,7 +179,7 @@ namespace Publisher
                 {
                     //print name 1st to know which gets stuck
                     //extra space to delete extra prev
-                    Console.Write($"\r{i}/{files.Length} Uploading:{blobName}                  ");
+                    Console.Write($"\r{i}/{files.Length} Uploading:{blobName}");
 
                     //note will overwrite existing
                     await using var fs = File.Open(filePath, FileMode.Open);
@@ -189,7 +192,7 @@ namespace Publisher
                 }
                 else
                 {
-                    Console.Write($"\r{i}/{files.Length} Skipped:{blobName}                  "); //space to delete extra previous line
+                    Console.Write($"\r{i}/{files.Length} Skipped:{blobName}"); //space to delete extra previous line
                 }
             }
 

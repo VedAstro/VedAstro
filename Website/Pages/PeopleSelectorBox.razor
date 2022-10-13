@@ -108,7 +108,7 @@
 
     }
 
-    public Person GetSelectedPerson() => WebsiteTools.GetPersonFromHashCached(SelectedPersonHash);
+    public Person GetSelectedPerson() => WebsiteTools.GetPersonFromHashCached(SelectedPersonHash, _jsRuntime);
 
 
     /// <summary>

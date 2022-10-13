@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -284,9 +284,13 @@ namespace Website
         /// <summary>
         /// NOTE Person list has to be loaded or will fail
         /// </summary>
-        public static Person GetPersonFromHashCached(string personHash)
+        public static Person GetPersonFromHashCached(string personHash, IJSRuntime jsRuntime)
         {
-            return AppData.PersonList.Find(p => p.GetHashCode() == int.Parse(personHash));
+            var personFromHashCached = AppData.TryGetPersonList(jsRuntime).Result?.Find(p => p.GetHashCode() == int.Parse(personHash));
+
+            if (personFromHashCached == null) { throw new Exception("BLZ:GetPersonFromHashCached:Failed!"); }
+
+            return (Person)personFromHashCached;
         }
 
         public static async Task DeletePerson(int personHash, IJSRuntime jsRuntime)
@@ -599,9 +603,9 @@ namespace Website
             var chartHashXml = new XElement("ChartHash", selectedChartHash);
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonHashFromSavedChartHash, chartHashXml, jsRuntime);
             var personHash = result.Value;
-            var selectedPerson = GetPersonFromHashCached(personHash);
+            var selectedPerson = GetPersonFromHashCached(personHash, jsRuntime);
 
-            return selectedPerson;
+            return (Person)selectedPerson;
         }
     }
 }

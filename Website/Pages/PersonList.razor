@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var person in AppData.PersonList)
+            @foreach (var person in AppData.TryGetPersonList(_jsRuntime).Result)
             {
                 <tr style="cursor: pointer;" @onclick="() => PersonNameClicked(person)">
                     <td>@person.Name</td>
@@ -80,7 +80,7 @@ else
         _isReady = false;
 
         //get all people from API server
-        //check if people list already loaded before
+        //auto checks if people list already loaded before
         await AppData.TryGetPersonList(_jsRuntime);
 
         _isReady = true;

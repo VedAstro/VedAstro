@@ -245,6 +245,24 @@ namespace API
                 return new XElement("Person");
             }
         }
+        public static async Task<XElement> FindChartByHash(XDocument savedChartListXml, int originalHash)
+        {
+            try
+            {
+                return savedChartListXml.Root.Elements()
+                    .Where(delegate (XElement chartXml)
+                    {   //use hash as id to find the person's record
+                        var thisHash = Chart.FromXml(chartXml).GetHashCode();
+                        return thisHash == originalHash;
+                    }).First();
+            }
+            catch (Exception e)
+            {
+                //if fail log it and return empty xelement
+                await Log.Error(e, null);
+                return new XElement("Chart");
+            }
+        }
 
         public static async Task<BlobClient> GetFileFromContainer(string fileName, string blobContainerName)
         {
@@ -295,7 +313,10 @@ namespace API
             return foundPersonListXml;
         }
 
-        public static async Task<Person> GetPersonFromHash(int personHash, BlobClient personListClient)
+        /// <summary>
+        /// Given a hash will return parsed person from main list
+        /// </summary>
+        public static async Task<Person> GetPersonFromHash(int personHash)
         {
             var personListXml = await GetPeronListFile();
             var foundPersonXml = await FindPersonByHash(personListXml, personHash);
@@ -337,6 +358,10 @@ namespace API
 
         }
 
+        /// <summary>
+        /// Gets main person list xml doc file 
+        /// </summary>
+        /// <returns></returns>
         private static async Task<XDocument> GetPeronListFile() => await APITools.GetXmlFileFromAzureStorage("PersonList.xml", "vedastro-site-data");
 
         /// <summary>

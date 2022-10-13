@@ -28,6 +28,7 @@ namespace Website
         public const string GetMaleListApi = "https://vedastroapi.azurewebsites.net/api/getmalelist";
         public const string GetPersonListApi = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
         public const string GetPersonApi = "https://vedastroapi.azurewebsites.net/api/getperson";
+        public const string GetPersonHashFromSavedChartHash = "https://vedastroapi.azurewebsites.net/api/getpersonhashfromsavedcharthash";
 
         public const string UpdatePersonApi = "https://vedastroapi.azurewebsites.net/api/updateperson";
         public const string GetTaskListApi = "https://vedastroapi.azurewebsites.net/api/gettasklist";
@@ -35,9 +36,9 @@ namespace Website
         public const string GetMessageList = "https://vedastroapi.azurewebsites.net/api/getmessagelist";
         public const string GetFemaleListApi = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
         public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
-        public const string GetPersonDasaReport = "https://vedastroapi.azurewebsites.net/api/getpersondasareport";
         public const string GetPersonEventsReport = "https://vedastroapi.azurewebsites.net/api/getpersoneventsreport";
-        public const string GetSavedChartNameList = "https://vedastroapi.azurewebsites.net/api/getsavedchartnamelist";
+        public const string GetSavedPersonEventsReport = "https://vedastroapi.azurewebsites.net/api/getsavedpersoneventsreport";
+        public const string GetSavedChartIdList = "https://vedastroapi.azurewebsites.net/api/getsavedchartnamelist";
         public const string SavePersonEventsReport = "https://vedastroapi.azurewebsites.net/api/savepersoneventsreport";
         public const string GetPersonDasaReportCached = "https://vedastroapi.azurewebsites.net/api/getpersondasareportcached";
         public const string GetPersonDasaReportLocal = "http://localhost:7071/api/getpersondasareport";
@@ -54,6 +55,11 @@ namespace Website
         public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
 
 
+        /// <summary>
+        /// Shows if any active connection is on, used to enforce 1 call at a time
+        /// </summary>
+        public static bool IsBusy = false;
+
         //PUBLIC METHODS
 
         /// <summary>
@@ -64,6 +70,12 @@ namespace Website
         /// </summary>
         public static async Task<XElement> ReadFromServerXmlReply(string apiUrl, IJSRuntime? jsRuntime, string rootElementName = "Root")
         {
+            await IfBusyPleaseHold(apiUrl);
+
+            //set busy
+            IsBusy = true;
+
+
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
             string rawMessage = "";
@@ -78,7 +90,12 @@ namespace Website
 
                 //raw message can be JSON or XML
                 //try parse as XML if fail then as JSON
-                return XElement.Parse(rawMessage);
+                var readFromServerXmlReply = XElement.Parse(rawMessage);
+
+                //set free
+                IsBusy = false;
+
+                return readFromServerXmlReply;
             }
             catch (Exception)
             {
@@ -86,11 +103,19 @@ namespace Website
                 try
                 {
                     var rawXml = JsonConvert.DeserializeXmlNode(rawMessage, rootElementName);
-                    return XElement.Parse(rawXml.InnerXml);
+                    var readFromServerXmlReply = XElement.Parse(rawXml.InnerXml);
+
+                    //set free
+                    IsBusy = false;
+
+                    return readFromServerXmlReply;
                 }
                 //unparseable data, let user know
                 catch (Exception e)
                 {
+                    //set free
+                    IsBusy = false;
+
                     throw new ApiCommunicationFailed($"ReadFromServerXmlReply()\n{rawMessage}", e);
                 }
             }
@@ -123,6 +148,11 @@ namespace Website
         /// </summary>
         public static async Task<Stream> WriteToServerStreamReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
+            await IfBusyPleaseHold(apiUrl);
+
+            //set busy
+            IsBusy = true;
+
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
 
@@ -145,12 +175,18 @@ namespace Website
                 //extract the content of the reply data
                 var rawMessage = response.Content.ReadAsStreamAsync().Result;
 
+                //set free
+                IsBusy = false;
+
                 return rawMessage;
 
             }
             //rethrow specialized exception to be handled by caller
             catch (Exception e)
             {
+                //set free
+                IsBusy = false;
+
                 throw new ApiCommunicationFailed($"WriteToServerStreamReply()", e);
             }
 
@@ -163,6 +199,11 @@ namespace Website
         /// </summary>
         public static async Task<XElement> WriteToServerXmlReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
+            await IfBusyPleaseHold(apiUrl);
+
+            //set busy
+            IsBusy = true;
+
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
 
@@ -193,7 +234,12 @@ namespace Website
 
                 //problems might occur when parsing
                 //try to parse as XML
-                return XElement.Parse(rawMessage);
+                var writeToServerXmlReply = XElement.Parse(rawMessage);
+
+                //set free
+                IsBusy = false;
+
+                return writeToServerXmlReply;
             }
 
             //note: failure here could be for several very likely reasons,
@@ -202,20 +248,28 @@ namespace Website
             //- server unreachable
             catch (Exception e)
             {
+                //set free
+                IsBusy = false;
+
                 throw new ApiCommunicationFailed($"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}", e);
             }
 
         }
 
         /// <summary>
-        /// Checks if Status is Pass or Fail in Root xml
+        /// Holds the control until line is clear
+        /// enforces 1 call at a time
+        /// check every 200ms
         /// </summary>
-        public static bool IsReplyPass(XElement rootXml) => rootXml.Element("Status")?.Value == "Pass";
-
-        /// <summary>
-        /// Gets first child element in "Payload" element
-        /// </summary>
-        public static XElement? GetPayload(XElement rootXml) => rootXml.Element("Payload")?.Elements()?.FirstOrDefault();
+        /// <returns></returns>
+        public static async Task IfBusyPleaseHold(string caller = "")
+        {
+            while (IsBusy)
+            {
+                Console.WriteLine($"BLZ:Waiting in line for call:{caller}");
+                await Task.Delay(500);
+            }
+        }
 
 
         //PRIVATE METHODS

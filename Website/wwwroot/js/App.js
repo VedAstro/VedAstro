@@ -145,10 +145,10 @@ function generatePersonListTable(tableId, tableData) {
     //set table data
     var table = new Tabulator(`#${tableId}`, {
         data: tableData,           //load row data from array
-        editable: false,
+        //editable: false,
         layout: "fitColumns",      //fit columns to width of table
         responsiveLayout: "hide",  //hide columns that don't fit on the table
-        tooltips: true,            //show tool tips on cells
+        //tooltips: true,            //show tool tips on cells
         addRowPos: "top",          //when adding a new row, add it to the top of the table
         history: false,             //allow undo and redo actions on the table
         pagination: "local",       //paginate the data
@@ -191,9 +191,9 @@ function generatePlanetDataTable(tableId, tableData) {
     var table = new Tabulator(`#${tableId}`, {
 
         data: tableData,           //load row data from array
-        editable: false,
+        //editable: false,
         layout: "fitDataTable",      //fit columns to width of table
-        tooltips: true,            //show tool tips on cells
+        //tooltips: true,            //show tool tips on cells
         addRowPos: "top",          //when adding a new row, add it to the top of the table
         history: false,             //allow undo and redo actions on the table
         pagination: false,       //paginate the data
@@ -239,9 +239,9 @@ function generateHouseDataTable(tableId, tableData) {
     var table = new Tabulator(`#${tableId}`, {
 
         data: tableData,           //load row data from array
-        editable: false,
+        //editable: false,
         layout: "fitDataTable",      //fit columns to width of table
-        tooltips: true,            //show tool tips on cells
+        //tooltips: true,            //show tool tips on cells
         addRowPos: "top",          //when adding a new row, add it to the top of the table
         history: false,             //allow undo and redo actions on the table
         pagination: false,       //paginate the data
@@ -289,7 +289,7 @@ function generateLifeEventListTable(tableId, tableData) {
         editable: true,
         layout: "fitColumns",      //fit columns to width of table
         responsiveLayout: "hide",  //hide columns that don't fit on the table
-        tooltips: true,            //show tool tips on cells
+        //tooltips: true,            //show tool tips on cells
         addRowPos: "top",          //when adding a new row, add it to the top of the table
         history: false,             //allow undo and redo actions on the table
         pagination: false, //enable pagination

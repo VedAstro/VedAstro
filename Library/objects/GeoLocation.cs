@@ -107,12 +107,20 @@ namespace Genso.Astrology.Library
 
         public static GeoLocation FromXml(XElement root)
         {
-            var name = root.Element("Name")?.Value;
-            var longitude = Double.Parse(root.Element("Longitude")?.Value);
-            var latitude = Double.Parse(root.Element("Latitude")?.Value);
+            try
+            {
+                var name = root.Element("Name")?.Value;
+                var longitude = Double.Parse(root.Element("Longitude")?.Value);
+                var latitude = Double.Parse(root.Element("Latitude")?.Value);
 
 
-            return new GeoLocation(name, longitude, latitude);
+                return new GeoLocation(name, longitude, latitude);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"BLZ:GeoLocation.FromXml() Failed : {root}");
+            }
         }
 
     }

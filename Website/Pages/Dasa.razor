@@ -1,5 +1,6 @@
 @attribute [Route(PageRoute.Dasa)]
 @using Genso.Astrology.Library
+@using System.Xml.Linq
 
 @*<UnderConstructionHeader PageName="Dasa" />
 *@
@@ -71,11 +72,11 @@
         <div class="vstack gap-3 p-3">
             <div class="input-group mb-3">
                 <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
-                <select class="form-select" @bind="_selectedChartName" id="inputGroupSelect01">
+                <select class="form-select" @bind="_selectedChartHash" id="inputGroupSelect01">
                     <option selected>Choose...</option>
-                    @foreach (var chartName in _allChartNameList)
+                    @foreach (var chartIdXml in _allChartIdList)
                     {
-                        <option value="@chartName">@GetFriendlyChartName(@chartName)</option>
+                        <option value="@(chartIdXml.Element("Hash")?.Value)">@(chartIdXml.Element("Name")?.Value)</option>
                     }
                 </select>
             </div>
@@ -192,7 +193,7 @@
 
     //--------------------FIELDS
     private string _selectedTimeRange = "FullLife";
-    private string _selectedChartName = "";
+    private string _selectedChartHash = "";
 
     private PageHelpSection _helpSection;
 
@@ -206,6 +207,8 @@
     private bool _isResultReady = false; //marks if the page ready to loaded
     private MonthYearSelectorBox _startTimeSelector;
     private MonthYearSelectorBox _endTimeSelector;
+
+    private List<XElement> _allChartIdList = new List<XElement>();
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -242,20 +245,26 @@
         //only continue if passed input field validation
         //if (!ValidationPassed()) { return; }
 
+        await _jsRuntime.ShowLoading();
+
         //mark page as NOT ready (when button clicked 2nd time)
         _isResultReady = false;
 
         //show saved chart
-        await _dasaChartViewer?.ShowSavedChart(_selectedChartName)!;
+        await _dasaChartViewer?.ShowSavedChart(_selectedChartHash)!;
 
         //this is needed to generate data charts below
         //note gets person from ID stored in chart name
         SelectedPerson = _dasaChartViewer.SelectedPerson;
 
+        //put person name into tab title for easy multi-tabbing
+        await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
+
 
         //mark page as ready to show results
         _isResultReady = true;
 
+        _jsRuntime.HideLoading();
     }
 
     private async Task _OnClickCalculate()
@@ -422,22 +431,24 @@
         }
     }
 
-    private List<string> _allChartNameList = new List<string>();
 
+    /// <summary>
+    /// Load chart name list when user clicks saved tab, if none show message to user
+    /// </summary>
     private async Task OnClickSavedTab()
     {
         await _jsRuntime.ShowLoading();
 
         //reload list before showing
         //load a list of saved charts
-        _allChartNameList = await _dasaChartViewer?.GetSavedChartNameList()!;
+        _allChartIdList = await _dasaChartViewer?.GetSavedChartNameList();
 
         //if no saved charts let user know
-        if (!_allChartNameList.Any())
+        if (!_allChartIdList.Any())
         {
             await _jsRuntime.ShowAlert("info", "No saved charts, click save chart first.", false, 3000);
         }
-        
+
         _jsRuntime.HideLoading();
 
     }

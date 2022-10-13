@@ -33,6 +33,7 @@ namespace API
         private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
         private const string ContainerName = "vedastro-site-data";
         private const string PersonListFile = "PersonList.xml";
+        private const string SavedChartListFile = "SavedChartList.xml";
         private const string RecycleBinFile = "RecycleBin.xml";
 
 
@@ -101,7 +102,7 @@ namespace API
                 var personHash = int.Parse(rootXml.Value);
 
                 //generate compatibility report
-                var person = await APITools.GetPersonFromHash(personHash, personListClient);
+                var person = await APITools.GetPersonFromHash(personHash);
 
                 //calculate predictions for current person
                 var predictionList = await APITools.GetPrediction(person);
@@ -425,7 +426,6 @@ namespace API
         }
 
 
-
         /// <summary>
         /// Generates a new SVG dasa report given a person hash
         /// Exp call:
@@ -456,16 +456,17 @@ namespace API
         /// </summary>
         [FunctionName("getpersoneventsreport")]
         public static async Task<IActionResult> GetPersonEventsReport(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             try
             {
                 //get dasa report for sending
-                var dasaReportSvg = await GetEventReportSvgForIncomingRequest(incomingRequest, personListClient);
+                var chart = await GetEventReportSvgForIncomingRequest(incomingRequest);
 
                 //send image back to caller
-                var x = StreamToByteArray(dasaReportSvg);
+                //convert svg string to stream for sending
+                var stream = GenerateStreamFromString(chart.ContentSvg);
+                var x = StreamToByteArray(stream);
                 return new FileContentResult(x, "image/svg+xml");
 
             }
@@ -482,6 +483,161 @@ namespace API
         }
 
 
+        /// <summary>
+        /// Gets chart from saved list, needs to be given hash to find
+        /// </summary>
+        [FunctionName("getsavedpersoneventsreport")]
+        public static async Task<IActionResult> GetSavedPersonEventsReport(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+
+            try
+            {
+                //get hash that will be used find the person
+                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var originalHash = int.Parse(requestData.Value);
+
+                //get the saved chart record by hash
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(SavedChartListFile, ContainerName);
+                var foundChartXml = await APITools.FindChartByHash(savedChartListXml, originalHash);
+                var chart = Chart.FromXml(foundChartXml);
+
+                //send image back to caller
+                //convert svg string to stream for sending
+                var stream = GenerateStreamFromString(chart.ContentSvg);
+                var x = StreamToByteArray(stream);
+                return new FileContentResult(x, "image/svg+xml");
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+        }
+
+        /// <summary>
+        /// Given a chart hash it will return the person hash for that chart
+        /// </summary>
+        [FunctionName("getpersonhashfromsavedcharthash")]
+        public static async Task<IActionResult> GetPersonHashFromSavedChartHash(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+
+            try
+            {
+                //get hash that will be used find the person
+                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var chartHash = int.Parse(requestData.Value);
+
+                //get the saved chart record by hash
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(SavedChartListFile, ContainerName);
+                var foundChartXml = await APITools.FindChartByHash(savedChartListXml, chartHash);
+                var chart = Chart.FromXml(foundChartXml);
+
+                //extract out the person hash from chart and send it to caller
+                var personHashXml = new XElement("PersonHash", chart.PersonHash);
+
+                return new OkObjectResult(personHashXml.ToString());
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+        }
+
+
+        /// <summary>
+        /// Saves the chart in Azure Storage
+        /// </summary>
+        [FunctionName("savepersoneventsreport")]
+        public static async Task<IActionResult> SavePersonEventsReport(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+            try
+            {
+                //generate report
+                var chart = await GetEventReportSvgForIncomingRequest(incomingRequest);
+
+                //save chart into storage
+                await APITools.AddXElementToXDocument(chart.ToXml(), SavedChartListFile, ContainerName);
+
+                //let caller know all good
+                return PassMessage();
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+
+        }
+
+        /// <summary>
+        /// make a name & hash only xml list of saved charts
+        /// note: done so to not download what is not needed
+        ///
+        /// client will use data from here to get the actual saved chart
+        /// </summary>
+        [FunctionName("getsavedchartnamelist")]
+        public static async Task<IActionResult> GetSavedChartNameList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+            try
+            {
+
+                //get ful saved chart list
+                var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(SavedChartListFile, ContainerName);
+
+                //extract out the name & hash
+                var rootXml = new XElement("Root");
+
+                //make a name & hash only xml list of saved charts
+                //note: done so to not download what is not needed
+                foreach (var chartXml in savedChartXmlDoc?.Root?.Elements()!)
+                {
+                    var parsedChart = Chart.FromXml(chartXml);
+                    var person = await APITools.GetPersonFromHash(parsedChart.PersonHash);
+                    var chartNameXml = new XElement("ChartName",
+                        new XElement("Name",
+                            parsedChart.GetFormattedName(person.Name)),
+                        new XElement("Hash",
+                            parsedChart.GetHashCode()));
+
+                    //add to final xml
+                    rootXml.Add(chartNameXml);
+                }
+
+
+                return new OkObjectResult(rootXml.ToString());
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+
+        }
 
 
         /// <summary>
@@ -524,6 +680,7 @@ namespace API
             }
 
         }
+
 
         /// <summary>
         /// Deletes a person's record, uses hash to identify person
@@ -842,7 +999,7 @@ namespace API
         /// <summary>
         /// processes incoming xml request and outputs events svg report
         /// </summary>
-        private static async Task<Stream> GetEventReportSvgForIncomingRequest(HttpRequestMessage req, BlobClient personListClient)
+        private static async Task<Chart> GetEventReportSvgForIncomingRequest(HttpRequestMessage req)
         {
             //get all the data needed out of the incoming request
             var rootXml = APITools.ExtractDataFromRequest(req);
@@ -857,17 +1014,12 @@ namespace API
 
 
             //get the person instance by hash
-            var foundPerson = await APITools.GetPersonFromHash(personHash, personListClient);
+            var foundPerson = await APITools.GetPersonFromHash(personHash);
 
             //from person get svg report
             var eventsReportSvgString = GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
-            //convert svg string to stream for sending
-            //todo check if using really needed here
-            var stream = GenerateStreamFromString(eventsReportSvgString);
-
-            return stream;
-
+            return new Chart(eventsReportSvgString, personHash, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
         }
 
 
@@ -1240,7 +1392,7 @@ namespace API
                           $"\" " +//end of style tag
                           $"xmlns=\"http://www.w3.org/2000/svg\" " +
                           $"xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + //much needed for use tags to work
-                          //$"<title>{chartTitle}</title>" + //title visible in browser when open direct
+                                                                             //$"<title>{chartTitle}</title>" + //title visible in browser when open direct
                           $"{combinedSvgString}</svg>";
 
             return svgBody;
@@ -1845,6 +1997,8 @@ namespace API
 
             string GenerateSummaryRow(int yAxis)
             {
+                Console.WriteLine("MAX" + maxValue);
+                Console.WriteLine("MIN" + minValue);
 
                 var rowHtml = "";
                 //generate color summary
@@ -1852,14 +2006,17 @@ namespace API
                 foreach (var summarySlice in summaryRowData)
                 {
                     int xAxis = summarySlice.Key;
-                    double totalNatureScore = summarySlice.Value; //possible negative
+                    //total nature score is sum of negative & positive 1s of all events
+                    //that occurred at this point in time, possible negative number
+                    //exp: -4 bad + 5 good = 1 total nature score
+                    double totalNatureScore = summarySlice.Value;
 
                     var rect = $"<rect " +
                                $"x=\"{xAxis}\" " +
                                $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                $"width=\"{widthPerSlice}\" " +
                                $"height=\"{singleRowHeight}\" " +
-                               $"fill=\"{GetSummaryColor(totalNatureScore)}\" />";
+                               $"fill=\"{GetSummaryColor(totalNatureScore, minValue, maxValue)}\" />";
 
                     //add rect to row
                     colorRow += rect;
@@ -1904,31 +2061,6 @@ namespace API
                 return rowHtml;
             }
 
-            string GetSummaryColor(double value)
-            {
-                string colorHex;
-
-                //convert value coming in, to a percentage based on min & max
-                //this will make setting color based on value easier & accurate
-
-                if (value >= 0) //good
-                {
-                    var color255 = (int)value.Remap(0, maxValue, 0, 255);
-                    if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return white color
-                    if (color255 >= 220) { return "#00FF00"; } //if very close to 255, return solid color
-                    colorHex = $"{color255:X}";//convert from 255 to FF
-                    return $"#{colorHex}FF{colorHex}"; //green
-                }
-                else //bad
-                {
-                    var color255 = (int)value.Remap(minValue, 0, 0, 255);
-                    if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return white color
-                    if (color255 >= 220) { return "#DD0000"; } //if very close to 255, return solid color (DD to make it darker)
-                    colorHex = $"{color255:X}";//convert from 255 to FF
-                    return $"#FF{colorHex}{colorHex}"; //red
-                }
-
-            }
 
 
             //height not known until generated
@@ -1978,7 +2110,7 @@ namespace API
                         rowHtml += rect;
 
                         //every time a rect is added, we keep track of it in a list to generate the summary row at last
-                        //based on event nature minus or plus
+                        //based on event nature minus or plus 1
                         double natureScore = 0;
                         switch (foundEvent?.Nature)
                         {
@@ -1991,7 +2123,8 @@ namespace API
                         }
 
                         //compile nature score for making summary row later (defaults to 0)
-                        summaryRowData[horizontalPosition] = natureScore + (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition] : 0);
+                        var previousNatureScoreSum = (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition] : 0);
+                        summaryRowData[horizontalPosition] = natureScore + previousNatureScoreSum; //combine current with previous
 
 
                         //increment vertical position for next
@@ -2028,6 +2161,44 @@ namespace API
 
         }
 
+
+        /// <summary>
+        /// convert value coming in, to a percentage based on min & max
+        /// this will make setting color based on value easier & accurate
+        /// note, this will cause color to be relative to only what is visible in chart atm!
+        /// </summary>
+        public static string GetSummaryColor(double totalNature, double minValue, double maxValue)
+        {
+            string colorHex;
+            if (totalNature >= 0) //good
+            {
+                //note: higher number is lighter color lower is darker
+                var color255 = (int)totalNature.Remap(0, maxValue, 0, 255);
+                if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return greenish white color (lighter)
+                if (color255 >= 220) { return "#00FF00"; } //if very close to 255, return solid green color (darker)
+
+                //this is done to invert the color,
+                //so that higher score leads to darker green
+                color255 = 255 - color255;
+
+                colorHex = $"{color255:X}";//convert from 255 to FF
+                var summaryColor = $"#{colorHex}FF{colorHex}";
+                return summaryColor; //green
+            }
+            else //bad
+            {
+                //note: colors here are rendered opposite compared to good
+                //because lower number here is worse, as such needs to be dark red.
+                var color255 = (int)totalNature.Remap(minValue, 0, 0, 255);
+                if (color255 <= 10) { return "#DD0000"; } //if very close to 0, return white color
+                if (color255 >= 220) { return "#FFFFFF"; } //if very close to 255, return solid color (DD to make it darker)
+                colorHex = $"{color255:X}";//convert from 255 to FF
+                var summaryColor = $"#FF{colorHex}{colorHex}";
+                return summaryColor; //red
+            }
+
+        }
+
         private static byte[] StreamToByteArray(Stream input)
         {
             //reset stream position
@@ -2048,4 +2219,6 @@ namespace API
         }
 
     }
+
+
 }

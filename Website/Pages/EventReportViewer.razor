@@ -18,7 +18,7 @@
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
         @if (!_nowSavedChart)
         {
-            <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChart" SmallSize="true" />
+            <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChartAPI" SmallSize="true" />
         }
     </div>
 </div>
@@ -78,48 +78,106 @@
 
         //needed to make save button appear again
         StateHasChanged();
+    }
 
-        //LOCAL FUNCTIONS
+    private async Task<string> GetSavedDasaReportSvgFromApi(string chartHash)
+    {
+        var chartIdXml = new XElement("ChartHash", chartHash);
+        var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetSavedPersonEventsReport, chartIdXml, _jsRuntime);
 
-        /// <summary>
-        /// Contacts API and gets Person Dasa Report in svg string
-        /// Note:
-        /// -previously used generate in blazor client,
-        ///  but for speed (10s gain) sake moved to server to do heavy lifting
-        /// </summary>
-        async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
-        {
-            //auto calculate precision
-            var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
-            //if not defined, use input
-            double daysPerPixelInput = 30;
-            daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
+        //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
+        // convert stream to string
+        svgStream.Position = 0; //reset position otherwise can be null value out
+        var reader = new StreamReader(svgStream);
+        var svgText = await reader.ReadToEndAsync();
+
+        return svgText;
+
+    }
+
+    /// <summary>
+    /// Contacts API and gets Person Dasa Report in svg string
+    /// Note:
+    /// -previously used generate in blazor client,
+    ///  but for speed (10s gain) sake moved to server to do heavy lifting
+    /// </summary>
+    private async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
+    {
+        //auto calculate precision
+        var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
+        //if not defined, use input
+        double daysPerPixelInput = 30;
+        daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
 
 
-            var personHashXml = new XElement("PersonHash", inputPerson.Hash);
-            var startTimeXml = new XElement("StartTime", startTime.ToXml());
-            var endTimeXml = new XElement("EndTime", endTime.ToXml());
-            var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
-            var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
-            var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
-            //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-            var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml, _jsRuntime);
+        var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+        var startTimeXml = new XElement("StartTime", startTime.ToXml());
+        var endTimeXml = new XElement("EndTime", endTime.ToXml());
+        var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
+        var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
+        var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+        //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
+        var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml, _jsRuntime);
 
-            //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
-            // convert stream to string
-            svgStream.Position = 0; //reset position otherwise can be null value out
-            var reader = new StreamReader(svgStream);
-            var svgText = await reader.ReadToEndAsync();
+        //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
+        // convert stream to string
+        svgStream.Position = 0; //reset position otherwise can be null value out
+        var reader = new StreamReader(svgStream);
+        var svgText = await reader.ReadToEndAsync();
 
-            return svgText;
-        }
+        return svgText;
+    }
 
+    private async Task<bool> SaveReportSvgInApi(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
+    {
+        //auto calculate precision
+        var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
+        //if not defined, use input
+        double daysPerPixelInput = 30;
+        daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
+
+
+        var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+        var startTimeXml = new XElement("StartTime", startTime.ToXml());
+        var endTimeXml = new XElement("EndTime", endTime.ToXml());
+        var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
+        var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
+        var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+        //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
+        Console.WriteLine(rootXml.ToString());
+        var result = await ServerManager.WriteToServerXmlReply(ServerManager.SavePersonEventsReport, rootXml, _jsRuntime);
+
+        return Tools.IsResultPass(result);
     }
 
     /// <summary>
     /// Given a saved chart name in local storage, it will load it into page
     /// </summary>
-    public async Task ShowSavedChart(string selectedChartName)
+    public async Task ShowSavedChart(string selectedChartHash)
+    {
+        //set current chart as from saved version (to hide save button)
+        //only show "Save" button if viewing newly generated chart, so that no erroneous double save
+        _nowSavedChart = true;
+
+        //1 GENERATE CHART IN SVG FROM SERVER
+        //saved for later use by Chart Saver
+        _finalSvg = await GetSavedDasaReportSvgFromApi(selectedChartHash);
+
+        //gets person profile used to generate the saved chart being showed now
+        //needs to be set else parent depending will fail
+        SelectedPerson = await WebsiteTools.GetPersonHashFromChartHash(selectedChartHash, _jsRuntime);
+
+        //2 LOAD CHART INTO PAGE
+        await LoadChartIntoPage(_finalSvg);
+
+        //needed to make save button appear again
+        StateHasChanged();
+
+    }
+    /// <summary>
+    /// Given a saved chart name in local storage, it will load it into page
+    /// </summary>
+    public async Task ShowSavedChartOld(string selectedChartHash)
     {
 
         await _jsRuntime.ShowLoading();
@@ -130,13 +188,13 @@
 
         //gets person profile used to generate the saved chart being showed now
         //extract hash from chart name
-        var raw = selectedChartName.Split("|");
+        var raw = selectedChartHash.Split("|");
         var hash = raw[0]; //1st place is hard set hash
                            //get person from hash
         SelectedPerson = WebsiteTools.GetPersonFromHashCached(hash);
 
         //get raw chart
-        _finalSvg = await _jsRuntime.GetProperty(selectedChartName);
+        _finalSvg = await _jsRuntime.GetProperty(selectedChartHash);
 
         //load chart into page
         await LoadChartIntoPage(_finalSvg);
@@ -144,7 +202,6 @@
         _jsRuntime.HideLoading();
 
     }
-
 
     /// <summary>
     /// Given an SVG as string, it will inject it into page & attach
@@ -156,6 +213,12 @@
         //inject new svg into page via JS for a more responsive progress update
         //doing it in blazor, causes progress bar freeze while updating
         await _jsRuntime.InjectIntoElement(_dasaViewBox, rawSvgChart);
+
+        //little delay after injection for cpu to idle, make smooth transition
+        await Task.Delay(300);
+
+        //reset life show/hide button
+        await OnClickShowLifeEvents();
 
         //attach tooltip lib for life events
         //note: needed on each draw
@@ -223,6 +286,9 @@
         await _jsRuntime.Hide("#LifeEventLinesHolder");
 
     }
+
+    //default to this, since api generates with events visible
+    //set every time after svg injected
     private async Task OnClickShowLifeEvents()
     {
         //hide & show the relevant buttons
@@ -234,9 +300,37 @@
 
     }
 
-    private async Task OnClickSaveChart()
+    /// <summary>
+    /// saves chart to server
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnClickSaveChartAPI()
     {
         await _jsRuntime.ShowLoading();
+
+        //tell server to generate & save this chart
+        //give the server settings used to generate this chart
+        var result = await SaveReportSvgInApi(SelectedPerson, StartTime, EndTime, InputedEventTags);
+
+        _jsRuntime.HideLoading();
+
+
+        //show message to user based on success or failure
+        if (result) { await _jsRuntime.ShowAlert("success", $"Chart saved successfully!", false, 2600); }
+        else { await _jsRuntime.ShowAlert("error", $"Chart failed to save! Try again.", true); }
+
+    }
+
+    private async Task OnClickSaveChartLocal()
+    {
+        await _jsRuntime.ShowLoading();
+
+        //check if number of charts exceed 3 (real 4), as that seems to be chrome limit
+        var savedChartCount = (await GetSavedChartNameList()).Count;
+        if (savedChartCount > 3)
+        {
+            await _jsRuntime.ShowAlert("success", $"Saved charts is full!", false, 2600);
+        }
 
         //a name to uniquely identify this chart
         var chartName = $"{SelectedPerson.Hash}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart|{SelectedPerson.Name}"; //"Chart" important used later to find
@@ -249,11 +343,12 @@
 
     }
 
+
     /// <summary>
     /// when user clicked tab saved tab, refresh saved list immediately
     /// </summary>
     /// <returns></returns>
-    public async Task<List<string>> GetSavedChartNameList()
+    public async Task<List<string>> GetSavedChartNameListLocal()
     {
         //get all latest keys from browser
         var allKeys = await _jsRuntime.InvokeAsync<List<string>>("getAllLocalStorageKeys");
@@ -262,6 +357,23 @@
         var filtered = allKeys.Where(x => x.Contains("Chart")).ToList();
 
         return filtered;
+    }
+
+    public async Task<List<XElement>> GetSavedChartNameList()
+    {
+        //get name list of all charts
+        //note: API will return readable name & hash for finding the chart later
+        var rootXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetSavedChartIdList, _jsRuntime);
+
+        //<Root>
+        //    <ChartName>
+        //        <Name>Viknesh - 4/1994 to 3/2114</Name>
+        //        <Hash>895183858</Hash>
+        //    </ChartName>
+        //</Root>
+        var chartIdXmlList = rootXml.Elements().ToList();
+
+        return chartIdXmlList;
     }
 
 

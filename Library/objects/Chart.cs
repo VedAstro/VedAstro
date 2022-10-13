@@ -7,19 +7,18 @@ using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
+
+    public class ChartId
+    {
+
+    }
+
+    /// <summary>
+    /// Represents an events report chart
+    /// Note: made so that a chart can be saved and accessed later
+    /// </summary>
     public class Chart
     {
-        public Chart(string contentSvg, int personHash, XElement eventTagListXml, XElement startTimeXml,
-            XElement endTimeXml, double daysPerPixel)
-        {
-            ContentSvg = contentSvg;
-            PersonHash = personHash;
-            EventTagListXml = eventTagListXml;
-            StartTimeXml = startTimeXml;
-            EndTimeXml = endTimeXml;
-            DaysPerPixel = daysPerPixel;
-        }
-
 
         public string ContentSvg { get; set; }
         public int PersonHash { get; }
@@ -28,6 +27,19 @@ namespace Genso.Astrology.Library
         public XElement EndTimeXml { get; }
         public double DaysPerPixel { get; }
 
+
+        public Chart(string contentSvg, int personHash, XElement eventTagListXml, XElement startTimeXml,
+            XElement endTimeXml, double daysPerPixel)
+        {
+            ContentSvg = contentSvg;
+            PersonHash = personHash;
+            EventTagListXml = eventTagListXml;
+            StartTimeXml = startTimeXml; //root time xml
+            EndTimeXml = endTimeXml; //root time xml
+            DaysPerPixel = daysPerPixel;
+        }
+
+
         public XElement ToXml()
         {
             var person = new XElement("Chart");
@@ -35,14 +47,13 @@ namespace Genso.Astrology.Library
             var personHash = new XElement("PersonHash", PersonHash);
             var daysPerPixel = new XElement("DaysPerPixel", DaysPerPixel);
 
-            person.Add(contentSvg,
+            person.Add(
                 personHash,
                 daysPerPixel,
                 EventTagListXml,
-                new XElement("StartTime",
-                    StartTimeXml),
-                new XElement("EndTime",
-                    EndTimeXml));
+                new XElement("StartTime", StartTimeXml),
+                new XElement("EndTime", EndTimeXml),
+                contentSvg);
 
             return person;
         }
@@ -52,10 +63,9 @@ namespace Genso.Astrology.Library
             var personHash = int.Parse(personXml.Element("PersonHash")?.Value);
             var contentSvg = personXml.Element("ContentSvg")?.Value;
             var eventTagListXml = personXml.Element("EventTagList");
-            var startTimeXml = personXml.Element("StartTime");
-            var endTimeXml = personXml.Element("EndTime");
+            var startTimeXml = personXml.Element("StartTime").Element("Time");
+            var endTimeXml = personXml.Element("EndTime").Element("Time");
             var daysPerPixel = double.Parse(personXml.Element("DaysPerPixel")?.Value);
-
 
             var parsedPerson = new Chart(contentSvg, personHash, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
 
@@ -77,6 +87,20 @@ namespace Genso.Astrology.Library
             //take out negative before returning
             var hashCode = Math.Abs(hash1 + hash2 + hash3 + hash4);
             return hashCode;
+        }
+
+        /// <summary>
+        /// Gets a nice identifiable name for this chart to show user 
+        /// </summary>
+        public object GetFormattedName(string personName)
+        {
+            var startTime = Time.FromXml(StartTimeXml);
+            var startYear = startTime.GetStdYear();
+            var startMonth = startTime.GetStdMonth();
+            var endTime = Time.FromXml(EndTimeXml);
+            var endYear = endTime.GetStdYear();
+            var endMonth = endTime.GetStdMonth();
+            return $"{personName} - {startMonth}/{startYear} to {endMonth}/{endYear}";
         }
     }
 }

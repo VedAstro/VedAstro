@@ -81,7 +81,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets now time (STD) at this time's location/offset 
         /// </summary>
-        public DateTimeOffset StdTimeNowAtOffset=> DateTimeOffset.Now.ToOffset(this.GetStdDateTimeOffset().Offset);
+        public DateTimeOffset StdTimeNowAtOffset => DateTimeOffset.Now.ToOffset(this.GetStdDateTimeOffset().Offset);
 
 
         //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -214,7 +214,7 @@ namespace Genso.Astrology.Library
         {
             return _geoLocation;
         }
-        
+
         public string GetLmtDateTimeOffsetText()
         {
             //convert internal STD time to LMT
@@ -226,7 +226,7 @@ namespace Genso.Astrology.Library
             //return time string caller
             return lmtTimeString;
         }
-        
+
         /// <summary>
         /// Note root element is "Time"
         /// </summary>
@@ -258,13 +258,20 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static Time FromXml(XElement timeXmlElement)
         {
-            var timeString = timeXmlElement.Element("StdTime").Value ?? "00:00 01/01/2000 +08:00";
-            var locationXml = timeXmlElement.Element("Location");
-            var geoLocation = GeoLocation.FromXml(locationXml);
+            try
+            {
+                var timeString = timeXmlElement.Element("StdTime")?.Value ?? "00:00 01/01/2000 +08:00";
+                var locationXml = timeXmlElement.Element("Location");
+                var geoLocation = GeoLocation.FromXml(locationXml);
 
-            var parsedTime = new Time(timeString, geoLocation);
+                var parsedTime = new Time(timeString, geoLocation);
 
-            return parsedTime;
+                return parsedTime;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"BLZ:Time.FromXml() Failed : {timeXmlElement}");
+            }
         }
 
         /// <summary>
@@ -280,7 +287,7 @@ namespace Genso.Astrology.Library
 
         public int GetStdYear() => this.GetStdDateTimeOffset().Year;
         public int GetStdMonth() => this.GetStdDateTimeOffset().Month;
-        
+
         /// <summary>
         /// Gets date in month 1-31
         /// </summary>
@@ -354,7 +361,7 @@ namespace Genso.Astrology.Library
 
 
 
-        
+
         //█▀█ █░█ █▀▀ █▀█ █▀█ █ █▀▄ █▀▀ █▀
         //█▄█ ▀▄▀ ██▄ █▀▄ █▀▄ █ █▄▀ ██▄ ▄█
 
@@ -394,7 +401,7 @@ namespace Genso.Astrology.Library
 
 
 
-        
+
         //█▀█ █▀█ █▀▀ █▀█ ▄▀█ ▀█▀ █▀█ █▀█   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▄█ █▀▀ ██▄ █▀▄ █▀█ ░█░ █▄█ █▀▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
@@ -423,9 +430,9 @@ namespace Genso.Astrology.Library
             }
             catch (Exception)
             {
-               //failure for any reason, return false
-               parsed = new DateTimeOffset();
-               return false;
+                //failure for any reason, return false
+                parsed = new DateTimeOffset();
+                return false;
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿@using System.Xml.Linq
+@using Genso.Astrology.Library
 @attribute [Route(PageRoute.VisitorList)]
 <PageTitle>Visitor List</PageTitle>
 <PageTop Title="Visitor List" IconName="fluent:people-list-20-filled">
@@ -278,7 +279,7 @@
 
         var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteVisitorByUserId, userIdXml, _jsRuntime);
 
-        if (ServerManager.IsReplyPass(result))
+        if (Tools.IsResultPass(result))
         {
             //delete local copy so that no need to refresh from server
             rawVisitorList.RemoveAll(x => x.Element("UserId")?.Value == userId);
@@ -300,7 +301,7 @@
 
         var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteVisitorByVisitorId, visitorIdXml, _jsRuntime);
 
-        if (ServerManager.IsReplyPass(result))
+        if (Tools.IsResultPass(result))
         {
             //delete local copy so that no need to refresh from server
             rawVisitorList.RemoveAll(x => x.Element("VisitorId")?.Value == visitorId);

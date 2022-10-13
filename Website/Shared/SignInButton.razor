@@ -127,12 +127,12 @@
         var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.SignInGoogle, new XElement("Token", idToken), _jsRuntime);
 
         //check if reply is pass or fail
-        var isPass = ServerManager.IsReplyPass(rootXml);
+        var isPass = Tools.IsResultPass(rootXml);
 
         if (isPass)
         {
             //get payload containing user data
-            var userDataXml = ServerManager.GetPayload(rootXml);
+            var userDataXml = Tools.GetPayload(rootXml);
 
             //initialize user data & store it for access by the rest of the app
             AppData.CurrentUser = UserData.FromXml(userDataXml);
@@ -191,12 +191,12 @@
         var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.SignInFacebook, new XElement("Token", accessToken), _jsRuntime);
 
         //check if reply is pass or fail
-        var isPass = ServerManager.IsReplyPass(rootXml);
+        var isPass = Tools.IsResultPass(rootXml);
 
         if (isPass)
         {
             //get payload containing user data
-            var userDataXml = ServerManager.GetPayload(rootXml);
+            var userDataXml = Tools.GetPayload(rootXml);
 
             //initialize user data & store it for access by the rest of the app
             AppData.CurrentUser = UserData.FromXml(userDataXml);

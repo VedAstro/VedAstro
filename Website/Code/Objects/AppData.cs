@@ -64,6 +64,7 @@ namespace Website
         
         /// <summary>
         /// Note access via try get person list
+        /// To clear & get fresh on next call set null
         /// </summary>
         public static List<Person>? PersonList { get; set; }
         
@@ -137,14 +138,24 @@ namespace Website
             }
             catch (Exception e)
             {
-                Console.WriteLine("BLZ: Update dark mode silent fail!");
+                Console.WriteLine("BLZ:Update dark mode silent fail!");
             }
         }
 
         public static async Task<List<Person>> TryGetPersonList(IJSRuntime _jsRuntime)
         {
+            await ServerManager.IfBusyPleaseHold("TryGetPersonList");
+
             //check if people list already loaded before
-            AppData.PersonList ??= await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
+            if (AppData.PersonList == null)
+            {
+                Console.WriteLine("BLZ:Get Fresh PersonList");
+                AppData.PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
+            }
+            else
+            {
+                Console.WriteLine("BLZ:Using PersonList Cache");
+            }
 
             return AppData.PersonList;
         }

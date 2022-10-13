@@ -118,7 +118,7 @@ namespace Genso.Astrology.Library
             //if type is an Enum process differently
             if (typeof(T).IsEnum)
             {
-                var parsedEnum = (T) Enum.Parse(typeof(T), rawVal);
+                var parsedEnum = (T)Enum.Parse(typeof(T), rawVal);
 
                 return parsedEnum;
             }
@@ -347,7 +347,7 @@ namespace Genso.Astrology.Library
 
             return to;
         }
-        
+
         /// <summary>
         /// Remap from 1 range to another
         /// </summary>
@@ -386,6 +386,32 @@ namespace Genso.Astrology.Library
             string text = reader.ReadToEnd();
 
             return text;
+        }
+
+        /// <summary>
+        /// Checks if result xml sent from api to client has status pass
+        /// else will return false, will also false if any error in result
+        /// </summary>
+        public static bool IsResultPass(XElement result)
+        {
+            try
+            {
+                return result.Element("Status")?.Value == "Pass";
+            }
+            catch (Exception) { return false; }
+        }
+
+        /// <summary>
+        /// Gets first child element in "Payload" element
+        /// </summary>
+        public static XElement? GetPayload(XElement rootXml)
+        {
+            try
+            {
+                return rootXml.Element("Payload")?.Elements()?.FirstOrDefault();
+
+            }
+            catch (Exception) { return new XElement("PayloadFailed"); }
         }
     }
 

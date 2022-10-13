@@ -129,6 +129,7 @@ namespace Publisher
             await Task.Delay(3000);
 
             var selectedBuildPath = projectBuildPath;
+            Console.WriteLine(selectedBuildPath);
             Console.WriteLine("Blasting new website into space");
             var files = Directory.GetFiles(selectedBuildPath, "*.*", SearchOption.AllDirectories);
             if (files.Length < 1)
@@ -153,16 +154,19 @@ namespace Publisher
 
                 // If the blob already exists, get the last modified tick count in the blobs metadata
                 long blobLastModifiedTick = 0;
-                if (await blobClient.ExistsAsync())
+                try
                 {
-                    try
+                    if (await blobClient.ExistsAsync())
                     {
                         var blobProperties = (await blobClient.GetPropertiesAsync()).Value;
                         //this line will fail if lastmodifiedticks was not set before
                         blobLastModifiedTick = long.Parse(blobProperties.Metadata[_lastmodifiedticks]);
+
                     }
-                    //if fail, blob last tick will be 0, aka outdated
-                    catch { }
+                }
+                //if fail, blob last tick will be 0, aka outdated
+                catch {
+                    Console.WriteLine("Failed to get LastModifiedTick:" + blobName);
                 }
 
                 //if local file is latest, then upload else skip
@@ -177,7 +181,7 @@ namespace Publisher
                     //note will overwrite existing
                     await using var fs = File.Open(filePath, FileMode.Open);
                     await blobClient.UploadAsync(fs, overwrite: true, CancellationToken.None);
-                    
+
                     //auto correct content type from wrongly set "octet/stream"
                     var blobHttpHeaders = new BlobHttpHeaders { ContentType = MimeTypeMap.GetMimeType(filePath) };
                     await blobClient.SetHttpHeadersAsync(blobHttpHeaders);

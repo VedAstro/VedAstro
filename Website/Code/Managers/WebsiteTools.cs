@@ -180,22 +180,20 @@ namespace Website
         public static async Task<List<Person>?> GetPeopleList(string userId, IJSRuntime jsRuntime)
         {
 
+            //1 GET USER LIST
             var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, new XElement("UserId", userId), jsRuntime);
             var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
 
-            //if guest user, include person list from visitor ID if any
-            //this is done because any person profile saved without login will be
-            //stored under Visitor ID
-            if (AppData.IsGuestUser)
-            {
-                //get list for visitor ID instead of User Id
-                personListRootXml = await ServerManager.WriteToServerXmlReply(
-                     ServerManager.GetPersonListApi, new XElement("UserId", AppData.VisitorId), jsRuntime);
-                var tempList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
-
-                //combine with previous list
-                if (tempList.Any()) { personList.AddRange(tempList); }
-            }
+            //2 GET VISITOR LIST
+            //always try to include person list from visitor ID if any
+            //this is done to avoid from user adding data logged out then logs in to find data missing
+            //TODO NOTE : this needs to be cleaned up, else if visitor id is lost then person is lost
+            //get list for visitor ID instead of User Id
+            personListRootXml = await ServerManager.WriteToServerXmlReply(
+                ServerManager.GetPersonListApi, new XElement("UserId", AppData.VisitorId), jsRuntime);
+            var tempList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+            //combine with previous list
+            if (tempList.Any()) { personList.AddRange(tempList); }
 
 
             return personList;
@@ -593,6 +591,17 @@ namespace Website
 
             //return new or saved ID
             return visitorId;
+        }
+
+        public static async Task<Person> GetPersonHashFromChartHash(string selectedChartHash, IJSRuntime jsRuntime)
+        {
+            //get person hash from api
+            var chartHashXml = new XElement("ChartHash", selectedChartHash);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonHashFromSavedChartHash, chartHashXml, jsRuntime);
+            var personHash = result.Value;
+            var selectedPerson = GetPersonFromHashCached(personHash);
+
+            return selectedPerson;
         }
     }
 }

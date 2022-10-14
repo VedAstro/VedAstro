@@ -201,8 +201,8 @@
         await _jsRuntime.SetTitle($"Horoscope | {_selectedPerson.Name}");
 
         //get horoscope predictions from API server
-        var personHashXml = new XElement("PersonHash", _selectedPerson.Hash);
-        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetHoroscope, personHashXml, _jsRuntime);
+        var personIdXml = new XElement("PersonId", _selectedPerson.Id);
+        var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetHoroscope, personIdXml, _jsRuntime);
 
         //parse xml horoscope predictions
         _horoscopePredictions = HoroscopePrediction.FromXmlList(rootXml);

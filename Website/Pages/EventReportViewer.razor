@@ -110,12 +110,12 @@
         daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
 
 
-        var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+        var personIdXml = new XElement("PersonId", inputPerson.Id);
         var startTimeXml = new XElement("StartTime", startTime.ToXml());
         var endTimeXml = new XElement("EndTime", endTime.ToXml());
         var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
         var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
-        var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+        var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
         var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml, _jsRuntime);
 
@@ -137,12 +137,12 @@
         daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
 
 
-        var personHashXml = new XElement("PersonHash", inputPerson.Hash);
+        var personIdXml = new XElement("PersonId", inputPerson.Id);
         var startTimeXml = new XElement("StartTime", startTime.ToXml());
         var endTimeXml = new XElement("EndTime", endTime.ToXml());
         var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
         var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
-        var rootXml = new XElement("Root", personHashXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+        var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
         Console.WriteLine(rootXml.ToString());
         var result = await ServerManager.WriteToServerXmlReply(ServerManager.SavePersonEventsReport, rootXml, _jsRuntime);
@@ -165,7 +165,7 @@
 
         //gets person profile used to generate the saved chart being showed now
         //needs to be set else parent depending will fail
-        SelectedPerson = await WebsiteTools.GetPersonHashFromChartHash(selectedChartHash, _jsRuntime);
+        SelectedPerson = await WebsiteTools.GetPersonIdFromChartHash(selectedChartHash, _jsRuntime);
 
         //2 LOAD CHART INTO PAGE
         await LoadChartIntoPage(_finalSvg);
@@ -191,7 +191,7 @@
         var raw = selectedChartHash.Split("|");
         var hash = raw[0]; //1st place is hard set hash
                            //get person from hash
-        SelectedPerson = WebsiteTools.GetPersonFromHashCached(hash, _jsRuntime);
+        SelectedPerson = WebsiteTools.GetPersonFromIdCached(hash, _jsRuntime);
 
         //get raw chart
         _finalSvg = await _jsRuntime.GetProperty(selectedChartHash);
@@ -333,7 +333,7 @@
         }
 
         //a name to uniquely identify this chart
-        var chartName = $"{SelectedPerson.Hash}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart|{SelectedPerson.Name}"; //"Chart" important used later to find
+        var chartName = $"{SelectedPerson.Id}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart|{SelectedPerson.Name}"; //"Chart" important used later to find
         await _jsRuntime.SetProperty(chartName, _finalSvg);
 
         _jsRuntime.HideLoading();

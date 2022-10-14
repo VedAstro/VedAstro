@@ -63,15 +63,15 @@ namespace API
             {
                 //get name of male & female
                 var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var maleHash = int.Parse(rootXml.Element("MaleHash").Value);
-                var femaleHash = int.Parse(rootXml.Element("FemaleHash").Value);
+                var maleId = rootXml.Element("MaleId")?.Value;
+                var femaleId = rootXml.Element("FemaleId")?.Value;
 
 
                 //get list of all people
                 var personList = new Data(personListRead);
 
                 //generate compatibility report
-                CompatibilityReport compatibilityReport = APITools.GetCompatibilityReport(maleHash, femaleHash, personList);
+                CompatibilityReport compatibilityReport = APITools.GetCompatibilityReport(maleId, femaleId, personList);
                 responseMessage = compatibilityReport.ToXml().ToString();
             }
             catch (Exception e)
@@ -99,10 +99,10 @@ namespace API
             {
                 //get name of male & female
                 var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var personHash = int.Parse(rootXml.Value);
+                var personId = rootXml.Value;
 
                 //generate compatibility report
-                var person = await APITools.GetPersonFromHash(personHash);
+                var person = await APITools.GetPersonFromId(personId);
 
                 //calculate predictions for current person
                 var predictionList = await APITools.GetPrediction(person);
@@ -400,11 +400,11 @@ namespace API
             {
                 //get hash that will be used find the person
                 var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var originalHash = int.Parse(requestData.Value);
+                var personId = requestData.Value;
 
                 //get the person record by hash
                 var personListXml = await APITools.BlobClientToXml(personListClient);
-                var foundPerson = await APITools.FindPersonByHash(personListXml, originalHash);
+                var foundPerson = await APITools.FindPersonById(personListXml, personId);
 
                 //send person to caller
                 responseMessage = new XElement("Root", foundPerson).ToString();
@@ -430,7 +430,7 @@ namespace API
         /// Generates a new SVG dasa report given a person hash
         /// Exp call:
         /// <Root>
-        //      <PersonHash>374117709</PersonHash>
+        //      <PersonId>374117709</PersonId>
         //      <StartTime>
         //          <Time>
         //              <StdTime>00:00 01/01/1994 +08:00</StdTime>
@@ -523,8 +523,8 @@ namespace API
         /// <summary>
         /// Given a chart hash it will return the person hash for that chart
         /// </summary>
-        [FunctionName("getpersonhashfromsavedcharthash")]
-        public static async Task<IActionResult> GetPersonHashFromSavedChartHash(
+        [FunctionName("getpersonidfromsavedcharthash")]
+        public static async Task<IActionResult> GetPersonIdFromSavedChartHash(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
@@ -540,9 +540,9 @@ namespace API
                 var chart = Chart.FromXml(foundChartXml);
 
                 //extract out the person hash from chart and send it to caller
-                var personHashXml = new XElement("PersonHash", chart.PersonHash);
+                var personIdXml = new XElement("PersonId", chart.PersonId);
 
-                return new OkObjectResult(personHashXml.ToString());
+                return new OkObjectResult(personIdXml.ToString());
 
             }
             catch (Exception e)
@@ -609,10 +609,11 @@ namespace API
 
                 //make a name & hash only xml list of saved charts
                 //note: done so to not download what is not needed
-                foreach (var chartXml in savedChartXmlDoc?.Root?.Elements()!)
+                var savedChartXmlList = savedChartXmlDoc?.Root?.Elements().ToList() ?? new List<XElement>(); //empty list so no failure
+                foreach (var chartXml in savedChartXmlList)
                 {
                     var parsedChart = Chart.FromXml(chartXml);
-                    var person = await APITools.GetPersonFromHash(parsedChart.PersonHash);
+                    var person = await APITools.GetPersonFromId(parsedChart.PersonId);
                     var chartNameXml = new XElement("ChartName",
                         new XElement("Name",
                             parsedChart.GetFormattedName(person.Name)),
@@ -653,12 +654,12 @@ namespace API
             {
                 //get unedited hash & updated person details from incoming request
                 var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var originalHash = int.Parse(requestData?.Element("PersonHash").Value);
+                var originalId = requestData?.Element("PersonId").Value;
                 var updatedPersonXml = requestData?.Element("Person");
 
                 //get the person record that needs to be updated
                 var personListXml = await APITools.BlobClientToXml(personListClient);
-                var personToUpdate = await APITools.FindPersonByHash(personListXml, originalHash);
+                var personToUpdate = await APITools.FindPersonById(personListXml, originalId);
 
                 //delete the previous person record,
                 //and insert updated record in the same place
@@ -699,11 +700,11 @@ namespace API
             {
                 //get unedited hash & updated person details from incoming request
                 var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var originalHash = int.Parse(requestData.Value);
+                var personId = requestData.Value;
 
                 //get the person record that needs to be deleted
                 var personListXml = await APITools.BlobClientToXml(personListClient);
-                var personToDelete = await APITools.FindPersonByHash(personListXml, originalHash);
+                var personToDelete = await APITools.FindPersonById(personListXml, personId);
 
                 //add deleted person to recycle bin 
                 await APITools.AddXElementToXDocument(personToDelete, RecycleBinFile, ContainerName);
@@ -1003,23 +1004,23 @@ namespace API
         {
             //get all the data needed out of the incoming request
             var rootXml = APITools.ExtractDataFromRequest(req);
-            var personHash = int.Parse(rootXml.Element("PersonHash").Value);
+            var personId = rootXml.Element("PersonId")?.Value;
             var eventTagListXml = rootXml.Element("EventTagList");
             var eventTags = EventTagExtensions.FromXmlList(eventTagListXml);
-            var startTimeXml = rootXml.Element("StartTime").Elements().First();
+            var startTimeXml = rootXml.Element("StartTime")?.Elements().First();
             var startTime = Time.FromXml(startTimeXml);
-            var endTimeXml = rootXml.Element("EndTime").Elements().First();
+            var endTimeXml = rootXml.Element("EndTime")?.Elements().First();
             var endTime = Time.FromXml(endTimeXml);
-            var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel").Value);
+            var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value);
 
 
             //get the person instance by hash
-            var foundPerson = await APITools.GetPersonFromHash(personHash);
+            var foundPerson = await APITools.GetPersonFromId(personId);
 
             //from person get svg report
             var eventsReportSvgString = GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
-            return new Chart(eventsReportSvgString, personHash, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+            return new Chart(eventsReportSvgString, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
         }
 
 
@@ -1147,6 +1148,43 @@ namespace API
                 case "Bad": return "#FF0000"; //red
                 default: throw new Exception($"Invalid Nature: {nature}");
             }
+        }
+
+        /// <summary>
+        /// convert value coming in, to a percentage based on min & max
+        /// this will make setting color based on value easier & accurate
+        /// note, this will cause color to be relative to only what is visible in chart atm!
+        /// </summary>
+        public static string GetSummaryColor(double totalNature, double minValue, double maxValue)
+        {
+            string colorHex;
+            if (totalNature >= 0) //good
+            {
+                //note: higher number is lighter color lower is darker
+                var color255 = (int)totalNature.Remap(0, maxValue, 0, 255);
+                if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return greenish white color (lighter)
+                if (color255 >= 220) { return "#00DD00"; } //if very close to 255, return darker green (DD) to highlight
+
+                //this is done to invert the color,
+                //so that higher score leads to darker green
+                color255 = 255 - color255;
+
+                colorHex = $"{color255:X}";//convert from 255 to FF
+                var summaryColor = $"#{colorHex}FF{colorHex}";
+                return summaryColor; //green
+            }
+            else //bad
+            {
+                //note: colors here are rendered opposite compared to good
+                //because lower number here is worse, as such needs to be dark red.
+                var color255 = (int)totalNature.Remap(minValue, 0, 0, 255);
+                if (color255 <= 10) { return "#DD0000"; } //if very close to 255, return darker red (DD) to highlight
+                if (color255 >= 220) { return "#FFFFFF"; } //if very close to 0, return white color
+                colorHex = $"{color255:X}";//convert from 255 to FF
+                var summaryColor = $"#FF{colorHex}{colorHex}";
+                return summaryColor; //red
+            }
+
         }
 
 
@@ -2045,7 +2083,7 @@ namespace API
 
                 //note: chart is flipped 180, to start bar from bottom to top
                 //default hidden
-                rowHtml += $"<g id=\"BarChartRow\" style=\"display:none;\" transform=\"matrix(1, 0, 0, -1, 0, 465)\">{barChartRow}</g>";
+                rowHtml += $"<g id=\"BarChartRow\" style=\"display:none;\">{barChartRow}</g>";
 
                 //add in "Summary" label above row
                 float aboveRow = yAxis - singleRowHeight - padding;
@@ -2162,42 +2200,6 @@ namespace API
         }
 
 
-        /// <summary>
-        /// convert value coming in, to a percentage based on min & max
-        /// this will make setting color based on value easier & accurate
-        /// note, this will cause color to be relative to only what is visible in chart atm!
-        /// </summary>
-        public static string GetSummaryColor(double totalNature, double minValue, double maxValue)
-        {
-            string colorHex;
-            if (totalNature >= 0) //good
-            {
-                //note: higher number is lighter color lower is darker
-                var color255 = (int)totalNature.Remap(0, maxValue, 0, 255);
-                if (color255 <= 10) { return "#FFFFFF"; } //if very close to 0, return greenish white color (lighter)
-                if (color255 >= 220) { return "#00FF00"; } //if very close to 255, return solid green color (darker)
-
-                //this is done to invert the color,
-                //so that higher score leads to darker green
-                color255 = 255 - color255;
-
-                colorHex = $"{color255:X}";//convert from 255 to FF
-                var summaryColor = $"#{colorHex}FF{colorHex}";
-                return summaryColor; //green
-            }
-            else //bad
-            {
-                //note: colors here are rendered opposite compared to good
-                //because lower number here is worse, as such needs to be dark red.
-                var color255 = (int)totalNature.Remap(minValue, 0, 0, 255);
-                if (color255 <= 10) { return "#DD0000"; } //if very close to 0, return white color
-                if (color255 >= 220) { return "#FFFFFF"; } //if very close to 255, return solid color (DD to make it darker)
-                colorHex = $"{color255:X}";//convert from 255 to FF
-                var summaryColor = $"#FF{colorHex}{colorHex}";
-                return summaryColor; //red
-            }
-
-        }
 
         private static byte[] StreamToByteArray(Stream input)
         {

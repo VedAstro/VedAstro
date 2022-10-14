@@ -58,6 +58,13 @@
     public string LabelText { get; set; } = "Location";
 
     /// <summary>
+    /// if set true will not auto update location after timeout
+    /// default false, optional set
+    /// </summary>
+    [Parameter]
+    public bool DisableAutoLocation { get; set; } = false;
+
+    /// <summary>
     /// If true hides, long lat fields, else defaults to visible
     /// </summary>
     [Parameter]
@@ -139,7 +146,7 @@
 
     /// <summary>
     /// Updates all the fields in the component
-    /// Note: Does not call state has changed
+    /// Note: Does not call state has changed, because called by parent
     /// </summary>
     public void UpdateData(dynamic newData)
     {
@@ -158,9 +165,16 @@
         //browser if no location name set within 1 second
         if (firstRender)
         {
-            //wait 1s before checking if it has been filled by user or other logic
-            await Task.Delay(1500);
-            if (LocationName == "" || LocationName == null) { await AutoSetLocation(); }
+            //if disable auto location is false,
+            //only then set timeout for auto set
+            //note: default is false, so will always run unless set
+            if (!DisableAutoLocation)
+            {
+                //wait 1s before checking if it has been filled by user or other logic
+                await Task.Delay(1500);
+                if (string.IsNullOrEmpty(LocationName)) { await AutoSetLocation(); }
+
+            }
         }
 
     }
@@ -261,5 +275,4 @@
 
 
     }
-
-    }
+}

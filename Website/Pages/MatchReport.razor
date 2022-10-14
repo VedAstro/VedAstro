@@ -414,9 +414,9 @@
 
     //VARIABLES
     [Parameter]
-    public string? MaleHash { get; set; } //data from URL not necessary provided
+    public string? MaleId { get; set; } //data from URL not necessary provided
     [Parameter]
-    public string? FemaleHash { get; set; } //data from URL not necessary provided
+    public string? FemaleId { get; set; } //data from URL not necessary provided
 
     //if true shows extra info columns
     bool showAdvanced = false;
@@ -443,7 +443,7 @@
 
     private async Task _OnInitialized()
     {
-        _report = await GetCompatibilityReport(MaleHash ?? "", FemaleHash ?? "");
+        _report = await GetCompatibilityReport(MaleId ?? "", FemaleId ?? "");
     }
 
     private static string GetNatureColor(EventNature nature)
@@ -464,21 +464,21 @@
     /// <summary>
     /// Gets CompatibilityReport from API server
     /// </summary>
-    private async Task<CompatibilityReport?> GetCompatibilityReport(string maleHash, string femaleHash)
+    private async Task<CompatibilityReport?> GetCompatibilityReport(string maleId, string femaleId)
     {
 
         //show loading box
         await _jsRuntime.ShowLoading();
 
         //show names on page
-        MaleName = (await WebsiteTools.GetPersonFromHash(maleHash, _jsRuntime)).Name;
-        FemaleName = (await WebsiteTools.GetPersonFromHash(femaleHash, _jsRuntime)).Name;
+        MaleName = WebsiteTools.GetPersonFromIdCached(maleId, _jsRuntime).Name;
+        FemaleName = WebsiteTools.GetPersonFromIdCached(femaleId, _jsRuntime).Name;
 
         //put person name into tab title for easy multi-tabbing
         await _jsRuntime.SetTitle($"{MaleName} + {FemaleName}");
 
         //get report from server
-        var rootXml = new XElement("Root", new XElement("MaleHash", maleHash), new XElement("FemaleHash", femaleHash));
+        var rootXml = new XElement("Root", new XElement("MaleHash", maleId), new XElement("FemaleHash", femaleId));
         var matchReportXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMatchReportApi, rootXml, _jsRuntime);
 
         //parse report

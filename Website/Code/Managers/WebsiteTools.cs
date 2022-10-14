@@ -182,7 +182,8 @@ namespace Website
 
             //1 GET USER LIST
             var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, new XElement("UserId", userId), jsRuntime);
-            var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+            //var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+            var personList = Person.FromXml(personListRootXml.Elements());
 
             //2 GET VISITOR LIST
             //always try to include person list from visitor ID if any
@@ -227,8 +228,9 @@ namespace Website
         /// Gets person instance from name contacts API
         /// Note: - uses API to get latest data
         ///       - will retry forever till result comes
+        /// TODO DEPRECATE FOR CACHED VERSION
         /// </summary>
-        public static async Task<Person> GetPersonFromHash(string personHash, IJSRuntime jsRuntime)
+        public static async Task<Person> GetPersonFromIdOld(string personId, IJSRuntime jsRuntime)
         {
             //timeout implemented because calls have
             //known to fail with stable connection
@@ -239,13 +241,13 @@ namespace Website
             var tryLimit = 3;
             var tryCount = 0;
 
-            Person personFromHash;
+            Person personFromId;
 
         TryAgain:
             try
             {
-                personFromHash = await DoWork().TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
-                return personFromHash;
+                personFromId = await DoWork().TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
+                return personFromId;
             }
             catch (Exception e)
             {
@@ -254,7 +256,7 @@ namespace Website
                 var isOnline = await jsRuntime.IsOnline();
                 if (isOnline && tryCount <= tryLimit)
                 {
-                    Console.WriteLine($"BLZ: GetPersonFromHash: {timeoutMs}ms Timeout!!");
+                    Console.WriteLine($"BLZ: GetPersonFromId: {timeoutMs}ms Timeout!!");
                     tryCount++;
                     goto TryAgain;
                 }
@@ -262,13 +264,50 @@ namespace Website
                 //we need to throw the exception to stop execution
                 //to show error alert which will reload to home
                 //since at this point it is unrecoverable
-                throw new ApiCommunicationFailed($"Error in GetPersonFromHash()", e);
+                throw new ApiCommunicationFailed($"Error in GetPersonFromId()", e);
             }
 
 
             async Task<Person> DoWork()
             {
-                var xmlData = Tools.AnyTypeToXml(personHash);
+                var xmlData = Tools.AnyTypeToXml(personId);
+                var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
+
+                var personXml = result.Element("Person");
+
+                //parse received person
+                var receivedPerson = Person.FromXml(personXml);
+
+                return receivedPerson;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets person instance from name contacts API
+        /// Note: - uses API to get latest data
+        ///       - will retry forever till result comes
+        /// TODO DEPRECATE FOR CACHED VERSION
+        /// </summary>
+        public static async Task<Person> GetPersonFromId(string personId, IJSRuntime jsRuntime)
+        {
+            Person personFromId;
+
+        TryAgain:
+            try
+            {
+                personFromId = await _getPersonFromId();
+                return personFromId;
+            }
+            catch (Exception e)
+            {
+                goto TryAgain;
+            }
+
+
+            async Task<Person> _getPersonFromId()
+            {
+                var xmlData = Tools.AnyTypeToXml(personId);
                 var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
 
                 var personXml = result.Element("Person");
@@ -284,31 +323,31 @@ namespace Website
         /// <summary>
         /// NOTE Person list has to be loaded or will fail
         /// </summary>
-        public static Person GetPersonFromHashCached(string personHash, IJSRuntime jsRuntime)
+        public static Person GetPersonFromIdCached(string personId, IJSRuntime jsRuntime)
         {
-            var personFromHashCached = AppData.TryGetPersonList(jsRuntime).Result?.Find(p => p.GetHashCode() == int.Parse(personHash));
+            var personFromIdCached = AppData.TryGetPersonList(jsRuntime).Result?.Find(p => p.Id == personId);
 
-            if (personFromHashCached == null) { throw new Exception("BLZ:GetPersonFromHashCached:Failed!"); }
+            if (personFromIdCached == null) { throw new Exception("BLZ:GetPersonFromIdCached:Failed!"); }
 
-            return (Person)personFromHashCached;
+            return (Person)personFromIdCached;
         }
 
-        public static async Task DeletePerson(int personHash, IJSRuntime jsRuntime)
+        public static async Task DeletePerson(string personId, IJSRuntime jsRuntime)
         {
-            var personHashXml = new XElement("PersonHash", personHash);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePersonApi, personHashXml, jsRuntime);
+            var personIdXml = new XElement("PersonId", personId);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePersonApi, personIdXml, jsRuntime);
 
             //check result, display error if needed
             if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Delete Person API\n{result.Value}"); }
         }
 
-        public static async Task UpdatePerson(Person person, int originalPersonHash, IJSRuntime jsRuntime)
+        public static async Task UpdatePerson(Person person, string personId, IJSRuntime jsRuntime)
         {
             var updatedPersonXml = person.ToXml();
             Console.WriteLine(updatedPersonXml.ToString());
-            var oriPersonHashXml = new XElement("PersonHash", originalPersonHash);
+            var personIdXml = new XElement("PersonId", personId);
             var rootXml = new XElement("Root");
-            rootXml.Add(oriPersonHashXml, updatedPersonXml);
+            rootXml.Add(personIdXml, updatedPersonXml);
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.UpdatePersonApi, rootXml, jsRuntime);
 
             //check result, display error if needed
@@ -597,13 +636,13 @@ namespace Website
             return visitorId;
         }
 
-        public static async Task<Person> GetPersonHashFromChartHash(string selectedChartHash, IJSRuntime jsRuntime)
+        public static async Task<Person> GetPersonIdFromChartHash(string selectedChartHash, IJSRuntime jsRuntime)
         {
             //get person hash from api
             var chartHashXml = new XElement("ChartHash", selectedChartHash);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonHashFromSavedChartHash, chartHashXml, jsRuntime);
-            var personHash = result.Value;
-            var selectedPerson = GetPersonFromHashCached(personHash, jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonIdFromSavedChartHash, chartHashXml, jsRuntime);
+            var personId = result.Value;
+            var selectedPerson = GetPersonFromIdCached(personId, jsRuntime);
 
             return (Person)selectedPerson;
         }

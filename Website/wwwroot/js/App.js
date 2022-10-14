@@ -163,24 +163,24 @@ function generatePersonListTable(tableId, tableData) {
             { title: "Name", field: "name", hozAlign: "center" },
             { title: "Gender", field: "genderString", hozAlign: "center" },
             { title: "Birth", field: "birthTimeString", hozAlign: "center" },
-            { title: "Hash", field: "hash", hozAlign: "center" },
+            { title: "Id", field: "id", hozAlign: "center" },
         ],
     });
 
     //handler when table row is clicked
     table.on("rowClick", function (e, row) {
         //get person name
-        let personHash = row._row.data.hash;
+        let personId = row._row.data.hash;
         //send user to person editor page with clicked person
-        window.location.href = `/personeditor/${personHash}`;
+        window.location.href = `/personeditor/${personId}`;
     });
 
     //same as click handler but for touch
     table.on("rowTap", function (e, row) {
         //get person name
-        let personHash = row._row.data.hash;
+        let personId = row._row.data.hash;
         //send user to person editor page with clicked person
-        window.location.href = `/personeditor/${personHash}`;
+        window.location.href = `/personeditor/${personId}`;
     });
 
 }
@@ -215,21 +215,7 @@ function generatePlanetDataTable(tableId, tableData) {
         ],
     });
 
-    //handler when table row is clicked
-    //table.on("rowClick", function (e, row) {
-    //    //get person name
-    //    let personHash = row._row.data.hash;
-    //    //send user to person editor page with clicked person
-    //    window.location.href = `/personeditor/${personHash}`;
-    //});
-
-    ////same as click handler but for touch
-    //table.on("rowTap", function (e, row) {
-    //    //get person name
-    //    let personHash = row._row.data.hash;
-    //    //send user to person editor page with clicked person
-    //    window.location.href = `/personeditor/${personHash}`;
-    //});
+   
 
 }
 
@@ -259,22 +245,7 @@ function generateHouseDataTable(tableId, tableData) {
             { title: "Planets Aspecting House", field: "planetsAspectingHouse", hozAlign: "center", responsive: 0 },
         ],
     });
-
-    //handler when table row is clicked
-    //table.on("rowClick", function (e, row) {
-    //    //get person name
-    //    let personHash = row._row.data.hash;
-    //    //send user to person editor page with clicked person
-    //    window.location.href = `/personeditor/${personHash}`;
-    //});
-
-    ////same as click handler but for touch
-    //table.on("rowTap", function (e, row) {
-    //    //get person name
-    //    let personHash = row._row.data.hash;
-    //    //send user to person editor page with clicked person
-    //    window.location.href = `/personeditor/${personHash}`;
-    //});
+    
 
 }
 

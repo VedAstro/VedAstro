@@ -28,7 +28,7 @@ namespace Website
         public const string GetMaleListApi = "https://vedastroapi.azurewebsites.net/api/getmalelist";
         public const string GetPersonListApi = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
         public const string GetPersonApi = "https://vedastroapi.azurewebsites.net/api/getperson";
-        public const string GetPersonHashFromSavedChartHash = "https://vedastroapi.azurewebsites.net/api/getpersonhashfromsavedcharthash";
+        public const string GetPersonIdFromSavedChartHash = "https://vedastroapi.azurewebsites.net/api/getpersonidfromsavedcharthash";
 
         public const string UpdatePersonApi = "https://vedastroapi.azurewebsites.net/api/updateperson";
         public const string GetTaskListApi = "https://vedastroapi.azurewebsites.net/api/gettasklist";
@@ -53,7 +53,12 @@ namespace Website
         public const string SignInGoogle = "https://vedastroapi.azurewebsites.net/api/SignInGoogle";
         public const string SignInFacebook = "https://vedastroapi.azurewebsites.net/api/SignInFacebook";
         public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
-
+        
+        /// <summary>
+        /// Keep track of calls waiting in line,
+        /// to by pass if one call holds the que
+        /// </summary>
+        private static int _waitingInLineCount = 0;
 
         /// <summary>
         /// Shows if any active connection is on, used to enforce 1 call at a time
@@ -256,6 +261,7 @@ namespace Website
 
         }
 
+
         /// <summary>
         /// Holds the control until line is clear
         /// enforces 1 call at a time
@@ -264,11 +270,16 @@ namespace Website
         /// <returns></returns>
         public static async Task IfBusyPleaseHold(string caller = "")
         {
-            while (IsBusy)
+            //if waiting too long, move on
+            while (IsBusy && _waitingInLineCount < 5)
             {
                 Console.WriteLine($"BLZ:Waiting in line for call:{caller}");
                 await Task.Delay(500);
+                _waitingInLineCount++; //increment  count
             }
+
+            //reset
+            _waitingInLineCount = 0;
         }
 
 

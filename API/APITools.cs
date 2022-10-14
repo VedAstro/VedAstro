@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Genso.Astrology.Library;
@@ -13,7 +12,6 @@ using Genso.Astrology.Library.Compatibility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Azure.Data.Tables;
 
 namespace API
 {
@@ -51,6 +49,10 @@ namespace API
 
             //upload stream to blob
             await blobClient.UploadAsync(dataStream, overwrite: true);
+
+            //auto correct content type from wrongly set "octet/stream"
+            var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/xml" };
+            await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
         }
 
         //todo use new method below for shorter code & consistency
@@ -190,14 +192,14 @@ namespace API
 
         }
 
-        public static CompatibilityReport GetCompatibilityReport(int maleHash, int femaleHash, Data personList)
+        public static CompatibilityReport GetCompatibilityReport(string maleId, string femaleId, Data personList)
         {
             //get all the people
             var peopleList = DatabaseManager.GetPersonList(personList);
 
             //filter out the male and female ones we want
-            var male = peopleList.Find(person => person.Hash == maleHash);
-            var female = peopleList.Find(person => person.Hash == femaleHash);
+            var male = peopleList.Find(person => person.Id == maleId);
+            var female = peopleList.Find(person => person.Id == femaleId);
 
             return MatchCalculator.GetCompatibilityReport(male, female);
         }
@@ -236,6 +238,25 @@ namespace API
                     {   //use hash as id to find the person's record
                         var thisHash = Person.FromXml(personXml).GetHashCode();
                         return thisHash == originalHash;
+                    }).First();
+            }
+            catch (Exception e)
+            {
+                //if fail log it and return empty xelement
+                await Log.Error(e, null);
+                return new XElement("Person");
+            }
+        }
+
+        public static async Task<XElement> FindPersonById(XDocument personListXml, string personId)
+        {
+            try
+            {
+                return personListXml.Root?.Elements()
+                    .Where(delegate (XElement personXml)
+                    {   //use id to find the person's record
+                        var thisId = Person.FromXml(personXml).Id;
+                        return thisId == personId;
                     }).First();
             }
             catch (Exception e)
@@ -320,6 +341,18 @@ namespace API
         {
             var personListXml = await GetPeronListFile();
             var foundPersonXml = await FindPersonByHash(personListXml, personHash);
+            var foundPerson = Person.FromXml(foundPersonXml);
+
+            return foundPerson;
+        }
+
+        /// <summary>
+        /// Given a id will return parsed person from main list
+        /// </summary>
+        public static async Task<Person> GetPersonFromId(string personId)
+        {
+            var personListXml = await GetPeronListFile();
+            var foundPersonXml = await FindPersonById(personListXml, personId);
             var foundPerson = Person.FromXml(foundPersonXml);
 
             return foundPerson;

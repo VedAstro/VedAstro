@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
@@ -18,6 +19,12 @@ namespace Genso.Astrology.Library
         public static Person Empty = new Person();
 
         //DATA FIELDS
+        /// <summary>
+        /// Represents permanent identity to this record, generated only once during creation
+        /// made of random alphanumeric string 
+        /// </summary>
+        public string Id { get; set; }
+
         public string Name { get; set; }
         /// <summary>
         /// User ID is used by website. Shows owner of person's profile
@@ -36,38 +43,6 @@ namespace Genso.Astrology.Library
         /// </summary>
         public List<LifeEvent> LifeEventList { get; set; }
 
-
-
-        //CTOR
-        public Person(string name, Time birthTime, Gender gender, string userId = "101", string notes = "", List<LifeEvent> lifeEventList = null)
-        {
-            Name = name;
-            BirthTime = birthTime;
-            Gender = gender;
-            UserId = userId;
-            Notes = notes;
-            LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
-        }
-
-
-
-        //PUBLIC PROPERTIES
-
-        /// <summary>
-        /// Get the place of birth
-        /// Note: uses the location stored in birth "Time"
-        /// </summary>
-        public GeoLocation GetBirthLocation() => BirthTime.GetGeoLocation();
-
-        /// <summary>
-        /// Todo deprecated use Name
-        /// </summary>
-        public string GetName() => Name;
-
-        /// <summary>
-        /// Todo deprecated use Gender
-        /// </summary>
-        public Gender GetGender() => Gender;
 
         /// <summary>
         /// Gets STD birth year for person
@@ -92,14 +67,6 @@ namespace Genso.Astrology.Library
         /// </summary>
         public string BirthDateMonthYear => BirthTime.GetStdDateTimeOffset().ToString("dd/MM/yyyy");//note "MM" is month, not "mm"
 
-        /// <summary>
-        /// Gets this person's age at the inputed time (using year from STD time)
-        /// </summary>
-        public int GetAge(Time time) => time.GetStdDateTimeOffset().Year - this.BirthYear;
-        /// <summary>
-        /// Gets this person's age at the inputed std year (using year from STD time)
-        /// </summary>
-        public int GetAge(int year) => year - this.BirthYear;
 
         /// <summary>
         /// Used by tabulator JS, when person is converted to json
@@ -120,6 +87,43 @@ namespace Genso.Astrology.Library
         /// Gets now time at birth location of person (STD time)
         /// </summary>
         public DateTimeOffset StdTimeNowAtBirthLocation => DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset);
+
+
+        //CTOR
+        public Person(string id, string name, Time birthTime, Gender gender, string userId = "101", string notes = "", List<LifeEvent> lifeEventList = null)
+        {
+            Id = id;
+            Name = name;
+            BirthTime = birthTime;
+            Gender = gender;
+            UserId = userId;
+            Notes = notes;
+            LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
+        }
+
+
+
+        //PUBLIC PROPERTIES
+
+        /// <summary>
+        /// Get the place of birth
+        /// Note: uses the location stored in birth "Time"
+        /// </summary>
+        public GeoLocation GetBirthLocation() => BirthTime.GetGeoLocation();
+
+
+
+
+        /// <summary>
+        /// Gets this person's age at the inputed time (using year from STD time)
+        /// </summary>
+        public int GetAge(Time time) => time.GetStdDateTimeOffset().Year - this.BirthYear;
+
+        /// <summary>
+        /// Gets this person's age at the inputed std year (using year from STD time)
+        /// </summary>
+        public int GetAge(int year) => year - this.BirthYear;
+
 
 
         //OVERRIDES METHODS
@@ -175,13 +179,14 @@ namespace Genso.Astrology.Library
         {
             var person = new XElement("Person");
             var name = new XElement("Name", this.Name);
+            var id = new XElement("PersonId", this.Id);
             var notes = new XElement("Notes", this.Notes);
             var gender = new XElement("Gender", this.Gender.ToString());
             var birthTime = new XElement("BirthTime", this.BirthTime.ToXml());
             var userId = new XElement("UserId", this.UserId);
             var lifeEventListXml = getLifeEventListXml(LifeEventList);
 
-            person.Add(name, gender, birthTime, userId, lifeEventListXml, notes);
+            person.Add(id, name, gender, birthTime, userId, lifeEventListXml, notes);
 
             return person;
 
@@ -214,13 +219,14 @@ namespace Genso.Astrology.Library
         public static Person FromXml(XElement personXml)
         {
             var name = personXml.Element("Name")?.Value;
+            var id = personXml.Element("PersonId")?.Value ?? Tools.GenerateId(); //if no id generate new
             var notes = personXml.Element("Notes")?.Value;
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
             var userId = personXml.Element("UserId")?.Value;
             var lifeEventList = getLifeEventListFromXml();
 
-            var parsedPerson = new Person(name, time, gender, userId, notes, lifeEventList);
+            var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);
 
             return parsedPerson;
 
@@ -256,5 +262,14 @@ namespace Genso.Astrology.Library
             }
         }
 
+        /// <summary>
+        /// Parses a list of person's
+        /// </summary>
+        /// <param name="personXmlList"></param>
+        /// <returns></returns>
+        public static List<Person> FromXml(IEnumerable<XElement> personXmlList)
+        {
+            return personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
+        }
     }
 }

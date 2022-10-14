@@ -16,8 +16,8 @@
 
 
 <div class="vstack gap-3">
-    <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonHash="@SelectedMale" Label="Male" />
-    <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonHash="@SelectedFemale" Label="Female" />
+    <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonId="@SelectedMale" Label="Male" />
+    <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
     <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 </div>
 
@@ -40,23 +40,25 @@
         if (firstRender)
         {
             //show loading box
-           await _jsRuntime.ShowLoading();
+            //await _jsRuntime.ShowLoading();
 
             //get male list from api server & save it for later
             //_malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(AppData.CurrentUser?.Id));
             //_femalePeopleSelector.SetData(await WebsiteTools.GetFemalePeopleList(AppData.CurrentUser?.Id));
 
             //hide loading box
-            _jsRuntime.HideAlert();
+            //_jsRuntime.HideAlert();
 
-            //called last because will loop back
-            this.StateHasChanged();
+            ////called last because will loop back
+            //this.StateHasChanged();
 
         }
     }
 
-    private void OnClickCalculate()
+    private async Task OnClickCalculate()
     {
+        await _jsRuntime.ShowLoading();
+
         //only continue if passed input field validation
         if (!ValidationPassed()) { return; }
 

@@ -5,7 +5,7 @@
 
 <div>
     <label class="form-label">@Label</label>
-    <select @bind="SelectedPersonHash" class="form-control" style="width: fit-content;min-width: 273px;">
+    <select @bind="SelectedPersonId" class="form-control" style="width: fit-content;min-width: 273px;">
         <option value="">Select Name</option>
         @DropDownOptionsHtml
     </select>
@@ -25,25 +25,25 @@
     /// Get selected person name
     /// </summary>
     [Parameter]
-    public string SelectedPersonHash
+    public string SelectedPersonId
     {
-        get => _selectedPersonHash;
+        get => _selectedPersonId;
         set
         {
             //this stops update loops
-            if (_selectedPersonHash == value) return;
+            if (_selectedPersonId == value) return;
 
             //log this, don't await to reduce lag
             WebsiteLogManager.LogData(_jsRuntime, $"Selected Person:{value}");
 
-            _selectedPersonHash = value;
+            _selectedPersonId = value;
             //update value in parent page
-            SelectedPersonHashChanged.InvokeAsync(value);
+            SelectedPersonIdChanged.InvokeAsync(value);
         }
     }
 
-    private const string NotSelectedPersonHash = "0";
-    private string _selectedPersonHash = NotSelectedPersonHash;
+    private const string NotSelectedPersonId = "0";
+    private string _selectedPersonId = NotSelectedPersonId;
 
 
     /// <summary>
@@ -55,7 +55,9 @@
 
     //below prop needed for 2-way binding between page & component to work
     [Parameter]
-    public EventCallback<string> SelectedPersonHashChanged { get; set; }
+    public EventCallback<string> SelectedPersonIdChanged { get; set; }
+
+
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -63,7 +65,6 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
     protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
-
 
 
 
@@ -81,12 +82,8 @@
         await FillDropDown();
 
         //hide loading box
-        _jsRuntime.HideAlert();
+        _jsRuntime.HideLoading();
     }
-
-
-
-
 
     private async Task FillDropDown()
     {
@@ -97,7 +94,7 @@
         //generate drop down options in html
         foreach (var person in personList)
         {
-            html += $"<option value=\"{person.GetHashCode()}\">{person.GetName()} - {person.BirthYear}</option>";
+            html += $"<option value=\"{person.Id}\">{person.Name} - {person.BirthYear}</option>";
         }
 
         //set drop down list into view
@@ -108,12 +105,11 @@
 
     }
 
-    public Person GetSelectedPerson() => WebsiteTools.GetPersonFromHashCached(SelectedPersonHash, _jsRuntime);
-
+    public Person GetSelectedPerson() => WebsiteTools.GetPersonFromIdCached(SelectedPersonId, _jsRuntime);
 
     /// <summary>
     /// True if a person has been selected else false
     /// </summary>
-    public bool IsPersonSelected => SelectedPersonHash != NotSelectedPersonHash && SelectedPersonHash != null && SelectedPersonHash != "";
+    public bool IsPersonSelected => SelectedPersonId != NotSelectedPersonId && SelectedPersonId != null && SelectedPersonId != "";
 
 }

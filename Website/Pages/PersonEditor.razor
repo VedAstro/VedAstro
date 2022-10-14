@@ -42,7 +42,7 @@
             <TimeInput @ref="_timeInput" />
         </div>
 
-        <GeoLocationInput @ref="_geoLocationInput" />
+        <GeoLocationInput DisableAutoLocation="true" @ref="_geoLocationInput" />
         <div>
             <label class="form-label">
                 Gender
@@ -82,10 +82,7 @@
         @*BUTTONS*@
         <div style="margin-top: 50px" class="hstack row gap-2">
             @*Only show delete button in Editor mode*@
-            @if (PageMode == Mode.Editor)
-            {
-                <IconButton ButtonText="Delete" IconName="fluent:delete-20-regular" OnClickCallback="@OnClickDeleteButton" />
-            }
+            <IconButton ButtonText="Delete" IconName="fluent:delete-20-regular" OnClickCallback="@OnClickDeleteButton" />
             <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
         </div>
     </div>
@@ -101,7 +98,7 @@
     /// editor passed, else becomes creator
     /// </summary>
     [Parameter]
-    public string PersonHash { get; set; }
+    public string PersonId { get; set; }
 
     /// <summary>
     /// represents the Person instance that this page represents
@@ -112,10 +109,8 @@
     /// a copy of the person's hash during init is saved in edit mode
     /// because hash will change on edit, used as when updating to API
     /// </summary>
-    private int _originalPersonHash;
+    private string _personId;
 
-    //gets page mode that was decided earlier
-    private bool IsCreator => PageMode == Mode.Creator;
 
     TimeInput _timeInput;
     string _nameInput = "";
@@ -129,10 +124,6 @@
 
     //--------------------PROPERTIES
 
-    /// <summary>
-    /// Mode the page is initialed in Creator or Editor
-    /// </summary>
-    private Mode PageMode { get; set; }
 
 
 
@@ -152,8 +143,6 @@
 
     private async Task _OnInitialized()
     {
-        //decide if page should be editor or creator
-        PageMode = PersonHash == null ? Mode.Creator : Mode.Editor;
 
         //little delay to let page elements load up
         //otherwise render page will encounter nulls
@@ -169,17 +158,19 @@
     private async Task _OnClickSubmitButton()
     {
 
-        //button does different stuff based on page mode
-        if (IsCreator)
-        {
-            //SubmitNewPerson();
-            await SubmitNewPerson();
-        }
-        else
-        {
-            //UpdateExistingPerson();
-            await UpdateExistingPerson();
-        }
+        //UpdateExistingPerson();
+        await UpdateExistingPerson();
+
+
+        ////button does different stuff based on page mode
+        //if (IsCreator)
+        //{
+        //    //SubmitNewPerson();
+        //    await SubmitNewPerson();
+        //}
+        //else
+        //{
+        //}
     }
 
 
@@ -191,50 +182,45 @@
         //based on page mode set the details
 
         //set page title
-        _pageTitle = IsCreator ? "Add New Person" : "Edit Person Details";
+        _pageTitle = "Edit Person Details";
 
         //set person
-        _person = IsCreator ? new Person() : await WebsiteTools.GetPersonFromHash(PersonHash, _jsRuntime);
+        _person = WebsiteTools.GetPersonFromIdCached(PersonId, _jsRuntime);
 
 
         //in edit mode save hash of unedited person
-        _originalPersonHash = IsCreator ? 0 : _person.GetHashCode();
+        _personId = _person.Id;
 
-        _nameInput = IsCreator ? "" : _person.Name;
+        _nameInput = _person.Name;
 
-        _notesInput = IsCreator ? "" : _person.Notes;
+        _notesInput = _person.Notes;
 
-        _genderInput = IsCreator ? "Male" : _person.Gender.ToString();
+        _genderInput = _person.Gender.ToString();
 
         //set timezone if NOT creator, else component will auto set
         var personBirthTimeOffset = _person.BirthTimeZone;
-        if (!IsCreator) { _timeInput.TimeZone = personBirthTimeOffset; }
+        _timeInput.TimeZone = personBirthTimeOffset;
 
         var birthTimeHourMin = _person.BirthHourMinute;
         var defaultHourMin = "00:00";
-        _timeInput.HourMin = IsCreator ? defaultHourMin : birthTimeHourMin;
+        _timeInput.HourMin = birthTimeHourMin;
 
         var birthTimeDate = _person.BirthDateMonthYear;
         var defaultDate = "10/10/1990";
-        _timeInput.Date = IsCreator ? defaultDate : birthTimeDate;
+        _timeInput.Date = birthTimeDate;
 
 
         //geolocation only needs to be set in Editor mode
-        //in Creator mode it will auto set after timeout
-        if (!IsCreator) //editor mode
+        var geoLocation = new
         {
-            var geoLocation = new
-            {
-                LocationName = IsCreator ? "" : _person.GetBirthLocation().GetName(),
-                Longitude = IsCreator ? 0 : _person.GetBirthLocation().GetLongitude(),
-                Latitude = IsCreator ? 0 : _person.GetBirthLocation().GetLatitude()
-            };
-            _geoLocationInput.UpdateData(geoLocation);
-        }
+            LocationName = _person.GetBirthLocation().GetName(),
+            Longitude = _person.GetBirthLocation().GetLongitude(),
+            Latitude = _person.GetBirthLocation().GetLatitude()
+        };
+        _geoLocationInput.UpdateData(geoLocation);
 
         //life events
-        var emptyList = new List<LifeEvent>();
-        var lifeEventList = IsCreator ? emptyList : _person.LifeEventList;
+        var lifeEventList = _person.LifeEventList;
         await _lifeEventEditor.SetData(lifeEventList);
 
 
@@ -368,7 +354,9 @@
         //if user not signed in, use their visitor id as user ID
         //done so that public list is not clouded
         var userId = AppData.CurrentUser?.Id == UserData.Empty.Id ? AppData.VisitorId : AppData.CurrentUser?.Id;
-        return new Person(_nameInput, birthTime, gender, userId, _notesInput, lifeEventList);
+
+        //note: person id does NOT change
+        return new Person(_person.Id, _nameInput, birthTime, gender, userId, _notesInput, lifeEventList);
 
 
         //----------LOCAL FUNCTION ---------------------
@@ -386,7 +374,7 @@
         _person = await GetPersonInstanceFromInput();
 
         //update person in API by hash
-        await WebsiteTools.UpdatePerson(_person, _originalPersonHash, _jsRuntime);
+        await WebsiteTools.UpdatePerson(_person, _personId, _jsRuntime);
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
@@ -408,7 +396,7 @@
         await _jsRuntime.ShowLoading();
 
         //tell API to delete person, using hash as id
-        await WebsiteTools.DeletePerson(_originalPersonHash, _jsRuntime);
+        await WebsiteTools.DeletePerson(_personId, _jsRuntime);
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);

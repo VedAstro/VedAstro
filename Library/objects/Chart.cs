@@ -21,18 +21,18 @@ namespace Genso.Astrology.Library
     {
 
         public string ContentSvg { get; set; }
-        public int PersonHash { get; }
+        public string PersonId { get; }
         public XElement EventTagListXml { get; }
         public XElement StartTimeXml { get; }
         public XElement EndTimeXml { get; }
         public double DaysPerPixel { get; }
 
 
-        public Chart(string contentSvg, int personHash, XElement eventTagListXml, XElement startTimeXml,
+        public Chart(string contentSvg, string personId, XElement eventTagListXml, XElement startTimeXml,
             XElement endTimeXml, double daysPerPixel)
         {
             ContentSvg = contentSvg;
-            PersonHash = personHash;
+            PersonId = personId;
             EventTagListXml = eventTagListXml;
             StartTimeXml = startTimeXml; //root time xml
             EndTimeXml = endTimeXml; //root time xml
@@ -44,11 +44,11 @@ namespace Genso.Astrology.Library
         {
             var person = new XElement("Chart");
             var contentSvg = new XElement("ContentSvg", ContentSvg);
-            var personHash = new XElement("PersonHash", PersonHash);
+            var personId = new XElement("PersonId", PersonId);
             var daysPerPixel = new XElement("DaysPerPixel", DaysPerPixel);
 
             person.Add(
-                personHash,
+                personId,
                 daysPerPixel,
                 EventTagListXml,
                 new XElement("StartTime", StartTimeXml),
@@ -60,14 +60,14 @@ namespace Genso.Astrology.Library
 
         public static Chart FromXml(XElement personXml)
         {
-            var personHash = int.Parse(personXml.Element("PersonHash")?.Value);
+            var personId = personXml.Element("PersonId")?.Value;
             var contentSvg = personXml.Element("ContentSvg")?.Value;
             var eventTagListXml = personXml.Element("EventTagList");
             var startTimeXml = personXml.Element("StartTime").Element("Time");
             var endTimeXml = personXml.Element("EndTime").Element("Time");
             var daysPerPixel = double.Parse(personXml.Element("DaysPerPixel")?.Value);
 
-            var parsedPerson = new Chart(contentSvg, personHash, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+            var parsedPerson = new Chart(contentSvg, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
 
             return parsedPerson;
         }
@@ -79,7 +79,7 @@ namespace Genso.Astrology.Library
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
-            var hash1 = PersonHash.GetHashCode();
+            var hash1 = PersonId.GetHashCode();
             var hash2 = Tools.GetStringHashCode(StartTimeXml.ToString());
             var hash3 = Tools.GetStringHashCode(EndTimeXml.ToString());
             var hash4 = Tools.GetStringHashCode(EventTagListXml.ToString());

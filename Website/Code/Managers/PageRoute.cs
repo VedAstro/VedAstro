@@ -21,7 +21,7 @@
         public const string PersonList = "/PersonList";
         public const string CalculatorList = "/CalculatorList";
         public const string PersonEditor = "/PersonEditor";
-        public const string PersonEditorParam = "/PersonEditor/{PersonHash}";
+        public const string PersonEditorParam = "/PersonEditor/{PersonId}";
         public const string Donate = "/Donate";
         public const string DonatePayment = $"{Donate}/Payment";
         public const string About = "/About";
@@ -31,7 +31,7 @@
         public const string Muhurtha = "/Muhurtha";
         public const string Match = "/Match";
         public const string MatchReport = "/MatchReport";
-        public const string MatchReportParam = "/MatchReport/{MaleHash}/{FemaleHash}";
+        public const string MatchReportParam = "/MatchReport/{MaleId}/{FemaleId}";
         public const string SunRiseSetTime = "/SunRiseSetTime";
         public const string AddLifeEvent = "/AddLifeEvent";
         public const string AddPerson = "/AddPerson";

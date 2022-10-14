@@ -25,6 +25,8 @@ namespace Publisher
         private static string projectBuildPath2 = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\wwwroot";
         private static string? _nukeOld;
         private static IConfigurationRoot _config;
+        private const string _lastmodifiedticks = "lastmodifiedticks";
+
 
         static async Task Main(string[] args)
         {
@@ -38,6 +40,7 @@ namespace Publisher
                 Console.WriteLine("5:Upload Normal only");
                 Console.WriteLine("6:Upload AOT & Normal");
                 Console.WriteLine("7:Build AOT & Normal");
+                Console.WriteLine("8:Build Normal Only");
 
                 var choice = Console.ReadLine();
                 Console.WriteLine("Nuke old website? Y/N");
@@ -49,43 +52,38 @@ namespace Publisher
 
                 switch (choice)
                 {
-                    case "2": goto AOT;
-                    case "3":
+                    case "1":
                         //build the website project
                         BuildProject();
+
                         //upload to azure
-                        await UploadToAzure("vedastrowebsitestorage");
+                        UploadToAzureAzCopyNormal();
+
+                        BuildProjectAOT();
+
+                        //upload to azure
+                        await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
                         goto END;
-                    case "4": goto AOT_UPLOAD;
-                    case "5": await UploadToAzure("vedastrowebsitestorage"); goto END;
+                    case "2": BuildProjectAOT(); await UploadToAzure("vedastrowebsitestorage2"); goto END;
+                    case "3": BuildProject(); UploadToAzureAzCopyNormal(); goto END;
+                    case "4": await UploadToAzure("vedastrowebsitestorage2"); goto END;
+                    case "5": UploadToAzureAzCopyNormal(); goto END;
                     case "6":
-                        await UploadToAzure("vedastrowebsitestorage");
-                        Console.WriteLine("Now we do AOT");
+                        Console.WriteLine("NORMAL BUILD UPLOAD");
+                        UploadToAzureAzCopyNormal();
+                        Console.WriteLine("AOT BUILD UPLOAD");
                         await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
                         goto END;
                     case "7": BuildProject(); BuildProjectAOT(); goto END;
+                    case "8": BuildProject(); goto END;
 
                 }
 
-                //NORMAL BUILD
-                //build the website project
-                BuildProject();
 
-                //upload to azure
-                await UploadToAzure("vedastrowebsitestorage");
-
-            //AOT BUILD
-            AOT:
-
-                BuildProjectAOT();
-
-            AOT_UPLOAD:
-                //upload to azure
-                await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
-
-                Console.WriteLine("DONE!!!");
 
             END:
+                Console.WriteLine("Done! You can go fly kites now.");
+
                 //hold your horses
                 Console.ReadLine();
 
@@ -99,8 +97,6 @@ namespace Publisher
             //hold your horses
             Console.ReadLine();
         }
-
-        private const string _lastmodifiedticks = "lastmodifiedticks";
 
         private static async Task UploadToAzure(string connectionStringName)
         {
@@ -154,7 +150,7 @@ namespace Publisher
                 //var blobClient = GetNewBlobClientWithMaxRetry(blobName, containerClient);
                 var blobClient = containerClient.GetBlobClient(blobName);
                 //var x = await blobClient2.ExistsAsync();
-                
+
                 // If the blob already exists, get the last modified tick count in the blobs metadata
                 long blobLastModifiedTick = 0;
                 try
@@ -168,7 +164,8 @@ namespace Publisher
                     }
                 }
                 //if fail, blob last tick will be 0, aka outdated
-                catch {
+                catch
+                {
                     //Console.WriteLine("Failed to get LastModifiedTick:" + blobName);
                 }
 
@@ -197,6 +194,25 @@ namespace Publisher
             }
 
             Console.WriteLine("\nUpload Complete");
+        }
+        private static void UploadToAzureAzCopyNormal()
+        {
+
+            Console.WriteLine("UploadToAzureAzCopy");
+
+            //set project path to build
+            System.Environment.CurrentDirectory = projectPath;
+
+            //run build from power shell since correct dir
+            var ps = PowerShell.Create();
+            var script = $@"./azcopy.exe sync '{projectBuildPath}' '{_config["UploadSasUri"]}' --recursive --delete-destination=true";
+            ps.AddScript(script);
+            ps.Invoke();
+
+            //print build output
+            foreach (PSObject o in ps.Invoke()) { Console.WriteLine(o.ToString()); }
+
+            Console.WriteLine("UploadToAzureAzCopy Complete");
         }
 
         /// <summary>

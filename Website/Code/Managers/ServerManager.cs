@@ -270,11 +270,14 @@ namespace Website
         /// <returns></returns>
         public static async Task IfBusyPleaseHold(string caller = "")
         {
+            //note: experimentation has shown that long delays cause serious lag
+            //as que piles up, so many checks very fast seems to work perfectly so far
+
             //if waiting too long, move on
-            while (IsBusy && _waitingInLineCount < 5)
+            while (IsBusy && _waitingInLineCount < 10)
             {
                 Console.WriteLine($"BLZ:Waiting in line for call:{caller}");
-                await Task.Delay(500);
+                await Task.Delay(100);
                 _waitingInLineCount++; //increment  count
             }
 

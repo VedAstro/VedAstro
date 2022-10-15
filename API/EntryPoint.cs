@@ -570,7 +570,8 @@ namespace API
                 var chart = await GetEventReportSvgForIncomingRequest(incomingRequest);
 
                 //save chart into storage
-                await APITools.AddXElementToXDocument(chart.ToXml(), SavedChartListFile, ContainerName);
+                //note: do not wait to speed things up, beware! failure will go undetected on client
+                APITools.AddXElementToXDocument(chart.ToXml(), SavedChartListFile, ContainerName);
 
                 //let caller know all good
                 return PassMessage();

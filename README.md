@@ -16,13 +16,19 @@
 
 
 <h1 align="center"><a href="https://www.vedastro.org">VedAstro.org</a></h1>
+<h5 align="center">
+  This tool enables one to see subtle phenomena across time.</br>
+       Which to the mortal man is invisible in action,
+       and only visible in its reaction.</h5>
 
 # Links
 - [Quick Guide](https://vedastro.org/quickguide) learn how to use
+- [About](https://vedastro.org/About) the reason and goal for this project
+- [Donate](https://vedastro.org/donate) to keep this project going
 - [Report](https://vedastro.org/contact) problems you find when using software
 - [Share](https://vedastro.org/contact) your ideas for new or better features 
 - [Fix](https://vedastro.org/contact) bugs & implement features
-- [Donate](https://vedastro.org/donate) to support programming & server costs
+
 
 
 # Unexpected errors?

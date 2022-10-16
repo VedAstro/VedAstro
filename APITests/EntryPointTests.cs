@@ -14,9 +14,9 @@ namespace API.Tests
         [TestMethod()]
         public void GetSummaryColorTest()
         {
-            var x = EntryPoint.GetSummaryColor(1, -5, 6);
+            var x = EventsChartAPI.GetSummaryColor(1, -5, 6);
             Console.WriteLine(x);
-            var y = EntryPoint.GetSummaryColor(4, -5, 6);
+            var y = EventsChartAPI.GetSummaryColor(4, -5, 6);
             Console.WriteLine(y);
             Assert.Fail();
         }

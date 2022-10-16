@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,9 +20,24 @@ namespace API
     /// </summary>
     public static class APITools
     {
+        //█░█ ▄▀█ █▀█ █▀▄   █▀▄ ▄▀█ ▀█▀ ▄▀█
+        //█▀█ █▀█ █▀▄ █▄▀   █▄▀ █▀█ ░█░ █▀█
+
+
+        //hard coded links to files stored in storage
+        public const string PersonListXml = "vedastro-site-data/PersonList.xml";
+        private const string CachedDasaReportXml = "vedastro-site-data/CachedDasaReport.xml";
+        public const string MessageListXml = "vedastro-site-data/MessageList.xml";
+        public const string TaskListXml = "vedastro-site-data/TaskList.xml";
+        public const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
+        public const string ContainerName = "vedastro-site-data";
+        public const string PersonListFile = "PersonList.xml";
+        public const string SavedChartListFile = "SavedChartList.xml";
+        public const string RecycleBinFile = "RecycleBin.xml";
+
         private const string UserDataListXml = "UserDataList.xml";
-        private const string PersonListXml = "PersonList.xml";
-        private const string MessageListXml = "MessageList.xml";
+        //private const string PersonListXml = "PersonList.xml";
+        //private const string MessageListXml = "MessageList.xml";
         private const string BlobContainerName = "vedastro-site-data";
 
         //we use direct storage URL for fast access & solid
@@ -34,6 +49,14 @@ namespace API
         //used in horoscope prediction
         private const string UrlPredictionDataListXml = $"https://{AzureStorage}/data/PredictionDataList.xml";
 
+        /// <summary>
+        /// Default success message sent to caller
+        /// </summary>
+        public static OkObjectResult PassMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msg)).ToString());
+
+        public static OkObjectResult PassMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msgXml)).ToString());
+        public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
+        private static OkObjectResult FailMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msgXml)).ToString());
 
 
         /// <summary>
@@ -564,7 +587,7 @@ namespace API
         /// Decision on when event starts & ends is also done here
         /// Event Data + Time = HoroscopePrediction
         /// </summary>
-        private static List<HoroscopePrediction> GetPredictionListByEventData(EventData eventData, Person person, List<Time> timeList)
+        public static List<HoroscopePrediction> GetPredictionListByEventData(EventData eventData, Person person, List<Time> timeList)
         {
             //declare empty event list to fill
             var eventList = new List<HoroscopePrediction>();
@@ -634,5 +657,22 @@ namespace API
             return eventList;
         }
 
+        public static async Task<HttpResponseMessage> GetRequest(string receiverAddress)
+        {
+            //prepare the data to be sent
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+            //get the data sender
+            using var client = new HttpClient();
+
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+            //send the data on its way
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+            //return the raw reply to caller
+            return response;
+        }
     }
 }

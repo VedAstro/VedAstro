@@ -18,412 +18,10 @@ using Newtonsoft.Json.Linq;
 
 namespace API
 {
-    public static class EntryPoint
+    public static class EventsChartAPI
     {
-
-        //█░█ ▄▀█ █▀█ █▀▄   █▀▄ ▄▀█ ▀█▀ ▄▀█
-        //█▀█ █▀█ █▀▄ █▄▀   █▄▀ █▀█ ░█░ █▀█
-
-
-        //hard coded links to files stored in storage
-        private const string PersonListXml = "vedastro-site-data/PersonList.xml";
-        private const string CachedDasaReportXml = "vedastro-site-data/CachedDasaReport.xml";
-        private const string MessageListXml = "vedastro-site-data/MessageList.xml";
-        private const string TaskListXml = "vedastro-site-data/TaskList.xml";
-        private const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
-        private const string ContainerName = "vedastro-site-data";
-        private const string PersonListFile = "PersonList.xml";
-        private const string SavedChartListFile = "SavedChartList.xml";
-        private const string RecycleBinFile = "RecycleBin.xml";
-
-
-        /// <summary>
-        /// Default success message sent to caller
-        /// </summary>
-        private static OkObjectResult PassMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msg)).ToString());
-        private static OkObjectResult PassMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msgXml)).ToString());
-        private static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
-        private static OkObjectResult FailMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msgXml)).ToString());
-
-
-
-
         //▄▀█ █▀█ █   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
         //█▀█ █▀▀ █   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
-
-
-        [FunctionName("getmatchreport")]
-        public static async Task<IActionResult> GetMatchReport(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.Read)] Stream personListRead)
-        {
-            string responseMessage;
-
-            try
-            {
-                //get name of male & female
-                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var maleId = rootXml.Element("MaleId")?.Value;
-                var femaleId = rootXml.Element("FemaleId")?.Value;
-
-
-                //get list of all people
-                var personList = new Data(personListRead);
-
-                //generate compatibility report
-                CompatibilityReport compatibilityReport = APITools.GetCompatibilityReport(maleId, femaleId, personList);
-                responseMessage = compatibilityReport.ToXml().ToString();
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-            return okObjectResult;
-        }
-
-        [FunctionName("gethoroscope")]
-        public static async Task<IActionResult> GetHoroscope(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
-            HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
-        {
-            string responseMessage;
-
-            try
-            {
-                //get name of male & female
-                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var personId = rootXml.Value;
-
-                //generate compatibility report
-                var person = await APITools.GetPersonFromId(personId);
-
-                //calculate predictions for current person
-                var predictionList = await APITools.GetPrediction(person);
-
-                //convert list to xml string in root elm
-                responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-            return okObjectResult;
-
-        }
-
-        [FunctionName("addperson")]
-        public static async Task<IActionResult> AddPerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
-        {
-
-            try
-            {
-                //get new person data out of incoming request
-                //note: inside new person xml already contains user id
-                var newPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
-
-                //add new person to main list
-                await APITools.AddXElementToXDocument(newPersonXml, PersonListFile, ContainerName);
-
-                return PassMessage();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-        }
-
-        [FunctionName("addmessage")]
-        public static async Task<IActionResult> AddMessage(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(MessageListXml, FileAccess.ReadWrite)] BlobClient messageListClient)
-        {
-
-            try
-            {
-                //get new message data out of incoming request
-                //note: inside new person xml already contains user id
-                var newMessageXml = APITools.ExtractDataFromRequest(incomingRequest);
-
-                //add new message to main list
-                var messageListXml = await APITools.AddXElementToXDocument(messageListClient, newMessageXml);
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(messageListClient, messageListXml);
-
-                return PassMessage();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-        }
-
-        [FunctionName("addtask")]
-        public static async Task<IActionResult> AddTask(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(TaskListXml, FileAccess.ReadWrite)] BlobClient taskListClient)
-        {
-            try
-            {
-                //get new task data out of incoming request 
-                var newTaskXml = APITools.ExtractDataFromRequest(incomingRequest);
-
-                //add new task to main list
-                var taskListXml = await APITools.AddXElementToXDocument(taskListClient, newTaskXml);
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(taskListClient, taskListXml);
-
-                return PassMessage();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-        }
-
-        [FunctionName("addvisitor")]
-        public static async Task<IActionResult> AddVisitor(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
-        {
-            try
-            {
-                //get new visitor data out of incoming request 
-                var newVisitorXml = APITools.ExtractDataFromRequest(incomingRequest);
-
-                //add new visitor to main list
-                var taskListXml = await APITools.AddXElementToXDocument(visitorLogClient, newVisitorXml);
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(visitorLogClient, taskListXml);
-
-                return PassMessage();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-        }
-
-        [FunctionName("getmalelist")]
-        public static async Task<IActionResult> GetMaleList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-
-                //get user id
-                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
-
-                //get person list from storage
-                var personListXml = await APITools.BlobClientToXml(personListClient);
-
-                //get only male ppl into a list & matching user id
-                var maleList = from person in personListXml.Root?.Elements()
-                               where
-                                   person.Element("Gender")?.Value == "Male" &&
-                                   person.Element("UserId")?.Value == userId
-                               select person;
-
-                //send male list to caller
-                responseMessage = new XElement("Root", maleList).ToString();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-        }
-
-        /// <summary>
-        /// Gets all the unique visitors to the site
-        /// </summary>
-        [FunctionName("getvisitorlist")]
-        public static async Task<IActionResult> GetVisitorList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-
-                //get user id
-                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
-
-                //get visitor log from storage
-                var visitorLogXml = await APITools.BlobClientToXml(visitorLogClient);
-
-                //get all unique visitor elements only
-                //var uniqueVisitorList = from visitorXml in visitorLogXml.Root?.Elements()
-                //                        where
-                //                            //note: location tag only exists for new visitor log,
-                //                            //so use that to get unique list
-                //                            visitorXml.Element("Location") != null
-                //                        select visitorXml;
-
-                //send list to caller
-                responseMessage = visitorLogXml.ToString();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-        }
-
-        /// <summary>
-        /// Function for debugging purposes
-        /// Call to see if return correct IP
-        /// </summary>
-        [FunctionName("getipaddress")]
-        public static async Task<IActionResult> GetIpAddress(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
-            HttpRequestMessage incomingRequest)
-        {
-            return PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip");
-        }
-
-
-        [FunctionName("getfemalelist")]
-        public static async Task<IActionResult> GetFemaleList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-                //get user id
-                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
-
-                //get person list from storage
-                var personListXml = await APITools.BlobClientToXml(personListClient);
-
-                //get only female ppl into a list
-                var femaleList = from person in personListXml.Root?.Elements()
-                                 where
-                                     person.Element("Gender")?.Value == "Female"
-                                     &&
-                                     person.Element("UserId")?.Value == userId
-                                 select person;
-
-                //send female list to caller
-                responseMessage = new XElement("Root", femaleList).ToString();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-        }
-
-        /// <summary>
-        /// Gets person all details from only hash
-        /// </summary>
-        [FunctionName("getperson")]
-        public static async Task<IActionResult> GetPerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-                //get hash that will be used find the person
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var personId = requestData.Value;
-
-                //get the person record by hash
-                var personListXml = await APITools.BlobClientToXml(personListClient);
-                var foundPerson = await APITools.FindPersonById(personListXml, personId);
-
-                //send person to caller
-                responseMessage = new XElement("Root", foundPerson).ToString();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-        }
 
 
         /// <summary>
@@ -482,7 +80,6 @@ namespace API
 
         }
 
-
         /// <summary>
         /// Gets chart from saved list, needs to be given hash to find
         /// </summary>
@@ -498,7 +95,7 @@ namespace API
                 var originalHash = int.Parse(requestData.Value);
 
                 //get the saved chart record by hash
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(SavedChartListFile, ContainerName);
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
                 var foundChartXml = await APITools.FindChartByHash(savedChartListXml, originalHash);
                 var chart = Chart.FromXml(foundChartXml);
 
@@ -535,7 +132,7 @@ namespace API
                 var chartHash = int.Parse(requestData.Value);
 
                 //get the saved chart record by hash
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(SavedChartListFile, ContainerName);
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
                 var foundChartXml = await APITools.FindChartByHash(savedChartListXml, chartHash);
                 var chart = Chart.FromXml(foundChartXml);
 
@@ -571,10 +168,10 @@ namespace API
 
                 //save chart into storage
                 //note: do not wait to speed things up, beware! failure will go undetected on client
-                APITools.AddXElementToXDocument(chart.ToXml(), SavedChartListFile, ContainerName);
+                APITools.AddXElementToXDocument(chart.ToXml(), APITools.SavedChartListFile, APITools.ContainerName);
 
                 //let caller know all good
-                return PassMessage();
+                return APITools.PassMessage();
 
             }
             catch (Exception e)
@@ -603,7 +200,7 @@ namespace API
             {
 
                 //get ful saved chart list
-                var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(SavedChartListFile, ContainerName);
+                var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
 
                 //extract out the name & hash
                 var rootXml = new XElement("Root");
@@ -642,362 +239,12 @@ namespace API
         }
 
 
-        /// <summary>
-        /// Updates a person's record, uses hash to identify person to overwrite
-        /// </summary>
-        [FunctionName("updateperson")]
-        public static async Task<IActionResult> UpdatePerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
-        {
-
-            try
-            {
-                //get unedited hash & updated person details from incoming request
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var originalId = requestData?.Element("PersonId").Value;
-                var updatedPersonXml = requestData?.Element("Person");
-
-                //get the person record that needs to be updated
-                var personListXml = await APITools.BlobClientToXml(personListClient);
-                var personToUpdate = await APITools.FindPersonById(personListXml, originalId);
-
-                //delete the previous person record,
-                //and insert updated record in the same place
-                personToUpdate.ReplaceWith(updatedPersonXml);
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(personListClient, personListXml);
-
-                return PassMessage();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-        }
-
-
-        /// <summary>
-        /// Deletes a person's record, uses hash to identify person
-        /// Note : user id is not checked here because Person hash
-        /// can't even be generated by client side if you don't have access.
-        /// Theoretically anybody who gets the hash of the person,
-        /// can delete the record by calling this API
-        /// </summary>
-        [FunctionName("deleteperson")]
-        public static async Task<IActionResult> DeletePerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
-        {
-
-            try
-            {
-                //get unedited hash & updated person details from incoming request
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var personId = requestData.Value;
-
-                //get the person record that needs to be deleted
-                var personListXml = await APITools.BlobClientToXml(personListClient);
-                var personToDelete = await APITools.FindPersonById(personListXml, personId);
-
-                //add deleted person to recycle bin 
-                await APITools.AddXElementToXDocument(personToDelete, RecycleBinFile, ContainerName);
-
-                //delete the person record,
-                personToDelete.Remove();
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(personListClient, personListXml);
-
-                return PassMessage();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-        }
-
-        [FunctionName("deletevisitorbyuserid")]
-        public static async Task<IActionResult> DeleteVisitorByUserId(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
-        {
-
-            try
-            {
-                //get unedited hash & updated person details from incoming request
-                var userIdXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var userId = userIdXml.Value;
-
-                //get all visitor elements that needs to be deleted
-                var visitorListXml = await APITools.BlobClientToXml(visitorLogClient);
-                var visitorLogsToDelete = visitorListXml.Root?.Elements().Where(x => x.Element("UserId")?.Value == userId).ToList();
-
-                //delete each record
-                foreach (var visitorXml in visitorLogsToDelete)
-                {
-                    visitorXml.Remove();
-                }
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(visitorLogClient, visitorListXml);
-
-                return PassMessage();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-        }
-
-        [FunctionName("deletevisitorbyvisitorid")]
-        public static async Task<IActionResult> DeleteVisitorByVisitorId(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
-        {
-
-            try
-            {
-                //get unedited hash & updated person details from incoming request
-                var visitorIdXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var visitorId = visitorIdXml.Value;
-
-                //get all visitor elements that needs to be deleted
-                var visitorListXml = await APITools.BlobClientToXml(visitorLogClient);
-                var visitorLogsToDelete = (from xml in visitorListXml.Root?.Elements()
-                                           where xml.Element("VisitorId")?.Value == visitorId
-                                           select xml).ToList();
-
-                //delete each record
-                foreach (var visitorXml in visitorLogsToDelete)
-                {
-                    visitorXml.Remove();
-                }
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(visitorLogClient, visitorListXml);
-
-                return PassMessage();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-        }
-
-        [FunctionName("getpersonlist")]
-        public static async Task<IActionResult> GetPersonList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-                //get user id
-                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
-
-                //get all person list from storage
-                var personListXml = await APITools.BlobClientToXml(personListClient);
-
-                //filter out person by user id
-                var filteredList = APITools.FindPersonByUserId(personListXml, userId);
-
-                //send filtered list to caller
-                responseMessage = new XElement("Root", filteredList).ToString();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-        }
-
-        [FunctionName("gettasklist")]
-        public static async Task<IActionResult> GetTaskList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(TaskListXml, FileAccess.ReadWrite)] BlobClient taskListClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-                //get task list from storage
-                var taskListXml = await APITools.BlobClientToXml(taskListClient);
-
-                //send task list to caller
-                responseMessage = taskListXml.ToString();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-        }
-
-        [FunctionName("getmessagelist")]
-        public static async Task<IActionResult> GetMessageList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(MessageListXml, FileAccess.ReadWrite)] BlobClient messageListClient)
-        {
-            var responseMessage = "";
-
-            try
-            {
-                //get message list from storage
-                var messageListXml = await APITools.BlobClientToXml(messageListClient);
-
-                //send task list to caller
-                responseMessage = messageListXml.ToString();
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await Log.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
-            }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
-        }
-
-        [FunctionName("SignInGoogle")]
-        public static async Task<IActionResult> SignInGoogle([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
-        {
-
-            //get ID Token/JWT from received request
-            var tokenXml = APITools.ExtractDataFromRequest(incomingRequest);
-            var jwtToken = tokenXml.Value;
-
-            try
-            {
-                //validate the the token & get data to id the user
-                var validPayload = await GoogleJsonWebSignature.ValidateAsync(jwtToken);
-                var userId = validPayload.Subject; //Unique Google User ID
-                var userName = validPayload.Name;
-                var userEmail = validPayload.Email;
-
-                //use the email to get the user's record (or make new one if don't exist)
-                var userData = await APITools.GetUserData(userId, userName, userEmail);
-
-                //todo add login to users log (browser, location, time)
-                //todo maybe better in client
-                //userData.AddLoginLog();
-                //save updated user data
-
-                //send user data as xml in with pass status
-                //so that client can generate hash and use it
-                return PassMessage(userData.ToXml());
-            }
-            //if any failure, reply as in valid login & log the event
-            catch (Exception e)
-            {
-                await Log.Error(e, incomingRequest);
-                return FailMessage("Login Failed");
-            }
-        }
-
-        [FunctionName("SignInFacebook")]
-        public static async Task<IActionResult> SignInFacebook(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
-        {
-
-            try
-            {
-                //get accessToken from received request
-                var tokenXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var accessToken = tokenXml.Value;
-
-                //validate the the token & get user data
-                var url = $"https://graph.facebook.com/me/?fields=id,name,email&access_token={accessToken}";
-                var reply = await GetRequest(url);
-                var jsonText = await reply.Content.ReadAsStringAsync();
-                var json = JsonNode.Parse(jsonText);
-                var userId = json["id"].ToString();
-                var userName = json["name"].ToString();
-                var userEmail = json["email"].ToString();
-
-                //use the email to get the user's record (or make new one if don't exist)
-                var userData = await APITools.GetUserData(userId, userName, userEmail);
-
-                //send user data as xml in with pass status
-                //so that client can generate hash and use it
-                return PassMessage(userData.ToXml());
-            }
-            //if any failure, reply as in valid login & log the event
-            catch (Exception e)
-            {
-                await Log.Error(e, incomingRequest);
-                return FailMessage("Login Failed");
-            }
-        }
 
 
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-
-
-        private static async Task<HttpResponseMessage> GetRequest(string receiverAddress)
-        {
-            //prepare the data to be sent
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
-
-            //get the data sender
-            using var client = new HttpClient();
-
-            //tell sender to wait for complete reply before exiting
-            var waitForContent = HttpCompletionOption.ResponseContentRead;
-
-            //send the data on its way
-            var response = await client.SendAsync(httpRequestMessage, waitForContent);
-
-            //return the raw reply to caller
-            return response;
-        }
-
+        
         /// <summary>
         /// processes incoming xml request and outputs events svg report
         /// </summary>
@@ -1023,9 +270,6 @@ namespace API
 
             return new Chart(eventsReportSvgString, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
         }
-
-
-
 
         /// <summary>
         /// Massive method that generates dasa report in SVG
@@ -1187,7 +431,6 @@ namespace API
             }
 
         }
-
 
         /// <summary>
         /// Generates individual life event line svg
@@ -1978,7 +1221,6 @@ namespace API
 
         }
 
-
         /// <summary>
         /// Generate rows based of inputed events
         /// </summary>
@@ -2201,7 +1443,6 @@ namespace API
         }
 
 
-
         private static byte[] StreamToByteArray(Stream input)
         {
             //reset stream position
@@ -2220,7 +1461,6 @@ namespace API
             stream.Position = 0;
             return stream;
         }
-
     }
 
 

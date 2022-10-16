@@ -1,8 +1,8 @@
-<h3 align="center">
+<div align="center">
+  
+   [![](GithubImages/header-logo.png)](https://www.vedastro.org)
 
-  ![](GithubImages/header-logo.png)
-
-</h3>
+</div>
 
 <h3 align="center">
   

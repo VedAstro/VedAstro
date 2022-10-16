@@ -40,6 +40,11 @@ namespace Genso.Astrology.Library
         public string FamilyName { get; set; }
         public string Picture { get; set; }
 
+        /// <summary>
+        /// Split the given name by space, and take the first name as first name
+        /// </summary>
+        public string FirstName => this.Name.Split(" ")[0];
+
 
         /// <summary>
         /// Converts XML to instance, root element is UserData

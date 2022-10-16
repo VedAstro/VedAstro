@@ -32,13 +32,46 @@
 
 
 # Unexpected errors?
-There are new updates to the VedAstro WebApp almost everyday! Your browsers caches the old version,
+There are new updates to the VedAstro WebApp almost **everyday!** Your browsers caches the old version,
 which causes errors as it fails to work with the updated API Server. Do a hard refresh & clear your cache.
 This will solve 99% of the errors you face.
 
+# About
+Anybody who has studied Vedic Astrology knows well how accurate it can be.
+But also how complex it can get to make accurate predictions.
+It takes **decades of experience** to be able make accurate prediction.
+As such this knowledge only reaches a limited people.
+This project is an effort to change that.
+</br>
+
+Our goal is to make Vedic Astrology easily accessible to anybody.
+So that people can use it in their daily lives for their benefit.
+Vedic Astrology in Sanskrit mean "**Light**". And that is exactly what it is.
+It lights our future so we can change it.
+And it lights our past, to understand our mistakes.
+</br>
+
+By using modern program technologies &amp; methods we can simplify the
+complexity of Vedic Astrology. For example, calculating planet strength (Bhava Bala)
+used to take hours, now with computers we can calculate it in milliseconds.
+And using databases &amp; innovative programming methods, there is no need to remember
+thousands of planetary combinations, allowing you to make accurate predictions
+with little to no knowledge.
+    
+# 8 Years Old
+The first line of code for this project was written in 2014.
+Back then it was a simple desktop software, with no UI and only text display.
+With continued support from investors &amp; users, this project has steadily developed to what it is today.
+Helping people from all over the world.
+    
+# Credits &amp; Reference
+Thanks to B.V. Raman and his grandfather B. Suryanarain Rao. Information from their books is the source
+material & inspiration for this project. Please buy their books to show your support.
+Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".
+Last but not least, we thank users like you who keep this project going.
 
 # Project Architecture
-#### Key design notes to understand the internals of the program better.
+Key design notes to understand the internals of the program better.
 
 
 ## Core Library

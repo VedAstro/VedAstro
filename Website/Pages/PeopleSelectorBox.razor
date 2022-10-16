@@ -105,7 +105,7 @@
 
     }
 
-    public Person GetSelectedPerson() => WebsiteTools.GetPersonFromIdCached(SelectedPersonId, _jsRuntime);
+    public async Task<Person> GetSelectedPerson() => await WebsiteTools.GetPersonFromIdCached(SelectedPersonId, _jsRuntime);
 
     /// <summary>
     /// True if a person has been selected else false

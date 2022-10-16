@@ -286,7 +286,7 @@
 
         //get needed input data
         //get data from inputs and save it for use by other components
-        _selectedPerson = _peopleSelectorBox.GetSelectedPerson();
+        _selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
         var startTime = _startTimeInput.GetTime(_selectedPerson.GetBirthLocation());
         var endTime = _endTimeInput.GetTime(_selectedPerson.GetBirthLocation());
         var getSelectedEventTypes = GetSelectedEventTypes();
@@ -314,7 +314,7 @@
         _isResultReady = false;
 
         //get needed input data
-        _selectedPerson = _easyPeopleSelectorBox.GetSelectedPerson();
+        _selectedPerson = await _easyPeopleSelectorBox.GetSelectedPerson();
         dynamic x = AutoCalculateTimeRange();
         var startTime = x.start;
         var endTime = x.end;

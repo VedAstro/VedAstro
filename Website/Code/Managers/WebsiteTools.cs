@@ -323,13 +323,14 @@ namespace Website
         /// <summary>
         /// NOTE Person list has to be loaded or will fail
         /// </summary>
-        public static Person GetPersonFromIdCached(string personId, IJSRuntime jsRuntime)
+        public static async Task<Person> GetPersonFromIdCached(string personId, IJSRuntime jsRuntime)
         {
-            var personFromIdCached = AppData.TryGetPersonList(jsRuntime).Result?.Find(p => p.Id == personId);
+            var personList = await AppData.TryGetPersonList(jsRuntime);
+            var personFromIdCached = personList.Find(p => p.Id == personId);
 
-            if (personFromIdCached == null) { throw new Exception("BLZ:GetPersonFromIdCached:Failed!"); }
+            //if (personFromIdCached) { throw new Exception("BLZ:GetPersonFromIdCached:Failed!"); }
 
-            return (Person)personFromIdCached;
+            return personFromIdCached;
         }
 
         public static async Task DeletePerson(string personId, IJSRuntime jsRuntime)
@@ -642,9 +643,9 @@ namespace Website
             var chartHashXml = new XElement("ChartHash", selectedChartHash);
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonIdFromSavedChartHash, chartHashXml, jsRuntime);
             var personId = result.Value;
-            var selectedPerson = GetPersonFromIdCached(personId, jsRuntime);
+            var selectedPerson = await GetPersonFromIdCached(personId, jsRuntime);
 
-            return (Person)selectedPerson;
+            return selectedPerson;
         }
     }
 }

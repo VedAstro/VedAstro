@@ -185,7 +185,7 @@
         _pageTitle = "Edit Person Details";
 
         //set person
-        _person = WebsiteTools.GetPersonFromIdCached(PersonId, _jsRuntime);
+        _person = await WebsiteTools.GetPersonFromIdCached(PersonId, _jsRuntime);
 
 
         //in edit mode save hash of unedited person

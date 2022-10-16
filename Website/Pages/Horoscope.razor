@@ -195,7 +195,7 @@
         _isReady = false;
 
         //get person from person dropdown
-        _selectedPerson = _peopleSelectorBox.GetSelectedPerson();
+        _selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
 
         //put person name into tab title for easy multi-tabbing
         await _jsRuntime.SetTitle($"Horoscope | {_selectedPerson.Name}");

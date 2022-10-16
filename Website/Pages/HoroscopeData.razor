@@ -61,7 +61,7 @@
         _isResultReady = false;
 
         //get data from inputs and save it for use by other components
-        SelectedPerson = _peopleSelectorBox.GetSelectedPerson();
+        SelectedPerson = await _peopleSelectorBox.GetSelectedPerson();
 
         //mark page as ready to show results
         _isResultReady = true;

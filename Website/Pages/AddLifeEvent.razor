@@ -78,7 +78,7 @@
             };
 
         //add life event to existing person
-        var selectedPerson = _peopleSelectorBox.GetSelectedPerson();
+        var selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
         var idBeforeAdd = selectedPerson.Id;
         selectedPerson.LifeEventList.Add(_inputedLifeEvent);
 

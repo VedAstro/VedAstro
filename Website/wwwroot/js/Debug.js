@@ -106,60 +106,6 @@ function isElementUnderElement(topElement, underElement) {
 }
 
 
-
-
-//IN PRODUCTION USE CODE BELOW, CAREFUL!
-//CALLED BY BLAZOR WRAPPER CLASS
-
-
-function getPropWrapper(element, propName) {
-    console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);
-    let propVal = $(element).prop(propName);
-    return propVal;
-};
-
-//TODO NEED TO MOVE TO APP JS
-window.setPropWrapper = function (element, propName, propVal) {
-    $(element).prop(propName, propVal);
-    console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
-    return propVal;
-};
-window.setAttrWrapper = function (element, propName, propVal) {
-    $(element).attr(propName, propVal);
-    console.log(`JS: setAttrWrapper : ${propName} : ${propVal}`);
-    return propVal;
-};
-window.setCssWrapper = function (element, propName, propVal) {
-    $(element).css(propName, propVal);
-    console.log(`JS: setCssWrapper : ${propName} : ${propVal}`);
-    return propVal;
-};
-
-
-window.getElementWidth = function (element, parm) {
-    console.log(`JS : getElementWidth : ${element.offsetWidth}`);
-    return element.offsetWidth;
-};
-
-
-
-
-//EXPERIMENTAL CODE BELOW, REMOVE IT IF NEEDED
-
-//adds a width value to every child found in given element
-window.addWidthToEveryChild = function (element, widthToAdd) {
-    console.log(`JS: addWidthToEveryChild`);
-
-    //add to each child of input element
-    $(element).children().each(function () {
-        //get current width
-        let currentWidth = $(this).width();
-
-        //set new width with input value
-        $(this).width(currentWidth + widthToAdd);
-    });
-};
-
 window.getWindowInnerWidth = function () {
     console.log(`JS : getWindowInnerWidth : ${window.innerWidth}`);
     return window.innerWidth;

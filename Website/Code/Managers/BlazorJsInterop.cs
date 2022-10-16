@@ -144,8 +144,9 @@ namespace Website
             //skip if set 0
             if (delayMs > 0) { await Task.Delay(delayMs); }
         }
-
+        
         public static void HideLoading(this IJSRuntime jsRuntime) => jsRuntime.HideAlert();
+
 
 
         //TIPPY TOOLTIP LIBRARY

@@ -41,6 +41,7 @@ namespace Publisher
                 Console.WriteLine("6:Upload AOT & Normal");
                 Console.WriteLine("7:Build AOT & Normal");
                 Console.WriteLine("8:Build Normal Only");
+                Console.WriteLine("9:Delete Old Website Files Normal (not images)");
 
                 var choice = Console.ReadLine();
                 Console.WriteLine("Nuke old website? Y/N");
@@ -65,7 +66,7 @@ namespace Publisher
                         await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
                         goto END;
                     case "2": BuildProjectAOT(); await UploadToAzure("vedastrowebsitestorage2"); goto END;
-                    case "3": BuildProject(); UploadToAzureAzCopyNormal(); goto END;
+                    case "3": BuildProject(); DeleteWebsiteFiles(); UploadToAzureAzCopyNormal(); goto END;
                     case "4": await UploadToAzure("vedastrowebsitestorage2"); goto END;
                     case "5": UploadToAzureAzCopyNormal(); goto END;
                     case "6":
@@ -76,6 +77,7 @@ namespace Publisher
                         goto END;
                     case "7": BuildProject(); BuildProjectAOT(); goto END;
                     case "8": BuildProject(); goto END;
+                    case "9": DeleteWebsiteFiles(); goto END;
 
                 }
 
@@ -197,7 +199,6 @@ namespace Publisher
         }
         private static void UploadToAzureAzCopyNormal()
         {
-
             Console.WriteLine("UploadToAzureAzCopy");
 
             //set project path to build
@@ -213,6 +214,30 @@ namespace Publisher
             foreach (PSObject o in ps.Invoke()) { Console.WriteLine(o.ToString()); }
 
             Console.WriteLine("UploadToAzureAzCopy Complete");
+        }
+
+        /// <summary>
+        /// Deletes all files that needs to be updated for site to work
+        /// </summary>
+        private static void DeleteWebsiteFiles()
+        {
+
+            Console.WriteLine("DeleteWebsiteFiles Started");
+
+            //set project path to build
+            System.Environment.CurrentDirectory = projectPath;
+
+            //run build from power shell since correct dir
+            var ps = PowerShell.Create();
+            //var script = $@"./azcopy.exe sync '{projectBuildPath}' '{_config["UploadSasUri"]}' --recursive --delete-destination=true --log-level=INFO";
+            var script = $@"./azcopy.exe remove '{_config["UploadSasUri"]}' --from-to=BlobTrash --list-of-files ""C:\Users\vigne\OneDrive\Desktop\Genso.Astrology\Publisher\WebFilesToDeleteAlways.txt"" --recursive --log-level=INFO";
+            ps.AddScript(script);
+            ps.Invoke();
+
+            //print build output
+            foreach (PSObject o in ps.Invoke()) { Console.WriteLine(o.ToString()); }
+
+            Console.WriteLine("Purged Pesky Old Website Files! (not images)");
         }
 
         /// <summary>

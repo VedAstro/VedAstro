@@ -105,7 +105,7 @@
             if (String.IsNullOrWhiteSpace(_nameInput))
             {
                 //mark invalid & alert user
-                await _jsRuntime.ShowAlert("error", AlertText.NoName, true);
+                await _jsRuntime.ShowAlert("error", AlertText.EnterName, true);
                 return false;
             }
 

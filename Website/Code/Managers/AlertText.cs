@@ -14,7 +14,8 @@ namespace Website
         //public const string ValidationError = $"Something went wrong, refresh page and try again!";
         public const string ValidationError = UnderMaintenance;
         public const string UnderMaintenance = $"Sorry, under maintenance.\nPlease try later";
-        public const string NoName = $"Please enter Name!";
+        public const string EnterName = $"Please enter Name!";
+        public const string SelectName = $"Please select Name!";
         public const string ErrorWillRefresh = "Something went wrong.\nPlease wait page will auto refresh.";
         //public const string ServerConnectionProblem = "Problem talking to Server\nSlow or unstable internet\ncan cause this";
         public const string ServerConnectionProblem = UnderMaintenance;

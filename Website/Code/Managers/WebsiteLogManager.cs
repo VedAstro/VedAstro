@@ -71,7 +71,7 @@ namespace Website
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var urlXml = new XElement("Url", AppData.CurrentUrl);
             var errorXml = new XElement("Error", new XElement("Message", errorMsg));
-            visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampXml);
+            visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampSystemXml);
 
             //send to server for storage
             SendLogToServer(visitorXml);
@@ -108,7 +108,7 @@ namespace Website
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var dataXml = new XElement("Data", extraInfo);
             var urlXml = new XElement("Url", AppData.CurrentUrl);
-            visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, WebsiteTools.TimeStampXml);
+            visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, WebsiteTools.TimeStampSystemXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -221,7 +221,7 @@ namespace Website
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
             var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, null, "Location");
             var visitorElement = new XElement("Visitor");
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
+            visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampSystemXml, WebsiteTools.TimeStampServerXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
 
             //mark new visitor as already logged for first time
             AppData.IsNewVisitor = false;
@@ -235,9 +235,10 @@ namespace Website
 
             //get visitor data & format it nicely for storage
             var visitorElement = new XElement("Visitor");
-            var originUrlXml = new XElement("OriginUrl", AppData.OriginUrl);
+            //todo origin url does not change, for now not needed for old visitor updates
+            //var originUrlXml = new XElement("OriginUrl", AppData.OriginUrl);
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId); //use id generated above
-            visitorElement.Add(userIdXml, visitorIdXml, originUrlXml, urlXml, WebsiteTools.TimeStampXml);
+            visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampSystemXml, WebsiteTools.TimeStampServerXml);
 
             return visitorElement;
         }

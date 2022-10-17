@@ -109,7 +109,6 @@
     /// a copy of the person's hash during init is saved in edit mode
     /// because hash will change on edit, used as when updating to API
     /// </summary>
-    private string _personId;
 
 
     TimeInput _timeInput;
@@ -189,7 +188,7 @@
 
 
         //in edit mode save hash of unedited person
-        _personId = _person.Id;
+        PersonId = _person.Id;
 
         _nameInput = _person.Name;
 
@@ -202,11 +201,9 @@
         _timeInput.TimeZone = personBirthTimeOffset;
 
         var birthTimeHourMin = _person.BirthHourMinute;
-        var defaultHourMin = "00:00";
         _timeInput.HourMin = birthTimeHourMin;
 
         var birthTimeDate = _person.BirthDateMonthYear;
-        var defaultDate = "10/10/1990";
         _timeInput.Date = birthTimeDate;
 
 
@@ -268,7 +265,7 @@
             if (String.IsNullOrWhiteSpace(_nameInput))
             {
                 //mark invalid & alert user
-                await _jsRuntime.ShowAlert("error", AlertText.NoName, true);
+                await _jsRuntime.ShowAlert("error", AlertText.EnterName, true);
                 return false;
             }
 
@@ -374,7 +371,7 @@
         _person = await GetPersonInstanceFromInput();
 
         //update person in API by hash
-        await WebsiteTools.UpdatePerson(_person, _personId, _jsRuntime);
+        await WebsiteTools.UpdatePerson(_person, PersonId, _jsRuntime);
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
@@ -396,7 +393,7 @@
         await _jsRuntime.ShowLoading();
 
         //tell API to delete person, using hash as id
-        await WebsiteTools.DeletePerson(_personId, _jsRuntime);
+        await WebsiteTools.DeletePerson(PersonId, _jsRuntime);
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);

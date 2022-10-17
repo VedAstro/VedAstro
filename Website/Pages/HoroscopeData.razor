@@ -80,7 +80,7 @@
         if (!_peopleSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", AlertText.NoName, true);
+            await _jsRuntime.ShowAlert("error", AlertText.SelectName, true);
             return false;
         }
 

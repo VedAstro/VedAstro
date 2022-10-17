@@ -590,7 +590,13 @@ namespace Website
         /// Gets now time with seconds in wrapped in xml element
         /// used for logging
         /// </summary>
-        public static XElement TimeStampXml => new("TimeStamp", Tools.GetNowSystemTimeSecondsText());
+        public static XElement TimeStampSystemXml => new("TimeStamp", Tools.GetNowSystemTimeSecondsText());
+
+        /// <summary>
+        /// Gets now time at server location (+8:00) with seconds in wrapped in xml element
+        /// used for logging
+        /// </summary>
+        public static XElement TimeStampServerXml => new("TimeStampServer", Tools.GetNowServerTimeSecondsText());
 
         /// <summary>
         /// Gets XML file from any URL and parses it into xelement list

@@ -57,7 +57,7 @@
         var textXml = new XElement("Text", _messageInput);
         var emailXml = new XElement("Email", _emailInput);
         var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
-        var messageXml = new XElement("Message", userIdXml, emailXml, WebsiteTools.TimeStampXml, textXml);
+        var messageXml = new XElement("Message", userIdXml, emailXml, WebsiteTools.TimeStampSystemXml, textXml);
 
         //send message to API server
         await ServerManager.WriteToServerXmlReply(ServerManager.AddMessageApi, messageXml, _jsRuntime);

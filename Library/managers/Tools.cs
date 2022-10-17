@@ -240,6 +240,11 @@ namespace Genso.Astrology.Library
         public static string GetNowSystemTimeSecondsText() => DateTimeOffset.Now.ToString(Time.DateTimeFormatSeconds);
 
         /// <summary>
+        /// Gets the time now in the Server (+8:00) in text form with seconds (HH:mm:ss dd/MM/yyyy zzz) 
+        /// </summary>
+        public static string GetNowServerTimeSecondsText() => DateTimeOffset.Now.ToOffset(TimeSpan.FromHours(8)).ToString(Time.DateTimeFormatSeconds);
+
+        /// <summary>
         /// Custom hash generator for Strings. Returns consistent/deterministic values
         /// If null returns 0
         /// Note: MD5 (System.Security.Cryptography) not used because not supported in Blazor WASM

@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.JSInterop;
+
 namespace Website
 {
 
@@ -74,9 +76,29 @@ namespace Website
             /// All unhandled exceptions will call this method
             /// Here exceptions are logged to API server
             /// </summary>
-            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+            public async void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
-                WebsiteLogManager.LogError(exception, "Error from UnhandledExceptionProvider.Log()");
+                //console log everything we got to ID this error,
+                //so that it never happens again!
+                var extraInfo = "Error from UnhandledExceptionProvider.Log() \n";
+                extraInfo += ($"{eventId.Id} {eventId.Name} \n");
+                extraInfo += ($"{state} \n");
+                extraInfo += ($"{formatter.Method.Name} \n");
+                extraInfo += ($"{formatter.Method.MemberType} \n");
+                extraInfo += ($"{formatter.Method.ReturnParameter} \n");
+                extraInfo += ($"{formatter.Method.ReturnType} \n");
+                extraInfo += ($"{formatter.Method.Module.FullyQualifiedName} \n");
+                extraInfo += ($"{formatter.Target} \n");
+
+                Console.WriteLine(extraInfo);
+
+                //make a log to server
+                await WebsiteLogManager.LogError(exception, extraInfo);
+
+                //now refresh page, only best option we have at the moment
+                //otherwise user is left standing in broken page
+                await AppData.JsRuntime.ShowAlert("warning", AlertText.ErrorWillRefresh, false, 1000);
+                await AppData.JsRuntime.LoadPage(AppData.CurrentUrl??"No URL!");
             }
 
             public IDisposable BeginScope<TState>(TState state)

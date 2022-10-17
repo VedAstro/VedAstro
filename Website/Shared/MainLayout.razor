@@ -148,7 +148,7 @@
         //done here before page/components are loaded
 
         //save current page url, (if error used for logging)
-        AppData.CurrentPage = _navigation.Uri;
+        AppData.CurrentUrl = _navigation.Uri;
 
         //used later to create HTTP client with correct base address
         AppData.BaseAddress = new Uri(_navigation.BaseUri);

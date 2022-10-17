@@ -196,6 +196,9 @@ namespace Genso.Astrology.Library
                 //create the empty list holder xml
                 var returnXml = new XElement("LifeEventList");
 
+                //if null just return empty list
+                if (lifeList is null) { return returnXml; }
+
                 //convert to xml and add to holder xml
                 foreach (var lifeEvent in lifeList)
                 {

@@ -35,10 +35,6 @@ namespace Website
         /// </summary>
         public static string? VisitorId { get; set; } = "";
 
-        /// <summary>
-        /// Url of current page, set by layout when loading
-        /// </summary>
-        public static string? CurrentPage { get; set; }
 
         /// <summary>
         /// Place where global event data list is stored for quick access
@@ -79,11 +75,33 @@ namespace Website
         public static string OriginUrl { get; set; }
 
         /// <summary>
+        /// Gets latest current page URL using JS
+        /// </summary>
+        public static Task<string> CurrentUrlJS => JsRuntime.GetCurrentUrl();
+
+        /// <summary>
+        /// Url of current page, set by layout when loading
+        /// </summary>
+        public static string? CurrentUrl { get; set; }
+
+
+        /// <summary>
         /// Return true if User ID is 101
         /// </summary>
         public static bool IsGuestUser => AppData.CurrentUser?.Id == UserData.Empty.Id;
 
         public static bool DarkMode { get; set; } = false;
+
+        /// <summary>
+        /// JS runtime instance set in program
+        /// </summary>
+        public static IJSRuntime JsRuntime
+        {
+            get {
+                Console.WriteLine("BLZ:Global JSRuntime Initialized");
+                return _jsRuntime; }
+            set => _jsRuntime = value;
+        }
 
         /// <summary>
         /// Hard coded max width used in pages 
@@ -97,6 +115,8 @@ namespace Website
         /// could be http://localhost or https://vedastro.org
         /// </summary>
         public static Uri? BaseAddress;
+
+        private static IJSRuntime _jsRuntime;
 
 
         /// <summary>

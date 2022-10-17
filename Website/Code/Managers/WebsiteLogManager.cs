@@ -61,7 +61,7 @@ namespace Website
             //and also not to clog server's error log
 #if DEBUG
             Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            Console.WriteLine($"PAGE NAME:{AppData.CurrentPage}\nERROR MESSAGE:{errorMsg}");
+            Console.WriteLine($"PAGE NAME:{AppData.CurrentUrl}\nERROR MESSAGE:{errorMsg}");
             return;
 #endif
             //place error data into visitor tag
@@ -69,7 +69,7 @@ namespace Website
             var visitorXml = new XElement("Visitor");
             var userId = new XElement("UserId", AppData.CurrentUser);
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
-            var urlXml = new XElement("Url", AppData.CurrentPage);
+            var urlXml = new XElement("Url", AppData.CurrentUrl);
             var errorXml = new XElement("Error", new XElement("Message", errorMsg));
             visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampXml);
 
@@ -107,7 +107,7 @@ namespace Website
             var userId = new XElement("UserId", AppData.CurrentUser?.Id);
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var dataXml = new XElement("Data", extraInfo);
-            var urlXml = new XElement("Url", AppData.CurrentPage);
+            var urlXml = new XElement("Url", AppData.CurrentUrl);
             visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, WebsiteTools.TimeStampXml);
 
             //send to server for storage
@@ -194,7 +194,7 @@ namespace Website
         private static async Task<XElement> GetVisitorDataXml(IJSRuntime jsRuntime)
         {
             //get url user is on
-            var urlString = await jsRuntime.InvokeAsync<string>("getUrl");
+            var urlString = await jsRuntime.GetCurrentUrl();
             //place url in xml
             var urlXml = new XElement("Url", urlString);
             var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);

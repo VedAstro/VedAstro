@@ -15,7 +15,7 @@
 </PageTop>
 
 
-
+@*only show once report ready*@
 @if (_report != null)
 {
 
@@ -478,7 +478,7 @@
         await _jsRuntime.SetTitle($"{MaleName} + {FemaleName}");
 
         //get report from server
-        var rootXml = new XElement("Root", new XElement("MaleHash", maleId), new XElement("FemaleHash", femaleId));
+        var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
         var matchReportXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMatchReportApi, rootXml, _jsRuntime);
 
         //parse report

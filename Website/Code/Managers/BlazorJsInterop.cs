@@ -322,6 +322,7 @@ namespace Website
         /// Load page to given url using JS, reloads Blazor app as well, good for error recovery
         /// </summary>
         public static async Task LoadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync("window.location.assign", url);
+        public static async Task ReloadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync("window.location.assign", url);
 
         /// <summary>
         /// Checks if browser is online
@@ -343,6 +344,11 @@ namespace Website
         /// Gets the previous page/origin url from JS
         /// </summary>
         public static async Task<string> GetOriginUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("getOriginUrl");
+        
+        /// <summary>
+        /// Gets current page's url
+        /// </summary>
+        public static async Task<string> GetCurrentUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("getUrl");
 
         /// <summary>
         /// Equal to pressing Back button

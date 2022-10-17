@@ -2,6 +2,7 @@ using AspNetMonsters.Blazor.Geolocation;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using System.Runtime.CompilerServices;
+using Microsoft.JSInterop;
 
 namespace Website
 {
@@ -51,7 +52,7 @@ namespace Website
 
             //The last thing that the Main method does is to take all of the configuration
             //specified with the WebAssemblyHostBuilder and call its Build method. This will
-            //create an instance of a WebAssemblyHost which is the heart of your Blazor app.
+            //create an instance of a WebAssemblyHost which is the heart of the Blazor app.
             //It contains all of the application configuration and services needed to run your app.
             var webAssemblyHost = builder.Build();
 
@@ -59,8 +60,12 @@ namespace Website
             Console.WriteLine("VedAstro");
             Console.WriteLine(RuntimeFeature.IsDynamicCodeSupported ? "INTERPRETED MODE" : "AOT MODE");
 
-            await webAssemblyHost.RunAsync();
+            //make the JS runtime globally accessible
+            var jsRuntime = webAssemblyHost.Services.GetRequiredService<IJSRuntime>();
+            AppData.JsRuntime = jsRuntime;
 
+            //run like the wind, Bullseye!
+            await webAssemblyHost.RunAsync();
         }
     }
 }

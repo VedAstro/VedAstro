@@ -123,7 +123,6 @@ namespace Website
         /// </summary>
         public static async Task ShowLoading(this IJSRuntime jsRuntime, int delayMs = 300)
         {
-
             var alertData = new
             {
                 showConfirmButton = false,
@@ -143,10 +142,18 @@ namespace Website
             //needed time to pop
             //skip if set 0
             if (delayMs > 0) { await Task.Delay(delayMs); }
-        }
-        
-        public static void HideLoading(this IJSRuntime jsRuntime) => jsRuntime.HideAlert();
 
+            //let others know loading box has popped
+            AppData.IsShowLoading = true;
+        }
+
+        public static void HideLoading(this IJSRuntime jsRuntime)
+        {
+            jsRuntime.HideAlert();
+
+            //let others know loading box is closed
+            AppData.IsShowLoading = false;
+        }
 
 
         //TIPPY TOOLTIP LIBRARY
@@ -344,7 +351,7 @@ namespace Website
         /// Gets the previous page/origin url from JS
         /// </summary>
         public static async Task<string> GetOriginUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("getOriginUrl");
-        
+
         /// <summary>
         /// Gets current page's url
         /// </summary>

@@ -15,8 +15,10 @@ namespace Genso.Astrology.Library
     {
         /// <summary>
         /// Empty instance for null use cases
+        /// All internal properties are initialized with empty values
+        /// so use that to detect
         /// </summary>
-        public static Person Empty = new Person();
+        public static Person Empty = new Person("0","Empty", Time.Now(GeoLocation.Empty), Gender.Empty, "0","Empty", new List<LifeEvent>());
 
         //DATA FIELDS
         /// <summary>

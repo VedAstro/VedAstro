@@ -407,13 +407,14 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
+        /// Input the result xml obtained from API
         /// Gets first child element in "Payload" element
         /// </summary>
-        public static XElement? GetPayload(XElement rootXml)
+        public static XElement? GetPayload(XElement result)
         {
             try
             {
-                return rootXml.Element("Payload")?.Elements()?.FirstOrDefault();
+                return result.Element("Payload")?.Elements()?.FirstOrDefault();
 
             }
             catch (Exception) { return new XElement("PayloadFailed"); }

@@ -53,7 +53,7 @@ namespace Website
         /// Log error when there is no exception data
         /// used when #blazor-error-ui is shown
         /// </summary>
-        public static void LogError(string errorMsg)
+        public static async Task LogError(string errorMsg)
         {
 
             //if running code locally, end here
@@ -61,7 +61,7 @@ namespace Website
             //and also not to clog server's error log
 #if DEBUG
             Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            Console.WriteLine($"PAGE NAME:{AppData.CurrentUrl}\nERROR MESSAGE:{errorMsg}");
+            Console.WriteLine($"PAGE NAME:{await AppData.CurrentUrlJS}\nERROR MESSAGE:{errorMsg}");
             return;
 #endif
             //place error data into visitor tag
@@ -69,7 +69,7 @@ namespace Website
             var visitorXml = new XElement("Visitor");
             var userId = new XElement("UserId", AppData.CurrentUser);
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
-            var urlXml = new XElement("Url", AppData.CurrentUrl);
+            var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
             var errorXml = new XElement("Error", new XElement("Message", errorMsg));
             visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampSystemXml);
 
@@ -107,7 +107,7 @@ namespace Website
             var userId = new XElement("UserId", AppData.CurrentUser?.Id);
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var dataXml = new XElement("Data", extraInfo);
-            var urlXml = new XElement("Url", AppData.CurrentUrl);
+            var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
             visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, WebsiteTools.TimeStampSystemXml);
 
             //send to server for storage
@@ -217,7 +217,7 @@ namespace Website
             //get visitor data & format it nicely for storage
             var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
             var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
-            var originUrlXml = new XElement("OriginUrl", AppData.OriginUrl);
+            var originUrlXml = new XElement("OriginUrl", await AppData.OriginUrl);
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
             var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, null, "Location");
             var visitorElement = new XElement("Visitor");

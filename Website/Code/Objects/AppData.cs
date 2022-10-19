@@ -72,17 +72,12 @@ namespace Website
         /// <summary>
         /// Origin URL set by MainLayout
         /// </summary>
-        public static string OriginUrl { get; set; }
+        public static Task<string> OriginUrl =>  JsRuntime.GetOriginUrl();
 
         /// <summary>
         /// Gets latest current page URL using JS
         /// </summary>
         public static Task<string> CurrentUrlJS => JsRuntime.GetCurrentUrl();
-
-        /// <summary>
-        /// Url of current page, set by layout when loading
-        /// </summary>
-        public static string? CurrentUrl { get; set; }
 
 
         /// <summary>
@@ -102,6 +97,13 @@ namespace Website
                 return _jsRuntime; }
             set => _jsRuntime = value;
         }
+
+        /// <summary>
+        /// If true means, loading box is still in show mode
+        /// note: main purpose to stop execution until message has popped
+        /// else serious lag at times
+        /// </summary>
+        public static bool IsShowLoading { get; set; } = false; //default false
 
         /// <summary>
         /// Hard coded max width used in pages 
@@ -162,6 +164,23 @@ namespace Website
             }
         }
 
+        public static async Task IfNoLoadingBoxPleaseHold(string caller = "")
+        {
+            //hold till loading is visible
+            while (!AppData.IsShowLoading)
+            {
+                Console.WriteLine($"BLZ:Waiting for loading box");
+                await Task.Delay(100);
+                //_waitingInLineCount++; //increment  count
+            }
+
+            //reset
+            //_waitingInLineCount = 0;
+        }
+
+        /// <summary>
+        /// data may be cached or from API
+        /// </summary>
         public static async Task<List<Person>> TryGetPersonList(IJSRuntime _jsRuntime)
         {
             await ServerManager.IfBusyPleaseHold("TryGetPersonList");

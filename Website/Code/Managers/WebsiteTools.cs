@@ -289,48 +289,63 @@ namespace Website
         ///       - will retry forever till result comes
         /// TODO DEPRECATE FOR CACHED VERSION
         /// </summary>
+
+        /// <summary>
+        /// Gets person from ID
+        /// Checks user's person list,
+        /// </summary>
         public static async Task<Person> GetPersonFromId(string personId, IJSRuntime jsRuntime)
         {
-            Person personFromId;
+            Person foundPerson;
 
-        TryAgain:
-            try
-            {
-                personFromId = await _getPersonFromId();
-                return personFromId;
-            }
-            catch (Exception e)
-            {
-                goto TryAgain;
-            }
+            //get person from cached person list assigned to user/visitor
+            foundPerson = await GetFromPersonList(personId);
+
+            //if person found return it, here
+            var personFound = foundPerson.Name != Person.Empty.Name; //not empty
+            if (personFound) { return foundPerson; }
+
+            //if control reaches here, than the person is not in current users list,
+            //so get direct from server, this indicates direct link access to another
+            //user's person profile, which is allowed but also monitored
+            await WebsiteLogManager.LogData(jsRuntime, $"Direct Link Access:{personId}");
+
+            foundPerson = await GetFromApi(personId, jsRuntime);
+
+            return foundPerson;
 
 
-            async Task<Person> _getPersonFromId()
+            //LOCAL FUNCTION
+            async Task<Person> GetFromApi(string personId, IJSRuntime jsRuntime)
             {
+                //send request to API
                 var xmlData = Tools.AnyTypeToXml(personId);
                 var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
 
-                var personXml = result.Element("Person");
-
-                //parse received person
-                var receivedPerson = Person.FromXml(personXml);
-
-                return receivedPerson;
+                //check result
+                if (Tools.IsResultPass(result))
+                {
+                    //if pass get person data out & return to caller
+                    var personXml = Tools.GetPayload(result);
+                    return Person.FromXml(personXml);
+                }
+                else
+                {
+                    //let user know fail, and return empty person
+                    await jsRuntime.ShowAlert("error", AlertText.NoPersonFound, true);
+                    return Person.Empty;
+                }
             }
 
-        }
+            async Task<Person> GetFromPersonList(string personId)
+            {
+                //try to get from person's own user list
+                var personList = await AppData.TryGetPersonList(jsRuntime);
+                var personFromId = personList.Where(p => p.Id == personId);
 
-        /// <summary>
-        /// NOTE Person list has to be loaded or will fail
-        /// </summary>
-        public static async Task<Person> GetPersonFromIdCached(string personId, IJSRuntime jsRuntime)
-        {
-            var personList = await AppData.TryGetPersonList(jsRuntime);
-            var personFromIdCached = personList.Find(p => p.Id == personId);
-
-            //if (personFromIdCached) { throw new Exception("BLZ:GetPersonFromIdCached:Failed!"); }
-
-            return personFromIdCached;
+                //will return Empty person if none found
+                return personFromId.FirstOrDefault(Person.Empty);
+            }
         }
 
         public static async Task DeletePerson(string personId, IJSRuntime jsRuntime)
@@ -649,7 +664,7 @@ namespace Website
             var chartHashXml = new XElement("ChartHash", selectedChartHash);
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonIdFromSavedChartHash, chartHashXml, jsRuntime);
             var personId = result.Value;
-            var selectedPerson = await GetPersonFromIdCached(personId, jsRuntime);
+            var selectedPerson = await GetPersonFromId(personId, jsRuntime);
 
             return selectedPerson;
         }

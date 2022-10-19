@@ -183,17 +183,12 @@
         //set page title
         _pageTitle = "Edit Person Details";
 
-        //set person
-        _person = await WebsiteTools.GetPersonFromIdCached(PersonId, _jsRuntime);
+        //try get person profile from ID
+        _person = await WebsiteTools.GetPersonFromId(PersonId, _jsRuntime);
 
-
-        //in edit mode save hash of unedited person
         PersonId = _person.Id;
-
         _nameInput = _person.Name;
-
         _notesInput = _person.Notes;
-
         _genderInput = _person.Gender.ToString();
 
         //set timezone if NOT creator, else component will auto set

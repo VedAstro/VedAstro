@@ -1,4 +1,4 @@
-﻿
+
 using Microsoft.JSInterop;
 
 namespace Website
@@ -97,8 +97,11 @@ namespace Website
 
                 //now refresh page, only best option we have at the moment
                 //otherwise user is left standing in broken page
-                await AppData.JsRuntime.ShowAlert("warning", AlertText.ErrorWillRefresh, false, 1000);
-                await AppData.JsRuntime.LoadPage(AppData.CurrentUrl??"No URL!");
+                //note: below refresh method works well to recover, though it should not happen
+
+                var timeToReadMsg = 4000; //give time for user to see the message
+                await AppData.JsRuntime.ShowAlert("warning", AlertText.ErrorWillRefresh, false, timeToReadMsg);
+                await AppData.JsRuntime.LoadPage(await AppData.CurrentUrlJS);
             }
 
             public IDisposable BeginScope<TState>(TState state)

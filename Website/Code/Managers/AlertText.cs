@@ -29,5 +29,6 @@ namespace Website
         public const string LoginFailed = "Login failed\nPlease try again";
         public const string FacebookLoginFail = "Error in OnFacebookSignInSuccessHandler where authResponse is null";
         public const string NoSavedCharts = "No saved charts, calculate a chart and save it to view here.";
+        public const string NoPersonFound = "Person profile not found,\nrefresh or check profile share link";
     }
 }

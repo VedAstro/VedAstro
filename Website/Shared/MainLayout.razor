@@ -147,17 +147,11 @@
         //control comes here after Program, all needed initialization
         //done here before page/components are loaded
 
-        //save current page url, (if error used for logging)
-        AppData.CurrentUrl = _navigation.Uri;
-
         //used later to create HTTP client with correct base address
         AppData.BaseAddress = new Uri(_navigation.BaseUri);
 
         //get visitor ID if available
         AppData.VisitorId = await WebsiteTools.TryGetVisitorId(_jsRuntime);
-
-        //get & save origin url
-        AppData.OriginUrl = await _jsRuntime.GetOriginUrl();
 
         //retrieve login status from previous visit if available
         await TryGetPreviousLogin();

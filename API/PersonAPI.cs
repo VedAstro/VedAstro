@@ -67,7 +67,7 @@ namespace API
                 var foundPerson = await APITools.FindPersonById(personListXml, personId);
 
                 //send person to caller
-                responseMessage = new XElement("Root", foundPerson).ToString();
+                return APITools.PassMessage(foundPerson);
 
             }
             catch (Exception e)
@@ -75,14 +75,11 @@ namespace API
                 //log error
                 await Log.Error(e, incomingRequest);
 
-                //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                //let caller know fail, include exception info for easy debugging
+                return APITools.FailMessage(e.ToString());
             }
 
 
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
         /// <summary>

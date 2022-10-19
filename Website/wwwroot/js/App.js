@@ -70,13 +70,15 @@ function showWrapper(element) {
     $(element).show();
 };
 
-function setTitleWrapper(newTitle) {
-    console.log(`JS: showWrapper`);
-    //this has to be done like this for it to work
-    $(function () {
-        $(document).attr("title", newTitle);
-    });
-};
+//function setTitleWrapper(newTitle) {
+//    console.log(`JS: setTitleWrapper`);
+//    //this has to be done like this for it to work
+//    $(function () {
+//        $(document).attr("title", newTitle);
+//    });
+//};
+
+//var setTitleWrapper = (title) => { document.title = title; };
 
 
 //Jquery to hide inputed element

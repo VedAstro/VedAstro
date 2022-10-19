@@ -5,7 +5,8 @@
 @inject HttpClient Client
 
 
-<PageTitle>Horoscope</PageTitle>
+<PageTitle>@_pageTitle</PageTitle>
+
 <PageTop Title="Horoscope" IconName="fluent:book-star-20-filled">
     <Description>Astrological predictions of a person's horoscope.<br />Over +370 planetary combinations are checked.</Description>
     <ButtonsRow>
@@ -126,6 +127,7 @@
 
 @code {
 
+    private string _pageTitle = "Horoscope";
     private PeopleSelectorBox? _peopleSelectorBox;
     private List<HoroscopePrediction>? _horoscopePredictions;
     private List<HoroscopePrediction>? _filteredHoroscopePredictions;
@@ -199,7 +201,9 @@
         _selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
 
         //put person name into tab title for easy multi-tabbing
-        await _jsRuntime.SetTitle($"Horoscope | {_selectedPerson.Name}");
+        //await _jsRuntime.SetTitle($"Horoscope | {_selectedPerson.Name}");
+        _pageTitle = $"Horoscope | {_selectedPerson.Name}";
+
 
         //get horoscope predictions from API server
         var personIdXml = new XElement("PersonId", _selectedPerson.Id);

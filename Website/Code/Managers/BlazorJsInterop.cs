@@ -363,9 +363,10 @@ namespace Website
         public static async Task GoBack(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("history.back");
 
         /// <summary>
+        /// DEPRECATED BECAUSE CAUSES ERRORS
         /// Sets new page/tab title
         /// </summary>
-        public static async Task SetTitle(this IJSRuntime jsRuntime, string newTitle) => await jsRuntime.InvokeVoidAsync("setTitleWrapper", newTitle);
+        //public static async Task SetTitle(this IJSRuntime jsRuntime, string newTitle) => await jsRuntime.InvokeVoidAsync("setTitleWrapper", newTitle);
 
         /// <summary>
         /// Load JS file programmatically

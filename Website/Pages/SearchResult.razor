@@ -4,7 +4,7 @@
 @attribute [Route(PageRoute.SearchResult)]
 @inject HttpClient Client
 
-<PageTitle>Search Vedic Astrology</PageTitle>
+<PageTitle>@_pageTitle</PageTitle>
 
 <PageTop Title="Search Astrology" IconName="flat-color-icons:fine-print" IconSize="60">
     <Description>Search all astrological combination or predictions that have been programmed into VedAstro</Description>
@@ -99,6 +99,9 @@ else
 
 @code {
 
+    private string _pageTitle = "Search";
+
+
     public string? SearchText = "";
 
     private int resultCount = 0;
@@ -145,7 +148,8 @@ else
         SearchText = searchText;
 
         //put search text  into tab title for easy multi-tabbing
-        await _jsRuntime.SetTitle($"Search | {SearchText}");
+        _pageTitle = $"Search | {SearchText}";
+
 
         //search file
         foundPrediction = (await AppData.GetPredictionDataListCached()).Where(IsFound);

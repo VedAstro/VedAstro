@@ -4,7 +4,7 @@
 @using Genso.Astrology.Library
 @using System.Xml.Linq
 
-<PageTitle>Match Report</PageTitle>
+<PageTitle>@_pageTitle</PageTitle>
 
 <PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill">
     <Description>Below is the results.</Description>
@@ -413,6 +413,8 @@
 @code {
 
     //VARIABLES
+    private string _pageTitle = "Match Report";
+
     [Parameter]
     public string? MaleId { get; set; } //data from URL not necessary provided
     [Parameter]
@@ -475,7 +477,8 @@
         FemaleName = (await WebsiteTools.GetPersonFromId(femaleId, _jsRuntime)).Name;
 
         //put person name into tab title for easy multi-tabbing
-        await _jsRuntime.SetTitle($"{MaleName} + {FemaleName}");
+        _pageTitle = $"{MaleName} + {FemaleName}";
+
 
         //get report from server
         var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));

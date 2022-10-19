@@ -5,7 +5,7 @@
 @*<UnderConstructionHeader PageName="Dasa" />
 *@
 
-<PageTitle>Dasa</PageTitle>
+<PageTitle>@_pageTitle</PageTitle>
 <PageTop Title="Dasa and Bhukti" IconName="gis:map-time">
     <Description>
         Dasas are major periods in which the indications of the planets are realised.
@@ -191,6 +191,7 @@
 
 @code {
 
+    private string _pageTitle = "Dasa";
     //--------------------FIELDS
     private string _selectedTimeRange = "FullLife";
     private string _selectedChartHash = "";
@@ -258,7 +259,8 @@
         SelectedPerson = _dasaChartViewer.SelectedPerson;
 
         //put person name into tab title for easy multi-tabbing
-        await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
+        //await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
+        _pageTitle = $"Dasa | {SelectedPerson.Name}";
 
 
         //mark page as ready to show results
@@ -281,7 +283,8 @@
         SelectedPerson = await _peopleSelectorBox.GetSelectedPerson();
 
         //put person name into tab title for easy multi-tabbing
-        await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
+        //await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
+        _pageTitle = $"Dasa | {SelectedPerson.Name}";
 
         //set data into dasa viewer
         dynamic timeRange = ComputeStartEndTimeFromInput();
@@ -315,7 +318,8 @@
         SelectedPerson = await _easyPeopleSelectorBox.GetSelectedPerson();
 
         //put person name into tab title for easy multi-tabbing
-        await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
+        //await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
+        _pageTitle = $"Dasa | {SelectedPerson.Name}";
 
         //set data into dasa viewer
         dynamic timeRange = AutoCalculateTimeRange();

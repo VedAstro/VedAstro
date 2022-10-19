@@ -1,7 +1,7 @@
 ﻿@attribute [Route(PageRoute.Muhurtha)]
 @using Genso.Astrology.Library
 
-<PageTitle>Muhurtha</PageTitle>
+<PageTitle>@_pageTitle</PageTitle>
 
 <PageTop Title="Muhurtha" IconName="ic:twotone-event">
     <Description>
@@ -228,6 +228,8 @@
 
 
 @code {
+    private string _pageTitle = "Muhurtha";
+
     private Person _selectedPerson;
 
     private bool _isResultReady = false; //marks if the page ready to loaded
@@ -292,7 +294,8 @@
         var getSelectedEventTypes = GetSelectedEventTypes();
 
         //put person name into tab title for easy multi-tabbing
-        await _jsRuntime.SetTitle($"Muhurtha | {_selectedPerson.Name}");
+        _pageTitle = $"Muhurtha | {_selectedPerson.Name}";
+
 
         //inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.Personal, EventTag.General };
         await _eventReportViewer.ShowChart(_selectedPerson, startTime, endTime, getSelectedEventTypes);
@@ -321,7 +324,9 @@
         var getSelectedEventTypes = GetSelectedEventTypesEasy();
 
         //put person name into tab title for easy multi-tabbing
-        await _jsRuntime.SetTitle($"Muhurtha | {_selectedPerson.Name}");
+        //await _jsRuntime.SetTitle($"Muhurtha | {_selectedPerson.Name}");
+        _pageTitle = $"Muhurtha | {_selectedPerson.Name}";
+
 
         await _eventReportViewer.ShowChart(_selectedPerson, startTime, endTime, getSelectedEventTypes);
 

@@ -270,7 +270,7 @@ namespace Website
         /// <returns></returns>
         public static async Task IfBusyPleaseHold(string caller = "")
         {
-            //note: experimentation has shown that long delays cause serious lag
+            //note: experimentation has shown that long wait time causes serious lag
             //as que piles up, so many checks very fast seems to work perfectly so far
 
             //if waiting too long, move on

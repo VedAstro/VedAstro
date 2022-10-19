@@ -41,7 +41,7 @@ namespace Genso.Astrology.Library
         /// List of events that mark important moments in a persons life
         /// This is used later by calculators like Dasa to show against astrological predictions
         /// </summary>
-        public List<LifeEvent> LifeEventList { get; set; }
+        public List<LifeEvent> LifeEventList { get; set; } = new List<LifeEvent>(); //default empty list to stop null errors
 
 
         /// <summary>

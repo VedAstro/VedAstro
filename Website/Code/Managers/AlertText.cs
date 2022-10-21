@@ -22,8 +22,9 @@ namespace Website
         public const string NoInternet = "Please check your Internet connection.";
         public const string SorryNeedRefreshToHome = "Sorry! App just crashed.\nWe are fixing this error.\nPlease try again later.";
         //public const string SorryNeedRefreshToHome = UnderMaintenance;
-        public const string UpdatePersonFail = "Error failed to update person!\nPlease try again later.";
-        public const string AskAstrologer = "Thank you, our astrologer will contact you soon!";
+        public const string UpdatePersonFail = "Error when update person!\nPlease try again later.";
+        public const string DeletePersonFail = "Error when delete person!\nPlease try again later.";
+        public const string AskAstrologer = "Thank you\nOur astrologer will contact you soon!";
         public const string AskAstrologerEmail = "Please give email for astrologer to contact you!";
         public const string SelectEventType = "Select at least 1 Event Type!";
         public const string LoginFailed = "Login failed\nPlease try again";

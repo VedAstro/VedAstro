@@ -35,10 +35,11 @@
         </div>
     </div>
 
+    @*divider*@
+    <hr />
+
     @if (_isReady)
     {
-        <hr />
-
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
@@ -69,7 +70,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th style="min-width: 123px;">Info</th>
+                                <th style="min-width: 123px;">Tags</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -189,21 +190,19 @@
 
     private async Task _CalculateAndUpdateEvents()
     {
+        await _jsRuntime.ShowLoading();
+
         //only continue if passed input field validation
         if (!await ValidationPassed()) { return; }
 
-        await _jsRuntime.ShowLoading();
-
-        //hide data while loading
+        //hide data while loading, only after validation
         _isReady = false;
 
         //get person from person dropdown
         _selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
 
         //put person name into tab title for easy multi-tabbing
-        //await _jsRuntime.SetTitle($"Horoscope | {_selectedPerson.Name}");
         _pageTitle = $"Horoscope | {_selectedPerson.Name}";
-
 
         //get horoscope predictions from API server
         var personIdXml = new XElement("PersonId", _selectedPerson.Id);
@@ -214,10 +213,12 @@
 
         _filteredHoroscopePredictions = _horoscopePredictions.ToList(); //make a copy for search
 
-        _jsRuntime.HideAlert();
-
         _isReady = true;
 
+        //close loading box
+        _jsRuntime.HideAlert();
+
+        //todo check if needed
         StateHasChanged();
     }
 

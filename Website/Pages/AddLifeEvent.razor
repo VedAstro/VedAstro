@@ -79,12 +79,10 @@
 
         //add life event to existing person
         var selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
-        var idBeforeAdd = selectedPerson.Id;
         selectedPerson.LifeEventList.Add(_inputedLifeEvent);
 
         //update person in API by hash
-        await WebsiteTools.UpdatePerson(selectedPerson, idBeforeAdd, _jsRuntime);
-
+        await WebsiteTools.UpdatePerson(selectedPerson, _jsRuntime);
 
         //page ready
         _jsRuntime.HideAlert();

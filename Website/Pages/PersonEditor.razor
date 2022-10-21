@@ -142,12 +142,15 @@
 
     private async Task _OnInitialized()
     {
+        await _jsRuntime.ShowLoading();
 
         //little delay to let page elements load up
         //otherwise render page will encounter nulls
         await Task.Delay(100);
 
         await RenderPage();
+
+        _jsRuntime.HideLoading();
     }
 
 
@@ -212,10 +215,9 @@
         _geoLocationInput.UpdateData(geoLocation);
 
         //life events
-        var lifeEventList = _person.LifeEventList;
-        await _lifeEventEditor.SetData(lifeEventList);
+        await _lifeEventEditor.SetData(_person);
 
-
+        //todo check if needed
         this.StateHasChanged();
     }
 
@@ -231,11 +233,7 @@
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
-        var xmlData = _person.ToXml();
-        var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, _jsRuntime);
-
-        //clear stored person list
-        AppData.ClearPersonList();
+        await WebsiteTools.AddPerson(_person);
 
         //page ready
         _jsRuntime.HideAlert();
@@ -356,23 +354,20 @@
 
     private async Task UpdateExistingPerson()
     {
-        //only continue if passed input field validation
-        if (!(await IsValidationPassed())) { return; }
-
         //show loading message
         await _jsRuntime.ShowLoading();
+
+        //only continue if passed input field validation
+        if (!(await IsValidationPassed())) { return; }
 
         //make a new person from the details in the input
         _person = await GetPersonInstanceFromInput();
 
         //update person in API by hash
-        await WebsiteTools.UpdatePerson(_person, PersonId, _jsRuntime);
+        await WebsiteTools.UpdatePerson(_person, _jsRuntime);
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
-
-        //clear stored person list
-        AppData.ClearPersonList();
 
         //page ready
         _jsRuntime.HideAlert();
@@ -392,9 +387,6 @@
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);
-
-        //clear stored person list
-        AppData.ClearPersonList();
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference > delete

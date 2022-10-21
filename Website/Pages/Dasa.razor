@@ -20,13 +20,22 @@
 @*TAB BUTTONS*@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="easy-tab" data-bs-toggle="tab" data-bs-target="#easy" type="button" role="tab" aria-controls="easy" aria-selected="true">Easy</button>
+        <button class="nav-link active" id="easy-tab" data-bs-toggle="tab" data-bs-target="#easy" type="button" role="tab" aria-controls="easy" aria-selected="true">
+            <Icon IconName="maki:school" />
+            Easy
+        </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">Advanced</button>
+        <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">
+            <Icon IconName="tabler:school" />
+            Advanced
+        </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button @onclick="OnClickSavedTab" class="nav-link" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button" role="tab" aria-controls="saved" aria-selected="false">Saved</button>
+        <button @onclick="OnClickSavedTab" class="nav-link" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button" role="tab" aria-controls="saved" aria-selected="false">
+            <Icon IconName="prime:save" />
+            Saved
+        </button>
     </li>
 </ul>
 
@@ -51,8 +60,6 @@
             <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
 
         </div>
-
-
     </div>
     <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
         <div class="vstack gap-3 p-3">

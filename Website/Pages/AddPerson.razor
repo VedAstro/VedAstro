@@ -75,11 +75,7 @@
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
-        var xmlData = _person.ToXml();
-        var result = ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, _jsRuntime);
-
-        //clear stored person list
-        AppData.ClearPersonList();
+        await WebsiteTools.AddPerson(_person);
 
         //page ready
         _jsRuntime.HideAlert();

@@ -1,0 +1,103 @@
+﻿@using Genso.Astrology.Library
+@attribute [Route(PageRoute.Journal)]
+
+
+
+<PageTitle>@_pageTitle</PageTitle>
+<PageTop Title="Journal" IconName="game-icons:secret-book">
+    <Description>Record your life events to understand the astrological reason behind them.</Description>
+    <ButtonsRow>
+        <IconButton IconName="fluent:book-add-24-regular" ButtonText="Add Life Event" ClickUrl="@PageRoute.AddLifeEvent"></IconButton>
+        <IconButton IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
+        @* <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>*@
+    </ButtonsRow>
+</PageTop>
+
+
+<div>
+    <div class="d-flex flex-wrap">
+        <div class="vstack gap-3">
+            <PeopleSelectorBox @ref="_peopleSelectorBox" />
+            <IconButton IconName="uim:process" ButtonText="Show journal" OnClickCallback="ShowButtonClicked"></IconButton>
+        </div>
+        <div class="alert alert-info d-flex align-items-center w-50" role="alert">
+            <span class="iconify bi flex-shrink-0 me-2" data-icon="ic:outline-tips-and-updates" data-width="50"></span>
+            <div>
+                <strong>Quick Tip</strong><br />
+                After updating your journal, go to <a href="@PageRoute.Dasa"><span class="fw-bold">Dasa</span></a> or <a href="@PageRoute.Muhurtha"><span class="fw-bold">Muhurtha</span></a> chart,
+                to view them against astrological influence.
+            </div>
+        </div>
+    </div>
+
+</div>
+@*divider*@
+<hr />
+
+
+@*list that will be shown after calculate*@
+<div class="vstack gap-2 p-2" style="@(_isReady?"":"display:none;")">
+
+    @*SEARCH*@
+    @*<div class="hstack gap-3">
+        <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
+        <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
+    </div>*@
+
+    @*LIST OF PREDICTIONS*@
+    <LifeEventEditor @ref="_lifeEventEditor" />
+
+</div>
+
+
+
+
+@code {
+    private string _pageTitle = "Journal"; //default
+    private LifeEventEditor _lifeEventEditor;
+
+    private string _searchInput = "";
+    private Person _selectedPerson;
+    private List<LifeEvent>? _filteredLifeEvents;
+
+    private PeopleSelectorBox? _peopleSelectorBox;
+
+    private bool _isReady = false;
+
+
+    private async Task ShowButtonClicked()
+    {
+        await _jsRuntime.ShowLoading();
+
+        //only continue if passed input field validation
+        //if (!await ValidationPassed()) { return; }
+
+        //hide data while loading, only after validation
+        _isReady = false;
+
+        //get person from person dropdown
+        _selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
+
+        //life events
+        await _lifeEventEditor.SetData(_selectedPerson);
+
+        //make a copy for search
+        _filteredLifeEvents = _selectedPerson.LifeEventList.ToList();
+
+        //put person name into tab title for easy multi-tabbing
+        _pageTitle = $"Journal | {_selectedPerson.Name}";
+
+        _isReady = true;
+
+        //close loading box
+        _jsRuntime.HideAlert();
+
+    }
+
+    private void SearchButtonClicked()
+    {
+        Console.WriteLine("TODO");
+    }
+
+
+}

@@ -348,33 +348,71 @@ namespace Website
             }
         }
 
+        /// <summary>
+        /// Deletes person from API server  main list
+        /// note:
+        /// - if fail will show alert message
+        /// - cached person list is cleared here
+        /// </summary>
         public static async Task DeletePerson(string personId, IJSRuntime jsRuntime)
         {
             var personIdXml = new XElement("PersonId", personId);
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePersonApi, personIdXml, jsRuntime);
 
             //check result, display error if needed
-            if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Delete Person API\n{result.Value}"); }
+            if (!Tools.IsResultPass(result))
+            {
+                WebsiteLogManager.LogError($"BLZ:DeletePerson() Fail:\n{result.Value}");
+                await jsRuntime.ShowAlert("error", AlertText.DeletePersonFail, true);
+            }
+
+            //if all went well clear stored person list
+            else { AppData.ClearPersonList(); }
         }
 
-        public static async Task UpdatePerson(Person person, string personId, IJSRuntime jsRuntime)
+        /// <summary>
+        /// Send updated person to API server to be saved in main list
+        /// note:
+        /// - if fail will show alert message
+        /// - cached person list is cleared here
+        /// </summary>
+        public static async Task UpdatePerson(Person person, IJSRuntime jsRuntime)
         {
+            //prepare and send updated person to API server
             var updatedPersonXml = person.ToXml();
-            Console.WriteLine(updatedPersonXml.ToString());
-            var personIdXml = new XElement("PersonId", personId);
-            var rootXml = new XElement("Root");
-            rootXml.Add(personIdXml, updatedPersonXml);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.UpdatePersonApi, rootXml, jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.UpdatePersonApi, updatedPersonXml, jsRuntime);
 
             //check result, display error if needed
-            if (result.Value != "Pass")
+            if (!Tools.IsResultPass(result))
             {
-                WebsiteLogManager.LogError($"Update Person API Fail\n{result.Value}");
+                WebsiteLogManager.LogError($"BLZ:UpdatePerson() Fail:\n{result.Value}");
                 await jsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
             }
 
+            //if all went well clear stored person list
+            else { AppData.ClearPersonList(); }
         }
 
+        /// <summary>
+        /// Adds new person to API server main list
+        /// </summary>
+        public static async Task AddPerson(Person person)
+        {
+            //send newly created person to API server
+            var xmlData = person.ToXml();
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, AppData.JsRuntime);
+
+            //check result, display error if needed
+            if (!Tools.IsResultPass(result))
+            {
+                WebsiteLogManager.LogError($"BLZ:AddPerson() Fail:\n{result.Value}");
+                await AppData.JsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
+            }
+
+            //if all went well clear stored person list
+            else { AppData.ClearPersonList(); }
+
+        }
         public static void ReloadPage(NavigationManager navigation) => navigation.NavigateTo(navigation.Uri, forceLoad: true);
 
         /// <summary>
@@ -667,6 +705,18 @@ namespace Website
             var selectedPerson = await GetPersonFromId(personId, jsRuntime);
 
             return selectedPerson;
+        }
+
+        /// <summary>
+        /// Given true or false will return CSS style string with display none
+        /// 
+        /// </summary>
+        public static string GetCssHideShow(bool isReady)
+        {
+            var displayProp = isReady ? "" : "display: none; ";
+            var css = $"style=\"{displayProp}";
+
+            return css;
         }
     }
 }

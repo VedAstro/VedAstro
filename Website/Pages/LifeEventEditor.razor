@@ -4,7 +4,9 @@
 
     <div class="hstack gap-3">
         <label>Life Events</label>
-        <IconButton ButtonText="Add" IconName="fluent:add-square-24-filled" OnClickCallback="OnClickAddLifeEvent"/>
+        <IconButton ButtonText="Add" IconName="fluent:add-square-24-filled" OnClickCallback="OnClickAddLifeEvent" />
+        <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="OnClickSaveButton" />
+
     </div>
 
     <div style="min-height: 150px;" id="@TableId"></div>
@@ -24,9 +26,7 @@
 
 
     //PROPERTIES
-
-    [Parameter]
-    public List<Event> LifeEventList { get; set; }
+    private Person InputedPerson { get; set; }
 
 
 
@@ -36,25 +36,23 @@
 
 
     private async Task OnClickAddLifeEvent() => await InvokeAsync(async () => await _OnClickAddLifeEvent()).Try(_jsRuntime);
-
+    private async Task OnClickSaveButton() => await InvokeAsync(async () => await _OnClickSaveButton()).Try(_jsRuntime);
 
 
 
     //-------------------EVENT HANDLERS
 
 
-    public async Task SetData(List<LifeEvent> lifeEventList)
+    public async Task SetData(Person inputedPerson)
     {
-        //show loading message
-       await _jsRuntime.ShowLoading();
+        //save inputed person for later use
+        InputedPerson = inputedPerson;
+
+        var lifeEventList = InputedPerson.LifeEventList;
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly
         await _jsRuntime.InvokeVoidAsync("generateLifeEventListTable", TableId, lifeEventList.ToArray());
-
-        //page ready
-        _jsRuntime.HideAlert();
-
     }
 
 
@@ -80,11 +78,35 @@
 
     }
 
-
     private async Task _OnClickAddLifeEvent()
     {
         //call js to add data
         await _jsRuntime.InvokeVoidAsync("addNewLifeEventToTable");
+
+    }
+
+    private async Task _OnClickSaveButton()
+    {
+        await _jsRuntime.ShowLoading();
+
+        //only continue if passed input field validation
+        //todo validation
+        //if (!(await IsValidationPassed())) { return; }
+
+        //get latest life events from table
+        var lifeEventList = await this.GetData();
+
+        //inject updated life events into person instance to be
+        //sent to API for updating main list
+        InputedPerson = InputedPerson.SetNewLifeEvents(lifeEventList);
+
+        //send updated person to API
+        await WebsiteTools.UpdatePerson(InputedPerson, _jsRuntime);
+
+        _jsRuntime.HideLoading();
+
+        //show message to user
+        await _jsRuntime.ShowAlert("success", $"Saved successfully!", false, 2500);
 
     }
 

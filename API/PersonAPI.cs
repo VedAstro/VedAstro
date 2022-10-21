@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using System.Xml.Linq;
+using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -94,13 +95,12 @@ namespace API
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var originalId = requestData?.Element("PersonId").Value;
-                var updatedPersonXml = requestData?.Element("Person");
+                var updatedPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var updatedPerson = Person.FromXml(updatedPersonXml);
 
                 //get the person record that needs to be updated
                 var personListXml = await APITools.BlobClientToXml(personListClient);
-                var personToUpdate = await APITools.FindPersonById(personListXml, originalId);
+                var personToUpdate = await APITools.FindPersonById(personListXml, updatedPerson.Id);
 
                 //delete the previous person record,
                 //and insert updated record in the same place

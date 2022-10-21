@@ -78,6 +78,11 @@ namespace Website
             /// </summary>
             public async void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
             {
+
+#if DEBUG
+                //in debug mode just rethrow exception
+                throw exception;
+#endif
                 //console log everything we got to ID this error,
                 //so that it never happens again!
                 var extraInfo = "Error from UnhandledExceptionProvider.Log() \n";

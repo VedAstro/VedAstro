@@ -9,7 +9,7 @@ namespace Genso.Astrology.Library
 {
     /// <summary>
     /// Simple data type to contain a person's details
-    /// NOTE: switch to class if needed
+    /// NOTE: try to maintain as struct, for unmutable data
     /// </summary>
     public struct Person : IToXml
     {
@@ -276,5 +276,13 @@ namespace Genso.Astrology.Library
         {
             return personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
         }
+
+        /// <summary>
+        /// Replaces life event list and returns new Person with modified val
+        /// note:
+        /// - done so because it's a struct
+        /// - maintains all other person props
+        /// </summary>
+        public Person SetNewLifeEvents(List<LifeEvent> updatedLifeEventList) => new Person(Id, Name, BirthTime, Gender, UserId, Notes, updatedLifeEventList);
     }
 }

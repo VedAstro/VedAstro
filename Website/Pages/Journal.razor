@@ -1,5 +1,6 @@
 ﻿@using Genso.Astrology.Library
 @attribute [Route(PageRoute.Journal)]
+@attribute [Route(PageRoute.JournalParam)]
 
 
 
@@ -40,8 +41,8 @@
 
     @*SEARCH*@
     @*<div class="hstack gap-3">
-        <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
-        <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
+    <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
+    <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
     </div>*@
 
     @*LIST OF PREDICTIONS*@
@@ -53,6 +54,10 @@
 
 
 @code {
+
+    [Parameter]
+    public string PersonIdUrl { get; set; } = "";
+
     private string _pageTitle = "Journal"; //default
     private LifeEventEditor _lifeEventEditor;
 
@@ -64,6 +69,29 @@
 
     private bool _isReady = false;
 
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //if parameter has been set then auto load person data as
+        //though person was selected and calculate was clicked
+
+
+        if (PersonIdUrl != null && firstRender)
+        {
+            //programmatically select the person
+            await _peopleSelectorBox.SetPerson(PersonIdUrl);
+
+            //start the same process as show button click
+            await ShowButtonClicked();
+
+            //needed to see updates because any changes in OnAfterRender
+            //have to be manually set
+            StateHasChanged();
+
+            //HACK: done because StateHasChanged will clear the one by SetPerson above
+            await _jsRuntime.SetValue(".PersonSelector", PersonIdUrl);
+        }
+    }
 
     private async Task ShowButtonClicked()
     {
@@ -77,6 +105,14 @@
 
         //get person from person dropdown
         _selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
+
+        //only set url if not already set
+        //note:this improves UX, as links can lead faster to data
+        if (String.IsNullOrWhiteSpace(PersonIdUrl))
+        {
+            PersonIdUrl = _selectedPerson.Id; //save local copy
+            _navigation.NavigateTo($"{PageRoute.Journal}/{PersonIdUrl}"); //change url
+        }
 
         //life events
         await _lifeEventEditor.SetData(_selectedPerson);

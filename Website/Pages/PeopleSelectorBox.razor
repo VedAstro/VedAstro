@@ -5,7 +5,8 @@
 
 <div>
     <label class="form-label">@Label</label>
-    <select @bind="SelectedPersonId" class="form-control" style="width: fit-content;min-width: 273px;">
+    @*PersonSelector class used to programatically set visible person selection*@
+    <select @bind="SelectedPersonId" class="form-control PersonSelector" style="width: fit-content;min-width: 273px;">
         <option value="">Select Name</option>
         @DropDownOptionsHtml
     </select>
@@ -111,5 +112,18 @@
     /// True if a person has been selected else false
     /// </summary>
     public bool IsPersonSelected => SelectedPersonId != NotSelectedPersonId && SelectedPersonId != null && SelectedPersonId != "";
+
+    /// <summary>
+    /// Programmatically sets a person from ID, as though selected by user
+    /// </summary>
+    public async Task SetPerson(string personIdUrl)
+    {
+        //set the backend data
+        SelectedPersonId = personIdUrl;
+
+        //make visible selection change
+        await _jsRuntime.SetValue(".PersonSelector", personIdUrl);
+    }
+
 
 }

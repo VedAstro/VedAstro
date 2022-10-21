@@ -171,7 +171,7 @@ namespace Website
             //since in local errors will show in console
             //and also not to clog server's error log
 #if DEBUG
-            Console.WriteLine("BLZ: LogAlert: DEBUG mode, skipped logging to server");
+            Console.WriteLine($"BLZ:LogData:DEBUG mode:skipped logging:{data}");
             return;
 #endif
 
@@ -253,7 +253,7 @@ namespace Website
                 //send to API for save keeping
                 //note:js runtime passed as null, so no internet checking done
                 var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddVisitorApi, visitorElement, null);
-                
+
                 //check result, display error if needed
                 if (result.Value != "Pass") { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Value}"); }
 

@@ -108,11 +108,8 @@
 
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
-        if (String.IsNullOrWhiteSpace(PersonIdUrl))
-        {
-            PersonIdUrl = _selectedPerson.Id; //save local copy
-            _navigation.NavigateTo($"{PageRoute.Journal}/{PersonIdUrl}"); //change url
-        }
+        PersonIdUrl = _selectedPerson.Id; //save local copy
+        _navigation.NavigateTo($"{PageRoute.Journal}/{PersonIdUrl}"); //change url
 
         //life events
         await _lifeEventEditor.SetData(_selectedPerson);

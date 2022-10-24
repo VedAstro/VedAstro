@@ -571,7 +571,9 @@ namespace Website
         public static string GetNowTimeString()
         {
             var returnVal = DateTimeOffset.Now.ToString(Time.DateTimeFormat);
-            Console.WriteLine("BLZ:GetNowTimeString:"+ returnVal);
+#if DEBUG
+            Console.WriteLine("BLZ:GetNowTimeString:" + returnVal);
+#endif
             return returnVal;
         }
 

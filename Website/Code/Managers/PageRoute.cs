@@ -29,6 +29,7 @@
         public const string About = "/About";
         public const string Contact = "/Contact";
         public const string Horoscope = "/Horoscope";
+        public const string HoroscopeParam = "/Horoscope/{PersonIdUrl}";
         public const string HoroscopeData = "/HoroscopeData";
         public const string Muhurtha = "/Muhurtha";
         public const string Match = "/Match";

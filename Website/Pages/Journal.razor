@@ -9,7 +9,8 @@
     <Description>Record your life events to understand the astrological reason behind them.</Description>
     <ButtonsRow>
         <IconButton IconName="fluent:book-add-24-regular" ButtonText="Add Life Event" ClickUrl="@PageRoute.AddLifeEvent"></IconButton>
-        <IconButton IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
+        <IconButton IconName="carbon:graphical-data-flow" ButtonText="Dasa Chart" ClickUrl="@PageRoute.Dasa"></IconButton>
+        <IconButton IconName="carbon:graphical-data-flow" ButtonText="Muhurtha Chart" ClickUrl="@PageRoute.Muhurtha"></IconButton>
         @* <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>*@
     </ButtonsRow>
 </PageTop>
@@ -32,9 +33,9 @@
     </div>
 
 </div>
+
 @*divider*@
 <hr />
-
 
 @*list that will be shown after calculate*@
 <div class="vstack gap-2 p-2" style="@(_isReady?"":"display:none;")">
@@ -55,6 +56,9 @@
 
 @code {
 
+    /// <summary>
+    /// Param used in URL to set Person ID via URL
+    /// </summary>
     [Parameter]
     public string PersonIdUrl { get; set; } = "";
 
@@ -74,8 +78,6 @@
     {
         //if parameter has been set then auto load person data as
         //though person was selected and calculate was clicked
-
-
         if (PersonIdUrl != null && firstRender)
         {
             //programmatically select the person
@@ -87,6 +89,9 @@
             //needed to see updates because any changes in OnAfterRender
             //have to be manually set
             StateHasChanged();
+
+            //little delay for renderer to complete
+            await Task.Delay(200);
 
             //HACK: done because StateHasChanged will clear the one by SetPerson above
             await _jsRuntime.SetValue(".PersonSelector", PersonIdUrl);

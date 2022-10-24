@@ -1,6 +1,7 @@
 ﻿@using System.Xml.Linq
 @using Genso.Astrology.Library
 @attribute [Route(PageRoute.Horoscope)]
+@attribute [Route(PageRoute.HoroscopeParam)]
 
 @inject HttpClient Client
 
@@ -17,9 +18,9 @@
 </PageTop>
 
 
-
 <div>
 
+    @*SELECTOR & BUTTON*@
     <div class="d-flex flex-wrap">
         <div class="vstack gap-3">
             <PeopleSelectorBox @ref="_peopleSelectorBox" />
@@ -38,6 +39,7 @@
     @*divider*@
     <hr />
 
+    @*RESULTS*@
     @if (_isReady)
     {
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -126,7 +128,14 @@
 
 </div>
 
+
 @code {
+
+    /// <summary>
+    /// Param used in URL to set Person ID via URL
+    /// </summary>
+    [Parameter]
+    public string PersonIdUrl { get; set; } = "";
 
     private string _pageTitle = "Horoscope";
     private PeopleSelectorBox? _peopleSelectorBox;
@@ -145,7 +154,10 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
     private async Task SearchButtonClicked() => await InvokeAsync(async () => await _SearchButtonClicked()).Try(_jsRuntime);
+
     private async Task CalculateButtonClicked() => await InvokeAsync(async () => await _CalculateAndUpdateEvents()).Try(_jsRuntime);
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
 
 
 
@@ -154,7 +166,28 @@
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
+    private async Task _OnAfterRenderAsync(bool firstRender)
+    {
+        //if parameter has been set then auto load person data as
+        //though person was selected and calculate was clicked
+        if (PersonIdUrl != null && firstRender)
+        {
+            await _jsRuntime.ShowLoading();
 
+            //programmatically select the person
+            await _peopleSelectorBox.SetPerson(PersonIdUrl);
+
+            //start the same process as show button click
+            //todo loading box disappears here, needs fix
+            await _CalculateAndUpdateEvents();
+
+            //needed to see updates because any changes in OnAfterRender
+            //have to be manually set
+            StateHasChanged();
+
+            _jsRuntime.HideLoading();
+        }
+    }
     private async Task _SearchButtonClicked()
     {
         await _jsRuntime.ShowLoading();
@@ -167,7 +200,6 @@
 
         _jsRuntime.HideLoading();
     }
-
 
     /// <summary>
     /// Checks if validation of all input fields
@@ -187,7 +219,6 @@
         return true;
     }
 
-
     private async Task _CalculateAndUpdateEvents()
     {
         await _jsRuntime.ShowLoading();
@@ -200,6 +231,11 @@
 
         //get person from person dropdown
         _selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
+
+        //only set url if not already set
+        //note:this improves UX, as links can lead faster to data
+        PersonIdUrl = _selectedPerson.Id; //save local copy
+        _navigation.NavigateTo($"{PageRoute.Horoscope}/{PersonIdUrl}"); //change url
 
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"Horoscope | {_selectedPerson.Name}";
@@ -217,11 +253,6 @@
 
         //close loading box
         _jsRuntime.HideAlert();
-
-        //todo check if needed
-        StateHasChanged();
     }
-
-
 
 }

@@ -217,7 +217,7 @@ function generatePlanetDataTable(tableId, tableData) {
         ],
     });
 
-   
+
 
 }
 
@@ -247,10 +247,9 @@ function generateHouseDataTable(tableId, tableData) {
             { title: "Planets Aspecting House", field: "planetsAspectingHouse", hozAlign: "center", responsive: 0 },
         ],
     });
-    
+
 
 }
-
 
 //Generates a table using Tabulator table library
 //id to where table will be generated needs to be inputed
@@ -259,26 +258,40 @@ function generateLifeEventListTable(tableId, tableData) {
     //set table data
     window.lifeEventsListTable = new Tabulator(`#${tableId}`, {
         data: tableData,           //load row data from array
-        editable: true,
-        layout: "fitColumns",      //fit columns to width of table
-        responsiveLayout: "hide",  //hide columns that don't fit on the table
+        //editable: true,
+        layout: "fitDataStretch",  // fit their data, and stretch the final column
+        //responsiveLayout: "hide",  //hide columns that don't fit on the table
         //tooltips: true,            //show tool tips on cells
         addRowPos: "top",          //when adding a new row, add it to the top of the table
         history: false,             //allow undo and redo actions on the table
-        pagination: false, //enable pagination
-        // pagination: "local",       //paginate the data
-        //paginationSize: 50,         //allow 7 rows per page of data
-        //paginationCounter: "rows", //display count of paginated rows in footer
+        //pagination: false, //enable pagination
+        pagination: "local",       //paginate the data
+        paginationSize: 25,         //allow 7 rows per page of data
+        paginationCounter: "rows", //display count of paginated rows in footer
         movableColumns: false,      //allow column order to be changed
         resizableRows: true,       //allow row order to be changed
         initialSort: [             //set the initial sort order of the data
-            { column: "name", dir: "asc" },
+            { column: "StartTime", dir: "desc" },
         ],
         columns: [                 //define the table columns
             { title: "Name", field: "Name", editor: "input", hozAlign: "center" },
-            { title: "Time", field: "StartTime", editor: "input", hozAlign: "center" },
-            { title: "Description", field: "Description", editor: "input", hozAlign: "center" },
-            { title: "Nature", field: "Nature", editor: "input", hozAlign: "center" },
+            {
+                title: "Time", field: "StartTime", editor: "datetime", editorParams: { format: "HH:mm dd/MM/yyyy ZZ" }, sorter: "datetime", sorterParams: {
+                    format: "HH:mm dd/MM/yyyy ZZ",
+                    elementAttributes: {
+                        title: "slide bar to choose option" // custom tooltip
+                    },
+                    alignEmptyValues: "top",
+                }
+            },
+            {
+                title: "Nature", field: "Nature", editor: "list", hozAlign: "center", editorParams: {
+                    //Value Options (You should use ONE of these per editor)
+                    values: ["Good", "Neutral", "Bad"], //an array of values or value/label objects
+                    valuesLookup: "active", //get the values from the currently active rows in this column
+                }
+            },
+            { title: "Description", field: "Description", editor: "input" },
             //code to delete button for row
             {
                 formatter: "buttonCross", width: 40, hozAlign: "center", cellClick: function (e, cell) {
@@ -298,8 +311,11 @@ function getLifeEventsListTableData() {
 //note: defaults are set here, maybe move to blazor side for conformity
 function addNewLifeEventToTable() {
 
+    //call blazor handler
+    var dateTimeStr = DotNet.invokeMethod('Website', 'GetNowTimeString');
+
     var addToTopOfTable = true;
-    window.lifeEventsListTable.addData([{ Name: "New Life Event", StartTime: "00:00 10/10/2020 +08:00", Description: "Description", Nature: "Good" }], addToTopOfTable);
+    window.lifeEventsListTable.addData([{ Name: "New Life Event", StartTime: dateTimeStr, Description: "Description", Nature: "Good" }], addToTopOfTable);
 }
 
 //async sleep millisecond

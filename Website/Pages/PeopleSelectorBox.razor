@@ -95,7 +95,9 @@
         //generate drop down options in html
         foreach (var person in personList)
         {
-            html += $"<option value=\"{person.Id}\">{person.Name} - {person.BirthYear}</option>";
+            //auto select person set by parent
+            var isSelected = person.Id == SelectedPersonId ? "selected" : "";
+            html += $"<option value=\"{person.Id}\" {isSelected}>{person.Name} - {person.BirthYear}</option>";
         }
 
         //set drop down list into view
@@ -122,7 +124,7 @@
         SelectedPersonId = personIdUrl;
 
         //make visible selection change
-        await _jsRuntime.SetValue(".PersonSelector", personIdUrl);
+        //await _jsRuntime.SetValue(".PersonSelector", personIdUrl);
     }
 
 

@@ -561,6 +561,19 @@ namespace Website
 
         }
 
+        /// <summary>
+        /// Gets date time string in standard format,
+        /// example call : var x = DotNet.invokeMethod('Website', 'GetNowTimeString');
+        /// used to generate time for new life events
+        /// </summary>
+        /// <returns></returns>
+        [JSInvokable]
+        public static string GetNowTimeString()
+        {
+            var returnVal = DateTimeOffset.Now.ToString(Time.DateTimeFormat);
+            Console.WriteLine("BLZ:GetNowTimeString:"+ returnVal);
+            return returnVal;
+        }
 
 
         #endregion

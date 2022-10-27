@@ -15,34 +15,33 @@ namespace Website
     public static class ServerManager
     {
 
-        public const string AddPersonApi = "https://vedastroapi.azurewebsites.net/api/addperson";
-        public const string GetHoroscope = "https://vedastroapi.azurewebsites.net/api/gethoroscope";
-        public const string AddLifeEventApi = "https://vedastroapi.azurewebsites.net/api/addlifeevent";
-        public const string AddMessageApi = "https://vedastroapi.azurewebsites.net/api/addmessage";
-        public const string DeletePersonApi = "https://vedastroapi.azurewebsites.net/api/deleteperson";
-        public const string DeleteVisitorByUserId = "https://vedastroapi.azurewebsites.net/api/deletevisitorbyuserid";
-        public const string DeleteVisitorByVisitorId = "https://vedastroapi.azurewebsites.net/api/deletevisitorbyvisitorid";
-        public const string AddTaskApi = "https://vedastroapi.azurewebsites.net/api/addtask";
-        public const string AddVisitorApi = "https://vedastroapi.azurewebsites.net/api/addvisitor";
+        public const string ApiUrl = "https://vedastroapi.azurewebsites.net/api";
+        public const string AddPersonApi = ApiUrl + "/addperson";
+        public const string GetHoroscope = ApiUrl + "/gethoroscope";
+        public const string AddLifeEventApi = ApiUrl + "/addlifeevent";
+        public const string AddMessageApi = ApiUrl + "/addmessage";
+        public const string DeletePersonApi = ApiUrl + "/deleteperson";
+        public const string DeleteVisitorByUserId = ApiUrl + "/deletevisitorbyuserid";
+        public const string DeleteVisitorByVisitorId = ApiUrl + "/deletevisitorbyvisitorid";
+        public const string AddTaskApi = ApiUrl + "/addtask";
+        public const string AddVisitorApi = ApiUrl + "/addvisitor";
 
-        public const string GetMaleListApi = "https://vedastroapi.azurewebsites.net/api/getmalelist";
-        public const string GetPersonListApi = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
-        public const string GetPersonApi = "https://vedastroapi.azurewebsites.net/api/getperson";
-        public const string GetPersonIdFromSavedChartId = "https://vedastroapi.azurewebsites.net/api/getpersonidfromsavedchartid";
+        public const string GetMaleListApi = ApiUrl + "/getmalelist";
+        public const string GetPersonListApi = ApiUrl + "/getpersonlist";
+        public const string GetPersonApi = ApiUrl + "/getperson";
+        public const string GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
 
-        public const string UpdatePersonApi = "https://vedastroapi.azurewebsites.net/api/updateperson";
-        public const string GetTaskListApi = "https://vedastroapi.azurewebsites.net/api/gettasklist";
-        public const string GetVisitorList = "https://vedastroapi.azurewebsites.net/api/getvisitorlist";
-        public const string GetMessageList = "https://vedastroapi.azurewebsites.net/api/getmessagelist";
-        public const string GetFemaleListApi = "https://vedastroapi.azurewebsites.net/api/getfemalelist";
-        public const string GetMatchReportApi = "https://vedastroapi.azurewebsites.net/api/getmatchreport";
-        public const string GetPersonEventsReport = "https://vedastroapi.azurewebsites.net/api/getpersoneventsreport";
-        public const string GetSavedPersonEventsReport = "https://vedastroapi.azurewebsites.net/api/getsavedpersoneventsreport";
-        public const string GetSavedChartIdList = "https://vedastroapi.azurewebsites.net/api/getsavedchartnamelist";
-        public const string SavePersonEventsReport = "https://vedastroapi.azurewebsites.net/api/savepersoneventsreport";
-        public const string GetPersonDasaReportCached = "https://vedastroapi.azurewebsites.net/api/getpersondasareportcached";
-        public const string GetPersonDasaReportLocal = "http://localhost:7071/api/getpersondasareport";
-        public const string GetEventsApi = "https://vedastroapi.azurewebsites.net/api/getevents";
+        public const string UpdatePersonApi = ApiUrl + "/updateperson";
+        public const string GetTaskListApi = ApiUrl + "/gettasklist";
+        public const string GetVisitorList = ApiUrl + "/getvisitorlist";
+        public const string GetMessageList = ApiUrl + "/getmessagelist";
+        public const string GetFemaleListApi = ApiUrl + "/getfemalelist";
+        public const string GetMatchReportApi = ApiUrl + "/getmatchreport";
+        public const string GetEventsChart = ApiUrl + "/getpersoneventsreport";
+        public const string GetSavedEventsChart = ApiUrl + "/getsavedpersoneventsreport";
+        public const string GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
+        public const string SaveEventsChart = ApiUrl + "/savepersoneventsreport";
+        public const string GetEventsApi = ApiUrl + "/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
         //TODO HIDE API
         public const string GoogleGeoLocationApiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
@@ -50,8 +49,8 @@ namespace Website
         /// link to js file used for google sign in function
         /// </summary>
         public const string GoogleSignInJs = "https://accounts.google.com/gsi/client";
-        public const string SignInGoogle = "https://vedastroapi.azurewebsites.net/api/SignInGoogle";
-        public const string SignInFacebook = "https://vedastroapi.azurewebsites.net/api/SignInFacebook";
+        public const string SignInGoogle = ApiUrl + "/SignInGoogle";
+        public const string SignInFacebook = ApiUrl + "/SignInFacebook";
         public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
         
         /// <summary>

@@ -20,11 +20,21 @@
         {
             <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChartAPI" SmallSize="true" />
         }
+        @*only show "Direct Link" button if viewing saved chart*@
+        @if (_nowSavedChart)
+        {
+            <IconButton ButtonText="Copy Link" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+        }
     </div>
 </div>
 
 
 @code {
+    /// <summary>
+    /// Id of chart that is shown
+    /// </summary>
+    public string CurrentChartId { get; set; }
+
     private bool _nowSavedChart = false; //set by show chart button
 
     public Person SelectedPerson { get; set; }
@@ -83,7 +93,7 @@
     private async Task<string> GetSavedDasaReportSvgFromApi(string chartId)
     {
         var chartIdXml = new XElement("ChartId", chartId);
-        var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetSavedPersonEventsReport, chartIdXml, _jsRuntime);
+        var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetSavedEventsChart, chartIdXml, _jsRuntime);
 
         //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
         // convert stream to string
@@ -117,7 +127,7 @@
         var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
         var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-        var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetPersonEventsReport, rootXml, _jsRuntime);
+        var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetEventsChart, rootXml, _jsRuntime);
 
         //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
         // convert stream to string
@@ -145,7 +155,7 @@
         var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
         Console.WriteLine(rootXml.ToString());
-        var result = await ServerManager.WriteToServerXmlReply(ServerManager.SavePersonEventsReport, rootXml, _jsRuntime);
+        var result = await ServerManager.WriteToServerXmlReply(ServerManager.SaveEventsChart, rootXml, _jsRuntime);
 
         return Tools.IsResultPass(result);
     }
@@ -155,6 +165,9 @@
     /// </summary>
     public async Task ShowSavedChart(string selectedChartId)
     {
+        //save chart id, used to generate direct link
+        CurrentChartId = selectedChartId;
+
         //set current chart as from saved version (to hide save button)
         //only show "Save" button if viewing newly generated chart, so that no erroneous double save
         _nowSavedChart = true;
@@ -174,6 +187,7 @@
         StateHasChanged();
 
     }
+    
     /// <summary>
     /// Given a saved chart name in local storage, it will load it into page
     /// </summary>
@@ -261,6 +275,7 @@
         return daysPerPixel;
     }
 
+
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
@@ -298,6 +313,14 @@
         //show element
         await _jsRuntime.Show("#LifeEventLinesHolder");
 
+    }
+
+    private async Task OnClickCopyChartLink()
+    {
+        var url = ServerManager.ApiUrl + $"/savedchart/{CurrentChartId}";
+        await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);
+
+        await _jsRuntime.ShowAlert("success", $"Chart Link Copied!", false, 2600);
     }
 
     /// <summary>
@@ -367,7 +390,7 @@
     {
         //get name list of all charts
         //note: API will return readable name & hash for finding the chart later
-        var rootXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetSavedChartIdList, _jsRuntime);
+        var rootXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetSavedEventsChartIdList, _jsRuntime);
 
         //<Root>
         //    <ChartName>

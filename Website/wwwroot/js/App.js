@@ -1107,3 +1107,14 @@ function DrawHouseStrengthChart(_house1,
         return Math.ceil(x / 5) * 5;
     }
 }
+
+//copies inputed text to clipboard
+//used for copying direct link to chart
+function CopyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function () {
+        //alert("Copied to clipboard!");
+    })
+        .catch(function (error) {
+            alert(error);
+        });
+}

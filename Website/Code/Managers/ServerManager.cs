@@ -28,7 +28,7 @@ namespace Website
         public const string GetMaleListApi = "https://vedastroapi.azurewebsites.net/api/getmalelist";
         public const string GetPersonListApi = "https://vedastroapi.azurewebsites.net/api/getpersonlist";
         public const string GetPersonApi = "https://vedastroapi.azurewebsites.net/api/getperson";
-        public const string GetPersonIdFromSavedChartHash = "https://vedastroapi.azurewebsites.net/api/getpersonidfromsavedcharthash";
+        public const string GetPersonIdFromSavedChartId = "https://vedastroapi.azurewebsites.net/api/getpersonidfromsavedchartid";
 
         public const string UpdatePersonApi = "https://vedastroapi.azurewebsites.net/api/updateperson";
         public const string GetTaskListApi = "https://vedastroapi.azurewebsites.net/api/gettasklist";

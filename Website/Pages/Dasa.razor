@@ -79,11 +79,11 @@
         <div class="vstack gap-3 p-3">
             <div class="input-group mb-3">
                 <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
-                <select class="form-select" @bind="_selectedChartHash" id="inputGroupSelect01">
+                <select class="form-select" @bind="_selectedChartId" id="inputGroupSelect01">
                     <option selected>Choose...</option>
                     @foreach (var chartIdXml in _allChartIdList)
                     {
-                        <option value="@(chartIdXml.Element("Hash")?.Value)">@(chartIdXml.Element("Name")?.Value)</option>
+                        <option value="@(chartIdXml.Element("ChartId")?.Value)">@(chartIdXml.Element("Name")?.Value)</option>
                     }
                 </select>
             </div>
@@ -201,7 +201,7 @@
     private string _pageTitle = "Dasa";
     //--------------------FIELDS
     private string _selectedTimeRange = "FullLife";
-    private string _selectedChartHash = "";
+    private string _selectedChartId = "";
 
     private PageHelpSection _helpSection;
 
@@ -259,7 +259,7 @@
         _isResultReady = false;
 
         //show saved chart
-        await _dasaChartViewer?.ShowSavedChart(_selectedChartHash)!;
+        await _dasaChartViewer?.ShowSavedChart(_selectedChartId)!;
 
         //this is needed to generate data charts below
         //note gets person from ID stored in chart name

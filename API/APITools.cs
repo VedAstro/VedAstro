@@ -289,16 +289,21 @@ namespace API
                 return new XElement("Person");
             }
         }
-        public static async Task<XElement> FindChartByHash(XDocument savedChartListXml, int originalHash)
+        public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)
         {
             try
             {
-                return savedChartListXml.Root.Elements()
-                    .Where(delegate (XElement chartXml)
-                    {   //use hash as id to find the person's record
-                        var thisHash = Chart.FromXml(chartXml).GetHashCode();
-                        return thisHash == originalHash;
-                    }).First();
+                var chartXmlList = savedChartListXml.Root.Elements();
+
+                //Console.WriteLine(savedChartListXml.ToString());
+
+                return chartXmlList.Where(delegate (XElement chartXml)
+                {   //use chart id to find chart record
+                    var thisId = Chart.FromXml(chartXml).ChartId;
+                    return thisId == inputChartId;
+                }).FirstOrDefault(Chart.Empty.ToXml());
+
+
             }
             catch (Exception e)
             {

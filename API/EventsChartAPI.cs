@@ -25,7 +25,7 @@ namespace API
 
 
         /// <summary>
-        /// Generates a new SVG dasa report given a person hash
+        /// Generates a new SVG dasa report given a person id
         /// Exp call:
         /// <Root>
         //      <PersonId>374117709</PersonId>
@@ -81,22 +81,22 @@ namespace API
         }
 
         /// <summary>
-        /// Gets chart from saved list, needs to be given hash to find
+        /// Gets chart from saved list, needs to be given id to find
         /// </summary>
         [FunctionName("getsavedpersoneventsreport")]
-        public static async Task<IActionResult> GetSavedPersonEventsReport(
+        public static async Task<IActionResult> GetSavedEventsChartReport(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
             {
-                //get hash that will be used find the person
+                //get id that will be used find the person
                 var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var originalHash = int.Parse(requestData.Value);
+                var chartId = requestData.Value;
 
-                //get the saved chart record by hash
+                //get the saved chart record by id
                 var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
-                var foundChartXml = await APITools.FindChartByHash(savedChartListXml, originalHash);
+                var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
                 var chart = Chart.FromXml(foundChartXml);
 
                 //send image back to caller
@@ -118,25 +118,62 @@ namespace API
         }
 
         /// <summary>
-        /// Given a chart hash it will return the person hash for that chart
+        /// Special function to access Saved Chart directly without website
         /// </summary>
-        [FunctionName("getpersonidfromsavedcharthash")]
-        public static async Task<IActionResult> GetPersonIdFromSavedChartHash(
+        [FunctionName("savedchart")]
+        public static async Task<IActionResult> GetSavedEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "savedchart/{chartId}")]
+            HttpRequestMessage incomingRequest, string chartId)
+        {
+            try
+            {
+
+                //get the saved chart record by id
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
+                var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
+                var chart = Chart.FromXml(foundChartXml);
+
+                //send image back to caller
+                //convert svg string to stream for sending
+                var stream = GenerateStreamFromString(chart.ContentSvg);
+                var x = StreamToByteArray(stream);
+                return new FileContentResult(x, "image/svg+xml");
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+
+
+            return new ContentResult { Content = "<html><body>Hello <b>world</b></body></html>", ContentType = "text/html" };
+        }
+
+
+        /// <summary>
+        /// Given a chart id it will return the person id for that chart
+        /// </summary>
+        [FunctionName("getpersonidfromsavedchartid")]
+        public static async Task<IActionResult> GetPersonIdFromSavedChartId(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
             {
-                //get hash that will be used find the person
+                //get id that will be used find the person
                 var requestData = APITools.ExtractDataFromRequest(incomingRequest);
-                var chartHash = int.Parse(requestData.Value);
+                var chartId = requestData.Value;
 
-                //get the saved chart record by hash
+                //get the saved chart record by id
                 var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
-                var foundChartXml = await APITools.FindChartByHash(savedChartListXml, chartHash);
+                var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
                 var chart = Chart.FromXml(foundChartXml);
 
-                //extract out the person hash from chart and send it to caller
+                //extract out the person id from chart and send it to caller
                 var personIdXml = new XElement("PersonId", chart.PersonId);
 
                 return new OkObjectResult(personIdXml.ToString());
@@ -187,7 +224,7 @@ namespace API
         }
 
         /// <summary>
-        /// make a name & hash only xml list of saved charts
+        /// make a name & id only xml list of saved charts
         /// note: done so to not download what is not needed
         ///
         /// client will use data from here to get the actual saved chart
@@ -202,10 +239,10 @@ namespace API
                 //get ful saved chart list
                 var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
 
-                //extract out the name & hash
+                //extract out the name & id
                 var rootXml = new XElement("Root");
 
-                //make a name & hash only xml list of saved charts
+                //make a name & id only xml list of saved charts
                 //note: done so to not download what is not needed
                 var savedChartXmlList = savedChartXmlDoc?.Root?.Elements().ToList() ?? new List<XElement>(); //empty list so no failure
                 foreach (var chartXml in savedChartXmlList)
@@ -215,8 +252,8 @@ namespace API
                     var chartNameXml = new XElement("ChartName",
                         new XElement("Name",
                             parsedChart.GetFormattedName(person.Name)),
-                        new XElement("Hash",
-                            parsedChart.GetHashCode()));
+                        new XElement("ChartId",
+                            parsedChart.ChartId));
 
                     //add to final xml
                     rootXml.Add(chartNameXml);
@@ -240,11 +277,10 @@ namespace API
 
 
 
-
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-        
+
         /// <summary>
         /// processes incoming xml request and outputs events svg report
         /// </summary>
@@ -262,13 +298,15 @@ namespace API
             var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value);
 
 
-            //get the person instance by hash
+            //get the person instance by id
             var foundPerson = await APITools.GetPersonFromId(personId);
 
             //from person get svg report
             var eventsReportSvgString = GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
-            return new Chart(eventsReportSvgString, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+            //a new chart is born
+            var newChartId = Tools.GenerateId();
+            return new Chart(newChartId,eventsReportSvgString, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
         }
 
         /// <summary>

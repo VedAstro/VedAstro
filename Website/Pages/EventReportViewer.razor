@@ -80,9 +80,9 @@
         StateHasChanged();
     }
 
-    private async Task<string> GetSavedDasaReportSvgFromApi(string chartHash)
+    private async Task<string> GetSavedDasaReportSvgFromApi(string chartId)
     {
-        var chartIdXml = new XElement("ChartHash", chartHash);
+        var chartIdXml = new XElement("ChartId", chartId);
         var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetSavedPersonEventsReport, chartIdXml, _jsRuntime);
 
         //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
@@ -153,7 +153,7 @@
     /// <summary>
     /// Given a saved chart name in local storage, it will load it into page
     /// </summary>
-    public async Task ShowSavedChart(string selectedChartHash)
+    public async Task ShowSavedChart(string selectedChartId)
     {
         //set current chart as from saved version (to hide save button)
         //only show "Save" button if viewing newly generated chart, so that no erroneous double save
@@ -161,11 +161,11 @@
 
         //1 GENERATE CHART IN SVG FROM SERVER
         //saved for later use by Chart Saver
-        _finalSvg = await GetSavedDasaReportSvgFromApi(selectedChartHash);
+        _finalSvg = await GetSavedDasaReportSvgFromApi(selectedChartId);
 
         //gets person profile used to generate the saved chart being showed now
         //needs to be set else parent depending will fail
-        SelectedPerson = await WebsiteTools.GetPersonIdFromChartHash(selectedChartHash, _jsRuntime);
+        SelectedPerson = await WebsiteTools.GetPersonIdFromChartId(selectedChartId, _jsRuntime);
 
         //2 LOAD CHART INTO PAGE
         await LoadChartIntoPage(_finalSvg);
@@ -177,7 +177,7 @@
     /// <summary>
     /// Given a saved chart name in local storage, it will load it into page
     /// </summary>
-    public async Task ShowSavedChartOld(string selectedChartHash)
+    public async Task ShowSavedChartOld(string selectedChartId)
     {
 
         await _jsRuntime.ShowLoading();
@@ -188,13 +188,13 @@
 
         //gets person profile used to generate the saved chart being showed now
         //extract hash from chart name
-        var raw = selectedChartHash.Split("|");
+        var raw = selectedChartId.Split("|");
         var hash = raw[0]; //1st place is hard set hash
                            //get person from hash
         SelectedPerson = await WebsiteTools.GetPersonFromId(hash, _jsRuntime);
 
         //get raw chart
-        _finalSvg = await _jsRuntime.GetProperty(selectedChartHash);
+        _finalSvg = await _jsRuntime.GetProperty(selectedChartId);
 
         //load chart into page
         await LoadChartIntoPage(_finalSvg);
@@ -372,7 +372,7 @@
         //<Root>
         //    <ChartName>
         //        <Name>Viknesh - 4/1994 to 3/2114</Name>
-        //        <Hash>895183858</Hash>
+        //        <ChartId>895183858</ChartId>
         //    </ChartName>
         //</Root>
         var chartIdXmlList = rootXml.Elements().ToList();

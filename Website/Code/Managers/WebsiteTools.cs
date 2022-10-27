@@ -711,11 +711,11 @@ namespace Website
             return visitorId;
         }
 
-        public static async Task<Person> GetPersonIdFromChartHash(string selectedChartHash, IJSRuntime jsRuntime)
+        public static async Task<Person> GetPersonIdFromChartId(string selectedChartId, IJSRuntime jsRuntime)
         {
             //get person hash from api
-            var chartHashXml = new XElement("ChartHash", selectedChartHash);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonIdFromSavedChartHash, chartHashXml, jsRuntime);
+            var chartIdXml = new XElement("ChartId", selectedChartId);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonIdFromSavedChartId, chartIdXml, jsRuntime);
             var personId = result.Value;
             var selectedPerson = await GetPersonFromId(personId, jsRuntime);
 

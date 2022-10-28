@@ -24,6 +24,7 @@ namespace Website
         //public const string SorryNeedRefreshToHome = UnderMaintenance;
         public const string UpdatePersonFail = "Error when update person!\nPlease try again later.";
         public const string DeletePersonFail = "Error when delete person!\nPlease try again later.";
+        public const string DeleteChartFail = "Error when delete chart!\nPlease try again later.";
         public const string AskAstrologer = "Thank you\nOur astrologer will contact you soon!";
         public const string AskAstrologerEmail = "Please give email for astrologer to contact you!";
         public const string SelectEventType = "Select at least 1 Event Type!";

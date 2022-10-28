@@ -382,7 +382,7 @@
         //show loading message
         await _jsRuntime.ShowLoading();
 
-        //tell API to delete person, using hash as id
+        //tell API to delete person, using person id
         await WebsiteTools.DeletePerson(PersonId, _jsRuntime);
 
         //let user know person has been updates

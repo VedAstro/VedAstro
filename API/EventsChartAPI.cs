@@ -300,6 +300,42 @@ namespace API
         }
 
 
+        [FunctionName("deletesavedchart")]
+        public static async Task<IActionResult> DeleteSavedChart(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+
+            try
+            {
+                //get unedited hash & updated person details from incoming request
+                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var chartId = requestData.Value;
+                
+
+                //get the person record that needs to be deleted
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
+                var chartToDelete = await APITools.FindChartById(savedChartListXml, chartId);
+
+                //delete the chart record,
+                chartToDelete.Remove();
+
+                //upload modified list to storage
+                var savedChartListClient = await APITools.GetFileFromContainer(APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
+                await APITools.OverwriteBlobData(savedChartListClient, savedChartListXml);
+
+                return APITools.PassMessage();
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+        }
+
+
 
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█

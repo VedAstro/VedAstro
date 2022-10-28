@@ -20,10 +20,11 @@
         {
             <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChartAPI" SmallSize="true" />
         }
-        @*only show "Direct Link" button if viewing saved chart*@
+        @*only show "Direct Link" & "Delete" button if viewing saved chart*@
         @if (_nowSavedChart)
         {
             <IconButton ButtonText="Copy Link" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+            <IconButton ButtonText="Delete" IconName="fluent:delete-16-regular" OnClickCallback="OnClickDeleteChart" SmallSize="true" />
         }
     </div>
 </div>
@@ -187,7 +188,7 @@
         StateHasChanged();
 
     }
-    
+
     /// <summary>
     /// Given a saved chart name in local storage, it will load it into page
     /// </summary>
@@ -315,11 +316,38 @@
 
     }
 
+    private async Task OnClickDeleteChart()
+    {
+        //show loading message
+        await _jsRuntime.ShowLoading();
+
+        //tell API to delete chart, using chart id
+        await WebsiteTools.DeleteSavedChart(CurrentChartId, _jsRuntime);
+
+        //let user know chart has been deleted
+        await _jsRuntime.ShowAlert("success", $"Chart deleted successfully!", false, timer: 2000);
+
+        //refresh the page variables
+        //todo marked for deletion, test without = no difference > delete
+        this.StateHasChanged();
+
+        //page ready
+        _jsRuntime.HideAlert();
+
+        ////send user to task list page after period of time
+        //await Task.Delay(100);
+        //_navigation.NavigateTo(PageRoute.PersonList);
+    }
+
     private async Task OnClickCopyChartLink()
     {
+        //generate the url
         var url = ServerManager.ApiUrl + $"/savedchart/{CurrentChartId}";
+
+        //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);
 
+        //let user know link coppied
         await _jsRuntime.ShowAlert("success", $"Chart Link Copied!", false, 2600);
     }
 

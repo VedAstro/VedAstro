@@ -21,6 +21,7 @@ namespace Website
         public const string AddLifeEventApi = ApiUrl + "/addlifeevent";
         public const string AddMessageApi = ApiUrl + "/addmessage";
         public const string DeletePersonApi = ApiUrl + "/deleteperson";
+        public const string DeleteChartApi = ApiUrl + "/deletesavedchart";
         public const string DeleteVisitorByUserId = ApiUrl + "/deletevisitorbyuserid";
         public const string DeleteVisitorByVisitorId = ApiUrl + "/deletevisitorbyvisitorid";
         public const string AddTaskApi = ApiUrl + "/addtask";

@@ -370,6 +370,20 @@ namespace Website
             else { AppData.ClearPersonList(); }
         }
 
+        public static async Task DeleteSavedChart(string chartId, IJSRuntime jsRuntime)
+        {
+            var chartIdXml = new XElement("ChartId", chartId);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteChartApi, chartIdXml, jsRuntime);
+
+            //check result, display error if needed
+            if (!Tools.IsResultPass(result))
+            {
+                WebsiteLogManager.LogError($"BLZ:DeleteSavedChart() Fail:\n{result.Value}");
+                await jsRuntime.ShowAlert("error", AlertText.DeleteChartFail, true);
+            }
+
+        }
+
         /// <summary>
         /// Send updated person to API server to be saved in main list
         /// note:

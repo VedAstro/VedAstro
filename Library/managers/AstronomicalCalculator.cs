@@ -8206,6 +8206,38 @@ namespace Genso.Astrology.Library
 
         }
 
+        public static string GetSignDescription(ZodiacSign getPlanetRasiSign)
+        {
+            switch (getPlanetRasiSign.GetSignName())
+            {
+                case ZodiacName.Aries:
+                    return @"movable, odd, masculine, cruel, fiery, of short ascension, rising by hinder part, powerful during the night";
+                case ZodiacName.Taurus:
+                    return @"fixed, even, feminine, mild,earthy, fruitful, of short ascension, rising by hinder part";
+                case ZodiacName.Gemini:
+                    return @"common, odd, masculine, cruel, airy, barren, of short ascension, rising by the head.";
+                case ZodiacName.Cancer:
+                    return @"even, movable, feminine, mild, watery, of long ascension, rising by the hinder part and fruitful.";
+                case ZodiacName.Leo:
+                    return @"fixed, odd, masculine, cruel, fiery, of long ascension, barren, rising by the head.";
+                case ZodiacName.Virgo:
+                    return @"common, even, feminine, mild, earthy, of long ascension, rising by the head.";
+                case ZodiacName.Libra:
+                    return @"movable, odd, masculine, cruel, airy, of long ascension, rising by the head.";
+                case ZodiacName.Scorpio:
+                    return @"fixed, even, feminine, mild, watery, of long ascension, rising by the head.";
+                case ZodiacName.Sagittarius:
+                    return @"common, odd, masculine, cruel, fiery, of long ascension, rising by the hinder part.";
+                case ZodiacName.Capricornus:
+                    return @"movable, even, feminine, mild, earthy, of long ascension, rising by hinder part";
+                case ZodiacName.Aquarius:
+                    return @"fixed, odd, masculine, cruel, fruitful, airy, of short ascension, rising by the head.";
+                case ZodiacName.Pisces:
+                    return @"common, feminine, water, even, mild, of short ascension, rising by head and hinder part.";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 
 }

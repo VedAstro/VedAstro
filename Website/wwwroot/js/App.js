@@ -201,14 +201,16 @@ function generatePlanetDataTable(tableId, tableData) {
         pagination: false,       //paginate the data
         movableColumns: false,      //allow column order to be changed
         resizableRows: false,       //allow row order to be changed
+        //autoColumns: true,
         columns: [                 //define the table columns
             { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
             { title: "Shadbala Pinda", field: "shadbalaPinda", hozAlign: "center", responsive: 0 },
-            { title: "Planet Aspect Strength", field: "planetAspectStrength", hozAlign: "center", responsive: 0 },
-            { title: "Planet Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
-            { title: "Planet Current Sign", field: "planetCurrentSign", hozAlign: "center", responsive: 0 },
-            { title: "Planet Current Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
-            { title: "Planet Current Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
+            { title: "Aspect Strength", field: "planetAspectStrength", hozAlign: "center", responsive: 0 },
+            { title: "Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
+            { title: "Sign", field: "planetCurrentSign", responsive: 0 },
+            { title: "Sign Info", field: "currentSignDescription", responsive: 0 },
+            { title: "Current Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
+            { title: "Current Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
             { title: "Current House Relation", field: "currentHouseRelation", hozAlign: "center", responsive: 0 },
             { title: "Is Planet Aspected By Malefic Planets", field: "isPlanetAspectedByMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
             { title: "Is Planet Conjunct With Malefic Planets", field: "isPlanetConjunctWithMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },

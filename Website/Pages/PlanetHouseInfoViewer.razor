@@ -153,6 +153,11 @@
             var _conjunctPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, planetName));
 
             var _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
+            
+            var _currentSignDescription = AstronomicalCalculator.GetSignDescription(AstronomicalCalculator.GetPlanetRasiSign(planetName, Time));
+            
+            //todo
+            //var _getPlanetStateDescription = AstronomicalCalculator.GetPlanetStateDescription();
 
             return new
             {
@@ -161,6 +166,7 @@
                 PlanetAspectStrength = _planetAspectStrength,
                 PlanetCurrentHouse = _planetCurrentHouse,
                 PlanetCurrentSign = _planetCurrentSign,
+                CurrentSignDescription = _currentSignDescription,
                 PlanetCurrentNavamsaSign = _planetCurrentNavamsaSign,
                 PlanetCurrentConstellation = _planetCurrentConstellation,
                 CurrentHouseRelation = Format.FormatName(_currentHouseRelation.ToString()),

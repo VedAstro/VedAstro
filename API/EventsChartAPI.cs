@@ -95,7 +95,7 @@ namespace API
                 var chartId = requestData.Value;
 
                 //get the saved chart record by id
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
                 var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
                 var chart = Chart.FromXml(foundChartXml);
 
@@ -128,7 +128,7 @@ namespace API
             {
 
                 //get the saved chart record by id
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
                 var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
                 var chart = Chart.FromXml(foundChartXml);
 
@@ -148,9 +148,33 @@ namespace API
                 return APITools.FormatErrorReply(e);
             }
 
+        }
 
 
-            return new ContentResult { Content = "<html><body>Hello <b>world</b></body></html>", ContentType = "text/html" };
+        /// <summary>
+        /// Special function to access Saved Chart directly without website
+        /// </summary>
+        [FunctionName("chart")]
+        public static async Task<IActionResult> GetEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "chart/{personId}/{eventPreset}/{timePreset}")]
+            HttpRequestMessage incomingRequest, string personId, string eventPreset, string timePreset)
+        {
+            try
+            {
+                //get chart index.html and send that to caller
+                var liveChartHtml = await APITools.GetStringFileFromAzureStorage(APITools.LiveChartHtml, APITools.ApiDataStorageContainer);
+
+                return new ContentResult { Content = liveChartHtml, ContentType = "text/html" };
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
         }
 
 
@@ -169,7 +193,7 @@ namespace API
                 var chartId = requestData.Value;
 
                 //get the saved chart record by id
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
                 var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
                 var chart = Chart.FromXml(foundChartXml);
 
@@ -205,7 +229,7 @@ namespace API
 
                 //save chart into storage
                 //note: do not wait to speed things up, beware! failure will go undetected on client
-                APITools.AddXElementToXDocument(chart.ToXml(), APITools.SavedChartListFile, APITools.ContainerName);
+                APITools.AddXElementToXDocument(chart.ToXml(), APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
 
                 //let caller know all good
                 return APITools.PassMessage();
@@ -237,7 +261,7 @@ namespace API
             {
 
                 //get ful saved chart list
-                var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ContainerName);
+                var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
 
                 //extract out the name & id
                 var rootXml = new XElement("Root");
@@ -306,7 +330,7 @@ namespace API
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
-            return new Chart(newChartId,eventsReportSvgString, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+            return new Chart(newChartId, eventsReportSvgString, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
         }
 
         /// <summary>

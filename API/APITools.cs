@@ -26,11 +26,11 @@ namespace API
 
         //hard coded links to files stored in storage
         public const string PersonListXml = "vedastro-site-data/PersonList.xml";
-        private const string CachedDasaReportXml = "vedastro-site-data/CachedDasaReport.xml";
         public const string MessageListXml = "vedastro-site-data/MessageList.xml";
         public const string TaskListXml = "vedastro-site-data/TaskList.xml";
         public const string VisitorLogXml = "vedastro-site-data/VisitorLog.xml";
-        public const string ContainerName = "vedastro-site-data";
+        public const string ApiDataStorageContainer = "vedastro-site-data";
+        public const string LiveChartHtml = "LiveChart.html";
         public const string PersonListFile = "PersonList.xml";
         public const string SavedChartListFile = "SavedChartList.xml";
         public const string RecycleBinFile = "RecycleBin.xml";
@@ -141,6 +141,44 @@ namespace API
                 //var document = XDocument.Load(xmlFileString);
 
                 return document;
+
+            }
+            catch (Exception e)
+            {
+                //todo log the error here
+                Console.WriteLine(e);
+                throw new Exception($"Azure Storage Failure : {blobClient.Name}");
+            }
+
+
+            //Console.WriteLine(blobClient.Name);
+            //Console.WriteLine(blobClient.AccountName);
+            //Console.WriteLine(blobClient.BlobContainerName);
+            //Console.WriteLine(blobClient.Uri);
+            //Console.WriteLine(blobClient.CanGenerateSasUri);
+
+            //if does not exist raise alarm
+            if (!await blobClient.ExistsAsync())
+            {
+                Console.WriteLine("NO FILE!");
+            }
+
+            //parse string as xml doc
+            //var valueContent = blobClient.Download().Value.Content;
+            //Console.WriteLine("Text:"+Tools.StreamToString(valueContent));
+
+        }
+        
+        /// <summary>
+        /// Converts a blob client of a file to string
+        /// </summary>
+        public static async Task<string> BlobClientToString(BlobClient blobClient)
+        {
+            try
+            {
+                var xmlFileString = await DownloadToText(blobClient);
+
+                return xmlFileString;
 
             }
             catch (Exception e)
@@ -512,6 +550,17 @@ namespace API
         {
             var fileClient = await GetFileFromContainer(fileName, blobContainerName);
             var xmlFile = await BlobClientToXml(fileClient);
+
+            return xmlFile;
+        }
+
+        /// <summary>
+        /// Gets any file from Azure blob storage in string form
+        /// </summary>
+        public static async Task<string> GetStringFileFromAzureStorage(string fileName, string blobContainerName)
+        {
+            var fileClient = await GetFileFromContainer(fileName, blobContainerName);
+            var xmlFile = await BlobClientToString(fileClient);
 
             return xmlFile;
         }

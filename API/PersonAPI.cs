@@ -31,7 +31,7 @@ namespace API
                 var newPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new person to main list
-                await APITools.AddXElementToXDocument(newPersonXml, APITools.PersonListFile, APITools.ContainerName);
+                await APITools.AddXElementToXDocument(newPersonXml, APITools.PersonListFile, APITools.ApiDataStorageContainer);
 
                 return APITools.PassMessage();
 
@@ -147,7 +147,7 @@ namespace API
                 var personToDelete = await APITools.FindPersonById(personListXml, personId);
 
                 //add deleted person to recycle bin 
-                await APITools.AddXElementToXDocument(personToDelete, APITools.RecycleBinFile, APITools.ContainerName);
+                await APITools.AddXElementToXDocument(personToDelete, APITools.RecycleBinFile, APITools.ApiDataStorageContainer);
 
                 //delete the person record,
                 personToDelete.Remove();

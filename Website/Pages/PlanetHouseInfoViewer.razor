@@ -84,7 +84,7 @@
             var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName)houseNumber, Time);
 
             //get house details and save it for view
-            var _houseDetails = AstronomicalCalculator.GetHouseDetails(houseNumber, Time);
+            var _houseDetails = AstronomicalCalculator.GetHouseDescription(houseNumber);
             var _houseLord = lordOfHouse.ToString();
             var _planetsInHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(houseNumber, Time));
             var _planetsAspectingHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)houseNumber, Time));
@@ -96,17 +96,22 @@
             var _lordExalted = AstronomicalCalculator.IsPlanetExaltated(lordOfHouse, Time);
             var _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, Time);
 
+            var _currentSignDescription = AstronomicalCalculator.GetSignDescription(AstronomicalCalculator.GetHouseSignName(houseNumber, Time));
+
             return new
             {
-                House ="House " + houseNumber,
+                House = "House " + houseNumber,
                 HouseLord = _houseLord,
                 PlanetsInHouse = _planetsInHouse,
                 PlanetsAspectingHouse = _planetsAspectingHouse,
                 HouseStrength = _houseStrength,
                 HouseSign = _houseSign,
+                CurrentSignDescription = _currentSignDescription,
                 HouseNavamsaSign = _houseNavamsaSign,
                 LordExalted = _lordExalted,
                 LordDebilitated = _lordDebilitated,
+                HouseDetails = _houseDetails
+
             };
         }
 
@@ -138,7 +143,9 @@
 
             var _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName);
 
-            var _planetCurrentSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, Time).ToString();
+            var planetRasiSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, Time);
+
+            var _planetCurrentSign = planetRasiSign.ToString();
 
             var _planetCurrentNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, Time).ToString();
 
@@ -153,9 +160,13 @@
             var _conjunctPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, planetName));
 
             var _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
+
+            var _currentSignDescription = AstronomicalCalculator.GetSignDescription(planetRasiSign.GetSignName());
             
-            var _currentSignDescription = AstronomicalCalculator.GetSignDescription(AstronomicalCalculator.GetPlanetRasiSign(planetName, Time));
+            var _currentHouseDescription = AstronomicalCalculator.GetHouseDescription(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
             
+            var _planetCurrentHouseType = AstronomicalCalculator.GetHouseType(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
+
             //todo
             //var _getPlanetStateDescription = AstronomicalCalculator.GetPlanetStateDescription();
 
@@ -173,7 +184,9 @@
                 IsPlanetAspectedByMaleficPlanets = _isPlanetAspectedByMaleficPlanets,
                 IsPlanetConjunctWithMaleficPlanets = _isPlanetConjunctWithMaleficPlanets,
                 ConjunctPlanets = _conjunctPlanets,
-                AspectingPlanets = _aspectingPlanets
+                AspectingPlanets = _aspectingPlanets,
+                CurrentHouseDescription = _currentHouseDescription,
+                PlanetCurrentHouseType = _planetCurrentHouseType
             };
         }
 

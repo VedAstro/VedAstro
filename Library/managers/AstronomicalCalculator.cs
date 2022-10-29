@@ -7839,10 +7839,9 @@ namespace Genso.Astrology.Library
         public static bool IsAirSign(ZodiacName moonSign) => moonSign is ZodiacName.Gemini or ZodiacName.Libra or ZodiacName.Aquarius;
 
         /// <summary>
-        /// Gets what the input house controls, rather
-        /// signifies certain important events and incidents.
+        /// 
         /// </summary>
-        public static string GetHouseDetails(int house, Time time)
+        public static string GetHouseDescription(int house)
         {
             switch (house)
             {
@@ -7860,9 +7859,6 @@ namespace Genso.Astrology.Library
                 case 12: return "losses, expenditure, waste, extravagance, sympathy, divine knowledge, Moksha and the state after death";
                 default: throw new Exception("House details not found!");
             }
-
-
-
         }
 
         /// <summary>
@@ -8206,9 +8202,14 @@ namespace Genso.Astrology.Library
 
         }
 
-        public static string GetSignDescription(ZodiacSign getPlanetRasiSign)
+        /// <summary>
+        /// These details would be highly useful in the delineation of
+        /// character and mental disposition
+        /// Source:Hindu Predictive Astrology pg.16
+        /// </summary>
+        public static string GetSignDescription(ZodiacName zodiacName)
         {
-            switch (getPlanetRasiSign.GetSignName())
+            switch (zodiacName)
             {
                 case ZodiacName.Aries:
                     return @"movable, odd, masculine, cruel, fiery, of short ascension, rising by hinder part, powerful during the night";
@@ -8238,6 +8239,69 @@ namespace Genso.Astrology.Library
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        /// <summary>
+        /// Source: Hindu Predictive Astrology pg.17
+        /// </summary>
+        public static string GetHouseType(int houseNumber)
+        {
+            //Quadrants (kendras) are l, 4, 7 and 10.
+            //Trines(Trikonas) are 5 and 9.
+            //Cadent houses (Panaparas) are 2, 5, 8 and 11
+            //Succeedent houses (Apoklimas) are 3, 6, 9 and 12 (9th being a trikona must be omitted)
+            //Upachayas are 3, 6, 10 and 11.
+
+            var returnString = "";
+
+            switch (houseNumber)
+            {
+                //Quadrants (kendras) are l, 4, 7 and 10.
+                case 1:
+                case 4:
+                case 7:
+                case 10:
+                    returnString += @"Quadrants (kendras)";
+                    break;
+                //Trines(Trikonas) are 5 and 9.
+                case 5:
+                case 9:
+                    returnString += @"Trines (Trikonas)";
+                    break;
+            }
+
+            switch (houseNumber)
+            {
+                //Cadent (Panaparas) are 2, 5, 8 and 11
+                case 2:
+                case 5:
+                case 8:
+                case 11:
+                    returnString += @"Cadent (Panaparas)";
+                    break;
+                //Succeedent (Apoklimas) are 3, 6, 9 and 12 (9th being a trikona must be omitted)
+                case 3:
+                case 6:
+                case 9:
+                case 12:
+                    returnString += @"Succeedent (Apoklimas)";
+                    break;
+            }
+
+            switch (houseNumber)
+            {
+                //Upachayas are 3, 6, 10 and 11.
+                case 3:
+                case 6:
+                case 10:
+                case 11:
+                    returnString += @"Upachayas";
+                    break;
+                
+            }
+
+            return returnString;
+        }
+
     }
 
 }

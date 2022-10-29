@@ -207,6 +207,7 @@ function generatePlanetDataTable(tableId, tableData) {
             { title: "Shadbala Pinda", field: "shadbalaPinda", hozAlign: "center", responsive: 0 },
             { title: "Aspect Strength", field: "planetAspectStrength", hozAlign: "center", responsive: 0 },
             { title: "Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
+            { title: "House Type", field: "planetCurrentHouseType", hozAlign: "center", responsive: 0 },
             { title: "Sign", field: "planetCurrentSign", responsive: 0 },
             { title: "Sign Info", field: "currentSignDescription", responsive: 0 },
             { title: "Current Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
@@ -216,6 +217,7 @@ function generatePlanetDataTable(tableId, tableData) {
             { title: "Is Planet Conjunct With Malefic Planets", field: "isPlanetConjunctWithMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
             { title: "Conjunct Planets", field: "conjunctPlanets", hozAlign: "center", responsive: 0 },
             { title: "Aspecting Planets", field: "aspectingPlanets", hozAlign: "center", responsive: 0 },
+            { title: "House Info", field: "currentHouseDescription", responsive: 0 },
         ],
     });
 
@@ -247,6 +249,8 @@ function generateHouseDataTable(tableId, tableData) {
             { title: "Lord Debilitated", field: "lordDebilitated", hozAlign: "center", formatter: "tickCross", responsive: 0 },
             { title: "Planets In House", field: "planetsInHouse", hozAlign: "center", responsive: 0 },
             { title: "Planets Aspecting House", field: "planetsAspectingHouse", hozAlign: "center", responsive: 0 },
+            { title: "Sign Info", field: "currentSignDescription", responsive: 0 },
+            { title: "House Info", field: "houseDetails", responsive: 0 }
         ],
     });
 

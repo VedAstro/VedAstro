@@ -310,7 +310,7 @@ namespace API
                 //get unedited hash & updated person details from incoming request
                 var requestData = APITools.ExtractDataFromRequest(incomingRequest);
                 var chartId = requestData.Value;
-                
+
 
                 //get the person record that needs to be deleted
                 var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
@@ -1342,6 +1342,7 @@ namespace API
             }
 
             //sort event by duration, so that events are ordered nicely in chart
+            //todo events are breaking up between rows
             var eventList = unsortedEventList.OrderByDescending(x => x.Duration).ToList();
 
 
@@ -1458,6 +1459,9 @@ namespace API
                 var highestTimeSlice = 0;
                 var multipleEventCount = 0;
 
+                //start as empty event
+                var prevEventList = new Dictionary<int, EventName>();
+
                 //generate 1px (rect) per time slice (horizontal)
                 foreach (var slice in timeSlices)
                 {
@@ -1467,11 +1471,19 @@ namespace API
                     //generate rect for each event & stack from top to bottom (vertical)
                     foreach (var foundEvent in foundEventList)
                     {
-                        ////if current event is different than event has changed, so draw a black line
-                        //var isNewEvent = prevEventName != foundEvent.Name;
-                        //var color = isNewEvent ? "black" : GetEventColor(foundEvent?.Nature);
-                        //prevEventName = foundEvent.Name;
-                        var color = GetColor(foundEvent?.Nature);
+                        //if current event is different than event has changed, so draw a black line
+                        int finalYAxis = yAxis + verticalPosition;
+                        var prevExist = prevEventList.TryGetValue(finalYAxis, out var prevEventName);
+                        var isNewEvent = prevExist && (prevEventName != foundEvent.Name);
+                        var color = isNewEvent ? "black" : GetColor(foundEvent?.Nature);
+
+                        //save current event to previous, to draw border later
+                        //border ONLY for top 3 rows (long duration events), lower row borders block color
+                        if(finalYAxis <= 29) { 
+                            prevEventList[finalYAxis] = foundEvent.Name; 
+                        }
+                        
+                        //var color = GetColor(foundEvent?.Nature);
 
                         //generate and add to row
                         //the hard coded attribute names used here are used in App.js
@@ -1480,7 +1492,7 @@ namespace API
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\" " +
                                    $"x=\"{horizontalPosition}\" " +
-                                   $"y=\"{yAxis + verticalPosition}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                                   $"y=\"{finalYAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                    $"width=\"{widthPerSlice}\" " +
                                    $"height=\"{singleRowHeight}\" " +
                                    $"fill=\"{color}\" />";

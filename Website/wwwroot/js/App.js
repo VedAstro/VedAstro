@@ -212,24 +212,43 @@ function generatePlanetDataTable(tableId, tableData) {
             { title: "Aspect Strength", field: "aspectStrength", hozAlign: "center", responsive: 0 },
             { title: "Permanent Strength", field: "permanentStrength", hozAlign: "center", responsive: 0 },
             { title: "Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
-            { title: "House Type", field: "planetCurrentHouseType", responsive: 0 },
             { title: "Sign", field: "planetCurrentSign", responsive: 0 },
             { title: "Current Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
             { title: "Current Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
-            { title: "House Relation", field: "houseRelation", hozAlign: "center", responsive: 0 },
-            { title: "Navamsa Relation", field: "navamsaRelation", hozAlign: "center", responsive: 0 },
             { title: "Malefic Conjunct", field: "isPlanetConjunctWithMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
             { title: "Malefic Aspect", field: "isPlanetAspectedByMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
             { title: "Conjunct Planets", field: "conjunctPlanets", hozAlign: "center", responsive: 0 },
             { title: "Aspecting Planets", field: "aspectingPlanets", hozAlign: "center", responsive: 0 },
+        ],
+    });
+}
+
+//table with more prediction
+function generatePlanetDataInfoTable(tableId, tableData) {
+
+    //set table data
+    var table = new Tabulator(`#${tableId}`, {
+
+        data: tableData,           //load row data from array
+        //editable: false,
+        layout: "fitDataTable",      //fit columns to width of table
+        //tooltips: true,            //show tool tips on cells
+        addRowPos: "top",          //when adding a new row, add it to the top of the table
+        history: false,             //allow undo and redo actions on the table
+        pagination: false,       //paginate the data
+        movableColumns: false,      //allow column order to be changed
+        resizableRows: false,       //allow row order to be changed
+        //autoColumns: true,
+        columns: [                 //define the table columns
+            { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
+            { title: "House Type", field: "planetCurrentHouseType", responsive: 0 },
+            { title: "House Relation", field: "houseRelation", hozAlign: "center", responsive: 0 },
+            { title: "Navamsa Relation", field: "navamsaRelation", hozAlign: "center", responsive: 0 },
             { title: "Planet Info", width: 250, resizable: true, field: "planetInfo", responsive: 0 },
             { title: "House Info", width: 250, resizable: true, field: "currentHouseDescription", responsive: 0 },
             { title: "Sign Info", width: 250, resizable: true, field: "currentSignDescription", responsive: 0 },
         ],
     });
-
-
-
 }
 
 function generateHouseDataTable(tableId, tableData) {

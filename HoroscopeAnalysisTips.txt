@@ -1,0 +1,6 @@
+
+
+
+- Lord Info AND House Info give accurate results
+Example : Vignes Lord Info = Profession with House Info = Loss, expense, 
+THUS Predict : Vignes has loss/expense in things related to profession/education(leading to profession)

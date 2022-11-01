@@ -10,6 +10,8 @@
 
 <h4>Planet Info</h4>
 <div style="min-height: 150px; width:100%;" class="mb-5" id="@PlanetTableId"></div>
+<hr />
+<div style="min-height: 150px; width:100%;" class="mb-5" id="@PlanetInfoTableId"></div>
 
 <h4>House Info</h4>
 <div style="min-height: 150px; width:100%;" class="mb-5" id="@HouseTableId"></div>
@@ -28,6 +30,7 @@
         }
     }
     const string PlanetTableId = "PlanetDataTable"; //change only needed here
+    const string PlanetInfoTableId = "PlanetDataInfoTable"; //change only needed here
     const string HouseTableId = "HouseDataTable"; //change only needed here
 
     private Time _time;
@@ -54,7 +57,9 @@
         var planetData = GetPlanetData();
 
         //and calls js code change table directly
+        //the data column to show is in js side
         await _jsRuntime.InvokeVoidAsync("generatePlanetDataTable", PlanetTableId, planetData);
+        await _jsRuntime.InvokeVoidAsync("generatePlanetDataInfoTable", PlanetInfoTableId, planetData);
 
         //get house data
         var houseData = GetHouseData();
@@ -67,8 +72,6 @@
 
     public List<object> GetHouseData()
     {
-
-
         var returnList = new List<object>();
 
         foreach (var house in House.AllHouses)

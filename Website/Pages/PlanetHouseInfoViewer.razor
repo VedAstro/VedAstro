@@ -97,6 +97,7 @@
             var _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, Time);
 
             var _currentSignDescription = AstronomicalCalculator.GetSignDescription(AstronomicalCalculator.GetHouseSignName(houseNumber, Time));
+            var _lordInfo = AstronomicalCalculator.GetPlanetInfo(lordOfHouse);
 
             return new
             {
@@ -110,7 +111,8 @@
                 HouseNavamsaSign = _houseNavamsaSign,
                 LordExalted = _lordExalted,
                 LordDebilitated = _lordDebilitated,
-                HouseDetails = _houseDetails
+                HouseDetails = _houseDetails,
+                LordInfo = _lordInfo
 
             };
         }
@@ -135,11 +137,20 @@
             //find out if planet is rahu or ketu, because not all calculations supported
             var isRahuKetu = planetName == PlanetName.Rahu || planetName == PlanetName.Ketu;
 
-
             //get planet details and save it for view
             var _shadbalaPinda = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, Time).ToDouble();
 
-            var _planetAspectStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetDrikBala(planetName, Time).ToDouble(), 2);
+            var _positionStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetSthanaBala(planetName, Time).ToDouble(), 2);
+
+            var _directionalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetDigBala(planetName, Time).ToDouble(), 2);
+
+            var _motionalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetChestaBala(planetName, Time).ToDouble(), 2);
+
+            var _temporalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetKalaBala(planetName, Time).ToDouble(), 2);
+
+            var _aspectStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetDrikBala(planetName, Time).ToDouble(), 2);
+
+            var _permanentStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetNaisargikaBala(planetName, Time).ToDouble(), 2);
 
             var _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName);
 
@@ -147,11 +158,15 @@
 
             var _planetCurrentSign = planetRasiSign.ToString();
 
-            var _planetCurrentNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, Time).ToString();
+            var planetNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, Time);
+
+            var _planetCurrentNavamsaSign = planetNavamsaSign.ToString();
 
             var _planetCurrentConstellation = AstronomicalCalculator.GetPlanetConstellation(Time, planetName).ToString();
 
             var _currentHouseRelation = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, Time);
+
+            var _navamsaRelation = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetRelationshipWithSign(planetName, planetNavamsaSign, Time);
 
             var _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(planetName, Time);
 
@@ -162,10 +177,12 @@
             var _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
 
             var _currentSignDescription = AstronomicalCalculator.GetSignDescription(planetRasiSign.GetSignName());
-            
+
             var _currentHouseDescription = AstronomicalCalculator.GetHouseDescription(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
-            
+
             var _planetCurrentHouseType = AstronomicalCalculator.GetHouseType(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
+
+            var _planetInfo = AstronomicalCalculator.GetPlanetInfo(planetName);
 
             //todo
             //var _getPlanetStateDescription = AstronomicalCalculator.GetPlanetStateDescription();
@@ -174,22 +191,27 @@
             {
                 Planet = planetName.ToString(),
                 ShadbalaPinda = _shadbalaPinda,
-                PlanetAspectStrength = _planetAspectStrength,
+                PositionStrength = _positionStrength,
+                DirectionalStrength = _directionalStrength,
+                MotionalStrength = _motionalStrength,
+                TemporalStrength = _temporalStrength,
+                AspectStrength = _aspectStrength,
+                PermanentStrength =_permanentStrength,
                 PlanetCurrentHouse = _planetCurrentHouse,
                 PlanetCurrentSign = _planetCurrentSign,
                 CurrentSignDescription = _currentSignDescription,
                 PlanetCurrentNavamsaSign = _planetCurrentNavamsaSign,
                 PlanetCurrentConstellation = _planetCurrentConstellation,
-                CurrentHouseRelation = Format.FormatName(_currentHouseRelation.ToString()),
+                HouseRelation = Format.FormatName(_currentHouseRelation.ToString()),
+                NavamsaRelation = Format.FormatName(_navamsaRelation.ToString()),
                 IsPlanetAspectedByMaleficPlanets = _isPlanetAspectedByMaleficPlanets,
                 IsPlanetConjunctWithMaleficPlanets = _isPlanetConjunctWithMaleficPlanets,
                 ConjunctPlanets = _conjunctPlanets,
                 AspectingPlanets = _aspectingPlanets,
                 CurrentHouseDescription = _currentHouseDescription,
-                PlanetCurrentHouseType = _planetCurrentHouseType
+                PlanetCurrentHouseType = _planetCurrentHouseType,
+                PlanetInfo = _planetInfo
             };
         }
-
     }
-
 }

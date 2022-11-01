@@ -11,7 +11,7 @@ namespace Genso.Astrology.Library
     public class PlanetName
     {
         //NESTED TYPES
-        private enum PlanetNameEnum
+        public enum PlanetNameEnum
         {
             Sun = 1,
             Moon,
@@ -60,13 +60,13 @@ namespace Genso.Astrology.Library
 
 
         //DATA FIELDS
-        private readonly PlanetNameEnum _planetName;
+        public PlanetNameEnum Name { get; }
 
 
         //CTOR
         private PlanetName(PlanetNameEnum planetName)
         {
-            _planetName = planetName;
+            Name = planetName;
         }
 
 
@@ -125,7 +125,7 @@ namespace Genso.Astrology.Library
         //METHOD OVERRIDES
         public override string ToString()
         {
-            return _planetName.ToString();
+            return Name.ToString();
         }
 
         public override bool Equals(object obj)
@@ -155,7 +155,7 @@ namespace Genso.Astrology.Library
         public override int GetHashCode()
         {
             //combine all the hash of the fields
-            var hash1 = _planetName.GetHashCode();
+            var hash1 = Name.GetHashCode();
 
             return hash1;
         }

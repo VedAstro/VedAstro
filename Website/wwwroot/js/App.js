@@ -204,20 +204,27 @@ function generatePlanetDataTable(tableId, tableData) {
         //autoColumns: true,
         columns: [                 //define the table columns
             { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
-            { title: "Shadbala Pinda", field: "shadbalaPinda", hozAlign: "center", responsive: 0 },
-            { title: "Aspect Strength", field: "planetAspectStrength", hozAlign: "center", responsive: 0 },
+            { title: "Total Strength", field: "shadbalaPinda", hozAlign: "center", responsive: 0 },
+            { title: "Position Strength", field: "positionStrength", hozAlign: "center", responsive: 0 },
+            { title: "Directional Strength", field: "directionalStrength", hozAlign: "center", responsive: 0 },
+            { title: "Motional Strength", field: "motionalStrength", hozAlign: "center", responsive: 0 },
+            { title: "Temporal Strength", field: "temporalStrength", hozAlign: "center", responsive: 0 },
+            { title: "Aspect Strength", field: "aspectStrength", hozAlign: "center", responsive: 0 },
+            { title: "Permanent Strength", field: "permanentStrength", hozAlign: "center", responsive: 0 },
             { title: "Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
-            { title: "House Type", field: "planetCurrentHouseType", hozAlign: "center", responsive: 0 },
+            { title: "House Type", field: "planetCurrentHouseType", responsive: 0 },
             { title: "Sign", field: "planetCurrentSign", responsive: 0 },
-            { title: "Sign Info", field: "currentSignDescription", responsive: 0 },
             { title: "Current Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
             { title: "Current Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
-            { title: "Current House Relation", field: "currentHouseRelation", hozAlign: "center", responsive: 0 },
-            { title: "Is Planet Aspected By Malefic Planets", field: "isPlanetAspectedByMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
-            { title: "Is Planet Conjunct With Malefic Planets", field: "isPlanetConjunctWithMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
+            { title: "House Relation", field: "houseRelation", hozAlign: "center", responsive: 0 },
+            { title: "Navamsa Relation", field: "navamsaRelation", hozAlign: "center", responsive: 0 },
+            { title: "Malefic Conjunct", field: "isPlanetConjunctWithMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
+            { title: "Malefic Aspect", field: "isPlanetAspectedByMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
             { title: "Conjunct Planets", field: "conjunctPlanets", hozAlign: "center", responsive: 0 },
             { title: "Aspecting Planets", field: "aspectingPlanets", hozAlign: "center", responsive: 0 },
-            { title: "House Info", field: "currentHouseDescription", responsive: 0 },
+            { title: "Planet Info", width: 250, resizable: true, field: "planetInfo", responsive: 0 },
+            { title: "House Info", width: 250, resizable: true, field: "currentHouseDescription", responsive: 0 },
+            { title: "Sign Info", width: 250, resizable: true, field: "currentSignDescription", responsive: 0 },
         ],
     });
 
@@ -229,28 +236,43 @@ function generateHouseDataTable(tableId, tableData) {
 
     //set table data
     var table = new Tabulator(`#${tableId}`, {
-
-        data: tableData,           //load row data from array
+        data: tableData, //load row data from array
         //editable: false,
-        layout: "fitDataTable",      //fit columns to width of table
+        layout: "fitDataTable", //fit columns to width of table
         //tooltips: true,            //show tool tips on cells
-        addRowPos: "top",          //when adding a new row, add it to the top of the table
-        history: false,             //allow undo and redo actions on the table
-        pagination: false,       //paginate the data
-        movableColumns: false,      //allow column order to be changed
-        resizableRows: false,       //allow row order to be changed
-        columns: [                 //define the table columns
-            { title: "House", field: "house", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
+        addRowPos: "top", //when adding a new row, add it to the top of the table
+        history: false, //allow undo and redo actions on the table
+        pagination: false, //paginate the data
+        movableColumns: false, //allow column order to be changed
+        resizableRows: false, //allow row order to be changed
+        columns: [//define the table columns
+            {
+                title: "House",
+                field: "house",
+                hozAlign: "center",
+                frozen: true,
+                responsive: 0,
+                minWidth: "120px",
+                cssClass: "PlanetColumn"
+            },
             { title: "House Strength", field: "houseStrength", hozAlign: "center", responsive: 0 },
             { title: "House Sign", field: "houseSign", hozAlign: "center", responsive: 0 },
             { title: "House Navamsa Sign", field: "houseNavamsaSign", hozAlign: "center", responsive: 0 },
             { title: "House Lord", field: "houseLord", hozAlign: "center", responsive: 0 },
             { title: "Lord Exalted", field: "lordExalted", hozAlign: "center", formatter: "tickCross", responsive: 0 },
-            { title: "Lord Debilitated", field: "lordDebilitated", hozAlign: "center", formatter: "tickCross", responsive: 0 },
+            {
+                title: "Lord Debilitated",
+                field: "lordDebilitated",
+                hozAlign: "center",
+                formatter: "tickCross",
+                responsive: 0
+            },
             { title: "Planets In House", field: "planetsInHouse", hozAlign: "center", responsive: 0 },
             { title: "Planets Aspecting House", field: "planetsAspectingHouse", hozAlign: "center", responsive: 0 },
-            { title: "Sign Info", field: "currentSignDescription", responsive: 0 },
-            { title: "House Info", field: "houseDetails", responsive: 0 }
+            { title: "Lord Info", width: 250, resizable: true, field: "lordInfo", responsive: 0 },
+            { title: "House Info", width: 250, resizable: true, field: "houseDetails", responsive: 0 },
+            { title: "Sign Info", width: 250, resizable: true, field: "currentSignDescription", responsive: 0 },
+
         ],
     });
 

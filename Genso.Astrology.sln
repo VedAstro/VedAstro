@@ -10,6 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Books\Astrology For Beginners (1992).pdf = Books\Astrology For Beginners (1992).pdf
 		Books\Bhava And Graha Balas.pdf = Books\Bhava And Graha Balas.pdf
 		Books\Bhavartha Ratnakara (1947).pdf = Books\Bhavartha Ratnakara (1947).pdf
+		Reference\constellation-extent-1.png = Reference\constellation-extent-1.png
+		Reference\constellation-extent-2.png = Reference\constellation-extent-2.png
+		Reference\constellation-extent-3.png = Reference\constellation-extent-3.png
 		GithubImages\header-logo.png = GithubImages\header-logo.png
 		Books\Hindu Predictive Astrology.pdf = Books\Hindu Predictive Astrology.pdf
 		Books\How to Judge Horoscope - Vol1.pdf = Books\How to Judge Horoscope - Vol1.pdf
@@ -18,11 +21,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Books\Muhurtha.pdf = Books\Muhurtha.pdf
 		Books\My Experiences in Astrology.pdf = Books\My Experiences in Astrology.pdf
 		Books\Notable Horoscopes (1998).pdf = Books\Notable Horoscopes (1998).pdf
+		Reference\planet-names-symbol.png = Reference\planet-names-symbol.png
 		Books\Planetary Influences on Human Affairs.pdf = Books\Planetary Influences on Human Affairs.pdf
 		Books\Prasna Marga Pt1.pdf = Books\Prasna Marga Pt1.pdf
 		Books\Prasna Marga Pt2.pdf = Books\Prasna Marga Pt2.pdf
+		Reference\rasis-and-extent.png = Reference\rasis-and-extent.png
 		README.md = README.md
 		Books\Three Hundred Important Combinations.pdf = Books\Three Hundred Important Combinations.pdf
+		Reference\zodiac-sign-name-symbol.png = Reference\zodiac-sign-name-symbol.png
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Website", "Website\Website.csproj", "{E2BF92A7-D6E5-4D1E-940B-4040707C51DE}"

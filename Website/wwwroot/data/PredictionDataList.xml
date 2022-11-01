@@ -3689,6 +3689,19 @@
 		<Tag>Horoscope</Tag>
 	</Event>
 
+	<!--GENERAL RULES-->
+	<!--<Event>
+		<Name>LordInTrine</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The lords of trines are always auspicious and
+			produce good.
+		</Description>
+		<Tag>Horoscope</Tag>
+	</Event>-->
+	
+
+
 	<!--
 	TODO Astrology for Beginners pg 37
 	//Results of Exaltation

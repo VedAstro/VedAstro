@@ -278,10 +278,10 @@ function generateHouseDataTable(tableId, tableData) {
                 minWidth: "120px",
                 cssClass: "PlanetColumn"
             },
-            { title: "House Strength", field: "houseStrength", hozAlign: "center", responsive: 0 },
-            { title: "House Sign", field: "houseSign", hozAlign: "center", responsive: 0 },
-            { title: "House Navamsa Sign", field: "houseNavamsaSign", hozAlign: "center", responsive: 0 },
-            { title: "House Lord", field: "houseLord", hozAlign: "center", responsive: 0 },
+            { title: "Strength", field: "houseStrength", hozAlign: "center", responsive: 0 },
+            { title: "Sign", field: "houseSign", hozAlign: "center", responsive: 0 },
+            { title: "Navamsa Sign", field: "houseNavamsaSign", hozAlign: "center", responsive: 0 },
+            { title: "Lord", field: "houseLord", hozAlign: "center", responsive: 0 },
             { title: "Lord Exalted", field: "lordExalted", hozAlign: "center", formatter: "tickCross", responsive: 0 },
             {
                 title: "Lord Debilitated",
@@ -290,12 +290,41 @@ function generateHouseDataTable(tableId, tableData) {
                 formatter: "tickCross",
                 responsive: 0
             },
-            { title: "Planets In House", field: "planetsInHouse", hozAlign: "center", responsive: 0 },
+            { title: "Planets Inside", field: "planetsInHouse", hozAlign: "center", responsive: 0 },
             { title: "Planets Aspecting House", field: "planetsAspectingHouse", hozAlign: "center", responsive: 0 },
-            { title: "Lord Info", width: 250, resizable: true, field: "lordInfo", responsive: 0 },
-            { title: "House Info", width: 250, resizable: true, field: "houseDetails", responsive: 0 },
-            { title: "Sign Info", width: 250, resizable: true, field: "currentSignDescription", responsive: 0 },
 
+        ],
+    });
+
+
+}
+
+function generateHouseDataInfoTable(tableId, tableData) {
+
+    //set table data
+    var table = new Tabulator(`#${tableId}`, {
+        data: tableData, //load row data from array
+        //editable: false,
+        layout: "fitDataTable", //fit columns to width of table
+        //tooltips: true,            //show tool tips on cells
+        addRowPos: "top", //when adding a new row, add it to the top of the table
+        history: false, //allow undo and redo actions on the table
+        pagination: false, //paginate the data
+        movableColumns: false, //allow column order to be changed
+        resizableRows: false, //allow row order to be changed
+        columns: [//define the table columns
+            {
+                title: "House",
+                field: "house",
+                hozAlign: "center",
+                frozen: true,
+                responsive: 0,
+                minWidth: "120px",
+                cssClass: "PlanetColumn"
+            },
+            { title: "Lord Info", width: 450, resizable: true, field: "lordInfo", responsive: 0 },
+            { title: "House Info", width: 450, resizable: true, field: "houseDetails", responsive: 0 },
+            { title: "Sign Info", width: 450, resizable: true, field: "currentSignDescription", responsive: 0 },
         ],
     });
 

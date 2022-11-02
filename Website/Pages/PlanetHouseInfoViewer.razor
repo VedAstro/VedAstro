@@ -187,6 +187,12 @@
 
             var _planetInfo = AstronomicalCalculator.GetPlanetInfo(planetName);
 
+            var lagna = AstronomicalCalculator.GetHouseSignName(1, Time);
+            var _isPlanetBeneficToLagna = AstronomicalCalculator.IsPlanetBeneficToLagna(planetName, lagna);
+            var _isPlanetMaleficToLagna = AstronomicalCalculator.IsPlanetMaleficToLagna(planetName, lagna);
+            var _isPlanetYogakarakaToLagna = AstronomicalCalculator.IsPlanetYogakarakaToLagna(planetName, lagna);
+            var _isPlanetMarakaToLagna = AstronomicalCalculator.IsPlanetMarakaToLagna(planetName, lagna);
+
             //todo
             //var _getPlanetStateDescription = AstronomicalCalculator.GetPlanetStateDescription();
 
@@ -199,7 +205,7 @@
                 MotionalStrength = _motionalStrength,
                 TemporalStrength = _temporalStrength,
                 AspectStrength = _aspectStrength,
-                PermanentStrength =_permanentStrength,
+                PermanentStrength = _permanentStrength,
                 PlanetCurrentHouse = _planetCurrentHouse,
                 PlanetCurrentSign = _planetCurrentSign,
                 CurrentSignDescription = _currentSignDescription,
@@ -213,7 +219,11 @@
                 AspectingPlanets = _aspectingPlanets,
                 CurrentHouseDescription = _currentHouseDescription,
                 PlanetCurrentHouseType = _planetCurrentHouseType,
-                PlanetInfo = _planetInfo
+                PlanetInfo = _planetInfo,
+                IsPlanetBeneficToLagna = _isPlanetBeneficToLagna,
+                IsPlanetMaleficToLagna = _isPlanetMaleficToLagna,
+                IsPlanetMarakaToLagna = _isPlanetMarakaToLagna,
+                IsPlanetYogakarakaToLagna = _isPlanetYogakarakaToLagna,
             };
         }
     }

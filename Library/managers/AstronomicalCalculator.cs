@@ -8296,7 +8296,7 @@ namespace Genso.Astrology.Library
                 case 11:
                     returnString += @"Upachayas";
                     break;
-                
+
             }
 
             return returnString;
@@ -8331,8 +8331,165 @@ namespace Genso.Astrology.Library
                     throw new ArgumentOutOfRangeException();
             }
         }
-    }
 
+        /// <summary>
+        /// Soumyas
+        /// Source : Astrology for beginners pg 30
+        /// </summary>
+        public static bool IsPlanetBeneficToLagna(PlanetName planetName, ZodiacName lagna)
+        {
+            switch (lagna)
+            {
+                case ZodiacName.Aries:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                case ZodiacName.Taurus:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars
+                           || planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                case ZodiacName.Gemini:
+                    return planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                case ZodiacName.Cancer:
+                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                case ZodiacName.Leo:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars;
+                case ZodiacName.Virgo:
+                    return planetName == PlanetName.Venus;
+                case ZodiacName.Libra:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                case ZodiacName.Scorpio:
+                    return planetName == PlanetName.Jupiter || planetName == PlanetName.Sun || planetName == PlanetName.Moon;
+                case ZodiacName.Sagittarius:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars;
+                case ZodiacName.Capricornus:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                case ZodiacName.Aquarius:
+                    return planetName == PlanetName.Venus || planetName == PlanetName.Mars
+                           || planetName == PlanetName.Sun || planetName == PlanetName.Saturn;
+                case ZodiacName.Pisces:
+                    return planetName == PlanetName.Mars || planetName == PlanetName.Moon;
+            }
+
+            //control should not come here
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Kruras (Malefics)
+        /// Source : Astrology for beginners pg 30
+        /// </summary>
+        public static bool IsPlanetMaleficToLagna(PlanetName planetName, ZodiacName lagna)
+        {
+            switch (lagna)
+            {
+                case ZodiacName.Aries:
+                    return planetName == PlanetName.Venus || planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                case ZodiacName.Taurus:
+                    return planetName == PlanetName.Moon || planetName == PlanetName.Jupiter || planetName == PlanetName.Venus;
+                case ZodiacName.Gemini:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                case ZodiacName.Cancer:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                case ZodiacName.Leo:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                case ZodiacName.Virgo:
+                    return planetName == PlanetName.Mars || planetName == PlanetName.Moon || planetName == PlanetName.Jupiter;
+                case ZodiacName.Libra:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Moon || planetName == PlanetName.Jupiter;
+                case ZodiacName.Scorpio:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                case ZodiacName.Sagittarius:
+                    return planetName == PlanetName.Saturn || planetName == PlanetName.Venus || planetName == PlanetName.Mercury;
+                case ZodiacName.Capricornus:
+                    return planetName == PlanetName.Moon || planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                case ZodiacName.Aquarius:
+                    return planetName == PlanetName.Jupiter || planetName == PlanetName.Moon;
+                case ZodiacName.Pisces:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Mercury
+                           || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+            }
+
+            //control should not come here
+            throw new InvalidOperationException();
+        }
+
+
+        /// <summary>
+        /// Yogakaraka (Planets indicating prosperity)
+        /// Source : Astrology for beginners pg 30
+        /// </summary>
+        public static bool IsPlanetYogakarakaToLagna(PlanetName planetName, ZodiacName lagna)
+        {
+            switch (lagna)
+            {
+                case ZodiacName.Aries:
+                    return planetName == PlanetName.Sun;
+                case ZodiacName.Taurus:
+                    return planetName == PlanetName.Saturn;
+                case ZodiacName.Gemini:
+                    return planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                case ZodiacName.Cancer:
+                    return planetName == PlanetName.Mars;
+                case ZodiacName.Leo:
+                    return planetName == PlanetName.Mars;
+                case ZodiacName.Virgo:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus;
+                case ZodiacName.Libra:
+                    return planetName == PlanetName.Moon || planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                case ZodiacName.Scorpio:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Moon;
+                case ZodiacName.Sagittarius:
+                    return planetName == PlanetName.Sun || planetName == PlanetName.Mars;
+                case ZodiacName.Capricornus:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus;
+                case ZodiacName.Aquarius:
+                    return planetName == PlanetName.Mars || planetName == PlanetName.Venus;
+                case ZodiacName.Pisces:
+                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter || planetName == PlanetName.Moon;
+            }
+
+            //control should not come here
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Yogakaraka (Planets indicating prosperity)
+        /// Source : Astrology for beginners pg 30
+        /// </summary>
+        public static bool IsPlanetMarakaToLagna(PlanetName planetName, ZodiacName lagna)
+        {
+            switch (lagna)
+            {
+                case ZodiacName.Aries:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Saturn;
+                case ZodiacName.Taurus:
+                    return planetName == PlanetName.Jupiter || planetName == PlanetName.Venus;
+                case ZodiacName.Gemini:
+                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                case ZodiacName.Cancer:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus;
+                case ZodiacName.Leo:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus;
+                case ZodiacName.Virgo:
+                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                case ZodiacName.Libra:
+                    return planetName == PlanetName.Jupiter;
+                case ZodiacName.Scorpio:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                case ZodiacName.Sagittarius:
+                    return planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+                case ZodiacName.Capricornus:
+                    return planetName == PlanetName.Mars || planetName == PlanetName.Jupiter;
+                case ZodiacName.Aquarius:
+                    return planetName == PlanetName.Mars;
+                case ZodiacName.Pisces:
+                    return planetName == PlanetName.Mercury || planetName == PlanetName.Venus || planetName == PlanetName.Saturn;
+            }
+
+            //control should not come here
+            throw new InvalidOperationException();
+        }
+    
+    
+    }
 }
 
 

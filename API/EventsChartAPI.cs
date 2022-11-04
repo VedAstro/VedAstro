@@ -131,12 +131,16 @@ namespace API
                 var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.ApiDataStorageContainer);
                 var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
                 var chart = Chart.FromXml(foundChartXml);
+                var svgString = chart.ContentSvg;
 
-                //send image back to caller
-                //convert svg string to stream for sending
-                var stream = GenerateStreamFromString(chart.ContentSvg);
-                var x = StreamToByteArray(stream);
-                return new FileContentResult(x, "image/svg+xml");
+                //get chart index.html and send that to caller
+                var htmlTemplate = await APITools.GetStringFileFromAzureStorage(APITools.LiveChartHtml, APITools.ApiDataStorageContainer);
+
+                //insert SVG into html place holder page
+                var finalHtml = htmlTemplate.Replace("<!--INSERT SVG-->", svgString);
+
+                return new ContentResult { Content = finalHtml, ContentType = "text/html" };
+
 
             }
             catch (Exception e)

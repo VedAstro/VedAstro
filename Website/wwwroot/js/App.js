@@ -763,6 +763,7 @@ function LoadEventDescription(event, eventName) {
     $(document).on('loadEventDescription', LoadEventDescription);
 
 }
+
 //SVG Event Chart Time Legend generator
 //this is where the whole time legend that follows
 //the mouse when placed on chart is generated

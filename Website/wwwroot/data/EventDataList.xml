@@ -4858,7 +4858,7 @@
 			give rise to good.
 		</Description>
 		<Tag>DasaSpecialRules</Tag>
-	</Event>	
+	</Event>
 	<Event>
 		<Name>Lord5And9DasaBhukti</Name>
 		<Nature>Good</Nature>
@@ -4925,6 +4925,64 @@
 			happens to be the 6th Dasa.
 			If Saturn is strong and favorably disposed,
 			the evil effects get considerably modified.
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+
+	<Event>
+		<Name>ElevatedSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			If the Sun is elevated, he displays wisdom, gets
+			money, attains fame and happiness
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>SunWithLord9Or10Dasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Sun in good position, in own house or joined with lord of 9 or
+			10 - happiness, gains, riches, honours
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>SunWithLord5Dasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Sun with lord of 5 - birth of children.
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>SunWithLord2Dasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Sun when related to lord of 2 - becomes rich, earns money, secures
+			property, gains, favours from influential persons.
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>SunBadPositionDasa</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			The Sun when debilitated or occupies the 6th or the
+			8th house or in cojunction with evil planets contracts evil diseases, loss of wealth, suffers from reverses
+			in employment, penalty and becomes ill. 
+		</Description>
+		<Tag>DasaSpecialRules</Tag>
+	</Event>
+	<Event>
+		<Name>ExaltatedSunDasa</Name>
+		<Nature>Good</Nature>
+		<Description>
+			The Dasa of the Sun in deep exaltation : Sudden
+			gains in cattle and wealth, much travelling in eastern
+			countries, residence in foreign countries, quarrels
+			among friends and relations, pleasure trios and picnic
+			parties and lovely women.
 		</Description>
 		<Tag>DasaSpecialRules</Tag>
 	</Event>

@@ -880,6 +880,12 @@
         Lord5And9DasaBhukti,
         LagnaLordDasa,
         Saturn4thDasa,
-        Jupiter6thDasa
+        Jupiter6thDasa,
+        ElevatedSunDasa,
+        SunWithLord9Or10Dasa,
+        SunWithLord5Dasa,
+        SunWithLord2Dasa,
+        SunBadPositionDasa,
+        ExaltatedSunDasa
     }
 }

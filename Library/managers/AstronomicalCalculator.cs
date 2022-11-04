@@ -8487,8 +8487,58 @@ namespace Genso.Astrology.Library
             //control should not come here
             throw new InvalidOperationException();
         }
-    
-    
+
+        /// <summary>
+        /// Checks if planet is placed in own house
+        /// meaning house sign owned by planet
+        /// note: rahu and ketu return false always
+        /// </summary>
+        public static bool IsPlanetInOwnHouse(Time time, PlanetName planetName)
+        {
+            //find out if planet is rahu or ketu, because not all calculations supported
+            var isRahuKetu = planetName == PlanetName.Rahu || planetName == PlanetName.Ketu;
+
+            //get current house
+            var _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(time, planetName);
+
+            //relatioship with current house
+            var _currentHouseRelation = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, time);
+        
+            //relation should be own
+            if(_currentHouseRelation == PlanetToSignRelationship.OwnVarga)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if a planet is same house (not nessarly conjunct) with the lord of a certain house
+        /// Example : Is Sun joined with lord of 9th?
+        /// </summary>
+        public static bool IsPlanetSameHouseWithHouseLord(Time birthTime, int houseNumber, PlanetName planet)
+        {
+            //get house of the lord in question
+            var houseLord = GetLordOfHouse((HouseName)houseNumber, birthTime);
+            var houseLordHouse = GetHousePlanetIsIn(birthTime, houseLord);
+
+            //get house of input planet
+            var inputPlanetHouse = GetHousePlanetIsIn(birthTime, planet);
+
+            //check if both are in same house
+            if (inputPlanetHouse == houseLordHouse)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
     }
 }
 

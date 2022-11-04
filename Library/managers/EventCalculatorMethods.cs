@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Genso.Astrology.Library
 {
@@ -12215,7 +12217,6 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
-
         [EventCalculator(EventName.Saturn4thDasa)]
         public static CalculatorResult Saturn4thDasa(Time time, Person person)
         {
@@ -12253,7 +12254,124 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+        [EventCalculator(EventName.ElevatedSunDasa)]
+        public static CalculatorResult ElevatedSunDasa(Time time, Person person)
+        {
+            //If the Sun is elevated, he displays wisdom, gets
+            //money, attains fame and happiness
 
+            //is sun dasa occuring
+            var isSunDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
+
+            //is sun elevated
+            //todo what is elvated?
+            var isSunElevated = false;
+
+            //occuring if one of the conditions met
+            var occuring = isSunDasa && isSunElevated;
+
+            return new() { Occuring = occuring, Info="Sun Dasa" };
+
+        }
+
+        [EventCalculator(EventName.SunWithLord9Or10Dasa)]
+        public static CalculatorResult SunWithLord9Or10Dasa(Time time, Person person)
+        {
+            //The Sun in good position, in own house or joined with lord of 9 or
+            //10 - happiness, gains, riches, honours
+
+            //is sun dasa occuring
+            var isSunDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
+
+            //is sun in own house
+            var sunInOwn = AstronomicalCalculator.IsPlanetInOwnHouse(person.BirthTime, PlanetName.Sun);
+
+            //is sun joined (same house) with lord 9 or 10
+            var a = AstronomicalCalculator.IsPlanetSameHouseWithHouseLord(person.BirthTime, 9, PlanetName.Sun);
+            var b = AstronomicalCalculator.IsPlanetSameHouseWithHouseLord(person.BirthTime, 10, PlanetName.Sun);
+            var sunJoined9Or10 = a || b;
+
+            var sunInGoodPosition = sunInOwn || sunJoined9Or10;
+
+            //occuring if one of the conditions met
+            var occuring = isSunDasa && sunInGoodPosition;
+
+            return new() { Occuring = occuring, Info="Sun Dasa Lord 9 Lord 10" };
+
+        }
+
+        [EventCalculator(EventName.SunWithLord5Dasa)]
+        public static CalculatorResult SunWithLord5Dasa(Time time, Person person)
+        {
+            //the Sun with lord of 5 - birth of children. 
+
+            //is sun dasa occuring
+            var isSunDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
+
+            //is sun with lord of 5th
+            var sunWithLord5th = AstronomicalCalculator.IsPlanetSameHouseWithHouseLord(person.BirthTime, 5, PlanetName.Sun);
+
+            //occuring if one of the conditions met
+            var occuring = isSunDasa && sunWithLord5th;
+
+
+            return new() { Occuring = occuring, Info = "Sun Dasa Lord 5" };
+
+        }
+
+
+        [EventCalculator(EventName.SunWithLord2Dasa)]
+        public static CalculatorResult SunWithLord2Dasa(Time time, Person person)
+        {
+            //The Sun when related to lord of 2 - becomes rich, earns money, secures
+            //property, gains, favours from influential persons. 
+
+            //is sun dasa occuring
+            var isSunDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
+
+            //is sun with lord of 2nd
+            var sunWithLord2nd = AstronomicalCalculator.IsPlanetSameHouseWithHouseLord(person.BirthTime, 2, PlanetName.Sun);
+
+            //occuring if one of the conditions met
+            var occuring = isSunDasa && sunWithLord2nd;
+
+            return new() { Occuring = occuring, Info = "Sun Dasa Lord 2" };
+
+        }
+
+        [EventCalculator(EventName.SunBadPositionDasa)]
+        public static CalculatorResult SunBadPositionDasa(Time time, Person person)
+        {
+            //The Sun when debilitated or occupies the 6th or the
+            //8th house or in cojunction with evil planets contracts evil diseases, loss of wealth, suffers from reverses
+            //in employment, penalty and becomes ill. 
+
+            //TODO
+            return new() { Occuring = false };
+
+        }
+
+        [EventCalculator(EventName.ExaltatedSunDasa)]
+        public static CalculatorResult ExaltatedSunDasa(Time time, Person person)
+        {
+            //The Dasa of the Sun in deep exaltation : Sudden
+            //gains in cattle and wealth, much travelling in eastern
+            //countries, residence in foreign countries, quarrels
+            //among friends and relations, pleasure trios and picnic
+            //parties and lovely women.
+
+            //is sun dasa occuring
+            var isSunDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
+
+            var isSunExalted = AstronomicalCalculator.IsPlanetExaltated(PlanetName.Sun, time);
+
+            //conditions met
+            var occuring = isSunDasa && isSunExalted;
+
+            return new() { Occuring = occuring, Info = "Sun Dasa" };
+        }
+
+       
 
 
         #endregion

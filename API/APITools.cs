@@ -41,13 +41,15 @@ namespace API
         private const string BlobContainerName = "vedastro-site-data";
 
         //we use direct storage URL for fast access & solid
-        private const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
+        public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
 
         //used in muhurtha events
-        private const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
+        public const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
 
         //used in horoscope prediction
-        private const string UrlPredictionDataListXml = $"https://{AzureStorage}/data/PredictionDataList.xml";
+        public const string UrlPredictionDataListXml = $"https://{AzureStorage}/data/PredictionDataList.xml";
+        
+        public const string UrlEventsChartViewerHtml = $"https://{AzureStorage}/data/EventsChartViewer.html";
 
         /// <summary>
         /// Default success message sent to caller
@@ -522,6 +524,21 @@ namespace API
 
             //get all records in document
             return document.Root.Elements().ToList();
+        }
+
+        /// <summary>
+        /// Gets any file at given url as string
+        /// </summary>
+        public static async Task<string> GetStringFile(string url)
+        {
+            //get the data sender
+            using var client = new HttpClient();
+
+            //load xml event data files before hand to be used quickly later for search
+            //get main horoscope prediction file (located in wwwroot)
+            var fileString = await client.GetStringAsync(url);
+
+            return fileString;
         }
 
         public static List<Event> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag, List<EventData> eventDataList)

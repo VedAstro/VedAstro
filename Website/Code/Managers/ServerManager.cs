@@ -38,8 +38,8 @@ namespace Website
         public const string GetMessageList = ApiUrl + "/getmessagelist";
         public const string GetFemaleListApi = ApiUrl + "/getfemalelist";
         public const string GetMatchReportApi = ApiUrl + "/getmatchreport";
-        public const string GetEventsChart = ApiUrl + "/getpersoneventsreport";
-        public const string GetSavedEventsChart = ApiUrl + "/getsavedpersoneventsreport";
+        public const string GetEventsChart = ApiUrl + "/geteventschart";
+        public const string GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         public const string GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
         public const string SaveEventsChart = ApiUrl + "/savepersoneventsreport";
         public const string GetEventsApi = ApiUrl + "/getevents";

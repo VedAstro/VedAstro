@@ -52,8 +52,8 @@ namespace API
         //  <DaysPerPixel>11</DaysPerPixel>
         //</Root>
         /// </summary>
-        [FunctionName("getpersoneventsreport")]
-        public static async Task<IActionResult> GetPersonEventsReport(
+        [FunctionName("geteventschart")]
+        public static async Task<IActionResult> GetEventsChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             try
@@ -79,11 +79,40 @@ namespace API
 
 
         }
+        
+        [FunctionName("geteventscharteasy")]
+        public static async Task<IActionResult> GetEventsChartEasy(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+            try
+            {
+                //get dasa report for sending
+                var chart = await GetEventReportSvgForIncomingRequestEasy(incomingRequest);
+
+                //send image back to caller
+                //convert svg string to stream for sending
+                var stream = GenerateStreamFromString(chart.ContentSvg);
+                var x = StreamToByteArray(stream);
+                return new FileContentResult(x, "image/svg+xml");
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+
+        }
+
 
         /// <summary>
         /// Gets chart from saved list, needs to be given id to find
         /// </summary>
-        [FunctionName("getsavedpersoneventsreport")]
+        [FunctionName("getsavedeventschart")]
         public static async Task<IActionResult> GetSavedEventsChartReport(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
@@ -117,6 +146,7 @@ namespace API
 
         }
 
+
         /// <summary>
         /// Special function to access Saved Chart directly without website
         /// </summary>
@@ -134,7 +164,9 @@ namespace API
                 var svgString = chart.ContentSvg;
 
                 //get chart index.html and send that to caller
-                var htmlTemplate = await APITools.GetStringFileFromAzureStorage(APITools.LiveChartHtml, APITools.ApiDataStorageContainer);
+                //get data list from Static Website storage
+                var htmlTemplate = await APITools.GetStringFile(APITools.UrlEventsChartViewerHtml);
+                //var htmlTemplate = await APITools.GetStringFileFromAzureStorage(APITools.LiveChartHtml, APITools.ApiDataStorageContainer);
 
                 //insert SVG into html place holder page
                 var finalHtml = htmlTemplate.Replace("<!--INSERT SVG-->", svgString);
@@ -156,7 +188,8 @@ namespace API
 
 
         /// <summary>
-        /// Special function to access Saved Chart directly without website
+        /// Special function to generate new Events Chart directly without website
+        /// Does not do anything to generate the chart, that is done by geteventscharteasy
         /// </summary>
         [FunctionName("chart")]
         public static async Task<IActionResult> GetEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "chart/{personId}/{eventPreset}/{timePreset}")]
@@ -165,9 +198,9 @@ namespace API
             try
             {
                 //get chart index.html and send that to caller
-                var liveChartHtml = await APITools.GetStringFileFromAzureStorage(APITools.LiveChartHtml, APITools.ApiDataStorageContainer);
+                var eventsChartViewerHtml = await APITools.GetStringFile(APITools.UrlEventsChartViewerHtml);
 
-                return new ContentResult { Content = liveChartHtml, ContentType = "text/html" };
+                return new ContentResult { Content = eventsChartViewerHtml, ContentType = "text/html" };
 
             }
             catch (Exception e)
@@ -341,6 +374,8 @@ namespace API
 
 
 
+
+
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
@@ -371,6 +406,134 @@ namespace API
             //a new chart is born
             var newChartId = Tools.GenerateId();
             return new Chart(newChartId, eventsReportSvgString, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+        }
+
+        private static async Task<Chart> GetEventReportSvgForIncomingRequestEasy(HttpRequestMessage req)
+        {
+            //get all the data needed out of the incoming request
+            var rootXml = APITools.ExtractDataFromRequest(req);
+            var personId = rootXml.Element("PersonId")?.Value;
+            var timePreset = rootXml.Element("TimePreset")?.Value;
+            var eventPreset = rootXml.Element("EventPreset")?.Value;
+            var maxWidth = int.Parse(rootXml.Element("MaxWidth")?.Value); //px
+
+            //hard set maxwidth to 1000px so that no forever calculation created
+            maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
+
+            //minus 10% for side padding
+            maxWidth = maxWidth - (int)(maxWidth * 0.10); ;
+
+
+            //EXTRACT & PREPARE DATA
+
+            //get the person instance by id
+            var foundPerson = await APITools.GetPersonFromId(personId);
+
+            //TIME
+            dynamic x = AutoCalculateTimeRange(timePreset, foundPerson.GetBirthLocation());
+            Time startTime = x.start;
+            Time endTime = x.end;
+
+            //EVENTS
+            var eventTags = GetSelectedEventTypesEasy(eventPreset);
+
+            //PRECISION
+            //calculate based on max screen width,
+            //done for fast calculation only for needed viewability
+            var daysPerPixel = GetDayPerPixel(startTime, endTime, maxWidth);
+
+            //from person get svg report
+            var eventsReportSvgString = GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+
+            //a new chart is born
+            var newChartId = Tools.GenerateId();
+            //todo needs update
+            return new Chart(newChartId, eventsReportSvgString, personId, EventTagExtensions.ToXmlList(eventTags), startTime.ToXml(), endTime.ToXml(), daysPerPixel);
+        }
+
+        /// <summary>
+        /// calculates the precision of the events to fit inside 1000px width
+        /// </summary>
+        public static double GetDayPerPixel(Time start, Time end, int maxWidth)
+        {
+            //const int maxWidth = 1000; //px
+
+            var daysBetween = end.Subtract(start).TotalDays;
+            var daysPerPixel = Math.Round(daysBetween / maxWidth, 3); //small val = higher precision
+                                                                      //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
+                                                                      //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
+
+            return daysPerPixel;
+        }
+
+        public static List<EventTag> GetSelectedEventTypesEasy(string eventPreset)
+        {
+            var returnList = new List<EventTag>();
+
+            switch (eventPreset)
+            {
+                //only general is customized
+                case "General":
+                    returnList.Add(EventTag.General);
+                    returnList.Add(EventTag.Personal);
+                    returnList.Add(EventTag.RulingConstellation);
+                    break;
+                case "Gochara":
+                    returnList.Add(EventTag.Personal);
+                    returnList.Add(EventTag.Gochara);
+                    break;
+                case "Travel":
+                    returnList.Add(EventTag.Personal);
+                    returnList.Add(EventTag.General);
+                    returnList.Add(EventTag.Travel);
+                    break;
+
+                //others are converted as is
+                default:
+                    returnList.Add(Enum.Parse<EventTag>(eventPreset));
+                    break;
+
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// Given a time preset in string like "Today"
+        /// a precisise start and end time will be returned
+        /// used in dasa/muhurtha easy calculator
+        /// </summary>
+        public static object AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation)
+        {
+
+            Time start, end;
+            var yesterday = (DateTimeOffset.Now.AddDays(-1)).ToString("dd/MM/yyyy zzz");
+            switch (timePreset)
+            {
+                case "Today":
+                case "Day":
+                    var today = DateTimeOffset.Now.ToString("dd/MM/yyyy zzz");
+                    start = new Time($"00:00 {today}", birthLocation);
+                    end = new Time($"23:59 {today}", birthLocation);
+                    return new { start = start, end = end };
+                case "Week":
+                    start = new Time($"00:00 {yesterday}", birthLocation);
+                    var weekEnd = (DateTimeOffset.Now.AddDays(7)).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {weekEnd}", birthLocation);
+                    return new { start = start, end = end };
+                case "Month":
+                    start = new Time($"00:00 {yesterday}", birthLocation);
+                    var monthEnd = (DateTimeOffset.Now.AddDays(30)).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {monthEnd}", birthLocation);
+                    return new { start = start, end = end };
+                case "Year":
+                    start = new Time($"00:00 {yesterday}", birthLocation);
+                    var yearEnd = (DateTimeOffset.Now.AddDays(365)).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {yearEnd}", birthLocation);
+                    return new { start = start, end = end };
+                default:
+                    return new { };
+            }
         }
 
         /// <summary>
@@ -1483,10 +1646,11 @@ namespace API
 
                         //save current event to previous, to draw border later
                         //border ONLY for top 3 rows (long duration events), lower row borders block color
-                        if(finalYAxis <= 29) { 
-                            prevEventList[finalYAxis] = foundEvent.Name; 
+                        if (finalYAxis <= 29)
+                        {
+                            prevEventList[finalYAxis] = foundEvent.Name;
                         }
-                        
+
                         //var color = GetColor(foundEvent?.Nature);
 
                         //generate and add to row

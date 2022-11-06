@@ -9,13 +9,18 @@
     <!--JQuery-->
     <!--Note: JQuery needs to be loaded before bootstrap-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
 </head>
-<body>
+<body class="container">
     <!--loading box is shown first-->
-    <img id="LoadingBox" style="position: absolute; left: 50%; top: 50%;" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
+    <img class="center" id="LoadingBox" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
 
-    <div id="DasaViewBox" style="display:none;">
+    <div class="center" id="DasaViewBox" style="display:none;">
         <!--INSERT SVG-->
         <!--loading box shown while blazor is loading-->
     </div>
@@ -31,23 +36,43 @@
         async function start() {
             console.log(`JS: start`);
 
-            //attach mouse handler to auto move cursor line & update time legend
-            //load event description file 1st
-            await LoadEventDataListFile();
+            var notLoaded = !isSvgLoaded();
 
-            addEventListenerWrapper("#DasaViewBox", "mousemove", "onMouseMoveDasaViewEventHandler");
+            //try get svg from server if svg not loaded by now
+            if (notLoaded) {
+                await GetEventsChartFromApi();
 
-            addEventListenerWrapper("#EventChartHolder", "mouseleave", "onMouseLeaveEventChart");
+                //attach mouse handler to auto move cursor line & update time legend
+                //load event description file 1st
+                await LoadEventDataListFile();
 
-            //event fired from autoUpdateTimeLegend
-            $(document).on('loadEventDescription', LoadEventDescription);
+                addEventListenerWrapper("#DasaViewBox", "mousemove", "onMouseMoveDasaViewEventHandler");
+
+                addEventListenerWrapper("#EventChartHolder", "mouseleave", "onMouseLeaveEventChart");
+
+                //event fired from autoUpdateTimeLegend
+                $(document).on('loadEventDescription', LoadEventDescription);
+
+                isSvgLoaded();
+            }
+            else {
+                //attach mouse handler to auto move cursor line & update time legend
+                //load event description file 1st
+                await LoadEventDataListFile();
+
+                addEventListenerWrapper("#DasaViewBox", "mousemove", "onMouseMoveDasaViewEventHandler");
+
+                addEventListenerWrapper("#EventChartHolder", "mouseleave", "onMouseLeaveEventChart");
+
+                //event fired from autoUpdateTimeLegend
+                $(document).on('loadEventDescription', LoadEventDescription);
+            }
+
+
 
             //var textBox = document.getElementById('textBox');
             //textBox.innerHTML = 'Width:' + getWidth()+' Height:' + getHeight();
 
-            //try get svg from server if svg not loaded by now
-            var notLoaded = !isSvgLoaded();
-            if (notLoaded) { await GetEventsChartFromApi(); }
         }
 
         //returns true if svg loaded
@@ -57,7 +82,7 @@
             //check if svg alredy loaded into page
             var x = $("#DasaViewBox").children().first().is("svg");
 
-            //if svg loaded then 
+            //if svg loaded then
             if (x) {
                 //hide default loading box
                 $("#LoadingBox").hide();
@@ -111,7 +136,21 @@
         async function GetEventsChartFromApi() {
             console.log(`JS: GetEventsChartFromApi`);
 
-            var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventschart", {
+            var pathname = window.location.pathname.split("/");
+            //url pattern chart/{personId}/{eventPreset}/{timePreset}
+            var timePreset = pathname[pathname.length - 1];
+            var eventPreset = pathname[pathname.length - 2];
+            var personId = pathname[pathname.length - 3];
+            var maxWidth = getWidth();
+
+            var payload = `<Root>
+                                    <PersonId>${personId}</PersonId>
+                                    <TimePreset>${timePreset}</TimePreset>
+                                    <EventPreset>${eventPreset}</EventPreset>
+                                    <MaxWidth>${maxWidth}</MaxWidth>
+                               </Root>`;
+
+            var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
                 "headers": {
                     "accept": "*/*",
                     "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
@@ -125,7 +164,7 @@
                 },
                 "referrer": "https://www.vedastro.org/",
                 "referrerPolicy": "strict-origin-when-cross-origin",
-                "body": "<Root><PersonId>54041d1ffb494a79997f7987ecfcf08b5</PersonId><StartTime><Time><StdTime>00:00 05/11/2022 +08:00</StdTime><Location><Name>Teluk Intan</Name><Longitude>101.0206</Longitude><Latitude>4.0224</Latitude></Location></Time></StartTime><EndTime><Time><StdTime>23:59 05/11/2022 +08:00</StdTime><Location><Name>Teluk Intan</Name><Longitude>101.0206</Longitude><Latitude>4.0224</Latitude></Location></Time></EndTime><EventTagList><EventTag>General</EventTag><EventTag>Personal</EventTag><EventTag>RulingConstellation</EventTag></EventTagList><DaysPerPixel>0.001</DaysPerPixel></Root>",
+                "body": payload,
                 "method": "POST",
                 "mode": "cors",
                 "credentials": "omit"
@@ -135,9 +174,8 @@
 
             InjectIntoElement($("#DasaViewBox")[0], svgEventsChart);
 
-            //console.log(svgEventsChart);
-        }
 
+        }
 
         function InjectIntoElement(element, valueToInject) {
             console.log(`JS: InjectIntoElement`);

@@ -327,6 +327,9 @@
         //await _jsRuntime.SetTitle($"Muhurtha | {_selectedPerson.Name}");
         _pageTitle = $"Muhurtha | {_selectedPerson.Name}";
 
+        //hack to make work direct link button
+        _eventReportViewer._timePreset = _selectedTimeRange;
+        _eventReportViewer._eventPreset = _selectedEventType;
 
         await _eventReportViewer.ShowChart(_selectedPerson, startTime, endTime, getSelectedEventTypes);
 

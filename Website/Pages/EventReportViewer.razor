@@ -15,6 +15,7 @@
     <div class="hstack gap-3 mt-2">
         <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
         <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
+        <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true" />
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
         @if (!_nowSavedChart)
         {
@@ -39,6 +40,8 @@
     private bool _nowSavedChart = false; //set by show chart button
 
     public Person SelectedPerson { get; set; }
+    public string _timePreset { get; set; }
+    public string _eventPreset { get; set; }
 
     ElementReference _dasaViewBox;
     public Time StartTime { get; set; }
@@ -47,6 +50,7 @@
 
     private IconButton _showButton;
     private IconButton _hideButton;
+    private IconButton _mobileViewButton;
 
     /// <summary>
     /// Raw SVG string of the latest chart
@@ -70,7 +74,7 @@
     /// </summary>
     public async Task ShowChart(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
-         
+
         //saved to be accessed later
         SelectedPerson = person;
         StartTime = startTime;
@@ -290,6 +294,17 @@
         {
             await _jsRuntime.Hide("#LifeEventLinesHolder");
         }
+    }
+
+    private async Task OnClickMobileViewButton()
+    {
+        //generate url
+        var personId = SelectedPerson.Id;
+        var eventPreset = _eventPreset;
+        var timePreset = _timePreset;
+        var url = $"https://vedastroapi.azurewebsites.net/api/chart/{personId}/{eventPreset}/{timePreset}";
+
+        _jsRuntime.OpenNewTab(url);
     }
 
     private async Task OnClickHideLifeEvents()

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/x-icon" href="https://www.vedastro.org/images/favicon.ico" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Live Events Chart | VedAstro</title>
+    <title>Chart | VedAstro</title>
 
     <!--JQuery-->
-    <!--Note: JQuery needs to be loaded before bootstrap-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
     <style>
         .container {
             display: flex;
@@ -19,6 +20,7 @@
 <body class="container">
     <!--loading box is shown first-->
     <img class="center" id="LoadingBox" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
+
 
     <div class="center" id="DasaViewBox" style="display:none;">
         <!--INSERT SVG-->
@@ -143,11 +145,11 @@
             var maxWidth = getWidth();
 
             var payload = `<Root>
-                                    <PersonId>${personId}</PersonId>
-                                    <TimePreset>${timePreset}</TimePreset>
-                                    <EventPreset>${eventPreset}</EventPreset>
-                                    <MaxWidth>${maxWidth}</MaxWidth>
-                               </Root>`;
+                                                    <PersonId>${personId}</PersonId>
+                                                    <TimePreset>${timePreset}</TimePreset>
+                                                    <EventPreset>${eventPreset}</EventPreset>
+                                                    <MaxWidth>${maxWidth}</MaxWidth>
+                                               </Root>`;
 
             var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
                 "headers": {

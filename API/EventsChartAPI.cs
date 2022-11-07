@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -421,6 +422,8 @@ namespace API
             var rootXml = APITools.ExtractDataFromRequest(req);
             var personId = rootXml.Element("PersonId")?.Value;
             var timePreset = rootXml.Element("TimePreset")?.Value;
+            var timezoneRaw = rootXml.Element("Timezone")?.Value; //should be "+08:00"
+            var timezone = DateTimeOffset.ParseExact(timezoneRaw, "zzz", CultureInfo.InvariantCulture).Offset;
             var eventPreset = rootXml.Element("EventPreset")?.Value;
             var maxWidth = int.Parse(rootXml.Element("MaxWidth")?.Value); //px
 
@@ -437,7 +440,7 @@ namespace API
             var foundPerson = await APITools.GetPersonFromId(personId);
 
             //TIME
-            dynamic x = AutoCalculateTimeRange(timePreset, foundPerson.GetBirthLocation());
+            dynamic x = AutoCalculateTimeRange(timePreset, foundPerson.GetBirthLocation(), timezone);
             Time startTime = x.start;
             Time endTime = x.end;
 
@@ -469,6 +472,9 @@ namespace API
             var daysPerPixel = Math.Round(daysBetween / maxWidth, 3); //small val = higher precision
                                                                       //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
                                                                       //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
+
+            //if final value is 0 then recalculate without rounding
+            daysPerPixel = daysPerPixel <= 0 ? daysBetween / maxWidth : daysPerPixel;
 
             return daysPerPixel;
         }
@@ -510,36 +516,46 @@ namespace API
         /// a precisise start and end time will be returned
         /// used in dasa/muhurtha easy calculator
         /// </summary>
-        public static object AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation)
+        public static object AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation, TimeSpan timezone)
         {
 
             Time start, end;
-            var yesterday = (DateTimeOffset.Now.AddDays(-1)).ToString("dd/MM/yyyy zzz");
+            //use the inputed user's timezone
+            DateTimeOffset now = DateTimeOffset.Now.ToOffset(timezone);
+            var today = now.ToString("dd/MM/yyyy zzz");
+
+            var yesterday = now.AddDays(-1).ToString("dd/MM/yyyy zzz");
             switch (timePreset)
             {
+
+                case "Hour":
+                    var startHour = now.AddHours(-1);//back 1 hour
+                    var endHour = now.AddHours(1);//front 1 hour
+                    start = new Time(startHour, birthLocation);
+                    end = new Time(endHour, birthLocation);
+                    return new { start = start, end = end };
                 case "Today":
                 case "Day":
-                    var today = DateTimeOffset.Now.ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {today}", birthLocation);
                     end = new Time($"23:59 {today}", birthLocation);
                     return new { start = start, end = end };
                 case "Week":
                     start = new Time($"00:00 {yesterday}", birthLocation);
-                    var weekEnd = (DateTimeOffset.Now.AddDays(7)).ToString("dd/MM/yyyy zzz");
+                    var weekEnd = now.AddDays(7).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {weekEnd}", birthLocation);
                     return new { start = start, end = end };
                 case "Month":
                     start = new Time($"00:00 {yesterday}", birthLocation);
-                    var monthEnd = (DateTimeOffset.Now.AddDays(30)).ToString("dd/MM/yyyy zzz");
+                    var monthEnd = now.AddDays(30).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {monthEnd}", birthLocation);
                     return new { start = start, end = end };
                 case "Year":
                     start = new Time($"00:00 {yesterday}", birthLocation);
-                    var yearEnd = (DateTimeOffset.Now.AddDays(365)).ToString("dd/MM/yyyy zzz");
+                    var yearEnd = now.AddDays(365).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {yearEnd}", birthLocation);
                     return new { start = start, end = end };
                 default:
-                    return new { };
+                    return new { start = Time.Empty, end = Time.Empty };
             }
         }
 

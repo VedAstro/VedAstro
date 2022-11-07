@@ -182,13 +182,15 @@
             var eventPreset = pathname[pathname.length - 2];
             var personId = pathname[pathname.length - 3];
             var maxWidth = getWidth();
+            var timezone = getParsableTimezone();
 
             var payload = `<Root>
-                                                            <PersonId>${personId}</PersonId>
-                                                            <TimePreset>${timePreset}</TimePreset>
-                                                            <EventPreset>${eventPreset}</EventPreset>
-                                                            <MaxWidth>${maxWidth}</MaxWidth>
-                                                       </Root>`;
+                                    <PersonId>${personId}</PersonId>
+                                    <TimePreset>${timePreset}</TimePreset>
+                                    <EventPreset>${eventPreset}</EventPreset>
+                                    <Timezone>${timezone}</Timezone>
+                                    <MaxWidth>${maxWidth}</MaxWidth>
+                               </Root>`;
 
             var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
                 "headers": {
@@ -213,6 +215,23 @@
             var svgEventsChart = await response.text();
 
             InjectIntoElement($("#DasaViewBox")[0], svgEventsChart);
+
+
+            //LOCAL FUNCTIONS
+
+            //gets clients timzone offset, exp:"+08:00"
+            function getParsableTimezone() {
+                var date = new Date();
+                var tzo = -date.getTimezoneOffset(),
+                    dif = tzo >= 0 ? '+' : '-',
+                    pad = function (num) {
+                        return (num < 10 ? '0' : '') + num;
+                    };
+
+                return dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+                    ':' + pad(Math.abs(tzo) % 60);
+            }
+
 
 
         }

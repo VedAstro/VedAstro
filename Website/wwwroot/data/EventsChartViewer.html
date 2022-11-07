@@ -19,27 +19,31 @@
     <!--loading box is shown first-->
     <img id="LoadingBox" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
 
-    <div id="ToolBar" class="my-3 hstack gap-3 d-flex align-items-center justify-content-center">
-        <text>Person : James Brown</text>
+    <div id="ToolBar" class="my-3 hstack gap-3 d-flex align-items-center justify-content-center visually-hidden">
+        <text id="PersonNameBox"></text>
         <div>
             <label for="TimePreset">Time</label>
             <select name="TimePreset" id="TimePresetSelector">
-                <option value="volvo">Hour</option>
-                <option value="saab">Day</option>
-                <option value="mercedes">Week</option>
-                <option value="audi">Month</option>
-                <option value="audi">Year</option>
+                <option value="Hour">Hour</option>
+                <option value="Day">Day</option>
+                <option value="Week">Week</option>
+                <option value="Month">Month</option>
+                <option value="Year">Year</option>
             </select>
         </div>
         <div>
             <label for="EventPreset">Events</label>
             <select name="EventPreset" id="EventPresetSelector">
-                <option value="volvo">General</option>
-                <option value="mercedes">Week</option>
-                <option value="audi">Month</option>
-                <option value="audi">Year</option>
+                <option value="General">General</option>
+                <option value="Gochara">Gochara</option>
+                <option value="Travel">Travel</option>
+                <option value="HairNailCutting">Hair Nail Cutting</option>
+                <option value="Medical">Medical</option>
+                <option value="Marriage">Marriage</option>
+                <option value="Astronomical">Astronomical</option>
             </select>
         </div>
+        <button type="button" class="btn btn-primary btn-sm">Refresh</button>
     </div>
     <div id="DasaViewBox" style="display:none;">
         <!--INSERT SVG-->
@@ -49,7 +53,9 @@
 
     <script>
 
-        /*INSERT JS VARIABLES*/
+        /*JS AUTO VARIABLES*/
+        /*INSERT-JS-VAR-HERE*/
+
         /*-------------------*/
 
         //start the app
@@ -61,10 +67,18 @@
         async function start() {
             console.log(`JS: start`);
 
+            //set title for easy multi-tabbing
+            document.title = `${window.ChartType} | ${window.PersonName}`;
+
+            //set toolbar data
+            $("#PersonNameBox").text("Person : " + window.PersonName);
+
             var notLoaded = !isSvgLoaded();
 
             //try get svg from server if svg not loaded by now
             if (notLoaded) {
+                //coming from live chart generate
+
                 await GetEventsChartFromApi();
 
                 //attach mouse handler to auto move cursor line & update time legend
@@ -93,8 +107,8 @@
                 $(document).on('loadEventDescription', LoadEventDescription);
             }
 
-            //set title for easy multi-tabbing
-            document.title = `${window.ChartType} | ${window.PersonName}`;
+            //make toolbar visible
+            $("#ToolBar").removeClass("visually-hidden");
 
             //var textBox = document.getElementById('textBox');
             //textBox.innerHTML = 'Width:' + getWidth()+' Height:' + getHeight();

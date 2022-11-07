@@ -161,10 +161,16 @@ namespace API
                 //get data list from Static Website storage
                 var htmlTemplate = await APITools.GetStringFile(APITools.UrlEventsChartViewerHtml);
 
-                //insert SVG into html place holder page
-                var finalHtml = htmlTemplate.Replace("<!--INSERT SVG-->", svgString);
+                //insert person name into page, to show ready page faster
+                var personName = (await APITools.GetPersonFromId(chart.PersonId)).Name;
+                var jsVariables = $@"window.PersonName = ""{personName}"";";
+                jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
+                htmlTemplate = htmlTemplate.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
 
-                return new ContentResult { Content = finalHtml, ContentType = "text/html" };
+                //insert SVG into html place holder page
+                htmlTemplate = htmlTemplate.Replace("<!--INSERT SVG-->", svgString);
+
+                return new ContentResult { Content = htmlTemplate, ContentType = "text/html" };
 
 
             }
@@ -193,16 +199,15 @@ namespace API
                 //get chart index.html and send that to caller
                 var eventsChartViewerHtml = await APITools.GetStringFile(APITools.UrlEventsChartViewerHtml);
 
-                //get person name
-                var personName = (await APITools.GetPersonFromId(personId)).Name;
 
                 //insert person name into page, to show ready page faster
+                var personName = (await APITools.GetPersonFromId(personId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
-                var finalHtml = eventsChartViewerHtml.Replace("/*INSERT JS VARIABLES*/", jsVariables);
+                var finalHtml = eventsChartViewerHtml.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
 
 
-                return new ContentResult { Content = eventsChartViewerHtml, ContentType = "text/html" };
+                return new ContentResult { Content = finalHtml, ContentType = "text/html" };
 
             }
             catch (Exception e)

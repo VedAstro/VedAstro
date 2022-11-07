@@ -55,6 +55,12 @@
                     Data
                 </button>
             </li>
+            <li class="nav-item" role="traditional">
+                <button class="nav-link" id="traditional-tab" data-bs-toggle="tab" data-bs-target="#traditional" type="button" role="tab" aria-controls="traditional" aria-selected="false">
+                    <Icon IconName="ph:squares-four-fill" />
+                    Traditional Chart
+                </button>
+            </li>
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -96,6 +102,17 @@
                     <StrengthChart Time="@_selectedPerson.BirthTime" />
                     <hr>
                     <PlanetHouseInfoViewer Time="@_selectedPerson.BirthTime" />
+
+                </div>
+            </div>
+
+            @*TRADITIONAL CHART*@
+            <div class="tab-pane fade" id="traditional" role="tabpanel" aria-labelledby="traditional-tab">
+                <div class="vstack gap-3 p-4">
+                    <h4>Under construction...</h4>
+                    <h4>
+                        <a href="@PageRoute.Donate" class="link-primary">Donate</a> to help build this faster.
+                    </h4>
 
                 </div>
             </div>

@@ -15,7 +15,12 @@
     <div class="hstack gap-3 mt-2">
         <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
         <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
-        <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true" />
+        
+        @*only show mobile view when eventPreset & timePreset has been set*@
+        @if (!string.IsNullOrEmpty(_eventPreset))
+        {
+            <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true" />
+        }
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
         @if (!_nowSavedChart)
         {

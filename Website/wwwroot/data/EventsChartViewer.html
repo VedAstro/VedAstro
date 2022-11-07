@@ -7,26 +7,50 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Chart | VedAstro</title>
 
+    <!-- Bootstrap 5 CSS : Used for styling everything-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <!--JQuery-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <style>
-        .container {
-            display: flex;
-            justify-content: center;
-        }
     </style>
 </head>
-<body class="container">
+<body class="vstack d-flex align-items-center justify-content-center">
     <!--loading box is shown first-->
-    <img class="center" id="LoadingBox" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
+    <img id="LoadingBox" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
 
-
-    <div class="center" id="DasaViewBox" style="display:none;">
+    <div id="ToolBar" class="my-3 hstack gap-3 d-flex align-items-center justify-content-center">
+        <text>Person : James Brown</text>
+        <div>
+            <label for="TimePreset">Time</label>
+            <select name="TimePreset" id="TimePresetSelector">
+                <option value="volvo">Hour</option>
+                <option value="saab">Day</option>
+                <option value="mercedes">Week</option>
+                <option value="audi">Month</option>
+                <option value="audi">Year</option>
+            </select>
+        </div>
+        <div>
+            <label for="EventPreset">Events</label>
+            <select name="EventPreset" id="EventPresetSelector">
+                <option value="volvo">General</option>
+                <option value="mercedes">Week</option>
+                <option value="audi">Month</option>
+                <option value="audi">Year</option>
+            </select>
+        </div>
+    </div>
+    <div id="DasaViewBox" style="display:none;">
         <!--INSERT SVG-->
     </div>
 
+
+
     <script>
+
+        /*INSERT JS VARIABLES*/
+        /*-------------------*/
 
         //start the app
         start();
@@ -69,7 +93,8 @@
                 $(document).on('loadEventDescription', LoadEventDescription);
             }
 
-
+            //set title for easy multi-tabbing
+            document.title = `${window.ChartType} | ${window.PersonName}`;
 
             //var textBox = document.getElementById('textBox');
             //textBox.innerHTML = 'Width:' + getWidth()+' Height:' + getHeight();
@@ -145,11 +170,11 @@
             var maxWidth = getWidth();
 
             var payload = `<Root>
-                                                    <PersonId>${personId}</PersonId>
-                                                    <TimePreset>${timePreset}</TimePreset>
-                                                    <EventPreset>${eventPreset}</EventPreset>
-                                                    <MaxWidth>${maxWidth}</MaxWidth>
-                                               </Root>`;
+                                                            <PersonId>${personId}</PersonId>
+                                                            <TimePreset>${timePreset}</TimePreset>
+                                                            <EventPreset>${eventPreset}</EventPreset>
+                                                            <MaxWidth>${maxWidth}</MaxWidth>
+                                                       </Root>`;
 
             var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
                 "headers": {

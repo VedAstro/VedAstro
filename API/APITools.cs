@@ -311,24 +311,6 @@ namespace API
             }
         }
 
-        public static async Task<XElement> FindPersonById(XDocument personListXml, string personId)
-        {
-            try
-            {
-                return personListXml.Root?.Elements()
-                    .Where(delegate (XElement personXml)
-                    {   //use id to find the person's record
-                        var thisId = Person.FromXml(personXml).Id;
-                        return thisId == personId;
-                    }).First();
-            }
-            catch (Exception e)
-            {
-                //if fail log it and return empty xelement
-                await Log.Error(e, null);
-                return new XElement("Person");
-            }
-        }
 
         public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)
         {
@@ -426,6 +408,29 @@ namespace API
 
             return foundPerson;
         }
+
+        /// <summary>
+        /// Will look for a person in a given list
+        /// </summary>
+        public static async Task<XElement> FindPersonById(XDocument personListXml, string personId)
+        {
+            try
+            {
+                return personListXml.Root?.Elements()
+                    .Where(delegate (XElement personXml)
+                    {   //use id to find the person's record
+                        var thisId = Person.FromXml(personXml).Id;
+                        return thisId == personId;
+                    }).First();
+            }
+            catch (Exception e)
+            {
+                //if fail log it and return empty xelement
+                await Log.Error(e, null);
+                return new XElement("Person");
+            }
+        }
+
 
         /// <summary>
         /// Gets user data, if user does

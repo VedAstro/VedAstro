@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Azure.Storage.Blobs;
 using Genso.Astrology.Library;
-using Genso.Astrology.Library.Compatibility;
-using Google.Apis.Auth;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Newtonsoft.Json.Linq;
 
 namespace API
 {
@@ -113,7 +107,7 @@ namespace API
         /// Gets chart from saved list, needs to be given id to find
         /// </summary>
         [FunctionName("getsavedeventschart")]
-        public static async Task<IActionResult> GetSavedEventsChartReport(
+        public static async Task<IActionResult> GetSavedEventsChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
@@ -166,7 +160,6 @@ namespace API
                 //get chart index.html and send that to caller
                 //get data list from Static Website storage
                 var htmlTemplate = await APITools.GetStringFile(APITools.UrlEventsChartViewerHtml);
-                //var htmlTemplate = await APITools.GetStringFileFromAzureStorage(APITools.LiveChartHtml, APITools.ApiDataStorageContainer);
 
                 //insert SVG into html place holder page
                 var finalHtml = htmlTemplate.Replace("<!--INSERT SVG-->", svgString);
@@ -199,6 +192,15 @@ namespace API
             {
                 //get chart index.html and send that to caller
                 var eventsChartViewerHtml = await APITools.GetStringFile(APITools.UrlEventsChartViewerHtml);
+
+                //get person name
+                var personName = (await APITools.GetPersonFromId(personId)).Name;
+
+                //insert person name into page, to show ready page faster
+                var jsVariables = $@"window.PersonName = ""{personName}"";";
+                jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
+                var finalHtml = eventsChartViewerHtml.Replace("/*INSERT JS VARIABLES*/", jsVariables);
+
 
                 return new ContentResult { Content = eventsChartViewerHtml, ContentType = "text/html" };
 

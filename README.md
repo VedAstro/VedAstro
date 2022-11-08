@@ -74,7 +74,12 @@ Last but not least, we thank users like you who keep this project going.
 Key design notes to understand the internals of the program better.
 
 
-## Core Library
+## Core Function Explained
+The main part of the program is the prediction/event generator.
+It works by combining **logic** on how to calculate a prediction with **data** about that prediction.
+This is done everytime a "Calculate" button is clicked. Below you will see a brief explanation of this process.
+This method was choosen to easily accommodate the thousands of astrological calculation possibilities.
+
 ```
 
             CREATION OF AN EVENT/PREDICTION
@@ -145,17 +150,22 @@ throughout the progam.
 2. Add the name in EventNames.cs
 3. Add the prediction/event details PredictionDataList.xml
 
-
 ### To add a new Event Tag
 1. Edit in Genso.Astrology.Library EventTag enum. Change here reflects even in GUI
 
 
-
-
 # Design Decision Notes
-#### These are randomly ordered notes on why a feature was implemented in a certain way. Will prove usefull when debugging & upgrading code
+These are randomly ordered notes on why a feature was implemented in a certain way.<br/>
+Will prove usefull when debugging & upgrading code.
 
-## Website: Dasa Notes APR 2022
+## Events Chart default timezone #08/11/2022
+The default timezone generated for all svg charts will be based on client timezone.
+Timezone does not matter when full life charts are made, but will matter alot when
+short term muhurtha charts are generated. Since most users are not living where they were born,
+it is only logical to default it client browser's timezone.
+This timezone must be visible/changeable to users who need to use otherwise.
+
+## Event Chart Notes : Life Events #15/04/2022
 - This feature is to store notes on the dasa report
 - The notes are actualy Events converted to XML and stored inside each person's record
 - When rendering these events are placed on top dasa report view

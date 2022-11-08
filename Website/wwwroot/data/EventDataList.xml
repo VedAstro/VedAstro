@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--This file has to be manually uploaded to Azure for use by API-->
-<Root>
-
+<Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!--This file has to be manually uploaded to Azure for use by API-->
 	<!--This is the DATA list for MUHURTHA-->
 	<Event>
 		<Name>AmritaSiddhaYoga</Name>
@@ -4970,7 +4969,7 @@
 		<Description>
 			The Sun when debilitated or occupies the 6th or the
 			8th house or in cojunction with evil planets contracts evil diseases, loss of wealth, suffers from reverses
-			in employment, penalty and becomes ill. 
+			in employment, penalty and becomes ill.
 		</Description>
 		<Tag>DasaSpecialRules</Tag>
 	</Event>

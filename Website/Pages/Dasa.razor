@@ -329,7 +329,7 @@
         _pageTitle = $"Dasa | {SelectedPerson.Name}";
 
         //set data into dasa viewer
-        dynamic timeRange = AutoCalculateTimeRange();
+        dynamic timeRange = AutoCalculateTimeRangeYear();
         var startTime = timeRange.start;
         var endTime = timeRange.end;
 
@@ -345,35 +345,41 @@
         _jsRuntime.HideAlert();
 
         //LOCAL FUNCTIONS
-        object AutoCalculateTimeRange()
+        object AutoCalculateTimeRangeYear()
         {
             Time start, end;
-            var birthTime = SelectedPerson.BirthTime;
+            var birthDateMonthYear = SelectedPerson.BirthDateMonthYear;
+
+            //note the use of system timezone and not birth timezone
+            //birth time is adjusted to show for clients timezone
+            var birthTimeStr = $"00:00 {birthDateMonthYear} {Tools.GetSystemTimezoneStr()}";
+            var startTimeClient = new Time(birthTimeStr, SelectedPerson.GetBirthLocation());
+
 
             switch (_selectedTimeRange)
             {
                 case "Age1to30":
-                    start = birthTime;
-                    end = start.AddYears(30);
+                    start = startTimeClient;
+                    end = startTimeClient.AddYears(30);
                     return new { start = start, end = end };
                 case "Age30to60":
-                    start = birthTime.AddYears(30);
-                    end = start.AddYears(60);
+                    start = startTimeClient.AddYears(30);
+                    end = startTimeClient.AddYears(60);
                     return new { start = start, end = end };
                 case "Age60to90":
-                    start = birthTime.AddYears(60);
-                    end = start.AddYears(90);
+                    start = startTimeClient.AddYears(60);
+                    end = startTimeClient.AddYears(90);
                     return new { start = start, end = end };
                 case "Age90to120":
-                    start = birthTime.AddYears(90);
-                    end = start.AddYears(90);
+                    start = startTimeClient.AddYears(90);
+                    end = startTimeClient.AddYears(90);
                     return new { start = start, end = end };
                 case "FullLife":
-                    start = birthTime;
-                    end = start.AddYears(120);
+                    start = startTimeClient;
+                    end = startTimeClient.AddYears(120);
                     return new { start = start, end = end };
                 default:
-                    return new { };
+                    return new { start = Time.Empty, end = Time.Empty };
             }
         }
 
@@ -420,11 +426,13 @@
     private object ComputeStartEndTimeFromInput()
     {
         var startMonthYear = _startTimeSelector.GetSelectedTimeText();
-        var x = $"00:00 01/{startMonthYear} {SelectedPerson.BirthTimeZone}";
+        //note the use of system timezone and not birth
+        var x = $"00:00 01/{startMonthYear} {Tools.GetSystemTimezoneStr()}";
         var startTime = new Time(x, SelectedPerson.GetBirthLocation());
 
         var endMonthYear = _endTimeSelector.GetSelectedTimeText();
-        var y = $"11:59 {GetLastDay(endMonthYear)}/{endMonthYear} {SelectedPerson.BirthTimeZone}";
+        //note the use of system timezone and not birth
+        var y = $"11:59 {GetLastDay(endMonthYear)}/{endMonthYear} {Tools.GetSystemTimezoneStr()}";
         var endTime = new Time(y, SelectedPerson.GetBirthLocation());
 
         return new { Start = startTime, End = endTime };

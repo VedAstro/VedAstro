@@ -88,7 +88,7 @@
 
         //1 GENERATE CHART IN SVG FROM SERVER
         //saved for later use by Chart Saver
-        _finalSvg = await GetDasaReportSvgFromApi(person, startTime, endTime, inputedEventTags);
+        _finalSvg = await GetEventsChartSvgFromApi(person, startTime, endTime, inputedEventTags);
 
         //2 LOAD CHART INTO PAGE
         await LoadChartIntoPage(_finalSvg);
@@ -100,7 +100,7 @@
         StateHasChanged();
     }
 
-    private async Task<string> GetSavedDasaReportSvgFromApi(string chartId)
+    private async Task<string> GetSavedEventsChartSvgFromApi(string chartId)
     {
         var chartIdXml = new XElement("ChartId", chartId);
         var svgStream = await ServerManager.WriteToServerStreamReply(ServerManager.GetSavedEventsChart, chartIdXml, _jsRuntime);
@@ -121,7 +121,7 @@
     /// -previously used generate in blazor client,
     ///  but for speed (10s gain) sake moved to server to do heavy lifting
     /// </summary>
-    private async Task<string> GetDasaReportSvgFromApi(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
+    private async Task<string> GetEventsChartSvgFromApi(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
         //auto calculate precision
         var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
@@ -184,7 +184,7 @@
 
         //1 GENERATE CHART IN SVG FROM SERVER
         //saved for later use by Chart Saver
-        _finalSvg = await GetSavedDasaReportSvgFromApi(selectedChartId);
+        _finalSvg = await GetSavedEventsChartSvgFromApi(selectedChartId);
 
         //gets person profile used to generate the saved chart being showed now
         //needs to be set else parent depending will fail
@@ -195,35 +195,6 @@
 
         //needed to make save button appear again
         StateHasChanged();
-
-    }
-
-    /// <summary>
-    /// Given a saved chart name in local storage, it will load it into page
-    /// </summary>
-    public async Task ShowSavedChartOld(string selectedChartId)
-    {
-
-        await _jsRuntime.ShowLoading();
-
-        //set current chart as from saved version (to hide save button)
-        //only show "Save" button if viewing newly generated chart, so that no erroneous double save
-        _nowSavedChart = true;
-
-        //gets person profile used to generate the saved chart being showed now
-        //extract hash from chart name
-        var raw = selectedChartId.Split("|");
-        var hash = raw[0]; //1st place is hard set hash
-                           //get person from hash
-        SelectedPerson = await WebsiteTools.GetPersonFromId(hash, _jsRuntime);
-
-        //get raw chart
-        _finalSvg = await _jsRuntime.GetProperty(selectedChartId);
-
-        //load chart into page
-        await LoadChartIntoPage(_finalSvg);
-
-        _jsRuntime.HideLoading();
 
     }
 

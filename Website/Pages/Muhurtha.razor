@@ -289,8 +289,8 @@
         //get needed input data
         //get data from inputs and save it for use by other components
         _selectedPerson = await _peopleSelectorBox.GetSelectedPerson();
-        var startTime = _startTimeInput.GetTime(_selectedPerson.GetBirthLocation());
-        var endTime = _endTimeInput.GetTime(_selectedPerson.GetBirthLocation());
+        var startTime = new Time($"{_startTimeInput.HourMin} {_startTimeInput.DateMonthYear} {Tools.GetSystemTimezoneStr()}", _selectedPerson.GetBirthLocation());
+        var endTime = new Time($"{_endTimeInput.HourMin} {_endTimeInput.DateMonthYear} {Tools.GetSystemTimezoneStr()}", _selectedPerson.GetBirthLocation());
         var getSelectedEventTypes = GetSelectedEventTypes();
 
         //put person name into tab title for easy multi-tabbing
@@ -318,7 +318,7 @@
 
         //get needed input data
         _selectedPerson = await _easyPeopleSelectorBox.GetSelectedPerson();
-        dynamic x = AutoCalculateTimeRange();
+        dynamic x = AutoCalculateTimeRange(_selectedTimeRange, _selectedPerson.GetBirthLocation(), Tools.GetSystemTimezone());
         var startTime = x.start;
         var endTime = x.end;
         var getSelectedEventTypes = GetSelectedEventTypesEasy();
@@ -341,34 +341,46 @@
 
         //LOCAL FUNCTIONS
 
-        object AutoCalculateTimeRange()
+        object AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation, TimeSpan timezone)
         {
+
             Time start, end;
-            var yesterday = (DateTimeOffset.Now.AddDays(-1)).ToString("dd/MM/yyyy zzz");
-            switch (_selectedTimeRange)
+            //use the inputed user's timezone
+            DateTimeOffset now = DateTimeOffset.Now.ToOffset(timezone);
+            var today = now.ToString("dd/MM/yyyy zzz");
+
+            var yesterday = now.AddDays(-1).ToString("dd/MM/yyyy zzz");
+            switch (timePreset)
             {
+
+                case "Hour":
+                    var startHour = now.AddHours(-1);//back 1 hour
+                    var endHour = now.AddHours(1);//front 1 hour
+                    start = new Time(startHour, birthLocation);
+                    end = new Time(endHour, birthLocation);
+                    return new { start = start, end = end };
+                case "Today":
                 case "Day":
-                    var today = DateTimeOffset.Now.ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {today}", _selectedPerson.GetBirthLocation());
-                    end = new Time($"23:59 {today}", _selectedPerson.GetBirthLocation());
+                    start = new Time($"00:00 {today}", birthLocation);
+                    end = new Time($"23:59 {today}", birthLocation);
                     return new { start = start, end = end };
                 case "Week":
-                    start = new Time($"00:00 {yesterday}", _selectedPerson.GetBirthLocation());
-                    var weekEnd = (DateTimeOffset.Now.AddDays(7)).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {weekEnd}", _selectedPerson.GetBirthLocation());
+                    start = new Time($"00:00 {yesterday}", birthLocation);
+                    var weekEnd = now.AddDays(7).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {weekEnd}", birthLocation);
                     return new { start = start, end = end };
                 case "Month":
-                    start = new Time($"00:00 {yesterday}", _selectedPerson.GetBirthLocation());
-                    var monthEnd = (DateTimeOffset.Now.AddDays(30)).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {monthEnd}", _selectedPerson.GetBirthLocation());
+                    start = new Time($"00:00 {yesterday}", birthLocation);
+                    var monthEnd = now.AddDays(30).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {monthEnd}", birthLocation);
                     return new { start = start, end = end };
                 case "Year":
-                    start = new Time($"00:00 {yesterday}", _selectedPerson.GetBirthLocation());
-                    var yearEnd = (DateTimeOffset.Now.AddDays(365)).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {yearEnd}", _selectedPerson.GetBirthLocation());
+                    start = new Time($"00:00 {yesterday}", birthLocation);
+                    var yearEnd = now.AddDays(365).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {yearEnd}", birthLocation);
                     return new { start = start, end = end };
                 default:
-                    return new { };
+                    return new { start = Time.Empty, end = Time.Empty };
             }
         }
     }

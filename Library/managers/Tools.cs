@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -419,6 +420,24 @@ namespace Genso.Astrology.Library
             }
             catch (Exception) { return new XElement("PayloadFailed"); }
         }
+
+        /// <summary>
+        /// Converts a timezone (+08:00) in string form to parsed timespan 
+        /// </summary>
+        public static TimeSpan StringToTimezone(string timezoneRaw)
+        {
+            return DateTimeOffset.ParseExact(timezoneRaw, "zzz", CultureInfo.InvariantCulture).Offset;
+        }
+
+        /// <summary>
+        /// Returns system timezone offset as TimeSpan
+        /// </summary>
+        public static string GetSystemTimezoneStr() => DateTimeOffset.Now.ToString("zzz");
+
+        /// <summary>
+        /// Returns system timezone offset as TimeSpan
+        /// </summary>
+        public static TimeSpan GetSystemTimezone() => DateTimeOffset.Now.Offset;
     }
 
 }

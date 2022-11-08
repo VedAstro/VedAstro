@@ -74,7 +74,7 @@ namespace API
 
 
         }
-        
+
         [FunctionName("geteventscharteasy")]
         public static async Task<IActionResult> GetEventsChartEasy(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
@@ -403,7 +403,7 @@ namespace API
             var endTimeXml = rootXml.Element("EndTime")?.Elements().First();
             var endTime = Time.FromXml(endTimeXml);
             var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value);
-
+           
 
             //get the person instance by id
             var foundPerson = await APITools.GetPersonFromId(personId);
@@ -422,16 +422,16 @@ namespace API
             var rootXml = APITools.ExtractDataFromRequest(req);
             var personId = rootXml.Element("PersonId")?.Value;
             var timePreset = rootXml.Element("TimePreset")?.Value;
-            var timezoneRaw = rootXml.Element("Timezone")?.Value; //should be "+08:00"
-            var timezone = DateTimeOffset.ParseExact(timezoneRaw, "zzz", CultureInfo.InvariantCulture).Offset;
             var eventPreset = rootXml.Element("EventPreset")?.Value;
             var maxWidth = int.Parse(rootXml.Element("MaxWidth")?.Value); //px
+            //client's timezone, not based on birth
+            var timezone = Tools.StringToTimezone(rootXml.Element("Timezone")?.Value);//should be "+08:00"
 
             //hard set maxwidth to 1000px so that no forever calculation created
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
 
-            //minus 10% for side padding
-            maxWidth = maxWidth - (int)(maxWidth * 0.10); ;
+            //minus 7% for side padding
+            maxWidth = maxWidth - (int)(maxWidth * 0.07); ;
 
 
             //EXTRACT & PREPARE DATA

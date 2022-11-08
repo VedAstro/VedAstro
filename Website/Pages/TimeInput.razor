@@ -15,7 +15,7 @@
         <label class="form-label">
             Date
         </label>
-        <input id="DateInput" style="max-width: 125px;margin-left: -5px;" class="form-control" @bind="Date" type="text" placeholder="16/04/2021">
+        <input id="DateInput" style="max-width: 125px;margin-left: -5px;" class="form-control" @bind="DateMonthYear" type="text" placeholder="16/04/2021">
     </div>
     <div style="width: fit-content;">
         <label class="form-label">
@@ -29,7 +29,9 @@
 
 @code {
 
-
+    /// <summary>
+    /// HH:mm
+    /// </summary>
     public string? HourMin
     {
         get => _hourMin;
@@ -40,7 +42,10 @@
         }
     }
 
-    public string? Date
+    /// <summary>
+    /// dd/MM/yyyy
+    /// </summary>
+    public string? DateMonthYear
     {
         get => _date;
         set
@@ -50,6 +55,9 @@
         }
     }
 
+    /// <summary>
+    /// +08:00
+    /// </summary>
     public string? TimeZone
     {
         get => _timeZone;
@@ -65,7 +73,7 @@
     /// <summary>
     /// Gets parseable time string
     /// </summary>
-    public string? FullTimeString => $"{HourMin} {Date} {TimeZone}";
+    public string? FullTimeString => $"{HourMin} {DateMonthYear} {TimeZone}";
 
 
     private string? _hourMin = DateTime.Today.ToString("HH:mm");

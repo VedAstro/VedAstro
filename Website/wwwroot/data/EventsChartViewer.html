@@ -11,9 +11,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <!--JQuery-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-    <style>
-    </style>
 </head>
 <body class="vstack d-flex align-items-center justify-content-center">
     <!--loading box is shown first-->
@@ -22,7 +19,7 @@
     <div id="ToolBar" class="my-3 hstack gap-3 d-flex align-items-center justify-content-center visually-hidden">
         <text id="PersonNameBox"></text>
         <div>
-            <label for="TimePreset">Time</label>
+            <label for="TimePreset">Time : </label>
             <select name="TimePreset" id="TimePresetSelector">
                 <option value="Hour">Hour</option>
                 <option value="Day">Day</option>
@@ -32,11 +29,12 @@
             </select>
         </div>
         <div>
-            <label for="EventPreset">Events</label>
+            <label for="EventPreset">Events : </label>
             <select name="EventPreset" id="EventPresetSelector">
                 <option value="General">General</option>
                 <option value="Gochara">Gochara</option>
                 <option value="Travel">Travel</option>
+                <option value="Agriculture">Agriculture</option>
                 <option value="HairNailCutting">Hair Nail Cutting</option>
                 <option value="Medical">Medical</option>
                 <option value="Marriage">Marriage</option>
@@ -185,12 +183,12 @@
             var timezone = getParsableTimezone();
 
             var payload = `<Root>
-                                    <PersonId>${personId}</PersonId>
-                                    <TimePreset>${timePreset}</TimePreset>
-                                    <EventPreset>${eventPreset}</EventPreset>
-                                    <Timezone>${timezone}</Timezone>
-                                    <MaxWidth>${maxWidth}</MaxWidth>
-                               </Root>`;
+                                                                                                                <PersonId>${personId}</PersonId>
+                                                                                                                <TimePreset>${timePreset}</TimePreset>
+                                                                                                                <EventPreset>${eventPreset}</EventPreset>
+                                                                                                                <Timezone>${timezone}</Timezone>
+                                                                                                                <MaxWidth>${maxWidth}</MaxWidth>
+                                                                                                           </Root>`;
 
             var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
                 "headers": {
@@ -255,15 +253,21 @@
             console.log(`JS: LoadEventDataListFile`);
 
             //get data list from server and store it for later use
-            var url = "https://www.vedastro.org/data/EventDataList.xml";
-            var response = await fetch(url, { mode: 'no-cors' });
-            var dataListStr = await response.text();
-
-            //parse as XML, to search through
-            //and save as global data for access later
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(dataListStr, "text/xml");
-            window.EventDataListXml = $(xmlDoc); //jquery for use with .filter
+            $(function () {
+                $.ajax({
+                    type: "get",
+                    url: "https://www.vedastro.org/data/EventDataList.xml",
+                    dataType: "xml",
+                    success: function (data) {
+                        /* handle data here */
+                        window.EventDataListXml = $(data); //jquery for use with .filter
+                    },
+                    error: function (xhr, status) {
+                        /* handle error here */
+                        console.log(status);
+                    }
+                });
+            });
         }
 
         //Jquery to attach event listener to inputed element

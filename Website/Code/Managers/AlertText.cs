@@ -13,6 +13,7 @@ namespace Website
     {
         //public const string ValidationError = $"Something went wrong, refresh page and try again!";
         public const string ValidationError = UnderMaintenance;
+        public const string InvalidBirthTime = $"Birth time is invalid, check date time format!";
         public const string UnderMaintenance = $"Sorry, under maintenance.\nPlease try later";
         public const string EnterName = $"Please enter Name!";
         public const string SelectName = $"Please select Name!";

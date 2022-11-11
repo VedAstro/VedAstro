@@ -1,4 +1,4 @@
-﻿@attribute [Route(PageRoute.PersonEditor)]
+@attribute [Route(PageRoute.PersonEditor)]
 @attribute [Route(PageRoute.PersonEditorParam)]
 
 @using Genso.Astrology.Library
@@ -268,7 +268,7 @@
             if (!timeInputPassed)
             {
                 //mark invalid & alert user
-                const string msg = $"Birth time is invalid, check date time format!";
+                const string msg = AlertText.InvalidBirthTime;
                 await _jsRuntime.ShowAlert("error", msg, true);
                 return false;
             }

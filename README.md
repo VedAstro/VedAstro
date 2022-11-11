@@ -70,7 +70,15 @@ material & inspiration for this project. Please buy their books to show your sup
 Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".
 Last but not least, we thank users like you who keep this project going.
 
-# Project Architecture
+# Examples of Perfect Predictions!
+The Dasa Calculator is the most advanced and amazingly accurate prediction tool we've ever seen.
+Take a look at this example charts of Napolean Bornapate and Queen Elizibeth. Every major event in their life
+can be clearly seen predicted by the chart in the "Summary Row". Red for a bad event and green for a good life event.
+Using a combination of Dasa, Bhukti, Antaram and Gocharam of 9 planets this complex chart can give perfect predictions!
+The chart takes alot of computational power to generate, so please be patient after you click the Calculate button.
+
+
+# Project Architecture : For Coders
 Key design notes to understand the internals of the program better.
 
 
@@ -157,6 +165,10 @@ throughout the progam.
 # Design Decision Notes
 These are randomly ordered notes on why a feature was implemented in a certain way.<br/>
 Will prove usefull when debugging & upgrading code.
+
+## Direct Events Chart #09/11/2022
+- Accessing events chart directly via API generated html
+- CORS in Azure Website Storage needs to be disabled for this to work, outside of vedastro.org
 
 ## Events Chart default timezone #08/11/2022
 The default timezone generated for all svg charts will be based on client timezone.

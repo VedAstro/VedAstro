@@ -79,7 +79,8 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
-        /// Gets now time (STD) at this time's location/offset 
+        /// Gets now time (STD) at this time's location/offset
+        /// SYSTEM NOW TIME
         /// </summary>
         public DateTimeOffset StdTimeNowAtOffset => DateTimeOffset.Now.ToOffset(this.GetStdDateTimeOffset().Offset);
 

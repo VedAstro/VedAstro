@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -14,6 +14,7 @@
     <PackageReference Include="Google.Apis.Calendar.v3" Version="1.51.0.2237" />
     <PackageReference Include="Google.Apis.Core" Version="1.51.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
+    <PackageReference Include="Microsoft.JSInterop" Version="6.0.11" />
     <PackageReference Include="SwissEphNet" Version="2.8.0.2" />
   </ItemGroup>
 

@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var person in AppData.TryGetPersonList(_jsRuntime).Result)
+            @foreach (var person in AppData.TryGetPersonListSortedAZ(_jsRuntime).Result)
             {
                 <tr style="cursor: pointer;" @onclick="() => PersonNameClicked(person)">
                     <td>@person.Name</td>
@@ -75,7 +75,7 @@ else
 
     private async Task GenerateTable()
     {
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
         _isReady = false;
 

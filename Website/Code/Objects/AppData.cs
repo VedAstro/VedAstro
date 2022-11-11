@@ -180,7 +180,15 @@ namespace Website
 
         /// <summary>
         /// data may be cached or from API
+        /// Sorted alphabetically
         /// </summary>
+        public static async Task<List<Person>> TryGetPersonListSortedAZ(IJSRuntime _jsRuntime)
+        {
+            var unsorted = await AppData.TryGetPersonList(_jsRuntime);
+            var sortedList = unsorted.OrderBy(person => person.Name).ToList();
+            return sortedList;
+
+        }
         public static async Task<List<Person>> TryGetPersonList(IJSRuntime _jsRuntime)
         {
             await ServerManager.IfBusyPleaseHold("TryGetPersonList");

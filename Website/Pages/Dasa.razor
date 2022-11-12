@@ -50,10 +50,13 @@
                 <label class="form-label">Time Range<HelpBox SmallIcon="true" HelpText="@HelpText.DasaTimeRange"></HelpBox></label>
                 <select @bind="_selectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
                     <option value="FullLife">Full Life</option>
-                    <option value="Age1to30">Age 1 to 30</option>
-                    <option value="Age30to60">Age 30 to 60</option>
-                    <option value="Age60to90">Age 60 to 90</option>
-                    <option value="Age90to120">Age 90 to 120</option>
+                    <option value="Age1to25">Age 1 to 25</option>
+                    <option value="Age10to35">Age 10 to 35</option>
+                    <option value="Age25to50">Age 25 to 50</option>
+                    <option value="Age35to60">Age 35 to 60</option>
+                    <option value="Age50to75">Age 50 to 75</option>
+                    <option value="Age60to85">Age 60 to 85</option>
+                    <option value="Age75to100">Age 75 to 100</option>
                 </select>
             </div>
 
@@ -353,30 +356,42 @@
             //note the use of system timezone and not birth timezone
             //birth time is adjusted to show for clients timezone
             var birthTimeStr = $"00:00 {birthDateMonthYear} {Tools.GetSystemTimezoneStr()}";
-            var startTimeClient = new Time(birthTimeStr, SelectedPerson.GetBirthLocation());
+            var birthTimeClient = new Time(birthTimeStr, SelectedPerson.GetBirthLocation());
 
 
             switch (_selectedTimeRange)
             {
-                case "Age1to30":
-                    start = startTimeClient;
-                    end = startTimeClient.AddYears(30);
+                case "Age1to25":
+                    start = birthTimeClient;
+                    end = birthTimeClient.AddYears(25);
                     return new { start = start, end = end };
-                case "Age30to60":
-                    start = startTimeClient.AddYears(30);
-                    end = startTimeClient.AddYears(60);
+                case "Age10to35":
+                    start = birthTimeClient.AddYears(10);
+                    end = birthTimeClient.AddYears(35);
                     return new { start = start, end = end };
-                case "Age60to90":
-                    start = startTimeClient.AddYears(60);
-                    end = startTimeClient.AddYears(90);
+                case "Age25to50":
+                    start = birthTimeClient.AddYears(25);
+                    end = birthTimeClient.AddYears(50);
                     return new { start = start, end = end };
-                case "Age90to120":
-                    start = startTimeClient.AddYears(90);
-                    end = startTimeClient.AddYears(90);
+                case "Age35to60":
+                    start = birthTimeClient.AddYears(35);
+                    end = birthTimeClient.AddYears(60);
+                    return new { start = start, end = end };
+                case "Age50to75":
+                    start = birthTimeClient.AddYears(50);
+                    end = birthTimeClient.AddYears(75);
+                    return new { start = start, end = end };
+                case "Age60to85":
+                    start = birthTimeClient.AddYears(60);
+                    end = birthTimeClient.AddYears(85);
+                    return new { start = start, end = end };
+                case "Age75to100":
+                    start = birthTimeClient.AddYears(75);
+                    end = birthTimeClient.AddYears(100);
                     return new { start = start, end = end };
                 case "FullLife":
-                    start = startTimeClient;
-                    end = startTimeClient.AddYears(120);
+                    start = birthTimeClient;
+                    end = birthTimeClient.AddYears(100);
                     return new { start = start, end = end };
                 default:
                     return new { start = Time.Empty, end = Time.Empty };

@@ -7,7 +7,10 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
+using Microsoft.JSInterop;
+using Newtonsoft.Json;
 
 namespace Genso.Astrology.Library
 {
@@ -438,6 +441,199 @@ namespace Genso.Astrology.Library
         /// Returns system timezone offset as TimeSpan
         /// </summary>
         public static TimeSpan GetSystemTimezone() => DateTimeOffset.Now.Offset;
+
+        public static async Task<dynamic> AddressToCoordinate(string address, string apiKey)
+        {
+            //create the request url for Google API
+            var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={apiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
+
+            //get location data from GoogleAPI
+            var rawReplyXml = await ReadFromServerXmlReply(url);
+
+            //extract out the longitude & latitude
+            var locationData = new XDocument(rawReplyXml);
+            var result = locationData.Element("GeocodeResponse")?.Element("result");
+            var locationElement = result?.Element("geometry")?.Element("location");
+            var lat = double.Parse(locationElement?.Element("lat")?.Value ?? "0");
+            var lng = double.Parse(locationElement?.Element("lng")?.Value ?? "0");
+
+            //round coordinates to 3 decimal places
+            lat = Math.Round(lat, 3);
+            lng = Math.Round(lng, 3);
+
+            //get full name with country & state
+            var fullName = result?.Element("formatted_address")?.Value;
+
+            return new { FullName = fullName, Latitude = lat, Longitude = lng };
+
+        }
+
+        /// <summary>
+        /// gets the name of the place given th coordinates, uses Google API
+        /// </summary>
+        public static async Task<string> CoordinateToAddress(decimal longitude, decimal latitude, string apiKey)
+        {
+            //create the request url for Google API
+            var url = string.Format($"https://maps.googleapis.com/maps/api/geocode/xml?latlng={latitude},{longitude}&key={apiKey}");
+
+            //get location data from GoogleAPI
+            var rawReplyXml = await ReadFromServerXmlReply(url);
+
+            //extract out the longitude & latitude
+            var locationData = new XDocument(rawReplyXml);
+            var localityResult = locationData.Element("GeocodeResponse")?.Elements("result").FirstOrDefault(result => result.Element("type")?.Value == "locality");
+            var locationName = localityResult?.Element("formatted_address")?.Value;
+
+
+            return locationName;
+
+        }
+
+        /// <summary>
+        /// Given a location & time, will use Google Timezone API
+        /// to get accurate time zone that was/is used
+        /// Must input valid geo location 
+        /// NOTE:
+        /// - offset of timeAtLocation not important
+        /// - googleGeoLocationApiKey needed to work
+        /// </summary>
+        public static async Task<TimeSpan> GetTimezoneOffset(string locationName, DateTimeOffset timeAtLocation, string apiKey)
+        {
+            //get geo location first then call underlying method
+            var geoLocation = await GeoLocation.FromName(locationName, apiKey);
+            return Tools.StringToTimezone(await GetTimezoneOffset(geoLocation, timeAtLocation, apiKey));
+        }
+        public static async Task<string> GetTimezoneOffsetString(string locationName, DateTime timeAtLocation, string apiKey)
+        {
+            //get geo location first then call underlying method
+            var geoLocation = await GeoLocation.FromName(locationName, apiKey);
+            return await GetTimezoneOffset(geoLocation, timeAtLocation, apiKey);
+        }
+        public static async Task<string> GetTimezoneOffsetString(string location, string dateTime)
+        {
+            //get timezone from Google API
+            var lifeEvtTimeNoTimezone = DateTime.ParseExact(dateTime, Time.DateTimeFormatNoTimezone, null);
+            var timezone = await Tools.GetTimezoneOffsetString(location, lifeEvtTimeNoTimezone, "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE");
+
+            return timezone;
+
+            //get start time of life event and find the position of it in slices (same as now line)
+            //so that this life event line can be placed exactly on the report where it happened
+            //var lifeEvtTimeStr = $"{dateTime} {timezone}"; //add offset 0 only for parsing, not used by API to get timezone
+            //var lifeEvtTime = DateTimeOffset.ParseExact(lifeEvtTimeStr, Time.DateTimeFormat, null);
+
+            //return lifeEvtTime;
+        }
+
+
+        /// <summary>
+        /// Given a location & time, will use Google Timezone API
+        /// to get accurate time zone that was/is used
+        /// NOTE:
+        /// - offset of timeAtLocation not important
+        /// - googleGeoLocationApiKey needed to work
+        /// </summary>
+        public static async Task<string> GetTimezoneOffset(GeoLocation geoLocation, DateTimeOffset timeAtLocation, string apiKey)
+        {
+            //use timestamp to account for historic timezone changes
+            var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
+            var longitude = geoLocation.GetLongitude();
+            var latitude = geoLocation.GetLatitude();
+
+            //create the request url for Google API 
+            //get the API key string stored separately (for security reasons)
+            var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={apiKey}");
+
+
+            //get location data from GoogleAPI
+            //< TimeZoneResponse >
+            //  < status > OK </ status >
+            //  < raw_offset > 28800.0000000 </ raw_offset >
+            //  < dst_offset > 0.0000000 </ dst_offset >
+            //  < time_zone_id > Asia / Kuala_Lumpur </ time_zone_id >
+            //  < time_zone_name > Malaysia Time </ time_zone_name >
+            //</ TimeZoneResponse >
+            var timeZoneResponseXml = await ReadFromServerXmlReply(url);
+
+            //extract out the timezone offset
+            var offsetSeconds = double.Parse(timeZoneResponseXml?.Element("raw_offset")?.Value);
+            //offset needs to be "whole" minutes, else fail
+            //purposely hard cast to int to remove not whole minutes
+            var notWhole = TimeSpan.FromSeconds(offsetSeconds).TotalMinutes;
+            var offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole));
+            var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
+
+            return parsedOffsetString;
+
+        }
+
+        /// <summary>
+        /// Calls a URL and returns the content of the result as XML
+        /// Even if content is returned as JSON, it is converted to XML
+        /// Note: if JSON auto adds "Root" as first element, unless specified
+        /// for XML data root element name is ignored
+        /// </summary>
+        public static async Task<XElement> ReadFromServerXmlReply(string apiUrl, string rootElementName = "Root")
+        {
+
+            string rawMessage = "";
+
+            try
+            {
+                //send request to API server
+                var result = await RequestServer(apiUrl);
+
+                //parse data reply
+                rawMessage = result.Content.ReadAsStringAsync().Result;
+
+                //raw message can be JSON or XML
+                //try parse as XML if fail then as JSON
+                var readFromServerXmlReply = XElement.Parse(rawMessage);
+
+                return readFromServerXmlReply;
+            }
+            catch (Exception)
+            {
+                //try to parse data as JSON
+                try
+                {
+                    var rawXml = JsonConvert.DeserializeXmlNode(rawMessage, rootElementName);
+                    var readFromServerXmlReply = XElement.Parse(rawXml?.InnerXml ?? "<Empty/>");
+
+                    return readFromServerXmlReply;
+                }
+                //unparseable data, let user know
+                catch (Exception e)
+                {
+                    throw new Exception($"ReadFromServerXmlReply()\n{rawMessage}", e);
+                }
+            }
+
+
+
+            // FUNCTIONS
+
+            async Task<HttpResponseMessage> RequestServer(string receiverAddress)
+            {
+                //prepare the data to be sent
+                var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
+
+                //get the data sender
+                using var client = new HttpClient();
+
+                //tell sender to wait for complete reply before exiting
+                var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+                //send the data on its way
+                var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+                //return the raw reply to caller
+                return response;
+            }
+        }
+
+
+
     }
 
 }

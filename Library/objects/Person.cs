@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using System.Web;
 using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
@@ -20,6 +22,8 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static Person Empty = new Person("0","Empty", Time.Now(GeoLocation.Empty), Gender.Empty, "0","Empty", new List<LifeEvent>());
 
+        private string _notes;
+
         //DATA FIELDS
         /// <summary>
         /// Represents permanent identity to this record, generated only once during creation
@@ -32,10 +36,16 @@ namespace Genso.Astrology.Library
         /// User ID is used by website. Shows owner of person's profile
         /// </summary>
         public string UserId { get; set; }
+
         /// <summary>
         /// Misc. notes about the person
         /// </summary>
-        public string Notes { get; set; }
+        public string Notes
+        {
+            readonly get => HttpUtility.HtmlEncode(_notes) ;
+            set => _notes = HttpUtility.HtmlEncode(value);
+        }
+
         public Gender Gender { get; set; }
         public Time BirthTime { get; set; }
 
@@ -99,7 +109,7 @@ namespace Genso.Astrology.Library
             BirthTime = birthTime;
             Gender = gender;
             UserId = userId;
-            Notes = notes;
+            this._notes = HttpUtility.HtmlEncode(notes);
             LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
         }
 

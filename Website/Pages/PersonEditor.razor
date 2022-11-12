@@ -1,4 +1,4 @@
-@attribute [Route(PageRoute.PersonEditor)]
+﻿@attribute [Route(PageRoute.PersonEditor)]
 @attribute [Route(PageRoute.PersonEditorParam)]
 
 @using Genso.Astrology.Library
@@ -280,7 +280,7 @@
             //note: auto timezone checked first, so that Google TimeZone API is not called until needed
             if (autoTimeZoneUsed)
             {
-                var birthLocationTimezone = await WebsiteTools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), parsedInputTime, _jsRuntime);
+                var birthLocationTimezone = await Tools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), parsedInputTime, ServerManager.GoogleGeoLocationApiKey);
                 var currentTimezone = _timeInput.TimeZone;
                 var timezoneNotMatch = birthLocationTimezone != currentTimezone;
                 if (timezoneNotMatch)

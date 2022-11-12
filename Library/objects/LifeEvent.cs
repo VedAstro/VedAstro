@@ -33,10 +33,10 @@ namespace Genso.Astrology.Library
         /// like "&" will cause errors otherwise 
         /// </summary>
         [JsonPropertyName("Name")]
-        public string Name  
+        public string Name
         {
-            get => HttpUtility.HtmlEncode(_name);
-            set => _name = value;
+            get => HttpUtility.HtmlEncode(_name);//in-case was edited outside code
+            set => _name = HttpUtility.HtmlEncode(value);
         }
 
         /// <summary>
@@ -46,15 +46,22 @@ namespace Genso.Astrology.Library
         [JsonPropertyName("Description")]
         public string Description
         {
-            get => HttpUtility.HtmlEncode(_description);
-            set => _description = value;
+            get => HttpUtility.HtmlEncode(_description); //in-case was edited outside code
+            set => _description = HttpUtility.HtmlEncode(value);
         }
+
+        /// <summary>
+        /// Format : 10:10 10/10/2010
+        /// Note the absence of offset, compensated by location
+        /// </summary>
+        [JsonPropertyName("StartTime")]
+        public string StartTime { get; set; }
 
         /// <summary>
         /// Must follow standard time formatting 
         /// </summary>
-        [JsonPropertyName("StartTime")]
-        public string StartTime { get; set; }
+        [JsonPropertyName("Location")]
+        public string Location { get; set; }
 
         /// <summary>
         /// must be Good, Neutral or Bad only
@@ -62,8 +69,31 @@ namespace Genso.Astrology.Library
         [JsonPropertyName("Nature")]
         public string Nature { get; set; }
 
+        /// <summary>
+        /// Auto set by code when not available using Google API
+        /// </summary>
+        [JsonPropertyName("Timezone")]
+        public string Timezone { get; set; } = ""; //detect empty string later
 
+        ///// </summary>
+        //[JsonPropertyName("Timezone")]
+        //public string Timezone
+        //{
+        //    get
+        //    {
+        //        //get from API if no saved 
+        //        var savedExists = !string.IsNullOrEmpty(_timezone);
+        //        if (!savedExists)
+        //        {
+        //            //get timezone from Google API
+        //            var lifeEvtTimeNoTimezone = DateTime.ParseExact(this.StartTime, Time.DateTimeFormatNoTimezone, null);
+        //            _timezone = Tools.GetTimezoneOffsetString(this.Location, lifeEvtTimeNoTimezone, "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE");
+        //        }
 
+        //        return _timezone;
+        //    }
+        //    set => _timezone = value;
+        //}
 
 
         //░█▀▄▀█ ░█▀▀▀ ▀▀█▀▀ ░█─░█ ░█▀▀▀█ ░█▀▀▄ ░█▀▀▀█ 
@@ -76,10 +106,12 @@ namespace Genso.Astrology.Library
             var lifeEventXml = new XElement("LifeEvent");
             var nameXml = new XElement("Name", this.Name);
             var startTimeXml = new XElement("StartTime", this.StartTime);
+            var timezoneXml = new XElement("Timezone", this.Timezone);
+            var locationXml = new XElement("Location", this.Location);
             var descriptionXml = new XElement("Description", this.Description);
             var natureXml = new XElement("Nature", this.Nature);
 
-            lifeEventXml.Add(nameXml, startTimeXml, descriptionXml, natureXml);
+            lifeEventXml.Add(nameXml, startTimeXml, timezoneXml, locationXml, descriptionXml, natureXml);
 
             return lifeEventXml;
         }
@@ -98,10 +130,13 @@ namespace Genso.Astrology.Library
             var lifeEventParsed = new LifeEvent();
 
             //try get data from xml else use empty string
-            lifeEventParsed.Name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml.Element("Name").Value : "";
-            lifeEventParsed.StartTime = !string.IsNullOrEmpty(lifeEventXml.Element("StartTime")?.Value) ? lifeEventXml.Element("StartTime").Value : "";
-            lifeEventParsed.Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml.Element("Description").Value : "";
-            lifeEventParsed.Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml.Element("Nature").Value : "";
+            lifeEventParsed.Name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml?.Element("Name")?.Value : "";
+            lifeEventParsed.StartTime = !string.IsNullOrEmpty(lifeEventXml.Element("StartTime")?.Value) ? lifeEventXml?.Element("StartTime")?.Value : "";
+            lifeEventParsed.Timezone = !string.IsNullOrEmpty(lifeEventXml.Element("Timezone")?.Value) ? lifeEventXml?.Element("Timezone")?.Value : ""; //keep it empty so that can be detected and filled in later
+            const string defaultLocation = "Singapore"; //backup location for error free operation
+            lifeEventParsed.Location = !string.IsNullOrEmpty(lifeEventXml.Element("Location")?.Value) ? lifeEventXml?.Element("Location")?.Value : defaultLocation;
+            lifeEventParsed.Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
+            lifeEventParsed.Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
 
 
             return lifeEventParsed;
@@ -140,7 +175,7 @@ namespace Genso.Astrology.Library
         public override string ToString()
         {
             //prepare string
-            var returnString = $"{this.Name} - {this.Nature} - {this.StartTime} - {this.Description}";
+            var returnString = $"{this.Name} - {this.Nature} - {this.StartTime} - {this.Location} - {this.Description}";
 
             //return string to caller
             return returnString;
@@ -154,14 +189,39 @@ namespace Genso.Astrology.Library
             //get hash of all the fields & combine them
             var hash1 = Tools.GetStringHashCode(this.Name);
             var hash2 = Tools.GetStringHashCode(this.StartTime);
-            var hash3 = Tools.GetStringHashCode(this.Description);
-            var hash4 = Tools.GetStringHashCode(this.Nature);
+            var hash3 = Tools.GetStringHashCode(this.Timezone);
+            var hash4 = Tools.GetStringHashCode(this.Location);
+            var hash5 = Tools.GetStringHashCode(this.Description);
+            var hash6 = Tools.GetStringHashCode(this.Nature);
 
             //take out negative before returning
-            return Math.Abs(hash1 + hash2 + hash3 + hash4);
+            return Math.Abs(hash1 + hash2 + hash3 + hash4 + hash5 + hash6);
         }
 
 
+        /// <summary>
+        /// Gets the extact time with offset at the place where this event happened
+        /// Parses a event start time into DateTimeOffset
+        /// uses google api
+        /// NOTE:
+        /// - updates the local instance with timezone data, to be saved and used later
+        /// </summary>
+        public async Task<DateTimeOffset> GetTime()
+        {
+            //get timezone from api and save it to local instance so that it can saved later
+            //only use API if timezone data not yet set, to save unnecessary calls to Google
+            this.Timezone = string.IsNullOrEmpty(this.Timezone)
+                ? await Tools.GetTimezoneOffsetString(this.Location,
+                    this.StartTime)
+                : this.Timezone;
+
+            //get start time of life event and find the position of it in slices (same as now line)
+            //so that this life event line can be placed exactly on the report where it happened
+            var lifeEvtTimeStr = $"{this.StartTime} {this.Timezone}"; //add offset 0 only for parsing, not used by API to get timezone
+            var lifeEvtTime = DateTimeOffset.ParseExact(lifeEvtTimeStr, Time.DateTimeFormat, null);
+
+            return lifeEvtTime;
+        }
 
     }
 }

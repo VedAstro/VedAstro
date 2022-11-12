@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="icon" type="image/x-icon" href="https://www.vedastro.org/images/favicon.ico" />
@@ -12,7 +12,7 @@
     <!--JQuery-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
-<body class="vstack d-flex align-items-center justify-content-center">
+<body class="container vstack d-flex align-items-center justify-content-center">
     <!--loading box is shown first-->
     <img id="LoadingBox" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
 
@@ -48,6 +48,10 @@
     </div>
 
 
+    <footer class="align-items-center py-3 my-4 border-top vstack gap-1">
+        <span class="text-muted"><small>Light mobile friendly version of Dasa/Muhurtha chart viewer.</small></span>
+        <span class="text-muted"><small><a href="https://www.vedastro.org/Donate">Support</a> ❤ <a href="https://www.vedastro.org">VedAstro</a></small></span>
+    </footer>
 
     <script>
 
@@ -183,12 +187,12 @@
             var timezone = getParsableTimezone();
 
             var payload = `<Root>
-                                                                                                                <PersonId>${personId}</PersonId>
-                                                                                                                <TimePreset>${timePreset}</TimePreset>
-                                                                                                                <EventPreset>${eventPreset}</EventPreset>
-                                                                                                                <Timezone>${timezone}</Timezone>
-                                                                                                                <MaxWidth>${maxWidth}</MaxWidth>
-                                                                                                           </Root>`;
+                                                                                                                                <PersonId>${personId}</PersonId>
+                                                                                                                                <TimePreset>${timePreset}</TimePreset>
+                                                                                                                                <EventPreset>${eventPreset}</EventPreset>
+                                                                                                                                <Timezone>${timezone}</Timezone>
+                                                                                                                                <MaxWidth>${maxWidth}</MaxWidth>
+                                                                                                                           </Root>`;
 
             var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
                 "headers": {
@@ -253,6 +257,7 @@
             console.log(`JS: LoadEventDataListFile`);
 
             //get data list from server and store it for later use
+            //NOTE: CORS in Azure Website Storage needs to be disabled for this to work, outside of vedastro.org
             $(function () {
                 $.ajax({
                     type: "get",
@@ -527,11 +532,14 @@
             var words = caption.split(" ");
             var line = "";
 
+            //process text and create rows
+            var svgTSpan;
+            var lineCount = 0; //number of lines to calculate height
             for (var n = 0; n < words.length; n++) {
                 var testLine = line + words[n] + " ";
                 if (testLine.length > MAXIMUM_CHARS_PER_LINE) {
                     //  Add a new <tspan> element
-                    var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                    svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
                     svgTSpan.setAttributeNS(null, 'x', x);
                     svgTSpan.setAttributeNS(null, 'y', y);
 
@@ -540,14 +548,19 @@
                     svgText.appendChild(svgTSpan);
 
                     line = words[n] + " ";
-                    y += LINE_HEIGHT;
+                    y += LINE_HEIGHT; //place next text row lower
+                    lineCount++; //count a line
                 }
                 else {
                     line = testLine;
                 }
             }
 
-            var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+            //calculate final height in px
+            var finalHeight = lineCount * LINE_HEIGHT;
+            console.log(finalHeight);
+
+            svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
             svgTSpan.setAttributeNS(null, 'x', x);
             svgTSpan.setAttributeNS(null, 'y', y);
 
@@ -559,7 +572,7 @@
             return svgText;
         }
 
-
     </script>
+
 </body>
 </html>

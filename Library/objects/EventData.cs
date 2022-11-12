@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
@@ -24,7 +25,7 @@ namespace Genso.Astrology.Library
         {
             Name = name;
             Nature = nature;
-            Description = description;
+            Description = HttpUtility.HtmlEncode(description); //HTML character safe
             Strength = "";//strength is only gotten after calculator is run
             EventTags = eventTags;
             _eventCalculator = eventCalculator;
@@ -84,7 +85,8 @@ namespace Genso.Astrology.Library
             Enum.TryParse(nameString, out EventName name);
             var natureString = eventData.Element("Nature")?.Value;
             Enum.TryParse(natureString, out EventNature nature);
-            var description = getDescription(eventData.Element("Description")?.Value); //with proper formatting
+            var rawDescription = eventData.Element("Description")?.Value;
+            var description = CleanText(rawDescription); //with proper formatting
             var tagString = eventData.Element("Tag")?.Value;
             var tagList = getEventTags(tagString); //multiple tags are possible ',' separated
             var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
@@ -122,16 +124,13 @@ namespace Genso.Astrology.Library
 
             //little function to format the description coming from the file
             //so that the description wraps nicely when rendered
-            string getDescription(string rawDescription)
-            {
-                //remove new line
-                //var cleaned1 = rawDescription.Replace("\n", "").Replace("\r", "");
+            string CleanText(string text)
+            { 
+                //remove all special characters
+                var cleaned = Regex.Replace(text, @"\s+", " ");
 
-                //remove double spaces
-                //RegexOptions options = RegexOptions.None;
-                //Regex regex = new Regex("[ ]{3,}", options);
-                //var cleaned2 = regex.Replace(cleaned1, " ");
-                var cleaned = Regex.Replace(rawDescription, @"\s+", " ");
+                //HTML character safe
+                cleaned = HttpUtility.HtmlEncode(cleaned); 
 
                 return cleaned;
             }

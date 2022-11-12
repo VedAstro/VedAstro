@@ -402,14 +402,14 @@ namespace API
             var startTime = Time.FromXml(startTimeXml);
             var endTimeXml = rootXml.Element("EndTime")?.Elements().First();
             var endTime = Time.FromXml(endTimeXml);
-            var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value);
+            var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value ?? "0");
            
 
             //get the person instance by id
             var foundPerson = await APITools.GetPersonFromId(personId);
 
             //from person get svg report
-            var eventsReportSvgString = GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+            var eventsReportSvgString = await GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
@@ -453,7 +453,7 @@ namespace API
             var daysPerPixel = GetDayPerPixel(startTime, endTime, maxWidth);
 
             //from person get svg report
-            var eventsReportSvgString = GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+            var eventsReportSvgString = await GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
@@ -562,7 +562,7 @@ namespace API
         /// <summary>
         /// Massive method that generates dasa report in SVG
         /// </summary>
-        private static string GenerateMainEventsReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
+        private static async Task<string> GenerateMainEventsReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
         {
             //1 CALCULATE DATA
             // One precision value for generating all dasa components,
@@ -585,7 +585,8 @@ namespace API
             var lineHeight = totalHeight + padding;
 
             //get now line position
-            var nowLinePosition = GetLinePosition(timeSlices, startTime.StdTimeNowAtOffset);
+            var clientNowTime = startTime.StdTimeNowAtOffset;//now time at client
+            var nowLinePosition = GetLinePosition(timeSlices, clientNowTime);
             var nowLineHeight = lineHeight + 6; //space between icon & last row
             compiledRow += GetNowLine(nowLineHeight, nowLinePosition);
 
@@ -607,9 +608,10 @@ namespace API
             //wait!, add in life events also
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
-            var inputOffset = startTime.GetStdDateTimeOffset().Offset;
+            //var inputOffset = startTime.GetStdDateTimeOffset().Offset;
             var lifeEventHeight = lineHeight + 6; //space between icon & last row
-            compiledRow += GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset);
+            var inputOffset = startTime.GetStdDateTimeOffset().Offset; //timezone the chart will be in
+            compiledRow += await GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset);
 
 
             //7 ADD BORDER
@@ -634,24 +636,32 @@ namespace API
 
 
             //gets person's life events as lines for the dasa chart
-            string GetLifeEventLinesSvg(Person person, int lineHeight, TimeSpan inputOffset)
+            async Task<string> GetLifeEventLinesSvg(Person person, int lineHeight, TimeSpan inputOffset)
             {
                 var compiledLines = "";
 
                 foreach (var lifeEvent in person.LifeEventList)
                 {
+                    //this is placed here so that if 
+                    try
+                    {
+                        //get timezone at place event happened
+                        var lifeEvtTime = await lifeEvent.GetTime();//time at the place of event with correct standard timezone
+                        var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
+                        var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
 
-                    //get start time of life event and find the position of it in slices (same as now line)
-                    //so that this life event line can be placed exactly on the report where it happened
-                    var lifeEvtTime = DateTimeOffset.ParseExact(lifeEvent.StartTime, Time.DateTimeFormat, null);
-                    var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to input offset, to match chart
-                    var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
+                        //if line is not in report time range, don't generate it
+                        if (positionX == 0) { continue; }
 
-                    //if line is not in report time range, don't generate it
-                    if (positionX == 0) { continue; }
-
-                    //put together icon + line + event data
-                    compiledLines += GenerateLifeEventLine(lifeEvent, lineHeight, lifeEvtTime, positionX);
+                        //put together icon + line + event data
+                        compiledLines += GenerateLifeEventLine(lifeEvent, lineHeight, lifeEvtTime, positionX);
+                    }
+                    catch (Exception e)
+                    {
+                        //if fail log it and go on with next life event despite failure
+                        await Log.Error(e, null);
+                        continue;
+                    }
                 }
 
 
@@ -790,8 +800,8 @@ namespace API
                             </g>
                             <!--place where dynamic event names are placed by JS-->
                             <g id=""CursorLineLegendHolder"" transform=""matrix(1, 0, 0, 1, 0, 4)""></g>
-                            <g id=""CursorLineLegendDescriptionHolder"" style=""display:none;"">
-			                    <rect style=""fill: blue; opacity: 0.8;"" x=""170"" y=""11.244"" width=""150"" height=""{lineHeight - 10}"" rx=""2"" ry=""2""></rect>
+                            <g id=""CursorLineLegendDescriptionHolder"" transform=""matrix(1, 0, 0, 1, 0, 0)"" style=""display:none;"">
+			                    <rect style=""fill: blue; opacity: 0.8;"" x=""170"" y=""11.244"" width=""150"" height=""0"" rx=""2"" ry=""2""></rect>
                                 <g id=""CursorLineLegendDescription""></g>
 		                    </g>
                        </g>
@@ -819,6 +829,15 @@ namespace API
         /// </summary>
         public static int GetLinePosition(List<Time> timeSliceList, DateTimeOffset inputTime)
         {
+            //input timezone must be converted output timezone (timeSliceList)
+            var outputTimezone = timeSliceList[0].GetStdDateTimeOffset().Offset;
+            //translate event timezone to match chart timezone
+            inputTime = inputTime.ToOffset(outputTimezone);
+
+#if DEBUG
+            if (outputTimezone.Ticks != inputTime.Offset.Ticks) { Console.WriteLine($"Life Event Offset Translated:{outputTimezone}->{inputTime.Offset}"); }
+#endif
+
             var nowHour = inputTime.Hour;
             var nowDay = inputTime.Day;
             var nowYear = inputTime.Year;

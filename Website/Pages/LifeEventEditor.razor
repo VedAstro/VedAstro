@@ -1,4 +1,10 @@
 ﻿@using Genso.Astrology.Library
+@using System.Text.Json.Nodes
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
+@using System.Globalization
+@using System.Text.Json
+@using JsonSerializer = Newtonsoft.Json.JsonSerializer
 
 <div class="vstack gap-3">
 
@@ -80,8 +86,28 @@
 
     private async Task _OnClickAddLifeEvent()
     {
+        //get person birth location name
+        var defaultLocation = InputedPerson.GetBirthLocation().GetName();
+
+        //default time is now at birth location
+        var defaultTime = InputedPerson.BirthTime.StdTimeNowAtOffset.ToString(Time.DateTimeFormatNoTimezone);
+
+        var defaultLifeEvent = new
+        {
+
+            Name = "New Life Event",
+            StartTime = defaultTime,
+            Location = defaultLocation,
+            Timezone = await Tools.GetTimezoneOffsetString(defaultLocation, defaultTime),
+            Description = "Description",
+            Nature = "Good"
+        };
+
+        //transform it to Json object
+        string jsonData = JsonConvert.SerializeObject(defaultLifeEvent);
+
         //call js to add data
-        await _jsRuntime.InvokeVoidAsync("addNewLifeEventToTable");
+        await _jsRuntime.InvokeAsync<JsonObject>("addNewLifeEventToTable", jsonData);
 
     }
 

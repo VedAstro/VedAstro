@@ -66,7 +66,7 @@
         await _jsRuntime.ShowLoading();
 
         //auto set correct Timezone based on location & birth date
-        _timeInput.TimeZone = await WebsiteTools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), await _timeInput.GetDateTimeOffset(), _jsRuntime);
+        _timeInput.TimeZone = await Tools.GetTimezoneOffset(_geoLocationInput.GetGeoLocation(), await _timeInput.GetDateTimeOffset(), ServerManager.GoogleGeoLocationApiKey);
 
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { return; }

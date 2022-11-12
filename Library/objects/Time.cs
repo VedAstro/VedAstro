@@ -24,6 +24,12 @@ namespace Genso.Astrology.Library
         /// HH:mm dd/MM/yyyy zzz
         /// </summary>
         public const string DateTimeFormat = "HH:mm dd/MM/yyyy zzz"; //define date time format
+        
+        /// <summary>
+        /// HH:mm dd/MM/yyyy
+        /// </summary>
+        public const string DateTimeFormatNoTimezone = "HH:mm dd/MM/yyyy"; //define date time format
+        
         /// <summary>
         /// HH:mm:ss dd/MM/yyyy zzz
         /// </summary>

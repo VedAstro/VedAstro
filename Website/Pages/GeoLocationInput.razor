@@ -211,7 +211,7 @@
         try
         {
             //get longitude & latitude for location
-            coordinates = await WebsiteTools.GetAddressLocation(LocationName, _jsRuntime);
+            coordinates = await Tools.AddressToCoordinate(LocationName, ServerManager.GoogleGeoLocationApiKey);
         }
         catch (Exception e)
         {
@@ -255,7 +255,7 @@
             if (Longitude == 0 && Latitude == 0) { goto SetDefault; }
 
             //set gotten location name into view
-            LocationName = await WebsiteTools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude, _jsRuntime);
+            LocationName = await Tools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude, ServerManager.GoogleGeoLocationApiKey);
 
             //exit
             return;

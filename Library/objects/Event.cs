@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
@@ -27,7 +28,7 @@ namespace Genso.Astrology.Library
             //initialize fields
             _name = name;
             _nature = nature;
-            _description = description;
+            _description = HttpUtility.HtmlEncode(description); //HTML character safe
             _startTime = startTime;
             _endTime = endTime;
         }

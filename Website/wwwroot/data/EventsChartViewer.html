@@ -16,6 +16,7 @@
     <!--loading box is shown first-->
     <img id="LoadingBox" src="https://www.vedastro.org/images/loading-animation-progress-transparent.gif" />
 
+    <!--TOOLBAR-->
     <div id="ToolBar" class="my-3 hstack gap-3 d-flex align-items-center justify-content-center visually-hidden">
         <text id="PersonNameBox"></text>
         <div>
@@ -43,20 +44,29 @@
         </div>
         <button type="button" class="btn btn-primary btn-sm">Refresh</button>
     </div>
+
+    <!--CHART VIEW BOX-->
     <div id="DasaViewBox" style="display:none;">
         <!--INSERT SVG-->
     </div>
 
-
+    <!--FOOTER-->
     <footer class="align-items-center py-3 my-4 border-top vstack gap-1">
-        <span class="text-muted"><small>Light mobile friendly version of Dasa/Muhurtha chart viewer.</small></span>
+        <span class="text-muted"><small>Light mobile friendly version of Dasa/Muhurtha chart viewer. <a href="https://www.vedastro.org/Muhurtha">Full Version</a></small></span>
+        <span class="text-muted"><small><b>How To Use: </b>Bookmark this page & access URL directly from mobile.</small></span>
+        <button onclick="onClickDarkMode()" type="button" class="btn btn-primary btn-sm">Dark Mode</button>
         <span class="text-muted"><small><a href="https://www.vedastro.org/Donate">Support</a> ❤ <a href="https://www.vedastro.org">VedAstro</a></small></span>
     </footer>
 
+
+    <!--JS CODE-->
     <script>
 
-        /*JS AUTO VARIABLES*/
+        /*JS auto variables are inserted below by*/
+        /*API before sending to client*/
         /*INSERT-JS-VAR-HERE*/
+
+
 
         /*-------------------*/
 
@@ -64,7 +74,19 @@
         start();
 
 
+
+        /*-------------------*/
         //FUNCTIONS
+
+        //called when dark mode button clicked
+        function onClickDarkMode() {
+            //set page background to black
+            $("body").css('background-color', '#333');
+            //set toolbar to white, much easier than changing each little element inside
+            $("#ToolBar").css('background-color', '#ddd');
+
+
+        }
 
         async function start() {
             console.log(`JS: start`);
@@ -155,25 +177,7 @@
             );
         }
 
-        function LoadEventDescription(event, eventName) {
 
-            //off events while firing
-            $(document).off('loadEventDescription');
-
-            //fill description box about event
-            getEventDescription(eventName.replace(/ /g, ""))
-                .then((eventDesc) => {
-                    //if no description than hide box & end here
-                    if (!eventDesc) { window.showDescription = false; return; }
-                    var wrappedDescText = createSVGtext(eventDesc, 175, 24);
-                    $("#CursorLineLegendDescription").empty(); //clear previous desc
-                    $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
-                });
-
-            //turn events back on
-            $(document).on('loadEventDescription', LoadEventDescription);
-
-        }
 
         async function GetEventsChartFromApi() {
             console.log(`JS: GetEventsChartFromApi`);
@@ -187,12 +191,12 @@
             var timezone = getParsableTimezone();
 
             var payload = `<Root>
-                                                                                                                                <PersonId>${personId}</PersonId>
-                                                                                                                                <TimePreset>${timePreset}</TimePreset>
-                                                                                                                                <EventPreset>${eventPreset}</EventPreset>
-                                                                                                                                <Timezone>${timezone}</Timezone>
-                                                                                                                                <MaxWidth>${maxWidth}</MaxWidth>
-                                                                                                                           </Root>`;
+                                                                                                                                                                                                                        <PersonId>${personId}</PersonId>
+                                                                                                                                                                                                                        <TimePreset>${timePreset}</TimePreset>
+                                                                                                                                                                                                                        <EventPreset>${eventPreset}</EventPreset>
+                                                                                                                                                                                                                        <Timezone>${timezone}</Timezone>
+                                                                                                                                                                                                                        <MaxWidth>${maxWidth}</MaxWidth>
+                                                                                                                                                                                                                   </Root>`;
 
             var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
                 "headers": {
@@ -371,7 +375,7 @@
             //count good and bad events for summary row
             var goodCount = 0;
             var badCount = 0;
-            var yAxis = 0;
+            var newRowYAxis = 0; //vertical position of the current event row
             window.showDescription = false;//default description not shown
             //extract event data out and place it in legend
             allElementsAtX.each(function () {
@@ -383,7 +387,7 @@
                 if (!eventName) { return; }
 
                 var color = this.getAttribute("fill");
-                yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
+                newRowYAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
 
                 //count good and bad events for summary row
                 var eventNatureName = "";// used later for icon color
@@ -399,7 +403,7 @@
                     newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
                     newTimeLegend.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
                     newTimeLegend.show();//make cloned visible
-                    newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis - 15})`); //above 1st row
+                    newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 15})`); //above 1st row
                     //split time to remove timezone from event
                     var stdTimeFull = this.getAttribute("stdtime");
                     var stdTimeSplit = stdTimeFull.split(" ");
@@ -420,7 +424,7 @@
                 newLegendRow.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
                 newLegendRow.show();//make cloned visible
                 //position the group holding the legend over the event row which the legend represents
-                newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis})`);
+                newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 2})`);//minus 2 for perfect alignment
 
                 //set event name text & color element
                 var textElm = newLegendRow.children("text");
@@ -430,8 +434,8 @@
 
                 //4 GENERATE DESCRIPTION ROW LOGIC
                 //check if mouse in within row of this event (y axis)
-                var elementTopY = yAxis;
-                var elementBottomY = yAxis + 15;
+                var elementTopY = newRowYAxis;
+                var elementBottomY = newRowYAxis + 15;
                 var mouseWithinRow = mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY;
                 //if event name is still the same then don't load description again
                 var notSameEvent = window.previousHoverEventName !== eventName;
@@ -442,7 +446,7 @@
                     var backgroundElm = newLegendRow.children("rect");
                     backgroundElm.css("fill", "white");
                     textElm.css("fill", "black");
-                    textElm.css("font-weight", "700");
+                    textElm.css("font-weight", "800");
                     //if mouse within show description box
                     window.showDescription = true;
                 }
@@ -454,6 +458,10 @@
 
                     //make holder visible
                     $("#CursorLineLegendDescriptionHolder").show();
+
+                    //move holder next to event
+                    var descBoxYAxis = newRowYAxis - 7;//minus 7 for perfect alignment with event name row
+                    $("#CursorLineLegendDescriptionHolder").attr("transform", `matrix(1, 0, 0, 1, 0, ${descBoxYAxis})`);
 
                     //note: using trigger to make it easy to skip multiple clogging events
                     $(document).trigger('loadEventDescription', eventName);
@@ -482,13 +490,36 @@
             newSummaryRow.appendTo("#CursorLineLegendHolder"); //place new legend into parent
             newSummaryRow.show();//make cloned visible
             //position the group holding the legend over the event row which the legend represents
-            newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis + 1 + 15})`);
+            newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis + 15 - 1})`);//minus 1 for perfect alignment
 
             //set event name text & color element
             var textElm = newSummaryRow.children("text");
             textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
             //change icon to summary icon
             newSummaryRow.children("use").attr("xlink:href", "#CursorLineSumIcon");
+
+        }
+
+        function LoadEventDescription(event, eventName) {
+
+            //off events while firing
+            $(document).off('loadEventDescription');
+
+            //fill description box about event
+            getEventDescription(eventName.replace(/ /g, ""))
+                .then((eventDesc) => {
+                    //if no description than hide box & end here
+                    if (!eventDesc) { window.showDescription = false; return; }
+                    //convert text to svg and place inside holder
+                    var wrappedDescText = createSVGtext(eventDesc, 175, 24);
+                    $("#CursorLineLegendDescription").empty(); //clear previous desc
+                    $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
+                    //set height of desc box background
+                    $("#CursorLineLegendDescriptionBackground").attr("height", window.EventDescriptionTextHeight + 20); //plus little for padding
+                });
+
+            //turn events back on
+            $(document).on('loadEventDescription', LoadEventDescription);
 
         }
 
@@ -556,9 +587,9 @@
                 }
             }
 
-            //calculate final height in px
-            var finalHeight = lineCount * LINE_HEIGHT;
-            console.log(finalHeight);
+            //calculate final height in px, save global to be accessed later
+            window.EventDescriptionTextHeight = lineCount * LINE_HEIGHT;
+            //console.log(window.EventDescriptionTextHeight);
 
             svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
             svgTSpan.setAttributeNS(null, 'x', x);

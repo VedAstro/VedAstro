@@ -15,6 +15,11 @@ namespace Website
     public static class ServerManager
     {
 
+        /// <summary>
+        /// All API functions can be accessed by this .org URL
+        /// Note: possible via azure CDN rules engine : AccessApiViaWebDomain
+        /// </summary>
+        public const string WebDomainToApi = "https://www.vedastro.org/api";
         public const string ApiUrl = "https://vedastroapi.azurewebsites.net/api";
         public const string AddPersonApi = ApiUrl + "/addperson";
         public const string GetHoroscope = ApiUrl + "/gethoroscope";

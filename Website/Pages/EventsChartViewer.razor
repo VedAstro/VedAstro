@@ -278,7 +278,7 @@
         var personId = SelectedPerson.Id;
         var eventPreset = _eventPreset;
         var timePreset = _timePreset;
-        var url = $"https://vedastroapi.azurewebsites.net/api/chart/{personId}/{eventPreset}/{timePreset}";
+        var url = $"{ServerManager.WebDomainToApi}/chart/{personId}/{eventPreset}/{timePreset}";
 
         _jsRuntime.OpenNewTab(url);
     }
@@ -333,7 +333,7 @@
     private async Task OnClickCopyChartLink()
     {
         //generate the url
-        var url = ServerManager.ApiUrl + $"/savedchart/{CurrentChartId}";
+        var url = ServerManager.WebDomainToApi + $"/savedchart/{CurrentChartId}";
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);

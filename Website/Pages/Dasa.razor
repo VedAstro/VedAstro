@@ -103,7 +103,7 @@
 <div style="@(_isResultReady?"":"display:none;")">
     <div>
         <HelpBox Label="Dasa" HelpText="@HelpText.DasaChart"></HelpBox>
-        <EventReportViewer @ref="_dasaChartViewer" />
+        <EventsChartViewer @ref="_dasaChartViewer" />
     </div>
 </div>
 
@@ -211,7 +211,7 @@
     private PeopleSelectorBox? _peopleSelectorBox;
     private PeopleSelectorBox? _easyPeopleSelectorBox;
 
-    private EventReportViewer? _dasaChartViewer;
+    private EventsChartViewer? _dasaChartViewer;
 
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }

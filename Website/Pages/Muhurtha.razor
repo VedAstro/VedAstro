@@ -165,7 +165,7 @@
     @*DASA VIEW BOX*@
     <div style="margin-bottom: 50px">
         <HelpBox Label="Events" HelpText="@HelpText.MuhurthaChart"></HelpBox>
-        <EventReportViewer @ref="_eventReportViewer" />
+        <EventsChartViewer @ref="_eventReportViewer" />
     </div>
     @if (_isResultReady)
     {
@@ -249,7 +249,7 @@
     private PeopleSelectorBox? _peopleSelectorBox;
     private PeopleSelectorBox? _easyPeopleSelectorBox;
 
-    private EventReportViewer? _eventReportViewer;
+    private EventsChartViewer? _eventReportViewer;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀

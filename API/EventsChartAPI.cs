@@ -166,6 +166,7 @@ namespace API
                 var personName = (await APITools.GetPersonFromId(chart.PersonId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
+                jsVariables += $@"window.PersonId = ""{chart.PersonId}"";";
                 htmlTemplate = htmlTemplate.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
 
                 //insert SVG into html place holder page
@@ -205,6 +206,7 @@ namespace API
                 var personName = (await APITools.GetPersonFromId(personId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
+                jsVariables += $@"window.PersonId = ""{personId}"";";
                 var finalHtml = eventsChartViewerHtml.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
 
 

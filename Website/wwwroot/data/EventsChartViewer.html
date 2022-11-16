@@ -42,7 +42,7 @@
                 <option value="Astronomical">Astronomical</option>
             </select>
         </div>
-        <button type="button" class="btn btn-primary btn-sm">Refresh</button>
+        <button onclick="onClickRefresh()" type="button" class="btn btn-primary btn-sm">Refresh</button>
     </div>
 
     <!--CHART VIEW BOX-->
@@ -54,7 +54,7 @@
     <footer class="align-items-center py-3 my-4 border-top vstack gap-1">
         <span class="text-muted"><small>Light mobile friendly version of Dasa/Muhurtha chart viewer. <a href="https://www.vedastro.org/Muhurtha">Full Version</a></small></span>
         <span class="text-muted"><small><b>How To Use: </b>Bookmark this page & access URL directly from mobile.</small></span>
-        <button onclick="onClickDarkMode()" type="button" class="btn btn-primary btn-sm">Dark Mode</button>
+        <button onclick="onClickDarkModeToggle()" type="button" class="btn btn-primary btn-sm">Dark Mode</button>
         <span class="text-muted"><small><a href="https://www.vedastro.org/Donate">Support</a> ❤ <a href="https://www.vedastro.org">VedAstro</a></small></span>
     </footer>
 
@@ -63,86 +63,48 @@
 
         /*JS auto variables are inserted below by*/
         /*API before sending to client*/
+        //person id, person name, chart type
+        //example : window.PersonName = "Viknesh";window.ChartType = "Muhurtha";window.PersonId = "54041d1ffb494a79997f7987ecfcf08b5";
         /*INSERT-JS-VAR-HERE*/
 
 
         /*-------------------*/
 
-        //start the app
-        animateEventsChart();
 
-
-
-        /*-------------------*/
         //FUNCTIONS
-
-        //called when dark mode button clicked
-        function onClickDarkMode() {
-            //set page background to black
-            $("body").css('background-color', '#333');
-            //set toolbar to white, much easier than changing each little element inside
-            $("#ToolBar").css('background-color', '#ddd');
-
-
-        }
-
-        async function animateEventsChart() {
-            console.log(`Starting the engine...`);
+        class Chart {
 
             //template used to generate legend rows
-            var holderTemplateId = `#CursorLineLegendTemplate`;
+            static holderTemplateId = `#CursorLineLegendTemplate`;
 
-            //set title for easy multi-tabbing
-            document.title = `${window.ChartType} | ${window.PersonName}`;
 
-            //set toolbar data
-            $("#PersonNameBox").text("Person : " + window.PersonName);
-
-            var notLoaded = !isSvgLoaded();
-
-            //try get svg from server if svg not loaded by now
-            if (notLoaded) {
-                //coming from live chart generate
-
-                //get data to generate chart from URL
-                var data = getDataFromUrl();
-
-                await getEventsChartFromApi(data);
-
-                //attach mouse handler to auto move cursor line & update time legend
-                //load event description file 1st
-                await loadEventDataListFile();
-
-                $("#DasaViewBox")[0].addEventListener("mousemove", onMouseMoveHandler);
-
-                $("#EventChartHolder")[0].addEventListener("mouseleave", onMouseLeaveEventChart);
-
-                //event fired from autoUpdateTimeLegend
-                $(document).on('loadEventDescription', loadEventDescription);
-
-                isSvgLoaded();
-            }
-            else {
-                //attach mouse handler to auto move cursor line & update time legend
-                //load event description file 1st
-                await loadEventDataListFile();
-
-                addEventListenerWrapper("#DasaViewBox", "mousemove", "onMouseMoveHandler");
-
-                addEventListenerWrapper("#EventChartHolder", "mouseleave", "onMouseLeaveEventChart");
-
-                //event fired from autoUpdateTimeLegend
-                $(document).on('loadEventDescription', loadEventDescription);
+            //get screen width
+            static getScreenWidth() {
+                return Math.max(
+                    document.body.scrollWidth,
+                    document.documentElement.scrollWidth,
+                    document.body.offsetWidth,
+                    document.documentElement.offsetWidth,
+                    document.documentElement.clientWidth
+                );
             }
 
-            //make toolbar visible
-            $("#ToolBar").removeClass("visually-hidden");
+            //gets clients timezone offset, exp:"+08:00"
+            static getParseableTimezone() {
+                var date = new Date();
+                var tzo = -date.getTimezoneOffset(),
+                    dif = tzo >= 0 ? '+' : '-',
+                    pad = function (num) {
+                        return (num < 10 ? '0' : '') + num;
+                    };
 
+                return dif +
+                    pad(Math.floor(Math.abs(tzo) / 60)) +
+                    ':' +
+                    pad(Math.abs(tzo) % 60);
+            }
 
-
-
-            //FUNCTIONS
-            function getDataFromUrl() {
+            static getDataFromUrl() {
 
                 //get data out of url
                 var pathname = window.location.pathname.split("/");
@@ -151,38 +113,252 @@
                     "timePreset": pathname[pathname.length - 1],
                     "eventPreset": pathname[pathname.length - 2],
                     "personId": pathname[pathname.length - 3],
-                    "maxWidth": getScreenWidth(),
-                    "timezone": getParseableTimezone()
+                    "maxWidth": Chart.getScreenWidth(),
+                    "timezone": Chart.getParseableTimezone()
                 };
 
                 return returnVal;
             }
 
+            //fired when mouse moves over dasa view box
+            //used to auto update cursor line & time legend
+            static async onMouseMoveHandler(mouse) {
+                //console.log(`JS: onMouseMoveDasaViewEventHandler`);
 
-            //gets clients timezone offset, exp:"+08:00"
-            function getParseableTimezone() {
-                var date = new Date();
-                var tzo = -date.getTimezoneOffset(),
-                    dif = tzo >= 0 ? '+' : '-',
-                    pad = function (num) {
-                        return (num < 10 ? '0' : '') + num;
-                    };
+                //get relative position of mouse in Dasa view
+                var mousePosition = getMousePositionInElement(mouse, "#EventChartHolder");
 
-                return dif + pad(Math.floor(Math.abs(tzo) / 60)) +
-                    ':' + pad(Math.abs(tzo) % 60);
+                //if mouse is out of dasa view hide cursor and end here
+                if (mousePosition == 0) { $("#CursorLine").hide(); return; }
+                else { $("#CursorLine").show(); }
+
+                //move cursor line 1st for responsiveness
+                autoMoveCursorLine(mousePosition.xAxis);
+
+                //update time legend
+                generateTimeLegend(mousePosition);
+
+                //FUNCTIONS
+                //Gets a mouses x axis relative inside the given element
+                //used to get mouse location on Dasa view
+                //returns 0 when mouse is out
+                function getMousePositionInElement(mouseEventData, elementId) {
+                    //console.log(`JS: GetMousePositionInElement`);
+
+                    //gets the measurements of the dasa view holder
+                    //the element where cursor line will be moving
+                    //TODO read val from global var
+                    let holderMeasurements = $(elementId)[0].getBoundingClientRect();
+
+                    //calculate mouse X relative to dasa view box
+                    let relativeMouseX = mouseEventData.clientX - holderMeasurements.left;
+                    let relativeMouseY = mouseEventData.clientY - holderMeasurements.top; //when mouse leaves top
+                    let relativeMouseYb = mouseEventData.clientY - holderMeasurements.bottom; //when mouse leaves bottom
+
+                    //if mouse out of element element, set 0 as indicator
+                    let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
+
+                    if (mouseOut) {
+                        return 0;
+                    } else {
+
+                        var mouse = {
+                            xAxis: relativeMouseX,
+                            yAxis: relativeMouseY
+                        };
+                        return mouse;
+                    }
+
+                }
+
+                function autoMoveCursorLine(relativeMouseX) {
+                    //console.log(`JS: autoMoveCursorLine`);
+
+                    //move vertical line to under mouse inside dasa view box
+                    $("#CursorLine").attr('transform', `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`);
+
+                }
+
+                //SVG Event Chart Time Legend generator
+                //this is where the whole time legend that follows
+                //the mouse when placed on chart is generated
+                //notes: a template row always exists in code,
+                //in client JS side uses template to create the rows from cloning it
+                //and modifying its prop as needed, as such any major edit needs to
+                //be done in API code
+                function generateTimeLegend(mousePosition) {
+                    //console.log(`JS: autoUpdateTimeLegend`);
+
+                    //x axis is rounded because axis value in rect is whole numbers
+                    //and it has to be exact match to get it
+                    var mouseRoundedX = Math.round(mousePosition.xAxis);
+                    var mouseRoundedY = Math.round(mousePosition.yAxis);
+
+                    //use the mouse position to get all dasa rect
+                    //dasa elements at same X position inside the dasa svg
+                    //note: faster and less erroneous than using mouse.path
+                    var children = $("#EventChartHolder").children();
+                    var allElementsAtX = children.find(`[x=${mouseRoundedX}]`);
+
+
+                    //delete previously generated legend rows
+                    $(".CursorLineLegendClone").remove();
+
+
+                    //count good and bad events for summary row
+                    var goodCount = 0;
+                    var badCount = 0;
+                    var newRowYAxis = 0; //vertical position of the current event row
+                    window.showDescription = false;//default description not shown
+                    //extract event data out and place it in legend
+                    allElementsAtX.each(drawEventRow);
+
+                    //auto show/hide description box based on mouse position
+                    if (window.showDescription) {
+                        $("#CursorLineLegendDescriptionHolder").show();
+                    } else {
+                        $("#CursorLineLegendDescriptionHolder").hide();
+                    }
+
+
+
+                    //5 GENERATE LAST SUMMARY ROW
+                    //generate summary row at the bottom
+                    //make a copy of template for this event
+                    var newSummaryRow = $(Chart.holderTemplateId).clone();
+                    newSummaryRow.removeAttr('id'); //remove the clone template id
+                    newSummaryRow.addClass("CursorLineLegendClone"); //to delete it on next run
+                    newSummaryRow.appendTo("#CursorLineLegendHolder"); //place new legend into parent
+                    newSummaryRow.show();//make cloned visible
+                    //position the group holding the legend over the event row which the legend represents
+                    newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis + 15 - 1})`);//minus 1 for perfect alignment
+
+                    //set event name text & color element
+                    var textElm = newSummaryRow.children("text");
+                    textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
+                    //change icon to summary icon
+                    newSummaryRow.children("use").attr("xlink:href", "#CursorLineSumIcon");
+
+                    //FUNCTIONS
+
+                    //
+                    function drawEventRow() {
+
+                        //this is the rect generated by API containing data about the event
+                        var svgEventRect = this;
+
+                        //1 GET DATA
+                        //extract other data out of the rect
+                        var eventName = svgEventRect.getAttribute("eventname");
+                        //if no "eventname" exist, wrong elm skip it
+                        if (!eventName) { return; }
+
+                        var color = svgEventRect.getAttribute("fill");
+                        newRowYAxis = parseInt(svgEventRect.getAttribute("y"));//parse as num, for calculation
+
+                        //count good and bad events for summary row
+                        var eventNatureName = "";// used later for icon color
+                        if (color === "#FF0000") { eventNatureName = "Bad", badCount++; }
+                        if (color === "#00FF00") { eventNatureName = "Good", goodCount++; }
+
+
+                        //2 TIME & AGE LEGEND
+                        //create time legend at top only for first element
+                        if (allElementsAtX[0] === svgEventRect) { drawTimeAgeLegendRow(); }
+
+                        //3 GENERATE EVENT ROW
+                        //make a copy of template for this event
+                        var newLegendRow = $(Chart.holderTemplateId).clone();
+                        newLegendRow.removeAttr('id'); //remove the clone template id
+                        newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
+                        newLegendRow.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
+                        newLegendRow.show();//make cloned visible
+                        //position the group holding the legend over the event row which the legend represents
+                        newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 2})`);//minus 2 for perfect alignment
+
+                        //set event name text & color element
+                        var textElm = newLegendRow.children("text");
+                        var iconElm = newLegendRow.children("use");
+                        textElm.text(`${eventName}`);
+                        iconElm.attr("xlink:href", `#CursorLine${eventNatureName}Icon`); //set icon color based on nature
+
+                        //4 GENERATE DESCRIPTION ROW LOGIC
+                        //check if mouse in within row of this event (y axis)
+                        var elementTopY = newRowYAxis;
+                        var elementBottomY = newRowYAxis + 15;
+                        var mouseWithinRow = mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY;
+                        //if event name is still the same then don't load description again
+                        var notSameEvent = window.previousHoverEventName !== eventName;
+
+                        //HIGHLIGHT ROW
+                        //if mouse is in event's row then highlight that row
+                        if (mouseWithinRow) {
+                            //highlight event name row
+                            var backgroundElm = newLegendRow.children("rect");
+                            backgroundElm.css("fill", "#003e99");
+                            backgroundElm.css("opacity", "1");//solid
+                            //textElm.css("fill", "#fff");
+                            textElm.css("font-weight", "700");
+                            //if mouse within show description box
+                            window.showDescription = true;
+                        }
+
+                        //if mouse within row AND the event has changed
+                        //then generate a new description
+                        //note: this is slow, so done only when absolutely needed
+                        if (mouseWithinRow && notSameEvent) {
+
+                            //make holder visible
+                            $("#CursorLineLegendDescriptionHolder").show();
+
+                            //move holder next to event
+                            var descBoxYAxis = newRowYAxis - 9;//minus 5 for perfect alignment with event name row
+                            $("#CursorLineLegendDescriptionHolder").attr("transform", `matrix(1, 0, 0, 1, 0, ${descBoxYAxis})`);
+
+                            //note: using trigger to make it easy to skip multiple clogging events
+                            $(document).trigger('loadEventDescription', eventName);
+
+                            //update previous hover event
+                            window.previousHoverEventName = eventName;
+                        }
+
+
+                        function drawTimeAgeLegendRow() {
+                            var newTimeLegend = $(Chart.holderTemplateId).clone();
+                            newTimeLegend.removeAttr('id'); //remove the clone template id
+                            newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
+                            newTimeLegend.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
+                            newTimeLegend.show();//make cloned visible
+                            newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 15})`); //above 1st row
+                            //split time to remove timezone from event
+                            var stdTimeFull = svgEventRect.getAttribute("stdtime");
+                            var stdTimeSplit = stdTimeFull.split(" ");
+                            var hourMin = stdTimeSplit[0];
+                            var date = stdTimeSplit[1];
+                            var timezone = stdTimeSplit[2];
+                            var age = svgEventRect.getAttribute("age");
+                            newTimeLegend.children("text").text(`${hourMin} ${date}  AGE: ${age}`);
+                            //replace circle with clock icon
+                            newTimeLegend.children("use").attr("xlink:href", "#CursorLineClockIcon");
+                        }
+
+                    }
+
+
+                }
+
             }
 
+            //on mouse leave event chart, auto hide time legend
+            static async onMouseLeaveEventChart(mouse) {
+                $("#CursorLine").hide();
+            }
 
-            async function getEventsChartFromApi(chartData) {
+            //gets chart from API & injects it into page
+            static async getEventsChartFromApi(chartData) {
                 console.log(`Getting events chart from API...`);
 
-
-                var payload = `<Root><PersonId>${chartData.personId}</PersonId>
-                                                    <TimePreset>${chartData.timePreset}</TimePreset>
-                                                    <EventPreset>${chartData.eventPreset}</EventPreset>
-                                                    <Timezone>${chartData.timezone}</Timezone>
-                                                    <MaxWidth>${chartData.maxWidth}</MaxWidth>
-                                                </Root>`;
+                var payload = `<Root><PersonId>${chartData.personId}</PersonId><TimePreset>${chartData.timePreset}</TimePreset><EventPreset>${chartData.eventPreset}</EventPreset><Timezone>${chartData.timezone}</Timezone><MaxWidth>${chartData.maxWidth}</MaxWidth></Root>`;
 
                 var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
                     "headers": {
@@ -210,8 +386,6 @@
 
 
                 //LOCAL FUNCTIONS
-
-
                 function injectIntoElement(element, valueToInject) {
                     console.log(`Injecting SVG Chart into page...`);
 
@@ -225,10 +399,9 @@
                     element.appendChild(nodeToInject);
                 }
 
-
             }
 
-            function loadEventDescription(event, eventName) {
+            static loadEventDescription(event, eventName) {
 
                 //off events while firing
                 $(document).off('loadEventDescription');
@@ -237,7 +410,7 @@
                 getEventDescription(eventName.replace(/ /g, "")).then(drawDescriptionBox);
 
                 //turn events back on
-                $(document).on('loadEventDescription', loadEventDescription);
+                $(document).on('loadEventDescription', Chart.loadEventDescription);
 
 
                 //FUNCTIONS
@@ -319,7 +492,7 @@
                 //gets events from EventDataList.xml
                 //for viewing in time legend
                 async function getEventDescription(eventName) {
-                    console.log(`JS: getEventDescription`);
+                    //console.log(`JS: getEventDescription`);
 
                     //search for matching event name
                     var eventXmlList = window.EventDataListXml.find('Event'); //get all event elements
@@ -339,9 +512,9 @@
 
             }
 
-            ////needs to be run once before get event description method is used
-            ////loads xml file located in wwwroot to xml global data
-            async function loadEventDataListFile() {
+            //needs to be run once before get event description method is used
+            //loads xml file located in wwwroot to xml global data
+            static async loadEventDataListFile() {
                 //console.log(`JS: LoadEventDataListFile`);
 
                 //get data list from server and store it for later use
@@ -363,285 +536,171 @@
                 });
             }
 
-            //fired when mouse moves over dasa view box
-            //used to auto update cursor line & time legend
-            async function onMouseMoveHandler(mouse) {
-                //console.log(`JS: onMouseMoveDasaViewEventHandler`);
+            //returns true if svg loaded
+            static isSvgLoaded() {
+                console.log(`Checking if SVG Chart is loaded...`);
 
-                //get relative position of mouse in Dasa view
-                var mousePosition = getMousePositionInElement(mouse, "#EventChartHolder");
+                //check if svg already loaded into page
+                var x = $("#DasaViewBox").children().first().is("svg");
 
-                //if mouse is out of dasa view hide cursor and end here
-                if (mousePosition == 0) { $("#CursorLine").hide(); return; }
-                else { $("#CursorLine").show(); }
-
-                //move cursor line 1st for responsiveness
-                autoMoveCursorLine(mousePosition.xAxis);
-
-                //update time legend
-                generateTimeLegend(mousePosition);
-
-                //FUNCTIONS
-                //Gets a mouses x axis relative inside the given element
-                //used to get mouse location on Dasa view
-                //returns 0 when mouse is out
-                function getMousePositionInElement(mouseEventData, elementId) {
-                    //console.log(`JS: GetMousePositionInElement`);
-
-                    //gets the measurements of the dasa view holder
-                    //the element where cursor line will be moving
-                    //TODO read val from global var
-                    let holderMeasurements = $(elementId)[0].getBoundingClientRect();
-
-                    //calculate mouse X relative to dasa view box
-                    let relativeMouseX = mouseEventData.clientX - holderMeasurements.left;
-                    let relativeMouseY = mouseEventData.clientY - holderMeasurements.top; //when mouse leaves top
-                    let relativeMouseYb = mouseEventData.clientY - holderMeasurements.bottom; //when mouse leaves bottom
-
-                    //if mouse out of element element, set 0 as indicator
-                    let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
-
-                    if (mouseOut) {
-                        return 0;
-                    } else {
-
-                        var mouse = {
-                            xAxis: relativeMouseX,
-                            yAxis: relativeMouseY
-                        };
-                        return mouse;
-                    }
-
-                }
-
-                function autoMoveCursorLine(relativeMouseX) {
-                    console.log(`JS: autoMoveCursorLine`);
-
-                    //move vertical line to under mouse inside dasa view box
-                    $("#CursorLine").attr('transform', `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`);
-
-                }
-
-                //SVG Event Chart Time Legend generator
-                //this is where the whole time legend that follows
-                //the mouse when placed on chart is generated
-                //notes: a template row always exists in code,
-                //in client JS side uses template to create the rows from cloning it
-                //and modifying its prop as needed, as such any major edit needs to
-                //be done in API code
-                function generateTimeLegend(mousePosition) {
-                    //console.log(`JS: autoUpdateTimeLegend`);
-
-                    //x axis is rounded because axis value in rect is whole numbers
-                    //and it has to be exact match to get it
-                    var mouseRoundedX = Math.round(mousePosition.xAxis);
-                    var mouseRoundedY = Math.round(mousePosition.yAxis);
-
-                    //use the mouse position to get all dasa rect
-                    //dasa elements at same X position inside the dasa svg
-                    //note: faster and less erroneous than using mouse.path
-                    var children = $("#EventChartHolder").children();
-                    var allElementsAtX = children.find(`[x=${mouseRoundedX}]`);
-
-
-                    //delete previously generated legend rows
-                    $(".CursorLineLegendClone").remove();
-
-
-                    //count good and bad events for summary row
-                    var goodCount = 0;
-                    var badCount = 0;
-                    var newRowYAxis = 0; //vertical position of the current event row
-                    window.showDescription = false;//default description not shown
-                    //extract event data out and place it in legend
-                    allElementsAtX.each(drawEventRow);
-
-                    //auto show/hide description box based on mouse position
-                    if (window.showDescription) {
-                        $("#CursorLineLegendDescriptionHolder").show();
-                    } else {
-                        $("#CursorLineLegendDescriptionHolder").hide();
-                    }
-
-
-
-                    //5 GENERATE LAST SUMMARY ROW
-                    //generate summary row at the bottom
-                    //make a copy of template for this event
-                    var newSummaryRow = $(holderTemplateId).clone();
-                    newSummaryRow.removeAttr('id'); //remove the clone template id
-                    newSummaryRow.addClass("CursorLineLegendClone"); //to delete it on next run
-                    newSummaryRow.appendTo("#CursorLineLegendHolder"); //place new legend into parent
-                    newSummaryRow.show();//make cloned visible
-                    //position the group holding the legend over the event row which the legend represents
-                    newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis + 15 - 1})`);//minus 1 for perfect alignment
-
-                    //set event name text & color element
-                    var textElm = newSummaryRow.children("text");
-                    textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
-                    //change icon to summary icon
-                    newSummaryRow.children("use").attr("xlink:href", "#CursorLineSumIcon");
-
-                    //FUNCTIONS
-
-                    //
-                    function drawEventRow() {
-
-                        //this is the rect generated by API containing data about the event
-                        var svgEventRect = this;
-
-                        //1 GET DATA
-                        //extract other data out of the rect
-                        var eventName = svgEventRect.getAttribute("eventname");
-                        //if no "eventname" exist, wrong elm skip it
-                        if (!eventName) { return; }
-
-                        var color = svgEventRect.getAttribute("fill");
-                        newRowYAxis = parseInt(svgEventRect.getAttribute("y"));//parse as num, for calculation
-
-                        //count good and bad events for summary row
-                        var eventNatureName = "";// used later for icon color
-                        if (color === "#FF0000") { eventNatureName = "Bad", badCount++; }
-                        if (color === "#00FF00") { eventNatureName = "Good", goodCount++; }
-
-
-                        //2 TIME & AGE LEGEND
-                        //create time legend at top only for first element
-                        if (allElementsAtX[0] === svgEventRect) { drawTimeAgeLegendRow(); }
-
-                        //3 GENERATE EVENT ROW
-                        //make a copy of template for this event
-                        var newLegendRow = $(holderTemplateId).clone();
-                        newLegendRow.removeAttr('id'); //remove the clone template id
-                        newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
-                        newLegendRow.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
-                        newLegendRow.show();//make cloned visible
-                        //position the group holding the legend over the event row which the legend represents
-                        newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 2})`);//minus 2 for perfect alignment
-
-                        //set event name text & color element
-                        var textElm = newLegendRow.children("text");
-                        var iconElm = newLegendRow.children("use");
-                        textElm.text(`${eventName}`);
-                        iconElm.attr("xlink:href", `#CursorLine${eventNatureName}Icon`); //set icon color based on nature
-
-                        //4 GENERATE DESCRIPTION ROW LOGIC
-                        //check if mouse in within row of this event (y axis)
-                        var elementTopY = newRowYAxis;
-                        var elementBottomY = newRowYAxis + 15;
-                        var mouseWithinRow = mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY;
-                        //if event name is still the same then don't load description again
-                        var notSameEvent = window.previousHoverEventName !== eventName;
-
-                        //HIGHLIGHT ROW
-                        //if mouse is in event's row then highlight that row
-                        if (mouseWithinRow) {
-                            //highlight event name row
-                            var backgroundElm = newLegendRow.children("rect");
-                            backgroundElm.css("fill", "#003e99");
-                            backgroundElm.css("opacity", "1");//solid
-                            //textElm.css("fill", "#fff");
-                            textElm.css("font-weight", "700");
-                            //if mouse within show description box
-                            window.showDescription = true;
-                        }
-
-                        //if mouse within row AND the event has changed
-                        //then generate a new description
-                        //note: this is slow, so done only when absolutely needed
-                        if (mouseWithinRow && notSameEvent) {
-
-                            //make holder visible
-                            $("#CursorLineLegendDescriptionHolder").show();
-
-                            //move holder next to event
-                            var descBoxYAxis = newRowYAxis - 9;//minus 5 for perfect alignment with event name row
-                            $("#CursorLineLegendDescriptionHolder").attr("transform", `matrix(1, 0, 0, 1, 0, ${descBoxYAxis})`);
-
-                            //note: using trigger to make it easy to skip multiple clogging events
-                            $(document).trigger('loadEventDescription', eventName);
-
-                            //update previous hover event
-                            window.previousHoverEventName = eventName;
-                        }
-
-
-                        function drawTimeAgeLegendRow() {
-                            var newTimeLegend = $(holderTemplateId).clone();
-                            newTimeLegend.removeAttr('id'); //remove the clone template id
-                            newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
-                            newTimeLegend.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
-                            newTimeLegend.show();//make cloned visible
-                            newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 15})`); //above 1st row
-                            //split time to remove timezone from event
-                            var stdTimeFull = svgEventRect.getAttribute("stdtime");
-                            var stdTimeSplit = stdTimeFull.split(" ");
-                            var hourMin = stdTimeSplit[0];
-                            var date = stdTimeSplit[1];
-                            var timezone = stdTimeSplit[2];
-                            var age = svgEventRect.getAttribute("age");
-                            newTimeLegend.children("text").text(`${hourMin} ${date}  AGE: ${age}`);
-                            //replace circle with clock icon
-                            newTimeLegend.children("use").attr("xlink:href", "#CursorLineClockIcon");
-                        }
-
-                    }
-
-
-                }
-
+                return x;
             }
 
-            //on mouse leave event chart, auto hide time legend
-            async function onMouseLeaveEventChart(mouse) {
-                $("#CursorLine").hide();
-            }
-
-        }
-
-        //returns true if svg loaded
-        function isSvgLoaded() {
-            console.log(`Checking if SVG Chart is loaded...`);
-
-            //check if svg alredy loaded into page
-            var x = $("#DasaViewBox").children().first().is("svg");
-
-            //if svg loaded then
-            if (x) {
+            static hideLoading() {
                 //hide default loading box
                 $("#LoadingBox").hide();
                 //show svg chart
                 $("#DasaViewBox").show();
             }
 
-            return x;
+            static showLoading() {
+                //hide default loading box
+                $("#LoadingBox").show();
+                //show svg chart
+                $("#DasaViewBox").hide();
+            }
+
+            static getScreenHeight() {
+                return Math.max(
+                    document.body.scrollHeight,
+                    document.documentElement.scrollHeight,
+                    document.body.offsetHeight,
+                    document.documentElement.offsetHeight,
+                    document.documentElement.clientHeight
+                );
+            }
+
+            static async animateEventsChart() {
+                console.log(`Starting the engine...`);
+
+                //set title for easy multi-tabbing
+                document.title = `${window.ChartType} | ${window.PersonName}`;
+
+                //set toolbar data
+                $("#PersonNameBox").text("Person : " + window.PersonName);
+
+                var notLoaded = !Chart.isSvgLoaded();
+
+                //try get svg from server if svg not loaded by now
+                if (notLoaded) {
+                    //coming from live chart generate
+
+                    //get data to generate chart from URL
+                    var data = Chart.getDataFromUrl();
+
+                    await Chart.getEventsChartFromApi(data);
+
+                    //attach mouse handler to auto move cursor line & update time legend
+                    //load event description file 1st
+                    await Chart.loadEventDataListFile();
+
+                    $("#DasaViewBox")[0].addEventListener("mousemove", Chart.onMouseMoveHandler);
+
+                    $("#EventChartHolder")[0].addEventListener("mouseleave", Chart.onMouseLeaveEventChart);
+
+                    //event fired from autoUpdateTimeLegend
+                    $(document).on('loadEventDescription', Chart.loadEventDescription);
+
+                }
+                else {
+                    //attach mouse handler to auto move cursor line & update time legend
+                    //load event description file 1st
+                    await Chart.loadEventDataListFile();
+
+                    $("#DasaViewBox")[0].addEventListener("mousemove", Chart.onMouseMoveHandler);
+
+                    $("#EventChartHolder")[0].addEventListener("mouseleave", Chart.onMouseLeaveEventChart);
+
+                    //event fired from autoUpdateTimeLegend
+                    $(document).on('loadEventDescription', Chart.loadEventDescription);
+                }
+
+                //make toolbar visible
+                $("#ToolBar").removeClass("visually-hidden");
+
+                Chart.hideLoading();
+
+            }
         }
 
-        //get screen width
-        function getScreenWidth() {
-            return Math.max(
-                document.body.scrollWidth,
-                document.documentElement.scrollWidth,
-                document.body.offsetWidth,
-                document.documentElement.offsetWidth,
-                document.documentElement.clientWidth
-            );
+        async function onClickRefresh() {
+
+            Chart.showLoading();
+
+            var returnVal = {
+                "timePreset": $("#TimePresetSelector").val(),
+                "eventPreset": $("#EventPresetSelector").val(),
+                "personId": window.PersonId,
+                "maxWidth": Chart.getScreenWidth(),
+                "timezone": Chart.getParseableTimezone()
+            };
+
+            await  Chart.getEventsChartFromApi(returnVal);
+
+            Chart.hideLoading();
         }
 
-        function getScreenHeight() {
-            return Math.max(
-                document.body.scrollHeight,
-                document.documentElement.scrollHeight,
-                document.body.offsetHeight,
-                document.documentElement.offsetHeight,
-                document.documentElement.clientHeight
-            );
+        //called when dark mode button clicked
+        function onClickDarkModeToggle() {
+
+
+            //get previous val if any
+            //note: same with Blazor's dark mode key
+            var toggleMode = getProperty("darkmode");
+
+            //set mode based on previous mode
+            if (!toggleMode) { setDarkMode(); }
+            else { setLightMode(); }
+
+
         }
 
-        //Jquery to attach event listener to inputed element
-        function addEventListenerWrapper(element, eventName, functionName) {
+        function setDarkMode() {
+            //set page background to black
+            $("body").css('background-color', '#333');
+            //set toolbar to white, much easier than changing each little element inside
+            $("#ToolBar").css('background-color', '#ddd');
+
+            //save dark mode state for later visits
+            //note: same with Blazor's dark mode key
+            setProperty("darkmode", true);
 
         }
+        function setLightMode() {
+            //set page background to black
+            $("body").css('background-color', '#ddd');
+            //set toolbar to white, much easier than changing each little element inside
+            $("#ToolBar").css('background-color', '#ddd');
+
+            //save dark mode state for later visits
+            //note: same with Blazor's dark mode key
+            setProperty("darkmode", false);
+
+        }
+
+        function getProperty(key) { return key in localStorage ? JSON.parse(localStorage[key]) : null; }
+        function setProperty(key, value) { localStorage[key] = JSON.stringify(value); }
+
+        function initDarkMode() {
+
+            //get previous val if any
+            //note: same with Blazor's dark mode key
+            var prevMode = getProperty("darkmode");
+
+            //set mode based on previous mode
+            if (prevMode) { setDarkMode(); }
+            else { setLightMode(); }
+
+        }
+
+
+        //START
+
+        initDarkMode();
+
+        //start the app
+        Chart.animateEventsChart();
+
 
     </script>
 

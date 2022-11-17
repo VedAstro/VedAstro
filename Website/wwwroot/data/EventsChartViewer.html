@@ -77,7 +77,6 @@
             //template used to generate legend rows
             static holderTemplateId = `#CursorLineLegendTemplate`;
 
-
             //get screen width
             static getScreenWidth() {
                 return Math.max(
@@ -551,13 +550,18 @@
                 $("#LoadingBox").hide();
                 //show svg chart
                 $("#DasaViewBox").show();
+                //show toolbar
+                $("#ToolBar").show();
             }
 
             static showLoading() {
-                //hide default loading box
+                //show default loading box
                 $("#LoadingBox").show();
-                //show svg chart
+                //hide svg chart
                 $("#DasaViewBox").hide();
+                //hide toolbar
+                $("#ToolBar").hide();
+
             }
 
             static getScreenHeight() {
@@ -623,10 +627,11 @@
             }
         }
 
+        //sets selection box data to URL & loads new chart from API
         async function onClickRefresh() {
-
             Chart.showLoading();
 
+            //get needed data out of selection boxes
             var returnVal = {
                 "timePreset": $("#TimePresetSelector").val(),
                 "eventPreset": $("#EventPresetSelector").val(),
@@ -635,7 +640,19 @@
                 "timezone": Chart.getParseableTimezone()
             };
 
-            await  Chart.getEventsChartFromApi(returnVal);
+            //reset parts of the URL with data from selection boxes
+            var pathname = window.location.pathname.split("/");
+            pathname[pathname.length - 1] = returnVal.timePreset;
+            pathname[pathname.length - 2] = returnVal.eventPreset;
+            pathname[pathname.length - 3] = returnVal.personId;
+
+            //construct the final URL back
+            var newUrl = pathname.join('/');
+            //location.href = window.location.origin + newUrl; //set url reload page
+            window.history.pushState('page2', 'Title', newUrl);//set url don't load page
+
+            //ge chart from API
+            await Chart.getEventsChartFromApi(returnVal);
 
             Chart.hideLoading();
         }

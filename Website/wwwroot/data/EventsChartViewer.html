@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="icon" type="image/x-icon" href="https://www.vedastro.org/images/favicon.ico" />
@@ -73,6 +73,16 @@
 
         //FUNCTIONS
         class Chart {
+            //constructor(chartElement) {  // Constructor
+            //    this.ChartElement = chartElement;
+
+            //    //check if chart is loaded or not
+            //    if (this.ChartElement) {
+
+            //    }
+
+            //    Chart.animateEventsChart();
+            //}
 
             //template used to generate legend rows
             static holderTemplateId = `#CursorLineLegendTemplate`;
@@ -514,25 +524,33 @@
             //needs to be run once before get event description method is used
             //loads xml file located in wwwroot to xml global data
             static async loadEventDataListFile() {
-                //console.log(`JS: LoadEventDataListFile`);
 
-                //get data list from server and store it for later use
-                //NOTE: CORS in Azure Website Storage needs to be disabled for this to work, outside of vedastro.org
-                $(function () {
-                    $.ajax({
-                        type: "get",
-                        url: "https://www.vedastro.org/data/EventDataList.xml",
-                        dataType: "xml",
-                        success: function (data) {
-                            /* handle data here */
-                            window.EventDataListXml = $(data); //jquery for use with .filter
-                        },
-                        error: function (xhr, status) {
-                            /* handle error here */
-                            console.log(status);
-                        }
+                //only load new file if none available
+                if (!window.EventDataListXml) {
+                    //get data list from server and store it for later use
+                    //NOTE: CORS in Azure Website Storage needs to be disabled for this to work, outside of vedastro.org
+                    $(function () {
+                        $.ajax({
+                            type: "get",
+                            url: "https://www.vedastro.org/data/EventDataList.xml",
+                            dataType: "xml",
+                            success: function (data) {
+                                //let user know
+                                console.log(`Getting event data file from API...`);
+                                //save for later
+                                window.EventDataListXml = $(data); //jquery for use with .filter
+                            },
+                            error: function (xhr, status) {
+                                /* handle error here */
+                                console.log(status);
+                            }
+                        });
                     });
-                });
+                } else {
+                    console.log(`Using cached event data file.`);
+                }
+
+
             }
 
             //returns true if svg loaded
@@ -574,21 +592,44 @@
                 );
             }
 
+            //attaches all needed handlers to animate a chart
+            static async initializeChart(chartElement$) {
+                //attach mouse handler to auto move cursor line & update time legend
+                //load event description file 1st
+                await Chart.loadEventDataListFile();
+
+                chartElement$[0].addEventListener("mousemove", Chart.onMouseMoveHandler);
+
+                chartElement$[0].addEventListener("mouseleave", Chart.onMouseLeaveEventChart);
+
+                //attach handler to load event description file before hand
+                $(document).on('loadEventDescription', Chart.loadEventDescription);
+
+                //save now line
+                Chart.NowVerticalLine = chartElement$.find('#NowVerticalLine');
+
+                //update now line position
+                var nowLineXAxis = 0;
+                Chart.NowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${nowLineXAxis}, 0)`);
+
+            }
+
+
+            //coming from direct/url access page
             static async animateEventsChart() {
                 console.log(`Starting the engine...`);
 
-                //set title for easy multi-tabbing
+                //set title for easy multi-tabbing (not chart related)
                 document.title = `${window.ChartType} | ${window.PersonName}`;
 
-                //set toolbar data
+                //set toolbar data (not chart related)
                 $("#PersonNameBox").text("Person : " + window.PersonName);
 
                 var notLoaded = !Chart.isSvgLoaded();
 
                 //try get svg from server if svg not loaded by now
+                //coming from live chart generate
                 if (notLoaded) {
-                    //coming from live chart generate
-
                     //get data to generate chart from URL
                     var data = Chart.getDataFromUrl();
 
@@ -596,27 +637,15 @@
 
                     //attach mouse handler to auto move cursor line & update time legend
                     //load event description file 1st
-                    await Chart.loadEventDataListFile();
-
-                    $("#DasaViewBox")[0].addEventListener("mousemove", Chart.onMouseMoveHandler);
-
-                    $("#EventChartHolder")[0].addEventListener("mouseleave", Chart.onMouseLeaveEventChart);
-
-                    //event fired from autoUpdateTimeLegend
-                    $(document).on('loadEventDescription', Chart.loadEventDescription);
+                    var svgChart$ = $("#DasaViewBox").children().first();
+                    await Chart.initializeChart(svgChart$);
 
                 }
                 else {
                     //attach mouse handler to auto move cursor line & update time legend
                     //load event description file 1st
-                    await Chart.loadEventDataListFile();
-
-                    $("#DasaViewBox")[0].addEventListener("mousemove", Chart.onMouseMoveHandler);
-
-                    $("#EventChartHolder")[0].addEventListener("mouseleave", Chart.onMouseLeaveEventChart);
-
-                    //event fired from autoUpdateTimeLegend
-                    $(document).on('loadEventDescription', Chart.loadEventDescription);
+                    var svgChart$ = $("#DasaViewBox").children().first();
+                    await Chart.initializeChart(svgChart$);
                 }
 
                 //make toolbar visible

@@ -113,6 +113,31 @@
                     pad(Math.abs(tzo) % 60);
             }
 
+            static getDataFromToolbar() {
+
+                //get needed data out of selection boxes
+                var chartData = {
+                    "timePreset": $("#TimePresetSelector").val(),
+                    "eventPreset": $("#EventPresetSelector").val(),
+                    "personId": window.PersonId,
+                    "maxWidth": Chart.getScreenWidth(),
+                    "timezone": Chart.getParseableTimezone(),
+                    "url": ""//empty string first
+                };
+
+                //reset parts of the URL with data from selection boxes
+                var pathname = window.location.pathname.split("/");
+                pathname[pathname.length - 1] = chartData.timePreset;
+                pathname[pathname.length - 2] = chartData.eventPreset;
+                pathname[pathname.length - 3] = chartData.personId;
+
+                //construct the final URL back
+                var newUrl = pathname.join('/');
+                chartData.url = newUrl;
+                return chartData;
+            }
+
+
             static getDataFromUrl() {
 
                 //get data out of url
@@ -389,9 +414,9 @@
                     "credentials": "omit"
                 });
 
-                var svgEventsChart = await response.text();
-
-                injectIntoElement($("#DasaViewBox")[0], svgEventsChart);
+                //inject new svg chart into page
+                var svgChartString = await response.text();
+                injectIntoElement($("#DasaViewBox")[0], svgChartString);
 
 
                 //LOCAL FUNCTIONS
@@ -401,11 +426,14 @@
                     //convert string to html node
                     var template = document.createElement("template");
                     template.innerHTML = valueToInject;
-                    var nodeToInject = template.content.firstElementChild;
+                    var svgElement = template.content.firstElementChild;
+
+                    //save for later use
+                    Chart.Element = svgElement;
 
                     //place new node in parent
                     element.innerHTML = ''; //clear current children if any
-                    element.appendChild(nodeToInject);
+                    element.appendChild(Chart.Element);
                 }
 
             }
@@ -594,25 +622,78 @@
 
             //attaches all needed handlers to animate a chart
             static async initializeChart(chartElement$) {
+                console.log("Attaching events to chart...");
+
+                //save for easier reference
+                Chart.Element = chartElement$;
+
                 //attach mouse handler to auto move cursor line & update time legend
                 //load event description file 1st
                 await Chart.loadEventDataListFile();
 
-                chartElement$[0].addEventListener("mousemove", Chart.onMouseMoveHandler);
+                Chart.Element[0].addEventListener("mousemove", Chart.onMouseMoveHandler);
 
-                chartElement$[0].addEventListener("mouseleave", Chart.onMouseLeaveEventChart);
+                Chart.Element[0].addEventListener("mouseleave", Chart.onMouseLeaveEventChart);
 
                 //attach handler to load event description file before hand
                 $(document).on('loadEventDescription', Chart.loadEventDescription);
 
                 //save now line
-                Chart.NowVerticalLine = chartElement$.find('#NowVerticalLine');
+                Chart.NowVerticalLine = Chart.Element.find('#NowVerticalLine');
+
+                //update once now
+                updateNowLine();
+
+                //setup to auto update every 1 minute
+                setInterval(function () { updateNowLine(); }, 60 * 1000); // 60*1000ms
 
                 //update now line position
-                var nowLineXAxis = 0;
-                Chart.NowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${nowLineXAxis}, 0)`);
+                function updateNowLine() {
+                    console.log("Updating now line position...");
 
+                    //get all rects
+                    var allEventRects = Chart.Element.find(".EventListHolder").children("rect");
+
+                    //find closest rect to now time
+                    var closestRectToNow;
+                    allEventRects.each(function (index) {
+                        //get parsed time from rect
+                        var svgEventRect = this;
+                        var rectTime = getTimeInRect(svgEventRect).getTime();//(milliseconds since 1 Jan 1970)
+                        var nowTime = Date.now();
+
+                        //if not yet reach continue, keep reference to this and goto next
+                        if (rectTime <= nowTime) {
+                            closestRectToNow = svgEventRect;
+                            return true; //go next
+                        }
+                        //already passed now time, use previous rect as now, stop looking
+                        else { return false; }
+                    });
+
+                    //get horizontal position of now rect (x axis)
+                    var xAxisNowRect = closestRectToNow.getAttribute("x");
+                    Chart.NowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`);
+
+                }
+
+                //parses the STD time found in rect and returns it
+                function getTimeInRect(eventRect$) {
+                    //convert "00:28 17/11/2022 +08:00" to "2019-01-01T00:00:00.000+00:00"
+                    var stdTimeRaw = eventRect$.getAttribute("stdtime");
+                    var stdTimeSplit = stdTimeRaw.split(" ");
+                    var hourMin = stdTimeSplit[0];
+                    var dateFull = stdTimeSplit[1].split('/');
+                    var date = dateFull[0];
+                    var month = dateFull[1];
+                    var year = dateFull[2];
+                    var timezone = stdTimeSplit[2];
+                    var rectTime = new Date(`${year}-${month}-${date}T${hourMin}:00.000${timezone}`);
+
+                    return rectTime;
+                }
             }
+
 
 
             //coming from direct/url access page
@@ -620,10 +701,10 @@
                 console.log(`Starting the engine...`);
 
                 //set title for easy multi-tabbing (not chart related)
-                document.title = `${window.ChartType} | ${window.PersonName}`;
+                document.title = `${window?.ChartType} | ${window?.PersonName}`;
 
                 //set toolbar data (not chart related)
-                $("#PersonNameBox").text("Person : " + window.PersonName);
+                $("#PersonNameBox").text("Person : " + window?.PersonName);
 
                 var notLoaded = !Chart.isSvgLoaded();
 
@@ -635,18 +716,12 @@
 
                     await Chart.getEventsChartFromApi(data);
 
-                    //attach mouse handler to auto move cursor line & update time legend
-                    //load event description file 1st
-                    var svgChart$ = $("#DasaViewBox").children().first();
-                    await Chart.initializeChart(svgChart$);
+                }
 
-                }
-                else {
-                    //attach mouse handler to auto move cursor line & update time legend
-                    //load event description file 1st
-                    var svgChart$ = $("#DasaViewBox").children().first();
-                    await Chart.initializeChart(svgChart$);
-                }
+                //attach mouse handler to auto move cursor line & update time legend
+                //load event description file 1st
+                var svgChart$ = $("#DasaViewBox").children().first();
+                await Chart.initializeChart(svgChart$);
 
                 //make toolbar visible
                 $("#ToolBar").removeClass("visually-hidden");
@@ -661,27 +736,14 @@
             Chart.showLoading();
 
             //get needed data out of selection boxes
-            var returnVal = {
-                "timePreset": $("#TimePresetSelector").val(),
-                "eventPreset": $("#EventPresetSelector").val(),
-                "personId": window.PersonId,
-                "maxWidth": Chart.getScreenWidth(),
-                "timezone": Chart.getParseableTimezone()
-            };
+            var chartData = Chart.GetChartDataFromToolbar();
 
-            //reset parts of the URL with data from selection boxes
-            var pathname = window.location.pathname.split("/");
-            pathname[pathname.length - 1] = returnVal.timePreset;
-            pathname[pathname.length - 2] = returnVal.eventPreset;
-            pathname[pathname.length - 3] = returnVal.personId;
-
-            //construct the final URL back
-            var newUrl = pathname.join('/');
             //location.href = window.location.origin + newUrl; //set url reload page
+            //todo need cleanup
             window.history.pushState('page2', 'Title', newUrl);//set url don't load page
 
-            //ge chart from API
-            await Chart.getEventsChartFromApi(returnVal);
+            //get chart from API
+            await Chart.getEventsChartFromApi(chartData);
 
             Chart.hideLoading();
         }
@@ -712,6 +774,7 @@
             setProperty("darkmode", true);
 
         }
+
         function setLightMode() {
             //set page background to black
             $("body").css('background-color', '#ddd');
@@ -725,6 +788,7 @@
         }
 
         function getProperty(key) { return key in localStorage ? JSON.parse(localStorage[key]) : null; }
+
         function setProperty(key, value) { localStorage[key] = JSON.stringify(value); }
 
         function initDarkMode() {

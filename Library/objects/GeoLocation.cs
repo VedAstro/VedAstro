@@ -127,7 +127,7 @@ namespace Genso.Astrology.Library
         /// Given a place's name, will get fully initialized GeoLocation.
         /// Using Google API
         /// </summary>
-        public static async Task<GeoLocation> FromName(string locationName, string apiKey)
+        public static async Task<GeoLocation> FromName(string locationName)
         {
             var DefaultLocationCountry = "Singapore";
 
@@ -141,7 +141,7 @@ namespace Genso.Astrology.Library
             try
             {
                 //get longitude & latitude for location from API
-                coordinates = await Tools.AddressToCoordinate(locationName, apiKey);
+                coordinates = await Tools.AddressToCoordinate(locationName);
             }
             catch (Exception e)
             {

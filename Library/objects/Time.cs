@@ -10,6 +10,8 @@ namespace Genso.Astrology.Library
     /// A single representation of time, contains both standard time (STD) & local mean time (LMT)
     /// LMT is actual time based on the location of the place
     /// IMMUTABLE CLASS
+    /// Exists as a merger/wrapper between Standard Time at a place and the coordinates of that place,
+    /// to generate the Local Mean Time needed for astrological calculation
     /// </summary>
     [Serializable()]
     public struct Time : IToXml

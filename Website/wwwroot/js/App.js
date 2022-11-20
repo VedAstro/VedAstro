@@ -363,7 +363,7 @@ function generateLifeEventListTable(tableId, tableData) {
         columns: [                 
             //code to delete button for row
             {
-                formatter: "buttonCross", width: 40, cellClick: function (e, cell) {
+                formatter: "buttonCross", hozAlign: "center", width: 40, cellClick: function (e, cell) {
                     cell.getRow().delete();
                 }
             },

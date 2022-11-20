@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -109,5 +110,6 @@ namespace Genso.Astrology.Library
             var endMonth = endTime.GetStdMonth();
             return $"{personName} - {startMonth}/{startYear} to {endMonth}/{endYear}";
         }
+
     }
 }

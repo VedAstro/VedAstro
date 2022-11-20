@@ -442,14 +442,15 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static TimeSpan GetSystemTimezone() => DateTimeOffset.Now.Offset;
 
-        public static async Task<dynamic> AddressToCoordinate(string address, string apiKey)
+        public static async Task<(string FullName, double Latitude,double Longitude)> AddressToCoordinate(string address)
         {
             //create the request url for Google API
+            var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
             var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={apiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
 
             //get location data from GoogleAPI
             var rawReplyXml = await ReadFromServerXmlReply(url);
-
+            Console.WriteLine(rawReplyXml.ToString());
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
             var result = locationData.Element("GeocodeResponse")?.Element("result");
@@ -464,7 +465,7 @@ namespace Genso.Astrology.Library
             //get full name with country & state
             var fullName = result?.Element("formatted_address")?.Value;
 
-            return new { FullName = fullName, Latitude = lat, Longitude = lng };
+            return (FullName: fullName, Latitude: lat, Longitude: lng);
 
         }
 
@@ -500,13 +501,13 @@ namespace Genso.Astrology.Library
         public static async Task<TimeSpan> GetTimezoneOffset(string locationName, DateTimeOffset timeAtLocation, string apiKey)
         {
             //get geo location first then call underlying method
-            var geoLocation = await GeoLocation.FromName(locationName, apiKey);
+            var geoLocation = await GeoLocation.FromName(locationName);
             return Tools.StringToTimezone(await GetTimezoneOffset(geoLocation, timeAtLocation, apiKey));
         }
         public static async Task<string> GetTimezoneOffsetString(string locationName, DateTime timeAtLocation, string apiKey)
         {
             //get geo location first then call underlying method
-            var geoLocation = await GeoLocation.FromName(locationName, apiKey);
+            var geoLocation = await GeoLocation.FromName(locationName);
             return await GetTimezoneOffset(geoLocation, timeAtLocation, apiKey);
         }
         public static async Task<string> GetTimezoneOffsetString(string location, string dateTime)

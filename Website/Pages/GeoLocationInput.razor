@@ -19,6 +19,7 @@
         @*make input wider if without*@
         <div class="hstack">
             <input @ref="_locationNameInput" @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control">
+            @*dummy button to start location search*@
             <div class="p-1 rounded border" style="cursor: pointer;height: 38px;margin-left: 4px;">
                 <span class="iconify" data-icon="bx:search-alt" data-width="23"></span>
             </div>
@@ -207,11 +208,11 @@
 
         //sometimes location can't be found, causes critical failure
         //so if fail here try again with default location & alert user
-        dynamic coordinates;
+        (string FullName, double Latitude, double Longitude) coordinates = (FullName: "", Latitude: 0, Longitude: 0);
         try
         {
             //get longitude & latitude for location
-            coordinates = await Tools.AddressToCoordinate(LocationName, ServerManager.GoogleGeoLocationApiKey);
+            coordinates = await Tools.AddressToCoordinate(LocationName);
         }
         catch (Exception e)
         {
@@ -226,13 +227,12 @@
             goto TryAgain;
         }
 
-
+        //(FullName: fullName, Latitude: lat, Longitude: lng);
+        //update user typed location name to proper formatted one
+        LocationName = coordinates.FullName;
         //set new coordinates into view
         Longitude = coordinates.Longitude;
         Latitude = coordinates.Latitude;
-
-        //update user typed location name to proper formatted one
-        LocationName = coordinates.FullName;
 
     }
 

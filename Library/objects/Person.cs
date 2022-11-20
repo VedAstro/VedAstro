@@ -294,5 +294,16 @@ namespace Genso.Astrology.Library
         /// - maintains all other person props
         /// </summary>
         public Person SetNewLifeEvents(List<LifeEvent> updatedLifeEventList) => new Person(Id, Name, BirthTime, Gender, UserId, Notes, updatedLifeEventList);
+
+        /// <summary>
+        /// Returns a new instance person with modified birth time
+        /// everything else including ID stays the same
+        /// </summary>
+        public Person ChangeBirthTime(Time newBirthTime)
+        {
+            //make a copy of person details except birth time
+            var newPerson = new Person(this.Id, Name, newBirthTime, Gender, UserId, Notes, LifeEventList);
+            return newPerson;
+        }
     }
 }

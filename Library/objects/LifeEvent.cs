@@ -20,6 +20,7 @@ namespace Genso.Astrology.Library
         private string _description;
 
 
+
         //░█▀▀▄ ─█▀▀█ ▀▀█▀▀ ─█▀▀█ 
         //░█─░█ ░█▄▄█ ─░█── ░█▄▄█ 
         //░█▄▄▀ ░█─░█ ─░█── ░█─░█
@@ -204,9 +205,10 @@ namespace Genso.Astrology.Library
         /// Parses a event start time into DateTimeOffset
         /// uses google api
         /// NOTE:
+        /// - standard time (STD) at the location at that time
         /// - updates the local instance with timezone data, to be saved and used later
         /// </summary>
-        public async Task<DateTimeOffset> GetTime()
+        public async Task<DateTimeOffset> GetDateTimeOffset()
         {
             //get timezone from api and save it to local instance so that it can saved later
             //only use API if timezone data not yet set, to save unnecessary calls to Google
@@ -223,5 +225,22 @@ namespace Genso.Astrology.Library
             return lifeEvtTime;
         }
 
+        /// <summary>
+        /// Note this call uses Google API everytime
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Time> GetTime()
+        {
+            var stdTimeLocation = await this.GetDateTimeOffset();
+            var location = await this.GetGeoLocation();
+            var newTime = new Time(stdTimeLocation, location);
+            return newTime;
+        }
+
+        /// <summary>
+        /// Gets geo location instance for this event, uses Google API
+        /// </summary>
+        /// <returns></returns>
+        public async Task<GeoLocation> GetGeoLocation() => await GeoLocation.FromName(this.Location);
     }
 }

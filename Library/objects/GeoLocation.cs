@@ -137,7 +137,7 @@ namespace Genso.Astrology.Library
 
             //sometimes location can't be found, causes critical failure
             //so if fail here continue with default location
-            dynamic coordinates;
+            (string FullName, double Latitude, double Longitude) coordinates;
             try
             {
                 //get longitude & latitude for location from API

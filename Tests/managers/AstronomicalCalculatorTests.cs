@@ -17,6 +17,42 @@ namespace Genso.Astrology.Library.Tests
         }
 
         [TestMethod()]
+        public void GetEpochIntervalTest()
+        {
+
+            //Example 36.-Find the interval in case of a birth on Tuesday,
+            //2nd 11 April 1895
+            var geoLocation = new GeoLocation("Ipoh", 101, 4.59);//not important
+            var birthTime = new Time("00:00 02/04/1895 +00:00", geoLocation);
+            var daysInterval = AstronomicalCalculator.GetEpochInterval(birthTime);
+
+            //correct result is 4
+            Assert.IsTrue(daysInterval == -1735);
+        }
+
+        [TestMethod()]
+        public void GetMadhyaTest()
+        {
+            //tested to confirm bug fix for dates before 1900
+            
+            var geoLocation = new GeoLocation("Ipoh", 101, 4.59);//not important
+            var birthTime = new Time("00:00 01/01/1899 +00:00", geoLocation);
+            var daysInterval = AstronomicalCalculator.GetEpochInterval(birthTime);
+            var planetMean = AstronomicalCalculator.GetMadhya(daysInterval, birthTime);
+
+            var geoLocation2 = new GeoLocation("Ipoh", 101, 4.59);//not important
+            var birthTime2 = new Time("00:00 01/01/1910 +00:00", geoLocation2);
+            var daysInterval2 = AstronomicalCalculator.GetEpochInterval(birthTime2);
+            var planetMean2 = AstronomicalCalculator.GetMadhya(daysInterval2, birthTime2);
+
+            var geoLocation3 = new GeoLocation("Ipoh", 101, 4.59);//not important
+            var birthTime3 = new Time("00:00 01/01/1911 +00:00", geoLocation3);
+            var daysInterval3 = AstronomicalCalculator.GetEpochInterval(birthTime3);
+            var planetMean3 = AstronomicalCalculator.GetMadhya(daysInterval3, birthTime3);
+
+        }
+
+        [TestMethod()]
         public void CountFromSignToSignTest()
         {
             //test

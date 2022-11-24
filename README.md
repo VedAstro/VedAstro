@@ -30,6 +30,17 @@
 - [Fix](https://vedastro.org/contact) bugs & implement features
 
 
+# Help us and get paid!
+Complete tasks for this project and get paid instantly! Each task has a different value based on complexity.
+To get started fork the repo, make your edits and submit pull request. Contact us for task details.
+
+Task | Value | Status
+--- | --- | ---
+Improve API chart generator performance by 2x | $10 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
+Show name of planet state in Horoscope page (combust, exalted, debilited) | $2 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
+Generate traditional Rasi, Navamsa South/North style chart | $5 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
+Find a spelling mistake in VedAstro.org content | $1 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
+Show name of planet motion in Horoscope page (retrograde, direct, stationary) | $1.5 | ![](https://img.shields.io/static/v1?label=&message=Done&color=green)
 
 # Unexpected errors?
 There are new updates to the VedAstro WebApp almost **everyday!** Your browsers caches the old version,

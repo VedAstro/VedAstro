@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using SwissEphNet;
 
@@ -1549,6 +1550,8 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets planet longitude used vedic astrology
         /// Nirayana Longitude = Sayana Longitude corrected to Ayanamsa
+        /// Number from 0 to 360, represent the degrees in the zodiac as viewed from earth
+        /// Note: Since Niryana is corrected, in actuality 0 degrees will start at Taurus not Aries
         /// </summary>
         public static Angle GetPlanetNirayanaLongitude(Time time, PlanetName planetName)
         {
@@ -4636,30 +4639,56 @@ namespace Genso.Astrology.Library
         /// of the True and Mean Longitudes of planets and
         /// divide the difference by 3. The quotient is the
         /// Chestabala.
+        /// Max 60, meaning Retrograde/Vakra
+        /// When the distance of any one planet from
+        /// the Sun exceeds a particular limit, it becomes
+        /// retrograde, i.e., when the planet goes from
+        /// perihelion (the point in a planet's orbit nearest
+        /// to the Sun) to aphelion (the part of a planet's
+        /// oroit most distant from the Sun) as it recedes
+        /// from the Sun, it gradually loses the power
+        /// of •the Sun's gravitation and consequently, 
         /// </summary>
         public static Shashtiamsa GetPlanetChestaBala(PlanetName planetName, Time time)
         {
-            //the Sun and the Moon doesn not retrograde, so 0 chesta bala
-            if (planetName == PlanetName.Sun || planetName == PlanetName.Moon) { return Shashtiamsa.Zero; }
+
+            //the Sun,Moon,Rahu and Ketu doesn not retrograde, so 0 chesta bala
+            if (planetName == PlanetName.Sun || planetName == PlanetName.Moon || planetName == PlanetName.Rahu || planetName == PlanetName.Ketu) { return Shashtiamsa.Zero; }
 
             //get the interval between birth date and the date of the epoch (1900)
-            var interval = GetInterval(time);
+            //verified standard horoscope = 6862.579
+            //NOTE: dates before 1900 give negative values
+            var interval = GetEpochInterval(time);
 
-            //get the mean longitudes of all planets
+            //get the mean/average longitudes of all planets
             var madhya = GetMadhya(interval, time);
 
-            //get the apogee of all planets
+            //get the apogee of all planets (apogee=earth, aphelion=sun)
+            // aphelion (the part of a planet's orbit most distant from the Sun) 
             var seegh = GetSeeghrochcha(madhya, interval, time);
 
 
             //calculate chesta kendra, also called Seeghra kendra
             var planetLongitude = AstronomicalCalculator.GetPlanetNirayanaLongitude(time, planetName).TotalDegrees;
-            var chestaKendra = (seegh[planetName] - ((madhya[planetName] + planetLongitude) / 2.0));
+            //This is the Arc of retrogression.
+            var planetAphelion = seegh[planetName]; //fixed most distant point from sun
+            var planetMeanCircle = madhya[planetName]; //planet average distant point from sun (CIRCLE ORBIT)
+            //Chesta kendra = 180 degrees = Retrograde
+            //Because the orbits are elliptical
+            //and not circular, equations are applied to the mean positions to get the true longitudes.
+            var trueLongitude = ((planetMeanCircle + planetLongitude) / 2.0);
+            //distance from stationary point, if less than 0 than add 360 
+            var chestaKendra = (planetAphelion - trueLongitude);
 
 
-            //If the Chesta kendra exceeds 180°, subtract it from 360, otherwise
+
+            //If the Chesta kendra exceeds 180° (maximum retrograde), subtract it from 360, otherwise
             //keep it as it is. The remainder represents the reduced Chesta kendra
-            if (chestaKendra < 360.00) { chestaKendra = chestaKendra + 360; }
+            //NOTE: done to reduce value of direct motion, only value relative to retro motion
+            if (chestaKendra < 360.00)
+            {
+                chestaKendra = chestaKendra + 360;
+            }
             chestaKendra = chestaKendra % 360;
             if (chestaKendra > 180.00) { chestaKendra = 360 - chestaKendra; }
 
@@ -4675,75 +4704,158 @@ namespace Genso.Astrology.Library
 
             //------------------------FUNCTIONS--------------
 
-            //Get mean longitudes (Madhya)
-            Dictionary<PlanetName, double> GetMadhya(double _interval, Time time1)
-            {
-                int _birthYear = time1.GetLmtDateTimeOffset().Year;
 
-                var madhya = new Dictionary<PlanetName, double>();
-
-                //this is the position of Madhya Ravi at the moment of birth
-                madhya[PlanetName.Sun] = madhya[PlanetName.Mercury] = madhya[PlanetName.Venus] = ((_interval * 0.9855931) + 257.4568) % 360;
-                madhya[PlanetName.Mars] = ((_interval * 0.5240218) + 270.22) % 360;
-
-                var correction1 = 3.33 + (0.0067 * (_birthYear - 1900));
-                madhya[PlanetName.Jupiter] = (((_interval * 0.08310024) + 220.04) - correction1) % 360;
-
-                correction1 = 5 + (0.001 * (_birthYear - 1900));
-                madhya[PlanetName.Saturn] = ((_interval * 0.03333857) + 236.74 + correction1) % 360;
-
-                return madhya;
-            }
-
-            //Seeghrochcha is the apogee of the planet
+            //Seeghrochcha is the aphelion of the planet
             //It is required to find the Chesta kendra.
-            Dictionary<PlanetName, double> GetSeeghrochcha(Dictionary<PlanetName, double> _madhya, double _interval, Time time1)
+            //NOTE:aphelion (the part of a planet's orbit most distant from the Sun)
+            Dictionary<PlanetName, double> GetSeeghrochcha(Dictionary<PlanetName, double> mean, double epochToBirthDays, Time time1)
             {
                 int _birthYear = time1.GetLmtDateTimeOffset().Year;
                 var seegh = new Dictionary<PlanetName, double>();
                 double correction;
 
                 //The mean longitude of the Sun will be the Seeghrochcha of Kuja, Guru and Sani.
-                seegh[PlanetName.Mars] = seegh[PlanetName.Jupiter] = seegh[PlanetName.Saturn] = _madhya[PlanetName.Sun];
+                seegh[PlanetName.Mars] = seegh[PlanetName.Jupiter] = seegh[PlanetName.Saturn] = mean[PlanetName.Sun];
 
                 correction = 6.670 + (0.00133 * (_birthYear - 1900));
-                seegh[PlanetName.Mercury] = ((_interval * 4.092385) + 164.00 + correction) % 360;
+                double changeDuringIntervalMercury = (epochToBirthDays * 4.092385);
+                const double aphelionAtEpochMercury = 164.00; // The Seeghrochcha of Budha at the epoch
+                double mercuryAphelion = changeDuringIntervalMercury < 0 ? aphelionAtEpochMercury - changeDuringIntervalMercury : aphelionAtEpochMercury + changeDuringIntervalMercury;
+                mercuryAphelion -= correction; //further correction of +6.670-0133
+                seegh[PlanetName.Mercury] = (mercuryAphelion + correction) % 360;
 
                 correction = 5 + (0.0001 * (_birthYear - 1900));
-                seegh[PlanetName.Venus] = (((_interval * 1.602159) + 328.51) - correction) % 360;
+                double changeDuringIntervalVenus = (epochToBirthDays * 1.602159);
+                const double aphelionAtEpochVenus = 328.51; // The Seeghrochcha of Budha at the epoch
+                double venusAphelion = changeDuringIntervalVenus < 0 ? aphelionAtEpochVenus - changeDuringIntervalVenus : aphelionAtEpochVenus + changeDuringIntervalVenus;
+                venusAphelion -= correction; //diminish the sum by 5 + 0.001*t (where t = birth year - 1900)
+                seegh[PlanetName.Venus] = venusAphelion % 360;
 
                 return seegh;
             }
 
-            //Get interval from the epoch to the birth date
-            double GetInterval(Time time1)
-            {
-                //Determine the interval between birth date and the date of the epoch thus.
-
-                int birthYear = time1.GetLmtDateTimeOffset().Year;
-                int birthMonth = time1.GetLmtDateTimeOffset().Month;
-                int birthDate = time1.GetLmtDateTimeOffset().Day;
-
-                //month ends in days
-                int[] monthEnds = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 };
-
-                //Deduct 1900 from the Christian Era. The difference will be past
-                //years when positive and coming years when negative.
-                int yrdiff = birthYear - 1900;
-
-                //Multiply the same by 365 and to the product add the intervening bi-sextile days.
-                var epochDays = ((yrdiff * 365) + (yrdiff / 4) + monthEnds[birthMonth - 1]) - 1 + birthDate;
-
-
-                double utime = new TimeSpan(time1.GetLmtDateTimeOffset().Hour, time1.GetLmtDateTimeOffset().Minute, 0).TotalHours +
-                               ((5 + (double)(4.00 / 60.00)) - time1.GetLmtDateTimeOffset().Offset.TotalHours);
-
-                //The result represents the interval from the epoch to the birth date.
-                double interval = epochDays + (double)(utime / 24.00);
-
-                return interval;
-            }
         }
+
+        /// <summary>
+        /// The mean position of a planet is the position which it would have attained at a uniform
+        /// rate of motion and the corrections to be applied in respect of the eccentricity of the orbit are not considered
+        /// </summary>
+        public static Dictionary<PlanetName, double> GetMadhya(double epochToBirthDays, Time time1)
+        {
+            int _birthYear = time1.GetLmtDateTimeOffset().Year;
+
+            var madhya = new Dictionary<PlanetName, double>();
+
+            //calculate chesta kendra, also called Seeghra kendra
+
+            //SUN 
+            //Start from the epoch. Calculate the time of interval from the epoch to the day of birth
+            //and multiply the same by the daily motion of the planet, and the change during the interval is obtained.
+            var sunEpochMean = 257.4568; //epoch the mean position
+            double changeDuringIntervalSun = (epochToBirthDays * 0.9855931);
+
+            //This change being added to or subtracted from the mean position at the
+            //time of epoch as the date is posterior or anterior to the epoch day, the mean position is arrived at.
+            double meanPositionSun = changeDuringIntervalSun < 0 ? sunEpochMean - changeDuringIntervalSun : sunEpochMean + changeDuringIntervalSun;
+            meanPositionSun = meanPositionSun % 360; //expunge
+            madhya[PlanetName.Sun] = meanPositionSun;
+
+            //Mean Longitudes of -Inferior Planets.-The mean longitudes of Budba and Sukra are the same as that of the Sun.
+            //same for venus & mercury because closer to sun than earth it self
+            madhya[PlanetName.Mercury] = madhya[PlanetName.Venus] = madhya[PlanetName.Sun];
+
+            //MARS
+            var marsEpochMean = 270.22;
+            double changeDuringIntervalMars = (epochToBirthDays * 0.5240218);
+            double meanPositionMars = changeDuringIntervalMars < 0 ? marsEpochMean - changeDuringIntervalMars : marsEpochMean + changeDuringIntervalMars;
+            meanPositionMars = meanPositionMars % 360; //expunge
+            madhya[PlanetName.Mars] = meanPositionMars;
+
+            //JUPITER
+            var jupiterEpochMean = 220.04;
+            double changeDuringIntervalJupiter = (epochToBirthDays * 0.08310024);
+            double meanPositionJupiter = changeDuringIntervalJupiter < 0 ? jupiterEpochMean - changeDuringIntervalJupiter : jupiterEpochMean + changeDuringIntervalJupiter;
+            var correction1 = 3.33 + (0.0067 * (_birthYear - 1900));
+            meanPositionJupiter -= correction1; //deduct from the total 3.33 + 0.0067*t (where t=birth year-1900).
+            meanPositionJupiter %= 360; //expunge
+            madhya[PlanetName.Jupiter] = meanPositionJupiter;
+
+            //SATURN
+            var saturnEpochMean = 220.04;
+            double changeDuringIntervalSaturn = (epochToBirthDays * 0.03333857);
+            double meanPositionSaturn = changeDuringIntervalSaturn < 0 ? saturnEpochMean - changeDuringIntervalSaturn : saturnEpochMean + changeDuringIntervalSaturn;
+            var correction2 = 5 + (0.001 * (_birthYear - 1900));
+            meanPositionSaturn += correction2; //add 5°+0.001*t (where t = birth year - 1900)
+            meanPositionSaturn %= 360; //expunge
+            madhya[PlanetName.Saturn] = meanPositionSaturn;
+
+            //raise alarm if negative, since that is clearly an error, no negative mean longitude
+            if (madhya.Any(x => x.Value < 0)) { throw new Exception("Madya/Mean can't be negative!"); }
+
+            return madhya;
+        }
+
+
+        /// <summary>
+        /// Get interval from the epoch to the birth date in days
+        /// The result represents the interval from the epoch to the birth date.
+        /// </summary>
+        public static double GetEpochInterval(Time time1)
+        {
+            //Determine the interval between birth date and the date of the epoch thus.
+
+            int birthYear = time1.GetLmtDateTimeOffset().Year;
+            int birthMonth = time1.GetLmtDateTimeOffset().Month;
+            int birthDate = time1.GetLmtDateTimeOffset().Day;
+
+            //month ends in days
+            int[] monthEnds = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 };
+
+            //Deduct 1900 from the Christian Era. The difference will be past
+            //years when positive and coming years when negative.
+            int yrdiff = birthYear - 1900;
+
+            //Multiply the same by 365 and to the product add the intervening bi-sextile days.
+            var epochDays = ((yrdiff * 365) + (yrdiff / 4) + monthEnds[birthMonth - 1]) - 1 + birthDate;
+
+
+            int hour = time1.GetLmtDateTimeOffset().Hour;
+            int minute = time1.GetLmtDateTimeOffset().Minute;
+            double offsetHours = time1.GetLmtDateTimeOffset().Offset.TotalHours;
+            double utime = new TimeSpan(hour, minute, 0).TotalHours + ((5 + (double)(4.00 / 60.00)) - offsetHours);
+
+            //The result represents the interval from the epoch to the birth date.
+            double interval = epochDays + (double)(utime / 24.00);
+            interval = Math.Round(interval, 3);//round to 3 places decimal
+
+            return interval;
+        }
+
+
+        /// <summary>
+        /// Gets the planets motion name, a name version of Chesta Bala
+        /// </summary>
+        public static PlanetMotion GetPlanetMotionName(PlanetName planetName, Time time)
+        {
+            //sun, moon, rahu & ketu don' have retrograde so always direct
+            if (planetName == PlanetName.Sun || planetName == PlanetName.Moon || planetName == PlanetName.Rahu || planetName == PlanetName.Ketu) { return PlanetMotion.Direct; }
+
+            //get chestaBala
+            var chestaBala = AstronomicalCalculator.GetPlanetChestaBala(planetName, time).ToDouble();
+
+            //based on chesta bala assign name to it
+            //Chesta kendra = 180 degrees = Retrograde
+            switch (chestaBala)
+            {
+                case <= 60 and > 45: return PlanetMotion.Retrograde;
+                case <= 45 and > 15: return PlanetMotion.Direct;
+                case <= 15 and >= 0: return PlanetMotion.Stationary;
+                default:
+                    throw new Exception($"Error in GetPlanetMotionName : {chestaBala}");
+            }
+
+        }
+
 
         /// <summary>
         /// circulation time of the objects in years, used by cheshta bala calculation
@@ -8503,9 +8615,9 @@ namespace Genso.Astrology.Library
 
             //relatioship with current house
             var _currentHouseRelation = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, time);
-        
+
             //relation should be own
-            if(_currentHouseRelation == PlanetToSignRelationship.OwnVarga)
+            if (_currentHouseRelation == PlanetToSignRelationship.OwnVarga)
             {
                 return true;
             }

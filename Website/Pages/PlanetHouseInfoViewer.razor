@@ -152,6 +152,7 @@
             var _directionalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetDigBala(planetName, Time).ToDouble(), 2);
 
             var _motionalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetChestaBala(planetName, Time).ToDouble(), 2);
+            var _motionName = AstronomicalCalculator.GetPlanetMotionName(planetName, Time).ToString();
 
             var _temporalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetKalaBala(planetName, Time).ToDouble(), 2);
 
@@ -207,6 +208,7 @@
                 PositionStrength = _positionStrength,
                 DirectionalStrength = _directionalStrength,
                 MotionalStrength = _motionalStrength,
+                MotionName = _motionName,
                 TemporalStrength = _temporalStrength,
                 AspectStrength = _aspectStrength,
                 PermanentStrength = _permanentStrength,

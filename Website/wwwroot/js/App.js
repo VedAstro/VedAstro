@@ -214,6 +214,7 @@ function generatePlanetDataTable(tableId, tableData) {
             { title: "Position Strength", field: "positionStrength", hozAlign: "center", responsive: 0 },
             { title: "Directional Strength", field: "directionalStrength", hozAlign: "center", responsive: 0 },
             { title: "Motional Strength", field: "motionalStrength", hozAlign: "center", responsive: 0 },
+            { title: "Motion Name", field: "motionName", hozAlign: "center", responsive: 0 },
             { title: "Temporal Strength", field: "temporalStrength", hozAlign: "center", responsive: 0 },
             { title: "Aspect Strength", field: "aspectStrength", hozAlign: "center", responsive: 0 },
             { title: "Permanent Strength", field: "permanentStrength", hozAlign: "center", responsive: 0 },

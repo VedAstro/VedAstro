@@ -5,6 +5,7 @@
     <AssemblyName>Genso.Astrology.Library</AssemblyName>
     <RootNamespace>Genso.Astrology.Library</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

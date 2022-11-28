@@ -20,7 +20,7 @@ namespace Genso.Astrology.Library
         /// All internal properties are initialized with empty values
         /// so use that to detect
         /// </summary>
-        public static Person Empty = new Person("0","Empty", Time.Now(GeoLocation.Empty), Gender.Empty, "0","Empty", new List<LifeEvent>());
+        public static Person Empty = new Person("0", "Empty", Time.Now(GeoLocation.Empty), Gender.Empty, "0", "Empty", new List<LifeEvent>());
 
         private string _notes;
 
@@ -42,7 +42,7 @@ namespace Genso.Astrology.Library
         /// </summary>
         public string Notes
         {
-            readonly get => HttpUtility.HtmlEncode(_notes) ;
+            get => HttpUtility.HtmlDecode(_notes);
             set => _notes = HttpUtility.HtmlEncode(value);
         }
 
@@ -54,6 +54,20 @@ namespace Genso.Astrology.Library
         /// This is used later by calculators like Dasa to show against astrological predictions
         /// </summary>
         public List<LifeEvent> LifeEventList { get; set; } = new List<LifeEvent>(); //default empty list to stop null errors
+
+
+
+        //CTOR
+        public Person(string id, string name, Time birthTime, Gender gender, string userId = "101", string notes = "", List<LifeEvent> lifeEventList = null)
+        {
+            Id = id;
+            Name = name;
+            BirthTime = birthTime;
+            Gender = gender;
+            UserId = userId;
+            Notes = notes;
+            LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
+        }
 
 
         /// <summary>
@@ -101,17 +115,6 @@ namespace Genso.Astrology.Library
         public DateTimeOffset StdTimeNowAtBirthLocation => DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset);
 
 
-        //CTOR
-        public Person(string id, string name, Time birthTime, Gender gender, string userId = "101", string notes = "", List<LifeEvent> lifeEventList = null)
-        {
-            Id = id;
-            Name = name;
-            BirthTime = birthTime;
-            Gender = gender;
-            UserId = userId;
-            this._notes = HttpUtility.HtmlEncode(notes);
-            LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
-        }
 
 
 

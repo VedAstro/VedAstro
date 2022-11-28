@@ -17,7 +17,7 @@ namespace Genso.Astrology.Library
         /** FIELDS **/
 
 
-        private readonly EventCalculator _eventCalculator;
+        private string _description = "";
 
 
         /** CTOR **/
@@ -25,10 +25,10 @@ namespace Genso.Astrology.Library
         {
             Name = name;
             Nature = nature;
-            Description = HttpUtility.HtmlEncode(description); //HTML character safe
+            EventCalculator = eventCalculator;
+            Description = description;
             Strength = "";//strength is only gotten after calculator is run
             EventTags = eventTags;
-            _eventCalculator = eventCalculator;
         }
 
 
@@ -37,7 +37,12 @@ namespace Genso.Astrology.Library
         public EventName Name { get; }
         public string FormattedName => Format.FormatName(this);
         public EventNature Nature { get; private set; }
-        public string Description { get; }
+        public EventCalculator EventCalculator { get; private set; }
+        public string Description
+        {
+            get => HttpUtility.HtmlDecode(_description);
+            set => _description = HttpUtility.HtmlEncode(value);
+        }
         public string Strength { get; set; }
         public List<EventTag> EventTags { get; }
 
@@ -47,7 +52,7 @@ namespace Genso.Astrology.Library
         public bool IsEventOccuring(Time time, Person person)
         {
             //do calculation for this event to get prediction data
-            var predictionData = _eventCalculator(time, person);
+            var predictionData = EventCalculator(time, person);
 
             //extract the data out and store it for later use
             //is prediction occuring
@@ -70,7 +75,7 @@ namespace Genso.Astrology.Library
         public string GetDescription() => Description;
 
         public string GetStrength() => Strength;
-        
+
         public List<EventTag> GetEventTags() => EventTags;
 
 
@@ -123,14 +128,14 @@ namespace Genso.Astrology.Library
             }
 
             //little function to format the description coming from the file
-            //so that the description wraps nicely when rendered
+            //so that the description wraps nicely when rendered also HTML Decode
             string CleanText(string text)
-            { 
+            {
                 //remove all special characters
                 var cleaned = Regex.Replace(text, @"\s+", " ");
 
-                //HTML character safe
-                cleaned = HttpUtility.HtmlEncode(cleaned); 
+                //decode special HTML character, exp: &,'
+                cleaned = HttpUtility.HtmlDecode(cleaned);
 
                 return cleaned;
             }

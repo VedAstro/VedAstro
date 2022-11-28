@@ -36,7 +36,7 @@ namespace Genso.Astrology.Library
         [JsonPropertyName("Name")]
         public string Name
         {
-            get => HttpUtility.HtmlEncode(_name);//in-case was edited outside code
+            get => HttpUtility.HtmlDecode(_name);
             set => _name = HttpUtility.HtmlEncode(value);
         }
 
@@ -47,7 +47,7 @@ namespace Genso.Astrology.Library
         [JsonPropertyName("Description")]
         public string Description
         {
-            get => HttpUtility.HtmlEncode(_description); //in-case was edited outside code
+            get => HttpUtility.HtmlDecode(_description);
             set => _description = HttpUtility.HtmlEncode(value);
         }
 
@@ -203,7 +203,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets the extact time with offset at the place where this event happened
         /// Parses a event start time into DateTimeOffset
-        /// uses google api
+        /// uses GOOGLE API
         /// NOTE:
         /// - standard time (STD) at the location at that time
         /// - updates the local instance with timezone data, to be saved and used later
@@ -211,7 +211,7 @@ namespace Genso.Astrology.Library
         public async Task<DateTimeOffset> GetDateTimeOffset()
         {
             //get timezone from api and save it to local instance so that it can saved later
-            //only use API if timezone data not yet set, to save unnecessary calls to Google
+            //only use API if timezone data not yet set, to save unnecessary slow calls to Google
             this.Timezone = string.IsNullOrEmpty(this.Timezone)
                 ? await Tools.GetTimezoneOffsetString(this.Location,
                     this.StartTime)

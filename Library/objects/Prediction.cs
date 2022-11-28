@@ -9,11 +9,11 @@ namespace Genso.Astrology.Library
     /// Simple class to encapsulate a prediction (data)
     /// TODO another Prediction class better naming?
     /// </summary>
-    public class Prediction : IHasName
+    public struct Prediction : IHasName
     {
         //FIELDS
         private readonly EventName _name;
-        private readonly string _description;
+        private string _description;
         private readonly string _strength;
         private readonly EventNature _nature;
         private readonly Time _startTime;
@@ -26,7 +26,7 @@ namespace Genso.Astrology.Library
             //initialize fields
             _name = name;
             _nature = nature;
-            _description = HttpUtility.HtmlEncode(description); //HTML character safe
+            Description = description; //HTML character safe
             _strength = strength;
             _startTime = startTime;
             _endTime = endTime;
@@ -37,7 +37,11 @@ namespace Genso.Astrology.Library
         //PROPERTIES
         //Note: Created mainly for ease of use with WPF binding
         public EventName Name => _name;
-        public string Description => _description;
+        public string Description
+        {
+            get => HttpUtility.HtmlDecode(_description);
+            set => _description = HttpUtility.HtmlEncode(value);
+        }
         public string Strength => _strength;
         public EventNature Nature => _nature;
         public Time StartTime => _startTime;

@@ -105,6 +105,7 @@ namespace Genso.Astrology.Library
         public int Hash => this.GetHashCode();
 
         /// <summary>
+        /// Returns STD birth time in string HH:mm dd/MM/yyyy zzz
         /// Used by tabulator JS, when person is converted to json
         /// </summary>
         public string BirthTimeString => this.BirthTime.GetStdDateTimeOffsetText();

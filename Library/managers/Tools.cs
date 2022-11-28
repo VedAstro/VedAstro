@@ -87,7 +87,10 @@ namespace Genso.Astrology.Library
             var typeNameFullName = typeof(T).FullName;
             var typeNameShortName = typeof(T).FullName;
 
+#if DEBUG
             Console.WriteLine(xml.ToString());
+#endif
+
             //type name inside XML
             var xmlElementName = xml?.Name;
 
@@ -442,7 +445,7 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static TimeSpan GetSystemTimezone() => DateTimeOffset.Now.Offset;
 
-        public static async Task<(string FullName, double Latitude,double Longitude)> AddressToCoordinate(string address)
+        public static async Task<(string FullName, double Latitude, double Longitude)> AddressToCoordinate(string address)
         {
             //create the request url for Google API
             var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
@@ -450,7 +453,11 @@ namespace Genso.Astrology.Library
 
             //get location data from GoogleAPI
             var rawReplyXml = await ReadFromServerXmlReply(url);
+
+#if DEBUG
             Console.WriteLine(rawReplyXml.ToString());
+#endif
+
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);
             var result = locationData.Element("GeocodeResponse")?.Element("result");

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using static Azure.Core.HttpHeader;
 
 namespace API
 {
@@ -72,24 +74,81 @@ namespace API
                 return APITools.FormatErrorReply(e);
             }
 
-
         }
-
-        [FunctionName("geteventscharteasy")]
-        public static async Task<IActionResult> GetEventsChartEasy(
+        [FunctionName("findbirthtimedasa")]
+        public static async Task<IActionResult> FindBirthTimeDasa(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             try
             {
-                //get dasa report for sending
-                var chart = await GetEventReportSvgForIncomingRequestEasy(incomingRequest);
+                //get data needed to generate multiple charts
+                //accurate life event
+                var lifeEvent = new LifeEvent();
+                lifeEvent.StartTime = "00:00 01/01/2014";
+                lifeEvent.Location = "Malaysia";
+                //view little ahead & forward of event
+                var eventTime = await lifeEvent.GetDateTimeOffset();
+                var startTime = new Time(eventTime.AddMonths(-1), await lifeEvent.GetGeoLocation());
+                var endTime = new Time(eventTime.AddMonths(1), await lifeEvent.GetGeoLocation());
+
+                //person
+                var person = await APITools.GetPersonFromId("54041d1ffb494a79997f7987ecfcf08b5");
+                //zoom level
+                //possible birth times
+                var timeSkip = 1;// 1 hour
+                var possibleTimeList = new List<Time>();
+                Time previousTime = person.BirthTime;//start with birth time
+                for (int i = 0; i < 3; i++) //5 possibilities
+                {
+                    //save to be added upon later
+                    previousTime = previousTime.AddHours(timeSkip);
+                    possibleTimeList.Add(previousTime);
+                }
+
+                //generate the needed charts
+                var chartList = new List<Chart>();
+                var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
+                //PRECISION
+                //calculate based on max screen width,
+                //done for fast calculation only for needed viewability
+                var daysPerPixel = GetDayPerPixel(startTime, endTime, 800);
+
+
+                var combinedSvg = "";
+                var chartYPosition = 30; //start with top padding
+                var leftPadding = 10;
+                foreach (var possibleTime in possibleTimeList)
+                {
+                    //replace original birth time
+                    var personAdjusted = person.ChangeBirthTime(possibleTime);
+                    var newChart = await GetChart(personAdjusted, startTime, endTime, daysPerPixel, dasaEventTags);
+                    var adjustedBirth = personAdjusted.BirthTimeString;
+
+                    //place in group with time above the chart
+                    var wrappedChart = $@"
+                            <g transform=""matrix(1, 0, 0, 1, {leftPadding}, {chartYPosition})"">
+                                <text style=""font-size: 16px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">{adjustedBirth}</text>
+                                {newChart.ContentSvg}
+                              </g>
+                            ";
+
+                    //combine charts together
+                    combinedSvg += wrappedChart;
+
+                    //next chart goes below this one
+                    //todo get actual chart height for dynamic stacking
+                    chartYPosition += 270;
+                }
+
+                //put all charts in 1 big container
+                var finalSvg = WrapSvgElements(combinedSvg, 800, chartYPosition);
+        
 
                 //send image back to caller
                 //convert svg string to stream for sending
-                var stream = GenerateStreamFromString(chart.ContentSvg);
+                var stream = GenerateStreamFromString(finalSvg);
                 var x = StreamToByteArray(stream);
                 return new FileContentResult(x, "image/svg+xml");
-
             }
             catch (Exception e)
             {
@@ -99,8 +158,38 @@ namespace API
                 //format error nicely to show user
                 return APITools.FormatErrorReply(e);
             }
+        }
 
+        /// <summary>
+        /// Special function to make Light Viewer(EventsChartViewer.html) work
+        /// </summary>
+        [FunctionName("geteventscharteasy")]
+        public static async Task<IActionResult> GetEventsChartEasy(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+            try
+            {
+                //TODO caching
+                //TODO get saved chart if any
+                //var rootXml = APITools.ExtractDataFromRequest(req);
 
+                //get dasa report for sending
+                var chart = await GetEventReportSvgForIncomingRequestEasy(incomingRequest);
+
+                //send image back to caller
+                //convert svg string to stream for sending
+                var stream = GenerateStreamFromString(chart.ContentSvg);
+                var x = StreamToByteArray(stream);
+                return new FileContentResult(x, "image/svg+xml");
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
         }
 
 
@@ -109,7 +198,7 @@ namespace API
         /// </summary>
         [FunctionName("getsavedeventschart")]
         public static async Task<IActionResult> GetSavedEventsChart(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
@@ -189,8 +278,10 @@ namespace API
 
 
         /// <summary>
+        /// Returns EventsChartViewer.html with injected variables
         /// Special function to generate new Events Chart directly without website
-        /// Does not do anything to generate the chart, that is done by geteventscharteasy
+        /// Does not do anything to generate the chart, that is done by
+        /// geteventscharteasy API called by the JS in HTML
         /// </summary>
         [FunctionName("chart")]
         public static async Task<IActionResult> GetEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "chart/{personId}/{eventPreset}/{timePreset}")]
@@ -405,17 +496,12 @@ namespace API
             var endTimeXml = rootXml.Element("EndTime")?.Elements().First();
             var endTime = Time.FromXml(endTimeXml);
             var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value ?? "0");
-           
+
 
             //get the person instance by id
             var foundPerson = await APITools.GetPersonFromId(personId);
 
-            //from person get svg report
-            var eventsReportSvgString = await GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
-
-            //a new chart is born
-            var newChartId = Tools.GenerateId();
-            return new Chart(newChartId, eventsReportSvgString, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+            return await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
         }
 
         private static async Task<Chart> GetEventReportSvgForIncomingRequestEasy(HttpRequestMessage req)
@@ -429,7 +515,7 @@ namespace API
             //client's timezone, not based on birth
             var timezone = Tools.StringToTimezone(rootXml.Element("Timezone")?.Value);//should be "+08:00"
 
-            //hard set maxwidth to 1000px so that no forever calculation created
+            //hard set max width to 1000px so that no forever calculation created
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
 
             //minus 7% for side padding
@@ -454,13 +540,24 @@ namespace API
             //done for fast calculation only for needed viewability
             var daysPerPixel = GetDayPerPixel(startTime, endTime, maxWidth);
 
+
+            return await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+        }
+
+        public static async Task<Chart> GetChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
+        {
             //from person get svg report
             var eventsReportSvgString = await GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
-            //todo needs update
-            return new Chart(newChartId, eventsReportSvgString, personId, EventTagExtensions.ToXmlList(eventTags), startTime.ToXml(), endTime.ToXml(), daysPerPixel);
+            var eventTagListXml = EventTagExtensions.ToXmlList(eventTags);
+            var startTimeXml = startTime.ToXml();
+            var endTimeXml = endTime.ToXml();
+
+            var eventReportSvgForIncomingRequest = new Chart(newChartId, eventsReportSvgString, foundPerson.Id, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+
+            return eventReportSvgForIncomingRequest;
         }
 
         /// <summary>
@@ -644,11 +741,11 @@ namespace API
 
                 foreach (var lifeEvent in person.LifeEventList)
                 {
-                    //this is placed here so that if 
+                    //this is placed here so that if fail
                     try
                     {
                         //get timezone at place event happened
-                        var lifeEvtTime = await lifeEvent.GetTime();//time at the place of event with correct standard timezone
+                        var lifeEvtTime = await lifeEvent.GetDateTimeOffset();//time at the place of event with correct standard timezone
                         var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
                         var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
 
@@ -964,7 +1061,6 @@ namespace API
 
         //wraps a list of svg elements inside 1 main svg element
         //if width not set defaults to 1000px, and height to 1000px
-        //height is set auto because hard to determine
         public static string WrapSvgElements(string combinedSvgString, int svgWidth, int svgTotalHeight)
         {
 
@@ -1588,8 +1684,10 @@ namespace API
 
             string GenerateSummaryRow(int yAxis)
             {
+#if DEBUG
                 Console.WriteLine("MAX" + maxValue);
                 Console.WriteLine("MIN" + minValue);
+#endif
 
                 var rowHtml = "";
                 //generate color summary

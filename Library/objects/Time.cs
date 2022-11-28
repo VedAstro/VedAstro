@@ -167,10 +167,13 @@ namespace Genso.Astrology.Library
             return lmtTime;
         }
 
+        /// <summary>
+        /// Returns STD time in string HH:mm dd/MM/yyyy zzz
+        /// </summary>
+        /// <returns></returns>
         public string GetStdDateTimeOffsetText()
         {
             //format time with formatting info
-            //var stdTimeString = _stdTime.ToString(FormatInfo);
             //note: only explicit statement of format as below works
             var stdTimeString = _stdTime.ToString("HH:mm dd/MM/yyyy zzz");
 

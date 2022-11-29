@@ -29,18 +29,15 @@
 - [Share](https://vedastro.org/contact) your ideas for new or better features 
 - [Fix](https://vedastro.org/contact) bugs & implement features
 
+# Examples of Perfect Predictions!
+The Dasa Calculator is the most advanced and amazingly accurate prediction tool we've ever seen.
+Take a look at this example charts of Napolean Bornapate and Queen Elizibeth. Every major event in their life
+can be clearly seen predicted by the chart in the "Summary Row". Red for a bad event and green for a good life event.
+Using a combination of Dasa, Bhukti, Antaram and Gocharam of 9 planets this complex chart can give perfect predictions!
+The chart takes alot of computational power to generate, so please be patient after you click the Calculate button.
 
-# Help us and get paid!
-Complete tasks for this project and get paid instantly! Each task has a different value based on complexity.
-To get started fork the repo, make your edits and submit pull request. Contact us for task details.
+[![](GithubImages/header-logo.png)](https://www.vedastro.org)
 
-Task | Value | Status
---- | --- | ---
-Improve API chart generator performance by 2x | $10 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
-Show name of planet state in Horoscope page (combust, exalted, debilited) | $2 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
-Generate traditional Rasi, Navamsa South/North style chart | $5 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
-Find a spelling mistake in VedAstro.org content | $1 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
-Show name of planet motion in Horoscope page (retrograde, direct, stationary) | $1.5 | ![](https://img.shields.io/static/v1?label=&message=Done&color=green)
 
 # Unexpected errors?
 There are new updates to the VedAstro WebApp almost **everyday!** Your browsers caches the old version,
@@ -81,12 +78,17 @@ material & inspiration for this project. Please buy their books to show your sup
 Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".
 Last but not least, we thank users like you who keep this project going.
 
-# Examples of Perfect Predictions!
-The Dasa Calculator is the most advanced and amazingly accurate prediction tool we've ever seen.
-Take a look at this example charts of Napolean Bornapate and Queen Elizibeth. Every major event in their life
-can be clearly seen predicted by the chart in the "Summary Row". Red for a bad event and green for a good life event.
-Using a combination of Dasa, Bhukti, Antaram and Gocharam of 9 planets this complex chart can give perfect predictions!
-The chart takes alot of computational power to generate, so please be patient after you click the Calculate button.
+# Help us and get paid!
+Complete tasks for this project and get paid instantly! Each task has a different value based on complexity.
+To get started fork the repo, make your edits and submit pull request. Contact us for task details.
+
+Task | Value | Status
+--- | --- | ---
+Improve API chart generator performance by 2x | $10 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
+Show name of planet state in Horoscope page (combust, exalted, debilited) | $2 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
+Generate traditional Rasi, Navamsa South/North style chart | $5 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
+Find a spelling mistake in VedAstro.org content | $1 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
+Show name of planet motion in Horoscope page (retrograde, direct, stationary) | $1.5 | ![](https://img.shields.io/static/v1?label=&message=Done&color=green)
 
 
 # Project Architecture : For Coders

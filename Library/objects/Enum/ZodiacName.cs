@@ -17,6 +17,5 @@ namespace Genso.Astrology.Library
         Capricornus = 10,
         Aquarius = 11,
         Pisces = 12
-
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Genso.Astrology.Library
+﻿using System.Collections.Generic;
+
+namespace Genso.Astrology.Library
 {
     /// <summary>
     /// Simple data type to enclose the data coming out of a calculator.
@@ -11,6 +13,11 @@
         /// </summary>
         public bool Occuring { get; set; }
         public string Info { get; set; }
+
+        /// <summary>
+        /// List of planets related to this calculation result
+        /// </summary>
+        public List<PlanetName> RelatedPlanets { get; set; }
 
         /// <summary>
         /// if specified overrides event nature from XML file

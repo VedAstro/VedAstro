@@ -5944,52 +5944,36 @@ namespace Genso.Astrology.Library
         public static CalculatorResult AriesRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aries;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Aries);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.TaurusRising)]
         public static CalculatorResult TaurusRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Taurus;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Taurus);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.GeminiRising)]
         public static CalculatorResult GeminiRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Gemini;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Gemini);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.CancerRising)]
         public static CalculatorResult CancerRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Cancer;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Cancer);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.LeoRising)]
@@ -5997,103 +5981,72 @@ namespace Genso.Astrology.Library
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Leo;
 
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Leo);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.VirgoRising)]
         public static CalculatorResult VirgoRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Virgo;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Virgo);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.LibraRising)]
         public static CalculatorResult LibraRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Libra;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Libra);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.ScorpioRising)]
         public static CalculatorResult ScorpioRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Scorpio;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Scorpio);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.SagittariusRising)]
         public static CalculatorResult SagittariusRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Sagittarius;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Sagittarius);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.CapricornusRising)]
         public static CalculatorResult CapricornusRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Capricornus;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Capricornus);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.AquariusRising)]
         public static CalculatorResult AquariusRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aquarius;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Aquarius);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         [EventCalculator(EventName.PiscesRising)]
         public static CalculatorResult PiscesRisingOccuring(Time time, Person person)
         {
             var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Pisces;
-
-            //STRENGTH CALCULATION
             var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Pisces);
 
-
-
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring, RelatedPlanets = { lord } };
         }
 
         #endregion
@@ -12270,7 +12223,7 @@ namespace Genso.Astrology.Library
             //occuring if one of the conditions met
             var occuring = isSunDasa && isSunElevated;
 
-            return new() { Occuring = occuring, Info="Sun Dasa" };
+            return new() { Occuring = occuring, Info = "Sun Dasa" };
 
         }
 
@@ -12296,7 +12249,7 @@ namespace Genso.Astrology.Library
             //occuring if one of the conditions met
             var occuring = isSunDasa && sunInGoodPosition;
 
-            return new() { Occuring = occuring, Info="Sun Dasa Lord 9 Lord 10" };
+            return new() { Occuring = occuring, Info = "Sun Dasa Lord 9 Lord 10" };
 
         }
 
@@ -12371,7 +12324,7 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring, Info = "Sun Dasa" };
         }
 
-       
+
 
 
         #endregion

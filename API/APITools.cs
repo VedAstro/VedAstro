@@ -48,17 +48,18 @@ namespace API
 
         //used in horoscope prediction
         public const string UrlPredictionDataListXml = $"https://{AzureStorage}/data/PredictionDataList.xml";
-        
+
         public const string UrlEventsChartViewerHtml = $"https://{AzureStorage}/data/EventsChartViewer.html";
 
         /// <summary>
         /// Default success message sent to caller
         /// </summary>
         public static OkObjectResult PassMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msg)).ToString());
-
         public static OkObjectResult PassMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msgXml)).ToString());
         public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
         private static OkObjectResult FailMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msgXml)).ToString());
+
+        public static List<EventData> SavedPredictionDataList { get; set; } = null; //null used for checking empty
 
 
         /// <summary>
@@ -111,7 +112,6 @@ namespace API
             await OverwriteBlobData(fileClient, updatedListXml);
 
         }
-
 
         /// <summary>
         /// Extracts data coming in from API caller
@@ -170,7 +170,7 @@ namespace API
             //Console.WriteLine("Text:"+Tools.StreamToString(valueContent));
 
         }
-        
+
         /// <summary>
         /// Converts a blob client of a file to string
         /// </summary>
@@ -311,7 +311,6 @@ namespace API
             }
         }
 
-
         public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)
         {
             try
@@ -431,7 +430,6 @@ namespace API
             }
         }
 
-
         /// <summary>
         /// Gets user data, if user does
         /// not exist makes a new one & returns that
@@ -494,9 +492,13 @@ namespace API
 
         /// <summary>
         /// Get parsed PredictionDataList.xml from wwwroot file / static site
+        /// Note: auto caching is used
         /// </summary>
         public static async Task<List<EventData>> GetPredictionDataList()
         {
+            //if prediction list already loaded use that instead
+            if (SavedPredictionDataList != null) { return SavedPredictionDataList; }
+
             //get data list from Static Website storage
             var predictionDataListXml = await GetXmlFile(APITools.UrlPredictionDataListXml);
 
@@ -507,6 +509,9 @@ namespace API
                 //add it to the return list
                 predictionDataList.Add(EventData.FromXml(predictionDataXml));
             }
+
+            //make a copy to be used later if needed (speed improve)
+            SavedPredictionDataList = predictionDataList;
 
             return predictionDataList;
 
@@ -597,10 +602,10 @@ namespace API
             var location = person.GetBirthLocation();
 
             //get list of prediction event data to check for event (file from wwwroot)
-            var eventDataList = await GetPredictionDataList();
+            var predictionDataList = await GetPredictionDataList();
 
             //start calculating predictions
-            var predictionList = GetListOfPredictionInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute1, eventDataList);
+            var predictionList = GetListOfPredictionInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute1, predictionDataList);
 
 
             return predictionList;
@@ -644,6 +649,9 @@ namespace API
             return eventList;
         }
 
+        /// <summary>
+        /// If start time and end time is same then will only return 1 time in list
+        /// </summary>
         public static List<Time> GetTimeListFromRange(Time startTime, Time endTime, double precisionInHours)
         {
             //declare return value
@@ -663,6 +671,7 @@ namespace API
         /// Get a list of events in a time period for a single event type aka "event data"
         /// Decision on when event starts & ends is also done here
         /// Event Data + Time = HoroscopePrediction
+        /// Marriage of DATA and LOGIC happens here
         /// </summary>
         public static List<HoroscopePrediction> GetPredictionListByEventData(EventData eventData, Person person, List<Time> timeList)
         {

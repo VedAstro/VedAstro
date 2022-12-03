@@ -383,6 +383,7 @@ function generateLifeEventListTable(tableId, tableData) {
                     //Value Options (You should use ONE of these per editor)
                     values: window.countries, //an array of country names
                     valuesLookup: "active", //get the values from the currently active rows in this column
+                    autocomplete: "true", allowEmpty: true, listOnEmpty: true
                 } },
             {
                 title: "Nature", field: "Nature", editor: "list", hozAlign: "center", editorParams: {
@@ -398,6 +399,7 @@ function generateLifeEventListTable(tableId, tableData) {
 
 }
 
+//gets data out of events list table, to be used by blazor
 function getLifeEventsListTableData() {
     return window.lifeEventsListTable.getData();
 }

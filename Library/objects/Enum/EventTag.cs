@@ -34,7 +34,8 @@ namespace Genso.Astrology.Library
         DasaSpecialRules,
         Tarabala,
         Chandrabala,
-        Travel
+        Travel,
+        RisingSign //used in birth time finder
     }
 
     public static class EventTagExtensions

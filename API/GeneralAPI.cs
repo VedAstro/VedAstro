@@ -67,20 +67,16 @@ namespace API
         }
 
         [FunctionName("gethoroscope")]
-        public static async Task<IActionResult> GetHoroscope(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
-            HttpRequestMessage incomingRequest,
-            [Blob(APITools.PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
+        public static async Task<IActionResult> GetHoroscope([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             string responseMessage;
 
             try
             {
-                //get name of male & female
+                //get person from request
                 var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
                 var personId = rootXml.Value;
 
-                //generate compatibility report
                 var person = await APITools.GetPersonFromId(personId);
 
                 //calculate predictions for current person
@@ -97,10 +93,8 @@ namespace API
                 return APITools.FormatErrorReply(e);
             }
 
-
             var okObjectResult = new OkObjectResult(responseMessage);
             return okObjectResult;
-
         }
 
 

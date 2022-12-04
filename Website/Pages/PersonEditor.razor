@@ -25,68 +25,89 @@
     </Description>
     <ButtonsRow>
         <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
+        @*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
+        *@
     </ButtonsRow>
 </PageTop>
 
 
 <div class="container">
-    <div class="vstack gap-3" style="max-width:@AppData.MaxContentWidthPx">
-        <div>
-            <label class="form-label">Name</label>
-            <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
-        </div>
+    @*TAB HEADER*@
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+                <Icon IconName="majesticons:scroll-text-line" />
+                Info
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab" aria-controls="notes" aria-selected="false">
+                <Icon IconName="material-symbols:note-alt-outline" />
+                Notes
+            </button>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                <Icon IconName="carbon:touch-interaction" /> Actions
+            </a>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" @onclick="Callback"><Icon IconName="material-symbols:ios-share" /> Share Link</a></li>
+                <li><a class="dropdown-item" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded" /> Delete</a></li>
+                @*                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Separated link</a></li>
+                *@
+            </ul>
+        </li>
+    </ul>
+    @*TAB BODY*@
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="vstack gap-3 px-3">
+                <div>
+                    <label class="form-label">Name</label>
+                    <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+                </div>
 
-        @*TIME ROW*@
-        <div>
-            <TimeInput @ref="_timeInput" />
-        </div>
+                @*TIME ROW*@
+                <div>
+                    <TimeInput @ref="_timeInput" />
+                </div>
 
-        <GeoLocationInput DisableAutoLocation="true" @ref="_geoLocationInput" />
-        <div>
-            <label class="form-label">
-                Gender
-                <HelpBox SmallIcon="true" HelpText="@HelpText.Gender"></HelpBox>
-            </label>
-            <select @bind="_genderInput" class="form-control">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
-        </div>
-
-        @*ADVANCED TAB*@
-        <div class="accordion" id="advancedTabAccordion" style="width: @AppData.MaxWidth">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        <strong>Advanced</strong><HelpBox SmallIcon="true" HelpText="@HelpText.PersonAdvanced"></HelpBox>
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#advancedTabAccordion">
-                    <div class="accordion-body">
-                        <div class="vstack gap-3">
-                            @*LIFE EVENTS*@
-                            <LifeEventEditor @ref="_lifeEventEditor" />
-                            <div>
-                                <label class="form-label">Notes</label>
-                                <textarea @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person" style="min-height:132px;">
-                                </textarea>
-
-                            </div>
-                        </div>
-                    </div>
+                <GeoLocationInput DisableAutoLocation="true" @ref="_geoLocationInput" />
+                <div>
+                    <label class="form-label">
+                        Gender
+                        <HelpBox SmallIcon="true" HelpText="@HelpText.Gender"></HelpBox>
+                    </label>
+                    <select @bind="_genderInput" class="form-control">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
                 </div>
             </div>
         </div>
 
-        @*BUTTONS*@
-        <div style="margin-top: 50px" class="hstack row gap-2">
-            @*Only show delete button in Editor mode*@
-            <IconButton ButtonText="Delete" IconName="fluent:delete-20-regular" OnClickCallback="@OnClickDeleteButton" />
-            <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
+        <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+            <div class="vstack gap-3">
+                @*LIFE EVENTS*@
+                <LifeEventEditor @ref="_lifeEventEditor" />
+                <div>
+                    <label class="form-label">Notes</label>
+                    <textarea @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person" style="min-height: 132px;"></textarea>
+                </div>
+            </div>
         </div>
+
+
     </div>
 
+    @*BUTTONS*@
+    <div style="margin-top: 50px" class="hstack row gap-2">
+        @*Only show delete button in Editor mode*@
+        <IconButton ButtonText="Delete" IconName="fluent:delete-20-regular" OnClickCallback="@OnClickDeleteButton" />
+        <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
+    </div>
 </div>
 
 
@@ -401,5 +422,9 @@
     }
 
 
+    private void Callback()
+    {
+        Console.WriteLine("NICE!!!!");
+    }
 
 }

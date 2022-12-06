@@ -46,11 +46,17 @@
                 Notes
             </button>
         </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab" aria-controls="notes" aria-selected="false">
+                <Icon IconName="material-symbols:note-alt-outline" />
+                Advanced
+            </button>
+        </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                 <Icon IconName="carbon:touch-interaction" /> Actions
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu"> 
                 <li><a class="dropdown-item" @onclick="Callback"><Icon IconName="material-symbols:ios-share" /> Share Link</a></li>
                 <li><a class="dropdown-item" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded" /> Delete</a></li>
                 @*                <li><a class="dropdown-item" href="#">Something else here</a></li>

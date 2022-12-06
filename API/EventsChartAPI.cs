@@ -161,6 +161,84 @@ namespace API
             }
         }
 
+        [FunctionName("findbirthtimerisingsign")]
+        public static async Task<IActionResult> FindBirthTimeRisingSign(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+            string responseMessage;
+
+            try
+            {
+                //get person
+                var person = await APITools.GetPersonFromId("54041d1ffb494a79997f7987ecfcf08b5");
+
+                //get all birth time with different rising sign
+                var possibleTimeList = await GetTimeList(person);
+
+                //calculate predictions
+                List<HoroscopePrediction> predictionList = new List<HoroscopePrediction>();
+                foreach (var timeSlice in possibleTimeList)
+                {                    
+                    //replace original birth time
+                    var personAdjusted = person.ChangeBirthTime(timeSlice);
+
+                    var x = await APITools.GetPrediction(personAdjusted);
+                }
+
+                //convert list to xml string in root elm
+                responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+            var okObjectResult = new OkObjectResult(responseMessage);
+            return okObjectResult;
+
+            //LOCAL FUNCTIONS
+            async Task<List<Time>> GetTimeList(Person person)
+            {
+
+                //start of day till end of day
+                var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
+                var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
+
+                var returnList = new List<Time>();
+                var timeSkip = 1;// 1 hour
+                var reachedDayEnd = false;
+                var checkTime = dayStart; //from the start of the day
+                var previousSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
+                //add 1st sign at start of day to list
+                returnList.Add(checkTime);
+
+                //scan through the day & add mark each time new sign rises
+                //stop looking when reached end of day
+                while (!reachedDayEnd)
+                {
+                    //if different from previous sign, then add time slice to list
+                    var checkSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
+                    if (checkSign != previousSign) { returnList.Add(checkTime); }
+
+                    //update previous sign
+                    previousSign = checkSign;
+
+                    //goto to next time slice
+                    checkTime = checkTime.AddHours(timeSkip);
+
+                    //if next time slice goes to next day, then end it here
+                    if (checkTime > dayEnd) { reachedDayEnd = true; }
+                }
+
+                return returnList;
+
+            }
+        }
+
+
         /// <summary>
         /// Special function to make Light Viewer(EventsChartViewer.html) work
         /// </summary>

@@ -75,6 +75,7 @@ namespace API
             }
 
         }
+
         [FunctionName("findbirthtimedasa")]
         public static async Task<IActionResult> FindBirthTimeDasa(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
@@ -142,7 +143,7 @@ namespace API
 
                 //put all charts in 1 big container
                 var finalSvg = WrapSvgElements(combinedSvg, 800, chartYPosition);
-        
+
 
                 //send image back to caller
                 //convert svg string to stream for sending
@@ -578,34 +579,52 @@ namespace API
             return daysPerPixel;
         }
 
+        /// <summary>
+        /// Parses event preset, string to list
+        /// </summary>
         public static List<EventTag> GetSelectedEventTypesEasy(string eventPreset)
         {
             var returnList = new List<EventTag>();
 
-            switch (eventPreset)
+            //if string contains comma "," then we read each seperately
+            if (eventPreset.Contains(','))
             {
-                //only general is customized
-                case "General":
-                    returnList.Add(EventTag.General);
-                    returnList.Add(EventTag.Personal);
-                    returnList.Add(EventTag.RulingConstellation);
-                    break;
-                case "Gochara":
-                    returnList.Add(EventTag.Personal);
-                    returnList.Add(EventTag.Gochara);
-                    break;
-                case "Travel":
-                    returnList.Add(EventTag.Personal);
-                    returnList.Add(EventTag.General);
-                    returnList.Add(EventTag.Travel);
-                    break;
-
-                //others are converted as is
-                default:
-                    returnList.Add(Enum.Parse<EventTag>(eventPreset));
-                    break;
-
+                var split = eventPreset.Split(',');
+                foreach (var item in split)
+                {
+                    //are converted as is
+                    returnList.Add(Enum.Parse<EventTag>(item));
+                }
             }
+            //else hard coded preset below
+            else
+            {
+                switch (eventPreset)
+                {
+                    //only general is customized
+                    case "General":
+                        returnList.Add(EventTag.General);
+                        returnList.Add(EventTag.Personal);
+                        returnList.Add(EventTag.RulingConstellation);
+                        break;
+                    case "Gochara":
+                        returnList.Add(EventTag.Personal);
+                        returnList.Add(EventTag.Gochara);
+                        break;
+                    case "Travel":
+                        returnList.Add(EventTag.Personal);
+                        returnList.Add(EventTag.General);
+                        returnList.Add(EventTag.Travel);
+                        break;
+
+                    //others are converted as is
+                    default:
+                        returnList.Add(Enum.Parse<EventTag>(eventPreset));
+                        break;
+
+                }
+            }
+
 
             return returnList;
         }

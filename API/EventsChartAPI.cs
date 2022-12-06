@@ -602,20 +602,21 @@ namespace API
                 switch (eventPreset)
                 {
                     //only general is customized
-                    case "General":
+                    case "Summary":
+                        returnList.Add(EventTag.GocharaSummary);
                         returnList.Add(EventTag.General);
                         returnList.Add(EventTag.Personal);
                         returnList.Add(EventTag.RulingConstellation);
                         break;
-                    case "Gochara":
-                        returnList.Add(EventTag.Personal);
-                        returnList.Add(EventTag.Gochara);
-                        break;
-                    case "Travel":
-                        returnList.Add(EventTag.Personal);
-                        returnList.Add(EventTag.General);
-                        returnList.Add(EventTag.Travel);
-                        break;
+                    //case "Gochara":
+                    //    returnList.Add(EventTag.Personal);
+                    //    returnList.Add(EventTag.Gochara);
+                    //    break;
+                    //case "Travel":
+                    //    returnList.Add(EventTag.Personal);
+                    //    returnList.Add(EventTag.General);
+                    //    returnList.Add(EventTag.Travel);
+                    //    break;
 
                     //others are converted as is
                     default:

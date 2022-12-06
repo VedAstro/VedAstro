@@ -35,7 +35,8 @@ namespace Genso.Astrology.Library
         Tarabala,
         Chandrabala,
         Travel,
-        RisingSign //used in birth time finder
+        RisingSign, //used in birth time finder
+        GocharaSummary
     }
 
     public static class EventTagExtensions

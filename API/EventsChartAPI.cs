@@ -730,27 +730,35 @@ namespace API
                     var endHour = now.AddHours(1);//front 1 hour
                     start = new Time(startHour, birthLocation);
                     end = new Time(endHour, birthLocation);
-                    return new { start = start, end = end };
+                    return new { start, end };
                 case "Today":
                 case "Day":
                     start = new Time($"00:00 {today}", birthLocation);
                     end = new Time($"23:59 {today}", birthLocation);
-                    return new { start = start, end = end };
+                    return new { start, end };
                 case "Week":
                     start = new Time($"00:00 {yesterday}", birthLocation);
                     var weekEnd = now.AddDays(7).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {weekEnd}", birthLocation);
-                    return new { start = start, end = end };
+                    return new { start, end };
                 case "Month":
-                    start = new Time($"00:00 {yesterday}", birthLocation);
+                    var _1WeekAgo = now.AddDays(-7).ToString("dd/MM/yyyy zzz");
+                    start = new Time($"00:00 {_1WeekAgo}", birthLocation);
                     var monthEnd = now.AddDays(30).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {monthEnd}", birthLocation);
-                    return new { start = start, end = end };
+                    return new { start, end };
                 case "Year":
-                    start = new Time($"00:00 {yesterday}", birthLocation);
+                    var _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
+                    start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
                     var yearEnd = now.AddDays(365).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {yearEnd}", birthLocation);
-                    return new { start = start, end = end };
+                    return new { start, end };
+                case "Decade":
+                    var _1YearAgo = now.AddDays(-365).ToString("dd/MM/yyyy zzz");
+                    start = new Time($"00:00 {_1YearAgo}", birthLocation);
+                    var decadeEnd = now.AddDays((365*10)).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {decadeEnd}", birthLocation);
+                    return new { start, end };
                 default:
                     return new { start = Time.Empty, end = Time.Empty };
             }

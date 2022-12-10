@@ -55,7 +55,6 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
             [Blob(APITools.PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
         {
-            var responseMessage = "";
 
             try
             {

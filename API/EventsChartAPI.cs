@@ -178,7 +178,7 @@ namespace API
                 //calculate predictions
                 List<HoroscopePrediction> predictionList = new List<HoroscopePrediction>();
                 foreach (var timeSlice in possibleTimeList)
-                {                    
+                {
                     //replace original birth time
                     var personAdjusted = person.ChangeBirthTime(timeSlice);
 
@@ -747,16 +747,35 @@ namespace API
                     var monthEnd = now.AddDays(30).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {monthEnd}", birthLocation);
                     return new { start, end };
+                case "3Months":
+                    var _2WeekAgo = now.AddDays(-14).ToString("dd/MM/yyyy zzz");
+                    start = new Time($"00:00 {_2WeekAgo}", birthLocation);
+                    var _3monthEnd = now.AddDays(90).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {_3monthEnd}", birthLocation);
+                    return new { start, end };
+                case "6Months":
+                    var _1MonthsAgo = now.AddDays(-30).ToString("dd/MM/yyyy zzz");
+                    start = new Time($"00:00 {_1MonthsAgo}", birthLocation);
+                    var _6monthEnd = now.AddDays(180).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {_6monthEnd}", birthLocation);
+                    return new { start, end };
                 case "Year":
                     var _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
                     var yearEnd = now.AddDays(365).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {yearEnd}", birthLocation);
                     return new { start, end };
+                case "5Years":
+                    var _6MonthsAgo = now.AddDays(-180).ToString("dd/MM/yyyy zzz");
+                    start = new Time($"00:00 {_6MonthsAgo}", birthLocation);
+                    var _5yearEnd = now.AddDays((365 * 5)).ToString("dd/MM/yyyy zzz");
+                    end = new Time($"23:59 {_5yearEnd}", birthLocation);
+                    return new { start, end };
+                case "10Years":
                 case "Decade":
                     var _1YearAgo = now.AddDays(-365).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_1YearAgo}", birthLocation);
-                    var decadeEnd = now.AddDays((365*10)).ToString("dd/MM/yyyy zzz");
+                    var decadeEnd = now.AddDays((365 * 10)).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {decadeEnd}", birthLocation);
                     return new { start, end };
                 default:

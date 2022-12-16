@@ -209,7 +209,7 @@
         //doing it in blazor, causes progress bar freeze while updating
         await _jsRuntime.InjectIntoElement(_dasaViewBox, rawSvgChart);
 
-        //little delay after injection for cpu to idle, make smooth transition
+        //little delay after injection for cpu to idle, makes smooth transition
         await Task.Delay(300);
 
         //reset life show/hide button
@@ -219,18 +219,9 @@
         //note: needed on each draw
         await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
 
-
         //2 ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
-
-        //attach mouse handler to auto move cursor line & update time legend
-        await _jsRuntime.InvokeVoidAsync("LoadEventDataListFile"); //load event description file 1st
-        await _jsRuntime.AddEventListener(_dasaViewBox, "mousemove", "onMouseMoveDasaViewEventHandler");
-
-        //attach handler to auto hide time legend
-        await _jsRuntime.AddEventListener("#EventChartHolder", "mouseleave", "onMouseLeaveEventChart");
-
-        //init touch for the dasa chart
-        await _jsRuntime.InvokeVoidAsync("InitTouchLib", _dasaViewBox);
+        //Animate SVG chart with JS
+        await _jsRuntime.InvokeVoidAsync("ChartInit");
 
         //get latest dark mode setting
         //so that event chart is set properly
@@ -388,7 +379,6 @@
         await _jsRuntime.ShowAlert("success", $"Chart saved successfully!", false, 2600);
 
     }
-
 
     /// <summary>
     /// when user clicked tab saved tab, refresh saved list immediately

@@ -20,6 +20,7 @@ namespace Website
         /// Note: possible via azure CDN rules engine : AccessApiViaWebDomain
         /// </summary>
         public const string WebDomainToApi = "https://www.vedastro.org/api";
+        public const string WebDomain = "https://www.vedastro.org/";
         public const string ApiUrl = "https://vedastroapi.azurewebsites.net/api";
         public const string AddPersonApi = ApiUrl + "/addperson";
         public const string GetHoroscope = ApiUrl + "/gethoroscope";

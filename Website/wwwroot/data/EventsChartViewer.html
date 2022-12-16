@@ -73,17 +73,6 @@
 
         //FUNCTIONS
         class Chart {
-            //constructor(chartElement) {  // Constructor
-            //    this.ChartElement = chartElement;
-
-            //    //check if chart is loaded or not
-            //    if (this.ChartElement) {
-
-            //    }
-
-            //    Chart.animateEventsChart();
-            //}
-
             //template used to generate legend rows
             static holderTemplateId = `#CursorLineLegendTemplate`;
 
@@ -136,7 +125,6 @@
                 chartData.url = newUrl;
                 return chartData;
             }
-
 
             static getDataFromUrl() {
 
@@ -694,9 +682,8 @@
                 }
             }
 
-
-
             //coming from direct/url access page
+            //this the method called to start the JS code to animate an already loaded chart
             static async animateEventsChart() {
                 console.log(`Starting the engine...`);
 

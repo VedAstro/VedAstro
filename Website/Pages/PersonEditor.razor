@@ -16,7 +16,6 @@
     }
 </style>*@
 
-
 <PageTitle>@_pageTitle</PageTitle>
 
 <PageTop Title="Person profile" IconName="icomoon-free:profile">
@@ -35,7 +34,7 @@
     @*TAB HEADER*@
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true">
                 <Icon IconName="majesticons:scroll-text-line" />
                 Info
             </button>
@@ -47,18 +46,19 @@
             </button>
         </li>
         <li class="nav-item">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab" aria-controls="notes" aria-selected="false">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">
                 <Icon IconName="material-symbols:note-alt-outline" />
                 Advanced
             </button>
         </li>
+        @*DROP DOWN ACTIONS*@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                 <Icon IconName="carbon:touch-interaction" /> Actions
             </a>
-            <ul class="dropdown-menu"> 
-                <li><a class="dropdown-item" @onclick="Callback"><Icon IconName="material-symbols:ios-share" /> Share Link</a></li>
-                <li><a class="dropdown-item" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded" /> Delete</a></li>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" style="cursor:pointer;" @onclick="CopyPersonProfileShareLink"><Icon IconName="material-symbols:ios-share" /> Share Link</a></li>
+                <li><a class="dropdown-item" style="cursor:pointer;" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded" /> Delete</a></li>
                 @*                <li><a class="dropdown-item" href="#">Something else here</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="#">Separated link</a></li>
@@ -68,8 +68,9 @@
     </ul>
     @*TAB BODY*@
     <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active p-2" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <div class="vstack gap-3 px-3">
+        @*INFO TAB CONTENT*@
+        <div class="tab-pane fade show active p-2" id="info" role="tabpanel" aria-labelledby="info-tab">
+            <div class="vstack gap-3 px-2">
                 <div>
                     <label class="form-label">Name</label>
                     <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
@@ -94,8 +95,9 @@
             </div>
         </div>
 
+        @*NOTES TAB CONTENT*@
         <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
-            <div class="vstack gap-3">
+            <div class="vstack gap-3 px-2">
                 @*LIFE EVENTS*@
                 <LifeEventEditor @ref="_lifeEventEditor" />
                 <div>
@@ -105,7 +107,22 @@
             </div>
         </div>
 
-
+        @*ADVANCED TAB CONTENT*@
+        <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+            <div class="px-2">
+                <ul class="list-group gap-1 mt-2">
+                    <li class="list-group-item active" aria-current="true">Info</li>
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item">Local Mean Time (LMT)</li>
+                        <li class="list-group-item">@_person.BirthTime.GetLmtDateTimeOffsetText()</li>
+                    </ul>
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item">Local Standard Time (STD)</li>
+                        <li class="list-group-item">@_person.BirthTime.GetStdDateTimeOffsetText()</li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
     </div>
 
     @*BUTTONS*@
@@ -427,10 +444,19 @@
         _navigation.NavigateTo(PageRoute.PersonList);
     }
 
-
-    private void Callback()
+    /// <summary>
+    /// Copies current person's URL to clipboard, usefull for lettting 3rd party see a profile
+    /// </summary>
+    private async void CopyPersonProfileShareLink()
     {
-        Console.WriteLine("NICE!!!!");
+        //generate the url
+        var url = ServerManager.WebDomain + $"{PageRoute.PersonEditor}/{PersonId}";
+
+        //use js to transfer to clipboard
+        await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);
+
+        //let user know link coppied
+        await _jsRuntime.ShowAlert("success", $"Share Link Copied!", false, 2600);
     }
 
 }

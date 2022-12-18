@@ -14,8 +14,6 @@ namespace Genso.Astrology.Library
     /// </summary>
     public class RelatedBody : IToXml
     {
-        public RelatedBody() { }
-
         /// <summary>
         /// List of planets related to this calculation result
         /// </summary>
@@ -30,7 +28,6 @@ namespace Genso.Astrology.Library
         /// List of houses related to this calculation result
         /// </summary>
         public List<HouseName> RelatedHouses { get; private set; } = new List<HouseName>();
-
 
         /// <summary>
         /// Converts all values to string seperated by comma
@@ -55,7 +52,7 @@ namespace Genso.Astrology.Library
             var parsed = new RelatedBody();
             var relatedPlanetsXml = relatedBodyXml?.Element("PlanetNameList") ?? new XElement("PlanetNameList");
             parsed.RelatedPlanets = PlanetName.FromXmlList(relatedPlanetsXml);
-            var relatedHousesXml = relatedBodyXml?.Element("HousesNameList") ?? new XElement("HousesNameList");
+            var relatedHousesXml = relatedBodyXml?.Element("HouseNameList") ?? new XElement("HouseNameList");
             parsed.RelatedHouses = HouseNameExtensions.FromXmlList(relatedHousesXml);
             var relatedZodiacXml = relatedBodyXml?.Element("ZodiacNameList") ?? new XElement("ZodiacNameList");
             parsed.RelatedZodiac = ZodiacNameExtensions.FromXmlList(relatedZodiacXml);
@@ -63,8 +60,6 @@ namespace Genso.Astrology.Library
             return parsed;
 
         }
-
-
 
         public XElement ToXml()
         {

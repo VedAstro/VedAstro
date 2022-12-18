@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Genso.Astrology.Library
 {
@@ -14,10 +16,7 @@ namespace Genso.Astrology.Library
         public bool Occuring { get; set; }
         public string Info { get; set; }
 
-        /// <summary>
-        /// List of planets related to this calculation result
-        /// </summary>
-        public List<PlanetName> RelatedPlanets { get; set; }
+
 
         /// <summary>
         /// if specified overrides event nature from XML file
@@ -59,6 +58,67 @@ namespace Genso.Astrology.Library
             };
 
             return prediction;
+        }
+
+        public RelatedBody RelatedBody { get; set; } = new RelatedBody();
+
+
+        //-------------------------------------------------------
+        //BELOW IS A LIST OF SPECIAL HELPER METHODS TO RECEIVE
+        //CALCULATOR RESULTS FOR MANY TYPES OF CALCULATION
+        //-------------------------------------------------------
+
+        /// <summary>
+        /// Helper method to make new instance of calculator result
+        /// </summary>
+        public static CalculatorResult New(bool occuring, PlanetName lord)
+        {
+            var newCalcResult = new CalculatorResult();
+            newCalcResult.Occuring = occuring;
+            newCalcResult.RelatedBody.RelatedPlanets.Add(lord);
+            return newCalcResult;
+        }
+
+        /// <summary>
+        /// Helper method to make new instance of calculator result
+        /// </summary>
+        public static CalculatorResult New(bool occuring, HouseName[] houseNames, Time time)
+        {
+            var newCalcResult = new CalculatorResult();
+            newCalcResult.Occuring = occuring;
+            newCalcResult.RelatedBody.RelatedHouses.AddRange(houseNames.ToList());
+            var lordNames = AstronomicalCalculator.GetLordOfHouseList(newCalcResult.RelatedBody.RelatedHouses, time);
+            newCalcResult.RelatedBody.RelatedPlanets.AddRange(lordNames.ToList());
+
+            return newCalcResult;
+        }
+
+        /// <summary>
+        /// Helper method to make new instance of calculator result
+        /// </summary>
+        public static CalculatorResult New(bool occuring, HouseName[] houseNames, ZodiacName[] signNames, Time time)
+        {
+            //create with house names
+            var newCalcResult = New(occuring, houseNames,time);
+
+            //add in sign names
+            newCalcResult.RelatedBody.RelatedZodiac.AddRange(signNames.ToList());
+
+            //return to caller
+            return newCalcResult;
+        }
+
+        /// <summary>
+        /// Helper method to make new instance of calculator result
+        /// </summary>
+        public static CalculatorResult New(bool occuring, HouseName houseNumber, Time time)
+        {
+            var newCalcResult = new CalculatorResult();
+            newCalcResult.Occuring = occuring;
+            newCalcResult.RelatedBody.RelatedHouses.Add(houseNumber);
+            var lord = AstronomicalCalculator.GetLordOfHouse(houseNumber, time);
+            newCalcResult.RelatedBody.RelatedPlanets.Add(lord);
+            return newCalcResult;
         }
     }
 }

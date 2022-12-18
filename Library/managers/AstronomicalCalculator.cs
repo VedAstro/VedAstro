@@ -2484,6 +2484,29 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
+        /// The lord of a bhava is
+        /// the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
+        /// List overload to GetLordOfHouse (above method)
+        /// </summary>
+        public static List<PlanetName> GetLordOfHouseList(List<HouseName> houseList, Time time)
+        {
+            var returnList = new List<PlanetName>();
+            foreach (var house in houseList)
+            {
+                var tempLord = GetLordOfHouse(house, time);
+                returnList.Add(tempLord);
+            }
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// Checks if the inputed sign was the sign of the house during the inputed time
+        /// </summary>
+        public static bool IsHouseSignName(int house, ZodiacName sign, Time time) => GetHouseSignName(house, time) == sign;
+
+
+        /// <summary>
         /// Gets the zodiac sign at middle longitude of the house.
         /// </summary>
         public static ZodiacName GetHouseSignName(int houseNumber, Time time)

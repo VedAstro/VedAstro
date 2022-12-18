@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
@@ -8,7 +9,7 @@ namespace Genso.Astrology.Library
     /// A list of planet names, with string parsing & comparison
     /// </summary>
     [Serializable()]
-    public class PlanetName
+    public class PlanetName : IToXml
     {
         //NESTED TYPES
         public enum PlanetNameEnum
@@ -56,7 +57,7 @@ namespace Genso.Astrology.Library
             Jupiter, Venus,
             Saturn, Rahu, Ketu
         };
-        
+
 
 
         //DATA FIELDS
@@ -123,10 +124,7 @@ namespace Genso.Astrology.Library
 
 
         //METHOD OVERRIDES
-        public override string ToString()
-        {
-            return Name.ToString();
-        }
+        public override string ToString() => Name.ToString();
 
         public override bool Equals(object obj)
         {
@@ -158,6 +156,54 @@ namespace Genso.Astrology.Library
             var hash1 = Name.GetHashCode();
 
             return hash1;
+        }
+
+        public XElement ToXml()
+        {
+            var planetNameHolder = new XElement("PlanetName");
+            var nameXml = new XElement("Name", this.Name.ToString());
+
+            planetNameHolder.Add(nameXml);
+
+            return planetNameHolder;
+
+        }
+
+        public dynamic FromXml<T>(XElement planetNameXml) where T : IToXml => FromXml(planetNameXml);
+
+        public static PlanetName FromXml(XElement planetNameXml)
+        {
+            var nameRaw = planetNameXml?.Element("Name")?.Value ?? "Empty";
+            var planetName = Enum.Parse<PlanetNameEnum>(nameRaw);
+            return new PlanetName(planetName);
+        }
+
+        /// <summary>
+        /// Note: Root element must be named EventTagList
+        /// </summary>
+        public static List<PlanetName> FromXmlList(XElement planetNameListXml)
+        {
+            var returnList = new List<PlanetName>();
+            foreach (var planetNameXml in planetNameListXml.Elements())
+            {
+                returnList.Add(PlanetName.FromXml(planetNameXml));
+            }
+            return returnList;
+        }
+
+        /// <summary>
+        /// Note: Root element must be named PlanetNameList
+        /// </summary>
+        public static XElement ToXmlList(List<PlanetName> planetNameList)
+        {
+            var planetNameListXml = new XElement("PlanetNameList");
+
+            foreach (var planetName in planetNameList)
+            {
+                planetNameListXml.Add(planetName.ToXml());
+            }
+
+            return planetNameListXml;
         }
 
     }

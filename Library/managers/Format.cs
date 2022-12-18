@@ -14,7 +14,7 @@ namespace Genso.Astrology.Library
         public static string FormatName(IHasName obj)
         {
             //get enum name of object
-            var name = obj.GetName();
+            var name = obj.Name;
 
             //convert enum name to string
             var nameWithoutSpaces = name.ToString();

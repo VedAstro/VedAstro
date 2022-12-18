@@ -65,10 +65,11 @@ namespace Genso.Astrology.Library
         /// Converts any type that implements IToXml to XML, it will use Type's own ToXml() converter
         /// Note, used to transfer data via internet Client to API Server
         /// Placed inside "Root" xml
+        /// Default name for root element is Root
         /// </summary>
-        public static XElement AnyTypeToXmlList<T>(List<T> xmlList) where T : IToXml
+        public static XElement AnyTypeToXmlList<T>(List<T> xmlList, string rootElementName = "Root") where T : IToXml
         {
-            var rootXml = new XElement("Root");
+            var rootXml = new XElement(rootElementName);
             foreach (var xmlItem in xmlList)
             {
                 rootXml.Add(AnyTypeToXml(xmlItem));

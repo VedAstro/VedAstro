@@ -1,25 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
 {
-    //TODO CAN BE MOVED OUT
-    public enum HouseName
-    {
-        //Note: maintain int relation for code that is still using int
-        House1 = 1,
-        House2 = 2,
-        House3 = 3,
-        House4 = 4,
-        House5 = 5,
-        House6 = 6,
-        House7 = 7,
-        House8 = 8,
-        House9 = 9,
-        House10 = 10,
-        House11 = 11,
-        House12 = 12,
-    }
 
     /// <summary>
     /// A simple data structure to contain an instance of a house in time

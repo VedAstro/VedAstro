@@ -27,28 +27,44 @@ namespace Genso.Astrology.Library
             Nature = nature;
             EventCalculator = eventCalculator;
             Description = description;
-            Strength = "";//strength is only gotten after calculator is run
             EventTags = eventTags;
         }
 
 
         /** PROPERTIES **/
         //mainly created for access from WPF binding
-        public EventName Name { get; }
+        public EventName Name { get; private set; } = EventName.EmptyEvent;
+        
+        /// <summary>
+        /// Gets human readable Event Name, removes camel case
+        /// </summary>
         public string FormattedName => Format.FormatName(this);
+        
         public EventNature Nature { get; private set; }
+        
         public EventCalculator EventCalculator { get; private set; }
+        
         public string Description
         {
             get => HttpUtility.HtmlDecode(_description);
             set => _description = HttpUtility.HtmlEncode(value);
         }
-        public string Strength { get; set; }
+
+        /// <summary>
+        /// Contains data about planets, houses, and signs related to a calculation
+        /// Note: filled when IsEventOccuring is called
+        /// </summary>
+        public RelatedBody RelatedBody { get; set; } = new RelatedBody();
+        
         public List<EventTag> EventTags { get; }
 
 
-
         /** PUBLIC METHODS **/
+
+
+        /// <summary>
+        /// Calculator Results are made here
+        /// </summary>
         public bool IsEventOccuring(Time time, Person person)
         {
             //do calculation for this event to get prediction data
@@ -58,25 +74,15 @@ namespace Genso.Astrology.Library
             //is prediction occuring
             bool isEventOccuring = predictionData.Occuring;
 
-            //prediction strength
-            Strength = predictionData.Info;
+            //store planets, houses & signs related to result
+            RelatedBody = predictionData.RelatedBody;
 
-            //override even nature from xml if specified
+            //override event nature from xml if specified
             Nature = predictionData.NatureOverride == EventNature.Empty ? Nature : predictionData.NatureOverride;
 
             //let caller know if occuring
             return isEventOccuring;
         }
-
-        public EventName GetName() => Name;
-
-        public EventNature GetNature() => Nature;
-
-        public string GetDescription() => Description;
-
-        public string GetStrength() => Strength;
-
-        public List<EventTag> GetEventTags() => EventTags;
 
 
 

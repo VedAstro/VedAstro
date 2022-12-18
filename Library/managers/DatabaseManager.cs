@@ -109,7 +109,7 @@ namespace Genso.Astrology.Library
                 //var filter1 = eventData.GetName() == EventName.SuryaSankramana || eventData.GetName() == EventName.Sunset || eventData.GetName() == EventName.Midday;
                 //var filter1 = eventData.GetName() == EventName.Papashadvargas;
                 //var filter1 = eventData.GetName().ToString().Contains("Suns");
-                var filter1 = eventData.GetEventTags().Contains(tag);
+                var filter1 = eventData.EventTags.Contains(tag);
 
                 return filter1;
             });

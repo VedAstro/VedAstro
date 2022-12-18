@@ -673,7 +673,7 @@ namespace API
 
             }
             //catches only exceptions that indicates that user canceled the calculation (caller lost interest in the result)
-            catch (Exception e) when (e.InnerException.GetType() == typeof(OperationCanceledException))
+            catch (Exception e)
             {
                 //return empty list
                 return new List<HoroscopePrediction>();
@@ -752,10 +752,7 @@ namespace API
                 else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
                 {
                     //add previous event to list
-                    var newEvent = new HoroscopePrediction(eventData.GetName(),
-                        eventData.GetDescription(),
-                        eventData.GetStrength());
-
+                    var newEvent = new HoroscopePrediction(eventData.Name, eventData.Description, eventData.RelatedBody);
                     eventList.Add(newEvent);
 
                     //set flag
@@ -766,10 +763,7 @@ namespace API
                 if (eventIsOccuringNow == true & time == lastInstanceOfTime)
                 {
                     //add current event to list
-                    var newEvent2 = new HoroscopePrediction(eventData.GetName(),
-                        eventData.GetDescription(),
-                        eventData.GetStrength());
-
+                    var newEvent2 = new HoroscopePrediction(eventData.Name, eventData.Description, eventData.RelatedBody);
 
                     eventList.Add(newEvent2);
                 }

@@ -257,9 +257,9 @@ namespace Genso.Astrology.Library
                 else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
                 {
                     //add previous event to list
-                    var newEvent = new Event(eventData.GetName(),
-                        eventData.GetNature(),
-                        eventData.GetDescription(),
+                    var newEvent = new Event(eventData.Name,
+                        eventData.Nature,
+                        eventData.Description,
                         eventStartTime,
                         eventEndTime);
 
@@ -280,9 +280,9 @@ namespace Genso.Astrology.Library
                 if (eventIsOccuringNow == true & time == lastInstanceOfTime)
                 {
                     //add current event to list
-                    var newEvent2 = new Event(eventData.GetName(),
-                        eventData.GetNature(),
-                        eventData.GetDescription(),
+                    var newEvent2 = new Event(eventData.Name,
+                        eventData.Nature,
+                        eventData.Description,
                         eventStartTime,
                         eventEndTime);
 
@@ -352,9 +352,9 @@ namespace Genso.Astrology.Library
                 else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
                 {
                     //add previous event to list
-                    var newEvent = new Event(eventData.GetName(),
-                        eventData.GetNature(),
-                        eventData.GetDescription(),
+                    var newEvent = new Event(eventData.Name,
+                        eventData.Nature,
+                        eventData.Description,
                         eventStartTime,
                         eventEndTime);
 
@@ -372,9 +372,7 @@ namespace Genso.Astrology.Library
                 if (eventIsOccuringNow == true & time == lastInstanceOfTime)
                 {
                     //add current event to list
-                    var newEvent2 = new Event(eventData.GetName(),
-                        eventData.GetNature(),
-                        eventData.GetDescription(),
+                    var newEvent2 = new Event(eventData.Name, eventData.Nature, eventData.Description,
                         eventStartTime,
                         eventEndTime);
 

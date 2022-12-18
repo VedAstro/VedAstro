@@ -4205,1449 +4205,384 @@ namespace Genso.Astrology.Library
 
 
         #endregion
-
+         
         #region HOROSCOPE
 
         #region Lord of 1st being Situated in Different Houses
 
         [EventCalculator(EventName.House1LordInHouse1)]
-        public static CalculatorResult House1LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House1, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House1, time), new[] { HouseName.House1, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House1LordInHouse2)]
-        public static CalculatorResult House1LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House2, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House1LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House2, time), new[] { HouseName.House1, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House1LordInHouse3)]
-        public static CalculatorResult House1LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House3, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House3, time), new[] { HouseName.House1, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House1LordInHouse4)]
-        public static CalculatorResult House1LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House4, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House4, time), new[] { HouseName.House1, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House1LordInHouse5)]
-        public static CalculatorResult House1LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House5, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House5, time), new[] { HouseName.House1, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House1LordInHouse6)]
-        public static CalculatorResult House1LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House6, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House6, time), new[] { HouseName.House1, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House1LordInHouse7)]
-        public static CalculatorResult House1LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House7, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House7, time), new[] { HouseName.House1, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House1LordInHouse8)]
-        public static CalculatorResult House1LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House8, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House8, time), new[] { HouseName.House1, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House1LordInHouse9)]
-        public static CalculatorResult House1LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House9, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House1LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House9, time), new[] { HouseName.House1, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House1LordInHouse10)]
-        public static CalculatorResult House1LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House10, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House1LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House10, time), new[] { HouseName.House1, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House1LordInHouse11)]
-        public static CalculatorResult House1LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House11, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House11, time), new[] { HouseName.House1, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House1LordInHouse12)]
-        public static CalculatorResult House1LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House12, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House1, time);
-
-            var info = $"House 1 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House1LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House1, HouseName.House12, time), new[] { HouseName.House1, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of 2nd being Situated in Different Houses
 
         [EventCalculator(EventName.House2LordInHouse1)]
-        public static CalculatorResult House2LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House1, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House1, time), new[] { HouseName.House2, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House2LordInHouse2)]
-        public static CalculatorResult House2LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House2, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House2, time), new[] { HouseName.House2, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House2LordInHouse3)]
-        public static CalculatorResult House2LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House3, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House3, time), new[] { HouseName.House2, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House2LordInHouse4)]
-        public static CalculatorResult House2LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House4, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House4, time), new[] { HouseName.House2, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House2LordInHouse5)]
-        public static CalculatorResult House2LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House5, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House5, time), new[] { HouseName.House2, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House2LordInHouse6)]
-        public static CalculatorResult House2LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House6, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House6, time), new[] { HouseName.House2, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House2LordInHouse7)]
-        public static CalculatorResult House2LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House7, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House7, time), new[] { HouseName.House2, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House2LordInHouse8)]
-        public static CalculatorResult House2LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House8, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House8, time), new[] { HouseName.House2, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House2LordInHouse9)]
-        public static CalculatorResult House2LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House9, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House9, time), new[] { HouseName.House2, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House2LordInHouse10)]
-        public static CalculatorResult House2LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House10, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House10, time), new[] { HouseName.House2, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House2LordInHouse11)]
-        public static CalculatorResult House2LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House11, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House2LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House11, time), new[] { HouseName.House2, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House2LordInHouse12)]
-        public static CalculatorResult House2LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House12, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House2, time);
-
-            var info = $"House 2 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House2LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House2, HouseName.House12, time), new[] { HouseName.House2, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of 3rd being Situated in Different Houses
 
         [EventCalculator(EventName.House3LordInHouse1)]
-        public static CalculatorResult House3LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House1, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House1, time), new[] { HouseName.House3, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House3LordInHouse2)]
-        public static CalculatorResult House3LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House2, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House2, time), new[] { HouseName.House3, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House3LordInHouse3)]
-        public static CalculatorResult House3LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House3, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House3, time), new[] { HouseName.House3, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House3LordInHouse4)]
-        public static CalculatorResult House3LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House4, time);
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House4, time), new[] { HouseName.House3, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House3LordInHouse5)]
-        public static CalculatorResult House3LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House5, time);
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House5, time), new[] { HouseName.House3, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House3LordInHouse6)]
-        public static CalculatorResult House3LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House6, time);
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House6, time), new[] { HouseName.House3, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House3LordInHouse7)]
-        public static CalculatorResult House3LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House7, time);
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House7, time), new[] { HouseName.House3, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House3LordInHouse8)]
-        public static CalculatorResult House3LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House8, time);
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House8, time), new[] { HouseName.House3, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House3LordInHouse9)]
-        public static CalculatorResult House3LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House9, time);
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House3LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House9, time), new[] { HouseName.House3, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House3LordInHouse10)]
-        public static CalculatorResult House3LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House10, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House3LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House10, time), new[] { HouseName.House3, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House3LordInHouse11)]
-        public static CalculatorResult House3LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House11, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House11, time), new[] { HouseName.House3, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House3LordInHouse12)]
-        public static CalculatorResult House3LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House12, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House3, time);
-
-            var info = $"House 3 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House3LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House3, HouseName.House12, time), new[] { HouseName.House3, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of the 4th House Occupying Different Houses
 
         [EventCalculator(EventName.House4LordInHouse1)]
-        public static CalculatorResult House4LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House1, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House4LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House1, time), new[] { HouseName.House4, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House4LordInHouse2)]
-        public static CalculatorResult House4LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House2, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House4LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House2, time), new[] { HouseName.House4, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House4LordInHouse3)]
-        public static CalculatorResult House4LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House3, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House4LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House3, time), new[] { HouseName.House4, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House4LordInHouse4)]
-        public static CalculatorResult House4LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House4, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House4LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House4, time), new[] { HouseName.House4, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House4LordInHouse5)]
-        public static CalculatorResult House4LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House5, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House4LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House5, time), new[] { HouseName.House4, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House4LordInHouse6)]
-        public static CalculatorResult House4LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House6, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House4LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House6, time), new[] { HouseName.House4, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House4LordInHouse7)]
-        public static CalculatorResult House4LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House7, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House4LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House7, time), new[] { HouseName.House4, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House4LordInHouse8)]
-        public static CalculatorResult House4LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House8, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House4LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House8, time), new[] { HouseName.House4, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House4LordInHouse9)]
-        public static CalculatorResult House4LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House9, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House4LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House9, time), new[] { HouseName.House4, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House4LordInHouse10)]
-        public static CalculatorResult House4LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House10, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House4LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House10, time), new[] { HouseName.House4, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House4LordInHouse11)]
-        public static CalculatorResult House4LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House11, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House4LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House11, time), new[] { HouseName.House4, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House4LordInHouse12)]
-        public static CalculatorResult House4LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House12, time);
-
-            //STRENGTH CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House4, time);
-
-            var info = $"House 4 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House4LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House4, HouseName.House12, time), new[] { HouseName.House4, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of the 5th House Occupying Different Houses
 
         [EventCalculator(EventName.House5LordInHouse1)]
-        public static CalculatorResult House5LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House1, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House1, time), new[] { HouseName.House5, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House5LordInHouse2)]
-        public static CalculatorResult House5LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House2, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House2, time), new[] { HouseName.House5, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House5LordInHouse3)]
-        public static CalculatorResult House5LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House3, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House3, time), new[] { HouseName.House5, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House5LordInHouse4)]
-        public static CalculatorResult House5LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House4, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House4, time), new[] { HouseName.House5, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House5LordInHouse5)]
-        public static CalculatorResult House5LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House5, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House5, time), new[] { HouseName.House5, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House5LordInHouse6)]
-        public static CalculatorResult House5LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House6, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House6, time), new[] { HouseName.House5, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House5LordInHouse7)]
-        public static CalculatorResult House5LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House7, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House7, time), new[] { HouseName.House5, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House5LordInHouse8)]
-        public static CalculatorResult House5LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House8, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House8, time), new[] { HouseName.House5, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House5LordInHouse9)]
-        public static CalculatorResult House5LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House9, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House5LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House9, time), new[] { HouseName.House5, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House5LordInHouse10)]
-        public static CalculatorResult House5LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House10, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House10, time), new[] { HouseName.House5, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House5LordInHouse11)]
-        public static CalculatorResult House5LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House11, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House11, time), new[] { HouseName.House5, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House5LordInHouse12)]
-        public static CalculatorResult House5LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House12, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House5, time);
-
-            var info = $"House 5 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House5LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House5, HouseName.House12, time), new[] { HouseName.House5, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of the 6th House Occupying Different Houses
 
         [EventCalculator(EventName.House6LordInHouse1)]
-        public static CalculatorResult House6LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House1, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House1, time), new[] { HouseName.House6, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House6LordInHouse2)]
-        public static CalculatorResult House6LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House2, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House2, time), new[] { HouseName.House6, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House6LordInHouse3)]
-        public static CalculatorResult House6LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House3, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House3, time), new[] { HouseName.House6, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House6LordInHouse4)]
-        public static CalculatorResult House6LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House4, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House4, time), new[] { HouseName.House6, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House6LordInHouse5)]
-        public static CalculatorResult House6LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House5, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-
-        }
+        public static CalculatorResult House6LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House5, time), new[] { HouseName.House6, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House6LordInHouse6)]
-        public static CalculatorResult House6LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House6, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House6, time), new[] { HouseName.House6, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House6LordInHouse7)]
-        public static CalculatorResult House6LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House7, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House7, time), new[] { HouseName.House6, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House6LordInHouse8)]
-        public static CalculatorResult House6LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House8, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House8, time), new[] { HouseName.House6, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House6LordInHouse9)]
-        public static CalculatorResult House6LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House9, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House9, time), new[] { HouseName.House6, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House6LordInHouse10)]
-        public static CalculatorResult House6LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House10, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House10, time), new[] { HouseName.House6, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House6LordInHouse11)]
-        public static CalculatorResult House6LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House11, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House11, time), new[] { HouseName.House6, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House6LordInHouse12)]
-        public static CalculatorResult House6LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House12, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House6, time);
-
-            var info = $"House 6 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House6LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House6, HouseName.House12, time), new[] { HouseName.House6, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of the 7th House Occupying Different Houses
 
         [EventCalculator(EventName.House7LordInHouse1)]
-        public static CalculatorResult House7LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House1, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House1, time), new[] { HouseName.House7, HouseName.House1 }, time);
         [EventCalculator(EventName.House7LordInHouse2)]
-        public static CalculatorResult House7LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House2, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House2, time), new[] { HouseName.House7, HouseName.House2 }, time);
         [EventCalculator(EventName.House7LordInHouse3)]
-        public static CalculatorResult House7LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House3, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House3, time), new[] { HouseName.House7, HouseName.House3 }, time);
         [EventCalculator(EventName.House7LordInHouse4)]
-        public static CalculatorResult House7LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House4, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House4, time), new[] { HouseName.House7, HouseName.House4 }, time);
         [EventCalculator(EventName.House7LordInHouse5)]
-        public static CalculatorResult House7LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House5, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House5, time), new[] { HouseName.House7, HouseName.House5 }, time);
         [EventCalculator(EventName.House7LordInHouse6)]
-        public static CalculatorResult House7LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House6, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House6, time), new[] { HouseName.House7, HouseName.House6 }, time);
         [EventCalculator(EventName.House7LordInHouse7)]
-        public static CalculatorResult House7LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House7, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House7, time), new[] { HouseName.House7, HouseName.House7 }, time);
         [EventCalculator(EventName.House7LordInHouse8)]
-        public static CalculatorResult House7LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House8, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House8, time), new[] { HouseName.House7, HouseName.House8 }, time);
         [EventCalculator(EventName.House7LordInHouse9)]
-        public static CalculatorResult House7LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House9, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House9, time), new[] { HouseName.House7, HouseName.House9 }, time);
         [EventCalculator(EventName.House7LordInHouse10)]
-        public static CalculatorResult House7LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House10, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House10, time), new[] { HouseName.House7, HouseName.House10 }, time);
         [EventCalculator(EventName.House7LordInHouse11)]
-        public static CalculatorResult House7LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House11, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House7LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House11, time), new[] { HouseName.House7, HouseName.House11 }, time);
         [EventCalculator(EventName.House7LordInHouse12)]
-        public static CalculatorResult House7LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House12, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House7, time);
-
-            var info = $"House 7 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House7LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House7, HouseName.House12, time), new[] { HouseName.House7, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of the 8th House Occupying Different Houses
 
         [EventCalculator(EventName.House8LordInHouse1)]
-        public static CalculatorResult House8LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House1, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House1, time), new[] { HouseName.House8, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House8LordInHouse2)]
-        public static CalculatorResult House8LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House2, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House2, time), new[] { HouseName.House8, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House8LordInHouse3)]
-        public static CalculatorResult House8LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House3, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House3, time), new[] { HouseName.House8, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House8LordInHouse4)]
-        public static CalculatorResult House8LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House4, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House4, time), new[] { HouseName.House8, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House8LordInHouse5)]
-        public static CalculatorResult House8LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House5, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House5, time), new[] { HouseName.House8, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House8LordInHouse6)]
-        public static CalculatorResult House8LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House6, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House6, time), new[] { HouseName.House8, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House8LordInHouse7)]
-        public static CalculatorResult House8LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House7, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House7, time), new[] { HouseName.House8, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House8LordInHouse8)]
-        public static CalculatorResult House8LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House8, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House8, time), new[] { HouseName.House8, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House8LordInHouse9)]
-        public static CalculatorResult House8LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House9, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House9, time), new[] { HouseName.House8, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House8LordInHouse10)]
-        public static CalculatorResult House8LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House10, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House10, time), new[] { HouseName.House8, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House8LordInHouse11)]
-        public static CalculatorResult House8LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House11, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House11, time), new[] { HouseName.House8, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House8LordInHouse12)]
-        public static CalculatorResult House8LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House12, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House8, time);
-
-            var info = $"House 8 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House8LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House8, HouseName.House12, time), new[] { HouseName.House8, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of the 9th House Occupying Different Houses
 
         [EventCalculator(EventName.House9LordInHouse1)]
-        public static CalculatorResult House9LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House1, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House1, time), new[] { HouseName.House9, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House9LordInHouse2)]
-        public static CalculatorResult House9LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House2, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House2, time), new[] { HouseName.House9, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House9LordInHouse3)]
-        public static CalculatorResult House9LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House3, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House3, time), new[] { HouseName.House9, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House9LordInHouse4)]
-        public static CalculatorResult House9LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House4, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House4, time), new[] { HouseName.House9, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House9LordInHouse5)]
-        public static CalculatorResult House9LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House5, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House5, time), new[] { HouseName.House9, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House9LordInHouse6)]
-        public static CalculatorResult House9LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House6, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House6, time), new[] { HouseName.House9, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House9LordInHouse7)]
-        public static CalculatorResult House9LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House7, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House7, time), new[] { HouseName.House9, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House9LordInHouse8)]
-        public static CalculatorResult House9LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House8, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House8, time), new[] { HouseName.House9, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House9LordInHouse9)]
-        public static CalculatorResult House9LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House9, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House9, time), new[] { HouseName.House9, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House9LordInHouse10)]
-        public static CalculatorResult House9LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House10, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House10, time), new[] { HouseName.House9, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House9LordInHouse11)]
-        public static CalculatorResult House9LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House11, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House11, time), new[] { HouseName.House9, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House9LordInHouse12)]
-        public static CalculatorResult House9LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House12, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House9, time);
-
-            var info = $"House 9 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House9LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House9, HouseName.House12, time), new[] { HouseName.House9, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of the 10th House Occupying Different Houses
 
         [EventCalculator(EventName.House10LordInHouse1)]
-        public static CalculatorResult House10LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House1, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House1, time), new[] { HouseName.House10, HouseName.House1 }, time);
         [EventCalculator(EventName.House10LordInHouse2)]
-        public static CalculatorResult House10LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House2, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House2, time), new[] { HouseName.House10, HouseName.House2 }, time);
         [EventCalculator(EventName.House10LordInHouse3)]
-        public static CalculatorResult House10LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House3, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House3, time), new[] { HouseName.House10, HouseName.House3 }, time);
         [EventCalculator(EventName.House10LordInHouse4)]
-        public static CalculatorResult House10LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House4, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House4, time), new[] { HouseName.House10, HouseName.House4 }, time);
         [EventCalculator(EventName.House10LordInHouse5)]
-        public static CalculatorResult House10LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House5, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House5, time), new[] { HouseName.House10, HouseName.House5 }, time);
         [EventCalculator(EventName.House10LordInHouse6)]
-        public static CalculatorResult House10LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House6, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info }; ;
-        }
-
+        public static CalculatorResult House10LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House6, time), new[] { HouseName.House10, HouseName.House6 }, time);
         [EventCalculator(EventName.House10LordInHouse7)]
-        public static CalculatorResult House10LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House7, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House7, time), new[] { HouseName.House10, HouseName.House7 }, time);
         [EventCalculator(EventName.House10LordInHouse8)]
-        public static CalculatorResult House10LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House8, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House8, time), new[] { HouseName.House10, HouseName.House8 }, time);
         [EventCalculator(EventName.House10LordInHouse9)]
-        public static CalculatorResult House10LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House9, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House9, time), new[] { HouseName.House10, HouseName.House9 }, time);
         [EventCalculator(EventName.House10LordInHouse10)]
-        public static CalculatorResult House10LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House10, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House10, time), new[] { HouseName.House10, HouseName.House10 }, time);
         [EventCalculator(EventName.House10LordInHouse11)]
-        public static CalculatorResult House10LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House11, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
-
+        public static CalculatorResult House10LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House11, time), new[] { HouseName.House10, HouseName.House11 }, time);
         [EventCalculator(EventName.House10LordInHouse12)]
-        public static CalculatorResult House10LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House12, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House10, time);
-
-            var info = $"House 10 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House10LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House10, HouseName.House12, time), new[] { HouseName.House10, HouseName.House12 }, time);
 
 
         #endregion
@@ -5655,285 +4590,80 @@ namespace Genso.Astrology.Library
         #region Lord of the 11th House Occupying Different Houses
 
         [EventCalculator(EventName.House11LordInHouse1)]
-        public static CalculatorResult House11LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House1, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House1, time), new[] { HouseName.House11, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House11LordInHouse2)]
-        public static CalculatorResult House11LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House2, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House2, time), new[] { HouseName.House11, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House11LordInHouse3)]
-        public static CalculatorResult House11LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House3, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House3, time), new[] { HouseName.House11, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House11LordInHouse4)]
-        public static CalculatorResult House11LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House4, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House4, time), new[] { HouseName.House11, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House11LordInHouse5)]
-        public static CalculatorResult House11LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House5, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House5, time), new[] { HouseName.House11, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House11LordInHouse6)]
-        public static CalculatorResult House11LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House6, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House6, time), new[] { HouseName.House11, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House11LordInHouse7)]
-        public static CalculatorResult House11LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House7, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House7, time), new[] { HouseName.House11, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House11LordInHouse8)]
-        public static CalculatorResult House11LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House8, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House8, time), new[] { HouseName.House11, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House11LordInHouse9)]
-        public static CalculatorResult House11LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House9, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House9, time), new[] { HouseName.House11, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House11LordInHouse10)]
-        public static CalculatorResult House11LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House10, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House10, time), new[] { HouseName.House11, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House11LordInHouse11)]
-        public static CalculatorResult House11LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House11, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House11, time), new[] { HouseName.House11, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House11LordInHouse12)]
-        public static CalculatorResult House11LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House12, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House11, time);
-
-            var info = $"House 11 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House11LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House11, HouseName.House12, time), new[] { HouseName.House11, HouseName.House12 }, time);
 
         #endregion
 
         #region Lord of the 12th House Occupying Different Houses
 
         [EventCalculator(EventName.House12LordInHouse1)]
-        public static CalculatorResult House12LordInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House1, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse1Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House1, time), new[] { HouseName.House12, HouseName.House1 }, time);
 
         [EventCalculator(EventName.House12LordInHouse2)]
-        public static CalculatorResult House12LordInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House2, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House2, time), new[] { HouseName.House12, HouseName.House2 }, time);
 
         [EventCalculator(EventName.House12LordInHouse3)]
-        public static CalculatorResult House12LordInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House3, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House3, time), new[] { HouseName.House12, HouseName.House3 }, time);
 
         [EventCalculator(EventName.House12LordInHouse4)]
-        public static CalculatorResult House12LordInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House4, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House4, time), new[] { HouseName.House12, HouseName.House4 }, time);
 
         [EventCalculator(EventName.House12LordInHouse5)]
-        public static CalculatorResult House12LordInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House5, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House5, time), new[] { HouseName.House12, HouseName.House5 }, time);
 
         [EventCalculator(EventName.House12LordInHouse6)]
-        public static CalculatorResult House12LordInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House6, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House6, time), new[] { HouseName.House12, HouseName.House6 }, time);
 
         [EventCalculator(EventName.House12LordInHouse7)]
-        public static CalculatorResult House12LordInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House7, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House7, time), new[] { HouseName.House12, HouseName.House7 }, time);
 
         [EventCalculator(EventName.House12LordInHouse8)]
-        public static CalculatorResult House12LordInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House8, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House8, time), new[] { HouseName.House12, HouseName.House8 }, time);
 
         [EventCalculator(EventName.House12LordInHouse9)]
-        public static CalculatorResult House12LordInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House9, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House9, time), new[] { HouseName.House12, HouseName.House9 }, time);
 
         [EventCalculator(EventName.House12LordInHouse10)]
-        public static CalculatorResult House12LordInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House10, time);
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House10, time), new[] { HouseName.House12, HouseName.House10 }, time);
 
         [EventCalculator(EventName.House12LordInHouse11)]
-        public static CalculatorResult House12LordInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House11, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House11, time), new[] { HouseName.House12, HouseName.House11 }, time);
 
         [EventCalculator(EventName.House12LordInHouse12)]
-        public static CalculatorResult House12LordInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House12, time);
-
-            //INFO CALCULATION
-            var lord = AstronomicalCalculator.GetLordOfHouse(HouseName.House12, time);
-
-            var info = $"House 12 Lord, {lord}";
-            return new() { Occuring = occuring, Info = info };
-        }
+        public static CalculatorResult House12LordInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseLordInHouse(HouseName.House12, HouseName.House12, time), new[] { HouseName.House12, HouseName.House12 }, time);
 
         #endregion
 
@@ -5941,113 +4671,40 @@ namespace Genso.Astrology.Library
         #region Different Signs Ascending
 
         [EventCalculator(EventName.AriesRising)]
-        public static CalculatorResult AriesRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aries;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Aries);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult AriesRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Aries, time), new[] { HouseName.House1, }, new[] { ZodiacName.Aries }, time);
 
         [EventCalculator(EventName.TaurusRising)]
-        public static CalculatorResult TaurusRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Taurus;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Taurus);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult TaurusRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Taurus, time), new[] { HouseName.House1, }, new[] { ZodiacName.Taurus }, time);
 
         [EventCalculator(EventName.GeminiRising)]
-        public static CalculatorResult GeminiRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Gemini;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Gemini);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult GeminiRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Gemini, time), new[] { HouseName.House1, }, new[] { ZodiacName.Gemini }, time);
 
         [EventCalculator(EventName.CancerRising)]
-        public static CalculatorResult CancerRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Cancer;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Cancer);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult CancerRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Cancer, time), new[] { HouseName.House1, }, new[] { ZodiacName.Cancer }, time);
 
         [EventCalculator(EventName.LeoRising)]
-        public static CalculatorResult LeoRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Leo;
-
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Leo);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult LeoRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Leo, time), new[] { HouseName.House1, }, new[] { ZodiacName.Leo }, time);
 
         [EventCalculator(EventName.VirgoRising)]
-        public static CalculatorResult VirgoRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Virgo;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Virgo);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult VirgoRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Virgo, time), new[] { HouseName.House1, }, new[] { ZodiacName.Virgo }, time);
 
         [EventCalculator(EventName.LibraRising)]
-        public static CalculatorResult LibraRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Libra;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Libra);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult LibraRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Libra, time), new[] { HouseName.House1, }, new[] { ZodiacName.Libra }, time);
 
         [EventCalculator(EventName.ScorpioRising)]
-        public static CalculatorResult ScorpioRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Scorpio;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Scorpio);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult ScorpioRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Scorpio, time), new[] { HouseName.House1, }, new[] { ZodiacName.Scorpio }, time);
 
         [EventCalculator(EventName.SagittariusRising)]
-        public static CalculatorResult SagittariusRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Sagittarius;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Sagittarius);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult SagittariusRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Sagittarius, time), new[] { HouseName.House1, }, new[] { ZodiacName.Sagittarius }, time);
 
         [EventCalculator(EventName.CapricornusRising)]
-        public static CalculatorResult CapricornusRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Capricornus;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Capricornus);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult CapricornusRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Capricornus, time), new[] { HouseName.House1, }, new[] { ZodiacName.Capricornus }, time);
 
         [EventCalculator(EventName.AquariusRising)]
-        public static CalculatorResult AquariusRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Aquarius;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Aquarius);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult AquariusRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Aquarius, time), new[] { HouseName.House1, }, new[] { ZodiacName.Aquarius }, time);
 
         [EventCalculator(EventName.PiscesRising)]
-        public static CalculatorResult PiscesRisingOccuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Pisces;
-            var lord = AstronomicalCalculator.GetLordOfZodiacSign(ZodiacName.Pisces);
-
-            return new() { Occuring = occuring, RelatedPlanets = { lord } };
-        }
+        public static CalculatorResult PiscesRisingOccuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsHouseSignName(1, ZodiacName.Pisces, time), new[] { HouseName.House1, }, new[] { ZodiacName.Pisces }, time);
 
         #endregion
 

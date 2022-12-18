@@ -16,16 +16,25 @@ namespace Genso.Astrology.Library
         private readonly EventName _name;
         private readonly string _description;
         private readonly string _info;
+        private readonly RelatedBody _relatedBody;
 
 
         //CTOR
-        public HoroscopePrediction(EventName name, string description, string info)
+        public HoroscopePrediction(EventName name, string description, RelatedBody relatedBody)
         {
             //initialize fields
             _name = name;
             _description = description;
-            _info = info;
+            _relatedBody = relatedBody;
         }
+
+        //public HoroscopePrediction(EventName name, string description, string info)
+        //{
+        //    //initialize fields
+        //    _name = name;
+        //    _description = description;
+        //    _info = info;
+        //}
 
 
 
@@ -33,7 +42,8 @@ namespace Genso.Astrology.Library
         //Note: Created mainly for ease of use with WPF binding
         public EventName Name => _name;
         public string Description => _description;
-        public string Info => _info;
+        public RelatedBody RelatedBody => _relatedBody;
+        //public string Info => _info;
         public string FormattedName => Format.FormatName(this);
 
 
@@ -49,9 +59,10 @@ namespace Genso.Astrology.Library
         {
             var eventName = Enum.Parse<EventName>(predictionXml.Element("Name")?.Value ?? "EmptyEvent");
             var description = predictionXml.Element("Description")?.Value ?? "Empty Description";
-            var info = predictionXml.Element("Info")?.Value ?? "Empty Info";
+            var relatedBodyXml = predictionXml?.Element("RelatedBody") ?? new XElement("RelatedBody");
+            var relatedBody = RelatedBody.FromXml(relatedBodyXml);
 
-            var parsed = new HoroscopePrediction(eventName, description, info);
+            var parsed = new HoroscopePrediction(eventName, description, relatedBody);
 
             return parsed;
         }
@@ -80,9 +91,9 @@ namespace Genso.Astrology.Library
             var predictionHolder = new XElement("HoroscopePrediction");
             var nameXml = new XElement("Name", this.Name.ToString());
             var descriptionXml = new XElement("Description", this.Description);
-            var infoXml = new XElement("Info", this.Info);
+            var relatedBodyXml = this.RelatedBody.ToXml();
 
-            predictionHolder.Add(nameXml, descriptionXml, infoXml);
+            predictionHolder.Add(nameXml, descriptionXml, relatedBodyXml);
 
             return predictionHolder;
         }
@@ -144,7 +155,7 @@ namespace Genso.Astrology.Library
 
         public override string ToString()
         {
-            return $"{FormattedName} - {Description} - {Info}";
+            return $"{FormattedName} - {Description}";
         }
 
 
@@ -155,7 +166,7 @@ namespace Genso.Astrology.Library
         public bool Contains(string searchText)
         {
             //place all text together
-            var compiledText = $"{FormattedName} {Description} {Info}";
+            var compiledText = $"{FormattedName} {Description} {this.RelatedBody.ToString()}";
 
             //do the searching
             string pattern = @"\b" + Regex.Escape(searchText) + @"\b"; //searches only words

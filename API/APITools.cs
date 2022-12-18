@@ -47,7 +47,7 @@ namespace API
         public const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
 
         //used in horoscope prediction
-        public const string UrlPredictionDataListXml = $"https://{AzureStorage}/data/PredictionDataList.xml";
+        public const string UrlHoroscopeDataListXml = $"https://{AzureStorage}/data/HoroscopeDataList.xml";
 
         public const string UrlEventsChartViewerHtml = $"https://{AzureStorage}/data/EventsChartViewer.html";
 
@@ -59,7 +59,7 @@ namespace API
         public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
         private static OkObjectResult FailMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msgXml)).ToString());
 
-        public static List<EventData> SavedPredictionDataList { get; set; } = null; //null used for checking empty
+        public static List<HoroscopeData> SavedHoroscopeDataList { get; set; } = null; //null used for checking empty
 
 
         /// <summary>
@@ -526,29 +526,29 @@ namespace API
         }
 
         /// <summary>
-        /// Get parsed PredictionDataList.xml from wwwroot file / static site
+        /// Get parsed HoroscopeDataList.xml from wwwroot file / static site
         /// Note: auto caching is used
         /// </summary>
-        public static async Task<List<EventData>> GetPredictionDataList()
+        public static async Task<List<HoroscopeData>> GetHoroscopeDataList()
         {
             //if prediction list already loaded use that instead
-            if (SavedPredictionDataList != null) { return SavedPredictionDataList; }
+            if (SavedHoroscopeDataList != null) { return SavedHoroscopeDataList; }
 
             //get data list from Static Website storage
-            var predictionDataListXml = await GetXmlFile(APITools.UrlPredictionDataListXml);
+            var horoscopeDataListXml = await GetXmlFile(APITools.UrlHoroscopeDataListXml);
 
             //parse each raw event data in list
-            var predictionDataList = new List<EventData>();
-            foreach (var predictionDataXml in predictionDataListXml)
+            var horoscopeDataList = new List<HoroscopeData>();
+            foreach (var predictionDataXml in horoscopeDataListXml)
             {
                 //add it to the return list
-                predictionDataList.Add(EventData.FromXml(predictionDataXml));
+                horoscopeDataList.Add(HoroscopeData.FromXml(predictionDataXml));
             }
 
             //make a copy to be used later if needed (speed improve)
-            SavedPredictionDataList = predictionDataList;
+            SavedHoroscopeDataList = horoscopeDataList;
 
-            return predictionDataList;
+            return horoscopeDataList;
 
         }
 
@@ -628,61 +628,62 @@ namespace API
             return xmlFile;
         }
 
+        /// <summary>
+        /// Gets all horoscope predictions for a person
+        /// </summary>
         public static async Task<List<HoroscopePrediction>> GetPrediction(Person person)
         {
-            //note: modified to use birth time as start & end time
-            var startStdTime = person.BirthTime;
-            var endStdTime = person.BirthTime;
 
-            var location = person.GetBirthLocation();
+            //get list of horoscope data (file from wwwroot)
+            var horoscopeDataList = await GetHoroscopeDataList();
 
-            //get list of prediction event data to check for event (file from wwwroot)
-            var predictionDataList = await GetPredictionDataList();
-
-            //start calculating predictions
-            var predictionList = GetListOfPredictionInTimePeriod(startStdTime, endStdTime, location, person, TimePreset.Minute1, predictionDataList);
+            //start calculating predictions (mix with time by person's birth date)
+            var predictionList = calculate(person, horoscopeDataList);
 
 
             return predictionList;
-        }
 
-        /// <summary>
-        /// Get list of predictions occurring in a time period for all the
-        /// inputed prediction types aka "prediction data"
-        /// </summary>
-        public static List<HoroscopePrediction> GetListOfPredictionInTimePeriod(Time startStdTime, Time endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
-        {
-            //get data to instantiate muhurtha time period
-            //get start & end times
-
-            //initialize empty list of event to return
-            List<HoroscopePrediction> eventList = new();
-
-            //split time into slices based on precision
-            var timeList = GetTimeListFromRange(startStdTime, endStdTime, precisionInHours);
-
-            try
+            /// <summary>
+            /// Get list of predictions occurring in a time period for all the
+            /// inputed prediction types aka "prediction data"
+            /// </summary>
+            List<HoroscopePrediction> calculate(Person person, List<HoroscopeData> horoscopeDataList)
             {
-                foreach (var eventData in eventDataList)
+                //get data to instantiate muhurtha time period
+                //get start & end times
+
+                //initialize empty list of event to return
+                List<HoroscopePrediction> horoscopeList = new();
+
+                try
                 {
-                    //get list of occuring events for a single event type
-                    var eventListForThisEvent = GetPredictionListByEventData(eventData, person, timeList);
-                    //add events to main list of event
-                    eventList.AddRange(eventListForThisEvent);
+                    foreach (var horoscopeData in horoscopeDataList)
+                    {
+                        //only add if occuring
+                        var isOccuring = horoscopeData.IsEventOccuring(person.BirthTime, person);
+                        if (isOccuring)
+                        {
+                            var newHoroscopePrediction = new HoroscopePrediction(horoscopeData.Name, horoscopeData.Description, horoscopeData.RelatedBody);
+                            //add events to main list of event
+                            horoscopeList.Add(newHoroscopePrediction);
+                        }
+                    }
+
+                }
+                //catches only exceptions that indicates that user canceled the calculation (caller lost interest in the result)
+                catch (Exception)
+                {
+                    //return empty list
+                    return new List<HoroscopePrediction>();
                 }
 
-            }
-            //catches only exceptions that indicates that user canceled the calculation (caller lost interest in the result)
-            catch (Exception e)
-            {
-                //return empty list
-                return new List<HoroscopePrediction>();
-            }
 
-
-            //return calculated event list
-            return eventList;
+                //return calculated event list
+                return horoscopeList;
+            }
         }
+
+
 
         /// <summary>
         /// If start time and end time is same then will only return 1 time in list
@@ -700,76 +701,6 @@ namespace API
 
             //return value
             return timeList;
-        }
-
-        /// <summary>
-        /// Get a list of events in a time period for a single event type aka "event data"
-        /// Decision on when event starts & ends is also done here
-        /// Event Data + Time = HoroscopePrediction
-        /// Marriage of DATA and LOGIC happens here
-        /// </summary>
-        public static List<HoroscopePrediction> GetPredictionListByEventData(EventData eventData, Person person, List<Time> timeList)
-        {
-            //declare empty event list to fill
-            var eventList = new List<HoroscopePrediction>();
-
-            //set previous time as false for first time instance
-            var eventOccuredInPreviousTime = false;
-
-            //declare start & end times
-            Time eventStartTime = new Time();
-            Time eventEndTime = new Time();
-            var lastInstanceOfTime = timeList.Last();
-
-            //loop through time list 
-            //note: loop must be done in sequential order, to detect correct start & end time
-            foreach (var time in timeList)
-            {
-                //debug print
-                //Console.Write($"\r Checking time:{time} : {eventData.GetName()}");
-
-                //get flag of event occuring now
-                var eventIsOccuringNow = eventData.IsEventOccuring(time, person);
-
-                //if event is occuring now & not in previous time
-                if (eventIsOccuringNow == true & eventOccuredInPreviousTime == false)
-                {
-                    //save new start & end time
-                    eventStartTime = time;
-                    eventEndTime = time;
-                    //update flag
-                    eventOccuredInPreviousTime = true;
-                }
-                //if event is occuring now & in previous time
-                else if (eventIsOccuringNow == true & eventOccuredInPreviousTime == true)
-                {
-                    //update end time only
-                    eventEndTime = time;
-                    //update flag
-                    eventOccuredInPreviousTime = true;
-                }
-                //if event is not occuring now but occurred before
-                else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
-                {
-                    //add previous event to list
-                    var newEvent = new HoroscopePrediction(eventData.Name, eventData.Description, eventData.RelatedBody);
-                    eventList.Add(newEvent);
-
-                    //set flag
-                    eventOccuredInPreviousTime = false;
-                }
-
-                //if event is occuring now & it is the last time
-                if (eventIsOccuringNow == true & time == lastInstanceOfTime)
-                {
-                    //add current event to list
-                    var newEvent2 = new HoroscopePrediction(eventData.Name, eventData.Description, eventData.RelatedBody);
-
-                    eventList.Add(newEvent2);
-                }
-            }
-
-            return eventList;
         }
 
         public static async Task<HttpResponseMessage> GetRequest(string receiverAddress)

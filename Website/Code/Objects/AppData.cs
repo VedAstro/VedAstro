@@ -40,9 +40,9 @@ namespace Website
         /// Place where global event data list is stored for quick access
         /// loaded in main layout
         /// </summary>
-        public static List<XElement>? PredictionDataList { get; set; }
+        public static List<XElement>? HoroscopeDataList { get; set; }
         
-        public static Stream? PredictionDataListStream { get; set; }
+        public static Stream? HoroscopeDataListStream { get; set; }
 
         /// <summary>
         /// Place where global event data list is stored for quick access
@@ -128,23 +128,23 @@ namespace Website
         public static async Task<Stream?> GetPredictionDataStreamCached()
         {
             //return already loaded if available
-            if (AppData.PredictionDataListStream != null) return AppData.PredictionDataListStream;
+            if (AppData.HoroscopeDataListStream != null) return AppData.HoroscopeDataListStream;
 
             //else get fresh copy from server
             var client = new HttpClient();
             client.BaseAddress = AppData.BaseAddress;
-            AppData.PredictionDataListStream = await client.GetStreamAsync("data/PredictionDataList.xml");
-            return AppData.PredictionDataListStream;
+            AppData.HoroscopeDataListStream = await client.GetStreamAsync("data/HoroscopeDataList.xml");
+            return AppData.HoroscopeDataListStream;
         }
 
-        public static async Task<List<XElement>?> GetPredictionDataListCached()
+        public static async Task<List<XElement>?> GetHoroscopeDataListCached()
         {
             //return already loaded if available
-            if (AppData.PredictionDataList != null) return AppData.PredictionDataList;
+            if (AppData.HoroscopeDataList != null) return AppData.HoroscopeDataList;
 
             //else get fresh copy from server
-            AppData.PredictionDataList = await WebsiteTools.GetXmlFile("data/PredictionDataList.xml");
-            return AppData.PredictionDataList;
+            AppData.HoroscopeDataList = await WebsiteTools.GetXmlFile("data/HoroscopeDataList.xml");
+            return AppData.HoroscopeDataList;
 
         }
 

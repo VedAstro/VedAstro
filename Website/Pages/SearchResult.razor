@@ -121,7 +121,7 @@ else
     private async Task LoadFiles()
     {
         //this data is used later search for fast loading
-        AppData.PredictionDataList = await WebsiteTools.GetXmlFile("data/PredictionDataList.xml");
+        AppData.HoroscopeDataList = await WebsiteTools.GetXmlFile("data/HoroscopeDataList.xml");
         AppData.EventDataList = await WebsiteTools.GetXmlFile("data/EventDataList.xml", Client);
         AppData.ReferenceList = await WebsiteTools.GetXmlFile("data/ReferenceList.xml", Client);
 
@@ -152,7 +152,7 @@ else
 
 
         //search file
-        foundPrediction = (await AppData.GetPredictionDataListCached()).Where(IsFound);
+        foundPrediction = (await AppData.GetHoroscopeDataListCached()).Where(IsFound);
         foundEvent = AppData.EventDataList.Where(IsFound);
         foundReference = AppData.ReferenceList.Where(IsFound);
 

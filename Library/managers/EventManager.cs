@@ -409,7 +409,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Gets the method that does the caculations for an event based on the events name
         /// </summary>
-        public static EventCalculator GetEventCalculatorMethod(EventName inputEventName)
+        public static EventCalculatorDelegate GetEventCalculatorMethod(EventName inputEventName)
         {
             //get all event calculator methods
             var eventCalculatorList = typeof(EventCalculatorMethods).GetMethods();
@@ -431,10 +431,48 @@ namespace Genso.Astrology.Library
                 if (eventCalculatorAttribute.GetEventName() == inputEventName)
                 {
                     //convert calculator reference to a delegate instance
-                    var eventCalculatorDelegate = (EventCalculator)Delegate.CreateDelegate(typeof(EventCalculator), eventCalculator);
+                    var eventCalculatorDelegate = (EventCalculatorDelegate)Delegate.CreateDelegate(typeof(EventCalculatorDelegate), eventCalculator);
 
                     //return calculator delegate
                     return eventCalculatorDelegate;
+                }
+            }
+
+
+            //if calculator method not found, raise error
+            throw new Exception("Calculator method not found!");
+
+        }
+
+        /// <summary>
+        /// Gets the method that does the caculations for an event based on the events name
+        /// </summary>
+        public static HoroscopeCalculatorDelegate GetHoroscopeCalculatorMethod(EventName inputEventName)
+        {
+            //get all event calculator methods
+            var horoscopeCalculatorList = typeof(HoroscopeCalculatorMethods).GetMethods();
+
+            //loop through all calculators
+            foreach (var horoscopeCalculator in horoscopeCalculatorList)
+            {
+                //try to get attribute attached to the calculator method
+                var horoscopeCalculatorAttribute = (EventCalculatorAttribute)Attribute.GetCustomAttribute(horoscopeCalculator,
+                    typeof(EventCalculatorAttribute));
+
+                //if attribute not found
+                if (horoscopeCalculatorAttribute == null)
+                {   //go to next method
+                    continue;
+                }
+
+                //if attribute name matches input event name
+                if (horoscopeCalculatorAttribute.GetEventName() == inputEventName)
+                {
+                    //convert calculator reference to a delegate instance
+                    var horoscopeCalculatorDelegate = (HoroscopeCalculatorDelegate)Delegate.CreateDelegate(typeof(HoroscopeCalculatorDelegate), horoscopeCalculator);
+
+                    //return calculator delegate
+                    return horoscopeCalculatorDelegate;
                 }
             }
 

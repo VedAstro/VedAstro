@@ -169,7 +169,7 @@ throughout the progam.
 ### To add a new prediction/event
 1. Create a method in EventCalculatorMethods.cs
 2. Add the name in EventNames.cs
-3. Add the prediction/event details PredictionDataList.xml
+3. Add the prediction/event details HoroscopeDataList.xml
 
 ### To add a new Event Tag
 1. Edit in Genso.Astrology.Library EventTag enum. Change here reflects even in GUI

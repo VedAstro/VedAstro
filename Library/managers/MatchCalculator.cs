@@ -2035,11 +2035,11 @@ namespace Genso.Astrology.Library
             };
 
 
-            //get the data needed
-            var maleStrongSex = EventCalculatorMethods.MarsVenusIn7th(male.BirthTime, male).Occuring;
-            var femaleStrongSex = EventCalculatorMethods.MarsVenusIn7th(female.BirthTime, female).Occuring;
-            var maleUnderSex = EventCalculatorMethods.MercuryOrJupiterIn7th(male.BirthTime, male).Occuring;
-            var femaleUnderSex = EventCalculatorMethods.MercuryOrJupiterIn7th(female.BirthTime, female).Occuring;
+            //get the data needed (borrow horoscope calculator)
+            var maleStrongSex = HoroscopeCalculatorMethods.MarsVenusIn7th(male.BirthTime, male).Occuring;
+            var femaleStrongSex = HoroscopeCalculatorMethods.MarsVenusIn7th(female.BirthTime, female).Occuring;
+            var maleUnderSex = HoroscopeCalculatorMethods.MercuryOrJupiterIn7th(male.BirthTime, male).Occuring;
+            var femaleUnderSex = HoroscopeCalculatorMethods.MercuryOrJupiterIn7th(female.BirthTime, female).Occuring;
 
             //fill extra info
             if (maleStrongSex) { prediction.MaleInfo = "Strong Sex"; }

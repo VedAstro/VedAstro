@@ -11,7 +11,7 @@ namespace Website
 
         /** CONST FIELDS **/
         //TODO Note ; missing files at these location fail without proper catch
-        private const string PredictionDataListFilePath = "data/PredictionDataList.xml";
+        private const string HoroscopeDataListFilePath = "data/HoroscopeDataList.xml";
         private const string PersonFilePath = "data\\PersonList.xml";
 
 
@@ -36,7 +36,7 @@ namespace Website
             var location = person.GetBirthLocation();
 
             //get list of event data to check for event
-            var xElements = await WebsiteTools.GetXmlFile(PredictionDataListFilePath);
+            var xElements = await WebsiteTools.GetXmlFile(HoroscopeDataListFilePath);
             var eventDataList = EventData.FromXmlList(xElements);
 
             //start calculating predictions

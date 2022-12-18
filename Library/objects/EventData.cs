@@ -21,7 +21,7 @@ namespace Genso.Astrology.Library
 
 
         /** CTOR **/
-        public EventData(EventName name, EventNature nature, string description, List<EventTag> eventTags, EventCalculator eventCalculator)
+        public EventData(EventName name, EventNature nature, string description, List<EventTag> eventTags, EventCalculatorDelegate eventCalculator)
         {
             Name = name;
             Nature = nature;
@@ -42,7 +42,7 @@ namespace Genso.Astrology.Library
         
         public EventNature Nature { get; private set; }
         
-        public EventCalculator EventCalculator { get; private set; }
+        public EventCalculatorDelegate EventCalculator { get; private set; }
         
         public string Description
         {

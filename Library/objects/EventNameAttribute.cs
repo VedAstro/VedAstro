@@ -2,10 +2,11 @@
 
 namespace Genso.Astrology.Library
 {
-    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
+
     /// <summary>
     /// Class that attaches attributes to event calculator methods
     /// </summary>
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public sealed class EventCalculatorAttribute : Attribute
     {
         private readonly EventName _eventName;

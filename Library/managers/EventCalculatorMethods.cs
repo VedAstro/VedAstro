@@ -3739,7 +3739,7 @@ namespace Genso.Astrology.Library
             var occuring = strongestPlanet == PlanetName.Sun;
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.MoonIsStrong)]
@@ -3751,7 +3751,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.MarsIsStrong)]
@@ -3760,7 +3760,7 @@ namespace Genso.Astrology.Library
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Mars;
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.MercuryIsStrong)]
@@ -3769,7 +3769,7 @@ namespace Genso.Astrology.Library
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Mercury;
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.JupiterIsStrong)]
@@ -3781,7 +3781,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.VenusIsStrong)]
@@ -3790,7 +3790,7 @@ namespace Genso.Astrology.Library
             var occuring = AstronomicalCalculator.GetAllPlanetOrderedByStrength(time)[0] == PlanetName.Venus;
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.SaturnIsStrong)]
@@ -3800,7 +3800,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House1IsStrong)]
@@ -3812,7 +3812,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House2IsStrong)]
@@ -3822,7 +3822,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House3IsStrong)]
@@ -3832,7 +3832,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House4IsStrong)]
@@ -3843,7 +3843,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House5IsStrong)]
@@ -3853,7 +3853,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House6IsStrong)]
@@ -3863,7 +3863,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House7IsStrong)]
@@ -3873,7 +3873,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House8IsStrong)]
@@ -3883,7 +3883,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House9IsStrong)]
@@ -3893,7 +3893,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House10IsStrong)]
@@ -3903,7 +3903,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House11IsStrong)]
@@ -3913,7 +3913,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.House12IsStrong)]
@@ -3923,7 +3923,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.Sunrise)]
@@ -3947,7 +3947,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.Sunset)]
@@ -3971,7 +3971,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
         [EventCalculator(EventName.Midday)]
@@ -3999,7 +3999,7 @@ namespace Genso.Astrology.Library
 
 
 
-            return new() { Occuring = occuring, Info = "" };
+            return new() { Occuring = occuring };
         }
 
 
@@ -8007,7 +8007,7 @@ namespace Genso.Astrology.Library
             //occuring if one of the conditions met
             var occuring = isSunDasa && isSunElevated;
 
-            return new() { Occuring = occuring, Info = "Sun Dasa" };
+            return CalculatorResult.New(occuring, PlanetName.Sun);
 
         }
 
@@ -8033,7 +8033,7 @@ namespace Genso.Astrology.Library
             //occuring if one of the conditions met
             var occuring = isSunDasa && sunInGoodPosition;
 
-            return new() { Occuring = occuring, Info = "Sun Dasa Lord 9 Lord 10" };
+            return CalculatorResult.New(occuring, new[]{ HouseName.House9, HouseName.House10}, new[]{ PlanetName.Sun }, time);
 
         }
 
@@ -8051,8 +8051,7 @@ namespace Genso.Astrology.Library
             //occuring if one of the conditions met
             var occuring = isSunDasa && sunWithLord5th;
 
-
-            return new() { Occuring = occuring, Info = "Sun Dasa Lord 5" };
+            return CalculatorResult.New(occuring, new[] { HouseName.House5 }, new[] { PlanetName.Sun }, time);
 
         }
 
@@ -8072,8 +8071,7 @@ namespace Genso.Astrology.Library
             //occuring if one of the conditions met
             var occuring = isSunDasa && sunWithLord2nd;
 
-            return new() { Occuring = occuring, Info = "Sun Dasa Lord 2" };
-
+            return CalculatorResult.New(occuring, new[] { HouseName.House2 }, new[] { PlanetName.Sun }, time);
         }
 
         [EventCalculator(EventName.SunBadPositionDasa)]
@@ -8105,7 +8103,7 @@ namespace Genso.Astrology.Library
             //conditions met
             var occuring = isSunDasa && isSunExalted;
 
-            return new() { Occuring = occuring, Info = "Sun Dasa" };
+            return CalculatorResult.New(occuring, PlanetName.Sun);
         }
 
 

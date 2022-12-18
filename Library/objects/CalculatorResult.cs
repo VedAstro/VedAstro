@@ -14,7 +14,6 @@ namespace Genso.Astrology.Library
         /// Indication if prediction is occurring
         /// </summary>
         public bool Occuring { get; set; }
-        public string Info { get; set; }
 
 
 
@@ -25,13 +24,13 @@ namespace Genso.Astrology.Library
         /// </summary>
         public EventNature NatureOverride { get; set; }
 
-        /// <summary>
-        /// Defaults set here
-        /// </summary>
-        public CalculatorResult()
-        {
-            Info = "";
-        }
+        ///// <summary>
+        ///// Defaults set here
+        ///// </summary>
+        //public CalculatorResult()
+        //{
+        //    Info = "";
+        //}
 
         /// <summary>
         /// Return an Not Occuring Prediction
@@ -40,8 +39,7 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CalculatorResult()
             {
-                Occuring = false,
-                Info = ""
+                Occuring = false
             };
 
             return prediction;
@@ -53,8 +51,8 @@ namespace Genso.Astrology.Library
         {
             var prediction = new CalculatorResult()
             {
-                Occuring = true,
-                Info = ""
+                Occuring = true
+                
             };
 
             return prediction;
@@ -103,6 +101,37 @@ namespace Genso.Astrology.Library
 
             //add in sign names
             newCalcResult.RelatedBody.RelatedZodiac.AddRange(signNames.ToList());
+
+            //return to caller
+            return newCalcResult;
+        }
+
+        public static CalculatorResult New(bool occuring, HouseName[] houseNames, PlanetName[] planetNames, ZodiacName[] signNames, Time time)
+        {
+            //create with house names
+            var newCalcResult = New(occuring, houseNames, planetNames, time);
+
+            //add in sign names
+            newCalcResult.RelatedBody.RelatedZodiac.AddRange(signNames.ToList());
+
+            //return to caller
+            return newCalcResult;
+
+        }
+
+
+        /// <summary>
+        /// Helper method to make new instance of calculator result
+        /// </summary>
+        public static CalculatorResult New(bool occuring, HouseName[] houseNames, PlanetName[] planetNames, Time time)
+        {
+            //create with house names
+            var newCalcResult = New(occuring, houseNames,time);
+
+            //todo can possibly add lord of houses into planet list
+
+            //add in planet Names
+            newCalcResult.RelatedBody.RelatedPlanets.AddRange(planetNames.ToList());
 
             //return to caller
             return newCalcResult;

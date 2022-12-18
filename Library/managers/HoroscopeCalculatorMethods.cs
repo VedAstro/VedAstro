@@ -516,773 +516,247 @@ namespace Genso.Astrology.Library
         #region Planets in the 1st House
 
         [EventCalculator(EventName.SunInHouse1)]
-        public static CalculatorResult SunInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 1;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-
-        }
+        public static CalculatorResult SunInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 1), new[] { HouseName.House1, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse1)]
-        public static CalculatorResult MoonInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 1;
-
-            //STRENGTH CALCULATION
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 1), new[] { HouseName.House1, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse1)]
-        public static CalculatorResult MarsInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 1;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 1), new[] { HouseName.House1, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse1)]
-        public static CalculatorResult MercuryInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 1;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 1), new[] { HouseName.House1, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse1)]
-        public static CalculatorResult JupiterInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 1;
-
-            //STRENGTH CALCULATION
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 1), new[] { HouseName.House1, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse1)]
-        public static CalculatorResult VenusInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 1;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 1), new[] { HouseName.House1, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse1)]
-        public static CalculatorResult SaturnInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 1;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 1), new[] { HouseName.House1, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse1)]
-        public static CalculatorResult RahuInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 1;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 1), new[] { HouseName.House1, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse1)]
-        public static CalculatorResult KetuInHouse1Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 1;
-
-            //STRENGTH CALCULATION
-            var raw = 0; //TODO stregth for RAHU
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse1(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 1), new[] { HouseName.House1, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 2nd House
 
         [EventCalculator(EventName.SunInHouse2)]
-        public static CalculatorResult SunInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 2;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 2), new[] { HouseName.House2, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse2)]
-        public static CalculatorResult MoonInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 2;
-
-            //STRENGTH CALCULATION
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 2), new[] { HouseName.House2, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse2)]
-        public static CalculatorResult MarsInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 2;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 2), new[] { HouseName.House2, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse2)]
-        public static CalculatorResult MercuryInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 2;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 2), new[] { HouseName.House2, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse2)]
-        public static CalculatorResult JupiterInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 2;
-
-            //STRENGTH CALCULATION
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 2), new[] { HouseName.House2, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse2)]
-        public static CalculatorResult VenusInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 2;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 2), new[] { HouseName.House2, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse2)]
-        public static CalculatorResult SaturnInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 2;
-
-            //STRENGTH CALCULATION
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 2), new[] { HouseName.House2, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse2)]
-        public static CalculatorResult RahuInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 2;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 2), new[] { HouseName.House2, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse2)]
-        public static CalculatorResult KetuInHouse2Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 2;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse2Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 2), new[] { HouseName.House2, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 3rd House
 
         [EventCalculator(EventName.SunInHouse3)]
-        public static CalculatorResult SunInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 3;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 3), new[] { HouseName.House3, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse3)]
-        public static CalculatorResult MoonInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 3;
-
-            //STRENGTH CALCULATION
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 3), new[] { HouseName.House3, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse3)]
-        public static CalculatorResult MarsInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 3;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 3), new[] { HouseName.House3, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse3)]
-        public static CalculatorResult MercuryInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 3;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 3), new[] { HouseName.House3, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse3)]
-        public static CalculatorResult JupiterInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 3;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 3), new[] { HouseName.House3, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse3)]
-        public static CalculatorResult VenusInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 3;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 3), new[] { HouseName.House3, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse3)]
-        public static CalculatorResult SaturnInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 3;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 3), new[] { HouseName.House3, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse3)]
-        public static CalculatorResult RahuInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 3;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 3), new[] { HouseName.House3, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse3)]
-        public static CalculatorResult KetuInHouse3Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 3;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse3Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 3), new[] { HouseName.House3, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 4th House
 
         [EventCalculator(EventName.SunInHouse4)]
-        public static CalculatorResult SunInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 4), new[] { HouseName.House4, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse4)]
-        public static CalculatorResult MoonInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 4), new[] { HouseName.House4, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse4)]
-        public static CalculatorResult MarsInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 4), new[] { HouseName.House4, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse4)]
-        public static CalculatorResult MercuryInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 4), new[] { HouseName.House4, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse4)]
-        public static CalculatorResult JupiterInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 4), new[] { HouseName.House4, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse4)]
-        public static CalculatorResult VenusInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 4), new[] { HouseName.House4, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse4)]
-        public static CalculatorResult SaturnInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 4), new[] { HouseName.House4, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse4)]
-        public static CalculatorResult RahuInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 4), new[] { HouseName.House4, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse4)]
-        public static CalculatorResult KetuInHouse4Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 4;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse4Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 4), new[] { HouseName.House4, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 5th House
 
         [EventCalculator(EventName.SunInHouse5)]
-        public static CalculatorResult SunInHouse5Occuring(Time time, Person person)
-        {
-
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 5;
-            var strength = "440"; //TODO Calulate proper
-
-            return new CalculatorResult() { Occuring = occuring, Info = strength };
-
-        }
+        public static CalculatorResult SunInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 5), new[] { HouseName.House5, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse5)]
-        public static CalculatorResult MoonInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 5;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 5), new[] { HouseName.House5, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse5)]
-        public static CalculatorResult MarsInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 5;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 5), new[] { HouseName.House5, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse5)]
-        public static CalculatorResult MercuryInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 5;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 5), new[] { HouseName.House5, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse5)]
-        public static CalculatorResult JupiterInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 5;
-
-            //STRENGTH CALCULATION
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 5), new[] { HouseName.House5, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse5)]
-        public static CalculatorResult VenusInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 5;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 5), new[] { HouseName.House5, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse5)]
-        public static CalculatorResult SaturnInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 5;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 5), new[] { HouseName.House5, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse5)]
-        public static CalculatorResult RahuInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 5;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 5), new[] { HouseName.House5, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse5)]
-        public static CalculatorResult KetuInHouse5Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 5;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse5Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 5), new[] { HouseName.House5, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 6th House
 
         [EventCalculator(EventName.SunInHouse6)]
-        public static CalculatorResult SunInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 6), new[] { HouseName.House6, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse6)]
-        public static CalculatorResult MoonInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 6), new[] { HouseName.House6, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse6)]
-        public static CalculatorResult MarsInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 6), new[] { HouseName.House6, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse6)]
-        public static CalculatorResult MercuryInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 6), new[] { HouseName.House6, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse6)]
-        public static CalculatorResult JupiterInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 6), new[] { HouseName.House6, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse6)]
-        public static CalculatorResult VenusInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 6), new[] { HouseName.House6, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse6)]
-        public static CalculatorResult SaturnInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 6), new[] { HouseName.House6, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse6)]
-        public static CalculatorResult RahuInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 6), new[] { HouseName.House6, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse6)]
-        public static CalculatorResult KetuInHouse6Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 6;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse6Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 6), new[] { HouseName.House6, }, new[] { PlanetName.Ketu }, time);
 
 
         //Planets in the 7th House
 
         [EventCalculator(EventName.SunInHouse7)]
-        public static CalculatorResult SunInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 7), new[] { HouseName.House7, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse7)]
-        public static CalculatorResult MoonInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 7), new[] { HouseName.House7, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse7)]
-        public static CalculatorResult MarsInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 7), new[] { HouseName.House7, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse7)]
-        public static CalculatorResult MercuryInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 7), new[] { HouseName.House7, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse7)]
-        public static CalculatorResult JupiterInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 7), new[] { HouseName.House7, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse7)]
-        public static CalculatorResult VenusInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 7), new[] { HouseName.House7, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse7)]
-        public static CalculatorResult SaturnInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 7), new[] { HouseName.House7, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse7)]
-        public static CalculatorResult RahuInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 7), new[] { HouseName.House7, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse7)]
-        public static CalculatorResult KetuInHouse7Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 7;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse7Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 7), new[] { HouseName.House7, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 8th House
 
         [EventCalculator(EventName.SunInHouse8)]
-        public static CalculatorResult SunInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 8), new[] { HouseName.House8, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse8)]
-        public static CalculatorResult MoonInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 8), new[] { HouseName.House8, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse8)]
-        public static CalculatorResult MarsInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 8), new[] { HouseName.House8, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse8)]
-        public static CalculatorResult MercuryInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 8), new[] { HouseName.House8, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse8)]
-        public static CalculatorResult JupiterInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 8), new[] { HouseName.House8, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse8)]
-        public static CalculatorResult VenusInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 8), new[] { HouseName.House8, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse8)]
-        public static CalculatorResult SaturnInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 8), new[] { HouseName.House8, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse8)]
-        public static CalculatorResult RahuInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 8), new[] { HouseName.House8, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse8)]
-        public static CalculatorResult KetuInHouse8Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 8;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse8Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 8), new[] { HouseName.House8, }, new[] { PlanetName.Ketu }, time);
 
 
         #endregion
@@ -1290,368 +764,124 @@ namespace Genso.Astrology.Library
         #region Planets in the 9th House
 
         [EventCalculator(EventName.SunInHouse9)]
-        public static CalculatorResult SunInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 9), new[] { HouseName.House9, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse9)]
-        public static CalculatorResult MoonInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 9), new[] { HouseName.House9, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse9)]
-        public static CalculatorResult MarsInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 9), new[] { HouseName.House9, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse9)]
-        public static CalculatorResult MercuryInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 9), new[] { HouseName.House9, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse9)]
-        public static CalculatorResult JupiterInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 9), new[] { HouseName.House9, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse9)]
-        public static CalculatorResult VenusInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 9), new[] { HouseName.House9, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse9)]
-        public static CalculatorResult SaturnInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 9), new[] { HouseName.House9, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse9)]
-        public static CalculatorResult RahuInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 9), new[] { HouseName.House9, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse9)]
-        public static CalculatorResult KetuInHouse9Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 9;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse9Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 9), new[] { HouseName.House9, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 10th House
 
         [EventCalculator(EventName.SunInHouse10)]
-        public static CalculatorResult SunInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 10), new[] { HouseName.House10, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse10)]
-        public static CalculatorResult MoonInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 10), new[] { HouseName.House10, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse10)]
-        public static CalculatorResult MarsInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 10), new[] { HouseName.House10, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse10)]
-        public static CalculatorResult MercuryInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 10), new[] { HouseName.House10, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse10)]
-        public static CalculatorResult JupiterInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 10), new[] { HouseName.House10, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse10)]
-        public static CalculatorResult VenusInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 10), new[] { HouseName.House10, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse10)]
-        public static CalculatorResult SaturnInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 10), new[] { HouseName.House10, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse10)]
-        public static CalculatorResult RahuInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 10), new[] { HouseName.House10, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse10)]
-        public static CalculatorResult KetuInHouse10Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 10;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse10Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 10), new[] { HouseName.House10, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 11th House
 
         [EventCalculator(EventName.SunInHouse11)]
-        public static CalculatorResult SunInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 11), new[] { HouseName.House11, }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse11)]
-        public static CalculatorResult MoonInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 11), new[] { HouseName.House11, }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse11)]
-        public static CalculatorResult MarsInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 11), new[] { HouseName.House11, }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse11)]
-        public static CalculatorResult MercuryInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 11), new[] { HouseName.House11, }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse11)]
-        public static CalculatorResult JupiterInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 11), new[] { HouseName.House11, }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse11)]
-        public static CalculatorResult VenusInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 11), new[] { HouseName.House11, }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse11)]
-        public static CalculatorResult SaturnInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 11), new[] { HouseName.House11, }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse11)]
-        public static CalculatorResult RahuInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult RahuInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 11), new[] { HouseName.House11, }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse11)]
-        public static CalculatorResult KetuInHouse11Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 11;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse11Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 11), new[] { HouseName.House11, }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
         #region Planets in the 12th House
 
         [EventCalculator(EventName.SunInHouse12)]
-        public static CalculatorResult SunInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 12;
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SunInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Sun, 12), new[] { HouseName.House12 }, new[] { PlanetName.Sun }, time);
 
         [EventCalculator(EventName.MoonInHouse12)]
-        public static CalculatorResult MoonInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon) == 12;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MoonInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Moon, 12), new[] { HouseName.House12 }, new[] { PlanetName.Moon }, time);
 
         [EventCalculator(EventName.MarsInHouse12)]
-        public static CalculatorResult MarsInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars) == 12;
-            var raw = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, time);
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MarsInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mars, 12), new[] { HouseName.House12 }, new[] { PlanetName.Mars }, time);
 
         [EventCalculator(EventName.MercuryInHouse12)]
-        public static CalculatorResult MercuryInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mercury) == 12;
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult MercuryInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Mercury, 12), new[] { HouseName.House12 }, new[] { PlanetName.Mercury }, time);
 
         [EventCalculator(EventName.JupiterInHouse12)]
-        public static CalculatorResult JupiterInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Jupiter) == 12;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult JupiterInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Jupiter, 12), new[] { HouseName.House12 }, new[] { PlanetName.Jupiter }, time);
 
         [EventCalculator(EventName.VenusInHouse12)]
-        public static CalculatorResult VenusInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus) == 12;
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult VenusInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Venus, 12), new[] { HouseName.House12 }, new[] { PlanetName.Venus }, time);
 
         [EventCalculator(EventName.SaturnInHouse12)]
-        public static CalculatorResult SaturnInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Saturn) == 12;
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult SaturnInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Saturn, 12), new[] { HouseName.House12 }, new[] { PlanetName.Saturn }, time);
 
         [EventCalculator(EventName.RahuInHouse12)]
-        public static CalculatorResult RahuInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Rahu) == 12;
-
-            return new() { Occuring = occuring, Info = "Rahu" };
-        }
+        public static CalculatorResult RahuInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Rahu, 12), new[] { HouseName.House12 }, new[] { PlanetName.Rahu }, time);
 
         [EventCalculator(EventName.KetuInHouse12)]
-        public static CalculatorResult KetuInHouse12Occuring(Time time, Person person)
-        {
-            var occuring = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Ketu) == 12;
-
-
-
-            return new() { Occuring = occuring, Info = "" };
-        }
+        public static CalculatorResult KetuInHouse12Occuring(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInHouse(time, PlanetName.Ketu, 12), new[] { HouseName.House12 }, new[] { PlanetName.Ketu }, time);
 
         #endregion
 
@@ -1681,9 +911,7 @@ namespace Genso.Astrology.Library
             //either one true for prediction to occur
             var occurring = evilInHouse2 || aspectedByEvil;
 
-            var info = $"Lord:{lord}";
-            return new CalculatorResult() { Occuring = occurring, Info = info };
-
+            return CalculatorResult.New(occurring, lord);
         }
 
         [EventCalculator(EventName.SaturnIn2WithVenus)]
@@ -1700,7 +928,7 @@ namespace Genso.Astrology.Library
             var venusAspecting =
                 AstronomicalCalculator.IsPlanetAspectedByPlanet(PlanetName.Saturn, PlanetName.Venus, time);
 
-            return new CalculatorResult() { Occuring = venusAspecting };
+            return CalculatorResult.New(venusAspecting, new[] { HouseName.House2 }, new[] { PlanetName.Saturn, PlanetName.Venus }, time);
         }
 
         [EventCalculator(EventName.MoonMarsIn2WithSaturnAspect)]
@@ -1720,7 +948,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = moonIn2 && marsIn2 && saturnAspects2nd;
 
-            return new CalculatorResult() { Occuring = occuring };
+            return CalculatorResult.New(occuring, new[] { HouseName.House2 }, new[] { PlanetName.Moon, PlanetName.Mars, PlanetName.Saturn }, time);
         }
 
         [EventCalculator(EventName.MercuryAndEvilIn2WithMoonAspect)]
@@ -1742,7 +970,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = mercuryIn2 && evilPlanetIn2 && moonAspects2nd;
 
-            return new CalculatorResult() { Occuring = occuring };
+            return CalculatorResult.New(occuring, new[] { HouseName.House2 }, new[] { PlanetName.Moon, PlanetName.Mercury }, time);
         }
 
         [EventCalculator(EventName.SunIn2WithNoSaturnAspect)]
@@ -1754,13 +982,12 @@ namespace Genso.Astrology.Library
             var sunIn2 = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Sun) == 2;
 
             //saturn aspects 2nd House
-            var saturnNotAspects2nd =
-                !AstronomicalCalculator.IsHouseAspectedByPlanet(HouseName.House2, PlanetName.Saturn, time);
+            var saturnNotAspects2nd = !AstronomicalCalculator.IsHouseAspectedByPlanet(HouseName.House2, PlanetName.Saturn, time);
 
             //check if all conditions met
             var occuring = sunIn2 && saturnNotAspects2nd;
 
-            return new CalculatorResult() { Occuring = occuring };
+            return CalculatorResult.New(occuring, new[] { HouseName.House2 }, new[] { PlanetName.Sun }, time);
         }
 
         [EventCalculator(EventName.MoonIn2WithMercuryAspect)]
@@ -1778,7 +1005,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = moonIn2 && mercuryAspects2nd;
 
-            return new CalculatorResult() { Occuring = occuring };
+            return CalculatorResult.New(occuring, new[] { HouseName.House2 }, new[] { PlanetName.Moon, PlanetName.Mercury }, time);
         }
 
         [EventCalculator(EventName.Lord2And3In6WithEvilPlanet)]
@@ -1802,7 +1029,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In6 && lord3In6 && evilPresentIn6;
 
-            return new CalculatorResult() { Occuring = occuring };
+            return CalculatorResult.New(occuring, new[] { HouseName.House2, HouseName.House3, HouseName.House6 }, new[] { lord2, lord3 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse1)]
@@ -1817,8 +1044,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In1;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House1 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse1AndLord1InHouse2)]
@@ -1840,8 +1066,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In1 && lord1In2;
 
-            var info = $"Lord 1:{lord1}/n Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House1, HouseName.House2 }, new[] { lord1, lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse3)]
@@ -1856,8 +1081,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In3;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House3 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse4)]
@@ -1872,8 +1096,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In4;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House4 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse5)]
@@ -1888,8 +1111,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In5;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House5 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse6)]
@@ -1904,8 +1126,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In6;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House6 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse7)]
@@ -1920,8 +1141,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In7;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House7 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse8)]
@@ -1936,8 +1156,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In8;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House8 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse9)]
@@ -1953,7 +1172,7 @@ namespace Genso.Astrology.Library
             var occuring = lord2In9;
 
             var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House9 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse10)]
@@ -1968,8 +1187,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In10;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House10 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse11)]
@@ -1984,8 +1202,7 @@ namespace Genso.Astrology.Library
             //check if all conditions met
             var occuring = lord2In11;
 
-            var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House11 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.Lord2InHouse12)]
@@ -2001,7 +1218,7 @@ namespace Genso.Astrology.Library
             var occuring = lord2In12;
 
             var info = $"Lord 2:{lord2}";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House12 }, new[] { lord2 }, time);
         }
 
         [EventCalculator(EventName.MaleficIn11FromArudha)]
@@ -2027,8 +1244,8 @@ namespace Genso.Astrology.Library
             var occuring = maleficFound;
 
             var malefics = AstronomicalCalculator.GetMaleficPlanetListInSign(sign11fromArudha, time);
-            var info = $"Malefic: {string.Join(" , ", malefics)}"; //space needed for word search
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+
+            return CalculatorResult.New(occuring, new[] { HouseName.House11 }, malefics.ToArray(), time);
         }
 
         [EventCalculator(EventName.BeneficIn11FromArudha)]
@@ -2054,8 +1271,8 @@ namespace Genso.Astrology.Library
             var occuring = beneficFound;
 
             var benefics = AstronomicalCalculator.GetBeneficPlanetListInSign(sign11fromArudha, time);
-            var info = $"Benefic: {string.Join(" , ", benefics)}"; //space needed for word search
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+
+            return CalculatorResult.New(occuring, new[] { HouseName.House11 }, benefics.ToArray(), time);
         }
 
 
@@ -2858,8 +2075,7 @@ namespace Genso.Astrology.Library
             var occuring = geminiRising && evilPlanetFound;
 
             //extra info
-            var info = $"Malefic: {string.Join(" , ", evilPlanets)}"; //space needed for word search
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House1 }, evilPlanets.ToArray(), new[] { ZodiacName.Gemini }, time);
         }
 
         [EventCalculator(EventName.AriesRisingWithEvilPlanet)]
@@ -2880,8 +2096,7 @@ namespace Genso.Astrology.Library
             var occuring = ariesRising && evilPlanetFound;
 
             //extra info
-            var info = $"Malefic:Saturn, Moon";
-            return new CalculatorResult() { Occuring = occuring, Info = info };
+            return CalculatorResult.New(occuring, new[] { HouseName.House1 }, new[] { PlanetName.Saturn, PlanetName.Moon }, new[] { ZodiacName.Aries }, time);
         }
 
         #endregion

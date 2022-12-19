@@ -29,14 +29,15 @@
 - [Share](https://vedastro.org/contact) your ideas for new or better features 
 - [Fix](https://vedastro.org/contact) bugs & implement features
 
-# Examples of Perfect Predictions!
-The Dasa Calculator is the most advanced and amazingly accurate prediction tool we've ever seen.
-Take a look at this example charts of Napolean Bornapate and Queen Elizibeth. Every major event in their life
+# Examples of Accurate Predictions
+The Dasa Life Calculator is the most advanced and amazingly accurate prediction tool we've ever seen.
+Take a look at this example charts of Napoleon Bonaparte and Queen Elizabeth II. Every major event in their life
 can be clearly seen predicted by the chart in the "Summary Row". Red for a bad event and green for a good life event.
 Using a combination of Dasa, Bhukti, Antaram and Gocharam of 9 planets this complex chart can give perfect predictions!
 The chart takes alot of computational power to generate, so please be patient after you click the Calculate button.
 
-[![](GithubImages/header-logo.png)](https://www.vedastro.org)
+[![](GithubImages/napoleon-dasa-chart.png)](https://www.vedastro.org)
+[![](GithubImages/elizabeth-dasa-chart.png)](https://www.vedastro.org)
 
 
 # Unexpected errors?

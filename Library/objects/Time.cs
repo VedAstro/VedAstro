@@ -233,7 +233,8 @@ namespace Genso.Astrology.Library
             var lmtTime = StdToLmt(_stdTime, _geoLocation.GetLongitude());
 
             //create LMT time string based on formatting info
-            var lmtTimeString = lmtTime.ToString(FormatInfo);
+            //note: only explicit statement of format as below works
+            var lmtTimeString = lmtTime.ToString("HH:mm dd/MM/yyyy zzz");
 
             //return time string caller
             return lmtTimeString;

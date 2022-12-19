@@ -128,7 +128,7 @@
         //done so that public list is not clouded
         var userId = AppData.CurrentUser?.Id == UserData.Empty.Id ? AppData.VisitorId : AppData.CurrentUser?.Id;
         var newId = Tools.GenerateId();
-        return new Person(newId, _nameInput, birthTime, gender, userId);
+        return new Person(newId, _nameInput, birthTime, gender, new[] { userId });
 
         //----------LOCAL FUNCTION ---------------------
     }

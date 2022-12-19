@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Genso.Astrology.Library
 {
@@ -15,12 +16,14 @@ namespace Genso.Astrology.Library
     /// </summary>
     public struct Person : IToXml
     {
+        private static string[] DefaultUserId = new[] { "101" };
+
         /// <summary>
         /// Empty instance for null use cases
         /// All internal properties are initialized with empty values
         /// so use that to detect
         /// </summary>
-        public static Person Empty = new Person("0", "Empty", Time.Now(GeoLocation.Empty), Gender.Empty, "0", "Empty", new List<LifeEvent>());
+        public static Person Empty = new Person("0", "Empty", Time.Now(GeoLocation.Empty), Gender.Empty, DefaultUserId, "Empty", new List<LifeEvent>());
 
         private string _notes;
 
@@ -33,9 +36,15 @@ namespace Genso.Astrology.Library
 
         public string Name { get; set; }
         /// <summary>
-        /// User ID is used by website. Shows owner of person's profile
+        /// User ID is used by website. Multiple supported, Shows owner of person's profile
         /// </summary>
-        public string UserId { get; set; }
+        public string[] UserId { get; set; }
+
+        /// <summary>
+        /// Comma sperated string of Person's all user ID
+        /// </summary>
+        public string UserIdString => string.Join(",", UserId);
+
 
         /// <summary>
         /// Misc. notes about the person
@@ -58,13 +67,13 @@ namespace Genso.Astrology.Library
 
 
         //CTOR
-        public Person(string id, string name, Time birthTime, Gender gender, string userId = "101", string notes = "", List<LifeEvent> lifeEventList = null)
+        public Person(string id, string name, Time birthTime, Gender gender, string[] userId, string notes = "", List<LifeEvent> lifeEventList = null)
         {
             Id = id;
             Name = name;
             BirthTime = birthTime;
             Gender = gender;
-            UserId = userId;
+            UserId = userId.Any() ? userId : DefaultUserId;
             Notes = notes;
             LifeEventList = lifeEventList ?? new List<LifeEvent>(); //empty list if not specified
         }
@@ -180,7 +189,7 @@ namespace Genso.Astrology.Library
             //get hash of all the fields & combine them
             var hash1 = Tools.GetStringHashCode(this.Name);
             var hash2 = BirthTime.GetHashCode();
-            var hash3 = Tools.GetStringHashCode(this.UserId);
+            var hash3 = Tools.GetStringHashCode(this.UserIdString);
 
             //take out negative before returning
             return Math.Abs(hash1 + hash2 + hash3);
@@ -199,7 +208,7 @@ namespace Genso.Astrology.Library
             var notes = new XElement("Notes", this.Notes);
             var gender = new XElement("Gender", this.Gender.ToString());
             var birthTime = new XElement("BirthTime", this.BirthTime.ToXml());
-            var userId = new XElement("UserId", this.UserId);
+            var userId = new XElement("UserId", this.UserIdString);
             var lifeEventListXml = getLifeEventListXml(LifeEventList);
 
             person.Add(id, name, gender, birthTime, userId, lifeEventListXml, notes);
@@ -242,7 +251,8 @@ namespace Genso.Astrology.Library
             var notes = personXml.Element("Notes")?.Value;
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
-            var userId = personXml.Element("UserId")?.Value;
+            var userIdRaw = personXml.Element("UserId")?.Value ?? "";
+            var userId = userIdRaw.Split(',');//split by comma
             var lifeEventList = getLifeEventListFromXml();
 
             var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);

@@ -128,17 +128,6 @@ namespace Website
             return visitorList;
         }
 
-        public static async Task<List<Person>> GetMalePeopleList(string userId, IJSRuntime jsRuntime)
-        {
-            var rawMaleListXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMaleListApi, new XElement("UserId", userId), jsRuntime);
-            return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
-        }
-
-        public static async Task<List<Person>> GetFemalePeopleList(string userId, IJSRuntime jsRuntime)
-        {
-            var rawMaleListXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetFemaleListApi, new XElement("UserId", userId), jsRuntime);
-            return rawMaleListXml.Elements().Select(maleXml => Person.FromXml(maleXml)).ToList();
-        }
 
         /// <summary>
         /// Gets person instance from name contacts API

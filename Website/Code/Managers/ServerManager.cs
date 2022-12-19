@@ -33,7 +33,6 @@ namespace Website
         public const string AddTaskApi = ApiUrl + "/addtask";
         public const string AddVisitorApi = ApiUrl + "/addvisitor";
 
-        public const string GetMaleListApi = ApiUrl + "/getmalelist";
         public const string GetPersonListApi = ApiUrl + "/getpersonlist";
         public const string GetPersonApi = ApiUrl + "/getperson";
         public const string GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
@@ -42,12 +41,11 @@ namespace Website
         public const string GetTaskListApi = ApiUrl + "/gettasklist";
         public const string GetVisitorList = ApiUrl + "/getvisitorlist";
         public const string GetMessageList = ApiUrl + "/getmessagelist";
-        public const string GetFemaleListApi = ApiUrl + "/getfemalelist";
         public const string GetMatchReportApi = ApiUrl + "/getmatchreport";
         public const string GetEventsChart = ApiUrl + "/geteventschart";
         public const string GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         public const string GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
-        public const string SaveEventsChart = ApiUrl + "/savepersoneventsreport";
+        public const string SaveEventsChart = ApiUrl + "/savepersoneventschart";
         public const string GetEventsApi = ApiUrl + "/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
         //TODO HIDE API

@@ -435,8 +435,8 @@ namespace API
         /// <summary>
         /// Saves the chart in Azure Storage
         /// </summary>
-        [FunctionName("savepersoneventsreport")]
-        public static async Task<IActionResult> SavePersonEventsReport(
+        [FunctionName("savepersoneventschart")]
+        public static async Task<IActionResult> SavePersonEventsChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             try
@@ -626,7 +626,7 @@ namespace API
         public static async Task<Chart> GetChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
         {
             //from person get svg report
-            var eventsReportSvgString = await GenerateMainEventsReportSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+            var eventsChartSvgString = await GenerateMainEventsChartSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
@@ -634,7 +634,7 @@ namespace API
             var startTimeXml = startTime.ToXml();
             var endTimeXml = endTime.ToXml();
 
-            var eventReportSvgForIncomingRequest = new Chart(newChartId, eventsReportSvgString, foundPerson.Id, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+            var eventReportSvgForIncomingRequest = new Chart(newChartId, eventsChartSvgString, foundPerson.Id, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
 
             return eventReportSvgForIncomingRequest;
         }
@@ -786,7 +786,7 @@ namespace API
         /// <summary>
         /// Massive method that generates dasa report in SVG
         /// </summary>
-        private static async Task<string> GenerateMainEventsReportSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
+        private static async Task<string> GenerateMainEventsChartSvg(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
         {
             //1 CALCULATE DATA
             // One precision value for generating all dasa components,

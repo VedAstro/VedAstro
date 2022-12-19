@@ -371,18 +371,6 @@ namespace API
             }
         }
 
-        /// <summary>
-        /// Find all person's xml element by user id
-        /// </summary>
-        public static IEnumerable<XElement> FindPersonByUserId(XDocument personListXml, string userId)
-        {
-            var foundPersonListXml = from person in personListXml.Root?.Elements()
-                                     where
-                                         person.Element("UserId")?.Value == userId
-                                     select person;
-
-            return foundPersonListXml;
-        }
 
         /// <summary>
         /// Given a hash will return parsed person from main list
@@ -407,6 +395,29 @@ namespace API
 
             return foundPerson;
         }
+
+        /// <summary>
+        /// Find all person's xml element owned by user id
+        /// Note:
+        /// - multiple comma seperated UserId in Person profile
+        /// - 1 person profile can have multiple user id (shared)
+        /// </summary>
+        public static List<XElement> FindPersonByUserId(XDocument personListXml, string userId)
+        {
+
+            var returnList = new List<XElement>();
+
+            //add all person profiles that have the given user ID
+            foreach (var personXml in personListXml.Root?.Elements())
+            {
+                var allOwnerId = personXml.Element("UserId")?.Value ?? "";
+                //check if inputed ID is found in list
+                if (allOwnerId.Contains(userId)) { returnList.Add(personXml); }
+            }
+
+            return returnList;
+        }
+
 
         /// <summary>
         /// Will look for a person in a given list

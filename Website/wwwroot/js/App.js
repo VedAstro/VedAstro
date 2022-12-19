@@ -1258,8 +1258,8 @@ class EventsChart {
             "timePreset": $("#TimePresetSelector").val(),
             "eventPreset": $("#EventPresetSelector").val(),
             "personId": window.PersonId,
-            "maxWidth": Chart.getScreenWidth(),
-            "timezone": Chart.getParseableTimezone(),
+            "maxWidth": EventsChart.getScreenWidth(),
+            "timezone": EventsChart.getParseableTimezone(),
             "url": ""//empty string first
         };
 
@@ -1284,8 +1284,8 @@ class EventsChart {
             "timePreset": pathname[pathname.length - 1],
             "eventPreset": pathname[pathname.length - 2],
             "personId": pathname[pathname.length - 3],
-            "maxWidth": Chart.getScreenWidth(),
-            "timezone": Chart.getParseableTimezone()
+            "maxWidth": EventsChart.getScreenWidth(),
+            "timezone": EventsChart.getParseableTimezone()
         };
 
         return returnVal;
@@ -1396,7 +1396,7 @@ class EventsChart {
             //5 GENERATE LAST SUMMARY ROW
             //generate summary row at the bottom
             //make a copy of template for this event
-            var newSummaryRow = $(Chart.holderTemplateId).clone();
+            var newSummaryRow = $(EventsChart.holderTemplateId).clone();
             newSummaryRow.removeAttr('id'); //remove the clone template id
             newSummaryRow.addClass("CursorLineLegendClone"); //to delete it on next run
             newSummaryRow.appendTo("#CursorLineLegendHolder"); //place new legend into parent
@@ -1439,7 +1439,7 @@ class EventsChart {
 
                 //3 GENERATE EVENT ROW
                 //make a copy of template for this event
-                var newLegendRow = $(Chart.holderTemplateId).clone();
+                var newLegendRow = $(EventsChart.holderTemplateId).clone();
                 newLegendRow.removeAttr('id'); //remove the clone template id
                 newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
                 newLegendRow.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
@@ -1495,7 +1495,7 @@ class EventsChart {
 
 
                 function drawTimeAgeLegendRow() {
-                    var newTimeLegend = $(Chart.holderTemplateId).clone();
+                    var newTimeLegend = $(EventsChart.holderTemplateId).clone();
                     newTimeLegend.removeAttr('id'); //remove the clone template id
                     newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
                     newTimeLegend.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
@@ -1566,11 +1566,11 @@ class EventsChart {
             var svgElement = template.content.firstElementChild;
 
             //save for later use
-            Chart.Element = svgElement;
+            EventsChart.Element = svgElement;
 
             //place new node in parent
             element.innerHTML = ''; //clear current children if any
-            element.appendChild(Chart.Element);
+            element.appendChild(EventsChart.Element);
         }
 
     }
@@ -1584,7 +1584,7 @@ class EventsChart {
         getEventDescription(eventName.replace(/ /g, "")).then(drawDescriptionBox);
 
         //turn events back on
-        $(document).on('loadEventDescription', Chart.loadEventDescription);
+        $(document).on('loadEventDescription', EventsChart.loadEventDescription);
 
 
         //FUNCTIONS
@@ -1761,21 +1761,21 @@ class EventsChart {
         console.log("Attaching events to chart...");
 
         //save for easier reference
-        Chart.Element = chartElement$;
+        EventsChart.Element = chartElement$;
 
         //attach mouse handler to auto move cursor line & update time legend
         //load event description file 1st
-        await Chart.loadEventDataListFile();
+        await EventsChart.loadEventDataListFile();
 
-        Chart.Element[0].addEventListener("mousemove", Chart.onMouseMoveHandler);
+        EventsChart.Element[0].addEventListener("mousemove", EventsChart.onMouseMoveHandler);
 
-        Chart.Element[0].addEventListener("mouseleave", Chart.onMouseLeaveEventChart);
+        EventsChart.Element[0].addEventListener("mouseleave", EventsChart.onMouseLeaveEventChart);
 
         //attach handler to load event description file before hand
-        $(document).on('loadEventDescription', Chart.loadEventDescription);
+        $(document).on('loadEventDescription', EventsChart.loadEventDescription);
 
         //save now line
-        Chart.NowVerticalLine = Chart.Element.find('#NowVerticalLine');
+        EventsChart.NowVerticalLine = EventsChart.Element.find('#NowVerticalLine');
 
         //update once now
         updateNowLine();
@@ -1788,7 +1788,7 @@ class EventsChart {
             console.log("Updating now line position...");
 
             //get all rects
-            var allEventRects = Chart.Element.find(".EventListHolder").children("rect");
+            var allEventRects = EventsChart.Element.find(".EventListHolder").children("rect");
 
             //find closest rect to now time
             var closestRectToNow;
@@ -1809,7 +1809,7 @@ class EventsChart {
 
             //get horizontal position of now rect (x axis)
             var xAxisNowRect = closestRectToNow.getAttribute("x");
-            Chart.NowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`);
+            EventsChart.NowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`);
 
         }
 
@@ -1841,27 +1841,27 @@ class EventsChart {
         //set toolbar data (not chart related)
         $("#PersonNameBox").text("Person : " + window?.PersonName);
 
-        var notLoaded = !Chart.isSvgLoaded();
+        var notLoaded = !EventsChart.isSvgLoaded();
 
         //try get svg from server if svg not loaded by now
         //coming from live chart generate
         if (notLoaded) {
             //get data to generate chart from URL
-            var data = Chart.getDataFromUrl();
+            var data = EventsChart.getDataFromUrl();
 
-            await Chart.getEventsChartFromApi(data);
+            await EventsChart.getEventsChartFromApi(data);
 
         }
 
         //attach mouse handler to auto move cursor line & update time legend
         //load event description file 1st
         var svgChart$ = $("#DasaViewBox").children().first();
-        await Chart.initializeChart(svgChart$);
+        await EventsChart.initializeChart(svgChart$);
 
         //make toolbar visible
         $("#ToolBar").removeClass("visually-hidden");
 
-        Chart.hideLoading();
+        EventsChart.hideLoading();
 
     }
 }

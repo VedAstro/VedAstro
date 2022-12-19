@@ -641,8 +641,21 @@ namespace Genso.Astrology.Library
             }
         }
 
+        /// <summary>
+        /// Given a list of strings will return one by random
+        /// Used to make dynamic user error & info messages
+        /// </summary>
+        public static string RandomSelect(string[] msgList)
+        {
+            // Create a Random object  
+            Random rand = new Random();
 
+            // Generate a random index less than the size of the array.  
+            int randomIndexNumber = rand.Next(msgList.Length);
 
+            //return random text from list to caller
+            return msgList[randomIndexNumber];
+        }
     }
 
 }

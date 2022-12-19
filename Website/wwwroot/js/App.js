@@ -1219,9 +1219,9 @@ function CopyToClipboard(text) {
         });
 }
 
-function ChartInit() { Chart.animateEventsChart(); }
+function EventsChartInit() { EventsChart.animateEventsChart(); }
 
-class Chart {
+class EventsChart {
     //template used to generate legend rows
     static holderTemplateId = `#CursorLineLegendTemplate`;
 
@@ -1714,7 +1714,6 @@ class Chart {
         } else {
             console.log(`Using cached event data file.`);
         }
-
 
     }
 

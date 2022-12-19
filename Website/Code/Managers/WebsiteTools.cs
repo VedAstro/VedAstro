@@ -527,6 +527,9 @@ namespace Website
         /// </summary>
         public static async Task Try(this Task invocation, IJSRuntime jsRuntime)
         {
+            //counts of failure before force refresh page
+            const int failureThreshold = 3;
+
             try
             {
                 //try to make call normally
@@ -556,7 +559,7 @@ namespace Website
                     //redirect with reload to clear memory & restart app
                     default:
                         //note : for unknown reason, when app starts multiple failures occur, for now
-                        if (AppData.FailureCount > 3)
+                        if (AppData.FailureCount > failureThreshold)
                         {
                             await jsRuntime.ShowAlert("warning", AlertText.SorryNeedRefreshToHome, true);
                             await jsRuntime.LoadPage(PageRoute.Home);

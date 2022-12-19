@@ -93,23 +93,12 @@
     /// </summary>
     private async Task<bool> IsValidationPassed()
     {
-        //it is possible for validation to throw exception
-        try
-        {
-            //TEST 1
-            //check that name is filled
-            if (String.IsNullOrWhiteSpace(_nameInput))
-            {
-                //mark invalid & alert user
-                await _jsRuntime.ShowAlert("error", AlertText.EnterName, true);
-                return false;
-            }
-
-        }
-        catch (Exception)
+        //TEST 1
+        //check that name is filled
+        if (String.IsNullOrWhiteSpace(_nameInput))
         {
             //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", AlertText.ValidationError, true);
+            await _jsRuntime.ShowAlert("error", AlertText.EnterName, true);
             return false;
         }
 

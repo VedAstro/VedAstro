@@ -30,6 +30,13 @@ namespace Genso.Astrology.Library
         public List<HouseName> RelatedHouses { get; private set; } = new List<HouseName>();
 
         /// <summary>
+        /// Checks if given planet is in List
+        /// </summary>
+        public bool Contains(PlanetName planetName) => RelatedPlanets.Contains(planetName);
+        public bool Contains(ZodiacName zodiacName) => RelatedZodiac.Contains(zodiacName);
+        public bool Contains(HouseName houseName) => RelatedHouses.Contains(houseName);
+
+        /// <summary>
         /// Converts all values to string seperated by comma
         /// Note: used when searching
         /// </summary>

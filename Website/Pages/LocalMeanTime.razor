@@ -14,39 +14,58 @@
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a href="#home" class="nav-link active" data-bs-toggle="tab">Calc 1</a>
+        <a href="#calc1" class="nav-link active" data-bs-toggle="tab">Time Now</a>
     </li>
     <li class="nav-item">
-        <a href="#profile" class="nav-link" data-bs-toggle="tab">Calc 2</a>
+        <a href="#calc2" class="nav-link" data-bs-toggle="tab">Long. To Timezone</a>
+    </li>
+    <li class="nav-item">
+        <a href="#calc3" class="nav-link" data-bs-toggle="tab">LMT to STD</a>
     </li>
 </ul>
 <div class="tab-content p-2 border">
-    <div class="tab-pane fade show active" id="home">
+    <div class="tab-pane fade show active" id="calc1">
         <div class="vstack gap-3">
-
+            <p>Local and Standard time now at a given location.</p>
             <h5>LMT: @_lmtString</h5>
             <h5>STD: @_stdString</h5>
-
             <GeoLocationInput @ref="_geoLocationInput"></GeoLocationInput>
-            <hr />
+            <hr/>
             <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="UpdateLocalMeanTime"></IconButton>
-
         </div>
     </div>
-    <div class="tab-pane fade" id="profile">
+    <div class="tab-pane fade" id="calc2">
         <p>Input a longitude to see the LMT offset used for that location</p>
         <h5>LMT Offset: @_lmtOffset</h5>
         <div class="input-group mb-3">
             <span class="input-group-text">Longitude</span>
             <div class="form-floating">
-                <input @bind="_longitudeInput" type="text" class="form-control" placeholder="-180 to 180">
+                <input @bind="_longitudeInput1" type="text" class="form-control" placeholder="-180 to 180">
                 @*<label for="floatingInputGroup1">Username</label>*@
             </div>
         </div>
         <hr />
-
         <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="OnClickCalcLMTOffset"></IconButton>
-
+    </div>
+    <div class="tab-pane fade" id="calc3">
+        <p>LMT date time convert to STD date time</p>
+        <h5>STD Time: @_stdDateTimeText</h5>
+        <div class="input-group mb-3">
+            <span class="input-group-text">LMT</span>
+            <div class="form-floating">
+                <input @bind="_lmtInput" type="text" class="form-control">
+                @*<label for="floatingInputGroup1">Username</label>*@
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Longitude</span>
+            <div class="form-floating">
+                <input @bind="_longitudeInput2" type="text" class="form-control" placeholder="-180 to 180">
+                @*<label for="floatingInputGroup1">Username</label>*@
+            </div>
+        </div>
+        <hr />
+        <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="OnClickCalcLmtToStd"></IconButton>
     </div>
 </div>
 
@@ -55,9 +74,13 @@
 
 @code {
 
+    //todo clean up variable names
     string? _lmtString = "";
-    string? _longitudeInput = "0"; //parsed to double later
+    string? _longitudeInput1 = "0"; //parsed to double later
+    string? _longitudeInput2 = "0"; //parsed to double later
+    string? _lmtInput = "00:00 01/01/0001"; //parsed to time later
     string? _stdString = "";
+    string? _stdDateTimeText = "Click Calculate";
     string? _lmtOffset = "Click Calculate";
     private GeoLocationInput _geoLocationInput;
 
@@ -75,10 +98,26 @@
         while (await timer.WaitForNextTickAsync()) { UpdateLocalMeanTime(); }
     }
 
+    private void OnClickCalcLmtToStd()
+    {
+        //get longitude from input
+        var longitudeInput = double.Parse(_longitudeInput2);
+
+        //calculate LMT offset
+        var offsetTimeSpan = Time.GetLocalTimeOffset(longitudeInput);
+
+        //calculate STD time
+        var lmtDateTime = DateTimeOffset.ParseExact(_lmtInput, Time.DateTimeFormatNoTimezone, null);
+        var std = AstronomicalCalculator.LmtToStd(lmtDateTime, offsetTimeSpan);
+
+        //update view with STD time
+        _stdDateTimeText = std.ToString(Time.DateTimeFormat);
+    }
+
     private void OnClickCalcLMTOffset()
     {
         //get longitude from input
-        var longitudeInput = double.Parse(_longitudeInput);
+        var longitudeInput = double.Parse(_longitudeInput1);
 
         //calculate LMT offset
         var offsetTimeSpan = Time.GetLocalTimeOffset(longitudeInput);

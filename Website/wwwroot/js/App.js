@@ -210,6 +210,15 @@ function generatePlanetDataTable(tableId, tableData) {
         //autoColumns: true,
         columns: [                 //define the table columns
             { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
+            { title: "Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
+            { title: "Nirayana Longitude", field: "nirayanaLongitude", responsive: 0 },
+            { title: "Sign", field: "planetCurrentSign", responsive: 0 },
+            { title: "Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
+            { title: "Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
+            { title: "Malefic Conjunct", field: "isPlanetConjunctWithMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
+            { title: "Malefic Aspect", field: "isPlanetAspectedByMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
+            { title: "Conjunct Planets", field: "conjunctPlanets", hozAlign: "center", responsive: 0 },
+            { title: "Aspecting Planets", field: "aspectingPlanets", hozAlign: "center", responsive: 0 },
             { title: "Total Strength", field: "shadbalaPinda", hozAlign: "center", responsive: 0 },
             { title: "Position Strength", field: "positionStrength", hozAlign: "center", responsive: 0 },
             { title: "Directional Strength", field: "directionalStrength", hozAlign: "center", responsive: 0 },
@@ -217,15 +226,7 @@ function generatePlanetDataTable(tableId, tableData) {
             { title: "Motion Name", field: "motionName", hozAlign: "center", responsive: 0 },
             { title: "Temporal Strength", field: "temporalStrength", hozAlign: "center", responsive: 0 },
             { title: "Aspect Strength", field: "aspectStrength", hozAlign: "center", responsive: 0 },
-            { title: "Permanent Strength", field: "permanentStrength", hozAlign: "center", responsive: 0 },
-            { title: "Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
-            { title: "Sign", field: "planetCurrentSign", responsive: 0 },
-            { title: "Current Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
-            { title: "Current Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
-            { title: "Malefic Conjunct", field: "isPlanetConjunctWithMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
-            { title: "Malefic Aspect", field: "isPlanetAspectedByMaleficPlanets", formatter: "tickCross", hozAlign: "center", responsive: 0 },
-            { title: "Conjunct Planets", field: "conjunctPlanets", hozAlign: "center", responsive: 0 },
-            { title: "Aspecting Planets", field: "aspectingPlanets", hozAlign: "center", responsive: 0 },
+            { title: "Permanent Strength", field: "permanentStrength", hozAlign: "center", responsive: 0 }
         ],
     });
 }

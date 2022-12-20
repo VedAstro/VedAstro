@@ -162,9 +162,11 @@
 
             var _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName);
 
-            var planetRasiSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, Time);
+            var _planetRasiSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, Time);
 
-            var _planetCurrentSign = planetRasiSign.ToString();
+            var _planetCurrentSign = _planetRasiSign.ToString();
+            
+            var _nirayanaLongitude = AstronomicalCalculator.GetPlanetNirayanaLongitude(Time, planetName).TotalDegrees;
 
             var planetNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, Time);
 
@@ -184,7 +186,7 @@
 
             var _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
 
-            var _currentSignDescription = AstronomicalCalculator.GetSignDescription(planetRasiSign.GetSignName());
+            var _currentSignDescription = AstronomicalCalculator.GetSignDescription(_planetRasiSign.GetSignName());
 
             var _currentHouseDescription = AstronomicalCalculator.GetHouseDescription(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
 
@@ -214,6 +216,7 @@
                 PermanentStrength = _permanentStrength,
                 PlanetCurrentHouse = _planetCurrentHouse,
                 PlanetCurrentSign = _planetCurrentSign,
+                NirayanaLongitude = _nirayanaLongitude,
                 CurrentSignDescription = _currentSignDescription,
                 PlanetCurrentNavamsaSign = _planetCurrentNavamsaSign,
                 PlanetCurrentConstellation = _planetCurrentConstellation,

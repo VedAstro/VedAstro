@@ -34,22 +34,28 @@
     @*TAB HEADER*@
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="true">
+            <a href="#info" class="nav-link active" data-bs-toggle="tab">
                 <Icon IconName="majesticons:scroll-text-line" />
                 Info
-            </button>
+            </a>
         </li>
         <li class="nav-item">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#notes" type="button" role="tab" aria-controls="notes" aria-selected="false">
+            <a href="#notes" class="nav-link" data-bs-toggle="tab">
                 <Icon IconName="material-symbols:note-alt-outline" />
                 Notes
-            </button>
+            </a>
         </li>
         <li class="nav-item">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">
+            <a href="#lifeEvents" class="nav-link" data-bs-toggle="tab">
+                <Icon IconName="material-symbols:note-alt-outline" />
+                Life Events
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#advanced" class="nav-link" data-bs-toggle="tab">
                 <Icon IconName="material-symbols:note-alt-outline" />
                 Advanced
-            </button>
+            </a>
         </li>
         @*DROP DOWN ACTIONS*@
         <li class="nav-item dropdown">
@@ -68,9 +74,9 @@
     </ul>
 
     @*TAB BODY*@
-    <div class="tab-content border" id="myTabContent">
-        @*INFO TAB CONTENT*@
-        <div class="tab-pane fade show active p-2" id="info" role="tabpanel" aria-labelledby="info-tab">
+    <div class="tab-content p-2 border">
+        @*INFO*@
+        <div class="tab-pane fade show active p-2" id="info">
             <div class="vstack gap-3 px-2">
                 <div>
                     <label class="form-label">Name</label>
@@ -96,20 +102,21 @@
             </div>
         </div>
 
-        @*NOTES TAB CONTENT*@
-        <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
-            <div class="vstack gap-3 px-2">
-                @*LIFE EVENTS*@
-                <LifeEventEditor @ref="_lifeEventEditor" />
-                <div>
-                    <label class="form-label">Notes</label>
-                    <textarea @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person" style="min-height: 132px;"></textarea>
-                </div>
+        @*NOTES*@
+        <div class="tab-pane fade" id="notes">
+            <div class="px-2">
+                <label class="form-label">Notes</label>
+                <textarea @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person" style="min-height: 132px;"></textarea>
             </div>
+        </div>
+        
+        @*LIFE EVENTS*@
+        <div class="tab-pane fade" id="lifeEvents">
+            <LifeEventEditor @ref="_lifeEventEditor"></LifeEventEditor>
         </div>
 
         @*ADVANCED TAB CONTENT*@
-        <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+        <div class="tab-pane fade" id="advanced">
             <div class="px-2">
                 <ul class="list-group gap-1 mt-2">
                     <li class="list-group-item active" aria-current="true">Info</li>

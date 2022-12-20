@@ -23,6 +23,7 @@ namespace Website
         public const string WebDomain = "https://www.vedastro.org";
         public const string ApiUrl = "https://vedastroapi.azurewebsites.net/api";
         public const string AddPersonApi = ApiUrl + "/addperson";
+        public const string AddUserIdToVisitorPersons = ApiUrl + "/AddUserIdToVisitorPersons";
         public const string GetHoroscope = ApiUrl + "/gethoroscope";
         public const string AddLifeEventApi = ApiUrl + "/addlifeevent";
         public const string AddMessageApi = ApiUrl + "/addmessage";

@@ -17,15 +17,15 @@ namespace API
 
         [FunctionName("getmessagelist")]
         public static async Task<IActionResult> GetMessageList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.MessageListXml, FileAccess.ReadWrite)] BlobClient messageListClient)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             var responseMessage = "";
 
             try
             {
                 //get message list from storage
-                var messageListXml = await APITools.BlobClientToXml(messageListClient);
+                var messageListXml = await APITools.GetXmlFileFromAzureStorage(APITools.MessageListFile, APITools.BlobContainerName);
+
 
                 //send task list to caller
                 responseMessage = messageListXml.ToString();
@@ -46,9 +46,7 @@ namespace API
         }
 
         [FunctionName("addmessage")]
-        public static async Task<IActionResult> AddMessage(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.MessageListXml, FileAccess.ReadWrite)] BlobClient messageListClient)
+        public static async Task<IActionResult> AddMessage([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
@@ -58,10 +56,7 @@ namespace API
                 var newMessageXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new message to main list
-                var messageListXml = await APITools.AddXElementToXDocument(messageListClient, newMessageXml);
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(messageListClient, messageListXml);
+                await APITools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, APITools.BlobContainerName);
 
                 return APITools.PassMessage();
 

@@ -15,9 +15,7 @@ namespace API
     public class VisitorAPI
     {
         [FunctionName("addvisitor")]
-        public static async Task<IActionResult> AddVisitor(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
+        public static async Task<IActionResult> AddVisitor([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             try
             {
@@ -25,13 +23,9 @@ namespace API
                 var newVisitorXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new visitor to main list
-                var taskListXml = await APITools.AddXElementToXDocument(visitorLogClient, newVisitorXml);
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(visitorLogClient, taskListXml);
+                await APITools.AddXElementToXDocumentAzure(newVisitorXml, APITools.VisitorLogFile, APITools.BlobContainerName);
 
                 return APITools.PassMessage();
-
             }
             catch (Exception e)
             {
@@ -48,9 +42,7 @@ namespace API
         /// Gets all the unique visitors to the site
         /// </summary>
         [FunctionName("getvisitorlist")]
-        public static async Task<IActionResult> GetVisitorList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
+        public static async Task<IActionResult> GetVisitorList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             var responseMessage = "";
 
@@ -61,7 +53,7 @@ namespace API
                 var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
 
                 //get visitor log from storage
-                var visitorLogXml = await APITools.BlobClientToXml(visitorLogClient);
+                var visitorLogXml = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
 
                 //get all unique visitor elements only
                 //var uniqueVisitorList = from visitorXml in visitorLogXml.Root?.Elements()
@@ -92,8 +84,7 @@ namespace API
 
         [FunctionName("deletevisitorbyuserid")]
         public static async Task<IActionResult> DeleteVisitorByUserId(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
@@ -103,7 +94,8 @@ namespace API
                 var userId = userIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
-                var visitorListXml = await APITools.BlobClientToXml(visitorLogClient);
+                var visitorLogClient = await APITools.GetBlobClientAzure(APITools.VisitorLogFile, APITools.BlobContainerName);
+                var visitorListXml = await APITools.BlobClientToXmlDoc(visitorLogClient);
                 var visitorLogsToDelete = visitorListXml.Root?.Elements().Where(x => x.Element("UserId")?.Value == userId).ToList();
 
                 //delete each record
@@ -129,9 +121,7 @@ namespace API
         }
 
         [FunctionName("deletevisitorbyvisitorid")]
-        public static async Task<IActionResult> DeleteVisitorByVisitorId(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.VisitorLogXml, FileAccess.ReadWrite)] BlobClient visitorLogClient)
+        public static async Task<IActionResult> DeleteVisitorByVisitorId([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
@@ -141,7 +131,8 @@ namespace API
                 var visitorId = visitorIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
-                var visitorListXml = await APITools.BlobClientToXml(visitorLogClient);
+                var visitorLogClient = await APITools.GetBlobClientAzure(APITools.VisitorLogFile, APITools.BlobContainerName);
+                var visitorListXml = await APITools.BlobClientToXmlDoc(visitorLogClient);
                 var visitorLogsToDelete = (from xml in visitorListXml.Root?.Elements()
                                            where xml.Element("VisitorId")?.Value == visitorId
                                            select xml).ToList();

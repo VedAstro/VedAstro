@@ -89,29 +89,17 @@ namespace Website
 
         /// <summary>
         /// Gets all people list from API server
-        /// This is the central place all person list is gotten for a User ID
+        /// This is the central place all person list is gotten for a User ID/Visitor ID
         /// NOTE: if User ID is Guest ID 101, then person profile under
-        /// Visitor ID is also auto added to return list if any
+        /// Visitor ID is also auto added to return list if any by API
         /// </summary>
         public static async Task<List<Person>?> GetPeopleList(string userId, IJSRuntime jsRuntime)
         {
 
-            //1 GET USER LIST
-            var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, new XElement("UserId", userId), jsRuntime);
-            //var personList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
+            //get all person profile owned by current user/visitor
+            var payload = new XElement("Root", new XElement("UserId", userId), new XElement("VisitorId", userId));
+            var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, payload, jsRuntime);
             var personList = Person.FromXml(personListRootXml.Elements());
-
-            //2 GET VISITOR LIST
-            //always try to include person list from visitor ID if any
-            //this is done to avoid from user adding data logged out then logs in to find data missing
-            //TODO NOTE : this needs to be cleaned up, else if visitor id is lost then person is lost
-            //get list for visitor ID instead of User Id
-            personListRootXml = await ServerManager.WriteToServerXmlReply(
-                ServerManager.GetPersonListApi, new XElement("UserId", AppData.VisitorId), jsRuntime);
-            var tempList = personListRootXml.Elements().Select(personXml => Person.FromXml(personXml)).ToList();
-            //combine with previous list
-            if (tempList.Any()) { personList.AddRange(tempList); }
-
 
             return personList;
         }

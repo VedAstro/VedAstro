@@ -11,6 +11,7 @@ using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.JSInterop;
 
 namespace API
 {
@@ -31,7 +32,7 @@ namespace API
                 var newPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new person to main list
-                await APITools.AddXElementToXDocument(newPersonXml, APITools.PersonListFile, APITools.ApiDataStorageContainer);
+                await APITools.AddXElementToXDocumentAzure(newPersonXml, APITools.PersonListFile, APITools.BlobContainerName);
 
                 return APITools.PassMessage();
 
@@ -48,12 +49,60 @@ namespace API
         }
 
         /// <summary>
+        /// API to add current user ID to all people created with current VisitorID
+        /// note: this is done to auto move profiles created before login, then user decides to login
+        /// but expects all the profiles created before to be there in new account/logged in account
+        /// </summary>
+        [FunctionName("AddUserIdToVisitorPersons")]
+        public static async Task<IActionResult> AddUserIdToVisitorPersons(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+
+            try
+            {
+                //get new person data out of incoming request
+                //note: inside new person xml already contains user id
+                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var userId = rootXml.Element("UserId")?.Value;
+                var visitorId = rootXml.Element("VisitorId")?.Value;
+
+                //find all person's with inputed visitor ID
+                var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+                var foundPersonList = APITools.FindPersonByUserId(personListXmlDoc, visitorId);
+
+                //add User ID to each person (if not already added, avoid duplicates)
+                foreach (var foundPerson in foundPersonList)
+                {
+                    var currentOwners = foundPerson?.Element("UserId")?.Value ?? "";
+                    var notInList = !currentOwners.Contains(userId);
+                    //if not in list, add to current person's owners user ID list
+                    if (notInList) { foundPerson.Element("UserId").Value = currentOwners + "," + userId; }
+                }
+
+                //upload modified list file to storage
+                await APITools.SaveXDocumentToAzure(personListXmlDoc, APITools.PersonListFile, APITools.BlobContainerName);
+
+                return APITools.PassMessage();
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await Log.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FormatErrorReply(e);
+            }
+
+        }
+
+
+
+        /// <summary>
         /// Gets person all details from only hash
         /// </summary>
         [FunctionName("getperson")]
-        public static async Task<IActionResult> GetPerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
+        public static async Task<IActionResult> GetPerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
@@ -63,7 +112,7 @@ namespace API
                 var personId = requestData.Value;
 
                 //get the person record by hash
-                var personListXml = await APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
                 var foundPerson = await APITools.FindPersonById(personListXml, personId);
 
                 //send person to caller
@@ -87,8 +136,7 @@ namespace API
         /// </summary>
         [FunctionName("updateperson")]
         public static async Task<IActionResult> UpdatePerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
@@ -98,15 +146,15 @@ namespace API
                 var updatedPerson = Person.FromXml(updatedPersonXml);
 
                 //get the person record that needs to be updated
-                var personListXml = await APITools.BlobClientToXml(personListClient);
-                var personToUpdate = await APITools.FindPersonById(personListXml, updatedPerson.Id);
+                var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+                var personToUpdate = await APITools.FindPersonById(personListXmlDoc, updatedPerson.Id);
 
                 //delete the previous person record,
                 //and insert updated record in the same place
                 personToUpdate.ReplaceWith(updatedPersonXml);
 
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(personListClient, personListXml);
+                //upload modified list file to storage
+                await APITools.SaveXDocumentToAzure(personListXmlDoc, APITools.PersonListFile, APITools.BlobContainerName);
 
                 return APITools.PassMessage();
 
@@ -131,8 +179,7 @@ namespace API
         /// </summary>
         [FunctionName("deleteperson")]
         public static async Task<IActionResult> DeletePerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
 
             try
@@ -142,17 +189,14 @@ namespace API
                 var personId = requestData.Value;
 
                 //get the person record that needs to be deleted
-                var personListXml = await APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
                 var personToDelete = await APITools.FindPersonById(personListXml, personId);
 
                 //add deleted person to recycle bin 
-                await APITools.AddXElementToXDocument(personToDelete, APITools.RecycleBinFile, APITools.ApiDataStorageContainer);
+                await APITools.AddXElementToXDocumentAzure(personToDelete, APITools.RecycleBinFile, APITools.BlobContainerName);
 
                 //delete the person record,
-                personToDelete.Remove();
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(personListClient, personListXml);
+                await APITools.DeleteXElementFromXDocumentAzure(personToDelete, APITools.PersonListFile, APITools.BlobContainerName);
 
                 return APITools.PassMessage();
 
@@ -167,26 +211,37 @@ namespace API
             }
         }
 
+        /// <summary>
+        /// Gets all person profiles owned by User ID & Visitor ID
+        /// </summary>
         [FunctionName("getpersonlist")]
         public static async Task<IActionResult> GetPersonList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.PersonListXml, FileAccess.ReadWrite)] BlobClient personListClient)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             var responseMessage = "";
 
             try
             {
-                //get user id
-                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
+                //data out of request
+                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var userId = rootXml.Element("UserId")?.Value;
+                var visitorId = rootXml.Element("VisitorId")?.Value;
 
                 //get all person list from storage
-                var personListXml = await APITools.BlobClientToXml(personListClient);
+                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
 
                 //filter out person by user id
-                var filteredList = APITools.FindPersonByUserId(personListXml, userId);
+                var filteredList1 = APITools.FindPersonByUserId(personListXml, userId);
+
+                //filter out person by visitor id
+                var filteredList2 = APITools.FindPersonByUserId(personListXml, visitorId);
+
+                //combine and remove duplicates
+                if (filteredList2.Any()) { filteredList1.AddRange(filteredList2); }
+                var personListNoDupes = filteredList1.Distinct().ToList();
 
                 //send filtered list to caller
-                responseMessage = new XElement("Root", filteredList).ToString();
+                responseMessage = new XElement("Root", personListNoDupes).ToString();
 
             }
             catch (Exception e)
@@ -203,6 +258,6 @@ namespace API
             return okObjectResult;
         }
 
-     
+
     }
 }

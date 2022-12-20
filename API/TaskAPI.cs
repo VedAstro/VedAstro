@@ -15,9 +15,7 @@ namespace API
     public class TaskAPI
     {
         [FunctionName("addtask")]
-        public static async Task<IActionResult> AddTask(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.TaskListXml, FileAccess.ReadWrite)] BlobClient taskListClient)
+        public static async Task<IActionResult> AddTask([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             try
             {
@@ -25,13 +23,9 @@ namespace API
                 var newTaskXml = APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new task to main list
-                var taskListXml = await APITools.AddXElementToXDocument(taskListClient, newTaskXml);
-
-                //upload modified list to storage
-                await APITools.OverwriteBlobData(taskListClient, taskListXml);
+                await APITools.AddXElementToXDocumentAzure(newTaskXml, APITools.TaskListFile, APITools.BlobContainerName);
 
                 return APITools.PassMessage();
-
             }
             catch (Exception e)
             {
@@ -45,16 +39,14 @@ namespace API
         }
 
         [FunctionName("gettasklist")]
-        public static async Task<IActionResult> GetTaskList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-            [Blob(APITools.TaskListXml, FileAccess.ReadWrite)] BlobClient taskListClient)
+        public static async Task<IActionResult> GetTaskList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             var responseMessage = "";
 
             try
             {
                 //get task list from storage
-                var taskListXml = await APITools.BlobClientToXml(taskListClient);
+                var taskListXml = await APITools.GetXmlFileFromAzureStorage(APITools.TaskListFile, APITools.BlobContainerName);
 
                 //send task list to caller
                 responseMessage = taskListXml.ToString();

@@ -43,22 +43,22 @@
             <div>
 
                 <div id="g_id_onload"
-                 data-client_id="19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com"
-                 data-context="signin"
-                 data-ux_mode="popup"
-                 data-callback="OnGoogleSignInSuccessHandler"
-                 data-auto_prompt="false">
+                     data-client_id="19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com"
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-callback="OnGoogleSignInSuccessHandler"
+                     data-auto_prompt="false">
                 </div>
 
                 <div class="g_id_signin"
-                 data-type="standard"
-                 data-shape="pill"
-                 data-theme="outline"
-                 data-text="signin"
-                 data-size="large"
-                 data-logo_alignment="center"
-                 data-width="150"
-                 id="GoogleSignInButton">
+                     data-type="standard"
+                     data-shape="pill"
+                     data-theme="outline"
+                     data-text="signin"
+                     data-size="large"
+                     data-logo_alignment="center"
+                     data-width="150"
+                     id="GoogleSignInButton">
                 </div>
             </div>
 
@@ -126,6 +126,15 @@
         //send token to api for verification
         var rootXml = await ServerManager.WriteToServerXmlReply(ServerManager.SignInGoogle, new XElement("Token", idToken), _jsRuntime);
 
+        //read the reply from API server and do what
+        //needs to be done after login
+        await HandleAllLogin(rootXml);
+
+    }
+
+    public async Task HandleAllLogin(XElement rootXml)
+    {
+
         //check if reply is pass or fail
         var isPass = Tools.IsResultPass(rootXml);
 
@@ -140,6 +149,14 @@
             //store user data (xml) in browser localstorage
             await _jsRuntime.SetProperty("UserData", AppData.CurrentUser.ToXml().ToString());
 
+            //tell API to add current user ID to all people created with current VisitorID
+            //note: this is done to auto move profiles created before login, then user decides to login
+            //but expects all the profiles created before to be there in new account/logged in account
+            var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddUserIdToVisitorPersons, payload, _jsRuntime);
+            //TODO handle result better
+            Console.WriteLine(result);
+
             //refresh page
             WebsiteTools.ReloadPage(_navigation);
         }
@@ -148,7 +165,6 @@
              //note: this failure is already logged in API
             await _jsRuntime.ShowAlert("error", AlertText.LoginFailed, true);
         }
-
 
     }
 
@@ -193,26 +209,10 @@
         //check if reply is pass or fail
         var isPass = Tools.IsResultPass(rootXml);
 
-        if (isPass)
-        {
-            //get payload containing user data
-            var userDataXml = Tools.GetPayload(rootXml);
+        //read the reply from API server and do what
+        //needs to be done after login
+        await HandleAllLogin(rootXml);
 
-            //initialize user data & store it for access by the rest of the app
-            AppData.CurrentUser = UserData.FromXml(userDataXml);
-
-            //store in browser localstorage
-            await _jsRuntime.SetProperty("UserData", AppData.CurrentUser.ToXml().ToString());
-
-            //refresh page
-            WebsiteTools.ReloadPage(_navigation);
-        }
-        else
-        {
-            //show login failed message to user
-            //note: this failure is already logged in API
-            await _jsRuntime.ShowAlert("error", AlertText.LoginFailed, true);
-        }
     }
 
     /// <summary>

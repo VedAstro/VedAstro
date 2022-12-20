@@ -24,33 +24,25 @@ namespace API
         /// Call to see if return correct IP
         /// </summary>
         [FunctionName("getipaddress")]
-        public static async Task<IActionResult> GetIpAddress(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
-            HttpRequestMessage incomingRequest)
+        public static async Task<IActionResult> GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous,"get", "post", Route = null)]HttpRequestMessage incomingRequest)
         {
             return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip");
         }
 
         [FunctionName("getmatchreport")]
-        public static async Task<IActionResult> GetMatchReport(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest,
-           [Blob(APITools.PersonListXml, FileAccess.Read)] Stream personListRead)
+        public static async Task<IActionResult> GetMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             string responseMessage;
 
             try
-            {
+            {                                                                                                                                                                                                                                                                                                                                           
                 //get name of male & female
                 var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
                 var maleId = rootXml.Element("MaleId")?.Value;
                 var femaleId = rootXml.Element("FemaleId")?.Value;
 
-
-                //get list of all people
-                var personList = new Data(personListRead);
-
                 //generate compatibility report
-                CompatibilityReport compatibilityReport = APITools.GetCompatibilityReport(maleId, femaleId, personList);
+                var compatibilityReport = await APITools.GetCompatibilityReport(maleId, femaleId);
                 responseMessage = compatibilityReport.ToXml().ToString();
             }
             catch (Exception e)

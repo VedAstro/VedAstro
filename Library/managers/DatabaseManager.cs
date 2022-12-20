@@ -118,6 +118,7 @@ namespace Genso.Astrology.Library
         }
 
 
+        //TODO MARKED FOR DELETION
         /// <summary>
         /// Gets a list of all persons from database
         /// Note: element names used here corespond to the ones found in the XML file
@@ -144,6 +145,7 @@ namespace Genso.Astrology.Library
 
         }
 
+        //TODO MARKED FOR DELETION
         //overload for above method
         public static List<Person> GetPersonList(string filePath)
         {

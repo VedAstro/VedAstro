@@ -36,7 +36,7 @@ public static class Log
         errorXml.Add(new XElement("Request Body"), APITools.RequestToXmlString(req));
 
         //add error data to main app log file
-        await APITools.AddXElementToXDocument(errorXml, AppLogXml, ContainerName);
+        await APITools.AddXElementToXDocumentAzure(errorXml, AppLogXml, ContainerName);
 
     }
 

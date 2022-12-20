@@ -317,8 +317,6 @@ class EventsChart {
                 "accept": "*/*",
                 "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
                 "content-type": "plain/text; charset=utf-8",
-                "sec-ch-ua": "\"Google Chrome\";v=\"107\", \"Chromium\";v=\"107\", \"Not=A?Brand\";v=\"24\"",
-                "sec-ch-ua-mobile": "?0",
                 "sec-ch-ua-platform": "\"Windows\"",
                 "sec-fetch-dest": "empty",
                 "sec-fetch-mode": "cors",
@@ -612,7 +610,7 @@ class EventsChart {
     }
 
     //coming from direct/url access page
-    //this the method called to start the JS code to animate an already loaded chart
+    //the method called to start the JS code to animate an already loaded chart
     static async animateEventsChart() {
         console.log(`Starting the engine...`);
 
@@ -631,7 +629,6 @@ class EventsChart {
             var data = EventsChart.getDataFromUrl();
 
             await EventsChart.getEventsChartFromApi(data);
-
         }
 
         //attach mouse handler to auto move cursor line & update time legend

@@ -10,20 +10,55 @@
     At 12PM LMT the Sun will be directly overhead.
 </p>
 
-<h5>LMT: @_lmtString</h5>
-<h5>STD: @_stdString</h5>
 
-<GeoLocationInput @ref="_geoLocationInput" />
 
-<div style="margin-top: 50px" class="row">
-    <IconButton ButtonText="Update" IconName="ep:refresh" OnClickCallback="UpdateLocalMeanTime"></IconButton>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a href="#home" class="nav-link active" data-bs-toggle="tab">Calc 1</a>
+    </li>
+    <li class="nav-item">
+        <a href="#profile" class="nav-link" data-bs-toggle="tab">Calc 2</a>
+    </li>
+</ul>
+<div class="tab-content p-2 border">
+    <div class="tab-pane fade show active" id="home">
+        <div class="vstack gap-3">
+
+            <h5>LMT: @_lmtString</h5>
+            <h5>STD: @_stdString</h5>
+
+            <GeoLocationInput @ref="_geoLocationInput"></GeoLocationInput>
+            <hr />
+            <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="UpdateLocalMeanTime"></IconButton>
+
+        </div>
+    </div>
+    <div class="tab-pane fade" id="profile">
+        <p>Input a longitude to see the LMT offset used for that location</p>
+        <h5>LMT Offset: @_lmtOffset</h5>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Longitude</span>
+            <div class="form-floating">
+                <input @bind="_longitudeInput" type="text" class="form-control" placeholder="-180 to 180">
+                @*<label for="floatingInputGroup1">Username</label>*@
+            </div>
+        </div>
+        <hr />
+
+        <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="OnClickCalcLMTOffset"></IconButton>
+
+    </div>
 </div>
+
+
 
 
 @code {
 
     string? _lmtString = "";
+    string? _longitudeInput = "0"; //parsed to double later
     string? _stdString = "";
+    string? _lmtOffset = "Click Calculate";
     private GeoLocationInput _geoLocationInput;
 
 
@@ -38,6 +73,18 @@
         //update time every 5s
         var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
         while (await timer.WaitForNextTickAsync()) { UpdateLocalMeanTime(); }
+    }
+
+    private void OnClickCalcLMTOffset()
+    {
+        //get longitude from input
+        var longitudeInput = double.Parse(_longitudeInput);
+
+        //calculate LMT offset
+        var offsetTimeSpan = Time.GetLocalTimeOffset(longitudeInput);
+
+        //show to user in correct format, exp: +03:00
+        _lmtOffset = new DateTimeOffset(2000, 1, 1, 1, 1, 1, offsetTimeSpan).ToString("zzz");
     }
 
     private void UpdateLocalMeanTime()

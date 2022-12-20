@@ -9,7 +9,7 @@ namespace Genso.Astrology.Library
 
     //IMMUTABLE CLASS
     [Serializable()]
-    public struct GeoLocation : IToXml
+    public readonly struct GeoLocation : IToXml
     {
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler
@@ -39,9 +39,13 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Eastern longitudes are positive, western ones negative.
+        /// Range : -180 to 180
         /// </summary>
         public double GetLongitude() => _longitude;
 
+        /// <summary>
+        /// Range : -90 to 90
+        /// </summary>
         public double GetLatitude() => _latitude;
 
 

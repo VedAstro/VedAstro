@@ -26,12 +26,12 @@ namespace Genso.Astrology.Library
         /// HH:mm dd/MM/yyyy zzz
         /// </summary>
         public const string DateTimeFormat = "HH:mm dd/MM/yyyy zzz"; //define date time format
-        
+
         /// <summary>
         /// HH:mm dd/MM/yyyy
         /// </summary>
         public const string DateTimeFormatNoTimezone = "HH:mm dd/MM/yyyy"; //define date time format
-        
+
         /// <summary>
         /// HH:mm:ss dd/MM/yyyy zzz
         /// </summary>
@@ -330,8 +330,16 @@ namespace Genso.Astrology.Library
             return lmtDateTime;
         }
 
-        private static TimeSpan GetLocalTimeOffset(double longitudeDeg)
+        /// <summary>
+        /// Convert longitude to LMT offset
+        /// input longitude range : -180 to 180 
+        /// </summary>
+        public static TimeSpan GetLocalTimeOffset(double longitudeDeg)
         {
+            //raise alarm if longitude is out of range
+            var outOfRange = !(longitudeDeg >= -180 && longitudeDeg <= 180);
+            if (outOfRange) { throw new Exception($"Longitude out of range : {longitudeDeg}"); }
+
             //declare +0:00 offset at first
             TimeSpan offsetToReturn = TimeSpan.Zero;
 

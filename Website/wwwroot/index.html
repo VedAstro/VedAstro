@@ -131,10 +131,13 @@
     <!-- JS Dark Mode button-->
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 
+    <!-- JS Code Events Chart-->
+    <!-- NOTE: Needs jQuery to load 1st-->
+    <script src="js/EventsChart.js"></script>
+
     <!--Application Logic, Must run last since it uses the libraries-->
     <script src="js/App.js" defer></script><!--DEFER to confirm run last-->
-    <!--TODO REMOVE FOR FASTER LOAD-->
-    <!--<script src="js/Debug.js" defer></script>--><!--DEFER to confirm run last-->
+
     <!--START BLAZOR-->
     <!--NOTE: DEFER added here so that loads last-->
     <script src="_framework/blazor.webassembly.js" defer></script><!--DEFER to confirm run last-->

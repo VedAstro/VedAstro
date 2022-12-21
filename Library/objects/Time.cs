@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 
 namespace Genso.Astrology.Library
@@ -340,22 +341,8 @@ namespace Genso.Astrology.Library
             var outOfRange = !(longitudeDeg >= -180 && longitudeDeg <= 180);
             if (outOfRange) { throw new Exception($"Longitude out of range : {longitudeDeg}"); }
 
-            //declare +0:00 offset at first
-            TimeSpan offsetToReturn = TimeSpan.Zero;
-
             //calculate offset based on longitude
-            if (longitudeDeg == 0)
-            {
-                offsetToReturn = TimeSpan.FromHours(longitudeDeg / 15.0);
-            }
-            else if (longitudeDeg < 0)
-            {
-                offsetToReturn = TimeSpan.FromHours(-(longitudeDeg / 15.0));
-            }
-            else if (longitudeDeg > 0)
-            {
-                offsetToReturn = TimeSpan.FromHours(longitudeDeg / 15.0);
-            }
+            var offsetToReturn = TimeSpan.FromHours(longitudeDeg / 15.0);
 
             //round off offset to full minutes (because datetime doesnt accept fractional minutes in offsets)
             var offsetMinutes = Math.Round(offsetToReturn.TotalMinutes);

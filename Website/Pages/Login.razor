@@ -1,0 +1,22 @@
+﻿@using Genso.Astrology.Library
+@attribute [Route(PageRoute.Login)]
+
+
+<SignInButton />
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        //after login this page is loaded again,
+        //if login success, redirect user to previous page
+        if (AppData.CurrentUser != UserData.Empty)
+        {
+            //goto page
+            var previousPage = await _jsRuntime.GetProperty("PreviousPage");
+            _navigation.NavigateTo(previousPage);
+
+        }
+    }
+
+}

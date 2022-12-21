@@ -3,7 +3,7 @@
 @using Microsoft.Extensions.FileSystemGlobbing.Internal
 @inherits LayoutComponentBase
 @inject HttpClient Client
-
+@using Website.Pages
 
 @*
     NOTE : Components here are loaded same time as page,
@@ -18,7 +18,7 @@
 *@
 @if (_mainPageInitDone)
 {
-    <!-- sidebar -->
+    <!-- SIDEBAR NAV BAR -->
     <div class="sidebar">
         <div class="sidebar-header">
             <a href="#" class="sidebar-logo"><span></span></a>
@@ -58,39 +58,55 @@
                 <a @ref="navLink8" @onclick="()=>OnClickNavItem(navLink8, PageRoute.About)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="akar-icons:info" data-width="25"></span><span>About</span>
                 </a>
-@*                <a @ref="navLink9" @onclick="()=>OnClickNavItem(navLink9, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="codicon:feedback" data-width="25"></span><span>Give Feedback</span>
-                </a>
-*@
+                @*                <a @ref="navLink9" @onclick="()=>OnClickNavItem(navLink9, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
+            <span class="iconify" data-icon="codicon:feedback" data-width="25"></span><span>Give Feedback</span>
+            </a>
+            *@
             </nav>
             @*<hr>
         <nav class="nav-sidebar">
         </nav>*@
         </div><!-- sidebar-body -->
+        <!--
         <div class="sidebar-footer">
-            @**@
-            @*            <a href="" class="avatar online"><span class="avatar-initial">s</span></a>
-        *@            <div class="avatar-body">
+            <a href="" class="avatar online"><span class="avatar-initial">s</span></a>
+            <div class="avatar-body">
                 <div class="d-flex align-items-center justify-content-between">
                     <SignInButton />
-                    @*                    <h6></h6>
-                <a href="" class="footer-menu"><i class="ri-settings-4-line"></i></a>
-                *@
+                    <h6></h6>
+                    <a href="" class="footer-menu"><i class="ri-settings-4-line"></i></a>
                 </div>
-                @*<span>Superuser/Administrator</span>*@
-            </div><!-- avatar-body -->
-        </div><!-- sidebar-footer -->
+                <span>Superuser/Administrator</span>
+            </div>
+        </div>
+        -->
+
     </div>
 
-
+    <!-- MAIN CONTENT -->
     <div class="content">
-        <!-- content-header -->
-        <div class="content-header border-bottom my-0 mx-4 py-0 px-2 pb-2 hstack gap-2">
-            @*visible in Desktop view todo shoe menu fold icon line-md:menu-fold-left*@
-            <a id="DesktopMenuBtn" href="#" class="content-menu d-none d-md-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
-            @*visible in Mobile view*@
-            <a id="MobileMenuBtn" href="#" class="content-menu d-md-none border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
-            <a id="DarkModeButton" @onclick="OnClickDarkModeButton" class="content-menu border"><span class="iconify" data-icon="material-symbols:dark-mode-outline-rounded" data-width="100"></span></a>
+        <!-- TOP BUTTON ROW -->
+        <div class="d-flex content-header border-bottom my-0 mx-4 py-0 px-2 pb-2 ">
+            <div class="p-2 hstack gap-2">
+                @*visible in Desktop view todo shoe menu fold icon line-md:menu-fold-left*@
+                <a id="DesktopMenuBtn" href="#" class="content-menu d-none d-md-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
+                @*visible in Mobile view*@
+                <a id="MobileMenuBtn" href="#" class="content-menu d-md-none border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
+                <a id="DarkModeButton" @onclick="OnClickDarkModeButton" class="content-menu border"><span class="iconify" data-icon="material-symbols:dark-mode-outline-rounded" data-width="100"></span></a>
+            </div>
+            <div class="ms-auto p-2">
+                @*User already signed in show account button else show login button*@
+                @if (AppData.CurrentUser != UserData.Empty)
+                {
+                    <IconButton ButtonText="Log Out" ButtonColorClass="btn-warning" IconName="icon-park-outline:logout" OnClickCallback="OnClickSignOutButton"></IconButton>
+                    @*                    <IconButton ButtonText="Account" ButtonColorClass="btn-warning" IconName="material-symbols:settings-account-box-outline" OnClickCallback="OnClickNavBarLoginButton"></IconButton>
+            *@  }
+                else
+                {
+                    <IconButton ButtonText="Log In" ButtonColorClass="btn-warning" IconName="mdi:login-variant" OnClickCallback="OnClickNavBarLoginButton"></IconButton>
+                }
+
+            </div>
         </div>
 
         <!-- content-body -->
@@ -233,7 +249,7 @@
 
         void DeselectAll()
         {
-             _jsRuntime.RemoveClass(navLink1, "active");
+            _jsRuntime.RemoveClass(navLink1, "active");
             _jsRuntime.RemoveClass(navLink2, "active");
             _jsRuntime.RemoveClass(navLink3, "active");
             _jsRuntime.RemoveClass(navLink4, "active");
@@ -244,6 +260,53 @@
             _jsRuntime.RemoveClass(navLink9, "active");
 
         }
+    }
+
+    private async Task OnClickSignOutButton()
+    {
+        //log this
+        await WebsiteLogManager.LogClick(_jsRuntime, "Sign Out");
+
+        //clear local storage of user data
+        //since login status is basically the existence of user data in localstorage
+        //removing it removes user's login
+        await _jsRuntime.RemoveProperty("UserData");
+
+        //refresh page
+        WebsiteTools.ReloadPage(_navigation);
+
+    }
+
+
+
+    private void OnClickNavBarLoginButton()
+    {
+
+        //remember previous page to come back to after login
+        //saved in browser, so doesn't get deleted by refresh
+        _jsRuntime.SetProperty("PreviousPage", _navigation.Uri);
+
+        //goto page
+        _navigation.NavigateTo(PageRoute.Login);
+
+
+        //var alertData = new
+        //{
+        //    showConfirmButton = false,
+        //    width = "280px",
+        //    padding = "1px",
+        //    //allowOutsideClick = false,
+        //    //allowEscapeKey = false,
+        //    stopKeydownPropagation = true,
+        //    keydownListenerCapture = true,
+        //    html = ""
+
+        //};
+
+        ////don't wait here
+        //_jsRuntime.ShowAlert(alertData);
+        //show pop up with login choices
+        //_jsRuntime.ShowAlert()
     }
 }
 

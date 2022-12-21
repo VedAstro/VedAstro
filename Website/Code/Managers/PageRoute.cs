@@ -7,6 +7,7 @@
     public static class PageRoute
     {
         public const string SavedCharts = "/SavedCharts";
+        public const string Login = "/Login";
         public const string Journal = "/Journal";
         public const string JournalParam = "/Journal/{PersonIdUrl}";
         public const string TaskList = "/Tasklist";

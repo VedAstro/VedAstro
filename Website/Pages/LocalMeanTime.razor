@@ -28,9 +28,9 @@
         <div class="vstack gap-3">
             <p>Local and Standard time now at a given location.</p>
             <h5>LMT: @_lmtString</h5>
-            <h5>STD: @_stdString</h5>
+            <h5>STD: @_stdString1</h5>
             <GeoLocationInput @ref="_geoLocationInput"></GeoLocationInput>
-            <hr/>
+            <hr />
             <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="UpdateLocalMeanTime"></IconButton>
         </div>
     </div>
@@ -39,30 +39,21 @@
         <h5>LMT Offset: @_lmtOffset</h5>
         <div class="input-group mb-3">
             <span class="input-group-text">Longitude</span>
-            <div class="form-floating">
-                <input @bind="_longitudeInput1" type="text" class="form-control" placeholder="-180 to 180">
-                @*<label for="floatingInputGroup1">Username</label>*@
-            </div>
+            <input @bind="_longitudeInput1" type="text" class="form-control" placeholder="-180 to 180">
         </div>
         <hr />
         <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="OnClickCalcLMTOffset"></IconButton>
     </div>
     <div class="tab-pane fade" id="calc3">
         <p>LMT date time convert to STD date time</p>
-        <h5>STD Time: @_stdDateTimeText</h5>
+        <h5>STD Time: @_stdString2</h5>
         <div class="input-group mb-3">
             <span class="input-group-text">LMT</span>
-            <div class="form-floating">
-                <input @bind="_lmtInput" type="text" class="form-control">
-                @*<label for="floatingInputGroup1">Username</label>*@
-            </div>
+            <input @bind="_lmtInput" type="text" class="form-control">
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text">Longitude</span>
-            <div class="form-floating">
-                <input @bind="_longitudeInput2" type="text" class="form-control" placeholder="-180 to 180">
-                @*<label for="floatingInputGroup1">Username</label>*@
-            </div>
+            <input @bind="_longitudeInput2" type="text" class="form-control">
         </div>
         <hr />
         <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="OnClickCalcLmtToStd"></IconButton>
@@ -74,13 +65,12 @@
 
 @code {
 
-    //todo clean up variable names
-    string? _lmtString = "";
     string? _longitudeInput1 = "0"; //parsed to double later
     string? _longitudeInput2 = "0"; //parsed to double later
     string? _lmtInput = "00:00 01/01/0001"; //parsed to time later
-    string? _stdString = "";
-    string? _stdDateTimeText = "Click Calculate";
+    string? _lmtString = "Click Calculate";
+    string? _stdString1 = "Click Calculate";
+    string? _stdString2 = "Click Calculate";
     string? _lmtOffset = "Click Calculate";
     private GeoLocationInput _geoLocationInput;
 
@@ -111,7 +101,7 @@
         var std = AstronomicalCalculator.LmtToStd(lmtDateTime, offsetTimeSpan);
 
         //update view with STD time
-        _stdDateTimeText = std.ToString(Time.DateTimeFormat);
+        _stdString2 = std.ToString(Time.DateTimeFormat);
     }
 
     private void OnClickCalcLMTOffset()
@@ -136,7 +126,7 @@
 
         //show lmt time as string
         _lmtString = timeNow.GetLmtDateTimeOffset().ToString(Time.DateTimeFormat);
-        _stdString = timeNow.GetStdDateTimeOffsetText();
+        _stdString1 = timeNow.GetStdDateTimeOffsetText();
     }
 
 }

@@ -21,15 +21,16 @@
 
 @*Colored box behind login/logout button*@
 <div class="rounded p-4" style="background:rgba(0, 255, 255, 0.1); margin-bottom: 180px;">
-
+    
+    @*User already signed in*@ 
     @if (AppData.CurrentUser != UserData.Empty)
     {
         <div class="vstack gap-1" style="padding: 6px;">
             <span class="" style="align-self: center;padding: 10px; color: white;">@($"Hi, {AppData.CurrentUser?.FirstName}")</span>
-            @*default hide Sign Out button*@
-            <button @onclick="OnClickSignOutButton" class="btn btn-primary">Sign Out</button>
         </div>
     }
+
+    @*Not yet sign in*@
     else
     {
 
@@ -74,7 +75,7 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
+    //private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
     private async Task OnClickSignInFacebook() => await InvokeAsync(async () => await _OnClickSignInFacebook()).Try(_jsRuntime);
 
 
@@ -168,20 +169,6 @@
 
     }
 
-    private async Task _OnClickSignOutButton()
-    {
-        //log this
-        await WebsiteLogManager.LogClick(_jsRuntime, "Sign Out");
-
-        //clear local storage of user data
-        //since login status is basically the existence of user data in localstorage
-        //removing it removes user's login
-        await _jsRuntime.RemoveProperty("UserData");
-
-        //refresh page
-        WebsiteTools.ReloadPage(_navigation);
-
-    }
 
 
     /// <summary>

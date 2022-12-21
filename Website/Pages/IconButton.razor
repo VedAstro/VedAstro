@@ -10,7 +10,7 @@
     }
 </style>
 
-<button @ref="ElementReference" @onclick="OnClickButton" class="@(SmallSize?"btn-sm":"") btn btn-primary hstack gap-2 iconButton">
+<button @ref="ElementReference" @onclick="OnClickButton" class="@(SmallSize?"btn-sm":"") btn @(ButtonColorClass) hstack gap-2 iconButton">
     <span class="iconify" data-icon="@IconName" data-width="25"></span> @ButtonText
 </button>
 @if (ShowDelayWarning)
@@ -34,6 +34,14 @@
 
     [Parameter]
     public bool SmallSize { get; set; } = false;
+
+    /// <summary>
+    /// Bootstrap button color class
+    /// default to : btn-primary
+    /// btn-secondary,btn-success,btn-danger,...
+    /// </summary>
+    [Parameter]
+    public string ButtonColorClass { get; set; } = "btn-primary";
 
     /// <summary>
     /// Special icon name from icon-sets.iconify.design

@@ -15,7 +15,7 @@
     <div class="hstack gap-3 mt-2">
         <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
         <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
-        
+
         @*only show mobile view when eventPreset & timePreset has been set*@
         @if (!string.IsNullOrEmpty(_eventPreset))
         {
@@ -207,21 +207,20 @@
 
         //inject new svg into page via JS for a more responsive progress update
         //doing it in blazor, causes progress bar freeze while updating
-        await _jsRuntime.InjectIntoElement(_dasaViewBox, rawSvgChart);
+        //await _jsRuntime.InjectIntoElement(_dasaViewBox, rawSvgChart);
 
         //little delay after injection for cpu to idle, makes smooth transition
-        await Task.Delay(300);
+        //await Task.Delay(300);
 
-        //reset life show/hide button
+        //reset life show/hide button TODO move to JS side, for global use
         await OnClickShowLifeEvents();
 
         //attach tooltip lib for life events
         //note: needed on each draw
         await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
 
-        //2 ATTACH HANDLERS NOW THAT COMPONENT IS LOADED
-        //Animate SVG chart with JS
-        await _jsRuntime.InvokeVoidAsync("EventsChartInit");
+        //2 Animate SVG chart with tiny JS lib
+        await _jsRuntime.InvokeVoidAsync("EventsChartInit", rawSvgChart, _dasaViewBox);
 
         //get latest dark mode setting
         //so that event chart is set properly

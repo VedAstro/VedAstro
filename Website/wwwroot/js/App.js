@@ -117,6 +117,208 @@ function getUrl() {
     return window.location.href;
 };
 
+//async sleep millisecond
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+//loads js file programatically,
+//equivalent to js include in header
+function loadJs(sourceUrl) {
+    if (sourceUrl.Length == 0) {
+        console.error("JS: loadJs: Invalid source URL");
+        return;
+    }
+
+    var tag = document.createElement('script');
+    tag.src = sourceUrl;
+    tag.type = "text/javascript";
+
+    tag.onload = function () {
+        console.log("JS: loadJs: Script loaded successfully");
+    }
+
+    tag.onerror = function () {
+        console.error("JS: loadJs: Failed to load script");
+    }
+
+    document.body.appendChild(tag);
+}
+
+function InjectIntoElement(element, valueToInject) {
+
+    //convert string to html node
+    var template = document.createElement("template");
+    template.innerHTML = valueToInject;
+    var nodeToInject = template.content.firstElementChild;
+
+    //place new node in parent
+    element.innerHTML = ''; //clear current children if any
+    element.appendChild(nodeToInject);
+}
+
+//async delay for specified time in ms
+//example: await delay(1000);
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
+//shows an email 
+async function ShowLeaveEmailAlert() {
+
+    //show alert to get email
+    const { value: email } = await Swal.fire({
+        title: 'Notify me on update',
+        input: 'email',
+        inputPlaceholder: 'Enter your email address'
+    });
+
+    if (email) { Swal.fire('Thanks', 'We will update you soon..', 'success'); }
+
+    //send email inputed to caller
+    return email;
+}
+
+//Gets a mouses x axis relative inside the given element
+//used to get mouse location on Dasa view
+//returns 0 when mouse is out
+function GetMousePositionInElement(mouseEventData, elementId) {
+
+    //gets the measurements of the dasa view holder
+    //the element where cursor line will be moving
+    //TODO read val from global var
+    let holderMeasurements = $(elementId)[0].getBoundingClientRect();
+
+    //calculate mouse X relative to dasa view box
+    let relativeMouseX = mouseEventData.clientX - holderMeasurements.left;
+    let relativeMouseY = mouseEventData.clientY - holderMeasurements.top; //when mouse leaves top
+    let relativeMouseYb = mouseEventData.clientY - holderMeasurements.bottom; //when mouse leaves bottom
+
+    //if mouse out of element element, set 0 as indicator
+    let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
+
+    if (mouseOut) {
+        return 0;
+    } else {
+
+        var mouse = {
+            xAxis: relativeMouseX,
+            yAxis: relativeMouseY
+        };
+        return mouse;
+    }
+
+}
+
+//TODO MARKED FOR DELETION ONCE SVG VERSION IMPLEMENTED
+//gets all life event lines by class
+//and attaches tooltip event on it to
+//show data of the event on mouse hover
+//uses Tippy js lib, needs to be called everytime
+//new elements are created, because attach by direct
+//element reference not class
+function InitLifeEventLineToolTip() {
+
+    $(".LifeEventLines").each(function () {
+
+        var evName = this.getAttribute("eventname");
+
+        tippy(this, {
+            content: evName,
+            placement: 'bottom',
+            arrow: true
+        });
+
+    });
+
+}
+
+//functions used by localstorage manager in Blazor
+var getProperty = key => key in localStorage ? JSON.parse(localStorage[key]) : null;
+var removeProperty = key => key in localStorage ? localStorage.removeItem(key) : null;
+var setProperty = (key, value) => { localStorage[key] = JSON.stringify(value); };
+var watchProperty = async (instance, handlerName) => {
+    window.addEventListener('storage', (e) => {
+        instance.invokeMethodAsync(handlerName);
+    });
+};
+
+//Uses Bootstrap Jquery plugin to toggle any collapsible component by id
+var toggleAccordion = (id) => $(id).collapse("toggle");
+
+var showAccordion = (id) => $(id).collapse("show");
+
+//scrolls element by id into view
+var scrollIntoView = (id) => $(id)[0].scrollIntoView();
+
+var addClassWrapper = (element, classString) => $(element).addClass(classString);
+var toggleClassWrapper = (element, classString) => $(element).toggleClass(classString);
+var removeClassWrapper = (element, classString) => $(element).removeClass(classString);
+var getTextWrapper = (element) => $(element).text();
+var getValueWrapper = (element) => $(element).val();
+var setValueWrapper = (element, value) => $(element).val(value);
+var IsOnline = () => window.navigator.onLine;
+
+function getPropWrapper(element, propName) {
+    let propVal = $(element).prop(propName);
+    console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);
+    return propVal;
+};
+
+window.setPropWrapper = function (element, propName, propVal) {
+    $(element).prop(propName, propVal);
+    console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
+    return propVal;
+};
+window.setAttrWrapper = function (element, propName, propVal) {
+    $(element).attr(propName, propVal);
+    console.log(`JS: setAttrWrapper : ${propName} : ${propVal}`);
+    return propVal;
+};
+
+window.setCssWrapper = function (element, propName, propVal) {
+    $(element).css(propName, propVal);
+    console.log(`JS: setCssWrapper : ${propName} : ${propVal}`);
+    return propVal;
+};
+window.getElementWidth = function (element, parm) {
+    console.log(`JS : getElementWidth : ${element.offsetWidth}`);
+    return element.offsetWidth;
+};
+
+//adds a width value to every child found in given element
+window.addWidthToEveryChild = function (element, widthToAdd) {
+    console.log(`JS: addWidthToEveryChild`);
+
+    //add to each child of input element
+    $(element).children().each(function () {
+        //get current width
+        let currentWidth = $(this).width();
+
+        //set new width with input value
+        $(this).width(currentWidth + widthToAdd);
+    });
+};
+
+//scrolls to div on page and flashes div using JS
+function scrollToDiv(elemId) {
+
+    //scroll to element
+    document.getElementById(elemId).scrollIntoView();
+
+    //use JS to attarct attention to div
+    var idString = `#${elmId}`;
+    $(idString).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+
+    $(idString).fadeTo(100, 0.3, function () { $(this).fadeTo(500, 1.0); });
+}
+
+
+
+//▀█▀ ▄▀█ █▄▄ █░░ █▀▀   █▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ ▀█▀ █▀█ █▀█
+//░█░ █▀█ █▄█ █▄▄ ██▄   █▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ ░█░ █▄█ █▀▄
+
+
 //Generates a table using Tabulator table library
 //id to where table will be generated needs to be inputed
 function generateWebsiteTaskListTable(tableId, tableData) {
@@ -417,647 +619,6 @@ function addNewLifeEventToTable(defaultNewLifeEventStr) {
     window.lifeEventsListTable.addData([defaultNewLifeEvent], addToTopOfTable);
 }
 
-//async sleep millisecond
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-//loads js file programatically,
-//equivalent to js include in header
-function loadJs(sourceUrl) {
-    if (sourceUrl.Length == 0) {
-        console.error("JS: loadJs: Invalid source URL");
-        return;
-    }
-
-    var tag = document.createElement('script');
-    tag.src = sourceUrl;
-    tag.type = "text/javascript";
-
-    tag.onload = function () {
-        console.log("JS: loadJs: Script loaded successfully");
-    }
-
-    tag.onerror = function () {
-        console.error("JS: loadJs: Failed to load script");
-    }
-
-    document.body.appendChild(tag);
-}
-
-function InjectIntoElement(element, valueToInject) {
-
-    //convert string to html node
-    var template = document.createElement("template");
-    template.innerHTML = valueToInject;
-    var nodeToInject = template.content.firstElementChild;
-
-    //place new node in parent
-    element.innerHTML = ''; //clear current children if any
-    element.appendChild(nodeToInject);
-}
-
-//async delay for specified time in ms
-//example: await delay(1000);
-function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-}
-
-//shows an email 
-async function ShowLeaveEmailAlert() {
-
-    //show alert to get email
-    const { value: email } = await Swal.fire({
-        title: 'Notify me on update',
-        input: 'email',
-        inputPlaceholder: 'Enter your email address'
-    });
-
-    if (email) { Swal.fire('Thanks', 'We will update you soon..', 'success'); }
-
-    //send email inputed to caller
-    return email;
-}
-
-//Gets a mouses x axis relative inside the given element
-//used to get mouse location on Dasa view
-//returns 0 when mouse is out
-function GetMousePositionInElement(mouseEventData, elementId) {
-
-    //gets the measurements of the dasa view holder
-    //the element where cursor line will be moving
-    //TODO read val from global var
-    let holderMeasurements = $(elementId)[0].getBoundingClientRect();
-
-    //calculate mouse X relative to dasa view box
-    let relativeMouseX = mouseEventData.clientX - holderMeasurements.left;
-    let relativeMouseY = mouseEventData.clientY - holderMeasurements.top; //when mouse leaves top
-    let relativeMouseYb = mouseEventData.clientY - holderMeasurements.bottom; //when mouse leaves bottom
-
-    //if mouse out of element element, set 0 as indicator
-    let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
-
-    if (mouseOut) {
-        return 0;
-    } else {
-
-        var mouse = {
-            xAxis: relativeMouseX,
-            yAxis: relativeMouseY
-        };
-        return mouse;
-    }
-
-}
-
-//TODO MARKED FOR DELETION ONCE SVG VERSION IMPLEMENTED
-//gets all life event lines by class
-//and attaches tooltip event on it to
-//show data of the event on mouse hover
-//uses Tippy js lib, needs to be called everytime
-//new elements are created, because attach by direct
-//element reference not class
-function InitLifeEventLineToolTip() {
-
-    $(".LifeEventLines").each(function () {
-
-        var evName = this.getAttribute("eventname");
-
-        tippy(this, {
-            content: evName,
-            placement: 'bottom',
-            arrow: true
-        });
-
-    });
-
-}
-
-
-//functions used by localstorage manager in Blazor
-var getProperty = key => key in localStorage ? JSON.parse(localStorage[key]) : null;
-var removeProperty = key => key in localStorage ? localStorage.removeItem(key) : null;
-var setProperty = (key, value) => { localStorage[key] = JSON.stringify(value); };
-var watchProperty = async (instance, handlerName) => {
-    window.addEventListener('storage', (e) => {
-        instance.invokeMethodAsync(handlerName);
-    });
-};
-
-//Uses Bootstrap Jquery plugin to toggle any collapsible component by id
-var toggleAccordion = (id) => $(id).collapse("toggle");
-
-var showAccordion = (id) => $(id).collapse("show");
-
-//scrolls element by id into view
-var scrollIntoView = (id) => $(id)[0].scrollIntoView();
-
-var addClassWrapper = (element, classString) => $(element).addClass(classString);
-var toggleClassWrapper = (element, classString) => $(element).toggleClass(classString);
-var removeClassWrapper = (element, classString) => $(element).removeClass(classString);
-var getTextWrapper = (element) => $(element).text();
-var getValueWrapper = (element) => $(element).val();
-var setValueWrapper = (element, value) => $(element).val(value);
-var IsOnline = () => window.navigator.onLine;
-
-function getPropWrapper(element, propName) {
-    let propVal = $(element).prop(propName);
-    console.log(`JS: getPropWrapper : ${propName} : ${propVal}`);
-    return propVal;
-};
-
-window.setPropWrapper = function (element, propName, propVal) {
-    $(element).prop(propName, propVal);
-    console.log(`JS: setPropWrapper : ${propName} : ${propVal}`);
-    return propVal;
-};
-window.setAttrWrapper = function (element, propName, propVal) {
-    $(element).attr(propName, propVal);
-    console.log(`JS: setAttrWrapper : ${propName} : ${propVal}`);
-    return propVal;
-};
-
-window.setCssWrapper = function (element, propName, propVal) {
-    $(element).css(propName, propVal);
-    console.log(`JS: setCssWrapper : ${propName} : ${propVal}`);
-    return propVal;
-};
-window.getElementWidth = function (element, parm) {
-    console.log(`JS : getElementWidth : ${element.offsetWidth}`);
-    return element.offsetWidth;
-};
-
-//adds a width value to every child found in given element
-window.addWidthToEveryChild = function (element, widthToAdd) {
-    console.log(`JS: addWidthToEveryChild`);
-
-    //add to each child of input element
-    $(element).children().each(function () {
-        //get current width
-        let currentWidth = $(this).width();
-
-        //set new width with input value
-        $(this).width(currentWidth + widthToAdd);
-    });
-};
-
-
-//scrolls to div on page and flashes div using JS
-function scrollToDiv(elemId) {
-
-    //scroll to element
-    document.getElementById(elemId).scrollIntoView();
-
-    //use JS to attarct attention to div
-    var idString = `#${elmId}`;
-    $(idString).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-
-    $(idString).fadeTo(100, 0.3, function () { $(this).fadeTo(500, 1.0); });
-}
-
-
-
-//█▀█ █▀█ █▀█ █▀▀ █▀█ █▀▀ █▀ █▀   █▄▄ ▄▀█ █▀█
-//█▀▀ █▀▄ █▄█ █▄█ █▀▄ ██▄ ▄█ ▄█   █▄█ █▀█ █▀▄
-
-function InitProgressBar(ms) {
-
-    window.ProgressBarTempValue = 0;
-
-    window.ProgressBarInstance = new ProgressBar.Line('#progressBar', {
-        strokeWidth: 4,
-        easing: 'linear',
-        duration: 1400,
-        color: '#2dd128',
-        trailColor: '#eee',
-        trailWidth: 1,
-        svgStyle: { width: '100%', height: '100%' },
-        text: {
-            style: {
-                // Text color.
-                // Default: same as stroke color (options.color)
-                color: '#999',
-                position: 'absolute',
-                right: '0',
-                top: '30px',
-                padding: 0,
-                margin: 0,
-                transform: null
-            },
-            autoStyleContainer: false
-        },
-        from: { color: '#FFEA82' },
-        to: { color: '#ED6A5A' },
-        step: (state, bar) => {
-            bar.setText(Math.round(bar.value() * 100) + ' %');
-        }
-    });
-
-}
-
-//Adds input value to current progress bar
-function AddToProgressBar(percentage) {
-
-
-    var value = percentage / 100; //convert 50 to 0.5
-    window.ProgressBarTempValue += value;
-
-    //if above 100 end here & reset to 0
-    if (window.ProgressBarTempValue > 1) {
-        window.ProgressBarTempValue = 0;
-        return;
-    }
-
-    ProgressBarInstance.animate(window.ProgressBarTempValue);
-
-}
-
-//Adds input value to current progress bar
-function SetProgressBar(percentage) {
-
-    var value = percentage / 100; //convert 50 to 0.5
-    window.ProgressBarTempValue = value;
-    ProgressBarInstance.animate(window.ProgressBarTempValue);
-}
-
-//auto updates progress bar till 100%
-async function ProgressBarSlowAutoUpdate() {
-
-
-    for (let percent = 0; percent < 100; percent++) {
-        //set 0
-        var progressVal = percent / 100; //convert exp: 50 to 0.5
-        ProgressBarInstance.animate(progressVal);
-        await delay(200);
-    }
-
-
-}
-
-function ResetProgressBar() {
-    //reset both view & data
-    window.ProgressBarTempValue = 0;
-    ProgressBarInstance.animate(0);
-}
-
-//Gets current value of progress bar
-function GetProgressBarValue() {
-    return window.ProgressBarTempValue;
-}
-
-
-
-//█▀▀ █▀█ █▀█ █▀▀ █░░ █▀▀   █░░ █▀█ █▀▀ █ █▄░█
-//█▄█ █▄█ █▄█ █▄█ █▄▄ ██▄   █▄▄ █▄█ █▄█ █ █░▀█
-
-
-//makes a reference to SignInButton instance, to be used when user clicks sign in
-//called in Blazor, after component render
-var SignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
-//wrapper function to forward call to blazor (hardwired in Blazor HTML)
-var OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
-
-
-//called from Blazor when custom login button clicked
-var facebookLogin = () => FB.login(callBackFB, { scope: 'email' });
-//wrapper function to forward call to blazor (hardwired in Blazor HTML)
-var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('OnFacebookSignInSuccessHandler', response);
-
-
-
-
-//█▀▀ █░█ █▀▀ █▄░█ ▀█▀   █░█ ▄▀█ █▄░█ █▀▄ █░░ █▀▀ █▀█
-//██▄ ▀▄▀ ██▄ █░▀█ ░█░   █▀█ █▀█ █░▀█ █▄▀ █▄▄ ██▄ █▀▄
-
-
-//on mouse leave event chart, auto hide time legend
-//attached by Blazor
-async function onMouseLeaveEventChart(mouse) {
-    $("#CursorLine").hide();
-}
-
-//fired when mouse moves over dasa view box
-//used to auto update cursor line & time legend
-async function onMouseMoveDasaViewEventHandler(mouse) {
-
-    //get relative position of mouse in Dasa view
-    var mousePosition = GetMousePositionInElement(mouse, "#EventChartHolder");
-
-    //if mouse is out of dasa view hide cursor and end here
-    if (mousePosition == 0) { $("#CursorLine").hide(); return; }
-    else { $("#CursorLine").show(); }
-
-    //move cursor line 1st for responsiveness
-    autoMoveCursorLine(mousePosition.xAxis);
-
-    //update time legend
-    autoUpdateTimeLegend(mousePosition);
-}
-
-function autoMoveCursorLine(relativeMouseX) {
-
-    //move vertical line to under mouse inside dasa view box
-    $("#CursorLine").attr('transform', `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`);
-
-}
-
-//event fired from autoUpdateTimeLegend
-$(document).on('loadEventDescription', LoadEventDescription);
-
-function LoadEventDescription(event, eventName) {
-
-    //off events while firing
-    $(document).off('loadEventDescription');
-
-    //fill description box about event
-    getEventDescription(eventName.replace(/ /g, ""))
-        .then((eventDesc) => {
-            //if no description than hide box & end here
-            if (!eventDesc) { window.showDescription = false; return; }
-            var wrappedDescText = createSVGtext(eventDesc, 175, 24);
-            $("#CursorLineLegendDescription").empty(); //clear previous desc
-            $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
-        });
-
-    //turn events back on
-    $(document).on('loadEventDescription', LoadEventDescription);
-
-}
-
-//SVG Event Chart Time Legend generator
-//this is where the whole time legend that follows
-//the mouse when placed on chart is generated
-//notes: a template row always exists in code,
-//in client JS side uses template to create the rows from cloning it
-//and modifying its prop as needed, as such any major edit needs to
-//be done in API code
-function autoUpdateTimeLegend(mousePosition) {
-
-    //x axis is rounded because axis value in rect is whole numbers
-    //and it has to be exact match to get it
-    var mouseRoundedX = Math.round(mousePosition.xAxis);
-    var mouseRoundedY = Math.round(mousePosition.yAxis);
-
-    //use the mouse position to get all dasa rect
-    //dasa elements at same X position inside the dasa svg
-    //note: faster and less erroneous than using mouse.path
-    var children = $("#EventChartHolder").children();
-    var allElementsAtX = children.find(`[x=${mouseRoundedX}]`);
-
-    //template used to generate legend rows
-    var holderTemplateId = `#CursorLineLegendTemplate`;
-
-    //delete previously generated legend rows
-    $(".CursorLineLegendClone").remove();
-
-
-    //count good and bad events for summary row
-    var goodCount = 0;
-    var badCount = 0;
-    var yAxis = 0;
-    window.showDescription = false;//default description not shown
-    //extract event data out and place it in legend
-    allElementsAtX.each(function () {
-
-        //1 GET DATA
-        //extract other data out of the rect
-        var eventName = this.getAttribute("eventname");
-        //if no "eventname" exist, wrong elm skip it
-        if (!eventName) { return; }
-
-        var color = this.getAttribute("fill");
-        yAxis = parseInt(this.getAttribute("y"));//parse as num, for calculation
-
-        //count good and bad events for summary row
-        var eventNatureName = "";// used later for icon color
-        if (color === "#FF0000") { eventNatureName = "Bad", badCount++; }
-        if (color === "#00FF00") { eventNatureName = "Good", goodCount++; }
-
-
-        //2 TIME & AGE LEGEND
-        //create time legend at top only for first element
-        if (allElementsAtX[0] === this) {
-            var newTimeLegend = $(holderTemplateId).clone();
-            newTimeLegend.removeAttr('id'); //remove the clone template id
-            newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
-            newTimeLegend.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
-            newTimeLegend.show();//make cloned visible
-            newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis - 15})`); //above 1st row
-            //split time to remove timezone from event
-            var stdTimeFull = this.getAttribute("stdtime");
-            var stdTimeSplit = stdTimeFull.split(" ");
-            var hourMin = stdTimeSplit[0];
-            var date = stdTimeSplit[1];
-            var timezone = stdTimeSplit[2];
-            var age = this.getAttribute("age");
-            newTimeLegend.children("text").text(`${hourMin} ${date}  AGE: ${age}`);
-            //replace circle with clock icon
-            newTimeLegend.children("use").attr("xlink:href", "#CursorLineClockIcon");
-        }
-
-        //3 GENERATE EVENT ROW
-        //make a copy of template for this event
-        var newLegendRow = $(holderTemplateId).clone();
-        newLegendRow.removeAttr('id'); //remove the clone template id
-        newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
-        newLegendRow.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
-        newLegendRow.show();//make cloned visible
-        //position the group holding the legend over the event row which the legend represents
-        newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis})`);
-
-        //set event name text & color element
-        var textElm = newLegendRow.children("text");
-        var iconElm = newLegendRow.children("use");
-        textElm.text(`${eventName}`);
-        iconElm.attr("xlink:href", `#CursorLine${eventNatureName}Icon`); //set icon color based on nature
-
-        //4 GENERATE DESCRIPTION ROW LOGIC
-        //check if mouse in within row of this event (y axis)
-        var elementTopY = yAxis;
-        var elementBottomY = yAxis + 15;
-        var mouseWithinRow = mouseRoundedY >= elementTopY && mouseRoundedY <= elementBottomY;
-        //if event name is still the same then don't load description again
-        var notSameEvent = window.previousHoverEventName !== eventName;
-
-        //if mouse is in event's row then highlight that row
-        if (mouseWithinRow) {
-            //highlight event name row
-            var backgroundElm = newLegendRow.children("rect");
-            backgroundElm.css("fill", "white");
-            textElm.css("fill", "black");
-            textElm.css("font-weight", "700");
-            //if mouse within show description box
-            window.showDescription = true;
-        }
-
-        //if mouse within row AND the event has changed
-        //then generate a new description
-        //note: this is slow, so done only when absolutely needed
-        if (mouseWithinRow && notSameEvent) {
-
-            //make holder visible
-            $("#CursorLineLegendDescriptionHolder").show();
-
-            //note: using trigger to make it easy to skip multiple clogging events
-            $(document).trigger('loadEventDescription', eventName);
-
-            //update previous hover event
-            window.previousHoverEventName = eventName;
-        }
-
-    });
-
-    //auto show/hide description box based on mouse position
-    if (window.showDescription) {
-        $("#CursorLineLegendDescriptionHolder").show();
-    } else {
-        $("#CursorLineLegendDescriptionHolder").hide();
-    }
-
-
-
-    //5 GENERATE LAST SUMMARY ROW
-    //generate summary row at the bottom
-    //make a copy of template for this event
-    var newSummaryRow = $(holderTemplateId).clone();
-    newSummaryRow.removeAttr('id'); //remove the clone template id
-    newSummaryRow.addClass("CursorLineLegendClone"); //to delete it on next run
-    newSummaryRow.appendTo("#CursorLineLegendHolder"); //place new legend into parent
-    newSummaryRow.show();//make cloned visible
-    //position the group holding the legend over the event row which the legend represents
-    newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${yAxis + 1 + 15})`);
-
-    //set event name text & color element
-    var textElm = newSummaryRow.children("text");
-    textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
-    //change icon to summary icon
-    newSummaryRow.children("use").attr("xlink:href", "#CursorLineSumIcon");
-
-}
-
-//needs to be run once before get event description method is used
-//loads xml file located in wwwroot to xml global data
-async function LoadEventDataListFile() {
-
-    var url = `${window.location.origin}/data/EventDataList.xml`;
-    var response = await fetch(url, { mode: 'no-cors' });
-    var dataListStr = await response.text();
-
-    //parse as XML, to search through
-    //and save as global data for access later
-    var parser = new DOMParser();
-    var xmlDoc = parser.parseFromString(dataListStr, "text/xml");
-    window.EventDataListXml = $(xmlDoc); //jquery for use with .filter
-}
-
-//gets events from EventDataList.xml
-//for viewing in time legend
-async function getEventDescription(eventName) {
-
-    //search for matching event name
-    var eventXmlList = window.EventDataListXml.find('Event'); //get all event elements
-    var results = eventXmlList.filter(
-        function () {
-            var eventNameXml = $(this).children('Name').eq(0);
-            return eventNameXml.text() === eventName;
-        });
-
-    var eventDescription = results.eq(0).children('Description').eq(0).text();
-
-    //remove tabs and new line to make easy detection of empty string
-    let cleaned = eventDescription.replace(/ {4}|[\t\n\r]/gm, '');
-    return cleaned;
-
-}
-
-
-//  This function attempts to create a new svg "text" element, chopping
-//  it up into "tspan" pieces, if the caption is too long
-function createSVGtext(caption, x, y) {
-    var svgText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    svgText.setAttributeNS(null, 'x', x);
-    svgText.setAttributeNS(null, 'y', y);
-    svgText.setAttributeNS(null, 'font-size', 10);
-    svgText.setAttributeNS(null, 'fill', '#FFFFFF');         //  White text
-    svgText.setAttributeNS(null, 'text-anchor', 'left');   //  Center the text
-
-    //  The following two variables should really be passed as parameters
-    var MAXIMUM_CHARS_PER_LINE = 30;
-    var LINE_HEIGHT = 10;
-
-    var words = caption.split(" ");
-    var line = "";
-
-    for (var n = 0; n < words.length; n++) {
-        var testLine = line + words[n] + " ";
-        if (testLine.length > MAXIMUM_CHARS_PER_LINE) {
-            //  Add a new <tspan> element
-            var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-            svgTSpan.setAttributeNS(null, 'x', x);
-            svgTSpan.setAttributeNS(null, 'y', y);
-
-            var tSpanTextNode = document.createTextNode(line);
-            svgTSpan.appendChild(tSpanTextNode);
-            svgText.appendChild(svgTSpan);
-
-            line = words[n] + " ";
-            y += LINE_HEIGHT;
-        }
-        else {
-            line = testLine;
-        }
-    }
-
-    var svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-    svgTSpan.setAttributeNS(null, 'x', x);
-    svgTSpan.setAttributeNS(null, 'y', y);
-
-    var tSpanTextNode = document.createTextNode(line);
-    svgTSpan.appendChild(tSpanTextNode);
-
-    svgText.appendChild(svgTSpan);
-
-    return svgText;
-}
-
-
-//element passed in is the element where touch will be detected
-function InitTouchLib(element) {
-
-    //var myElement = document.getElementById('myElement')
-
-    // create a simple instance
-    // by default, it only adds horizontal recognizers
-    window.hammerJs = new Hammer(element, { touchAction: 'auto' });
-
-    // listen to events...
-    window.hammerJs.on("panleft panright tap", function (ev) {
-
-        //when dragging the dasa report, this will stop
-        //from detecting as out of element
-        if (ev.center.x == 0) { return; }
-
-        //converting the touch event into a mouse event
-        var mouse = {
-            clientX: ev.center.x,
-            clientY: ev.center.y,
-            path: ev.srcEvent.path
-        };
-
-        //and calling the event handlers
-        //that a mouse would normally fire
-        // alert("todo touch not implemented!!!");
-        autoMoveCursorLine(mouse);
-        //todo call to this method is out dated
-        autoUpdateTimeLegend(mouse);
-    });
-
-    //window.hammerJs = new Hammer(myElement, myOptions);
-
-    //window.hammerJs.on('pan', function (ev) {
-    //    console.log(ev);
-    //});
-}
 
 function DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venus) {
 
@@ -1207,6 +768,152 @@ function DrawHouseStrengthChart(_house1,
     function round(x) {
         return Math.ceil(x / 5) * 5;
     }
+}
+
+
+//█▀█ █▀█ █▀█ █▀▀ █▀█ █▀▀ █▀ █▀   █▄▄ ▄▀█ █▀█
+//█▀▀ █▀▄ █▄█ █▄█ █▀▄ ██▄ ▄█ ▄█   █▄█ █▀█ █▀▄
+
+function InitProgressBar(ms) {
+
+    window.ProgressBarTempValue = 0;
+
+    window.ProgressBarInstance = new ProgressBar.Line('#progressBar', {
+        strokeWidth: 4,
+        easing: 'linear',
+        duration: 1400,
+        color: '#2dd128',
+        trailColor: '#eee',
+        trailWidth: 1,
+        svgStyle: { width: '100%', height: '100%' },
+        text: {
+            style: {
+                // Text color.
+                // Default: same as stroke color (options.color)
+                color: '#999',
+                position: 'absolute',
+                right: '0',
+                top: '30px',
+                padding: 0,
+                margin: 0,
+                transform: null
+            },
+            autoStyleContainer: false
+        },
+        from: { color: '#FFEA82' },
+        to: { color: '#ED6A5A' },
+        step: (state, bar) => {
+            bar.setText(Math.round(bar.value() * 100) + ' %');
+        }
+    });
+
+}
+
+//Adds input value to current progress bar
+function AddToProgressBar(percentage) {
+
+
+    var value = percentage / 100; //convert 50 to 0.5
+    window.ProgressBarTempValue += value;
+
+    //if above 100 end here & reset to 0
+    if (window.ProgressBarTempValue > 1) {
+        window.ProgressBarTempValue = 0;
+        return;
+    }
+
+    ProgressBarInstance.animate(window.ProgressBarTempValue);
+
+}
+
+//Adds input value to current progress bar
+function SetProgressBar(percentage) {
+
+    var value = percentage / 100; //convert 50 to 0.5
+    window.ProgressBarTempValue = value;
+    ProgressBarInstance.animate(window.ProgressBarTempValue);
+}
+
+//auto updates progress bar till 100%
+async function ProgressBarSlowAutoUpdate() {
+
+
+    for (let percent = 0; percent < 100; percent++) {
+        //set 0
+        var progressVal = percent / 100; //convert exp: 50 to 0.5
+        ProgressBarInstance.animate(progressVal);
+        await delay(200);
+    }
+
+
+}
+
+function ResetProgressBar() {
+    //reset both view & data
+    window.ProgressBarTempValue = 0;
+    ProgressBarInstance.animate(0);
+}
+
+//Gets current value of progress bar
+function GetProgressBarValue() {
+    return window.ProgressBarTempValue;
+}
+
+
+
+//█▀▀ █▀█ █▀█ █▀▀ █░░ █▀▀   █░░ █▀█ █▀▀ █ █▄░█
+//█▄█ █▄█ █▄█ █▄█ █▄▄ ██▄   █▄▄ █▄█ █▄█ █ █░▀█
+
+
+//makes a reference to SignInButton instance, to be used when user clicks sign in
+//called in Blazor, after component render
+var SignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
+//wrapper function to forward call to blazor (hardwired in Blazor HTML)
+var OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
+
+//called from Blazor when custom login button clicked
+var facebookLogin = () => FB.login(callBackFB, { scope: 'email' });
+//wrapper function to forward call to blazor (hardwired in Blazor HTML)
+var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('OnFacebookSignInSuccessHandler', response);
+
+//---------------------
+
+//element passed in is the element where touch will be detected
+function InitTouchLib(element) {
+
+    //var myElement = document.getElementById('myElement')
+
+    // create a simple instance
+    // by default, it only adds horizontal recognizers
+    window.hammerJs = new Hammer(element, { touchAction: 'auto' });
+
+    // listen to events...
+    window.hammerJs.on("panleft panright tap", function (ev) {
+
+        //when dragging the dasa report, this will stop
+        //from detecting as out of element
+        if (ev.center.x == 0) { return; }
+
+        //converting the touch event into a mouse event
+        var mouse = {
+            clientX: ev.center.x,
+            clientY: ev.center.y,
+            path: ev.srcEvent.path
+        };
+
+        //and calling the event handlers
+        //that a mouse would normally fire
+        // alert("todo touch not implemented!!!");
+        autoMoveCursorLine(mouse);
+        //todo call to this method is out dated
+        autoUpdateTimeLegend(mouse);
+    });
+
+    //window.hammerJs = new Hammer(myElement, myOptions);
+
+    //window.hammerJs.on('pan', function (ev) {
+    //    console.log(ev);
+    //});
 }
 
 //copies inputed text to clipboard

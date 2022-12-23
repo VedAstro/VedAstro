@@ -1851,7 +1851,8 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = marsIn7th && venusIn7th;
 
-            return new() { Occuring = occuring };
+            return CalculatorResult.New(occuring, new[] { HouseName.House7 }, new[]{PlanetName.Mars, PlanetName.Venus }, time);
+
         }
 
         [EventCalculator(EventName.MercuryOrJupiterIn7th)]

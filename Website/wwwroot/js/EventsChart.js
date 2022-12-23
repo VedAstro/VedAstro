@@ -1,10 +1,231 @@
+﻿
+/*
 
-//Single place for all code related to animating Events Chart SVG
-//used by light & full viewer
+███████╗██╗░░░██╗███████╗███╗░░██╗████████╗░██████╗    ░█████╗░██╗░░██╗░█████╗░██████╗░████████╗  
+██╔════╝██║░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝    ██╔══██╗██║░░██║██╔══██╗██╔══██╗╚══██╔══╝  
+█████╗░░╚██╗░██╔╝█████╗░░██╔██╗██║░░░██║░░░╚█████╗░    ██║░░╚═╝███████║███████║██████╔╝░░░██║░░░  
+██╔══╝░░░╚████╔╝░██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗    ██║░░██╗██╔══██║██╔══██║██╔══██╗░░░██║░░░  
+███████╗░░╚██╔╝░░███████╗██║░╚███║░░░██║░░░██████╔╝    ╚█████╔╝██║░░██║██║░░██║██║░░██║░░░██║░░░  
+╚══════╝░░░╚═╝░░░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░    ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░  
+
+░░░░░██╗░██████╗    ░█████╗░███╗░░██╗██╗███╗░░░███╗░█████╗░████████╗░█████╗░██████╗░
+░░░░░██║██╔════╝    ██╔══██╗████╗░██║██║████╗░████║██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗
+░░░░░██║╚█████╗░    ███████║██╔██╗██║██║██╔████╔██║███████║░░░██║░░░██║░░██║██████╔╝
+██╗░░██║░╚═══██╗    ██╔══██║██║╚████║██║██║╚██╔╝██║██╔══██║░░░██║░░░██║░░██║██╔══██╗
+╚█████╔╝██████╔╝    ██║░░██║██║░╚███║██║██║░╚═╝░██║██║░░██║░░░██║░░░╚█████╔╝██║░░██║
+░╚════╝░╚═════╝░    ╚═╝░░╚═╝╚═╝░░╚══╝╚═╝╚═╝░░░░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝
+
+*/
+//Single place for all code related to animating Events Chart SVG, used by light & full viewer
 
 class EventsChart {
+
+    //inputed SVG chart can also be flag "URL"
+    constructor(rawSvgChart, $chartParentElm) {
+        console.log(`Creating new Events Chart...`);
+
+        //all others relative to this element
+        this.$ChartParentElm = $chartParentElm;
+
+        //get chart from URL instead
+        if (rawSvgChart === "URL") {
+            //get data to generate chart from URL
+            this.ChartData = EventsChart.getDataFromUrl();
+        }
+        //load inputed SVG chart
+        else {
+            //inject SVG chart string into parent element
+            var svgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], rawSvgChart);
+
+            //save for later use
+            this.$SvgChartElm = $(svgChartElm);
+        }
+
+        //if SVG chart already loaded then, save it for later
+        //var isLoaded = this.$ChartParentElm.children().first().is("svg");
+        //if (isLoaded) { this.$SvgChartElm = this.$ChartParentElm.children().first(); }
+
+    }
+
+    //DATA
     //template used to generate legend rows
     static holderTemplateId = `#CursorLineLegendTemplate`;
+
+    //INSTANCE METHODS
+    //animates an already loaded chart
+    async animateChart() {
+
+        //set title for easy multi-tabbing (not chart related)
+        //document.title = `${window?.ChartType} | ${window?.PersonName}`;
+
+        //set toolbar data (not chart related)
+        //$("#PersonNameBox").text("Person : " + window?.PersonName);
+
+        await this.attachEventHandlers();
+
+        //make toolbar visible
+        //$("#ToolBar").removeClass("visually-hidden");
+
+        //EventsChart.hideLoading();
+    }
+    //animates a new chart from URL
+    //coming from live chart generate
+    async animateChartFromUrl() {
+
+        ////set title for easy multi-tabbing (not chart related)
+        //document.title = `${window?.ChartType} | ${window?.PersonName}`;
+
+        ////set toolbar data (not chart related)
+        //$("#PersonNameBox").text("Person : " + window?.PersonName);
+
+        //---
+
+        var svgChartString = await EventsChart.getEventsChartFromApi(this.ChartData);
+
+        this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], svgChartString);
+
+        await this.attachEventHandlers();
+
+        //---
+        //make toolbar visible
+        //    $("#ToolBar").removeClass("visually-hidden");
+
+        //    EventsChart.hideLoading();
+    }
+    //attaches all needed handlers to animate a chart
+    async attachEventHandlers() {
+        console.log("Attaching events to chart...");
+
+        //save for easier reference
+        //EventsChart.Element = chartElement$;
+
+        //attach mouse handler to auto move cursor line & update time legend
+        //load event description file 1st
+        await this.loadEventDataListFile();
+
+        this.$SvgChartElm[0].addEventListener("mousemove", EventsChart.onMouseMoveHandler);
+
+        this.$SvgChartElm[0].addEventListener("mouseleave", EventsChart.onMouseLeaveEventChart);
+
+        //attach handler to load event description file beforehand (custom events)
+        $(document).on('loadEventDescription', EventsChart.loadEventDescription);
+
+        //save now line
+        this.NowVerticalLine = this.$SvgChartElm.find('#NowVerticalLine');
+
+        //update once now
+        var nowVerticalLine = this.NowVerticalLine; //hack to make available in local below
+        var svgChartElm = this.$SvgChartElm; //hack to make available in local below
+        updateNowLine();
+
+        //setup to auto update every 1 minute
+        setInterval(function () { updateNowLine(); }, 60 * 1000); // 60*1000ms
+
+        //update now line position
+        function updateNowLine() {
+            console.log("Updating now line position...");
+
+            //get all rects
+            var allEventRects = svgChartElm.find(".EventListHolder").children("rect");
+
+            //find closest rect to now time
+            var closestRectToNow;
+            allEventRects.each(function (index) {
+                //get parsed time from rect
+                var svgEventRect = this;
+                var rectTime = getTimeInRect(svgEventRect).getTime();//(milliseconds since 1 Jan 1970)
+                var nowTime = Date.now();
+
+                //if not yet reach continue, keep reference to this and goto next
+                if (rectTime <= nowTime) {
+                    closestRectToNow = svgEventRect;
+                    return true; //go next
+                }
+                //already passed now time, use previous rect as now, stop looking
+                else { return false; }
+            });
+
+            //get horizontal position of now rect (x axis)
+            var xAxisNowRect = closestRectToNow.getAttribute("x");
+            nowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`);
+
+        }
+
+        //parses the STD time found in rect and returns it
+        function getTimeInRect(eventRect$) {
+            //convert "00:28 17/11/2022 +08:00" to "2019-01-01T00:00:00.000+00:00"
+            var stdTimeRaw = eventRect$.getAttribute("stdtime");
+            var stdTimeSplit = stdTimeRaw.split(" ");
+            var hourMin = stdTimeSplit[0];
+            var dateFull = stdTimeSplit[1].split('/');
+            var date = dateFull[0];
+            var month = dateFull[1];
+            var year = dateFull[2];
+            var timezone = stdTimeSplit[2];
+            var rectTime = new Date(`${year}-${month}-${date}T${hourMin}:00.000${timezone}`);
+
+            return rectTime;
+        }
+    }
+
+    //highlights all events rects in chart by
+    //the inputed keyword in the event name
+    highlightByEventName(keyword) {
+
+        //get all rects
+        var allEventRects = this.$SvgChartElm.find(".EventListHolder").children("rect");
+
+        //find all rects representing the sun based event
+        allEventRects.each(function (index) {
+            //get parsed time from rect
+            var svgEventRect = this;
+            var eventName = svgEventRect.getAttribute("eventname");
+            //check if event name contains SUN
+            var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
+
+            //if event is related to planet, highlight the rect
+            if (foundEvent) {
+                var highlightColor = EventsChart.getRandomHighlightColor();
+                svgEventRect.setAttribute("fill", highlightColor);
+            }
+
+        });
+
+    }
+
+    //needs to be run once before get event description method is used
+    //loads xml file located in wwwroot to xml global data
+    async loadEventDataListFile() {
+
+        //only load new file if none available
+        if (!window.$EventDataListXml) {
+            //get data list from server and store it for later use
+            //NOTE: CORS in Azure Website Storage needs to be disabled for this to work, outside of vedastro.org
+            $(function () {
+                $.ajax({
+                    type: "get",
+                    url: "https://www.vedastro.org/data/EventDataList.xml",
+                    dataType: "xml",
+                    success: function (data) {
+                        //let user know
+                        console.log(`Getting event data file from API...`);
+                        //save in global for later & other caller's use
+                        window.$EventDataListXml = $(data); //jquery for use with .filter
+                    },
+                    error: function (xhr, status) {
+                        /* handle error here */
+                        console.log(status);
+                    }
+                });
+            });
+        } else {
+            console.log(`Using cached event data file.`);
+        }
+
+    }
+
+
+    //STATIC FUNCTIONS
 
     //get screen width
     static getScreenWidth() {
@@ -56,7 +277,9 @@ class EventsChart {
         return chartData;
     }
 
+    //gets data needed to make chart from URL
     static getDataFromUrl() {
+        console.log(`Getting chart data from URL...`);
 
         //get data out of url
         var pathname = window.location.pathname.split("/");
@@ -306,13 +529,31 @@ class EventsChart {
         $("#CursorLine").hide();
     }
 
+    //returns the reference to the SVG element in DOM
+    static injectIntoElement(parentElement, valueToInject) {
+        console.log(`Injecting SVG Chart into page...`);
+
+        //convert string to html node
+        var template = document.createElement("template");
+        template.innerHTML = valueToInject;
+        var svgElement = template.content.firstElementChild;
+
+        //place new node in parent
+        parentElement.innerHTML = ''; //clear current children if any
+        parentElement.appendChild(svgElement);
+
+        //return reference in to SVG elm in DOM
+        return svgElement;
+    }
+
     //gets chart from API & injects it into page
+    //returns svg chart as string
     static async getEventsChartFromApi(chartData) {
         console.log(`Getting events chart from API...`);
 
         var payload = `<Root><PersonId>${chartData.personId}</PersonId><TimePreset>${chartData.timePreset}</TimePreset><EventPreset>${chartData.eventPreset}</EventPreset><Timezone>${chartData.timezone}</Timezone><MaxWidth>${chartData.maxWidth}</MaxWidth></Root>`;
 
-        var response = await fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
+        var response = await window.fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
             "headers": {
                 "accept": "*/*",
                 "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
@@ -332,26 +573,8 @@ class EventsChart {
 
         //inject new svg chart into page
         var svgChartString = await response.text();
-        injectIntoElement($("#DasaViewBox")[0], svgChartString);
 
-
-        //LOCAL FUNCTIONS
-        function injectIntoElement(element, valueToInject) {
-            console.log(`Injecting SVG Chart into page...`);
-
-            //convert string to html node
-            var template = document.createElement("template");
-            template.innerHTML = valueToInject;
-            var svgElement = template.content.firstElementChild;
-
-            //save for later use
-            EventsChart.Element = svgElement;
-
-            //place new node in parent
-            element.innerHTML = ''; //clear current children if any
-            element.appendChild(EventsChart.Element);
-        }
-
+        return svgChartString;
     }
 
     static loadEventDescription(event, eventName) {
@@ -445,16 +668,15 @@ class EventsChart {
         //gets events from EventDataList.xml
         //for viewing in time legend
         async function getEventDescription(eventName) {
-            //console.log(`JS: getEventDescription`);
-
             //search for matching event name
-            var eventXmlList = window.EventDataListXml.find('Event'); //get all event elements
+            var eventXmlList = window.$EventDataListXml.find('Event'); //get all event elements
             var results = eventXmlList.filter(
                 function () {
                     var eventNameXml = $(this).children('Name').eq(0);
                     return eventNameXml.text() === eventName;
                 });
 
+            //get description text out of the event xml record
             var eventDescription = results.eq(0).children('Description').eq(0).text();
 
             //remove tabs and new line to make easy detection of empty string
@@ -465,45 +687,14 @@ class EventsChart {
 
     }
 
-    //needs to be run once before get event description method is used
-    //loads xml file located in wwwroot to xml global data
-    static async loadEventDataListFile() {
-
-        //only load new file if none available
-        if (!window.EventDataListXml) {
-            //get data list from server and store it for later use
-            //NOTE: CORS in Azure Website Storage needs to be disabled for this to work, outside of vedastro.org
-            $(function () {
-                $.ajax({
-                    type: "get",
-                    url: "https://www.vedastro.org/data/EventDataList.xml",
-                    dataType: "xml",
-                    success: function (data) {
-                        //let user know
-                        console.log(`Getting event data file from API...`);
-                        //save for later
-                        window.EventDataListXml = $(data); //jquery for use with .filter
-                    },
-                    error: function (xhr, status) {
-                        /* handle error here */
-                        console.log(status);
-                    }
-                });
-            });
-        } else {
-            console.log(`Using cached event data file.`);
-        }
-
-    }
-
     //returns true if svg loaded
     static isSvgLoaded() {
         console.log(`Checking if SVG Chart is loaded...`);
 
         //check if svg already loaded into page
-        var x = $("#DasaViewBox").children().first().is("svg");
+        var isLoaded = $("#DasaViewBox").children().first().is("svg");
 
-        return x;
+        return isLoaded;
     }
 
     static hideLoading() {
@@ -535,114 +726,78 @@ class EventsChart {
         );
     }
 
-    //attaches all needed handlers to animate a chart
-    static async initializeChart(chartElement$) {
-        console.log("Attaching events to chart...");
+    static getRandomHighlightColor() {
+        var arrayValues = ["#ff60fa", "#ff60fa", "#ff60fa"];
 
-        //save for easier reference
-        EventsChart.Element = chartElement$;
+        var arrayMax = arrayValues.length - 1;
+        var randomIndex = Math.floor(Math.random() * arrayMax);
 
-        //attach mouse handler to auto move cursor line & update time legend
-        //load event description file 1st
-        await EventsChart.loadEventDataListFile();
-
-        EventsChart.Element[0].addEventListener("mousemove", EventsChart.onMouseMoveHandler);
-
-        EventsChart.Element[0].addEventListener("mouseleave", EventsChart.onMouseLeaveEventChart);
-
-        //attach handler to load event description file before hand
-        $(document).on('loadEventDescription', EventsChart.loadEventDescription);
-
-        //save now line
-        EventsChart.NowVerticalLine = EventsChart.Element.find('#NowVerticalLine');
-
-        //update once now
-        updateNowLine();
-
-        //setup to auto update every 1 minute
-        setInterval(function () { updateNowLine(); }, 60 * 1000); // 60*1000ms
-
-        //update now line position
-        function updateNowLine() {
-            console.log("Updating now line position...");
-
-            //get all rects
-            var allEventRects = EventsChart.Element.find(".EventListHolder").children("rect");
-
-            //find closest rect to now time
-            var closestRectToNow;
-            allEventRects.each(function (index) {
-                //get parsed time from rect
-                var svgEventRect = this;
-                var rectTime = getTimeInRect(svgEventRect).getTime();//(milliseconds since 1 Jan 1970)
-                var nowTime = Date.now();
-
-                //if not yet reach continue, keep reference to this and goto next
-                if (rectTime <= nowTime) {
-                    closestRectToNow = svgEventRect;
-                    return true; //go next
-                }
-                //already passed now time, use previous rect as now, stop looking
-                else { return false; }
-            });
-
-            //get horizontal position of now rect (x axis)
-            var xAxisNowRect = closestRectToNow.getAttribute("x");
-            EventsChart.NowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`);
-
-        }
-
-        //parses the STD time found in rect and returns it
-        function getTimeInRect(eventRect$) {
-            //convert "00:28 17/11/2022 +08:00" to "2019-01-01T00:00:00.000+00:00"
-            var stdTimeRaw = eventRect$.getAttribute("stdtime");
-            var stdTimeSplit = stdTimeRaw.split(" ");
-            var hourMin = stdTimeSplit[0];
-            var dateFull = stdTimeSplit[1].split('/');
-            var date = dateFull[0];
-            var month = dateFull[1];
-            var year = dateFull[2];
-            var timezone = stdTimeSplit[2];
-            var rectTime = new Date(`${year}-${month}-${date}T${hourMin}:00.000${timezone}`);
-
-            return rectTime;
-        }
+        return arrayValues[randomIndex];
     }
 
-    //coming from direct/url access page
-    //the method called to start the JS code to animate an already loaded chart
-    static async animateEventsChart() {
-        console.log(`Starting the engine...`);
 
-        //set title for easy multi-tabbing (not chart related)
-        document.title = `${window?.ChartType} | ${window?.PersonName}`;
 
-        //set toolbar data (not chart related)
-        $("#PersonNameBox").text("Person : " + window?.PersonName);
+    
+    ////coming from direct/url access page
+    ////the method called to start the JS code to animate an already loaded chart
+    //async animateEventsChart2() {
+    //    console.log(`Starting the engine...`);
 
-        var notLoaded = !EventsChart.isSvgLoaded();
+    //    //set title for easy multi-tabbing (not chart related)
+    //    document.title = `${window?.ChartType} | ${window?.PersonName}`;
 
-        //try get svg from server if svg not loaded by now
-        //coming from live chart generate
-        if (notLoaded) {
-            //get data to generate chart from URL
-            var data = EventsChart.getDataFromUrl();
+    //    //set toolbar data (not chart related)
+    //    $("#PersonNameBox").text("Person : " + window?.PersonName);
 
-            await EventsChart.getEventsChartFromApi(data);
-        }
+    //    var notLoaded = !EventsChart.isSvgLoaded();
 
-        //attach mouse handler to auto move cursor line & update time legend
-        //load event description file 1st
-        var svgChart$ = $("#DasaViewBox").children().first();
-        await EventsChart.initializeChart(svgChart$);
+    //    //try get svg from server if svg not loaded by now
+    //    //coming from live chart generate
+    //    if (notLoaded) {
+    //        //get data to generate chart from URL
+    //        var data = EventsChart.getDataFromUrl();
 
-        //make toolbar visible
-        $("#ToolBar").removeClass("visually-hidden");
+    //        await EventsChart.getEventsChartFromApi(data);
+    //    }
 
-        EventsChart.hideLoading();
+    //    //attach mouse handler to auto move cursor line & update time legend
+    //    //load event description file 1st
+    //    //this.svgChart$ = this.$ChartParentElm.children().first();
+    //    await EventsChart.attachEventHandlers();
 
-    }
+    //    //make toolbar visible
+    //    $("#ToolBar").removeClass("visually-hidden");
+
+    //    EventsChart.hideLoading();
+
+    //}
 }
 
 //special function for blazor side
-function EventsChartInit() { EventsChart.animateEventsChart(); }
+//calls with chart already in parent
+//GLUE METHOD > KEEP IT CLEAN
+function EventsChartInit(rawSvgChart, chartParent) {
+
+    //make new events chart instance with inputed data
+    //insert chart parent (jquery)
+    var $chartParent = $(chartParent);
+    var newChart = new EventsChart(rawSvgChart, $chartParent);
+
+    //animate chart
+    newChart.animateChart();
+
+    //make available for debug
+    window.EventsChart = newChart;
+}
+
+//load chart from URL
+//GLUE METHOD > KEEP IT CLEAN
+function EventsChartInit2() {
+
+    //insert chart parent (jquery)
+    var $chartParent = $("#DasaViewHolder");
+    var newChart = new EventsChart("URL", $chartParent);//tell to use URL
+
+    //animate chart, gets data for chart from special URL
+    newChart.animateChartFromUrl();
+}

@@ -205,13 +205,6 @@
     private async Task LoadChartIntoPage(string rawSvgChart)
     {
 
-        //inject new svg into page via JS for a more responsive progress update
-        //doing it in blazor, causes progress bar freeze while updating
-        //await _jsRuntime.InjectIntoElement(_dasaViewBox, rawSvgChart);
-
-        //little delay after injection for cpu to idle, makes smooth transition
-        //await Task.Delay(300);
-
         //reset life show/hide button TODO move to JS side, for global use
         await OnClickShowLifeEvents();
 
@@ -247,8 +240,10 @@
     }
 
 
+
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    
     private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
     {
         //based on checked value hide or show

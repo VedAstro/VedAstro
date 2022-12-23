@@ -150,14 +150,31 @@
 
         }
 
+        function hideLoading() {
+            //hide default loading box
+            $("#LoadingBox").hide();
+            //show svg chart
+            $("#DasaViewBox").show();
+            //show toolbar
+            $("#ToolBar").show();
+        }
+
+        function showLoading() {
+            //show default loading box
+            $("#LoadingBox").show();
+            //hide svg chart
+            $("#DasaViewBox").hide();
+            //hide toolbar
+            $("#ToolBar").hide();
+        }
 
         //START
 
         initDarkMode();
 
-        //start the app
-        EventsChart.animateEventsChart();
-
+        //load the chart using URL
+        EventsChartInit("URL", $("#DasaViewBox"))
+            .then(hideLoading); //hide loading & show chart
 
     </script>
 

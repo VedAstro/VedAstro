@@ -18,6 +18,20 @@
 */
 //Single place for all code related to animating Events Chart SVG, used by light & full viewer
 
+class ID {
+
+    static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
+    static CursorLineLegendCloneCls = ".CursorLineLegendClone";
+    static EventChartHolder = "#EventChartHolder";
+    static CursorLine = '#CursorLine';
+    static CursorLineLegendClone = "CursorLineLegendClone";
+    static CursorLineLegendHolder = "#CursorLineLegendHolder";
+    static CursorLineSumIcon = "#CursorLineSumIcon";
+    static NowVerticalLine = '#NowVerticalLine';
+    static EventListHolder = ".EventListHolder";
+    static CursorLineClockIcon = "#CursorLineClockIcon";
+}
+
 class EventsChart {
 
     //inputed SVG chart can also be flag "URL"
@@ -29,16 +43,14 @@ class EventsChart {
 
         //get chart from URL instead
         if (rawSvgChart === "URL") {
+            this.ChartMode = "URL"; //save for later when animating
             //get data to generate chart from URL
             this.ChartData = EventsChart.getDataFromUrl();
         }
         //load inputed SVG chart
         else {
             //inject SVG chart string into parent element
-            var svgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], rawSvgChart);
-
-            //save for later use
-            this.$SvgChartElm = $(svgChartElm);
+            this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], rawSvgChart);
         }
 
         //if SVG chart already loaded then, save it for later
@@ -49,10 +61,10 @@ class EventsChart {
 
     //DATA
     //template used to generate legend rows
-    static holderTemplateId = `#CursorLineLegendTemplate`;
+
 
     //INSTANCE METHODS
-    //animates an already loaded chart
+    //brings the chart to live, call after constructor
     async animateChart() {
 
         //set title for easy multi-tabbing (not chart related)
@@ -61,6 +73,14 @@ class EventsChart {
         //set toolbar data (not chart related)
         //$("#PersonNameBox").text("Person : " + window?.PersonName);
 
+        //if URL based chart then load from API first
+        if (this.ChartMode === "URL") {
+
+            var svgChartString = await EventsChart.getEventsChartFromApi(this.ChartData);
+
+            this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], svgChartString);
+        }
+
         await this.attachEventHandlers();
 
         //make toolbar visible
@@ -68,50 +88,23 @@ class EventsChart {
 
         //EventsChart.hideLoading();
     }
-    //animates a new chart from URL
-    //coming from live chart generate
-    async animateChartFromUrl() {
 
-        ////set title for easy multi-tabbing (not chart related)
-        //document.title = `${window?.ChartType} | ${window?.PersonName}`;
-
-        ////set toolbar data (not chart related)
-        //$("#PersonNameBox").text("Person : " + window?.PersonName);
-
-        //---
-
-        var svgChartString = await EventsChart.getEventsChartFromApi(this.ChartData);
-
-        this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], svgChartString);
-
-        await this.attachEventHandlers();
-
-        //---
-        //make toolbar visible
-        //    $("#ToolBar").removeClass("visually-hidden");
-
-        //    EventsChart.hideLoading();
-    }
     //attaches all needed handlers to animate a chart
     async attachEventHandlers() {
         console.log("Attaching events to chart...");
 
-        //save for easier reference
-        //EventsChart.Element = chartElement$;
-
         //attach mouse handler to auto move cursor line & update time legend
         //load event description file 1st
-        await this.loadEventDataListFile();
+        await EventsChart.loadEventDataListFile();
 
         this.$SvgChartElm[0].addEventListener("mousemove", EventsChart.onMouseMoveHandler);
-
         this.$SvgChartElm[0].addEventListener("mouseleave", EventsChart.onMouseLeaveEventChart);
 
         //attach handler to load event description file beforehand (custom events)
         $(document).on('loadEventDescription', EventsChart.loadEventDescription);
 
         //save now line
-        this.NowVerticalLine = this.$SvgChartElm.find('#NowVerticalLine');
+        this.NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine);
 
         //update once now
         var nowVerticalLine = this.NowVerticalLine; //hack to make available in local below
@@ -173,7 +166,7 @@ class EventsChart {
     highlightByEventName(keyword) {
 
         //get all rects
-        var allEventRects = this.$SvgChartElm.find(".EventListHolder").children("rect");
+        var allEventRects = this.$SvgChartElm.find(ID.EventListHolder).children("rect");
 
         //find all rects representing the sun based event
         allEventRects.each(function (index) {
@@ -193,9 +186,12 @@ class EventsChart {
 
     }
 
+
+    //STATIC FUNCTIONS
+
     //needs to be run once before get event description method is used
     //loads xml file located in wwwroot to xml global data
-    async loadEventDataListFile() {
+    static async loadEventDataListFile() {
 
         //only load new file if none available
         if (!window.$EventDataListXml) {
@@ -206,26 +202,29 @@ class EventsChart {
                     type: "get",
                     url: "https://www.vedastro.org/data/EventDataList.xml",
                     dataType: "xml",
-                    success: function (data) {
-                        //let user know
-                        console.log(`Getting event data file from API...`);
-                        //save in global for later & other caller's use
-                        window.$EventDataListXml = $(data); //jquery for use with .filter
-                    },
-                    error: function (xhr, status) {
-                        /* handle error here */
-                        console.log(status);
-                    }
+                    success: onSuccess,
+                    error: onError
                 });
             });
         } else {
             console.log(`Using cached event data file.`);
         }
 
+
+        //-----------------
+
+        function onError(xhr, status) {
+            /* handle error here */
+            console.log(status);
+        }
+
+        function onSuccess(data) {
+            //let user know
+            console.log(`Getting event data file from API...`);
+            //save in global for later & other caller's use
+            window.$EventDataListXml = $(data); //jquery for use with .filter
+        }
     }
-
-
-    //STATIC FUNCTIONS
 
     //get screen width
     static getScreenWidth() {
@@ -301,11 +300,11 @@ class EventsChart {
         //console.log(`JS: onMouseMoveDasaViewEventHandler`);
 
         //get relative position of mouse in Dasa view
-        var mousePosition = getMousePositionInElement(mouse, "#EventChartHolder");
+        var mousePosition = getMousePositionInElement(mouse, ID.EventChartHolder);
 
         //if mouse is out of dasa view hide cursor and end here
-        if (mousePosition == 0) { $("#CursorLine").hide(); return; }
-        else { $("#CursorLine").show(); }
+        if (mousePosition == 0) { $(ID.CursorLine).hide(); return; }
+        else { $(ID.CursorLine).show(); }
 
         //move cursor line 1st for responsiveness
         autoMoveCursorLine(mousePosition.xAxis);
@@ -318,7 +317,6 @@ class EventsChart {
         //used to get mouse location on Dasa view
         //returns 0 when mouse is out
         function getMousePositionInElement(mouseEventData, elementId) {
-            //console.log(`JS: GetMousePositionInElement`);
 
             //gets the measurements of the dasa view holder
             //the element where cursor line will be moving
@@ -347,11 +345,8 @@ class EventsChart {
         }
 
         function autoMoveCursorLine(relativeMouseX) {
-            //console.log(`JS: autoMoveCursorLine`);
-
             //move vertical line to under mouse inside dasa view box
-            $("#CursorLine").attr('transform', `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`);
-
+            $(ID.CursorLine).attr('transform', `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`);
         }
 
         //SVG Event Chart Time Legend generator
@@ -372,12 +367,12 @@ class EventsChart {
             //use the mouse position to get all dasa rect
             //dasa elements at same X position inside the dasa svg
             //note: faster and less erroneous than using mouse.path
-            var children = $("#EventChartHolder").children();
+            var children = $(ID.EventChartHolder).children();
             var allElementsAtX = children.find(`[x=${mouseRoundedX}]`);
 
 
             //delete previously generated legend rows
-            $(".CursorLineLegendClone").remove();
+            $(ID.CursorLineLegendCloneCls).remove();
 
 
             //count good and bad events for summary row
@@ -400,10 +395,10 @@ class EventsChart {
             //5 GENERATE LAST SUMMARY ROW
             //generate summary row at the bottom
             //make a copy of template for this event
-            var newSummaryRow = $(EventsChart.holderTemplateId).clone();
+            var newSummaryRow = $(ID.CursorLineLegendTemplate).clone();
             newSummaryRow.removeAttr('id'); //remove the clone template id
-            newSummaryRow.addClass("CursorLineLegendClone"); //to delete it on next run
-            newSummaryRow.appendTo("#CursorLineLegendHolder"); //place new legend into parent
+            newSummaryRow.addClass(ID.CursorLineLegendClone); //to delete it on next run
+            newSummaryRow.appendTo(ID.CursorLineLegendHolder); //place new legend into parent
             newSummaryRow.show();//make cloned visible
             //position the group holding the legend over the event row which the legend represents
             newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis + 15 - 1})`);//minus 1 for perfect alignment
@@ -412,7 +407,7 @@ class EventsChart {
             var textElm = newSummaryRow.children("text");
             textElm.text(` Good : ${goodCount}   Bad : ${badCount}`);
             //change icon to summary icon
-            newSummaryRow.children("use").attr("xlink:href", "#CursorLineSumIcon");
+            newSummaryRow.children("use").attr("xlink:href", ID.CursorLineSumIcon);
 
             //FUNCTIONS
 
@@ -443,7 +438,7 @@ class EventsChart {
 
                 //3 GENERATE EVENT ROW
                 //make a copy of template for this event
-                var newLegendRow = $(EventsChart.holderTemplateId).clone();
+                var newLegendRow = $(ID.CursorLineLegendTemplate).clone();
                 newLegendRow.removeAttr('id'); //remove the clone template id
                 newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
                 newLegendRow.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
@@ -499,10 +494,10 @@ class EventsChart {
 
 
                 function drawTimeAgeLegendRow() {
-                    var newTimeLegend = $(EventsChart.holderTemplateId).clone();
+                    var newTimeLegend = $(ID.CursorLineLegendTemplate).clone();
                     newTimeLegend.removeAttr('id'); //remove the clone template id
-                    newTimeLegend.addClass("CursorLineLegendClone"); //to delete it on next run
-                    newTimeLegend.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
+                    newTimeLegend.addClass(ID.CursorLineLegendClone); //to delete it on next run
+                    newTimeLegend.appendTo(ID.CursorLineLegendHolder); //place new legend into special holder
                     newTimeLegend.show();//make cloned visible
                     newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 15})`); //above 1st row
                     //split time to remove timezone from event
@@ -514,7 +509,7 @@ class EventsChart {
                     var age = svgEventRect.getAttribute("age");
                     newTimeLegend.children("text").text(`${hourMin} ${date}  AGE: ${age}`);
                     //replace circle with clock icon
-                    newTimeLegend.children("use").attr("xlink:href", "#CursorLineClockIcon");
+                    newTimeLegend.children("use").attr("xlink:href", ID.CursorLineClockIcon);
                 }
 
             }
@@ -542,8 +537,8 @@ class EventsChart {
         parentElement.innerHTML = ''; //clear current children if any
         parentElement.appendChild(svgElement);
 
-        //return reference in to SVG elm in DOM
-        return svgElement;
+        //return reference in to SVG elm in DOM (jquery for ease)
+        return $(svgElement);
     }
 
     //gets chart from API & injects it into page
@@ -594,74 +589,13 @@ class EventsChart {
             //if no description than hide box & end here
             if (!eventDesc) { window.showDescription = false; return; }
             //convert text to svg and place inside holder
-            var wrappedDescText = textToSvg(eventDesc, 175, 24);
+            var wrappedDescText = EventsChart.textToSvg(eventDesc, 175, 24);
 
             $("#CursorLineLegendDescription").empty(); //clear previous desc
             $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
             //set height of desc box background
             $("#CursorLineLegendDescriptionBackground").attr("height", window.EventDescriptionTextHeight + 20); //plus little for padding
 
-            //FUNCTION
-            //  This function attempts to create a new svg "text" element, chopping
-            //  it up into "tspan" pieces, if the caption is too long
-            function textToSvg(caption, x, y) {
-                //console.log(`JS: createSVGtext`);
-
-                //svg "text" element to hold smaller text lines
-                var svgTextHolder = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                svgTextHolder.setAttributeNS(null, 'x', x);
-                svgTextHolder.setAttributeNS(null, 'y', y);
-                svgTextHolder.setAttributeNS(null, 'font-size', 10);
-                svgTextHolder.setAttributeNS(null, 'fill', '#FFF');
-                svgTextHolder.setAttributeNS(null, 'text-anchor', 'left');
-
-                //The following two variables can be passed as parameters
-                var maximumCharsPerLine = 30;
-                var lineHeight = 10;
-
-                var words = caption.split(" ");
-                var line = "";
-
-                //process text and create rows
-                var svgTSpan;
-                var lineCount = 0; //number of lines to calculate height
-                var tSpanTextNode;
-                for (var n = 0; n < words.length; n++) {
-                    var testLine = line + words[n] + " ";
-                    if (testLine.length > maximumCharsPerLine) {
-                        //  Add a new <tspan> element
-                        svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                        svgTSpan.setAttributeNS(null, 'x', x);
-                        svgTSpan.setAttributeNS(null, 'y', y);
-
-                        tSpanTextNode = document.createTextNode(line);
-                        svgTSpan.appendChild(tSpanTextNode);
-                        svgTextHolder.appendChild(svgTSpan);
-
-                        line = words[n] + " ";
-                        y += lineHeight; //place next text row lower
-                        lineCount++; //count a line
-                    }
-                    else {
-                        line = testLine;
-                    }
-                }
-
-                //calculate final height in px, save global to be accessed later
-                window.EventDescriptionTextHeight = lineCount * lineHeight;
-                //console.log(window.EventDescriptionTextHeight);
-
-                svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                svgTSpan.setAttributeNS(null, 'x', x);
-                svgTSpan.setAttributeNS(null, 'y', y);
-
-                tSpanTextNode = document.createTextNode(line);
-                svgTSpan.appendChild(tSpanTextNode);
-
-                svgTextHolder.appendChild(svgTSpan);
-
-                return svgTextHolder;
-            }
 
         }
 
@@ -682,38 +616,7 @@ class EventsChart {
             //remove tabs and new line to make easy detection of empty string
             let cleaned = eventDescription.replace(/ {4}|[\t\n\r]/gm, '');
             return cleaned;
-
         }
-
-    }
-
-    //returns true if svg loaded
-    static isSvgLoaded() {
-        console.log(`Checking if SVG Chart is loaded...`);
-
-        //check if svg already loaded into page
-        var isLoaded = $("#DasaViewBox").children().first().is("svg");
-
-        return isLoaded;
-    }
-
-    static hideLoading() {
-        //hide default loading box
-        $("#LoadingBox").hide();
-        //show svg chart
-        $("#DasaViewBox").show();
-        //show toolbar
-        $("#ToolBar").show();
-    }
-
-    static showLoading() {
-        //show default loading box
-        $("#LoadingBox").show();
-        //hide svg chart
-        $("#DasaViewBox").hide();
-        //hide toolbar
-        $("#ToolBar").hide();
-
     }
 
     static getScreenHeight() {
@@ -735,48 +638,70 @@ class EventsChart {
         return arrayValues[randomIndex];
     }
 
+    //FUNCTION
+    //  This function attempts to create a new svg "text" element, chopping
+    //  it up into "tspan" pieces, if the text is too long
+    static textToSvg(caption, x, y) {
 
+        //svg "text" element to hold smaller text lines
+        var svgTextHolder = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        svgTextHolder.setAttributeNS(null, 'x', x);
+        svgTextHolder.setAttributeNS(null, 'y', y);
+        svgTextHolder.setAttributeNS(null, 'font-size', 10);
+        svgTextHolder.setAttributeNS(null, 'fill', '#FFF');
+        svgTextHolder.setAttributeNS(null, 'text-anchor', 'left');
 
-    
-    ////coming from direct/url access page
-    ////the method called to start the JS code to animate an already loaded chart
-    //async animateEventsChart2() {
-    //    console.log(`Starting the engine...`);
+        //The following two variables can be passed as parameters
+        var maximumCharsPerLine = 30;
+        var lineHeight = 10;
 
-    //    //set title for easy multi-tabbing (not chart related)
-    //    document.title = `${window?.ChartType} | ${window?.PersonName}`;
+        var words = caption.split(" ");
+        var line = "";
 
-    //    //set toolbar data (not chart related)
-    //    $("#PersonNameBox").text("Person : " + window?.PersonName);
+        //process text and create rows
+        var svgTSpan;
+        var lineCount = 0; //number of lines to calculate height
+        var tSpanTextNode;
+        for (var n = 0; n < words.length; n++) {
+            var testLine = line + words[n] + " ";
+            if (testLine.length > maximumCharsPerLine) {
+                //  Add a new <tspan> element
+                svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                svgTSpan.setAttributeNS(null, 'x', x);
+                svgTSpan.setAttributeNS(null, 'y', y);
 
-    //    var notLoaded = !EventsChart.isSvgLoaded();
+                tSpanTextNode = document.createTextNode(line);
+                svgTSpan.appendChild(tSpanTextNode);
+                svgTextHolder.appendChild(svgTSpan);
 
-    //    //try get svg from server if svg not loaded by now
-    //    //coming from live chart generate
-    //    if (notLoaded) {
-    //        //get data to generate chart from URL
-    //        var data = EventsChart.getDataFromUrl();
+                line = words[n] + " ";
+                y += lineHeight; //place next text row lower
+                lineCount++; //count a line
+            }
+            else {
+                line = testLine;
+            }
+        }
 
-    //        await EventsChart.getEventsChartFromApi(data);
-    //    }
+        //calculate final height in px, save global to be accessed later
+        window.EventDescriptionTextHeight = lineCount * lineHeight;
 
-    //    //attach mouse handler to auto move cursor line & update time legend
-    //    //load event description file 1st
-    //    //this.svgChart$ = this.$ChartParentElm.children().first();
-    //    await EventsChart.attachEventHandlers();
+        svgTSpan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+        svgTSpan.setAttributeNS(null, 'x', x);
+        svgTSpan.setAttributeNS(null, 'y', y);
 
-    //    //make toolbar visible
-    //    $("#ToolBar").removeClass("visually-hidden");
+        tSpanTextNode = document.createTextNode(line);
+        svgTSpan.appendChild(tSpanTextNode);
 
-    //    EventsChart.hideLoading();
+        svgTextHolder.appendChild(svgTSpan);
 
-    //}
+        return svgTextHolder;
+    }
+
 }
 
-//special function for blazor side
-//calls with chart already in parent
 //GLUE METHOD > KEEP IT CLEAN
-function EventsChartInit(rawSvgChart, chartParent) {
+async function EventsChartInit(rawSvgChart, chartParent) {
 
     //make new events chart instance with inputed data
     //insert chart parent (jquery)
@@ -784,20 +709,84 @@ function EventsChartInit(rawSvgChart, chartParent) {
     var newChart = new EventsChart(rawSvgChart, $chartParent);
 
     //animate chart
-    newChart.animateChart();
+    await newChart.animateChart();
 
     //make available for debug
     window.EventsChart = newChart;
 }
 
-//load chart from URL
-//GLUE METHOD > KEEP IT CLEAN
-function EventsChartInit2() {
 
-    //insert chart parent (jquery)
-    var $chartParent = $("#DasaViewHolder");
-    var newChart = new EventsChart("URL", $chartParent);//tell to use URL
 
-    //animate chart, gets data for chart from special URL
-    newChart.animateChartFromUrl();
-}
+
+
+
+
+//ARCHIVE
+////coming from direct/url access page
+////the method called to start the JS code to animate an already loaded chart
+//async animateEventsChart2() {
+//    console.log(`Starting the engine...`);
+
+//    //set title for easy multi-tabbing (not chart related)
+//    document.title = `${window?.ChartType} | ${window?.PersonName}`;
+
+//    //set toolbar data (not chart related)
+//    $("#PersonNameBox").text("Person : " + window?.PersonName);
+
+//    var notLoaded = !EventsChart.isSvgLoaded();
+
+//    //try get svg from server if svg not loaded by now
+//    //coming from live chart generate
+//    if (notLoaded) {
+//        //get data to generate chart from URL
+//        var data = EventsChart.getDataFromUrl();
+
+//        await EventsChart.getEventsChartFromApi(data);
+//    }
+
+//    //attach mouse handler to auto move cursor line & update time legend
+//    //load event description file 1st
+//    //this.svgChart$ = this.$ChartParentElm.children().first();
+//    await EventsChart.attachEventHandlers();
+
+//    //make toolbar visible
+//    $("#ToolBar").removeClass("visually-hidden");
+
+//    EventsChart.hideLoading();
+
+//}
+
+////animates a new chart from URL
+////coming from live chart generate
+//async animateChartFromUrl() {
+
+//    ////set title for easy multi-tabbing (not chart related)
+//    //document.title = `${window?.ChartType} | ${window?.PersonName}`;
+
+//    ////set toolbar data (not chart related)
+//    //$("#PersonNameBox").text("Person : " + window?.PersonName);
+
+//    //---
+
+//    var svgChartString = await EventsChart.getEventsChartFromApi(this.ChartData);
+
+//    this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], svgChartString);
+
+//    await this.attachEventHandlers();
+
+//    //---
+//    //make toolbar visible
+//    //    $("#ToolBar").removeClass("visually-hidden");
+
+//    //    EventsChart.hideLoading();
+//}
+
+////returns true if svg loaded
+//static isSvgLoaded() {
+//    console.log(`Checking if SVG Chart is loaded...`);
+
+//    //check if svg already loaded into page
+//    var isLoaded = $("#DasaViewBox").children().first().is("svg");
+
+//    return isLoaded;
+//}

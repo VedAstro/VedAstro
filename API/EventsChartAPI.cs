@@ -820,12 +820,11 @@ namespace API
             compiledRow = $"<g class=\"EventChartContent\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledRow}</g>";
 
 
-
             //6 MAKE CURSOR LINE
             //add in the cursor line (moves with cursor via JS)
             //note: - template cursor line is duplicated to dynamically generate legend box
             //      - placed last so that show on top of others
-            var svgTotalHeight = totalHeight + 35;//add space for life event icon
+            var svgTotalHeight = totalHeight + 110;//add space for life event icon
             compiledRow += GetTimeCursorLine(svgTotalHeight);
 
             //4 MAKE LIFE EVENTS
@@ -957,40 +956,69 @@ namespace API
         /// <summary>
         /// Generates individual life event line svg
         /// </summary>
-        public static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime,
-            int positionX)
+        public static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime,int positionX)
         {
 
             //note: this is the icon below the life event line to magnify it
             var iconWidth = 12;
             var iconX = $"-{iconWidth}"; //use negative to move center under line
             var iconSvg = $@"
-                                    <g transform=""matrix(2, 0, 0, 2, {iconX}, {lineHeight})"">
-                                        <rect style=""fill:{GetColor(lifeEvent.Nature)}; stroke:black; stroke-width: 0.5px;"" x=""0"" y=""0"" width=""{iconWidth}"" height=""9.95"" rx=""2.5"" ry=""2.5""/>
-                                        <path d=""M 7.823 5.279 L 6.601 5.279 C 6.377 5.279 6.194 5.456 6.194 5.671 L 6.194 6.846 C 6.194 7.062 6.377 7.238 6.601 7.238 L 7.823 7.238 C 8.046 7.238 8.229 7.062 8.229 6.846 L 8.229 5.671 C 8.229 5.456 8.046 5.279 7.823 5.279 Z M 7.823 1.364 L 7.823 1.756 L 4.566 1.756 L 4.566 1.364 C 4.566 1.148 4.383 0.973 4.158 0.973 C 3.934 0.973 3.751 1.148 3.751 1.364 L 3.751 1.756 L 3.345 1.756 C 2.892 1.756 2.534 2.108 2.534 2.539 L 2.53 8.021 C 2.53 8.454 2.895 8.804 3.345 8.804 L 9.044 8.804 C 9.492 8.804 9.857 8.452 9.857 8.021 L 9.857 2.539 C 9.857 2.108 9.492 1.756 9.044 1.756 L 8.636 1.756 L 8.636 1.364 C 8.636 1.148 8.453 0.973 8.229 0.973 C 8.006 0.973 7.823 1.148 7.823 1.364 Z M 8.636 8.021 L 3.751 8.021 C 3.528 8.021 3.345 7.845 3.345 7.629 L 3.345 3.714 L 9.044 3.714 L 9.044 7.629 C 9.044 7.845 8.86 8.021 8.636 8.021 Z"" />
-                                    </g>";
+                                <g class=""life-event-line-icon"" transform=""matrix(1, 0, 0, 1, 340, 2)"">
+		                            <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""260""></rect>
+		                            <g class=""event-info-box"" transform=""matrix(2.667386, 0, 0, 2.667386, -18.19187, 260.856232)"">
+			                            <path class=""background"" opacity=""0.8"" fill=""#0000FF"" enable-background=""new"" d=""M-8.953-0.321h32.854c1.381,0,2.5,1.119,2.5,2.5v15.429c0,1.381-1.119,2.5-2.5,2.5H-8.953c-1.381,0-2.5-1.119-2.5-2.5V2.179C-11.453,0.798-10.334-0.321-8.953-0.321z""></path>
+			                            <path class=""divider"" stroke=""#FEFEFE"" stroke-width=""0.5"" stroke-linecap=""round"" stroke-linejoin=""round"" d=""M-10.066,7.513L24.82,7.51""></path>
+			                            {StringToSvgTextBox(lifeEvent.Description)}
+				                        <text class=""event-name"" transform=""matrix(0.3673 0 0 0.3749 -2.3429 5.0749)"" fill=""#FFFFFF"" enable-background=""new"" font-family=""Calibri"" font-size=""13.3369"">{lifeEvent.Name}</text>
+			                            <g class=""event-nature-icon"" transform=""matrix(1, 0, 0, 0.996745, -0.374224, 0.280947)"">
+				                            <ellipse fill=""{GetColor(lifeEvent.Nature)}"" cx=""-6.76"" cy=""3.182"" rx=""2.96"" ry=""2.929""/>
+                                            <path class=""calender-icon"" d=""M-5.891,3.317h-0.626c-0.115,0-0.209,0.091-0.209,0.201V4.12c0,0.111,0.094,0.201,0.209,0.201h0.626 c0.115,0,0.209-0.09,0.209-0.201V3.518C-5.682,3.408-5.776,3.317-5.891,3.317z M-5.891,1.309V1.51h-1.67V1.309 c0-0.11-0.093-0.2-0.209-0.2c-0.115,0-0.209,0.09-0.209,0.2V1.51h-0.208c-0.232,0-0.416,0.181-0.416,0.402l-0.002,2.811 c0,0.222,0.187,0.401,0.418,0.401h2.923c0.229,0,0.416-0.18,0.416-0.401V1.912c0-0.221-0.187-0.402-0.416-0.402h-0.21V1.309 c0-0.11-0.093-0.2-0.208-0.2C-5.797,1.109-5.891,1.199-5.891,1.309z M-5.474,4.723h-2.505c-0.114,0-0.208-0.09-0.208-0.201 V2.514h2.923v2.008C-5.264,4.633-5.359,4.723-5.474,4.723z""/>
+                                        </g>
+		                            </g>
+	                            </g>";
 
             //put together icon + line + event data
-            var lifeEventLine = $"<g" +
-                             $" eventName=\"{lifeEvent.Name}\" " +
-                             $" class=\"LifeEventLines\" " + //atm used for tooltip logic
-                             $" stdTime=\"{lifeEvtTime:dd/MM/yyyy}\" " + //show only date
-                             $" transform=\"matrix(1, 0, 0, 1, {positionX}, 0)\"" +
-                            $" x=\"0\" y=\"0\" >" +
-                                $"<rect" +
-                                $" width=\"2\"" +
-                                $" height=\"{lineHeight}\"" +
-                                $" style=\"" +
-                                $" fill:{GetColor(lifeEvent.Nature)};" +
-                                //border
-                                $" stroke-width:0.5px;" +
-                                $" stroke:#000;" +
-                                $"\"" +
-                                $" />"
-                                 + iconSvg +
-                            "</g>";
+            var lifeEventLine = $@"<g eventName=""{lifeEvent.Name}"" class=""LifeEventLines"" stdTime=""{lifeEvtTime:dd/MM/yyyy}"" 
+                              transform=""matrix(1, 0, 0, 1, {positionX}, 0)"" x=""0"" y=""0"" >{iconSvg}</g>";
 
             return lifeEventLine;
+        }
+
+
+        /// <summary>
+        /// Input sting to get nicely wrapped text in SVG
+        /// Note: this is only an invisible structured text, other styling have to be added separately
+        /// </summary>
+        /// <returns></returns>
+        public static string StringToSvgTextBox(string inputStr)
+        {
+            const int characterLimit = 21;
+            //chop string to pieces, to wrap text nicely (new line)
+            var splitString = Tools.SplitByCharCount(inputStr, characterLimit);
+
+
+            //make a new holder for each line
+            var compiledSvgLines = "";
+            const int lineHeight = 12;
+            var nextYAxis = 0; //start with 0, at top
+            foreach (var strLine in splitString)
+            {
+                var newLineSvg = $@"<tspan x=""0"" y=""{nextYAxis}"" fill=""#FFFFFF"" font-family=""Calibri"" font-size=""10"">{strLine}</tspan>";
+                
+                //add together with other lines
+                compiledSvgLines += newLineSvg;
+
+                //set next line to come underneath this (increment y axis)
+                nextYAxis += lineHeight;
+            }
+
+            var finalTextSvg = $@"			
+                    <text transform=""matrix(0.37 0 0 0.37 -10 11.6)"">
+                        {compiledSvgLines}
+			        </text>
+                ";
+
+            return finalTextSvg;
         }
 
         /// <summary>

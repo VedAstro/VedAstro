@@ -656,6 +656,15 @@ namespace Genso.Astrology.Library
             //return random text from list to caller
             return msgList[randomIndexNumber];
         }
+
+        /// <summary>
+        /// Split string by character count
+        /// </summary>
+        public static IEnumerable<string> SplitByCharCount(string str, int maxChunkSize)
+        {
+            for (int i = 0; i < str.Length; i += maxChunkSize)
+                yield return str.Substring(i, Math.Min(maxChunkSize, str.Length - i));
+        }
     }
 
 }

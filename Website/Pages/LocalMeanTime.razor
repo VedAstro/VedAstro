@@ -10,8 +10,6 @@
     At 12PM LMT the Sun will be directly overhead.
 </p>
 
-
-
 <ul class="nav nav-tabs">
     <li class="nav-item">
         <a href="#calc1" class="nav-link active" data-bs-toggle="tab">Time Now</a>
@@ -21,6 +19,9 @@
     </li>
     <li class="nav-item">
         <a href="#calc3" class="nav-link" data-bs-toggle="tab">LMT to STD</a>
+    </li>
+    <li class="nav-item">
+        <a href="#calc4" class="nav-link" data-bs-toggle="tab">Location to Timezone</a>
     </li>
 </ul>
 <div class="tab-content p-2 border">
@@ -58,10 +59,21 @@
         <hr />
         <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="OnClickCalcLmtToStd"></IconButton>
     </div>
+    <div class="tab-pane fade" id="calc4">
+        <p>Uses Google API to get the standard timezone offset used at location, at a point in time</p>
+        <h5>Offset (UTC/GMT): @_timezoneOffsetOutput</h5>
+        <div class="input-group mb-3">
+            <span class="input-group-text">STD Time</span>
+            <input @bind="_stdTimeInput" type="text" class="form-control">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Location Name</span>
+            <input @bind="_locationNameInput" type="text" class="form-control">
+        </div>
+        <hr />
+        <IconButton ButtonText="Calculate" IconName="ep:refresh" OnClickCallback="OnClickCalcLocationToOffset"></IconButton>
+    </div>
 </div>
-
-
-
 
 @code {
 
@@ -71,6 +83,9 @@
     string? _lmtString = "Click Calculate";
     string? _stdString1 = "Click Calculate";
     string? _stdString2 = "Click Calculate";
+    string? _timezoneOffsetOutput = "Click Calculate";
+    string? _stdTimeInput = DateTime.Now.ToString(Time.DateTimeFormatNoTimezone); //set default now time
+    string? _locationNameInput = "Singapore";
     string? _lmtOffset = "Click Calculate";
     private GeoLocationInput _geoLocationInput;
 
@@ -78,8 +93,6 @@
     //auto update "time" after location is updated
     //called every time after the component has finished rendering
     protected override void OnAfterRender(bool firstRender) => UpdateLocalMeanTime();
-
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -102,6 +115,12 @@
 
         //update view with STD time
         _stdString2 = std.ToString(Time.DateTimeFormat);
+    }
+
+    private async void OnClickCalcLocationToOffset()
+    {
+        //gets timezone data from Google API & display to user
+        _timezoneOffsetOutput = await Tools.GetTimezoneOffsetString(_locationNameInput, _stdTimeInput);
     }
 
     private void OnClickCalcLMTOffset()

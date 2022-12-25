@@ -967,7 +967,12 @@ namespace API
             var iconWidth = 12;
             var iconX = $"-{iconWidth}"; //use negative to move center under line
             var iconYAxis = lineHeight; //start icon at end of line
-            var incrementRate = 25;
+            var incrementRate = 25; //for overcrowded jump
+
+            //shorten the event name if too long & add ellipsis at end
+            //else text goes out side box
+            var formattedEventName = ShortenName(lifeEvent.Name);
+
             var iconSvg = $@"
                                 <g class=""life-event-line-icon"" transform=""matrix(1, 0, 0, 1, 340, 2)"">
 		                            <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{lineHeight}""></rect>
@@ -975,9 +980,9 @@ namespace API
 			                            <path class=""background"" opacity=""0.8"" fill=""#0000FF"" enable-background=""new"" d=""M-8.953-0.321h32.854c1.381,0,2.5,1.119,2.5,2.5v15.429c0,1.381-1.119,2.5-2.5,2.5H-8.953c-1.381,0-2.5-1.119-2.5-2.5V2.179C-11.453,0.798-10.334-0.321-8.953-0.321z""></path>
 			                            <path class=""divider"" stroke=""#FEFEFE"" stroke-width=""0.5"" stroke-linecap=""round"" stroke-linejoin=""round"" d=""M-10.066,7.513L24.82,7.51""></path>
 			                            {StringToSvgTextBox(lifeEvent.Description)}
-				                        <text class=""event-name"" transform=""matrix(0.3673 0 0 0.3749 -2.3429 5.0749)"" fill=""#FFFFFF"" enable-background=""new"" font-family=""Calibri"" font-size=""13.3369"">{lifeEvent.Name}</text>
+				                        <text class=""event-name"" transform=""matrix(0.3673 0 0 0.3749 -2.3429 5.0749)"" fill=""#FFFFFF"" enable-background=""new"" font-family=""Calibri"" font-size=""13"">{formattedEventName}</text>
 			                            <g class=""event-nature-icon"" transform=""matrix(1, 0, 0, 0.996745, -0.374224, 0.280947)"">
-				                            <ellipse fill=""{GetColor(lifeEvent.Nature)}"" cx=""-6.76"" cy=""3.182"" rx=""2.96"" ry=""2.929""/>
+				                            <ellipse fill=""{GetColor(lifeEvent.Nature)}"" cx=""-6.76"" cy=""3.182"" rx=""3"" ry=""3""/>
                                             <path class=""calender-icon"" d=""M-5.891,3.317h-0.626c-0.115,0-0.209,0.091-0.209,0.201V4.12c0,0.111,0.094,0.201,0.209,0.201h0.626 c0.115,0,0.209-0.09,0.209-0.201V3.518C-5.682,3.408-5.776,3.317-5.891,3.317z M-5.891,1.309V1.51h-1.67V1.309 c0-0.11-0.093-0.2-0.209-0.2c-0.115,0-0.209,0.09-0.209,0.2V1.51h-0.208c-0.232,0-0.416,0.181-0.416,0.402l-0.002,2.811 c0,0.222,0.187,0.401,0.418,0.401h2.923c0.229,0,0.416-0.18,0.416-0.401V1.912c0-0.221-0.187-0.402-0.416-0.402h-0.21V1.309 c0-0.11-0.093-0.2-0.208-0.2C-5.797,1.109-5.891,1.199-5.891,1.309z M-5.474,4.723h-2.505c-0.114,0-0.208-0.09-0.208-0.201 V2.514h2.923v2.008C-5.264,4.633-5.359,4.723-5.474,4.723z""/>
                                         </g>
 		                            </g>
@@ -989,6 +994,28 @@ namespace API
 
             return lifeEventLine;
 
+            //LOCAL FUNC
+            string ShortenName(string rawInput)
+            {
+                //if no changes needed return as is (default)
+                var returnVal = rawInput;
+
+                const int nameCharLimit = 10; //any number of char above this limit will be replaced with  ellipsis  "..."
+
+                //if input is above limit
+                //replace extra chars with ...
+                var isAbove = rawInput.Length > nameCharLimit;
+                if (isAbove)
+                {
+                    //cut the extra chars out
+                    returnVal = returnVal.Substring(0, nameCharLimit);
+
+                    //add ellipsis 
+                    returnVal += "...";
+                }
+
+                return returnVal;
+            }
 
         }
 

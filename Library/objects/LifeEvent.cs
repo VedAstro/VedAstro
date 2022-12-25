@@ -201,20 +201,19 @@ namespace Genso.Astrology.Library
 
 
         /// <summary>
-        /// Gets the extact time with offset at the place where this event happened
+        /// TODO all events should have offset data on entry, as such google API here is a hack
+        /// Gets the exact time with offset at the place where this event happened
         /// Parses a event start time into DateTimeOffset
         /// uses GOOGLE API
         /// NOTE:
         /// - standard time (STD) at the location at that time
-        /// - updates the local instance with timezone data, to be saved and used later
         /// </summary>
         public async Task<DateTimeOffset> GetDateTimeOffset()
         {
             //get timezone from api and save it to local instance so that it can saved later
             //only use API if timezone data not yet set, to save unnecessary slow calls to Google
             this.Timezone = string.IsNullOrEmpty(this.Timezone)
-                ? await Tools.GetTimezoneOffsetString(this.Location,
-                    this.StartTime)
+                ? await Tools.GetTimezoneOffsetString(this.Location, this.StartTime)
                 : this.Timezone;
 
             //get start time of life event and find the position of it in slices (same as now line)
@@ -224,6 +223,28 @@ namespace Genso.Astrology.Library
 
             return lifeEvtTime;
         }
+
+
+        /// <summary>
+        /// Gets exact time event occurred without API
+        /// note: if timezone not filled, time zone set to +00:00
+        /// </summary>
+        /// <returns></returns>
+        public DateTimeOffset GetDateTimeOffsetLocal()
+        {
+            //used saved time zone or use the birth time zone as quick backup
+            this.Timezone = string.IsNullOrEmpty(this.Timezone)
+                ? "+00:00"
+                : this.Timezone;
+
+            //get start time of life event and find the position of it in slices (same as now line)
+            //so that this life event line can be placed exactly on the report where it happened
+            var lifeEvtTimeStr = $"{this.StartTime} {this.Timezone}"; //add offset 0 only for parsing, not used by API to get timezone
+            var lifeEvtTime = DateTimeOffset.ParseExact(lifeEvtTimeStr, Time.DateTimeFormat, null);
+
+            return lifeEvtTime;
+        }
+
 
         /// <summary>
         /// Note this call uses Google API everytime
@@ -242,5 +263,23 @@ namespace Genso.Astrology.Library
         /// </summary>
         /// <returns></returns>
         public async Task<GeoLocation> GetGeoLocation() => await GeoLocation.FromName(this.Location);
+
+        /// <summary>
+        /// compare logic to sort according to time
+        /// greater = -1
+        /// equal = 0
+        /// lesser = 1
+        /// </summary>
+        public int CompareTo(LifeEvent lifeEvent)
+        {
+            var inputTime = lifeEvent.GetDateTimeOffsetLocal();
+
+            var currentTime = this.GetDateTimeOffsetLocal();
+
+            //compare with time
+            return currentTime.CompareTo(inputTime);
+        }
+
+
     }
 }

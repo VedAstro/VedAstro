@@ -863,7 +863,11 @@ namespace API
             {
                 var compiledLines = "";
 
-                foreach (var lifeEvent in person.LifeEventList)
+                //sort by earliest to latest event, done to generate an
+                var lifeEventList = person.LifeEventList;
+                lifeEventList.Sort((x, y) => x.CompareTo(y));
+
+                foreach (var lifeEvent in lifeEventList)
                 {
                     //this is placed here so that if fail
                     try
@@ -956,16 +960,18 @@ namespace API
         /// <summary>
         /// Generates individual life event line svg
         /// </summary>
-        public static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime,int positionX)
+        public static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX)
         {
 
             //note: this is the icon below the life event line to magnify it
             var iconWidth = 12;
             var iconX = $"-{iconWidth}"; //use negative to move center under line
+            var iconYAxis = lineHeight; //start icon at end of line
+            var incrementRate = 25;
             var iconSvg = $@"
                                 <g class=""life-event-line-icon"" transform=""matrix(1, 0, 0, 1, 340, 2)"">
-		                            <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""260""></rect>
-		                            <g class=""event-info-box"" transform=""matrix(2.667386, 0, 0, 2.667386, -18.19187, 260.856232)"">
+		                            <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{lineHeight}""></rect>
+		                            <g class=""event-info-box"" transform=""matrix(2.6, 0, 0, 2.6, -18, {iconYAxis})"">
 			                            <path class=""background"" opacity=""0.8"" fill=""#0000FF"" enable-background=""new"" d=""M-8.953-0.321h32.854c1.381,0,2.5,1.119,2.5,2.5v15.429c0,1.381-1.119,2.5-2.5,2.5H-8.953c-1.381,0-2.5-1.119-2.5-2.5V2.179C-11.453,0.798-10.334-0.321-8.953-0.321z""></path>
 			                            <path class=""divider"" stroke=""#FEFEFE"" stroke-width=""0.5"" stroke-linecap=""round"" stroke-linejoin=""round"" d=""M-10.066,7.513L24.82,7.51""></path>
 			                            {StringToSvgTextBox(lifeEvent.Description)}
@@ -982,6 +988,8 @@ namespace API
                               transform=""matrix(1, 0, 0, 1, {positionX}, 0)"" x=""0"" y=""0"" >{iconSvg}</g>";
 
             return lifeEventLine;
+
+
         }
 
 
@@ -1004,7 +1012,7 @@ namespace API
             foreach (var strLine in splitString)
             {
                 var newLineSvg = $@"<tspan x=""0"" y=""{nextYAxis}"" fill=""#FFFFFF"" font-family=""Calibri"" font-size=""10"">{strLine}</tspan>";
-                
+
                 //add together with other lines
                 compiledSvgLines += newLineSvg;
 

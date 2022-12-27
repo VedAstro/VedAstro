@@ -18,7 +18,7 @@
 
 <div class="vstack gap-3" style="max-width:286px">
     <div>
-        <label>Name</label>
+        <label>Name<HelpBox SmallIcon="true" HelpText="@HelpText.PrivateProfileName"></HelpBox></label>
         <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
     </div>
     <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />

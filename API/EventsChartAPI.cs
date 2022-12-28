@@ -863,10 +863,17 @@ namespace API
             {
                 var compiledLines = "";
 
-                //sort by earliest to latest event, done to generate an
+                //sort by earliest to latest event
                 var lifeEventList = person.LifeEventList;
                 lifeEventList.Sort((x, y) => x.CompareTo(y));
 
+
+                var previousPositionX = 0; //to keep track of crowding
+                var incrementRate = 25; //for overcrowded jump
+                var adjustedLineHeight = lineHeight; //keep copy for resetting after overcrowded jum
+                //count for previous events crowded in a row 
+                var prevCrowdedCount = 0;
+                var previousMovedDown = false;
                 foreach (var lifeEvent in lifeEventList)
                 {
                     //this is placed here so that if fail
@@ -880,8 +887,46 @@ namespace API
                         //if line is not in report time range, don't generate it
                         if (positionX == 0) { continue; }
 
+                        //check if overcrowded, move icon down if so
+                        var isCrowded = IsEventIconSpaceCrowded(previousPositionX, positionX);
+                        if (isCrowded)
+                        {
+                            //set icon position lower than previous
+                            //if crowded back to back then move down accordingly
+                            //todo can move up as well if next item is not going to crowd
+                            prevCrowdedCount++;
+                            //if previous move down, the this move up
+                            if (previousMovedDown)
+                            {
+                                adjustedLineHeight = lineHeight;
+                                previousMovedDown = false; //set as moved up, so next can go down
+                                //reset previous back to back crowd count
+                                prevCrowdedCount = 0;
+                            }
+                            //move down
+                            else
+                            {
+                                adjustedLineHeight += (incrementRate * prevCrowdedCount);
+                                previousMovedDown = true; //set as moved down, so next can go up
+                            }
+                        }
+                        else
+                        {
+                            //reset previous back to back crowd count
+                            prevCrowdedCount = 0;
+                            //reset previous label crowded movement
+                            previousMovedDown = false;
+                        }
+
                         //put together icon + line + event data
-                        compiledLines += GenerateLifeEventLine(lifeEvent, lineHeight, lifeEvtTime, positionX);
+                        compiledLines += GenerateLifeEventLine(lifeEvent, adjustedLineHeight, lifeEvtTime, positionX);
+
+                        //reset line height for next 
+                        if (isCrowded) { adjustedLineHeight = lineHeight; }
+
+                        //update previous position
+                        previousPositionX = positionX;
+
                     }
                     catch (Exception e)
                     {
@@ -898,7 +943,24 @@ namespace API
 
                 return wrapperGroup;
 
+                //-------------------------
 
+                //check if current event icon position will block previous life event icon
+                //expects next event to be chronologically next event
+                bool IsEventIconSpaceCrowded(int previousX, int currentX)
+                {
+                    //if previous 0, then obviously not crowded
+                    if (previousX <= 0) { return false; }
+
+                    //space smaller than this is set crowded
+                    const int minSpaceBetween = 110;//px
+
+                    //previous X axis should be lower than current
+                    //difference shows space between these 2 icons
+                    var difference = currentX - previousX;
+                    var isOverLapping = difference < minSpaceBetween;
+                    return isOverLapping;
+                }
             }
         }
 
@@ -959,6 +1021,7 @@ namespace API
 
         /// <summary>
         /// Generates individual life event line svg
+        /// Incrementing line height also increments icon position below
         /// </summary>
         public static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX)
         {
@@ -967,7 +1030,6 @@ namespace API
             var iconWidth = 12;
             var iconX = $"-{iconWidth}"; //use negative to move center under line
             var iconYAxis = lineHeight; //start icon at end of line
-            var incrementRate = 25; //for overcrowded jump
 
             //shorten the event name if too long & add ellipsis at end
             //else text goes out side box

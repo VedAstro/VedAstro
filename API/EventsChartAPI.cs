@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -1026,34 +1027,58 @@ namespace API
         /// </summary>
         public static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX)
         {
-
-            //note: this is the icon below the life event line to magnify it
-            var iconWidth = 12;
-            var iconX = $"-{iconWidth}"; //use negative to move center under line
-            var iconYAxis = lineHeight; //start icon at end of line
-
             //shorten the event name if too long & add ellipsis at end
             //else text goes out side box
             var formattedEventName = ShortenName(lifeEvent.Name);
 
+            //based on length of event name make the background
+            //mainly done to shorten background of short names (saving space)
+            SizeF size;
+            using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                size = graphics.MeasureString(formattedEventName, new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
+            }
+            var backgroundWidth = Math.Round(size.Width);
+
+
+            //set max & min width background
+            //const int maxWidth = 70;
+            //backgroundWidth = backgroundWidth > maxWidth ? maxWidth : backgroundWidth;
+            //const int minWidth = 30;
+            //backgroundWidth = backgroundWidth > minWidth ? minWidth : backgroundWidth;
+
+            int iconYAxis = lineHeight; //start icon at end of line
+            var iconXAxis = $"-{backgroundWidth/2}"; //use negative to move center under line
+            var nameTextHeight = 15;
             var iconSvg = $@"
-                                <g class=""life-event-line-icon"" transform=""matrix(1, 0, 0, 1, 340, 2)"">
-		                            <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{lineHeight}""></rect>
-		                            <g class=""event-info-box"" transform=""matrix(2.6, 0, 0, 2.6, -18, {iconYAxis})"">
-			                            <path class=""background"" opacity=""0.8"" fill=""#0000FF"" enable-background=""new"" d=""M-8.953-0.321h32.854c1.381,0,2.5,1.119,2.5,2.5v15.429c0,1.381-1.119,2.5-2.5,2.5H-8.953c-1.381,0-2.5-1.119-2.5-2.5V2.179C-11.453,0.798-10.334-0.321-8.953-0.321z""></path>
-			                            <path class=""divider"" stroke=""#FEFEFE"" stroke-width=""0.5"" stroke-linecap=""round"" stroke-linejoin=""round"" d=""M-10.066,7.513L24.82,7.51""></path>
-			                            {StringToSvgTextBox(lifeEvent.Description)}
-				                        <text class=""event-name"" transform=""matrix(0.3673 0 0 0.3749 -2.3429 5.0749)"" fill=""#FFFFFF"" enable-background=""new"" font-family=""Calibri"" font-size=""13"">{formattedEventName}</text>
-			                            <g class=""event-nature-icon"" transform=""matrix(1, 0, 0, 0.996745, -0.374224, 0.280947)"">
-				                            <ellipse fill=""{GetColor(lifeEvent.Nature)}"" cx=""-6.76"" cy=""3.182"" rx=""3"" ry=""3""/>
-                                            <path class=""calender-icon"" d=""M-5.891,3.317h-0.626c-0.115,0-0.209,0.091-0.209,0.201V4.12c0,0.111,0.094,0.201,0.209,0.201h0.626 c0.115,0,0.209-0.09,0.209-0.201V3.518C-5.682,3.408-5.776,3.317-5.891,3.317z M-5.891,1.309V1.51h-1.67V1.309 c0-0.11-0.093-0.2-0.209-0.2c-0.115,0-0.209,0.09-0.209,0.2V1.51h-0.208c-0.232,0-0.416,0.181-0.416,0.402l-0.002,2.811 c0,0.222,0.187,0.401,0.418,0.401h2.923c0.229,0,0.416-0.18,0.416-0.401V1.912c0-0.221-0.187-0.402-0.416-0.402h-0.21V1.309 c0-0.11-0.093-0.2-0.208-0.2C-5.797,1.109-5.891,1.199-5.891,1.309z M-5.474,4.723h-2.505c-0.114,0-0.208-0.09-0.208-0.201 V2.514h2.923v2.008C-5.264,4.633-5.359,4.723-5.474,4.723z""/>
-                                        </g>
+                                <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{lineHeight}""></rect>
+                                <!-- EVENT ICON LABEL -->
+                                <g transform=""translate({iconXAxis},{iconYAxis})"">
+                                    <!-- NAME -->
+                                    <g class=""name-label"" >
+                                        <g transform=""translate(15,0)"">
+						                    <rect class=""background"" x=""0"" y=""0"" style=""fill: blue; opacity: 0.8;"" width=""{backgroundWidth}"" height=""{nameTextHeight}"" rx=""2"" ry=""2"" />
+						                    <text class=""event-name"" x=""3"" y=""11"" style=""fill:#FFFFFF; font-family:'Calibri'; font-size:12px;"">{formattedEventName}</text>
+					                    </g>
+				                        <g class=""nature-icon"" transform=""translate(8,8)"">
+                                            <rect class=""background"" fill=""{GetColor(lifeEvent.Nature)}"" x=""-8"" y=""-8"" width=""15"" height=""15"" rx=""0"" ry=""0""/>
+					                        <path d=""M2-0.2H0.7C0.5-0.2,0.3,0,0.3,0.2v1.3c0,0.2,0.2,0.4,0.4,0.4H2c0.2,0,0.4-0.2,0.4-0.4V0.2C2.5,0,2.3-0.2,2-0.2z M2-4.5v0.4 h-3.6v-0.4c0-0.2-0.2-0.4-0.4-0.4c-0.2,0-0.4,0.2-0.4,0.4v0.4h-0.4c-0.5,0-0.9,0.4-0.9,0.9v6.1c0,0.5,0.4,0.9,0.9,0.9h6.3 c0.5,0,0.9-0.4,0.9-0.9v-6.1c0-0.5-0.4-0.9-0.9-0.9H3.1v-0.4c0-0.2-0.2-0.4-0.4-0.4S2-4.8,2-4.5z M2.9,2.9h-5.4 c-0.2,0-0.4-0.2-0.4-0.4v-4.4h6.3v4.4C3.4,2.7,3.2,2.9,2.9,2.9z""/>
+				                        </g>
+			                        
+</g>
+                                    <!-- DESCRIPTION -->
+		                            <g class=""description-label"" style=""display:none;"" transform=""translate(0,{20})"">
+                                        <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{backgroundWidth}"" height=""50"" rx=""2"" ry=""2""/>
+                                        <text x=""4.849"" y=""-1.77"">
+                                            {StringToSvgTextBox(lifeEvent.Description)}
+			                            </text>
 		                            </g>
-	                            </g>";
+                                </g>
+                                ";
 
             //put together icon + line + event data
             var lifeEventLine = $@"<g eventName=""{lifeEvent.Name}"" class=""LifeEventLines"" stdTime=""{lifeEvtTime:dd/MM/yyyy}"" 
-                              transform=""matrix(1, 0, 0, 1, {positionX}, 0)"" x=""0"" y=""0"" >{iconSvg}</g>";
+                              transform=""translate({positionX}, 0)"">{iconSvg}</g>";
 
             return lifeEventLine;
 
@@ -1062,8 +1087,7 @@ namespace API
             {
                 //if no changes needed return as is (default)
                 var returnVal = rawInput;
-
-                const int nameCharLimit = 10; //any number of char above this limit will be replaced with  ellipsis  "..."
+                const int nameCharLimit = 12; //any number of char above this limit will be replaced with  ellipsis  "..."
 
                 //if input is above limit
                 //replace extra chars with ...
@@ -1113,13 +1137,9 @@ namespace API
                 nextYAxis += lineHeight;
             }
 
-            var finalTextSvg = $@"			
-                    <text transform=""matrix(0.37 0 0 0.37 -10 11.6)"">
-                        {compiledSvgLines}
-			        </text>
-                ";
+            //var finalTextSvg = $@"{compiledSvgLines}";
 
-            return finalTextSvg;
+            return compiledSvgLines;
         }
 
         /// <summary>

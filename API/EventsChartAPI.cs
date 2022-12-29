@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
@@ -1089,10 +1090,13 @@ namespace API
         /// <returns></returns>
         public static string StringToSvgTextBox(string inputStr)
         {
+
             const int characterLimit = 21;
             //chop string to pieces, to wrap text nicely (new line)
-            var splitString = Tools.SplitByCharCount(inputStr, characterLimit);
+            var splitStringRaw = Tools.SplitByCharCount(inputStr, characterLimit);
 
+            //convert raw string to be HTML safe (handles special chars like &,!,%)
+            var splitString = splitStringRaw.Select(rawStr => HttpUtility.HtmlEncode(rawStr)).ToList();
 
             //make a new holder for each line
             var compiledSvgLines = "";

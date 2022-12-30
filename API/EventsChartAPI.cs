@@ -818,7 +818,7 @@ namespace API
 
             //5 WRAP IN GROUP
             //place all content except border & cursor time legend inside group for padding
-            var contentPadding = 2;
+            const int contentPadding = 2;
             compiledRow = $"<g class=\"EventChartContent\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledRow}</g>";
 
 
@@ -833,10 +833,9 @@ namespace API
             //wait!, add in life events also
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
-            //var inputOffset = startTime.GetStdDateTimeOffset().Offset;
             var lifeEventHeight = lineHeight + 6; //space between icon & last row
             var inputOffset = startTime.GetStdDateTimeOffset().Offset; //timezone the chart will be in
-            compiledRow += await GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset);
+            compiledRow += await GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset, timeSlices);
 
 
             //7 ADD BORDER
@@ -860,110 +859,6 @@ namespace API
             //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
 
-            //gets person's life events as lines for the dasa chart
-            async Task<string> GetLifeEventLinesSvg(Person person, int lineHeight, TimeSpan inputOffset)
-            {
-                var compiledLines = "";
-
-                //sort by earliest to latest event
-                var lifeEventList = person.LifeEventList;
-                lifeEventList.Sort((x, y) => x.CompareTo(y));
-
-
-                var previousPositionX = 0; //to keep track of crowding
-                var incrementRate = 25; //for overcrowded jump
-                var adjustedLineHeight = lineHeight; //keep copy for resetting after overcrowded jum
-                //count for previous events crowded in a row 
-                var prevCrowdedCount = 0;
-                var previousMovedDown = false;
-                foreach (var lifeEvent in lifeEventList)
-                {
-                    //this is placed here so that if fail
-                    try
-                    {
-                        //get timezone at place event happened
-                        var lifeEvtTime = await lifeEvent.GetDateTimeOffset();//time at the place of event with correct standard timezone
-                        var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
-                        var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
-
-                        //if line is not in report time range, don't generate it
-                        if (positionX == 0) { continue; }
-
-                        //check if overcrowded, move icon down if so
-                        var isCrowded = IsEventIconSpaceCrowded(previousPositionX, positionX);
-                        if (isCrowded)
-                        {
-                            //set icon position lower than previous
-                            //if crowded back to back then move down accordingly
-                            //todo can move up as well if next item is not going to crowd
-                            prevCrowdedCount++;
-                            //if previous move down, the this move up
-                            if (previousMovedDown)
-                            {
-                                adjustedLineHeight = lineHeight;
-                                previousMovedDown = false; //set as moved up, so next can go down
-                                //reset previous back to back crowd count
-                                prevCrowdedCount = 0;
-                            }
-                            //move down
-                            else
-                            {
-                                adjustedLineHeight += (incrementRate * prevCrowdedCount);
-                                previousMovedDown = true; //set as moved down, so next can go up
-                            }
-                        }
-                        else
-                        {
-                            //reset previous back to back crowd count
-                            prevCrowdedCount = 0;
-                            //reset previous label crowded movement
-                            previousMovedDown = false;
-                        }
-
-                        //put together icon + line + event data
-                        compiledLines += GenerateLifeEventLine(lifeEvent, adjustedLineHeight, lifeEvtTime, positionX);
-
-                        //reset line height for next 
-                        if (isCrowded) { adjustedLineHeight = lineHeight; }
-
-                        //update previous position
-                        previousPositionX = positionX;
-
-                    }
-                    catch (Exception e)
-                    {
-                        //if fail log it and go on with next life event despite failure
-                        await Log.Error(e, null);
-                        continue;
-                    }
-                }
-
-
-                //wrap in a group so that can be hidden/shown as needed
-                //add transform matrix to adjust for border shift
-                var wrapperGroup = $"<g id=\"LifeEventLinesHolder\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledLines}</g>";
-
-                return wrapperGroup;
-
-                //-------------------------
-
-                //check if current event icon position will block previous life event icon
-                //expects next event to be chronologically next event
-                bool IsEventIconSpaceCrowded(int previousX, int currentX)
-                {
-                    //if previous 0, then obviously not crowded
-                    if (previousX <= 0) { return false; }
-
-                    //space smaller than this is set crowded
-                    const int minSpaceBetween = 110;//px
-
-                    //previous X axis should be lower than current
-                    //difference shows space between these 2 icons
-                    var difference = currentX - previousX;
-                    var isOverLapping = difference < minSpaceBetween;
-                    return isOverLapping;
-                }
-            }
         }
 
         /// <summary>
@@ -1036,7 +931,7 @@ namespace API
             var backgroundWidth = GetTextWidthPx(formattedEventName);
 
             int iconYAxis = lineHeight; //start icon at end of line
-            var iconXAxis = $"-{backgroundWidth/2}"; //use negative to move center under line
+            var iconXAxis = $"-{backgroundWidth / 2}"; //use negative to move center under line
             var nameTextHeight = 15;
             var iconSvg = $@"
                                 <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{lineHeight}""></rect>
@@ -1149,6 +1044,117 @@ namespace API
             //var finalTextSvg = $@"{compiledSvgLines}";
 
             return compiledSvgLines;
+        }
+
+
+        /// <summary>
+        /// Returns a person's life events in SVG group to be placed inside events chart
+        /// gets person's life events as lines for the events chart
+        /// </summary>
+        private static async Task<string> GetLifeEventLinesSvg(Person person, int lineHeight, TimeSpan inputOffset, List<Time> timeSlices)
+        {
+
+            var compiledLines = "";
+
+            //sort by earliest to latest event
+            var lifeEventList = person.LifeEventList;
+            lifeEventList.Sort((x, y) => x.CompareTo(y));
+
+
+            var previousPositionX = 0; //to keep track of crowding
+            var incrementRate = 25; //for overcrowded jump
+            var adjustedLineHeight = lineHeight; //keep copy for resetting after overcrowded jum
+                                                 //count for previous events crowded in a row 
+            var prevCrowdedCount = 0;
+            var previousMovedDown = false;
+            foreach (var lifeEvent in lifeEventList)
+            {
+                //this is placed here so that if fail
+                try
+                {
+                    //get timezone at place event happened
+                    var lifeEvtTime = await lifeEvent.GetDateTimeOffset();//time at the place of event with correct standard timezone
+                    var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
+                    var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
+
+                    //if line is not in report time range, don't generate it
+                    if (positionX == 0) { continue; }
+
+                    //check if overcrowded, move icon down if so
+                    var isCrowded = IsEventIconSpaceCrowded(previousPositionX, positionX);
+                    if (isCrowded)
+                    {
+                        //set icon position lower than previous
+                        //if crowded back to back then move down accordingly
+                        //todo can move up as well if next item is not going to crowd
+                        prevCrowdedCount++;
+                        //if previous move down, the this move up
+                        if (previousMovedDown)
+                        {
+                            adjustedLineHeight = lineHeight;
+                            previousMovedDown = false; //set as moved up, so next can go down
+                                                       //reset previous back to back crowd count
+                            prevCrowdedCount = 0;
+                        }
+                        //move down
+                        else
+                        {
+                            adjustedLineHeight += (incrementRate * prevCrowdedCount);
+                            previousMovedDown = true; //set as moved down, so next can go up
+                        }
+                    }
+                    else
+                    {
+                        //reset previous back to back crowd count
+                        prevCrowdedCount = 0;
+                        //reset previous label crowded movement
+                        previousMovedDown = false;
+                    }
+
+                    //put together icon + line + event data
+                    compiledLines += GenerateLifeEventLine(lifeEvent, adjustedLineHeight, lifeEvtTime, positionX);
+
+                    //reset line height for next 
+                    if (isCrowded) { adjustedLineHeight = lineHeight; }
+
+                    //update previous position
+                    previousPositionX = positionX;
+
+                }
+                catch (Exception e)
+                {
+                    //if fail log it and go on with next life event despite failure
+                    await Log.Error(e, null);
+                    continue;
+                }
+            }
+
+
+            //wrap in a group so that can be hidden/shown as needed
+            //add transform matrix to adjust for border shift
+            const int contentPadding = 2;
+            var wrapperGroup = $"<g id=\"LifeEventLinesHolder\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledLines}</g>";
+
+            return wrapperGroup;
+
+            //-------------------------
+
+            //check if current event icon position will block previous life event icon
+            //expects next event to be chronologically next event
+            bool IsEventIconSpaceCrowded(int previousX, int currentX)
+            {
+                //if previous 0, then obviously not crowded
+                if (previousX <= 0) { return false; }
+
+                //space smaller than this is set crowded
+                const int minSpaceBetween = 110;//px
+
+                //previous X axis should be lower than current
+                //difference shows space between these 2 icons
+                var difference = currentX - previousX;
+                var isOverLapping = difference < minSpaceBetween;
+                return isOverLapping;
+            }
         }
 
         /// <summary>

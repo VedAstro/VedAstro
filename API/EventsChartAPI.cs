@@ -625,7 +625,7 @@ namespace API
             return await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
         }
 
-        public static async Task<Chart> GetChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
+        private static async Task<Chart> GetChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
         {
             //from person get svg report
             var eventsChartSvgString = await GenerateMainEventsChartSvg(foundPerson, startTime, endTime, daysPerPixel, eventTags);
@@ -644,7 +644,7 @@ namespace API
         /// <summary>
         /// calculates the precision of the events to fit inside 1000px width
         /// </summary>
-        public static double GetDayPerPixel(Time start, Time end, int maxWidth)
+        private static double GetDayPerPixel(Time start, Time end, int maxWidth)
         {
             //const int maxWidth = 1000; //px
 
@@ -662,7 +662,7 @@ namespace API
         /// <summary>
         /// Parses event preset, string to list
         /// </summary>
-        public static List<EventTag> GetSelectedEventTypesEasy(string eventPreset)
+        private static List<EventTag> GetSelectedEventTypesEasy(string eventPreset)
         {
             var returnList = new List<EventTag>();
 
@@ -715,7 +715,7 @@ namespace API
         /// a precisise start and end time will be returned
         /// used in dasa/muhurtha easy calculator
         /// </summary>
-        public static object AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation, TimeSpan timezone)
+        private static object AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation, TimeSpan timezone)
         {
 
             Time start, end;
@@ -864,11 +864,12 @@ namespace API
         /// <summary>
         /// Get color based on nature
         /// </summary>
-        public static string GetColor(EventNature? eventNature) => GetColor(eventNature.ToString());
+        private static string GetColor(EventNature? eventNature) => GetColor(eventNature.ToString());
+        
         /// <summary>
         /// Get color based on nature
         /// </summary>
-        public static string GetColor(string nature)
+        private static string GetColor(string nature)
         {
             switch (nature)
             {
@@ -920,7 +921,7 @@ namespace API
         /// Generates individual life event line svg
         /// Incrementing line height also increments icon position below
         /// </summary>
-        public static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX)
+        private static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX)
         {
             //shorten the event name if too long & add ellipsis at end
             //else text goes out side box
@@ -1010,13 +1011,12 @@ namespace API
             }
         }
 
-
         /// <summary>
         /// Input sting to get nicely wrapped text in SVG
         /// Note: this is only an invisible structured text, other styling have to be added separately
         /// </summary>
         /// <returns></returns>
-        public static string StringToSvgTextBox(string inputStr)
+        private static string StringToSvgTextBox(string inputStr)
         {
 
             const int characterLimit = 21;
@@ -1045,7 +1045,6 @@ namespace API
 
             return compiledSvgLines;
         }
-
 
         /// <summary>
         /// Returns a person's life events in SVG group to be placed inside events chart
@@ -1161,7 +1160,7 @@ namespace API
         /// add in the cursor line (moves with cursor via JS)
         /// note: template cursor line is duplicated to dynamically generate legend box
         /// </summary>
-        public static string GetTimeCursorLine(int lineHeight)
+        private static string GetTimeCursorLine(int lineHeight)
         {
             return $@"
                         <g id=""CursorLine"" x=""0"" y=""0"">
@@ -1195,7 +1194,8 @@ namespace API
                        </g>
                         ";
         }
-        public static string GetNowLine(int lineHeight, int nowLinePosition)
+
+        private static string GetNowLine(int lineHeight, int nowLinePosition)
         {
             return $@"
                        <g id=""NowVerticalLine"" x=""0"" y=""0"" transform=""matrix(1, 0, 0, 1, {nowLinePosition}, 0)"">
@@ -1215,7 +1215,7 @@ namespace API
         /// - make sure offset in time list and input time matches
         /// - tries to get nearest day first, then tries month to nearest year
         /// </summary>
-        public static int GetLinePosition(List<Time> timeSliceList, DateTimeOffset inputTime)
+        private static int GetLinePosition(List<Time> timeSliceList, DateTimeOffset inputTime)
         {
             //input timezone must be converted output timezone (timeSliceList)
             var outputTimezone = timeSliceList[0].GetStdDateTimeOffset().Offset;
@@ -1350,7 +1350,7 @@ namespace API
 
         //wraps a list of svg elements inside 1 main svg element
         //if width not set defaults to 1000px, and height to 1000px
-        public static string WrapSvgElements(string combinedSvgString, int svgWidth, int svgTotalHeight)
+        private static string WrapSvgElements(string combinedSvgString, int svgWidth, int svgTotalHeight)
         {
 
             var svgBackgroundColor = "#f0f9ff";
@@ -2150,7 +2150,6 @@ namespace API
             }
 
         }
-
 
         private static byte[] StreamToByteArray(Stream input)
         {

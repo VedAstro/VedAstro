@@ -1033,19 +1033,7 @@ namespace API
 
             //based on length of event name make the background
             //mainly done to shorten background of short names (saving space)
-            SizeF size;
-            using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
-            {
-                size = graphics.MeasureString(formattedEventName, new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
-            }
-            var backgroundWidth = Math.Round(size.Width);
-
-
-            //set max & min width background
-            //const int maxWidth = 70;
-            //backgroundWidth = backgroundWidth > maxWidth ? maxWidth : backgroundWidth;
-            //const int minWidth = 30;
-            //backgroundWidth = backgroundWidth > minWidth ? minWidth : backgroundWidth;
+            var backgroundWidth = GetTextWidthPx(formattedEventName);
 
             int iconYAxis = lineHeight; //start icon at end of line
             var iconXAxis = $"-{backgroundWidth/2}"; //use negative to move center under line
@@ -1104,6 +1092,27 @@ namespace API
                 return returnVal;
             }
 
+            //gets the exact width of a text based on Font size & type
+            //used to generate nicely fitting background for text
+            double GetTextWidthPx(string textInput)
+            {
+                //TODO handle max & min
+                //set max & min width background
+                //const int maxWidth = 70;
+                //backgroundWidth = backgroundWidth > maxWidth ? maxWidth : backgroundWidth;
+                //const int minWidth = 30;
+                //backgroundWidth = backgroundWidth > minWidth ? minWidth : backgroundWidth;
+
+
+                SizeF size;
+                using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
+                {
+                    size = graphics.MeasureString(formattedEventName, new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
+                }
+                var widthPx = Math.Round(size.Width);
+
+                return widthPx;
+            }
         }
 
 

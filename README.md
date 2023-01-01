@@ -22,12 +22,12 @@
        and only visible in its reaction.</h5>
 
 # Links
-- [Quick Guide](https://vedastro.org/quickguide) learn how to use
-- [About](https://vedastro.org/About) the reason and goal for this project
-- [Donate](https://vedastro.org/donate) to keep this project going
-- [Report](https://vedastro.org/contact) problems you find when using software
-- [Share](https://vedastro.org/contact) your ideas for new or better features 
-- [Fix](https://vedastro.org/contact) bugs & implement features
+- [Quick Guide](https://www.vedastro.org/quickguide) learn how to use
+- [About](https://www.vedastro.org/About) the reason and goal for this project
+- [Donate](https://www.vedastro.org/donate) to keep this project going
+- [Report](https://www.vedastro.org/contact) problems you find when using software
+- [Share](https://www.vedastro.org/contact) your ideas for new or better features 
+- [Fix](https://www.vedastro.org/contact) bugs & implement features
 
 # Examples of Accurate Predictions
 The Dasa Life Calculator is the most advanced and amazingly accurate prediction tool we've ever seen.

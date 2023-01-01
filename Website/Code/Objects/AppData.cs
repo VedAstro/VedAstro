@@ -114,7 +114,7 @@ namespace Website
         
         /// <summary>
         /// Base address currently used by App,
-        /// could be http://localhost or https://vedastro.org
+        /// could be http://localhost or https://www.vedastro.org
         /// </summary>
         public static Uri? BaseAddress;
 

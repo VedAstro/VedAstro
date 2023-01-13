@@ -1308,526 +1308,188 @@ namespace Genso.Astrology.Library
 
         //SUN
         [EventCalculator(EventName.SunInAries)]
-        public static CalculatorResult SunInAries(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Aries
-        };
-
+        public static CalculatorResult SunInAries(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Aries, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Aries }, time);
         [EventCalculator(EventName.SunInTaurus)]
-        public static CalculatorResult SunInTaurus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Taurus
-        };
+        public static CalculatorResult SunInTaurus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Taurus, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Taurus }, time);
         [EventCalculator(EventName.SunInGemini)]
-        public static CalculatorResult SunInGemini(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Gemini
-        };
+        public static CalculatorResult SunInGemini(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Gemini, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Gemini }, time);
         [EventCalculator(EventName.SunInCancer)]
-        public static CalculatorResult SunInCancer(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Cancer
-        };
+        public static CalculatorResult SunInCancer(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Cancer, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Cancer }, time);
         [EventCalculator(EventName.SunInLeo)]
-        public static CalculatorResult SunInLeo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Leo
-        };
+        public static CalculatorResult SunInLeo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Leo, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Leo }, time);
         [EventCalculator(EventName.SunInVirgo)]
-        public static CalculatorResult SunInVirgo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Virgo
-        };
+        public static CalculatorResult SunInVirgo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Virgo, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Virgo }, time);
         [EventCalculator(EventName.SunInLibra)]
-        public static CalculatorResult SunInLibra(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Libra
-        };
+        public static CalculatorResult SunInLibra(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Libra, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Libra }, time);
         [EventCalculator(EventName.SunInScorpio)]
-        public static CalculatorResult SunInScorpio(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Scorpio
-        };
+        public static CalculatorResult SunInScorpio(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Scorpio, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Scorpio }, time);
         [EventCalculator(EventName.SunInSagittarius)]
-        public static CalculatorResult SunInSagittarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Sagittarius
-        };
+        public static CalculatorResult SunInSagittarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Sagittarius, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Sagittarius }, time);
         [EventCalculator(EventName.SunInCapricornus)]
-        public static CalculatorResult SunInCapricornus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Capricornus
-        };
+        public static CalculatorResult SunInCapricornus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Capricornus, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Capricornus }, time);
         [EventCalculator(EventName.SunInAquarius)]
-        public static CalculatorResult SunInAquarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Aquarius
-        };
+        public static CalculatorResult SunInAquarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Aquarius, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Aquarius }, time);
         [EventCalculator(EventName.SunInPisces)]
-        public static CalculatorResult SunInPisces(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Sun, person.BirthTime)
-                .GetSignName() == ZodiacName.Pisces
-        };
+        public static CalculatorResult SunInPisces(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Sun, ZodiacName.Pisces, time), new[] { PlanetName.Sun }, new[] { ZodiacName.Pisces }, time);
 
         //MOON
         [EventCalculator(EventName.MoonInAries)]
-        public static CalculatorResult MoonInAries(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Aries
-        };
+        public static CalculatorResult MoonInAries(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Aries, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Aries }, time);
         [EventCalculator(EventName.MoonInTaurus)]
-        public static CalculatorResult MoonInTaurus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Taurus
-        };
+        public static CalculatorResult MoonInTaurus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Taurus, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Taurus }, time);
         [EventCalculator(EventName.MoonInGemini)]
-        public static CalculatorResult MoonInGemini(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Gemini
-        };
+        public static CalculatorResult MoonInGemini(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Gemini, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Gemini }, time);
         [EventCalculator(EventName.MoonInCancer)]
-        public static CalculatorResult MoonInCancer(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Cancer
-        };
+        public static CalculatorResult MoonInCancer(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Cancer, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Cancer }, time);
         [EventCalculator(EventName.MoonInLeo)]
-        public static CalculatorResult MoonInLeo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Leo
-        };
+        public static CalculatorResult MoonInLeo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Leo, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Leo }, time);
         [EventCalculator(EventName.MoonInVirgo)]
-        public static CalculatorResult MoonInVirgo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Virgo
-        };
+        public static CalculatorResult MoonInVirgo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Virgo, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Virgo }, time);
         [EventCalculator(EventName.MoonInLibra)]
-        public static CalculatorResult MoonInLibra(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Libra
-        };
+        public static CalculatorResult MoonInLibra(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Libra, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Libra }, time);
         [EventCalculator(EventName.MoonInScorpio)]
-        public static CalculatorResult MoonInScorpio(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Scorpio
-        };
+        public static CalculatorResult MoonInScorpio(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Scorpio, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Scorpio }, time);
         [EventCalculator(EventName.MoonInSagittarius)]
-        public static CalculatorResult MoonInSagittarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Sagittarius
-        };
+        public static CalculatorResult MoonInSagittarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Sagittarius, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Sagittarius }, time);
         [EventCalculator(EventName.MoonInCapricornus)]
-        public static CalculatorResult MoonInCapricornus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Capricornus
-        };
+        public static CalculatorResult MoonInCapricornus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Capricornus, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Capricornus }, time);
         [EventCalculator(EventName.MoonInAquarius)]
-        public static CalculatorResult MoonInAquarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Aquarius
-        };
+        public static CalculatorResult MoonInAquarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Aquarius, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Aquarius }, time);
         [EventCalculator(EventName.MoonInPisces)]
-        public static CalculatorResult MoonInPisces(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, person.BirthTime)
-                .GetSignName() == ZodiacName.Pisces
-        };
+        public static CalculatorResult MoonInPisces(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Moon, ZodiacName.Pisces, time), new[] { PlanetName.Moon }, new[] { ZodiacName.Pisces }, time);
+
 
         //MARS
         [EventCalculator(EventName.MarsInAries)]
-        public static CalculatorResult MarsInAries(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Aries
-        };
+        public static CalculatorResult MarsInAries(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Aries, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Aries }, time);
         [EventCalculator(EventName.MarsInTaurus)]
-        public static CalculatorResult MarsInTaurus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Taurus
-        };
+        public static CalculatorResult MarsInTaurus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Taurus, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Taurus }, time);
         [EventCalculator(EventName.MarsInGemini)]
-        public static CalculatorResult MarsInGemini(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Gemini
-        };
+        public static CalculatorResult MarsInGemini(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Gemini, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Gemini }, time);
         [EventCalculator(EventName.MarsInCancer)]
-        public static CalculatorResult MarsInCancer(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Cancer
-        };
+        public static CalculatorResult MarsInCancer(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Cancer, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Cancer }, time);
         [EventCalculator(EventName.MarsInLeo)]
-        public static CalculatorResult MarsInLeo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Leo
-        };
+        public static CalculatorResult MarsInLeo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Leo, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Leo }, time);
         [EventCalculator(EventName.MarsInVirgo)]
-        public static CalculatorResult MarsInVirgo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Virgo
-        };
+        public static CalculatorResult MarsInVirgo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Virgo, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Virgo }, time);
         [EventCalculator(EventName.MarsInLibra)]
-        public static CalculatorResult MarsInLibra(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Libra
-        };
+        public static CalculatorResult MarsInLibra(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Libra, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Libra }, time);
         [EventCalculator(EventName.MarsInScorpio)]
-        public static CalculatorResult MarsInScorpio(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Scorpio
-        };
+        public static CalculatorResult MarsInScorpio(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Scorpio, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Scorpio }, time);
         [EventCalculator(EventName.MarsInSagittarius)]
-        public static CalculatorResult MarsInSagittarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Sagittarius
-        };
+        public static CalculatorResult MarsInSagittarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Sagittarius, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Sagittarius }, time);
         [EventCalculator(EventName.MarsInCapricornus)]
-        public static CalculatorResult MarsInCapricornus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Capricornus
-        };
+        public static CalculatorResult MarsInCapricornus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Capricornus, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Capricornus }, time);
         [EventCalculator(EventName.MarsInAquarius)]
-        public static CalculatorResult MarsInAquarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Aquarius
-        };
+        public static CalculatorResult MarsInAquarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Aquarius, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Aquarius }, time);
         [EventCalculator(EventName.MarsInPisces)]
-        public static CalculatorResult MarsInPisces(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mars, person.BirthTime)
-                .GetSignName() == ZodiacName.Pisces
-        };
+        public static CalculatorResult MarsInPisces(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mars, ZodiacName.Pisces, time), new[] { PlanetName.Mars }, new[] { ZodiacName.Pisces }, time);
 
 
         //MERCURY
         [EventCalculator(EventName.MercuryInAries)]
-        public static CalculatorResult MercuryInAries(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Aries
-        };
+        public static CalculatorResult MercuryInAries(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Aries, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Aries }, time);
         [EventCalculator(EventName.MercuryInTaurus)]
-        public static CalculatorResult MercuryInTaurus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Taurus
-        };
+        public static CalculatorResult MercuryInTaurus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Taurus, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Taurus }, time);
         [EventCalculator(EventName.MercuryInGemini)]
-        public static CalculatorResult MercuryInGemini(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Gemini
-        };
+        public static CalculatorResult MercuryInGemini(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Gemini, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Gemini }, time);
         [EventCalculator(EventName.MercuryInCancer)]
-        public static CalculatorResult MercuryInCancer(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Cancer
-        };
+        public static CalculatorResult MercuryInCancer(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Cancer, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Cancer }, time);
         [EventCalculator(EventName.MercuryInLeo)]
-        public static CalculatorResult MercuryInLeo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Leo
-        };
+        public static CalculatorResult MercuryInLeo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Leo, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Leo }, time);
         [EventCalculator(EventName.MercuryInVirgo)]
-        public static CalculatorResult MercuryInVirgo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Virgo
-        };
+        public static CalculatorResult MercuryInVirgo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Virgo, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Virgo }, time);
         [EventCalculator(EventName.MercuryInLibra)]
-        public static CalculatorResult MercuryInLibra(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Libra
-        };
+        public static CalculatorResult MercuryInLibra(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Libra, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Libra }, time);
         [EventCalculator(EventName.MercuryInScorpio)]
-        public static CalculatorResult MercuryInScorpio(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Scorpio
-        };
+        public static CalculatorResult MercuryInScorpio(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Scorpio, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Scorpio }, time);
         [EventCalculator(EventName.MercuryInSagittarius)]
-        public static CalculatorResult MercuryInSagittarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Sagittarius
-        };
+        public static CalculatorResult MercuryInSagittarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Sagittarius, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Sagittarius }, time);
         [EventCalculator(EventName.MercuryInCapricornus)]
-        public static CalculatorResult MercuryInCapricornus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Capricornus
-        };
+        public static CalculatorResult MercuryInCapricornus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Capricornus, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Capricornus }, time);
         [EventCalculator(EventName.MercuryInAquarius)]
-        public static CalculatorResult MercuryInAquarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Aquarius
-        };
+        public static CalculatorResult MercuryInAquarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Aquarius, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Aquarius }, time);
         [EventCalculator(EventName.MercuryInPisces)]
-        public static CalculatorResult MercuryInPisces(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, person.BirthTime)
-                .GetSignName() == ZodiacName.Pisces
-        };
-
+        public static CalculatorResult MercuryInPisces(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Mercury, ZodiacName.Pisces, time), new[] { PlanetName.Mercury }, new[] { ZodiacName.Pisces }, time);
 
         //JUPITER
         [EventCalculator(EventName.JupiterInAries)]
-        public static CalculatorResult JupiterInAries(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Aries
-        };
+        public static CalculatorResult JupiterInAries(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Aries, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Aries }, time);
         [EventCalculator(EventName.JupiterInTaurus)]
-        public static CalculatorResult JupiterInTaurus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Taurus
-        };
+        public static CalculatorResult JupiterInTaurus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Taurus, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Taurus }, time);
         [EventCalculator(EventName.JupiterInGemini)]
-        public static CalculatorResult JupiterInGemini(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Gemini
-        };
+        public static CalculatorResult JupiterInGemini(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Gemini, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Gemini }, time);
         [EventCalculator(EventName.JupiterInCancer)]
-        public static CalculatorResult JupiterInCancer(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Cancer
-        };
+        public static CalculatorResult JupiterInCancer(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Cancer, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Cancer }, time);
         [EventCalculator(EventName.JupiterInLeo)]
-        public static CalculatorResult JupiterInLeo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Leo
-        };
+        public static CalculatorResult JupiterInLeo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Leo, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Leo }, time);
         [EventCalculator(EventName.JupiterInVirgo)]
-        public static CalculatorResult JupiterInVirgo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Virgo
-        };
+        public static CalculatorResult JupiterInVirgo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Virgo, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Virgo }, time);
         [EventCalculator(EventName.JupiterInLibra)]
-        public static CalculatorResult JupiterInLibra(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Libra
-        };
+        public static CalculatorResult JupiterInLibra(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Libra, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Libra }, time);
         [EventCalculator(EventName.JupiterInScorpio)]
-        public static CalculatorResult JupiterInScorpio(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Scorpio
-        };
+        public static CalculatorResult JupiterInScorpio(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Scorpio, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Scorpio }, time);
         [EventCalculator(EventName.JupiterInSagittarius)]
-        public static CalculatorResult JupiterInSagittarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Sagittarius
-        };
+        public static CalculatorResult JupiterInSagittarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Sagittarius, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Sagittarius }, time);
         [EventCalculator(EventName.JupiterInCapricornus)]
-        public static CalculatorResult JupiterInCapricornus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Capricornus
-        };
+        public static CalculatorResult JupiterInCapricornus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Capricornus, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Capricornus }, time);
         [EventCalculator(EventName.JupiterInAquarius)]
-        public static CalculatorResult JupiterInAquarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Aquarius
-        };
+        public static CalculatorResult JupiterInAquarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Aquarius, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Aquarius }, time);
         [EventCalculator(EventName.JupiterInPisces)]
-        public static CalculatorResult JupiterInPisces(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Jupiter, person.BirthTime)
-                .GetSignName() == ZodiacName.Pisces
-        };
-
+        public static CalculatorResult JupiterInPisces(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Jupiter, ZodiacName.Pisces, time), new[] { PlanetName.Jupiter }, new[] { ZodiacName.Pisces }, time);
 
         //VENUS
         [EventCalculator(EventName.VenusInAries)]
-        public static CalculatorResult VenusInAries(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Aries
-        };
+        public static CalculatorResult VenusInAries(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Aries, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Aries }, time);
         [EventCalculator(EventName.VenusInTaurus)]
-        public static CalculatorResult VenusInTaurus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Taurus
-        };
+        public static CalculatorResult VenusInTaurus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Taurus, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Taurus }, time);
         [EventCalculator(EventName.VenusInGemini)]
-        public static CalculatorResult VenusInGemini(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Gemini
-        };
+        public static CalculatorResult VenusInGemini(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Gemini, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Gemini }, time);
         [EventCalculator(EventName.VenusInCancer)]
-        public static CalculatorResult VenusInCancer(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Cancer
-        };
+        public static CalculatorResult VenusInCancer(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Cancer, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Cancer }, time);
         [EventCalculator(EventName.VenusInLeo)]
-        public static CalculatorResult VenusInLeo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Leo
-        };
+        public static CalculatorResult VenusInLeo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Leo, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Leo }, time);
         [EventCalculator(EventName.VenusInVirgo)]
-        public static CalculatorResult VenusInVirgo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Virgo
-        };
+        public static CalculatorResult VenusInVirgo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Virgo, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Virgo }, time);
         [EventCalculator(EventName.VenusInLibra)]
-        public static CalculatorResult VenusInLibra(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Libra
-        };
+        public static CalculatorResult VenusInLibra(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Libra, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Libra }, time);
         [EventCalculator(EventName.VenusInScorpio)]
-        public static CalculatorResult VenusInScorpio(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Scorpio
-        };
+        public static CalculatorResult VenusInScorpio(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Scorpio, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Scorpio }, time);
         [EventCalculator(EventName.VenusInSagittarius)]
-        public static CalculatorResult VenusInSagittarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Sagittarius
-        };
+        public static CalculatorResult VenusInSagittarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Sagittarius, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Sagittarius }, time);
         [EventCalculator(EventName.VenusInCapricornus)]
-        public static CalculatorResult VenusInCapricornus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Capricornus
-        };
+        public static CalculatorResult VenusInCapricornus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Capricornus, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Capricornus }, time);
         [EventCalculator(EventName.VenusInAquarius)]
-        public static CalculatorResult VenusInAquarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Aquarius
-        };
+        public static CalculatorResult VenusInAquarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Aquarius, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Aquarius }, time);
         [EventCalculator(EventName.VenusInPisces)]
-        public static CalculatorResult VenusInPisces(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Venus, person.BirthTime)
-                .GetSignName() == ZodiacName.Pisces
-        };
+        public static CalculatorResult VenusInPisces(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Venus, ZodiacName.Pisces, time), new[] { PlanetName.Venus }, new[] { ZodiacName.Pisces }, time);
 
 
         //SATURN
         [EventCalculator(EventName.SaturnInAries)]
-        public static CalculatorResult SaturnInAries(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Aries
-        };
+        public static CalculatorResult SaturnInAries(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Aries, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Aries }, time);
         [EventCalculator(EventName.SaturnInTaurus)]
-        public static CalculatorResult SaturnInTaurus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Taurus
-        };
+        public static CalculatorResult SaturnInTaurus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Taurus, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Taurus }, time);
         [EventCalculator(EventName.SaturnInGemini)]
-        public static CalculatorResult SaturnInGemini(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Gemini
-        };
+        public static CalculatorResult SaturnInGemini(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Gemini, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Gemini }, time);
         [EventCalculator(EventName.SaturnInCancer)]
-        public static CalculatorResult SaturnInCancer(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Cancer
-        };
+        public static CalculatorResult SaturnInCancer(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Cancer, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Cancer }, time);
         [EventCalculator(EventName.SaturnInLeo)]
-        public static CalculatorResult SaturnInLeo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Leo
-        };
+        public static CalculatorResult SaturnInLeo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Leo, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Leo }, time);
         [EventCalculator(EventName.SaturnInVirgo)]
-        public static CalculatorResult SaturnInVirgo(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Virgo
-        };
+        public static CalculatorResult SaturnInVirgo(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Virgo, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Virgo }, time);
         [EventCalculator(EventName.SaturnInLibra)]
-        public static CalculatorResult SaturnInLibra(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Libra
-        };
+        public static CalculatorResult SaturnInLibra(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Libra, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Libra }, time);
         [EventCalculator(EventName.SaturnInScorpio)]
-        public static CalculatorResult SaturnInScorpio(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Scorpio
-        };
+        public static CalculatorResult SaturnInScorpio(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Scorpio, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Scorpio }, time);
         [EventCalculator(EventName.SaturnInSagittarius)]
-        public static CalculatorResult SaturnInSagittarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Sagittarius
-        };
+        public static CalculatorResult SaturnInSagittarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Sagittarius, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Sagittarius }, time);
         [EventCalculator(EventName.SaturnInCapricornus)]
-        public static CalculatorResult SaturnInCapricornus(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Capricornus
-        };
+        public static CalculatorResult SaturnInCapricornus(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Capricornus, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Capricornus }, time);
         [EventCalculator(EventName.SaturnInAquarius)]
-        public static CalculatorResult SaturnInAquarius(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Aquarius
-        };
+        public static CalculatorResult SaturnInAquarius(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Aquarius, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Aquarius }, time);
         [EventCalculator(EventName.SaturnInPisces)]
-        public static CalculatorResult SaturnInPisces(Time time, Person person) => new()
-        {
-            Occuring = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Saturn, person.BirthTime)
-                .GetSignName() == ZodiacName.Pisces
-        };
+        public static CalculatorResult SaturnInPisces(Time time, Person person) => CalculatorResult.New(AstronomicalCalculator.IsPlanetInSign(PlanetName.Saturn, ZodiacName.Pisces, time), new[] { PlanetName.Saturn }, new[] { ZodiacName.Pisces }, time);
 
 
 
@@ -1851,7 +1513,7 @@ namespace Genso.Astrology.Library
             //occuring if all conditions met
             var occuring = marsIn7th && venusIn7th;
 
-            return CalculatorResult.New(occuring, new[] { HouseName.House7 }, new[]{PlanetName.Mars, PlanetName.Venus }, time);
+            return CalculatorResult.New(occuring, new[] { HouseName.House7 }, new[] { PlanetName.Mars, PlanetName.Venus }, time);
 
         }
 

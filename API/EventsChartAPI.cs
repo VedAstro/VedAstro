@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -13,7 +11,6 @@ using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using static Azure.Core.HttpHeader;
 
 namespace API
 {
@@ -504,8 +501,7 @@ namespace API
                 }
 
 
-                return new OkObjectResult(rootXml.ToString());
-
+                return APITools.PassMessage(rootXml);
             }
             catch (Exception e)
             {
@@ -551,7 +547,6 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
                 return APITools.FailMessage(e);
             }
         }

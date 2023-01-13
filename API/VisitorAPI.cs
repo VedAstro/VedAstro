@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -33,7 +29,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -44,7 +40,6 @@ namespace API
         [FunctionName("getvisitorlist")]
         public static async Task<IActionResult> GetVisitorList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
-            var responseMessage = "";
 
             try
             {
@@ -64,7 +59,7 @@ namespace API
                 //                        select visitorXml;
 
                 //send list to caller
-                responseMessage = visitorLogXml.ToString();
+                return APITools.PassMessage(visitorLogXml.Root);
 
             }
             catch (Exception e)
@@ -73,13 +68,8 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
-
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
         [FunctionName("deletevisitorbyuserid")]
@@ -115,7 +105,7 @@ namespace API
                 //log error
                 await Log.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -154,7 +144,7 @@ namespace API
                 //log error
                 await Log.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }

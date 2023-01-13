@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Azure.Storage.Blobs;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.JSInterop;
 
 namespace API
 {
@@ -43,7 +38,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -91,7 +86,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -125,7 +120,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //let caller know fail, include exception info for easy debugging
-                return APITools.FailMessage(e.ToString());
+                return APITools.FailMessage(e);
             }
 
 
@@ -165,7 +160,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -207,18 +202,17 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
         }
 
         /// <summary>
         /// Gets all person profiles owned by User ID & Visitor ID
         /// </summary>
-        [FunctionName("getpersonlist")]
+        [FunctionName("GetPersonList")]
         public static async Task<IActionResult> GetPersonList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
-            var responseMessage = "";
 
             try
             {
@@ -241,7 +235,7 @@ namespace API
                 var personListNoDupes = filteredList1.Distinct().ToList();
 
                 //send filtered list to caller
-                responseMessage = new XElement("Root", personListNoDupes).ToString();
+                return APITools.PassMessage(new XElement("Root", personListNoDupes));
 
             }
             catch (Exception e)
@@ -249,13 +243,10 @@ namespace API
                 //log error
                 await Log.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
 
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
 

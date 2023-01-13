@@ -28,5 +28,6 @@
 	</ItemGroup>
 	<PropertyGroup>
 		<DisableFunctionExtensionVersionUpdate>true</DisableFunctionExtensionVersionUpdate>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -77,6 +77,25 @@ namespace Genso.Astrology.Library
             return rootXml;
         }
 
+
+        /// <summary>
+        /// Converts given exception data to XML
+        /// </summary>
+        public static XElement ExceptionToXml(Exception e)
+        {
+
+            var responseMessage = new XElement("Exception");
+
+            responseMessage.Add($"#Message#\n{e.Message}\n");
+            responseMessage.Add($"#Data#\n{e.Data}\n");
+            responseMessage.Add($"#InnerException#\n{e.InnerException}\n");
+            responseMessage.Add($"#Source#\n{e.Source}\n");
+            responseMessage.Add($"#Source#\n{e.Source}\n");
+            responseMessage.Add($"#StackTrace#\n{e.StackTrace}\n");
+            responseMessage.Add($"#StackTrace#\n{e.TargetSite}\n");
+
+            return responseMessage;
+        }
 
         /// <summary>
         /// - Type is a value typ

@@ -172,7 +172,8 @@ namespace API
             try
             {
                 //get person
-                var person = await APITools.GetPersonFromId("54041d1ffb494a79997f7987ecfcf08b5");
+                var person = await APITools.GetPersonFromId("05abf671c8bf4e4badc07a086c067f26");
+                //var person = await APITools.GetPersonFromId("54041d1ffb494a79997f7987ecfcf08b5");
 
                 //get all birth time with different rising sign
                 var possibleTimeList = await GetTimeList(person);
@@ -419,7 +420,7 @@ namespace API
                 //extract out the person id from chart and send it to caller
                 var personIdXml = new XElement("PersonId", chart.PersonId);
 
-                return new OkObjectResult(personIdXml.ToString());
+                return APITools.PassMessage(personIdXml);
 
             }
             catch (Exception e)
@@ -428,7 +429,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(Tools.ExceptionToXml(e));
             }
 
         }

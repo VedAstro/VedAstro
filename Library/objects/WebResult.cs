@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -21,6 +22,15 @@ namespace Genso.Astrology.Library
         public bool Result { get; set; }
 
         public T Payload { get; set; }
+
+
+        public WebResult() { }
+
+        public WebResult(bool result, T payload)
+        {
+            Result = result;
+            Payload = payload;
+        }
 
         public static implicit operator T(WebResult<T> value)
         {

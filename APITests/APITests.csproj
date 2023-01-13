@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
+
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

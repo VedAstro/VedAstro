@@ -54,7 +54,7 @@ namespace Genso.Astrology.Library
         /// Contains data about planets, houses, and signs related to a calculation
         /// Note: filled when IsEventOccuring is called
         /// </summary>
-        public RelatedBody RelatedBody { get; set; } = new RelatedBody();
+        public RelatedBody RelatedBody { get; set; } = new RelatedBody(); //default empty
         
         public List<EventTag> EventTags { get; }
 

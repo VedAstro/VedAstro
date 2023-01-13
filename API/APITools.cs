@@ -54,9 +54,9 @@ namespace API
         /// Default success message sent to caller
         /// </summary>
         public static OkObjectResult PassMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msg)).ToString());
-        public static OkObjectResult PassMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msgXml)).ToString());
+        public static OkObjectResult PassMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payloadXml)).ToString());
         public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
-        private static OkObjectResult FailMessage(XElement msgXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msgXml)).ToString());
+        public static OkObjectResult FailMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payloadXml)).ToString());
 
         public static List<HoroscopeData> SavedHoroscopeDataList { get; set; } = null; //null used for checking empty
 
@@ -324,6 +324,9 @@ namespace API
 
             return new OkObjectResult(responseMessage);
         }
+
+
+        
 
 
         public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)

@@ -2666,6 +2666,17 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
+        /// Checks if a given planet is in a given sign at a given time
+        /// </summary>
+        public static bool IsPlanetInSign(PlanetName planetName, ZodiacName signInput, Time time)
+        {
+            var currentSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, time).GetSignName();
+
+            //check if sign match
+            return currentSign == signInput;
+        }
+
+        /// <summary>
         /// Get navamsa sign of planet
         /// </summary>
         public static ZodiacName GetPlanetNavamsaSign(PlanetName planetName, Time time)

@@ -438,8 +438,8 @@ namespace API
         /// <summary>
         /// Saves the chart in Azure Storage
         /// </summary>
-        [FunctionName("savepersoneventschart")]
-        public static async Task<IActionResult> SavePersonEventsChart(
+        [FunctionName("SaveEventsChart")]
+        public static async Task<IActionResult> SaveEventsChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             try

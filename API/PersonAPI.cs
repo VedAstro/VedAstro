@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -232,10 +233,13 @@ namespace API
 
                 //combine and remove duplicates
                 if (filteredList2.Any()) { filteredList1.AddRange(filteredList2); }
-                var personListNoDupes = filteredList1.Distinct().ToList();
+                List<XElement> personListNoDupes = filteredList1.Distinct().ToList();
+
+                //convert list to xml
+                var xmlPayload = Tools.AnyTypeToXmlList(personListNoDupes);
 
                 //send filtered list to caller
-                return APITools.PassMessage(new XElement("Root", personListNoDupes));
+                return APITools.PassMessage(xmlPayload);
 
             }
             catch (Exception e)

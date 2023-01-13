@@ -77,6 +77,19 @@ namespace Genso.Astrology.Library
             return rootXml;
         }
 
+        /// <summary>
+        /// Simple override for XML, to skip parsing to type before sorting
+        /// </summary>
+        public static XElement AnyTypeToXmlList(List<XElement> xmlList, string rootElementName = "Root")
+        {
+            var rootXml = new XElement(rootElementName);
+            foreach (var xmlItem in xmlList)
+            {
+                rootXml.Add(xmlItem);
+            }
+            return rootXml;
+        }
+
 
         /// <summary>
         /// Converts given exception data to XML

@@ -24,7 +24,7 @@ namespace API
         /// Call to see if return correct IP
         /// </summary>
         [FunctionName("getipaddress")]
-        public static async Task<IActionResult> GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous,"get", "post", Route = null)]HttpRequestMessage incomingRequest)
+        public static async Task<IActionResult> GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestMessage incomingRequest)
         {
             return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip");
         }
@@ -32,10 +32,9 @@ namespace API
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> GetMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
-            string responseMessage;
 
             try
-            {                                                                                                                                                                                                                                                                                                                                           
+            {
                 //get name of male & female
                 var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
                 var maleId = rootXml.Element("MaleId")?.Value;
@@ -43,25 +42,21 @@ namespace API
 
                 //generate compatibility report
                 var compatibilityReport = await APITools.GetCompatibilityReport(maleId, femaleId);
-                responseMessage = compatibilityReport.ToXml().ToString();
+                return APITools.PassMessage(compatibilityReport.ToXml());
             }
             catch (Exception e)
             {
                 //log error
                 await Log.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-            return okObjectResult;
         }
 
         [FunctionName("gethoroscope")]
         public static async Task<IActionResult> GetHoroscope([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
-            string responseMessage;
 
             try
             {
@@ -75,18 +70,17 @@ namespace API
                 var predictionList = await APITools.GetPrediction(person);
 
                 //convert list to xml string in root elm
-                responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
+                return APITools.PassMessage(Tools.AnyTypeToXmlList(predictionList));
+
             }
             catch (Exception e)
             {
                 //log error
                 await Log.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
-            var okObjectResult = new OkObjectResult(responseMessage);
-            return okObjectResult;
         }
 
 

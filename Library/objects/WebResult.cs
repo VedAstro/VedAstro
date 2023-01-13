@@ -19,7 +19,7 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// If true result is PASS, if false is FAIL
         /// </summary>
-        public bool Result { get; set; }
+        public bool IsPass { get; set; }
 
         public T Payload { get; set; }
 
@@ -28,7 +28,7 @@ namespace Genso.Astrology.Library
 
         public WebResult(bool result, T payload)
         {
-            Result = result;
+            IsPass = result;
             Payload = payload;
         }
 
@@ -60,7 +60,7 @@ namespace Genso.Astrology.Library
             var result = new WebResult<XElement>();
 
             //get data out of the xml
-            result.Result = inputXml.Element("Status")?.Value == "Pass";
+            result.IsPass = inputXml.Element("Status")?.Value == "Pass";
             result.Payload = inputXml.Element("Payload")?.Elements().FirstOrDefault();
 
             return result;

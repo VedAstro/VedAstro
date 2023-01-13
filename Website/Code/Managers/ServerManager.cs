@@ -34,7 +34,7 @@ namespace Website
         public const string AddTaskApi = ApiUrl + "/addtask";
         public const string AddVisitorApi = ApiUrl + "/addvisitor";
 
-        public const string GetPersonListApi = ApiUrl + "/getpersonlist";
+        public const string GetPersonList = ApiUrl + "/GetPersonList";
         public const string GetPersonApi = ApiUrl + "/getperson";
         public const string GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
 
@@ -46,7 +46,7 @@ namespace Website
         public const string GetEventsChart = ApiUrl + "/geteventschart";
         public const string GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         public const string GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
-        public const string SaveEventsChart = ApiUrl + "/savepersoneventschart";
+        public const string SaveEventsChart = ApiUrl + "/SaveEventsChart";
         public const string GetEventsApi = ApiUrl + "/getevents";
         public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
         //TODO HIDE API
@@ -58,7 +58,7 @@ namespace Website
         public const string SignInGoogle = ApiUrl + "/SignInGoogle";
         public const string SignInFacebook = ApiUrl + "/SignInFacebook";
         public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
-        
+
         /// <summary>
         /// Keep track of calls waiting in line,
         /// to by pass if one call holds the que
@@ -207,8 +207,10 @@ namespace Website
         /// Note: xml is not checked here, just converted
         /// NOTEl: No timeout! Will wait forever
         /// </summary>
-        public static async Task<XElement> WriteToServerXmlReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
+        public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
+            WebResult<XElement> returnVal;
+
             await IfBusyPleaseHold(apiUrl);
 
             //set busy
@@ -245,11 +247,10 @@ namespace Website
                 //problems might occur when parsing
                 //try to parse as XML
                 var writeToServerXmlReply = XElement.Parse(rawMessage);
+                returnVal = WebResult<XElement>.FromXml(writeToServerXmlReply);
 
                 //set free
                 IsBusy = false;
-
-                return writeToServerXmlReply;
             }
 
             //note: failure here could be for several very likely reasons,
@@ -261,8 +262,13 @@ namespace Website
                 //set free
                 IsBusy = false;
 
-                throw new ApiCommunicationFailed($"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}", e);
+                returnVal = new WebResult<XElement>(false, new XElement("Root", $"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}"));
+
+                //throw new ApiCommunicationFailed($"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}", e);
             }
+
+
+            return returnVal;
 
         }
 

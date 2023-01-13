@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using Genso.Astrology.Library.Compatibility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
@@ -28,7 +29,8 @@ namespace API
 
 
                 //send task list to caller
-                responseMessage = messageListXml.ToString();
+                return APITools.PassMessage(messageListXml.Root);
+
 
             }
             catch (Exception e)
@@ -36,7 +38,7 @@ namespace API
                 //log error
                 await Log.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
 
@@ -58,6 +60,8 @@ namespace API
                 //add new message to main list
                 await APITools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, APITools.BlobContainerName);
 
+                //TODO send email to admin
+
                 return APITools.PassMessage();
 
             }
@@ -67,7 +71,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
         }
 

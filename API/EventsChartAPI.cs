@@ -73,7 +73,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -159,7 +159,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
         }
 
@@ -196,7 +196,7 @@ namespace API
                 //log error
                 await Log.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
             var okObjectResult = new OkObjectResult(responseMessage);
@@ -270,7 +270,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
         }
 
@@ -307,7 +307,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -353,7 +353,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -392,7 +392,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
         }
@@ -461,7 +461,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
 
@@ -513,7 +513,7 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
             }
 
 
@@ -551,7 +551,8 @@ namespace API
                 await Log.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FormatErrorReply(e);
+                return APITools.FailMessage(e);
+                return APITools.FailMessage(e);
             }
         }
 
@@ -866,7 +867,7 @@ namespace API
         /// Get color based on nature
         /// </summary>
         private static string GetColor(EventNature? eventNature) => GetColor(eventNature.ToString());
-        
+
         /// <summary>
         /// Get color based on nature
         /// </summary>

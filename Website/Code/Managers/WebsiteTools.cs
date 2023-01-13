@@ -98,8 +98,8 @@ namespace Website
 
             //get all person profile owned by current user/visitor
             var payload = new XElement("Root", new XElement("UserId", userId), new XElement("VisitorId", userId));
-            var personListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonListApi, payload, jsRuntime);
-            var personList = Person.FromXml(personListRootXml.Elements());
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonList, payload, jsRuntime);
+            var personList = Person.FromXml(result.Payload.Elements());
 
             return personList;
         }
@@ -111,8 +111,8 @@ namespace Website
         /// </summary>
         public static async Task<List<XElement>> GetVisitorList(string userId, IJSRuntime jsRuntime)
         {
-            var visitorListRootXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetVisitorList, new XElement("UserId", userId), jsRuntime);
-            var visitorList = visitorListRootXml.Elements().ToList();
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetVisitorList, new XElement("UserId", userId), jsRuntime);
+            var visitorList = result.Payload.Elements().ToList();//visitorListRootXml
             return visitorList;
         }
 
@@ -166,7 +166,7 @@ namespace Website
                 var xmlData = Tools.AnyTypeToXml(personId);
                 var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
 
-                var personXml = result.Element("Person");
+                var personXml = result.Payload.Element("Person");
 
                 //parse received person
                 var receivedPerson = Person.FromXml(personXml);
@@ -216,10 +216,10 @@ namespace Website
                 var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
 
                 //check result
-                if (Tools.IsResultPass(result))
+                if (result.IsPass)
                 {
                     //if pass get person data out & return to caller
-                    var personXml = Tools.GetPayload(result);
+                    var personXml = result.Payload;
                     return Person.FromXml(personXml);
                 }
                 else
@@ -253,9 +253,9 @@ namespace Website
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePersonApi, personIdXml, jsRuntime);
 
             //check result, display error if needed
-            if (!Tools.IsResultPass(result))
+            if (!result.IsPass)
             {
-                WebsiteLogManager.LogError($"BLZ:DeletePerson() Fail:\n{result.Value}");
+                WebsiteLogManager.LogError($"BLZ:DeletePerson() Fail:\n{result.Payload}");
                 await jsRuntime.ShowAlert("error", AlertText.DeletePersonFail, true);
             }
 
@@ -269,9 +269,9 @@ namespace Website
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteChartApi, chartIdXml, jsRuntime);
 
             //check result, display error if needed
-            if (!Tools.IsResultPass(result))
+            if (!result.IsPass)
             {
-                WebsiteLogManager.LogError($"BLZ:DeleteSavedChart() Fail:\n{result.Value}");
+                WebsiteLogManager.LogError($"BLZ:DeleteSavedChart() Fail:\n{result.Payload}");
                 await jsRuntime.ShowAlert("error", AlertText.DeleteChartFail, true);
             }
 
@@ -290,9 +290,9 @@ namespace Website
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.UpdatePersonApi, updatedPersonXml, jsRuntime);
 
             //check result, display error if needed
-            if (!Tools.IsResultPass(result))
+            if (!result.IsPass)
             {
-                WebsiteLogManager.LogError($"BLZ:UpdatePerson() Fail:\n{result.Value}");
+                WebsiteLogManager.LogError($"BLZ:UpdatePerson() Fail:\n{result.Payload}");
                 await jsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
             }
 
@@ -310,9 +310,9 @@ namespace Website
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, AppData.JsRuntime);
 
             //check result, display error if needed
-            if (!Tools.IsResultPass(result))
+            if (!result.IsPass)
             {
-                WebsiteLogManager.LogError($"BLZ:AddPerson() Fail:\n{result.Value}");
+                WebsiteLogManager.LogError($"BLZ:AddPerson() Fail:\n{result.Payload}");
                 await AppData.JsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
             }
 
@@ -626,7 +626,7 @@ namespace Website
             //get person hash from api
             var chartIdXml = new XElement("ChartId", selectedChartId);
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonIdFromSavedChartId, chartIdXml, jsRuntime);
-            var personId = result.Value;
+            var personId = result.Payload.Value;//xml named person id
             var selectedPerson = await GetPersonFromId(personId, jsRuntime);
 
             return selectedPerson;

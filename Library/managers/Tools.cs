@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -420,32 +420,6 @@ namespace Genso.Astrology.Library
             return text;
         }
 
-        /// <summary>
-        /// Checks if result xml sent from api to client has status pass
-        /// else will return false, will also false if any error in result
-        /// </summary>
-        public static bool IsResultPass(XElement result)
-        {
-            try
-            {
-                return result.Element("Status")?.Value == "Pass";
-            }
-            catch (Exception) { return false; }
-        }
-
-        /// <summary>
-        /// Input the result xml obtained from API
-        /// Gets first child element in "Payload" element
-        /// </summary>
-        public static XElement? GetPayload(XElement result)
-        {
-            try
-            {
-                return result.Element("Payload")?.Elements()?.FirstOrDefault();
-
-            }
-            catch (Exception) { return new XElement("PayloadFailed"); }
-        }
 
         /// <summary>
         /// Converts a timezone (+08:00) in string form to parsed timespan 
@@ -529,13 +503,13 @@ namespace Genso.Astrology.Library
         {
             //get geo location first then call underlying method
             var geoLocation = await GeoLocation.FromName(locationName);
-            return Tools.StringToTimezone(await GetTimezoneOffset(geoLocation, timeAtLocation, apiKey));
+            return Tools.StringToTimezone(await GetTimezoneOffsetApi(geoLocation, timeAtLocation, apiKey));
         }
         public static async Task<string> GetTimezoneOffsetString(string locationName, DateTime timeAtLocation, string apiKey)
         {
             //get geo location first then call underlying method
             var geoLocation = await GeoLocation.FromName(locationName);
-            return await GetTimezoneOffset(geoLocation, timeAtLocation, apiKey);
+            return await GetTimezoneOffsetApi(geoLocation, timeAtLocation, apiKey);
         }
         public static async Task<string> GetTimezoneOffsetString(string location, string dateTime)
         {
@@ -556,54 +530,76 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Given a location & time, will use Google Timezone API
-        /// to get accurate time zone that was/is used
+        /// to get accurate time zone that was/is used, if Google fail,
+        /// then auto default to system timezone
         /// NOTE:
+        /// - sometimes unexpected failure to call google by some clients only
         /// - offset of timeAtLocation not important
         /// - googleGeoLocationApiKey needed to work
         /// </summary>
-        public static async Task<string> GetTimezoneOffset(GeoLocation geoLocation, DateTimeOffset timeAtLocation, string apiKey)
+        public static async Task<WebResult<string>> GetTimezoneOffsetApi(GeoLocation geoLocation, DateTimeOffset timeAtLocation, string apiKey)
         {
+            var returnResult = new WebResult<string>();
+
             //use timestamp to account for historic timezone changes
             var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
             var longitude = geoLocation.GetLongitude();
             var latitude = geoLocation.GetLatitude();
 
             //create the request url for Google API 
-            //get the API key string stored separately (for security reasons)
+            //todo get the API key string stored separately (for security reasons)
             var url = string.Format($@"https://maps.googleapis.com/maps/api/timezone/xml?location={latitude},{longitude}&timestamp={locationTimeUnix}&key={apiKey}");
 
+            //get raw location data from GoogleAPI
+            var apiResult = await ReadFromServerXmlReply(url);
 
-            //get location data from GoogleAPI
-            //< TimeZoneResponse >
-            //  < status > OK </ status >
-            //  < raw_offset > 28800.0000000 </ raw_offset >
-            //  < dst_offset > 0.0000000 </ dst_offset >
-            //  < time_zone_id > Asia / Kuala_Lumpur </ time_zone_id >
-            //  < time_zone_name > Malaysia Time </ time_zone_name >
-            //</ TimeZoneResponse >
-            var timeZoneResponseXml = await ReadFromServerXmlReply(url);
+            //if result from API is a failure then use system timezone
+            //this is clearly an error, as such log it
+            //TODO user should be notified
+            TimeSpan offsetMinutes;
+            if (apiResult.IsPass) //all well
+            {
+                var timeZoneResponseXml = apiResult.Payload;
+                //extract out the timezone offset
+                var rawOffsetData = timeZoneResponseXml?.Element("raw_offset")?.Value;
+                //at times google api returns no valid data, but call is replied as normal
+                //as such let caller know something went wrong
+                if (rawOffsetData == null) { returnResult.IsPass = false; }
+                var offsetSeconds = double.Parse(rawOffsetData ?? "");
+                //offset needs to be "whole" minutes, else fail
+                //purposely hard cast to int to remove not whole minutes
+                var notWhole = TimeSpan.FromSeconds(offsetSeconds).TotalMinutes;
+                offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole));
+            }
+            else
+            {
+                //mark as fail & use possibly inaccurate backup timezone
+                returnResult.IsPass = false;
+                offsetMinutes = Tools.GetSystemTimezone();
 
-            //extract out the timezone offset
-            var offsetSeconds = double.Parse(timeZoneResponseXml?.Element("raw_offset")?.Value);
-            //offset needs to be "whole" minutes, else fail
-            //purposely hard cast to int to remove not whole minutes
-            var notWhole = TimeSpan.FromSeconds(offsetSeconds).TotalMinutes;
-            var offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole));
+            }
+
+
+
             var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
 
-            return parsedOffsetString;
+            //place data inside capsule
+            returnResult.Payload = parsedOffsetString;
+
+            return returnResult;
 
         }
 
         /// <summary>
         /// Calls a URL and returns the content of the result as XML
         /// Even if content is returned as JSON, it is converted to XML
-        /// Note: if JSON auto adds "Root" as first element, unless specified
+        /// Note:
+        /// - if JSON auto adds "Root" as first element, unless specified
         /// for XML data root element name is ignored
         /// </summary>
-        public static async Task<XElement> ReadFromServerXmlReply(string apiUrl, string rootElementName = "Root")
+        public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl, string rootElementName = "Root")
         {
-
+            var returnResult = new WebResult<XElement>();
             string rawMessage = "";
 
             try
@@ -617,8 +613,9 @@ namespace Genso.Astrology.Library
                 //raw message can be JSON or XML
                 //try parse as XML if fail then as JSON
                 var readFromServerXmlReply = XElement.Parse(rawMessage);
+                returnResult.Payload = readFromServerXmlReply;
+                returnResult.IsPass = true; //pass
 
-                return readFromServerXmlReply;
             }
             catch (Exception)
             {
@@ -628,17 +625,25 @@ namespace Genso.Astrology.Library
                     var rawXml = JsonConvert.DeserializeXmlNode(rawMessage, rootElementName);
                     var readFromServerXmlReply = XElement.Parse(rawXml?.InnerXml ?? "<Empty/>");
 
-                    return readFromServerXmlReply;
+                    returnResult.Payload = readFromServerXmlReply;
+                    returnResult.IsPass = true; //pass
+
                 }
                 //unparseable data, let user know
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw new Exception($"ReadFromServerXmlReply()\n{rawMessage}", e);
+                    //todo log it
+                    var logData = $"ReadFromServerXmlReply()\n{rawMessage}";
+
+                    returnResult.IsPass = false; //fail
                 }
             }
 
+            //send the prepared result caller
+            return returnResult;
 
 
+            //--------------------
             // FUNCTIONS
 
             async Task<HttpResponseMessage> RequestServer(string receiverAddress)

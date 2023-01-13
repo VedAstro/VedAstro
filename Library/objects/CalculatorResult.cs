@@ -91,6 +91,15 @@ namespace Genso.Astrology.Library
             return newCalcResult;
         }
 
+        public static CalculatorResult New(bool occuring, PlanetName[] planetNames, Time time)
+        {
+            var newCalcResult = new CalculatorResult();
+            newCalcResult.Occuring = occuring;
+            newCalcResult.RelatedBody.RelatedPlanets.AddRange(planetNames.ToList());
+
+            return newCalcResult;
+        }
+
         /// <summary>
         /// Helper method to make new instance of calculator result
         /// </summary>
@@ -110,6 +119,19 @@ namespace Genso.Astrology.Library
         {
             //create with house names
             var newCalcResult = New(occuring, houseNames, planetNames, time);
+
+            //add in sign names
+            newCalcResult.RelatedBody.RelatedZodiac.AddRange(signNames.ToList());
+
+            //return to caller
+            return newCalcResult;
+
+        }
+
+        public static CalculatorResult New(bool occuring, PlanetName[] planetNames, ZodiacName[] signNames, Time time)
+        {
+            //create with house names
+            var newCalcResult = New(occuring, planetNames, time);
 
             //add in sign names
             newCalcResult.RelatedBody.RelatedZodiac.AddRange(signNames.ToList());

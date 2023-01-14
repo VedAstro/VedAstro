@@ -4418,7 +4418,7 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Shadbala :the six sources of strength and weakness the planets
-        /// The importanc of and the part played by the Shadbalas,
+        /// The importance of and the part played by the Shadbalas,
         /// in the science of horoscopy, are manifold
         ///
         /// In order to obtain the total strength of
@@ -4442,6 +4442,14 @@ namespace Genso.Astrology.Library
             //UNDERLYING FUNCTION
             Shashtiamsa _getPlanetShadbalaPinda()
             {
+
+                //if planet name is rahu or ketu then replace with house lord
+                if (planetName == PlanetName.Rahu || planetName == PlanetName.Ketu)
+                {
+                    var houseLord = AstronomicalCalculator.GetLordOfHousePlanetIsIn(time, planetName);
+                    planetName = houseLord;
+                }
+
                 //Sthana bala (Positional Strength)
                 var sthanaBala = GetPlanetSthanaBala(planetName, time);
 
@@ -4470,6 +4478,17 @@ namespace Genso.Astrology.Library
                 return roundedTotal;
             }
 
+        }
+
+        /// <summary>
+        /// Gets the lord of the house the inputed planet is in
+        /// </summary>
+        private static PlanetName GetLordOfHousePlanetIsIn(Time time, PlanetName planetName)
+        {
+            var currentHouse = AstronomicalCalculator.GetHousePlanetIsIn(time, planetName);
+            var houseLord = AstronomicalCalculator.GetLordOfHouse((HouseName)currentHouse, time);
+
+            return houseLord;
         }
 
         /// <summary>

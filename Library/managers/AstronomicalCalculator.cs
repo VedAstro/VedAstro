@@ -4321,7 +4321,7 @@ namespace Genso.Astrology.Library
                 var planetStrenghtList = new Dictionary<double, PlanetName>();
 
                 //create a list with planet names & its strength (unsorted)
-                foreach (var planet in PlanetName.All7Planets)
+                foreach (var planet in PlanetName.All9Planets)
                 {
                     //get planet strength in rupas
                     var strength = GetPlanetShadbalaPinda(planet, time).ToRupa();
@@ -4339,7 +4339,6 @@ namespace Genso.Astrology.Library
                 var keys_sorted = planetStrenghtList.Keys.ToList();
                 keys_sorted.Sort();
 
-                //PlanetName[] sortedArray = new PlanetName[7];
                 var sortedArray = new List<PlanetName>();
                 foreach (var key in keys_sorted)
                 {
@@ -4368,6 +4367,28 @@ namespace Genso.Astrology.Library
                 }
             }
 
+        }
+
+
+        /// <summary>
+        /// Gets all planets strenght (shadbala)
+        /// </summary>
+        public static List<(double, PlanetName)> GetAllPlanetStrength(Time time)
+        {
+            var planetStrenghtList = new List<(double, PlanetName)>();
+
+            //create a list with planet names & its strength (unsorted)
+            foreach (var planet in PlanetName.All9Planets)
+            {
+                //get planet strength in rupas
+                var strength = GetPlanetShadbalaPinda(planet, time).ToDouble();
+
+                //place in list with planet name
+                planetStrenghtList.Add((strength, planet));
+
+            }
+
+            return planetStrenghtList;
         }
 
         /// <summary>

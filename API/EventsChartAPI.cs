@@ -18,7 +18,8 @@ namespace API
     public struct SumData
     {
         public double NatureScore = 0;
-        public PlanetName Planet;
+        public List<PlanetName> Planet;
+        public Time BirthTime;
 
         public SumData()
         {
@@ -2036,7 +2037,7 @@ namespace API
                 rowHtml += $"<g id=\"BarChartRow\" transform=\"matrix(1, 0, 0, 1, 0, 20)\">{barChartRow}</g>";
 
 
-                //STEP 3 : generate color summary smart
+                //STEP 3 : generate color summary SMART
                 var colorRowSmart = "";
                 foreach (var summarySlice in summaryRowData)
                 {
@@ -2045,13 +2046,14 @@ namespace API
                     //that occurred at this point in time, possible negative number
                     //exp: -4 bad + 5 good = 1 total nature score
                     double totalNatureScore = summarySlice.Value.NatureScore;
-
+                    var planetPowerFactor = GetPlanetPowerFactor(summarySlice.Value.Planet, summarySlice.Value.BirthTime);
+                    var smartNatureScore = totalNatureScore * planetPowerFactor;
                     var rect = $"<rect " +
                                $"x=\"{xAxis}\" " +
                                $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                $"width=\"{widthPerSlice}\" " +
                                $"height=\"{singleRowHeight}\" " +
-                               $"fill=\"{GetSummaryColor(totalNatureScore, minValue, maxValue)}\" />";
+                               $"fill=\"{GetSummaryColor(smartNatureScore, -100, 100)}\" />";
 
                     //add rect to row
                     colorRowSmart += rect;
@@ -2154,7 +2156,8 @@ namespace API
 
                         var x = new SumData
                         {
-                            Planet = Tools.GetPlanetFromName(foundEvent.FormattedName).FirstOrDefault(),//todo for now only take first planet in list
+                            BirthTime = inputPerson.BirthTime,
+                            Planet = Tools.GetPlanetFromName(foundEvent.FormattedName),
                             NatureScore = natureScore + previousNatureScoreSum //combine current with previous
                         };
                         summaryRowData[horizontalPosition] = x;
@@ -2191,6 +2194,50 @@ namespace API
 
                 return rowHtml;
             }
+
+        }
+
+        /// <summary>
+        /// Given a list planet names only power factor of strongest planet is returned
+        /// convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
+        /// </summary>
+        public static double GetPlanetPowerFactor(PlanetName valuePlanet, Time time)
+        {
+            //get all planet strength for given time (horoscope)
+            var list = AstronomicalCalculator.GetAllPlanetStrength(time);
+            //get the power of the planet inputed
+            var planetPwr = list.FirstOrDefault(x => x.Item2 == valuePlanet).Item1;
+
+            //get min & max
+            var min = list.Min(x => x.Item1); //weakest planet
+            var max = list.Max(x => x.Item1); //strongest planet
+
+            //convert the planets strength into a value over hundred with max & min set by strongest & weakest planet
+            //returns as percentage over 100%
+            var factor = planetPwr.Remap(min, max, 0, 100);
+
+            return factor;
+        }
+
+        /// <summary>
+        /// Given planet list, will return factor for strongest only
+        /// </summary>
+        public static double GetPlanetPowerFactor(List<PlanetName> inputPlanetList, Time time)
+        {
+            //get all power factors into a list
+            var listx = new List<double>();
+            foreach (var planet in inputPlanetList)
+            {
+                var x = GetPlanetPowerFactor(planet, time);
+                listx.Add(x);
+            }
+
+            //todo can experiment with average as well,
+            //strongest was choose because, it is assumed that strong bhukti can override dasa
+            //take the strongest
+            var strongest = listx.Max();
+
+            return strongest;
 
         }
 

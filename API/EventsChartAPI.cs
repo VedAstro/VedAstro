@@ -14,6 +14,18 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 
 namespace API
 {
+
+    public struct SumData
+    {
+        public double NatureScore = 0;
+        public PlanetName Planet;
+
+        public SumData()
+        {
+            Planet = null;
+        }
+    }
+
     public static class EventsChartAPI
     {
         //▄▀█ █▀█ █   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
@@ -1944,7 +1956,7 @@ namespace API
             var compiledRow = "";
 
             //note: summary data is filled when generating rows
-            var summaryRowData = new Dictionary<int, double>();//x axis & total nature score
+            var summaryRowData = new Dictionary<int, SumData>();//x axis, total nature score, planet name
             int yAxis = headerY;
             //generate svg for each row & add to final row
             compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
@@ -1953,8 +1965,8 @@ namespace API
 
             //4 GENERATE SUMMARY ROW
             //min & max used to calculate color later
-            var maxValue = summaryRowData.Values.Max();
-            var minValue = summaryRowData.Values.Min();
+            var maxValue = summaryRowData.Values.Max(x => x.NatureScore);
+            var minValue = summaryRowData.Values.Min(x => x.NatureScore);
             compiledRow += GenerateSummaryRow(yAxis);
             yAxis += 15;//add in height of summary row
 
@@ -1971,12 +1983,13 @@ namespace API
             string GenerateSummaryRow(int yAxis)
             {
 #if DEBUG
+                Console.WriteLine("GenerateSummaryRow");
                 Console.WriteLine("MAX" + maxValue);
                 Console.WriteLine("MIN" + minValue);
 #endif
 
                 var rowHtml = "";
-                //generate color summary
+                //STEP 1 : generate color summary
                 var colorRow = "";
                 foreach (var summarySlice in summaryRowData)
                 {
@@ -1984,7 +1997,7 @@ namespace API
                     //total nature score is sum of negative & positive 1s of all events
                     //that occurred at this point in time, possible negative number
                     //exp: -4 bad + 5 good = 1 total nature score
-                    double totalNatureScore = summarySlice.Value;
+                    double totalNatureScore = summarySlice.Value.NatureScore;
 
                     var rect = $"<rect " +
                                $"x=\"{xAxis}\" " +
@@ -2000,12 +2013,12 @@ namespace API
                 rowHtml += $"<g id=\"ColorRow\">{colorRow}</g>";
 
 
-                //generate graph summary
+                //STEP 2 : generate graph summary
                 var barChartRow = "";
                 foreach (var summarySlice in summaryRowData)
                 {
                     int xAxis = summarySlice.Key;
-                    double totalNatureScore = summarySlice.Value; //possible negative
+                    double totalNatureScore = summarySlice.Value.NatureScore; //possible negative
                     var barHeight = (int)totalNatureScore.Remap(minValue, maxValue, 0, 30);
                     var rect = $"<rect " +
                                $"x=\"{xAxis}\" " +
@@ -2020,8 +2033,35 @@ namespace API
 
                 //note: chart is flipped 180, to start bar from bottom to top
                 //default hidden
-                rowHtml += $"<g id=\"BarChartRow\" style=\"display:none;\">{barChartRow}</g>";
+                rowHtml += $"<g id=\"BarChartRow\" transform=\"matrix(1, 0, 0, 1, 0, 20)\">{barChartRow}</g>";
 
+
+                //STEP 3 : generate color summary smart
+                var colorRowSmart = "";
+                foreach (var summarySlice in summaryRowData)
+                {
+                    int xAxis = summarySlice.Key;
+                    //total nature score is sum of negative & positive 1s of all events
+                    //that occurred at this point in time, possible negative number
+                    //exp: -4 bad + 5 good = 1 total nature score
+                    double totalNatureScore = summarySlice.Value.NatureScore;
+
+                    var rect = $"<rect " +
+                               $"x=\"{xAxis}\" " +
+                               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                               $"width=\"{widthPerSlice}\" " +
+                               $"height=\"{singleRowHeight}\" " +
+                               $"fill=\"{GetSummaryColor(totalNatureScore, minValue, maxValue)}\" />";
+
+                    //add rect to row
+                    colorRowSmart += rect;
+                }
+                //note: chart is flipped 180, to start bar from bottom to top
+                //default hidden
+                rowHtml += $"<g id=\"BarChartRowSmart\" transform=\"matrix(1, 0, 0, 1, 0, 43)\">{colorRowSmart}</g>";
+
+
+                //STEP 4 : final wrapper
                 //add in "Summary" label above row
                 float aboveRow = yAxis - singleRowHeight - padding;
                 rowHtml += $@"
@@ -2110,8 +2150,14 @@ namespace API
                         }
 
                         //compile nature score for making summary row later (defaults to 0)
-                        var previousNatureScoreSum = (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition] : 0);
-                        summaryRowData[horizontalPosition] = natureScore + previousNatureScoreSum; //combine current with previous
+                        var previousNatureScoreSum = (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition].NatureScore : 0);
+
+                        var x = new SumData
+                        {
+                            Planet = Tools.GetPlanetFromName(foundEvent.FormattedName).FirstOrDefault(),//todo for now only take first planet in list
+                            NatureScore = natureScore + previousNatureScoreSum //combine current with previous
+                        };
+                        summaryRowData[horizontalPosition] = x;
 
 
                         //increment vertical position for next

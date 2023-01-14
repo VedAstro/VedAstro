@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using static Genso.Astrology.Library.PlanetName;
 
 namespace Genso.Astrology.Library
 {
@@ -701,6 +702,35 @@ namespace Genso.Astrology.Library
         {
             for (int i = 0; i < str.Length; i += maxChunkSize)
                 yield return str.Substring(i, Math.Min(maxChunkSize, str.Length - i));
+        }
+
+        /// <summary>
+        /// Inputed event name has be space separated
+        /// </summary>
+        public static List<PlanetName> GetPlanetFromName(string eventName)
+        {
+            var returnList = new List<PlanetName>();
+
+            //lower case it
+            var lowerCased = eventName.ToLower();
+
+            //split into words
+            var splited = lowerCased.Split(' ');
+
+            //check if any be parsed into planet name
+            foreach (var word in splited)
+            {
+                var result = PlanetName.TryParse(word, out var planetParsed);
+                if (result)
+                {
+                    //add list if parsed
+                    returnList.Add(planetParsed);
+                }
+            }
+
+
+            //return list to caller
+            return returnList;
         }
     }
 

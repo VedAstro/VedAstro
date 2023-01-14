@@ -206,6 +206,28 @@ namespace Genso.Astrology.Library
             return planetNameListXml;
         }
 
+        /// <summary>
+        /// Tries to parse planet from name, caps not important
+        /// </summary>
+        public static bool TryParse(string possiblePlanetName, out PlanetName parsed)
+        {
+            switch (possiblePlanetName.ToLower())
+            {
+                case "sun": { parsed = PlanetName.Sun; return true; }
+                case "moon": { parsed = PlanetName.Moon; return true; }
+                case "mars": { parsed = PlanetName.Mars; return true; }
+                case "mercury": { parsed = PlanetName.Mercury; return true; }
+                case "jupiter": { parsed = PlanetName.Jupiter; return true; }
+                case "venus": { parsed = PlanetName.Venus; return true; }
+                case "saturn": { parsed = PlanetName.Saturn; return true; }
+                case "rahu": { parsed = PlanetName.Rahu; return true; }
+                case "ketu": { parsed = PlanetName.Ketu; return true; }
+            }
+
+            //could not parse
+            parsed = null;
+            return false;
+        }
     }
 
 }

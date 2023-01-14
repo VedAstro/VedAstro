@@ -167,7 +167,7 @@
         Console.WriteLine(rootXml.ToString());
         var result = await ServerManager.WriteToServerXmlReply(ServerManager.SaveEventsChart, rootXml, _jsRuntime);
 
-        return Tools.IsResultPass(result);
+        return result.IsPass;
     }
 
     /// <summary>

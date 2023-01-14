@@ -587,7 +587,9 @@ class EventsChart {
         //FUNCTIONS
         function drawDescriptionBox(eventDesc) {
             //if no description than hide box & end here
-            if (!eventDesc) { window.showDescription = false; return; }
+            //if (!eventDesc) { $("#CursorLineLegendDescriptionHolder").hide(); return; }
+            if (!eventDesc) { this.$CursorLineLegendDescriptionHolder.hide(); return; }
+
             //convert text to svg and place inside holder
             var wrappedDescText = EventsChart.textToSvg(eventDesc, 175, 24);
 

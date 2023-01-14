@@ -92,6 +92,7 @@ namespace Website
         /// This is the central place all person list is gotten for a User ID/Visitor ID
         /// NOTE: if User ID is Guest ID 101, then person profile under
         /// Visitor ID is also auto added to return list if any by API
+        /// - if API fail will return empty list
         /// </summary>
         public static async Task<List<Person>?> GetPeopleList(string userId, IJSRuntime jsRuntime)
         {
@@ -99,9 +100,20 @@ namespace Website
             //get all person profile owned by current user/visitor
             var payload = new XElement("Root", new XElement("UserId", userId), new XElement("VisitorId", userId));
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonList, payload, jsRuntime);
-            var personList = Person.FromXml(result.Payload.Elements());
 
-            return personList;
+            if (result.IsPass)
+            {
+                var personList = Person.FromXml(result.Payload.Elements());
+                return personList;
+            }
+            //if fail log it and return empty list as not to break the caller
+            else
+            {
+                await jsRuntime.ShowAlert("error", "Failed to fetch name list.", true);
+                return new List<Person>();
+            }
+
+
         }
 
 

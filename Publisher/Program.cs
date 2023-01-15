@@ -35,17 +35,18 @@ namespace Publisher
                 Console.WriteLine("Choose wisely");
                 Console.WriteLine("1:Build & Upload All");
                 Console.WriteLine("2:Build & Upload AOT only");
-                Console.WriteLine("3:Build & Upload Normal only");
+                Console.WriteLine("3:Build > Delete Minor Files > Sync Upload");
                 Console.WriteLine("4:Upload AOT only");
                 Console.WriteLine("5:Upload Normal only");
                 Console.WriteLine("6:Upload AOT & Normal");
                 Console.WriteLine("7:Build AOT & Normal");
                 Console.WriteLine("8:Build Normal Only");
                 Console.WriteLine("9:Delete Old Website Files Normal (not images)");
+                Console.WriteLine("10:Build > Sync Upload");
 
                 var choice = Console.ReadLine();
-                Console.WriteLine("Nuke old website? Y/N");
-                _nukeOld = Console.ReadLine()?.ToLower();
+                //Console.WriteLine("Nuke old website? Y/N");
+                //_nukeOld = Console.ReadLine()?.ToLower();
 
                 //init config to get app secrets, like upload string
                 _config = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
@@ -58,7 +59,7 @@ namespace Publisher
                         BuildProject();
 
                         //upload to azure
-                        UploadToAzureAzCopyNormal();
+                        UploadToAzureAzCopySync();
 
                         BuildProjectAOT();
 
@@ -66,18 +67,19 @@ namespace Publisher
                         await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
                         goto END;
                     case "2": BuildProjectAOT(); await UploadToAzure("vedastrowebsitestorage2"); goto END;
-                    case "3": BuildProject(); DeleteWebsiteFiles(); UploadToAzureAzCopyNormal(); goto END;
+                    case "3": BuildProject(); DeleteWebsiteFiles(); UploadToAzureAzCopySync(); goto END;
                     case "4": await UploadToAzure("vedastrowebsitestorage2"); goto END;
-                    case "5": UploadToAzureAzCopyNormal(); goto END;
+                    case "5": UploadToAzureAzCopySync(); goto END;
                     case "6":
                         Console.WriteLine("NORMAL BUILD UPLOAD");
-                        UploadToAzureAzCopyNormal();
+                        UploadToAzureAzCopySync();
                         Console.WriteLine("AOT BUILD UPLOAD");
                         await UploadToAzure("vedastrowebsitestorage2");  //NOTE:AOT USES WEBSITE2
                         goto END;
                     case "7": BuildProject(); BuildProjectAOT(); goto END;
                     case "8": BuildProject(); goto END;
                     case "9": DeleteWebsiteFiles(); goto END;
+                    case "10": BuildProject(); UploadToAzureAzCopySync(); goto END;
 
                 }
 
@@ -197,9 +199,9 @@ namespace Publisher
 
             Console.WriteLine("\nUpload Complete");
         }
-        private static void UploadToAzureAzCopyNormal()
+        private static void UploadToAzureAzCopySync()
         {
-            Console.WriteLine("UploadToAzureAzCopy");
+            Console.WriteLine("UploadToAzureAzCopySync : START");
 
             //set project path to build
             System.Environment.CurrentDirectory = projectPath;
@@ -213,7 +215,7 @@ namespace Publisher
             //print build output
             foreach (PSObject o in ps.Invoke()) { Console.WriteLine(o.ToString()); }
 
-            Console.WriteLine("UploadToAzureAzCopy Complete");
+            Console.WriteLine("UploadToAzureAzCopySync : DONE");
         }
 
         /// <summary>
@@ -276,6 +278,7 @@ namespace Publisher
         {
 
             Console.WriteLine("Birthing new website");
+            Console.WriteLine("*****************************************************");
 
             //delete all existing builds
             CleanBuildFolder();
@@ -291,6 +294,7 @@ namespace Publisher
             //print build output
             foreach (PSObject o in ps.Invoke()) { Console.WriteLine(o.ToString()); }
 
+            Console.WriteLine("*****************************************************");
             Console.WriteLine("Build Complete");
             PrintBuildSize();
         }

@@ -460,8 +460,8 @@ namespace Genso.Astrology.Library
             var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={apiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
 
             //get location data from GoogleAPI
-            var rawReplyXml = await ReadFromServerXmlReply(url);
-
+            var webResult = await ReadFromServerXmlReply(url);
+            var rawReplyXml = webResult.Payload;
 #if DEBUG
             Console.WriteLine(rawReplyXml.ToString());
 #endif
@@ -493,7 +493,8 @@ namespace Genso.Astrology.Library
             var url = string.Format($"https://maps.googleapis.com/maps/api/geocode/xml?latlng={latitude},{longitude}&key={apiKey}");
 
             //get location data from GoogleAPI
-            var rawReplyXml = await ReadFromServerXmlReply(url);
+            var webResult = await ReadFromServerXmlReply(url);
+            var rawReplyXml = webResult.Payload;
 
             //extract out the longitude & latitude
             var locationData = new XDocument(rawReplyXml);

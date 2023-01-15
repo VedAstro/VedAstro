@@ -37,7 +37,7 @@ namespace Website
                 var visitorXml = await GetVisitorDataXml(jsRuntime);
 
                 //send to server for storage
-                await SendLogToServer(visitorXml);
+                await SendLogToServer(visitorXml, jsRuntime);
 
             }
             catch (Exception e)
@@ -47,7 +47,6 @@ namespace Website
             }
 
         }
-
 
         /// <summary>
         /// Log error when there is no exception data
@@ -74,7 +73,7 @@ namespace Website
             visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampSystemXml);
 
             //send to server for storage
-            SendLogToServer(visitorXml);
+            SendLogToServer(visitorXml, AppData.JsRuntime);
 
             Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
 
@@ -111,7 +110,7 @@ namespace Website
             visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, WebsiteTools.TimeStampSystemXml);
 
             //send to server for storage
-            await SendLogToServer(visitorXml);
+            await SendLogToServer(visitorXml, AppData.JsRuntime);
 
             Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
         }
@@ -182,7 +181,7 @@ namespace Website
             visitorXml.Add(new XElement("Data", data));
 
             //send to server for storage
-            await SendLogToServer(visitorXml);
+            await SendLogToServer(visitorXml, jsRuntime);
         }
 
 
@@ -247,16 +246,19 @@ namespace Website
         /// <summary>
         /// Given the Visitor xml element, it will send it to API for safe keeping
         /// </summary>
-        private static async Task SendLogToServer(XElement visitorElement)
+        private static async Task SendLogToServer(XElement visitorElement, IJSRuntime jsRuntime)
         {
             try
             {
+                //send using worker JS
+                await jsRuntime.InvokeAsync<string>("window.LogThread.postMessage", visitorElement.ToString());
+
                 //send to API for save keeping
                 //note:js runtime passed as null, so no internet checking done
-                var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddVisitorApi, visitorElement, null);
+                //var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddVisitorApi, visitorElement, null);
 
                 //check result, display error if needed
-                if (!result.IsPass) { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Payload.Value}"); }
+                //if (!result.IsPass) { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Payload.Value}"); }
 
             }
             catch (Exception e)

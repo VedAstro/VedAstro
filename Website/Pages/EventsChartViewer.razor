@@ -393,7 +393,8 @@
     {
         //get name list of all charts
         //note: API will return readable name & hash for finding the chart later
-        var rootXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetSavedEventsChartIdList, _jsRuntime);
+        var result = await ServerManager.ReadFromServerXmlReply(ServerManager.GetSavedEventsChartIdList, _jsRuntime);
+        var rootXml = result.Payload;
 
         //<Root>
         //    <ChartName>

@@ -219,7 +219,8 @@ namespace Website
             var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
             var originUrlXml = new XElement("OriginUrl", await AppData.OriginUrl);
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
-            var locationXml = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, null, "Location");
+            var resultLocation = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, null, "Location");
+            var locationXml = resultLocation.Payload;
             var visitorElement = new XElement("Visitor");
             visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampSystemXml, WebsiteTools.TimeStampServerXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
 

@@ -78,61 +78,65 @@ namespace Website
         /// Note: if JSON auto adds "Root" as first element, unless specified
         /// for XML data root element name is ignored
         /// </summary>
-        public static async Task<XElement> ReadFromServerXmlReply(string apiUrl, IJSRuntime? jsRuntime, string rootElementName = "Root")
+        public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl, IJSRuntime? jsRuntime, string rootElementName = "Root")
         {
             await IfBusyPleaseHold(apiUrl);
 
             //set busy
             IsBusy = true;
 
-
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
-            string rawMessage = "";
 
-            try
+            //send request to API server
+            var result = await RequestServer(apiUrl);
+
+            //parse data reply
+            var rawMessage = result.Content.ReadAsStringAsync().Result;
+
+            var parsed = ParseData(rawMessage);
+
+            //set free
+            IsBusy = false;
+
+            return parsed;
+
+
+            //----------------------------------------------------------
+            // FUNCTIONS
+
+            WebResult<XElement> ParseData(string inputRawString)
             {
-                //send request to API server
-                var result = await RequestServer(apiUrl);
-
-                //parse data reply
-                rawMessage = result.Content.ReadAsStringAsync().Result;
-
-                //raw message can be JSON or XML
-                //try parse as XML if fail then as JSON
-                var readFromServerXmlReply = XElement.Parse(rawMessage);
-
-                //set free
-                IsBusy = false;
-
-                return readFromServerXmlReply;
-            }
-            catch (Exception)
-            {
-                //try to parse data as JSON
                 try
                 {
-                    var rawXml = JsonConvert.DeserializeXmlNode(rawMessage, rootElementName);
-                    var readFromServerXmlReply = XElement.Parse(rawXml.InnerXml);
-
-                    //set free
-                    IsBusy = false;
-
-                    return readFromServerXmlReply;
+                    //OPTION 1 : xml with standard reply
+                    var parsedXml = XElement.Parse(inputRawString);
+                    var returnVal = WebResult<XElement>.FromXml(parsedXml);
+                    return returnVal;
                 }
-                //unparseable data, let user know
-                catch (Exception e)
+                catch (Exception e1)
                 {
-                    //set free
-                    IsBusy = false;
+                    try
+                    {
+                        //OPTION 2 : xml 3rd party reply (google)
+                        var parsedXml = XElement.Parse(inputRawString);
+                        return new WebResult<XElement>(true, parsedXml);
+                    }
+                    catch (Exception e2) { Console.WriteLine(e2); } //if fail just void print
 
-                    throw new ApiCommunicationFailed($"ReadFromServerXmlReply()\n{rawMessage}", e);
+                    try
+                    {
+                        //OPTION 3 : json 3rd party reply
+                        var parsedJson = JsonConvert.DeserializeXmlNode(inputRawString);
+                        var wrappedXml = XElement.Parse(parsedJson.InnerXml);
+                        return new WebResult<XElement>(true, wrappedXml);
+                    }
+                    catch (Exception e3) { Console.WriteLine(e3); } //if fail just void print
+
+                    //if control reaches here all has failed
+                    return new WebResult<XElement>(false, Tools.ExceptionToXml(e1));
                 }
             }
-
-
-
-            // FUNCTIONS
 
             async Task<HttpResponseMessage> RequestServer(string receiverAddress)
             {

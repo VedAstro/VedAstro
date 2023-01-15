@@ -51,7 +51,8 @@
        await _jsRuntime.ShowLoading();
 
         //get all message list from API server
-        var rawDoc = await ServerManager.ReadFromServerXmlReply(ServerManager.GetMessageList, _jsRuntime);
+        var result = await ServerManager.ReadFromServerXmlReply(ServerManager.GetMessageList, _jsRuntime);
+        var rawDoc = result.Payload;
         _messageListXml = rawDoc.Elements().ToList();
 
         _jsRuntime.HideLoading();

@@ -94,11 +94,11 @@ namespace Website
         /// Visitor ID is also auto added to return list if any by API
         /// - if API fail will return empty list
         /// </summary>
-        public static async Task<List<Person>?> GetPeopleList(string userId, IJSRuntime jsRuntime)
+        public static async Task<List<Person>?> GetPeopleList(IJSRuntime jsRuntime)
         {
 
             //get all person profile owned by current user/visitor
-            var payload = new XElement("Root", new XElement("UserId", userId), new XElement("VisitorId", userId));
+            var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
             var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonList, payload, jsRuntime);
 
             if (result.IsPass)
@@ -262,7 +262,7 @@ namespace Website
         public static async Task DeletePerson(string personId, IJSRuntime jsRuntime)
         {
             var personIdXml = new XElement("PersonId", personId);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePersonApi, personIdXml, jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePerson, personIdXml, jsRuntime);
 
             //check result, display error if needed
             if (!result.IsPass)

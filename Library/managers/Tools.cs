@@ -352,7 +352,7 @@ namespace Genso.Astrology.Library
         /// in `needle`, in any order. Returns -1 if not found.
         /// <para>This function can return false positives</para>
         /// </summary>
-        public static bool FindCluster(this string? haystack, string? needle)
+        public static bool FindCluster(this string haystack, string needle)
         {
             if (haystack == null) return false;
             if (needle == null) return false;

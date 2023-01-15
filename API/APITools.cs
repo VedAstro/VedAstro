@@ -127,7 +127,7 @@ namespace API
             //check if record to delete exists
             //if not found, raise alarm
             var xmlRecordList = xmlDocFile.Root.Elements();
-            var foundRecord = xmlRecordList.Contains(dataXmlToDelete);
+            var foundRecord = xmlRecordList.Any(x => x.Element("PersonId").Value == dataXmlToDelete.Element("PersonId").Value);
             if (!foundRecord) { throw new Exception("Could not find XML record to delete in main list!"); }
 
             //continue with delete

@@ -173,7 +173,7 @@ namespace API
         /// Theoretically anybody who gets the hash of the person,
         /// can delete the record by calling this API
         /// </summary>
-        [FunctionName("deleteperson")]
+        [FunctionName("DeletePerson")]
         public static async Task<IActionResult> DeletePerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {

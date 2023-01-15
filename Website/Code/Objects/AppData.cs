@@ -23,9 +23,9 @@ namespace Website
 
         /// <summary>
         /// Represents the currently logged in User
-        /// If null then nobody logged in
+        /// If null then nobody logged in, default Empty/Public User
         /// </summary>
-        public static UserData? CurrentUser { get; set; } = UserData.Empty;
+        public static UserData CurrentUser { get; set; } = UserData.Empty;
 
         /// <summary>
         /// A copy of this visitor's ID, set when logging new visit
@@ -197,7 +197,7 @@ namespace Website
             if (AppData.PersonList == null)
             {
                 Console.WriteLine("BLZ:Get Fresh PersonList");
-                AppData.PersonList = await WebsiteTools.GetPeopleList(AppData.CurrentUser?.Id, _jsRuntime);
+                AppData.PersonList = await WebsiteTools.GetPeopleList(_jsRuntime);
             }
             else
             {

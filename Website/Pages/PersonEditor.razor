@@ -320,8 +320,7 @@
             if (!timeInputPassed)
             {
                 //mark invalid & alert user
-                const string msg = AlertText.InvalidBirthTime;
-                await _jsRuntime.ShowAlert("error", msg, true);
+                await _jsRuntime.ShowAlert("error", AlertText.InvalidBirthTime, true);
                 return false;
             }
 

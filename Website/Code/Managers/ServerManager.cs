@@ -208,8 +208,11 @@ namespace Website
 
         /// <summary>
         /// Send xml as string to server and returns xml as response
-        /// Note: xml is not checked here, just converted
-        /// NOTEl: No timeout! Will wait forever
+        /// Note:
+        /// - on failure payload will contain error info
+        /// - xml is not checked here, just converted
+        /// - No timeout! Will wait forever
+        /// 
         /// </summary>
         public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {

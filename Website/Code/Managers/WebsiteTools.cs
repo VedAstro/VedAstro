@@ -541,7 +541,7 @@ namespace Website
                     // - slow or unstable internet connection
                     //best choice is to redirect 
                     case ApiCommunicationFailed:
-                        await jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem, true);
+                        await jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
                         break;
 
                     //failure here can't be recovered, so best choice is to refresh page to home

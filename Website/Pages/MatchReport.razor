@@ -482,7 +482,15 @@
 
         //get report from server
         var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
-        var matchReportXml = await ServerManager.WriteToServerXmlReply(ServerManager.GetMatchReportApi, rootXml, _jsRuntime);
+        var webResult = await ServerManager.WriteToServerXmlReply(ServerManager.GetMatchReportApi, rootXml, _jsRuntime);
+
+        //check the results, if fail let user know
+        if (!webResult.IsPass)
+        {
+            await _jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
+        }
+
+        var matchReportXml = webResult.Payload;
 
         //parse report
         var matchReport = CompatibilityReport.FromXml(matchReportXml);

@@ -22,9 +22,6 @@ namespace Website
         public const string SelectName = $"Please select Name!";
         public const string ErrorWillRefresh = "Something went wrong.\nPlease wait page will auto refresh.";
         public const string SlowUnstableInternet = "Problem talking to Server\nSlow or unstable internet\ncan cause this";
-        //random select because server talking related problems, can only be caused by INTERNET (slow) or BAD CODE (new features)
-        //and since it's hard to detect during failure, for now select on random, to tell user both possible related errors info
-        public static string ServerConnectionProblem = Tools.RandomSelect(new[] { SlowUnstableInternet, NewFeatures, ImproveWebsite });
         public const string NoInternet = "Please check your Internet connection.";
         public const string SorryNeedRefreshToHome = "Sorry! App just crashed.\nWe are fixing this error.\nPlease try again later.";
         //public const string SorryNeedRefreshToHome = UnderMaintenance;
@@ -38,5 +35,15 @@ namespace Website
         public const string FacebookLoginFail = "Error in OnFacebookSignInSuccessHandler where authResponse is null";
         public const string NoSavedCharts = "No saved charts, calculate a chart and save it to view here.";
         public const string NoPersonFound = "Person profile not found,\nrefresh or check profile share link";
+
+
+        /// <summary>
+        /// random select because server talking related problems, can only be caused by INTERNET (slow) or BAD CODE (new features)
+        /// and since it's hard to detect during failure, for now select on random, to tell user both possible related errors info
+        /// </summary>
+        /// <returns></returns>
+        public static string ServerConnectionProblem() => Tools.RandomSelect(new[] { SlowUnstableInternet, NewFeatures, ImproveWebsite });
+
+
     }
 }

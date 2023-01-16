@@ -66,7 +66,7 @@ namespace Website
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
-            var userId = new XElement("UserId", AppData.CurrentUser);
+            var userId = new XElement("UserId", AppData.CurrentUser.Id);
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
             var errorXml = new XElement("Error", new XElement("Message", errorMsg));

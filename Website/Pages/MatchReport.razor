@@ -487,18 +487,27 @@
         //check the results, if fail let user know
         if (!webResult.IsPass)
         {
+            //let user know
             await _jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
+
+            //log it
+            WebsiteLogManager.LogError(webResult.Payload);
+
+            //send empty view
+            return null;
         }
+        else
+        {
+            var matchReportXml = webResult.Payload;
 
-        var matchReportXml = webResult.Payload;
+            //try parse report (null if fail)
+            var matchReport = CompatibilityReport.FromXml(matchReportXml);
 
-        //parse report
-        var matchReport = CompatibilityReport.FromXml(matchReportXml);
+            _jsRuntime.HideAlert();
 
-        _jsRuntime.HideAlert();
-
-        //return parsed report to caller
-        return matchReport;
+            //return parsed report to caller
+            return matchReport;
+        }
     }
 
     /// <summary>

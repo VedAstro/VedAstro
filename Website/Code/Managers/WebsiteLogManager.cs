@@ -34,10 +34,10 @@ namespace Website
 #endif
 
                 //get all visitor data
-                var visitorXml = await GetVisitorDataXml(jsRuntime);
+                var visitorXml = await GetVisitorDataXml(AppData.JsRuntime);
 
                 //send to server for storage
-                await SendLogToServer(visitorXml, jsRuntime);
+                await SendLogToServer(visitorXml, AppData.JsRuntime);
 
             }
             catch (Exception e)
@@ -46,6 +46,12 @@ namespace Website
                 Console.WriteLine($"BLZ: LogVisitor: Failed! \n{e.Message}\n{e.StackTrace}");
             }
 
+        }
+
+
+        public static async Task LogError(XElement errorDataXml)
+        {
+           await LogError(errorDataXml.ToString());
         }
 
         /// <summary>
@@ -128,7 +134,7 @@ namespace Website
             return;
 #endif
 
-            await LogData(jsRuntime, $"Button Text:{buttonText}");
+            await LogData(AppData.JsRuntime, $"Button Text:{buttonText}");
 
         }
 
@@ -149,7 +155,7 @@ namespace Website
             {
                 //todo loading box is not logged, because of over logging (possible fix, wrapper class to handle )
                 var alertMessage = ((dynamic)alertData)?.title ?? "";
-                await LogData(jsRuntime, $"Alert Message:{alertMessage}");
+                await LogData(AppData.JsRuntime, $"Alert Message:{alertMessage}");
             }
             catch (Exception)
             {
@@ -175,13 +181,13 @@ namespace Website
 #endif
 
             //get basic visitor data
-            var visitorXml = await GetVisitorDataXml(jsRuntime);
+            var visitorXml = await GetVisitorDataXml(AppData.JsRuntime);
 
             //add in button click data
             visitorXml.Add(new XElement("Data", data));
 
             //send to server for storage
-            await SendLogToServer(visitorXml, jsRuntime);
+            await SendLogToServer(visitorXml, AppData.JsRuntime);
         }
 
 
@@ -193,7 +199,7 @@ namespace Website
         private static async Task<XElement> GetVisitorDataXml(IJSRuntime jsRuntime)
         {
             //get url user is on
-            var urlString = await jsRuntime.GetCurrentUrl();
+            var urlString = await AppData.JsRuntime.GetCurrentUrl();
             //place url in xml
             var urlXml = new XElement("Url", urlString);
             var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
@@ -202,7 +208,7 @@ namespace Website
             //based on visitor type create the right record data to log
             //this is done to minimize excessive logging
             var visitorXml = AppData.IsNewVisitor
-                ? await NewVisitor(userIdXml, urlXml, jsRuntime)
+                ? await NewVisitor(userIdXml, urlXml, AppData.JsRuntime)
                 : OldVisitor(userIdXml, urlXml);
 
 
@@ -214,8 +220,8 @@ namespace Website
         private static async Task<XElement> NewVisitor(XElement userIdXml, XElement urlXml, IJSRuntime jsRuntime)
         {
             //get visitor data & format it nicely for storage
-            var browserDataXml = await jsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
-            var screenDataXml = await jsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
+            var browserDataXml = await AppData.JsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
+            var screenDataXml = await AppData.JsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
             var originUrlXml = new XElement("OriginUrl", await AppData.OriginUrl);
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
             var resultLocation = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, null, "Location");
@@ -251,7 +257,7 @@ namespace Website
             try
             {
                 //send using worker JS
-                await jsRuntime.InvokeAsync<string>("window.LogThread.postMessage", visitorElement.ToString());
+                await AppData.JsRuntime.InvokeAsync<string>("window.LogThread.postMessage", visitorElement.ToString());
 
                 //send to API for save keeping
                 //note:js runtime passed as null, so no internet checking done

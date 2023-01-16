@@ -189,6 +189,8 @@ namespace Genso.Astrology.Library
 
             }
 
+            //Kutas analysis consist of analyzing 12 Factors.Every factor contributes
+            //some points, toward a maximum total score of 36 points.
             void calculateTotalPoints(ref CompatibilityReport report)
             {
 
@@ -199,48 +201,41 @@ namespace Genso.Astrology.Library
                     if (prediction.Nature != EventNature.Good) { continue; }
 
                     //based on prediction name add together the score
+                    //only certain kuta have points to consider others do not
                     switch (prediction.Name)
                     {
-                        case MatchPredictionName.Mahendra:
-                            break;
-                        case MatchPredictionName.NadiKuta:
-                            report.KutaScore += 8;
-                            break;
-                        case MatchPredictionName.GunaKuta:
-                            report.KutaScore += 6;
-                            break;
-                        case MatchPredictionName.Varna:
-                            report.KutaScore += 1;
-                            break;
-                        case MatchPredictionName.YoniKuta:
-                            report.KutaScore += 4;
-                            break;
-                        case MatchPredictionName.Vedha:
-                            break;
-                        case MatchPredictionName.VasyaKuta:
-                            report.KutaScore += 2;
-                            break;
-                        case MatchPredictionName.GrahaMaitram:
-                            report.KutaScore += 5;
-                            break;
-                        case MatchPredictionName.RasiKuta:
-                            report.KutaScore += 7;
-                            break;
-                        case MatchPredictionName.StreeDeergha:
-                            break;
+                        //Dina Kuta (3 pts)
                         case MatchPredictionName.DinaKuta:
                             report.KutaScore += 3;
                             break;
-                        case MatchPredictionName.KujaDosa:
+                        //Gana Kuta: (6 pts)
+                        case MatchPredictionName.GunaKuta:
+                            report.KutaScore += 6;
                             break;
-                        case MatchPredictionName.Rajju:
+                        //Nadi Kuta: (8 pts)
+                        case MatchPredictionName.NadiKuta:
+                            report.KutaScore += 8;
                             break;
-                        case MatchPredictionName.LagnaAnd7thGood:
+                        //Rashi Kuta - (7 pts)
+                        case MatchPredictionName.RasiKuta:
+                            report.KutaScore += 7;
                             break;
-                        case MatchPredictionName.BadConstellation:
+                        //Graha Maitram - (5 pts)
+                        case MatchPredictionName.GrahaMaitram:
+                            report.KutaScore += 5;
                             break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                        // Vasyu Kuta - (2 pts).
+                        case MatchPredictionName.VasyaKuta:
+                            report.KutaScore += 2;
+                            break;
+                        // Varna Kuta - (1 pt)
+                        case MatchPredictionName.Varna:
+                            report.KutaScore += 1;
+                            break;
+                        //Yoni Kuta - (4 pts)
+                        case MatchPredictionName.YoniKuta:
+                            report.KutaScore += 4;
+                            break;
                     }
                 }
 

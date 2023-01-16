@@ -35,7 +35,7 @@ namespace Genso.Astrology.Library.Compatibility
             var predictionList = PredictionListToXml(this.PredictionList);
 
             //add in the data
-            compatibilityReport.Add(kutaScore,male, female, predictionList);
+            compatibilityReport.Add(kutaScore, male, female, predictionList);
 
             return compatibilityReport;
 
@@ -62,12 +62,21 @@ namespace Genso.Astrology.Library.Compatibility
         public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
 
+        /// <summary>
+        /// If unparseable will return null
+        /// </summary>
         public static CompatibilityReport FromXml(XElement compatibilityReportXml)
         {
-            var male = Person.FromXml(compatibilityReportXml.Element("Male").Element("Person"));
-            var female = Person.FromXml(compatibilityReportXml.Element("Female").Element("Person"));
-            var kutaScore = Double.Parse(compatibilityReportXml.Element("KutaScore")?.Value ?? "0");
+            //end here if null
+            if (compatibilityReportXml == null) { return null; }
 
+            //it is possible xml is not valid data, possible error xml, so end here
+            if (compatibilityReportXml?.Element("Male")?.Element("Person") == null) { return null; }
+
+            //extract out data from xml
+            var male = Person.FromXml(compatibilityReportXml.Element("Male")?.Element("Person"));
+            var female = Person.FromXml(compatibilityReportXml.Element("Female")?.Element("Person"));
+            var kutaScore = Double.Parse(compatibilityReportXml.Element("KutaScore")?.Value ?? "0");
 
             var predictionListXml = compatibilityReportXml.Element("PredictionList");
             var predictionList = ParseXmlToPredictionList(predictionListXml);
@@ -82,6 +91,7 @@ namespace Genso.Astrology.Library.Compatibility
 
             return newCompatibilityReport;
 
+            //----------------------------------------------
             //FUNCTIONS
 
             List<CompatibilityPrediction> ParseXmlToPredictionList(XElement xmlData)
@@ -113,7 +123,6 @@ namespace Genso.Astrology.Library.Compatibility
 
                 return returnVal;
             }
-
 
         }
     }

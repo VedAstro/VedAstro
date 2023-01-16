@@ -303,10 +303,19 @@ namespace API
             var peopleList = Person.FromXml(peopleXmlList);
 
             //filter out the male and female ones we want
-            var male = peopleList.Find(person => person.Id == maleId);
-            var female = peopleList.Find(person => person.Id == femaleId);
+            var males = peopleList.Where(person => person.Id == maleId);
+            var females = peopleList.Where(person => person.Id == femaleId);
 
-            return MatchCalculator.GetCompatibilityReport(male, female);
+            //if male & female profile found, make report and return caller
+            if (males.Any() && females.Any())
+            {
+                return MatchCalculator.GetCompatibilityReport(males.First(), females.First());
+            }
+            else
+            {
+                throw new Exception(AlertText.PersonProfileNoExist);
+            }
+
         }
 
         /// <summary>

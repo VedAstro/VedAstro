@@ -202,38 +202,14 @@
     private async Task SetCoordinatesFromNameInput()
     {
 
-    TryAgain:
-        //if location not set, default to preset location
-        LocationName = LocationName is "" or null ? DefaultLocationCountry : LocationName;
+        (string FullName, double Latitude, double Longitude) coordinates = await Tools.CoordinateToAddressGuiHandle(LocationName, _jsRuntime);
 
-        //sometimes location can't be found, causes critical failure
-        //so if fail here try again with default location & alert user
-        (string FullName, double Latitude, double Longitude) coordinates = (FullName: "", Latitude: 0, Longitude: 0);
-        try
-        {
-            //get longitude & latitude for location
-            coordinates = await Tools.AddressToCoordinate(LocationName);
-        }
-        catch (Exception e)
-        {
-            //alert user first with the wrong name
-            var msg = $"The location \"{LocationName}\", not found!" +
-                      $"\n Check spelling or try other nearby place.";
-            await _jsRuntime.ShowAlert("error", msg, true);
-
-
-            //change to default location & try again to get coordinates
-            LocationName = DefaultLocationCountry;
-            goto TryAgain;
-        }
-
-        //(FullName: fullName, Latitude: lat, Longitude: lng);
         //update user typed location name to proper formatted one
         LocationName = coordinates.FullName;
+
         //set new coordinates into view
         Longitude = coordinates.Longitude;
         Latitude = coordinates.Latitude;
-
     }
 
     /// <summary>

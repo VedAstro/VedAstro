@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -453,7 +454,7 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static TimeSpan GetSystemTimezone() => DateTimeOffset.Now.Offset;
 
-        public static async Task<(string FullName, double Latitude, double Longitude)> AddressToCoordinate(string address)
+        public static async Task<WebResult<(string FullName, double Latitude, double Longitude)>> AddressToCoordinate(string address)
         {
             //create the request url for Google API
             var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
@@ -461,15 +462,22 @@ namespace Genso.Astrology.Library
 
             //get location data from GoogleAPI
             var webResult = await ReadFromServerXmlReply(url);
-            var rawReplyXml = webResult.Payload;
-#if DEBUG
-            Console.WriteLine(rawReplyXml.ToString());
-#endif
 
-            //extract out the longitude & latitude
-            var locationData = new XDocument(rawReplyXml);
-            var result = locationData.Element("GeocodeResponse")?.Element("result");
-            var locationElement = result?.Element("geometry")?.Element("location");
+            //if fail to make call, end here
+            if (!webResult.IsPass) { return new WebResult<(string FullName, double Latitude, double Longitude)>(false, ("", 0, 0)); }
+
+            //if success, get the reply data out
+            var geocodeResponseXml = webResult.Payload;
+            var resultXml = geocodeResponseXml.Element("result");
+
+            //DEBUG
+            //Console.WriteLine(geocodeResponseXml.ToString());
+
+            //check the data, if location was NOT found by google API, end here
+            if (resultXml.Value == "ZERO_RESULTS") { return new WebResult<(string FullName, double Latitude, double Longitude)>(false, ("", 0, 0)); }
+
+            //if success, extract out the longitude & latitude
+            var locationElement = resultXml?.Element("geometry")?.Element("location");
             var lat = double.Parse(locationElement?.Element("lat")?.Value ?? "0");
             var lng = double.Parse(locationElement?.Element("lng")?.Value ?? "0");
 
@@ -478,10 +486,10 @@ namespace Genso.Astrology.Library
             lng = Math.Round(lng, 3);
 
             //get full name with country & state
-            var fullName = result?.Element("formatted_address")?.Value;
+            var fullName = resultXml?.Element("formatted_address")?.Value;
 
+            //return to caller
             return (FullName: fullName, Latitude: lat, Longitude: lng);
-
         }
 
         /// <summary>
@@ -732,6 +740,47 @@ namespace Genso.Astrology.Library
 
             //return list to caller
             return returnList;
+        }
+
+        /// <summary>
+        /// if js runtime not passed then no error message
+        /// </summary>
+        public static async Task<(string FullName, double Latitude, double Longitude)> CoordinateToAddressGuiHandle(string locationName, dynamic jsRuntime)
+        {
+            const string defaultLocationCountry = "Singapore";
+
+        TryAgain:
+            //if location not set, default to preset location
+            locationName = locationName is "" or null ? defaultLocationCountry : locationName;
+
+            //sometimes location can't be found, causes critical failure
+            //so if fail here try again with default location & alert user
+
+            //get longitude & latitude for location
+            var results = await Tools.AddressToCoordinate(locationName);
+
+            //if fail, show message -> set default country -> try again
+            if (!results.IsPass)
+            {
+                //if js runtime not passed then no error message
+                if (jsRuntime != null)
+                {
+                    //alert user first with the wrong name
+                    var msg = $"The location \"{locationName}\", not found!" +
+                              $"\n Check spelling or try other nearby place.";
+                    await jsRuntime.ShowAlert("error", msg, true);
+                }
+
+                //change to default location & try again to get coordinates
+                locationName = defaultLocationCountry;
+                goto TryAgain;
+
+            }
+
+            //extract out valid location data
+            (string FullName, double Latitude, double Longitude) coordinates = results.Payload;
+
+            return coordinates;
         }
     }
 

@@ -133,36 +133,11 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static async Task<GeoLocation> FromName(string locationName)
         {
-            var DefaultLocationCountry = "Singapore";
-
-            TryAgain:
-            //if location not set, default to preset location
-            locationName = locationName is "" or null ? DefaultLocationCountry : locationName;
-
-            //sometimes location can't be found, causes critical failure
-            //so if fail here continue with default location
-            (string FullName, double Latitude, double Longitude) coordinates;
-            try
-            {
-                //get longitude & latitude for location from API
-                coordinates = await Tools.AddressToCoordinate(locationName);
-            }
-            catch (Exception e)
-            {
-                //if fail set to default location and continue
-                locationName = DefaultLocationCountry;
-                goto TryAgain;
-            }
-
-            //set new coordinates into view
-            double longitude = coordinates.Longitude;
-            double latitude = coordinates.Latitude;
-
-            //update user typed location name to proper formatted one
-            var formattedLocationName = coordinates.FullName;
+           
+            var coordinates = await Tools.CoordinateToAddressGuiHandle(locationName, null);
 
             //make the new Geo Location and return it
-            var newGeoLocation = new GeoLocation(formattedLocationName, longitude, latitude);
+            var newGeoLocation = new GeoLocation(coordinates.FullName, coordinates.Longitude, coordinates.Latitude);
             return newGeoLocation;
         }
     }

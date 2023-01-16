@@ -127,11 +127,12 @@ namespace API
             //check if record to delete exists
             //if not found, raise alarm
             var xmlRecordList = xmlDocFile.Root.Elements();
-            var foundRecord = xmlRecordList.Any(x => x.Element("PersonId").Value == dataXmlToDelete.Element("PersonId").Value);
-            if (!foundRecord) { throw new Exception("Could not find XML record to delete in main list!"); }
+            var personToDelete = Person.FromXml(dataXmlToDelete);
+            var foundRecords = xmlRecordList.Where(x => Person.FromXml(x).Id == personToDelete.Id);
+            if (!foundRecords.Any()) { throw new Exception("Could not find XML record to delete in main list!"); }
 
             //continue with delete
-            xmlRecordList.First(xmlReco => xmlReco == dataXmlToDelete).Remove();
+            foundRecords.First().Remove();
 
             //upload modified list to storage
             await OverwriteBlobData(fileClient, xmlDocFile);

@@ -104,10 +104,10 @@ class EventsChart {
         $(document).on('loadEventDescription', EventsChart.loadEventDescription);
 
         //save now line
-        this.NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine);
+        this.$NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine);
 
         //update once now
-        var nowVerticalLine = this.NowVerticalLine; //hack to make available in local below
+        var nowVerticalLine = this.$NowVerticalLine; //hack to make available in local below
         var svgChartElm = this.$SvgChartElm; //hack to make available in local below
         updateNowLine();
 
@@ -138,9 +138,11 @@ class EventsChart {
                 else { return false; }
             });
 
-            //get horizontal position of now rect (x axis)
-            var xAxisNowRect = closestRectToNow.getAttribute("x");
-            nowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`);
+            //get horizontal position of now rect (x axis) (conditional access, not initialized all the time)
+            var xAxisNowRect = closestRectToNow?.getAttribute("x");
+
+            //only set line position if, data is valid
+            if (xAxisNowRect) { nowVerticalLine.attr('transform', `matrix(1, 0, 0, 1, ${xAxisNowRect}, 0)`); }
 
         }
 

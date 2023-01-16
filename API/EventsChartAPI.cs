@@ -2224,6 +2224,10 @@ namespace API
         /// </summary>
         public static double GetPlanetPowerFactor(List<PlanetName> inputPlanetList, Time time)
         {
+            //if no input planets return 0 power,
+            //this makes events with no power planets not appear in smart sum row
+            if (!inputPlanetList.Any()) { return 0; }
+
             //get all power factors into a list
             var listx = new List<double>();
             foreach (var planet in inputPlanetList)

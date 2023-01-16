@@ -667,10 +667,17 @@ namespace Genso.Astrology.Library
                 //Marriage between the constellations indicating same class of yoni and between the male and
                 //female stars of that yoni conduces to great happiness, perfect harmony and progeny.
                 //The union of these is agreeable and conduces to favourable results to the fullest extent.
-                if (maleAnimal == femaleAnimal && maleGender != femaleGender)
+                var sameAnimal = maleAnimal == femaleAnimal;
+                var sameGender = maleGender == femaleGender;
+                if (sameAnimal && !sameGender) //same animal opposite gender
                 {
                     prediction.Nature = EventNature.Good;
                     prediction.Info = "favourable results to the fullest extent, harmony and progeny";
+                }
+                else if(sameAnimal && sameGender) //same animal same gender 
+                {
+                    prediction.Nature = EventNature.Good;
+                    prediction.Info = "not perfect, better than normal."; //(not 100% known)
                 }
 
 

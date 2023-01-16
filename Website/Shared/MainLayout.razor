@@ -265,7 +265,7 @@
     private async Task OnClickSignOutButton()
     {
         //log this
-        await WebsiteLogManager.LogClick(_jsRuntime, "Sign Out");
+        await WebsiteLogManager.LogClick("Sign Out");
 
         //clear local storage of user data
         //since login status is basically the existence of user data in localstorage

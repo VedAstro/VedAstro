@@ -34,10 +34,10 @@ namespace Website
 #endif
 
                 //get all visitor data
-                var visitorXml = await GetVisitorDataXml(AppData.JsRuntime);
+                var visitorXml = await GetVisitorDataXml();
 
                 //send to server for storage
-                await SendLogToServer(visitorXml, AppData.JsRuntime);
+                await SendLogToServer(visitorXml);
 
             }
             catch (Exception e)
@@ -51,7 +51,7 @@ namespace Website
 
         public static async Task LogError(XElement errorDataXml)
         {
-           await LogError(errorDataXml.ToString());
+            await LogError(errorDataXml.ToString());
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace Website
             visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampSystemXml);
 
             //send to server for storage
-            SendLogToServer(visitorXml, AppData.JsRuntime);
+            SendLogToServer(visitorXml);
 
             Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
 
@@ -116,7 +116,7 @@ namespace Website
             visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, WebsiteTools.TimeStampSystemXml);
 
             //send to server for storage
-            await SendLogToServer(visitorXml, AppData.JsRuntime);
+            await SendLogToServer(visitorXml);
 
             Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
         }
@@ -124,7 +124,7 @@ namespace Website
         /// <summary>
         /// Logs a button click
         /// </summary>
-        public static async Task LogClick(IJSRuntime jsRuntime, string? buttonText)
+        public static async Task LogClick(string? buttonText)
         {
             //if running code locally, end here
             //since in local errors will show in console
@@ -134,14 +134,14 @@ namespace Website
             return;
 #endif
 
-            await LogData(AppData.JsRuntime, $"Button Text:{buttonText}");
+            await LogData($"Button Text:{buttonText}");
 
         }
 
         /// <summary>
         /// Logs an alert shown to user
         /// </summary>
-        public static async Task LogAlert(IJSRuntime jsRuntime, dynamic alertData)
+        public static async Task LogAlert(dynamic alertData)
         {
             //if running code locally, end here
             //since in local errors will show in console
@@ -150,27 +150,19 @@ namespace Website
             Console.WriteLine("BLZ: LogAlert: DEBUG mode, skipped logging to server");
             return;
 #endif
+
             //all alerts except loading box, visitor list popup (use of html instead of title)
-            try
-            {
-                //todo loading box is not logged, because of over logging (possible fix, wrapper class to handle )
-                var alertMessage = ((dynamic)alertData)?.title ?? "";
-                await LogData(AppData.JsRuntime, $"Alert Message:{alertMessage}");
-            }
-            catch (Exception)
-            {
-                // only visitor list page & loading box uses "html" and not "title",
-                // so if can't get it skip it
-            }
-
-
+            // only visitor list page & loading box uses "html" and not "title",
+            // so if can't get it skip it
+            var alertMessage = ((dynamic)alertData)?.title ?? "";
+            await LogData($"Alert Message:{alertMessage}");
         }
 
         /// <summary>
         /// Simple method to log general data to API
         /// note: will not run debug
         /// </summary>
-        public static async Task LogData(IJSRuntime jsRuntime, string data)
+        public static async Task LogData(string data)
         {
             //if running code locally, end here
             //since in local errors will show in console
@@ -181,13 +173,13 @@ namespace Website
 #endif
 
             //get basic visitor data
-            var visitorXml = await GetVisitorDataXml(AppData.JsRuntime);
+            var visitorXml = await GetVisitorDataXml();
 
             //add in button click data
             visitorXml.Add(new XElement("Data", data));
 
             //send to server for storage
-            await SendLogToServer(visitorXml, AppData.JsRuntime);
+            await SendLogToServer(visitorXml);
         }
 
 
@@ -196,7 +188,7 @@ namespace Website
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-        private static async Task<XElement> GetVisitorDataXml(IJSRuntime jsRuntime)
+        private static async Task<XElement> GetVisitorDataXml()
         {
             //get url user is on
             var urlString = await AppData.JsRuntime.GetCurrentUrl();
@@ -208,7 +200,7 @@ namespace Website
             //based on visitor type create the right record data to log
             //this is done to minimize excessive logging
             var visitorXml = AppData.IsNewVisitor
-                ? await NewVisitor(userIdXml, urlXml, AppData.JsRuntime)
+                ? await NewVisitor(userIdXml, urlXml)
                 : OldVisitor(userIdXml, urlXml);
 
 
@@ -217,7 +209,7 @@ namespace Website
         }
 
         //all possible details are logged
-        private static async Task<XElement> NewVisitor(XElement userIdXml, XElement urlXml, IJSRuntime jsRuntime)
+        private static async Task<XElement> NewVisitor(XElement userIdXml, XElement urlXml)
         {
             //get visitor data & format it nicely for storage
             var browserDataXml = await AppData.JsRuntime.InvokeAsyncJson("getVisitorData", "BrowserData");
@@ -252,7 +244,7 @@ namespace Website
         /// <summary>
         /// Given the Visitor xml element, it will send it to API for safe keeping
         /// </summary>
-        private static async Task SendLogToServer(XElement visitorElement, IJSRuntime jsRuntime)
+        private static async Task SendLogToServer(XElement visitorElement)
         {
             try
             {

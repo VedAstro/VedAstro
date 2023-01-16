@@ -130,72 +130,6 @@ namespace Website
 
 
         /// <summary>
-        /// Gets person instance from name contacts API
-        /// Note: - uses API to get latest data
-        ///       - will retry forever till result comes
-        /// TODO DEPRECATE FOR CACHED VERSION
-        /// </summary>
-        public static async Task<Person> GetPersonFromIdOld(string personId, IJSRuntime jsRuntime)
-        {
-            //timeout implemented because calls have
-            //known to fail with stable connection
-            var timeoutMs = 650;
-
-            //if can't be recovered within limit
-            //then code related error
-            var tryLimit = 3;
-            var tryCount = 0;
-
-            Person personFromId;
-
-        TryAgain:
-            try
-            {
-                personFromId = await DoWork().TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
-                return personFromId;
-            }
-            catch (Exception e)
-            {
-                //if internet connection is fine, try again
-                //also keep within try max, to stop looping
-                var isOnline = await jsRuntime.IsOnline();
-                if (isOnline && tryCount <= tryLimit)
-                {
-                    Console.WriteLine($"BLZ: GetPersonFromId: {timeoutMs}ms Timeout!!");
-                    tryCount++;
-                    goto TryAgain;
-                }
-
-                //we need to throw the exception to stop execution
-                //to show error alert which will reload to home
-                //since at this point it is unrecoverable
-                throw new ApiCommunicationFailed($"Error in GetPersonFromId()", e);
-            }
-
-
-            async Task<Person> DoWork()
-            {
-                var xmlData = Tools.AnyTypeToXml(personId);
-                var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
-
-                var personXml = result.Payload.Element("Person");
-
-                //parse received person
-                var receivedPerson = Person.FromXml(personXml);
-
-                return receivedPerson;
-            }
-
-        }
-
-        /// <summary>
-        /// Gets person instance from name contacts API
-        /// Note: - uses API to get latest data
-        ///       - will retry forever till result comes
-        /// TODO DEPRECATE FOR CACHED VERSION
-        /// </summary>
-
-        /// <summary>
         /// Gets person from ID
         /// Checks user's person list,
         /// </summary>
@@ -213,7 +147,7 @@ namespace Website
             //if control reaches here, than the person is not in current users list,
             //so get direct from server, this indicates direct link access to another
             //user's person profile, which is allowed but also monitored
-            await WebsiteLogManager.LogData(jsRuntime, $"Direct Link Access:{personId}");
+            await WebsiteLogManager.LogData($"Direct Link Access:{personId}");
 
             foundPerson = await GetFromApi(personId, jsRuntime);
 

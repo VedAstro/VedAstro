@@ -212,7 +212,7 @@ namespace Website
         /// - on failure payload will contain error info
         /// - xml is not checked here, just converted
         /// - No timeout! Will wait forever
-        /// 
+        /// - failure is logged here
         /// </summary>
         public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
@@ -274,9 +274,10 @@ namespace Website
                 //throw new ApiCommunicationFailed($"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}", e);
             }
 
+            //if fail log it
+            if (!returnVal.IsPass) { WebsiteLogManager.LogError(returnVal.Payload); }
 
             return returnVal;
-
         }
 
 

@@ -72,7 +72,7 @@
                         <b style="font-size: 22px;">@prediction.FormattedName</b>
                         <p style="margin: 0px; font-size: 15px;">@prediction.Description</p>
                         <button type="button"
-                        @onclick="@(() => _jsRuntime.InvokeVoidAsync("scrollToDiv", @prediction.Name.ToString()))"
+                        @onclick="@(() => OnClickMoreInfo(@prediction.Name.ToString()))"
                         class="btn btn-sm btn-outline-primary my-1">
                             More Info
                         </button>
@@ -490,9 +490,6 @@
             //let user know
             await _jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
 
-            //log it
-            WebsiteLogManager.LogError(webResult.Payload);
-
             //send empty view
             return null;
         }
@@ -541,6 +538,15 @@
         }
 
         return "";
+    }
+
+    private void OnClickMoreInfo(string predictionName)
+    {
+        //make a log
+        WebsiteLogManager.LogData("Click : More Info : " + predictionName);
+
+        //make scroll movement to place
+        _jsRuntime.InvokeVoidAsync("scrollToDiv", predictionName);
     }
 
 }

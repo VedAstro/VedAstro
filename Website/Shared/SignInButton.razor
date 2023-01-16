@@ -117,7 +117,7 @@
 #endif
 
         //log this
-        await WebsiteLogManager.LogClick(_jsRuntime, "Google Sign In");
+        await WebsiteLogManager.LogClick("Google Sign In");
 
         //todo show loading box
 
@@ -206,7 +206,7 @@
     private async Task _OnClickSignInFacebook()
     {
         //log this
-        WebsiteLogManager.LogClick(_jsRuntime, "Facebook Sign In");
+        WebsiteLogManager.LogClick("Facebook Sign In");
 
         await _jsRuntime.InvokeVoidAsync("facebookLogin");
     }

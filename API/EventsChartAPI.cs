@@ -2216,8 +2216,8 @@ namespace API
             //returns as percentage over 100%
             var factor = planetPwr.Remap(min, max, 0, 100);
 
-            //planet power below 70% filtered out
-            factor = factor < 70 ? 0 : factor;
+            //planet power below 60% filtered out
+            factor = factor < 60 ? 0 : factor;
 
             return factor;
         }

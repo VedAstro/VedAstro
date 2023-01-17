@@ -4,14 +4,14 @@
 {
     <div class="hstack gap-2 align-content-center">
         <h4 class="mt-2">@Label</h4>
-        <div @ref="helpIconHolder">
+        <div @ref="helpIconHolder" @onmouseenter="OnMouseOverHelpIcon">
             <span class="iconify" data-icon="icon-park:help" data-width="@(SmallIcon?smallIconSize:bigIconSize)"></span>
         </div>
     </div>
 }
 else
 {
-    <div @ref="helpIconHolder" style="float: right; margin-left: 8px;margin-top: -2px;">
+    <div @ref="helpIconHolder" @onmouseenter="OnMouseOverHelpIcon" style="float: right; margin-left: 8px;margin-top: -2px;">
         <span class="iconify" data-icon="icon-park:help" data-width="@(SmallIcon?smallIconSize:bigIconSize)"></span>
     </div>
 }
@@ -25,10 +25,10 @@ else
     /// </summary>
     [Parameter]
     public string Label { get; set; } = "";
-    
+
     /// <summary>
     /// Set true if for small icon size 19px next to form labels
-    /// default false, not need to be set 
+    /// default false, not need to be set
     /// </summary>
     [Parameter]
     public bool SmallIcon { get; set; } = false;
@@ -54,6 +54,12 @@ else
 
         //attach tooltip lib to element
         await _jsRuntime.Tippy(helpIconHolder, tooltipData);
+    }
+
+    private void OnMouseOverHelpIcon()
+    {
+        //make a log
+        WebLogger.Data("HelpBox : " + HelpText);
     }
 
 }

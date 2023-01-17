@@ -99,7 +99,7 @@ namespace Website
                 Console.WriteLine(extraInfo);
 
                 //make a log to server
-                await WebsiteLogManager.LogError(exception, extraInfo);
+                await WebLogger.Error(exception, extraInfo);
 
                 //now refresh page, only best option we have at the moment
                 //otherwise user is left standing in broken page

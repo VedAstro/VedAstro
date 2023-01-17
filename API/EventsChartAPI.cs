@@ -80,7 +80,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -166,7 +166,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -204,7 +204,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e);
             }
@@ -277,7 +277,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -314,7 +314,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -360,7 +360,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -399,7 +399,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -436,7 +436,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(Tools.ExceptionToXml(e));
@@ -468,7 +468,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -519,7 +519,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -557,7 +557,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await Log.Error(e, incomingRequest);
+                await ApiLogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -1133,7 +1133,7 @@ namespace API
                 catch (Exception e)
                 {
                     //if fail log it and go on with next life event despite failure
-                    await Log.Error(e, null);
+                    await ApiLogger.Error(e, null);
                     continue;
                 }
             }

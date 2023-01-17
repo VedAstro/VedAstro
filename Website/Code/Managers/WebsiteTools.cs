@@ -147,7 +147,7 @@ namespace Website
             //if control reaches here, than the person is not in current users list,
             //so get direct from server, this indicates direct link access to another
             //user's person profile, which is allowed but also monitored
-            await WebsiteLogManager.LogData($"Direct Link Access:{personId}");
+            await WebLogger.Data($"Direct Link Access:{personId}");
 
             foundPerson = await GetFromApi(personId, jsRuntime);
 
@@ -201,7 +201,7 @@ namespace Website
             //check result, display error if needed
             if (!result.IsPass)
             {
-                WebsiteLogManager.LogError($"BLZ:DeletePerson() Fail:\n{result.Payload}");
+                WebLogger.Error($"BLZ:DeletePerson() Fail:\n{result.Payload}");
                 await jsRuntime.ShowAlert("error", AlertText.DeletePersonFail, true);
             }
 
@@ -217,7 +217,7 @@ namespace Website
             //check result, display error if needed
             if (!result.IsPass)
             {
-                WebsiteLogManager.LogError($"BLZ:DeleteSavedChart() Fail:\n{result.Payload}");
+                WebLogger.Error($"BLZ:DeleteSavedChart() Fail:\n{result.Payload}");
                 await jsRuntime.ShowAlert("error", AlertText.DeleteChartFail, true);
             }
 
@@ -238,7 +238,7 @@ namespace Website
             //check result, display error if needed
             if (!result.IsPass)
             {
-                WebsiteLogManager.LogError($"BLZ:UpdatePerson() Fail:\n{result.Payload}");
+                WebLogger.Error($"BLZ:UpdatePerson() Fail:\n{result.Payload}");
                 await jsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
             }
 
@@ -258,7 +258,7 @@ namespace Website
             //check result, display error if needed
             if (!result.IsPass)
             {
-                WebsiteLogManager.LogError($"BLZ:AddPerson() Fail:\n{result.Payload}");
+                WebLogger.Error($"BLZ:AddPerson() Fail:\n{result.Payload}");
                 await AppData.JsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
             }
 
@@ -361,7 +361,7 @@ namespace Website
         public static void OnAppError()
         {
             //log it
-            WebsiteLogManager.LogError("Blazor Error Box Shown");
+            WebLogger.Error("Blazor Error Box Shown");
         }
 
 
@@ -510,17 +510,6 @@ namespace Website
         }
 
 
-        /// <summary>
-        /// Gets now time with seconds in wrapped in xml element
-        /// used for logging
-        /// </summary>
-        public static XElement TimeStampSystemXml => new("TimeStamp", Tools.GetNowSystemTimeSecondsText());
-
-        /// <summary>
-        /// Gets now time at server location (+8:00) with seconds in wrapped in xml element
-        /// used for logging
-        /// </summary>
-        public static XElement TimeStampServerXml => new("TimeStampServer", Tools.GetNowServerTimeSecondsText());
 
         /// <summary>
         /// Gets XML file from any URL and parses it into xelement list

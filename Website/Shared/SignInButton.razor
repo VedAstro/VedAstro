@@ -117,7 +117,7 @@
 #endif
 
         //log this
-        await WebsiteLogManager.LogClick("Google Sign In");
+        await WebLogger.Click("Google Sign In");
 
         //todo show loading box
 
@@ -181,7 +181,7 @@
         //login failed, let user know, and exit here
         if (authResponse == null)
         {
-            WebsiteLogManager.LogError(AlertText.FacebookLoginFail);
+            WebLogger.Error(AlertText.FacebookLoginFail);
             await _jsRuntime.ShowAlert("error", AlertText.LoginFailed, true);
             return;
         }
@@ -206,7 +206,7 @@
     private async Task _OnClickSignInFacebook()
     {
         //log this
-        WebsiteLogManager.LogClick("Facebook Sign In");
+        WebLogger.Click("Facebook Sign In");
 
         await _jsRuntime.InvokeVoidAsync("facebookLogin");
     }

@@ -1,11 +1,15 @@
 ﻿
 console.log("Log Thread JS Loaded");
 
-self.addEventListener('message', async function (e) {
-    //var message = e.data + ' to myself!';
 
-    var result = await addVisitor(e.data);
-    console.log(result);
+
+self.addEventListener('message', async function (e) {
+    //make a log
+    await addVisitor(e.data);
+
+    //var message = e.data + ' to myself!';
+    //var result = await addVisitor(e.data);
+    //console.log(result);
 
     //var name = e.data.name;
     //if (name === "addVisitor") {

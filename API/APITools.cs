@@ -360,7 +360,7 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                await Log.Error(e, null);
+                await ApiLogger.Error(e, null);
                 return new XElement("Chart");
             }
         }
@@ -466,7 +466,7 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                await Log.Error(e, null);
+                await ApiLogger.Error(e, null);
                 return new XElement("Person");
             }
         }

@@ -337,21 +337,35 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static TimeSpan GetLocalTimeOffset(double longitudeDeg)
         {
-            //raise alarm if longitude is out of range
-            var outOfRange = !(longitudeDeg >= -180 && longitudeDeg <= 180);
-            if (outOfRange) { throw new Exception($"Longitude out of range : {longitudeDeg}"); }
 
-            //calculate offset based on longitude
-            var offsetToReturn = TimeSpan.FromHours(longitudeDeg / 15.0);
+            try
+            {
+                //raise alarm if longitude is out of range
+                var outOfRange = !(longitudeDeg >= -180 && longitudeDeg <= 180);
+                if (outOfRange) { throw new Exception($"Longitude out of range : {longitudeDeg}"); }
 
-            //round off offset to full minutes (because datetime doesnt accept fractional minutes in offsets)
-            var offsetMinutes = Math.Round(offsetToReturn.TotalMinutes);
+                //calculate offset based on longitude
+                var offsetToReturn = TimeSpan.FromHours(longitudeDeg / 15.0);
 
-            //get new offset from rounded minutes
-            offsetToReturn = TimeSpan.FromMinutes(offsetMinutes);
+                //round off offset to full minutes (because datetime doesnt accept fractional minutes in offsets)
+                var offsetMinutes = Math.Round(offsetToReturn.TotalMinutes);
 
-            //return offset to caller
-            return offsetToReturn;
+                //get new offset from rounded minutes
+                offsetToReturn = TimeSpan.FromMinutes(offsetMinutes);
+
+                //return offset to caller
+                return offsetToReturn;
+
+            }
+            catch (Exception e)
+            {
+                //let caller know failure silently
+                LibLogger.Error(e);
+
+                //return empty LMT for controlled failure
+                return TimeSpan.Zero;
+            }
+
         }
 
         /// <summary>

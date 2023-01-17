@@ -175,7 +175,7 @@ namespace Website
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
 
-                httpRequestMessage.Content = XmLtoHttpContent(xmlData);
+                httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
 
                 //get the data sender
                 using var client = new HttpClient();
@@ -234,7 +234,7 @@ namespace Website
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
 
-                httpRequestMessage.Content = XmLtoHttpContent(xmlData);
+                httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
 
                 //get the data sender
                 using var client = new HttpClient();
@@ -275,7 +275,7 @@ namespace Website
             }
 
             //if fail log it
-            if (!returnVal.IsPass) { WebsiteLogManager.LogError(returnVal.Payload); }
+            if (!returnVal.IsPass) { WebLogger.Error(returnVal.Payload); }
 
             return returnVal;
         }
@@ -306,25 +306,7 @@ namespace Website
 
 
         //PRIVATE METHODS
-        /// <summary>
-        /// Packages the data into ready form for the HTTP client to use in final sending stage
-        /// </summary>
-        private static StringContent XmLtoHttpContent(XElement data)
-        {
-            //gets the main XML data as a string
-            var dataString = Tools.XmlToString(data);
-
-            //specify the data encoding
-            var encoding = Encoding.UTF8;
-
-            //specify the type of the data sent
-            //plain text, stops auto formatting
-            var mediaType = "plain/text";
-
-            //return packaged data to caller
-            return new StringContent(dataString, encoding, mediaType);
-        }
-
+        
 
 
     }

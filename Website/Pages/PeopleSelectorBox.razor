@@ -35,7 +35,7 @@
             if (_selectedPersonId == value) return;
 
             //log this, don't await to reduce lag
-            WebsiteLogManager.LogData($"Selected Person:{value}");
+            WebLogger.Data($"Selected Person:{value}");
 
             _selectedPersonId = value;
             //update value in parent page

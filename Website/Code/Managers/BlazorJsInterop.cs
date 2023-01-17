@@ -39,7 +39,7 @@ namespace Website
             try
             {
                 //log this, don't await to reduce lag
-                WebsiteLogManager.LogAlert(alertData);
+                WebLogger.Alert(alertData);
 
                 await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
             }
@@ -58,7 +58,7 @@ namespace Website
         public static void HideAlert(this IJSRuntime jsRuntime)
         {
             //log this, don't await to reduce lag
-            WebsiteLogManager.LogData("Alert Close");
+            WebLogger.Data("Alert Close");
 
             jsRuntime.InvokeVoidAsync("Swal.close");
         }
@@ -70,7 +70,7 @@ namespace Website
         public static async Task<JsonElement> ShowAlertResult(this IJSRuntime jsRuntime, object alertData)
         {
             //log this, don't await to reduce lag
-            WebsiteLogManager.LogAlert(alertData);
+            WebLogger.Alert(alertData);
 
             return await jsRuntime.InvokeAsync<JsonElement>("Swal.fire", alertData);
         }
@@ -136,7 +136,7 @@ namespace Website
             };
 
             //log it
-            WebsiteLogManager.LogData("Show Loading Box");
+            WebLogger.Data("Show Loading Box");
 
             //don't wait here
             jsRuntime.ShowAlert(alertData);
@@ -152,7 +152,7 @@ namespace Website
         public static void HideLoading(this IJSRuntime jsRuntime)
         {
             //log it
-            WebsiteLogManager.LogData("Hide Loading Box");
+            WebLogger.Data("Hide Loading Box");
 
             jsRuntime.HideAlert();
 

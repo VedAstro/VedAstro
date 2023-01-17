@@ -9,7 +9,7 @@ namespace Website
     /// <summary>
     /// A specialized log manager for website
     /// </summary>
-    public static class WebsiteLogManager
+    public static class WebLogger
     {
 
 
@@ -20,7 +20,7 @@ namespace Website
         /// - Does not log any url with localhost
         /// - if fail will exit silently
         /// </summary>
-        public static async Task LogVisitor(IJSRuntime jsRuntime)
+        public static async Task Visitor(IJSRuntime jsRuntime)
         {
             try
             {
@@ -49,16 +49,16 @@ namespace Website
         }
 
 
-        public static async Task LogError(XElement errorDataXml)
+        public static async Task Error(XElement errorDataXml)
         {
-            await LogError(errorDataXml.ToString());
+            await Error(errorDataXml.ToString());
         }
 
         /// <summary>
         /// Log error when there is no exception data
         /// used when #blazor-error-ui is shown
         /// </summary>
-        public static async Task LogError(string errorMsg)
+        public static async Task Error(string errorMsg)
         {
 
             //if running code locally, end here
@@ -76,7 +76,7 @@ namespace Website
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
             var errorXml = new XElement("Error", new XElement("Message", errorMsg));
-            visitorXml.Add(userId, visitorId, errorXml, urlXml, WebsiteTools.TimeStampSystemXml);
+            visitorXml.Add(userId, visitorId, errorXml, urlXml, Tools.TimeStampSystemXml);
 
             //send to server for storage
             SendLogToServer(visitorXml);
@@ -88,7 +88,7 @@ namespace Website
         /// <summary>
         /// Makes a log of the exception in API server
         /// </summary>
-        public static async Task LogError(Exception exception, string extraInfo = "")
+        public static async Task Error(Exception exception, string extraInfo = "")
         {
 
             //if running code locally, end here
@@ -104,7 +104,7 @@ namespace Website
             //var visitorXml = await GetVisitorDataXml(jsRuntime);
 
             //convert exception into nice xml
-            var errorXml = ExtractDataFromException(exception);
+            var errorXml = Tools.ExtractDataFromException(exception);
 
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error
@@ -113,7 +113,7 @@ namespace Website
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var dataXml = new XElement("Data", extraInfo);
             var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
-            visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, WebsiteTools.TimeStampSystemXml);
+            visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, Tools.TimeStampSystemXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -124,7 +124,7 @@ namespace Website
         /// <summary>
         /// Logs a button click
         /// </summary>
-        public static async Task LogClick(string? buttonText)
+        public static async Task Click(string? buttonText)
         {
             //if running code locally, end here
             //since in local errors will show in console
@@ -134,14 +134,14 @@ namespace Website
             return;
 #endif
 
-            await LogData($"Button Text:{buttonText}");
+            await Data($"Button Text:{buttonText}");
 
         }
 
         /// <summary>
         /// Logs an alert shown to user
         /// </summary>
-        public static async Task LogAlert(dynamic alertData)
+        public static async Task Alert(dynamic alertData)
         {
             //if running code locally, end here
             //since in local errors will show in console
@@ -155,14 +155,14 @@ namespace Website
             // only visitor list page & loading box uses "html" and not "title",
             // so if can't get it skip it
             var alertMessage = ((dynamic)alertData)?.title ?? "";
-            await LogData($"Alert Message:{alertMessage}");
+            await Data($"Alert Message:{alertMessage}");
         }
 
         /// <summary>
         /// Simple method to log general data to API
         /// note: will not run debug
         /// </summary>
-        public static async Task LogData(string data)
+        public static async Task Data(string data)
         {
             //if running code locally, end here
             //since in local errors will show in console
@@ -219,7 +219,7 @@ namespace Website
             var resultLocation = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, null, "Location");
             var locationXml = resultLocation.Payload;
             var visitorElement = new XElement("Visitor");
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampSystemXml, WebsiteTools.TimeStampServerXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
+            visitorElement.Add(userIdXml, visitorIdXml, urlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
 
             //mark new visitor as already logged for first time
             AppData.IsNewVisitor = false;
@@ -233,10 +233,8 @@ namespace Website
 
             //get visitor data & format it nicely for storage
             var visitorElement = new XElement("Visitor");
-            //todo origin url does not change, for now not needed for old visitor updates
-            //var originUrlXml = new XElement("OriginUrl", AppData.OriginUrl);
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId); //use id generated above
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, WebsiteTools.TimeStampSystemXml, WebsiteTools.TimeStampServerXml);
+            visitorElement.Add(userIdXml, visitorIdXml, urlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             return visitorElement;
         }
@@ -266,59 +264,6 @@ namespace Website
             }
 
 
-        }
-
-        /// <summary>
-        /// Extracts data from an Exception puts it in a nice XML
-        /// </summary>
-        private static XElement ExtractDataFromException(Exception e)
-        {
-            //place to store the exception data
-            string fileName;
-            string methodName;
-            int line;
-            int columnNumber;
-            string message;
-            string source;
-
-            //get the exception that started it all
-            var originalException = e.GetBaseException();
-
-            //extract the data from the error
-            StackTrace st = new StackTrace(e, true);
-
-            //Get the first stack frame
-            StackFrame frame = st.GetFrame(st.FrameCount - 1);
-
-            //Get the file name
-            fileName = frame.GetFileName();
-
-            //Get the method name
-            methodName = frame.GetMethod().Name;
-
-            //Get the line number from the stack frame
-            line = frame.GetFileLineNumber();
-
-            //Get the column number
-            columnNumber = frame.GetFileColumnNumber();
-
-            message = originalException.ToString();
-
-            source = originalException.Source;
-
-
-            //put together the new error record
-            var newRecord = new XElement("Error",
-                new XElement("Message", message),
-                new XElement("Source", source),
-                new XElement("FileName", fileName),
-                new XElement("SourceLineNumber", line),
-                new XElement("SourceColNumber", columnNumber),
-                new XElement("MethodName", methodName)
-            );
-
-
-            return newRecord;
         }
 
     }

@@ -149,7 +149,7 @@
             await _jsRuntime.InvokeVoidAsync("InitErrorCatcher");
 
             //log visit only 1 once when page is rendered
-            await WebsiteLogManager.LogVisitor(_jsRuntime);
+            await WebLogger.Visitor(_jsRuntime);
 
             //attach tooltip lib to dark mode & nav button element
             await _jsRuntime.Tippy("#DarkModeButton", new { content = "Night Mode" });
@@ -265,7 +265,7 @@
     private async Task OnClickSignOutButton()
     {
         //log this
-        await WebsiteLogManager.LogClick("Sign Out");
+        await WebLogger.Click("Sign Out");
 
         //clear local storage of user data
         //since login status is basically the existence of user data in localstorage

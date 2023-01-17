@@ -152,7 +152,8 @@ else
 
 
         //search file
-        foundPrediction = (await AppData.GetHoroscopeDataListCached()).Where(IsFound);
+        var horoscopeDataListCached = await AppData.GetHoroscopeDataListCached();
+        foundPrediction = horoscopeDataListCached?.Where(IsFound) ?? Array.Empty<XElement>();
         foundEvent = AppData.EventDataList.Where(IsFound);
         foundReference = AppData.ReferenceList.Where(IsFound);
 

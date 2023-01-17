@@ -500,7 +500,7 @@ namespace Website
                 Console.WriteLine(e.ToString());
 #else
                 //if Release log error & end silently
-                WebsiteLogManager.LogError(e, "Error from WebsiteTools.Try()");
+                WebLogger.Error(e, "Error from WebsiteTools.Try()");
 #endif
 
                 //note exception will not go past this point,

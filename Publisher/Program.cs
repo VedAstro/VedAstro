@@ -43,6 +43,7 @@ namespace Publisher
                 Console.WriteLine("8:Build Normal Only");
                 Console.WriteLine("9:Delete Old Website Files Normal (not images)");
                 Console.WriteLine("10:Build > Sync Upload");
+                Console.WriteLine("11:Sync Upload");
 
                 var choice = Console.ReadLine();
                 //Console.WriteLine("Nuke old website? Y/N");
@@ -80,6 +81,7 @@ namespace Publisher
                     case "8": BuildProject(); goto END;
                     case "9": DeleteWebsiteFiles(); goto END;
                     case "10": BuildProject(); UploadToAzureAzCopySync(); goto END;
+                    case "11": UploadToAzureAzCopySync(); goto END;
 
                 }
 
@@ -205,6 +207,8 @@ namespace Publisher
 
             //set project path to build
             System.Environment.CurrentDirectory = projectPath;
+
+            Console.WriteLine("Upload From Directory:\n"+ projectBuildPath);
 
             //run build from power shell since correct dir
             var ps = PowerShell.Create();

@@ -217,7 +217,7 @@ class EventsChart {
 
         function onError(xhr, status) {
             /* handle error here */
-            console.log(status);
+            console.log("Failed to load EventDataList.xml");
         }
 
         function onSuccess(data) {

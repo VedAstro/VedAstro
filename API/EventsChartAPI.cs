@@ -2216,6 +2216,9 @@ namespace API
             //returns as percentage over 100%
             var factor = planetPwr.Remap(min, max, 0, 100);
 
+            //planet power below 70% filtered out
+            factor = factor < 70 ? 0 : factor;
+
             return factor;
         }
 
@@ -2225,7 +2228,8 @@ namespace API
         public static double GetPlanetPowerFactor(List<PlanetName> inputPlanetList, Time time)
         {
             //if no input planets return 0 power,
-            //this makes events with no power planets not appear in smart sum row
+            //this makes events with no planets not appear in smart sum row
+            //muhurtha events also are stopped here
             if (!inputPlanetList.Any()) { return 0; }
 
             //get all power factors into a list

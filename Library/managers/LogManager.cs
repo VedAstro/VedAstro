@@ -6,6 +6,7 @@ namespace Genso.Astrology.Library
 {
 
     /// <summary>
+    /// TODO MARKED FOR DEPRECATION, REMOVE IF SEE FIT
     /// Manages the internal logging of the app
     /// Logs can be of types, error, debug
     /// NOTE : 

@@ -623,13 +623,13 @@ function addNewLifeEventToTable(defaultNewLifeEventStr) {
 }
 
 
-function DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venus) {
+function DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venus, rahu, ketu) {
 
     //delete previous chart if any
     if (window.PlanetStrengthChart != null) { window.PlanetStrengthChart.destroy(); }
 
-    var xValues = ["Sun", "Moon", "Mercury", "Mars", "Jupiter", "Saturn", "Venus"];
-    var yValues = [sun, moon, mercury, mars, jupiter, saturn, venus];
+    var xValues = ["Sun", "Moon", "Mercury", "Mars", "Jupiter", "Saturn", "Venus", "Rahu", "Ketu"];
+    var yValues = [sun, moon, mercury, mars, jupiter, saturn, venus, rahu, ketu];
 
     //this chart elm ID is hard coded in Blazor
     //note: stored in window so that can delete it on redraw
@@ -650,7 +650,9 @@ function DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venu
                             'rgba(75, 192, 192, 0.7)',
                             'rgba(54, 162, 235, 0.7)',
                             'rgba(153, 102, 255, 0.7)',
-                            'rgba(201, 203, 207, 0.7)'
+                            'rgba(201, 203, 207, 0.7)',
+                            'rgba(201, 162, 207, 0.7)',
+                            'rgba(162, 203, 207, 0.7)'
                         ],
                         borderColor: [
                             'rgb(255, 99, 132)',
@@ -659,7 +661,9 @@ function DrawPlanetStrengthChart(sun, moon, mercury, mars, jupiter, saturn, venu
                             'rgb(75, 192, 192)',
                             'rgb(54, 162, 235)',
                             'rgb(153, 102, 255)',
-                            'rgb(201, 203, 207)'
+                            'rgb(201, 203, 207)',
+                            'rgb(201, 162, 207)',
+                            'rgb(162, 203, 207)'
                         ],
                         borderWidth: 1
                     }

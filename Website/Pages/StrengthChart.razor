@@ -34,6 +34,8 @@
     private double _shadbalaPindaJupiter;
     private double _shadbalaPindaSaturn;
     private double _shadbalaPindaVenus;
+    private double _shadbalaPindaRahu;
+    private double _shadbalaPindaKetu;
     private Time _time;
 
     private double _house1, _house2, _house3, _house4, _house5, _house6, _house7, _house8, _house9, _house10, _house11, _house12;
@@ -50,6 +52,8 @@
         _shadbalaPindaJupiter = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, Time).ToDouble();
         _shadbalaPindaSaturn = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, Time).ToDouble();
         _shadbalaPindaVenus = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, Time).ToDouble();
+        _shadbalaPindaRahu = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Rahu, Time).ToDouble();
+        _shadbalaPindaKetu = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Ketu, Time).ToDouble();
 
         //generate JS bar chart with calculated values
         //note : done here so needed element is available
@@ -61,7 +65,9 @@
             _shadbalaPindaMars,
             _shadbalaPindaJupiter,
             _shadbalaPindaSaturn,
-            _shadbalaPindaVenus
+            _shadbalaPindaVenus,
+            _shadbalaPindaRahu,
+            _shadbalaPindaKetu
             );
 
 

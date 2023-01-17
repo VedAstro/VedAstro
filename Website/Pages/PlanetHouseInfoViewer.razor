@@ -145,7 +145,7 @@
             var isRahuKetu = planetName == PlanetName.Rahu || planetName == PlanetName.Ketu;
 
             //get planet details and save it for view
-            var _shadbalaPinda = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, Time).ToDouble();
+            var _shadbalaPinda =  AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, Time).ToDouble();
 
             var _positionStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetSthanaBala(planetName, Time).ToDouble(), 2);
 

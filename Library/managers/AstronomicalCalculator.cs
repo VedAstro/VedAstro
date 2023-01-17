@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -4451,7 +4451,7 @@ namespace Genso.Astrology.Library
         /// The result obtained is the Shadbala Pinda of the
         /// planet in Shashtiamsas.
         ///
-        /// Note: Rahu & Ketu is not supported, possible fix?
+        /// Note: Rahu & Ketu supported, via house lord
         /// </summary>
         public static Shashtiamsa GetPlanetShadbalaPinda(PlanetName planetName, Time time)
         {

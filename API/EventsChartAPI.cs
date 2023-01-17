@@ -1163,6 +1163,11 @@ namespace API
                 var startX = middleX - halfWidth;
                 var endX = halfWidth + middleX;
 
+                //set limits
+                startX = startX < 0 ? 0 : startX;
+                endX = endX > (maxSlices - 1) ? (maxSlices - 1) : endX;
+
+
                 for (int i = startX; i <= endX; i++)
                 {
                     //mark as occupied
@@ -1175,12 +1180,20 @@ namespace API
             {
                 var startX = middleX - halfWidth;
                 var endX = halfWidth + middleX;
-
+                
+                //set limits
+                startX = startX < 0 ? 0 : startX;
+                endX = endX > (maxSlices-1) ? (maxSlices-1) : endX;
 
             TryAgain:
                 //check if space is occupied in array
                 foreach (var row in rowList)
                 {
+                    if (row.Length < endX)
+                    {
+                        Console.WriteLine("Index");
+                    }
+
                     var startFree = row[startX] == false;
                     var endFree = row[endX] == false;
                     if (startFree && endFree)

@@ -1189,11 +1189,6 @@ namespace API
                 //check if space is occupied in array
                 foreach (var row in rowList)
                 {
-                    if (row.Length < endX)
-                    {
-                        Console.WriteLine("Index");
-                    }
-
                     var startFree = row[startX] == false;
                     var endFree = row[endX] == false;
                     if (startFree && endFree)

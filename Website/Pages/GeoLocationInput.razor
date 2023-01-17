@@ -183,17 +183,7 @@
     /// <summary>
     /// When location name text is changed this method is called to fetch longitude & latitude
     /// </summary>
-    private async Task OnLocationNameUpdated(FocusEventArgs obj)
-    {
-        //show loading to user
-        //_jsRuntime.ShowLoading();
-
-        await SetCoordinatesFromNameInput();
-
-        //hide loading from user
-        //_jsRuntime.HideAlert();
-
-    }
+    private void OnLocationNameUpdated(FocusEventArgs obj) => SetCoordinatesFromNameInput();
 
     /// <summary>
     /// Takes location name and gets the coordinates
@@ -201,15 +191,32 @@
     /// </summary>
     private async Task SetCoordinatesFromNameInput()
     {
+        const string defaultLocationCountry = "Singapore";
 
-        (string FullName, double Latitude, double Longitude) coordinates = await Tools.CoordinateToAddressGuiHandle(LocationName, _jsRuntime);
+
+    TryAgain:
+        var results = await Tools.AddressToGeoLocation(LocationName);
+
+        //if fail, show message -> set default country -> try again
+        if (!results.IsPass)
+        {
+            //alert user first with the wrong name
+            var msg = $"The location \"{LocationName}\", not found!" +
+                      $"\n Check spelling or try other nearby place.";
+            await _jsRuntime.ShowAlert("error", msg, true);
+
+            //change to default location & try again to get coordinates
+            LocationName = defaultLocationCountry;
+            goto TryAgain;
+
+        }
 
         //update user typed location name to proper formatted one
-        LocationName = coordinates.FullName;
-
+        var geoLocal = results.Payload;
+        LocationName = geoLocal.GetName();
         //set new coordinates into view
-        Longitude = coordinates.Longitude;
-        Latitude = coordinates.Latitude;
+        Longitude = geoLocal.GetLongitude();
+        Latitude = geoLocal.GetLatitude();
     }
 
     /// <summary>
@@ -231,7 +238,8 @@
             if (Longitude == 0 && Latitude == 0) { goto SetDefault; }
 
             //set gotten location name into view
-            LocationName = await Tools.CoordinateToAddress(locationCoordinates.Longitude, locationCoordinates.Latitude, ServerManager.GoogleGeoLocationApiKey);
+            var geoLocation = await Tools.CoordinateToGeoLocation((double)locationCoordinates.Longitude, (double)locationCoordinates.Latitude, ServerManager.GoogleGeoLocationApiKey);
+            LocationName = geoLocation.GetName();
 
             //exit
             return;

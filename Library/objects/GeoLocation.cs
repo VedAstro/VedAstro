@@ -133,12 +133,15 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static async Task<GeoLocation> FromName(string locationName)
         {
-           
-            var coordinates = await Tools.CoordinateToAddressGuiHandle(locationName, null);
+
+            //try get location from name using google API
+            var results = await Tools.AddressToGeoLocation(locationName);
+
+            //if fail, raise alarm
+            if (!results.IsPass) { throw new Exception("Location failed to find!"); }
 
             //make the new Geo Location and return it
-            var newGeoLocation = new GeoLocation(coordinates.FullName, coordinates.Longitude, coordinates.Latitude);
-            return newGeoLocation;
+            return results.Payload;
         }
     }
 }

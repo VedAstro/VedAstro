@@ -188,6 +188,9 @@ namespace Website
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
+        /// <summary>
+        /// Gets new visitor xml data for logging
+        /// </summary>
         private static async Task<XElement> GetVisitorDataXml()
         {
             //get url user is on
@@ -202,11 +205,10 @@ namespace Website
             var visitorXml = AppData.IsNewVisitor
                 ? await NewVisitor(userIdXml, urlXml)
                 : OldVisitor(userIdXml, urlXml);
-
-
             return visitorXml;
-
         }
+
+       
 
         //all possible details are logged
         private static async Task<XElement> NewVisitor(XElement userIdXml, XElement urlXml)

@@ -210,6 +210,9 @@
         //get search text
         var text = await _jsRuntime.GetValue(searchInput);
 
+        //log
+        WebLogger.Data("Search:" + text);
+
         //go home when no text
         if (text.Length == 0) { _navigation.NavigateTo(PageRoute.Home); return; }
 
@@ -236,16 +239,19 @@
 
     }
 
-    private async Task OnClickNavItem(ElementReference elementReference, string home)
+    private async Task OnClickNavItem(ElementReference elementReference, string pageName)
     {
         //remove highlight from all nav (reset)
         DeselectAll();
+
+        //log
+        WebLogger.Data("Click Nav:" + pageName);
 
         //set proper color for nav menu
         await _jsRuntime.AddClass(elementReference, "active");
 
         //goto page
-        _navigation.NavigateTo(home);
+        _navigation.NavigateTo(pageName);
 
         void DeselectAll()
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Web;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 
@@ -1061,6 +1063,157 @@ namespace API
         /// gets person's life events as lines for the events chart
         /// </summary>
         private static async Task<string> GetLifeEventLinesSvg(Person person, int lineHeight, TimeSpan inputOffset, List<Time> timeSlices)
+        {
+            //add 1 to offset 0 index
+            //each 1 cell is 1 px
+            var maxSlices = timeSlices.Count + 1;
+            var rowList = new List<bool[]>() { new bool[maxSlices], new bool[maxSlices], new bool[maxSlices], new bool[maxSlices], new bool[maxSlices], new bool[maxSlices], new bool[maxSlices] };
+            //space smaller than this is set crowded
+            const int minSpaceBetween = 100;//px
+            var halfWidth = minSpaceBetween / 2; //icon
+
+
+            var compiledLines = "";
+
+            //sort by earliest to latest event
+            var lifeEventList = person.LifeEventList;
+            lifeEventList.Sort((x, y) => x.CompareTo(y));
+
+
+            var previousPositionX = 0; //to keep track of crowding
+            var incrementRate = 20; //for overcrowded jump
+            var adjustedLineHeight = lineHeight; //keep copy for resetting after overcrowded jum
+                                                 //count for previous events crowded in a row 
+            var prevCrowdedCount = 0;
+            var previousMovedDown = false;
+            foreach (var lifeEvent in lifeEventList)
+            {
+
+                //get timezone at place event happened
+                var lifeEvtTime = await lifeEvent.GetDateTimeOffset();//time at the place of event with correct standard timezone
+                var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
+                var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
+
+                //if line is not in report time range, don't generate it
+                if (positionX == 0) { continue; }
+
+                //get row number
+                var rowNumber = GetRowNumber(positionX);
+
+                //mark as occupied
+                MarkRowNumber(positionX, rowNumber);
+
+                adjustedLineHeight += rowNumber * incrementRate;//plus 1 for 0 index correction
+
+
+                //check if overcrowded, move icon down if so
+                //var isCrowded = IsEventIconSpaceCrowded(previousPositionX, positionX);
+                //if (isCrowded)
+                //{
+                //    //set icon position lower than previous
+                //    //if crowded back to back then move down accordingly
+                //    //todo can move up as well if next item is not going to crowd
+                //    prevCrowdedCount++;
+                //    //if previous move down, the this move up
+                //    if (previousMovedDown)
+                //    {
+                //        adjustedLineHeight = lineHeight;
+                //        previousMovedDown = false; //set as moved up, so next can go down
+                //                                   //reset previous back to back crowd count
+                //        prevCrowdedCount = 0;
+                //    }
+                //    //move down
+                //    else
+                //    {
+                //        adjustedLineHeight += (incrementRate * prevCrowdedCount);
+                //        previousMovedDown = true; //set as moved down, so next can go up
+                //    }
+                //}
+                //else
+                //{
+                //    //reset previous back to back crowd count
+                //    prevCrowdedCount = 0;
+                //    //reset previous label crowded movement
+                //    previousMovedDown = false;
+                //}
+
+                //put together icon + line + event data
+                compiledLines += GenerateLifeEventLine(lifeEvent, adjustedLineHeight, lifeEvtTime, positionX);
+
+                //reset line height for next 
+                if (rowNumber != 0) { adjustedLineHeight = lineHeight; }
+
+                //update previous position
+                previousPositionX = positionX;
+
+            }
+
+
+            //wrap in a group so that can be hidden/shown as needed
+            //add transform matrix to adjust for border shift
+            const int contentPadding = 2;
+            var wrapperGroup = $"<g id=\"LifeEventLinesHolder\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">{compiledLines}</g>";
+
+            return wrapperGroup;
+
+            //-------------------------
+
+            void MarkRowNumber(int middleX, int rowNumber)
+            {
+                var startX = middleX - halfWidth;
+                var endX = halfWidth + middleX;
+
+                for (int i = startX; i <= endX; i++)
+                {
+                    //mark as occupied
+                    rowList[rowNumber][i] = true;
+                }
+            }
+
+            //start at 0 index
+            int GetRowNumber(int middleX)
+            {
+                var startX = middleX - halfWidth;
+                var endX = halfWidth + middleX;
+
+
+            TryAgain:
+                //check if space is occupied in array
+                foreach (var row in rowList)
+                {
+                    var startFree = row[startX] == false;
+                    var endFree = row[endX] == false;
+                    if (startFree && endFree)
+                    {
+                        return rowList.IndexOf(row);
+                    }
+                }
+
+                //add row 
+                rowList.Add(new bool[maxSlices]);
+                goto TryAgain;
+
+                throw new Exception("Row count exceed!");
+            }
+
+            //check if current event icon position will block previous life event icon
+            //expects next event to be chronologically next event
+            bool IsEventIconSpaceCrowded(int previousX, int currentX)
+            {
+                //if previous 0, then obviously not crowded
+                if (previousX <= 0) { return false; }
+
+                //space smaller than this is set crowded
+                const int minSpaceBetween = 110;//px
+
+                //previous X axis should be lower than current
+                //difference shows space between these 2 icons
+                var difference = currentX - previousX;
+                var isOverLapping = difference < minSpaceBetween;
+                return isOverLapping;
+            }
+        }
+        private static async Task<string> GetLifeEventLinesSvgOLD(Person person, int lineHeight, TimeSpan inputOffset, List<Time> timeSlices)
         {
 
             var compiledLines = "";

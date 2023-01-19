@@ -49,6 +49,11 @@ namespace API
         public const string UrlHoroscopeDataListXml = $"https://{AzureStorage}/data/HoroscopeDataList.xml";
 
         public const string UrlEventsChartViewerHtml = $"https://{AzureStorage}/data/EventsChartViewer.html";
+        
+        /// <summary>
+        /// Toolbar.svg used in when rendering events chart
+        /// </summary>
+        public const string ToolbarSvgAzure = $"https://{AzureStorage}/svg/Toolbar.svg";
 
         /// <summary>
         /// Default success message sent to caller

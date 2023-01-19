@@ -346,6 +346,7 @@ namespace API
                 var htmlTemplate = await APITools.GetStringFileHttp(APITools.UrlEventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
+                //TODO NEEDS TO BE UPDATED
                 var personName = (await APITools.GetPersonFromId(chart.PersonId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
@@ -850,7 +851,20 @@ namespace API
             compiledRow += await GetLifeEventLinesSvg(inputPerson, lifeEventHeight, inputOffset, timeSlices);
 
 
-            //7 ADD BORDER
+            //5 ADD TOOLBAR
+            //todo possible to make into file
+            //get file as string from site wwwroot
+            var toolbarSvg = await APITools.GetStringFileHttp(APITools.ToolbarSvgAzure);
+            
+            //remove special encoding that allows svg to be inserted into another svg
+            //encoding is left in original file, so that toolbar.svg can be opened directly in browser
+            toolbarSvg = toolbarSvg.Replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>", "");
+
+            compiledRow += toolbarSvg;
+            svgTotalHeight += 40;
+
+
+            //6 ADD BORDER
             //save a copy of the number of time slices used to calculate the svg total width later
             var dasaSvgWidth = timeSlices.Count;
             //add border around svg element
@@ -859,6 +873,8 @@ namespace API
             var roundedBorder = 3;
             compiledRow += $"<rect class=\"EventChartBorder\" rx=\"{roundedBorder}\" width=\"{borderWidth}\" height=\"{svgTotalHeight}\" style=\"stroke-width: 1; fill: none; paint-order: stroke; stroke:#333;\"></rect>";
 
+            //7 ADD IN JS
+            compiledRow += "<script xlink:href=\"https://www.vedastro.org/js/EventsChartInside.js\" />";
 
             //8 DONE!
             //put all stuff in final SVG tag
@@ -1180,10 +1196,10 @@ namespace API
             {
                 var startX = middleX - halfWidth;
                 var endX = halfWidth + middleX;
-                
+
                 //set limits
                 startX = startX < 0 ? 0 : startX;
-                endX = endX > (maxSlices-1) ? (maxSlices-1) : endX;
+                endX = endX > (maxSlices - 1) ? (maxSlices - 1) : endX;
 
             TryAgain:
                 //check if space is occupied in array

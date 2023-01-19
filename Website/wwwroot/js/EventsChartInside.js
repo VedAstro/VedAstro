@@ -1,0 +1,1 @@
+﻿console.log("test123 from inside SVG 123sdsada");

@@ -12,6 +12,17 @@ window.countries = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "Ameri
 //initialize separate worker thread to handle all logging
 window.LogThread = new Worker('js/LogThread.js');
 
+//print console greeting (file in wwwroot)
+printConsoleMessage();
+
+
+//prints a message to console for developers to see
+function printConsoleMessage() {
+    $.get("https://vedastrowebsitestorage.z5.web.core.windows.net/data/ConsoleGreeting.txt")
+        .done((result) => {
+            console.log(result);
+        });
+}
 
 //Initializes the global error cather, from here error handler in blazor is called.
 //This is only a backup way to know unexpected exception occurred,

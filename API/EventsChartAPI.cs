@@ -852,14 +852,14 @@ namespace API
 
 
             //5 ADD TOOLBAR
-            //todo possible to make into file
             //get file as string from site wwwroot
             var toolbarSvg = await APITools.GetStringFileHttp(APITools.ToolbarSvgAzure);
             
             //remove special encoding that allows svg to be inserted into another svg
             //encoding is left in original file, so that toolbar.svg can be opened directly in browser
             toolbarSvg = toolbarSvg.Replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>", "");
-
+            //wrap in group for positioning
+            toolbarSvg = $"<g transform=\"matrix(1, 0, 0, 1, 5, 295)\">{toolbarSvg}</g>";
             compiledRow += toolbarSvg;
             svgTotalHeight += 40;
 
@@ -874,7 +874,9 @@ namespace API
             compiledRow += $"<rect class=\"EventChartBorder\" rx=\"{roundedBorder}\" width=\"{borderWidth}\" height=\"{svgTotalHeight}\" style=\"stroke-width: 1; fill: none; paint-order: stroke; stroke:#333;\"></rect>";
 
             //7 ADD IN JS
-            compiledRow += "<script xlink:href=\"https://www.vedastro.org/js/EventsChartInside.js\" />";
+            //add last to load last
+            compiledRow += "<script href=\"https://code.jquery.com/jquery-3.6.0.min.js\" />";
+            compiledRow += "<script href=\"https://www.vedastro.org/js/EventsChartInside.js\" />";
 
             //8 DONE!
             //put all stuff in final SVG tag

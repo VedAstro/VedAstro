@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<!--This file has to be manually uploaded to Azure for use by API-->
 	<!--This is the DATA list for MUHURTHA-->
 	<Event>
 		<Name>AmritaSiddhaYoga</Name>
@@ -1386,6 +1385,16 @@
 			Selling for Profit. - Monday, Wednesday and Thursday are the best.
 		</Description>
 		<Tag>BuyingSelling</Tag>
+	</Event>
+
+	<!--Gochara SUMMARY-->
+	<Event>
+		<Name>GocharaSummary</Name>
+		<Nature>Neutral</Nature>
+		<Description>
+			Combination of all gochara occurring at time.
+		</Description>
+		<Tag>GocharaSummary</Tag>
 	</Event>
 
 

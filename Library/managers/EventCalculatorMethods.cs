@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -4007,6 +4008,28 @@ namespace Genso.Astrology.Library
          
 
         #region GOCHARA
+
+        [EventCalculator(EventName.GocharaSummary)]
+        public static CalculatorResult GocharaSummary(Time time, Person person)
+        {
+
+            throw new NotImplementedException();
+            //get all gochara ocured att time
+            var occuringGocharaList = new List<CalculatorResult>(){};
+
+            //loop list
+            var goodCount = 0;
+            var badCount = 0;
+            foreach(var result in occuringGocharaList){
+                
+                //result.
+            }
+
+            //summarize good & bad count to final value
+
+
+            //Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 1)
+        }
 
         [EventCalculator(EventName.SunGocharaInHouse1)]
         public static CalculatorResult SunGocharaInHouse1(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsGocharaOccurring(person.BirthTime, time, PlanetName.Sun, 1) };

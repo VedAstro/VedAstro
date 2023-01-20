@@ -149,11 +149,11 @@
     /// Updates all the fields in the component
     /// Note: Does not call state has changed, because called by parent
     /// </summary>
-    public void UpdateData(dynamic newData)
+    public void UpdateData(GeoLocation newData)
     {
-        LocationName = newData.LocationName;
-        Longitude = newData.Longitude;
-        Latitude = newData.Latitude;
+        LocationName = newData.GetName();
+        Longitude = newData.GetLongitude();
+        Latitude = newData.GetLatitude();
     }
 
 

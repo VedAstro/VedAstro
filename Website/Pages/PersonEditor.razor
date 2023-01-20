@@ -20,8 +20,7 @@
 
 <PageTop Title="Person profile" IconName="icomoon-free:profile">
     <Description>
-        Person's birth info for astronomical calculation<br/>
-        Info added here will be available for calculators later
+        Person's birth info for astronomical calculation
     </Description>
     <ButtonsRow>
         <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
@@ -65,6 +64,7 @@
             </a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" style="cursor:pointer;" @onclick="CopyPersonProfileShareLink"><Icon IconName="material-symbols:ios-share" /> Share Link</a></li>
+                <li><a class="dropdown-item" style="cursor:pointer;" @onclick="OnClickSubmitButton"><Icon IconName="bx:save" /> Save</a></li>
                 <li><a class="dropdown-item" style="cursor:pointer;" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded" /> Delete</a></li>
                 @*                <li><a class="dropdown-item" href="#">Something else here</a></li>
                 <li><hr class="dropdown-divider"></li>
@@ -110,7 +110,7 @@
                 <textarea @bind="_notesInput" type="text" class="form-control" placeholder="Extra details regarding the person" style="min-height: 500px;"></textarea>
             </div>
         </div>
-        
+
         @*LIFE EVENTS*@
         <div class="tab-pane fade" id="lifeEvents">
             <LifeEventEditor @ref="_lifeEventEditor"></LifeEventEditor>
@@ -259,12 +259,12 @@
 
 
         //geolocation only needs to be set in Editor mode
-        var geoLocation = new
-        {
-            LocationName = _person.GetBirthLocation().GetName(),
-            Longitude = _person.GetBirthLocation().GetLongitude(),
-            Latitude = _person.GetBirthLocation().GetLatitude()
-        };
+        var geoLocation = new GeoLocation
+        (
+            _person.GetBirthLocation().GetName(),
+           _person.GetBirthLocation().GetLongitude(),
+           _person.GetBirthLocation().GetLatitude()
+        );
         _geoLocationInput.UpdateData(geoLocation);
 
         //life events
@@ -434,8 +434,9 @@
         _jsRuntime.HideAlert();
 
         //send user to task list page after period of time
-        await Task.Delay(100);
-        _navigation.NavigateTo(PageRoute.PersonList);
+        //todo ask user if wants to go back to previous page or stay
+        //await Task.Delay(100);
+        //_navigation.NavigateTo(PageRoute.PersonList);
     }
 
     private async Task _OnClickDeleteButton()

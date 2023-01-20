@@ -470,12 +470,13 @@ namespace Genso.Astrology.Library
             //if success, get the reply data out
             var geocodeResponseXml = webResult.Payload;
             var resultXml = geocodeResponseXml.Element("result");
+            var statusXml = geocodeResponseXml.Element("status");
 
             //DEBUG
             //Console.WriteLine(geocodeResponseXml.ToString());
 
             //check the data, if location was NOT found by google API, end here
-            if (resultXml.Value == "ZERO_RESULTS") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            if (statusXml.Value == "ZERO_RESULTS") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
             //if success, extract out the longitude & latitude
             var locationElement = resultXml?.Element("geometry")?.Element("location");

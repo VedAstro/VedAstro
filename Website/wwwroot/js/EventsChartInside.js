@@ -27,8 +27,9 @@ $(".CheckBox").click(function () {
     //based on text handle the call appropriately
     switch (text) {
         case 'Life Events': ToggleElm($("#LifeEventLinesHolder")); break;
-        case 'Color Summary': ClickLifeEventsCheckBox(); break;
-        case 'Bar Summary': ClickLifeEventsCheckBox(); break;
+        case 'Color Summary': ToggleElm($("#ColorRow")); break;
+        case 'Smart Summary': ToggleElm($("#BarChartRowSmart")); break;
+        case 'Bar Summary': ToggleElm($("#BarChartRow")); break;
         case 'Sun': ClickLifeEventsCheckBox(); break;
         case 'Moon': ClickLifeEventsCheckBox(); break;
         case 'Mars': ClickLifeEventsCheckBox(); break;
@@ -41,15 +42,9 @@ function ToggleElm(element) {
 
     var svgElm = SVG(element[0]);
 
-    ////get visible status of element
-    //var styleText = element?.attr("style") ?? "";
-    //var isHidden = styleText.includes("display: none;");
-
     if (svgElm.visible()) {
-        //element.css("display", "none");
         svgElm.hide();
     } else {
-        //element.css("display", "block");
         svgElm.show();
     }
 

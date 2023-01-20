@@ -489,8 +489,8 @@ namespace Genso.Astrology.Library
             //get full name with country & state
             var fullName = resultXml?.Element("formatted_address")?.Value;
 
-            //return to caller
-            return new GeoLocation(fullName, lat, lng);
+            //return to caller pass
+            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lat, lng));
         }
 
         /// <summary>

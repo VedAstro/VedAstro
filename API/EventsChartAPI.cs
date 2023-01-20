@@ -875,7 +875,8 @@ namespace API
 
             //7 ADD IN JS
             //add last to load last
-            compiledRow += "<script href=\"https://code.jquery.com/jquery-3.6.0.min.js\" />";
+            compiledRow += "<script href=\"https://code.jquery.com/jquery-3.6.3.min.js\" />";
+            compiledRow += "<script href=\"https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js\" />";
             compiledRow += "<script href=\"https://www.vedastro.org/js/EventsChartInside.js\" />";
 
             //8 DONE!

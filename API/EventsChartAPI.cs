@@ -156,7 +156,7 @@ namespace API
                 }
 
                 //put all charts in 1 big container
-                var finalSvg = WrapSvgElements(combinedSvg, 800, chartYPosition);
+                var finalSvg = WrapSvgElements(combinedSvg, 800, chartYPosition, Tools.GenerateId());
 
 
                 //send image back to caller
@@ -854,7 +854,7 @@ namespace API
             //5 ADD TOOLBAR
             //get file as string from site wwwroot
             var toolbarSvg = await APITools.GetStringFileHttp(APITools.ToolbarSvgAzure);
-            
+
             //remove special encoding that allows svg to be inserted into another svg
             //encoding is left in original file, so that toolbar.svg can be opened directly in browser
             toolbarSvg = toolbarSvg.Replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>", "");
@@ -875,13 +875,31 @@ namespace API
 
             //7 ADD IN JS
             //add last to load last
+            //load order is important
             compiledRow += "<script href=\"https://code.jquery.com/jquery-3.6.3.min.js\" />";
-            compiledRow += "<script href=\"https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js\" />";
-            compiledRow += "<script href=\"https://www.vedastro.org/js/EventsChartInside.js\" />";
+            compiledRow += "<script href=\"https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js\" />";//used in events chart inside js
+            compiledRow += "<script href=\"https://www.vedastro.org/js/EventsChart.js\" />";
+            //compiledRow += "<script href=\"https://www.vedastro.org/js/EventsChartInside.js\" />";
+
+            //random id is created here to link svg element with JS instance
+            var randomId = Tools.GenerateId();
+            compiledRow += $@"
+                            <script>//<![CDATA[
+
+                                var newChart = new EventsChart($(""#{randomId}""));
+
+                                //animate chart
+                                newChart.animateChart();
+
+                                //make available for debug
+                                window.EventsChart = newChart;
+                            //]]>
+                            </script>
+                            ";
 
             //8 DONE!
             //put all stuff in final SVG tag
-            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, svgTotalHeight); //little wiggle room
+            var finalSvg = WrapSvgElements(compiledRow, dasaSvgWidth, svgTotalHeight, randomId); //little wiggle room
             return finalSvg;
 
 
@@ -1540,14 +1558,17 @@ namespace API
 
         //wraps a list of svg elements inside 1 main svg element
         //if width not set defaults to 1000px, and height to 1000px
-        private static string WrapSvgElements(string combinedSvgString, int svgWidth, int svgTotalHeight)
+        private static string WrapSvgElements(string combinedSvgString, int svgWidth, int svgTotalHeight, string randomId)
         {
 
             var svgBackgroundColor = "#f0f9ff";
 
+            //use random id for each chart, done so that js can uniquely
+            //manipulate 1 chart in page of multiple charts
+
             //create the final svg that will be displayed
             var svgTotalWidth = svgWidth + 10; //add little for wiggle room
-            var svgBody = $"<svg id=\"EventChartHolder\"" +
+            var svgBody = $"<svg class=\"EventChartHolder\" id=\"{randomId}\"" +
                           //$" width=\"100%\"" +
                           //$" height=\"100%\"" +
                           $" style=\"" +

@@ -22,7 +22,8 @@ class ID {
 
     static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
     static CursorLineLegendCloneCls = ".CursorLineLegendClone";
-    static EventChartHolder = "#EventChartHolder";
+    static CursorLineLegendDescriptionHolder = "#CursorLineLegendDescriptionHolder";
+    static EventChartHolder = ".EventChartHolder";
     static CursorLine = '#CursorLine';
     static CursorLineLegendClone = "CursorLineLegendClone";
     static CursorLineLegendHolder = "#CursorLineLegendHolder";
@@ -35,28 +36,40 @@ class ID {
 class EventsChart {
 
     //inputed SVG chart can also be flag "URL"
-    constructor(rawSvgChart, $chartParentElm) {
+    constructor($SvgChartElm) {
         console.log(`Creating new Events Chart...`);
 
+        this.$SvgChartElm = $SvgChartElm;
+
         //all others relative to this element
-        this.$ChartParentElm = $chartParentElm;
+        //this.$ChartParentElm = $chartParentElm;
 
         //get chart from URL instead
-        if (rawSvgChart === "URL") {
-            this.ChartMode = "URL"; //save for later when animating
-            //get data to generate chart from URL
-            this.ChartData = EventsChart.getDataFromUrl();
-        }
-        //load inputed SVG chart
-        else {
-            //inject SVG chart string into parent element
-            this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], rawSvgChart);
-        }
+        //if (rawSvgChart === "URL") {
+
+        //}
+        ////load inputed SVG chart
+        //else {
+        //    //inject SVG chart string into parent element
+        //    this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], rawSvgChart);
+        //}
 
         //if SVG chart already loaded then, save it for later
         //var isLoaded = this.$ChartParentElm.children().first().is("svg");
         //if (isLoaded) { this.$SvgChartElm = this.$ChartParentElm.children().first(); }
 
+    }
+    static async ChartFromUrl() {
+
+        //this.ChartMode = "URL"; //save for later when animating
+        //get data to generate chart from URL
+        var chartData = EventsChart.getDataFromUrl();
+
+        var svgChartString = await EventsChart.getEventsChartFromApi(chartData);
+
+        var $SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], svgChartString);
+
+        return new EventsChart($SvgChartElm);
     }
 
     //DATA
@@ -74,12 +87,12 @@ class EventsChart {
         //$("#PersonNameBox").text("Person : " + window?.PersonName);
 
         //if URL based chart then load from API first
-        if (this.ChartMode === "URL") {
+        //if (this.ChartMode === "URL") {
 
-            var svgChartString = await EventsChart.getEventsChartFromApi(this.ChartData);
+        //    var svgChartString = await EventsChart.getEventsChartFromApi(this.ChartData);
 
-            this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], svgChartString);
-        }
+        //    this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], svgChartString);
+        //}
 
         await this.attachEventHandlers();
 
@@ -100,6 +113,33 @@ class EventsChart {
         this.$SvgChartElm[0].addEventListener("mousemove", EventsChart.onMouseMoveHandler);
         this.$SvgChartElm[0].addEventListener("mouseleave", EventsChart.onMouseLeaveEventChart);
 
+        //checkbox in toolbar
+        $(".CheckBox").click(function () {
+
+            var checkbox = $(this);
+            var tickElm = checkbox.find('.Tick');
+
+            //toggle display of the tick mark
+            toggleElm(tickElm);
+
+            //get text of check box
+            var text = checkbox.find("text").text();
+
+            //based on text handle the call appropriately
+            switch (text) {
+                case 'Life Events': toggleElm($("#LifeEventLinesHolder")); break;
+                case 'Color Summary': toggleElm($("#ColorRow")); break;
+                case 'Smart Summary': toggleElm($("#BarChartRowSmart")); break;
+                case 'Bar Summary': toggleElm($("#BarChartRow")); break;
+                case 'Sun': highlightByEventName("Sun"); break;
+                case 'Moon': break;
+                case 'Mars': break;
+                case 'Mercury': break;
+                default: console.log('Selected value not handled!');
+            }
+        });
+
+
         //attach handler to load event description file beforehand (custom events)
         $(document).on('loadEventDescription', EventsChart.loadEventDescription);
 
@@ -113,6 +153,19 @@ class EventsChart {
 
         //setup to auto update every 1 minute
         setInterval(function () { updateNowLine(); }, 60 * 1000); // 60*1000ms
+
+        //toggle hide and show of elements via SVG.js lib
+        function toggleElm(element) {
+
+            var svgElm = SVG(element[0]);
+
+            if (svgElm.visible()) {
+                svgElm.hide();
+            } else {
+                svgElm.show();
+            }
+
+        }
 
         //update now line position
         function updateNowLine() {
@@ -195,37 +248,15 @@ class EventsChart {
     //loads xml file located in wwwroot to xml global data
     static async loadEventDataListFile() {
 
-        //only load new file if none available
-        if (!window.$EventDataListXml) {
-            //get data list from server and store it for later use
-            //NOTE: CORS in Azure Website Storage needs to be disabled for this to work, outside of vedastro.org
-            $(function () {
-                $.ajax({
-                    type: "get",
-                    url: "https://www.vedastro.org/data/EventDataList.xml",
-                    dataType: "xml",
-                    success: onSuccess,
-                    error: onError
-                });
-            });
-        } else {
-            console.log(`Using cached event data file.`);
-        }
+        console.log(`Getting event data file from API...`);
 
+        var response = await window.fetch("https://www.vedastro.org/data/EventDataList.xml");
 
-        //-----------------
+        var rawData = await response.text();
+        var xmlDoc = $.parseXML(rawData);
+        var $xml = $(xmlDoc);
+        window.$EventDataListXml = $xml;
 
-        function onError(xhr, status) {
-            /* handle error here */
-            console.log("Failed to load EventDataList.xml");
-        }
-
-        function onSuccess(data) {
-            //let user know
-            console.log(`Getting event data file from API...`);
-            //save in global for later & other caller's use
-            window.$EventDataListXml = $(data); //jquery for use with .filter
-        }
     }
 
     //get screen width
@@ -305,8 +336,8 @@ class EventsChart {
         var mousePosition = getMousePositionInElement(mouse, ID.EventChartHolder);
 
         //if mouse is out of dasa view hide cursor and end here
-        if (mousePosition == 0) { $(ID.CursorLine).hide(); return; }
-        else { $(ID.CursorLine).show(); }
+        if (mousePosition == 0) { SVG(ID.CursorLine).hide(); return; }
+        else { SVG(ID.CursorLine).show(); }
 
         //move cursor line 1st for responsiveness
         autoMoveCursorLine(mousePosition.xAxis);
@@ -387,9 +418,9 @@ class EventsChart {
 
             //auto show/hide description box based on mouse position
             if (window.showDescription) {
-                $("#CursorLineLegendDescriptionHolder").show();
+                SVG(ID.CursorLineLegendDescriptionHolder).show();
             } else {
-                $("#CursorLineLegendDescriptionHolder").hide();
+                SVG(ID.CursorLineLegendDescriptionHolder).hide();
             }
 
 
@@ -401,7 +432,7 @@ class EventsChart {
             newSummaryRow.removeAttr('id'); //remove the clone template id
             newSummaryRow.addClass(ID.CursorLineLegendClone); //to delete it on next run
             newSummaryRow.appendTo(ID.CursorLineLegendHolder); //place new legend into parent
-            newSummaryRow.show();//make cloned visible
+            SVG(newSummaryRow[0]).show();//make cloned visible
             //position the group holding the legend over the event row which the legend represents
             newSummaryRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis + 15 - 1})`);//minus 1 for perfect alignment
 
@@ -444,12 +475,12 @@ class EventsChart {
                 newLegendRow.removeAttr('id'); //remove the clone template id
                 newLegendRow.addClass("CursorLineLegendClone"); //to delete it on next run
                 newLegendRow.appendTo("#CursorLineLegendHolder"); //place new legend into special holder
-                newLegendRow.show();//make cloned visible
+                SVG(newLegendRow[0]).show();//make cloned visible
                 //position the group holding the legend over the event row which the legend represents
                 newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 2})`);//minus 2 for perfect alignment
 
                 //set event name text & color element
-                var textElm = newLegendRow.children("text");
+                var textElm = SVG(newLegendRow.children("text")[0]);
                 var iconElm = newLegendRow.children("use");
                 textElm.text(`${eventName}`);
                 iconElm.attr("xlink:href", `#CursorLine${eventNatureName}Icon`); //set icon color based on nature
@@ -466,11 +497,11 @@ class EventsChart {
                 //if mouse is in event's row then highlight that row
                 if (mouseWithinRow) {
                     //highlight event name row
-                    var backgroundElm = newLegendRow.children("rect");
-                    backgroundElm.css("fill", "#003e99");
-                    backgroundElm.css("opacity", "1");//solid
+                    var backgroundElm = SVG(newLegendRow.children("rect")[0]);
+                    backgroundElm.fill("#003e99");
+                    backgroundElm.opacity(1);//solid
                     //textElm.css("fill", "#fff");
-                    textElm.css("font-weight", "700");
+                    textElm.font('weight', '700');
                     //if mouse within show description box
                     window.showDescription = true;
                 }
@@ -481,11 +512,11 @@ class EventsChart {
                 if (mouseWithinRow && notSameEvent) {
 
                     //make holder visible
-                    $("#CursorLineLegendDescriptionHolder").show();
+                    SVG(ID.CursorLineLegendDescriptionHolder).show();
 
                     //move holder next to event
                     var descBoxYAxis = newRowYAxis - 9;//minus 5 for perfect alignment with event name row
-                    $("#CursorLineLegendDescriptionHolder").attr("transform", `matrix(1, 0, 0, 1, 0, ${descBoxYAxis})`);
+                    $(ID.CursorLineLegendDescriptionHolder).attr("transform", `matrix(1, 0, 0, 1, 0, ${descBoxYAxis})`);
 
                     //note: using trigger to make it easy to skip multiple clogging events
                     $(document).trigger('loadEventDescription', eventName);
@@ -500,7 +531,7 @@ class EventsChart {
                     newTimeLegend.removeAttr('id'); //remove the clone template id
                     newTimeLegend.addClass(ID.CursorLineLegendClone); //to delete it on next run
                     newTimeLegend.appendTo(ID.CursorLineLegendHolder); //place new legend into special holder
-                    newTimeLegend.show();//make cloned visible
+                    SVG(newTimeLegend[0]).show();//make cloned visible
                     newTimeLegend.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 15})`); //above 1st row
                     //split time to remove timezone from event
                     var stdTimeFull = svgEventRect.getAttribute("stdtime");
@@ -589,7 +620,7 @@ class EventsChart {
         //FUNCTIONS
         function drawDescriptionBox(eventDesc) {
             //if no description than hide box & end here
-            if (!eventDesc) { $("#CursorLineLegendDescriptionHolder").hide(); return; }
+            if (!eventDesc) { $(ID.CursorLineLegendDescriptionHolder).hide(); return; }
             //if (!eventDesc) { this.$CursorLineLegendDescriptionHolder.hide(); return; }
 
             //convert text to svg and place inside holder

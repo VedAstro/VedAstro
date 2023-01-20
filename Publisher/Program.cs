@@ -44,7 +44,7 @@ namespace Publisher
                 Console.WriteLine("9:Delete Old Website Files Normal (not images)");
                 Console.WriteLine("10:Build > Sync Upload");
                 Console.WriteLine("11:Sync Upload");
-                Console.WriteLine("12:Sync Build WWWROOT");
+                Console.WriteLine("12:Sync JS WWWROOT");
 
                 var choice = Console.ReadLine();
                 //Console.WriteLine("Nuke old website? Y/N");
@@ -83,7 +83,7 @@ namespace Publisher
                     case "9": DeleteWebsiteFiles(); goto END;
                     case "10": BuildProject(); UploadToAzureAzCopySync(); goto END;
                     case "11": UploadToAzureAzCopySync(); goto END;
-                    case "12": AzCopySync("C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\wwwroot"); goto END;
+                    case "12": AzCopySyncJS(); goto END;
 
                 }
 
@@ -236,6 +236,30 @@ namespace Publisher
             //run build from power shell since correct dir
             var ps = PowerShell.Create();
             var script = $@"./azcopy.exe sync '{syncLocalPath}' '{_config["UploadSasUri"]}' --recursive --delete-destination=true";
+            ps.AddScript(script);
+            ps.Invoke();
+
+            //print build output
+            foreach (PSObject o in ps.Invoke()) { Console.WriteLine(o.ToString()); }
+
+            Console.WriteLine("*****************************************************");
+            Console.WriteLine("End Sync");
+        }
+        private static void AzCopySyncJS()
+        {
+            var syncLocalPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\wwwroot\\js";
+
+            Console.WriteLine("Start Sync");
+            Console.WriteLine("*****************************************************");
+
+            //set project path to build (for powershell)
+            System.Environment.CurrentDirectory = projectPath;
+
+            Console.WriteLine("Upload From Directory:\n"+ syncLocalPath);
+
+            //run build from power shell since correct dir
+            var ps = PowerShell.Create();
+            var script = $@"./azcopy.exe sync '{syncLocalPath}' '{_config["JsFolder"]}' --recursive --delete-destination=true";
             ps.AddScript(script);
             ps.Invoke();
 

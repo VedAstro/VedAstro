@@ -35,7 +35,6 @@
     <!-- Project css -->
     <link href="css/app.css" rel="stylesheet" />
     <link href="Website.styles.css" rel="stylesheet" /> <!--compiled-->
-
     <!-- FACEBOOK SDK (for login, future share, post...)-->
     <script>
         window.fbAsyncInit = function () {
@@ -132,13 +131,15 @@
     <!-- JS Dark Mode button-->
     <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 
+    <!-- SVG.js used for events chart animation-->
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+
     <!-- JS Code Events Chart-->
-    <!-- NOTE: Needs jQuery to load 1st-->
+    <!-- NOTE: Needs jQuery & SVG.js to load 1st-->
     <script src="js/EventsChart.js"></script>
 
     <!--Application Logic, Must run last since it uses the libraries-->
     <script src="js/App.js" defer></script><!--DEFER to confirm run last-->
-
     <!--START BLAZOR-->
     <!--NOTE: DEFER added here so that loads last-->
     <script src="_framework/blazor.webassembly.js" defer></script><!--DEFER to confirm run last-->

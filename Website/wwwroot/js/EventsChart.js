@@ -1,4 +1,4 @@
-
+﻿
 /*
 
 ███████╗██╗░░░██╗███████╗███╗░░██╗████████╗░██████╗    ░█████╗░██╗░░██╗░█████╗░██████╗░████████╗  
@@ -59,7 +59,7 @@ class EventsChart {
         //if (isLoaded) { this.$SvgChartElm = this.$ChartParentElm.children().first(); }
 
     }
-    static async ChartFromUrl() {
+    static async ChartFromUrl($ChartParentElm) {
 
         //this.ChartMode = "URL"; //save for later when animating
         //get data to generate chart from URL
@@ -67,9 +67,11 @@ class EventsChart {
 
         var svgChartString = await EventsChart.getEventsChartFromApi(chartData);
 
-        var $SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], svgChartString);
+        var $SvgChartElm = EventsChart.injectIntoElement($ChartParentElm[0], svgChartString);
 
-        return new EventsChart($SvgChartElm);
+        var newChart = new EventsChart($SvgChartElm);
+
+        newChart.animateChart();
     }
 
     //DATA
@@ -113,31 +115,9 @@ class EventsChart {
         this.$SvgChartElm[0].addEventListener("mousemove", EventsChart.onMouseMoveHandler);
         this.$SvgChartElm[0].addEventListener("mouseleave", EventsChart.onMouseLeaveEventChart);
 
+
         //checkbox in toolbar
-        $(".CheckBox").click(function () {
-
-            var checkbox = $(this);
-            var tickElm = checkbox.find('.Tick');
-
-            //toggle display of the tick mark
-            toggleElm(tickElm);
-
-            //get text of check box
-            var text = checkbox.find("text").text();
-
-            //based on text handle the call appropriately
-            switch (text) {
-                case 'Life Events': toggleElm($("#LifeEventLinesHolder")); break;
-                case 'Color Summary': toggleElm($("#ColorRow")); break;
-                case 'Smart Summary': toggleElm($("#BarChartRowSmart")); break;
-                case 'Bar Summary': toggleElm($("#BarChartRow")); break;
-                case 'Sun': highlightByEventName("Sun"); break;
-                case 'Moon': break;
-                case 'Mars': break;
-                case 'Mercury': break;
-                default: console.log('Selected value not handled!');
-            }
-        });
+        $(".CheckBox").click((eventData) => EventsChart.handleCheckBoxClicks(eventData, this.$SvgChartElm));
 
 
         //attach handler to load event description file beforehand (custom events)
@@ -154,18 +134,6 @@ class EventsChart {
         //setup to auto update every 1 minute
         setInterval(function () { updateNowLine(); }, 60 * 1000); // 60*1000ms
 
-        //toggle hide and show of elements via SVG.js lib
-        function toggleElm(element) {
-
-            var svgElm = SVG(element[0]);
-
-            if (svgElm.visible()) {
-                svgElm.hide();
-            } else {
-                svgElm.show();
-            }
-
-        }
 
         //update now line position
         function updateNowLine() {
@@ -216,33 +184,38 @@ class EventsChart {
         }
     }
 
-    //highlights all events rects in chart by
-    //the inputed keyword in the event name
-    highlightByEventName(keyword) {
 
-        //get all rects
-        var allEventRects = this.$SvgChartElm.find(ID.EventListHolder).children("rect");
+   
 
-        //find all rects representing the sun based event
-        allEventRects.each(function (index) {
-            //get parsed time from rect
-            var svgEventRect = this;
-            var eventName = svgEventRect.getAttribute("eventname");
-            //check if event name contains SUN
-            var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
-
-            //if event is related to planet, highlight the rect
-            if (foundEvent) {
-                var highlightColor = EventsChart.getRandomHighlightColor();
-                svgEventRect.setAttribute("fill", highlightColor);
-            }
-
-        });
-
-    }
 
 
     //STATIC FUNCTIONS
+
+    static handleCheckBoxClicks(eventData, $SvgChartElm) {
+
+        var checkbox = $(eventData.currentTarget);
+        var tickElm = checkbox.find('.Tick');
+
+        //toggle display of the tick mark
+        EventsChart.toggleElm(tickElm);
+
+        //get text of check box
+        var text = checkbox.find("text").text();
+
+        //based on text handle the call appropriately
+        switch (text) {
+        case 'Life Events': EventsChart.toggleElm($("#LifeEventLinesHolder")); break;
+        case 'Color Summary': EventsChart.toggleElm($("#ColorRow")); break;
+        case 'Smart Summary': EventsChart.toggleElm($("#BarChartRowSmart")); break;
+        case 'Bar Summary': EventsChart.toggleElm($("#BarChartRow")); break;
+        case 'Sun': EventsChart.highlightByEventName("Sun", $SvgChartElm); break;
+        case 'Moon': break;
+        case 'Mars': break;
+        case 'Mercury': break;
+        default: console.log('Selected value not handled!');
+        }
+
+    }
 
     //needs to be run once before get event description method is used
     //loads xml file located in wwwroot to xml global data
@@ -259,6 +232,32 @@ class EventsChart {
 
     }
 
+    //highlights all events rects in chart by
+    //the inputed keyword in the event name
+    static highlightByEventName(keyword, $SvgChartElm) {
+
+        //get all rects
+        var allEventRects = $SvgChartElm.find(ID.EventListHolder).children("rect");
+
+        //find all rects representing the keyword based event
+        allEventRects.each(function (index) {
+            //get parsed time from rect
+            var svgEventRect = this;
+            var eventName = svgEventRect.getAttribute("eventname");
+            //check if event name contains keyword
+            var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
+
+            //if event is related to planet, highlight the rect
+            if (foundEvent) {
+                var highlightColor = EventsChart.getRandomHighlightColor();
+                svgEventRect.setAttribute("fill", highlightColor);
+            }
+
+        });
+
+    }
+
+
     //get screen width
     static getScreenWidth() {
         return Math.max(
@@ -269,6 +268,21 @@ class EventsChart {
             document.documentElement.clientWidth
         );
     }
+
+    //toggle hide and show of elements via SVG.js lib
+    static toggleElm(element) {
+
+        var svgElm = SVG(element[0]);
+
+        if (svgElm.visible()) {
+            svgElm.hide();
+        } else {
+            svgElm.show();
+        }
+
+    }
+
+
 
     //gets clients timezone offset, exp:"+08:00"
     static getParseableTimezone() {
@@ -480,9 +494,10 @@ class EventsChart {
                 newLegendRow.attr('transform', `matrix(1, 0, 0, 1, 10, ${newRowYAxis - 2})`);//minus 2 for perfect alignment
 
                 //set event name text & color element
-                var textElm = SVG(newLegendRow.children("text")[0]);
+                var textElm = newLegendRow.children("text")[0];
                 var iconElm = newLegendRow.children("use");
-                textElm.text(`${eventName}`);
+                textElm.innerHTML = eventName;
+                //textElm.text(`${eventName}`);
                 iconElm.attr("xlink:href", `#CursorLine${eventNatureName}Icon`); //set icon color based on nature
 
                 //4 GENERATE DESCRIPTION ROW LOGIC
@@ -501,7 +516,7 @@ class EventsChart {
                     backgroundElm.fill("#003e99");
                     backgroundElm.opacity(1);//solid
                     //textElm.css("fill", "#fff");
-                    textElm.font('weight', '700');
+                    SVG(textElm).font('weight', '700');
                     //if mouse within show description box
                     window.showDescription = true;
                 }

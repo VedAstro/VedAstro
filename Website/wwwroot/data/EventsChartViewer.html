@@ -12,8 +12,11 @@
     <!--JQuery-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
+    <!-- SVG.js used for events chart animation-->
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+
     <!-- JS Code Events Chart-->
-    <!-- NOTE: Needs jQuery to load 1st-->
+    <!-- NOTE: Needs jQuery & SVG.js to load 1st-->
     <script src="https://www.vedastro.org/js/EventsChart.js"></script>
 
 </head>
@@ -175,8 +178,8 @@
         //when creating from URL, we provide parent where chart will be injected
         //note: animation will be handled by embedded JS in chart
         var parentElm = $("#EventsChartSvgHolder");
-        EventsChart.ChartFromUrl(parentElm);
-        hideLoading();
+        EventsChart.ChartFromUrl(parentElm).then(hideLoading);
+        
 
     </script>
 

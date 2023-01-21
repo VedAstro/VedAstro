@@ -51,7 +51,7 @@
     </div>
 
     <!--CHART VIEW BOX-->
-    <div id="DasaViewBox" style="display:none;">
+    <div id="EventsChartSvgHolder" style="display:none;">
         <!--INSERT SVG-->
     </div>
 
@@ -154,7 +154,7 @@
             //hide default loading box
             $("#LoadingBox").hide();
             //show svg chart
-            $("#DasaViewBox").show();
+            $("#EventsChartSvgHolder").show();
             //show toolbar
             $("#ToolBar").show();
         }
@@ -163,7 +163,7 @@
             //show default loading box
             $("#LoadingBox").show();
             //hide svg chart
-            $("#DasaViewBox").hide();
+            $("#EventsChartSvgHolder").hide();
             //hide toolbar
             $("#ToolBar").hide();
         }
@@ -172,9 +172,11 @@
 
         initDarkMode();
 
-        //load the chart using URL
-        EventsChartInit("URL", $("#DasaViewBox"))
-            .then(hideLoading); //hide loading & show chart
+        //when creating from URL, we provide parent where chart will be injected
+        //note: animation will be handled by embedded JS in chart
+        var parentElm = $("#EventsChartSvgHolder");
+        EventsChart.ChartFromUrl(parentElm);
+        hideLoading();
 
     </script>
 

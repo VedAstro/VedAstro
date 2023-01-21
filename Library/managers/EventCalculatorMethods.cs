@@ -4013,7 +4013,7 @@ namespace Genso.Astrology.Library
         public static CalculatorResult GocharaSummary(Time time, Person person)
         {
 
-            throw new NotImplementedException();
+            return CalculatorResult.NotOccuring();
             //get all gochara ocured att time
             var occuringGocharaList = new List<CalculatorResult>(){};
 

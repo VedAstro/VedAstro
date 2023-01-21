@@ -9,7 +9,7 @@
     dark mode is disabled for chart with mix-blend-mode
     note: extra logic to remove filter in normal mode
     *@
-    <div class="container-xxl" id="DasaViewBox" @ref="_dasaViewBox" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
+    <div class="container-xxl" id="EventsChartSvgHolder" @ref="_eventsChartSvgHolder" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
 
     @*bottom chart options row*@
     <div class="hstack gap-3 mt-2">
@@ -48,7 +48,7 @@
     public string _timePreset { get; set; }
     public string _eventPreset { get; set; }
 
-    ElementReference _dasaViewBox;
+    ElementReference _eventsChartSvgHolder;
     public Time StartTime { get; set; }
     public Time EndTime { get; set; }
     public List<EventTag> InputedEventTags { get; set; }
@@ -213,7 +213,7 @@
         await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
 
         //2 Animate SVG chart with tiny JS lib
-        await _jsRuntime.InvokeVoidAsync("EventsChartInit", rawSvgChart, _dasaViewBox);
+        await _jsRuntime.InvokeVoidAsync("EventsChartInit", rawSvgChart, _eventsChartSvgHolder);
 
         //get latest dark mode setting
         //so that event chart is set properly

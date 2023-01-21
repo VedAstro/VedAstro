@@ -1,4 +1,4 @@
-﻿
+
 /*
 
 ███████╗██╗░░░██╗███████╗███╗░░██╗████████╗░██████╗    ░█████╗░██╗░░██╗░█████╗░██████╗░████████╗  
@@ -821,7 +821,7 @@ async function EventsChartInit(rawSvgChart, chartParent) {
 //    console.log(`Checking if SVG Chart is loaded...`);
 
 //    //check if svg already loaded into page
-//    var isLoaded = $("#DasaViewBox").children().first().is("svg");
+//    var isLoaded = $("#EventsChartSvgHolder").children().first().is("svg");
 
 //    return isLoaded;
 //}

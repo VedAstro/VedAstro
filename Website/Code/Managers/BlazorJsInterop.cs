@@ -236,7 +236,7 @@ namespace Website
         /// <summary>
         /// Injects html/svg into an element
         /// </summary>
-        public static async Task InjectIntoElement(this IJSRuntime jsRuntime, ElementReference _dasaViewBox, string value) => await jsRuntime.InvokeVoidAsync("InjectIntoElement", _dasaViewBox, value);
+        public static async Task InjectIntoElement(this IJSRuntime jsRuntime, ElementReference elmReference, string value) => await jsRuntime.InvokeVoidAsync("InjectIntoElement", elmReference, value);
 
         /// <summary>
         /// Uses jQuery to attach a function by name to a HTML element event

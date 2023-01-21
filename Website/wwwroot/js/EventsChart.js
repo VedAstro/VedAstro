@@ -185,7 +185,7 @@ class EventsChart {
     }
 
 
-   
+
 
 
 
@@ -197,22 +197,26 @@ class EventsChart {
         var tickElm = checkbox.find('.Tick');
 
         //toggle display of the tick mark
-        EventsChart.toggleElm(tickElm);
+        //if tick visible, then tick on
+        var tickOn = EventsChart.toggleElm(tickElm);
 
         //get text of check box
         var text = checkbox.find("text").text();
 
         //based on text handle the call appropriately
         switch (text) {
-        case 'Life Events': EventsChart.toggleElm($("#LifeEventLinesHolder")); break;
-        case 'Color Summary': EventsChart.toggleElm($("#ColorRow")); break;
-        case 'Smart Summary': EventsChart.toggleElm($("#BarChartRowSmart")); break;
-        case 'Bar Summary': EventsChart.toggleElm($("#BarChartRow")); break;
-        case 'Sun': EventsChart.highlightByEventName("Sun", $SvgChartElm); break;
-        case 'Moon': break;
-        case 'Mars': break;
-        case 'Mercury': break;
-        default: console.log('Selected value not handled!');
+            case 'Life Events': EventsChart.toggleElm($("#LifeEventLinesHolder")); break;
+            case 'Color Summary': EventsChart.toggleElm($("#ColorRow")); break;
+            case 'Smart Summary': EventsChart.toggleElm($("#BarChartRowSmart")); break;
+            case 'Bar Summary': EventsChart.toggleElm($("#BarChartRow")); break;
+            default:
+            {
+                if (tickOn) {
+                    EventsChart.highlightByEventName(text, $SvgChartElm);
+                } else {
+                    EventsChart.unhighlightByEventName(text, $SvgChartElm);
+                }
+            }
         }
 
     }
@@ -249,8 +253,45 @@ class EventsChart {
 
             //if event is related to planet, highlight the rect
             if (foundEvent) {
+
+                //save original color for later return
+                var oriColor = svgEventRect.getAttribute("fill");
+                svgEventRect.setAttribute("fillORI", oriColor);
+
+                //set new highlight color
                 var highlightColor = EventsChart.getRandomHighlightColor();
                 svgEventRect.setAttribute("fill", highlightColor);
+            }
+
+        });
+
+    }
+
+
+    static unhighlightByEventName(keyword, $SvgChartElm) {
+
+        //get all rects
+        var allEventRects = $SvgChartElm.find(ID.EventListHolder).children("rect");
+
+        //find all rects representing the keyword based event
+        allEventRects.each(function (index) {
+            //get parsed time from rect
+            var svgEventRect = this;
+            var eventName = svgEventRect.getAttribute("eventname");
+            //check if event name contains keyword
+            var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
+
+            //if event is related to planet, highlight the rect
+            if (foundEvent) {
+
+                //save original color for later return
+                var oriColor = svgEventRect.getAttribute("fillORI");
+
+                //ori will be null if never highlighted before
+                oriColor = oriColor === null ? svgEventRect.getAttribute("fill") : oriColor;
+
+                //set original color if changed, else same color
+                svgEventRect.setAttribute("fill", oriColor);
             }
 
         });
@@ -270,16 +311,20 @@ class EventsChart {
     }
 
     //toggle hide and show of elements via SVG.js lib
+    //returns true if set to visible, false if set to hide
     static toggleElm(element) {
 
         var svgElm = SVG(element[0]);
 
-        if (svgElm.visible()) {
+        var isVisible = svgElm.visible();
+        if (isVisible) {
             svgElm.hide();
         } else {
             svgElm.show();
         }
 
+        //get updated is visibility
+        return svgElm.visible();
     }
 
 

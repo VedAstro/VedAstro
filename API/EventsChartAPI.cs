@@ -617,7 +617,6 @@ namespace API
             //so that chart not squeezed to side of page
             maxWidth = maxWidth - (int)(maxWidth * 0.07); ;
 
-
             //EXTRACT & PREPARE DATA
 
             //get the person instance by id
@@ -681,20 +680,11 @@ namespace API
         {
             var returnList = new List<EventTag>();
 
-            //if string contains comma "," then we read each seperately
-            if (eventPreset.Contains(','))
+            //split into pieces if any
+            var presetList = eventPreset.Split(',');
+            foreach (var preset in presetList)
             {
-                var split = eventPreset.Split(',');
-                foreach (var item in split)
-                {
-                    //are converted as is
-                    returnList.Add(Enum.Parse<EventTag>(item));
-                }
-            }
-            //else hard coded preset below
-            else
-            {
-                switch (eventPreset)
+                switch (preset)
                 {
                     //only general is customized
                     case "Summary":
@@ -703,15 +693,6 @@ namespace API
                         returnList.Add(EventTag.Personal);
                         returnList.Add(EventTag.RulingConstellation);
                         break;
-                    //case "Gochara":
-                    //    returnList.Add(EventTag.Personal);
-                    //    returnList.Add(EventTag.Gochara);
-                    //    break;
-                    //case "Travel":
-                    //    returnList.Add(EventTag.Personal);
-                    //    returnList.Add(EventTag.General);
-                    //    returnList.Add(EventTag.Travel);
-                    //    break;
 
                     //others are converted as is
                     default:
@@ -721,13 +702,12 @@ namespace API
                 }
             }
 
-
             return returnList;
         }
 
         /// <summary>
         /// Given a time preset in string like "Today"
-        /// a precisise start and end time will be returned
+        /// a precise start and end time will be returned
         /// used in dasa/muhurtha easy calculator
         /// </summary>
         private static object AutoCalculateTimeRange(string timePresetRaw, GeoLocation birthLocation, TimeSpan timezone)

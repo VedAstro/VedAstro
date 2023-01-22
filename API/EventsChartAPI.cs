@@ -256,6 +256,7 @@ namespace API
 
         /// <summary>
         /// Special function to make Light Viewer(EventsChartViewer.html) work
+        /// This API is called by EventsChart.js when viewing chart view lite viewer
         /// </summary>
         [FunctionName("geteventscharteasy")]
         public static async Task<IActionResult> GetEventsChartEasy(
@@ -612,7 +613,8 @@ namespace API
             //hard set max width to 1000px so that no forever calculation created
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
 
-            //minus 7% for side padding
+            //minus 7% from width for side padding
+            //so that chart not squeezed to side of page
             maxWidth = maxWidth - (int)(maxWidth * 0.07); ;
 
 
@@ -728,7 +730,7 @@ namespace API
         /// a precisise start and end time will be returned
         /// used in dasa/muhurtha easy calculator
         /// </summary>
-        private static object AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation, TimeSpan timezone)
+        private static object AutoCalculateTimeRange(string timePresetRaw, GeoLocation birthLocation, TimeSpan timezone)
         {
 
             Time start, end;
@@ -737,57 +739,59 @@ namespace API
             var today = now.ToString("dd/MM/yyyy zzz");
 
             var yesterday = now.AddDays(-1).ToString("dd/MM/yyyy zzz");
+            var timePreset = timePresetRaw.ToLower(); //so that all cases are accepted
             switch (timePreset)
             {
 
-                case "Hour":
+                case "hour":
                     var startHour = now.AddHours(-1);//back 1 hour
                     var endHour = now.AddHours(1);//front 1 hour
                     start = new Time(startHour, birthLocation);
                     end = new Time(endHour, birthLocation);
                     return new { start, end };
-                case "Today":
-                case "Day":
+                case "today":
+                case "day":
                     start = new Time($"00:00 {today}", birthLocation);
                     end = new Time($"23:59 {today}", birthLocation);
                     return new { start, end };
-                case "Week":
+                case "week":
                     start = new Time($"00:00 {yesterday}", birthLocation);
                     var weekEnd = now.AddDays(7).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {weekEnd}", birthLocation);
                     return new { start, end };
-                case "Month":
+                case "month":
                     var _1WeekAgo = now.AddDays(-7).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_1WeekAgo}", birthLocation);
                     var monthEnd = now.AddDays(30).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {monthEnd}", birthLocation);
                     return new { start, end };
-                case "3Months":
+                case "3months":
                     var _2WeekAgo = now.AddDays(-14).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_2WeekAgo}", birthLocation);
                     var _3monthEnd = now.AddDays(90).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {_3monthEnd}", birthLocation);
                     return new { start, end };
-                case "6Months":
+                case "6months":
                     var _1MonthsAgo = now.AddDays(-30).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_1MonthsAgo}", birthLocation);
                     var _6monthEnd = now.AddDays(180).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {_6monthEnd}", birthLocation);
                     return new { start, end };
-                case "Year":
+                case "1year":
+                case "year":
                     var _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
                     var yearEnd = now.AddDays(365).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {yearEnd}", birthLocation);
                     return new { start, end };
-                case "5Years":
+                case "5years":
                     var _6MonthsAgo = now.AddDays(-180).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_6MonthsAgo}", birthLocation);
                     var _5yearEnd = now.AddDays((365 * 5)).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {_5yearEnd}", birthLocation);
                     return new { start, end };
-                case "10Years":
-                case "Decade":
+                case "10years":
+                case "decade":
                     var _1YearAgo = now.AddDays(-365).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_1YearAgo}", birthLocation);
                     var decadeEnd = now.AddDays((365 * 10)).ToString("dd/MM/yyyy zzz");

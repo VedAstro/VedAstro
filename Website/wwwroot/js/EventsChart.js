@@ -1,4 +1,4 @@
-﻿
+
 /*
 
 ███████╗██╗░░░██╗███████╗███╗░░██╗████████╗░██████╗    ░█████╗░██╗░░██╗░█████╗░██████╗░████████╗  
@@ -61,6 +61,8 @@ class EventsChart {
     }
     static async ChartFromUrl($ChartParentElm) {
 
+        console.log(`From URL`);
+
         //this.ChartMode = "URL"; //save for later when animating
         //get data to generate chart from URL
         var chartData = EventsChart.getDataFromUrl();
@@ -74,9 +76,28 @@ class EventsChart {
         newChart.animateChart();
     }
 
+    static async ChartFromSvgString(svgChartString, $ChartParentElm) {
+
+        console.log(`From SVG String`);
+
+        //this.ChartMode = "URL"; //save for later when animating
+        //get data to generate chart from URL
+        //var chartData = EventsChart.getDataFromUrl();
+
+        //var svgChartString = await EventsChart.getEventsChartFromApi(chartData);
+
+        $ChartParentElm = $($ChartParentElm);
+
+        var $SvgChartElm = EventsChart.injectIntoElement($ChartParentElm[0], svgChartString);
+
+        var newChart = new EventsChart($SvgChartElm);
+
+        newChart.animateChart();
+    }
+
+
     //DATA
     //template used to generate legend rows
-
 
     //INSTANCE METHODS
     //brings the chart to live, call after constructor
@@ -183,10 +204,6 @@ class EventsChart {
             return rectTime;
         }
     }
-
-
-
-
 
 
     //STATIC FUNCTIONS
@@ -298,7 +315,6 @@ class EventsChart {
 
     }
 
-
     //get screen width
     static getScreenWidth() {
         return Math.max(
@@ -326,7 +342,6 @@ class EventsChart {
         //get updated is visibility
         return svgElm.visible();
     }
-
 
 
     //gets clients timezone offset, exp:"+08:00"
@@ -798,16 +813,18 @@ class EventsChart {
 //GLUE METHOD > KEEP IT CLEAN
 async function EventsChartInit(rawSvgChart, chartParent) {
 
+    EventsChart.ChartFromSvgString(rawSvgChart, chartParent);
+
     //make new events chart instance with inputed data
     //insert chart parent (jquery)
-    var $chartParent = $(chartParent);
-    var newChart = new EventsChart(rawSvgChart, $chartParent);
+//    var $chartParent = $(chartParent);
+//    var newChart = new EventsChart(rawSvgChart, $chartParent);
 
-    //animate chart
-    await newChart.animateChart();
+//    //animate chart
+//    await newChart.animateChart();
 
-    //make available for debug
-    window.EventsChart = newChart;
+//    //make available for debug
+//    window.EventsChart = newChart;
 }
 
 

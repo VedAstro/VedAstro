@@ -231,21 +231,21 @@ function GetMousePositionInElement(mouseEventData, elementId) {
 //uses Tippy js lib, needs to be called everytime
 //new elements are created, because attach by direct
 //element reference not class
-function InitLifeEventLineToolTip() {
+//function InitLifeEventLineToolTip() {
 
-    $(".LifeEventLines").each(function () {
+//    $(".LifeEventLines").each(function () {
 
-        var evName = this.getAttribute("eventname");
+//        var evName = this.getAttribute("eventname");
 
-        tippy(this, {
-            content: evName,
-            placement: 'bottom',
-            arrow: true
-        });
+//        tippy(this, {
+//            content: evName,
+//            placement: 'bottom',
+//            arrow: true
+//        });
 
-    });
+//    });
 
-}
+//}
 
 //functions used by localstorage manager in Blazor
 var getProperty = key => key in localStorage ? JSON.parse(localStorage[key]) : null;

@@ -13,10 +13,10 @@
 
     @*bottom chart options row*@
     <div class="hstack gap-3 mt-2">
-        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
+@*        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
         <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
 
-        @*only show mobile view when eventPreset & timePreset has been set*@
+*@        @*only show mobile view when eventPreset & timePreset has been set*@
         @if (!string.IsNullOrEmpty(_eventPreset))
         {
             <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true" />
@@ -69,7 +69,7 @@
         if (isDirty)
         {
             //default show life event
-            await OnClickShowLifeEvents();
+            //await OnClickShowLifeEvents();
             isDirty = false;//reset
         }
     }
@@ -205,12 +205,12 @@
     private async Task LoadChartIntoPage(string rawSvgChart)
     {
 
-        //reset life show/hide button TODO move to JS side, for global use
-        await OnClickShowLifeEvents();
+        //reset life show/hide button 
+        //await OnClickShowLifeEvents();
 
         //attach tooltip lib for life events
         //note: needed on each draw
-        await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
+        //await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
 
         //2 Animate SVG chart with tiny JS lib
         await _jsRuntime.InvokeVoidAsync("EventsChartInit", rawSvgChart, _eventsChartSvgHolder);
@@ -281,16 +281,16 @@
 
     //default to this, since api generates with events visible
     //set every time after svg injected
-    private async Task OnClickShowLifeEvents()
-    {
-        //hide & show the relevant buttons
-        await _jsRuntime.Hide(_showButton.ElementReference);
-        await _jsRuntime.Show(_hideButton.ElementReference);
+    //private async Task OnClickShowLifeEvents()
+    //{
+    //    //hide & show the relevant buttons
+    //    await _jsRuntime.Hide(_showButton.ElementReference);
+    //    await _jsRuntime.Show(_hideButton.ElementReference);
 
-        //show element
-        await _jsRuntime.Show("#LifeEventLinesHolder");
+    //    //show element
+    //    await _jsRuntime.Show("#LifeEventLinesHolder");
 
-    }
+    //}
 
     private async Task OnClickDeleteChart()
     {

@@ -31,9 +31,11 @@ public static class ApiLogger
         //get caller data for more debug info
         var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
 
+        errorXml.Add(Tools.TimeStampServerXml);
         errorXml.Add(new XElement("CallerIP", ipAddress));
         errorXml.Add(new XElement("Url", req?.RequestUri));
         errorXml.Add(new XElement("RequestBody"), APITools.RequestToXmlString(req));
+        
 
         //add error data to main app log file
         await APITools.AddXElementToXDocumentAzure(errorXml, AppLogXml, ContainerName);

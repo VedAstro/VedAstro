@@ -208,7 +208,7 @@ namespace Website
             return visitorXml;
         }
 
-       
+
 
         //all possible details are logged
         private static async Task<XElement> NewVisitor(XElement userIdXml, XElement urlXml)
@@ -218,8 +218,7 @@ namespace Website
             var screenDataXml = await AppData.JsRuntime.InvokeAsyncJson("getScreenData", "ScreenData");
             var originUrlXml = new XElement("OriginUrl", await AppData.OriginUrl);
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
-            var resultLocation = await ServerManager.ReadFromServerXmlReply(ServerManager.GetGeoLocation, null, "Location");
-            var locationXml = resultLocation.Payload;
+            var locationXml = await GetVisitorLocation();
             var visitorElement = new XElement("Visitor");
             visitorElement.Add(userIdXml, visitorIdXml, urlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
 
@@ -227,6 +226,29 @@ namespace Website
             AppData.IsNewVisitor = false;
 
             return visitorElement;
+        }
+
+        /// <summary>
+        /// Gets current visitor's geo location from 3rd party API (geojs.io)
+        /// </summary>
+        /// <returns></returns>
+        private static async Task<XElement> GetVisitorLocation()
+        {
+            XElement locationXml;
+
+            //because call to 3rd party API, call not reliable from all locations on earth
+            //known to fail from time to time, as such compensate!
+            var resultLocation = await ServerManager.ReadFromServerXmlReply(ServerManager.GeoJsApiUrl, AppData.JsRuntime, "Location");
+            if (resultLocation.IsPass)
+            {
+                locationXml = resultLocation.Payload;
+            }
+            else
+            {
+                locationXml = new XElement("Location", "API CALL FAIL");
+            }
+
+            return locationXml;
         }
 
         //only needed details are logged

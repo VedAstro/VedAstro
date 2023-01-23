@@ -48,7 +48,7 @@ namespace Website
         public const string GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
         public const string SaveEventsChart = ApiUrl + "/SaveEventsChart";
         public const string GetEventsApi = ApiUrl + "/getevents";
-        public const string GetGeoLocation = "https://get.geojs.io/v1/ip/geo.json";
+        public const string GeoJsApiUrl = "https://get.geojs.io/v1/ip/geo.json";
         //TODO HIDE API
         public const string GoogleGeoLocationApiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
         /// <summary>
@@ -91,8 +91,12 @@ namespace Website
             //send request to API server
             var result = await RequestServer(apiUrl);
 
-            //parse data reply
-            var rawMessage = result.Content.ReadAsStringAsync().Result;
+            //get raw reply from the server response
+            var rawMessage = result.Content?.ReadAsStringAsync()?.Result ?? "";
+
+            //only good reply from server is accepted, anything else is marked invalid
+            //stops invalid replies from being passed as valid
+            if (!result.IsSuccessStatusCode) { return new WebResult<XElement>(false, new("RawErrorData", rawMessage)); }
 
             var parsed = ParseData(rawMessage);
 
@@ -122,7 +126,7 @@ namespace Website
                         var parsedXml = XElement.Parse(inputRawString);
                         return new WebResult<XElement>(true, parsedXml);
                     }
-                    catch (Exception e2) { Console.WriteLine(e2); } //if fail just void print
+                    catch (Exception e2) { WebLogger.Error(e2); } //if fail just void print
 
                     try
                     {
@@ -131,7 +135,7 @@ namespace Website
                         var wrappedXml = XElement.Parse(parsedJson.InnerXml);
                         return new WebResult<XElement>(true, wrappedXml);
                     }
-                    catch (Exception e3) { Console.WriteLine(e3); } //if fail just void print
+                    catch (Exception e3) { WebLogger.Error(e3); } //if fail just void print
 
                     //if control reaches here all has failed
                     return new WebResult<XElement>(false, Tools.ExceptionToXml(e1));
@@ -306,7 +310,7 @@ namespace Website
 
 
         //PRIVATE METHODS
-        
+
 
 
     }

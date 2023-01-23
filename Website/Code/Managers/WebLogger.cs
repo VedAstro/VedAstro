@@ -242,7 +242,7 @@ namespace Website
         }
 
         /// <summary>
-        /// Given the Visitor xml element, it will send it to API for safe keeping
+        /// Given the Visitor xml element, it will send it to API for safe keeping via WORKER JS!!
         /// </summary>
         private static async Task SendLogToServer(XElement visitorElement)
         {

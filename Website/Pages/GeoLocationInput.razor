@@ -47,9 +47,9 @@
     private ElementReference _locationNameInput;
     private ElementReference _longitudeInput;
     private ElementReference _latitudeInput;
-    private string _locationName;
-    private double _longitude;
-    private double _latitude;
+    private string? _locationName = "";
+    private double? _longitude = null;
+    private double?_latitude = null;
 
 
     /// <summary>
@@ -75,7 +75,7 @@
 
     public string LocationName
     {
-        get => _locationName;
+        get => _locationName ?? "";
         set
         {
             //avoid same value to stop loops
@@ -92,7 +92,7 @@
 
     public double Longitude
     {
-        get => _longitude;
+        get => _longitude ?? 0;
         set
         {
             //avoid same value to stop loops
@@ -109,7 +109,7 @@
 
     public double Latitude
     {
-        get => _latitude;
+        get => _latitude ?? 0;
         set
         {
             //avoid same value to stop loops
@@ -143,6 +143,21 @@
     public GeoLocation GetGeoLocation()
     {
         return new GeoLocation(this.LocationName, this.Longitude, this.Latitude);
+    }
+
+    /// <summary>
+    /// Checks if input has valid location data, false if invalid
+    /// If true, than GetGeoLocation can be called safely
+    /// </summary>
+    public bool IsValid()
+    {
+        //check if the underlying data is valid
+        if (string.IsNullOrEmpty(_locationName)) { return false; }
+        if (_longitude is null) { return false; }
+        if (_latitude is null) { return false; }
+
+        //if control reaches here than all good
+        return true;
     }
 
     /// <summary>

@@ -17,6 +17,8 @@ namespace Genso.Astrology.Library
         public const string NewFeatures = $"New features are being added.\nPlease try later";
         public const string ImproveWebsite = $"We're improving the website.\nPlease try later";
         public const string EnterName = $"Please enter Name!";
+        public const string SelectGender = $"Please select gender, male or female!";
+        public const string InvalidLocation = $"Wrong location, try different place name.";
         public const string SelectName = $"Please select Name!";
         public const string ErrorWillRefresh = "Something went wrong.\nPlease wait page will auto refresh.";
         public const string SlowUnstableInternet = "Problem talking to Server\nSlow or unstable internet\ncan cause this";

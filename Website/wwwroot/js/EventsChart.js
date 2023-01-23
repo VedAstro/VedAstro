@@ -1,4 +1,4 @@
-
+﻿
 /*
 
 ███████╗██╗░░░██╗███████╗███╗░░██╗████████╗░██████╗    ░█████╗░██╗░░██╗░█████╗░██████╗░████████╗  
@@ -808,6 +808,11 @@ class EventsChart {
         return svgTextHolder;
     }
 
+    //this allows the life event icons to be moved up
+    //or down to meet the changing rows
+    static setLifeEventsIconYAxis() {
+
+    }
 }
 
 //GLUE METHOD > KEEP IT CLEAN

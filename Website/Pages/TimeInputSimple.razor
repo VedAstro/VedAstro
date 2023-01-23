@@ -127,7 +127,7 @@
     }
 
     /// <summary>
-    /// Gets parseable time string
+    /// Gets parseable time string from JS calendar plugin
     /// </summary>
     public async Task<string> GetFullTimeString()
     {
@@ -175,7 +175,7 @@
     /// <summary>
     /// Creates a new Time instance with inputed time data
     /// </summary>
-    public async Task<Time> GetTime(GeoLocation geoLocation) => new(await GetFullTimeString(), geoLocation);
+    public async Task<Time> GetTime(GeoLocation geoLocation) => new Time(await this.GetFullTimeString(), geoLocation);
 
     /// <summary>
     /// Creates a new DateTimeOffset instance with inputed time data

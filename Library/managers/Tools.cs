@@ -9,9 +9,11 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.JSInterop;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using static Genso.Astrology.Library.PlanetName;
 
@@ -855,7 +857,25 @@ namespace Genso.Astrology.Library
         }
 
 
-
+        /// <summary>
+        /// Removes all evil/invalid characters from a string
+        /// used to clean name field user input
+        /// </summary>
+        public static string CleanText(string nameInput)
+        {
+            // Replace invalid characters with empty strings.
+            try
+            {
+                return Regex.Replace(nameInput, @"[^\w\.@-]", "",
+                    RegexOptions.None, TimeSpan.FromSeconds(1.5));
+            }
+            // If we timeout when replacing invalid characters,
+            // we should return Empty.
+            catch (RegexMatchTimeoutException)
+            {
+                return string.Empty;
+            }
+        }
     }
 
 }

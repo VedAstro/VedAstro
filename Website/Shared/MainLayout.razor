@@ -278,6 +278,9 @@
         //removing it removes user's login
         await _jsRuntime.RemoveProperty("UserData");
 
+        //reset app data
+        AppData.CurrentUser = UserData.Empty;
+
         //refresh page
         WebsiteTools.ReloadPage(_navigation);
 

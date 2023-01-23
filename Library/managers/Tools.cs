@@ -587,10 +587,17 @@ namespace Genso.Astrology.Library
                 var timeZoneResponseXml = apiResult.Payload;
                 //extract out the timezone offset
                 var rawOffsetData = timeZoneResponseXml?.Element("raw_offset")?.Value;
+
                 //at times google api returns no valid data, but call is replied as normal
-                //as such let caller know something went wrong
-                if (rawOffsetData == null) { returnResult.IsPass = false; }
-                var offsetSeconds = double.Parse(rawOffsetData ?? "");
+                //as such let caller know something went wrong & set to 0s
+                double offsetSeconds;
+                if (string.IsNullOrEmpty(rawOffsetData))
+                {
+                    returnResult.IsPass = false;
+                    offsetSeconds = 0;
+                }
+                else { offsetSeconds = double.Parse(rawOffsetData); }
+
                 //offset needs to be "whole" minutes, else fail
                 //purposely hard cast to int to remove not whole minutes
                 var notWhole = TimeSpan.FromSeconds(offsetSeconds).TotalMinutes;

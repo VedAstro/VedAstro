@@ -166,7 +166,7 @@
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"Horoscope | {_selectedPerson.Name}";
 
-        //inject selected person into component
+        //inject selected person into component to show horoscope data
         await _horoscopeInfoView.SetPerson(_selectedPerson);
 
     }

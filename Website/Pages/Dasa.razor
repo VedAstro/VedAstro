@@ -110,14 +110,11 @@
     </div>
 </div>
 
-@if (_isResultReady)
-{
-    <hr>
-    @*DATA CHART*@
-    <StrengthChart Time="@SelectedPerson.BirthTime" />
-    <hr>
-    <PlanetHouseInfoViewer Time="@SelectedPerson.BirthTime" />
-}
+<div class="mt-4">
+    @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
+    <HoroscopeInfoView @ref="_horoscopeInfoView" />
+</div>
+
 
 @*HELP SECTION*@
 <PageHelpSection @ref="_helpSection">
@@ -204,9 +201,12 @@
 
 @code {
 
+    private HoroscopeInfoView _horoscopeInfoView;
+
+
     private string _pageTitle = "Dasa";
     //--------------------FIELDS
-    private string _selectedTimeRange = "FullLife";
+    private string _selectedTimeRange = "FullLife"; //1st in list
     private string _selectedChartId = "";
 
     private PageHelpSection _helpSection;
@@ -296,7 +296,6 @@
         SelectedPerson = await _peopleSelectorBox.GetSelectedPerson();
 
         //put person name into tab title for easy multi-tabbing
-        //await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
         _pageTitle = $"Dasa | {SelectedPerson.Name}";
 
         //set data into dasa viewer
@@ -312,6 +311,10 @@
 
         //mark page as ready to show results
         _isResultReady = true;
+
+        //inject selected person into component to show horoscope data
+        //do last so that loading box is not closed too soon
+        await _horoscopeInfoView.SetPerson(SelectedPerson);
 
         _jsRuntime.HideAlert();
     }
@@ -331,7 +334,6 @@
         SelectedPerson = await _easyPeopleSelectorBox.GetSelectedPerson();
 
         //put person name into tab title for easy multi-tabbing
-        //await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
         _pageTitle = $"Dasa | {SelectedPerson.Name}";
 
         //set data into dasa viewer
@@ -347,6 +349,10 @@
 
         //mark page as ready to show results
         _isResultReady = true;
+
+        //inject selected person into component to show horoscope data
+        //do last so that loading box is not closed too soon
+        await _horoscopeInfoView.SetPerson(SelectedPerson);
 
         _jsRuntime.HideAlert();
 

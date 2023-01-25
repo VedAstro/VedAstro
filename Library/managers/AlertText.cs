@@ -21,7 +21,7 @@ namespace Genso.Astrology.Library
         public const string InvalidLocation = $"Wrong location, try different place name.";
         public const string SelectName = $"Please select Name!";
         public const string ErrorWillRefresh = "Something went wrong.\nPlease wait page will auto refresh.";
-        public const string SlowUnstableInternet = "Problem talking to Server\nSlow or unstable internet\ncan cause this";
+        public const string SlowUnstableInternet = "Problem with internet connetion,\nPlease try again later.";
         public const string NoInternet = "Please check your Internet connection.";
         public const string SorryNeedRefreshToHome = "Sorry! App just crashed.\nWe are fixing this error.\nPlease try again later.";
         //public const string SorryNeedRefreshToHome = UnderMaintenance;
@@ -36,6 +36,7 @@ namespace Genso.Astrology.Library
         public const string NoSavedCharts = "No saved charts, calculate a chart and save it to view here.";
         public const string NoPersonFound = "Person profile not found,\nrefresh or check profile share link";
         public const string PersonProfileNoExist = "Person profile no longer exists, could not make chart.";
+        public const string Unexpected = "Unexpected error, we are working on the fix.\nPlease try again later.";
 
 
         /// <summary>
@@ -44,6 +45,11 @@ namespace Genso.Astrology.Library
         /// </summary>
         /// <returns></returns>
         public static string ServerConnectionProblem() => Tools.RandomSelect(new[] { SlowUnstableInternet, NewFeatures, ImproveWebsite });
+        
+        /// <summary>
+        /// Random selection of errors messages for unexpected errors 
+        /// </summary>
+        public static string ObliviousErrors() => Tools.RandomSelect(new[] { Unexpected, SlowUnstableInternet, NewFeatures, ImproveWebsite });
 
 
     }

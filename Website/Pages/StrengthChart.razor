@@ -20,6 +20,9 @@
         get => _time;
         set
         {
+            //don't set if null
+            if (value == null) { return; }
+            
             _time = value;
             //needed for updates to be shown on 2nd click
             StateHasChanged();

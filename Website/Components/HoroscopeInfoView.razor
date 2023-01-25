@@ -164,6 +164,7 @@
 
             _isReadyToShow = true;
 
+            //need to make change visible
             StateHasChanged();
 
             //close loading box
@@ -179,7 +180,6 @@
         }
 
     }
-
 
     private async Task SearchButtonClicked() => await InvokeAsync(async () => await _SearchButtonClicked()).Try(_jsRuntime);
 
@@ -233,7 +233,6 @@
         _jsRuntime.HideLoading();
     }
 
-
     /// <summary>
     /// Returns a list of zodiac name selected by user
     /// to ONLY include in results
@@ -258,7 +257,6 @@
 
         return returnList;
     }
-
 
     /// <summary>
     /// Returns a list of planets selected by user

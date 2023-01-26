@@ -811,26 +811,13 @@ class EventsChart {
     //this allows the life event icons to be moved up
     //or down to meet the changing rows
     static setLifeEventsIconYAxis() {
-
+        //use svg.js
     }
 }
 
 //GLUE METHOD > KEEP IT CLEAN
-async function EventsChartInit(rawSvgChart, chartParent) {
+async function ChartFromSvgString(rawSvgChart, chartParent) { EventsChart.ChartFromSvgString(rawSvgChart, chartParent); }
 
-    EventsChart.ChartFromSvgString(rawSvgChart, chartParent);
-
-    //make new events chart instance with inputed data
-    //insert chart parent (jquery)
-//    var $chartParent = $(chartParent);
-//    var newChart = new EventsChart(rawSvgChart, $chartParent);
-
-//    //animate chart
-//    await newChart.animateChart();
-
-//    //make available for debug
-//    window.EventsChart = newChart;
-}
 
 
 

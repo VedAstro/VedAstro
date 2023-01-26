@@ -205,15 +205,8 @@
     private async Task LoadChartIntoPage(string rawSvgChart)
     {
 
-        //reset life show/hide button 
-        //await OnClickShowLifeEvents();
-
-        //attach tooltip lib for life events
-        //note: needed on each draw
-        //await _jsRuntime.InvokeVoidAsync("InitLifeEventLineToolTip");
-
         //2 Animate SVG chart with tiny JS lib
-        await _jsRuntime.InvokeVoidAsync("EventsChartInit", rawSvgChart, _eventsChartSvgHolder);
+        await _jsRuntime.InvokeVoidAsync("ChartFromSvgString", rawSvgChart, _eventsChartSvgHolder);
 
         //get latest dark mode setting
         //so that event chart is set properly

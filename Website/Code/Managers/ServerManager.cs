@@ -65,10 +65,6 @@ namespace Website
         /// </summary>
         private static int _waitingInLineCount = 0;
 
-        /// <summary>
-        /// Shows if any active connection is on, used to enforce 1 call at a time
-        /// </summary>
-        public static bool IsBusy = false;
 
         //PUBLIC METHODS
 
@@ -80,11 +76,6 @@ namespace Website
         /// </summary>
         public static async Task<WebResult<XElement>> ReadFromServerXmlReply(string apiUrl, IJSRuntime? jsRuntime, string rootElementName = "Root")
         {
-            await IfBusyPleaseHold(apiUrl);
-
-            //set busy
-            IsBusy = true;
-
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
 
@@ -98,10 +89,10 @@ namespace Website
             //stops invalid replies from being passed as valid
             if (!result.IsSuccessStatusCode) { return new WebResult<XElement>(false, new("RawErrorData", rawMessage)); }
 
+            //tries to parse the raw data received into XML or JSON
+            //if all fail will return raw data with fail status
             var parsed = ParseData(rawMessage);
 
-            //set free
-            IsBusy = false;
 
             return parsed;
 
@@ -166,10 +157,6 @@ namespace Website
         /// </summary>
         public static async Task<Stream> WriteToServerStreamReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
-            await IfBusyPleaseHold(apiUrl);
-
-            //set busy
-            IsBusy = true;
 
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
@@ -193,17 +180,12 @@ namespace Website
                 //extract the content of the reply data
                 var rawMessage = response.Content.ReadAsStreamAsync().Result;
 
-                //set free
-                IsBusy = false;
-
                 return rawMessage;
 
             }
             //rethrow specialized exception to be handled by caller
             catch (Exception e)
             {
-                //set free
-                IsBusy = false;
 
                 throw new ApiCommunicationFailed($"WriteToServerStreamReply()", e);
             }
@@ -221,11 +203,6 @@ namespace Website
         public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
             WebResult<XElement> returnVal;
-
-            await IfBusyPleaseHold(apiUrl);
-
-            //set busy
-            IsBusy = true;
 
             //if js runtime available & browser offline show error
             jsRuntime?.CheckInternet();
@@ -260,22 +237,17 @@ namespace Website
                 var writeToServerXmlReply = XElement.Parse(rawMessage);
                 returnVal = WebResult<XElement>.FromXml(writeToServerXmlReply);
 
-                //set free
-                IsBusy = false;
             }
+            //if internet failure let caller know immediately
+            catch(HttpRequestException){ throw new NoInternetError(); }
 
-            //note: failure here could be for several very likely reasons,
+            //note: other failure here could be for several very likely reasons,
             //so it is important to properly check and handled here for best UX
             //- server unexpected failure
             //- server unreachable
             catch (Exception e)
             {
-                //set free
-                IsBusy = false;
-
                 returnVal = new WebResult<XElement>(false, new XElement("Root", $"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}"));
-
-                //throw new ApiCommunicationFailed($"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}", e);
             }
 
             //if fail log it
@@ -285,28 +257,28 @@ namespace Website
         }
 
 
-        /// <summary>
-        /// Holds the control until line is clear
-        /// enforces 1 call at a time
-        /// check every 200ms
-        /// </summary>
-        /// <returns></returns>
-        public static async Task IfBusyPleaseHold(string caller = "")
-        {
-            //note: experimentation has shown that long wait time causes serious lag
-            //as que piles up, so many checks very fast seems to work perfectly so far
+        ///// <summary>
+        ///// Holds the control until line is clear
+        ///// enforces 1 call at a time
+        ///// check every 200ms
+        ///// </summary>
+        ///// <returns></returns>
+        //public static async Task IfBusyPleaseHold(string caller = "")
+        //{
+        //    //note: experimentation has shown that long wait time causes serious lag
+        //    //as que piles up, so many checks very fast seems to work perfectly so far
 
-            //if waiting too long, move on
-            while (IsBusy && _waitingInLineCount < 10)
-            {
-                Console.WriteLine($"BLZ:Waiting in line for call:{caller}");
-                await Task.Delay(100);
-                _waitingInLineCount++; //increment  count
-            }
+        //    //if waiting too long, move on
+        //    while (IsBusy && _waitingInLineCount < 10)
+        //    {
+        //        Console.WriteLine($"BLZ:Waiting in line for call:{caller}");
+        //        await Task.Delay(100);
+        //        _waitingInLineCount++; //increment  count
+        //    }
 
-            //reset
-            _waitingInLineCount = 0;
-        }
+        //    //reset
+        //    _waitingInLineCount = 0;
+        //}
 
 
         //PRIVATE METHODS

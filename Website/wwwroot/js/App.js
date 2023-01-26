@@ -271,6 +271,8 @@ var removeClassWrapper = (element, classString) => $(element).removeClass(classS
 var getTextWrapper = (element) => $(element).text();
 var getValueWrapper = (element) => $(element).val();
 var setValueWrapper = (element, value) => $(element).val(value);
+
+//todo check for functionality
 var IsOnline = () => window.navigator.onLine;
 
 function getPropWrapper(element, propName) {

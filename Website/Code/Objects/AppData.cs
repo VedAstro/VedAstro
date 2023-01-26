@@ -192,7 +192,6 @@ namespace Website
         }
         public static async Task<List<Person>> TryGetPersonList(IJSRuntime _jsRuntime)
         {
-            await ServerManager.IfBusyPleaseHold("TryGetPersonList");
 
             //check if people list already loaded before
             if (AppData.PersonList == null)

@@ -109,7 +109,7 @@ namespace Website
             //if fail log it and return empty list as not to break the caller
             else
             {
-                await jsRuntime.ShowAlert("error", "Failed to fetch name list.", true);
+                await jsRuntime.ShowAlert("error", AlertText.FailedNameList, true);
                 return new List<Person>();
             }
 

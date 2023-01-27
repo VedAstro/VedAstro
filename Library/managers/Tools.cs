@@ -858,16 +858,18 @@ namespace Genso.Astrology.Library
 
 
         /// <summary>
-        /// Removes all evil/invalid characters from a string
+        /// Removes all invalid characters for an person name
         /// used to clean name field user input
+        /// allowed chars : periods (.) and hyphens (-), space ( )
+        /// SRC:https://learn.microsoft.com/en-us/dotnet/standard/base-types/how-to-strip-invalid-characters-from-a-string
         /// </summary>
-        public static string CleanText(string nameInput)
+        public static string CleanNameText(string nameInput)
         {
             // Replace invalid characters with empty strings.
             try
             {
-                return Regex.Replace(nameInput, @"[^\w\.@-]", "",
-                    RegexOptions.None, TimeSpan.FromSeconds(1.5));
+                var cleanText = Regex.Replace(nameInput, @"[^\w\.\s*-]", "",RegexOptions.None, TimeSpan.FromSeconds(2));
+                return cleanText;
             }
             // If we timeout when replacing invalid characters,
             // we should return Empty.

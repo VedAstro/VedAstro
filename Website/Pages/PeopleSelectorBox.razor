@@ -5,11 +5,14 @@
 
 <div>
     <label class="form-label">@Label</label>
-    @*PersonSelector class used to programatically set visible person selection*@
-    <select @bind="SelectedPersonId" class="form-control PersonSelector" style="width: fit-content;min-width: 273px;">
-        <option value="">Select Name</option>
-        @DropDownOptionsHtml
-    </select>
+    <div class="hstack">
+        @*PersonSelector class used to programatically set visible person selection*@
+        <select @bind="SelectedPersonId" class="form-control PersonSelector" style="width: fit-content;min-width: 273px;">
+            <option value="">Select Name</option>
+            @DropDownOptionsHtml
+        </select>
+        <IconButton IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
+    </div>
 </div>
 
 
@@ -122,9 +125,6 @@
     {
         //set the backend data
         SelectedPersonId = personIdUrl;
-
-        //make visible selection change
-        //await _jsRuntime.SetValue(".PersonSelector", personIdUrl);
     }
 
 

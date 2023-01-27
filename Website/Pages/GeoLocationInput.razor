@@ -18,11 +18,9 @@
         </label>
         @*make input wider if without*@
         <div class="hstack">
-            <input @ref="_locationNameInput" @onblur="OnLocationNameUpdated" @bind="LocationName" type="text" class="form-control">
+            <input @ref="_locationNameInput" @onblur="SetCoordinatesFromNameInput" @bind="LocationName" type="text" class="form-control">
             @*dummy button to start location search*@
-            <div class="p-1 rounded border" style="cursor: pointer;height: 38px;margin-left: 4px;">
-                <span class="iconify" data-icon="bx:search-alt" data-width="23"></span>
-            </div>
+            <IconButton IconName="bx:search-alt" OnClickCallback="SetCoordinatesFromNameInput" />
         </div>
 
     </div>
@@ -49,7 +47,7 @@
     private ElementReference _latitudeInput;
     private string? _locationName = "";
     private double? _longitude = null;
-    private double?_latitude = null;
+    private double? _latitude = null;
 
 
     /// <summary>
@@ -136,8 +134,6 @@
 
 
 
-
-
     //PUBLIC METHODS
 
     public GeoLocation GetGeoLocation()
@@ -148,6 +144,10 @@
     /// <summary>
     /// Checks if input has valid location data, false if invalid
     /// If true, than GetGeoLocation can be called safely
+    /// Note:
+    /// technically this should not fail since defaulting of location
+    /// will handle invalid input, this is if that fails,
+    /// which it has so yeah keep it
     /// </summary>
     public bool IsValid()
     {
@@ -198,7 +198,7 @@
     /// <summary>
     /// When location name text is changed this method is called to fetch longitude & latitude
     /// </summary>
-    private void OnLocationNameUpdated(FocusEventArgs obj) => SetCoordinatesFromNameInput();
+    private void OnLocationNameUpdated() => SetCoordinatesFromNameInput();
 
     /// <summary>
     /// Takes location name and gets the coordinates

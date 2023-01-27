@@ -8,9 +8,17 @@
         min-width: 100px;
         /*align-self: center;*/
     }
+
+    /*usually placed next to input*/
+    .iconOnlyButton {
+        margin-left: 6px;
+        min-width: auto !important;
+        height: 37px;
+    }
+
 </style>
 
-<button @ref="ElementReference" @onclick="OnClickButton" class="@(SmallSize?"btn-sm":"") btn @(ButtonColorClass) hstack gap-2 iconButton">
+<button @ref="ElementReference" @onclick="OnClickButton" class="@(SmallSize?"btn-sm":"") @(IsIconOnly?"iconOnlyButton":"") btn @(ButtonColorClass) hstack gap-2 iconButton">
     <span class="iconify" data-icon="@IconName" data-width="25"></span> @ButtonText
 </button>
 @if (ShowDelayWarning)
@@ -28,6 +36,11 @@
     /// </summary>
     [Parameter]
     public string? ButtonText { get; set; }
+
+    /// <summary>
+    /// If true means no text provided so icon is made small by css class
+    /// </summary>
+    public bool IsIconOnly => string.IsNullOrEmpty(ButtonText);
 
     [Parameter]
     public bool ShowDelayWarning { get; set; } = false;

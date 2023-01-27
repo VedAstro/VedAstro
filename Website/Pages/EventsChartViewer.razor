@@ -13,24 +13,35 @@
 
     @*bottom chart options row*@
     <div class="hstack gap-3 mt-2">
-@*        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <Icon IconName="entypo:save" /> Save
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" @onclick="OnClickSaveAsImage">as Image <Icon IconName="uil:image-download" /></a></li>
+                <li><a class="dropdown-item" @onclick="OnClickSaveChartAPI">to Cloud <Icon IconName="material-symbols:cloud-upload" /></a></li>
+            </ul>
+        </div>
+
+        @*        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
         <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
 
-*@        @*only show mobile view when eventPreset & timePreset has been set*@
+        *@ @*only show mobile view when eventPreset & timePreset has been set*@
         @if (!string.IsNullOrEmpty(_eventPreset))
         {
-            <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true" />
+            <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true"/>
         }
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
         @if (!_nowSavedChart)
         {
-            <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChartAPI" SmallSize="true" />
+            @*            <IconButton ButtonText="Save Chart" IconName="entypo:save" OnClickCallback="OnClickSaveChartAPI" SmallSize="true" />
+        *@
         }
         @*only show "Direct Link" & "Delete" button if viewing saved chart*@
         @if (_nowSavedChart)
         {
-            <IconButton ButtonText="Copy Link" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
-            <IconButton ButtonText="Delete" IconName="fluent:delete-16-regular" OnClickCallback="OnClickDeleteChart" SmallSize="true" />
+            <IconButton ButtonText="Copy Link" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true"/>
+            <IconButton ButtonText="Delete" IconName="fluent:delete-16-regular" OnClickCallback="OnClickDeleteChart" SmallSize="true"/>
         }
     </div>
 </div>
@@ -204,8 +215,7 @@
     /// </summary>
     private async Task LoadChartIntoPage(string rawSvgChart)
     {
-
-        //2 Animate SVG chart with tiny JS lib
+        //create new chart from svg string
         await _jsRuntime.InvokeVoidAsync("ChartFromSvgString", rawSvgChart, _eventsChartSvgHolder);
 
         //get latest dark mode setting
@@ -236,7 +246,7 @@
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-    
+
     private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
     {
         //based on checked value hide or show
@@ -259,17 +269,6 @@
         var url = $"{ServerManager.WebDomainToApi}/chart/{personId}/{eventPreset}/{timePreset}";
 
         _jsRuntime.OpenNewTab(url);
-    }
-
-    private async Task OnClickHideLifeEvents()
-    {
-        //hide & show the relevant buttons
-        await _jsRuntime.Hide(_hideButton.ElementReference);
-        await _jsRuntime.Show(_showButton.ElementReference);
-
-        //hide element
-        await _jsRuntime.Hide("#LifeEventLinesHolder");
-
     }
 
     private async Task OnClickDeleteChart()
@@ -370,7 +369,12 @@
         return filtered;
     }
 
+    private async Task OnClickSaveAsImage()
+    {
+        //the downloading of the chart as image is done by JS
+        //this is done because, because save as image will be implemented directly in future
+        await _jsRuntime.InvokeVoidAsync("DownloadChartFileSVG");
 
-
+    }
 
 }

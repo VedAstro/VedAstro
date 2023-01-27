@@ -41,24 +41,12 @@ class EventsChart {
 
         this.$SvgChartElm = $SvgChartElm;
 
-        //all others relative to this element
-        //this.$ChartParentElm = $chartParentElm;
-
-        //get chart from URL instead
-        //if (rawSvgChart === "URL") {
-
-        //}
-        ////load inputed SVG chart
-        //else {
-        //    //inject SVG chart string into parent element
-        //    this.$SvgChartElm = EventsChart.injectIntoElement(this.$ChartParentElm[0], rawSvgChart);
-        //}
-
-        //if SVG chart already loaded then, save it for later
-        //var isLoaded = this.$ChartParentElm.children().first().is("svg");
-        //if (isLoaded) { this.$SvgChartElm = this.$ChartParentElm.children().first(); }
+        //make available for access from blazor
+        window.EventsChart = this;
 
     }
+
+    //ctor to call when need to make chart from data in URL (easy charts)
     static async ChartFromUrl($ChartParentElm) {
 
         console.log(`From URL`);
@@ -76,15 +64,10 @@ class EventsChart {
         newChart.animateChart();
     }
 
-    static async ChartFromSvgString(svgChartString, $ChartParentElm) {
+    //used by blazor pages
+    static async chartFromSvgString(svgChartString, $ChartParentElm) {
 
         console.log(`From SVG String`);
-
-        //this.ChartMode = "URL"; //save for later when animating
-        //get data to generate chart from URL
-        //var chartData = EventsChart.getDataFromUrl();
-
-        //var svgChartString = await EventsChart.getEventsChartFromApi(chartData);
 
         $ChartParentElm = $($ChartParentElm);
 
@@ -205,6 +188,32 @@ class EventsChart {
         }
     }
 
+    async downloadChartFileSVG() {
+
+
+        //chart name is file name
+        var _fileName = "Chart";
+
+        //change svg node to string, then add XML encoding info,
+        //since it is going to be an independent SVG file 
+        var svgElmString = this.$SvgChartElm[0].outerHTML;
+        var encoding = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+        var finalSvg = encoding + svgElmString;
+
+        //do the download
+        download(finalSvg, "image/svg+xml", _fileName);
+
+        //turns given content to file for download
+        function download(content, mimeType, filename) {
+            const a = document.createElement('a') // Create "a" element
+            const blob = new Blob([content], { type: mimeType }) // Create a blob (file-like object)
+            const url = URL.createObjectURL(blob) // Create an object URL from blob
+            a.setAttribute('href', url) // Set "a" element link
+            a.setAttribute('download', filename) // Set download filename
+            a.click() // Start downloading
+        }
+    }
+
 
     //STATIC FUNCTIONS
 
@@ -227,13 +236,13 @@ class EventsChart {
             case 'Smart Summary': EventsChart.toggleElm($("#BarChartRowSmart")); break;
             case 'Bar Summary': EventsChart.toggleElm($("#BarChartRow")); break;
             default:
-            {
-                if (tickOn) {
-                    EventsChart.highlightByEventName(text, $SvgChartElm);
-                } else {
-                    EventsChart.unhighlightByEventName(text, $SvgChartElm);
+                {
+                    if (tickOn) {
+                        EventsChart.highlightByEventName(text, $SvgChartElm);
+                    } else {
+                        EventsChart.unhighlightByEventName(text, $SvgChartElm);
+                    }
                 }
-            }
         }
 
     }
@@ -404,7 +413,6 @@ class EventsChart {
     //fired when mouse moves over dasa view box
     //used to auto update cursor line & time legend
     static async onMouseMoveHandler(mouse) {
-        //console.log(`JS: onMouseMoveDasaViewEventHandler`);
 
         //get relative position of mouse in Dasa view
         var mousePosition = getMousePositionInElement(mouse, ID.EventChartHolder);
@@ -428,7 +436,10 @@ class EventsChart {
             //gets the measurements of the dasa view holder
             //the element where cursor line will be moving
             //TODO read val from global var
-            let holderMeasurements = $(elementId)[0].getBoundingClientRect();
+            let holderMeasurements = $(elementId)[0]?.getBoundingClientRect();
+
+            //if holder measurements invalid then end here
+            if (holderMeasurements) { return 0; }
 
             //calculate mouse X relative to dasa view box
             let relativeMouseX = mouseEventData.clientX - holderMeasurements.left;
@@ -816,7 +827,8 @@ class EventsChart {
 }
 
 //GLUE METHOD > KEEP IT CLEAN
-async function ChartFromSvgString(rawSvgChart, chartParent) { EventsChart.ChartFromSvgString(rawSvgChart, chartParent); }
+async function ChartFromSvgString(rawSvgChart, chartParent) { EventsChart.chartFromSvgString(rawSvgChart, chartParent); }
+async function DownloadChartFileSVG() { window.EventsChart.downloadChartFileSVG(); }
 
 
 

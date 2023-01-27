@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Genso.Astrology.Library;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -117,16 +118,16 @@ namespace Website
                         var parsedXml = XElement.Parse(inputRawString);
                         return new WebResult<XElement>(true, parsedXml);
                     }
-                    catch (Exception e2) { WebLogger.Error(e2); } //if fail just void print
+                    catch (Exception e2) { WebLogger.Error(e2, inputRawString); } //if fail just void print
 
                     try
                     {
                         //OPTION 3 : json 3rd party reply
                         var parsedJson = JsonConvert.DeserializeXmlNode(inputRawString);
-                        var wrappedXml = XElement.Parse(parsedJson.InnerXml);
+                        var wrappedXml = XElement.Parse(parsedJson.InnerXml); //expected to fail if not right
                         return new WebResult<XElement>(true, wrappedXml);
                     }
-                    catch (Exception e3) { WebLogger.Error(e3); } //if fail just void print
+                    catch (Exception e3) { WebLogger.Error(e3, inputRawString); } //if fail just void print
 
                     //if control reaches here all has failed
                     return new WebResult<XElement>(false, Tools.ExceptionToXml(e1));

@@ -1,8 +1,5 @@
-<div align="center">
-  
-   [![](GithubImages/header-logo.png)](https://www.vedastro.org)
+[![](GithubImages/header-logo.png)](https://www.vedastro.org)
 
-</div>
 
 <h3 align="center">
   
@@ -41,7 +38,7 @@ The chart takes alot of computational power to generate, so please be patient af
 
 
 # Unexpected errors?
-There are new updates to the VedAstro WebApp almost **everyday!** Your browsers caches the old version,
+Click "Refresh", there are new updates to the VedAstro WebApp almost **everyday!** Your browsers caches the old version,
 which causes errors as it fails to work with the updated API Server. Do a hard refresh & clear your cache.
 This will solve 99% of the errors you face.
 

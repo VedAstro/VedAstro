@@ -345,6 +345,37 @@ namespace Website
         }
 
 
+        public static async Task<List<ChartName>> GetSavedChartNameList()
+        {
+            //get name list of all charts
+            //note: API will return readable name & hash for finding the chart later
+            var result = await ServerManager.ReadFromServerXmlReply(ServerManager.GetSavedEventsChartIdList, AppData.JsRuntime);
+
+            if (result.IsPass)
+            {
+                var rootXml = result.Payload;
+
+                var chartIdXmlList = rootXml.Elements().ToList();
+
+                //parse each xml, then return
+                var returnList = new List<ChartName>();
+                foreach (var chartXml in chartIdXmlList)
+                {
+                    returnList.Add(ChartName.FromXml(chartXml));
+                }
+
+                return returnList;
+            }
+            else
+            {
+                //raise alarm if fail
+                //todo better logging
+                throw new Exception("BLZ:GetSavedChartNameList FAIL");
+            }
+
+        }
+
+
 
 
 

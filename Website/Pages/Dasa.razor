@@ -87,9 +87,9 @@
                 <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
                 <select class="form-select" @bind="_selectedChartId" id="inputGroupSelect01">
                     <option selected>Choose...</option>
-                    @foreach (var chartIdXml in _allChartIdList)
+                    @foreach (var chart in _allChartList)
                     {
-                        <option value="@(chartIdXml.Element("ChartId")?.Value)">@(chartIdXml.Element("Name")?.Value)</option>
+                        <option value="@(chart.ChartId)">@(chart.Name)</option>
                     }
                 </select>
             </div>
@@ -222,7 +222,7 @@
     private MonthYearSelectorBox _startTimeSelector;
     private MonthYearSelectorBox _endTimeSelector;
 
-    private List<XElement> _allChartIdList = new List<XElement>();
+    private List<ChartName> _allChartList = new List<ChartName>();
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -485,12 +485,12 @@
 
         //reload list before showing
         //load a list of saved charts
-        _allChartIdList = await _dasaChartViewer?.GetSavedChartNameList();
+        _allChartList = await WebsiteTools.GetSavedChartNameList();
 
         //if no saved charts let user know
-        if (!_allChartIdList.Any())
+        if (!_allChartList.Any())
         {
-            await _jsRuntime.ShowAlert("info", "No saved charts, click save chart first.", false, 3000);
+            await _jsRuntime.ShowAlert("info", "No saved charts found, click \"Save to Cloud\" to add new.", false, 3000);
         }
 
         _jsRuntime.HideLoading();

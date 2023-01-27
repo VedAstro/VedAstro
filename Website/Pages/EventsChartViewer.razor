@@ -272,19 +272,6 @@
 
     }
 
-    //default to this, since api generates with events visible
-    //set every time after svg injected
-    //private async Task OnClickShowLifeEvents()
-    //{
-    //    //hide & show the relevant buttons
-    //    await _jsRuntime.Hide(_showButton.ElementReference);
-    //    await _jsRuntime.Show(_hideButton.ElementReference);
-
-    //    //show element
-    //    await _jsRuntime.Show("#LifeEventLinesHolder");
-
-    //}
-
     private async Task OnClickDeleteChart()
     {
         //show loading message
@@ -345,12 +332,13 @@
 
     }
 
+    //todo use for lite viewer
     private async Task OnClickSaveChartLocal()
     {
         await _jsRuntime.ShowLoading();
 
         //check if number of charts exceed 3 (real 4), as that seems to be chrome limit
-        var savedChartCount = (await GetSavedChartNameList()).Count;
+        var savedChartCount = (await WebsiteTools.GetSavedChartNameList()).Count;
         if (savedChartCount > 3)
         {
             await _jsRuntime.ShowAlert("success", $"Saved charts is full!", false, 2600);
@@ -382,23 +370,6 @@
         return filtered;
     }
 
-    public async Task<List<XElement>> GetSavedChartNameList()
-    {
-        //get name list of all charts
-        //note: API will return readable name & hash for finding the chart later
-        var result = await ServerManager.ReadFromServerXmlReply(ServerManager.GetSavedEventsChartIdList, _jsRuntime);
-        var rootXml = result.Payload;
-
-        //<Root>
-        //    <ChartName>
-        //        <Name>Viknesh - 4/1994 to 3/2114</Name>
-        //        <ChartId>895183858</ChartId>
-        //    </ChartName>
-        //</Root>
-        var chartIdXmlList = rootXml.Elements().ToList();
-
-        return chartIdXmlList;
-    }
 
 
 

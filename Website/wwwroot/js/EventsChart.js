@@ -439,7 +439,7 @@ class EventsChart {
             let holderMeasurements = $(elementId)[0]?.getBoundingClientRect();
 
             //if holder measurements invalid then end here
-            if (holderMeasurements) { return 0; }
+            if (!holderMeasurements) { return 0; }
 
             //calculate mouse X relative to dasa view box
             let relativeMouseX = mouseEventData.clientX - holderMeasurements.left;

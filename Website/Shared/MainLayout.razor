@@ -98,12 +98,12 @@
                 @*User already signed in show account button else show login button*@
                 @if (AppData.CurrentUser != UserData.Empty)
                 {
-                    <IconButton ButtonText="Log Out" ButtonColorClass="btn-warning" IconName="icon-park-outline:logout" OnClickCallback="OnClickSignOutButton"></IconButton>
-                    @*                    <IconButton ButtonText="Account" ButtonColorClass="btn-warning" IconName="material-symbols:settings-account-box-outline" OnClickCallback="OnClickNavBarLoginButton"></IconButton>
+                    <IconButton ButtonText="Log Out" ButtonColorClass="btn-warning" IconName="icon-park-outline:logout" OnClickCallback="OnClickSignOutButton" />
+                    @*<IconButton ButtonText="Account" ButtonColorClass="btn-warning" IconName="material-symbols:settings-account-box-outline" OnClickCallback="OnClickNavBarLoginButton"></IconButton>
             *@  }
                 else
                 {
-                    <IconButton ButtonText="Log In" ButtonColorClass="btn-warning" IconName="mdi:user-circle" OnClickCallback="OnClickNavBarLoginButton"></IconButton>
+                    <IconButton ButtonText="Log In" ButtonColorClass="btn-warning" IconName="mdi:user-circle" OnClickCallback="OnClickNavBarLoginButton" />
                 }
 
             </div>

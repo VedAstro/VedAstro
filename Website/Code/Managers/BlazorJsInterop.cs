@@ -364,6 +364,7 @@ namespace Website
 
         /// <summary>
         /// Equal to pressing Back button
+        /// goes back to when things were simple
         /// </summary>
         public static async Task GoBack(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("history.back");
 

@@ -1,0 +1,38 @@
+﻿@namespace Website.Pages
+@using Genso.Astrology.Library;
+@using System.Xml.Linq
+
+<div>
+    <div class="alert alert-@AlertType d-flex align-items-center" role="alert">
+        <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
+        <div>
+            <strong>@Title</strong><br />
+            @Description
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    /// <summary>
+    /// Text that will be displayed in button
+    /// Default : primary
+    /// </summary>
+    [Parameter]
+    public string? AlertType { get; set; } = "primary";
+
+    /// <summary>
+    /// Special icon name from icon-sets.iconify.design
+    /// </summary>
+    [Parameter]
+    public string? IconName { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? Description { get; set; }
+
+
+}

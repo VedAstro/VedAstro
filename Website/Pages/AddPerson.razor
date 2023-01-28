@@ -7,35 +7,43 @@
 
 <PageTop Title="Add New Person" IconName="icomoon-free:profile">
     <Description>
-        Add new Person's birth info for astronomical calculation
+        Person's birth info for astronomical calculation
     </Description>
     <ButtonsRow>
-        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+        
         @*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
         *@
     </ButtonsRow>
 </PageTop>
 
-<div class="vstack gap-3" style="max-width:286px">
-    <div>
-        <label>Name<HelpBox SmallIcon="true" HelpText="@HelpText.PrivateProfileName"></HelpBox></label>
-        <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+<div class="d-flex flex-wrap">
+    <div class="vstack gap-3 me-5 mb-4" style="max-width:286px">
+        <div>
+            <label>Name<HelpBox SmallIcon="true" HelpText="@HelpText.PrivateProfileName"></HelpBox></label>
+            <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+        </div>
+        <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
+        <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
+        <div>
+            <label>
+                Gender
+                <HelpBox SmallIcon="true" HelpText="@HelpText.Gender"></HelpBox>
+            </label>
+            <select @bind="_genderInput" class="form-control">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+        <div class="hstack gap-4">
+            <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+            <IconButton IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton" />
+        </div>
     </div>
-    <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
-    <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
-    <div>
-        <label>
-            Gender
-            <HelpBox SmallIcon="true" HelpText="@HelpText.Gender"></HelpBox>
-        </label>
-        <select @bind="_genderInput" class="form-control">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-    </div>
-    <IconButton ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
-
+    @*PRIVATE DATA MESSAGE*@
+    <InfoBox Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
 </div>
+
+
 
 @code {
     TimeInputSimple _timeInput;

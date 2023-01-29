@@ -2877,6 +2877,12 @@ namespace Genso.Astrology.Library
             throw new Exception("Thrimsamsa not found, error!");
         }
 
+        /// <summary>
+        /// When a sign is divided into 12 equal parts each is called a dwadasamsa and measures 2.5 degrees.
+        /// The Bhachakra can thus he said to contain 12x12=144 Dwadasamsas. The lords of the 12
+        /// Dwadasamsas in a sign are the lords of the 12 signs from it, i.e.,
+        /// the lord of the first Dwadasamsa in Mesha is Kuja, that of the second Sukra and so on.
+        /// </summary>
         public static ZodiacName GetPlanetDwadasamsaSign(PlanetName planetName, Time time)
         {
             //get sign planet is in
@@ -2888,7 +2894,7 @@ namespace Genso.Astrology.Library
             //get degrees in sign 
             var degreesInSign = planetSign.GetDegreesInSign().TotalDegrees;
 
-            //declare const number for saptamsa calculation
+            //declare const number for Dwadasamsa calculation
             const double maxDwadasamsaDegrees = 2.5; // 30/12
             const double maxSignDegrees = 30.0;
 

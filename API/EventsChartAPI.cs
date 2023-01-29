@@ -696,7 +696,7 @@ namespace API
 
                     //others are converted as is
                     default:
-                        returnList.Add(Enum.Parse<EventTag>(eventPreset));
+                        returnList.Add(Enum.Parse<EventTag>(preset));
                         break;
 
                 }

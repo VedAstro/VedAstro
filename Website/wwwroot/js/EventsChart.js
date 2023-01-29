@@ -79,9 +79,6 @@ class EventsChart {
     }
 
 
-    //DATA
-    //template used to generate legend rows
-
     //INSTANCE METHODS
     //brings the chart to live, call after constructor
     async animateChart() {
@@ -270,6 +267,7 @@ class EventsChart {
         var allEventRects = $SvgChartElm.find(ID.EventListHolder).children("rect");
 
         //find all rects representing the keyword based event
+        //note keyword will be planet name or house name
         allEventRects.each(function (index) {
             //get parsed time from rect
             var svgEventRect = this;
@@ -285,7 +283,7 @@ class EventsChart {
                 svgEventRect.setAttribute("fillORI", oriColor);
 
                 //set new highlight color
-                var highlightColor = EventsChart.getRandomHighlightColor();
+                var highlightColor = EventsChart.getHighlightColor(keyword);
                 svgEventRect.setAttribute("fill", highlightColor);
             }
 
@@ -750,13 +748,29 @@ class EventsChart {
         );
     }
 
-    static getRandomHighlightColor() {
-        var arrayValues = ["#ff60fa", "#ff60fa", "#ff60fa"];
+    static getHighlightColor(keyword) {
 
-        var arrayMax = arrayValues.length - 1;
-        var randomIndex = Math.floor(Math.random() * arrayMax);
+        switch (keyword.toLowerCase()) {
+            case "sun": return "#FFFF00";
+            case "moon": return "#00FFFF";
+            case "mars": return "#ff609b";
+            case "mercury": return "#005522";
+            case "jupiter": return "#ff60fa";
+            case "venus": return "#FF0099";
+            case "saturn": return "#60aaff";
+            case "rahu": return "#ffb460";
+            case "ketu": return "#faff60";
+        }
 
-        return arrayValues[randomIndex];
+        //default
+        return "ff60fa"; 
+
+        //    var arrayValues = ["#ff60fa", "#ff60fa", "#ff60fa"];
+
+        //    var arrayMax = arrayValues.length - 1;
+        //    var randomIndex = Math.floor(Math.random() * arrayMax);
+
+        //    return arrayValues[randomIndex];
     }
 
     //FUNCTION

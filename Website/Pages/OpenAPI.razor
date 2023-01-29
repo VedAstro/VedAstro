@@ -2,17 +2,40 @@
 @using System.Xml.Linq
 @attribute [Route(PageRoute.OpenAPI)]
 
-<PageTitle>Open API</PageTitle>
+<PageTitle>Open API | VedAstro</PageTitle>
 
-<PageTop Title="Open API | VedAstro" IconName="simple-icons:aiohttp">
+<PageTop Title="Open API" IconName="simple-icons:aiohttp">
     <Description>Access powerful astrological tools via a simple HTTP request for free.</Description>
 </PageTop>
 
-<h3>What is Open API?</h3>
-<h3>What is Open API?</h3>
-<p>An open API (often referred to as a public API) is a publicly available application programming interface
-    that provides developers with programmatic access to a proprietary software application or web service.</p>
+To get started make simple HTTP GET request using any language you want. With no authentication needed.
+Below examples is done with Sun as the planet, Singapore as the example and the time used is
+11:59PM 31st December 2000 UTC +08:00. It's very important you follow the URL format exactly,
+else the call will fail. This API is under constant development, so please report if you
+find bugs to help others.
 
+<h3>Get Zodiac Sign</h3>
+<p>https://www.vedastro.org/api/Location/Singapore/Time/23:59-31/12/2000+08:00/Sun/Sign/</p>
+
+<h3>Get Constellation (Nakshatra)</h3>
+<p>https://www.vedastro.org/api/Location/Singapore/Time/23:59-31/12/2000+08:00/Sun/Longitude/</p>
+
+<h3>Get Planet Longitude</h3>
+<p>https://www.vedastro.org/api/Location/Singapore/Time/23:59-31/12/2000+08:00/Sun/Longitude/</p>
+
+
+
+<h3>What is Open API?</h3>
+<p>
+    An open API (often referred to as a public API) is a publicly available application programming interface
+    that provides developers with programmatic access to a proprietary software application or web service.
+</p>
+
+<h3>API Server up-time?</h3>
+<p>
+    We use Azure Functions to run by reputable Microsoft server farms all over the world.
+    So overall up-time is almost 99%, not taking into account failures from bad code.
+</p>
 
 @code {
 

@@ -870,13 +870,11 @@ namespace API
             compiledRow += $@"
                             <script>//<![CDATA[
 
-                                var newChart = new EventsChart($(""#{randomId}""));
+                                new EventsChart($(""#{randomId}""));
 
                                 //animate chart
-                                newChart.animateChart();
+                                window.EventsChart.animateChart();
 
-                                //make available for debug
-                                window.EventsChart = newChart;
                             //]]>
                             </script>
                             ";

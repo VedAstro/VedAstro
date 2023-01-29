@@ -6,6 +6,7 @@
     /// </summary>
     public static class PageRoute
     {
+        public const string OpenAPI = "/OpenAPI";
         public const string SavedCharts = "/SavedCharts";
         public const string Login = "/Login";
         public const string Journal = "/Journal";

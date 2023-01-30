@@ -40,9 +40,13 @@ The chart takes alot of computational power to generate, so please be patient af
 
 
 # Unexpected errors?
-Click "Refresh", there are new updates to the VedAstro WebApp almost **everyday!** Your browsers caches the old version,
-which causes errors as it fails to work with the updated API Server. Do a hard refresh & clear your cache.
+Click &quot;Refresh&quot;, several times. This will clear the cache.
+Since there are new updates to the VedAstro WebApp almost <a target="_blank" rel="noopener noreferrer" href="https://github.com/gen-so/Genso.Astrology/commits/master" class="link-primary fw-bold">everyday!</a>
+The browser caches the old version, which causes errors
+as it fails to work with the updated API Server.
+Do a hard refresh &amp; clear your cache.
 This will solve 99% of the errors you face.
+
 
 # About
 Anybody who has studied Vedic Astrology knows well how accurate it can be.

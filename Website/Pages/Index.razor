@@ -43,7 +43,7 @@
 
 <div class="py-4" id="icon-grid">
     <h3 class="pb-2 border-bottom">
-        Calculators <button @onclick="() => _navigation.NavigateTo(PageRoute.CalculatorList)" type="button" class="btn btn-sm btn-outline-secondary">View All</button>
+        Quick Links <button @onclick="() => _navigation.NavigateTo(PageRoute.CalculatorList)" type="button" class="btn btn-sm btn-outline-secondary">View All</button>
     </h3>
     <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
         <div @onclick="() => _navigation.NavigateTo(PageRoute.Match)" style="cursor: pointer;" class="col">
@@ -55,7 +55,6 @@
                 </div>
             </div>
         </div>
-
         <div @onclick="() => _navigation.NavigateTo(PageRoute.Horoscope)" style="cursor: pointer;" class="col">
             <div class="card">
                 <img src="images/horoscope-card.jpg" class="card-img-top">
@@ -99,6 +98,15 @@
                 <div class="card-body">
                     <h5 class="card-title">Journal</h5>
                     <p class="card-text">Astrological journal to help understand your life events</p>
+                </div>
+            </div>
+        </div>
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.OpenAPI)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/open-api-card.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">Open API</h5>
+                    <p class="card-text">Access powerful astrological tools via a simple HTTP request for free</p>
                 </div>
             </div>
         </div>

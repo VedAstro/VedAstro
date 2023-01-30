@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -493,7 +493,7 @@ namespace Genso.Astrology.Library
             var fullName = resultXml?.Element("formatted_address")?.Value;
 
             //return to caller pass
-            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lat, lng));
+            return new WebResult<GeoLocation>(true, new GeoLocation(fullName, lng, lat));
         }
 
         /// <summary>
@@ -868,7 +868,7 @@ namespace Genso.Astrology.Library
             // Replace invalid characters with empty strings.
             try
             {
-                var cleanText = Regex.Replace(nameInput, @"[^\w\.\s*-]", "",RegexOptions.None, TimeSpan.FromSeconds(2));
+                var cleanText = Regex.Replace(nameInput, @"[^\w\.\s*-]", "", RegexOptions.None, TimeSpan.FromSeconds(2));
                 return cleanText;
             }
             // If we timeout when replacing invalid characters,

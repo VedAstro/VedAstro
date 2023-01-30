@@ -34,31 +34,31 @@
         </div><!-- sidebar-search -->
         <div class="sidebar-body">
             <nav class="nav-sidebar">
-                <a @ref="navLink1" @onclick="()=>OnClickNavItem(navLink1, PageRoute.Home)" style="cursor: pointer;" class="nav-link active">
+                <a @ref="navLink1" href="@PageRoute.Home" @onclick="()=>OnClickNavItem(navLink1, PageRoute.Home)" style="cursor: pointer;" class="nav-link active">
                     <span class="iconify" data-icon="ant-design:home-twotone" data-width="25"></span><span>Home</span>
                 </a>
-                <a @ref="navLink2" @onclick="()=>OnClickNavItem(navLink2, PageRoute.QuickGuide)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink2" href="@PageRoute.QuickGuide" @onclick="()=>OnClickNavItem(navLink2, PageRoute.QuickGuide)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="cil:book" data-width="25"></span><span>Quick Guide</span>
                 </a>
-                <a @ref="navLink3" @onclick="()=>OnClickNavItem(navLink3, PageRoute.AskAstrolger)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink3" href="@PageRoute.AskAstrolger" @onclick="()=>OnClickNavItem(navLink3, PageRoute.AskAstrolger)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="wpf:ask-question" data-width="25"></span><span>Ask Astrologer</span>
                 </a>
-                <a @ref="navLink4" @onclick="()=>OnClickNavItem(navLink4, PageRoute.CalculatorList)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink4" href="@PageRoute.CalculatorList" @onclick="()=>OnClickNavItem(navLink4, PageRoute.CalculatorList)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="bi:calculator" data-width="25"></span><span>Calculators</span>
                 </a>
-                <a @ref="navLink5" @onclick="()=>OnClickNavItem(navLink5, PageRoute.PersonList)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink5" href="@PageRoute.PersonList" @onclick="()=>OnClickNavItem(navLink5, PageRoute.PersonList)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="fluent:people-list-20-filled" data-width="25"></span><span>Person List</span>
                 </a>
-                <a @ref="navLink6" @onclick="()=>OnClickNavItem(navLink6, PageRoute.OpenAPI)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink6" href="@PageRoute.OpenAPI" @onclick="()=>OnClickNavItem(navLink6, PageRoute.OpenAPI)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="carbon:gateway-api" data-width="25"></span><span>Open API</span>
                 </a>
-                <a @ref="navLink7" @onclick="()=>OnClickNavItem(navLink7, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink7" href="@PageRoute.Contact" @onclick="()=>OnClickNavItem(navLink7, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="ci:mail" data-width="24"></span><span>Contact</span>
                 </a>
-                <a @ref="navLink8" @onclick="()=>OnClickNavItem(navLink8, PageRoute.Donate)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink8" href="@PageRoute.Donate" @onclick="()=>OnClickNavItem(navLink8, PageRoute.Donate)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="iconoir:donate" data-width="25"></span><span>Donate</span>
                 </a>
-                <a @ref="navLink9" @onclick="()=>OnClickNavItem(navLink9, PageRoute.About)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink9" href="@PageRoute.About" @onclick="()=>OnClickNavItem(navLink9, PageRoute.About)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="akar-icons:info" data-width="25"></span><span>About</span>
                 </a>
                 @*                <a @ref="navLink9" @onclick="()=>OnClickNavItem(navLink9, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">

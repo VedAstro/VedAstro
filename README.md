@@ -17,13 +17,14 @@
        and only visible in its reaction.</h5>
 
 # Links
-- [Quick Guide](https://www.vedastro.org/quickguide) learn how to use
+- [Quick Guide](https://www.vedastro.org/QuickGuide) learn how to use
 - [Open API](https://www.vedastro.org/OpenAPI) easily get astrology data for your app or website
+- [Calculators](https://www.vedastro.org/CalculatorList) easily get astrology data for your app or website
 - [About](https://www.vedastro.org/About) the reason and goal for this project
-- [Donate](https://www.vedastro.org/donate) to keep this project going
-- [Report](https://www.vedastro.org/contact) problems you find when using the WebApp
-- [Share](https://www.vedastro.org/contact) your ideas for new or better features 
-- [Fix](https://www.vedastro.org/contact) bugs & implement features
+- [Donate](https://www.vedastro.org/Donate) to keep this project going
+- [Report](https://www.vedastro.org/Contact) problems you find when using the WebApp
+- [Share](https://www.vedastro.org/Contact) your ideas for new or better features 
+- [Fix](https://www.vedastro.org/Contact) bugs & implement features
 
 <!--
 

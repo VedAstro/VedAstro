@@ -810,8 +810,10 @@ namespace API
             //get now line position
             var clientNowTime = startTime.StdTimeNowAtOffset;//now time at client
             var nowLinePosition = GetLinePosition(timeSlices, clientNowTime);
+            //skip now line if beyond chart on both sides
+            var beyondLimit = nowLinePosition == 0 || nowLinePosition == (timeSlices.Count-1);
             var nowLineHeight = lineHeight + 6; //space between icon & last row
-            compiledRow += GetNowLine(nowLineHeight, nowLinePosition);
+            compiledRow += GetNowLine(nowLineHeight, nowLinePosition, beyondLimit); //hides if beyond limit
 
             //5 WRAP IN GROUP
             //place all content except border & cursor time legend inside group for padding
@@ -1259,10 +1261,17 @@ namespace API
                         ";
         }
 
-        private static string GetNowLine(int lineHeight, int nowLinePosition)
+        /// <summary>
+        /// if set hide will set display as hidden
+        /// </summary>
+        private static string GetNowLine(int lineHeight, int nowLinePosition, bool hideOnLoad = false)
         {
+
+            //add hide style if caller specifies to hide on load
+            var extraClass = hideOnLoad ? "style=\"display: none;\"" : "";
+
             return $@"
-                       <g id=""NowVerticalLine"" x=""0"" y=""0"" transform=""matrix(1, 0, 0, 1, {nowLinePosition}, 0)"">
+                       <g id=""NowVerticalLine"" x=""0"" y=""0"" {extraClass} transform=""matrix(1, 0, 0, 1, {nowLinePosition}, 0)"">
 		                    <rect width=""2"" height=""{lineHeight}"" style="" fill:blue; stroke-width:0.5px; stroke:#000;""></rect>
 		                    <g transform=""matrix(2, 0, 0, 2, -12, {lineHeight})"">
 			                    <rect style=""fill:blue; stroke:black; stroke-width: 0.5px;"" x=""0"" y=""0"" width=""12"" height=""9.95"" rx=""2.5"" ry=""2.5""></rect>

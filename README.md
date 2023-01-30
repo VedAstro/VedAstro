@@ -1,6 +1,4 @@
 [![](GithubImages/header-logo.png)](https://www.vedastro.org)
-
-
 <h3 align="center">
   
   ![GitHub last commit](https://img.shields.io/github/last-commit/gen-so/Genso.Astrology)
@@ -20,11 +18,14 @@
 
 # Links
 - [Quick Guide](https://www.vedastro.org/quickguide) learn how to use
+- [Open API](https://www.vedastro.org/OpenAPI) easily get astrology data for your app or website
 - [About](https://www.vedastro.org/About) the reason and goal for this project
 - [Donate](https://www.vedastro.org/donate) to keep this project going
-- [Report](https://www.vedastro.org/contact) problems you find when using software
+- [Report](https://www.vedastro.org/contact) problems you find when using the WebApp
 - [Share](https://www.vedastro.org/contact) your ideas for new or better features 
 - [Fix](https://www.vedastro.org/contact) bugs & implement features
+
+<!--
 
 # Examples of Accurate Predictions
 The Dasa Life Calculator is the most advanced and amazingly accurate prediction tool we've ever seen.
@@ -35,6 +36,7 @@ The chart takes alot of computational power to generate, so please be patient af
 
 [![](GithubImages/napoleon-dasa-chart.png)](https://www.vedastro.org)
 [![](GithubImages/elizabeth-dasa-chart.png)](https://www.vedastro.org)
+ -->
 
 
 # Unexpected errors?
@@ -71,11 +73,11 @@ With continued support from investors &amp; users, this project has steadily dev
 Helping people from all over the world.
     
 # Credits &amp; Reference
-Thanks to B.V. Raman and his grandfather B. Suryanarain Rao. Information from their books is the source
+Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao. Information from their books is the source
 material & inspiration for this project. Please buy their books to show your support.
 Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".
 Last but not least, we thank users like you who keep this project going.
-
+<!--
 # Help us and get paid!
 Complete tasks for this project and get paid instantly! Each task has a different value based on complexity.
 To get started fork the repo, make your edits and submit pull request. Contact us for task details.
@@ -87,7 +89,7 @@ Show name of planet state in Horoscope page (combust, exalted, debilited) | $2 |
 Generate traditional Rasi, Navamsa South/North style chart | $5 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
 Find a spelling mistake in VedAstro.org content | $1 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
 Show name of planet motion in Horoscope page (retrograde, direct, stationary) | $1.5 | ![](https://img.shields.io/static/v1?label=&message=Done&color=green)
-
+ -->
 
 # Project Architecture : For Coders
 Key design notes to understand the internals of the program better.

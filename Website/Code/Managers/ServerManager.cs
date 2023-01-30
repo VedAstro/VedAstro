@@ -103,9 +103,11 @@ namespace Website
 
             WebResult<XElement> ParseData(string inputRawString)
             {
+                var exceptionList = new List<Exception>();
+
                 try
                 {
-                    //OPTION 1 : xml with standard reply
+                    //OPTION 1 : xml with VedAstro standard reply
                     var parsedXml = XElement.Parse(inputRawString);
                     var returnVal = WebResult<XElement>.FromXml(parsedXml);
                     return returnVal;
@@ -118,19 +120,24 @@ namespace Website
                         var parsedXml = XElement.Parse(inputRawString);
                         return new WebResult<XElement>(true, parsedXml);
                     }
-                    catch (Exception e2) { WebLogger.Error(e2, inputRawString); } //if fail just void print
+                    catch (Exception e2) { exceptionList.Add(e2); } 
 
                     try
                     {
                         //OPTION 3 : json 3rd party reply
-                        var parsedJson = JsonConvert.DeserializeXmlNode(inputRawString);
+                        var parsedJson = JsonConvert.DeserializeXmlNode(inputRawString,"LocationData");
                         var wrappedXml = XElement.Parse(parsedJson.InnerXml); //expected to fail if not right
                         return new WebResult<XElement>(true, wrappedXml);
                     }
-                    catch (Exception e3) { WebLogger.Error(e3, inputRawString); } //if fail just void print
+                    catch (Exception e3) { exceptionList.Add(e3); } //if fail just void print
+
+                    exceptionList.Add(e1);
+
+                    //send all exception data to server
+                    foreach (var exception in exceptionList) { WebLogger.Error(exception, inputRawString); }
 
                     //if control reaches here all has failed
-                    return new WebResult<XElement>(false, Tools.ExceptionToXml(e1));
+                    return new WebResult<XElement>(false, new XElement("Failed"));
                 }
             }
 

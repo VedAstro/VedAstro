@@ -20,7 +20,6 @@
 - [Quick Guide](https://www.vedastro.org/QuickGuide) learn how to use
 - [Open API](https://www.vedastro.org/OpenAPI) easily get astrology data for your app or website
 - [Calculators](https://www.vedastro.org/CalculatorList) each calculator shows an aspect of vedic astrology
-
 - [About](https://www.vedastro.org/About) the reason and goal for this project
 - [Donate](https://www.vedastro.org/Donate) to keep this project going
 - [Report](https://www.vedastro.org/Contact) problems you find when using the WebApp

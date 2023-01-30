@@ -21,14 +21,14 @@
     </p>
 
     <p>
-        API Server Address<br/>
+        API Server Address<br />
         <kbd>https://www.vedastro.org/api/...</kbd>
     </p>
-@*    <p>
-        Note: ... = https://www.vedastro.org/api
-        So final call will look like https://www.vedastro.org/api/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign
+    @*    <p>
+    Note: ... = https://www.vedastro.org/api
+    So final call will look like https://www.vedastro.org/api/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign
     </p>
-*@
+    *@
     @*    case "Rasi":
     case "Sign": returnVal = AstronomicalCalculator.GetPlanetRasiSign(planetName, parsedTime).ToString(); break;
     case "Navamsa": returnVal = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, parsedTime).ToString(); break;
@@ -84,8 +84,14 @@
 
     <h4 class="fw-bold">API Server up-time?</h4>
     <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-        We use Azure Functions to run by reputable Microsoft server farms all over the world.
-        So overall up-time is almost 99%, not taking into account failures from bad code.
+        We use Azure Functions run by reputable Microsoft server farms located all over the world.
+        So because of this overall up-time is almost 99%, not taking into account failures from bad code, of course.
+    </p>
+
+    <h4 class="fw-bold">API access price?</h4>
+    <p class="text-justify" style="max-width:@AppData.MaxWidth;">
+        All API calls are free without quota, paid for by users like you.
+        Consider donating to keep this API service going.
     </p>
 </div>
 

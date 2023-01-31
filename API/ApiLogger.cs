@@ -13,6 +13,7 @@ namespace API;
 public static class ApiLogger
 {
     private const string AppLogXml = "AppLog.xml";
+    private const string VisitorLogXml = "VisitorLog.xml";
     private const string ContainerName = "vedastro-site-data";
 
 
@@ -39,6 +40,27 @@ public static class ApiLogger
 
         //add error data to main app log file
         await APITools.AddXElementToXDocumentAzure(errorXml, AppLogXml, ContainerName);
+
+    }
+
+    public static async Task Visitor(HttpRequestMessage req)
+    {
+        //get data out of exception
+        //var errorXml = Tools.ExtractDataFromException(exception);
+
+        //get caller data for more debug info
+        var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
+
+        var visitorXml = new XElement("Visitor");
+
+        visitorXml.Add(Tools.TimeStampServerXml);
+        visitorXml.Add(new XElement("CallerIP", ipAddress));
+        visitorXml.Add(new XElement("Url", req?.RequestUri));
+        visitorXml.Add(new XElement("Data"), APITools.RequestToXmlString(req));
+        visitorXml.Add(Tools.TimeStampServerXml);
+
+        //add error data to main app log file
+        await APITools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
 
     }
 

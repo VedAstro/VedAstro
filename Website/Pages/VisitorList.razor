@@ -46,11 +46,6 @@
             <th style="width: 277px;">Url</th>
             <th style="width: 230px;">Data</th>
             <th>TimeStamp</th>
-            <th>Location</th>
-            @*            <th>IP</th>
-            <th>Device</th>
-            *@
-            <th>Error</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -62,12 +57,7 @@
                 <td class="link-primary" @onclick="@(()=> FilterByVisitorId(visitorXml.Element("VisitorId")?.Value))">@visitorXml.Element("VisitorId")?.Value</td>
                 <td>@visitorXml.Element("Url")?.Value</td>
                 <td>@visitorXml.Element("Data")?.Value;</td>
-                <td>@visitorXml.Element("TimeStamp")?.Value</td>
-                <td>@visitorXml.Element("Location")?.Element("city")?.Value,@visitorXml.Element("Location")?.Element("country")?.Value</td>
-                @*                <td>@visitorXml.Element("Location")?.Element("ip")?.Value</td>
-            <td>@visitorXml.Element("BrowserData")?.Element("browser")?.Element("name")?.Value|@visitorXml.Element("BrowserData")?.Element("os")?.Element("name")?.Value|@visitorXml.Element("BrowserData")?.Element("device")?.Value</td>
-            *@
-                <td>@visitorXml.Element("Error")?.Element("Message")?.Value</td>
+                <td>@visitorXml.Element("TimeStampServer")?.Value</td>
                 <td class="link-primary" @onclick="@(()=> ViewVisitor(visitorXml))">View</td>
             </tr>
         }

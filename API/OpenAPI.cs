@@ -17,6 +17,9 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/{propertyName}")]
             HttpRequestMessage incomingRequest, string locationName, string hhmmStr, string dateStr, string monthStr, string yearStr, string offsetStr, string planetNameStr, string propertyName)
         {
+            //log the call
+            ApiLogger.Visitor(incomingRequest);
+
             PlanetName planetName;
             var planetNameResult = PlanetName.TryParse(planetNameStr, out planetName);
             var geoLocationResult = await Tools.AddressToGeoLocation(locationName);

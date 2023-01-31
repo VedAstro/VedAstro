@@ -33,20 +33,28 @@ namespace Genso.Astrology.Library
             return;
 #endif
 
-            //get all visitor data
-            //var visitorXml = await GetVisitorDataXml(jsRuntime);
-
             //convert exception into nice xml
             var errorXml = Tools.ExtractDataFromException(exception);
 
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
-            //var userId = new XElement("UserId", AppData.CurrentUser?.Id);
-            //var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var dataXml = new XElement("Data", extraInfo);
-            //var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
-            visitorXml.Add( errorXml, dataXml, Tools.TimeStampSystemXml);
+            visitorXml.Add(errorXml, dataXml, Tools.TimeStampSystemXml);
+
+            //send to server for storage
+            await SendLogToServer(visitorXml);
+
+            Console.WriteLine("LibLogger: An unexpected error occurred and was logged.");
+        }
+        
+        public static async Task Error(XElement errorXml, string extraInfo = "")
+        {
+            //place error data into visitor tag
+            //this is done because visitor data might hold clues to error
+            var visitorXml = new XElement("Visitor");
+            var dataXml = new XElement("Data", extraInfo);
+            visitorXml.Add(errorXml, dataXml, Tools.TimeStampSystemXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);

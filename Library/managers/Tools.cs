@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -582,45 +582,86 @@ namespace Genso.Astrology.Library
 
             //if result from API is a failure then use system timezone
             //this is clearly an error, as such log it
-            //TODO user should be notified
             TimeSpan offsetMinutes;
             if (apiResult.IsPass) //all well
             {
+                //get the raw data from google
                 var timeZoneResponseXml = apiResult.Payload;
-                //extract out the timezone offset
+
+                //try parse Google API's payload
+                var isParsed = TryParseGoogleTimeZoneResponse(timeZoneResponseXml, out offsetMinutes);
+                if (isParsed) { goto Fail; }
+
+                //convert to string exp: +08:00
+                var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
+
+                //place data inside capsule
+                returnResult.Payload = parsedOffsetString;
+                returnResult.IsPass = true;
+                return returnResult;
+            }
+
+            Fail:
+            //mark as fail & use possibly inaccurate backup timezone (client browser's timezone)
+            returnResult.IsPass = false;
+            offsetMinutes = Tools.GetSystemTimezone();
+            returnResult.Payload = offsetMinutes.ToString("zzz");
+            return returnResult;
+
+        }
+
+        /// <summary>
+        /// When using google api to get timezone data, the API returns a reply in XML similar to one below
+        /// This function parses this raw XML data from google to TimeSpan data we need
+        /// It also checks for other failures like wrong location name
+        /// Failing when parsing this TimeZoneResponse XML has occurred enough times, for its own method
+        /// </summary>
+        public static bool TryParseGoogleTimeZoneResponse(XElement timeZoneResponseXml, out TimeSpan offsetMinutes)
+        {
+            //<?xml version="1.0" encoding="UTF-8"?>
+            //<TimeZoneResponse>
+            //    <status>INVALID_REQUEST </ status >
+            //    < error_message > Invalid request.Invalid 'location' parameter.</ error_message >
+            //</ TimeZoneResponse >
+
+            //extract out the data from google's reply timezone offset
+            var status = timeZoneResponseXml?.Element("status")?.Value ?? "";
+            var failed = status.Contains("INVALID_REQUEST");
+
+            //try process data if did NOT fail so far
+            if (!failed)
+            {
+                double offsetSeconds;
+
+                //get raw data from XML
                 var rawOffsetData = timeZoneResponseXml?.Element("raw_offset")?.Value;
 
                 //at times google api returns no valid data, but call is replied as normal
-                //as such let caller know something went wrong & set to 0s
-                double offsetSeconds;
-                if (string.IsNullOrEmpty(rawOffsetData))
+                //so check for that here, if fail end here
+                if (string.IsNullOrEmpty(rawOffsetData)) { goto Fail; }
+
+                //try to parse what ever value there is, should be number
+                else
                 {
-                    returnResult.IsPass = false;
-                    offsetSeconds = 0;
+                    var isNumber = double.TryParse(rawOffsetData, out offsetSeconds);
+                    if (!isNumber) { goto Fail; } //if not number end here
                 }
-                else { offsetSeconds = double.Parse(rawOffsetData); }
 
                 //offset needs to be "whole" minutes, else fail
                 //purposely hard cast to int to remove not whole minutes
                 var notWhole = TimeSpan.FromSeconds(offsetSeconds).TotalMinutes;
-                offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole));
-            }
-            else
-            {
-                //mark as fail & use possibly inaccurate backup timezone
-                returnResult.IsPass = false;
-                offsetMinutes = Tools.GetSystemTimezone();
+                offsetMinutes = TimeSpan.FromMinutes((int)Math.Round(notWhole)); //set
 
+                //let caller know valid data
+                return true;
             }
 
+        //if fail let caller know something went wrong & set to 0s
+        Fail:
+            LibLogger.Error(timeZoneResponseXml);
+            offsetMinutes = TimeSpan.Zero;
+            return false;
 
-
-            var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
-
-            //place data inside capsule
-            returnResult.Payload = parsedOffsetString;
-
-            return returnResult;
 
         }
 

@@ -73,6 +73,12 @@
     [Parameter]
     public bool HideLongLat { get; set; } = false;
 
+    /// <summary>
+    /// If true means latitude or longitude has been set by code or user
+    /// used to check location validity
+    /// </summary>
+    private bool IsLatitudeLongitudeDirty { get; set; } = false; //start as not dirty, clean
+
     //PARAMETERS
 
     public string LocationName
@@ -106,6 +112,9 @@
 
             //save the value
             _longitude = value;
+
+            //used to check location validity
+            IsLatitudeLongitudeDirty = true;
         }
     }
 
@@ -123,6 +132,9 @@
 
             //save the value
             _latitude = value;
+
+            //used to check location validity
+            IsLatitudeLongitudeDirty = true;
         }
 
     }
@@ -157,6 +169,11 @@
     {
         //check if the underlying data is valid
         if (string.IsNullOrEmpty(_locationName)) { return false; }
+        
+        //must be dirty else means it was not set, hence invalid location with only name
+        if (!IsLatitudeLongitudeDirty) { return false; }
+
+        //check incase it got nulled
         if (_longitude is null) { return false; }
         if (_latitude is null) { return false; }
 

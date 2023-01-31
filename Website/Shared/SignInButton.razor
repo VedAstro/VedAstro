@@ -78,7 +78,12 @@
     //private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
     private async Task OnClickSignInFacebook() => await InvokeAsync(async () => await _OnClickSignInFacebook()).Try(_jsRuntime);
 
-
+    /// <summary>
+    /// If true then, all buttons area loaded and ready
+    /// note: because parent can't know else if login buttons are ready
+    /// parent watches this to hide loading box
+    /// </summary>
+    public bool IsReady { get; set; } = false; //start as false
 
 
     //▒█▀▄▀█ ▒█▀▀▀ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▀▀█

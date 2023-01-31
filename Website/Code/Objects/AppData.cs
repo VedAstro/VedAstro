@@ -101,10 +101,15 @@ namespace Website
 
         /// <summary>
         /// If true means, loading box is still in show mode
-        /// note: main purpose to stop execution until message has popped
+        /// note: main purpose to stop execution until message has popped (shown)
         /// else serious lag at times
         /// </summary>
         public static bool IsShowLoading { get; set; } = false; //default false
+
+        /// <summary>
+        /// If true login is success
+        /// </summary>
+        public static bool IsLoginSuccess => AppData.CurrentUser != UserData.Empty;
 
         /// <summary>
         /// Hard coded max width used in pages 

@@ -2,7 +2,17 @@
 @attribute [Route(PageRoute.Login)]
 
 
-<SignInButton />
+<div class="d-flex flex-wrap">
+    <div class="vstack gap-3 me-5 mb-4" style="max-width:286px">
+        <SignInButton />
+    </div>
+    @*PRIVATE DATA MESSAGE*@
+    <div class="w-50">
+        <InfoBox FullWidth="@true" Title="Secure" Description="Your data is safe when you login securely with Google or Facebook." IconName="flat-color-icons:approval" />
+        <InfoBox AlertType="success" FullWidth="@true" Title="Easy" Description="Person profile data is saved for easy access on your next visit" IconName="flat-color-icons:close-up-mode" />
+        <InfoBox FullWidth="@true" Title="Support" Description="Our support team can you help you better if you login" IconName="flat-color-icons:customer-support" />
+    </div>
+</div>
 
 @code {
 
@@ -10,7 +20,7 @@
     {
         //after login this page is loaded again,
         //if login success, redirect user to previous page
-        if (AppData.CurrentUser != UserData.Empty)
+        if (AppData.IsLoginSuccess)
         {
             //goto page
             var previousPage = await _jsRuntime.GetProperty("PreviousPage");

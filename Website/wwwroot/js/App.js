@@ -24,6 +24,20 @@ function printConsoleMessage() {
         });
 }
 
+function saveMatchReportAsImage() {
+    var node = document.getElementById('my-node');
+
+    domtoimage.toPng(node)
+        .then(function (dataUrl) {
+            var img = new Image();
+            img.src = dataUrl;
+            document.appendChild(img);
+        })
+        .catch(function (error) {
+            console.error('oops, something went wrong!', error);
+        });
+}
+
 //Initializes the global error cather, from here error handler in blazor is called.
 //This is only a backup way to know unexpected exception occurred,
 //not really caught & handled

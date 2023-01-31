@@ -100,6 +100,7 @@ namespace Genso.Astrology.Library
                 }
                 else if (planetName == PlanetName.Ketu)
                 {
+                    //TODO CHECK HERE
                     planet = SwissEph.SE_MEAN_NODE;
                 }
 
@@ -4913,7 +4914,8 @@ namespace Genso.Astrology.Library
 
 
         /// <summary>
-        /// Gets the planets motion name, a name version of Chesta Bala
+        /// Gets the planets motion name, can be Retrograde, Direct, Stationary
+        /// a name version of Chesta Bala
         /// </summary>
         public static PlanetMotion GetPlanetMotionName(PlanetName planetName, Time time)
         {

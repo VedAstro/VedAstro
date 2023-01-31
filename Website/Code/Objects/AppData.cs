@@ -212,6 +212,9 @@ namespace Website
             return AppData.PersonList;
         }
 
+        /// <summary>
+        /// When called clears person list from memory, so new list is auto loaded from API on next get
+        /// </summary>
         public static void ClearPersonList() => AppData.PersonList = null;
 
     }

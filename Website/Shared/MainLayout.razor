@@ -281,6 +281,9 @@
         //removing it removes user's login
         await _jsRuntime.RemoveProperty("UserData");
 
+        //reset person's list
+        AppData.ClearPersonList();
+
         //reset app data
         AppData.CurrentUser = UserData.Empty;
 

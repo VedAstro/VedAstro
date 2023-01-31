@@ -11,19 +11,24 @@
     }
 
     #FacebookSignInButton {
-        width: 150px;
+        width: 170px;
         align-self: center;
         border-radius: 30px;
         padding-left: 29px;
     }
 
+/*    .MakeBig {
+        font-size: 31px;
+        width: 183px;
+    }
+*/
 </style>
 
 @*Colored box behind login/logout button*@
-<div class="rounded p-4" style="background:rgba(0, 255, 255, 0.1); margin-bottom: 180px;">
+<div class="rounded p-4" style="background:rgba(0, 255, 255, 0.1); margin-bottom: 7px;">
     
     @*User already signed in*@ 
-    @if (AppData.CurrentUser != UserData.Empty)
+    @if (AppData.IsLoginSuccess)
     {
         <div class="vstack gap-1" style="padding: 6px;">
             <span class="" style="align-self: center;padding: 10px; color: white;">@($"Hi, {AppData.CurrentUser?.FirstName}")</span>
@@ -33,10 +38,9 @@
     @*Not yet sign in*@
     else
     {
-
-        <div class="vstack gap-2">
+        <div class="vstack gap-4">
             @*FACEBOOK Sign In button*@
-            <button id="FacebookSignInButton" @onclick="OnClickSignInFacebook" class="btn btn-primary hstack gap-2 iconButton">
+            <button id="FacebookSignInButton" @onclick="OnClickSignInFacebook" class="MakeBig btn btn-primary hstack gap-2 iconButton">
                 <span class="iconify" data-icon="akar-icons:facebook-fill" data-width="25"></span> Sign In
             </button>
 
@@ -58,7 +62,7 @@
                      data-text="signin"
                      data-size="large"
                      data-logo_alignment="center"
-                     data-width="150"
+                     data-width="170"
                      id="GoogleSignInButton">
                 </div>
             </div>
@@ -67,16 +71,10 @@
     }
 </div>
 
+<hr/>
+
 @code {
 
-
-    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
-
-
-    //private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
-    private async Task OnClickSignInFacebook() => await InvokeAsync(async () => await _OnClickSignInFacebook()).Try(_jsRuntime);
 
     /// <summary>
     /// If true then, all buttons area loaded and ready
@@ -84,6 +82,15 @@
     /// parent watches this to hide loading box
     /// </summary>
     public bool IsReady { get; set; } = false; //start as false
+
+    
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+    //private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
+    private async Task OnClickSignInFacebook() => await InvokeAsync(async () => await _OnClickSignInFacebook()).Try(_jsRuntime);
+
 
 
     //▒█▀▄▀█ ▒█▀▀▀ ▀▀█▀▀ ▒█░▒█ ▒█▀▀▀█ ▒█▀▀▄ ▒█▀▀▀█

@@ -2,7 +2,7 @@
 @using Genso.Astrology.Library;
 @using System.Xml.Linq
 
-<div class="@(FullWidth?"":"w-50")">
+<div class="@(FullWidth?"":"w-50")" style="@(MaxWidth == null ? "":MaxWidthClass)">
     <div class="alert alert-@AlertType d-flex align-items-center" role="alert">
         <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
         <div>
@@ -41,5 +41,12 @@
     [Parameter]
     public bool FullWidth { get; set; } = false;
 
+    [Parameter]
+    public int MaxWidth { get; set; }
+
+    /// <summary>
+    /// used to make class applied in style attribute
+    /// </summary>
+    private string MaxWidthClass => $"max-width:{MaxWidth}px;";
 
 }

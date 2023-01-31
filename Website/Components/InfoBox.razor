@@ -3,11 +3,12 @@
 @using System.Xml.Linq
 
 <div class="@(FullWidth?"":"w-50")" style="@(MaxWidth == null ? "":MaxWidthClass)">
-    <div class="alert alert-@AlertType d-flex align-items-center" role="alert">
+    <div class="alert alert-@Color d-flex align-items-center" role="alert">
         <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
         <div>
             <strong>@Title</strong><br />
             @Description
+            @DescriptionHTML
         </div>
     </div>
 </div>
@@ -20,7 +21,7 @@
     /// Default : primary
     /// </summary>
     [Parameter]
-    public string? AlertType { get; set; } = "primary";
+    public string? Color { get; set; } = "primary";
 
     /// <summary>
     /// Special icon name from icon-sets.iconify.design
@@ -34,15 +35,22 @@
     [Parameter]
     public string? Description { get; set; }
 
+    [Parameter]
+    public RenderFragment? DescriptionHTML { get; set; }
+
+
     /// <summary>
-    /// If set true, class w-50 will be applied
-    /// default false
+    /// If set true, class w-50 will be removed
+    /// default false, with w-50 
     /// </summary>
     [Parameter]
     public bool FullWidth { get; set; } = false;
 
+    /// <summary>
+    /// Note: Needs to be nullable so that can detect if was set
+    /// </summary>
     [Parameter]
-    public int MaxWidth { get; set; }
+    public int? MaxWidth { get; set; }
 
     /// <summary>
     /// used to make class applied in style attribute

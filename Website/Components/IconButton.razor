@@ -22,7 +22,7 @@
 
 </style>
 
-<button @ref="ElementReference" @onclick="OnClickButton" class="@(SmallSize?"btn-sm":"") @(IsIconOnly?"iconOnlyButton":"") btn @(ButtonColorClass) hstack gap-2 iconButton">
+<button @ref="ElementReference" @onclick="OnClickButton" class="@(SmallSize?"btn-sm":"") @(IsIconOnly?"iconOnlyButton":"") btn btn-@(Color) hstack gap-2 iconButton">
     <span class="iconify" data-icon="@IconName" data-width="25"></span> @ButtonText
 </button>
 @if (ShowDelayWarning)
@@ -34,6 +34,8 @@
 }
 
 @code {
+
+
 
     /// <summary>
     /// Text that will be displayed in button
@@ -54,11 +56,11 @@
 
     /// <summary>
     /// Bootstrap button color class
-    /// default to : btn-primary
-    /// btn-secondary,btn-success,btn-danger,...
+    /// default to : primary
+    /// other:secondary,success,danger,...
     /// </summary>
     [Parameter]
-    public string ButtonColorClass { get; set; } = "btn-primary";
+    public string Color { get; set; } = "primary";
 
     /// <summary>
     /// Special icon name from icon-sets.iconify.design

@@ -590,10 +590,10 @@ namespace Genso.Astrology.Library
 
                 //try parse Google API's payload
                 var isParsed = TryParseGoogleTimeZoneResponse(timeZoneResponseXml, out offsetMinutes);
-                if (isParsed) { goto Fail; }
+                if (!isParsed) { goto Fail; } //not parsed end here
 
                 //convert to string exp: +08:00
-                var parsedOffsetString = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
+                var parsedOffsetString = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
 
                 //place data inside capsule
                 returnResult.Payload = parsedOffsetString;
@@ -605,9 +605,18 @@ namespace Genso.Astrology.Library
             //mark as fail & use possibly inaccurate backup timezone (client browser's timezone)
             returnResult.IsPass = false;
             offsetMinutes = Tools.GetSystemTimezone();
-            returnResult.Payload = offsetMinutes.ToString("zzz");
+            returnResult.Payload = Tools.TimeSpanToUTCTimezoneString(offsetMinutes);
             return returnResult;
 
+        }
+
+        /// <summary>
+        /// Given a timespan instance converts to string timezone +08:00
+        /// </summary>
+        private static string TimeSpanToUTCTimezoneString(TimeSpan offsetMinutes)
+        {
+            var x = DateTimeOffset.UtcNow.ToOffset(offsetMinutes).ToString("zzz");
+            return x;
         }
 
         /// <summary>

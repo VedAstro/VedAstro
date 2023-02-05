@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Genso.Astrology.Library;
@@ -63,8 +64,10 @@ namespace API
                 //calculate predictions for current person
                 var predictionList = await APITools.GetPrediction(person);
 
+                var sortedList = SortPredictionData(predictionList);
+
                 //convert list to xml string in root elm
-                return APITools.PassMessage(Tools.AnyTypeToXmlList(predictionList));
+                return APITools.PassMessage(Tools.AnyTypeToXmlList(sortedList));
 
             }
             catch (Exception e)
@@ -73,6 +76,18 @@ namespace API
                 await ApiLogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e);
+            }
+
+
+
+            List<HoroscopePrediction> SortPredictionData(List<HoroscopePrediction> horoscopePredictions)
+            {
+                //put rising sign at top
+                horoscopePredictions.Move((horPre) => horPre.FormattedName.ToLower().Contains("rising"), 0);
+
+                //todo followed by planet in sign prediction ordered by planet strength 
+
+                return horoscopePredictions;
             }
 
         }

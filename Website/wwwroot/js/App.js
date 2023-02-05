@@ -331,16 +331,19 @@ window.addWidthToEveryChild = function (element, widthToAdd) {
 };
 
 //scrolls to div on page and flashes div using JS
-function scrollToDiv(elemId) {
+function scrollToDiv(elmInput) {
+
+    var $elm = $(elmInput);
 
     //scroll to element
-    document.getElementById(elemId).scrollIntoView();
+    $elm[0].scrollIntoView();
+    //document.getElementById(elemId).scrollIntoView();
 
     //use JS to attarct attention to div
-    var idString = `#${elmId}`;
-    $(idString).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+    //var idString = `#${elmId}`;
+    $elm.fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
 
-    $(idString).fadeTo(100, 0.3, function () { $(this).fadeTo(500, 1.0); });
+    $elm.fadeTo(100, 0.4, function () { $(this).fadeTo(500, 1.0); });
 }
 
 

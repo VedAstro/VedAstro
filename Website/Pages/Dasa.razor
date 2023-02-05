@@ -104,8 +104,7 @@
 @*DASA VIEW BOX*@
 @*hide until ready but initialized as well*@
 <div style="@(_isResultReady?"":"display:none;")">
-    <div>
-        <HelpBox Label="Dasa" HelpText="@HelpText.DasaChart"></HelpBox>
+    <div @ref="_holderDiv">
         <EventsChartViewer @ref="_dasaChartViewer"></EventsChartViewer>
     </div>
 </div>
@@ -203,6 +202,7 @@
 
     private HoroscopeInfoView _horoscopeInfoView;
 
+    private ElementReference _holderDiv;
 
     private string _pageTitle = "Dasa";
     //--------------------FIELDS

@@ -1,4 +1,4 @@
-﻿@attribute [Route(PageRoute.Muhurtha)]
+@attribute [Route(PageRoute.Muhurtha)]
 @using Genso.Astrology.Library
 
 <PageTitle>@_pageTitle</PageTitle>
@@ -157,7 +157,6 @@
     <hr>
     @*DASA VIEW BOX*@
     <div style="margin-bottom: 50px">
-        <HelpBox Label="Events" HelpText="@HelpText.MuhurthaChart"></HelpBox>
         <EventsChartViewer @ref="_eventReportViewer"></EventsChartViewer>
     </div>
     @if (_isResultReady)

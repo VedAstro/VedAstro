@@ -542,11 +542,8 @@
 
     private void OnClickMoreInfo(string predictionName)
     {
-        //make a log
-        WebLogger.Data("Click : More Info : " + predictionName);
-
         //make scroll movement to place
-        _jsRuntime.InvokeVoidAsync("scrollToDiv", predictionName);
+        _jsRuntime.InvokeVoidAsync("scrollToDiv", "#"+predictionName);
     }
 
 }

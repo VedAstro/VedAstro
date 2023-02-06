@@ -2441,6 +2441,53 @@ namespace Genso.Astrology.Library
             return allPlanetLongitudeList;
         }
 
+        /// <summary>
+        /// Gets longitude positions of all planets Sayana / Fixed zodiac 
+        /// </summary>
+        public static List<PlanetLongitude> GetAllPlanetFixedLongitude(Time time)
+        {
+
+            //get longitudes of all planets
+            var sunLongitude = GetPlanetSayanaLongitude(time, PlanetName.Sun);
+            var sun = new PlanetLongitude(PlanetName.Sun, sunLongitude);
+
+            var moonLongitude = GetPlanetSayanaLongitude(time, PlanetName.Moon);
+            var moon = new PlanetLongitude(PlanetName.Moon, moonLongitude);
+
+            var marsLongitude = GetPlanetSayanaLongitude(time, PlanetName.Mars);
+            var mars = new PlanetLongitude(PlanetName.Mars, marsLongitude);
+
+            var mercuryLongitude = GetPlanetSayanaLongitude(time, PlanetName.Mercury);
+            var mercury = new PlanetLongitude(PlanetName.Mercury, mercuryLongitude);
+
+            var jupiterLongitude = GetPlanetSayanaLongitude(time, PlanetName.Jupiter);
+            var jupiter = new PlanetLongitude(PlanetName.Jupiter, jupiterLongitude);
+
+            var venusLongitude = GetPlanetSayanaLongitude(time, PlanetName.Venus);
+            var venus = new PlanetLongitude(PlanetName.Venus, venusLongitude);
+
+            var saturnLongitude = GetPlanetSayanaLongitude(time, PlanetName.Saturn);
+            var saturn = new PlanetLongitude(PlanetName.Saturn, saturnLongitude);
+
+            var rahuLongitude = GetPlanetSayanaLongitude(time, PlanetName.Rahu);
+            var rahu = new PlanetLongitude(PlanetName.Rahu, rahuLongitude);
+
+            var ketuLongitude = GetPlanetSayanaLongitude(time, PlanetName.Ketu);
+            var ketu = new PlanetLongitude(PlanetName.Ketu, ketuLongitude);
+
+
+
+            //add longitudes to list
+            var allPlanetLongitudeList = new List<PlanetLongitude>
+            {
+                sun, moon, mars, mercury, jupiter, venus, saturn, ketu, rahu
+            };
+
+
+            //return list;
+            return allPlanetLongitudeList;
+        }
+
         public static int GetHousePlanetIsIn(Time time, PlanetName planetName)
         {
 

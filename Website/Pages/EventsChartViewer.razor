@@ -4,17 +4,13 @@
 @using System.Text
 
 
-<div class="vstack gap-1" style="width: fit-content;">
-    @*
-    dark mode is disabled for chart with mix-blend-mode
-    note: extra logic to remove filter in normal mode
-    *@
-    <div class="container-xxl" id="EventsChartSvgHolder" @ref="_eventsChartSvgHolder" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
+<div @ref="Element" class="vstack gap-1" style="width: fit-content;">
 
-    @*bottom chart options row*@
     <div class="hstack gap-3 mt-2">
+        <HelpBox Label="Dasa" HelpText="@HelpText.DasaChart"></HelpBox>
+
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <Icon IconName="entypo:save" /> Save
             </button>
             <ul class="dropdown-menu">
@@ -23,13 +19,83 @@
             </ul>
         </div>
 
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <Icon IconName="entypo:save" /> Planets
+            </button> 
+            <ul class="dropdown-menu">
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" >
+                        <label class="form-check-label" for="flexCheckDefault">Sun</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" >
+                        <label class="form-check-label" for="flexCheckDefault">Moon</label>
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+
+@*        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <Icon IconName="entypo:save" /> Highlight
+            </button>
+            <ul class="dropdown-menu">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Planets</th>
+                        <th scope="col">Houses</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td colspan="2">Larry the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <li>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">Sun</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Moon
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+*@
         @*        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
         <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
 
         *@ @*only show mobile view when eventPreset & timePreset has been set*@
         @if (!string.IsNullOrEmpty(_eventPreset))
         {
-            <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true"/>
+            <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true" />
         }
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
         @if (!_nowSavedChart)
@@ -40,14 +106,28 @@
         @*only show "Direct Link" & "Delete" button if viewing saved chart*@
         @if (_nowSavedChart)
         {
-            <IconButton ButtonText="Copy Link" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true"/>
-            <IconButton ButtonText="Delete" IconName="fluent:delete-16-regular" OnClickCallback="OnClickDeleteChart" SmallSize="true"/>
+            <IconButton ButtonText="Copy Link" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+            <IconButton ButtonText="Delete" IconName="fluent:delete-16-regular" OnClickCallback="OnClickDeleteChart" SmallSize="true" />
         }
     </div>
+
+    @*
+    dark mode is disabled for chart with mix-blend-mode
+    note: extra logic to remove filter in normal mode
+    *@
+    <div class="container-xxl" id="EventsChartSvgHolder" @ref="_eventsChartSvgHolder" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
+
+    @*bottom chart options row*@
 </div>
 
 
 @code {
+
+    /// <summary>
+    /// Reference to main holder div
+    /// </summary>
+    public ElementReference Element;
+
     /// <summary>
     /// Id of chart that is shown
     /// </summary>

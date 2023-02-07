@@ -20,9 +20,9 @@ namespace Publisher
 {
     internal class Program
     {
-        private static string projectPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website";
-        private static string projectBuildPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\publish\\wwwroot";
-        private static string projectBuildPath2 = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\wwwroot";
+        private static string projectPath = "C:\\Users\\Vignes\\Desktop\\Genso.Astrology\\Website";
+        private static string projectBuildPath = "C:\\Users\\Vignes\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\publish\\wwwroot";
+        private static string projectBuildPath2 = "C:\\Users\\Vignes\\Desktop\\Genso.Astrology\\Website\\bin\\Release\\net7.0\\wwwroot";
         private static string? _nukeOld;
         private static IConfigurationRoot _config;
         private const string _lastmodifiedticks = "lastmodifiedticks";
@@ -203,6 +203,9 @@ namespace Publisher
 
             Console.WriteLine("\nUpload Complete");
         }
+
+        private static string UploadSasUri = "https://vedastrowebsitestorage.blob.core.windows.net/$web?sp=racwdli&st=2023-02-03T09:38:54Z&se=2043-02-03T17:38:54Z&spr=https&sv=2021-06-08&sr=c&sig=OqjFb0LYvekW984RbcUjaQH32NIGCJLyv6O2h2jK5pU%3D";
+
         private static void UploadToAzureAzCopySync()
         {
             Console.WriteLine("UploadToAzureAzCopySync : START");
@@ -214,7 +217,8 @@ namespace Publisher
 
             //run build from power shell since correct dir
             var ps = PowerShell.Create();
-            var script = $@"./azcopy.exe sync '{projectBuildPath}' '{_config["UploadSasUri"]}' --recursive --delete-destination=true";
+            //var script = $@"./azcopy.exe sync '{projectBuildPath}' '{_config["UploadSasUri"]}' --recursive --delete-destination=true";
+            var script = $@"./azcopy.exe sync '{projectBuildPath}' '{UploadSasUri}' --recursive --delete-destination=true";
             ps.AddScript(script);
             ps.Invoke();
 
@@ -235,7 +239,7 @@ namespace Publisher
 
             //run build from power shell since correct dir
             var ps = PowerShell.Create();
-            var script = $@"./azcopy.exe sync '{syncLocalPath}' '{_config["UploadSasUri"]}' --recursive --delete-destination=true";
+            var script = $@"./azcopy.exe sync '{syncLocalPath}' '{UploadSasUri}' --recursive --delete-destination=true";
             ps.AddScript(script);
             ps.Invoke();
 
@@ -247,7 +251,7 @@ namespace Publisher
         }
         private static void AzCopySyncJS()
         {
-            var syncLocalPath = "C:\\Users\\vigne\\OneDrive\\Desktop\\Genso.Astrology\\Website\\wwwroot\\js";
+            var syncLocalPath = "C:\\Users\\Vignes\\Desktop\\Genso.Astrology\\Website\\wwwroot\\js";
 
             Console.WriteLine("Start Sync");
             Console.WriteLine("*****************************************************");
@@ -284,7 +288,7 @@ namespace Publisher
             //run build from power shell since correct dir
             var ps = PowerShell.Create();
             //var script = $@"./azcopy.exe sync '{projectBuildPath}' '{_config["UploadSasUri"]}' --recursive --delete-destination=true --log-level=INFO";
-            var script = $@"./azcopy.exe remove '{_config["UploadSasUri"]}' --from-to=BlobTrash --list-of-files ""C:\Users\vigne\OneDrive\Desktop\Genso.Astrology\Publisher\WebFilesToDeleteAlways.txt"" --recursive --log-level=INFO";
+            var script = $@"./azcopy.exe remove '{UploadSasUri}' --from-to=BlobTrash --list-of-files ""C:\Users\Vignes\Desktop\Genso.Astrology\Publisher\WebFilesToDeleteAlways.txt"" --recursive --log-level=INFO";
             ps.AddScript(script);
             ps.Invoke();
 

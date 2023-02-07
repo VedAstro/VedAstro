@@ -14,15 +14,6 @@ namespace API
     /// </summary>
     public class GeneralAPI
     {
-        /// <summary>
-        /// Function for debugging purposes
-        /// Call to see if return correct IP
-        /// </summary>
-        [FunctionName("getipaddress")]
-        public static async Task<IActionResult> GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestMessage incomingRequest)
-        {
-            return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip");
-        }
 
         [FunctionName("getmatchreport")]
         public static async Task<IActionResult> GetMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
@@ -83,7 +74,7 @@ namespace API
             List<HoroscopePrediction> SortPredictionData(List<HoroscopePrediction> horoscopePredictions)
             {
                 //put rising sign at top
-                horoscopePredictions.Move((horPre) => horPre.FormattedName.ToLower().Contains("rising"), 0);
+                horoscopePredictions.MoveToBeginning((horPre) => horPre.FormattedName.ToLower().Contains("rising"));
 
                 //todo followed by planet in sign prediction ordered by planet strength 
 

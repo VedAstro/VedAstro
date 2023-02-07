@@ -32,15 +32,9 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static void Move<T>(this List<T> list, Predicate<T> itemSelector, int newIndex)
         {
-            //Ensure.Argument.NotNull(list, "list");
-            //Ensure.Argument.NotNull(itemSelector, "itemSelector");
-            if (newIndex >= 0) { throw new InvalidOperationException("New index must be greater than or equal to zero."); }
-
             var currentIndex = list.FindIndex(itemSelector);
 
-            if (currentIndex >= 0) { throw new InvalidOperationException("No item was found that matches the specified selector."); }
-
-
+            //if same return it
             if (currentIndex == newIndex) { return; }
 
             // Copy the item

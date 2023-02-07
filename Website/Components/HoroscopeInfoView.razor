@@ -96,7 +96,8 @@
                     <tbody>
                         @foreach (var prediction in _filteredHoroscopePredictions)
                         {
-                            <tr>
+                            @*log when when user reads a predictions*@
+                            <tr @onmouseenter="@(()=>WebLogger.Data("Mouse Over: "+@prediction.FormattedName))"> 
                                 <td>@prediction.FormattedName</td>
                                 <td>@prediction.Description</td>
                                 <td>@prediction.RelatedBody</td>
@@ -168,7 +169,7 @@
 
 
         //---------------------------
-        async Task  setPredictionPerson(Person person)
+        async Task setPredictionPerson(Person person)
         {
             //get horoscope predictions from API server
             var personIdXml = new XElement("PersonId", selectedPerson.Id);

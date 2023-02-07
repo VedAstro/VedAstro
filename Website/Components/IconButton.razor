@@ -22,9 +22,16 @@
 
 </style>
 
-<button @ref="ElementReference" @onclick="OnClickButton" class="@(SmallSize?"btn-sm":"") @(IsIconOnly?"iconOnlyButton":"") btn btn-@(Color) hstack gap-2 iconButton">
-    <span class="iconify" data-icon="@IconName" data-width="25"></span> @ButtonText
+<button @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
+    @*only show icon if specified*@
+    @if (IconName != null)
+    {
+        <span class="iconify" data-icon="@IconName" data-width="25" />
+    }
+    @ButtonText
 </button>
+
+@*text below button*@
 @if (ShowDelayWarning)
 {
     <div class="hstack gap-1" style="align-items: start;margin-top: -10px;">
@@ -35,7 +42,29 @@
 
 @code {
 
+    /// <summary>
+    /// the final class list added to button elm
+    /// </summary>
+    private string ButtonClassStr
+    {
+        get
+        {
+            //add outline class if specified
+            var colorStyle = $"btn-{Color}" + (Outline ? "-outline " : " ");
 
+            return (SmallSize ? "btn-sm " : "") //remember space between class names
+                   + (IsIconOnly ? "iconOnlyButton " : "")
+                   + colorStyle
+                   + "btn hstack gap-2 iconButton "
+                   + ExtraClass;
+        }
+    }
+
+    /// <summary>
+    /// Bootstrap outline
+    /// </summary>
+    [Parameter]
+    public bool Outline { get; set; } = false;
 
     /// <summary>
     /// Text that will be displayed in button
@@ -64,9 +93,16 @@
 
     /// <summary>
     /// Special icon name from icon-sets.iconify.design
+    /// If not specified, icon automatically not set
     /// </summary>
     [Parameter]
     public string? IconName { get; set; }
+
+    /// <summary>
+    /// If specified extra, added directly to button class attribute
+    /// </summary>
+    [Parameter]
+    public string? ExtraClass { get; set; }
 
 
     /// <summary>

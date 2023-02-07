@@ -6,6 +6,11 @@
     /// </summary>
     public static class PageRoute
     {
+        public const string NasaJPLSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";
+        public const string SwissEphSource = "https://www.astro.com/swisseph/swephinfo_e.htm";
+        public const string SwissEphemerisAPI = "/SwissEphemerisAPI";
+        public const string HouseAPI = "/HouseAPI";
+        public const string PlanetAPI = "/PlanetAPI";
         public const string OpenAPI = "/OpenAPI";
         public const string SavedCharts = "/SavedCharts";
         public const string Login = "/Login";
@@ -16,7 +21,7 @@
         public const string SearchResult = "/SearchResult";
         public const string SearchResultParam = "/SearchResult/{SearchText}";
         public const string Debug = "/Debug";
-        public const string AskAstrolger = "/AskAstrolger";
+        public const string AskAstrologer = "/AskAstrologer";
         public const string BirthTimeFinder = "/BirthTimeFinder";
         public const string VisitorListOld = "/VisitorListOld";
         public const string VisitorList = "/VisitorList";

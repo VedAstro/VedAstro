@@ -51,9 +51,10 @@
     {
         get
         {
+            //btn btn-outline-primary
+            //btn btn-primary
             //add outline class if specified
-            var colorStyle = $"btn-{Color}" + (Outline ? "-outline " : " ");
-
+            var colorStyle = $"btn" + (Outline ? $"-outline-{Color}" : $"-{Color}");
             return (SmallSize ? "btn-sm " : "") //remember space between class names
                    + (IsIconOnly ? "iconOnlyButton " : "")
                    + (IsIconTextButton ? "hstack gap-2 iconButton " : "") //if only text than no extra classes

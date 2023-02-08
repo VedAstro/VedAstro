@@ -22,35 +22,40 @@
         public const string SearchResultParam = "/SearchResult/{SearchText}";
         public const string Debug = "/Debug";
         public const string AskAstrologer = "/AskAstrologer";
-        public const string BirthTimeFinder = "/BirthTimeFinder";
-        public const string VisitorListOld = "/VisitorListOld";
+        
+        //CALCULATORS
+        public const string CalculatorList = "/Calculator";
+        public const string SunRiseSetTime = "Calculator/SunRiseSetTime";
+        public const string BirthTimeFinder = "Calculator/BirthTimeFinder";
+        public const string LocalMeanTime = "Calculator/LocalMeanTime";
+        public const string Horoscope = "Calculator/Horoscope";
+        public const string HoroscopeParam = "Calculator/Horoscope/{PersonIdUrl}";
+        public const string HoroscopeData = "Calculator/HoroscopeData";
+        public const string Muhurtha = "Calculator/Muhurtha";
+        public const string Match = "Calculator/Match";
+        public const string MatchReport = "Calculator/MatchReport";
+        public const string MatchReportParam = "Calculator/MatchReport/{MaleId}/{FemaleId}";
+
+        //PAGES
         public const string VisitorList = "/VisitorList";
         public const string TaskEditor = "/TaskEditor";
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
         public const string PersonList = "/PersonList";
-        public const string CalculatorList = "/CalculatorList";
         public const string PersonEditor = "/PersonEditor";
         public const string PersonEditorParam = "/PersonEditor/{PersonId}";
         public const string Donate = "/Donate";
         public const string DonatePayment = $"{Donate}/Payment";
         public const string About = "/About";
         public const string Contact = "/Contact";
-        public const string Horoscope = "/Horoscope";
-        public const string HoroscopeParam = "/Horoscope/{PersonIdUrl}";
-        public const string HoroscopeData = "/HoroscopeData";
-        public const string Muhurtha = "/Muhurtha";
-        public const string Match = "/Match";
-        public const string MatchReport = "/MatchReport";
-        public const string MatchReportParam = "/MatchReport/{MaleId}/{FemaleId}";
-        public const string SunRiseSetTime = "/SunRiseSetTime";
         public const string AddLifeEvent = "/AddLifeEvent";
         public const string AddPerson = "/AddPerson";
-        public const string LocalMeanTime = "/LocalMeanTime";
         public const string Dasa = "/Dasa";
         public const string QuickGuide = "/QuickGuide";
         public const string DasaCached = "/DasaCached";
         public const string FeatureList = "/FeatureList";
         public const string Home = "/";
+
+        //LINKS
         public const string HttpHome = "https://www.vedastro.org";
         public const string PatreonPage = "https://patreon.com/vedastro";
         public const string KoFiPage = "https://ko-fi.com/vedastro";

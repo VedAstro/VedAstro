@@ -23,6 +23,8 @@
     //DEFAULTS
     const string DefaultLabel = "Person";
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
+    private const string NotSelectedPersonId = "0";
+    private string _selectedPersonId = NotSelectedPersonId;
 
 
     //PARAMETERS
@@ -48,8 +50,6 @@
         }
     }
 
-    private const string NotSelectedPersonId = "0";
-    private string _selectedPersonId = NotSelectedPersonId;
 
 
     /// <summary>

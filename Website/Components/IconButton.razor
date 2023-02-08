@@ -4,6 +4,7 @@
 
 
 <style>
+    /*button with icon amd text*/
     .iconButton {
         width: fit-content;
         height: fit-content;
@@ -18,8 +19,9 @@
         margin-left: 6px;
         min-width: auto !important;
         height: 37px;
+        width: fit-content;
+        height: fit-content;
     }
-
 </style>
 
 <button @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
@@ -54,8 +56,9 @@
 
             return (SmallSize ? "btn-sm " : "") //remember space between class names
                    + (IsIconOnly ? "iconOnlyButton " : "")
+                   + (IsIconTextButton ? "hstack gap-2 iconButton " : "") //if only text than no extra classes
                    + colorStyle
-                   + "btn hstack gap-2 iconButton "
+                   + "btn "
                    + ExtraClass;
         }
     }
@@ -76,6 +79,11 @@
     /// If true means no text provided so icon is made small by css class
     /// </summary>
     public bool IsIconOnly => string.IsNullOrEmpty(ButtonText);
+
+    /// <summary>
+    /// If true means text and icon provided
+    /// </summary>
+    public bool IsIconTextButton => !(string.IsNullOrEmpty(ButtonText)) && !(string.IsNullOrEmpty(IconName)); //button text not empty and icon name not empty
 
     [Parameter]
     public bool ShowDelayWarning { get; set; } = false;

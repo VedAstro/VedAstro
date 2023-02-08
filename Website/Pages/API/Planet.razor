@@ -8,14 +8,16 @@
     <Description>Access astrological data related to planets via a simple API call</Description>
 </PageTop>
 
-
+<UnderConstructionHeader/>
 
 <h3>API Call List</h3>
 <table class="table table-striped table-hover table-bordered mb-5 mt-4">
     <thead class="table-dark">
         <tr>
-            <th scope="col">Planet Data</th>
+            <th scope="col"><span class="hstack gap-2">Data Name<HelpBox SmallIcon="true" HelpText="Name of the data being accessed"></HelpBox></span></th>
+            <th scope="col"><span class="hstack gap-2">Call<HelpBox SmallIcon="true" HelpText="How to call this API"></HelpBox></span></th>
         </tr>
+
     </thead>
     <tbody>
         <tr>
@@ -23,8 +25,12 @@
                 <div class="gap-1 vstack mb-1">
                     <b style="font-size: 22px;">Rasi / Sign</b>
                     <p style="margin: 0px; font-size: 15px;">Gets the zodiac sign behind a planet at a given time. (Sayana)</p>
-                    <kbd>.../Planet/Sun/Sign</kbd>
+
                 </div>
+            </td>
+            <td>
+                <kbd class ="mb-2">.../Planet/Sun/Sign</kbd>
+                <IconButton ButtonText="Demo Call" IconName="uil:cloud-data-connection" OnClickCallback="@(() => OnClickTestAPI("Sign"))" SmallSize="true" />
             </td>
         </tr>
         <tr>
@@ -32,8 +38,11 @@
                 <div class="gap-1 vstack mb-1">
                     <b style="font-size: 22px;">Navamsa Sign</b>
                     <p style="margin: 0px; font-size: 15px;">Gets the Navamsa sign of a planet at a given time.</p>
-                    <kbd>.../Planet/Sun/Navamsa</kbd>
                 </div>
+            </td>
+            <td>
+                <kbd class="mb-2">.../Planet/Sun/Navamsa</kbd>
+                <IconButton ButtonText="Demo Call" IconName="uil:cloud-data-connection" OnClickCallback="@(() => OnClickTestAPI("Navamsa"))" SmallSize="true" />
             </td>
         </tr>
         <tr>
@@ -104,5 +113,18 @@
 
 
 @code {
+
+    private void OnClickTestAPI(string urlPart)
+    {
+        ////generate url
+        //var personId = SelectedPerson.Id;
+        //var eventPreset = _eventPreset;
+        //var timePreset = _timePreset;
+        //var url = $"{ServerManager.WebDomainToApi}/chart/{personId}/{eventPreset}/{timePreset}";
+                  //https://www.vedastro.org/api/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Jupiter/Sign
+        var url = $"https://www.vedastro.org/api/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/{urlPart}";
+        _jsRuntime.OpenNewTab(url);
+
+    }
 
 }

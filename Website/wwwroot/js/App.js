@@ -446,7 +446,8 @@ function generatePlanetDataTable(tableId, tableData) {
         columns: [                 //define the table columns
             { title: "Planet", field: "planet", hozAlign: "center", frozen: true, responsive: 0, minWidth: "120px", cssClass: "PlanetColumn" },
             { title: "Current House", field: "planetCurrentHouse", hozAlign: "center", responsive: 0 },
-            { title: "Nirayana Longitude", field: "nirayanaLongitude", responsive: 0 },
+            { title: "Nirayana/Movable Longitude", field: "nirayanaLongitude", responsive: 0 },
+            { title: "Sayana/Fixed Longitude", field: "sayanaLongitude", responsive: 0 },
             { title: "Sign", field: "planetCurrentSign", responsive: 0 },
             { title: "Navamsa Sign", field: "planetCurrentNavamsaSign", hozAlign: "center", responsive: 0 },
             { title: "Constellation", field: "planetCurrentConstellation", hozAlign: "center", responsive: 0 },
@@ -458,7 +459,6 @@ function generatePlanetDataTable(tableId, tableData) {
             { title: "Position Strength", field: "positionStrength", hozAlign: "center", responsive: 0 },
             { title: "Directional Strength", field: "directionalStrength", hozAlign: "center", responsive: 0 },
             { title: "Motional Strength", field: "motionalStrength", hozAlign: "center", responsive: 0 },
-            { title: "Motion Name", field: "motionName", hozAlign: "center", responsive: 0 },
             { title: "Temporal Strength", field: "temporalStrength", hozAlign: "center", responsive: 0 },
             { title: "Aspect Strength", field: "aspectStrength", hozAlign: "center", responsive: 0 },
             { title: "Permanent Strength", field: "permanentStrength", hozAlign: "center", responsive: 0 }
@@ -487,6 +487,7 @@ function generatePlanetDataInfoTable(tableId, tableData) {
             { title: "House Type", field: "planetCurrentHouseType", responsive: 0 },
             { title: "House Relation", field: "houseRelation", hozAlign: "center", responsive: 0 },
             { title: "Navamsa Relation", field: "navamsaRelation", hozAlign: "center", responsive: 0 },
+            { title: "Motion Name", field: "motionName", hozAlign: "center", responsive: 0 },
             { title: "Benefic", field: "isPlanetBeneficToLagna", formatter: "tickCross", hozAlign: "center", responsive: 0 },
             { title: "Yogakaraka", field: "isPlanetYogakarakaToLagna", formatter: "tickCross", hozAlign: "center", responsive: 0 },
             { title: "Malefic", field: "isPlanetMaleficToLagna", formatter: "tickCross", hozAlign: "center", responsive: 0 },

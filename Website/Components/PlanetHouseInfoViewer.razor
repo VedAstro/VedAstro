@@ -168,7 +168,8 @@
 
             var _planetCurrentSign = _planetRasiSign.ToString();
             
-            var _nirayanaLongitude = AstronomicalCalculator.GetPlanetNirayanaLongitude(Time, planetName).TotalDegrees;
+            var _nirayanaLongitude = Math.Round(AstronomicalCalculator.GetPlanetNirayanaLongitude(Time, planetName).TotalDegrees, 2);
+            var _sayanaLongitude = Math.Round(AstronomicalCalculator.GetPlanetSayanaLongitude(Time, planetName).TotalDegrees, 2);
 
             var planetNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, Time);
 
@@ -205,6 +206,8 @@
             //todo
             //var _getPlanetStateDescription = AstronomicalCalculator.GetPlanetStateDescription();
 
+            //return as anonymous type, when sent to JS
+            //will auto convert to JSON data
             return new
             {
                 Planet = planetName.ToString(),
@@ -219,6 +222,7 @@
                 PlanetCurrentHouse = _planetCurrentHouse,
                 PlanetCurrentSign = _planetCurrentSign,
                 NirayanaLongitude = _nirayanaLongitude,
+                SayanaLongitude = _sayanaLongitude,
                 CurrentSignDescription = _currentSignDescription,
                 PlanetCurrentNavamsaSign = _planetCurrentNavamsaSign,
                 PlanetCurrentConstellation = _planetCurrentConstellation,

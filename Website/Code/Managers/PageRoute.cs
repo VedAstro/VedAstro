@@ -36,6 +36,7 @@
         public const string HoroscopeData = "Calculator/HoroscopeData";
         public const string Muhurtha = "Calculator/Muhurtha";
         public const string Match = "Calculator/Match";
+        public const string FamilyChart = "Calculator/FamilyChart";
         public const string MatchReport = "Calculator/Match/Report";
         public const string MatchReportParam = "Calculator/Match/Report/{MaleId}/{FemaleId}";
 

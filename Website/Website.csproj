@@ -44,4 +44,8 @@
 	  <None Include="Pages\API\Planet.razor" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Pages\Person\" />
+	</ItemGroup>
+
 </Project>

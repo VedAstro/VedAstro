@@ -90,8 +90,7 @@ namespace Website
         /// <summary>
         /// Gets all people list from API server
         /// This is the central place all person list is gotten for a User ID/Visitor ID
-        /// NOTE: if User ID is Guest ID 101, then person profile under
-        /// Visitor ID is also auto added to return list if any by API
+        /// NOTE: API combines person list from visitor id and 
         /// - if API fail will return empty list
         /// </summary>
         public static async Task<List<Person>?> GetPeopleList(IJSRuntime jsRuntime)

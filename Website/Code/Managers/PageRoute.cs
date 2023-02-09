@@ -36,6 +36,7 @@
         public const string HoroscopeData = "Calculator/HoroscopeData";
         public const string Muhurtha = "Calculator/Muhurtha";
         public const string Match = "Calculator/Match";
+        public const string MatchFinder = "Calculator/Finder";
         public const string FamilyChart = "Calculator/FamilyChart";
         public const string MatchReport = "Calculator/Match/Report";
         public const string MatchReportParam = "Calculator/Match/Report/{MaleId}/{FemaleId}";
@@ -49,6 +50,7 @@
         //PAGES
         public const string AddLifeEvent = "/AddLifeEvent";
         public const string SavedCharts = "/SavedCharts";
+        public const string UserAccount = "/UserAccount";
         public const string VisitorList = "/VisitorList";
         public const string TaskEditor = "/TaskEditor";
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
@@ -58,7 +60,6 @@
         public const string Contact = "/Contact";
         public const string Dasa = "/Dasa";
         public const string QuickGuide = "/QuickGuide";
-        public const string DasaCached = "/DasaCached";
         public const string FeatureList = "/FeatureList";
         public const string Home = "/";
 

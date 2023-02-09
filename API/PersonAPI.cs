@@ -229,14 +229,30 @@ namespace API
                 var filteredList1 = APITools.FindPersonByUserId(personListXml, userId);
 
                 //filter out person by visitor id
-                var filteredList2 = APITools.FindPersonByUserId(personListXml, visitorId);
+                var visitorIdList = APITools.FindPersonByUserId(personListXml, visitorId);
+
+                //before sending to user, clean the data
+                //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
+                //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
+                var loggedIn = userId != "101" || !(string.IsNullOrEmpty(userId));//already logged in if true
+                var visitorProfileExists = visitorIdList.Any();
+                if (loggedIn && visitorProfileExists)
+                {
+                    //transfer to user id
+                    foreach (var person in visitorIdList)
+                    {
+                        person.Element("")
+                    }
+                }
+
 
                 //combine and remove duplicates
-                if (filteredList2.Any()) { filteredList1.AddRange(filteredList2); }
+                if (visitorIdList.Any()) { filteredList1.AddRange(visitorIdList); }
                 List<XElement> personListNoDupes = filteredList1.Distinct().ToList();
 
                 //convert list to xml
                 var xmlPayload = Tools.AnyTypeToXmlList(personListNoDupes);
+
 
                 //send filtered list to caller
                 return APITools.PassMessage(xmlPayload);

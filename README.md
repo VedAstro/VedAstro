@@ -79,8 +79,16 @@ With continued support from investors &amp; users, this project has steadily dev
 Helping people from all over the world.
     
 # Credits &amp; Reference
-[![](https://www.vedastro.org/images/b-suryanarain-rao-pic.jpg)]
-[![](https://www.vedastro.org/images/bv-raman-pic.jpg)]
+<img
+  src="https://www.vedastro.org/images/bv-raman-pic.jpg"
+  alt="Alt text"
+  title="Optional title"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+<img
+  src="https://www.vedastro.org/images/b-suryanarain-rao-pic.jpg"
+  alt="Alt text"
+  title="Optional title"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao. Information from their books is the source
 material & inspiration for this project. Please buy their books to show your support.
 Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".

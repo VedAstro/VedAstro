@@ -1,11 +1,11 @@
 
+<a href="https://www.vedastro.org">
 <img
   src="https://www.vedastro.org/images/website-header-screenshot.png"
-  alt="Alt text"
-  title="Optional title"
-  style="display: inline-block; margin: 0 auto;">
+  alt="VedAstro.org"
+  title="VedAstro.org">
+</a>
 
-  </br>
 
 <h3 align="center">
   

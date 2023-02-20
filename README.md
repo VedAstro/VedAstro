@@ -13,7 +13,6 @@
   ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
   [![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
-  [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C7IVZ2Y)
 
 </h3>
 

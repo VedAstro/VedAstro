@@ -1,4 +1,5 @@
 [![](GithubImages/header-logo.png)](https://www.vedastro.org)
+
 <h3 align="center">
   
   ![GitHub last commit](https://img.shields.io/github/last-commit/gen-so/Genso.Astrology)
@@ -78,6 +79,7 @@ With continued support from investors &amp; users, this project has steadily dev
 Helping people from all over the world.
     
 # Credits &amp; Reference
+[![B.V. Raman](https://www.icasindia.org/wp-content/uploads/2018/12/BVRaman.PNG)]
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao. Information from their books is the source
 material & inspiration for this project. Please buy their books to show your support.
 Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".

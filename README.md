@@ -79,7 +79,8 @@ With continued support from investors &amp; users, this project has steadily dev
 Helping people from all over the world.
     
 # Credits &amp; Reference
-[![B.V. Raman](https://www.icasindia.org/wp-content/uploads/2018/12/BVRaman.PNG)]
+[![](https://www.vedastro.org/images/b-suryanarain-rao-pic.jpg)]
+[![](https://www.vedastro.org/images/bv-raman-pic.jpg)]
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao. Information from their books is the source
 material & inspiration for this project. Please buy their books to show your support.
 Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".

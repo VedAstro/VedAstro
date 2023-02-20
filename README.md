@@ -12,9 +12,9 @@
   ![GitHub last commit](https://img.shields.io/github/last-commit/gen-so/Genso.Astrology)
   ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
   [![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
-  [![Gitter](https://badges.gitter.im/VedAstro/community.svg)](https://gitter.im/VedAstro/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
-  
+  [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C7IVZ2Y)
+
 </h3>
 
 

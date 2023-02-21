@@ -139,19 +139,16 @@ namespace API
             {
                 //get unedited hash & updated person details from incoming request
                 var updatedPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var updatedPerson = Person.FromXml(updatedPersonXml);
 
-                //get the person record that needs to be updated
-                var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-                var personToUpdate = await APITools.FindPersonById(personListXmlDoc, updatedPerson.Id);
+                //save a copy of the original person record in recycle bin, just in-case accidental update
+                var personId = Person.FromXml(updatedPersonXml).Id;//does not change
+                var originalPerson = await APITools.GetPersonFromId(personId);
+                await APITools.AddXElementToXDocumentAzure(originalPerson.ToXml(), APITools.RecycleBinFile, APITools.BlobContainerName);
 
-                //delete the previous person record,
-                //and insert updated record in the same place
-                personToUpdate.ReplaceWith(updatedPersonXml);
+                //directly updates and saves new person record to main list (does all the work, sleep easy)
+                await APITools.UpdatePersonRecord(updatedPersonXml);
 
-                //upload modified list file to storage
-                await APITools.SaveXDocumentToAzure(personListXmlDoc, APITools.PersonListFile, APITools.BlobContainerName);
-
+                //all is good baby
                 return APITools.PassMessage();
 
             }
@@ -214,6 +211,8 @@ namespace API
         public static async Task<IActionResult> GetPersonList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {
+        //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 
+        TryAgain:
 
             try
             {
@@ -241,8 +240,15 @@ namespace API
                     //transfer to user id
                     foreach (var person in visitorIdList)
                     {
-                        person.Element("")
+                        //edit data direct to for speed
+                        person.Element("UserId").Value = userId;
+
+                        //save to main list
+                        await APITools.UpdatePersonRecord(person);
                     }
+
+                    //after the transfer, restart the call as though new, so that user only gets the correct list at all times (though this might be little slow)
+                    goto TryAgain;
                 }
 
 

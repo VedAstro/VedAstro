@@ -49,7 +49,7 @@ namespace API
         public const string UrlHoroscopeDataListXml = $"https://{AzureStorage}/data/HoroscopeDataList.xml";
 
         public const string UrlEventsChartViewerHtml = $"https://{AzureStorage}/data/EventsChartViewer.html";
-        
+
         /// <summary>
         /// Toolbar.svg used in when rendering events chart
         /// </summary>
@@ -299,29 +299,6 @@ namespace API
 
         }
 
-        public static async Task<CompatibilityReport> GetCompatibilityReport(string maleId, string femaleId)
-        {
-            var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-
-            //get all the people
-            var peopleXmlList = personListXmlDoc.Root?.Elements().ToList();
-            var peopleList = Person.FromXml(peopleXmlList);
-
-            //filter out the male and female ones we want
-            var males = peopleList.Where(person => person.Id == maleId);
-            var females = peopleList.Where(person => person.Id == femaleId);
-
-            //if male & female profile found, make report and return caller
-            if (males.Any() && females.Any())
-            {
-                return MatchCalculator.GetCompatibilityReport(males.First(), females.First());
-            }
-            else
-            {
-                throw new Exception(AlertText.PersonProfileNoExist);
-            }
-
-        }
 
         /// <summary>
         /// Gets the error in a nice string to send to user
@@ -415,11 +392,15 @@ namespace API
 
         /// <summary>
         /// Given a id will return parsed person from main list
+        /// Returns empty person if, no person found
         /// </summary>
         public static async Task<Person> GetPersonFromId(string personId)
         {
             var personListXml = await GetPersonListFile();
             var foundPersonXml = await FindPersonById(personListXml, personId);
+
+            if (foundPersonXml == null) { return Person.Empty; }
+
             var foundPerson = Person.FromXml(foundPersonXml);
 
             return foundPerson;
@@ -451,8 +432,9 @@ namespace API
 
         /// <summary>
         /// Will look for a person in a given list
+        /// returns null if no person found
         /// </summary>
-        public static async Task<XElement> FindPersonById(XDocument personListXmlDoc, string personId)
+        public static async Task<XElement?> FindPersonById(XDocument personListXmlDoc, string personId)
         {
             try
             {
@@ -460,7 +442,7 @@ namespace API
                 var personXmlList = personListXmlDoc.Root?.Elements();
 
                 //do the finding
-                var foundPerson = personXmlList.Where(delegate (XElement personXml)
+                var foundPerson = personXmlList?.Where(delegate (XElement personXml)
                 {   //use id to find the person's record
                     var thisId = Person.FromXml(personXml).Id;
                     return thisId == personId;
@@ -472,7 +454,7 @@ namespace API
             {
                 //if fail log it and return empty xelement
                 await ApiLogger.Error(e, null);
-                return new XElement("Person");
+                return null;
             }
         }
 
@@ -765,6 +747,33 @@ namespace API
 
             //return the raw reply to caller
             return response;
+        }
+
+        public static async Task UpdatePersonRecord(XElement updatedPersonXml)
+        {
+            var updatedPerson = Person.FromXml(updatedPersonXml);
+
+            //get the person record that needs to be updated
+            var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+            var personToUpdate = await APITools.FindPersonById(personListXmlDoc, updatedPerson.Id);
+
+            //delete the previous person record,
+            //and insert updated record in the same place
+            personToUpdate.ReplaceWith(updatedPersonXml);
+
+            //upload modified list file to storage
+            await APITools.SaveXDocumentToAzure(personListXmlDoc, APITools.PersonListFile, APITools.BlobContainerName);
+        }
+
+        public static async Task<List<Person>> GetAllPersonList()
+        {
+            //get all person list from storage
+            var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+            var allPersonList = personListXml.Root?.Elements();
+
+            var returnList = Person.FromXml(allPersonList);
+
+            return returnList;
         }
     }
 }

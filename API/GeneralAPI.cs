@@ -15,31 +15,6 @@ namespace API
     public class GeneralAPI
     {
 
-        [FunctionName("getmatchreport")]
-        public static async Task<IActionResult> GetMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
-        {
-
-            try
-            {
-                //get name of male & female
-                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
-                var maleId = rootXml.Element("MaleId")?.Value;
-                var femaleId = rootXml.Element("FemaleId")?.Value;
-
-                //generate compatibility report
-                var compatibilityReport = await APITools.GetCompatibilityReport(maleId, femaleId);
-                return APITools.PassMessage(compatibilityReport.ToXml());
-            }
-            catch (Exception e)
-            {
-                //log error
-                await ApiLogger.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FailMessage(e);
-            }
-
-        }
-
         [FunctionName("gethoroscope")]
         public static async Task<IActionResult> GetHoroscope([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
         {

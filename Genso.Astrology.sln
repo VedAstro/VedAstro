@@ -28,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Books\Prasna Marga Pt2.pdf = Books\Prasna Marga Pt2.pdf
 		Reference\rasis-and-extent.png = Reference\rasis-and-extent.png
 		README.md = README.md
+		Books\README.md = Books\README.md
 		Books\Three Hundred Important Combinations.pdf = Books\Three Hundred Important Combinations.pdf
 		Reference\zodiac-sign-name-symbol.png = Reference\zodiac-sign-name-symbol.png
 	EndProjectSection

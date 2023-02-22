@@ -233,7 +233,7 @@ namespace API
                 //before sending to user, clean the data
                 //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
                 //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-                var loggedIn = userId != "101" || !(string.IsNullOrEmpty(userId));//already logged in if true
+                var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId));//already logged in if true
                 var visitorProfileExists = visitorIdList.Any();
                 if (loggedIn && visitorProfileExists)
                 {

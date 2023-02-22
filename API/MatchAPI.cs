@@ -112,7 +112,7 @@ namespace API
             {
                 foreach (var report in reportList)
                 {
-                    Console.WriteLine($"{report.Male.GetName()}\t{report.Female.GetName()}\t{report.KutaScore}");
+                    Console.WriteLine($"{report.Male.Name}\t{report.Female.Name}\t{report.KutaScore}");
                 }
 
                 Console.ReadLine();

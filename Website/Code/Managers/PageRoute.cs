@@ -41,21 +41,25 @@
         public const string MatchReport = "Calculator/Match/Report";
         public const string MatchReportParam = "Calculator/Match/Report/{MaleId}/{FemaleId}";
 
+        //DONATE
+        public const string Donate = "Donate/";
+        public const string DonateOld = "DonateOld/";
+        public const string DonatePayment = $"{Donate}/Payment"; //todo maybe not needed
+        public const string DonateSpacy = $"{Donate}/spaCyAPI";
+
         //PERSON
         public const string PersonList = "/PersonList";
         public const string PersonEditor = "/PersonEditor";
         public const string AddPerson = "/AddPerson";
         public const string PersonEditorParam = "/PersonEditor/{PersonId}";
 
-        //PAGES
+        //LITTLE PAGES
         public const string AddLifeEvent = "/AddLifeEvent";
         public const string SavedCharts = "/SavedCharts";
         public const string UserAccount = "/UserAccount";
         public const string VisitorList = "/VisitorList";
         public const string TaskEditor = "/TaskEditor";
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
-        public const string Donate = "/Donate";
-        public const string DonatePayment = $"{Donate}/Payment"; //todo maybe not needed
         public const string About = "/About";
         public const string Contact = "/Contact";
         public const string Dasa = "/Dasa";

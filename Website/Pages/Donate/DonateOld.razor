@@ -1,0 +1,122 @@
+﻿@attribute [Route(PageRoute.DonateOld)]
+
+<PageTitle>Donate</PageTitle>
+
+<PageTop Title="Donate" IconName="iconoir:donate">
+    <Description>Funding from users like you is what keeps this project going.</Description>
+</PageTop>
+
+
+<h4 class="fw-bold">Where do donations go?</h4>
+<h5>Developers</h5>
+<p class="text-justify" style="max-width:@AppData.MaxWidth;">
+    A major part of cost is developer salary.
+    A page like Match for example took 3 weeks of developer work time to build.
+    Cost of one developer work day is $20.
+    This means that Match calculator page cost $420 to develop.
+</p>
+<h5>Hosting</h5>
+<p class="text-justify" style="max-width:@AppData.MaxWidth;">
+    Next priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
+    as a Static Web App which reduces running cost considerably.
+    We try our best to be transparent with the monetary flow so that
+    you know your money is spent to help the community.
+</p>
+@*<h6>Transparent Donations</h6>
+<p class="text-justify" style="max-width:@AppData.MaxWidth;">
+    Know exactly where your money is going.
+    We try to keep the fund flow as transparent as possible.
+    That's why you can choose to sponsor a specific thing.
+    Where you know exactly what you're paying for.
+</p>*@
+
+<style>
+    img {
+        max-width: 167px;
+    }
+</style>
+
+<div style="max-width:@AppData.MaxWidth;">
+    <hr class="mt-4 mb-4" />
+    <h4 class="fw-bold mb-3">Donate Options</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card text-center">
+                <img src="images/patreon-logo.jpg" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <IconButton ButtonText="Patreon" OnClickCallback="@(() => _navigation.NavigateTo(PageRoute.PatreonPage))" />
+                    </h5>
+                    <p class="card-text">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <img src="images/ko-fi-logo.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <IconButton ButtonText="Ko-fi" OnClickCallback="@(() => _navigation.NavigateTo(PageRoute.KoFiPage))" />
+                    </h5>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <img src="images/paypal-logo.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <IconButton ButtonText="PayPal" OnClickCallback="@(() => _navigation.NavigateTo(PageRoute.PaypalMePage))" />
+                    </h5>
+                    <p class="card-text">
+
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Bitcoin"))">
+            <div class="card text-center">
+                <img src="images/luno-btc-donate.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span>
+                        Bitcoin
+                    </h5>
+                    <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
+                </div>
+            </div>
+        </div>
+        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Litecoin"))">
+            <div class="card text-center">
+                <img src="images/luno-ltc-donate.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span>
+                        Litecoin
+                    </h5>
+                    <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
+                </div>
+            </div>
+        </div>
+        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Ethereum"))">
+            <div class="card text-center">
+                <img src="images/luno-eth-donate.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span>
+                        Ethereum
+                    </h5>
+                    <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+
+
+}

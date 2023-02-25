@@ -168,7 +168,7 @@ namespace API
             var xmlString = RequestToXmlString(request);
 
             //parse xml string
-            //todo an exception check here might be needed
+            //todo an exception check here might be needed, json data might come here
             var xml = XElement.Parse(xmlString);
 
             return xml;

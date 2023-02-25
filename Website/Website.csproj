@@ -48,4 +48,10 @@
 	  <Folder Include="Pages\Person\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="Pages\Donate\DonateSpacyAPI.razor">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	  </Content>
+	</ItemGroup>
+
 </Project>

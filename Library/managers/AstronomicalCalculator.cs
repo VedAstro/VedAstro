@@ -7473,6 +7473,7 @@ namespace Genso.Astrology.Library
             double dasaYears = years;
             double bhuktiYears; //will be filled when getting dasa
             double antaramYears; //will be filled when getting bhukti
+            double sukshmaYears; //will be filled when getting antaram
 
             //NOTE: Get Dasa prepares values for Get Bhukti and so on.
 
@@ -7485,11 +7486,43 @@ namespace Genso.Astrology.Library
             //based on bhukti get antaram planet
             var antaramPlanet = GetAntaram();
 
+            //based on antaram get sukshma planet
+            var sukshmaPlanet = GetSukshma();
 
-            return new Dasas() { Dasa = dasaPlanet, Bhukti = bhuktiPlanet, Antaram = antaramPlanet };
+
+            return new Dasas() { Dasa = dasaPlanet, Bhukti = bhuktiPlanet, Antaram = antaramPlanet, Sukshma = sukshmaPlanet};
 
 
             //LOCAL FUNCTIONS
+            PlanetName GetSukshma()
+            {
+                //first possible sukshma planet is the antaram planet
+                var possibleSukshmaPlanet = antaramPlanet;
+
+            //minus the possible sukshma planet's full years
+            MinusSukshmaYears:
+                var sukshmaPlanetFullYears = GetSukshmaPlanetFullYears(dasaPlanet, bhuktiPlanet, antaramPlanet, possibleSukshmaPlanet);
+                sukshmaYears -= sukshmaPlanetFullYears;
+
+                //if remaining sukshma years is negative,
+                //than current possible sukshma planet is correct
+                if (sukshmaYears <= 0)
+                {
+                    //return possible planet as correct
+                    return possibleSukshmaPlanet;
+                }
+                //else possible sukshma planet not correct, go to next one 
+                else
+                {
+                    //change to next sukshma planet in order
+                    possibleSukshmaPlanet = GetNextDasaPlanet(possibleSukshmaPlanet);
+                    //go back to minus this planet's years
+                    goto MinusSukshmaYears;
+                }
+
+
+            }
+
             PlanetName GetAntaram()
             {
                 //first possible antaram planet is the bhukti planet
@@ -7504,6 +7537,11 @@ namespace Genso.Astrology.Library
                 //than current possible antaram planet is correct
                 if (antaramYears <= 0)
                 {
+                    //get back the antaram years before it became negative
+                    //this is the years inside the current antaram, aka Sukshma years
+                    //save it for late use
+                    sukshmaYears = antaramYears + antaramPlanetFullYears;
+
                     //return possible planet as correct
                     return possibleAntaramPlanet;
                 }
@@ -7725,7 +7763,7 @@ namespace Genso.Astrology.Library
             //120 years is the total of all the dasa planet's years
             const double fullHumanLifeYears = 120.0;
 
-            //the time a antaram planet consumes in a bhukti is
+            //the time an antaram planet consumes in a bhukti is
             //a fixed percentage it consumes in a person's full life
             var antaramPlanetPercentage = GetDasaPlanetFullYears(antaramPlanet) / fullHumanLifeYears;
 
@@ -7734,6 +7772,27 @@ namespace Genso.Astrology.Library
 
             //return the calculated value
             return antaramPlanetFullYears;
+
+        }
+
+        /// <summary>
+        /// Gets the full years of an Sukshma planet 
+        /// Sukshma is a Sanskrit word meaning "subtle" or "dormant." The presence of sukshma is felt, but not seen.
+        /// </summary>
+        public static double GetSukshmaPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet, PlanetName antaramPlanet, PlanetName sukshmaPlanet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time an sukshma planet consumes in a dasa is
+            //a fixed percentage it consumes in a person's full life
+            var sukshmaPlanetPercentage = GetDasaPlanetFullYears(sukshmaPlanet) / fullHumanLifeYears;
+
+            //sukshma planet's full years is a percentage of the Antaram planet's full years
+            var sukshmaPlanetFullYears = sukshmaPlanetPercentage * GetAntaramPlanetFullYears(dasaPlanet, bhuktiPlanet, antaramPlanet);
+
+            //return the calculated value
+            return sukshmaPlanetFullYears;
 
         }
 

@@ -6062,6 +6062,7 @@ namespace Genso.Astrology.Library
             return new() { Occuring = occuring };
         }
 
+
         [EventCalculator(EventName.SunDasaMoonBhukti)]
         public static CalculatorResult SunDasaMoonBhukti(Time time, Person person)
         {

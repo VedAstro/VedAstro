@@ -10,6 +10,7 @@
         public PlanetName Dasa { get; set; }
         public PlanetName Bhukti { get; set; }
         public PlanetName Antaram { get; set; }
+        public PlanetName Sukshma { get; set; }
     }
 }
 

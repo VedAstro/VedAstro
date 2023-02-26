@@ -44,8 +44,8 @@
         //DONATE
         public const string Donate = "Donate/";
         public const string DonateOld = "DonateOld/";
-        public const string DonatePayment = $"{Donate}/Payment"; //todo maybe not needed
-        public const string DonateSpacy = $"{Donate}/spaCyAPI";
+        public const string DonatePayment = "Donate/Payment"; //todo maybe not needed
+        public const string DonateSpacy = "Donate/spaCyAPI";
 
         //PERSON
         public const string PersonList = "/PersonList";

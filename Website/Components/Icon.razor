@@ -5,13 +5,16 @@
 <span class="iconify" data-icon="@IconName" data-width="@Size"></span>
 
 @code {
-    
+
     /// <summary>
     /// Special icon name from icon-sets.iconify.design
     /// </summary>
     [Parameter]
     public string? IconName { get; set; }
 
+    /// <summary>
+    /// Size in pixels, default is 25
+    /// </summary>
     [Parameter]
     public int? Size { get; set; } = 25;
 

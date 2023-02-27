@@ -304,7 +304,7 @@
         var endTime = timeRange.End;
 
         //generate the events row & time header row
-        var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
+        var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Gochara };
 
         //pump data into chart
         await _dasaChartViewer.ShowChart(SelectedPerson, startTime, endTime, inputedEventTags);
@@ -342,7 +342,7 @@
         var endTime = timeRange.end;
 
         //generate the events row & time header row
-        var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
+        var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Gochara };
 
         //pump data into chart
         await _dasaChartViewer.ShowChart(SelectedPerson, startTime, endTime, dasaEventTags);

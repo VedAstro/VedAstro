@@ -2,37 +2,66 @@
 
 <PageTitle>Donate</PageTitle>
 
-<PageTop Title="Donate" IconName="iconoir:donate">
-    <Description>Funding from users like you is what keeps this project going. Every cent helps.</Description>
+<PageTop Title="Support us" IconName="iconoir:donate">
+    <Description>With every donation you'll receive free astro gifts as a sign of our thanks</Description>
 </PageTop>
 
 
-<iframe id='kofiframe' src='https://ko-fi.com/vedastro89790/?hidefeed=true&widget=true&embed=true&preview=true' style='border:none;width:100%;padding:4px;background:#f9f9f9;' height='712' title='vedastro89790'></iframe>
+<div class="d-flex flex-wrap">
+    <div class="me-5" style="">
+        <iframe id='kofiframe' src='https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true' style='width:auto; height: 630px' title='vedastro'></iframe>
+    </div>
+    @*STACK BOXES ON RIGHT*@
+    <div>
+        <div class="gap-3">
+            <p>
+                Free Gifts:
+            </p>
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Full Life Chart" Description="Written full life analysis by expert astrologer" IconName="icon-park:table-report"/>
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Astrologer Call" Description="45 minute live call consultation with vedic astrologer" IconName="flat-color-icons:customer-support"/>
+            <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Monthly Updates" Description="We'll keep you updated on latest astro events" IconName="emojione:closed-mailbox-with-raised-flag"/>
+        </div>
+    </div>
+
+</div>
+
+<hr/>
 
 
-@*
-<h4 class="fw-bold">Where do donations go?</h4>
-<h5>Developers</h5>
+
+
+<h4 class="fw-bold">Why Donate?</h4>
 <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-    A major part of cost is developer salary.
-    A page like Match for example took 3 weeks of developer work time to build.
-    Cost of one developer work day is $20.
-    This means that Match calculator page cost $420 to develop.
+    Donations help to run the web servers 24/7 &amp; to continually improve the project.
 </p>
-<h5>Hosting</h5>
-<p class="text-justify" style="max-width:@AppData.MaxWidth;">
-    Next priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
-    as a Static Web App which reduces running cost considerably.
-    We try our best to be transparent with the monetary flow so that
-    you know your money is spent to help the community.
-</p>
-<h6>Transparent Donations</h6>
+
+<h4 class="fw-bold">Transparent Donations</h4>
 <p class="text-justify" style="max-width:@AppData.MaxWidth;">
     Know exactly where your money is going.
     We try to keep the fund flow as transparent as possible.
-    That's why you can choose to sponsor a specific thing.
-    Where you know exactly what you're paying for.
+    That's why you can choose to sponsor a specific thing
+    like domain fees or hosting costs. Leave your choice in the message box.
 </p>
+
+<h4 class="fw-bold">Hosting Costs</h4>
+<p class="text-justify" style="max-width:@AppData.MaxWidth;">
+    1st priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
+    as a Static Web App which reduces running costs, but it comes with minor reliability issues.
+    With support from users we hope to diversify the hosting platform for stable & reliable service anywhere in the world.
+</p>
+
+<h4 class="fw-bold">Programmer Costs</h4>
+<p class="text-justify" style="max-width:@AppData.MaxWidth;">
+    As of December 2022 more than <a target="_blank" rel="noopener noreferrer" href="https://github.com/VedAstro/VedAstro/discussions/4" class="link-primary fw-bold">88,000 lines of code</a> was written for this project not including documentation.
+    That's an impressive number. The more code there is, the more testing &amp; debugging that needs to be done. As such more developer/programmer work hours are required.
+    Your donations go a long way to help pay for this expenses.
+</p>
+
+
+
+
+
+@*
 
 <style>
     img {

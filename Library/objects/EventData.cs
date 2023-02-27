@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
@@ -33,7 +34,7 @@ namespace Genso.Astrology.Library
 
         /** PROPERTIES **/
         //mainly created for access from WPF binding
-        public EventName Name { get; private set; } = EventName.EmptyEvent;
+        public EventName Name { get; private set; } = EventName.Empty;
         
         /// <summary>
         /// Gets human readable Event Name, removes camel case
@@ -80,6 +81,10 @@ namespace Genso.Astrology.Library
             //override event nature from xml if specified
             Nature = predictionData.NatureOverride == EventNature.Empty ? Nature : predictionData.NatureOverride;
 
+            //override description if specified
+            var isDescriptionOverride = !string.IsNullOrEmpty(predictionData.DescriptionOverride); //if true override, else false
+            Description = isDescriptionOverride ? predictionData.DescriptionOverride : Description;
+
             //let caller know if occuring
             return isEventOccuring;
         }
@@ -92,11 +97,18 @@ namespace Genso.Astrology.Library
         public static EventData FromXml(XElement eventData)
         {
             //extract the individual data out & convert it to the correct type
-            var nameString = eventData.Element("Name")?.Value;
-            Enum.TryParse(nameString, out EventName name);
-            var natureString = eventData.Element("Nature")?.Value;
-            Enum.TryParse(natureString, out EventNature nature);
-            var rawDescription = eventData.Element("Description")?.Value;
+            //NOTE : some XML elements like nature & description is filled
+            //       by code, so is empty  tag like <Nature/>
+
+            //set defaults, so that wont fail when hit empty tags
+            EventName name = EventName.Empty;
+            EventNature nature = EventNature.Empty;
+
+            var nameString = eventData.Element("Name")?.Value ?? "Empty";
+            Enum.TryParse(nameString, out name);
+            var natureString = eventData.Element("Nature")?.Value ?? "Empty";
+            Enum.TryParse(natureString, out nature);
+            var rawDescription = eventData.Element("Description")?.Value ?? "Empty";
             var description = CleanText(rawDescription); //with proper formatting
             var tagString = eventData.Element("Tag")?.Value;
             var tagList = getEventTags(tagString); //multiple tags are possible ',' separated

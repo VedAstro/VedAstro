@@ -3667,10 +3667,10 @@
 	<!--SUN BHUKTI-->
 	<Event>
 		<Name>SunDasaSunBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
 			Unpleasantness with relatives and superiors, anxieties,
-			headache. pain in the ear, some tendency to urinary or kidney
+			headache, pain in the ear, some tendency to urinary or kidney
 			troubles, sickness, fear from rulers and enemies, fear of death,
 			loss of money, danger to father if the Sun is afflicted, stomachache
 			and travels, gains through religious people, mental
@@ -3693,7 +3693,7 @@
 	</Event>
 	<Event>
 		<Name>SunDasaMarsBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
 			Mars' sub-period-4 months, 6 days.
 			Rheumatic and similar troubles, quarrels, danger of
@@ -3708,11 +3708,11 @@
 	</Event>
 	<Event>
 		<Name>SunDasaRahuBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
-			Rahu's sub-period -10 months, 24 days.
+			Rahu's sub-period - 10 months, 24 days.
 			Many troubles, changes according to the position of Rahu,
-			family disputes, journeys, pang of death, trouble from
+			family disputes, journeys, fear of death, trouble from
 			relatives and enemies, loss of peace or mental misery, loss of
 			money, sorrows, unsuccessful in all attempts, fear of thieves
 			and reptiles, scandals.
@@ -3723,11 +3723,11 @@
 		<Name>SunDasaJupiterBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Jupiter's sub-perlod-9 months, 18 days.
+			Jupiter's sub-period-9 months, 18 days.
 			Benefits from friends and acquaintances, increase in education,
 			employment in high circles, association with people of
 			high rank, success through obstacles, birth of a child, wealth
-			got through sons (if there is·a son), honour to religious people,
+			got through sons (if there is a son), honour to religious people,
 			virtuous acts, good traditional observances, good society and
 			conversations, reputation, gains and court-honours.
 		</Description>
@@ -3735,12 +3735,12 @@
 	</Event>
 	<Event>
 		<Name>SunDasaSaturnBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period--11 months, 12 days.
-			Constant sickness to family members, new enemies,• some
-			loss of property, bodily ailmenu, much unhappiness, dis·
-			placement from home accidents, quarrels with relatives, loss
+			Constant sickness to family members, new enemies, some
+			loss of property, bodily ailment, much unhappiness, displacement
+			from home accidents, quarrels with relatives, loss
 			of money, disease, lacking in energy, ignoble calls, mental
 			worries, loans, danger from thieve and rulers.
 		</Description>
@@ -3748,12 +3748,12 @@
 	</Event>
 	<Event>
 		<Name>SunDasaMercuryBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Mercury's sub-period-IO months, 6 days.
 			Gain in money, good reputation, acquisition of new
 			clothes and ornaments, new education, trouble through
-			telatives, mental distress, depression of spirits, waste of
+			relatives, mental distress, depression of spirits, waste of
 			money and nervous weakness, no comforts, friends becoming
 			enemies, much anxiety and fears, health bad, children ungrateful,
 			disputes and trouble from ruler or judge, suffer
@@ -3763,11 +3763,11 @@
 	</Event>
 	<Event>
 		<Name>SunDasaKetuBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
-			Ketu' s sub-period-4 months, 6 days.
-			Loss of money, affliction of mind with troubles, faintings
-			or nervous exhaustion, mind full of-misgivings, a long journey
+			Ketu's sub-period - 4 months, 6 days.
+			Loss of money, affliction of mind with troubles, fainting
+			or nervous exhaustion, mind full of misgivings, a long journey
 			to a distant place, change of house due to disputes, troubles
 			among relatives and associates, throat disease, mental anguish,
 			ophthalmia, serious illness, fear from kings or rulers and
@@ -3779,7 +3779,7 @@
 		<Name>SunDasaVenusBhukti</Name>
 		<Nature>Good</Nature>
 		<Description>
-			Venus' sub-period-I year.
+			Venus sub-period - 1 year.
 			Gain of money, respect by rulers and gain of vehicles,
 			likelihood of marriage, increase of property, illness, does
 			many good works, acquisition of pearls or other precious
@@ -3793,7 +3793,7 @@
 	<!--Moon BHUKTI-->
 	<Event>
 		<Name>MoonDasaSunBhukti</Name>
-		<Nature>Bad</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 6 months.
 			Feverish complaints, pains in the eyes, success or failure
@@ -3840,7 +3840,7 @@
 		<Description>
 			Rahu's sub-period - 1 year, 6 months.
 			Distress of risks from falls and dangerous diseases, waste
-			of wealth and loss of relatives and no ease to body. loss of
+			of wealth and loss of relatives and no ease to body, loss of
 			money, danger of stirring up enemies, sickness, anxiety, enmity
 			of superiors and elders, anxiety and troubles through wife,
 			scandals, change of residence, diseases of skin, danger from
@@ -3867,8 +3867,8 @@
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period - 1 year, 7 months.
-			Wife's death or separation, much mental anguish, loss or
-			property, loss of friends, ill·health, mental trouble due to
+			Wife's death or separation, much mental anguish, loss of
+			property, loss of friends, ill health, mental trouble due to
 			mother, wind and bilious affections, harsh words, and discussion
 			with unfriendly people, disease due to indigestion, no peace of mind,
 			quarrels with relatives.
@@ -3884,7 +3884,7 @@
 			clothes and ornaments, settlement of disputes, pleasure
 			through children or lover, increase of wealth, accomplishment
 			of desires, intellectual achievements, new education, honour
-			from rulers. general happiness, enjoyment with females,
+			from rulers, general happiness, enjoyment with females,
 			addiction to betting and drinks.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -3897,7 +3897,7 @@
 			Illness to wife, loss of relatives, suffering from stomach
 			ache, loss or property, sickness of a feverish nature, danger
 			from fire, subject to swellings or eruptions, eye troubles,
-			mind filled with cares, public criticism or displeasure, dishonour,
+			mind filled with cares, public criticism or displeasure, dishonor,
 			danger to father, mother and children, scandals
 			among equals, eating of prohibited food, bad acts, bad
 			company, loss of money and memory.
@@ -3910,9 +3910,9 @@
 		<Description>
 			Venus's sub-period - 1 year, 8 months.
 			Sudden gain from wife, enjoys comforts of agriculture,
-			water products and clothing : suffers from diseases inherited
+			water products and clothing, suffers from diseases inherited
 			by mother, sickness, pain, loss of property, enmity, gain of
-			houses, good works and "good meals, birth of children,
+			houses, good works and good meals, birth of children,
 			expenses due to marriage or other auspicious acts.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -3922,7 +3922,7 @@
 	<!--Mars BHUKTI-->
 	<Event>
 		<Name>MarsDasaSunBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 4 months, 6 days.
 			Gain of money in bad ways, destruction of enemies, good
@@ -3956,34 +3956,34 @@
 			with superiors and some anxiety through strangers, foreigners
 			or people abroad and through warlike clan. Danger of open
 			violence, quarrel with relations, loss of money, skin disease,
-			consumption, loss of blood, fistula, and fissures in anus, Jou
+			consumption, loss of blood, fistula, and fissures in anus, loss
 			of females and brothers, evil doings and boils.
 		</Description>
 		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaRahuBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Bad</Nature>
 		<Description>
-			Rahu's sub-period- 1 year, 18 days.
+			Rahu's sub-period - 1 year, 18 days.
 			Danger from rulers and robbers, loss of wealth, success
 			in evil pursuits, suffering from poisonous complaints, loss of
 			relatives, danger from skin diseases, change of residence,
 			some severe kind of cutaneous disease, journey to a foreign
 			country, scandals, loss of cows and buffaloes, illness to wife,
 			loss of memory, fear from insects and thieves, falls into well,
-			fear from ghosts, affection of gonorrhoea, fretting and
+			fear from ghosts, affection of gonorrhea, fretting and
 			litigation.
 		</Description>
 		<Tag>Bhukti</Tag>
 	</Event>
 	<Event>
 		<Name>MarsDasaJupiterBhukti</Name>
-		<Nature>Bad</Nature>
+		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period - 11 months, 6 days.
 			Loss of wealth, enemies, end the unfortunate period,
-			favour from superiors and persons in position. gain of
+			favour from superiors and persons in position, gain of
 			money, birth of children, auspicious celebrations, acquisition
 			or wealth through holy people, freedom from illness, public
 			reputation, ascendancy and happiness.
@@ -4005,7 +4005,7 @@
 	</Event>
 	<Event>
 		<Name>MarsDasaMercuryBhukti</Name>
-		<Nature>Bad</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Mercury's sub-period- 11 months, 27 days.
 			Marriage or inclination to marriage, knowledge and fruits
@@ -4050,7 +4050,7 @@
 	<!--Rahu BHUKTI-->
 	<Event>
 		<Name>RahuDasaSunBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 1O months, 24 days.
 			Hot fevers, giddiness, fear and enmity of people, quarrels
@@ -4135,7 +4135,7 @@
 	</Event>
 	<Event>
 		<Name>RahuDasaMercuryBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Mercury - 2 years, 6 months, 18 days.
 			Many friends and relatives, wife and children, accession
@@ -4181,7 +4181,7 @@
 	<!--JUPITER BHUKTI-->
 	<Event>
 		<Name>JupiterDasaSunBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 9 months, 18 days.
 			Enemies, victory, ease, great diligence, coming in of
@@ -4271,7 +4271,7 @@
 	</Event>
 	<Event>
 		<Name>JupiterDasaKetuBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Ketu's sub-period - 11 months, 6 days.
 			Pilgrimages to holy shrines, increase of wealth, suffering
@@ -4323,7 +4323,8 @@
 			affections, troubles and sickness, family disputes, loss of
 			money and property, reduction to great need, mortgage of
 			property and its recovery after a lapse of time, death of a
-			near relative, sorrow, dislike of relatives, coming in of money,windy diseases.
+			near relative, sorrow, dislike of relatives, coming in of money, 
+			windy diseases.
 		</Description>
 		<Tag>Bhukti</Tag>
 	</Event>
@@ -4334,7 +4335,7 @@
 			Mars - 1 year, 1 month, 9 days.
 			Some disgrace, serious enmity, strife, much blame,
 			wanderings from place to place, unsettled life, many enemies,
-			loss of money by fraud or theft, change of residence. serious
+			loss of money by fraud or theft, change of residence, serious
 			illness, distress to brothers and friends, hot diseases.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -4357,7 +4358,7 @@
 			Jupiter - 2 years, 6 months, 12 days.
 			Worship of gods and holy people, happiness to family,
 			increase in bodily comforts, accomplishment of intentions by
-			the help of superiors. increase of family circles. attainment of
+			the help of superiors, increase of family circles, attainment of
 			rank.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -4367,7 +4368,7 @@
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period 3 years, 3 days.
-			Brings on diseases, troubles aad torments, much mental
+			Brings on diseases, troubles and torments, much mental
 			anguish, capacity of kings and free-hooters, loss of wealth,
 			fear or poisonous effect to cattle, much sufferings to family,
 			fever, wind or phlegm, bodily ailments and colic, body
@@ -4422,8 +4423,8 @@
 		<Nature>Bad</Nature>
 		<Description>
 			Sun - 1O months, 6 days.
-			Pains in bead and stomach, enmity of people. loss of
-			respect, danger of fire, anxieties, sickness to wire, trouble~
+			Pains in bead and stomach, enmity of people, loss of
+			respect, danger of fire, anxieties, sickness to wire, troubles
 			from enemies, many obstacles, troubles through superiors,
 			acquisition of wealth.
 		</Description>
@@ -4431,11 +4432,11 @@
 	</Event>
 	<Event>
 		<Name>MercuryDasaMoonBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Moon - 1 year, 5 months.
 			Loss of health, some swellings or hurts in the limbs,
-			quarrels and troubles through women, many difficulties. gain
+			quarrels and troubles through women, many difficulties, gain
 			of money through ladies and agriculture and trade, success,
 			happiness, diseases, ill-will of enemies, miscarriage of every
 			concern, risk from quadrupeds.
@@ -4444,15 +4445,15 @@
 	</Event>
 	<Event>
 		<Name>MercuryDasaMarsBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Mars sub-period - 11 months, 27 days.
-			Disappearance of all dangers diseases. or enemies. fame
-			derived from acts of charity and beneficence, royal favour.
+			Disappearance of all dangers diseases or enemies, fame
+			derived from acts of charity and beneficence, royal favour,
 			danger from jaundice or bilious fever, affections of the blood,
 			neuralgic pains and headaches, troubles through neighbors,
 			sickness, wounds or hurts, quarrels, addiction to drinks,
-			betting and prostitutes. boils and hurts of arms, travels in
+			betting and prostitutes, boils and hurts of arms, travels in
 			forests and villages, sorrows, royal disfavour, imprisonment.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -4473,7 +4474,7 @@
 	</Event>
 	<Event>
 		<Name>MercuryDasaJupiterBhukti</Name>
-		<Nature>Good</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Jupiter - 2 years, 3 months 6 days.
 			Hatred of friends, relatives and elders, wealth, liable to
@@ -4504,9 +4505,9 @@
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 2 years, 4 months, 27
-			Acquisition of beautiful house and apparel. money through
+			Acquisition of beautiful house and apparel, money through
 			relatives, success in every undertaking, the birth of a brother
-			or sister. increase in family, gain in business, good mind
+			or sister, increase in family, gain in business, good mind
 			charitable acts, learning of mathematics and arts.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -4575,7 +4576,7 @@
 			progress obstructed, fear and anxiety, disputes and contests
 			of different kinds, enemies arise, danger of disputes and
 			destruction through females, sufferings from fever, fear of
-			robbers. death, imprisonment, urinary diseases,
+			robbers, death, imprisonment, urinary diseases,
 			loss and difficulties
 			and surgical operations.
 		</Description>
@@ -4621,12 +4622,12 @@
 	</Event>
 	<Event>
 		<Name>KetuDasaMercuryBhukti</Name>
-		<Nature>Bad</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Mercury - 11 months 27 days.
 			Society of relatives, friends and the like, material gains
 			from knowledge, danger from relatives, anxiety on account of
-			children. failure in plans, deception, jealousy, falsehood, and
+			children, failure in plans, deception, jealousy, falsehood, and
 			knowledge.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -4674,7 +4675,7 @@
 		<Nature>Good</Nature>
 		<Description>
 			Moon - 1 year, 8 months.
-			Gains of females, education. knowledge, money, children
+			Gains of females, education, knowledge, money, children
 			and vehicles, worship of God, accomplishments of desires,
 			troubles through wife, domestic happiness afterwards, pain
 			and disease due to inflammation of nervous tissue and from
@@ -4684,12 +4685,12 @@
 	</Event>
 	<Event>
 		<Name>VenusDasaMarsBhukti</Name>
-		<Nature>Bad</Nature>
+		<Nature>Neutral</Nature>
 		<Description>
 			Mars - 1 year, 2 months.
 			Flow of bile, disease of the eyes, great exertion, much
 			income, acquisition or wealth, marriage, acquisition of lands,
-			venereal diseases, danger from arms, e1.ile in foreign places,
+			venereal diseases, danger from arms, exile in foreign places,
 			atheistic tendencies, increase of property through the influence
 			of females, negligence of duty, bent on pleasure and passion,
 			temporary affection of eyes.
@@ -4703,7 +4704,7 @@
 			Rahu - 3 years.
 			Meditation, seclusion, quarrels among relatives and his
 			people, entire change of surroundings, schemes of deception.
-			miserliness, acquisition of lost property. dislike of relatives.
+			miserliness, acquisition of lost property, dislike of relatives.
 			evil from friends and injury by fire.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -4732,7 +4733,7 @@
 			to lands and wealth, disappearance of enemies, affection of
 			excretory system, piles, etc., rheumatic pains in legs and
 			bands, danger to eye sight, distaste for food, loss of appetite,
-			physical condition poor. loss of money. wanderings, servitude,
+			physical condition poor, loss of money, wanderings, servitude,
 			bolting and gambling, addiction to liquor, bad company, etc.,
 			ill-health, loss of memory, impotence.
 		</Description>
@@ -4747,7 +4748,7 @@
 			mathematical learning, success in litigations, inclination to
 			learn music, piles and other hot ailments, pleasure through
 			wife and children, increase of wealth, gain of knowledge in
-			aru and sciences, wealth, royal favour. prosperity on a large
+			aru and sciences, wealth, royal favour, prosperity on a large
 			scale and sound health.
 		</Description>
 		<Tag>Bhukti</Tag>
@@ -4779,70 +4780,209 @@
 		<Tag>Bhukti</Tag>
 	</Event>
 
-	<!--ANTARAM-->
-	<Event>
-		<Name>SunAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
-	<Event>
-		<Name>MoonAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
-	<Event>
-		<Name>MarsAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
-	<Event>
-		<Name>RahuAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
-	<Event>
-		<Name>JupiterAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
-	<Event>
-		<Name>SaturnAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
-	<Event>
-		<Name>MercuryAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
-	<Event>
-		<Name>KetuAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
-	<Event>
-		<Name>VenusAntaram</Name>
-		<Nature>Good</Nature>
-		<Description>
-		</Description>
-		<Tag>Antaram</Tag>
-	</Event>
+
+	<!--Nature & description filled in by calculator-->
+
+	<!--SUN ANTARAM -->
+	<Event><Name>SunBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+
+	<!--MOON ANTARAM -->
+	<Event><Name>SunBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+
+	<!--MARS ANTARAM -->
+	<Event><Name>SunBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	
+	<!--RAHU ANTARAM -->
+	<Event><Name>SunBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+
+	<!--JUPITER ANTARAM -->
+	<Event><Name>SunBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+
+	<!--SATURN ANTARAM -->
+	<Event><Name>SunBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	
+	<!--MERCURY ANTARAM -->
+	<Event><Name>SunBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+
+	<!--KETU ANTARAM -->
+	<Event><Name>SunBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+
+	<!--VENUS ANTARAM -->
+	<Event><Name>SunBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MoonBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MarsBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>RahuBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>JupiterBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>SaturnBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>MercuryBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>KetuBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<Event><Name>VenusBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+
+	
+	<!--Nature & description filled in by calculator-->
+
+	<!--SUN SUKSHMA -->
+	<Event><Name>SunAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+
+	<!--MOON SUKSHMA -->
+	<Event><Name>SunAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+
+	<!--MARS SUKSHMA -->
+	<Event><Name>SunAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	
+	<!--RAHU SUKSHMA -->
+	<Event><Name>SunAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+
+	<!--JUPITER SUKSHMA -->
+	<Event><Name>SunAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+
+	<!--SATURN SUKSHMA -->
+	<Event><Name>SunAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	
+	<!--MERCURY SUKSHMA -->
+	<Event><Name>SunAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+
+	<!--KETU SUKSHMA -->
+	<Event><Name>SunAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+
+	<!--VENUS SUKSHMA -->
+	<Event><Name>SunAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MoonAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MarsAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>RahuAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>JupiterAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>SaturnAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>MercuryAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>KetuAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<Event><Name>VenusAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
 
 
 	<!--Dasa Special Rules-->

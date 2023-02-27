@@ -9,7 +9,10 @@
         /// default value when not assigned
         /// </summary>
         Empty = 0,
-        Good, 
+        Good,
+        /// <summary>
+        /// Also represents Mixed results with good and bad
+        /// </summary>
         Neutral, 
         Bad
     }

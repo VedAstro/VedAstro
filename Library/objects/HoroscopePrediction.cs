@@ -57,7 +57,7 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static HoroscopePrediction FromXml(XElement predictionXml)
         {
-            var eventName = Enum.Parse<EventName>(predictionXml.Element("Name")?.Value ?? "EmptyEvent");
+            var eventName = Enum.Parse<EventName>(predictionXml.Element("Name")?.Value ?? "Empty");
             var description = predictionXml.Element("Description")?.Value ?? "Empty Description";
             var relatedBodyXml = predictionXml?.Element("RelatedBody") ?? new XElement("RelatedBody");
             var relatedBody = RelatedBody.FromXml(relatedBodyXml);

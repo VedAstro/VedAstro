@@ -12,7 +12,7 @@ namespace Genso.Astrology.Library
         /// Returns an Empty Time instance meant to be used as null/void filler
         /// for debugging and generating empty dasa svg lines
         /// </summary>
-        public static Event Empty = new Event(EventName.EmptyEvent, EventNature.Empty, "", Time.Empty, Time.Empty);
+        public static Event Empty = new Event(EventName.Empty, EventNature.Empty, "", Time.Empty, Time.Empty);
 
         //FIELDS
         private readonly EventName _name;

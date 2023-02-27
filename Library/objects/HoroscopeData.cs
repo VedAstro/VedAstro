@@ -34,7 +34,7 @@ namespace Genso.Astrology.Library
 
         /** PROPERTIES **/
         //mainly created for access from WPF binding
-        public EventName Name { get; private set; } = EventName.EmptyEvent;
+        public EventName Name { get; private set; } = EventName.Empty;
         
         /// <summary>
         /// Gets human readable Event Name, removes camel case
@@ -81,6 +81,10 @@ namespace Genso.Astrology.Library
 
             //override event nature from xml if specified
             Nature = predictionData.NatureOverride == EventNature.Empty ? Nature : predictionData.NatureOverride;
+
+            //override description if specified
+            var isDescriptionOverride = !string.IsNullOrEmpty(predictionData.DescriptionOverride); //if true override, else false
+            Description = isDescriptionOverride ? predictionData.DescriptionOverride : Description;
 
             //let caller know if occuring
             return isEventOccuring;

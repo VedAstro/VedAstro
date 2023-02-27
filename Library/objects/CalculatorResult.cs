@@ -24,6 +24,13 @@ namespace Genso.Astrology.Library
         /// </summary>
         public EventNature NatureOverride { get; set; }
 
+        /// <summary>
+        /// if specified overrides event description text from XML file
+        /// will default to Empty when not set
+        /// note: implemented to allow calculator method to modify final event nature
+        /// </summary>
+        public string DescriptionOverride { get; set; } = ""; //empty to detect if set
+
         ///// <summary>
         ///// Defaults set here
         ///// </summary>

@@ -202,24 +202,26 @@ throughout the progam.
 These are randomly ordered notes on why a feature was implemented in a certain way.<br/>
 Will prove usefull when debugging & upgrading code.
 
-## Domain redirection #06/03/2023
-web : vedastro.org -> domain registra -> azure DNS -> azure cdn -> web blob storage
-api **stable** : vedastro.org/api -> domain registra -> azure DNS -> azure cdn -> stable api server (render)
-api **beta** : beta.vedastro.org/api -> domain registra -> azure DNS -> azure cdn -> beta api server (azure)
-domain cert managed by lets encyrpt acme bot azure func
+## Antaram > Sukshma > Prana > Avi Prana > Viprana  # FEB 2023
+Since not documented by BV. Raman, code here is created through experimentation by
+repeating relationship between Dasa planet & Bhukti planet.
 
-## Direct Events Chart #09/11/2022
+## Skipping EventDataList.xml # FEB 2023
+Not all data regarding an event is hardwired. Generating gochara, antaram, sukshma and others is more effcient if description was created by Astronomical calculator
+At the moment EventDataList.xml is the source of truth, meaning if an event exists in xml file, then it must exist in code.
+
+## Direct Events Chart # NOV 2022
 - Accessing events chart directly via API generated html
 - CORS in Azure Website Storage needs to be disabled for this to work, outside of vedastro.org
 
-## Events Chart default timezone #08/11/2022
+## Events Chart default timezone # NOV 2022
 The default timezone generated for all svg charts will be based on client timezone.
 Timezone does not matter when full life charts are made, but will matter alot when
 short term muhurtha charts are generated. Since most users are not living where they were born,
 it is only logical to default it client browser's timezone.
 This timezone must be visible/changeable to users who need to use otherwise.
 
-## Event Chart Notes : Life Events #15/04/2022
+## Event Chart Notes : Life Events # APR 2022
 - This feature is to store notes on the dasa report
 - The notes are actualy Events converted to XML and stored inside each person's record
 - When rendering these events are placed on top dasa report view
@@ -231,7 +233,7 @@ So as not to waste time, the API route has been decided since it has been proven
 - There are places where all Astronomical computation is done in client, exp. Planet Info Box 
 
 
-## MUHURTHA : Notes On Gochara Prediction (from book ) - 11/2/2022
+## MUHURTHA : Notes On Gochara Prediction (from book ) # FEB 2022
 
 - Built on reference to, Hindu Predictive Astrology pg. 254
 

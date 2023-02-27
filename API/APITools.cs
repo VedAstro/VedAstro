@@ -539,6 +539,7 @@ namespace API
         public static async Task<List<EventData>> GetEventDataList()
         {
             //get data list from Static Website storage
+            //note : done so that any updates to that live file will be instantly reflected in API results
             var eventDataListXml = await GetXmlFileHttp(UrlEventDataListXml);
 
             //parse each raw event data in list

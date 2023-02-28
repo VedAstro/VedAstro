@@ -47,7 +47,7 @@ namespace Genso.Astrology.Library
 
             Console.WriteLine("LibLogger: An unexpected error occurred and was logged.");
         }
-        
+
         public static async Task Error(XElement errorXml, string extraInfo = "")
         {
             //place error data into visitor tag
@@ -55,6 +55,24 @@ namespace Genso.Astrology.Library
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Data", extraInfo);
             visitorXml.Add(errorXml, dataXml, Tools.TimeStampSystemXml);
+
+            //send to server for storage
+            await SendLogToServer(visitorXml);
+
+            Console.WriteLine("LibLogger: An unexpected error occurred and was logged.");
+        }
+
+        /// <summary>
+        /// Makes a debug log entry
+        /// </summary>
+        public static async Task Debug(string message = "")
+        {
+            //place error data into visitor tag
+            //this is done because visitor data might hold clues to error
+            var visitorXml = new XElement("Visitor");
+            var dataXml = new XElement("Data", message);
+            var sourceXml = new XElement("Source", "LibLogger");
+            visitorXml.Add(sourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);

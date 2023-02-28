@@ -178,11 +178,11 @@ namespace Genso.Astrology.Library
                     Parallel.ForEach(cacheData, cache => methodCache.TryAdd(cache.Key, cache.Value));
                 }
 
-                LogManager.Debug("Cache Loaded: " + methodName);
+                LibLogger.Debug("Cache Loaded: " + methodName);
 
             });
 
-            LogManager.Debug("All Cache Loaded");
+            LibLogger.Debug("All Cache Loaded");
 
         }
 
@@ -292,7 +292,7 @@ namespace Genso.Astrology.Library
                 if (value == null)
                 {
                     //log the cache miss
-                    LogManager.Debug("Cache said to be loaded, but not here!");
+                    LibLogger.Debug("Cache said to be loaded, but not here!");
                     goto Start;
                 }
                 return value;

@@ -1584,7 +1584,7 @@ namespace Genso.Astrology.Library
                 if (planetName == PlanetName.Ketu)
                 {
                     //TODO unsure code, if below should u add 360 as done above instead of changing minus order?
-                    LogManager.Debug("!!!Running untested code!!! in GetPlanetNirayanaLongitude");
+                    LibLogger.Debug("!!!Running untested code!!! in GetPlanetNirayanaLongitude");
                     returnValue = returnValue < Angle.Degrees180
                         ? Angle.Degrees180 - returnValue
                         : returnValue - Angle.Degrees180;
@@ -2580,7 +2580,7 @@ namespace Genso.Astrology.Library
             var unroundedSignName = AstronomicalCalculator.GetZodiacSignAtLongitude(middleLongitude).GetSignName();
             if (unroundedSignName != houseSignName)
             {
-                LogManager.Debug($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
+                LibLogger.Debug($"Due to rounding sign changed from {unroundedSignName} to {houseSignName}");
             }
 
             //return the name of house sign
@@ -4039,7 +4039,7 @@ namespace Genso.Astrology.Library
 
                 //if not conjunct with any planet, should be malefic (not 100% sure, maybe aspects needs to be considered)
                 //TODO NOTE : Further checking on this point is needed, for now just place as benefic with mild warning
-                LogManager.Debug("Info:Mercury not conjunct, but placed as benefic!");
+                LibLogger.Debug("Info:Mercury not conjunct, but placed as benefic!");
                 return false;
 
 
@@ -4104,7 +4104,6 @@ namespace Genso.Astrology.Library
 
 
         }
-
 
         /// <summary>
         /// Moon is a benefic from the 8th day of the bright half of the lunar month

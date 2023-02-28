@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +73,7 @@ namespace Genso.Astrology.Library
             catch (Exception e) when (e.InnerException.GetType() == typeof(OperationCanceledException))
             {
                 //log it
-                LogManager.Debug("User canceled event calculation halfway!");
+                LibLogger.Debug("User canceled event calculation halfway!");
                 //return empty list
                 return new List<Event>();
             }
@@ -254,7 +254,7 @@ namespace Genso.Astrology.Library
                     //update flag
                     eventOccuredInPreviousTime = true;
                 }
-                //if event is not occuring now but occured before
+                //if event is not occuring now but occurred before
                 else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
                 {
                     //add previous event to list
@@ -264,11 +264,8 @@ namespace Genso.Astrology.Library
                         eventStartTime,
                         eventEndTime);
 
-                    //if event is duration is 0 minute, raise alarm
-                    if (newEvent.GetDurationMinutes() <= 0)
-                    {
-                        LogManager.Debug("Event duration is 0!");
-                    }
+                    //if event is duration is 0 minute, log it
+                    if (newEvent.GetDurationMinutes() <= 0) { LibLogger.Debug("Event duration is 0!"); }
 
 
                     eventList.Add(newEvent);
@@ -288,10 +285,7 @@ namespace Genso.Astrology.Library
                         eventEndTime);
 
                     //if event is duration is 0 minute, raise alarm
-                    if (newEvent2.GetDurationMinutes() <= 0)
-                    {
-                        LogManager.Debug("Event duration is 0!");
-                    }
+                    if (newEvent2.GetDurationMinutes() <= 0) { LibLogger.Debug("Event duration is 0!"); }
 
                     eventList.Add(newEvent2);
                 }
@@ -300,92 +294,6 @@ namespace Genso.Astrology.Library
             return eventList;
         }
 
-
-        /// <summary>
-        /// MARKED FOR ARHIVEING, if not used long archive it
-        /// Get a list of events in a time period for a single event type aka "event data"
-        /// Decision on when event starts & ends is also done here
-        /// Note :
-        /// 1.thread cancelation checked & thrown here (caught by caller)
-        /// 2.method is operated in sequencial way, it is anloder version, marked for archiving!
-        /// </summary>
-        private static List<Event> GetListOfEventsByEventData(EventData eventData, Person person, List<Time> timeList)
-        {
-            //declare empty event list to fill
-            var eventList = new List<Event>();
-
-            //set previous time as false for first time instance
-            var eventOccuredInPreviousTime = false;
-
-            //declare start & end times
-            Time eventStartTime = new Time();
-            Time eventEndTime = new Time();
-            var lastInstanceOfTime = timeList.Last();
-
-            //loop through time list 
-            //note: loop must be done in sequencial order, to detect correct start & end time
-            foreach (var time in timeList)
-            {
-                //check if user has canceled calculation halfway
-                threadCanceler.ThrowIfCancellationRequested();
-
-                //get flag of event occuring now
-                var eventIsOccuringNow = eventData.IsEventOccuring(time, person);
-
-                //if event is occuring now & not in previous time
-                if (eventIsOccuringNow == true & eventOccuredInPreviousTime == false)
-                {
-                    //save new start & end time
-                    eventStartTime = time;
-                    eventEndTime = time;
-                    //update flag
-                    eventOccuredInPreviousTime = true;
-                }
-                //if event is occuring now & in previous time
-                else if (eventIsOccuringNow == true & eventOccuredInPreviousTime == true)
-                {
-                    //update end time only
-                    eventEndTime = time;
-                    //update flag
-                    eventOccuredInPreviousTime = true;
-                }
-                //if event is not occuring now but occured before
-                else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
-                {
-                    //add previous event to list
-                    var newEvent = new Event(eventData.Name,
-                        eventData.Nature,
-                        eventData.Description,
-                        eventStartTime,
-                        eventEndTime);
-
-                    //if event is duration is 0 minute, raise alarm
-                    if (newEvent.GetDurationMinutes() <= 0) { LogManager.Debug("Event duration is 0!"); }
-
-
-                    eventList.Add(newEvent);
-
-                    //set flag
-                    eventOccuredInPreviousTime = false;
-                }
-
-                //if event is occuring now & it is the last time
-                if (eventIsOccuringNow == true & time == lastInstanceOfTime)
-                {
-                    //add current event to list
-                    var newEvent2 = new Event(eventData.Name, eventData.Nature, eventData.Description,
-                        eventStartTime,
-                        eventEndTime);
-
-                    //if event is duration is 0 minute, raise alarm
-                    if (newEvent2.GetDurationMinutes() <= 0) { LogManager.Debug("Event duration is 0!"); }
-
-                    eventList.Add(newEvent2);
-                }
-            }
-
-            return eventList;
-        }
 
         /// <summary>
         /// Slices time range into pieces by inputed hours

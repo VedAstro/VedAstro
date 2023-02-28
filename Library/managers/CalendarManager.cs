@@ -53,7 +53,7 @@ namespace Genso.Astrology.Library
                     new FileDataStore(credPath, true)).Result;
 
                 //debug print
-                LogManager.Debug("Credential file saved to: " + credPath);
+                LibLogger.Debug("Credential file saved to: " + credPath);
             }
 
 
@@ -88,7 +88,7 @@ namespace Genso.Astrology.Library
                     threadCanceler.ThrowIfCancellationRequested();
 
                     //log progress
-                    LogManager.Debug($"{addedEventCount} of {eventToAddList.Count} Events added to Google Calendar");
+                    LibLogger.Debug($"{addedEventCount} of {eventToAddList.Count} Events added to Google Calendar");
 
                     //increment progress counter
                     addedEventCount++;
@@ -103,12 +103,12 @@ namespace Genso.Astrology.Library
             catch (Exception e) when (e.GetType() == typeof(OperationCanceledException))
             {
                 //log the event and end here
-                LogManager.Debug($"User canceled sending events to google calendar: {addedEventCount} events already sent!");
+                LibLogger.Debug($"User canceled sending events to google calendar: {addedEventCount} events already sent!");
                 return;
             }
 
 
-            LogManager.Debug($"All {eventToAddList.Count} events added to Google calender");
+            LibLogger.Debug($"All {eventToAddList.Count} events added to Google calender");
 
 
             //----------------FUNCTIONS-----------------------
@@ -188,7 +188,7 @@ namespace Genso.Astrology.Library
             }
 
             //debug event
-            LogManager.Debug($"{result.Items.Count} events deleted!");
+            LibLogger.Debug($"{result.Items.Count} events deleted!");
 
         }
 

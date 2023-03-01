@@ -43,7 +43,7 @@ namespace API
             //if any failure, reply as in valid login & log the event
             catch (Exception e)
             {
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
                 return APITools.FailMessage("Login Failed");
             }
         }
@@ -78,7 +78,7 @@ namespace API
             //if any failure, reply as in valid login & log the event
             catch (Exception e)
             {
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
                 return APITools.FailMessage("Login Failed");
             }
         }

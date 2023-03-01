@@ -342,7 +342,7 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                await ApiLogger.Error(e, null);
+                await APILogger.Error(e, null);
                 return new XElement("Chart");
             }
         }
@@ -453,7 +453,7 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                await ApiLogger.Error(e, null);
+                await APILogger.Error(e, null);
                 return null;
             }
         }
@@ -619,7 +619,7 @@ namespace API
         {
 
             //get all event data/types which has the inputed tag (FILTER)
-            var eventDataListFiltered = DatabaseManager.GetEventDataListByTag(tag, eventDataList);
+            var eventDataListFiltered = EventManager.GetEventDataListByTag(tag, eventDataList);
 
             //start calculating events
             var eventList = EventManager.GetEventsInTimePeriod(startTime.GetStdDateTimeOffset(), endTime.GetStdDateTimeOffset(), geoLocation, person, eventsPrecision, eventDataListFiltered);

@@ -82,7 +82,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -168,7 +168,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -206,7 +206,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e);
             }
@@ -280,7 +280,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -317,7 +317,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -364,7 +364,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -403,7 +403,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -440,7 +440,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(Tools.ExceptionToXml(e));
@@ -472,7 +472,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -523,7 +523,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -561,7 +561,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -2000,7 +2000,7 @@ namespace API
             //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
             const int singleRowHeight = 15;
-            var eventDataList = APITools.GetEventDataList().Result;
+            var eventDataListUnfilled = APITools.GetEventDataList().Result;
 
             //rows are dynamically generated as needed, hence the extra logic below
             //list of rows to generate
@@ -2009,7 +2009,7 @@ namespace API
             //calculate events for each tag
             foreach (var eventTag in inputedEventTags)
             {
-                var tempEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag, eventDataList);
+                var tempEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag, eventDataListUnfilled);
                 unsortedEventList.AddRange(tempEventList);
             }
 

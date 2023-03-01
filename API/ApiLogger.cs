@@ -10,7 +10,7 @@ namespace API;
 /// <summary>
 /// Custom simple logger for API, auto log to AppLog.xml file
 /// </summary>
-public static class ApiLogger
+public static class APILogger
 {
     private const string AppLogXml = "AppLog.xml";
     private const string VisitorLogXml = "VisitorLog.xml";

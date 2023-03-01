@@ -124,6 +124,8 @@ It works by combining **logic** on how to calculate a prediction with **data** a
 This is done everytime a "Calculate" button is clicked. Below you will see a brief explanation of this process.
 This method was choosen to easily accommodate the thousands of astrological calculation possibilities.
 
+## event prediction = (data + logic) + time
+
 ```
 
             CREATION OF AN EVENT/PREDICTION
@@ -201,6 +203,9 @@ throughout the progam.
 # Design Decision Notes
 These are randomly ordered notes on why a feature was implemented in a certain way.<br/>
 Will prove usefull when debugging & upgrading code.
+
+## API domain is routed # MAR 2023
+via Azure CDN Rules Engine, this allows the use of ```vedastro.org/api/...``` & ```vedastro.org/api/nlp/...```
 
 ## Antaram > Sukshma > Prana > Avi Prana > Viprana  # FEB 2023
 Since not documented by BV. Raman, code here is created through experimentation by

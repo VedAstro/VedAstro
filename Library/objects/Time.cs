@@ -337,12 +337,36 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static TimeSpan GetLocalTimeOffset(double longitudeDeg)
         {
+            var failCount = 0;
+            var failTryLimit = 3;
 
+            
             try
             {
+                TryAgain:
                 //raise alarm if longitude is out of range
                 var outOfRange = !(longitudeDeg >= -180 && longitudeDeg <= 180);
-                if (outOfRange) { throw new Exception($"Longitude out of range : {longitudeDeg}"); }
+                if (outOfRange)
+                {
+                    if (failCount < failTryLimit)
+                    {
+                        var oldLongitude = longitudeDeg; //back up for logging
+
+                        //instead of giving up, lets take a go at correcting it
+                        //assume input is 48401 but should be 48.401, so divide 1000
+                        longitudeDeg = longitudeDeg / 1000;
+
+                        failCount++; //keep track so not fall into rabbit hole
+
+                        LibLogger.Debug($"Longitude out of range : {oldLongitude} > Auto correct to : {longitudeDeg}"); //log it for debug research
+
+                        goto TryAgain;
+                    }
+
+                    //if control reaches here than raise exception,
+                    //control should not reach here under any good call condition
+                    throw new Exception($"Longitude out of range : {longitudeDeg} > Auto correct failed!");
+                }
 
                 //calculate offset based on longitude
                 var offsetToReturn = TimeSpan.FromHours(longitudeDeg / 15.0);

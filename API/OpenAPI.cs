@@ -18,7 +18,7 @@ namespace API
             HttpRequestMessage incomingRequest, string locationName, string hhmmStr, string dateStr, string monthStr, string yearStr, string offsetStr, string planetNameStr, string propertyName)
         {
             //log the call
-            ApiLogger.Visitor(incomingRequest);
+            APILogger.Visitor(incomingRequest);
 
             PlanetName planetName;
             var planetNameResult = PlanetName.TryParse(planetNameStr, out planetName);

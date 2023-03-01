@@ -26,7 +26,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -65,7 +65,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
                 return APITools.FailMessage(e);
@@ -103,7 +103,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e);
             }
@@ -142,7 +142,7 @@ namespace API
             catch (Exception e)
             {
                 //log error
-                await ApiLogger.Error(e, incomingRequest);
+                await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e);
             }

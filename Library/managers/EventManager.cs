@@ -83,91 +83,6 @@ namespace Genso.Astrology.Library
             return eventList;
         }
 
-        /// <summary>
-        /// Note : the list of events to find is treated as 1 event here
-        /// </summary>
-        public static List<Event> FindCombinedEventsInTimePeriod(DateTimeOffset startStdTime, DateTimeOffset endStdTime, GeoLocation geoLocation, Person person, double precisionInHours, List<EventData> eventDataList)
-        {
-
-            //get data to instantiate
-            //get start & end times
-            var startTime = new Time(startStdTime, geoLocation);
-            var endTime = new Time(endStdTime, geoLocation);
-
-
-            //split time into slices based on precision
-            List<Time> timeList = GetTimeListFromRange(startTime, endTime, precisionInHours);
-
-            //takes time slices and check if all the events is occurig for each time slice,
-            //the list of events is treated as 1 event here 
-            var precalculatedList = GetCalculatedTimeEventOccuringList(eventDataList);
-
-            //create a new combined event data type (used when extracting events)
-            var combinedEvent = CreateNewEventData(eventDataList);
-
-
-            //go through time slices and identify start & end of events
-            //and place them in a event list
-            var eventList = ExtractEventsFromTimeSlices(timeList, precalculatedList, combinedEvent);
-
-            return eventList;
-
-
-
-            //----------------------FUNCTIONS--------------------------
-
-            //takes time list and checks if event is occurig for each time slice,
-            //and returns it in dictionary list, done in parallel
-            ConcurrentDictionary<Time, bool> GetCalculatedTimeEventOccuringList(List<EventData> combinedEvents)
-            {
-                //time is "key", and "is occuring" is "value"
-                var returnList = new ConcurrentDictionary<Time, bool>();
-
-                Parallel.ForEach(timeList, (time, state) =>
-                {
-                    //check if all events are occuring in this time slice
-                    var isEventOccuring = isAllEventsOccuring(time, person, combinedEvents);
-
-                    //add to the dictionary
-                    returnList[time] = isEventOccuring;
-
-                });
-
-                return returnList;
-            }
-
-            //check if all events are occuring for a time slice
-            bool isAllEventsOccuring(Time timeSlice, Person person, List<EventData> combinedEvents)
-            {
-                //makes sure all the events are occuring for this time slice
-                //else false is returned even if 1 event is not occuring
-                foreach (var _event in combinedEvents)
-                {
-                    var isEventOccuring = _event.IsEventOccuring(timeSlice, person);
-                    if (isEventOccuring == false) { return false; }
-                }
-
-                //if control reaches here, then all events are occuring
-                return true;
-            }
-
-            //creates a new event data type for the particular custom search
-            EventData CreateNewEventData(List<EventData> eventDatas)
-            {
-                //if only looking for 1 event, then no need to create a new merged event
-                //just use that event data
-                if (eventDatas.Count == 1) { return eventDatas[0]; }
-
-                //but if more than 1, create a merged/combined type
-                var eventName = EventName.CombinedEvent;
-                var description = "Combined event of:\n";
-                eventDatas.ForEach(eventData => description += $"-{eventData.Name}\n"); //name of each event is added to description
-                var combinedEvent =
-                    new EventData(eventName, EventNature.Neutral, description, null,
-                        null); //no need tag & calculator since only used visualy
-                return combinedEvent;
-            }
-        }
 
         /// <summary>
         /// Get a list of events in a time period for a single event type aka "event data"
@@ -568,7 +483,28 @@ namespace Genso.Astrology.Library
         }
 
 
+        /// <summary>
+        /// Gets all event data/types that match the inputed tag
+        /// </summary>
+        public static List<EventData> GetEventDataListByTag(EventTag tag, List<EventData> eventDataList)
+        {
+            //get all event data/types
+            //var eventDataList = DatabaseManager.GetEventDataList(filePath);
 
+            //filter IN event data list by tag
+            var filteredEventDataList = eventDataList.FindAll(eventData =>
+            {
+                //single tag filter
+                //var filter1 = eventData.GetName() == EventName.SuryaSankramana || eventData.GetName() == EventName.Sunset || eventData.GetName() == EventName.Midday;
+                //var filter1 = eventData.GetName() == EventName.Papashadvargas;
+                //var filter1 = eventData.GetName().ToString().Contains("Suns");
+                var filter1 = eventData.EventTags.Contains(tag);
+
+                return filter1;
+            });
+
+            return filteredEventDataList;
+        }
     }
 }
 

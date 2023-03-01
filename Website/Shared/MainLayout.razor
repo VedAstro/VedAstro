@@ -52,16 +52,23 @@
                 <a @ref="navLink6" href="@PageRoute.OpenApi" @onclick="()=>OnClickNavItem(navLink6, PageRoute.OpenApi)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="carbon:gateway-api" data-width="25"></span><span>Open API</span>
                 </a>
-                <a @ref="navLink7" href="@PageRoute.Contact" @onclick="()=>OnClickNavItem(navLink7, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink7" href="https://github.com/orgs/VedAstro/discussions" @onclick="()=>OnClickNavItem(navLink6, PageRoute.OpenApi)" style="cursor: pointer;" class="nav-link">
+                    <span class="iconify" data-icon="fluent:news-16-regular" data-width="25"></span><span>Blog</span>
+                </a>
+                <a @ref="navLink8" href="https://github.com/orgs/VedAstro/discussions" @onclick="()=>OnClickNavItem(navLink6, PageRoute.OpenApi)" style="cursor: pointer;" class="nav-link">
+                    <span class="iconify" data-icon="material-symbols:forum-outline" data-width="25"></span><span>Forum</span>
+                </a>
+                <a @ref="navLink9" href="@PageRoute.Contact" @onclick="()=>OnClickNavItem(navLink7, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="ci:mail" data-width="24"></span><span>Contact</span>
                 </a>
-                <a @ref="navLink8" href="@PageRoute.Donate" @onclick="()=>OnClickNavItem(navLink8, PageRoute.Donate)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink10" href="@PageRoute.Donate" @onclick="()=>OnClickNavItem(navLink8, PageRoute.Donate)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="iconoir:donate" data-width="25"></span><span>Donate</span>
                 </a>
-                <a @ref="navLink9" href="@PageRoute.About" @onclick="()=>OnClickNavItem(navLink9, PageRoute.About)" style="cursor: pointer;" class="nav-link">
+                <a @ref="navLink11" href="@PageRoute.About" @onclick="()=>OnClickNavItem(navLink9, PageRoute.About)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="akar-icons:info" data-width="25"></span><span>About</span>
                 </a>
-                @*                <a @ref="navLink9" @onclick="()=>OnClickNavItem(navLink9, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
+                @*
+            <a @ref="navLink9" @onclick="()=>OnClickNavItem(navLink9, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
             <span class="iconify" data-icon="codicon:feedback" data-width="25"></span><span>Give Feedback</span>
             </a>
             *@
@@ -125,7 +132,7 @@
 {
     IJSObjectReference? _module;
     bool _mainPageInitDone;
-    private ElementReference searchInput, navLink1, navLink2, navLink3, navLink4, navLink5, navLink6, navLink7, navLink8, navLink9;
+    private ElementReference searchInput, navLink1, navLink2, navLink3, navLink4, navLink5, navLink6, navLink7, navLink8, navLink9, navLink10, navLink11;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -213,7 +220,7 @@
         var text = await _jsRuntime.GetValue(searchInput);
 
         //log
-        WebLogger.Data("Search:" + text);
+        WebLogger.Data("Search: " + text);
 
         //go home when no text
         if (text.Length == 0) { _navigation.NavigateTo(PageRoute.Home); return; }
@@ -266,6 +273,8 @@
             _jsRuntime.RemoveClass(navLink7, "active");
             _jsRuntime.RemoveClass(navLink8, "active");
             _jsRuntime.RemoveClass(navLink9, "active");
+            _jsRuntime.RemoveClass(navLink10, "active");
+            _jsRuntime.RemoveClass(navLink11, "active");
 
         }
     }

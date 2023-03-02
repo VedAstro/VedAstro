@@ -26,6 +26,25 @@ namespace Genso.Astrology.Library
     public static class Tools
     {
         /// <summary>
+        /// "H1N1" -> ["H", "1", "N", "1"]
+        /// "H" -> ["H"]
+        /// "GH1N12" -> ["GH", "1", "N", "12"]
+        /// "OS234" -> ["OS", "234"]
+        /// </summary>
+        public static List<string> SplitAlpha(string input)
+        {
+            var words = new List<string> { string.Empty };
+            for (var i = 0; i < input.Length; i++)
+            {
+                words[words.Count - 1] += input[i];
+                if (i + 1 < input.Length && char.IsLetter(input[i]) != char.IsLetter(input[i + 1]))
+                {
+                    words.Add(string.Empty);
+                }
+            }
+            return words;
+        }
+        /// <summary>
         /// Converts xml element instance to string properly
         /// </summary>
         public static string XmlToString(XElement xml)

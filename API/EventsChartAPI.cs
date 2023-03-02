@@ -720,65 +720,62 @@ namespace API
 
             var yesterday = now.AddDays(-1).ToString("dd/MM/yyyy zzz");
             var timePreset = timePresetRaw.ToLower(); //so that all cases are accepted
-            switch (timePreset)
-            {
 
+            //assume input is "3days", number + date type
+            //so split by number
+            var split = Tools.SplitAlpha(timePreset);
+            var number = int.Parse(split[0]);
+            number = number < 1 ? 1 : number; //min 1, so user can in put just, "year" and except 1 year
+            var dateType = split[1];
+
+
+            int days;
+            double hoursToAdd;
+            string _2MonthsAgo;
+            switch (dateType)
+            {
                 case "hour":
-                    var startHour = now.AddHours(-1);//back 1 hour
-                    var endHour = now.AddHours(1);//front 1 hour
+                    var startHour = now.AddHours(-1); //back 1 hour
+                    var endHour = now.AddHours(number); //front by input
                     start = new Time(startHour, birthLocation);
                     end = new Time(endHour, birthLocation);
                     return new { start, end };
                 case "today":
                 case "day":
                     start = new Time($"00:00 {today}", birthLocation);
-                    end = new Time($"23:59 {today}", birthLocation);
+                    end = start.AddHours(Tools.DaysToHours(number));
                     return new { start, end };
                 case "week":
+                    days = number * 7;
+                    hoursToAdd = Tools.DaysToHours(days);
                     start = new Time($"00:00 {yesterday}", birthLocation);
-                    var weekEnd = now.AddDays(7).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {weekEnd}", birthLocation);
+                    end = start.AddHours(hoursToAdd);
                     return new { start, end };
                 case "month":
+                    days = number * 30;
+                    hoursToAdd = Tools.DaysToHours(days);
                     var _1WeekAgo = now.AddDays(-7).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_1WeekAgo}", birthLocation);
-                    var monthEnd = now.AddDays(30).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {monthEnd}", birthLocation);
+                    end = Time.Now(birthLocation).AddHours(hoursToAdd);
                     return new { start, end };
-                case "3months":
-                    var _2WeekAgo = now.AddDays(-14).ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {_2WeekAgo}", birthLocation);
-                    var _3monthEnd = now.AddDays(90).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {_3monthEnd}", birthLocation);
-                    return new { start, end };
-                case "6months":
-                    var _1MonthsAgo = now.AddDays(-30).ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {_1MonthsAgo}", birthLocation);
-                    var _6monthEnd = now.AddDays(180).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {_6monthEnd}", birthLocation);
-                    return new { start, end };
-                case "1year":
                 case "year":
-                    var _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
+                    days = number * 365;
+                    hoursToAdd = Tools.DaysToHours(days);
+                    _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
-                    var yearEnd = now.AddDays(365).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {yearEnd}", birthLocation);
+                    end = Time.Now(birthLocation).AddHours(hoursToAdd);
                     return new { start, end };
-                case "5years":
-                    var _6MonthsAgo = now.AddDays(-180).ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {_6MonthsAgo}", birthLocation);
-                    var _5yearEnd = now.AddDays((365 * 5)).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {_5yearEnd}", birthLocation);
-                    return new { start, end };
-                case "10years":
+                case "decades":
                 case "decade":
-                    var _1YearAgo = now.AddDays(-365).ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {_1YearAgo}", birthLocation);
-                    var decadeEnd = now.AddDays((365 * 10)).ToString("dd/MM/yyyy zzz");
-                    end = new Time($"23:59 {decadeEnd}", birthLocation);
+                    days = number * 3652;
+                    hoursToAdd = Tools.DaysToHours(days);
+                    _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
+                    start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
+                    end = Time.Now(birthLocation).AddHours(hoursToAdd);
                     return new { start, end };
                 default:
                     return new { start = Time.Empty, end = Time.Empty };
+
             }
         }
 

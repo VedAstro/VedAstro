@@ -307,3 +307,8 @@ but with Client + Server config, hashes become different, needs changing to MD5
     Example, Tarabala Events is taged for Personal & Tarabala.
 -   Needs to be added with care and where absolutely needed,
     else could get very confusing.
+
+
+
+![GitHub stats](https://github-readme-stats.vercel.app/api?username=sengiv&count_private=true&theme=dark&show_icons=true&hide_border=true&hide=contribs,prs,issues)
+![GitHub stats](https://github-readme-stats.vercel.app/api/top-langs/?username=sengiv&theme=dark&hide_border=true&langs_count=4)

@@ -24,6 +24,7 @@
         public const string OpenApi = "API/";
         public const string MatchApi = "API/Match";
         public const string SwissEphemerisApi = "API/SwissEphemeris";
+        public const string NLPApi = "API/NLP";
 
 
         //CALCULATORS

@@ -65,6 +65,7 @@ namespace Genso.Astrology.Library
             return prediction;
         }
 
+        
         public RelatedBody RelatedBody { get; set; } = new RelatedBody();
 
 

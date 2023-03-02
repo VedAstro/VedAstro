@@ -811,7 +811,7 @@ namespace API
             var clientNowTime = startTime.StdTimeNowAtOffset;//now time at client
             var nowLinePosition = GetLinePosition(timeSlices, clientNowTime);
             //skip now line if beyond chart on both sides
-            var beyondLimit = nowLinePosition == 0 || nowLinePosition == (timeSlices.Count-1);
+            var beyondLimit = nowLinePosition == 0 || nowLinePosition == (timeSlices.Count - 1);
             var nowLineHeight = lineHeight + 6; //space between icon & last row
             compiledRow += GetNowLine(nowLineHeight, nowLinePosition, beyondLimit); //hides if beyond limit
 
@@ -2000,18 +2000,10 @@ namespace API
             //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
             const int singleRowHeight = 15;
-            var eventDataListUnfilled = APITools.GetEventDataList().Result;
 
             //rows are dynamically generated as needed, hence the extra logic below
             //list of rows to generate
-            var unsortedEventList = new List<Event>();
-
-            //calculate events for each tag
-            foreach (var eventTag in inputedEventTags)
-            {
-                var tempEventList = APITools.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag, eventDataListUnfilled);
-                unsortedEventList.AddRange(tempEventList);
-            }
+            var unsortedEventList = EventManager.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, inputedEventTags);
 
             //sort event by duration, so that events are ordered nicely in chart
             //todo events are breaking up between rows
@@ -2050,9 +2042,7 @@ namespace API
             string GenerateSummaryRow(int yAxis)
             {
 #if DEBUG
-                Console.WriteLine("GenerateSummaryRow");
-                Console.WriteLine("MAX" + maxValue);
-                Console.WriteLine("MIN" + minValue);
+                Console.WriteLine($"GenerateSummaryRow : MAX:{maxValue}, MIN:{minValue}");
 #endif
 
                 var rowHtml = "";

@@ -42,8 +42,6 @@ namespace API
         //we use direct storage URL for fast access & solid
         public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
 
-        //used in muhurtha events
-        public const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
 
         //used in horoscope prediction
         public const string UrlHoroscopeDataListXml = $"https://{AzureStorage}/data/HoroscopeDataList.xml";
@@ -533,28 +531,6 @@ namespace API
         private static async Task<XDocument> GetPersonListFile() => await GetXmlFileFromAzureStorage("PersonList.xml", "vedastro-site-data");
 
         /// <summary>
-        /// Get parsed EventDataList.xml from wwwroot file / static site
-        /// Note: Event data list needed to calculate events
-        /// </summary>
-        public static async Task<List<EventData>> GetEventDataList()
-        {
-            //get data list from Static Website storage
-            //note : done so that any updates to that live file will be instantly reflected in API results
-            var eventDataListXml = await GetXmlFileHttp(UrlEventDataListXml);
-
-            //parse each raw event data in list
-            var eventDataList = new List<EventData>();
-            foreach (var eventDataXml in eventDataListXml)
-            {
-                //add it to the return list
-                eventDataList.Add(EventData.FromXml(eventDataXml));
-            }
-
-            return eventDataList;
-
-        }
-
-        /// <summary>
         /// Get parsed HoroscopeDataList.xml from wwwroot file / static site
         /// Note: auto caching is used
         /// </summary>
@@ -564,7 +540,7 @@ namespace API
             if (SavedHoroscopeDataList != null) { return SavedHoroscopeDataList; }
 
             //get data list from Static Website storage
-            var horoscopeDataListXml = await GetXmlFileHttp(UrlHoroscopeDataListXml);
+            var horoscopeDataListXml = await Tools.GetXmlFileHttp(UrlHoroscopeDataListXml);
 
             //parse each raw event data in list
             var horoscopeDataList = new List<HoroscopeData>();
@@ -581,24 +557,6 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Gets XML file from any URL and parses it into xelement list
-        /// </summary>
-        public static async Task<List<XElement>> GetXmlFileHttp(string url)
-        {
-            //get the data sender
-            using var client = new HttpClient();
-
-            //load xml event data files before hand to be used quickly later for search
-            //get main horoscope prediction file (located in wwwroot)
-            var fileStream = await client.GetStreamAsync(url);
-
-            //parse raw file to xml doc
-            var document = XDocument.Load(fileStream);
-
-            //get all records in document
-            return document.Root.Elements().ToList();
-        }
 
         /// <summary>
         /// Gets any file at given url as string
@@ -615,25 +573,6 @@ namespace API
             return fileString;
         }
 
-        public static List<Event> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag, List<EventData> eventDataList)
-        {
-
-            //get all event data/types which has the inputed tag (FILTER)
-            var eventDataListFiltered = EventManager.GetEventDataListByTag(tag, eventDataList);
-
-            //start calculating events
-            var eventList = EventManager.GetEventsInTimePeriod(startTime.GetStdDateTimeOffset(), endTime.GetStdDateTimeOffset(), geoLocation, person, eventsPrecision, eventDataListFiltered);
-
-            //sort the list by time before sending view
-            var orderByAscResult = from dasaEvent in eventList
-                                   orderby dasaEvent.StartTime.GetStdDateTimeOffset()
-                                   select dasaEvent;
-
-
-            //send sorted events to view
-            return orderByAscResult.ToList();
-
-        }
 
         /// <summary>
         /// Gets XML file from Azure blob storage

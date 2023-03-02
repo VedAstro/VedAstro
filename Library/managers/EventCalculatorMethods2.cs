@@ -4563,7 +4563,7 @@ namespace Genso.Astrology.Library
             if (occuring)
             {
                 //nature & description override, based on cyclic relationship between planets
-                var periodPrediction = AstronomicalCalculator.GetPlanetDasaMajorPlanetAndMinorRelationship(PlanetName.Sun, PlanetName.Sun);
+                var periodPrediction = AstronomicalCalculator.GetPlanetDasaMajorPlanetAndMinorRelationship(bhuktiPlanet, antaramPlanet);
 
                 var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 
@@ -4597,7 +4597,7 @@ namespace Genso.Astrology.Library
             if (occuring)
             {
                 //nature & description override, based on cyclic relationship between planets
-                var periodPrediction = AstronomicalCalculator.GetPlanetDasaMajorPlanetAndMinorRelationship(PlanetName.Sun, PlanetName.Sun);
+                var periodPrediction = AstronomicalCalculator.GetPlanetDasaMajorPlanetAndMinorRelationship(antaramPlanet, sukshmaPlanet);
 
                 var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 

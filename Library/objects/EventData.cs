@@ -13,7 +13,7 @@ namespace Genso.Astrology.Library
     /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
-    public struct EventData : IHasName
+    public struct EventData : IHasName, IToXml
     {
         /** FIELDS **/
 
@@ -40,7 +40,7 @@ namespace Genso.Astrology.Library
         /// Gets human readable Event Name, removes camel case
         /// </summary>
         public string FormattedName => Format.FormatName(this);
-        
+
         public EventNature Nature { get; private set; }
         
         public EventCalculatorDelegate EventCalculator { get; private set; }
@@ -63,31 +63,7 @@ namespace Genso.Astrology.Library
         /** PUBLIC METHODS **/
 
 
-        /// <summary>
-        /// Calculator Results are made here
-        /// </summary>
-        public bool IsEventOccuring(Time time, Person person)
-        {
-            //do calculation for this event to get prediction data
-            var predictionData = EventCalculator(time, person);
-
-            //extract the data out and store it for later use
-            //is prediction occuring
-            bool isEventOccuring = predictionData.Occuring;
-
-            //store planets, houses & signs related to result
-            RelatedBody = predictionData.RelatedBody;
-
-            //override event nature from xml if specified
-            Nature = predictionData.NatureOverride == EventNature.Empty ? Nature : predictionData.NatureOverride;
-
-            //override description if specified
-            var isDescriptionOverride = !string.IsNullOrEmpty(predictionData.DescriptionOverride); //if true override, else false
-            Description = isDescriptionOverride ? predictionData.DescriptionOverride : Description;
-
-            //let caller know if occuring
-            return isEventOccuring;
-        }
+       
 
 
 
@@ -246,5 +222,17 @@ namespace Genso.Astrology.Library
             //return the list to caller
             return eventDataList;
         }
+
+        public XElement ToXml()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The root element is expected to be Person
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
+
     }
 }

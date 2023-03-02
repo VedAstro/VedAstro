@@ -34,6 +34,25 @@ namespace Genso.Astrology.Library
             return xml.ToString(SaveOptions.DisableFormatting);
         }
 
+        /// <summary>
+        /// Gets XML file from any URL and parses it into xelement list
+        /// </summary>
+        public static async Task<List<XElement>> GetXmlFileHttp(string url)
+        {
+            //get the data sender
+            using var client = new HttpClient();
+
+            //load xml event data files before hand to be used quickly later for search
+            //get main horoscope prediction file (located in wwwroot)
+            var fileStream = await client.GetStreamAsync(url);
+
+            //parse raw file to xml doc
+            var document = XDocument.Load(fileStream);
+
+            //get all records in document
+            return document.Root.Elements().ToList();
+        }
+
 
         /// <summary>
         /// Converts any type to XML, it will use Type's own ToXml() converter if available

@@ -93,7 +93,7 @@ namespace Genso.Astrology.Library
 
                 //go through time slices and identify start & end of events
                 //place them in a event list
-                var eventList = ExtractEventsFromTimeSlices(timeList, eventSlices);
+                var eventList = EventSlicesToEvents(timeList, eventSlices);
 
                 return eventList;
 
@@ -105,24 +105,13 @@ namespace Genso.Astrology.Library
 
         //takes time list and checks if event is occuring for each time slice,
         //and returns it in dictionary list, done in parallel
-        public static List<EventSlice> ConvertToEventSlice(List<Time> timeList, EventData eventData,
+        public static EventSlice[] ConvertToEventSlice(List<Time> timeList, EventData eventData,
             Person person)
         {
             //event data list is recreated because the data
             //inside is possibly changed when calculators are run (dynamic yeah!)
             //var returnList = new ConcurrentBag<EventSlice>();
             EventSlice[] returnList = new EventSlice[timeList.Count];
-
-            //PARALLEL CODE
-            //Parallel.ForEach(timeList, (time, state) =>
-            //{
-            //    //get if event occuring at the inputed time (heavy computation)
-            //    var updatedEventData = ConvertToEventSlice(time, _eventData, _person);
-
-            //    //only add if occuring
-            //    if (updatedEventData != null) { returnList.Add((EventSlice)updatedEventData); }
-
-            //});
 
             Parallel.For(0, timeList.Count, i =>
             {
@@ -134,7 +123,7 @@ namespace Genso.Astrology.Library
                 returnList[i] = updatedEventData;
             });
 
-            return returnList.ToList();
+            return returnList;
         }
 
 
@@ -176,16 +165,17 @@ namespace Genso.Astrology.Library
             return null;
         }
 
-        private static List<Event> ExtractEventsFromTimeSlices(List<Time> timeList, List<EventSlice> eventSliceList)
+        /// <summary>
+        /// before becoming events
+        /// </summary>
+        private static List<Event> EventSlicesToEvents(List<Time> timeList, EventSlice[] eventSliceList)
         {
-            //before becoming events
 
             //Makes the events as it scans them
             var returnList = new List<Event>();
-            var startI = 0;
-            var endI = 0;
+            var eventStartI = 0;
             var inBetween = false; //in between start & end event, start as though null before
-            var lastIndex = eventSliceList.Count;
+            var lastIndex = eventSliceList.Length;
             for (int i = 0; i < lastIndex; i++)
             {
                 //if null move to next
@@ -200,7 +190,7 @@ namespace Genso.Astrology.Library
                         var previousSliceI = --i;//last slice in event
 
                         //create the event
-                        var startSlice = eventSliceList[startI];
+                        var startSlice = eventSliceList[eventStartI];
                         var startTime = startSlice.Time;
                         var endTime = eventSliceList[previousSliceI].Time;//aka endI
                         
@@ -210,107 +200,17 @@ namespace Genso.Astrology.Library
                         returnList.Add(newEvent); //add to list
                     }
 
-                    //nothing to see go to next
+                    //nothing to see, go to next
                     continue;
                 }
 
                 //if new event after null, set start
-                if (!isNull && !inBetween) { startI = i; inBetween = true; }
-
+                if (!isNull && !inBetween) { eventStartI = i; inBetween = true; }
 
             }
 
             return returnList;
 
-        }
-
-        //go through time slices and identify start & end of events
-        //place them in a event list and return it
-        //new feature feb 2023 : allows each event data to be modified by calculator, so 1 event name can
-        //have different descriptions or natures based on time & person (truly dynamic) 
-        private static List<Event> ExtractEventsFromTimeSlicesOld(List<Time> timeList, List<EventSlice> eventSliceList)
-        {
-            //declare empty event list to fill
-            var eventList = new List<Event>();
-
-            //set previous time as false for first time instance
-            var eventOccuredInPreviousTime = false;
-
-            //declare start & end times
-            Time eventStartTime = new Time();
-            Time eventEndTime = new Time();
-            var lastInstanceOfTime = timeList.Last();
-
-            //loop through time list 
-            //note: loop must be done in sequential order, to detect correct start & end time
-            foreach (var time in timeList)
-            {
-
-                //check if event is occuring at this time slice (pre-calculated list)
-                var eventSlice = eventSliceList.Where(x => x.Time == time).FirstOrDefault();
-                var eventIsOccuringNow = eventSlice.IsOccuring;
-
-                //if event is occuring now & not in previous time
-                if (eventIsOccuringNow == true & eventOccuredInPreviousTime == false)
-                {
-                    //save new start & end time
-                    eventStartTime = time;
-                    eventEndTime = time;
-                    //update flag
-                    eventOccuredInPreviousTime = true;
-                }
-                //if event is occuring now & in previous time
-                else if (eventIsOccuringNow == true & eventOccuredInPreviousTime == true)
-                {
-                    //update end time only
-                    eventEndTime = time;
-                    //update flag
-                    eventOccuredInPreviousTime = true;
-                }
-                //if event is not occuring now but occurred before
-                else if (eventIsOccuringNow == false & eventOccuredInPreviousTime == true)
-                {
-                    //add previous event to list
-                    var newEvent = new Event(eventSlice.Name,
-                        eventSlice.Nature,
-                        eventSlice.Description,
-                        eventStartTime,
-                        eventEndTime);
-
-                    //if event is duration is 0 minute, log it
-                    if (newEvent.GetDurationMinutes() <= 0)
-                    {
-                        //LibLogger.Debug("Event duration is 0!");
-                    }
-
-
-                    eventList.Add(newEvent);
-
-                    //set flag
-                    eventOccuredInPreviousTime = false;
-                }
-
-                //if event is occuring now & it is the last time
-                if (eventIsOccuringNow == true & time == lastInstanceOfTime)
-                {
-                    //add current event to list
-                    var newEvent2 = new Event(eventSlice.Name,
-                        eventSlice.Nature,
-                        eventSlice.Description,
-                        eventStartTime,
-                        eventEndTime);
-
-                    //if event is duration is 0 minute, raise alarm
-                    if (newEvent2.GetDurationMinutes() <= 0)
-                    {
-                        //LibLogger.Debug("Event duration is 0!");
-                    }
-
-                    eventList.Add(newEvent2);
-                }
-            }
-
-            return eventList;
         }
 
 
@@ -635,6 +535,7 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static List<Event> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation getBirthLocation, Person inputPerson, List<EventTag> inputedEventTags)
         {
+
             //load data list
             //used later by calculate events
             EventDataList = GetEventDataList<EventData>(UrlEventDataListXml).Result;
@@ -642,7 +543,8 @@ namespace Genso.Astrology.Library
             var sync = new object();//to lock thread access to list
 
 
-            //set based on 
+            //reset, if called in the same instance
+            EventManager.EventList = new List<Event>();
 
             //calculate events for each tag
             //NOTE: parallel speed > 143s > 40s

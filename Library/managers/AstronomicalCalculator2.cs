@@ -2290,7 +2290,7 @@ namespace Genso.Astrology.Library
                             case PlanetName.PlanetNameEnum.Moon:
                                 {
                                     returnVal.eventNature = EventNature.Bad;
-                                    returnVal.desciption = @"Disputes about ""fair sex"", trouble through children, gains and financial success, diseases of biliousness and cold, loss of relatives and money, destruction of wealth and distress of mind.";
+                                    returnVal.desciption = @"Disputes about fair sex, trouble through children, gains and financial success, diseases of biliousness and cold, loss of relatives and money, destruction of wealth and distress of mind.";
                                     return returnVal;
                                 }
                             case PlanetName.PlanetNameEnum.Mars:

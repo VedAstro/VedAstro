@@ -2177,12 +2177,11 @@ namespace API
                             prevEventList[finalYAxis] = foundEvent.Name;
                         }
 
-                        //var color = GetColor(foundEvent?.Nature);
-
                         //generate and add to row
                         //the hard coded attribute names used here are used in App.js
                         var rect = $"<rect " +
                                    $"eventname=\"{foundEvent?.FormattedName}\" " +
+                                   $"eventdescription=\"{foundEvent?.Description}\" " +
                                    $"age=\"{inputPerson.GetAge(slice)}\" " +
                                    $"stdtime=\"{slice.GetStdDateTimeOffset().ToString(Time.DateTimeFormat)}\" " +
                                    $"x=\"{horizontalPosition}\" " +

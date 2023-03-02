@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
@@ -724,17 +725,19 @@ namespace API
             //assume input is "3days", number + date type
             //so split by number
             var split = Tools.SplitAlpha(timePreset);
-            var number = int.Parse(split[0]);
+            var result = int.TryParse(split[0], out int number);
             number = number < 1 ? 1 : number; //min 1, so user can in put just, "year" and except 1 year
-            var dateType = split[1];
-
+            //if no number, than data type in 1st place
+            var dateType = result ? split[1] : split[0];
 
             int days;
             double hoursToAdd;
             string _2MonthsAgo;
+            var timeNow = Time.Now(birthLocation);
             switch (dateType)
             {
                 case "hour":
+                case "hours":
                     var startHour = now.AddHours(-1); //back 1 hour
                     var endHour = now.AddHours(number); //front by input
                     start = new Time(startHour, birthLocation);
@@ -742,28 +745,32 @@ namespace API
                     return new { start, end };
                 case "today":
                 case "day":
+                case "days":
                     start = new Time($"00:00 {today}", birthLocation);
-                    end = start.AddHours(Tools.DaysToHours(number));
+                    end = timeNow.AddHours(Tools.DaysToHours(number));
                     return new { start, end };
                 case "week":
+                case "weeks":
                     days = number * 7;
                     hoursToAdd = Tools.DaysToHours(days);
                     start = new Time($"00:00 {yesterday}", birthLocation);
-                    end = start.AddHours(hoursToAdd);
+                    end = timeNow.AddHours(hoursToAdd);
                     return new { start, end };
                 case "month":
+                case "months":
                     days = number * 30;
                     hoursToAdd = Tools.DaysToHours(days);
                     var _1WeekAgo = now.AddDays(-7).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_1WeekAgo}", birthLocation);
-                    end = Time.Now(birthLocation).AddHours(hoursToAdd);
+                    end = timeNow.AddHours(hoursToAdd);
                     return new { start, end };
                 case "year":
+                case "years":
                     days = number * 365;
                     hoursToAdd = Tools.DaysToHours(days);
                     _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
-                    end = Time.Now(birthLocation).AddHours(hoursToAdd);
+                    end = timeNow.AddHours(hoursToAdd);
                     return new { start, end };
                 case "decades":
                 case "decade":
@@ -771,7 +778,7 @@ namespace API
                     hoursToAdd = Tools.DaysToHours(days);
                     _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
                     start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
-                    end = Time.Now(birthLocation).AddHours(hoursToAdd);
+                    end = timeNow.AddHours(hoursToAdd);
                     return new { start, end };
                 default:
                     return new { start = Time.Empty, end = Time.Empty };

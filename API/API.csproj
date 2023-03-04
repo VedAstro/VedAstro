@@ -9,6 +9,7 @@
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.13.1" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Storage" Version="5.0.1" />
 		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.1.3" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0-rc.1.22426.10" />
 	</ItemGroup>
 	<ItemGroup>
@@ -29,5 +30,7 @@
 	<PropertyGroup>
 		<DisableFunctionExtensionVersionUpdate>true</DisableFunctionExtensionVersionUpdate>
 		<LangVersion>preview</LangVersion>
+		<DockerFastModeProjectMountDirectory>/home/site/wwwroot</DockerFastModeProjectMountDirectory>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 </Project>

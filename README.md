@@ -18,21 +18,25 @@
 
 
 <h1 align="center"><a href="https://www.vedastro.org">VedAstro.org</a></h1>
-<h5 align="center">
+<h4 align="center">
   Astrology enables one to see subtle phenomena across time.</br>
        Which to the mortal man is invisible in action,
-       and only visible in its reaction.</h5>
+       and only visible in its reaction.</h4>
 
 # Links
 - [Quick Guide](https://www.vedastro.org/QuickGuide) learn how to use
 - [Open API](https://www.vedastro.org/API) easily get astrology data for your app or website
+- [Swiss Ephemris API](https://www.vedastro.org/API/SwissEphemeris) easily get astrology data for your app or website
 - [Calculators](https://www.vedastro.org/Calculator) each calculator shows an aspect of vedic astrology
+- [Docker](https://github.com/orgs/VedAstro/discussions/8) supported for easy deployement anywhere
+
 - [About](https://www.vedastro.org/About) the reason and goal for this project
 - [Donate](https://www.vedastro.org/Donate) to keep this project going
 - [Report](https://www.vedastro.org/Contact) problems you find when using the WebApp
 - [Share](https://www.vedastro.org/Contact) your ideas for new or better features 
-- [Fix](https://www.vedastro.org/Contact) bugs & implement features
 
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0ELZGR)
 <!--
 
 # Examples of Accurate Predictions

@@ -487,29 +487,6 @@ namespace Genso.Astrology.Library
         }
 
 
-        /// <summary>
-        /// Get parsed EventDataList.xml from wwwroot file / static site
-        /// Note: Event data list needed to calculate events
-        /// TODO MOVE TO TOOLS!!!!!
-        /// </summary>
-        public static async Task<List<T>> GetEventDataList<T>(string httpUrl) where T : IToXml, new()
-        {
-            //get data list from Static Website storage
-            //note : done so that any updates to that live file will be instantly reflected in API results
-            var eventDataListXml = await Tools.GetXmlFileHttp(httpUrl);
-
-            //parse each raw event data in list
-            var eventDataList = new List<T>();
-            foreach (var eventDataXml in eventDataListXml)
-            {
-                //add it to the return list
-                var x = new T();
-                eventDataList.Add(x.FromXml<T>(eventDataXml));
-            }
-
-            return eventDataList;
-
-        }
 
 
 

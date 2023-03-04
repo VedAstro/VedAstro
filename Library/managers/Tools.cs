@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -131,6 +131,29 @@ namespace Genso.Astrology.Library
                 rootXml.Add(xmlItem);
             }
             return rootXml;
+        }
+
+        /// <summary>
+        /// Given the URL of a standard VedAstro XML file, like "http://...PersonList.xml",
+        /// will convert to the specified type and return in nice list, with time to be home for dinner
+        /// </summary>
+        public static async Task<List<T>> ConvertXmlListFileToInstanceList<T>(string httpUrl) where T : IToXml, new()
+        {
+            //get data list from Static Website storage
+            //note : done so that any updates to that live file will be instantly reflected in API results
+            var eventDataListXml = await Tools.GetXmlFileHttp(httpUrl);
+
+            //parse each raw event data in list
+            var eventDataList = new List<T>();
+            foreach (var eventDataXml in eventDataListXml)
+            {
+                //add it to the return list
+                var x = new T();
+                eventDataList.Add(x.FromXml<T>(eventDataXml));
+            }
+
+            return eventDataList;
+
         }
 
 

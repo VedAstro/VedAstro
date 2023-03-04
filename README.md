@@ -29,13 +29,9 @@
 - [Swiss Ephemris API](https://www.vedastro.org/API/SwissEphemeris) easily get astrology data for your app or website
 - [Calculators](https://www.vedastro.org/Calculator) each calculator shows an aspect of vedic astrology
 - [Docker](https://github.com/orgs/VedAstro/discussions/8) supported for easy deployement anywhere
-- [About](https://www.vedastro.org/About) the reason and goal for this project
+- [Contact](https://www.vedastro.org/Contact) us and we'll get back to you ASAP.
 - [Donate](https://www.vedastro.org/Donate) to keep this project going
-- [Report](https://www.vedastro.org/Contact) problems you find when using the WebApp
-- [Share](https://www.vedastro.org/Contact) your ideas for new or better features 
-
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0ELZGR)
+- [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0ELZGR)
 
 <!--
 
@@ -60,7 +56,7 @@ Do a hard refresh &amp; clear your cache.
 This will solve 99% of the errors you face.
 
 
-# About
+# About : reason and goal for this project
 Anybody who has studied Vedic Astrology knows well how accurate it can be.
 But also how complex it can get to make accurate predictions.
 It takes **decades of experience** to be able make accurate prediction.

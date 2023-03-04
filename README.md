@@ -17,8 +17,10 @@
 </h3>
 
 
-<h2 align="center"><a href="https://www.vedastro.org">VedAstro</a>[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0ELZGR)
-</h1>
+<h2 align="center">
+<a href="https://www.vedastro.org">VedAstro</a>
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0ELZGR)
+</h2>
 <h4 align="center">
   Astrology enables one to see subtle phenomena across time.</br>
        Which to the mortal man is invisible in action,

@@ -17,7 +17,8 @@
 </h3>
 
 
-<h1 align="center"><a href="https://www.vedastro.org">VedAstro.org</a></h1>
+<h2 align="center"><a href="https://www.vedastro.org">VedAstro</a>[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0ELZGR)
+</h1>
 <h4 align="center">
   Astrology enables one to see subtle phenomena across time.</br>
        Which to the mortal man is invisible in action,
@@ -29,14 +30,12 @@
 - [Swiss Ephemris API](https://www.vedastro.org/API/SwissEphemeris) easily get astrology data for your app or website
 - [Calculators](https://www.vedastro.org/Calculator) each calculator shows an aspect of vedic astrology
 - [Docker](https://github.com/orgs/VedAstro/discussions/8) supported for easy deployement anywhere
-
 - [About](https://www.vedastro.org/About) the reason and goal for this project
 - [Donate](https://www.vedastro.org/Donate) to keep this project going
 - [Report](https://www.vedastro.org/Contact) problems you find when using the WebApp
 - [Share](https://www.vedastro.org/Contact) your ideas for new or better features 
 
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S0ELZGR)
 <!--
 
 # Examples of Accurate Predictions
@@ -282,6 +281,8 @@ Thus Option 3 was choosen.
 
 ## Astrology Library: Use of Struct vs Class
 -   Structs are used to reduce overhead from large collections, exp. List<>
+-   When structs are part of a class, they are stored in the heap. An additional benefit is that structs need less memory than a class because they have no ObjectHeader or MethodTable. You should consider using a
+    struct when the size of the struct will be minimal (say around 16 bytes), the struct will be short-lived, or the struct will be immutable.
 
 
 ## Person Get Hash uses MD5

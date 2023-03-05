@@ -515,10 +515,9 @@ namespace Genso.Astrology.Library
 
             //load data list
             //used later by calculate events
-            EventDataList = GetEventDataList<EventData>(UrlEventDataListXml).Result;
+            EventDataList = Tools.ConvertXmlListFileToInstanceList<EventData>(UrlEventDataListXml).Result;
 
             var sync = new object();//to lock thread access to list
-
 
             //reset, if called in the same instance
             EventManager.EventList = new List<Event>();

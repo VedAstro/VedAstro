@@ -492,9 +492,15 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// Gets all event data/types that match the inputed tag
+        /// NOTE: file is cached, so may not be latest
         /// </summary>
         public static List<EventData> GetEventDataListByTag(EventTag tag)
         {
+            //load fresh data list if not loaded already
+            //since list does not change often, it should be save to cache it between calls to azure function
+            //if a second call comes in while 1st call has already loaded this list, the 2nd instance will use 1st call's list
+            //NOTE : faster ~6s file is cached, may not be latest
+            if (EventDataList == null || !EventDataList.Any()) { EventDataList = Tools.ConvertXmlListFileToInstanceList<EventData>(UrlEventDataListXml).Result; }
 
             //filter IN event data list by tag
             var filteredEventDataList = EventDataList.FindAll(eventData =>
@@ -513,9 +519,6 @@ namespace Genso.Astrology.Library
         public static List<Event> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation getBirthLocation, Person inputPerson, List<EventTag> inputedEventTags)
         {
 
-            //load data list
-            //used later by calculate events
-            EventDataList = Tools.ConvertXmlListFileToInstanceList<EventData>(UrlEventDataListXml).Result;
 
             var sync = new object();//to lock thread access to list
 
@@ -528,14 +531,8 @@ namespace Genso.Astrology.Library
             {
                 var tempEventList = _CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag);
 
-
                 //adding to list needs to be synced for thread safety
-                lock (sync)
-                {
-                    //adding to list needs to be synced for thread safety
-                    EventList.AddRange(tempEventList);
-                }
-
+                lock (sync) { EventList.AddRange(tempEventList); }
 
             });
 

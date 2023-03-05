@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "APIDocker": {
+    "API": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7028"
+      "commandLineArgs": "--port 7071"
     },
     "Docker": {
       "commandName": "Docker",

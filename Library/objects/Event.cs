@@ -77,7 +77,7 @@ namespace Genso.Astrology.Library
         public override bool Equals(object value)
         {
 
-            if (value.GetType() == typeof(Event))
+            if (value != null && value.GetType() == typeof(Event))
             {
                 //cast to type
                 var parsedValue = (Event)value;

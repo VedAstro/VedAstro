@@ -12,6 +12,9 @@ namespace Genso.Astrology.Library
     /// </summary>
     public static class EventCalculatorMethods
     {
+        [EventCalculator(EventName.EmptyEvent)]
+        public static CalculatorResult Empty(Time time, Person person) => CalculatorResult.NotOccuring();
+
         #region PERSONAL
         //[EventCalculator(EventName.GoodTarabala)] TODO Can be removed and fucntion moved to astronomical
         public static CalculatorResult IsGoodTarabalaOccuring(Time time, Person person)

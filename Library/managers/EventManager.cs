@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Reflection;
 
 namespace Genso.Astrology.Library
 {
@@ -414,17 +415,22 @@ namespace Genso.Astrology.Library
             //get all event calculator methods
             var eventCalculatorList = typeof(EventCalculatorMethods).GetMethods();
 
+            EventCalculatorDelegate emptyCalculator = null;
+
             //loop through all calculators
             foreach (var eventCalculator in eventCalculatorList)
             {
-                //try to get attribute attached to the calculator method
-                var eventCalculatorAttribute = (EventCalculatorAttribute)Attribute.GetCustomAttribute(eventCalculator,
-                    typeof(EventCalculatorAttribute));
 
-                //if attribute not found
-                if (eventCalculatorAttribute == null)
-                {   //go to next method
-                    continue;
+                //try to get attribute attached to the calculator method
+                var eventCalculatorAttribute = (EventCalculatorAttribute)Attribute.GetCustomAttribute(eventCalculator, typeof(EventCalculatorAttribute));
+
+                //if attribute not found, go to next method (private function)
+                if (eventCalculatorAttribute == null) { continue; }
+
+                //store empty event to be used if error
+                if (eventCalculatorAttribute.GetEventName() == EventName.EmptyEvent)
+                {
+                    emptyCalculator = (EventCalculatorDelegate)Delegate.CreateDelegate(typeof(EventCalculatorDelegate), eventCalculator);
                 }
 
                 //if attribute name matches input event name
@@ -439,8 +445,22 @@ namespace Genso.Astrology.Library
             }
 
 
-            //if calculator method not found, raise error
+            //if calculator method not found,
+            //to make old code run with updated eventdatalist.xml file, an empty calculator return no event is attached as default
+            return emptyCalculator;
+            //todo log if this happens hack
             throw new Exception("Calculator method not found!");
+
+        }
+
+        private static bool Predicate(MethodInfo arg)
+        {
+            var eventCalculatorAttribute = (EventCalculatorAttribute)Attribute.GetCustomAttribute(arg,
+                typeof(EventCalculatorAttribute));
+
+            var eventName = eventCalculatorAttribute.GetEventName();
+
+            return eventName == EventName.EmptyEvent;
 
         }
 

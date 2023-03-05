@@ -27,5 +27,13 @@ namespace API
             return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip");
         }
 
+        [FunctionName("getversion")]
+        public static async Task<IActionResult> GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestMessage incomingRequest)
+        {
+            var versionNumber = "101";
+
+            return APITools.PassMessage(versionNumber);
+        }
+
     }
 }

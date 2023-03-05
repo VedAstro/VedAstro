@@ -72,6 +72,7 @@ namespace API
             {
                 //get dasa report for sending
                 var chart = await GetEventReportSvgForIncomingRequest(incomingRequest);
+                //var chart = Chart.Empty;
 
                 //send image back to caller
                 //convert svg string to stream for sending
@@ -103,7 +104,7 @@ namespace API
                 lifeEvent.StartTime = "00:00 01/01/2014";
                 lifeEvent.Location = "Malaysia";
                 //view little ahead & forward of event
-                var eventTime = await lifeEvent.GetDateTimeOffset();
+                var eventTime = await lifeEvent.GetDateTimeOffsetAsync();
                 var startTime = new Time(eventTime.AddMonths(-1), await lifeEvent.GetGeoLocation());
                 var endTime = new Time(eventTime.AddMonths(1), await lifeEvent.GetGeoLocation());
 

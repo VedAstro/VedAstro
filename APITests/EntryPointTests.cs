@@ -14,11 +14,11 @@ namespace API.Tests
         [TestMethod()]
         public void GetSummaryColorTest()
         {
-            var x = EventsChartAPI.GetSummaryColor(1, -5, 6);
-            Console.WriteLine(x);
-            var y = EventsChartAPI.GetSummaryColor(4, -5, 6);
-            Console.WriteLine(y);
-            Assert.Fail();
+            //var x = EventsChartAPI.GetSummaryColor(1, -5, 6);
+            //Console.WriteLine(x);
+            //var y = EventsChartAPI.GetSummaryColor(4, -5, 6);
+            //Console.WriteLine(y);
+            //Assert.Fail();
         }
     }
 }

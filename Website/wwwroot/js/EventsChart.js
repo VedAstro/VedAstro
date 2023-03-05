@@ -122,7 +122,8 @@ class EventsChart {
 
 
         //attach handler to load event description file beforehand (custom events)
-        $(document).on('loadEventDescription', EventsChart.loadEventDescription);
+        //todo marked for deletion
+        //$(document).on('loadEventDescription', EventsChart.loadEventDescription);
 
         //save now line
         this.$NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine);
@@ -539,11 +540,13 @@ class EventsChart {
                 //if no "eventname" exist, wrong elm skip it
                 if (!eventName) { return; }
 
+                var eventDescription = svgEventRect.getAttribute("eventdescription");
                 var color = svgEventRect.getAttribute("fill");
                 newRowYAxis = parseInt(svgEventRect.getAttribute("y"));//parse as num, for calculation
 
                 //count good and bad events for summary row
                 var eventNatureName = "";// used later for icon color
+                //todo this could fail if change in generator
                 if (color === "#FF0000") { eventNatureName = "Bad", badCount++; }
                 if (color === "#00FF00") { eventNatureName = "Good", goodCount++; }
 
@@ -603,12 +606,33 @@ class EventsChart {
                     $(ID.CursorLineLegendDescriptionHolder).attr("transform", `matrix(1, 0, 0, 1, 0, ${descBoxYAxis})`);
 
                     //note: using trigger to make it easy to skip multiple clogging events
-                    $(document).trigger('loadEventDescription', eventName);
+                    //set event desc directly
+                    drawDescriptionBox(eventDescription);
+                    //$(document).trigger('loadEventDescription', eventName);
 
                     //update previous hover event
                     window.previousHoverEventName = eventName;
                 }
 
+                //---------------------LOCAL---------------------------
+
+                function drawDescriptionBox(eventDescRaw) {
+
+                    //remove tabs and new line to make easy detection of empty string
+                    let eventDesc = eventDescRaw.replace(/ {4}|[\t\n\r]/gm, '');
+
+                    //if no description than hide box & end here
+                    if (!eventDesc) { $(ID.CursorLineLegendDescriptionHolder).hide(); return; }
+
+                    //convert text to svg and place inside holder
+                    var wrappedDescText = EventsChart.textToSvg(eventDesc, 175, 24);
+
+                    $("#CursorLineLegendDescription").empty(); //clear previous desc
+                    $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
+                    //set height of desc box background
+                    $("#CursorLineLegendDescriptionBackground").attr("height", window.EventDescriptionTextHeight + 20); //plus little for padding
+
+                }
 
                 function drawTimeAgeLegendRow() {
                     var newTimeLegend = $(ID.CursorLineLegendTemplate).clone();
@@ -628,7 +652,6 @@ class EventsChart {
                     //replace circle with clock icon
                     newTimeLegend.children("use").attr("xlink:href", ID.CursorLineClockIcon);
                 }
-
             }
 
 
@@ -689,54 +712,6 @@ class EventsChart {
         return svgChartString;
     }
 
-    static loadEventDescription(event, eventName) {
-
-        //off events while firing
-        $(document).off('loadEventDescription');
-
-        //fill description box about event
-        getEventDescription(eventName.replace(/ /g, "")).then(drawDescriptionBox);
-
-        //turn events back on
-        $(document).on('loadEventDescription', EventsChart.loadEventDescription);
-
-
-        //FUNCTIONS
-        function drawDescriptionBox(eventDesc) {
-            //if no description than hide box & end here
-            if (!eventDesc) { $(ID.CursorLineLegendDescriptionHolder).hide(); return; }
-            //if (!eventDesc) { this.$CursorLineLegendDescriptionHolder.hide(); return; }
-
-            //convert text to svg and place inside holder
-            var wrappedDescText = EventsChart.textToSvg(eventDesc, 175, 24);
-
-            $("#CursorLineLegendDescription").empty(); //clear previous desc
-            $(wrappedDescText).appendTo("#CursorLineLegendDescription"); //add in new desc
-            //set height of desc box background
-            $("#CursorLineLegendDescriptionBackground").attr("height", window.EventDescriptionTextHeight + 20); //plus little for padding
-
-
-        }
-
-        //gets events from EventDataList.xml
-        //for viewing in time legend
-        async function getEventDescription(eventName) {
-            //search for matching event name
-            var eventXmlList = window.$EventDataListXml.find('Event'); //get all event elements
-            var results = eventXmlList.filter(
-                function () {
-                    var eventNameXml = $(this).children('Name').eq(0);
-                    return eventNameXml.text() === eventName;
-                });
-
-            //get description text out of the event xml record
-            var eventDescription = results.eq(0).children('Description').eq(0).text();
-
-            //remove tabs and new line to make easy detection of empty string
-            let cleaned = eventDescription.replace(/ {4}|[\t\n\r]/gm, '');
-            return cleaned;
-        }
-    }
 
     static getScreenHeight() {
         return Math.max(

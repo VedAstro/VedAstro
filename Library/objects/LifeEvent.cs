@@ -202,18 +202,35 @@ namespace Genso.Astrology.Library
 
         /// <summary>
         /// TODO all events should have offset data on entry, as such google API here is a hack
+        /// TODO MARKED FOR DELETION use non async version
         /// Gets the exact time with offset at the place where this event happened
         /// Parses a event start time into DateTimeOffset
         /// uses GOOGLE API
         /// NOTE:
         /// - standard time (STD) at the location at that time
         /// </summary>
-        public async Task<DateTimeOffset> GetDateTimeOffset()
+        public async Task<DateTimeOffset> GetDateTimeOffsetAsync()
         {
             //get timezone from api and save it to local instance so that it can saved later
             //only use API if timezone data not yet set, to save unnecessary slow calls to Google
             this.Timezone = string.IsNullOrEmpty(this.Timezone)
                 ? await Tools.GetTimezoneOffsetString(this.Location, this.StartTime)
+                : this.Timezone;
+
+            //get start time of life event and find the position of it in slices (same as now line)
+            //so that this life event line can be placed exactly on the report where it happened
+            var lifeEvtTimeStr = $"{this.StartTime} {this.Timezone}"; //add offset 0 only for parsing, not used by API to get timezone
+            var lifeEvtTime = DateTimeOffset.ParseExact(lifeEvtTimeStr, Time.DateTimeFormat, null);
+
+            return lifeEvtTime;
+        }
+
+        public DateTimeOffset GetDateTimeOffset()
+        {
+            //get timezone from api and save it to local instance so that it can saved later
+            //only use API if timezone data not yet set, to save unnecessary slow calls to Google
+            this.Timezone = string.IsNullOrEmpty(this.Timezone)
+                ? throw new Exception($"Timezone data for event \"{this.Name}\" missing!")
                 : this.Timezone;
 
             //get start time of life event and find the position of it in slices (same as now line)
@@ -252,7 +269,7 @@ namespace Genso.Astrology.Library
         /// <returns></returns>
         public async Task<Time> GetTime()
         {
-            var stdTimeLocation = await this.GetDateTimeOffset();
+            var stdTimeLocation = await this.GetDateTimeOffsetAsync();
             var location = await this.GetGeoLocation();
             var newTime = new Time(stdTimeLocation, location);
             return newTime;

@@ -30,7 +30,15 @@ namespace Website
             //service used to place data in browser's localstorage
             //builder.Services.AddSingleton<ILocalStorage, LocalStorageManager>();
 
-
+            //TODO CORS Test
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddDefaultPolicy(
+            //        policy =>
+            //        {
+            //            policy.AllowAnyOrigin();  //set the allowed origin  
+            //        });
+            //});
 
             //ERROR HANDLING
 

@@ -120,7 +120,7 @@ namespace API
 
                 cursorLine = GetTimeCursorLine(verticalYAxis);
 
-                lifeEvents = GetLifeEventLinesSvg(inputPerson, verticalYAxis, startTime, timeSlices).Result; //todo make async
+                lifeEvents = GetLifeEventLinesSvg(inputPerson, verticalYAxis, startTime, timeSlices); //todo make async
 
                 border = GetBorderSvg(timeSlices, verticalYAxis);
 
@@ -505,7 +505,7 @@ namespace API
         /// Returns a person's life events in SVG group to be placed inside events chart
         /// gets person's life events as lines for the events chart
         /// </summary>
-        private static async Task<string> GetLifeEventLinesSvg(Person person, int verticalYAxis, Time startTime, List<Time> timeSlices)
+        private static string GetLifeEventLinesSvg(Person person, int verticalYAxis, Time startTime, List<Time> timeSlices)
         {
             //wait!, add in life events also
             //use offset of input time, this makes sure life event lines
@@ -536,7 +536,7 @@ namespace API
             {
 
                 //get timezone at place event happened
-                var lifeEvtTime = await lifeEvent.GetDateTimeOffset();//time at the place of event with correct standard timezone
+                var lifeEvtTime = lifeEvent.GetDateTimeOffset();//time at the place of event with correct standard timezone
                 var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
                 var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
 

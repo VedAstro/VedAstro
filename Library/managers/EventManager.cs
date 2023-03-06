@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Timers;
 
@@ -255,7 +256,7 @@ namespace Genso.Astrology.Library
                 if (eventCalculatorAttribute == null) { continue; }
 
                 //store empty event to be used if error
-                if (eventCalculatorAttribute.GetEventName() == EventName.EmptyEvent)
+                if (eventCalculatorAttribute.GetEventName() == EventName.Empty)
                 {
                     emptyCalculator = (EventCalculatorDelegate)Delegate.CreateDelegate(typeof(EventCalculatorDelegate), eventCalculator);
                 }
@@ -280,19 +281,8 @@ namespace Genso.Astrology.Library
 
         }
 
-        private static bool Predicate(MethodInfo arg)
-        {
-            var eventCalculatorAttribute = (EventCalculatorAttribute)Attribute.GetCustomAttribute(arg,
-                typeof(EventCalculatorAttribute));
-
-            var eventName = eventCalculatorAttribute.GetEventName();
-
-            return eventName == EventName.EmptyEvent;
-
-        }
-
         /// <summary>
-        /// Gets the method that does the caculations for an event based on the events name
+        /// Gets the method that does the calculations for an event based on the events name
         /// </summary>
         public static HoroscopeCalculatorDelegate GetHoroscopeCalculatorMethod(EventName inputEventName)
         {
@@ -496,11 +486,6 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static List<EventData> GetEventDataListByTag(EventTag tag)
         {
-            //load fresh data list if not loaded already
-            //since list does not change often, it should be save to cache it between calls to azure function
-            //if a second call comes in while 1st call has already loaded this list, the 2nd instance will use 1st call's list
-            //NOTE : faster ~6s file is cached, may not be latest
-            if (EventDataList == null || !EventDataList.Any()) { EventDataList = Tools.ConvertXmlListFileToInstanceList<EventData>(UrlEventDataListXml).Result; }
 
             //filter IN event data list by tag
             var filteredEventDataList = EventDataList.FindAll(eventData =>
@@ -516,17 +501,22 @@ namespace Genso.Astrology.Library
         /// <summary>
         /// Parallel already built in
         /// </summary>
-        public static List<Event> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation getBirthLocation, Person inputPerson, List<EventTag> inputedEventTags)
+        public static async Task<List<Event>> CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation getBirthLocation, Person inputPerson, List<EventTag> inputedEventTags)
         {
-
-
-            var sync = new object();//to lock thread access to list
+            //load fresh data list if not loaded already
+            //since list does not change often, it should be save to cache it between calls to azure function
+            //if a second call comes in while 1st call has already loaded this list, the 2nd instance will use 1st call's list
+            //NOTE :
+            //- faster ~6s file is cached, may not be latest
+            //- must be done outside parallel loop
+            if (EventDataList == null || !EventDataList.Any()) { EventDataList = await Tools.ConvertXmlListFileToInstanceList<EventData>(UrlEventDataListXml); }
 
             //reset, if called in the same instance
             EventManager.EventList = new List<Event>();
 
             //calculate events for each tag
             //NOTE: parallel speed > 143s > 40s
+            var sync = new object();//to lock thread access to list
             Parallel.ForEach(inputedEventTags, (eventTag, state) =>
             {
                 var tempEventList = _CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag);

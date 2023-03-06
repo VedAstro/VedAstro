@@ -14,7 +14,7 @@ namespace Genso.Astrology.Library
     /// </summary>
     public static partial class EventCalculatorMethods
     {
-        [EventCalculator(EventName.EmptyEvent)]
+        [EventCalculator(EventName.Empty)]
         public static CalculatorResult Empty(Time time, Person person) => CalculatorResult.NotOccuring();
 
         #region PERSONAL

@@ -120,11 +120,6 @@ class EventsChart {
         //checkbox in toolbar
         $(".CheckBox").click((eventData) => EventsChart.handleCheckBoxClicks(eventData, this.$SvgChartElm));
 
-
-        //attach handler to load event description file beforehand (custom events)
-        //todo marked for deletion
-        //$(document).on('loadEventDescription', EventsChart.loadEventDescription);
-
         //save now line
         this.$NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine);
 

@@ -28,6 +28,12 @@ namespace API
         /// </summary>
         private static bool[] verticalYAxisManifest = new bool[maxChartHeightPx];
 
+        /// <summary>
+        /// Filled when first events come out fresh from oven unsorted
+        /// declare static, stops GC
+        /// </summary>
+        public static List<Event> UnsortedEventList { get; set; }
+
         //index is Y axis px (vertical position)
         //private static string[] SvgConmponentList = new string[];
 
@@ -56,7 +62,7 @@ namespace API
 
             //PART II : fill the components in order
 
-            GenerateComponents( inputPerson,  startTime,  endTime,  daysPerPixel,  inputedEventTags);
+            await GenerateComponents( inputPerson,  startTime,  endTime,  daysPerPixel,  inputedEventTags);
 
 
             //PART III : compile in right placement
@@ -82,10 +88,10 @@ namespace API
             return final;
 
 
-            void GenerateComponents(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
+            async Task GenerateComponents(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
             {
-                //DATA 
-                var svgBackgroundColor = "#f0f9ff";
+                //STEP 1: USER INPUT > USABLE DATA
+                var svgBackgroundColor = "#f0f9ff"; //not bleach white
                 var randomId = Tools.GenerateId();
 
                 // One precision value for generating all dasa components,
@@ -97,14 +103,16 @@ namespace API
                 var timeSlices = EventManager.GetTimeListFromRange(startTime, endTime, eventsPrecisionHours);
                 var svgWidth = timeSlices.Count; //slice per px
                 var svgTotalWidth = svgWidth + 10; //add little for wiggle room
-                
 
                 int verticalYAxis; //last position of element above is set here
                 verticalYAxis = 0; //start at 0 y axis
 
+                //rows are dynamically generated as needed, hence the extra logic below
+                //list of rows to generate
+                EventsChartManager.UnsortedEventList = await EventManager.CalculateEvents(eventsPrecisionHours, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, inputedEventTags);
 
-                //COMPONENTS
 
+                //STEP 2: DATA > SVG COMPONENTS
                 timeHeader = GenerateTimeHeaderRow(timeSlices, daysPerPixel, widthPerSlice, ref verticalYAxis);
 
                 //note : avg speed 30s
@@ -120,7 +128,7 @@ namespace API
 
                 cursorLine = GetTimeCursorLine(verticalYAxis);
 
-                lifeEvents = GetLifeEventLinesSvg(inputPerson, verticalYAxis, startTime, timeSlices); //todo make async
+                lifeEvents = GetLifeEventLinesSvg(inputPerson, verticalYAxis, startTime, timeSlices);
 
                 border = GetBorderSvg(timeSlices, verticalYAxis);
 
@@ -129,13 +137,13 @@ namespace API
                 var svgStyle = $@"width:{svgTotalWidth}px;height:{svgTotalHeight}px;background:{svgBackgroundColor};";//end of style tag
                 svgHead = $"<svg class=\"EventChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
-
                 jsCode = GetJsCodeSvg(randomId);
-                svgTail = "</svg>";
 
                 //place all content except border & cursor time legend inside group for padding
                 const int contentPadding = 2;//todo move to central place
                 contentHead = $"<g class=\"EventChartContent\" transform=\"matrix(1, 0, 0, 1, {contentPadding}, {contentPadding})\">";
+
+                svgTail = "</svg>";
                 contentTail = "</g>";
 
             }
@@ -1374,13 +1382,11 @@ namespace API
             const int widthPerSlice = 1;
             const int singleRowHeight = 15;
 
-            //rows are dynamically generated as needed, hence the extra logic below
-            //list of rows to generate
-            var unsortedEventList = EventManager.CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, inputedEventTags);
 
             //sort event by duration, so that events are ordered nicely in chart
             //todo events are breaking up between rows
-            var eventList = unsortedEventList.OrderByDescending(x => x.Duration).ToList();
+            //todo order by planet strength
+            var eventList = EventsChartManager.UnsortedEventList.OrderByDescending(x => x.Duration).ToList();
 
 
             //2 STACK & GENERATED ROWS FROM ABOVE DATA

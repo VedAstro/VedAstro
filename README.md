@@ -204,6 +204,12 @@ throughout the progam.
 These are randomly ordered notes on why a feature was implemented in a certain way.<br/>
 Will prove usefull when debugging & upgrading code.
 
+## Domain redirection #06/03/2023
+web : vedastro.org -> domain registra -> azure DNS -> azure cdn -> web blob storage
+api **stable** : vedastro.org/api -> domain registra -> azure DNS -> azure cdn -> stable api server (render)
+api **beta** : beta.vedastro.org/api -> domain registra -> azure DNS -> azure cdn -> beta api server (azure)
+domain cert managed by lets encyrpt acme bot azure func
+
 ## API domain is routed # MAR 2023
 via Azure CDN Rules Engine, this allows the use of ```vedastro.org/api/...``` & ```vedastro.org/api/nlp/...```
 

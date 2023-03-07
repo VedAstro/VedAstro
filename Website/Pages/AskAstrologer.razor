@@ -104,7 +104,7 @@
         var messageXml = new XElement("Message", userIdXml,visitorIdXml, emailXml, Tools.TimeStampSystemXml, detailsXml, questionXml);
 
         //send message to API server
-        await ServerManager.WriteToServerXmlReply(ServerManager.AddMessageApi, messageXml, _jsRuntime);
+        await ServerManager.WriteToServerXmlReply(URL.AddMessageApi, messageXml, _jsRuntime);
 
         //hide loading box
         _jsRuntime.HideAlert();

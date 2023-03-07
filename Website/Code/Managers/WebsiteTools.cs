@@ -98,7 +98,7 @@ namespace Website
 
             //get all person profile owned by current user/visitor
             var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonList, payload, jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(URL.GetPersonList, payload, jsRuntime);
 
             if (result.IsPass)
             {
@@ -122,7 +122,7 @@ namespace Website
         /// </summary>
         public static async Task<List<XElement>> GetVisitorList(string userId, IJSRuntime jsRuntime)
         {
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetVisitorList, new XElement("UserId", userId), jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(URL.GetVisitorList, new XElement("UserId", userId), jsRuntime);
             var visitorList = result.Payload.Elements().ToList();//visitorListRootXml
             return visitorList;
         }
@@ -158,7 +158,7 @@ namespace Website
             {
                 //send request to API
                 var xmlData = Tools.AnyTypeToXml(personId);
-                var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonApi, xmlData, jsRuntime);
+                var result = await ServerManager.WriteToServerXmlReply(URL.GetPersonApi, xmlData, jsRuntime);
 
                 //check result
                 if (result.IsPass)
@@ -195,7 +195,7 @@ namespace Website
         public static async Task DeletePerson(string personId, IJSRuntime jsRuntime)
         {
             var personIdXml = new XElement("PersonId", personId);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeletePerson, personIdXml, jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(URL.DeletePerson, personIdXml, jsRuntime);
 
             //check result, display error if needed
             if (!result.IsPass)
@@ -211,7 +211,7 @@ namespace Website
         public static async Task DeleteSavedChart(string chartId, IJSRuntime jsRuntime)
         {
             var chartIdXml = new XElement("ChartId", chartId);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.DeleteChartApi, chartIdXml, jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(URL.DeleteChartApi, chartIdXml, jsRuntime);
 
             //check result, display error if needed
             if (!result.IsPass)
@@ -232,7 +232,7 @@ namespace Website
         {
             //prepare and send updated person to API server
             var updatedPersonXml = person.ToXml();
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.UpdatePersonApi, updatedPersonXml, jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(URL.UpdatePersonApi, updatedPersonXml, jsRuntime);
 
             //check result, display error if needed
             if (!result.IsPass)
@@ -252,7 +252,7 @@ namespace Website
         {
             //send newly created person to API server
             var xmlData = person.ToXml();
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.AddPersonApi, xmlData, AppData.JsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(URL.AddPersonApi, xmlData, AppData.JsRuntime);
 
             //check result, display error if needed
             if (!result.IsPass)
@@ -332,7 +332,7 @@ namespace Website
 
 
             //send to api and get results
-            var resultsRaw = await ServerManager.WriteToServerXmlReply(ServerManager.GetEventsApi, root, _jsRuntime);
+            var resultsRaw = await ServerManager.WriteToServerXmlReply(URL.GetEventsApi, root, _jsRuntime);
 
 
             //parse raw results
@@ -348,7 +348,7 @@ namespace Website
         {
             //get name list of all charts
             //note: API will return readable name & hash for finding the chart later
-            var result = await ServerManager.ReadFromServerXmlReply(ServerManager.GetSavedEventsChartIdList, AppData.JsRuntime);
+            var result = await ServerManager.ReadFromServerXmlReply(URL.GetSavedEventsChartIdList, AppData.JsRuntime);
 
             if (result.IsPass)
             {
@@ -590,7 +590,7 @@ namespace Website
         {
             //get person hash from api
             var chartIdXml = new XElement("ChartId", selectedChartId);
-            var result = await ServerManager.WriteToServerXmlReply(ServerManager.GetPersonIdFromSavedChartId, chartIdXml, jsRuntime);
+            var result = await ServerManager.WriteToServerXmlReply(URL.GetPersonIdFromSavedChartId, chartIdXml, jsRuntime);
             var personId = result.Payload.Value;//xml named person id
             var selectedPerson = await GetPersonFromId(personId, jsRuntime);
 

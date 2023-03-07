@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -25,6 +26,31 @@ namespace Genso.Astrology.Library
     /// </summary>
     public static class Tools
     {
+        public static readonly bool IsBetaRuntime;
+
+        static Tools()
+        {
+            //set based on branch
+            IsBetaRuntime = GetBranchManifest() == "beta";
+        }
+
+        /// <summary>
+        /// Gets the file contents of branch-manifest.txt to know which build this is beta or stable
+        /// </summary>
+        public static string GetBranchManifest()
+        {
+            //todo needs testing
+            var projectPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            //debug
+            Console.WriteLine($"project path:{projectPath}");
+
+            string text = System.IO.File.ReadAllText($@"{projectPath}\branch-manifest.txt");
+
+            return text;
+
+        }
+
         /// <summary>
         /// "H1N1" -> ["H", "1", "N", "1"]
         /// "H" -> ["H"]
@@ -662,7 +688,7 @@ namespace Genso.Astrology.Library
                 return returnResult;
             }
 
-            Fail:
+        Fail:
             //mark as fail & use possibly inaccurate backup timezone (client browser's timezone)
             returnResult.IsPass = false;
             offsetMinutes = Tools.GetSystemTimezone();
@@ -864,7 +890,6 @@ namespace Genso.Astrology.Library
             return returnList;
         }
 
-
         /// <summary>
         /// Packages the data into ready form for the HTTP client to use in final sending stage
         /// </summary>
@@ -937,7 +962,6 @@ namespace Genso.Astrology.Library
             return newRecord;
         }
 
-
         /// <summary>
         /// Gets now time with seconds in wrapped in xml element
         /// used for logging
@@ -949,6 +973,8 @@ namespace Genso.Astrology.Library
         /// used for logging
         /// </summary>
         public static XElement TimeStampServerXml => new("TimeStampServer", Tools.GetNowServerTimeSecondsText());
+        
+        public static readonly XElement BranchXml = new XElement("Branch", Tools.GetBranchManifest());
 
         /// <summary>
         /// Gets now time in UTC +8:00

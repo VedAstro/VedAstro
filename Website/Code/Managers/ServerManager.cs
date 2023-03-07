@@ -16,55 +16,8 @@ namespace Website
     public static class ServerManager
     {
 
-        /// <summary>
-        /// All API functions can be accessed by this .org URL
-        /// Note: possible via azure CDN rules engine : AccessApiViaWebDomain
-        /// </summary>
-        public const string WebDomainToApi = "https://www.vedastro.org/api";
-        public const string WebDomain = "https://www.vedastro.org";
-        public const string ApiUrl = "https://vedastroapi.azurewebsites.net/api";
-        public const string AddPersonApi = ApiUrl + "/addperson";
-        public const string AddUserIdToVisitorPersons = ApiUrl + "/AddUserIdToVisitorPersons";
-        public const string GetHoroscope = ApiUrl + "/gethoroscope";
-        public const string AddLifeEventApi = ApiUrl + "/addlifeevent";
-        public const string AddMessageApi = ApiUrl + "/addmessage";
-        public const string DeletePerson = ApiUrl + "/DeletePerson";
-        public const string DeleteChartApi = ApiUrl + "/deletesavedchart";
-        public const string DeleteVisitorByUserId = ApiUrl + "/deletevisitorbyuserid";
-        public const string DeleteVisitorByVisitorId = ApiUrl + "/deletevisitorbyvisitorid";
-        public const string AddTaskApi = ApiUrl + "/addtask";
-        public const string AddVisitorApi = ApiUrl + "/addvisitor";
-
-        public const string GetPersonList = ApiUrl + "/GetPersonList";
-        public const string GetPersonApi = ApiUrl + "/getperson";
-        public const string GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
-
-        public const string UpdatePersonApi = ApiUrl + "/updateperson";
-        public const string GetTaskListApi = ApiUrl + "/gettasklist";
-        public const string GetVisitorList = ApiUrl + "/getvisitorlist";
-        public const string GetMessageList = ApiUrl + "/getmessagelist";
-        public const string GetMatchReportApi = ApiUrl + "/getmatchreport";
-        public const string GetEventsChart = ApiUrl + "/geteventschart";
-        public const string GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
-        public const string GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
-        public const string SaveEventsChart = ApiUrl + "/SaveEventsChart";
-        public const string GetEventsApi = ApiUrl + "/getevents";
-        public const string GeoJsApiUrl = "https://get.geojs.io/v1/ip/geo.json";
         //TODO HIDE API
         public const string GoogleGeoLocationApiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
-        /// <summary>
-        /// link to js file used for google sign in function
-        /// </summary>
-        public const string GoogleSignInJs = "https://accounts.google.com/gsi/client";
-        public const string SignInGoogle = ApiUrl + "/SignInGoogle";
-        public const string SignInFacebook = ApiUrl + "/SignInFacebook";
-        public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
-
-        /// <summary>
-        /// Keep track of calls waiting in line,
-        /// to by pass if one call holds the que
-        /// </summary>
-        private static int _waitingInLineCount = 0;
 
 
         //PUBLIC METHODS
@@ -192,11 +145,7 @@ namespace Website
 
             }
             //rethrow specialized exception to be handled by caller
-            catch (Exception e)
-            {
-
-                throw new ApiCommunicationFailed($"WriteToServerStreamReply()", e);
-            }
+            catch (Exception e) { throw new ApiCommunicationFailed($"WriteToServerStreamReply()", e); }
 
         }
 

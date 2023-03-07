@@ -2,12 +2,11 @@
 {
 
     /// <summary>
-    /// A centralized place to store hardcoded page links
+    /// A centralized place to store hardcoded page links only for BLAZOR
+    /// for API & others go to URL class, it's got the stuff you want
     /// </summary>
     public static class PageRoute
     {
-        public const string NasaJplSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";
-        public const string SwissEphSource = "https://www.astro.com/swisseph/swephinfo_e.htm";
         public const string Login = "/Login";
         public const string Journal = "/Journal";
         public const string JournalParam = "/Journal/{PersonIdUrl}";
@@ -69,11 +68,6 @@
         public const string Home = "/";
 
         //LINKS
-        public const string HttpHome = "https://www.vedastro.org";
-        public const string PatreonPage = "https://patreon.com/vedastro";
-        public const string KoFiPage = "https://ko-fi.com/vedastro";
-        public const string PaypalMePage = "https://paypal.me/VedAstroOrg";
-        public const string AddPersonGuideVideo = "https://youtu.be/RDUPsFOrr3c";
         public const string BlogWhyVedic = "/Blog/WhyVedic";
     }
 }

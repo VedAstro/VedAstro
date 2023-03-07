@@ -11,6 +11,7 @@ namespace Website
     /// </summary>
     public static class WebLogger
     {
+        private static readonly XElement SourceXml = new XElement("Source", "WebLogger");
 
 
         /// <summary>
@@ -64,11 +65,13 @@ namespace Website
             //if running code locally, end here
             //since in local errors will show in console
             //and also not to clog server's error log
-#if DEBUG
-            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            Console.WriteLine($"PAGE NAME:{await AppData.CurrentUrlJS}\nERROR MESSAGE:{errorMsg}");
-            return;
-#endif
+            //todo check if needed
+            //#if DEBUG
+            //            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
+            //            Console.WriteLine($"PAGE NAME:{await AppData.CurrentUrlJS}\nERROR MESSAGE:{errorMsg}");
+            //            return;
+            //#endif
+
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
@@ -76,10 +79,10 @@ namespace Website
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
             var errorXml = new XElement("Error", new XElement("Message", errorMsg));
-            visitorXml.Add(userId, visitorId, errorXml, urlXml, Tools.TimeStampSystemXml);
+            visitorXml.Add(Tools.BranchXml, SourceXml, userId, visitorId, errorXml, urlXml, Tools.TimeStampSystemXml);
 
             //send to server for storage
-            SendLogToServer(visitorXml);
+            await SendLogToServer(visitorXml);
 
             Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
 
@@ -94,11 +97,12 @@ namespace Website
             //if running code locally, end here
             //since in local errors will show in console
             //and also not to clog server's error log
-#if DEBUG
-            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
-            return;
-#endif
+            //todo check need
+            //#if DEBUG
+            //            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
+            //            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
+            //            return;
+            //#endif
 
             //get all visitor data
             //var visitorXml = await GetVisitorDataXml(jsRuntime);
@@ -113,7 +117,8 @@ namespace Website
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var dataXml = new XElement("Data", extraInfo);
             var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
-            visitorXml.Add(userId, visitorId, errorXml, urlXml, dataXml, Tools.TimeStampSystemXml);
+
+            visitorXml.Add(Tools.BranchXml, SourceXml, userId, visitorId, errorXml, urlXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -167,16 +172,17 @@ namespace Website
             //if running code locally, end here
             //since in local errors will show in console
             //and also not to clog server's error log
-#if DEBUG
-            Console.WriteLine($"BLZ:LogData:DEBUG mode:skipped logging:{data}");
-            return;
-#endif
+            //todo check need
+            //#if DEBUG
+            //            Console.WriteLine($"BLZ:LogData:DEBUG mode:skipped logging:{data}");
+            //            return;
+            //#endif
 
             //get basic visitor data
             var visitorXml = await GetVisitorDataXml();
 
             //add in button click data
-            visitorXml.Add(new XElement("Data", data));
+            visitorXml.Add(Tools.BranchXml, SourceXml, new XElement("Data", data), Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -220,7 +226,7 @@ namespace Website
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
             var locationXml = await GetVisitorLocation();
             var visitorElement = new XElement("Visitor");
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, locationXml, browserDataXml, screenDataXml, originUrlXml);
+            visitorElement.Add(Tools.BranchXml, SourceXml, userIdXml, visitorIdXml, urlXml, locationXml, browserDataXml, screenDataXml, originUrlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml,);
 
             //mark new visitor as already logged for first time
             AppData.IsNewVisitor = false;
@@ -238,7 +244,7 @@ namespace Website
 
             //because call to 3rd party API, call not reliable from all locations on earth
             //known to fail from time to time, as such compensate!
-            var resultLocation = await ServerManager.ReadFromServerXmlReply(ServerManager.GeoJsApiUrl, AppData.JsRuntime, "Location");
+            var resultLocation = await ServerManager.ReadFromServerXmlReply(URL.GeoJsApiUrl, AppData.JsRuntime, "Location");
             if (resultLocation.IsPass)
             {
                 locationXml = resultLocation.Payload;
@@ -258,7 +264,7 @@ namespace Website
             //get visitor data & format it nicely for storage
             var visitorElement = new XElement("Visitor");
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId); //use id generated above
-            visitorElement.Add(userIdXml, visitorIdXml, urlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorElement.Add(Tools.BranchXml, SourceXml, userIdXml, visitorIdXml, urlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             return visitorElement;
         }

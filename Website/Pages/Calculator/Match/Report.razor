@@ -478,7 +478,7 @@
 
         //get report from server
         var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
-        var webResult = await ServerManager.WriteToServerXmlReply(ServerManager.GetMatchReportApi, rootXml, _jsRuntime);
+        var webResult = await ServerManager.WriteToServerXmlReply(URL.GetMatchReportApi, rootXml, _jsRuntime);
 
         //check the results, if fail let user know
         if (!webResult.IsPass)

@@ -16,6 +16,8 @@ public static class APILogger
     private const string VisitorLogXml = "VisitorLog.xml";
     private const string ContainerName = "vedastro-site-data";
 
+    private static readonly XElement SourceXml = new XElement("Source", "APILogger");
+
 
 
     //PUBLIC FUNCTIONS
@@ -32,10 +34,13 @@ public static class APILogger
         //get caller data for more debug info
         var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
 
-        errorXml.Add(Tools.TimeStampServerXml);
+
+        errorXml.Add(Tools.BranchXml, SourceXml);
         errorXml.Add(new XElement("CallerIP", ipAddress));
         errorXml.Add(new XElement("Url", req?.RequestUri));
         errorXml.Add(new XElement("RequestBody"), APITools.RequestToXmlString(req));
+        errorXml.Add(Tools.TimeStampSystemXml);
+        errorXml.Add(Tools.TimeStampServerXml);
         
 
         //add error data to main app log file
@@ -45,18 +50,16 @@ public static class APILogger
 
     public static async Task Visitor(HttpRequestMessage req)
     {
-        //get data out of exception
-        //var errorXml = Tools.ExtractDataFromException(exception);
-
         //get caller data for more debug info
         var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
 
         var visitorXml = new XElement("Visitor");
 
-        visitorXml.Add(Tools.TimeStampServerXml);
+        visitorXml.Add(Tools.BranchXml, SourceXml);
         visitorXml.Add(new XElement("CallerIP", ipAddress));
         visitorXml.Add(new XElement("Url", req?.RequestUri));
         visitorXml.Add(new XElement("Data"), APITools.RequestToXmlString(req));
+        visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 
         //add error data to main app log file

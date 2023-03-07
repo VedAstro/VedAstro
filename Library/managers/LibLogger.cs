@@ -18,6 +18,9 @@ namespace Genso.Astrology.Library
     public static class LibLogger
     {
 
+        private static readonly XElement SourceXml = new XElement("Source", "LibLogger");
+
+
         /// <summary>
         /// Makes a log of the exception in API server
         /// </summary>
@@ -27,11 +30,12 @@ namespace Genso.Astrology.Library
             //if running code locally, end here
             //since in local errors will show in console
             //and also not to clog server's error log
-#if DEBUG
-            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
-            return;
-#endif
+            //todo check if below debug code is needed
+            //#if DEBUG
+            //            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
+            //            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
+            //            return;
+            //#endif
 
             //convert exception into nice xml
             var errorXml = Tools.ExtractDataFromException(exception);
@@ -40,7 +44,7 @@ namespace Genso.Astrology.Library
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Data", extraInfo);
-            visitorXml.Add(errorXml, dataXml, Tools.TimeStampSystemXml);
+            visitorXml.Add(Tools.BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -54,13 +58,25 @@ namespace Genso.Astrology.Library
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Data", extraInfo);
-            visitorXml.Add(errorXml, dataXml, Tools.TimeStampSystemXml);
+            visitorXml.Add(Tools.BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+
+            //send to server for storage
+            await SendLogToServer(visitorXml);
+        }
+
+        public static async Task Error(string errorMessage)
+        {
+            //place error data into visitor tag
+            //this is done because visitor data might hold clues to error
+            var visitorXml = new XElement("Visitor");
+            var dataXml = new XElement("Error", errorMessage);
+            visitorXml.Add(Tools.BranchXml, SourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
 
-            Console.WriteLine("LibLogger: An unexpected error occurred and was logged.");
         }
+
 
         /// <summary>
         /// Makes a debug log entry
@@ -71,8 +87,7 @@ namespace Genso.Astrology.Library
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Data", message);
-            var sourceXml = new XElement("Source", "LibLogger");
-            visitorXml.Add(sourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorXml.Add(Tools.BranchXml, SourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -89,7 +104,7 @@ namespace Genso.Astrology.Library
             {
                 //send to API for save keeping
                 //note:js runtime passed as null, so no internet checking done
-                var result = await WriteToServerXmlReply("https://vedastroapi.azurewebsites.net/api/addvisitor", visitorElement);
+                var result = await WriteToServerXmlReply(URL.AddVisitorApi, visitorElement);
 
                 //check result, display error if needed
                 if (!result.IsPass) { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Payload.Value}"); }
@@ -131,8 +146,8 @@ namespace Genso.Astrology.Library
                 statusCode = response?.StatusCode.ToString();
 
                 //extract the content of the reply data
-                //todo await instead of result testing needed
-                rawMessage = response?.Content.ReadAsStringAsync().Result ?? "";
+                var readAsStringAsync = await response?.Content.ReadAsStringAsync();
+                rawMessage = readAsStringAsync ?? "";
 
                 //problems might occur when parsing
                 //try to parse as XML

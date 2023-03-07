@@ -15,9 +15,7 @@
 			<!--AOT disabled because not working in android chrome-->
 			<RunAOTCompilation>false</RunAOTCompilation>
 	</PropertyGroup>
-	<ItemGroup>
-	  <Content Remove="Pages\PlanetAPI.razor" />
-	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="AspNetMonsters.Blazor.Geolocation" Version="0.5.0-preview1" />
 		<PackageReference Include="GoogleMaps.LocationServices" Version="1.2.0.5" />
@@ -32,26 +30,9 @@
 		<ProjectReference Include="..\Library\Library.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Pages\PlanetAPI.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <_ContentIncludedByDefault Remove="Pages\PlanetAPI.razor" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="Pages\API\Planet.razor" />
-	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <Folder Include="Pages\Person\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Update="Pages\Donate\DonateSpacyAPI.razor">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	  </Content>
 	</ItemGroup>
 
 </Project>

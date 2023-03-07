@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -16,6 +17,7 @@ using System.Xml.Linq;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using static System.Net.WebRequestMethods;
 using static Genso.Astrology.Library.PlanetName;
 
 namespace Genso.Astrology.Library
@@ -26,30 +28,6 @@ namespace Genso.Astrology.Library
     /// </summary>
     public static class Tools
     {
-        public static readonly bool IsBetaRuntime;
-
-        static Tools()
-        {
-            //set based on branch
-            IsBetaRuntime = GetBranchManifest() == "beta";
-        }
-
-        /// <summary>
-        /// Gets the file contents of branch-manifest.txt to know which build this is beta or stable
-        /// </summary>
-        public static string GetBranchManifest()
-        {
-            //todo needs testing
-            var projectPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-            //debug
-            Console.WriteLine($"project path:{projectPath}");
-
-            string text = System.IO.File.ReadAllText($@"{projectPath}\branch-manifest.txt");
-
-            return text;
-
-        }
 
         /// <summary>
         /// "H1N1" -> ["H", "1", "N", "1"]
@@ -973,8 +951,12 @@ namespace Genso.Astrology.Library
         /// used for logging
         /// </summary>
         public static XElement TimeStampServerXml => new("TimeStampServer", Tools.GetNowServerTimeSecondsText());
-        
-        public static readonly XElement BranchXml = new XElement("Branch", Tools.GetBranchManifest());
+
+        /// <summary>
+        /// Has to be loaded when app loads, obviously since that is when branch manifest it read
+        /// since this is only used by loggers
+        /// </summary>
+        public static XElement BranchXml = new XElement("Branch", "not yet loaded, patience");
 
         /// <summary>
         /// Gets now time in UTC +8:00
@@ -1014,6 +996,28 @@ namespace Genso.Astrology.Library
             {
                 return string.Empty;
             }
+        }
+
+        /// <summary>
+        /// Reads branch-manifest.txt
+        /// If fail defaults to stable, aka false
+        /// </summary>
+        public static async Task<bool> GetIsBetaRuntime(HttpClient client)
+        {
+            try
+            {
+                var byteOfTheFile = await client.GetByteArrayAsync("data/branch-manifest.txt");
+                string branchName = Encoding.UTF8.GetString(byteOfTheFile);
+
+                var isBetaRuntime = branchName.Contains("beta");
+
+                return isBetaRuntime;
+            }
+            catch (Exception e)
+            {
+                return false; //default to "stable", false
+            }
+
         }
     }
 

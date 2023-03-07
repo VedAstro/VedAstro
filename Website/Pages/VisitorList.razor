@@ -267,7 +267,7 @@
         //convert list to xml for sending
         var userIdXml = new XElement("UserId", userId);
 
-        var result = await ServerManager.WriteToServerXmlReply(URL.DeleteVisitorByUserId, userIdXml, _jsRuntime);
+        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.DeleteVisitorByUserId, userIdXml, _jsRuntime);
 
         if (result.IsPass)
         {
@@ -289,7 +289,7 @@
         //convert list to xml for sending
         var visitorIdXml = new XElement("VisitorId", visitorId);
 
-        var result = await ServerManager.WriteToServerXmlReply(URL.DeleteVisitorByVisitorId, visitorIdXml, _jsRuntime);
+        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.DeleteVisitorByVisitorId, visitorIdXml, _jsRuntime);
 
         if (result.IsPass)
         {

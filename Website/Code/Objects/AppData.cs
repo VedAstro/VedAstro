@@ -1,4 +1,4 @@
-﻿using System.Xml.Linq;
+using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -112,6 +112,16 @@ namespace Website
         public static bool IsLoginSuccess => AppData.CurrentUser != UserData.Empty;
 
         /// <summary>
+        /// set by when app starts
+        /// </summary>
+        public static URL URL { get; set; }
+
+        /// <summary>
+        /// set by when app starts
+        /// </summary>
+        public static HttpClient HttpClient { get; set; }
+
+        /// <summary>
         /// Hard coded max width used in pages 
         /// </summary>
         public const string MaxWidth = "693px";
@@ -137,9 +147,7 @@ namespace Website
             if (AppData.HoroscopeDataListStream != null) return AppData.HoroscopeDataListStream;
 
             //else get fresh copy from server
-            var client = new HttpClient();
-            client.BaseAddress = AppData.BaseAddress;
-            AppData.HoroscopeDataListStream = await client.GetStreamAsync("data/HoroscopeDataList.xml");
+            AppData.HoroscopeDataListStream = await AppData.HttpClient.GetStreamAsync("data/HoroscopeDataList.xml");
             return AppData.HoroscopeDataListStream;
         }
 

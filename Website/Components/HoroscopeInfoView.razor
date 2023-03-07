@@ -173,7 +173,7 @@
         {
             //get horoscope predictions from API server
             var personIdXml = new XElement("PersonId", selectedPerson.Id);
-            var webResult = await ServerManager.WriteToServerXmlReply(URL.GetHoroscope, personIdXml, _jsRuntime);
+            var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.GetHoroscope, personIdXml, _jsRuntime);
 
             //based on pass of fail handle it
             if (webResult.IsPass)

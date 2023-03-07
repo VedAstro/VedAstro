@@ -2,7 +2,6 @@
 @using System.Xml.Linq
 @using System.Text.RegularExpressions
 @attribute [Route(PageRoute.SearchResult)]
-@inject HttpClient Client
 
 <PageTitle>@_pageTitle</PageTitle>
 
@@ -122,8 +121,8 @@ else
     {
         //this data is used later search for fast loading
         AppData.HoroscopeDataList = await WebsiteTools.GetXmlFile("data/HoroscopeDataList.xml");
-        AppData.EventDataList = await WebsiteTools.GetXmlFile("data/EventDataList.xml", Client);
-        AppData.ReferenceList = await WebsiteTools.GetXmlFile("data/ReferenceList.xml", Client);
+        AppData.EventDataList = await WebsiteTools.GetXmlFile("data/EventDataList.xml");
+        AppData.ReferenceList = await WebsiteTools.GetXmlFile("data/ReferenceList.xml");
 
         //mark as loaded so on next search won't reload
         filesLoaded = true;

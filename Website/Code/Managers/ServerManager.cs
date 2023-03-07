@@ -100,13 +100,13 @@ namespace Website
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
 
                 //get the data sender
-                using var client = new HttpClient();
+                //using var client = new HttpClient();
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
                 //send the data on its way
-                var response = await client.SendAsync(httpRequestMessage, waitForContent);
+                var response = await AppData.HttpClient.SendAsync(httpRequestMessage, waitForContent);
 
                 //return the raw reply to caller
                 return response;
@@ -130,13 +130,13 @@ namespace Website
                 httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
 
                 //get the data sender
-                using var client = new HttpClient();
+                //using var client = new HttpClient();
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
                 //send the data on its way
-                var response = await client.SendAsync(httpRequestMessage, waitForContent);
+                var response = await AppData.HttpClient.SendAsync(httpRequestMessage, waitForContent);
 
                 //extract the content of the reply data
                 var rawMessage = response.Content.ReadAsStreamAsync().Result;
@@ -175,14 +175,14 @@ namespace Website
                 httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
 
                 //get the data sender
-                using var client = new HttpClient();
+                //using var client = new HttpClient();
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
                 //send the data on its way (wait forever no timeout)
-                client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
-                var response = await client.SendAsync(httpRequestMessage, waitForContent);
+                //client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
+                var response = await AppData.HttpClient.SendAsync(httpRequestMessage, waitForContent);
                 statusCode = response?.StatusCode.ToString();
 
                 //extract the content of the reply data

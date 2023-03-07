@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="branch-manifest.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ByteSize" Version="2.1.1" />
     <PackageReference Include="Google.Apis" Version="1.51.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.51.0" />
@@ -21,12 +17,6 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
     <PackageReference Include="Microsoft.JSInterop" Version="6.0.11" />
     <PackageReference Include="SwissEphNet" Version="2.8.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="branch-manifest.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
 </Project>

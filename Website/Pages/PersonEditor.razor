@@ -1,4 +1,4 @@
-﻿@attribute [Route(PageRoute.PersonEditor)]
+@attribute [Route(PageRoute.PersonEditor)]
 @attribute [Route(PageRoute.PersonEditorParam)]
 
 @using Genso.Astrology.Library
@@ -463,12 +463,12 @@
     }
 
     /// <summary>
-    /// Copies current person's URL to clipboard, usefull for lettting 3rd party see a profile
+    /// Copies current person's URL to clipboard, useful for letting 3rd party see a profile
     /// </summary>
     private async void CopyPersonProfileShareLink()
     {
         //generate the url
-        var url = URL.WebUrl + $"{PageRoute.PersonEditor}/{PersonId}";
+        var url = AppData.URL.WebUrl + $"{PageRoute.PersonEditor}/{PersonId}";
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);

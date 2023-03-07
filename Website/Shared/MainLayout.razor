@@ -2,7 +2,6 @@
 @using System.Xml.Linq
 @using Microsoft.Extensions.FileSystemGlobbing.Internal
 @inherits LayoutComponentBase
-@inject HttpClient Client
 @using Website.Pages
 
 @*
@@ -171,6 +170,12 @@
         //NOTE
         //control comes here after Program, all needed initialization
         //done here before page/components are loaded
+
+        //create url based on beta or stable
+        AppData.URL = await URL.CreateInstance(_client);
+
+        //to be accessed by classes
+        AppData.HttpClient = _client;
 
         //used later to create HTTP client with correct base address
         AppData.BaseAddress = new Uri(_navigation.BaseUri);

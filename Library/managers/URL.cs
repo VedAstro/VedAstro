@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Genso.Astrology.Library;
 
-public static class URL
+public class URL
 {
 
-
     /// <summary>
+    /// I know its tedious to make it a instance but shows that URLS are
+    /// specific to instance and the use of them should be aware of that
     /// sets if in beta or stable URL
     /// All API functions can be accessed by this .org URL
     /// Note: possible via azure CDN rules engine : AccessApiViaWebDomain
     /// </summary>
-    static URL()
+    public URL(bool isBetaRuntime)
     {
         //keep inside
         const string apiBeta = "https://beta.vedastro.org/api";
@@ -19,45 +23,86 @@ public static class URL
         const string webBeta = "https://beta.vedastro.org";
         const string webStable = "https://vedastro.org";
 
-        ApiUrl = Tools.IsBetaRuntime ? apiBeta : apiStable;
-        WebUrl = Tools.IsBetaRuntime ? webBeta : webStable;
+        ApiUrl = isBetaRuntime ? apiBeta : apiStable;
+        WebUrl = isBetaRuntime ? webBeta : webStable;
 
-        Console.WriteLine(Tools.IsBetaRuntime ? "BETA URL" : "STABLE URLS");
+        //done here so that can be readonly
+        AddPersonApi = ApiUrl + "/addperson";
+        AddUserIdToVisitorPersons = ApiUrl + "/AddUserIdToVisitorPersons";
+        GetHoroscope = ApiUrl + "/gethoroscope";
+        AddLifeEventApi = ApiUrl + "/addlifeevent";
+        AddMessageApi = ApiUrl + "/addmessage";
+        DeletePerson = ApiUrl + "/DeletePerson";
+        DeleteChartApi = ApiUrl + "/deletesavedchart";
+        DeleteVisitorByUserId = ApiUrl + "/deletevisitorbyuserid";
+        DeleteVisitorByVisitorId = ApiUrl + "/deletevisitorbyvisitorid";
+        AddTaskApi = ApiUrl + "/addtask";
+        AddVisitorApi = ApiUrl + "/addvisitor";
+        GetPersonList = ApiUrl + "/GetPersonList";
+        GetPersonApi = ApiUrl + "/getperson";
+        GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
+        UpdatePersonApi = ApiUrl + "/updateperson";
+        GetTaskListApi = ApiUrl + "/gettasklist";
+        GetVisitorList = ApiUrl + "/getvisitorlist";
+        GetMessageList = ApiUrl + "/getmessagelist";
+        GetMatchReportApi = ApiUrl + "/getmatchreport";
+        GetEventsChart = ApiUrl + "/geteventschart";
+        GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
+        GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
+        SaveEventsChart = ApiUrl + "/SaveEventsChart";
+        GetEventsApi = ApiUrl + "/getevents";
+        SignInGoogle = ApiUrl + "/SignInGoogle";
+        SignInFacebook = ApiUrl + "/SignInFacebook";
+
+        //let dev user know
+        Console.WriteLine("Dynamic URL:" + (isBetaRuntime ? "Beta" : "Stable"));
     }
+
+    /// <summary>
+    /// Gets the file contents of branch-manifest.txt to know which build this is beta or stable
+    /// gotten once when app is loading API & Blazor, and save it for use in the instance
+    /// </summary>
+    public static async Task<URL> CreateInstance(HttpClient client)
+    {
+        var isBetaRuntime = await Tools.GetIsBetaRuntime(client);
+        return new URL(isBetaRuntime);
+    }
+
 
     /// <summary>
     /// Auto set beta or stable based on branch-manifest.txt
     /// </summary>
-    public static string ApiUrl;
-    public static string WebUrl;
-    public static readonly string AddPersonApi = ApiUrl + "/addperson";
-    public static readonly string AddUserIdToVisitorPersons = ApiUrl + "/AddUserIdToVisitorPersons";
-    public static readonly string GetHoroscope = ApiUrl + "/gethoroscope";
-    public static readonly string AddLifeEventApi = ApiUrl + "/addlifeevent";
-    public static readonly string AddMessageApi = ApiUrl + "/addmessage";
-    public static readonly string DeletePerson = ApiUrl + "/DeletePerson";
-    public static readonly string DeleteChartApi = ApiUrl + "/deletesavedchart";
-    public static readonly string DeleteVisitorByUserId = ApiUrl + "/deletevisitorbyuserid";
-    public static readonly string DeleteVisitorByVisitorId = ApiUrl + "/deletevisitorbyvisitorid";
-    public static readonly string AddTaskApi = ApiUrl + "/addtask";
-    public static readonly string AddVisitorApi = ApiUrl + "/addvisitor";
+    public readonly string ApiUrl;
+    public readonly string WebUrl;
+    public readonly string AddPersonApi;
+    public readonly string AddUserIdToVisitorPersons;
+    public readonly string GetHoroscope;
+    public readonly string AddLifeEventApi;
+    public readonly string AddMessageApi;
+    public readonly string DeletePerson;
+    public readonly string DeleteChartApi;
+    public readonly string DeleteVisitorByUserId;
+    public readonly string DeleteVisitorByVisitorId;
+    public readonly string AddTaskApi;
+    public readonly string AddVisitorApi;
+    public static readonly string AddVisitorApi_Stable = "https://vedastro.org/api/addvisitor";
 
-    public static readonly string GetPersonList = ApiUrl + "/GetPersonList";
-    public static readonly string GetPersonApi = ApiUrl + "/getperson";
-    public static readonly string GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
+    public readonly string GetPersonList;
+    public readonly string GetPersonApi;
+    public readonly string GetPersonIdFromSavedChartId;
 
-    public static readonly string UpdatePersonApi = ApiUrl + "/updateperson";
-    public static readonly string GetTaskListApi = ApiUrl + "/gettasklist";
-    public static readonly string GetVisitorList = ApiUrl + "/getvisitorlist";
-    public static readonly string GetMessageList = ApiUrl + "/getmessagelist";
-    public static readonly string GetMatchReportApi = ApiUrl + "/getmatchreport";
-    public static readonly string GetEventsChart = ApiUrl + "/geteventschart";
-    public static readonly string GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
-    public static readonly string GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
-    public static readonly string SaveEventsChart = ApiUrl + "/SaveEventsChart";
-    public static readonly string GetEventsApi = ApiUrl + "/getevents";
-    public static readonly string SignInGoogle = ApiUrl + "/SignInGoogle";
-    public static readonly string SignInFacebook = ApiUrl + "/SignInFacebook";
+    public readonly string UpdatePersonApi;
+    public readonly string GetTaskListApi;
+    public readonly string GetVisitorList;
+    public readonly string GetMessageList;
+    public readonly string GetMatchReportApi;
+    public readonly string GetEventsChart;
+    public readonly string GetSavedEventsChart;
+    public readonly string GetSavedEventsChartIdList;
+    public readonly string SaveEventsChart;
+    public readonly string GetEventsApi;
+    public readonly string SignInGoogle;
+    public readonly string SignInFacebook;
 
     /// <summary>
     /// link to js file used for google sign in function

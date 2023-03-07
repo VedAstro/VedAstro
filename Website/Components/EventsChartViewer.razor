@@ -193,7 +193,7 @@
     private async Task<string> GetSavedEventsChartSvgFromApi(string chartId)
     {
         var chartIdXml = new XElement("ChartId", chartId);
-        var svgStream = await ServerManager.WriteToServerStreamReply(URL.GetSavedEventsChart, chartIdXml, _jsRuntime);
+        var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetSavedEventsChart, chartIdXml, _jsRuntime);
 
         //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
         // convert stream to string
@@ -227,7 +227,7 @@
         var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
         var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-        var svgStream = await ServerManager.WriteToServerStreamReply(URL.GetEventsChart, rootXml, _jsRuntime);
+        var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetEventsChart, rootXml, _jsRuntime);
 
         //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
         // convert stream to string
@@ -255,7 +255,7 @@
         var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
         Console.WriteLine(rootXml.ToString());
-        var result = await ServerManager.WriteToServerXmlReply(URL.SaveEventsChart, rootXml, _jsRuntime);
+        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SaveEventsChart, rootXml, _jsRuntime);
 
         return result.IsPass;
     }
@@ -349,7 +349,7 @@
         var personId = SelectedPerson.Id;
         var eventPreset = _eventPreset;
         var timePreset = _timePreset;
-        var url = $"{URL.ApiUrl}/chart/{personId}/{eventPreset}/{timePreset}";
+        var url = $"{AppData.URL.ApiUrl}/chart/{personId}/{eventPreset}/{timePreset}";
 
         _jsRuntime.OpenNewTab(url);
     }
@@ -380,7 +380,7 @@
     private async Task OnClickCopyChartLink()
     {
         //generate the url
-        var url = URL.ApiUrl + $"/savedchart/{CurrentChartId}";
+        var url = AppData.URL.ApiUrl + $"/savedchart/{CurrentChartId}";
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);

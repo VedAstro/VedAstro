@@ -26,23 +26,13 @@ async function addVisitor(payloadXml) {
 
     console.log("Sending data...");
 
-    var response = await fetch("https://vedastroapi.azurewebsites.net/api/addvisitor", {
-        "headers": {
-            "accept": "*/*",
-            "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-            "content-type": "plain/text; charset=utf-8",
-            "sec-ch-ua": "\"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"108\", \"Google Chrome\";v=\"108\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "cross-site"
-        },
+    var response = await fetch("https://vedastro.org/api/addvisitor", {
+        "headers": { "accept": "*/*", "accept-language": "en-GB,en-US;q=0.9,en;q=0.8" },
         "referrer": "https://www.vedastro.org/",
         "referrerPolicy": "strict-origin-when-cross-origin",
         "body": payloadXml,
         "method": "POST",
-        "mode": "cors",
+        "mode": "no-cors",
         "credentials": "omit"
     });
 

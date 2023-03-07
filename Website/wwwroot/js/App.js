@@ -18,7 +18,7 @@ printConsoleMessage();
 
 //prints a message to console for developers to see
 function printConsoleMessage() {
-    $.get("https://vedastrowebsitestorage.z5.web.core.windows.net/data/ConsoleGreeting.txt")
+    $.get("https://vedastro.org/data/ConsoleGreeting.txt")
         .done((result) => {
             console.log(result);
         });

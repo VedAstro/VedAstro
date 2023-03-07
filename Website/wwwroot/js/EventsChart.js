@@ -683,21 +683,13 @@ class EventsChart {
 
         var payload = `<Root><PersonId>${chartData.personId}</PersonId><TimePreset>${chartData.timePreset}</TimePreset><EventPreset>${chartData.eventPreset}</EventPreset><Timezone>${chartData.timezone}</Timezone><MaxWidth>${chartData.maxWidth}</MaxWidth></Root>`;
 
-        var response = await window.fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
-            "headers": {
-                "accept": "*/*",
-                "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
-                "content-type": "plain/text; charset=utf-8",
-                "sec-ch-ua-platform": "\"Windows\"",
-                "sec-fetch-dest": "empty",
-                "sec-fetch-mode": "cors",
-                "sec-fetch-site": "cross-site"
-            },
+        var response = await window.fetch("https://vedastro.org/api/geteventscharteasy", {
+            "headers": { "accept": "*/*", "accept-language": "en-GB,en-US;q=0.9,en;q=0.8" },
             "referrer": "https://www.vedastro.org/",
             "referrerPolicy": "strict-origin-when-cross-origin",
             "body": payload,
             "method": "POST",
-            "mode": "cors",
+            "mode": "no-cors",
             "credentials": "omit"
         });
 
@@ -733,7 +725,7 @@ class EventsChart {
         }
 
         //default
-        return "ff60fa"; 
+        return "ff60fa";
 
         //    var arrayValues = ["#ff60fa", "#ff60fa", "#ff60fa"];
 

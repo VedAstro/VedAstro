@@ -468,7 +468,7 @@
     private async void CopyPersonProfileShareLink()
     {
         //generate the url
-        var url = URL.WebDomain + $"{PageRoute.PersonEditor}/{PersonId}";
+        var url = URL.WebUrl + $"{PageRoute.PersonEditor}/{PersonId}";
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);

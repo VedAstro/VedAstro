@@ -226,7 +226,7 @@ namespace Website
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
             var locationXml = await GetVisitorLocation();
             var visitorElement = new XElement("Visitor");
-            visitorElement.Add(Tools.BranchXml, SourceXml, userIdXml, visitorIdXml, urlXml, locationXml, browserDataXml, screenDataXml, originUrlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml,);
+            visitorElement.Add(Tools.BranchXml, SourceXml, userIdXml, visitorIdXml, urlXml, locationXml, browserDataXml, screenDataXml, originUrlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //mark new visitor as already logged for first time
             AppData.IsNewVisitor = false;

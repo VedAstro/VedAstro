@@ -83,5 +83,19 @@ namespace API
             }
         }
 
+        [FunctionName(nameof(FacebookDeauthorize))]
+        public static async Task<IActionResult> FacebookDeauthorize(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post,get", Route = null)] HttpRequestMessage incomingRequest)
+        {
+
+            //facebook pings this when user Deauthorize facebook login
+            //https://vedastro.org/api/FacebookDeauthorize 
+
+            //todo proper logging
+            await APILogger.Visitor(incomingRequest);
+
+            return APITools.PassMessage();
+        }
+
     }
 }

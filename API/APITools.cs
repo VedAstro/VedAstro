@@ -163,7 +163,7 @@ namespace API
         public static XElement ExtractDataFromRequest(HttpRequestMessage request)
         {
             //get xml string from caller
-            var xmlString = RequestToXmlString(request);
+            var xmlString = RequestToString(request);
 
             //parse xml string
             //todo an exception check here might be needed, json data might come here
@@ -277,7 +277,7 @@ namespace API
         /// No parsing is done here
         /// note: null request return empty string
         /// </summary>
-        public static string RequestToXmlString(HttpRequestMessage rawData) => rawData?.Content?.ReadAsStringAsync().Result ?? "";
+        public static string RequestToString(HttpRequestMessage rawData) => rawData?.Content?.ReadAsStringAsync().Result ?? "";
 
         /// <summary>
         /// Extracts names from the query URL

@@ -204,6 +204,16 @@ throughout the progam.
 These are randomly ordered notes on why a feature was implemented in a certain way.<br/>
 Will prove usefull when debugging & upgrading code.
 
+## Stop 404 error
+for direct access Blazor page via static storage without 404 error
+since no page acctually exists at page url, blazor takes url and runs the page as app
+using rule engine this is possible
+rules also make sure not to redirect file & api access only page access
+- not begins with "/api/"
+- has a path
+- Sec-Fetch-Mode = navigate
+- Sec-Fetch-Dest = document
+
 ## Domain redirection #06/03/2023
 web : vedastro.org -> domain registra -> azure DNS -> azure cdn -> web blob storage
 api **stable** : vedastro.org/api -> domain registra -> azure DNS -> azure cdn -> stable api server (render)

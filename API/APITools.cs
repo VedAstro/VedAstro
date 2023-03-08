@@ -421,7 +421,7 @@ namespace API
             {
                 var allOwnerId = personXml.Element("UserId")?.Value ?? "";
                 //check if inputed ID is found in list
-                if (allOwnerId.Contains(userId)) { returnList.Add(personXml); }
+                if (allOwnerId.Equals(userId)) { returnList.Add(personXml); }
             }
 
             return returnList;

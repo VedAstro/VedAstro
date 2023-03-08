@@ -70,7 +70,7 @@ namespace API
                 foreach (var foundPerson in foundPersonList)
                 {
                     var currentOwners = foundPerson?.Element("UserId")?.Value ?? "";
-                    var notInList = !currentOwners.Contains(userId);
+                    var notInList = !currentOwners.Equals(userId);
                     //if not in list, add to current person's owners user ID list
                     if (notInList) { foundPerson.Element("UserId").Value = currentOwners + "," + userId; }
                 }
@@ -216,6 +216,8 @@ namespace API
 
             try
             {
+                //TODO CHECK HERE FOR SAM ENTRY
+
                 //data out of request
                 var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
                 var userId = rootXml.Element("UserId")?.Value;

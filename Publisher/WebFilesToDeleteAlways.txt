@@ -1,7 +1,0 @@
-appsettings.Development.json
-appsettings.Development.json.br
-appsettings.Development.json.gz
-index.html
-Website.styles.css
-js/
-_framework/

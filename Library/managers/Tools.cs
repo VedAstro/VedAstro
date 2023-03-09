@@ -1006,19 +1006,11 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static async Task<bool> GetIsBetaRuntime(HttpClient client)
         {
-            try
-            {
-                var byteOfTheFile = await client.GetByteArrayAsync("data/branch-manifest.txt");
-                string branchName = Encoding.UTF8.GetString(byteOfTheFile);
-
-                var isBetaRuntime = branchName.Contains("beta");
-
-                return isBetaRuntime;
-            }
-            catch (Exception e)
-            {
-                return false; //default to "stable", false
-            }
+            //default to stable
+#if BETA
+            return true;
+#endif
+            return false;
 
         }
     }

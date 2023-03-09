@@ -9,6 +9,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Genso.Astrology.Library;
 using Genso.Astrology.Library.Compatibility;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -675,6 +676,7 @@ namespace API
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+            httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
             //get the data sender
             using var client = new HttpClient();

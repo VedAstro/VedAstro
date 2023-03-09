@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 namespace Website
 {
@@ -98,9 +99,7 @@ namespace Website
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
-
-                //get the data sender
-                //using var client = new HttpClient();
+                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -126,6 +125,7 @@ namespace Website
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
                 httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
 
@@ -171,11 +171,8 @@ namespace Website
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-
+                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
                 httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
-
-                //get the data sender
-                //using var client = new HttpClient();
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -186,8 +183,7 @@ namespace Website
                 statusCode = response?.StatusCode.ToString();
 
                 //extract the content of the reply data
-                //todo await instead of result testing needed
-                rawMessage = response?.Content.ReadAsStringAsync().Result ?? "";
+                rawMessage = await response?.Content.ReadAsStringAsync() ?? "";
 
                 //problems might occur when parsing
                 //try to parse as XML

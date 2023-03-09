@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 namespace Genso.Astrology.Library
 {
@@ -131,6 +132,7 @@ namespace Genso.Astrology.Library
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
                 httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
 

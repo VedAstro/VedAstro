@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
@@ -799,6 +800,7 @@ namespace Genso.Astrology.Library
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
+                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
                 //get the data sender
                 using var client = new HttpClient();

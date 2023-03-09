@@ -59,7 +59,7 @@ public class URL
     }
 
     /// <summary>
-    /// Gets the file contents of branch-manifest.txt to know which build this is beta or stable
+    /// which build this is beta or stable
     /// gotten once when app is loading API & Blazor, and save it for use in the instance
     /// </summary>
     public static async Task<URL> CreateInstance(HttpClient client)
@@ -70,7 +70,7 @@ public class URL
 
 
     /// <summary>
-    /// Auto set beta or stable based on branch-manifest.txt
+    /// Auto set beta or stable based on build settings
     /// </summary>
     public readonly string ApiUrl;
     public readonly string WebUrl;

@@ -1001,8 +1001,8 @@ namespace Genso.Astrology.Library
         }
 
         /// <summary>
-        /// Reads branch-manifest.txt
         /// If fail defaults to stable, aka false
+        /// set from when building via "dotnet publish -c Release e -p:BuildBranch=stable"
         /// </summary>
         public static async Task<bool> GetIsBetaRuntime(HttpClient client)
         {

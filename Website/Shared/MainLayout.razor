@@ -66,30 +66,15 @@
                 <a @ref="navLink11" href="@PageRoute.About" @onclick="()=>OnClickNavItem(navLink9, PageRoute.About)" style="cursor: pointer;" class="nav-link">
                     <span class="iconify" data-icon="akar-icons:info" data-width="25"></span><span>About</span>
                 </a>
-                @*
-            <a @ref="navLink9" @onclick="()=>OnClickNavItem(navLink9, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
-            <span class="iconify" data-icon="codicon:feedback" data-width="25"></span><span>Give Feedback</span>
-            </a>
-            *@
             </nav>
-            @*<hr>
-        <nav class="nav-sidebar">
-        </nav>*@
-        </div><!-- sidebar-body -->
-        <!--
-        <div class="sidebar-footer">
-            <a href="" class="avatar online"><span class="avatar-initial">s</span></a>
-            <div class="avatar-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <SignInButton />
-                    <h6></h6>
-                    <a href="" class="footer-menu"><i class="ri-settings-4-line"></i></a>
-                </div>
-                <span>Superuser/Administrator</span>
-            </div>
         </div>
-        -->
-
+        <p style="
+                  color: chartreuse;
+                  font-size: 10px;
+                  text-align-last: center;
+                  position: relative;
+                  bottom: -47px;
+              ">@ThisAssembly.AssemblyInformationalVersion</p><!-- Stamped build version during deployment, used to identify code in cloud -->
     </div>
 
     <!-- MAIN CONTENT -->
@@ -121,6 +106,7 @@
         <div class="content-body">
             @Body
         </div>
+
     </div>
 
 }

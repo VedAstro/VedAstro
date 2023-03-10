@@ -49,22 +49,16 @@ namespace Website
         }
 
         /// <summary>
-        /// If fail defaults to stable, aka false
-        /// set from when building via "dotnet publish -c Release e -p:BuildBranch=stable"
+        /// Reads data stamped build version, if "beta" is found in that name, return true
+        /// note, AssemblyInformationalVersion is custom set in Directory.Build.props
         /// </summary>
-        public static bool GetIsBetaRuntime()
-        {
-
-            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-            var productVersion = FileVersionInfo.GetVersionInfo(assemblyLocation).ProductVersion;
-
-            //default to stable
-#if BETA
-            return true;
-#endif
-            return false;
-
-        }
+        public static bool GetIsBetaRuntime() => GetBuildVersion().Contains("beta");
+        
+        /// <summary>
+        /// Gets build version stamped during deployment by Publisher
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBuildVersion() => ThisAssembly.AssemblyInformationalVersion; //todo maybe wrapper not needed
 
 
         /// <summary>

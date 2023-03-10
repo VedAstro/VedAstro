@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Reference\constellation-extent-1.png = Reference\constellation-extent-1.png
 		Reference\constellation-extent-2.png = Reference\constellation-extent-2.png
 		Reference\constellation-extent-3.png = Reference\constellation-extent-3.png
+		Directory.Build.props = Directory.Build.props
 		GithubImages\header-logo.png = GithubImages\header-logo.png
 		Books\Hindu Predictive Astrology.pdf = Books\Hindu Predictive Astrology.pdf
 		HoroscopeAnalysisTips.txt = HoroscopeAnalysisTips.txt
@@ -30,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		Books\README.md = Books\README.md
 		Books\Three Hundred Important Combinations.pdf = Books\Three Hundred Important Combinations.pdf
+		version.json = version.json
 		Reference\zodiac-sign-name-symbol.png = Reference\zodiac-sign-name-symbol.png
 	EndProjectSection
 EndProject

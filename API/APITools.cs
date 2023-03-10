@@ -672,6 +672,17 @@ namespace API
             return timeList;
         }
 
+        public static bool GetIsBetaRuntime()
+        {
+            //default to stable
+#if BETA
+            return true;
+#endif
+            return false;
+
+        }
+
+
         public static async Task<HttpResponseMessage> GetRequest(string receiverAddress)
         {
             //prepare the data to be sent

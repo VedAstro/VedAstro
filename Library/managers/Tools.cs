@@ -1000,19 +1000,6 @@ namespace Genso.Astrology.Library
             }
         }
 
-        /// <summary>
-        /// If fail defaults to stable, aka false
-        /// set from when building via "dotnet publish -c Release e -p:BuildBranch=stable"
-        /// </summary>
-        public static async Task<bool> GetIsBetaRuntime(HttpClient client)
-        {
-            //default to stable
-#if BETA
-            return true;
-#endif
-            return false;
-
-        }
     }
 
 }

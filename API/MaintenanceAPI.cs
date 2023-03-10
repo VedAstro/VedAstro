@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Genso.Astrology.Library;
 
 namespace API
@@ -30,9 +31,13 @@ namespace API
         [FunctionName("getversion")]
         public static async Task<IActionResult> GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestMessage incomingRequest)
         {
-            var versionNumber = "UPLOADED BY PUBLISHER HELLO!";
+            var holder = new XElement("Root");
+            var branch = APITools.GetIsBetaRuntime() ? "beta" : "stable";
+            var branchXml = new XElement("Branch", branch);
+            var versionNumberXml = new XElement("Version", branch);
+            holder.Add(branchXml, versionNumberXml, Tools.TimeStampServerXml);
 
-            return APITools.PassMessage(versionNumber);
+            return APITools.PassMessage(holder);
         }
 
     }

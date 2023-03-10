@@ -172,7 +172,7 @@
         //done here before page/components are loaded
 
         //create url based on beta or stable
-        AppData.URL = await URL.CreateInstance(_client);
+        AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime());
 
         //to be accessed by classes
         AppData.HttpClient = _client;
@@ -189,6 +189,8 @@
         //other components can start loading now
         _mainPageInitDone = true;
     }
+
+
 
     /// <summary>
     /// Checks if previous login data exist in browser's local storage

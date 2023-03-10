@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Reflection;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
@@ -46,6 +48,23 @@ namespace Website
             }
         }
 
+        /// <summary>
+        /// If fail defaults to stable, aka false
+        /// set from when building via "dotnet publish -c Release e -p:BuildBranch=stable"
+        /// </summary>
+        public static bool GetIsBetaRuntime()
+        {
+
+            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
+            var productVersion = FileVersionInfo.GetVersionInfo(assemblyLocation).ProductVersion;
+
+            //default to stable
+#if BETA
+            return true;
+#endif
+            return false;
+
+        }
 
 
         /// <summary>

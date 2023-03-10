@@ -58,16 +58,6 @@ public class URL
         Console.WriteLine("Dynamic URL:" + (isBetaRuntime ? "Beta" : "Stable"));
     }
 
-    /// <summary>
-    /// which build this is beta or stable
-    /// gotten once when app is loading API & Blazor, and save it for use in the instance
-    /// </summary>
-    public static async Task<URL> CreateInstance(HttpClient client)
-    {
-        var isBetaRuntime = await Tools.GetIsBetaRuntime(client);
-        return new URL(isBetaRuntime);
-    }
-
 
     /// <summary>
     /// Auto set beta or stable based on build settings

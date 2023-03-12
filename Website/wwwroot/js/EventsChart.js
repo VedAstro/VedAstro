@@ -684,14 +684,12 @@ class EventsChart {
         var payload = `<Root><PersonId>${chartData.personId}</PersonId><TimePreset>${chartData.timePreset}</TimePreset><EventPreset>${chartData.eventPreset}</EventPreset><Timezone>${chartData.timezone}</Timezone><MaxWidth>${chartData.maxWidth}</MaxWidth></Root>`;
 
         var response = await window.fetch("https://vedastro.org/api/geteventscharteasy", {
-            "headers": { "accept": "*/*", "accept-language": "en-GB,en-US;q=0.9,en;q=0.8" },
-            "referrer": "https://www.vedastro.org/",
-            "referrerPolicy": "strict-origin-when-cross-origin",
+            "headers": { "accept": "*/*", "Connection": "keep-alive", "Content-Type": "text/plain" },
             "body": payload,
             "method": "POST",
-            "mode": "no-cors",
-            "credentials": "omit"
+            "mode": "no-cors"
         });
+
 
         //inject new svg chart into page
         var svgChartString = await response.text();

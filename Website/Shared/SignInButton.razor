@@ -109,7 +109,7 @@
 
             //makes this components instance available in JS,
             //to be used later when user clicks sign in button
-            await _jsRuntime.InvokeVoidAsync("SignInButtonInstance", DotNetObjectReference.Create(this));
+            await _jsRuntime.InvokeVoidAsync("SetSignInButtonInstance", DotNetObjectReference.Create(this));
         }
     }
 
@@ -134,7 +134,7 @@
         var idToken = (string)credentialResponse["credential"]!;
 
         //send token to api for verification
-        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SignInGoogle, new XElement("Token", idToken), _jsRuntime);
+        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SignInGoogle, new XElement("Token", idToken));
 
         //read the reply from API server and do what
         //needs to be done after login
@@ -162,7 +162,7 @@
             //note: this is done to auto move profiles created before login, then user decides to login
             //but expects all the profiles created before to be there in new account/logged in account
             var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
-            var resultAddUser = await ServerManager.WriteToServerXmlReply(AppData.URL.AddUserIdToVisitorPersons, payload, _jsRuntime);
+            var resultAddUser = await ServerManager.WriteToServerXmlReply(AppData.URL.AddUserIdToVisitorPersons, payload);
             //TODO handle result better
             Console.WriteLine(resultAddUser);
 
@@ -198,7 +198,7 @@
         var accessToken = (string)(authResponse["accessToken"])!;
 
         //send token to api for verification
-        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SignInFacebook, new XElement("Token", accessToken), _jsRuntime);
+        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SignInFacebook, new XElement("Token", accessToken));
 
         //todo check if reply is pass or fail
 

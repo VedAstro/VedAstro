@@ -905,7 +905,7 @@ function GetProgressBarValue() {
 
 //makes a reference to SignInButton instance, to be used when user clicks sign in
 //called in Blazor, after component render
-var SignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
+var SetSignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
 //wrapper function to forward call to blazor (hardwired in Blazor HTML)
 var OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
 

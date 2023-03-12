@@ -31,12 +31,11 @@ namespace Genso.Astrology.Library
             //if running code locally, end here
             //since in local errors will show in console
             //and also not to clog server's error log
-            //todo check if below debug code is needed
-            //#if DEBUG
-            //            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            //            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
-            //            return;
-            //#endif
+#if DEBUG
+            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
+            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
+            return;
+#endif
 
             //convert exception into nice xml
             var errorXml = Tools.ExtractDataFromException(exception);

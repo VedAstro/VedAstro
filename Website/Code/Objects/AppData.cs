@@ -93,10 +93,12 @@ namespace Website
         /// </summary>
         public static IJSRuntime JsRuntime
         {
-            get {
+            get { return _jsRuntime; }
+            set
+            {
                 Console.WriteLine("BLZ:Global JSRuntime Initialized");
-                return _jsRuntime; }
-            set => _jsRuntime = value;
+                _jsRuntime = value;
+            }
         }
 
         /// <summary>
@@ -130,7 +132,7 @@ namespace Website
         
         /// <summary>
         /// Base address currently used by App,
-        /// could be http://localhost or https://www.vedastro.org
+        /// could be http://localhost / www.vedastro.org / vedastro.org / beta.vedastro.org
         /// </summary>
         public static Uri? BaseAddress;
 
@@ -196,21 +198,21 @@ namespace Website
         /// data may be cached or from API
         /// Sorted alphabetically
         /// </summary>
-        public static async Task<List<Person>> TryGetPersonListSortedAZ(IJSRuntime _jsRuntime)
+        public static async Task<List<Person>> TryGetPersonListSortedAZ()
         {
-            var unsorted = await AppData.TryGetPersonList(_jsRuntime);
+            var unsorted = await AppData.TryGetPersonList();
             var sortedList = unsorted.OrderBy(person => person.Name).ToList();
             return sortedList;
 
         }
-        public static async Task<List<Person>> TryGetPersonList(IJSRuntime _jsRuntime)
+        public static async Task<List<Person>> TryGetPersonList()
         {
 
             //check if people list already loaded before
             if (AppData.PersonList == null)
             {
                 Console.WriteLine("BLZ:Get Fresh PersonList");
-                AppData.PersonList = await WebsiteTools.GetPeopleList(_jsRuntime);
+                AppData.PersonList = await WebsiteTools.GetPeopleList();
             }
             else
             {

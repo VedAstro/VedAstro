@@ -25,26 +25,24 @@ namespace Website
         {
             try
             {
+                //get all visitor data
+                var visitorXml = await GetVisitorDataXml();
 
                 //if running code locally, end here
                 //since in local errors will show in console
                 //and also not to clog server's error log
 #if DEBUG
-                Console.WriteLine("BLZ: LogVisitor: DEBUG mode, skipped logging to server");
+                Console.WriteLine($"BLZ > LogVisitor > DEBUG > skipped logging > \n{visitorXml}");
                 return;
 #endif
 
-                //get all visitor data
-                var visitorXml = await GetVisitorDataXml();
-
                 //send to server for storage
                 await SendLogToServer(visitorXml);
-
             }
             catch (Exception e)
             {
                 //if fail exit silently, not priority
-                Console.WriteLine($"BLZ: LogVisitor: Failed! \n{e.Message}\n{e.StackTrace}");
+                Console.WriteLine($"BLZ > LogVisitor > Failed! \n{e.Message}\n{e.StackTrace}");
             }
 
         }
@@ -65,12 +63,11 @@ namespace Website
             //if running code locally, end here
             //since in local errors will show in console
             //and also not to clog server's error log
-            //todo check if needed
-            //#if DEBUG
-            //            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            //            Console.WriteLine($"PAGE NAME:{await AppData.CurrentUrlJS}\nERROR MESSAGE:{errorMsg}");
-            //            return;
-            //#endif
+#if DEBUG
+            Console.WriteLine("BLZ > LogAlert > DEBUG > skipped logging");
+            Console.WriteLine($"PAGE NAME:{await AppData.CurrentUrlJS}\nERROR MESSAGE:{errorMsg}");
+            return;
+#endif
 
             //place error data into visitor tag
             //this is done because visitor data might hold clues to error
@@ -84,7 +81,7 @@ namespace Website
             //send to server for storage
             await SendLogToServer(visitorXml);
 
-            Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
+            Console.WriteLine("BLZ > LogAlert > An unexpected error occurred and was logged.");
 
         }
 
@@ -97,12 +94,11 @@ namespace Website
             //if running code locally, end here
             //since in local errors will show in console
             //and also not to clog server's error log
-            //todo check need
-            //#if DEBUG
-            //            Console.WriteLine("BLZ: LogError: DEBUG mode, skipped logging to server");
-            //            Console.WriteLine($"{exception.Message}\n{exception.StackTrace}");
-            //            return;
-            //#endif
+#if DEBUG
+            Console.WriteLine("BLZ > LogAlert > DEBUG > skipped logging");
+            Console.WriteLine($"{extraInfo}\n{exception.Message}\n{exception.StackTrace}");
+            return;
+#endif
 
             //get all visitor data
             //var visitorXml = await GetVisitorDataXml(jsRuntime);
@@ -123,7 +119,7 @@ namespace Website
             //send to server for storage
             await SendLogToServer(visitorXml);
 
-            Console.WriteLine("BLZ: LogError: An unexpected error occurred and was logged.");
+            Console.WriteLine("BLZ > LogAlert > An unexpected error occurred and was logged.");
         }
 
         /// <summary>
@@ -135,7 +131,7 @@ namespace Website
             //since in local errors will show in console
             //and also not to clog server's error log
 #if DEBUG
-            Console.WriteLine("BLZ: LogClick: DEBUG mode, skipped logging to server");
+            Console.WriteLine($"BLZ > LogAlert > DEBUG > skipped logging > {buttonText}");
             return;
 #endif
 
@@ -152,7 +148,7 @@ namespace Website
             //since in local errors will show in console
             //and also not to clog server's error log
 #if DEBUG
-            Console.WriteLine("BLZ: LogAlert: DEBUG mode, skipped logging to server");
+            Console.WriteLine($"BLZ > LogAlert > DEBUG > skipped logging > {alertData}");
             return;
 #endif
 
@@ -289,7 +285,7 @@ namespace Website
             }
             catch (Exception e)
             {
-                //not important if fail, keep quite
+                //not important if fail, keep quiet
                 Console.WriteLine("BLZ: SendLogToServer Silent Fail");
             }
 

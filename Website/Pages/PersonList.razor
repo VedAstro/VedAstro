@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var person in AppData.TryGetPersonListSortedAZ(_jsRuntime).Result)
+            @foreach (var person in _personListAsync)
             {
                 <tr style="cursor: pointer;" @onclick="() => PersonNameClicked(person)">
                     <td>@person.Name</td>
@@ -47,6 +47,7 @@ else
     //FIELDS
     const string TableId = "PersonListTable"; //change only needed here
 
+    private List<Person> _personListAsync = new List<Person>();
     private bool _isReady = false;
 
 
@@ -82,7 +83,9 @@ else
 
         //get all people from API server
         //auto checks if people list already loaded before
-        await AppData.TryGetPersonList(_jsRuntime);
+        //await AppData.TryGetPersonList();
+
+        _personListAsync = await AppData.TryGetPersonListSortedAZ();
 
         _isReady = true;
 

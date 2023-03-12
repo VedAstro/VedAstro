@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using System.Runtime.CompilerServices;
 using Microsoft.JSInterop;
+using System.Net;
 
 namespace Website
 {
@@ -15,19 +16,20 @@ namespace Website
 
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
+            
 
             //the client made here is used via AppData everywhere
-            builder.Services.AddScoped(sp => new HttpClient
+            var httpClient = new HttpClient
             {
                 //wait forever
                 Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite),
-                BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
-            });
+                BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
+                DefaultRequestHeaders = { ConnectionClose = false } //keep alive
+            };
 
-            //setup for global variables (to remember state)
-            //TODO replace with AppData
-            //var globalVariable = new GlobalVariableManager();
-            //builder.Services.AddSingleton(globalVariable);
+            //specify to use TLS 1.2 as default connection
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            builder.Services.AddScoped(sp => httpClient);
 
             //setup for getting location from browser
             //used by geolocation input
@@ -35,16 +37,6 @@ namespace Website
 
             //service used to place data in browser's localstorage
             //builder.Services.AddSingleton<ILocalStorage, LocalStorageManager>();
-
-            //TODO CORS Test
-            //builder.Services.AddCors(options =>
-            //{
-            //    options.AddDefaultPolicy(
-            //        policy =>
-            //        {
-            //            policy.AllowAnyOrigin();  //set the allowed origin  
-            //        });
-            //});
 
             //ERROR HANDLING
 

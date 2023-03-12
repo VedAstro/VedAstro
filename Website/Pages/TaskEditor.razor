@@ -106,7 +106,7 @@
         _websiteTask.Date = Tools.GetNowSystemTimeText();
 
         //send new task to api server
-        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.AddTaskApi, _websiteTask.ToXml(), _jsRuntime);
+        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.AddTaskApi, _websiteTask.ToXml());
 
         //let user know task has been added
         await _jsRuntime.ShowAlert("success", $"{_name} added successfully!", false,timer:1000);

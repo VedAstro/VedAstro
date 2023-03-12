@@ -95,7 +95,7 @@
     {
         var html = "";
 
-        var personList = await AppData.TryGetPersonListSortedAZ(_jsRuntime);
+        var personList = await AppData.TryGetPersonListSortedAZ();
 
         //generate drop down options in html
         foreach (var person in personList)

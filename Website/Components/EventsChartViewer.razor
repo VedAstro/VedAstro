@@ -255,7 +255,7 @@
         var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
         Console.WriteLine(rootXml.ToString());
-        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SaveEventsChart, rootXml, _jsRuntime);
+        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SaveEventsChart, rootXml);
 
         return result.IsPass;
     }

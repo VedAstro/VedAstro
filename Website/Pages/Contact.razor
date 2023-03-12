@@ -62,7 +62,7 @@
         var messageXml = new XElement("Message", userIdXml, emailXml, Tools.TimeStampSystemXml, textXml);
 
         //send message to API server
-        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml, _jsRuntime);
+        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
 
 
         //hide message form

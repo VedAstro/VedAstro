@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Genso.Astrology.Library;
 using System.Text;
 using System.Xml;
@@ -38,7 +38,7 @@ namespace Website
             var result = await RequestServer(apiUrl);
 
             //get raw reply from the server response
-            var rawMessage = result.Content?.ReadAsStringAsync()?.Result ?? "";
+            var rawMessage = await result.Content?.ReadAsStringAsync() ?? "";
 
             //only good reply from server is accepted, anything else is marked invalid
             //stops invalid replies from being passed as valid
@@ -74,12 +74,12 @@ namespace Website
                         var parsedXml = XElement.Parse(inputRawString);
                         return new WebResult<XElement>(true, parsedXml);
                     }
-                    catch (Exception e2) { exceptionList.Add(e2); } 
+                    catch (Exception e2) { exceptionList.Add(e2); }
 
                     try
                     {
                         //OPTION 3 : json 3rd party reply
-                        var parsedJson = JsonConvert.DeserializeXmlNode(inputRawString,"LocationData");
+                        var parsedJson = JsonConvert.DeserializeXmlNode(inputRawString, "LocationData");
                         var wrappedXml = XElement.Parse(parsedJson.InnerXml); //expected to fail if not right
                         return new WebResult<XElement>(true, wrappedXml);
                     }
@@ -150,6 +150,7 @@ namespace Website
         }
 
         /// <summary>
+        /// TODO DEPRECATED MARKED FOR DELETION
         /// Send xml as string to server and returns xml as response
         /// Note:
         /// - on failure payload will contain error info
@@ -192,7 +193,13 @@ namespace Website
 
             }
             //if internet failure let caller know immediately
-            catch(HttpRequestException){ throw new NoInternetError(); }
+            catch (HttpRequestException e)
+            {
+#if DEBUG
+                Console.WriteLine(e.Message);
+#endif
+                throw new NoInternetError();
+            }
 
             //note: other failure here could be for several very likely reasons,
             //so it is important to properly check and handled here for best UX

@@ -2,6 +2,7 @@ using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Website.Code.Managers;
 using Website.Pages;
 
 namespace Website
@@ -122,6 +123,8 @@ namespace Website
         /// set by when app starts
         /// </summary>
         public static HttpClient HttpClient { get; set; }
+
+        public static JSFetchWrapper JSFetchWrapper { get; set; }
 
         /// <summary>
         /// Hard coded max width used in pages 

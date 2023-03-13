@@ -12,8 +12,21 @@ window.countries = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "Ameri
 //initialize separate worker thread to handle all logging
 window.LogThread = new Worker('js/LogThread.js');
 
+//initialize separate worker thread to handle all HTTP talk, POST, GET, etc...
+window.NetworkThread = new Worker('js/NetworkThread.js');
+
+//when call is completed messages from here to blazor
+window.NetworkThread.onmessage = function (receivedRaw) {
+    window.JSFetchWrapperInstance.invokeMethodAsync('OnNetworkReply', receivedRaw);
+};
+
+//sets for access when event call back, received messages
+var SetJSFetchWrapperInstance = (instance) => window.JSFetchWrapperInstance = instance;
+
+
 //print console greeting (file in wwwroot)
 printConsoleMessage();
+
 
 
 //prints a message to console for developers to see

@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using Genso.Astrology.Library;
 using System.Text;
 using System.Xml;
@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
+using System.Text.Json.Nodes;
+using Website.Code.Managers;
+using Microsoft.AspNetCore.Http;
 
 namespace Website
 {
@@ -158,8 +161,9 @@ namespace Website
         /// - No timeout! Will wait forever
         /// - failure is logged here
         /// </summary>
-        public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
+        public static async Task<WebResult<XElement>> WriteToServerXmlReplyDotNet(string apiUrl, XElement xmlData, IJSRuntime? jsRuntime)
         {
+
             WebResult<XElement> returnVal;
 
             //if js runtime available & browser offline show error
@@ -213,6 +217,26 @@ namespace Website
             //if fail log it
             if (!returnVal.IsPass) { WebLogger.Error(returnVal.Payload); }
 
+            return returnVal;
+        }
+
+        /// <summary>
+        /// HTTP Post via JS interop
+        /// </summary>
+        public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData)
+        {
+            //ACT 1:
+            //send data to URL
+            var receivedData = await AppData.JSFetchWrapper.Post(apiUrl, xmlData);
+
+            //ACT 2:
+            //return data as XML
+            //problems might occur when parsing
+            //try to parse as XML
+            var writeToServerXmlReply = XElement.Parse(receivedData);
+            var returnVal = WebResult<XElement>.FromXml(writeToServerXmlReply);
+
+            //ACT 3:
             return returnVal;
         }
 

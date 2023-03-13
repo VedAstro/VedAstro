@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using System.Xml.Linq;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
 {
     public class VisitorAPI
     {
-        [FunctionName("addvisitor")]
-        public static async Task<IActionResult> AddVisitor([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("addvisitor")]
+        public static async Task<HttpResponseData> AddVisitor([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             try
             {
                 //get new visitor data out of incoming request 
-                var newVisitorXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var newVisitorXml = await APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new visitor to main list
                 await APITools.AddXElementToXDocumentAzure(newVisitorXml, APITools.VisitorLogFile, APITools.BlobContainerName);
 
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
             }
             catch (Exception e)
             {
@@ -29,7 +28,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
@@ -37,15 +36,15 @@ namespace API
         /// <summary>
         /// Gets all the unique visitors to the site
         /// </summary>
-        [FunctionName("getvisitorlist")]
-        public static async Task<IActionResult> GetVisitorList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("getvisitorlist")]
+        public static async Task<HttpResponseData> GetVisitorList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
 
                 //get user id
-                var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
+                //var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
 
                 //get visitor log from storage
                 var visitorLogXml = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
@@ -58,8 +57,9 @@ namespace API
                 //                            visitorXml.Element("Location") != null
                 //                        select visitorXml;
 
-                //send list to caller
-                return APITools.PassMessage(visitorLogXml.Root);
+                //convert list to nice string before sending to caller
+                var visitorLogXmlString = visitorLogXml?.Root?.ToString(SaveOptions.DisableFormatting) ?? "<Empty/>";
+                return APITools.PassMessage(visitorLogXmlString, incomingRequest);
 
             }
             catch (Exception e)
@@ -68,19 +68,18 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
         }
 
-        [FunctionName("deletevisitorbyuserid")]
-        public static async Task<IActionResult> DeleteVisitorByUserId(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("deletevisitorbyuserid")]
+        public static async Task<HttpResponseData> DeleteVisitorByUserId([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var userIdXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var userIdXml = await APITools.ExtractDataFromRequest(incomingRequest);
                 var userId = userIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
@@ -97,7 +96,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, visitorListXml);
 
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -105,19 +104,19 @@ namespace API
                 //log error
                 await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
 
-        [FunctionName("deletevisitorbyvisitorid")]
-        public static async Task<IActionResult> DeleteVisitorByVisitorId([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("deletevisitorbyvisitorid")]
+        public static async Task<HttpResponseData> DeleteVisitorByVisitorId([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var visitorIdXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var visitorIdXml = await APITools.ExtractDataFromRequest(incomingRequest);
                 var visitorId = visitorIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
@@ -136,7 +135,7 @@ namespace API
                 //upload modified list to storage
                 await APITools.OverwriteBlobData(visitorLogClient, visitorListXml);
 
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -144,7 +143,7 @@ namespace API
                 //log error
                 await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }

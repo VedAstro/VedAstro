@@ -104,7 +104,7 @@ namespace Genso.Astrology.Library
             {
                 //send to API for save keeping
                 //note:js runtime passed as null, so no internet checking done
-                var result = await WriteToServerXmlReply(URL.AddVisitorApi_Stable, visitorElement);
+                var result = await WriteToServerXmlReply(URL.AddVisitorApiStable, visitorElement);
 
                 //check result, display error if needed
                 if (!result.IsPass) { Console.WriteLine($"BLZ: ERROR: Add Visitor Api\n{result.Payload.Value}"); }

@@ -3,14 +3,11 @@ using Genso.Astrology.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs;
-using System.Net.Http;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
 {
@@ -24,34 +21,35 @@ namespace API
 
         //PUBLIC API
 
-        [FunctionName("getmatchreport")]
-        public static async Task<IActionResult> GetMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("getmatchreport")]
+        public static async Task<HttpResponseData> GetMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get name of male & female
-                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var rootXml = await APITools.ExtractDataFromRequest(incomingRequest);
                 var maleId = rootXml.Element("MaleId")?.Value;
                 var femaleId = rootXml.Element("FemaleId")?.Value;
 
                 //generate compatibility report
                 var compatibilityReport = await GetCompatibilityReport(maleId, femaleId);
-                return APITools.PassMessage((XElement)compatibilityReport.ToXml());
+                return APITools.PassMessage((XElement)compatibilityReport.ToXml(), incomingRequest);
             }
             catch (Exception e)
             {
                 //log error
                 await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
 
-        [FunctionName("GetAllMatchForPerson")]
-        public static async Task<IActionResult> GetAllMatchForPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{personId}")] HttpRequestMessage incomingRequest, string personId)
+        [Function("GetAllMatchForPerson")]
+        public static async Task<HttpResponseData> GetAllMatchForPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequestData incomingRequest, string personId)
         {
+            //todo needs work person ID  is not being fed in 
 
             var person = await APITools.GetPersonFromId(personId);
 
@@ -59,7 +57,7 @@ namespace API
 
             var text = Tools.ListToString(personList);
 
-            return new ContentResult { Content = text, ContentType = "text/html" };
+            return APITools.PassMessage(text, incomingRequest);
 
 
         }

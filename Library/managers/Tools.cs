@@ -482,19 +482,6 @@ namespace Genso.Astrology.Library
             return to;
         }
 
-        /// <summary>
-        /// Gets public IP address of client sending the http request
-        /// </summary>
-        public static IPAddress GetCallerIp(this HttpRequestMessage request)
-        {
-            IPAddress result = null;
-            if (request.Headers.TryGetValues("X-Forwarded-For", out IEnumerable<string> values))
-            {
-                var ipn = values.FirstOrDefault().Split(new char[] { ',' }).FirstOrDefault().Split(new char[] { ':' }).FirstOrDefault();
-                IPAddress.TryParse(ipn, out result);
-            }
-            return result;
-        }
 
         public static string StreamToString(Stream stream)
         {
@@ -912,10 +899,10 @@ namespace Genso.Astrology.Library
             StackFrame frame = st.GetFrame(st.FrameCount - 1);
 
             //Get the file name
-            fileName = frame.GetFileName();
+            fileName = frame?.GetFileName();
 
             //Get the method name
-            methodName = frame.GetMethod().Name;
+            methodName = frame.GetMethod()?.Name;
 
             //Get the line number from the stack frame
             line = frame.GetFileLineNumber();
@@ -926,6 +913,8 @@ namespace Genso.Astrology.Library
             message = originalException.ToString();
 
             source = originalException.Source;
+            //todo include inner exception data
+            var stackTrace = originalException.StackTrace;
 
 
             //put together the new error record
@@ -935,6 +924,7 @@ namespace Genso.Astrology.Library
                 new XElement("FileName", fileName),
                 new XElement("SourceLineNumber", line),
                 new XElement("SourceColNumber", columnNumber),
+                new XElement("MethodName", methodName),
                 new XElement("MethodName", methodName)
             );
 

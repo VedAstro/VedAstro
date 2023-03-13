@@ -1,9 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API;
 
@@ -26,29 +26,29 @@ public static class APILogger
     /// Logs an error directly to AppLog.xml
     /// note: request can be null
     /// </summary>
-    public static async Task Error(Exception exception, HttpRequestMessage req)
+    public static async Task Error(Exception exception, HttpRequestData req)
     {
+
         //get data out of exception
         var errorXml = Tools.ExtractDataFromException(exception);
 
-        //get caller data for more debug info
-        var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
-
-
-        errorXml.Add(Tools.BranchXml, SourceXml);
-        errorXml.Add(new XElement("CallerIP", ipAddress));
-        errorXml.Add(new XElement("Url", req?.RequestUri));
-        errorXml.Add(new XElement("RequestBody"), APITools.RequestToString(req));
-        errorXml.Add(Tools.TimeStampSystemXml);
-        errorXml.Add(Tools.TimeStampServerXml);
-        
+        //get data out of request
+        var requestDataXml = await APITools.RequestToXml(req);
 
         //add error data to main app log file
-        await APITools.AddXElementToXDocumentAzure(errorXml, AppLogXml, ContainerName);
+        var visitorXml = new XElement("Visitor", requestDataXml, errorXml);
+
+        //stamp it!
+        visitorXml.Add(Tools.BranchXml, SourceXml);
+        visitorXml.Add(Tools.TimeStampSystemXml);
+        visitorXml.Add(Tools.TimeStampServerXml);
+
+        await APITools.AddXElementToXDocumentAzure(visitorXml, AppLogXml, ContainerName);
 
     }
+   
 
-    public static async Task Visitor(HttpRequestMessage req)
+    public static async Task Visitor(HttpRequestData req)
     {
         //get caller data for more debug info
         var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
@@ -56,9 +56,7 @@ public static class APILogger
         var visitorXml = new XElement("Visitor");
 
         visitorXml.Add(Tools.BranchXml, SourceXml);
-        visitorXml.Add(new XElement("CallerIP", ipAddress));
-        visitorXml.Add(new XElement("Url", req?.RequestUri));
-        visitorXml.Add(new XElement("Data"), APITools.RequestToString(req));
+        visitorXml.Add(await APITools.RequestToXml(req));
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 
@@ -66,17 +64,14 @@ public static class APILogger
         await APITools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
 
     }
-    public static async Task Data(string textData, HttpRequestMessage req)
+    public static async Task Data(string textData, HttpRequestData req)
     {
-        //get caller data for more debug info
-        var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
 
         var visitorXml = new XElement("Visitor");
 
         visitorXml.Add(Tools.BranchXml, SourceXml);
-        visitorXml.Add(new XElement("CallerIP", ipAddress));
-        visitorXml.Add(new XElement("Url", req?.RequestUri));
-        visitorXml.Add(new XElement("Data"),new XElement("Text", textData), APITools.RequestToString(req));
+        visitorXml.Add(await APITools.RequestToXml(req));
+        visitorXml.Add(new XElement("Data"),new XElement("Text", textData));
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 

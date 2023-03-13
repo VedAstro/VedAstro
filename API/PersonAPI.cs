@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
 {
@@ -16,21 +14,20 @@ namespace API
     /// </summary>
     public class PersonAPI
     {
-        [FunctionName("addperson")]
-        public static async Task<IActionResult> AddPerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("addperson")]
+        public static async Task<HttpResponseData> AddPerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get new person data out of incoming request
                 //note: inside new person xml already contains user id
-                var newPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var newPersonXml = await APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new person to main list
                 await APITools.AddXElementToXDocumentAzure(newPersonXml, APITools.PersonListFile, APITools.BlobContainerName);
 
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -39,7 +36,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
@@ -49,18 +46,17 @@ namespace API
         /// note: this is done to auto move profiles created before login, then user decides to login
         /// but expects all the profiles created before to be there in new account/logged in account
         /// </summary>
-        [FunctionName("AddUserIdToVisitorPersons")]
-        public static async Task<IActionResult> AddUserIdToVisitorPersons(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("AddUserIdToVisitorPersons")]
+        public static async Task<HttpResponseData> AddUserIdToVisitorPersons([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get new person data out of incoming request
                 //note: inside new person xml already contains user id
-                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var rootXml = await APITools.ExtractDataFromRequest(incomingRequest);
                 var userId = rootXml.Element("UserId")?.Value;
-                var visitorId = rootXml.Element("VisitorId")?.Value;
+                var visitorId = rootXml.Element("VisitorId")?.Value ?? "";
 
                 //find all person's with inputed visitor ID
                 var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
@@ -78,7 +74,7 @@ namespace API
                 //upload modified list file to storage
                 await APITools.SaveXDocumentToAzure(personListXmlDoc, APITools.PersonListFile, APITools.BlobContainerName);
 
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -87,7 +83,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
@@ -97,14 +93,14 @@ namespace API
         /// <summary>
         /// Gets person all details from only hash
         /// </summary>
-        [FunctionName("getperson")]
-        public static async Task<IActionResult> GetPerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("getperson")]
+        public static async Task<HttpResponseData> GetPerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get hash that will be used find the person
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
                 var personId = requestData.Value;
 
                 //get the person record by hash
@@ -112,7 +108,7 @@ namespace API
                 var foundPerson = await APITools.FindPersonById(personListXml, personId);
 
                 //send person to caller
-                return APITools.PassMessage(foundPerson);
+                return APITools.PassMessage(foundPerson, incomingRequest);
 
             }
             catch (Exception e)
@@ -121,7 +117,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //let caller know fail, include exception info for easy debugging
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
 
@@ -130,15 +126,15 @@ namespace API
         /// <summary>
         /// Updates a person's record, uses hash to identify person to overwrite
         /// </summary>
-        [FunctionName("updateperson")]
-        public static async Task<IActionResult> UpdatePerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("updateperson")]
+        public static async Task<HttpResponseData> UpdatePerson(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var updatedPersonXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var updatedPersonXml = await APITools.ExtractDataFromRequest(incomingRequest);
 
                 //save a copy of the original person record in recycle bin, just in-case accidental update
                 var personId = Person.FromXml(updatedPersonXml).Id;//does not change
@@ -149,7 +145,7 @@ namespace API
                 await APITools.UpdatePersonRecord(updatedPersonXml);
 
                 //all is good baby
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -158,7 +154,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
@@ -170,15 +166,14 @@ namespace API
         /// Theoretically anybody who gets the hash of the person,
         /// can delete the record by calling this API
         /// </summary>
-        [FunctionName("DeletePerson")]
-        public static async Task<IActionResult> DeletePerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("DeletePerson")]
+        public static async Task<HttpResponseData> DeletePerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
                 var personId = requestData.Value;
 
                 //get the person record that needs to be deleted
@@ -191,7 +186,7 @@ namespace API
                 //delete the person record,
                 await APITools.DeleteXElementFromXDocumentAzure(personToDelete, APITools.PersonListFile, APITools.BlobContainerName);
 
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -200,16 +195,15 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
         }
 
         /// <summary>
         /// Gets all person profiles owned by User ID & Visitor ID
         /// </summary>
-        [FunctionName("GetPersonList")]
-        public static async Task<IActionResult> GetPersonList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("GetPersonList")]
+        public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
         //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 
         TryAgain:
@@ -219,7 +213,7 @@ namespace API
                 //TODO CHECK HERE FOR SAM ENTRY
 
                 //data out of request
-                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var rootXml = await APITools.ExtractDataFromRequest(incomingRequest);
                 var userId = rootXml.Element("UserId")?.Value;
                 var visitorId = rootXml.Element("VisitorId")?.Value;
 
@@ -263,7 +257,7 @@ namespace API
 
 
                 //send filtered list to caller
-                return APITools.PassMessage(xmlPayload);
+                return APITools.PassMessage(xmlPayload, incomingRequest);
 
             }
             catch (Exception e)
@@ -271,7 +265,7 @@ namespace API
                 //log error
                 await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
 

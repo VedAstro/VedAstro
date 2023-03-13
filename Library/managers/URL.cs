@@ -11,7 +11,7 @@ public class URL
     /// <summary>
     /// I know its tedious to make it a instance but shows that URLS are
     /// specific to instance and the use of them should be aware of that
-    /// sets if in beta or stable URL
+    /// sets if in beta or stable URL both API & CLIENT consult this singular truth file 
     /// All API functions can be accessed by this .org URL
     /// Note: possible via azure CDN rules engine : AccessApiViaWebDomain
     /// </summary>
@@ -53,6 +53,10 @@ public class URL
         GetEventsApi = ApiUrl + "/getevents";
         SignInGoogle = ApiUrl + "/SignInGoogle";
         SignInFacebook = ApiUrl + "/SignInFacebook";
+        UrlHoroscopeDataListXml = $"{WebUrl}/data/HoroscopeDataList.xml";//used in horoscope prediction
+        UrlEventsChartViewerHtml = $"{WebUrl}/data/EventsChartViewer.html";
+        ToolbarSvgAzure = $"{WebUrl}/svg/Toolbar.svg";// Toolbar.svg used in when rendering events chart
+
 
         //let dev user know
         Console.WriteLine("Dynamic URL:" + (isBetaRuntime ? "Beta" : "Stable"));
@@ -62,6 +66,9 @@ public class URL
     /// <summary>
     /// Auto set beta or stable based on build settings
     /// </summary>
+    public readonly string ToolbarSvgAzure;
+    public readonly string UrlEventsChartViewerHtml;
+    public readonly string UrlHoroscopeDataListXml;
     public readonly string ApiUrl;
     public readonly string WebUrl;
     public readonly string AddPersonApi;
@@ -75,7 +82,7 @@ public class URL
     public readonly string DeleteVisitorByVisitorId;
     public readonly string AddTaskApi;
     public readonly string AddVisitorApi;
-    public static readonly string AddVisitorApi_Stable = "https://vedastro.org/api/addvisitor";
+    public static readonly string AddVisitorApiStable = "https://vedastro.org/api/addvisitor";
 
     public readonly string GetPersonList;
     public readonly string GetPersonApi;
@@ -108,4 +115,6 @@ public class URL
     public const string AddPersonGuideVideo = "https://youtu.be/RDUPsFOrr3c";
     public const string NasaJplSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";
     public const string SwissEphSource = "https://www.astro.com/swisseph/swephinfo_e.htm";
+    public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
+    public const string SlackUserMessageWebHook = "https://hooks.slack.com/services/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";
 }

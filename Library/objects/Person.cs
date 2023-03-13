@@ -252,6 +252,10 @@ namespace Genso.Astrology.Library
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
             var userIdRaw = personXml.Element("UserId")?.Value ?? "";
+            //clean, remove white space & new line if any
+            userIdRaw = userIdRaw.Replace("\n", "");
+            userIdRaw = userIdRaw.Replace(" ", "");
+
             var userId = userIdRaw.Split(',');//split by comma
             var lifeEventList = getLifeEventListFromXml();
 

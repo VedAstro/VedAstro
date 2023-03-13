@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
+using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
-
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 namespace API
 {
     /// <summary>
@@ -22,22 +17,21 @@ namespace API
         /// Function for debugging purposes
         /// Call to see if return correct IP
         /// </summary>
-        [FunctionName("getipaddress")]
-        public static async Task<IActionResult> GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("getipaddress")]
+        public static async Task<HttpResponseData> GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-            return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip");
+            return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
         }
 
-        [FunctionName("getversion")]
-        public static async Task<IActionResult> GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestMessage incomingRequest)
+
+        [Function("version")]
+        public static HttpResponseData GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
             var holder = new XElement("Root");
-            var branch = APITools.GetIsBetaRuntime() ? "beta" : "stable";
-            var branchXml = new XElement("Branch", branch);
-            var versionNumberXml = new XElement("Version", branch);
-            holder.Add(branchXml, versionNumberXml, Tools.TimeStampServerXml);
+            var versionNumberXml = new XElement("Version", APITools.GetBuildVersion());
+            holder.Add(versionNumberXml, Tools.TimeStampServerXml);
 
-            return APITools.PassMessage(holder);
+            return APITools.PassMessage(holder, incomingRequest);
         }
 
     }

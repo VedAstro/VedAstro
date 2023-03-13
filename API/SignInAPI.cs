@@ -1,23 +1,21 @@
 ﻿using Google.Apis.Auth;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs;
 using System;
-using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
 {
     public class SignInAPI
     {
 
-        [FunctionName("SignInGoogle")]
-        public static async Task<IActionResult> SignInGoogle([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("SignInGoogle")]
+        public static async Task<HttpResponseData> SignInGoogle([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             //get ID Token/JWT from received request
-            var tokenXml = APITools.ExtractDataFromRequest(incomingRequest);
+            var tokenXml = await APITools.ExtractDataFromRequest(incomingRequest);
             var jwtToken = tokenXml.Value;
 
             try
@@ -38,25 +36,24 @@ namespace API
 
                 //send user data as xml in with pass status
                 //so that client can generate hash and use it
-                return APITools.PassMessage(userData.ToXml());
+                return APITools.PassMessage(userData.ToXml(), incomingRequest);
             }
             //if any failure, reply as in valid login & log the event
             catch (Exception e)
             {
                 await APILogger.Error(e, incomingRequest);
-                return APITools.FailMessage("Login Failed");
+                return APITools.FailMessage("Login Failed", incomingRequest);
             }
         }
 
-        [FunctionName("SignInFacebook")]
-        public static async Task<IActionResult> SignInFacebook(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("SignInFacebook")]
+        public static async Task<HttpResponseData> SignInFacebook([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get accessToken from received request
-                var tokenXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var tokenXml = await APITools.ExtractDataFromRequest(incomingRequest);
                 var accessToken = tokenXml.Value;
 
                 //validate the the token & get user data
@@ -73,19 +70,18 @@ namespace API
 
                 //send user data as xml in with pass status
                 //so that client can generate hash and use it
-                return APITools.PassMessage(userData.ToXml());
+                return APITools.PassMessage(userData.ToXml(), incomingRequest);
             }
             //if any failure, reply as in valid login & log the event
             catch (Exception e)
             {
                 await APILogger.Error(e, incomingRequest);
-                return APITools.FailMessage("Login Failed");
+                return APITools.FailMessage("Login Failed", incomingRequest);
             }
         }
 
-        [FunctionName(nameof(FacebookDeauthorize))]
-        public static async Task<IActionResult> FacebookDeauthorize(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post,get", Route = null)] HttpRequestMessage incomingRequest)
+        [Function(nameof(FacebookDeauthorize))]
+        public static async Task<HttpResponseData> FacebookDeauthorize([HttpTrigger(AuthorizationLevel.Anonymous, "post,get", Route = null)] HttpRequestData incomingRequest)
         {
 
             //facebook pings this when user Deauthorize facebook login
@@ -94,7 +90,7 @@ namespace API
             //todo proper logging
             await APILogger.Visitor(incomingRequest);
 
-            return APITools.PassMessage();
+            return APITools.PassMessage(incomingRequest);
         }
 
     }

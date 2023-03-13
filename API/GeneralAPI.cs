@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Genso.Astrology.Library;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
 {
@@ -15,14 +13,14 @@ namespace API
     public class GeneralAPI
     {
 
-        [FunctionName("gethoroscope")]
-        public static async Task<IActionResult> GetHoroscope([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("gethoroscope")]
+        public static async Task<HttpResponseData> GetHoroscope([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get person from request
-                var rootXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var rootXml = await APITools.ExtractDataFromRequest(incomingRequest);
                 var personId = rootXml.Value;
 
                 var person = await APITools.GetPersonFromId(personId);
@@ -33,7 +31,7 @@ namespace API
                 var sortedList = SortPredictionData(predictionList);
 
                 //convert list to xml string in root elm
-                return APITools.PassMessage(Tools.AnyTypeToXmlList(sortedList));
+                return APITools.PassMessage(Tools.AnyTypeToXmlList(sortedList), incomingRequest);
 
             }
             catch (Exception e)
@@ -41,7 +39,7 @@ namespace API
                 //log error
                 await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
 

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Azure.WebJobs;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Genso.Astrology.Library;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
 {
@@ -12,10 +11,8 @@ namespace API
         /// <summary>
         /// https://www.vedastro.org/api/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
         /// </summary>
-        [FunctionName("Location")]
-        public static async Task<IActionResult> Main(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/{propertyName}")]
-            HttpRequestMessage incomingRequest, string locationName, string hhmmStr, string dateStr, string monthStr, string yearStr, string offsetStr, string planetNameStr, string propertyName)
+        [Function("Location")]
+        public static async Task<HttpResponseData> Main([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/{propertyName}")] HttpRequestData incomingRequest, string locationName, string hhmmStr, string dateStr, string monthStr, string yearStr, string offsetStr, string planetNameStr, string propertyName)
         {
             //log the call
             APILogger.Visitor(incomingRequest);
@@ -26,11 +23,7 @@ namespace API
             var geoLocation = geoLocationResult.Payload;
 
             //check result 1st before parsing
-            if (!planetNameResult || !geoLocationResult.IsPass)
-            {
-                return new ContentResult
-                { Content = "Please check your input, it failed to parse.", ContentType = "text/html" };
-            }
+            if (!planetNameResult || !geoLocationResult.IsPass) { return APITools.FailMessage("Please check your input, it failed to parse.", incomingRequest); }
 
             //clean time text
             var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
@@ -56,7 +49,7 @@ namespace API
             }
 
 
-            return new ContentResult { Content = returnVal, ContentType = "text/html" };
+            return APITools.PassMessage(returnVal, incomingRequest);
         }
 
     }

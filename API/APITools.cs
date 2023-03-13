@@ -2,17 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Genso.Astrology.Library;
-using Genso.Astrology.Library.Compatibility;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
 {
@@ -39,33 +38,110 @@ namespace API
         public const string RecycleBinFile = "RecycleBin.xml";
         public const string UserDataListXml = "UserDataList.xml";
         public const string BlobContainerName = "vedastro-site-data";
+        public static URL Url { get; set; } //instance of beta or stable URLs
 
-        //we use direct storage URL for fast access & solid
-        public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
+        static APITools()
+        {
+            //make urls used here for beta or stable
+            Url = new URL(APITools.GetIsBetaRuntime());
+        }
 
-
-        //used in horoscope prediction
-        public const string UrlHoroscopeDataListXml = $"https://{AzureStorage}/data/HoroscopeDataList.xml";
-
-        public const string UrlEventsChartViewerHtml = $"https://{AzureStorage}/data/EventsChartViewer.html";
-
-        /// <summary>
-        /// Toolbar.svg used in when rendering events chart
-        /// </summary>
-        public const string ToolbarSvgAzure = $"https://{AzureStorage}/svg/Toolbar.svg";
 
         /// <summary>
         /// Default success message sent to caller
-        /// - .ToString() to make xml indented
+        /// - .ToString(SaveOptions.DisableFormatting); to remove make xml indented
         /// </summary>
-        public static OkObjectResult PassMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", msg)).ToString());
-        public static OkObjectResult PassMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payloadXml)).ToString());
-        public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
-        public static OkObjectResult FailMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payloadXml)).ToString());
-        public static OkObjectResult FailMessage(Exception payloadException) => FailMessage(Tools.ExceptionToXml(payloadException));
+        public static HttpResponseData PassMessage(HttpRequestData req) => PassMessage("", req);
+        public static HttpResponseData PassMessage(object payload, HttpRequestData req)
+        {
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+
+            //wrap data in nice tag
+            var finalXml = new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
+
+            //place in response body
+            response.WriteString(finalXml);
+
+            return response;
+        }
+
+
+        //public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
+        //public static OkObjectResult FailMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payloadXml)).ToString());
+        public static HttpResponseData FailMessage(object payload, HttpRequestData req)
+        {
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+
+            //wrap data in nice tag
+            var finalXml = new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
+
+            //place in response body
+            response.WriteString(finalXml);
+
+            return response;
+
+        }
+
+        public static HttpResponseData FailMessage(Exception payloadException, HttpRequestData req) => FailMessage(Tools.ExceptionToXml(payloadException), req);
+
 
         public static List<HoroscopeData> SavedHoroscopeDataList { get; set; } = null; //null used for checking empty
 
+
+
+
+
+
+
+
+        //----------------------------------------FUNCTIONS---------------------------------------------
+
+
+        /// <summary>
+        /// Gets public IP address of client sending the http request
+        /// </summary>
+        public static IPAddress GetCallerIp(this HttpRequestData req)
+        {
+            var headerDictionary = req.Headers.ToDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+            var key = "x-forwarded-for";
+            var key2 = "x-azure-clientip";
+            IPAddress? ipAddress = null;
+
+            if (headerDictionary.ContainsKey(key) || headerDictionary.ContainsKey(key))
+            {
+                var headerValues = headerDictionary[key];
+                var ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()?.Split(new char[] { ':' }).FirstOrDefault();
+                IPAddress.TryParse(ipn, out ipAddress);
+            }
+
+            return ipAddress;
+        }
+        public static IPAddress GetCallerIp(this HttpRequestMessage request)
+        {
+            IPAddress result = null;
+            if (request.Headers.TryGetValues("X-Forwarded-For", out IEnumerable<string> values))
+            {
+                var ipn = values.FirstOrDefault().Split(new char[] { ',' }).FirstOrDefault().Split(new char[] { ':' }).FirstOrDefault();
+                IPAddress.TryParse(ipn, out result);
+            }
+            return result;
+        }
+
+
+
+        /// <summary>
+        /// Reads data stamped build version, if "beta" is found in that name, return true
+        /// note, AssemblyInformationalVersion is custom set in Directory.Build.props
+        /// </summary>
+        public static bool GetIsBetaRuntime() => GetBuildVersion().Contains("beta");
+
+        /// <summary>
+        /// Gets build version stamped during deployment by Publisher
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBuildVersion() => ThisAssembly.AssemblyInformationalVersion; //todo maybe wrapper not needed
 
         /// <summary>
         /// Overwrites new XML data to a blob file
@@ -156,15 +232,11 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Extracts data coming in from API caller
-        /// And parses it as XML
-        /// Note : Data is assumed to be XML in string form
-        /// </summary>
-        public static XElement ExtractDataFromRequest(HttpRequestMessage request)
+       
+        public static async Task<XElement> ExtractDataFromRequest(HttpRequestData request)
         {
             //get xml string from caller
-            var xmlString = RequestToString(request);
+            var xmlString = await request?.ReadAsStringAsync() ?? "<Empty/>";
 
             //parse xml string
             //todo an exception check here might be needed, json data might come here
@@ -273,30 +345,38 @@ namespace API
             return stream;
         }
 
-        /// <summary>
-        /// Simply converts incoming request to raw string
-        /// No parsing is done here
-        /// note: null request return empty string
-        /// </summary>
-        public static string RequestToString(HttpRequestMessage rawData) => rawData?.Content?.ReadAsStringAsync().Result ?? "";
 
         /// <summary>
-        /// Extracts names from the query URL
+        /// Extracts data from HTTP request and turn it into a XML
         /// </summary>
-        public static async Task<object> ExtractMaleFemaleHash(HttpRequest request)
+        public static async Task<XElement> RequestToXml(HttpRequestData requestData)
         {
-            string maleHash = request.Query["male"];
-            string femaleHash = request.Query["female"];
+            var requestXml = new XElement("Request");
 
-            string requestBody = await new StreamReader(request.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            maleHash = maleHash ?? data?.male;
-            femaleHash = femaleHash ?? data?.female;
 
-            //convert to int
-            return new { Male = int.Parse(maleHash), Female = int.Parse(femaleHash) };
+            var propList = new Dictionary<string, string>()
+            {
+                ["Method"] = requestData.Method,
+                ["Url"] = requestData.Url.ToString(),
+                ["IP"] = requestData.GetCallerIp().ToString() ?? "no ip!",
+                ["Cookies"] = Tools.ListToString(requestData.Cookies.ToList()),
+                ["Identities"] = Tools.ListToString(requestData.Identities.ToList()),
+                ["Headers"] = Tools.ListToString(requestData.Headers.ToList()) ?? "no headers!",
+                ["Body"] = await requestData.ReadAsStringAsync() ?? "Empty",
+
+            };
+
+
+            foreach (var property in propList)
+            {
+                var tempXml = new XElement(property.Key, property.Value);
+                requestXml.Add(tempXml);
+            }
+
+            return requestXml;
 
         }
+
 
 
         /// <summary>
@@ -317,10 +397,6 @@ namespace API
 
             return new OkObjectResult(responseMessage);
         }
-
-
-
-
 
         public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)
         {
@@ -388,7 +464,6 @@ namespace API
             }
         }
 
-
         /// <summary>
         /// Given a id will return parsed person from main list
         /// Returns empty person if, no person found
@@ -427,7 +502,6 @@ namespace API
 
             return returnList;
         }
-
 
         /// <summary>
         /// Will look for a person in a given list
@@ -541,7 +615,7 @@ namespace API
             if (SavedHoroscopeDataList != null) { return SavedHoroscopeDataList; }
 
             //get data list from Static Website storage
-            var horoscopeDataListXml = await Tools.GetXmlFileHttp(UrlHoroscopeDataListXml);
+            var horoscopeDataListXml = await Tools.GetXmlFileHttp(Url.UrlHoroscopeDataListXml);
 
             //parse each raw event data in list
             var horoscopeDataList = new List<HoroscopeData>();
@@ -558,7 +632,6 @@ namespace API
 
         }
 
-
         /// <summary>
         /// Gets any file at given url as string
         /// </summary>
@@ -573,7 +646,6 @@ namespace API
 
             return fileString;
         }
-
 
         /// <summary>
         /// Gets XML file from Azure blob storage
@@ -652,8 +724,6 @@ namespace API
             }
         }
 
-
-
         /// <summary>
         /// If start time and end time is same then will only return 1 time in list
         /// </summary>
@@ -671,17 +741,6 @@ namespace API
             //return value
             return timeList;
         }
-
-        public static bool GetIsBetaRuntime()
-        {
-            //default to stable
-#if BETA
-            return true;
-#endif
-            return false;
-
-        }
-
 
         public static async Task<HttpResponseMessage> GetRequest(string receiverAddress)
         {

@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
+using Newtonsoft.Json;
 
 namespace API
 {
     public class MessageAPI
     {
 
-        [FunctionName("getmessagelist")]
-        public static async Task<IActionResult> GetMessageList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("getmessagelist")]
+        public static async Task<HttpResponseData> GetMessageList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             var responseMessage = "";
 
@@ -23,7 +26,7 @@ namespace API
 
 
                 //send task list to caller
-                return APITools.PassMessage(messageListXml.Root);
+                return APITools.PassMessage(messageListXml.Root, incomingRequest);
 
 
             }
@@ -32,31 +35,28 @@ namespace API
                 //log error
                 await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
-
-            var okObjectResult = new OkObjectResult(responseMessage);
-
-            return okObjectResult;
         }
 
-        [FunctionName("addmessage")]
-        public static async Task<IActionResult> AddMessage([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("addmessage")]
+        public static async Task<HttpResponseData> AddMessage([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get new message data out of incoming request
                 //note: inside new person xml already contains user id
-                var newMessageXml = APITools.ExtractDataFromRequest(incomingRequest);
+                var newMessageXml = await APITools.ExtractDataFromRequest(incomingRequest);
 
                 //add new message to main list
                 await APITools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, APITools.BlobContainerName);
 
-                //TODO send email to admin
+                //notify admin
+                await SendMessageToSlack(newMessageXml.Element("Email")?.Value ?? "Empty", newMessageXml.Element("Text")?.Value ?? "Empty");
 
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -65,9 +65,60 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
         }
+
+
+        private static async Task SendMessageToSlack(string fromEmail, string msgContent)
+        {
+
+            object model = new
+            {
+                username = "Acmebot",
+                attachments = new[]
+                {
+                    new
+                    {
+                        text = "New Message",
+                        color = "good",
+                        fields = new object[]
+                        {
+                            new
+                            {
+                                title = "From",
+                                value= fromEmail,
+                                @short = false
+                            },
+                            new
+                            {
+                                title = "Content",
+                                value = msgContent,
+                                @short = false
+                            }
+                        }
+                    }
+                }
+            };
+
+            var httpClient = new HttpClient();
+
+            var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+
+            //todo store in APITools.
+            var response = await httpClient.PostAsync(URL.SlackUserMessageWebHook, content);
+
+            var responseData = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine(responseData);
+            //return responseData;
+
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    _logger.LogWarning($"Failed invoke webhook. Status Code = {response.StatusCode}, Reason = {await response.Content.ReadAsStringAsync()}");
+            //}
+        }
+
 
 
     }

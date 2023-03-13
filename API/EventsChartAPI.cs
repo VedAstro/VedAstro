@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text.RegularExpressions;
+using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Xml.Linq;
+using Azure;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
 {
@@ -64,21 +60,21 @@ namespace API
         //  <DaysPerPixel>11</DaysPerPixel>
         //</Root>
         /// </summary>
-        [FunctionName("geteventschart")]
-        public static async Task<IActionResult> GetEventsChart(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("geteventschart")]
+        public static async Task<HttpResponseData> GetEventsChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             try
             {
                 //get dasa report for sending
                 var chart = await GetEventReportSvgForIncomingRequest(incomingRequest);
-                //var chart = Chart.Empty;
 
-                //send image back to caller
-                //convert svg string to stream for sending
-                var stream = GenerateStreamFromString(chart.ContentSvg);
-                var x = StreamToByteArray(stream);
-                return new FileContentResult(x, "image/svg+xml");
+                return SendSvgToCaller(chart.ContentSvg, incomingRequest);
+
+                //marked for deletion
+                ////convert svg string to stream for sending
+                //var stream = GenerateStreamFromString(chart.ContentSvg);
+                //var x = StreamToByteArray(stream);
+                //return new FileContentResult(x, "image/svg+xml");
 
             }
             catch (Exception e)
@@ -87,14 +83,32 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
 
-        [FunctionName("findbirthtimedasa")]
-        public static async Task<IActionResult> FindBirthTimeDasa(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        private static HttpResponseData SendSvgToCaller(string chartContentSvg, HttpRequestData incomingRequest)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "image/svg+xml");
+            //place in response body
+            response.WriteString(chartContentSvg);
+            return response;
+        }
+        private static HttpResponseData SendHtmlToCaller(string chartContentSvg, HttpRequestData incomingRequest)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/html");
+            //place in response body
+            response.WriteString(chartContentSvg);
+            return response;
+        }
+
+        [Function("findbirthtimedasa")]
+        public static async Task<HttpResponseData> FindBirthTimeDasa([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             try
             {
@@ -162,10 +176,7 @@ namespace API
 
 
                 //send image back to caller
-                //convert svg string to stream for sending
-                var stream = GenerateStreamFromString(finalSvg);
-                var x = StreamToByteArray(stream);
-                return new FileContentResult(x, "image/svg+xml");
+                return SendSvgToCaller(finalSvg, incomingRequest);
             }
             catch (Exception e)
             {
@@ -173,16 +184,13 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
         }
 
-        [FunctionName("findbirthtimerisingsign")]
-        public static async Task<IActionResult> FindBirthTimeRisingSign(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("findbirthtimerisingsign")]
+        public static async Task<HttpResponseData> FindBirthTimeRisingSign([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
-            string responseMessage;
-
             try
             {
                 //get person
@@ -201,20 +209,20 @@ namespace API
 
                     var x = await APITools.GetPrediction(personAdjusted);
                 }
-
                 //convert list to xml string in root elm
-                responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
+                var responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
+
+                return APITools.PassMessage(responseMessage, incomingRequest);
             }
             catch (Exception e)
             {
                 //log error
                 await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
-            var okObjectResult = new OkObjectResult(responseMessage);
-            return okObjectResult;
+
 
             //LOCAL FUNCTIONS
             async Task<List<Time>> GetTimeList(Person person)
@@ -260,9 +268,8 @@ namespace API
         /// Special function to make Light Viewer(EventsChartViewer.html) work
         /// This API is called by EventsChart.js when viewing chart view lite viewer
         /// </summary>
-        [FunctionName("geteventscharteasy")]
-        public static async Task<IActionResult> GetEventsChartEasy(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("geteventscharteasy")]
+        public static async Task<HttpResponseData> GetEventsChartEasy([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             try
             {
@@ -274,10 +281,7 @@ namespace API
                 var chart = await GetEventReportSvgForIncomingRequestEasy(incomingRequest);
 
                 //send image back to caller
-                //convert svg string to stream for sending
-                var stream = GenerateStreamFromString(chart.ContentSvg);
-                var x = StreamToByteArray(stream);
-                return new FileContentResult(x, "image/svg+xml");
+                return SendSvgToCaller(chart.ContentSvg, incomingRequest);
             }
             catch (Exception e)
             {
@@ -285,7 +289,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
         }
 
@@ -293,15 +297,14 @@ namespace API
         /// <summary>
         /// Gets chart from saved list, needs to be given id to find
         /// </summary>
-        [FunctionName("getsavedeventschart")]
-        public static async Task<IActionResult> GetSavedEventsChart(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("getsavedeventschart")]
+        public static async Task<HttpResponseData> GetSavedEventsChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get id that will be used find the person
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
                 var chartId = requestData.Value;
 
                 //get the saved chart record by id
@@ -310,10 +313,7 @@ namespace API
                 var chart = Chart.FromXml(foundChartXml);
 
                 //send image back to caller
-                //convert svg string to stream for sending
-                var stream = GenerateStreamFromString(chart.ContentSvg);
-                var x = StreamToByteArray(stream);
-                return new FileContentResult(x, "image/svg+xml");
+                return SendSvgToCaller(chart.ContentSvg, incomingRequest);
 
             }
             catch (Exception e)
@@ -322,7 +322,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
@@ -331,9 +331,9 @@ namespace API
         /// <summary>
         /// Special function to access Saved Chart directly without website
         /// </summary>
-        [FunctionName("savedchart")]
-        public static async Task<IActionResult> GetSavedEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "savedchart/{chartId}")]
-            HttpRequestMessage incomingRequest, string chartId)
+        [Function("savedchart")]
+        public static async Task<HttpResponseData> GetSavedEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "savedchart/{chartId}")]
+            HttpRequestData incomingRequest, string chartId)
         {
             try
             {
@@ -346,7 +346,7 @@ namespace API
 
                 //get chart index.html and send that to caller
                 //get data list from Static Website storage
-                var htmlTemplate = await APITools.GetStringFileHttp(APITools.UrlEventsChartViewerHtml);
+                var htmlTemplate = await APITools.GetStringFileHttp(APITools.Url.UrlEventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
                 //TODO NEEDS TO BE UPDATED
@@ -359,8 +359,7 @@ namespace API
                 //insert SVG into html place holder page
                 htmlTemplate = htmlTemplate.Replace("<!--INSERT SVG-->", svgString);
 
-                return new ContentResult { Content = htmlTemplate, ContentType = "text/html" };
-
+                return SendHtmlToCaller(htmlTemplate, incomingRequest);
 
             }
             catch (Exception e)
@@ -369,7 +368,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
@@ -381,14 +380,14 @@ namespace API
         /// Does not do anything to generate the chart, that is done by
         /// geteventscharteasy API called by the JS in HTML
         /// </summary>
-        [FunctionName("chart")]
-        public static async Task<IActionResult> GetEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "chart/{personId}/{eventPreset}/{timePreset}")]
-            HttpRequestMessage incomingRequest, string personId, string eventPreset, string timePreset)
+        [Function("chart")]
+        public static async Task<HttpResponseData> GetEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "chart/{personId}/{eventPreset}/{timePreset}")]
+            HttpRequestData incomingRequest, string personId, string eventPreset, string timePreset)
         {
             try
             {
                 //get chart index.html and send that to caller
-                var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.UrlEventsChartViewerHtml);
+                var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.Url.UrlEventsChartViewerHtml);
 
 
                 //insert person name into page, to show ready page faster
@@ -398,8 +397,8 @@ namespace API
                 jsVariables += $@"window.PersonId = ""{personId}"";";
                 var finalHtml = eventsChartViewerHtml.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
 
+                return SendHtmlToCaller(finalHtml, incomingRequest);
 
-                return new ContentResult { Content = finalHtml, ContentType = "text/html" };
 
             }
             catch (Exception e)
@@ -408,7 +407,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
         }
@@ -417,15 +416,14 @@ namespace API
         /// <summary>
         /// Given a chart id it will return the person id for that chart
         /// </summary>
-        [FunctionName("getpersonidfromsavedchartid")]
-        public static async Task<IActionResult> GetPersonIdFromSavedChartId(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("getpersonidfromsavedchartid")]
+        public static async Task<HttpResponseData> GetPersonIdFromSavedChartId([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get id that will be used find the person
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
                 var chartId = requestData.Value;
 
                 //get the saved chart record by id
@@ -436,7 +434,7 @@ namespace API
                 //extract out the person id from chart and send it to caller
                 var personIdXml = new XElement("PersonId", chart.PersonId);
 
-                return APITools.PassMessage(personIdXml);
+                return APITools.PassMessage(personIdXml, incomingRequest);
 
             }
             catch (Exception e)
@@ -445,7 +443,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(Tools.ExceptionToXml(e));
+                return APITools.FailMessage(Tools.ExceptionToXml(e), incomingRequest);
             }
 
         }
@@ -454,9 +452,8 @@ namespace API
         /// <summary>
         /// Saves the chart in Azure Storage
         /// </summary>
-        [FunctionName("SaveEventsChart")]
-        public static async Task<IActionResult> SaveEventsChart(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("SaveEventsChart")]
+        public static async Task<HttpResponseData> SaveEventsChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             try
             {
@@ -468,7 +465,7 @@ namespace API
                 APITools.AddXElementToXDocumentAzure(chart.ToXml(), APITools.SavedChartListFile, APITools.BlobContainerName);
 
                 //let caller know all good
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -477,7 +474,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
 
@@ -489,9 +486,8 @@ namespace API
         ///
         /// client will use data from here to get the actual saved chart
         /// </summary>
-        [FunctionName("getsavedchartnamelist")]
-        public static async Task<IActionResult> GetSavedChartNameList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("getsavedchartnamelist")]
+        public static async Task<HttpResponseData> GetSavedChartNameList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             try
             {
@@ -520,7 +516,7 @@ namespace API
                 }
 
 
-                return APITools.PassMessage(rootXml);
+                return APITools.PassMessage(rootXml, incomingRequest);
             }
             catch (Exception e)
             {
@@ -528,22 +524,21 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
 
 
         }
 
 
-        [FunctionName("deletesavedchart")]
-        public static async Task<IActionResult> DeleteSavedChart(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestMessage incomingRequest)
+        [Function("deletesavedchart")]
+        public static async Task<HttpResponseData> DeleteSavedChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var requestData = APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
                 var chartId = requestData.Value;
 
 
@@ -558,7 +553,7 @@ namespace API
                 var savedChartListClient = await APITools.GetBlobClientAzure(APITools.SavedChartListFile, APITools.BlobContainerName);
                 await APITools.OverwriteBlobData(savedChartListClient, savedChartListXml);
 
-                return APITools.PassMessage();
+                return APITools.PassMessage(incomingRequest);
             }
             catch (Exception e)
             {
@@ -566,7 +561,7 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e);
+                return APITools.FailMessage(e, incomingRequest);
             }
         }
 
@@ -581,10 +576,10 @@ namespace API
         /// <summary>
         /// processes incoming xml request and outputs events svg report
         /// </summary>
-        private static async Task<Chart> GetEventReportSvgForIncomingRequest(HttpRequestMessage req)
+        private static async Task<Chart> GetEventReportSvgForIncomingRequest(HttpRequestData req)
         {
             //get all the data needed out of the incoming request
-            var rootXml = APITools.ExtractDataFromRequest(req);
+            var rootXml = await APITools.ExtractDataFromRequest(req);
             var personId = rootXml.Element("PersonId")?.Value;
             var eventTagListXml = rootXml.Element("EventTagList");
             var eventTags = EventTagExtensions.FromXmlList(eventTagListXml);
@@ -601,10 +596,10 @@ namespace API
             return await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
         }
 
-        private static async Task<Chart> GetEventReportSvgForIncomingRequestEasy(HttpRequestMessage req)
+        private static async Task<Chart> GetEventReportSvgForIncomingRequestEasy(HttpRequestData req)
         {
             //get all the data needed out of the incoming request
-            var rootXml = APITools.ExtractDataFromRequest(req);
+            var rootXml = await APITools.ExtractDataFromRequest(req);
             var personId = rootXml.Element("PersonId")?.Value;
             var timePreset = rootXml.Element("TimePreset")?.Value;
             var eventPreset = rootXml.Element("EventPreset")?.Value;

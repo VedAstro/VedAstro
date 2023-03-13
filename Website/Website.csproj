@@ -16,6 +16,7 @@
 			<RunAOTCompilation>false</RunAOTCompilation>
 	</PropertyGroup>
 
+	<!--TODO MARKED FOR DELETION-->
 	<PropertyGroup Condition="'$(BuildBranch)'=='stable'">
 		<DefineConstants>STABLE</DefineConstants>
 	</PropertyGroup>

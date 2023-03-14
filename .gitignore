@@ -366,9 +366,9 @@ FodyWeavers.xsd
 Library/google_credentials.json
 Website/DeleteAndPublish.ps1
 
-/Website/SyncFiles.ps1
+Website/SyncFiles.ps1
 /Website/.env
 
 # Repo Versioning set by Publisher before deploy, so don't track
-/API/ThisAssembly.cs
-/API/ThisAssembly.cs
+API/ThisAssembly.cs
+API/ThisAssembly.cs

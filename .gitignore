@@ -368,3 +368,5 @@ Website/DeleteAndPublish.ps1
 
 Website/SyncFiles.ps1
 /Website/.env
+
+API/ThisAssembly.cs

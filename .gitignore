@@ -372,3 +372,5 @@ Website/SyncFiles.ps1
 # Repo Versioning set by Publisher before deploy, so don't track
 API/ThisAssembly.cs
 Website/ThisAssembly.cs
+
+API/local.settings.json

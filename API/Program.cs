@@ -1,4 +1,3 @@
-﻿using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 
@@ -10,12 +9,11 @@ namespace API
         {
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults()
-                .ConfigureOpenApi()
-                .ConfigureServices(services =>
-                {
-                })
                 .Build();
-            await host.RunAsync();
+
+            host.Run();
         }
     }
 }
+
+

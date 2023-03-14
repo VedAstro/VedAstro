@@ -116,5 +116,4 @@ public class URL
     public const string NasaJplSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";
     public const string SwissEphSource = "https://www.astro.com/swisseph/swephinfo_e.htm";
     public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
-    public const string SlackUserMessageWebHook = "https://hooks.slack.com/services/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";
 }

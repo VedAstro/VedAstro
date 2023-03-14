@@ -10,7 +10,6 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API
@@ -109,14 +108,22 @@ namespace API
             var key2 = "x-azure-clientip";
             IPAddress? ipAddress = null;
 
-            if (headerDictionary.ContainsKey(key) || headerDictionary.ContainsKey(key))
+            if (headerDictionary.ContainsKey(key) || headerDictionary.ContainsKey(key2))
             {
                 var headerValues = headerDictionary[key];
                 var ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()?.Split(new char[] { ':' }).FirstOrDefault();
-                IPAddress.TryParse(ipn, out ipAddress);
+                var key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
+
+                //if key 1 fail , try key 2
+                if (!key1ParseResult)
+                {
+                     headerValues = headerDictionary[key];
+                     ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()?.Split(new char[] { ':' }).FirstOrDefault();
+                     key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
+                }
             }
 
-            return ipAddress;
+            return ipAddress?? IPAddress.None;  
         }
 
         public static IPAddress GetCallerIp(this HttpRequestMessage request)
@@ -351,11 +358,11 @@ namespace API
             {
                 ["Method"] = requestData.Method,
                 ["Url"] = requestData.Url.ToString(),
-                ["IP"] = requestData.GetCallerIp().ToString() ?? "no ip!",
-                ["Cookies"] = Tools.ListToString(requestData.Cookies.ToList()),
-                ["Identities"] = Tools.ListToString(requestData.Identities.ToList()),
-                ["Headers"] = Tools.ListToString(requestData.Headers.ToList()) ?? "no headers!",
-                ["Body"] = await requestData.ReadAsStringAsync() ?? "Empty",
+                ["IP"] = requestData?.GetCallerIp().ToString() ?? "no ip!",
+                ["Cookies"] = Tools.ListToString(requestData?.Cookies.ToList()),
+                ["Identities"] = Tools.ListToString(requestData?.Identities.ToList()),
+                ["Headers"] = Tools.ListToString(requestData?.Headers.ToList()) ?? "no headers!",
+                ["Body"] = await requestData?.ReadAsStringAsync() ?? "Empty",
 
             };
 
@@ -371,25 +378,6 @@ namespace API
         }
 
 
-
-        /// <summary>
-        /// Gets the error in a nice string to send to user
-        /// todo receiver using this data expect XML, so when receiving such data as below will raise parse alarm
-        /// todo so when changing to XML, look for receivers and update their error catching mechanism
-        /// </summary> 
-        public static OkObjectResult FormatErrorReply(Exception e)
-        {
-            var responseMessage = "";
-
-            responseMessage += $"#Message#\n{e.Message}\n";
-            responseMessage += $"#Data#\n{e.Data}\n";
-            responseMessage += $"#InnerException#\n{e.InnerException}\n";
-            responseMessage += $"#Source#\n{e.Source}\n";
-            responseMessage += $"#StackTrace#\n{e.StackTrace}\n";
-            responseMessage += $"#StackTrace#\n{e.TargetSite}\n";
-
-            return new OkObjectResult(responseMessage);
-        }
 
         public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)
         {
@@ -425,7 +413,7 @@ namespace API
         {
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+            var storageConnectionString = Environment.GetEnvironmentVariable("API_STORAGE"); //vedastro-api-data
 
             //get image from storage
             var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);

@@ -9,7 +9,7 @@
         //HARD CODED DEFAULTS
         public const string CommitHash = "1010101010";
         public const string CommitNumber = "100";
-        public const string BranchName = "stable";
+        public const string BranchName = "beta";
         public static readonly string Version = $"{CommitHash}-{CommitNumber}-{BranchName}";
     }
 }

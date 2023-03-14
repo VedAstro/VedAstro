@@ -12,17 +12,39 @@ window.countries = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "Ameri
 //initialize separate worker thread to handle all logging
 window.LogThread = new Worker('js/LogThread.js');
 
+//todo remove if not needed
 //initialize separate worker thread to handle all HTTP talk, POST, GET, etc...
-window.NetworkThread = new Worker('js/NetworkThread.js');
+//window.NetworkThread = new Worker('js/NetworkThread.js');
 
 //when call is completed messages from here to blazor
-window.NetworkThread.onmessage = function (receivedRaw) {
-    window.JSFetchWrapperInstance.invokeMethodAsync('OnNetworkReply', receivedRaw);
-};
+//window.NetworkThread.onmessage = function (receivedRaw) {
+//    window.JSFetchWrapperInstance.invokeMethodAsync('OnNetworkReply', receivedRaw);
+//};
 
 //sets for access when event call back, received messages
-var SetJSFetchWrapperInstance = (instance) => window.JSFetchWrapperInstance = instance;
+//var SetJSFetchWrapperInstance = (instance) => window.JSFetchWrapperInstance = instance;
 
+
+//-----------------------FOR JSFetchWrapper
+//calls to server from blazor come here not via blazor http client
+async function postWrapper(url, payloadXml) {
+
+    console.log("JS > Sending POST request...");
+
+    var response = await fetch(url, {
+        "headers": { "accept": "*/*", "Connection": "keep-alive", "Content-Type": "text/plain" },
+        "body": payloadXml,
+        "method": "POST",
+        "mode": "no-cors"
+    });
+
+    var responseText = await response.text();
+
+    //show data 
+    console.log(responseText);
+
+    return responseText;
+}
 
 //print console greeting (file in wwwroot)
 printConsoleMessage();

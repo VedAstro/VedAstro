@@ -25,23 +25,23 @@ namespace Website.Code.Managers
 
         public async Task<string> Post(string apiUrl, XElement xmlData)
         {
-            //send using worker JS
-            var callMeBack = Tools.GenerateId();
-            var postData = new
-            {
-                callMeBack = callMeBack, //id so that caller can return data from worker independent of main thread
-                method = "POST",
-                url = apiUrl,
-                payload = xmlData.ToString(), //todo remove /n & space between tags, compression level 1
-            };
+            ////send using worker JS
+            //var callMeBack = Tools.GenerateId();
+            //var postData = new
+            //{
+            //    callMeBack = callMeBack, //id so that caller can return data from worker independent of main thread
+            //    method = "POST",
+            //    url = apiUrl,
+            //    payload = xmlData.ToString(), //todo remove /n & space between tags, compression level 1
+            //};
 
             //this call will take you to NetworkThread.js
-            await AppData.JsRuntime.InvokeAsync<string>("window.NetworkThread.postMessage", postData);
+            var rawPayload = await AppData.JsRuntime.InvokeAsync<string>("postWrapper", apiUrl, xmlData.ToString());
 
-            var receivedData = await GetMyData(callMeBack);
+            //var receivedData = await GetMyData(callMeBack);
 
             //todo proper checking of status needed
-            return receivedData;
+            return rawPayload;
         }
 
         private async Task<string> GetMyData(string callMeBack)

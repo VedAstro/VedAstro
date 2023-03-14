@@ -52,53 +52,9 @@ namespace Website
         /// Reads data stamped build version, if "beta" is found in that name, return true
         /// note, AssemblyInformationalVersion is custom set in Directory.Build.props
         /// </summary>
-        public static bool GetIsBetaRuntime() => GetBuildVersion().Contains("beta");
-
-        /// <summary>
-        /// Gets build version stamped during deployment by Publisher
-        /// </summary>
-        /// <returns></returns>
-        public static string GetBuildVersion() => ThisAssembly.AssemblyInformationalVersion; //todo maybe wrapper not needed
+        public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");
 
 
-        /// <summary>
-        /// Tries to get user login state, else returns public user id.
-        /// Note: Public User Id is the standard id all unregistered visitors get
-        /// </summary>
-        //public static async Task<string> GetUserIdAsync(IJSRuntime jsRuntime)
-        //{
-        //    //wait here a little if user has not signed in
-        //    //5 X 200 delay = 1 sec wait time max
-        //    var signInSuccess = await WaitTillGoogleSignInSuccess(5, 200);
-
-        //    //if sign in failed use Public Id
-        //    if (!signInSuccess) { Console.WriteLine("BLZ: GetUserIdAsync: Public ID Assigned"); return PublicUserId; }
-
-        //    //get user Id from variable in JS scope
-        //    var userId = AppData.CurrentUser?.Id;
-
-        //    return userId;
-        //}
-
-        /// <summary>
-        /// if try limit is expired then returns false
-        /// try limit 5 X 200 delay = 1 sec wait time max
-        /// </summary>
-        //public static async Task<bool> WaitTillGoogleSignInSuccess(int tryLimit, int delay)
-        //{
-        //    var count = 0;
-        //    while (!AppData.CurrentUser && count < tryLimit)
-        //    {
-        //        Console.WriteLine("BLZ: GetUserIdAsync: Waiting For Sign In");
-        //        await Task.Delay(delay);
-        //        count++;
-        //    }
-
-        //    if (!GoogleUserSignedIn && count == tryLimit) { return false; }
-
-        //    //if control reaches here than, user sign in success
-        //    return true;
-        //}
 
         /// <summary>
         /// Gets all people list from API server

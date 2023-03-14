@@ -16,7 +16,7 @@ public static class APILogger
     private const string VisitorLogXml = "VisitorLog.xml";
     private const string ContainerName = "vedastro-site-data";
 
-    private static readonly XElement SourceXml = new XElement("Source", "APILogger");
+    private static readonly XElement SourceXml = new("Source", "APILogger");
 
 
 

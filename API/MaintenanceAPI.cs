@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+
 namespace API
 {
     /// <summary>
@@ -28,7 +26,7 @@ namespace API
         public static HttpResponseData GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
             var holder = new XElement("Root");
-            var versionNumberXml = new XElement("Version", APITools.GetBuildVersion());
+            var versionNumberXml = new XElement("Version", Genso.Astrology.Library.ThisAssembly.Version);
             holder.Add(versionNumberXml, Tools.TimeStampServerXml);
 
             return APITools.PassMessage(holder, incomingRequest);

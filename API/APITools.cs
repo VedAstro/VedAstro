@@ -118,6 +118,7 @@ namespace API
 
             return ipAddress;
         }
+
         public static IPAddress GetCallerIp(this HttpRequestMessage request)
         {
             IPAddress result = null;
@@ -130,18 +131,10 @@ namespace API
         }
 
 
-
         /// <summary>
         /// Reads data stamped build version, if "beta" is found in that name, return true
-        /// note, AssemblyInformationalVersion is custom set in Directory.Build.props
         /// </summary>
-        public static bool GetIsBetaRuntime() => GetBuildVersion().Contains("beta");
-
-        /// <summary>
-        /// Gets build version stamped during deployment by Publisher
-        /// </summary>
-        /// <returns></returns>
-        public static string GetBuildVersion() => ThisAssembly.AssemblyInformationalVersion; //todo maybe wrapper not needed
+        public static bool GetIsBetaRuntime() => Genso.Astrology.Library.ThisAssembly.BranchName.Contains("beta");
 
         /// <summary>
         /// Overwrites new XML data to a blob file

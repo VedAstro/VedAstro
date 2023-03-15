@@ -25,17 +25,22 @@ public static class APILogger
     /// Logs an error directly to AppLog.xml
     /// note: request can be null
     /// </summary>
-    public static async Task Error(Exception exception, HttpRequestData req)
+    public static async Task Error(Exception exception, HttpRequestData req = null)
     {
+
+        //add error data to main app log file
+        var visitorXml = new XElement("Visitor");
 
         //get data out of exception
         var errorXml = Tools.ExtractDataFromException(exception);
+        visitorXml.Add(errorXml);
 
-        //get data out of request
-        var requestDataXml = await APITools.RequestToXml(req);
-
-        //add error data to main app log file
-        var visitorXml = new XElement("Visitor", requestDataXml, errorXml);
+        //get data out of request (if specified)
+        if (req != null)
+        {
+            var requestDataXml = await APITools.RequestToXml(req);
+            visitorXml.Add(requestDataXml);
+        }
 
         //stamp it!
         visitorXml.Add(Tools.BranchXml, SourceXml);
@@ -45,7 +50,7 @@ public static class APILogger
         await APITools.AddXElementToXDocumentAzure(visitorXml, AppLogXml, ContainerName);
 
     }
-   
+
 
     public static async Task Visitor(HttpRequestData req)
     {
@@ -70,7 +75,7 @@ public static class APILogger
 
         visitorXml.Add(Tools.BranchXml, SourceXml);
         visitorXml.Add(await APITools.RequestToXml(req));
-        visitorXml.Add(new XElement("Data"),new XElement("Text", textData));
+        visitorXml.Add(new XElement("Data"), new XElement("Text", textData));
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 

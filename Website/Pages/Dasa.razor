@@ -1,6 +1,5 @@
 @attribute [Route(PageRoute.Dasa)]
 @using Genso.Astrology.Library
-@using System.Xml.Linq
 
 @*<UnderConstructionHeader PageName="Dasa" />
 *@
@@ -230,7 +229,7 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitializedAsync()).Try(_jsRuntime);
+    //protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitializedAsync()).Try(_jsRuntime);
 
     private async Task OnClickCalculate() => await InvokeAsync(async () => await _OnClickCalculate()).Try(_jsRuntime);
     private async Task OnClickShowSaved() => await InvokeAsync(async () => await _OnClickShowSaved()).Try(_jsRuntime);
@@ -240,15 +239,15 @@
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-    private async Task _OnInitializedAsync()
-    {
-        ////show loading box
-        //await _jsRuntime.ShowLoading();
+    //private async Task _OnInitializedAsync()
+    //{
+    //    ////show loading box
+    //    //await _jsRuntime.ShowLoading();
 
-        ////hide loading box
-        //_jsRuntime.HideAlert();
+    //    ////hide loading box
+    //    //_jsRuntime.HideAlert();
 
-    }
+    //}
 
     /// <summary>
     /// Saves current chart to local storage

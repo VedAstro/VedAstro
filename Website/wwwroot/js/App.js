@@ -12,54 +12,30 @@ window.countries = ["Afghanistan", "Aland Islands", "Albania", "Algeria", "Ameri
 //initialize separate worker thread to handle all logging
 window.LogThread = new Worker('js/LogThread.js');
 
-//todo remove if not needed
-//initialize separate worker thread to handle all HTTP talk, POST, GET, etc...
-//window.NetworkThread = new Worker('js/NetworkThread.js');
-
-//when call is completed messages from here to blazor
-//window.NetworkThread.onmessage = function (receivedRaw) {
-//    window.JSFetchWrapperInstance.invokeMethodAsync('OnNetworkReply', receivedRaw);
-//};
-
-//sets for access when event call back, received messages
-//var SetJSFetchWrapperInstance = (instance) => window.JSFetchWrapperInstance = instance;
-
-
-//-----------------------FOR JSFetchWrapper
-//calls to server from blazor come here not via blazor http client
-async function postWrapper(url, payloadXml) {
-
-    console.log("JS > Sending POST request...");
-
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/xml");
-
-    var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: payloadXml,
-        redirect: 'follow'
-    };
-
-    //fetch("https://beta.vedastro.org/api/GetPersonList", requestOptions)
-    //    .then(response => response.text())
-    //    .then(result => console.log(result))
-    //    .catch(error => console.log('error', error));
-
-    var response = await fetch(url, requestOptions);
-
-    var responseText = await response.text();
-
-    //show data 
-    //console.log(responseText);
-
-    return responseText;
-}
 
 //print console greeting (file in wwwroot)
 printConsoleMessage();
 
+
+
+
+
+
+//-----------------------FOR JSFetchWrapper
+//calls to server from blazor come here not via blazor http client, reliable
+async function postWrapper(url, payloadXml) {
+
+    console.log("JS > Sending POST request...");
+
+    var response = await fetch(url, {
+        "body": payloadXml,
+        "method": "POST"
+    });
+
+    var responseText = await response.text();
+
+    return responseText;
+}
 
 
 //prints a message to console for developers to see

@@ -117,13 +117,13 @@ namespace API
                 //if key 1 fail , try key 2
                 if (!key1ParseResult)
                 {
-                     headerValues = headerDictionary[key];
-                     ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()?.Split(new char[] { ':' }).FirstOrDefault();
-                     key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
+                    headerValues = headerDictionary[key];
+                    ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()?.Split(new char[] { ':' }).FirstOrDefault();
+                    key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
                 }
             }
 
-            return ipAddress?? IPAddress.None;  
+            return ipAddress ?? IPAddress.None;
         }
 
         public static IPAddress GetCallerIp(this HttpRequestMessage request)
@@ -232,7 +232,7 @@ namespace API
 
         }
 
-       
+
         public static async Task<XElement> ExtractDataFromRequest(HttpRequestData request)
         {
             //get xml string from caller
@@ -253,9 +253,7 @@ namespace API
             try
             {
                 var xmlFileString = await DownloadToText(blobClient);
-
                 XDocument document = XDocument.Parse(xmlFileString);
-                //var document = XDocument.Load(xmlFileString);
 
                 return document;
 
@@ -266,23 +264,6 @@ namespace API
                 Console.WriteLine(e);
                 throw new Exception($"Azure Storage Failure : {blobClient.Name}");
             }
-
-
-            //Console.WriteLine(blobClient.Name);
-            //Console.WriteLine(blobClient.AccountName);
-            //Console.WriteLine(blobClient.BlobContainerName);
-            //Console.WriteLine(blobClient.Uri);
-            //Console.WriteLine(blobClient.CanGenerateSasUri);
-
-            //if does not exist raise alarm
-            if (!await blobClient.ExistsAsync())
-            {
-                Console.WriteLine("NO FILE!");
-            }
-
-            //parse string as xml doc
-            //var valueContent = blobClient.Download().Value.Content;
-            //Console.WriteLine("Text:"+Tools.StreamToString(valueContent));
 
         }
 
@@ -449,7 +430,7 @@ namespace API
         /// Given a id will return parsed person from main list
         /// Returns empty person if, no person found
         /// </summary>
-        public static async Task<Person> GetPersonFromId(string personId)
+        public static async Task<Person> GetPersonById(string personId)
         {
             var personListXml = await GetPersonListFile();
             var foundPersonXml = await FindPersonById(personListXml, personId);
@@ -459,29 +440,6 @@ namespace API
             var foundPerson = Person.FromXml(foundPersonXml);
 
             return foundPerson;
-        }
-
-        /// <summary>
-        /// Find all person's xml element owned by User/Visitor ID
-        /// Note:
-        /// - multiple comma seperated UserId in Person profile
-        /// - 1 person profile can have multiple user id (shared)
-        /// - document is inputed instead for wide compatibilty
-        /// </summary>
-        public static List<XElement> FindPersonByUserId(XDocument personListXml, string userId)
-        {
-            var returnList = new List<XElement>();
-
-            //add all person profiles that have the given user ID
-            var allPersonList = personListXml.Root?.Elements();
-            foreach (var personXml in allPersonList)
-            {
-                var allOwnerId = personXml.Element("UserId")?.Value ?? "";
-                //check if inputed ID is found in list
-                if (allOwnerId.Equals(userId)) { returnList.Add(personXml); }
-            }
-
-            return returnList;
         }
 
         /// <summary>
@@ -507,10 +465,39 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                await APILogger.Error(e, null);
+                await APILogger.Error(e);
                 return null;
             }
         }
+
+        /// <summary>
+        /// Find all person's xml element owned by User/Visitor ID
+        /// Note:
+        /// - multiple comma seperated UserId in Person profile
+        /// - 1 person profile can have multiple user id (shared)
+        /// - document is inputed instead for wide compatibilty
+        /// </summary>
+        public static List<XElement> FindPersonByUserId(XDocument personListXml, string inputUserId)
+        {
+            var returnList = new List<XElement>();
+
+            //add all person profiles that have the given user ID
+            var allPersonList = personListXml.Root?.Elements();
+            foreach (var personXml in allPersonList)
+            {
+                var allOwnerId = personXml.Element("UserId")?.Value ?? "";
+
+                //must be split before can be used
+                var ownerList = allOwnerId.Split(',');
+
+                //check if inputed ID is found in list, add to return list
+                foreach (var owner in ownerList) { if (owner.Equals(inputUserId)) { returnList.Add(personXml); } }
+
+            }
+
+            return returnList;
+        }
+
 
         /// <summary>
         /// Gets user data, if user does

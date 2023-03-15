@@ -1,15 +1,8 @@
-﻿using System.Net;
-using Genso.Astrology.Library;
-using System.Text;
-using System.Xml;
+﻿using Genso.Astrology.Library;
 using System.Xml.Linq;
-using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using System.Text.Json.Nodes;
-using Website.Code.Managers;
-using Microsoft.AspNetCore.Http;
 
 namespace Website
 {
@@ -209,7 +202,7 @@ namespace Website
             //so it is important to properly check and handled here for best UX
             //- server unexpected failure
             //- server unreachable
-            catch (Exception e)
+            catch (Exception)
             {
                 returnVal = new WebResult<XElement>(false, new XElement("Root", $"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}"));
             }
@@ -226,15 +219,13 @@ namespace Website
         public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData)
         {
             //ACT 1:
-            //send data to URL
-            var receivedData = await AppData.JSFetchWrapper.Post(apiUrl, xmlData);
+            //send data to URL, using JS for speed
+            var receivedData = await WebsiteTools.Post(apiUrl, xmlData);
 
             //ACT 2:
-            //check raw data
-            if (string.IsNullOrEmpty(receivedData))
-            {
-                throw new ApiCommunicationFailed();
-            }
+            //check raw data 
+            //todo handle error better
+            if (string.IsNullOrEmpty(receivedData)) { throw new ApiCommunicationFailed(); }
 
             //ACT 2:
             //return data as XML

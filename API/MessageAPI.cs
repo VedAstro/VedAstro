@@ -15,7 +15,6 @@ namespace API
         [Function("getmessagelist")]
         public static async Task<HttpResponseData> GetMessageList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
-            var responseMessage = "";
 
             try
             {

@@ -16,7 +16,7 @@ namespace API
         /// Call to see if return correct IP
         /// </summary>
         [Function("getipaddress")]
-        public static async Task<HttpResponseData> GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
+        public static HttpResponseData GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
             return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
         }
@@ -26,7 +26,7 @@ namespace API
         public static HttpResponseData GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
             var holder = new XElement("Root");
-            var versionNumberXml = new XElement("Version", Genso.Astrology.Library.ThisAssembly.Version);
+            var versionNumberXml = new XElement("Version", ThisAssembly.Version);
             holder.Add(versionNumberXml, Tools.TimeStampServerXml);
 
             return APITools.PassMessage(holder, incomingRequest);

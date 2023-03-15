@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System.Reflection;
 using System.Xml.Linq;
 using Genso.Astrology.Library;
 using Microsoft.AspNetCore.Components;
@@ -25,6 +23,14 @@ namespace Website
         //░█░█░█ ░█▀▀▀ ─░█── ░█▀▀█ ░█──░█ ░█─░█ ─▀▀▀▄▄ 
         //░█──░█ ░█▄▄▄ ─░█── ░█─░█ ░█▄▄▄█ ░█▄▄▀ ░█▄▄▄█
 
+        public static async Task<string> Post(string apiUrl, XElement xmlData)
+        {
+            //this call will take you to NetworkThread.js
+            var rawPayload = await AppData.JsRuntime.InvokeAsync<string>("postWrapper", apiUrl, xmlData.ToString(SaveOptions.DisableFormatting));
+
+            //todo proper checking of status needed
+            return rawPayload;
+        }
 
         /// <summary>
         /// Extension method for setting a Timeout for a Task
@@ -54,8 +60,6 @@ namespace Website
         /// </summary>
         public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");
 
-
-
         /// <summary>
         /// Gets all people list from API server
         /// This is the central place all person list is gotten for a User ID/Visitor ID
@@ -84,8 +88,6 @@ namespace Website
 
         }
 
-
-
         /// <summary>
         /// Gets all visitor list from API server
         /// </summary>
@@ -95,7 +97,6 @@ namespace Website
             var visitorList = result.Payload.Elements().ToList();//visitorListRootXml
             return visitorList;
         }
-
 
         /// <summary>
         /// Gets person from ID

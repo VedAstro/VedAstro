@@ -1,7 +1,5 @@
 ﻿@using Genso.Astrology.Library
 @using System.Xml.Linq
-@using Microsoft.Extensions.FileSystemGlobbing.Internal
-@using Website.Code.Managers
 @inherits LayoutComponentBase
 @using Website.Pages
 
@@ -173,8 +171,6 @@
         //NOTE
         //control comes here after Program, all needed initialization
         //done here before page/components are loaded
-
-        AppData.JSFetchWrapper = new JSFetchWrapper();
 
         //create url based on beta or stable
         AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime());

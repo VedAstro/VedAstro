@@ -23,7 +23,7 @@ namespace API
                 var rootXml = await APITools.ExtractDataFromRequest(incomingRequest);
                 var personId = rootXml.Value;
 
-                var person = await APITools.GetPersonFromId(personId);
+                var person = await APITools.GetPersonById(personId);
 
                 //calculate predictions for current person
                 var predictionList = await APITools.GetPrediction(person);

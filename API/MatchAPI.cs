@@ -50,7 +50,7 @@ namespace API
         {
             //todo needs work person ID  is not being fed in 
 
-            var person = await APITools.GetPersonFromId(personId);
+            var person = await APITools.GetPersonById(personId);
 
             var personList = await GetAllPersonByMatchStrength(person);
 
@@ -75,8 +75,8 @@ namespace API
         public static async Task<CompatibilityReport> GetCompatibilityReport(string maleId, string femaleId)
         {
 
-            var male = await APITools.GetPersonFromId(maleId);
-            var female = await APITools.GetPersonFromId(femaleId);
+            var male = await APITools.GetPersonById(maleId);
+            var female = await APITools.GetPersonById(femaleId);
 
             //if male & female profile found, make report and return caller
             var notEmpty = !Person.Empty.Equals(male) && !Person.Empty.Equals(female);

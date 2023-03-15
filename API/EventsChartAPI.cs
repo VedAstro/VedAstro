@@ -121,7 +121,7 @@ namespace API
                 var endTime = new Time(eventTime.AddMonths(1), await lifeEvent.GetGeoLocation());
 
                 //person
-                var person = await APITools.GetPersonFromId("54041d1ffb494a79997f7987ecfcf08b5");
+                var person = await APITools.GetPersonById("54041d1ffb494a79997f7987ecfcf08b5");
                 //zoom level
                 //possible birth times
                 var timeSkip = 1;// 1 hour
@@ -192,8 +192,7 @@ namespace API
             try
             {
                 //get person
-                var person = await APITools.GetPersonFromId("05abf671c8bf4e4badc07a086c067f26");
-                //var person = await APITools.GetPersonFromId("54041d1ffb494a79997f7987ecfcf08b5");
+                var person = await APITools.GetPersonById("05abf671c8bf4e4badc07a086c067f26");
 
                 //get all birth time with different rising sign
                 var possibleTimeList = await GetTimeList(person);
@@ -348,7 +347,7 @@ namespace API
 
                 //insert person name into page, to show ready page faster
                 //TODO NEEDS TO BE UPDATED
-                var personName = (await APITools.GetPersonFromId(chart.PersonId)).Name;
+                var personName = (await APITools.GetPersonById(chart.PersonId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
                 jsVariables += $@"window.PersonId = ""{chart.PersonId}"";";
@@ -389,7 +388,7 @@ namespace API
 
 
                 //insert person name into page, to show ready page faster
-                var personName = (await APITools.GetPersonFromId(personId)).Name;
+                var personName = (await APITools.GetPersonById(personId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
                 jsVariables += $@"window.PersonId = ""{personId}"";";
@@ -502,7 +501,7 @@ namespace API
                 foreach (var chartXml in savedChartXmlList)
                 {
                     var parsedChart = Chart.FromXml(chartXml);
-                    var person = await APITools.GetPersonFromId(parsedChart.PersonId);
+                    var person = await APITools.GetPersonById(parsedChart.PersonId);
                     var chartNameXml = new XElement("ChartName",
                         new XElement("Name",
                             parsedChart.GetFormattedName(person.Name)),
@@ -589,7 +588,7 @@ namespace API
 
 
             //get the person instance by id
-            var foundPerson = await APITools.GetPersonFromId(personId);
+            var foundPerson = await APITools.GetPersonById(personId);
 
             return await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
         }
@@ -615,7 +614,7 @@ namespace API
             //EXTRACT & PREPARE DATA
 
             //get the person instance by id
-            var foundPerson = await APITools.GetPersonFromId(personId);
+            var foundPerson = await APITools.GetPersonById(personId);
 
             //TIME
             dynamic x = AutoCalculateTimeRange(timePreset, foundPerson.GetBirthLocation(), timezone);

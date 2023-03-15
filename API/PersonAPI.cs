@@ -138,7 +138,7 @@ namespace API
 
                 //save a copy of the original person record in recycle bin, just in-case accidental update
                 var personId = Person.FromXml(updatedPersonXml).Id;//does not change
-                var originalPerson = await APITools.GetPersonFromId(personId);
+                var originalPerson = await APITools.GetPersonById(personId);
                 await APITools.AddXElementToXDocumentAzure(originalPerson.ToXml(), APITools.RecycleBinFile, APITools.BlobContainerName);
 
                 //directly updates and saves new person record to main list (does all the work, sleep easy)

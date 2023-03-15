@@ -5,22 +5,31 @@
 <PageTitle>Contact</PageTitle>
 
 <PageTop Title="Contact us" IconName="fluent:chat-mail-20-filled">
-    <Description>You can report a bug, suggest a feature or just say Hi. Our email is contact@vedastro.org</Description>
+    <Description>Report a bug, suggest a feature or just say Hi</Description>
 </PageTop>
 
-@*<h3>Our Email: contact@vedastro.org</h3>
-*@
-<div @ref="_messageFormElement" class="vstack gap-2" style="max-width:@AppData.MaxWidth;">
-    <div>
-        <label for="emailInputId">Email</label>
-        <input @bind="_emailInput" type="text" id="emailInputId" class="form-control" placeholder="john@example.com">
+
+<div class="d-flex flex-wrap">
+    <div class="vstack gap-3 me-5 mb-4" style="max-width:286px">
+        <div @ref="_messageFormElement" class="vstack gap-2" style="max-width:@AppData.MaxWidth;">
+            <div>
+                <label for="emailInputId">Email</label>
+                <input @bind="_emailInput" type="text" id="emailInputId" class="form-control" placeholder="john@example.com">
+            </div>
+            <div>
+                <label for="messageInputId">Message</label>
+                <textarea style="min-height:132px;" class="form-control" @bind="_messageInput" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
+            </div>
+            <IconButton OnClickCallback="@OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
+        </div>
     </div>
-    <div>
-        <label for="messageInputId">Message</label>
-        <textarea style="min-height:132px;" class="form-control" @bind="_messageInput" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
+    @*STACK BOXES ON RIGHT*@
+    <div class="w-50">
+        <InfoBox MaxWidth="365" FullWidth="@true" Title="WhatsApp" ClickUrl="@URL.WhatsAppContact" Description="Call or chat with us." IconName="logos:whatsapp-icon" />
+        <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Email" ClickUrl="@URL.EmailToClick" Description="contact@vedastro.org" IconName="flat-color-icons:address-book" />
     </div>
-    <IconButton OnClickCallback="@OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
 </div>
+
 
 @*Default hidden Thank you message*@
 <div style="display: none;" @ref="_thankYouMessageElement">
@@ -53,9 +62,9 @@
     private async Task SendMessage()
     {
         //loading box show
-       await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading();
 
-    //package message data to be sent
+        //package message data to be sent
         var textXml = new XElement("Text", _messageInput);
         var emailXml = new XElement("Email", _emailInput);
         var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);

@@ -2,7 +2,7 @@
 @using Genso.Astrology.Library;
 @using System.Xml.Linq
 
-<div class="@(FullWidth?"":"w-50")" style="@(MaxWidth == null ? "":MaxWidthClass)">
+<div @onclick="OnClick" class="@(FullWidth?"":"w-50")" style="@InlineStyle">
     <div class="alert alert-@Color d-flex align-items-center" role="alert">
         <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
         <div>
@@ -35,13 +35,36 @@
     [Parameter]
     public string? Description { get; set; }
 
+    public string? InlineStyle
+    {
+        get
+        {
+            var final = "";
+            final += IsClickMode ? PointerCursorStyle : "";
+            final += MaxWidth == null ? "" : MaxWidthStyle;
+            return final;
+        }
+    }
+
     [Parameter]
     public RenderFragment? DescriptionHTML { get; set; }
 
 
     /// <summary>
+    /// If URL is provided, on button click will navigate to URL
+    /// </summary>
+    [Parameter]
+    public string? ClickUrl { get; set; }
+
+    /// <summary>
+    /// Checks if click URL has been specified
+    /// </summary>
+    public bool IsClickMode => ClickUrl != "" || ClickUrl != null;
+
+
+    /// <summary>
     /// If set true, class w-50 will be removed
-    /// default false, with w-50 
+    /// default false, with w-50
     /// </summary>
     [Parameter]
     public bool FullWidth { get; set; } = false;
@@ -55,6 +78,16 @@
     /// <summary>
     /// used to make class applied in style attribute
     /// </summary>
-    private string MaxWidthClass => $"max-width:{MaxWidth}px;";
+    private string MaxWidthStyle => $" max-width:{MaxWidth}px;";
+    private string PointerCursorStyle => $" cursor: pointer;";
+
+    private void OnClick()
+    {
+        if (IsClickMode)
+        {
+            _navigation.NavigateTo(ClickUrl, new NavigationOptions(){ForceLoad = false, });
+        }
+
+    }
 
 }

@@ -31,17 +31,28 @@ async function postWrapper(url, payloadXml) {
 
     console.log("JS > Sending POST request...");
 
-    var response = await fetch(url, {
-        "headers": { "accept": "*/*", "Connection": "keep-alive", "Content-Type": "text/plain" },
-        "body": payloadXml,
-        "method": "POST",
-        "mode": "no-cors"
-    });
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/xml");
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: payloadXml,
+        redirect: 'follow'
+    };
+
+    //fetch("https://beta.vedastro.org/api/GetPersonList", requestOptions)
+    //    .then(response => response.text())
+    //    .then(result => console.log(result))
+    //    .catch(error => console.log('error', error));
+
+    var response = await fetch(url, requestOptions);
 
     var responseText = await response.text();
 
     //show data 
-    console.log(responseText);
+    //console.log(responseText);
 
     return responseText;
 }

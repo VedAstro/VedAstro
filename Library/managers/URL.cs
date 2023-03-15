@@ -117,4 +117,5 @@ public class URL
     public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
     public const string WhatsAppContact = "https://wa.me/60142938084?text=Hi";
     public const string EmailToClick = "mailto:contact@vedastro.org";
+    public const string GitHubRepo = "https://github.com/VedAstro/VedAstro";
 }

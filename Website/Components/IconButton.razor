@@ -132,7 +132,18 @@
     /// If URL is provided, on button click will navigate to URL
     /// </summary>
     [Parameter]
-    public string? ClickUrl { get; set; }
+    public string? ClickUrl { get; set; } = "";
+
+    /// <summary>
+    /// Checks if click URL has been specified
+    /// </summary>
+    public bool IsClickMode => !string.IsNullOrEmpty(ClickUrl);
+
+    /// <summary>
+    /// Related to ClickURL, if set true opens in new tab, default is false
+    /// </summary>
+    [Parameter]
+    public bool IsNewTabOpen { get; set; } = false;
 
     public ElementReference ElementReference { get; set; }
 
@@ -167,9 +178,11 @@
             await OnClickCallback.InvokeAsync(obj);
         }
         //else if URL has been specified use that
-        else if (ClickUrl != "" || ClickUrl != null)
+        else if (IsClickMode)
         {
-            _navigation.NavigateTo(ClickUrl);
+            //if specified opens link in new tab
+            if (IsNewTabOpen) { _jsRuntime.OpenNewTab(ClickUrl); }
+            else { _navigation.NavigateTo(ClickUrl); }
         }
 
     }

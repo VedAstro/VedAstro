@@ -54,12 +54,19 @@
     /// If URL is provided, on button click will navigate to URL
     /// </summary>
     [Parameter]
-    public string? ClickUrl { get; set; }
+    public string? ClickUrl { get; set; } = ""; //default empty to detect
+
+    /// <summary>
+    /// Related to ClickURL, if set true opens in new tab, default is false
+    /// </summary>
+    [Parameter]
+    public bool IsNewTabOpen { get; set; } = false;
+
 
     /// <summary>
     /// Checks if click URL has been specified
     /// </summary>
-    public bool IsClickMode => ClickUrl != "" || ClickUrl != null;
+    public bool IsClickMode => !string.IsNullOrEmpty(ClickUrl);
 
 
     /// <summary>
@@ -83,11 +90,20 @@
 
     private void OnClick()
     {
+
+
         if (IsClickMode)
         {
-            _navigation.NavigateTo(ClickUrl, new NavigationOptions(){ForceLoad = false, });
+            //if specified opens link in new tab
+            if (IsNewTabOpen)
+            {
+                _jsRuntime.OpenNewTab(ClickUrl);
+            }
+            else
+            {
+                _navigation.NavigateTo(ClickUrl);
+            }
         }
-
     }
 
 }

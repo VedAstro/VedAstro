@@ -1,3 +1,4 @@
+@using Genso.Astrology.Library
 @attribute [Route(PageRoute.Home)]
 
 
@@ -136,7 +137,7 @@
 
 @code {
 
-    private void OnClickSourceCodeButton() => _navigation.NavigateTo("https://github.com/gen-so/Genso.Astrology");
+    private void OnClickSourceCodeButton() => _jsRuntime.OpenNewTab(URL.GitHubRepo);
     private void OnClickGuideButton() => _navigation.NavigateTo(PageRoute.QuickGuide);
 
 }

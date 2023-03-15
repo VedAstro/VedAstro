@@ -230,6 +230,13 @@ namespace Website
             var receivedData = await AppData.JSFetchWrapper.Post(apiUrl, xmlData);
 
             //ACT 2:
+            //check raw data
+            if (string.IsNullOrEmpty(receivedData))
+            {
+                throw new ApiCommunicationFailed();
+            }
+
+            //ACT 2:
             //return data as XML
             //problems might occur when parsing
             //try to parse as XML

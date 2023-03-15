@@ -18,6 +18,7 @@
 *@
 @if (_mainPageInitDone)
 {
+
     <!-- SIDEBAR NAV BAR -->
     <div class="sidebar">
         <div class="sidebar-header">
@@ -78,6 +79,8 @@
               ">@ThisAssembly.Version</p><!-- Stamped build version during deployment, used to identify code in cloud -->
     </div>
 
+
+
     <!-- MAIN CONTENT -->
     <div class="content">
         <!-- TOP BUTTON ROW -->
@@ -87,23 +90,36 @@
                 <a id="DesktopMenuBtn" href="#" class="content-menu d-none d-md-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
                 @*visible in Mobile view*@
                 <a id="MobileMenuBtn" href="#" class="content-menu d-md-none border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
-                <a id="DarkModeButton" @onclick="OnClickDarkModeButton" class="content-menu border"><span class="iconify" data-icon="material-symbols:dark-mode-outline-rounded" data-width="100"></span></a>
-            </div>
-            <div class="ms-auto p-2">
-                @*User already signed in show account button else show login button*@
-                @if (AppData.CurrentUser != UserData.Empty)
+                <IconButton IconName="material-symbols:dark-mode-outline-rounded" OnClickCallback="OnClickDarkModeButton" TooltipText="Return to stable version" />
+@*                <a id="DarkModeButton" @onclick="OnClickDarkModeButton" class="content-menu border"><span class="iconify" data-icon="material-symbols:dark-mode-outline-rounded" data-width="100"></span></a>
+*@            </div>
+            <div class="ms-auto p-2 hstack gap-3">
+
+                @*show links to beta & stable from vice versa*@
+                @if (@WebsiteTools.GetIsBetaRuntime())
                 {
-                    <IconButton ButtonText="Log Out" Color="warning" IconName="icon-park-outline:logout" OnClickCallback="OnClickSignOutButton" />
+                    <IconButton ButtonText="Stable" Color="warning" IconName="mdi:bank-check" ClickUrl="@URL.WebStable" TooltipText="Return to stable version" />
                 }
                 else
                 {
-                    <IconButton ButtonText="Log In" Color="warning" IconName="mdi:user-circle" OnClickCallback="OnClickNavBarLoginButton" />
+                    <IconButton ButtonText="Try BETA" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview experimental features" />
+                }
+
+
+                @*User already signed in show account button else show login button*@
+                @if (AppData.CurrentUser != UserData.Empty)
+                {
+                    <IconButton ButtonText="Log Out" Color="primary" IconName="icon-park-outline:logout" OnClickCallback="OnClickSignOutButton" TooltipText="We'll miss you, take care..." />
+                }
+                else
+                {
+                    <IconButton ButtonText="Log In" Color="primary" IconName="mdi:user-circle" OnClickCallback="OnClickNavBarLoginButton" TooltipText="Login to save your data" />
                 }
 
             </div>
         </div>
 
-        <!-- content-body -->
+        <!-- CONTENT-BODY -->
         <div class="content-body">
             @Body
         </div>

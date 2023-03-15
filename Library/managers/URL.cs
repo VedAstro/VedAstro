@@ -7,6 +7,11 @@ namespace Genso.Astrology.Library;
 
 public class URL
 {
+    //keep inside
+    public const string ApiBeta = "https://beta.vedastro.org/api";
+    public const string ApiStable = "https://vedastro.org/api";
+    public const string WebBeta = "https://beta.vedastro.org";
+    public const string WebStable = "https://vedastro.org";
 
     /// <summary>
     /// I know its tedious to make it a instance but shows that URLS are
@@ -17,14 +22,8 @@ public class URL
     /// </summary>
     public URL(bool isBetaRuntime)
     {
-        //keep inside
-        const string apiBeta = "https://beta.vedastro.org/api";
-        const string apiStable = "https://vedastro.org/api";
-        const string webBeta = "https://beta.vedastro.org";
-        const string webStable = "https://vedastro.org";
-
-        ApiUrl = isBetaRuntime ? apiBeta : apiStable;
-        WebUrl = isBetaRuntime ? webBeta : webStable;
+        ApiUrl = isBetaRuntime ? ApiBeta : ApiStable;
+        WebUrl = isBetaRuntime ? WebBeta : WebStable;
 
         //done here so that can be readonly
         AddPersonApi = ApiUrl + "/addperson";

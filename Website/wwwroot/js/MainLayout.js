@@ -1,18 +1,4 @@
 ﻿
-/*
-      Customized JS for initializing Darkmode.js
- */
-
-const options = {
-    mixColor: '#fff', // default: '#fff'
-    backgroundColor: '#fff',  // default: '#fff'
-    buttonColorDark: '#100f2c',  // default: '#100f2c'
-    buttonColorLight: '#fff', // default: '#fff'
-    saveInCookies: true, // default: true,
-    autoMatchOsTheme: false // default: true
-}
-
-window.DarkMode = new Darkmode(options);
 
 
 /*

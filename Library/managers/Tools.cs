@@ -531,7 +531,7 @@ namespace Genso.Astrology.Library
             //Console.WriteLine(geocodeResponseXml.ToString());
 
             //check the data, if location was NOT found by google API, end here
-            if (statusXml.Value == "ZERO_RESULTS") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+            if (statusXml == null || statusXml.Value == "ZERO_RESULTS") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
 
             //if success, extract out the longitude & latitude
             var locationElement = resultXml?.Element("geometry")?.Element("location");

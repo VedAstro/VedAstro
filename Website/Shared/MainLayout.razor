@@ -26,6 +26,8 @@
                 <li class="nav-item">
                     <a class="nav-link active hstack gap-2" href="@PageRoute.Home" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="ant-design:home-twotone" data-width="19"></span><span>Home</span></a>
                 </li>
+                <IconButton SmallSize="true" Outline="true" ExtraClass="mt-1" ButtonText="Match" IconName="bi:arrow-through-heart-fill" OnClickCallback="OnClickDarkModeButton" TooltipText="Open Source Code" />
+
                 <li class="nav-item">
                     <a class="nav-link hstack gap-2" href="@PageRoute.Match" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="bi:arrow-through-heart-fill" data-width="19"></span><span>Match</span></a>
                 </li>
@@ -39,17 +41,22 @@
                     <a class="nav-link hstack gap-2" href="@PageRoute.Journal" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="game-icons:secret-book" data-width="19"></span><span>Journal</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="akar-icons:info" data-width="19"></span><span>Birth Time Finder</span></a>
+                    <a class="nav-link hstack gap-2" href="@PageRoute.BirthTimeFinder"><span class="iconify" data-icon="fa-solid:history" data-width="19"></span><span>Birth Time Finder</span></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><span class="iconify" data-icon="cil:book" data-width="19"></span><span>Time Tools</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Local Mean Time</a></li>
-                        <li><a class="dropdown-item" href="#">Sun</a></li>
-                        <li><a class="dropdown-item" href="#">Blog</a></li>
-                        <li><a class="dropdown-item" href="#">Forum</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Separated link</a></li>
+                        <li><a class="dropdown-item" href="@PageRoute.LocalMeanTime">Local Mean Time</a></li>
+                        <li><a class="dropdown-item" href="@PageRoute.SunRiseSetTime">Sunrise/Sunset Time</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><span class="iconify" data-icon="ic:round-account-box" data-width="19"></span><span>Account</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="@PageRoute.PersonList">Person List</a></li>
+                        <li><a class="dropdown-item" href="@PageRoute.AddPerson">Add Person</a></li>
+                        <li><a class="dropdown-item" href="@PageRoute.SunRiseSetTime">Saved Charts</a></li>
+                        <li><a class="dropdown-item" href="@PageRoute.SunRiseSetTime">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -79,10 +86,24 @@
 
             <!-- REFERENCE BUTTONS : buttons placed here are
             linked to places not needed all the time, like About and Docs -->
-            <div class="row rounded-3 border shadow mb-3 p-sm-1 p-md-2">
+            <div class="row rounded-3 border shadow mb-4 p-sm-1 p-md-2">
                 <div class="col">
-                    <ul class="nav nav-pills">
-                        <li class="nav-item">
+                    <ul class="nav nav-pills gap-1">
+                        <IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Night Reader Mode" />
+                        <IconButton SmallSize="true" IconName="jam:code" OnClickCallback="OnClickDarkModeButton" TooltipText="Open Source Code" />
+                        
+                        @*show links to beta & stable from vice versa*@
+                        @if (@WebsiteTools.GetIsBetaRuntime())
+                        {
+                            <IconButton SmallSize="true" Color="warning" IconName="mdi:bench-back" ClickUrl="@URL.WebStable" TooltipText="Return to stable version" />
+                        }
+                        else
+                        {
+                            <IconButton SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview experimental features" />
+                        }
+
+
+                       @* <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Active</a>
                         </li>
                         <li class="nav-item">
@@ -93,22 +114,27 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link disabled">Disabled</a>
-                        </li>
+                        </li>*@
                     </ul>
                 </div>
                 <div class="col">
-                    <ul class="nav nav-pills justify-content-end">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Active</a>
+                    <ul class="nav nav-pills justify-content-end gap-1">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" onclick="NavMenuAutoActiveStyle(this)" role="button" aria-expanded="false"><span class="iconify" data-icon="cil:book" data-width="19"></span><span>Docs</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="@PageRoute.QuickGuide">Quick Guide</a></li>
+                                <li><a class="dropdown-item" href="@URL.GitHubDiscussions">Blog</a></li>
+                                <li><a class="dropdown-item" href="@URL.GitHubDiscussions">Forum</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+                            <a class="nav-link hstack gap-2" href="@PageRoute.Donate" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="iconoir:donate" data-width="19"></span><span>Donate</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
+                            <a class="nav-link hstack gap-2" href="@PageRoute.Contact" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="ci:mail" data-width="19"></span><span>Contact</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled">Disabled</a>
+                            <a class="nav-link hstack gap-2" href="@PageRoute.About" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="akar-icons:info" data-width="19"></span><span>About</span></a>
                         </li>
                     </ul>
 
@@ -253,37 +279,6 @@
         var value = AppData.DarkMode ? "difference" : "normal";
         await _jsRuntime.SetCss("#EventsChartSvgHolder", "mix-blend-mode", value);
 
-    }
-
-    private async Task OnClickNavItem(ElementReference elementReference, string pageName)
-    {
-        //remove highlight from all nav (reset)
-        DeselectAll();
-
-        //log
-        WebLogger.Data("Click Nav:" + pageName);
-
-        //set proper color for nav menu
-        await _jsRuntime.AddClass(elementReference, "active");
-
-        //goto page
-        _navigation.NavigateTo(pageName);
-
-        void DeselectAll()
-        {
-            _jsRuntime.RemoveClass(navLink1, "active");
-            _jsRuntime.RemoveClass(navLink2, "active");
-            _jsRuntime.RemoveClass(navLink3, "active");
-            _jsRuntime.RemoveClass(navLink4, "active");
-            _jsRuntime.RemoveClass(navLink5, "active");
-            _jsRuntime.RemoveClass(navLink6, "active");
-            _jsRuntime.RemoveClass(navLink7, "active");
-            _jsRuntime.RemoveClass(navLink8, "active");
-            _jsRuntime.RemoveClass(navLink9, "active");
-            _jsRuntime.RemoveClass(navLink10, "active");
-            _jsRuntime.RemoveClass(navLink11, "active");
-
-        }
     }
 
     private async Task OnClickSignOutButton()

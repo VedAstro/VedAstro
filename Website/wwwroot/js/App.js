@@ -33,13 +33,13 @@ const options = {
 window.DarkMode = new Darkmode(options);
 
 
+//called by nav items to add active class to them self and remove nav pill from the previous
 function NavMenuAutoActiveStyle(clickedNav) {
     //remove highlight from other
     $(clickedNav).parent('li').siblings().children().removeClass('active');
 
     //give highlight to clicked nav button
     $(clickedNav).addClass('active');
-
 }
 
 

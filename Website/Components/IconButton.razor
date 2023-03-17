@@ -145,6 +145,7 @@
     [Parameter]
     public bool IsNewTabOpen { get; set; } = false;
 
+    [Parameter]
     public ElementReference ElementReference { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);

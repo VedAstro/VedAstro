@@ -17,111 +17,86 @@
 @if (_mainPageInitDone)
 {
 
-    <!-- SIDEBAR NAV BAR -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <a href="#" class="sidebar-logo"><span></span></a>
-            <a href="#" class="sidebar-logo-text">Ved<span>Astro</span></a>
-        </div><!-- sidebar-header -->
-        <div class="sidebar-search">
-            <div class="search-body">
-                <input @ref="searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
-                <div @onclick="OnClickSearchIcon" style="cursor: pointer;">
-                    <span class="iconify" data-icon="bx:search-alt" data-width="24"></span>
-                </div>
-            </div><!-- search-body -->
-        </div><!-- sidebar-search -->
-        <div class="sidebar-body">
-            <nav class="nav-sidebar">
-                <a @ref="navLink1" href="@PageRoute.Home" @onclick="()=>OnClickNavItem(navLink1, PageRoute.Home)" style="cursor: pointer;" class="nav-link active">
-                    <span class="iconify" data-icon="ant-design:home-twotone" data-width="25"></span><span>Home</span>
-                </a>
-                <a @ref="navLink2" href="@PageRoute.QuickGuide" @onclick="()=>OnClickNavItem(navLink2, PageRoute.QuickGuide)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="cil:book" data-width="25"></span><span>Quick Guide</span>
-                </a>
-                <a @ref="navLink3" href="@PageRoute.AskAstrologer" @onclick="()=>OnClickNavItem(navLink3, PageRoute.AskAstrologer)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="wpf:ask-question" data-width="25"></span><span>Ask Astrologer</span>
-                </a>
-                <a @ref="navLink4" href="@PageRoute.CalculatorList" @onclick="()=>OnClickNavItem(navLink4, PageRoute.CalculatorList)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="bi:calculator" data-width="25"></span><span>Calculators</span>
-                </a>
-                <a @ref="navLink5" href="@PageRoute.PersonList" @onclick="()=>OnClickNavItem(navLink5, PageRoute.PersonList)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="fluent:people-list-20-filled" data-width="25"></span><span>Person List</span>
-                </a>
-                <a @ref="navLink6" href="@PageRoute.OpenApi" @onclick="()=>OnClickNavItem(navLink6, PageRoute.OpenApi)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="carbon:gateway-api" data-width="25"></span><span>Open API</span>
-                </a>
-                <a @ref="navLink7" href="@URL.GitHubDiscussions" @onclick="()=>OnClickNavItem(navLink6, PageRoute.OpenApi)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="fluent:news-16-regular" data-width="25"></span><span>Blog</span>
-                </a>
-                <a @ref="navLink8" href="@URL.GitHubDiscussions" @onclick="()=>OnClickNavItem(navLink6, PageRoute.OpenApi)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="material-symbols:forum-outline" data-width="25"></span><span>Forum</span>
-                </a>
-                <a @ref="navLink9" href="@PageRoute.Contact" @onclick="()=>OnClickNavItem(navLink7, PageRoute.Contact)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="ci:mail" data-width="24"></span><span>Contact</span>
-                </a>
-                <a @ref="navLink10" href="@PageRoute.Donate" @onclick="()=>OnClickNavItem(navLink8, PageRoute.Donate)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="iconoir:donate" data-width="25"></span><span>Donate</span>
-                </a>
-                <a @ref="navLink11" href="@PageRoute.About" @onclick="()=>OnClickNavItem(navLink9, PageRoute.About)" style="cursor: pointer;" class="nav-link">
-                    <span class="iconify" data-icon="akar-icons:info" data-width="25"></span><span>About</span>
-                </a>
-            </nav>
+    <div class="row mt-3">
+        <!-- SIDEBAR -->
+        <div class="col-auto align-items-start">
+            <ul class="mb-3 rounded-3 border shadow nav nav-pills flex-md-column sticky-md-top p-md-3 p-sm-2" style="background: #fff;">
+                <!--when on mobile become top nav-->
+                <li class="nav-item">
+                    <a class="nav-link active hstack gap-2" href="#"><span class="iconify" data-icon="ant-design:home-twotone" data-width="19"></span><span>Home</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><span class="iconify" data-icon="cil:book" data-width="19"></span><span>Docs</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Quick Guide</a></li>
+                        <li><a class="dropdown-item" href="#">Philosophy</a></li>
+                        <li><a class="dropdown-item" href="#">Blog</a></li>
+                        <li><a class="dropdown-item" href="#">Forum</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Separated link</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="bi:calculator" data-width="19"></span><span>Calculators</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="ci:mail" data-width="19"></span><span>Contact</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="iconoir:donate" data-width="19"></span><span>Donate</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="akar-icons:info" data-width="19"></span><span>About</span></a>
+                </li>
+            </ul>
         </div>
-        <p style="
-                  color: rgb(200, 200, 200);
-                  font-size: 10px;
-                  text-align-last: center;
-                  position: relative;
-                  bottom: -47px;
-              ">@ThisAssembly.Version</p><!-- Stamped build version during deployment, used to identify code in cloud -->
-    </div>
 
+        <!-- CONTENT + REF BUTTONS -->
+        <div class="col">
 
+            <!-- REFERENCE BUTTONS : buttons placed here are
+            linked to places not needed all the time, like About and Docs -->
+            <div class="row mb-4 p-2 rounded-3 border shadow">
+                <div class="col">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Active</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">Disabled</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <ul class="nav nav-pills justify-content-end">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Active</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">Disabled</a>
+                        </li>
+                    </ul>
 
-    <!-- MAIN CONTENT -->
-    <div class="content">
-        <!-- TOP BUTTON ROW -->
-        <div class="d-flex content-header border-bottom my-0 mx-4 py-0 px-2 pb-2 ">
-            <div class="p-2 hstack gap-2">
-                @*visible in Desktop view todo shoe menu fold icon line-md:menu-fold-left*@
-                <a id="DesktopMenuBtn" href="#" class="content-menu d-none d-md-flex border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
-                @*visible in Mobile view*@
-                <a id="MobileMenuBtn" href="#" class="content-menu d-md-none border"><span class="iconify" data-icon="dashicons:menu-alt3" data-width="100"></span></a>
-                <IconButton IconName="material-symbols:dark-mode-outline-rounded" OnClickCallback="OnClickDarkModeButton" TooltipText="Return to stable version" />
-@*                <a id="DarkModeButton" @onclick="OnClickDarkModeButton" class="content-menu border"><span class="iconify" data-icon="material-symbols:dark-mode-outline-rounded" data-width="100"></span></a>
-*@            </div>
-            <div class="ms-auto p-2 hstack gap-3">
+                </div>
+            </div>
 
-                @*show links to beta & stable from vice versa*@
-                @if (@WebsiteTools.GetIsBetaRuntime())
-                {
-                    <IconButton ButtonText="Stable" Color="warning" IconName="mdi:bank-check" ClickUrl="@URL.WebStable" TooltipText="Return to stable version" />
-                }
-                else
-                {
-                    <IconButton ButtonText="Try BETA" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview experimental features" />
-                }
-
-
-                @*User already signed in show account button else show login button*@
-                @if (AppData.CurrentUser != UserData.Empty)
-                {
-                    <IconButton ButtonText="Log Out" Color="primary" IconName="icon-park-outline:logout" OnClickCallback="OnClickSignOutButton" TooltipText="We'll miss you, take care..." />
-                }
-                else
-                {
-                    <IconButton ButtonText="Log In" Color="primary" IconName="mdi:user-circle" OnClickCallback="OnClickNavBarLoginButton" TooltipText="Login to save your data" />
-                }
-
+            <!-- PAGE CONTENT INSERTED HERE -->
+            <div>
+                @Body
             </div>
         </div>
-
-        <!-- CONTENT-BODY -->
-        <div class="content-body">
-            @Body
-        </div>
-
     </div>
 
 }
@@ -130,7 +105,7 @@
 
 @code
 {
-    IJSObjectReference? _module;
+    //IJSObjectReference? _module;
     bool _mainPageInitDone;
     private ElementReference searchInput, navLink1, navLink2, navLink3, navLink4, navLink5, navLink6, navLink7, navLink8, navLink9, navLink10, navLink11;
 
@@ -153,7 +128,7 @@
         if (firstRender)
         {
             //load js script for date time picker
-            _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/MainLayout.js");
+            //_module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/MainLayout.js");
 
             await _jsRuntime.InvokeVoidAsync("InitErrorCatcher");
 
@@ -161,6 +136,7 @@
             await WebLogger.Visitor(_jsRuntime);
 
             //attach tooltip lib to dark mode & nav button element
+            //todo remove after update
             await _jsRuntime.Tippy("#DarkModeButton", new { content = "Night Mode" });
             await _jsRuntime.Tippy("#DesktopMenuBtn", new { content = "Hide Menu" });
         }

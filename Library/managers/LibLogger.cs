@@ -55,7 +55,9 @@ namespace Genso.Astrology.Library
         public static async Task Error(XElement errorXml, string extraInfo = "")
         {
             //place error data into visitor tag
-            //this is done because visitor data might hold clues to error
+            //this is done because visitor data might hold "Blue's Clues"
+            //to why it all went down hill, hence easier to fix
+            //so take the time & data to log
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Data", extraInfo);
             visitorXml.Add(Tools.BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
@@ -131,7 +133,6 @@ namespace Genso.Astrology.Library
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
                 httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
 
@@ -147,8 +148,7 @@ namespace Genso.Astrology.Library
                 statusCode = response?.StatusCode.ToString();
 
                 //extract the content of the reply data
-                var readAsStringAsync = await response?.Content.ReadAsStringAsync();
-                rawMessage = readAsStringAsync ?? "";
+                rawMessage = response?.Content.ReadAsStringAsync().Result ?? "";
 
                 //problems might occur when parsing
                 //try to parse as XML
@@ -161,17 +161,11 @@ namespace Genso.Astrology.Library
             //so it is important to properly check and handled here for best UX
             //- server unexpected failure
             //- server unreachable
-            catch (Exception e)
-            {
-                //todo clean up
+            //catch the exception, and return a nice & clean fail result 
+            catch (Exception) { returnVal = new WebResult<XElement>(false, new XElement("Root", $"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}")); }
 
-                returnVal = new WebResult<XElement>(false, new XElement("Root", $"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}"));
-
-                //throw new ApiCommunicationFailed($"Error from WriteToServerXmlReply()\n{statusCode}\n{rawMessage}", e);
-            }
-
-            //if fail log it
-            //if (!returnVal.IsPass) { WebLogger.Error(returnVal.Payload); }
+            //if fail log it properly, hence await (should not happen all the time)
+            if (!returnVal.IsPass) { await LibLogger.Error(returnVal.Payload); }
 
             return returnVal;
         }

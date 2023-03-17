@@ -49,7 +49,26 @@
                     <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="akar-icons:info" data-width="19"></span><span>About</span></a>
                 </li>
             </ul>
-        </div>
+            
+            <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
+            <div class="d-none d-md-block sticky-bottom position-fixed mb-1" style="color: rgb(200, 200, 200); font-size: 8px;">
+                <div class="hstack gap-1">
+                    <span class="iconify" data-icon="ion:earth" data-width="9"></span>
+                    <span>Made on Earth</span>
+                </div>
+                <div class="hstack gap-1">
+                    <span class="iconify" data-icon="ph:factory-bold" data-width="9"></span>
+                    <!-- Stamped build version during deployment, used to identify code in cloud -->
+                    <span>@ThisAssembly.Version</span>
+                </div>
+                <div class="hstack gap-1">
+                    <span class="iconify" data-icon="material-symbols:copyright-outline" data-width="10"></span>
+                    <!-- Stamped build version during deployment, used to identify code in cloud -->
+                    <span>2014 - 2023 VedAstro</span>
+                </div>
+            </div>
+
+            </div>
 
         <!-- CONTENT + REF BUTTONS -->
         <div class="col">

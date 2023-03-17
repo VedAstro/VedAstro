@@ -17,58 +17,62 @@
 @if (_mainPageInitDone)
 {
 
-    <div class="row mt-3 flex-md-nowrap"> <!--only wrap in mobile screen-->
+    <div class="row mt-3 flex-md-nowrap">
+        <!--only wrap in mobile screen-->
         <!-- SIDEBAR -->
         <div class="col-auto align-items-start">
+            <!--when on mobile become top nav-->
             <ul class="mb-3 rounded-3 border shadow nav nav-pills flex-md-column sticky-md-top p-md-3 p-sm-2" style="background: #fff;">
-                <!--when on mobile become top nav-->
                 <li class="nav-item">
-                    <a class="nav-link active hstack gap-2" href="#"><span class="iconify" data-icon="ant-design:home-twotone" data-width="19"></span><span>Home</span></a>
+                    <a class="nav-link active hstack gap-2" href="@PageRoute.Home" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="ant-design:home-twotone" data-width="19"></span><span>Home</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="@PageRoute.Match" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="bi:arrow-through-heart-fill" data-width="19"></span><span>Match</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="@PageRoute.Dasa" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="gis:map-time" data-width="19"></span><span>Life Predictor</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="@PageRoute.Horoscope" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="fluent:book-star-20-filled" data-width="19"></span><span>Horoscope</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="@PageRoute.Journal" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="game-icons:secret-book" data-width="19"></span><span>Journal</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="akar-icons:info" data-width="19"></span><span>Birth Time Finder</span></a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><span class="iconify" data-icon="cil:book" data-width="19"></span><span>Docs</span></a>
+                    <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><span class="iconify" data-icon="cil:book" data-width="19"></span><span>Time Tools</span></a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Quick Guide</a></li>
-                        <li><a class="dropdown-item" href="#">Philosophy</a></li>
+                        <li><a class="dropdown-item" href="#">Local Mean Time</a></li>
+                        <li><a class="dropdown-item" href="#">Sun</a></li>
                         <li><a class="dropdown-item" href="#">Blog</a></li>
                         <li><a class="dropdown-item" href="#">Forum</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Separated link</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="bi:calculator" data-width="19"></span><span>Calculators</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="ci:mail" data-width="19"></span><span>Contact</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="iconoir:donate" data-width="19"></span><span>Donate</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="#"><span class="iconify" data-icon="akar-icons:info" data-width="19"></span><span>About</span></a>
-                </li>
             </ul>
-            
+
             <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
             <div class="d-none d-md-block sticky-bottom position-fixed mb-1" style="color: rgb(200, 200, 200); font-size: 8px;">
                 <div class="hstack gap-1">
-                    <span class="iconify" data-icon="ion:earth" data-width="9"></span>
+                    <span class="iconify" data-icon="ion:earth" data-width="10"></span>
                     <span>Made on Earth</span>
                 </div>
                 <div class="hstack gap-1">
-                    <span class="iconify" data-icon="ph:factory-bold" data-width="9"></span>
+                    <span class="iconify" data-icon="bi:rocket-fill" data-width="10"></span>
                     <!-- Stamped build version during deployment, used to identify code in cloud -->
                     <span>@ThisAssembly.Version</span>
                 </div>
                 <div class="hstack gap-1">
-                    <span class="iconify" data-icon="material-symbols:copyright-outline" data-width="10"></span>
+                    <span class="iconify" data-icon="material-symbols:copyright-outline" data-width="11"></span>
                     <!-- Stamped build version during deployment, used to identify code in cloud -->
                     <span>2014 - 2023 VedAstro</span>
                 </div>
             </div>
 
-            </div>
+        </div>
 
         <!-- CONTENT + REF BUTTONS -->
         <div class="col">
@@ -334,6 +338,7 @@
         //show pop up with login choices
         //_jsRuntime.ShowAlert()
     }
+
 }
 
 

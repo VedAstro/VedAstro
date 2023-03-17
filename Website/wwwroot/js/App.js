@@ -33,6 +33,14 @@ const options = {
 window.DarkMode = new Darkmode(options);
 
 
+function NavMenuAutoActiveStyle(clickedNav) {
+    //remove highlight from other
+    $(clickedNav).parent('li').siblings().children().removeClass('active');
+
+    //give highlight to clicked nav button
+    $(clickedNav).addClass('active');
+
+}
 
 
 //-----------------------FOR JSFetchWrapper

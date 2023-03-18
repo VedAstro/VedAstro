@@ -1,0 +1,92 @@
+﻿@using Genso.Astrology.Library
+@namespace Website.Pages
+
+@*
+    BUTTONS USED IN TOP BAR
+- have been separated so that can render unique nav bar for mobile
+*@
+
+<div class="d-flex justify-content-between">
+    <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack" TooltipText="Goto Previous" />
+    <IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Night Reader Mode" />
+    <IconButton SmallSize="true" IconName="jam:code" OnClickCallback="OnClickDarkModeButton" TooltipText="Open Source Code" />
+
+    @*show links to beta & stable from vice versa*@
+    @if (@WebsiteTools.GetIsBetaRuntime())
+    {
+        <IconButton SmallSize="true" Color="warning" IconName="mdi:bench-back" ClickUrl="@URL.WebStable" TooltipText="Return to stable version" />
+    }
+    else
+    {
+        <IconButton SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview experimental features" />
+    }
+    
+    <IconButton SmallSize="true" Outline="true" ButtonText="Donate" IconName="iconoir:donate" ClickUrl="@PageRoute.Donate" />
+    <IconButton SmallSize="true" Outline="true" ButtonText="Contact" IconName="ci:mail" ClickUrl="@PageRoute.Contact" />
+    <IconButton SmallSize="true" Outline="true" ButtonText="About" IconName="akar-icons:info" ClickUrl="@PageRoute.About" />
+    
+    <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Read Me" IconName="cil:book">
+        <DropDownList>
+            <li><a class="dropdown-item" href="@PageRoute.QuickGuide">Quick Guide</a></li>
+            <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Blog</a></li>
+            <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Forum</a></li>
+        </DropDownList>
+    </IconButton>
+
+</div>
+
+
+
+@code {
+
+    private async Task OnClickDarkModeButton()
+    {
+        //using JS lib toggle the dark mode
+        await _jsRuntime.InvokeVoidAsync("window.DarkMode.toggle");
+
+        //get dark mode value and store it for use by event chart
+        await AppData.UpdateDarkMode(_jsRuntime);
+
+        //special for event chart, if exist on page change vis JS for instant correction
+        //note : this makes chart appear normal in dark/normal mode
+        var value = AppData.DarkMode ? "difference" : "normal";
+        await _jsRuntime.SetCss("#EventsChartSvgHolder", "mix-blend-mode", value);
+
+    }
+
+
+    private void OnClickNavBarLoginButton()
+    {
+
+        //remember previous page to come back to after login
+        //saved in browser, so doesn't get deleted by refresh
+        _jsRuntime.SetProperty("PreviousPage", _navigation.Uri);
+
+        //goto page
+        _navigation.NavigateTo(PageRoute.Login);
+
+    }
+
+
+    private async Task OnClickSignOutButton()
+    {
+        //log this
+        await WebLogger.Click("Sign Out");
+
+        //clear local storage of user data
+        //since login status is basically the existence of user data in localstorage
+        //removing it removes user's login
+        await _jsRuntime.RemoveProperty("UserData");
+
+        //reset person's list
+        AppData.ClearPersonList();
+
+        //reset app data
+        AppData.CurrentUser = UserData.Empty;
+
+        //refresh page
+        WebsiteTools.ReloadPage(_navigation);
+
+    }
+
+}

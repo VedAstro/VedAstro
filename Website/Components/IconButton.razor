@@ -24,14 +24,39 @@
     }
 </style>
 
-<button @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
-    @*only show icon if specified*@
-    @if (IconName != null)
-    {
-        <span class="iconify" data-icon="@IconName" data-width="25" />
-    }
-    @ButtonText
-</button>
+@*DROP DOWN VERSION*@
+@if (IsDropDownMode)
+{
+    <div class="dropdown">
+        <button @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            @*only show icon if specified*@
+            @if (IconName != null)
+            {
+                <span class="iconify" data-icon="@IconName" data-width="25" />
+            }
+            @ButtonText
+        </button>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            @DropDownList
+        </ul>
+    </div>
+}
+@*NORMAL BUTTON*@
+else
+{
+    <button @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
+        @*only show icon if specified*@
+        @if (IconName != null)
+        {
+            <span class="iconify" data-icon="@IconName" data-width="25" />
+        }
+        @ButtonText
+    </button>
+
+}
+
+
+
 
 @*text below button*@
 @if (ShowDelayWarning)
@@ -45,7 +70,7 @@
 @code {
 
     /// <summary>
-    /// the final class list added to button elm
+    /// the final class list added to button elm generates based on the parameters set
     /// </summary>
     private string ButtonClassStr
     {
@@ -54,13 +79,17 @@
             //btn btn-outline-primary
             //btn btn-primary
             //add outline class if specified
-            var colorStyle = $"btn" + (Outline ? $"-outline-{Color}" : $"-{Color}");
-            return (SmallSize ? "btn-sm " : "") //remember space between class names
-                   + (IsIconOnly ? "iconOnlyButton " : "")
-                   + (IsIconTextButton ? "hstack gap-2 iconButton " : "") //if only text than no extra classes
-                   + colorStyle
-                   + " btn " //note: spaces so classes don't stick
-                   + ExtraClass;
+            string compiledClass = "";
+            compiledClass += (SmallSize ? "btn-sm " : ""); //remember space between class names
+            compiledClass += (IsIconOnly ? "iconOnlyButton " : "");
+            compiledClass += (FullWidth ? "w-100 " : "");
+            compiledClass += (IsDropDownMode ? "dropdown-toggle " : ""); //drop down bootstrap class
+            compiledClass += (IsIconTextButton ? "hstack gap-2 iconButton " : ""); //if only text than no extra classes
+            compiledClass += $"btn" + (Outline ? $"-outline-{Color}" : $"-{Color}"); //colorStyle
+            compiledClass += " btn "; //note: spaces so classes don't stick
+            compiledClass += ExtraClass;
+
+            return compiledClass;
         }
     }
 
@@ -91,6 +120,12 @@
 
     [Parameter]
     public bool SmallSize { get; set; } = false;
+
+    /// <summary>
+    /// Defaults to false, if true button will be 100% of parent by adding w-100
+    /// </summary>
+    [Parameter]
+    public bool FullWidth { get; set; } = false;
 
     /// <summary>
     /// Bootstrap button color class
@@ -127,6 +162,18 @@
     /// </summary>
     [Parameter]
     public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+
+    /// <summary>
+    /// Drop down list contents placed in drop down button
+    /// HTML
+    /// </summary>
+    [Parameter]
+    public RenderFragment? DropDownList { get; set; }
+
+    /// <summary>
+    /// If Drop down list is provided then this turn true
+    /// </summary>
+    public bool IsDropDownMode => DropDownList != null;
 
     /// <summary>
     /// If URL is provided, on button click will navigate to URL

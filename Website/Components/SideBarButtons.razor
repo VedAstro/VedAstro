@@ -1,0 +1,82 @@
+﻿@using Genso.Astrology.Library
+@namespace Website.Pages
+
+@*
+    BUTTONS USED IN SIDEBAR
+- have been separated so that can render unique nav bar for mobile
+*@
+
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Home" IconName="ant-design:home-twotone" ClickUrl="@PageRoute.Home" />
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Match" IconName="bi:arrow-through-heart-fill" ClickUrl="@PageRoute.Match" />
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Life Predictor" IconName="gis:map-time" ClickUrl="@PageRoute.Dasa" />
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Horoscope" IconName="fluent:book-star-20-filled" ClickUrl="@PageRoute.Horoscope" />
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Journal" IconName="game-icons:secret-book">
+    <DropDownList>
+        <li><a class="dropdown-item" href="@PageRoute.Journal">View Life Events</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.AddLifeEvent">New Life Event</a></li>
+    </DropDownList>
+</IconButton>
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Birth Time Finder" IconName="fa-solid:history" ClickUrl="@PageRoute.BirthTimeFinder" />
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Time Tools" IconName="mdi:tool-time">
+    <DropDownList>
+        <li><a class="dropdown-item" href="@PageRoute.LocalMeanTime">Local Mean Time</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.SunRiseSetTime">Sunrise/Sunset Time</a></li>
+    </DropDownList>
+</IconButton>
+
+<!--ACCOUNT OR LOGIN-->
+@*User already signed in show account button else show login button*@
+@if (AppData.CurrentUser != UserData.Empty)
+{
+    <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Account" IconName="ic:round-account-box">
+        <DropDownList>
+            <li><a class="dropdown-item" href="@PageRoute.PersonList">Person List</a></li>
+            <li><a class="dropdown-item" href="@PageRoute.AddPerson">Add Person</a></li>
+            <li><a class="dropdown-item" href="@PageRoute.SavedCharts">Saved Charts</a></li>
+            <li><a class="dropdown-item" href="#" @onclick="OnClickSignOutButton"><Icon IconName="icon-park-outline:logout" /> Logout</a></li>
+        </DropDownList>
+    </IconButton>
+}
+else
+{
+    <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Log In" Color="warning" IconName="mdi:user-circle" OnClickCallback="OnClickNavBarLoginButton" TooltipText="Login to save your data" />
+}
+
+
+@code {
+
+    private void OnClickNavBarLoginButton()
+    {
+
+        //remember previous page to come back to after login
+        //saved in browser, so doesn't get deleted by refresh
+        _jsRuntime.SetProperty("PreviousPage", _navigation.Uri);
+
+        //goto page
+        _navigation.NavigateTo(PageRoute.Login);
+
+    }
+
+
+    private async Task OnClickSignOutButton()
+    {
+        //log this
+        await WebLogger.Click("Sign Out");
+
+        //clear local storage of user data
+        //since login status is basically the existence of user data in localstorage
+        //removing it removes user's login
+        await _jsRuntime.RemoveProperty("UserData");
+
+        //reset person's list
+        AppData.ClearPersonList();
+
+        //reset app data
+        AppData.CurrentUser = UserData.Empty;
+
+        //refresh page
+        WebsiteTools.ReloadPage(_navigation);
+
+    }
+
+}

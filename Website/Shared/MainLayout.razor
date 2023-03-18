@@ -3,6 +3,7 @@
 @inherits LayoutComponentBase
 @using Website.Pages
 
+
 @*
     NOTE : Components here are loaded same time as page,
     so component might not exist when page needs it.
@@ -16,53 +17,16 @@
 *@
 @if (_mainPageInitDone)
 {
-
+    <!--only wrap in mobile screen-->
     <div class="row mt-3 flex-md-nowrap">
-        <!--only wrap in mobile screen-->
-        <!-- SIDEBAR -->
-        <div class="col-auto align-items-start">
-            <!--when on mobile become top nav-->
-            <ul class="mb-3 rounded-3 border shadow nav nav-pills flex-md-column sticky-md-top p-md-3 p-sm-2" style="background: #fff;">
-                <li class="nav-item">
-                    <a class="nav-link active hstack gap-2" href="@PageRoute.Home" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="ant-design:home-twotone" data-width="19"></span><span>Home</span></a>
-                </li>
-                <IconButton SmallSize="true" Outline="true" ExtraClass="mt-1" ButtonText="Match" IconName="bi:arrow-through-heart-fill" OnClickCallback="OnClickDarkModeButton" TooltipText="Open Source Code" />
 
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="@PageRoute.Match" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="bi:arrow-through-heart-fill" data-width="19"></span><span>Match</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="@PageRoute.Dasa" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="gis:map-time" data-width="19"></span><span>Life Predictor</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="@PageRoute.Horoscope" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="fluent:book-star-20-filled" data-width="19"></span><span>Horoscope</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="@PageRoute.Journal" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="game-icons:secret-book" data-width="19"></span><span>Journal</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link hstack gap-2" href="@PageRoute.BirthTimeFinder"><span class="iconify" data-icon="fa-solid:history" data-width="19"></span><span>Birth Time Finder</span></a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><span class="iconify" data-icon="cil:book" data-width="19"></span><span>Time Tools</span></a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="@PageRoute.LocalMeanTime">Local Mean Time</a></li>
-                        <li><a class="dropdown-item" href="@PageRoute.SunRiseSetTime">Sunrise/Sunset Time</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><span class="iconify" data-icon="ic:round-account-box" data-width="19"></span><span>Account</span></a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="@PageRoute.PersonList">Person List</a></li>
-                        <li><a class="dropdown-item" href="@PageRoute.AddPerson">Add Person</a></li>
-                        <li><a class="dropdown-item" href="@PageRoute.SunRiseSetTime">Saved Charts</a></li>
-                        <li><a class="dropdown-item" href="@PageRoute.SunRiseSetTime">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
+        <!-- DESKTOP SIDEBAR -->
+        <div class="col-auto align-items-start d-none d-md-block">
+            <!--when on mobile become top nav-->
+            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 p-sm-2"><SideBarButtons /></div>
 
             <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
-            <div class="d-none d-md-block sticky-bottom position-fixed mb-1" style="color: rgb(200, 200, 200); font-size: 8px;">
+            <div class=" sticky-bottom position-fixed mb-1" style="color: rgb(200, 200, 200); font-size: 8px;">
                 <div class="hstack gap-1">
                     <span class="iconify" data-icon="ion:earth" data-width="10"></span>
                     <span>Made on Earth</span>
@@ -81,70 +45,37 @@
 
         </div>
 
+        <!-- MOBILE NAV MENU -->
+        <div class="col-auto d-md-none">
+            <nav class="navbar fixed-top" style="background: #acd1eb;">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="@PageRoute.Home">VedAstro</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 p-sm-2"><SideBarButtons /></div>
+                            <hr/>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
         <!-- CONTENT + REF BUTTONS -->
         <div class="col">
 
             <!-- REFERENCE BUTTONS : buttons placed here are
             linked to places not needed all the time, like About and Docs -->
-            <div class="row rounded-3 border shadow mb-4 p-sm-1 p-md-2">
-                <div class="col">
-                    <ul class="nav nav-pills gap-1">
-                        <IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Night Reader Mode" />
-                        <IconButton SmallSize="true" IconName="jam:code" OnClickCallback="OnClickDarkModeButton" TooltipText="Open Source Code" />
-                        
-                        @*show links to beta & stable from vice versa*@
-                        @if (@WebsiteTools.GetIsBetaRuntime())
-                        {
-                            <IconButton SmallSize="true" Color="warning" IconName="mdi:bench-back" ClickUrl="@URL.WebStable" TooltipText="Return to stable version" />
-                        }
-                        else
-                        {
-                            <IconButton SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview experimental features" />
-                        }
-
-
-                       @* <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Active</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled">Disabled</a>
-                        </li>*@
-                    </ul>
-                </div>
-                <div class="col">
-                    <ul class="nav nav-pills justify-content-end gap-1">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle hstack gap-2" data-bs-toggle="dropdown" href="#" onclick="NavMenuAutoActiveStyle(this)" role="button" aria-expanded="false"><span class="iconify" data-icon="cil:book" data-width="19"></span><span>Docs</span></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="@PageRoute.QuickGuide">Quick Guide</a></li>
-                                <li><a class="dropdown-item" href="@URL.GitHubDiscussions">Blog</a></li>
-                                <li><a class="dropdown-item" href="@URL.GitHubDiscussions">Forum</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link hstack gap-2" href="@PageRoute.Donate" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="iconoir:donate" data-width="19"></span><span>Donate</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link hstack gap-2" href="@PageRoute.Contact" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="ci:mail" data-width="19"></span><span>Contact</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link hstack gap-2" href="@PageRoute.About" onclick="NavMenuAutoActiveStyle(this)"><span class="iconify" data-icon="akar-icons:info" data-width="19"></span><span>About</span></a>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
+            <div class="rounded-3 border shadow mb-4 p-sm-1 p-md-2"><TopBarButtons/></div>
 
             <!-- PAGE CONTENT INSERTED HERE -->
-            <div>
-                @Body
-            </div>
+            <div>@Body</div>
         </div>
     </div>
 
@@ -216,8 +147,6 @@
         _mainPageInitDone = true;
     }
 
-
-
     /// <summary>
     /// Checks if previous login data exist in browser's local storage
     /// </summary>
@@ -266,73 +195,7 @@
 
     private async Task OnClickSearchIcon() => await PerformSearch();
 
-    private async Task OnClickDarkModeButton()
-    {
-        //using JS lib toggle the dark mode
-        await _jsRuntime.InvokeVoidAsync("window.DarkMode.toggle");
 
-        //get dark mode value and store it for use by event chart
-        await AppData.UpdateDarkMode(_jsRuntime);
-
-        //special for event chart, if exist on page change vis JS for instant correction
-        //note : this makes chart appear normal in dark/normal mode
-        var value = AppData.DarkMode ? "difference" : "normal";
-        await _jsRuntime.SetCss("#EventsChartSvgHolder", "mix-blend-mode", value);
-
-    }
-
-    private async Task OnClickSignOutButton()
-    {
-        //log this
-        await WebLogger.Click("Sign Out");
-
-        //clear local storage of user data
-        //since login status is basically the existence of user data in localstorage
-        //removing it removes user's login
-        await _jsRuntime.RemoveProperty("UserData");
-
-        //reset person's list
-        AppData.ClearPersonList();
-
-        //reset app data
-        AppData.CurrentUser = UserData.Empty;
-
-        //refresh page
-        WebsiteTools.ReloadPage(_navigation);
-
-    }
-
-
-
-    private void OnClickNavBarLoginButton()
-    {
-
-        //remember previous page to come back to after login
-        //saved in browser, so doesn't get deleted by refresh
-        _jsRuntime.SetProperty("PreviousPage", _navigation.Uri);
-
-        //goto page
-        _navigation.NavigateTo(PageRoute.Login);
-
-
-        //var alertData = new
-        //{
-        //    showConfirmButton = false,
-        //    width = "280px",
-        //    padding = "1px",
-        //    //allowOutsideClick = false,
-        //    //allowEscapeKey = false,
-        //    stopKeydownPropagation = true,
-        //    keydownListenerCapture = true,
-        //    html = ""
-
-        //};
-
-        ////don't wait here
-        //_jsRuntime.ShowAlert(alertData);
-        //show pop up with login choices
-        //_jsRuntime.ShowAlert()
-    }
 
 }
 

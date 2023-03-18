@@ -1,12 +1,21 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using Website.Pages
+
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
-        <PageTitle>Not found</PageTitle>
+        <PageTitle>Limbo</PageTitle>
         <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
+            <div>
+                <Icon IconName="fluent-emoji-flat:cactus" Size="80" />
+                <Icon IconName="fluent-emoji-flat:alien" Size="80" />
+                <h4 class="mt-4">An "Unidentified URL" has been sighted near you!</h4>
+                <h4 class="mt-4"></h4>
+                <h4><a href="@PageRoute.Contact" class="link-info">Report</a> this 404 error, to get it fixed faster</h4>
+            </div>
         </LayoutView>
     </NotFound>
 </Router>

@@ -91,10 +91,23 @@ namespace Website
         /// <summary>
         /// Gets all visitor list from API server
         /// </summary>
-        public static async Task<List<XElement>> GetVisitorList(string userId, IJSRuntime jsRuntime)
+        public static async Task<List<XElement>> GetVisitorList(string userId)
         {
+            //get result from server
             var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetVisitorList, new XElement("UserId", userId));
-            var visitorList = result.Payload.Elements().ToList();//visitorListRootXml
+
+            //if server replied pass, then forward data to caller,
+            //else raise alarm and return empty list
+            List<XElement> visitorList;//visitorListRootXml
+            if (result.IsPass)
+            {
+                visitorList = result.Payload.Elements().ToList();
+            }
+            else
+            {
+                await WebLogger.Error("GetVisitorList Failed, returned empty list");
+                visitorList = new List<XElement>();
+            }
             return visitorList;
         }
 

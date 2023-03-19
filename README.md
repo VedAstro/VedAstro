@@ -24,10 +24,10 @@
        and only visible in its reaction.</h4>
 
 # Links
-- [Quick Guide](https://www.vedastro.org/QuickGuide) learn how to use
-- [Open API](https://www.vedastro.org/API) easily get astrology data for your app or website
-- [Swiss Ephemris API](https://www.vedastro.org/API/SwissEphemeris) easily get astrology data for your app or website
-- [Calculators](https://www.vedastro.org/Calculator) each calculator shows an aspect of vedic astrology
+- [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
+- [Open API](https://vedastro.org/Docs/API) easily get astrology data for your app or website
+- [Swiss Ephemris API](https://vedastro.org/Docs/API/SwissEphemeris) easily get astrology data for your app or website
+- [Calculators](https://vedastro.org/Calculator) each calculator shows an aspect of vedic astrology
 - [Docker](https://github.com/orgs/VedAstro/discussions/8) supported for easy deployement anywhere
 - [Contact](https://www.vedastro.org/Contact) us and we'll get back to you ASAP.
 - [Donate](https://www.vedastro.org/Donate) to keep this project going
@@ -45,15 +45,6 @@ The chart takes alot of computational power to generate, so please be patient af
 [![](GithubImages/napoleon-dasa-chart.png)](https://www.vedastro.org)
 [![](GithubImages/elizabeth-dasa-chart.png)](https://www.vedastro.org)
  -->
-
-
-# Unexpected errors?
-Click &quot;Refresh&quot;, several times. This will clear the cache.
-Since there are new updates to the VedAstro WebApp almost <a target="_blank" rel="noopener noreferrer" href="https://github.com/gen-so/Genso.Astrology/commits/master" class="link-primary fw-bold">everyday!</a>
-The browser caches the old version, which causes errors
-as it fails to work with the updated API Server.
-Do a hard refresh &amp; clear your cache.
-This will solve 99% of the errors you face.
 
 
 # About : reason and goal for this project
@@ -113,6 +104,10 @@ Generate traditional Rasi, Navamsa South/North style chart | $5 | ![](https://im
 Find a spelling mistake in VedAstro.org content | $1 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
 Show name of planet motion in Horoscope page (retrograde, direct, stationary) | $1.5 | ![](https://img.shields.io/static/v1?label=&message=Done&color=green)
  -->
+
+ # Unexpected errors?
+- Clear browser cache & reload webapp
+- Switch to Beta version
 
 # Project Architecture : For Coders
 Key design notes to understand the internals of the program better.

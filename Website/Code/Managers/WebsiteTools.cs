@@ -326,7 +326,6 @@ namespace Website
             return resultsParsed;
         }
 
-
         public static async Task<List<ChartName>> GetSavedChartNameList()
         {
             //get name list of all charts

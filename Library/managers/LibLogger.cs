@@ -18,10 +18,15 @@ namespace Genso.Astrology.Library
     /// </summary>
     public static class LibLogger
     {
+        /// <summary>
+        /// Has to be loaded when app loads, obviously since that is when branch manifest it read
+        /// since this is only used by loggers
+        /// </summary>
+        private static XElement BranchXml = new XElement("Branch", "todo set lib logger branch");
 
         private static readonly XElement SourceXml = new XElement("Source", "LibLogger");
 
-
+        
         /// <summary>
         /// Makes a log of the exception in API server
         /// </summary>
@@ -44,7 +49,7 @@ namespace Genso.Astrology.Library
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Data", extraInfo);
-            visitorXml.Add(Tools.BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorXml.Add(BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -60,7 +65,7 @@ namespace Genso.Astrology.Library
             //so take the time & data to log
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Data", extraInfo);
-            visitorXml.Add(Tools.BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorXml.Add(BranchXml, SourceXml, errorXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -72,7 +77,7 @@ namespace Genso.Astrology.Library
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Error", errorMessage);
-            visitorXml.Add(Tools.BranchXml, SourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorXml.Add(BranchXml, SourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -89,7 +94,7 @@ namespace Genso.Astrology.Library
             //this is done because visitor data might hold clues to error
             var visitorXml = new XElement("Visitor");
             var dataXml = new XElement("Data", message);
-            visitorXml.Add(Tools.BranchXml, SourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorXml.Add(BranchXml, SourceXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);

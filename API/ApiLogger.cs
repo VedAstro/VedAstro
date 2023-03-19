@@ -16,6 +16,7 @@ public static class APILogger
     private const string ContainerName = "vedastro-site-data";
 
     private static readonly XElement SourceXml = new("Source", "APILogger");
+    private static XElement BranchXml = new XElement("Branch", ThisAssembly.Version);
 
 
 
@@ -43,7 +44,7 @@ public static class APILogger
         }
 
         //stamp it!
-        visitorXml.Add(Tools.BranchXml, SourceXml);
+        visitorXml.Add(BranchXml, SourceXml);
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 
@@ -59,7 +60,7 @@ public static class APILogger
 
         var visitorXml = new XElement("Visitor");
 
-        visitorXml.Add(Tools.BranchXml, SourceXml);
+        visitorXml.Add(BranchXml, SourceXml);
         visitorXml.Add(await APITools.RequestToXml(req));
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
@@ -73,7 +74,7 @@ public static class APILogger
 
         var visitorXml = new XElement("Visitor");
 
-        visitorXml.Add(Tools.BranchXml, SourceXml);
+        visitorXml.Add(BranchXml, SourceXml);
         visitorXml.Add(await APITools.RequestToXml(req));
         visitorXml.Add(new XElement("Data"), new XElement("Text", textData));
         visitorXml.Add(Tools.TimeStampSystemXml);

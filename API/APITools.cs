@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
@@ -710,14 +711,16 @@ namespace API
             return timeList;
         }
 
+        /// <summary>
+        /// Makes a HTTP GET request and return the data as HTTP response message
+        /// </summary>
         public static async Task<HttpResponseMessage> GetRequest(string receiverAddress)
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
-            httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
             //get the data sender
-            using var client = new HttpClient();
+            using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
 
             //tell sender to wait for complete reply before exiting
             var waitForContent = HttpCompletionOption.ResponseContentRead;

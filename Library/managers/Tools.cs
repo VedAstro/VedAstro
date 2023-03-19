@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
@@ -49,6 +50,7 @@ namespace Genso.Astrology.Library
             }
             return words;
         }
+
         /// <summary>
         /// Converts xml element instance to string properly
         /// </summary>
@@ -76,7 +78,6 @@ namespace Genso.Astrology.Library
             //get all records in document
             return document.Root.Elements().ToList();
         }
-
 
         /// <summary>
         /// Converts any type to XML, it will use Type's own ToXml() converter if available
@@ -160,7 +161,6 @@ namespace Genso.Astrology.Library
             return eventDataList;
 
         }
-
 
         /// <summary>
         /// Converts given exception data to XML
@@ -311,7 +311,6 @@ namespace Genso.Astrology.Library
         }
 
 
-
         /// <summary>
         /// Converts days to hours
         /// </summary>
@@ -345,6 +344,7 @@ namespace Genso.Astrology.Library
         /// formatted with standard style (HH:mm dd/MM/yyyy zzz) 
         /// </summary>
         public static string GetNowSystemTimeText() => DateTimeOffset.Now.ToString(Time.DateTimeFormat);
+
         /// <summary>
         /// Gets the time now in the system in text form with seconds (HH:mm:ss dd/MM/yyyy zzz) 
         /// </summary>
@@ -410,6 +410,11 @@ namespace Genso.Astrology.Library
 
             return combinedNames;
         }
+
+
+
+
+
 
 
         //█▀▀ █░█ ▀▀█▀▀ █▀▀ █▀▀▄ █▀▀ ░▀░ █▀▀█ █▀▀▄ 　 █▀▄▀█ █▀▀ ▀▀█▀▀ █░░█ █▀▀█ █▀▀▄ █▀▀ 
@@ -482,7 +487,6 @@ namespace Genso.Astrology.Library
             return to;
         }
 
-
         public static string StreamToString(Stream stream)
         {
             StreamReader reader = new StreamReader(stream);
@@ -490,7 +494,6 @@ namespace Genso.Astrology.Library
 
             return text;
         }
-
 
         /// <summary>
         /// Converts a timezone (+08:00) in string form to parsed timespan 
@@ -585,12 +588,14 @@ namespace Genso.Astrology.Library
             var geoLocation = await GeoLocation.FromName(locationName);
             return Tools.StringToTimezone(await GetTimezoneOffsetApi(geoLocation, timeAtLocation, apiKey));
         }
+
         public static async Task<string> GetTimezoneOffsetString(string locationName, DateTime timeAtLocation, string apiKey)
         {
             //get geo location first then call underlying method
             var geoLocation = await GeoLocation.FromName(locationName);
             return await GetTimezoneOffsetApi(geoLocation, timeAtLocation, apiKey);
         }
+
         public static async Task<string> GetTimezoneOffsetString(string location, string dateTime)
         {
             //get timezone from Google API
@@ -606,7 +611,6 @@ namespace Genso.Astrology.Library
 
             //return lifeEvtTime;
         }
-
 
         /// <summary>
         /// Given a location & time, will use Google Timezone API
@@ -742,7 +746,7 @@ namespace Genso.Astrology.Library
             try
             {
                 //send request to API server
-                var result = await RequestServer(apiUrl);
+                var result = await RequestServerPost(apiUrl);
 
                 //parse data reply
                 rawMessage = result.Content.ReadAsStringAsync().Result;
@@ -783,14 +787,13 @@ namespace Genso.Astrology.Library
             //--------------------
             // FUNCTIONS
 
-            async Task<HttpResponseMessage> RequestServer(string receiverAddress)
+            async Task<HttpResponseMessage> RequestServerPost(string receiverAddress)
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
-                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
-                //get the data sender
-                using var client = new HttpClient();
+                //get the data sender 
+                using var client = new HttpClient() { Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite) }; //no timeout
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -945,12 +948,6 @@ namespace Genso.Astrology.Library
         public static XElement TimeStampServerXml => new("TimeStampServer", Tools.GetNowServerTimeSecondsText());
 
         /// <summary>
-        /// Has to be loaded when app loads, obviously since that is when branch manifest it read
-        /// since this is only used by loggers
-        /// </summary>
-        public static XElement BranchXml = new XElement("Branch", "not yet loaded, patience");
-
-        /// <summary>
         /// Gets now time in UTC +8:00
         /// Because server time is uncertain, all change to UTC8
         /// </summary>
@@ -966,7 +963,6 @@ namespace Genso.Astrology.Library
             //return converted time to caller
             return utc8Time.ToString(Time.DateTimeFormatSeconds);
         }
-
 
         /// <summary>
         /// Removes all invalid characters for an person name

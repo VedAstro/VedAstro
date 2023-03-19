@@ -95,7 +95,6 @@ namespace Website
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, receiverAddress);
-                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -121,12 +120,8 @@ namespace Website
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
 
                 httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
-
-                //get the data sender
-                //using var client = new HttpClient();
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
@@ -169,15 +164,15 @@ namespace Website
             {
                 //prepare the data to be sent
                 var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-                httpRequestMessage.SetBrowserRequestMode(BrowserRequestMode.NoCors); //NO CORS!
                 httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
 
                 //tell sender to wait for complete reply before exiting
                 var waitForContent = HttpCompletionOption.ResponseContentRead;
 
-                //send the data on its way (wait forever no timeout)
-                //client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
+                //send the data on its way 
                 var response = await AppData.HttpClient.SendAsync(httpRequestMessage, waitForContent);
+
+                //keep for error logging if needed
                 statusCode = response?.StatusCode.ToString();
 
                 //extract the content of the reply data
@@ -208,7 +203,7 @@ namespace Website
             }
 
             //if fail log it
-            if (!returnVal.IsPass) { WebLogger.Error(returnVal.Payload); }
+            if (!returnVal.IsPass) { await WebLogger.Error(returnVal.Payload); }
 
             return returnVal;
         }
@@ -219,13 +214,19 @@ namespace Website
         public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData)
         {
             //ACT 1:
-            //send data to URL, using JS for speed
+            //send data to URL, using JS for reliability & speed
             var receivedData = await WebsiteTools.Post(apiUrl, xmlData);
 
             //ACT 2:
             //check raw data 
-            //todo handle error better
-            if (string.IsNullOrEmpty(receivedData)) { throw new ApiCommunicationFailed(); }
+            if (string.IsNullOrEmpty(receivedData))
+            {
+                //log it
+                await WebLogger.Error($"BLZ > Call returned empty\n To:{apiUrl} with payload:\n{xmlData}");
+
+                //send failed empty data to caller, it should know what to do with it
+                return new WebResult<XElement>(false, new XElement("CallEmptyError"));
+            }
 
             //ACT 2:
             //return data as XML

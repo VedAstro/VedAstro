@@ -12,6 +12,8 @@ namespace Website
     {
         private static readonly XElement SourceXml = new XElement("Source", "WebLogger");
 
+        private static XElement BranchXml = new XElement("Branch", ThisAssembly.Version);
+
 
         /// <summary>
         /// Tries to ID the user, and sends a log of the visit to API server
@@ -75,7 +77,7 @@ namespace Website
             var visitorId = new XElement("VisitorId", AppData.VisitorId);
             var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
             var errorXml = new XElement("Error", new XElement("Message", errorMsg));
-            visitorXml.Add(Tools.BranchXml, SourceXml, userId, visitorId, errorXml, urlXml, Tools.TimeStampSystemXml);
+            visitorXml.Add(BranchXml, SourceXml, userId, visitorId, errorXml, urlXml, Tools.TimeStampSystemXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -113,7 +115,7 @@ namespace Website
             var dataXml = new XElement("Data", extraInfo);
             var urlXml = new XElement("Url", await AppData.CurrentUrlJS);
 
-            visitorXml.Add(Tools.BranchXml, SourceXml, userId, visitorId, errorXml, urlXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorXml.Add(BranchXml, SourceXml, userId, visitorId, errorXml, urlXml, dataXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -177,7 +179,7 @@ namespace Website
             var visitorXml = await GetVisitorDataXml();
 
             //add in button click data
-            visitorXml.Add(Tools.BranchXml, SourceXml, new XElement("Data", data), Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorXml.Add(BranchXml, SourceXml, new XElement("Data", data), Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //send to server for storage
             await SendLogToServer(visitorXml);
@@ -221,7 +223,7 @@ namespace Website
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
             var locationXml = await GetVisitorLocation();
             var visitorElement = new XElement("Visitor");
-            visitorElement.Add(Tools.BranchXml, SourceXml, userIdXml, visitorIdXml, urlXml, locationXml, browserDataXml, screenDataXml, originUrlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorElement.Add(BranchXml, SourceXml, userIdXml, visitorIdXml, urlXml, locationXml, browserDataXml, screenDataXml, originUrlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             //mark new visitor as already logged for first time
             AppData.IsNewVisitor = false;
@@ -259,7 +261,7 @@ namespace Website
             //get visitor data & format it nicely for storage
             var visitorElement = new XElement("Visitor");
             var visitorIdXml = new XElement("VisitorId", AppData.VisitorId); //use id generated above
-            visitorElement.Add(Tools.BranchXml, SourceXml, userIdXml, visitorIdXml, urlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+            visitorElement.Add(BranchXml, SourceXml, userIdXml, visitorIdXml, urlXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
             return visitorElement;
         }
@@ -285,7 +287,7 @@ namespace Website
             catch (Exception e)
             {
                 //not important if fail, keep quiet
-                Console.WriteLine("BLZ: SendLogToServer Silent Fail");
+                Console.WriteLine("BLZ > SendLogToServer Silent Fail");
             }
 
 

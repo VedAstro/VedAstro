@@ -10,8 +10,8 @@
         Ask our astrologers about your finance, marriage, health, job, etc.
     </Description>
     <ButtonsRow>
-        <IconButton IconName="iconoir:donate" ButtonText="Donate" OnClickCallback="() => _navigation.NavigateTo(PageRoute.Donate)"></IconButton>
-        <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+        <IconButton SmallSize="true" IconName="iconoir:donate" ButtonText="Donate" OnClickCallback="() => _navigation.NavigateTo(PageRoute.Donate)"></IconButton>
+        <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -49,7 +49,7 @@
         </label>
         <textarea style="min-height: 132px;" class="form-control" @bind="_detailsInput" id="messageInputId" placeholder="Enter extra info about your question"></textarea>
     </div>
-    <IconButton OnClickCallback="SendMessage" ButtonText="Send" IconName="bi:send-check" />
+    <IconButton SmallSize="true" OnClickCallback="SendMessage" ButtonText="Send" IconName="bi:send-check" />
 </div>
 
 

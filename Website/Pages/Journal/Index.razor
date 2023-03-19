@@ -8,8 +8,8 @@
 <PageTop Title="Journal" IconName="game-icons:secret-book">
     <Description>Record your life events to understand the astrological reason behind them.</Description>
     <ButtonsRow>
-        <IconButton IconName="carbon:graphical-data-flow" ButtonText="Dasa Chart" ClickUrl="@PageRoute.Dasa"></IconButton>
-        <IconButton IconName="carbon:graphical-data-flow" ButtonText="Muhurtha Chart" ClickUrl="@PageRoute.Muhurtha"></IconButton>
+        <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Dasa Chart" ClickUrl="@PageRoute.Dasa"></IconButton>
+        <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Muhurtha Chart" ClickUrl="@PageRoute.Muhurtha"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -18,7 +18,7 @@
     <div class="d-flex flex-wrap">
         <div class="vstack gap-3">
             <PeopleSelectorBox @ref="_peopleSelectorBox" />
-            <IconButton IconName="uim:process" ButtonText="Show journal" OnClickCallback="ShowButtonClicked"></IconButton>
+            <IconButton SmallSize="true" IconName="uim:process" ButtonText="Show journal" OnClickCallback="ShowButtonClicked"></IconButton>
         </div>
         <div class="alert alert-info d-flex align-items-center w-50" role="alert">
             <span class="iconify bi flex-shrink-0 me-2" data-icon="ic:outline-tips-and-updates" data-width="50"></span>
@@ -41,7 +41,7 @@
     @*SEARCH*@
     @*<div class="hstack gap-3">
     <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
-    <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
+    <IconButton SmallSize="true" ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
     </div>*@
 
     @*LIST OF PREDICTIONS*@

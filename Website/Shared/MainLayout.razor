@@ -23,7 +23,7 @@
         <!-- DESKTOP ONLY : SIDEBAR -->
         <div class="col-auto align-items-start d-none d-md-block">
             <!--only visible in Desktop-->
-            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 "><SideBarButtons /></div>
+            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white"><SideBarButtons /></div>
 
             <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
             <div class=" sticky-bottom position-fixed mb-1" style="color: rgb(200, 200, 200); font-size: 8px;">
@@ -46,15 +46,15 @@
 
         <!-- MOBILE ONLY : SIDEBAR -->
         <div class="col-auto d-md-none">
-            <nav class="navbar fixed-top" style="background: #acd1eb;">
+            <nav class="navbar fixed-top" style="background:#1877f2;">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="@PageRoute.Home">VedAstro</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                        <span class="navbar-toggler-icon"></span>
+                    <a class="navbar-brand text-white ps-3 fs-4" href="@PageRoute.Home">VedAstro</a>
+                    <button class="navbar-toggler text-white border-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                        <Icon IconName="material-symbols:menu-open-rounded" Size="30" />
                     </button>
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                         <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Mobile Menu</h5>
+                            <h6 class="offcanvas-title" id="offcanvasNavbarLabel">Mobile Menu</h6>
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
                         <div class="offcanvas-body">
@@ -74,7 +74,7 @@
             <!-- REFERENCE BUTTONS : buttons placed here are
             linked to places not needed all the time, like About and Docs -->
             <!--only visible in Desktop-->
-            <div class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between"><TopBarButtons /></div>
+            <div class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white"><TopBarButtons /></div>
 
             <!-- PAGE CONTENT INSERTED HERE -->
             <div>@Body</div>

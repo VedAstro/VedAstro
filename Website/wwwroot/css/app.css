@@ -80,3 +80,23 @@
 .nav .nav-item .active {
     font-weight: bold !important;
 }
+
+
+/*
+    Bootstrap Button Override
+    - more soothing blue for buttons, bootstrap blue is too sharp
+*/
+.btn-outline-primary:hover {
+    background-color: #1877f2 !important;
+}
+/*darker to make it stick out*/
+.btn-primary:hover {
+    color: #1877f2;
+    background-color: #e7f3ff !important;
+}
+.btn-primary:active {
+    color: #1877f2;
+}
+.btn-primary{
+    background-color: #1877f2 !important;
+}

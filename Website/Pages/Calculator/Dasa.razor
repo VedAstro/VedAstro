@@ -8,8 +8,8 @@
         Know good and bad periods of your life years ahead.
     </Description>
     <ButtonsRow>
-        <IconButton IconName="fluent:person-add-16-filled" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-        <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+        <IconButton SmallSize="true" IconName="fluent:person-add-16-filled" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
+        <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -57,7 +57,7 @@
                 </select>
             </div>
 
-            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
+            <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
 
         </div>
     </div>
@@ -72,7 +72,7 @@
             <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
 
             @*CALCULATE BTN*@
-            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"></IconButton>
+            <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"></IconButton>
 
         </div>
     </div>
@@ -90,7 +90,7 @@
                 </select>
             </div>
             @*CALCULATE BTN*@
-            <IconButton IconName="ant-design:folder-view-outlined" ButtonText="Show" OnClickCallback="OnClickShowSaved"></IconButton>
+            <IconButton SmallSize="true" IconName="ant-design:folder-view-outlined" ButtonText="Show" OnClickCallback="OnClickShowSaved"></IconButton>
         </div>
     </div>
 </div>

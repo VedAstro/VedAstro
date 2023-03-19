@@ -22,11 +22,6 @@
     <Description>
         Person's birth info for astronomical calculation
     </Description>
-    <ButtonsRow>
-        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-        @*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
-        *@
-    </ButtonsRow>
 </PageTop>
 
 
@@ -137,8 +132,8 @@
     @*BUTTONS*@
     <div style="margin-top: 50px" class="hstack row gap-2">
         @*Only show delete button in Editor mode*@
-        <IconButton ButtonText="Delete" IconName="fluent:delete-20-regular" OnClickCallback="@OnClickDeleteButton" />
-        <IconButton Color="success" ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
+        <IconButton SmallSize="true" ButtonText="Delete" IconName="fluent:delete-20-regular" OnClickCallback="@OnClickDeleteButton" />
+        <IconButton SmallSize="true" Color="success" ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
     </div>
 </div>
 

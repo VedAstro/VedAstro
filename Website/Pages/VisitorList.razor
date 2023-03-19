@@ -79,7 +79,7 @@
        await _jsRuntime.ShowLoading();
 
         //get all people from API server
-        rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id, _jsRuntime);
+        rawVisitorList = await WebsiteTools.GetVisitorList(AppData.CurrentUser.Id);
 
         await ShowAllVisitorLog();
 

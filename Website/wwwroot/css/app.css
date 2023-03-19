@@ -1,4 +1,6 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+﻿/*TODO MARKED FOR DELETION IF ALL OK*/
+
+/*@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
 html, body {
     margin: 0;
@@ -39,7 +41,7 @@ a, .btn-link {
 
 .validation-message {
     color: red;
-}
+}*/
 
 #blazor-error-ui {
     background: lightyellow;
@@ -72,6 +74,30 @@ a, .btn-link {
 
 
 /*
+    Custom CSS for icon button .razor
+    placed here so that doesn not repeat everytime if placed in component
+*/
+
+/*button with icon amd text*/
+.iconButton {
+    width: fit-content;
+    height: fit-content;
+    /*align-self: end;*/
+    /* padding: 5px; */
+    min-width: 100px;
+    /*align-self: center;*/
+}
+
+/*usually placed next to input*/
+.iconOnlyButton {
+    margin-left: 6px;
+    min-width: auto !important;
+    height: 37px;
+    width: fit-content;
+    height: fit-content;
+}
+
+/*
     Custom CSS below to make Darkmode.JS work properly with bootstrap
     Note placed here because night overlay is placed outside 
 */
@@ -84,6 +110,7 @@ a, .btn-link {
     background: #f5f9fd !important;
     color: #495057 !important; /*so that button is not blue*/
 }
+
 #myTabContent {
     background: #f5f9fd !important;
 }
@@ -92,4 +119,3 @@ a, .btn-link {
 .nav .nav-item .active {
     font-weight: bold !important;
 }
-

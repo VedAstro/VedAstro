@@ -459,7 +459,7 @@ function generatePersonListTable(tableId, tableData) {
         //get person name
         let personId = row._row.data.hash;
         //send user to person editor page with clicked person
-        window.location.href = `/personeditor/${personId}`;
+        window.location.href = `/Account/Person/Editor/${personId}`;
     });
 
     //same as click handler but for touch
@@ -467,7 +467,7 @@ function generatePersonListTable(tableId, tableData) {
         //get person name
         let personId = row._row.data.hash;
         //send user to person editor page with clicked person
-        window.location.href = `/personeditor/${personId}`;
+        window.location.href = `/Account/Person/Editor/${personId}`;
     });
 
 }

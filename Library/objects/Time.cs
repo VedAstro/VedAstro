@@ -178,6 +178,9 @@ namespace Genso.Astrology.Library
             //note: only explicit statement of format as below works
             var stdTimeString = _stdTime.ToString("HH:mm dd/MM/yyyy zzz");
 
+            //god knows, in some time zones date comes with "." instead of "/" (despite above formatting)
+            stdTimeString = stdTimeString.Replace('.', '/');
+
             //return formatted time
             return stdTimeString;
         }
@@ -275,6 +278,10 @@ namespace Genso.Astrology.Library
             try
             {
                 var timeString = timeXmlElement.Element("StdTime")?.Value ?? "00:00 01/01/2000 +08:00";
+
+                //know issue to have "." instead of "/" for date separator, so change it here if at all
+                timeString = timeString.Replace('.', '/');
+
                 var locationXml = timeXmlElement.Element("Location");
                 var geoLocation = GeoLocation.FromXml(locationXml);
 
@@ -284,7 +291,11 @@ namespace Genso.Astrology.Library
             }
             catch (Exception e)
             {
-                throw new Exception($"BLZ:Time.FromXml() Failed : {timeXmlElement}");
+                //log it
+                LibLogger.Error(e, $"Time.FromXml FAIL! : {timeXmlElement}");
+
+                //return empty time to stop keep things running
+                return Time.Empty;
             }
         }
 
@@ -340,10 +351,10 @@ namespace Genso.Astrology.Library
             var failCount = 0;
             var failTryLimit = 3;
 
-            
+
             try
             {
-                TryAgain:
+            TryAgain:
                 //raise alarm if longitude is out of range
                 var outOfRange = !(longitudeDeg >= -180 && longitudeDeg <= 180);
                 if (outOfRange)

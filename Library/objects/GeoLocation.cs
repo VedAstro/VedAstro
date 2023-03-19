@@ -9,6 +9,7 @@ namespace Genso.Astrology.Library
 
     //IMMUTABLE CLASS
     [Serializable()]
+    //TODO CANDIDATE FOR RECORD STRUCT
     public readonly struct GeoLocation : IToXml
     {
         /// <summary>
@@ -109,13 +110,13 @@ namespace Genso.Astrology.Library
         /// </summary>
         public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
-        public static GeoLocation FromXml(XElement root)
+        public static GeoLocation FromXml(XElement locationXml)
         {
             try
             {
-                var name = root.Element("Name")?.Value;
-                var longitude = Double.Parse(root.Element("Longitude")?.Value);
-                var latitude = Double.Parse(root.Element("Latitude")?.Value);
+                var name = locationXml.Element("Name")?.Value;
+                var longitude = Double.Parse(locationXml.Element("Longitude")?.Value ?? "-1"); //-1 so easy to spot
+                var latitude = Double.Parse(locationXml.Element("Latitude")?.Value ?? "-1");
 
 
                 return new GeoLocation(name, longitude, latitude);
@@ -123,7 +124,13 @@ namespace Genso.Astrology.Library
             }
             catch (Exception e)
             {
-                throw new Exception($"BLZ:GeoLocation.FromXml() Failed : {root}");
+                //log it
+                LibLogger.Error(e, $"GeoLocation.FromXml FAIL! : {locationXml}");
+
+                //instead of giving up return something
+                return GeoLocation.Empty;
+
+                throw new Exception($"BLZ:GeoLocation.FromXml() Failed : {locationXml}");
             }
         }
 

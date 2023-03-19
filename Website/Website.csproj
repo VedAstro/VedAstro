@@ -15,6 +15,12 @@
 			<!--AOT disabled because not working in android chrome-->
 			<RunAOTCompilation>false</RunAOTCompilation>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Pages\Person\**" />
+	  <Content Remove="Pages\Person\**" />
+	  <EmbeddedResource Remove="Pages\Person\**" />
+	  <None Remove="Pages\Person\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AspNetMonsters.Blazor.Geolocation" Version="0.5.0-preview1" />
@@ -28,11 +34,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Library\Library.csproj" />
-	</ItemGroup>
-
-	
-	<ItemGroup>
-	  <Folder Include="Pages\Person\" />
 	</ItemGroup>
 
 </Project>

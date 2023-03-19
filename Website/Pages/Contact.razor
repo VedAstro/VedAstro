@@ -10,15 +10,23 @@
 
 
 <div class="d-flex flex-wrap">
-    <div class="vstack gap-3 me-5 mb-4" style="max-width:286px">
-        <div @ref="_messageFormElement" class="vstack gap-2" style="max-width:@AppData.MaxWidth;">
+    @*Default hidden Thank you message*@
+    <div style="display: none;" @ref="_thankYouMessageElement">
+        <h3>
+            Thank you for your message.<br />
+            We'll reply soon.
+        </h3>
+    </div>
+    <div class="vstack gap-3 me-5 mb-4" style="max-width: 300px">
+
+        <div @ref="_messageFormElement" class="vstack gap-2" style="max-width: @AppData.MaxWidth;">
             <div>
                 <label for="emailInputId">Email</label>
                 <input @bind="_emailInput" type="text" id="emailInputId" class="form-control" placeholder="john@example.com">
             </div>
             <div>
                 <label for="messageInputId">Message</label>
-                <textarea style="min-height:132px;" class="form-control" @bind="_messageInput" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
+                <textarea style="min-height: 132px;" class="form-control" @bind="_messageInput" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
             </div>
             <IconButton OnClickCallback="@OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
         </div>
@@ -31,13 +39,6 @@
 </div>
 
 
-@*Default hidden Thank you message*@
-<div style="display: none;" @ref="_thankYouMessageElement">
-    <h3>
-        Thank you for your message.<br />
-        We'll reply soon.
-    </h3>
-</div>
 
 @code {
 

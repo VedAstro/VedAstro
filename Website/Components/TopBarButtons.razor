@@ -1,39 +1,40 @@
-﻿@using Genso.Astrology.Library
-@namespace Website.Pages
+﻿@namespace Website.Pages
+@using Genso.Astrology.Library
+
 
 @*
     BUTTONS USED IN TOP BAR
 - have been separated so that can render unique nav bar for mobile
+- REFERENCE BUTTONS : buttons placed here are linked to places not needed all the time, like About and Docs -->
 *@
 
-<div class="d-flex justify-content-between">
-    <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack" TooltipText="Goto Previous" />
-    <IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Night Reader Mode" />
-    <IconButton SmallSize="true" IconName="jam:code" OnClickCallback="OnClickDarkModeButton" TooltipText="Open Source Code" />
+<IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack" TooltipText="Go Back" />
+<IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Night Reader Mode" />
+@*<IconButton SmallSize="true" IconName="jam:code" IsNewTabOpen="true" ClickUrl="@URL.GitHubRepo" TooltipText="Open Source Code" />*@
 
-    @*show links to beta & stable from vice versa*@
-    @if (@WebsiteTools.GetIsBetaRuntime())
-    {
-        <IconButton SmallSize="true" Color="warning" IconName="mdi:bench-back" ClickUrl="@URL.WebStable" TooltipText="Return to stable version" />
-    }
-    else
-    {
-        <IconButton SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview experimental features" />
-    }
-    
-    <IconButton SmallSize="true" Outline="true" ButtonText="Donate" IconName="iconoir:donate" ClickUrl="@PageRoute.Donate" />
-    <IconButton SmallSize="true" Outline="true" ButtonText="Contact" IconName="ci:mail" ClickUrl="@PageRoute.Contact" />
-    <IconButton SmallSize="true" Outline="true" ButtonText="About" IconName="akar-icons:info" ClickUrl="@PageRoute.About" />
-    
-    <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Read Me" IconName="cil:book">
-        <DropDownList>
-            <li><a class="dropdown-item" href="@PageRoute.QuickGuide">Quick Guide</a></li>
-            <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Blog</a></li>
-            <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Forum</a></li>
-        </DropDownList>
-    </IconButton>
+@*show links to beta & stable from vice versa*@
+@if (@WebsiteTools.GetIsBetaRuntime())
+{
+    <IconButton SmallSize="true" Color="warning" IconName="mdi:bench-back" ClickUrl="@URL.WebStable" TooltipText="Stable Version" />
+}
+else
+{
+    <IconButton SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Experimental Version" />
+}
 
-</div>
+<IconButton ExtraClass="ms-md-auto" SmallSize="true" Outline="true" ButtonText="Read Me" IconName="cil:book">
+    <DropDownList>
+        <li><a class="dropdown-item" href="@PageRoute.QuickGuide">Quick Guide</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.OpenApi">Open API</a></li>
+        <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Blog</a></li>
+        <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Forum</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.Glossary" target="_blank">Glossary</a></li>
+    </DropDownList>
+</IconButton>
+
+<IconButton  SmallSize="true" Outline="true" ButtonText="Donate" IconName="iconoir:donate" ClickUrl="@PageRoute.Donate" />
+<IconButton  SmallSize="true" Outline="true" ButtonText="Contact" IconName="ci:mail" ClickUrl="@PageRoute.Contact" />
+<IconButton  SmallSize="true" Outline="true" ButtonText="About" IconName="akar-icons:info" ClickUrl="@PageRoute.About" />
 
 
 

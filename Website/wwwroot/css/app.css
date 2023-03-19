@@ -1,48 +1,8 @@
-﻿/*TODO MARKED FOR DELETION IF ALL OK*/
+﻿
 
-/*@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-
-html, body {
-    margin: 0;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    text-align: left;
-    background-color: #fff;
-}
-
-h1:focus {
-    outline: none;
-}
-
-a, .btn-link {
-    color: #0077cc;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
-.content {
-    padding-top: 1.1rem;
-}
-
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
-
-.invalid {
-    outline: 1px solid red;
-}
-
-.validation-message {
-    color: red;
-}*/
-
+/*
+   CSS Below came with Blazor package, for last resort error box
+*/
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
@@ -97,6 +57,7 @@ a, .btn-link {
     height: fit-content;
 }
 
+
 /*
     Custom CSS below to make Darkmode.JS work properly with bootstrap
     Note placed here because night overlay is placed outside 
@@ -110,10 +71,10 @@ a, .btn-link {
     background: #f5f9fd !important;
     color: #495057 !important; /*so that button is not blue*/
 }
-
 #myTabContent {
     background: #f5f9fd !important;
 }
+
 
 /*make selected tab words bold*/
 .nav .nav-item .active {

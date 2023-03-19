@@ -7,8 +7,8 @@
     /// </summary>
     public static class PageRoute
     {
-        public const string Journal = "/Journal";
-        public const string JournalParam = "/Journal/{PersonIdUrl}";
+
+
         public const string TaskList = "/Tasklist";
         public const string MessageList = "/MessageList";
         public const string SearchResult = "/SearchResult";
@@ -27,6 +27,12 @@
         public const string MatchApi = "Docs/API/Match";
         public const string SwissEphemerisApi = "Docs/API/SwissEphemeris";
         public const string NLPApi = "Docs/API/NLP";
+
+        //JOURNAL
+        public const string Journal = "Journal/";
+        public const string JournalParam = "/Journal/{PersonIdUrl}";
+        public const string JournalAdd = "Journal/Add";
+        public const string JournalEditor = "Journal/Editor";
 
 
         //CALCULATORS
@@ -63,7 +69,6 @@
 
 
         //LITTLE PAGES
-        public const string AddLifeEvent = "/AddLifeEvent";
         public const string VisitorList = "/VisitorList";
         public const string TaskEditor = "/TaskEditor";
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";

@@ -4,44 +4,36 @@
 
 <PageTitle>VedAstro | Vedic Astrology</PageTitle>
 
-<style>
-   /* .card-title {
-        font-weight: bolder;
-    }*/
+<!--SLIDE SHOW-->
+<div>
+    <style>
+        .backgroudImg {
+            background-image: url("images/zodiac-wheel-faded-2.png");
+            background-repeat: no-repeat;
+        }
+    </style>
 
-    .backgroudImg {
-        background-image: url("images/zodiac-wheel-faded-2.png");
-        background-repeat: no-repeat;
-    }
-
-</style>
-
-
-
-<div class="backgroudImg bg-white row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow">
-    <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-        <h1 class="display-4 fw-bold lh-1">VedAstro</h1>
-        <p class="lh-base lead text-nowrap" style="font-weight: 400;">A non-profit, open source project to make<br /><span class="fw-bold">Vedic Astrology</span> easily available to all.</p>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-            <button @onclick="OnClickGuideButton" type="button" class="btn btn-primary btn-lg px-4 text-nowrap" style="height: fit-content;">
-                <img class="me-1" style="height: 26px;" src="images/quick-guide.svg" />
-                Quick Guide
-            </button>
-            <button @onclick="OnClickSourceCodeButton" type="button" class="btn btn-primary btn-lg px-4 text-nowrap" style="height: fit-content;">
-                <img class="me-1" style="height: 26px;" src="images/github.svg" />
-                Source Code
-            </button>
+    <div class="backgroudImg bg-white p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow">
+        <div class="p-3 p-lg-5 pt-lg-3">
+            <h1 class="display-4 fw-bold lh-1">VedAstro</h1>
+            <p class="lh-base lead text-nowrap" style="font-weight: 400;">A non-profit, open source project to make<br /><span class="fw-bold">Vedic Astrology</span> easily available to all.</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                <IconButton ButtonText="Quick Guide" IconName="mdi:book-open-variant" ClickUrl="@PageRoute.QuickGuide" />
+                <IconButton ButtonText="Source Code" IconName="uil:github" ClickUrl="@URL.GitHubRepo" />
+                <IconButton ButtonText="Donate" IconName="iconoir:donate" ClickUrl="@PageRoute.Donate" />
+            </div>
         </div>
     </div>
 </div>
 
+
+<!--QUICK LINKS-->
 <style>
     /*to make card look clickable*/
     .card:hover {
         border: 2px solid #3E7DC0 !important;
     }
 </style>
-
 <div class="py-4" id="icon-grid">
     <h3 class="pb-2 border-bottom">
         Quick Links <button @onclick="() => _navigation.NavigateTo(PageRoute.CalculatorList)" type="button" class="btn btn-sm btn-outline-secondary">View All</button>

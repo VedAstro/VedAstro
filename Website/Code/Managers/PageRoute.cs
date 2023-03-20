@@ -20,7 +20,7 @@
         public const string QuickGuide = "Docs/QuickGuide";
         public const string Glossary = "Docs/Glossary";
 
-        //API
+        //DOCS > API
         public const string HouseApi = "Docs/API/House";
         public const string PlanetApi = "Docs/API/Planet";
         public const string OpenApi = "Docs/API/";
@@ -50,6 +50,9 @@
         public const string FamilyChart = "Calculator/FamilyChart";
         public const string MatchReport = "Calculator/Match/Report";
         public const string MatchReportParam = "Calculator/Match/Report/{MaleId}/{FemaleId}";
+        public const string APIBuilder = "Calculator/APIBuilder";
+
+
 
         //DONATE
         public const string Donate = "Donate/";

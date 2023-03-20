@@ -238,31 +238,7 @@ namespace Website
             //ACT 3:
             return returnVal;
         }
-
-
-        ///// <summary>
-        ///// Holds the control until line is clear
-        ///// enforces 1 call at a time
-        ///// check every 200ms
-        ///// </summary>
-        ///// <returns></returns>
-        //public static async Task IfBusyPleaseHold(string caller = "")
-        //{
-        //    //note: experimentation has shown that long wait time causes serious lag
-        //    //as que piles up, so many checks very fast seems to work perfectly so far
-
-        //    //if waiting too long, move on
-        //    while (IsBusy && _waitingInLineCount < 10)
-        //    {
-        //        Console.WriteLine($"BLZ:Waiting in line for call:{caller}");
-        //        await Task.Delay(100);
-        //        _waitingInLineCount++; //increment  count
-        //    }
-
-        //    //reset
-        //    _waitingInLineCount = 0;
-        //}
-
+        
 
         //PRIVATE METHODS
 

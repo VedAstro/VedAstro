@@ -61,7 +61,29 @@ namespace Genso.Astrology.Library
 
             //get data out of the xml
             result.IsPass = inputXml.Element("Status")?.Value == "Pass";
-            result.Payload = inputXml.Element("Payload")?.Elements().FirstOrDefault();
+            var finalXml = inputXml.Element("Payload")?.Elements().FirstOrDefault();
+            //if null then, possible xml has been double encoded, so decode again first before parsing
+            if (finalXml == null)
+            {
+                //get payload out and check it
+                var rawXml = inputXml.Element("Payload")?.Value;
+                
+                //payload is allowed to be empty
+                if (string.IsNullOrEmpty(rawXml)) { finalXml = new XElement("Root"); }
+                
+                //only attempt to parse when confirmed something inside
+                else
+                {
+                    try { finalXml = XElement.Parse(rawXml); }
+
+                    //something there but not xml ?#! as such wrap it
+                    catch (Exception) { finalXml = new XElement("NotXML", rawXml); }
+                }
+
+            }
+
+            //put parsed xml payload into package 
+            result.Payload = finalXml;
 
             return result;
         }

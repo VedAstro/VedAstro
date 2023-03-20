@@ -199,6 +199,9 @@ throughout the progam.
 These are randomly ordered notes on why a feature was implemented in a certain way.<br/>
 Will prove usefull when debugging & upgrading code.
 
+## Handling SEO bots via Rules
+Shows only clean & nice html index for bots from best known SEs
+
 ## Stop 404 error
 for direct access Blazor page via static storage without 404 error
 since no page acctually exists at page url, blazor takes url and runs the page as app

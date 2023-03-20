@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
@@ -192,6 +193,11 @@ namespace Genso.Astrology.Library
         /// </summary>
         public static T GetCache<T>(CacheKey key, Func<T> heavyComputation)
         {
+            //IF BLAZOR WASM, no caching please, obviously browser tech won't be ready for RAM cache till 2030  
+            var isBlazorWasm = RuntimeInformation.IsOSPlatform(OSPlatform.Create("WEBASSEMBLY"));
+
+            if (isBlazorWasm) { goto StartNoCache; }
+
             //based on calling method, get the correct cache that holds the data
             var methodCache = getMethodCache(key.Function);
 
@@ -208,6 +214,10 @@ namespace Genso.Astrology.Library
 
             //return value to caller
             return (T)value;
+
+            StartNoCache:
+            var computed = (T)heavyComputation();
+            return computed;
 
         }
 

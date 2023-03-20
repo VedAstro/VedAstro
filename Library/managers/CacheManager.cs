@@ -195,7 +195,6 @@ namespace Genso.Astrology.Library
         {
             //IF BLAZOR WASM, no caching please, obviously browser tech won't be ready for RAM cache till 2030  
             var isBlazorWasm = RuntimeInformation.IsOSPlatform(OSPlatform.Create("WEBASSEMBLY"));
-
             if (isBlazorWasm) { goto StartNoCache; }
 
             //based on calling method, get the correct cache that holds the data

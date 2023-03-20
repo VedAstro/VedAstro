@@ -5,11 +5,14 @@
 		<OutputType>Exe</OutputType>
 		<Nullable>enable</Nullable>
 		<Configurations>Debug;Release;ReleaseTest</Configurations>
+		<DockerFastModeProjectMountDirectory>/home/site/wwwroot</DockerFastModeProjectMountDirectory>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>.</DockerfileContext>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.15.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.14" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0-rc.1.22426.10" />
 
 		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.10.1" />
@@ -31,9 +34,4 @@
 	<ItemGroup>
 		<Using Include="System.Threading.ExecutionContext" Alias="ExecutionContext" />
 	</ItemGroup>
-	<PropertyGroup>
-		<LangVersion>preview</LangVersion>
-		<DockerFastModeProjectMountDirectory>/home/site/wwwroot</DockerFastModeProjectMountDirectory>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-	</PropertyGroup>
 </Project>

@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 //using Xfrogcn.BinaryFormatter;
+#pragma warning disable SYSLIB0011
 
 namespace Genso.Astrology.Library
 {
@@ -116,7 +117,9 @@ namespace Genso.Astrology.Library
                 var formatter = new BinaryFormatter();
 
                 //parse the cache
+#pragma warning disable SYSLIB0011
                 var cacheData = formatter.Deserialize(stream) as ConcurrentDictionary<CacheKey, object>;
+#pragma warning restore SYSLIB0011
 
                 //get name of the method the cache belongs to
                 var rawName = file.Split('_');
@@ -158,7 +161,10 @@ namespace Genso.Astrology.Library
                 //parse the cache
                 try
                 {
+#pragma warning disable SYSLIB0011
                     cacheData = formatter.Deserialize(stream) as ConcurrentDictionary<CacheKey, object>;
+#pragma warning restore SYSLIB0011
+
                 }
                 //if fail just skip this cache file
                 catch (Exception)
@@ -265,7 +271,9 @@ namespace Genso.Astrology.Library
                 var formatter = new BinaryFormatter();
 
                 //save cache from memory to disk
+#pragma warning disable SYSLIB0011
                 formatter.Serialize(stream, tempCacheList);
+#pragma warning restore SYSLIB0011
                 stream.Close();
 
             }
@@ -325,6 +333,7 @@ namespace Genso.Astrology.Library
 
 
     }
+
 }
 
 

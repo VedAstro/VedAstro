@@ -7,15 +7,13 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/runtime:6.0 as runtime6.0
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 # Copy .NET Core 6.0 runtime from the 6.0 image
-# Copy .NET Core 6.0 runtime from the 6.0 image
 COPY --from=runtime6.0 /usr/share/dotnet/host /usr/share/dotnet/host
 COPY --from=runtime6.0 /usr/share/dotnet/shared /usr/share/dotnet/shared
 WORKDIR /src
-COPY ["API/API.csproj", "API/"]
-COPY ["Library/Library.csproj", "Library/"]
-RUN dotnet restore "API/API.csproj"
+COPY ["API.csproj", "."]
+RUN dotnet restore "./API.csproj"
 COPY . .
-WORKDIR "/src/API"
+WORKDIR "/src/."
 RUN dotnet build "API.csproj" -c Release -o /app/build
 
 FROM build AS publish

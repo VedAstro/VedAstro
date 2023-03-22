@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Genso.Astrology.Library;
+using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker.Http;
 
 namespace API;

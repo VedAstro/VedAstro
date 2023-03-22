@@ -1,5 +1,5 @@
-﻿using Genso.Astrology.Library.Compatibility;
-using Genso.Astrology.Library;
+﻿using VedAstro.Library.Compatibility;
+using VedAstro.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;

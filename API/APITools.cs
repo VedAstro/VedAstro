@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Genso.Astrology.Library;
+using VedAstro.Library;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.Azure.Functions.Worker.Http;
+using VedAstro.Library;
 
 namespace API
 {
@@ -142,7 +143,7 @@ namespace API
         /// <summary>
         /// Reads data stamped build version, if "beta" is found in that name, return true
         /// </summary>
-        public static bool GetIsBetaRuntime() => Genso.Astrology.Library.ThisAssembly.BranchName.Contains("beta");
+        public static bool GetIsBetaRuntime() => VedAstro.Library.ThisAssembly.BranchName.Contains("beta");
 
         /// <summary>
         /// Overwrites new XML data to a blob file

@@ -8,6 +8,7 @@
 		<DockerFastModeProjectMountDirectory>/home/site/wwwroot</DockerFastModeProjectMountDirectory>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>.</DockerfileContext>
+		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.15.0" />
@@ -18,9 +19,7 @@
 		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.10.1" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.7.0" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Library\Library.csproj" />
+		<PackageReference Include="VedAstro.Library" Version="1.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="host.json">

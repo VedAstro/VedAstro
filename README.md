@@ -13,11 +13,15 @@
   ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
   [![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
-  [![NuGet](https://img.shields.io/static/v1?style=for-the-badge&message=NuGet&color=004880&logo=NuGet&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
-  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
-
 </h3>
 
+<h3>
+  [![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
+  [![NuGet](https://img.shields.io/static/v1?style=for-the-badge&message=NuGet&color=004880&logo=NuGet&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
+  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
+  [![Ko-fi](https://img.shields.io/static/v1?style=for-the-badge&message=Ko-fi&color=FF5E5B&logo=Ko-fi&logoColor=FFFFFF&label=)](https://ko-fi.com/vedastro)
+  [![Patreon](https://img.shields.io/static/v1?style=for-the-badge&message=Patreon&color=FF424D&logo=Patreon&logoColor=FFFFFF&label=)](https://www.patreon.com/vedastro)
+</h3>
 
 <h2 align="center"><a href="https://www.vedastro.org">VedAstro</a></h2>
 <h4 align="center">
@@ -78,7 +82,7 @@ With continued support from investors &amp; users, this project has steadily dev
 Helping people from all over the world.
     
 # Credits &amp; Reference
-![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226777799-4361884b-5f4e-43e3-bc0b-122aa8cc847e.jpg)
+![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226793913-493ca156-cb69-4109-bbe4-3007f57a3941.png)
 
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao. Information from their books is the source
 material & inspiration for this project. Please buy their books to show your support.

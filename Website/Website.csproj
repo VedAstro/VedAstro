@@ -23,7 +23,7 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0-rc.1.22426.10" />
 		<PackageReference Include="NetCoreServer" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="VedAstro.Library" Version="1.0.0" />
+		<PackageReference Include="VedAstro.Library" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

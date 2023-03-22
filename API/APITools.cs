@@ -12,7 +12,6 @@ using Azure.Storage.Blobs.Models;
 using VedAstro.Library;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.Azure.Functions.Worker.Http;
-using VedAstro.Library;
 
 namespace API
 {

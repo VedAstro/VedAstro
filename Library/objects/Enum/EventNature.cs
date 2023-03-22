@@ -1,4 +1,4 @@
-﻿namespace Genso.Astrology.Library
+﻿namespace VedAstro.Library
 {
     /// <summary>
     /// General type to represent good, bad , neutral

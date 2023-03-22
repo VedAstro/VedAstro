@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Timers;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// All logic dealing with creating events is here

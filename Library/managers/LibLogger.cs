@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
 
     /// <summary>

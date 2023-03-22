@@ -1,4 +1,4 @@
-﻿namespace Genso.Astrology.Library
+﻿namespace VedAstro.Library
 {
     /// <summary>
     /// Constellation names ordered as seen in the sky with corresponding number values

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Uniquely identifies a specific call to the method

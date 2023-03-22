@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     [Serializable()]
     public enum ZodiacName

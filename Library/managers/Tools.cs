@@ -20,9 +20,9 @@ using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using static System.Net.WebRequestMethods;
-using static Genso.Astrology.Library.PlanetName;
+using static VedAstro.Library.PlanetName;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// A collection of general functions that don't have a home yet, so they live here for now.

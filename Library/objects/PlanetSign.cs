@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// The zodiac sign which is at a longitude

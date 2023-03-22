@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
 
     /// <summary>

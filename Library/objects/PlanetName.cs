@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// A list of planet names, with string parsing & comparison

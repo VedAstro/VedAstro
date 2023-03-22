@@ -8,7 +8,7 @@ using System.Web;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Simple data type to contain a person's details

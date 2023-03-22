@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Holds all the info of a specific point in the constellation

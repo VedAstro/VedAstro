@@ -1,4 +1,4 @@
-﻿namespace Genso.Astrology.Library
+﻿namespace VedAstro.Library
 {
     /// <summary>
     /// Staticly typed name list of events,

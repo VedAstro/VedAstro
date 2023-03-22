@@ -8,7 +8,7 @@ using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     public static class CalendarManager
     {

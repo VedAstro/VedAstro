@@ -1,4 +1,4 @@
-﻿namespace Genso.Astrology.Library
+﻿namespace VedAstro.Library
 {
     /// <summary>
     /// Holds info (Dasa, Bhukti & Antaram) on the ruling period at point in time.

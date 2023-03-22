@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library.Compatibility
+namespace VedAstro.Library.Compatibility
 {
     /// <summary>
     /// Represents the final data generated for compatibility

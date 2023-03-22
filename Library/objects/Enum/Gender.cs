@@ -1,4 +1,4 @@
-﻿namespace Genso.Astrology.Library
+﻿namespace VedAstro.Library
 {
     /// <summary>
     /// Gender type female/male used in Person

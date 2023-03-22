@@ -1,4 +1,4 @@
-﻿namespace Genso.Astrology.Library.Compatibility
+﻿namespace VedAstro.Library.Compatibility
 {
     //simple type to hold animal names
     //used in yoni calculations

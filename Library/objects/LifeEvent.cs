@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Simple data type to hold info on life events of a person

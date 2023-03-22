@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Genso.Astrology.Library;
+namespace VedAstro.Library;
 
 public class URL
 {

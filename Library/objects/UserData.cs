@@ -2,7 +2,7 @@
 using System.Xml.Linq;
 using Google.Apis.Auth;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Simple class to hold user data

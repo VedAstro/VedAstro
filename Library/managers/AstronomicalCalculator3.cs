@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     public static partial class AstronomicalCalculator
     {

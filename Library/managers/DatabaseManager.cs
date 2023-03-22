@@ -4,7 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Manager to handle getting from & saving to database (XML files on disk)

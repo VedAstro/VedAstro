@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Apis.Testing;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// A collection of methods used to calculate if an event is occuring

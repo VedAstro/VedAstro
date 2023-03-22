@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// To implement type convertible to and from XML

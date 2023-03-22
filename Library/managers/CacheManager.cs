@@ -13,7 +13,7 @@ using Microsoft.Extensions.Caching.Memory;
 //using Xfrogcn.BinaryFormatter;
 #pragma warning disable SYSLIB0011
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Manages the caches used to speed up astrological functions

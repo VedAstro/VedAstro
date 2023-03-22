@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     [Serializable()]
     public struct Tarabala

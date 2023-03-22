@@ -1,24 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <AssemblyName>Genso.Astrology.Library</AssemblyName>
-    <RootNamespace>Genso.Astrology.Library</RootNamespace>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>preview</LangVersion>
-    <Title>VedAstro</Title>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<AssemblyName>VedAstro.Library</AssemblyName>
+		<RootNamespace>VedAstro.Library</RootNamespace>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<LangVersion>preview</LangVersion>
+		<Title>VedAstro</Title>
+		<!--The package name or identifier.-->
+		<PackageId>VedAstro.Library</PackageId>
+		<!--NuGet package version.-->
+		<Version>1.0.0</Version>
+		<!--A comma-separated list of package authors, often using the individual's or an organization's "pretty name."-->
+		<Authors>VedAstro</Authors>
+		<!--A description of the package.-->
+		<Description>Powerful open-source vedic astrology calculator library</Description>
+		<!--Copyright details for the package.-->
+		<Copyright>Copyright (c) 2014-2023 VedAstro</Copyright>
+		<!--A URL for the project homepage.-->
+		<PackageProjectUrl>https://vedastro.org/</PackageProjectUrl>
+		<!--Path to the package icon image file.-->
+		<PackageIcon>icon.png</PackageIcon>
+		<RepositoryUrl>https://github.com/VedAstro/VedAstro</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<!--A space-delimited list of tags and keywords that describe the package. Tags are used when searching for packages.-->
+		<PackageTags>astrology vedic calculator muhurtha dasa bhukti antaram horoscope match kuta planet longitudes zodiac sign constellation</PackageTags>
+		<!--A description of the changes made in this release of the package.-->
+		<PackageReleaseNotes>1st release, may the force be you</PackageReleaseNotes>
+		<Company>VedAstro</Company>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ByteSize" Version="2.1.1" />
-    <PackageReference Include="Google.Apis" Version="1.51.0" />
-    <PackageReference Include="Google.Apis.Auth" Version="1.51.0" />
-    <PackageReference Include="Google.Apis.Calendar.v3" Version="1.51.0.2237" />
-    <PackageReference Include="Google.Apis.Core" Version="1.51.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.11" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
-    <PackageReference Include="Microsoft.JSInterop" Version="6.0.11" />
-    <PackageReference Include="SwissEphNet" Version="2.8.0.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="icon.png" Pack="true" PackagePath="\"/>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<PackageReference Include="ByteSize" Version="2.1.1" />
+		<PackageReference Include="Google.Apis" Version="1.51.0" />
+		<PackageReference Include="Google.Apis.Auth" Version="1.51.0" />
+		<PackageReference Include="Google.Apis.Calendar.v3" Version="1.51.0.2237" />
+		<PackageReference Include="Google.Apis.Core" Version="1.51.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
+		<PackageReference Include="Microsoft.JSInterop" Version="6.0.11" />
+		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />
+	</ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ using SwissEphNet;
 
 //using Genso.Framework;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Collection of astronomical calculator functions

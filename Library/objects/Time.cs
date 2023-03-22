@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
 
 

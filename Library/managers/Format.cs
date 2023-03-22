@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Class to handle formatting

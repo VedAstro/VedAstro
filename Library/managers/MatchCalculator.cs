@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Genso.Astrology.Library.Compatibility;
+using VedAstro.Library.Compatibility;
 
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
 
     /// <summary>

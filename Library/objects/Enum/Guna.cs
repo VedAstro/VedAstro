@@ -1,4 +1,4 @@
-﻿namespace Genso.Astrology.Library.Compatibility
+﻿namespace VedAstro.Library.Compatibility
 {
     /// <summary>
     /// used for Guna Kuta

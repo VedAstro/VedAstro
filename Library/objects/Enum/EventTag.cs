@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// List of Tags added to event data for categorizing, calendar marking & etc.

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     public class Event : IHasName, IToXml
     {

@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using System.Web;
-using Genso.Astrology.Library;
+using VedAstro.Library;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
 
     /// <summary>

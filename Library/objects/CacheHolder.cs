@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Genso.Astrology.Library
+namespace VedAstro.Library
 {
     /// <summary>
     /// Holds cache key & and its value when saved to file on disk

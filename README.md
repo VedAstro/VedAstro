@@ -13,6 +13,8 @@
   ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
   [![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+  [![NuGet](https://img.shields.io/static/v1?style=for-the-badge&message=NuGet&color=004880&logo=NuGet&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
+  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 
 </h3>
 
@@ -76,17 +78,8 @@ With continued support from investors &amp; users, this project has steadily dev
 Helping people from all over the world.
     
 # Credits &amp; Reference
-<img
-  src="https://www.vedastro.org/images/bv-raman-pic.jpg"
-  alt="Alt text"
-  title="Optional title"
-  style="display: inline-block; margin: 0 auto; max-width: 300px">
-<img
-  src="https://www.vedastro.org/images/b-suryanarain-rao-pic.jpg"
-  alt="Alt text"
-  title="Optional title"
-  style="display: inline-block; margin: 0 auto; max-width: 300px">
-  </br>
+![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226777799-4361884b-5f4e-43e3-bc0b-122aa8cc847e.jpg)
+
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao. Information from their books is the source
 material & inspiration for this project. Please buy their books to show your support.
 Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".

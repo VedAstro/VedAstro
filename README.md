@@ -5,29 +5,33 @@
   alt="VedAstro.org"
   title="VedAstro.org">
 </a>
+<span align="center">
 
-
-<h3 align="center">
+[![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
+[![NuGet](https://img.shields.io/static/v1?style=for-the-badge&message=NuGet&color=004880&logo=NuGet&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
+[![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
+[![Ko-fi](https://img.shields.io/static/v1?style=for-the-badge&message=Ko-fi&color=FF5E5B&logo=Ko-fi&logoColor=FFFFFF&label=)](https://ko-fi.com/vedastro)
+[![Patreon](https://img.shields.io/static/v1?style=for-the-badge&message=Patreon&color=FF424D&logo=Patreon&logoColor=FFFFFF&label=)](https://www.patreon.com/vedastro)
   
-  ![GitHub last commit](https://img.shields.io/github/last-commit/gen-so/Genso.Astrology)
-  ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
-  [![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
-</h3>
+</span>
+<span align="center">
 
-<h3>
-  [![.NET](https://img.shields.io/static/v1?style=for-the-badge&message=.NET&color=512BD4&logo=.NET&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
-  [![NuGet](https://img.shields.io/static/v1?style=for-the-badge&message=NuGet&color=004880&logo=NuGet&logoColor=FFFFFF&label=)](https://www.nuget.org/packages/VedAstro.Library)
-  [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
-  [![Ko-fi](https://img.shields.io/static/v1?style=for-the-badge&message=Ko-fi&color=FF5E5B&logo=Ko-fi&logoColor=FFFFFF&label=)](https://ko-fi.com/vedastro)
-  [![Patreon](https://img.shields.io/static/v1?style=for-the-badge&message=Patreon&color=FF424D&logo=Patreon&logoColor=FFFFFF&label=)](https://www.patreon.com/vedastro)
-</h3>
+![GitHub last commit](https://img.shields.io/github/last-commit/gen-so/Genso.Astrology)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
+[![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
-<h2 align="center"><a href="https://www.vedastro.org">VedAstro</a></h2>
+</span>
+
+
+<h2 align="center"><a href="https://vedastro.org">VedAstro</a></h2>
 <h4 align="center">
   Astrology enables one to see subtle phenomena across time.</br>
        Which to the mortal man is invisible in action,
        and only visible in its reaction.</h4>
+
+
+
 
 # Links
 - [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
@@ -321,7 +325,3 @@ but with Client + Server config, hashes become different, needs changing to MD5
 -   Needs to be added with care and where absolutely needed,
     else could get very confusing.
 
-
-
-![GitHub stats](https://github-readme-stats.vercel.app/api?username=sengiv&count_private=true&theme=dark&show_icons=true&hide_border=true&hide=contribs,prs,issues)
-![GitHub stats](https://github-readme-stats.vercel.app/api/top-langs/?username=sengiv&theme=dark&hide_border=true&langs_count=4)

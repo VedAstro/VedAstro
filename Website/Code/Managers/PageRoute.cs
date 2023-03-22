@@ -27,6 +27,11 @@
         public const string MatchApi = "Docs/API/Match";
         public const string SwissEphemerisApi = "Docs/API/SwissEphemeris";
         public const string NLPApi = "Docs/API/NLP";
+        
+        //DEVELOPER
+        public const string Developer = "Developer/";
+        public const string Docker = "https://github.com/VedAstro/VedAstro/discussions/8";
+        public const string NuGet = "https://github.com/VedAstro/VedAstro/discussions/18";
 
         //JOURNAL
         public const string Journal = "Journal/";

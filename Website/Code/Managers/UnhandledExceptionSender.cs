@@ -1,5 +1,5 @@
 
-using Genso.Astrology.Library;
+using VedAstro.Library;
 
 namespace Website
 {

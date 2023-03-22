@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@using Genso.Astrology.Library
+@using VedAstro.Library
 @using System.Xml.Linq
 @using Website.Pages
 
@@ -18,7 +18,7 @@
 @if (_mainPageInitDone)
 {
     <!--only wrap in mobile screen-->
-    <div class="row mt-3 flex-md-nowrap">
+    <div class="row flex-md-nowrap">
 
         <!-- DESKTOP ONLY : SIDEBAR -->
         <div class="col-auto align-items-start d-none d-md-block">
@@ -26,7 +26,7 @@
             <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white"><SideBarButtons /></div>
 
             <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
-            <div class=" sticky-bottom position-fixed mb-1" style="color: rgb(200, 200, 200); font-size: 8px;">
+            <div class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px;">
                 <div class="hstack gap-1">
                     <span class="iconify" data-icon="ion:earth" data-width="10"></span>
                     <span>Made on Earth</span>
@@ -40,6 +40,9 @@
                     <span class="iconify" data-icon="material-symbols:copyright-outline" data-width="11"></span>
                     <!-- Stamped build version during deployment, used to identify code in cloud -->
                     <span>2014 - 2023 VedAstro</span>
+                </div>
+                <div class="mt-1">
+                   <img src="images/ce-fcc-recycle.svg">
                 </div>
             </div>
         </div>

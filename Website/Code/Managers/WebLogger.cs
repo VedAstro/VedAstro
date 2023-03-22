@@ -1,5 +1,5 @@
 ﻿using System.Xml.Linq;
-using Genso.Astrology.Library;
+using VedAstro.Library;
 using Microsoft.JSInterop;
 
 namespace Website

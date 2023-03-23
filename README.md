@@ -1,4 +1,4 @@
-
+﻿
 <a href="https://www.vedastro.org">
 <img
   src="https://www.vedastro.org/images/website-header-screenshot.png"
@@ -79,11 +79,11 @@ And using databases &amp; innovative programming methods, there is no need to re
 thousands of planetary combinations, allowing you to make accurate predictions
 with little to no knowledge.
     
-# 8 Years Old
+# 9 Years Old
 The first line of code for this project was written in 2014.
 Back then it was a simple desktop software, with no UI and only text display.
-With continued support from investors &amp; users, this project has steadily developed to what it is today.
-Helping people from all over the world.
+With continued support from users, this project has steadily developed to what it is today.
+Helping people from all over the world.🌍
     
 # Credits &amp; Reference
 ![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226793913-493ca156-cb69-4109-bbe4-3007f57a3941.png)

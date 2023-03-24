@@ -57,7 +57,7 @@ The chart takes alot of computational power to generate, so please be patient af
  -->
 
 
-# About : reason and goal for this project
+# About 🌍
 Anybody who has studied Vedic Astrology knows well how accurate it can be.
 But also how complex it can get to make accurate predictions.
 It takes **decades of experience** to be able make accurate prediction.
@@ -79,11 +79,11 @@ And using databases &amp; innovative programming methods, there is no need to re
 thousands of planetary combinations, allowing you to make accurate predictions
 with little to no knowledge.
     
-# 9 Years Old
+# 9 Years Old 🎂
 The first line of code for this project was written in 2014.
 Back then it was a simple desktop software, with no UI and only text display.
 With continued support from users, this project has steadily developed to what it is today.
-Helping people from all over the world 🌍
+Helping people from all over the world.
     
 # Credits &amp; Reference
 ![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226793913-493ca156-cb69-4109-bbe4-3007f57a3941.png)
@@ -93,7 +93,13 @@ material & inspiration for this project. Please buy their books to show your sup
 Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".
 Last but not least, we thank users like you who keep this project going.
 
+### Special Thanks :pray:
+@Ceeper00 @razukc @kristaps.bunts
+
+
+# Community
 [![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
+
 <!--
 # Help us and get paid!
 Complete tasks for this project and get paid instantly! Each task has a different value based on complexity.
@@ -106,12 +112,11 @@ Show name of planet state in Horoscope page (combust, exalted, debilited) | $2 |
 Generate traditional Rasi, Navamsa South/North style chart | $5 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
 Find a spelling mistake in VedAstro.org content | $1 | ![](https://img.shields.io/static/v1?label=&message=Open&color=blue)
 Show name of planet motion in Horoscope page (retrograde, direct, stationary) | $1.5 | ![](https://img.shields.io/static/v1?label=&message=Done&color=green)
- -->
 
-# Unexpected errors?
+
 - Clear browser cache & reload WebApp
 - Switch to Beta version
-
+ -->
 
 
 # Other Cool Projects 😎

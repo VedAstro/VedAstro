@@ -34,7 +34,7 @@
 
 
 
-# Links
+# Links 🌍
 - [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
 - [Open API](https://vedastro.org/Docs/API) easily get astrology data for your app or website
 - [Swiss Ephemris API](https://vedastro.org/Docs/API/SwissEphemeris) access powerful astronomical library with a simple `HTTP GET`
@@ -57,12 +57,14 @@ The chart takes alot of computational power to generate, so please be patient af
  -->
 
 
-# About 🌍
-Anybody who has studied Vedic Astrology knows well how accurate it can be.
-But also how complex it can get to make accurate predictions.
-It takes **decades of experience** to be able make accurate prediction.
-As such this knowledge only reaches a limited people.
-This project is an effort to change that.
+# About 📜
+
+Using modern computational technologies &amp; methods we can simplify the
+complexity of Vedic Astrology. For example, calculating planet strength (Bhava Bala)
+used to take hours, now with computers we can calculate it in milliseconds.
+And using databases &amp; innovative programming methods, there is no need to remember
+thousands of planetary combinations, allowing you to make accurate predictions
+with little to no knowledge.
 </br>
 
 Our goal is to make Vedic Astrology easily accessible to anybody.
@@ -72,20 +74,19 @@ It lights our future so we can change it.
 And it lights our past, to understand our mistakes.
 </br>
 
-By using modern computational technologies &amp; methods we can simplify the
-complexity of Vedic Astrology. For example, calculating planet strength (Bhava Bala)
-used to take hours, now with computers we can calculate it in milliseconds.
-And using databases &amp; innovative programming methods, there is no need to remember
-thousands of planetary combinations, allowing you to make accurate predictions
-with little to no knowledge.
-    
+Anybody who has studied Vedic Astrology knows well how accurate it can be.
+But also how complex it can get to make accurate predictions.
+It takes **decades of experience** to be able make accurate prediction.
+As such this knowledge only reaches a limited people.
+This project is an effort to change that.
+
 # 9 Years Old 🎂
 The first line of code for this project was written in 2014.
 Back then it was a simple desktop software, with no UI and only text display.
 With continued support from users, this project has steadily developed to what it is today.
 Helping people from all over the world.
     
-# Credits &amp; Reference
+# Credits &amp; Reference 📚
 ![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226793913-493ca156-cb69-4109-bbe4-3007f57a3941.png)
 
 Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao. Information from their books is the source
@@ -96,8 +97,8 @@ Last but not least, we thank users like you who keep this project going.
 ### Special Thanks :pray:
 @Ceeper00 @razukc @kristaps.bunts
 
+<hr>
 
-# Community
 [![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
 
 <!--
@@ -124,8 +125,8 @@ Show name of planet motion in Horoscope page (retrograde, direct, stationary) | 
 
 <hr>
 
-# Project Architecture : For Coders
-Key design notes to understand the internals of the program better.
+# Project Architecture 🔩
+Key design notes to understand the internals of the program better during development
 
 
 ## Core Function Explained

@@ -32,6 +32,9 @@ namespace API
             return APITools.PassMessage(holder, incomingRequest);
         }
 
+        /// <summary>
+        /// Build to be pinged by Render server for live build, but can be used by any for checking health
+        /// </summary>
         [Function("health")]
         public static HttpResponseData GetHealth([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {

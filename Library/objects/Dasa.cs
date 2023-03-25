@@ -11,6 +11,7 @@
         public PlanetName Bhukti { get; set; }
         public PlanetName Antaram { get; set; }
         public PlanetName Sukshma { get; set; }
+        public PlanetName Prana { get; set; }
     }
 }
 

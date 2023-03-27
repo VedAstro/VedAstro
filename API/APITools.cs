@@ -43,7 +43,7 @@ namespace API
         static APITools()
         {
             //make urls used here for beta or stable
-            Url = new URL(APITools.GetIsBetaRuntime());
+            Url = new URL(GetIsBetaRuntime());
         }
 
 
@@ -142,7 +142,7 @@ namespace API
         /// <summary>
         /// Reads data stamped build version, if "beta" is found in that name, return true
         /// </summary>
-        public static bool GetIsBetaRuntime() => VedAstro.Library.ThisAssembly.BranchName.Contains("beta");
+        public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");
 
         /// <summary>
         /// Overwrites new XML data to a blob file
@@ -433,8 +433,7 @@ namespace API
         /// </summary>
         public static async Task<Person> GetPersonById(string personId)
         {
-            var personListXml = await GetPersonListFile();
-            var foundPersonXml = await FindPersonById(personListXml, personId);
+            var foundPersonXml = await FindPersonById(personId);
 
             if (foundPersonXml == null) { return Person.Empty; }
 
@@ -446,29 +445,38 @@ namespace API
         /// <summary>
         /// Will look for a person in a given list
         /// returns null if no person found
+        /// This a unique id representing the unique person record
         /// </summary>
-        public static async Task<XElement?> FindPersonById(XDocument personListXmlDoc, string personId)
+        public static async Task<XElement?> FindPersonById(string personId)
         {
+
             try
             {
-                //list of person XMLs
-                var personXmlList = personListXmlDoc.Root?.Elements();
+                //get latest file from server
+                //note how this creates & destroys per call to method
+                //might cost little extra cycles but it's a functionality
+                //to always get the latest list
+                var personListXmlDoc = await GetPersonListFile();
 
-                //do the finding
-                var foundPerson = personXmlList?.Where(delegate (XElement personXml)
-                {   //use id to find the person's record
-                    var thisId = Person.FromXml(personXml).Id;
-                    return thisId == personId;
-                }).First();
+                //list of person XMLs
+                var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
+
+                //do the finding (default empty)
+                var foundPerson = personXmlList?.Where(MathcPeronId)?.First() ?? Person.Empty.ToXml();
 
                 return foundPerson;
             }
             catch (Exception e)
             {
-                //if fail log it and return empty xelement
+                //if fail log it and return empty value so caller will know
                 await APILogger.Error(e);
                 return null;
-            }
+            } 
+
+            //--------
+            //do the finding
+            bool MathcPeronId(XElement personXml) => Person.FromXml(personXml).Id.Equals(personId);
+
         }
 
         /// <summary>
@@ -572,7 +580,12 @@ namespace API
         /// Gets main person list xml doc file 
         /// </summary>
         /// <returns></returns>
-        private static async Task<XDocument> GetPersonListFile() => await GetXmlFileFromAzureStorage("PersonList.xml", "vedastro-site-data");
+        private static async Task<XDocument> GetPersonListFile()
+        {
+            var personListXml = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
+
+            return personListXml;
+        }
 
         /// <summary>
         /// Get parsed HoroscopeDataList.xml from wwwroot file / static site
@@ -737,21 +750,21 @@ namespace API
             var updatedPerson = Person.FromXml(updatedPersonXml);
 
             //get the person record that needs to be updated
-            var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-            var personToUpdate = await APITools.FindPersonById(personListXmlDoc, updatedPerson.Id);
+            var personToUpdate = await FindPersonById(updatedPerson.Id);
 
             //delete the previous person record,
             //and insert updated record in the same place
-            personToUpdate.ReplaceWith(updatedPersonXml);
+            personToUpdate?.ReplaceWith(updatedPersonXml);
 
             //upload modified list file to storage
-            await APITools.SaveXDocumentToAzure(personListXmlDoc, APITools.PersonListFile, APITools.BlobContainerName);
+            var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
+            await SaveXDocumentToAzure(personListXmlDoc, PersonListFile, BlobContainerName);
         }
 
         public static async Task<List<Person>> GetAllPersonList()
         {
             //get all person list from storage
-            var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+            var personListXml = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
             var allPersonList = personListXml.Root?.Elements();
 
             var returnList = Person.FromXml(allPersonList);

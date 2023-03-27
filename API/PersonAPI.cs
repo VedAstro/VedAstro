@@ -199,7 +199,7 @@ namespace API
         /// Gets all person profiles owned by User ID & Visitor ID
         /// </summary>
         [Function(nameof(GetPersonList))]
-        public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous)] HttpRequestData incomingRequest)
         {
         //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 
         TryAgain:

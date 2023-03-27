@@ -46,7 +46,7 @@ namespace API
         /// note: this is done to auto move profiles created before login, then user decides to login
         /// but expects all the profiles created before to be there in new account/logged in account
         /// </summary>
-        [Function("AddUserIdToVisitorPersons")]
+        [Function(nameof(AddUserIdToVisitorPersons))]
         public static async Task<HttpResponseData> AddUserIdToVisitorPersons([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
@@ -88,8 +88,6 @@ namespace API
 
         }
 
-
-
         /// <summary>
         /// Gets person all details from only hash
         /// </summary>
@@ -104,8 +102,7 @@ namespace API
                 var personId = requestData.Value;
 
                 //get the person record by hash
-                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-                var foundPerson = await APITools.FindPersonById(personListXml, personId);
+                var foundPerson = await APITools.FindPersonById(personId);
 
                 //send person to caller
                 return APITools.PassMessage(foundPerson, incomingRequest);
@@ -166,7 +163,7 @@ namespace API
         /// Theoretically anybody who gets the hash of the person,
         /// can delete the record by calling this API
         /// </summary>
-        [Function("DeletePerson")]
+        [Function(nameof(DeletePerson))]
         public static async Task<HttpResponseData> DeletePerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
@@ -177,8 +174,7 @@ namespace API
                 var personId = requestData.Value;
 
                 //get the person record that needs to be deleted
-                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-                var personToDelete = await APITools.FindPersonById(personListXml, personId);
+                var personToDelete = await APITools.FindPersonById(personId);
 
                 //add deleted person to recycle bin 
                 await APITools.AddXElementToXDocumentAzure(personToDelete, APITools.RecycleBinFile, APITools.BlobContainerName);
@@ -202,7 +198,7 @@ namespace API
         /// <summary>
         /// Gets all person profiles owned by User ID & Visitor ID
         /// </summary>
-        [Function("GetPersonList")]
+        [Function(nameof(GetPersonList))]
         public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
         //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 

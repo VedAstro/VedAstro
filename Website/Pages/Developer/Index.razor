@@ -1,0 +1,68 @@
+﻿@attribute [Route(PageRoute.Developer)]
+@attribute [Route(PageRoute.DeveloperParam)]
+
+There are 3 ways you can use VedAstro in your project.
+<ol class="list-group list-group-numbered">
+    <li class="list-group-item">Open API</li>
+    <li class="list-group-item">Docker</li>
+    <li class="list-group-item">NuGet</li>
+</ol>
+
+<h3>Open API</h3>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button @ref="element1" class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Javascript</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button @ref="element2" class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">PHP</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button @ref="element3" class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">C#</button>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">dfsfsdfsfsdf</div>
+    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">.dfsfsdfsfsdf..</div>
+    <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">..dfsfsdfsfsdf.</div>
+    <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">..dfsfsdfsfsdf.</div>
+</div>
+
+@code {
+    private ElementReference element1, element2, element3;
+
+    /// <summary>
+    /// Based on inputed tab name is select on load
+    /// basically navigating tab from menu
+    /// </summary>
+    [Parameter]
+    public string TabName { get; set; }
+
+    /// <summary>
+    /// if true means, tab name was specified
+    /// </summary>
+    private bool AutoSwitchTab => !string.IsNullOrEmpty(TabName);
+
+
+    //protected override Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    //after loading page select tab name if specified from URL
+    //    if (firstRender && AutoSwitchTab)
+    //    {
+    //        //convert inputed tab name to the actual element
+    //        ElementReference selectedTab;
+    //        switch (TabName)
+    //        {
+    //            case "JS":selectedTab = element1; break;
+    //            case "PHP":selectedTab = element2; break;
+    //            case "C#":selectedTab = element3; break;
+    //        }
+
+    //        //then tell JS to make as though clicked
+    //        //thus allowing users to navigate within a page by using only the URL
+    //        _jsRuntime.InvokeVoidAsync("ShowTab", selectedTab);
+    //    }
+
+    //}
+
+
+}

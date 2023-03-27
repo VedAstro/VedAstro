@@ -26,8 +26,4 @@
 		<PackageReference Include="VedAstro.Library" Version="1.2.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Pages\Developer\" />
-	</ItemGroup>
-
 </Project>

@@ -30,6 +30,7 @@
         
         //DEVELOPER
         public const string Developer = "Developer/";
+        public const string DeveloperParam = "Developer/{TabName}";
         public const string Docker = "https://github.com/VedAstro/VedAstro/discussions/8";
         public const string NuGet = "https://github.com/VedAstro/VedAstro/discussions/18";
 

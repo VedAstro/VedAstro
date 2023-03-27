@@ -163,7 +163,7 @@ namespace API
         /// Theoretically anybody who gets the hash of the person,
         /// can delete the record by calling this API
         /// </summary>
-        [Function("DeletePerson")]
+        [Function(nameof(DeletePerson))]
         public static async Task<HttpResponseData> DeletePerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
 
@@ -198,8 +198,8 @@ namespace API
         /// <summary>
         /// Gets all person profiles owned by User ID & Visitor ID
         /// </summary>
-        [Function("GetPersonList")]
-        public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous, "get", "put", "delete", "post", "head", "trace", "patch", "connect", "options", Route = null)] HttpRequestData incomingRequest)
+        [Function(nameof(GetPersonList))]
+        public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
         //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 
         TryAgain:

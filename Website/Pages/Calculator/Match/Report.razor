@@ -8,9 +8,9 @@
 
 <PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill">
     <ButtonsRow>
-        <IconButton IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-        <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-        <IconButton IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+        <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+        <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
+        <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -71,7 +71,7 @@
                     <td scope="row">
                         <b style="font-size: 22px;">@prediction.FormattedName</b>
                         <p style="margin: 0px; font-size: 15px;">@prediction.Description</p>
-                        <IconButton Outline="@true" ExtraClass=" my-1" SmallSize="@true" ButtonText="More Info" OnClickCallback="@(() => OnClickMoreInfo(@prediction.Name.ToString()))" />
+                        <IconButton Outline="@true" ExtraClass=" my-1" SmallSize="true" ButtonText="More Info" OnClickCallback="@(() => OnClickMoreInfo(@prediction.Name.ToString()))" />
                     </td>
 
                     <td>

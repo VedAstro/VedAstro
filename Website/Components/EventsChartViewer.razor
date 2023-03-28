@@ -94,7 +94,7 @@
         *@ @*only show mobile view when eventPreset & timePreset has been set*@
         @if (!string.IsNullOrEmpty(_eventPreset))
         {
-            <IconButton @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" SmallSize="true" />
+            <IconButton SmallSize="true" @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton"  />
         }
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
         @if (!_nowSavedChart)

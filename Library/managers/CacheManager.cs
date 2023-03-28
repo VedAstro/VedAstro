@@ -303,24 +303,24 @@ namespace VedAstro.Library
         {
 
             //if value is in cache return to caller, end here
-            if (_cacheList.TryGetValue(methodName, out var value))
+            if (_cacheList.TryGetValue(methodName, out var wholeCache))
             {
                 //if value is null, try again, possible miss with multiple threads
-                if (value == null)
+                if (wholeCache == null)
                 {
                     //log the cache miss
                     LibLogger.Debug("Cache said to be loaded, but not here!");
                     goto Start;
                 }
-                return value;
+                return wholeCache;
             }
 
             Start:
             //if no value found in cache, make new cache for the method 
-            value = _cacheList[methodName] = new ConcurrentDictionary<CacheKey, object>();
+            wholeCache = _cacheList[methodName] = new ConcurrentDictionary<CacheKey, object>();
 
             //return the new cache for the method to caller
-            return value;
+            return wholeCache;
 
         }
 

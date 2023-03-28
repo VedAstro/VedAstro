@@ -597,7 +597,7 @@ namespace API
             if (SavedHoroscopeDataList != null) { return SavedHoroscopeDataList; }
 
             //get data list from Static Website storage
-            var horoscopeDataListXml = await Tools.GetXmlFileHttp(Url.UrlHoroscopeDataListXml);
+            var horoscopeDataListXml = await Tools.GetXmlFileHttp(Url.HoroscopeDataListXml);
 
             //parse each raw event data in list
             var horoscopeDataList = new List<HoroscopeData>();
@@ -770,6 +770,16 @@ namespace API
             var returnList = Person.FromXml(allPersonList);
 
             return returnList;
+        }
+
+        public static HttpResponseData SendHtmlToCaller(string chartContentSvg, HttpRequestData incomingRequest)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/html");
+            //place in response body
+            response.WriteString(chartContentSvg);
+            return response;
         }
     }
 }

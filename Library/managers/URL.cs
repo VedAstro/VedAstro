@@ -8,9 +8,9 @@ namespace VedAstro.Library;
 public class URL
 {
     //keep inside
-    public const string ApiBeta = "https://beta.vedastro.org/api";
-    public const string ApiStable = "https://vedastro.org/api";
-    public const string WebBeta = "https://beta.vedastro.org";
+    public const string ApiBeta = "https://beta.api.vedastro.org/";
+    public const string ApiStable = "https://api.vedastro.org";
+    public const string WebBeta = "https://beta.vedastro.org/";
     public const string WebStable = "https://vedastro.org";
 
     /// <summary>
@@ -52,9 +52,10 @@ public class URL
         GetEventsApi = ApiUrl + "/getevents";
         SignInGoogle = ApiUrl + "/SignInGoogle";
         SignInFacebook = ApiUrl + "/SignInFacebook";
-        UrlHoroscopeDataListXml = $"{WebUrl}/data/HoroscopeDataList.xml";//used in horoscope prediction
-        UrlEventsChartViewerHtml = $"{WebUrl}/data/EventsChartViewer.html";
+        HoroscopeDataListXml = $"{WebUrl}/data/HoroscopeDataList.xml";//used in horoscope prediction
+        EventsChartViewerHtml = $"{WebUrl}/data/EventsChartViewer.html";
         ToolbarSvgAzure = $"{WebUrl}/svg/Toolbar.svg";// Toolbar.svg used in when rendering events chart
+        APIHomePageTxt = $"{WebUrl}/data/APIHomePage.txt";
 
 
         //let dev user know
@@ -66,8 +67,9 @@ public class URL
     /// Auto set beta or stable based on build settings
     /// </summary>
     public readonly string ToolbarSvgAzure;
-    public readonly string UrlEventsChartViewerHtml;
-    public readonly string UrlHoroscopeDataListXml;
+    public readonly string EventsChartViewerHtml;
+    public readonly string HoroscopeDataListXml;
+    public readonly string APIHomePageTxt;
     public readonly string ApiUrl;
     public readonly string WebUrl;
     public readonly string AddPersonApi;

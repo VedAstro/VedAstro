@@ -330,7 +330,7 @@ namespace API
 
                 //get chart index.html and send that to caller
                 //get data list from Static Website storage
-                var htmlTemplate = await APITools.GetStringFileHttp(APITools.Url.UrlEventsChartViewerHtml);
+                var htmlTemplate = await APITools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
                 //TODO NEEDS TO BE UPDATED
@@ -343,7 +343,7 @@ namespace API
                 //insert SVG into html place holder page
                 htmlTemplate = htmlTemplate.Replace("<!--INSERT SVG-->", svgString);
 
-                return SendHtmlToCaller(htmlTemplate, incomingRequest);
+                return APITools.SendHtmlToCaller(htmlTemplate, incomingRequest);
 
             }
             catch (Exception e)
@@ -371,8 +371,7 @@ namespace API
             try
             {
                 //get chart index.html and send that to caller
-                var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.Url.UrlEventsChartViewerHtml);
-
+                var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
                 var personName = (await APITools.GetPersonById(personId)).Name;
@@ -381,8 +380,7 @@ namespace API
                 jsVariables += $@"window.PersonId = ""{personId}"";";
                 var finalHtml = eventsChartViewerHtml.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
 
-                return SendHtmlToCaller(finalHtml, incomingRequest);
-
+                return APITools.SendHtmlToCaller(finalHtml, incomingRequest);
 
             }
             catch (Exception e)
@@ -567,15 +565,6 @@ namespace API
             return response;
         }
 
-        private static HttpResponseData SendHtmlToCaller(string chartContentSvg, HttpRequestData incomingRequest)
-        {
-            //send image back to caller
-            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/html");
-            //place in response body
-            response.WriteString(chartContentSvg);
-            return response;
-        }
 
         /// <summary>
         /// processes incoming xml request and outputs events svg report

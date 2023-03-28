@@ -21,80 +21,80 @@
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <Icon IconName="entypo:save" /> Planets
-            </button> 
+            </button>
             <ul class="dropdown-menu">
                 <li class="dropdown-item">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" >
+                        <input class="form-check-input" type="checkbox" value="">
                         <label class="form-check-label" for="flexCheckDefault">Sun</label>
                     </div>
                 </li>
                 <li class="dropdown-item">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" >
+                        <input class="form-check-input" type="checkbox" value="">
                         <label class="form-check-label" for="flexCheckDefault">Moon</label>
                     </div>
                 </li>
-                
+
             </ul>
         </div>
 
-@*        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <Icon IconName="entypo:save" /> Highlight
-            </button>
-            <ul class="dropdown-menu">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Planets</th>
-                        <th scope="col">Houses</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td colspan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <li>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">Sun</label>
-                    </div>
-                </li>
-                <li>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
-                        <label class="form-check-label" for="flexCheckDefault">
-                            Moon
-                        </label>
-                    </div>
-                </li>
-            </ul>
+        @*        <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <Icon IconName="entypo:save" /> Highlight
+        </button>
+        <ul class="dropdown-menu">
+        <table class="table">
+        <thead>
+        <tr>
+        <th scope="col">Planets</th>
+        <th scope="col">Houses</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        </tr>
+        <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+        </tr>
+        <tr>
+        <th scope="row">3</th>
+        <td colspan="2">Larry the Bird</td>
+        <td>@twitter</td>
+        </tr>
+        </tbody>
+        </table>
+        <li>
+        <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">Sun</label>
         </div>
-*@
+        </li>
+        <li>
+        <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2">
+        <label class="form-check-label" for="flexCheckDefault">
+        Moon
+        </label>
+        </div>
+        </li>
+        </ul>
+        </div>
+        *@
         @*        <IconButton @ref="_showButton" ButtonText="Life Events" IconName="clarity:eye-show-solid" OnClickCallback="OnClickShowLifeEvents" SmallSize="true" />
         <IconButton @ref="_hideButton" ButtonText="Life Events" IconName="clarity:eye-hide-solid" OnClickCallback="OnClickHideLifeEvents" SmallSize="true" />
 
         *@ @*only show mobile view when eventPreset & timePreset has been set*@
         @if (!string.IsNullOrEmpty(_eventPreset))
         {
-            <IconButton SmallSize="true" @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton"  />
+            <IconButton SmallSize="true" @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" />
         }
         @*only show "Save" button if viewing newly generated chart, so that no erroneous double save*@
         @if (!_nowSavedChart)
@@ -121,6 +121,10 @@
 
 
 @code {
+
+        
+    //█▀▄ ▄▀█ ▀█▀ ▄▀█
+    //█▄▀ █▀█ ░█░ █▀█
 
     /// <summary>
     /// Reference to main holder div
@@ -153,6 +157,13 @@
     string _finalSvg;
 
     bool isDirty = true; //so that it runs on 1st render
+
+
+
+
+    //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▄█ █▄█ █▄▄ █ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -188,6 +199,73 @@
 
         //needed to make save button appear again
         StateHasChanged();
+    }
+
+    /// <summary>
+    /// Given a saved chart name in local storage, it will load it into page
+    /// </summary>
+    public async Task ShowSavedChart(string selectedChartId)
+    {
+        //save chart id, used to generate direct link
+        CurrentChartId = selectedChartId;
+
+        //set current chart as from saved version (to hide save button)
+        //only show "Save" button if viewing newly generated chart, so that no erroneous double save
+        _nowSavedChart = true;
+
+        //1 GENERATE CHART IN SVG FROM SERVER
+        //saved for later use by Chart Saver
+        _finalSvg = await GetSavedEventsChartSvgFromApi(selectedChartId);
+
+        //gets person profile used to generate the saved chart being showed now
+        //needs to be set else parent depending will fail
+        SelectedPerson = await WebsiteTools.GetPersonIdFromChartId(selectedChartId, _jsRuntime);
+
+        //2 LOAD CHART INTO PAGE
+        await LoadChartIntoPage(_finalSvg);
+
+        //needed to make save button appear again
+        StateHasChanged();
+
+    }
+
+    /// <summary>
+    /// calculates the precision of the events to fit inside 1000px width
+    /// </summary>
+    public static double GetDayPerPixel(Time start, Time end)
+    {
+        const int maxWidth = 1000; //px
+
+        var daysBetween = end.Subtract(start).TotalDays;
+        var daysPerPixel = Math.Round(daysBetween / maxWidth, 3); //small val = higher precision
+                                                                  //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
+                                                                  //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
+
+        return daysPerPixel;
+    }
+
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    /// <summary>
+    /// Given an SVG as string, it will inject it into page & attach
+    /// the needed JS handlers for animation
+    /// </summary>
+    private async Task LoadChartIntoPage(string rawSvgChart)
+    {
+        //create new chart from svg string
+        await _jsRuntime.InvokeVoidAsync("ChartFromSvgString", rawSvgChart, _eventsChartSvgHolder);
+
+        //get latest dark mode setting
+        //so that event chart is set properly
+        await AppData.UpdateDarkMode(_jsRuntime);
+
+        //needed to show changes to inputs
+        StateHasChanged();
+
     }
 
     private async Task<string> GetSavedEventsChartSvgFromApi(string chartId)
@@ -227,7 +305,7 @@
         var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
         var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
         //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-        var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetEventsChart, rootXml, _jsRuntime);
+        var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetEventsChartDirect, rootXml, _jsRuntime);
 
         //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
         // convert stream to string
@@ -260,71 +338,6 @@
         return result.IsPass;
     }
 
-    /// <summary>
-    /// Given a saved chart name in local storage, it will load it into page
-    /// </summary>
-    public async Task ShowSavedChart(string selectedChartId)
-    {
-        //save chart id, used to generate direct link
-        CurrentChartId = selectedChartId;
-
-        //set current chart as from saved version (to hide save button)
-        //only show "Save" button if viewing newly generated chart, so that no erroneous double save
-        _nowSavedChart = true;
-
-        //1 GENERATE CHART IN SVG FROM SERVER
-        //saved for later use by Chart Saver
-        _finalSvg = await GetSavedEventsChartSvgFromApi(selectedChartId);
-
-        //gets person profile used to generate the saved chart being showed now
-        //needs to be set else parent depending will fail
-        SelectedPerson = await WebsiteTools.GetPersonIdFromChartId(selectedChartId, _jsRuntime);
-
-        //2 LOAD CHART INTO PAGE
-        await LoadChartIntoPage(_finalSvg);
-
-        //needed to make save button appear again
-        StateHasChanged();
-
-    }
-
-    /// <summary>
-    /// Given an SVG as string, it will inject it into page & attach
-    /// the needed JS handlers for animation
-    /// </summary>
-    private async Task LoadChartIntoPage(string rawSvgChart)
-    {
-        //create new chart from svg string
-        await _jsRuntime.InvokeVoidAsync("ChartFromSvgString", rawSvgChart, _eventsChartSvgHolder);
-
-        //get latest dark mode setting
-        //so that event chart is set properly
-        await AppData.UpdateDarkMode(_jsRuntime);
-
-        //needed to show changes to inputs
-        StateHasChanged();
-
-    }
-
-    /// <summary>
-    /// calculates the precision of the events to fit inside 1000px width
-    /// </summary>
-    public static double GetDayPerPixel(Time start, Time end)
-    {
-        const int maxWidth = 1000; //px
-
-        var daysBetween = end.Subtract(start).TotalDays;
-        var daysPerPixel = Math.Round(daysBetween / maxWidth, 3); //small val = higher precision
-                                                                  //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
-                                                                  //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
-
-        return daysPerPixel;
-    }
-
-
-
-    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
     private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
     {

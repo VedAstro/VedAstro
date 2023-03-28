@@ -781,5 +781,16 @@ namespace API
             response.WriteString(chartContentSvg);
             return response;
         }
+
+        public static HttpResponseData SendTextToCaller(string chartContentSvg, HttpRequestData incomingRequest)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain");
+            //place in response body
+            response.WriteString(chartContentSvg);
+
+            return response;
+        }
     }
 }

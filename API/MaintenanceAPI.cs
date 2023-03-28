@@ -21,7 +21,7 @@ namespace API
             //get chart special API home page and send that to caller
             var APIHomePageTxt = await APITools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
 
-            return APITools.SendHtmlToCaller(APIHomePageTxt, incomingRequest);
+            return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
 
         }
 

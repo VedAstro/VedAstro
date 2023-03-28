@@ -202,6 +202,11 @@ throughout the progam.
 ```
 
 # Code Edit Guide
+
+### Internal Project Linking
+all 3 independent, only linked in VS for easy access
+don't commit local referenced .csproj to Git as it'll be used by CI/CD
+
 ### To add a new prediction/event
 1. Create a method in EventCalculatorMethods.cs
 2. Add the name in EventNames.cs

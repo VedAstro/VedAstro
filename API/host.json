@@ -3,10 +3,11 @@
   "logging": {
     "applicationInsights": {
       "samplingSettings": {
-        "isEnabled": true,
+        "isEnabled": false,
         "excludedTypes": "Request"
       }
     }
-  }
+  },
+  "functionTimeout": "00:10:00"
 }
 

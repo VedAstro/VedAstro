@@ -14,8 +14,8 @@ namespace API
         /// <summary>
         /// API Home page
         /// </summary>
-        [Function(nameof(Main))]
-        public static async Task<HttpResponseData> Main([HttpTrigger(AuthorizationLevel.Anonymous, "get", "put", "delete", "post", "head", "trace", "patch", "connect", "options", Route = "")] HttpRequestData incomingRequest)
+        [Function(nameof(Home))]
+        public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", "put", "delete", "post", "head", "trace", "patch", "connect", "options", Route = "Home")] HttpRequestData incomingRequest)
         {
 
             //get chart special API home page and send that to caller

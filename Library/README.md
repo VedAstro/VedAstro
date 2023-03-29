@@ -214,12 +214,12 @@ rules also make sure not to redirect file & api access only page access
 
 ## Domain redirection #06/03/2023
 web : vedastro.org -> domain registra -> azure DNS -> azure cdn -> web blob storage
-api **stable** : vedastro.org/api -> domain registra -> azure DNS -> azure cdn -> stable api server (render)
-api **beta** : beta.vedastro.org/api -> domain registra -> azure DNS -> azure cdn -> beta api server (azure)
+api **stable** : api.vedastro.org -> domain registra -> azure DNS -> azure cdn -> stable api server (render)
+api **beta** : beta.api.vedastro.org -> domain registra -> azure DNS -> azure cdn -> beta api server (azure)
 domain cert managed by lets encyrpt acme bot azure func
 
 ## API domain is routed # MAR 2023
-via Azure CDN Rules Engine, this allows the use of ```vedastro.org/api/...``` & ```vedastro.org/api/nlp/...```
+via Azure CDN Rules Engine, this allows the use of ```api.vedastro.org``` & ```beta.api.vedastro.org```
 
 ## Antaram > Sukshma > Prana > Avi Prana > Viprana  # FEB 2023
 Since not documented by BV. Raman, code here is created through experimentation by

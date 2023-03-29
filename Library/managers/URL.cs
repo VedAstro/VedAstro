@@ -46,8 +46,8 @@ public class URL
         GetMessageList = ApiUrl + "/getmessagelist";
         GetMatchReportApi = ApiUrl + "/getmatchreport";
         GetEventsChart = ApiUrl + "/geteventschart";
-        //TODO special because timeout Azure CDN timeout >30s
-        GetEventsChartDirect = "https://vedastroapi.azurewebsites.net/geteventschart"; 
+        //TODO special URL for chart because timeout Azure CDN timeout >30s
+        GetEventsChartDirect = "https://vedastroapi.azurewebsites.net/api/geteventschart"; 
         GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
         SaveEventsChart = ApiUrl + "/SaveEventsChart";
@@ -85,7 +85,7 @@ public class URL
     public readonly string DeleteVisitorByVisitorId;
     public readonly string AddTaskApi;
     public readonly string AddVisitorApi;
-    public static readonly string AddVisitorApiStable = "https://vedastro.org/api/addvisitor";
+    public static readonly string AddVisitorApiStable = "https://api.vedastro.org/addvisitor";
 
     public readonly string GetPersonList;
     public readonly string GetPersonApi;

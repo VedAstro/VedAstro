@@ -8,7 +8,7 @@ namespace API
     public static class OpenAPI
     {
         /// <summary>
-        /// https://www.vedastro.org/api/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
+        /// https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
         /// </summary>
         [Function(nameof(OneProperty))]
         public static async Task<HttpResponseData> OneProperty([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/{propertyName}")] HttpRequestData incomingRequest, string locationName, string hhmmStr, string dateStr, string monthStr, string yearStr, string offsetStr, string planetNameStr, string propertyName)
@@ -49,7 +49,7 @@ namespace API
 
         /// <summary>
         /// Here comes calls that with 2 level properties like planet strength
-        /// https://www.vedastro.org/api/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Strength/Temporal
+        /// https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Strength/Temporal
         /// </summary>
         [Function(nameof(TwoProperty))]
         public static async Task<HttpResponseData> TwoProperty([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/{propertyName1}/{propertyName2}")] HttpRequestData incomingRequest, string locationName, string hhmmStr, string dateStr, string monthStr, string yearStr, string offsetStr, string planetNameStr, string propertyName1, string propertyName2)

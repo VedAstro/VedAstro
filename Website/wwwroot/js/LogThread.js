@@ -17,7 +17,7 @@ self.addEventListener('message', async function (e) {
 async function addVisitor(payloadXml) {
 
     console.log("LogThread > Logging");
-    var response = await fetch("https://vedastro.org/api/addvisitor", {
+    var response = await fetch("https://api.vedastro.org/addvisitor", {
         "headers": { "accept": "*/*", "Connection": "keep-alive", "Content-Type": "text/plain" },
         "body": payloadXml,
         "method": "POST",

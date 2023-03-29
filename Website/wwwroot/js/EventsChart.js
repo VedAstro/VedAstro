@@ -683,7 +683,10 @@ class EventsChart {
 
         var payload = `<Root><PersonId>${chartData.personId}</PersonId><TimePreset>${chartData.timePreset}</TimePreset><EventPreset>${chartData.eventPreset}</EventPreset><Timezone>${chartData.timezone}</Timezone><MaxWidth>${chartData.maxWidth}</MaxWidth></Root>`;
 
-        var response = await window.fetch("https://vedastro.org/api/geteventscharteasy", {
+        //TODO special URL for chart because timeout Azure CDN timeout >30s
+        //GetEventsChartDirect = "https://vedastroapi.azurewebsites.net/api/geteventschart"; 
+
+        var response = await window.fetch("https://vedastroapi.azurewebsites.net/api/geteventscharteasy", {
             "headers": { "accept": "*/*", "Connection": "keep-alive", "Content-Type": "text/plain" },
             "body": payload,
             "method": "POST",

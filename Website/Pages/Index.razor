@@ -62,7 +62,7 @@
                 <img src="images/dasa-card.jpg" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">Life Predictor</h5>
-       
+
                     <p class="card-text">Know good and bad periods of your life years ahead. Dasa &amp; Gochara</p>
                 </div>
             </div>
@@ -103,27 +103,26 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <h3 class="pb-2 border-bottom mt-5">Blog Articles</h3>
-    <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <img src="images/why-vedic.webp" class="img-fluid rounded-start">
-            </div>
-            <div class="col-md-8" @onclick="() => _navigation.NavigateTo(PageRoute.BlogWhyVedic)" style="cursor: pointer;">
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.BirthTimeFinder)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/birth-time-finder-card.jpg" class="card-img-top">
                 <div class="card-body">
-                    <h5 class="card-title">Why Not Mayan Astrology?</h5>
-                    <p class="card-text">
-                        Wise man of all ages across the world have spoken of astrology in one form or the other.
-                        As such Astrology does not belong to one man, creed or country. It is the knowledge of the ages.
-                        So this begs the question, "Why 'Vedic' Astrology?...
-                    </p>
-                    @*<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>*@
+                    <h5 class="card-title">Birth Time Finder</h5>
+                    <p class="card-text">Find forgotten or lost birth time using astrological methods. </p>
+                </div>
+            </div>
+        </div>
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.SunRiseSetTime)" style="cursor: pointer;" class="col">
+            <div class="card">
+                <img src="images/sunrise-card.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">Sunrise Time</h5>
+                    <p class="card-text">Time when Sun's disc center meets the horizon</p>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 
@@ -134,27 +133,3 @@
 
 }
 
-
-@*
-    We're always looking to add more features and tools that will be helpful to people.
-    So if you got idea for a feature share it here.
-
-    This website is under active development, if you spot a bug or spelling mistake. Report it here.
-
-    <div class="p-5 mb-4 bg-light rounded-3">
-    <div class="container-fluid py-5">
-    <h1 class="display-5 fw-bold">VedAstro</h1>
-    <p class="col-md-8 fs-4">
-    A non-profit, open source project to make <br\> <span class="fw-bold">Vedic Astrology</span> easily available to all.
-    </p>
-    <button class="btn btn-primary btn-lg" type="button">Example button</button>
-    </div>
-    </div>
-
-
-    <p>
-    </p>
-
-    <div class="container">
-    </div>
-*@

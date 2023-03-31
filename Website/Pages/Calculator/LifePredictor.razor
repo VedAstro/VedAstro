@@ -1,11 +1,11 @@
-@attribute [Route(PageRoute.Dasa)]
+@attribute [Route(PageRoute.LifePredictor)]
 @using VedAstro.Library
 
 <PageTitle>@_pageTitle</PageTitle>
-<PageTop Title="Dasa and Bhukti" IconName="gis:map-time">
+<PageTop Title="Life Predictor" IconName="gis:map-time">
     <Description>
-        Dasas are major periods in which the indications of the planets are realised.
-        Know good and bad periods of your life years ahead.
+        Each life is a story and using advanced computation algorithms fused with ancient vedic astrology this accurate chart is created.
+        It's a digital snapshot of a human's life.
     </Description>
     <ButtonsRow>
         <IconButton SmallSize="true" IconName="fluent:person-add-16-filled" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
@@ -13,6 +13,9 @@
     </ButtonsRow>
 </PageTop>
 
+@*Dasas are major periods in which the indications of the planets are realised.
+Know good and bad periods of your life years ahead.
+*@
 @*TAB BUTTONS*@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
@@ -38,10 +41,11 @@
 @*TAB CONTENT*@
 @*all border except top*@
 <div class="tab-content border" id="myTabContent">
+
     @*EASY*@
     <div class="tab-pane fade show active" id="easy" role="tabpanel" aria-labelledby="easy-tab">
         <div class="vstack gap-3 p-3">
-            <PeopleSelectorBox @ref="_easyPeopleSelectorBox" />
+            <PeopleSelectorBox @ref="_easyPeopleSelectorBox"/>
 
             <div>
                 <label class="form-label">Time Range<HelpBox SmallIcon="true" HelpText="@HelpText.DasaTimeRange"></HelpBox></label>
@@ -61,21 +65,23 @@
 
         </div>
     </div>
+
     @*ADVANCED*@
     <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
         <div class="vstack gap-3 p-3">
             @*PERSON SELECTOR
             note: selector placed here because multiple components use it
             *@
-            <PeopleSelectorBox @ref="_peopleSelectorBox" />
-            <MonthYearSelectorBox LabelText="Start" @ref="_startTimeSelector" />
-            <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
+            <PeopleSelectorBox @ref="_peopleSelectorBox"/>
+            <MonthYearSelectorBox LabelText="Start" @ref="_startTimeSelector"/>
+            <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector"/>
 
             @*CALCULATE BTN*@
             <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"></IconButton>
 
         </div>
     </div>
+
     @*SAVED*@
     <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
         <div class="vstack gap-3 p-3">

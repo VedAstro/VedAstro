@@ -43,7 +43,7 @@
 
         //CALCULATORS
         public const string CalculatorList = "Calculator/";
-        public const string Dasa = "Calculator/Dasa";
+        public const string LifePredictor = "Calculator/LifePredictor";
         public const string SunRiseSetTime = "Calculator/SunRiseSetTime";
         public const string BirthTimeFinder = "Calculator/BirthTimeFinder";
         public const string LocalMeanTime = "Calculator/LocalMeanTime";

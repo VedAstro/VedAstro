@@ -41,7 +41,7 @@ namespace Website
         /// loaded in main layout
         /// </summary>
         public static List<XElement>? HoroscopeDataList { get; set; }
-        
+
         public static Stream? HoroscopeDataListStream { get; set; }
 
         /// <summary>
@@ -57,13 +57,13 @@ namespace Website
         public static List<XElement> ReferenceList { get; set; }
 
         public static SearchResult SearchPage { get; set; }
-        
+
         /// <summary>
         /// Note access via try get person list
         /// To clear & get fresh on next call set null
         /// </summary>
         public static List<Person>? PersonList { get; set; }
-        
+
         /// <summary>
         /// If true new Visitor is first visit (theoretically)
         /// Sets true on every page refresh
@@ -73,7 +73,7 @@ namespace Website
         /// <summary>
         /// Origin URL set by MainLayout
         /// </summary>
-        public static Task<string> OriginUrl =>  JsRuntime.GetOriginUrl();
+        public static Task<string> OriginUrl => JsRuntime.GetOriginUrl();
 
         /// <summary>
         /// Gets latest current page URL using JS
@@ -127,10 +127,25 @@ namespace Website
         /// <summary>
         /// Hard coded max width used in pages 
         /// </summary>
-        public const string MaxWidth = "693px";
+        public static string MaxWidth
+        {
+            get
+            {
+                //dynamically calculate
+                var beautyWidth = ContentWidth / GoldenRatio;
+                var rounded = Math.Round(beautyWidth, 1);
+                return $"{rounded}px";
+            }
+        }
 
         public const string MaxContentWidthPx = "443px";
-        
+
+        /// <summary>
+        /// used for dynamic design layout
+        /// </summary>
+        public const double GoldenRatio = 1.61803;
+        public const double ContentWidth = 1080; //page on the content si
+
         /// <summary>
         /// Base address currently used by App,
         /// could be http://localhost / www.vedastro.org / vedastro.org / beta.vedastro.org

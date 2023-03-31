@@ -4,18 +4,29 @@
 <PageTitle>Birth Time Finder</PageTitle>
 <PageTop Title="Birth Time Finder" IconName="fa-solid:history">
     <Description>
-        Find forgotten or lost birth time using astrological methods.
-        Not all birth time is recorded accurately at birth, use this tool to find out your correct birth time.
+        Find forgotten or lost birth time using advanced algorithms.
+        Currently under development. Help out if you can.
     </Description>
-    <ButtonsRow>
-        <IconButton SmallSize="true" IconName="iconoir:donate" ButtonText="Fund" OnClickCallback="() => _navigation.NavigateTo(PageRoute.Donate)"></IconButton>
-    </ButtonsRow>
 </PageTop>
 
-<h4>Calculator is under development.</h4>
-<h4>
-    <a href="@PageRoute.Donate" class="link-primary">Fund</a> this calculator for faster development.
-</h4>
+<a href="https://ko-fi.com/vedastro" target="_blank">
+    <img src="images/birth-time-finder-donate-progress-card-kofi.png" class="img-fluid" alt="...">
+</a>
+
+<hr />
+<h3 class="fw-bold">Theory</h3>
+<p class="text-justify mb-5" style="max-width:@AppData.MaxContentWidthPx">
+    One may wonder how this is even possible.
+    Well the answer is simple we do a "dictionary attack" on time.
+    To put it plainly, we generate every possible human birth and
+    check which life snapshot matches your life the closest.
+    <a href="https://en.wikipedia.org/wiki/Nadi_astrology" target="_blank">Ancient Nadi</a>
+    palm leafs is a perfect example that this
+    methodology actually works in practice.
+    This is only theory atm, much remains to be done!
+    Checkout our GitHub progress on this <a href="https://github.com/VedAstro/VedAstro/issues/57" target="_blank">calculator</a>.
+</p>
+
 
 
 @code {

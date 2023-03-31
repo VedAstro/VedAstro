@@ -11,15 +11,18 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using static System.Net.WebRequestMethods;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static VedAstro.Library.PlanetName;
 
 namespace VedAstro.Library
@@ -986,6 +989,43 @@ namespace VedAstro.Library
             }
         }
 
+
+        /// <summary>
+        /// Given a parsed XML element will convert to Json string
+        /// Note:
+        /// - this light weight only uses Newtownsoft
+        /// - Newtownsoft here because the converter is better than .net's
+        /// </summary>
+        public static string XmlToJsonString(XElement xElement)
+        {
+            //no XML indent
+            var finalXml = xElement.ToString(SaveOptions.DisableFormatting);
+
+            //convert to JSON
+            XmlDocument doc = new XmlDocument(); //NOTE: different xDOC from .Net's
+            doc.LoadXml(finalXml);
+
+            string jsonText = JsonConvert.SerializeXmlNode(doc);
+
+            return jsonText;
+        }
+
+        /// <summary>
+        /// Parses from XML > string > .Net JSON
+        /// NOTE:
+        /// - compute heavier than just string, use wisely
+        /// </summary>
+        public static JsonElement XmlToJson(XElement xElement)
+        {
+            //convert xml to JSON string
+            var jsonStr = XmlToJsonString(xElement);
+
+            //convert string 
+            using JsonDocument doc = JsonDocument.Parse(jsonStr);
+            JsonElement root = doc.RootElement;
+
+            return root;
+        }
     }
 
 }

@@ -26,7 +26,7 @@
             <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white"><SideBarButtons /></div>
 
             <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
-            <div class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px;">
+            <div @onclick="OnClickStamp" class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px;">
                 <div class="hstack gap-1">
                     <span class="iconify" data-icon="ion:earth" data-width="10"></span>
                     <span>Made on Earth</span>
@@ -201,7 +201,21 @@
     private async Task OnClickSearchIcon() => await PerformSearch();
 
 
+    private async Task OnClickStamp()
+    {
+        //count click
+        AppData.StampClickCount++;
 
+        switch (AppData.StampClickCount)
+        {
+            case 2: await _jsRuntime.ShowAlert("success", $"You clicked this 2x times, why?", true); break;
+            case 3: await _jsRuntime.ShowAlert("success", $"Stop clicking! There is no cake here.", true); break;
+            case 4: _navigation.NavigateTo(PageRoute.EasterEgg, true); break;
+                
+        }
+
+      
+    }
 }
 
 

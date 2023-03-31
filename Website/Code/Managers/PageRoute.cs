@@ -88,5 +88,8 @@
 
         //LINKS
         public const string BlogWhyVedic = "/Blog/WhyVedic";
+
+        public const string EasterEgg = "data/EasterEgg.txt";
+
     }
 }

@@ -154,6 +154,11 @@ namespace Website
 
         private static IJSRuntime _jsRuntime;
 
+        /// <summary>
+        /// Counts the number of times the stamp was clicked
+        /// </summary>
+        public static int StampClickCount;
+
 
         /// <summary>
         /// if data already loaded then return the that one,

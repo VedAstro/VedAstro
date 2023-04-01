@@ -83,6 +83,7 @@
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
         public const string About = "/About";
         public const string Contact = "/Contact";
+        public const string MadeOnEarth = "/MadeOnEarth";
         public const string FeatureList = "/FeatureList";
         public const string Home = "/";
 

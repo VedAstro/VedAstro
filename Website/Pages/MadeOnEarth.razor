@@ -1,33 +1,46 @@
-﻿
+﻿@attribute [Route(PageRoute.MadeOnEarth)]
+
 <PageTitle>Made On Earth</PageTitle>
 
-<PageTop Title="Made On Earth Movement" IconName="akar-icons:info" >
-    <Description></Description>
+@*<PageTop Title="Made On Earth" IconName="ph:hash-bold">
 </PageTop>
+*@
+
+<div style="max-width:@AppData.WidgetWidthPx">
+    
+    <img src="images/made-on-earth.jpg" width="@AppData.WidgetWidthPx" class="img-thumbnail" alt="...">
+
+    <figure class="text-center mt-1" style="max-width:@AppData.WidgetWidthPx">
+        <blockquote class="blockquote">
+            <p>There is not a single person in the world who could make a pencil.</p>
+        </blockquote>
+        <figcaption class="blockquote-footer">
+            Milton Freedman <cite title="Source Title">Nobel Prize 76'</cite>
+        </figcaption>
+    </figure>
 
 
-<img src="images/made-on-earth.jpg" class="img-fluid" alt="...">
+
+    <h4 class="fw-bold text-center mt-4">Made On Earth Movement</h4>
 
 
-<div class="container gap-3">
+    <p class="text-justify mt-3" >
+        Everywhere on so many things we see "Made in USA", "Made in Great Britain", "Made in China", "Made in Sweden",
+        made here &amp; made there. I would love to put such a label on this project, but where to begin?
+    </p>
 
-    <p class="text-justify" style="max-width:@AppData.WidgetWidthPx">
-        Everywhere on so many goods &amp; services we see "Made in USA", "Made in Great Britain", "Made in China", "Made in Sweden",
-        made here &amp; made there.
-        I would love to put such a label on this project, but I would not know where to start.
-        As Milton Freedman put it, even to manufacture the humble "pencil" it takes the accumulated
+    <p class="text-justify" style="max-width: @AppData.WidgetWidthPx">
+        As the genius <a href="https://youtu.be/67tHtpac5ws" target="_blank">M. Freedman put it</a>, even to manufacture a humble <strong>"pencil"</strong> it takes the accumulated
         might of industry spread across the earth. From graphite mines in Brazil to rubber
         trees in Indonesia, just to make a pencil!
-
-        The point we're trying to make is that this project is only possible because of people and
-        resources from many places spread across the earth and time.
-        
-        As such the only REAL label for this project is, proudly "Made on Earth"
     </p>
-    
+    <p class="text-justify" style="max-width:@AppData.WidgetWidthPx; margin-bottom: 150px;">
+        The point we're trying to make here is this. VedAstro is only possible because of people and
+        resources from many countries spread across the earth and time.
+        As such, the only valid label for this project is, <strong>"Made on Earth"</strong>.
+    </p>
 
 </div>
-
 
 
 @code {

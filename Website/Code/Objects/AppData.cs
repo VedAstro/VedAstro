@@ -1,3 +1,4 @@
+﻿using System.Globalization;
 using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.AspNetCore.Components;
@@ -124,27 +125,23 @@ namespace Website
         public static HttpClient HttpClient { get; set; }
 
 
-        /// <summary>
-        /// Hard coded max width used in pages 
-        /// </summary>
-        public static string MaxWidth
-        {
-            get
-            {
-                //dynamically calculate
-                var beautyWidth = ContentWidth / GoldenRatio;
-                var rounded = Math.Round(beautyWidth, 1);
-                return $"{rounded}px";
-            }
-        }
-
-        public const string MaxContentWidthPx = "443px";
+        
+        //█░░ ▄▀█ █▄█ █▀█ █░█ ▀█▀   █▀ █ ▀█ █▀▀
+        //█▄▄ █▀█ ░█░ █▄█ █▄█ ░█░   ▄█ █ █▄ ██▄
+        //Content > Component > Widget
 
         /// <summary>
         /// used for dynamic design layout
         /// </summary>
         public const double GoldenRatio = 1.61803;
-        public const double ContentWidth = 1080; //page on the content si
+        public const double ContentWidth = 1080; //page content 
+        public static string ContentWidthPx => $"{ContentWidth}px";
+        public static string ComponentWidthPx => $"{ComponentWidth}px";
+        public static double ComponentWidth => Math.Round(ContentWidth / GoldenRatio, 1);
+        public static string WidgetWidthPx => $"{WidgetWidth}px";
+        public static double WidgetWidth => Math.Round((ComponentWidth / GoldenRatio));
+
+
 
         /// <summary>
         /// Base address currently used by App,

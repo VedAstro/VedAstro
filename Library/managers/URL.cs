@@ -8,9 +8,9 @@ namespace VedAstro.Library;
 public class URL
 {
     //keep inside
-    public const string ApiBeta = "https://beta.api.vedastro.org/";
+    public const string ApiBeta = "https://beta.api.vedastro.org";
     public const string ApiStable = "https://api.vedastro.org";
-    public const string WebBeta = "https://beta.vedastro.org/";
+    public const string WebBeta = "https://beta.vedastro.org";
     public const string WebStable = "https://vedastro.org";
 
     /// <summary>

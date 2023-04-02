@@ -79,6 +79,7 @@
 
         //LITTLE PAGES
         public const string VisitorList = "/VisitorList";
+        public const string FAQ = "/FAQ";
         public const string TaskEditor = "/TaskEditor";
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";
         public const string About = "/About";

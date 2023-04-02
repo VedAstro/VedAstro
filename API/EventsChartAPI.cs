@@ -157,7 +157,7 @@ namespace API
                 }
 
                 //put all charts in 1 big container
-                var finalSvg = EventsChartManager.WrapSvgElements(combinedSvg, 800, chartYPosition, Tools.GenerateId());
+                var finalSvg = EventsChartManager.WrapSvgElements("MultipleDasa",combinedSvg, 800, chartYPosition, Tools.GenerateId());
 
 
                 //send image back to caller
@@ -288,7 +288,7 @@ namespace API
             try
             {
                 //get id that will be used find the person
-                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var chartId = requestData.Value;
 
                 //get the saved chart record by id
@@ -405,7 +405,7 @@ namespace API
             try
             {
                 //get id that will be used find the person
-                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var chartId = requestData.Value;
 
                 //get the saved chart record by id
@@ -521,7 +521,7 @@ namespace API
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var chartId = requestData.Value;
 
 
@@ -572,7 +572,7 @@ namespace API
         private static async Task<Chart> GetEventReportSvgForIncomingRequest(HttpRequestData req, bool cacheEnable)
         {
             //get all the data needed out of the incoming request
-            var rootXml = await APITools.ExtractDataFromRequest(req);
+            var rootXml = await APITools.ExtractDataFromRequestXml(req);
             var personId = rootXml.Element("PersonId")?.Value;
             var eventTagListXml = rootXml.Element("EventTagList");
             var eventTags = EventTagExtensions.FromXmlList(eventTagListXml);
@@ -605,7 +605,7 @@ namespace API
         private static async Task<Chart> GetEventReportSvgForIncomingRequestEasy(HttpRequestData req)
         {
             //get all the data needed out of the incoming request
-            var rootXml = await APITools.ExtractDataFromRequest(req);
+            var rootXml = await APITools.ExtractDataFromRequestXml(req);
             var personId = rootXml.Element("PersonId")?.Value;
             var timePreset = rootXml.Element("TimePreset")?.Value;
             var eventPreset = rootXml.Element("EventPreset")?.Value;

@@ -22,7 +22,7 @@ namespace API
             {
                 //get new person data out of incoming request
                 //note: inside new person xml already contains user id
-                var newPersonXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var newPersonXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 
                 //add new person to main list
                 await APITools.AddXElementToXDocumentAzure(newPersonXml, APITools.PersonListFile, APITools.BlobContainerName);
@@ -54,7 +54,7 @@ namespace API
             {
                 //get new person data out of incoming request
                 //note: inside new person xml already contains user id
-                var rootXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var userId = rootXml.Element("UserId")?.Value;
                 var visitorId = rootXml.Element("VisitorId")?.Value ?? "";
 
@@ -98,7 +98,7 @@ namespace API
             try
             {
                 //get hash that will be used find the person
-                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var personId = requestData.Value;
 
                 //get the person record by hash
@@ -131,7 +131,7 @@ namespace API
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var updatedPersonXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var updatedPersonXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 
                 //save a copy of the original person record in recycle bin, just in-case accidental update
                 var personId = Person.FromXml(updatedPersonXml).Id;//does not change
@@ -170,7 +170,7 @@ namespace API
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var requestData = await APITools.ExtractDataFromRequest(incomingRequest);
+                var requestData = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var personId = requestData.Value;
 
                 //get the person record that needs to be deleted
@@ -209,7 +209,7 @@ namespace API
                 //TODO CHECK HERE FOR SAM ENTRY
 
                 //data out of request
-                var rootXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var userId = rootXml.Element("UserId")?.Value;
                 var visitorId = rootXml.Element("VisitorId")?.Value;
 

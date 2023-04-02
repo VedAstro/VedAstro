@@ -45,7 +45,7 @@ namespace API
             {
                 //get new message data out of incoming request
                 //note: inside new person xml already contains user id
-                var newMessageXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var newMessageXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 
                 //add new message to main list
                 await APITools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, APITools.BlobContainerName);

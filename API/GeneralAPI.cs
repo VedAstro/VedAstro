@@ -20,7 +20,7 @@ namespace API
             try
             {
                 //get person from request
-                var rootXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var personId = rootXml.Value;
 
                 var person = await APITools.GetPersonById(personId);

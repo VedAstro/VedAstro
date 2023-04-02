@@ -15,7 +15,7 @@ namespace API
             try
             {
                 //get new visitor data out of incoming request 
-                var newVisitorXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var newVisitorXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 
                 //add new visitor to main list
                 await APITools.AddXElementToXDocumentAzure(newVisitorXml, APITools.VisitorLogFile, APITools.BlobContainerName);
@@ -79,7 +79,7 @@ namespace API
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var userIdXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var userIdXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var userId = userIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
@@ -116,7 +116,7 @@ namespace API
             try
             {
                 //get unedited hash & updated person details from incoming request
-                var visitorIdXml = await APITools.ExtractDataFromRequest(incomingRequest);
+                var visitorIdXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var visitorId = visitorIdXml.Value;
 
                 //get all visitor elements that needs to be deleted

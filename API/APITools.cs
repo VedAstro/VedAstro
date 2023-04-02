@@ -234,16 +234,59 @@ namespace API
         }
 
 
-        public static async Task<XElement> ExtractDataFromRequest(HttpRequestData request)
+        public static async Task<XElement> ExtractDataFromRequestXml(HttpRequestData request)
         {
             //get xml string from caller
-            var xmlString = await request?.ReadAsStringAsync() ?? "<Empty/>";
+            var xmlString = (await request?.ReadAsStringAsync()) ?? "<Empty/>";
 
             //parse xml string
-            //todo an exception check here might be needed, json data might come here
             var xml = XElement.Parse(xmlString);
 
             return xml;
+        }
+
+
+
+        public static async Task<JsonElement> ExtractDataFromRequestJson(HttpRequestData request)
+        {
+
+
+            string jsonString = "";
+
+            try
+            {
+                //get raw string from caller
+                jsonString = (await request?.ReadAsStringAsync()) ?? @"{Root:""Empty""}";
+
+                using JsonDocument doc = JsonDocument.Parse(jsonString);
+                JsonElement root = doc.RootElement;
+
+                return root;
+            }
+            //todo better logging
+            catch (Exception e) { throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}"); }
+
+        }
+
+        /// <summary>
+        /// data received as json is converted to
+        /// </summary>
+        public static async Task<JsonDocument> ExtractDataFromRequestJsonToXml(HttpRequestData request)
+        {
+            string jsonString = "";
+
+            try
+            {
+                //get raw string from caller
+                jsonString = (await request?.ReadAsStringAsync()) ?? "{Root:\"Empty\"}";
+
+                var parsedJson = JsonDocument.Parse(jsonString);
+                return parsedJson;
+
+            }
+            //todo better logging
+            catch (Exception e) { throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}"); }
+
         }
 
         /// <summary>
@@ -471,7 +514,7 @@ namespace API
                 //if fail log it and return empty value so caller will know
                 await APILogger.Error(e);
                 return null;
-            } 
+            }
 
             //--------
             //do the finding

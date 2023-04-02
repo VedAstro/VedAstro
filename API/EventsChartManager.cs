@@ -132,7 +132,7 @@ namespace API
                 border = GetBorderSvg(timeSlices, verticalYAxis);
 
                 //note: if width & height not hard set, parent div clips it
-                var svgTotalHeight = verticalYAxis;
+                var svgTotalHeight = 333;//todo for now hard set, future use: verticalYAxis;
                 var svgStyle = $@"width:{svgTotalWidth}px;height:{svgTotalHeight}px;background:{svgBackgroundColor};";//end of style tag
                 svgHead = $"<svg class=\"EventChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
@@ -150,11 +150,10 @@ namespace API
         }
 
 
-
         //wraps a list of svg elements inside 1 main svg element
         //if width not set defaults to 1000px, and height to 1000px
         //todo temp who ever is calling can change
-        public static string WrapSvgElements(string combinedSvgString, int svgWidth, int svgTotalHeight, string randomId)
+        public static string WrapSvgElements(string svgClass, string combinedSvgString, int svgWidth, int svgTotalHeight, string randomId)
         {
 
             var svgBackgroundColor = "#f0f9ff";
@@ -164,7 +163,7 @@ namespace API
 
             //create the final svg that will be displayed
             var svgTotalWidth = svgWidth + 10; //add little for wiggle room
-            var svgBody = $"<svg class=\"EventChartHolder\" id=\"{randomId}\"" +
+            var svgBody = $"<svg class=\"{svgClass}\" id=\"{randomId}\"" +
                           //$" width=\"100%\"" +
                           //$" height=\"100%\"" +
                           $" style=\"" +

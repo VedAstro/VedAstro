@@ -24,6 +24,7 @@ using Newtonsoft.Json;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static VedAstro.Library.PlanetName;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace VedAstro.Library
 {
@@ -993,6 +994,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Given a parsed XML element will convert to Json string
         /// Note:
+        /// - auto removes Root from XML (since XML needs it & JSON does not)
         /// - this light weight only uses Newtownsoft
         /// - Newtownsoft here because the converter is better than .net's
         /// </summary>
@@ -1005,7 +1007,8 @@ namespace VedAstro.Library
             XmlDocument doc = new XmlDocument(); //NOTE: different xDOC from .Net's
             doc.LoadXml(finalXml);
 
-            string jsonText = JsonConvert.SerializeXmlNode(doc);
+            //removes "Root" from xml
+            string jsonText = JsonConvert.SerializeXmlNode(doc, Formatting.None, true);
 
             return jsonText;
         }

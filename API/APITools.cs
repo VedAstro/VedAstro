@@ -12,6 +12,9 @@ using Azure.Storage.Blobs.Models;
 using VedAstro.Library;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.Azure.Functions.Worker.Http;
+using System.Text.Json;
+using System.Xml;
+using Newtonsoft.Json;
 
 namespace API
 {
@@ -52,10 +55,28 @@ namespace API
         /// - .ToString(SaveOptions.DisableFormatting); to remove make xml indented
         /// </summary>
         public static HttpResponseData PassMessage(HttpRequestData req) => PassMessage("", req);
-        public static HttpResponseData PassMessage(object payload, HttpRequestData req)
+
+        /// <summary>
+        /// we specify xml catch error at compile time, likely to fail 
+        /// </summary>
+        public static HttpResponseData PassMessage(XElement payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            response.Headers.Add("Content-Type", "text/xml"); //todo check if charset is needed
+
+            //wrap data in nice tag
+            var finalXml = new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
+
+            //place in response body
+            response.WriteString(finalXml);
+
+            return response;
+        }
+
+        public static HttpResponseData PassMessage(string payload, HttpRequestData req)
+        {
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/xml"); //todo check if charset is needed
 
             //wrap data in nice tag
             var finalXml = new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
@@ -67,12 +88,38 @@ namespace API
         }
 
 
+        /// <summary>
+        /// data comes in as XML should leave as JSON ready for sending to client via HTTP
+        /// </summary>
+        public static HttpResponseData MessageJson(string statusResult, XElement payload, HttpRequestData req)
+        {
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "application/json");
+
+            //wrap data in nice tag
+            var xElement = new XElement("Root", new XElement("Status", statusResult), new XElement("Payload", payload));
+
+            //convert XML to Json text
+            string jsonText = Tools.XmlToJsonString(xElement);
+
+            //place in response body
+            response.WriteString(jsonText);
+
+            return response;
+        }
+
+        public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) => MessageJson("Fail", payload, req);
+        public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
+        
+        public static HttpResponseData PassMessageJson(XElement payload, HttpRequestData req) => MessageJson("Pass", payload, req);
+
+
         //public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
         //public static OkObjectResult FailMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payloadXml)).ToString());
         public static HttpResponseData FailMessage(object payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            response.Headers.Add("Content-Type", "text/plain");
 
             //wrap data in nice tag
             var finalXml = new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
@@ -258,7 +305,7 @@ namespace API
                 //get raw string from caller
                 jsonString = (await request?.ReadAsStringAsync()) ?? @"{Root:""Empty""}";
 
-                using JsonDocument doc = JsonDocument.Parse(jsonString);
+                JsonDocument doc = JsonDocument.Parse(jsonString);
                 JsonElement root = doc.RootElement;
 
                 return root;

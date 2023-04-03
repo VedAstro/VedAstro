@@ -10,6 +10,8 @@ namespace VedAstro.Library.Compatibility
     /// </summary>
     public class CompatibilityPrediction : IToXml
     {
+        public static CompatibilityPrediction Empty = new CompatibilityPrediction(MatchPredictionName.Empty, EventNature.Empty, "Empty", "Empty","Empty", "Empty");
+
         //DATA FIELDS
         private string _info = "";
         private string _maleInfo = "";
@@ -24,13 +26,9 @@ namespace VedAstro.Library.Compatibility
             FemaleInfo = femaleInfo;
             Info = info;
             Description = description;
-
         }
 
-        public CompatibilityPrediction()
-        {
-            
-        }
+        public CompatibilityPrediction() { }
 
 
         //PUBLIC PROPERTIES
@@ -111,7 +109,7 @@ namespace VedAstro.Library.Compatibility
         public XElement ToXml()
         {
             //create root tag to hold data
-            var predictionXml = new XElement("Prediction");
+            var predictionXml = new XElement(nameof(CompatibilityPrediction));
             var name = new XElement("Name", this.Name);
             var nature = new XElement("Nature", this.Nature);
             var maleInfo = new XElement("MaleInfo", this.MaleInfo);

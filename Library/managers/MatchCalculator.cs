@@ -18,44 +18,75 @@ namespace VedAstro.Library
         /// </summary>
         public static CompatibilityReport GetCompatibilityReport(Person male, Person female)
         {
+            //calculators are designed to fail 1st,
+            //as such if they fail don't shut down the whole show!
+
+            //list all calculators here, to be processed one by one
+            List<Func<Person, Person, CompatibilityPrediction>> calculatorList = new List<Func<Person, Person, CompatibilityPrediction>>()
+            {
+                MatchCalculator.GrahaMaitram, //5
+                MatchCalculator.Rajju,
+                MatchCalculator.NadiKuta, //8
+                MatchCalculator.VasyaKuta, //2
+                MatchCalculator.DinaKuta, //3
+                MatchCalculator.GunaKuta,//6
+                MatchCalculator.Mahendra,
+                MatchCalculator.StreeDeergha,
+                MatchCalculator.RasiKuta,//7
+                MatchCalculator.VedhaKuta,
+                MatchCalculator.Varna, //1
+                MatchCalculator.YoniKuta,//4
+                MatchCalculator.LagnaAndHouse7Good,
+                MatchCalculator.KujaDosa,
+                MatchCalculator.BadConstellations,
+                MatchCalculator.SexEnergyCompatibility
+            };
+
+            //place to put results
+            List<CompatibilityPrediction> compatibilityPredictions = new List<CompatibilityPrediction>();
+
+            //now calculate one by one safely
+            foreach (var calculator in calculatorList)
+            {
+                CompatibilityPrediction prediction;
+
+                try
+                {
+                    prediction = calculator(male, female);
+                }
+                catch (Exception e)
+                {
+                    //log error
+                    LibLogger.Error(e, $"Male:{male.Name} Female:{female.Name}");
+
+                    //return empty
+                    prediction = CompatibilityPrediction.Empty; //default empty
+                }
+
+                //add to return list
+                compatibilityPredictions.Add(prediction);
+            }
 
             var report = new CompatibilityReport
             {
                 Male = male,
                 Female = female,
                 //do the calculations & add results to a list
-                PredictionList = new List<CompatibilityPrediction>(){
-                    MatchCalculator.GrahaMaitram(male, female), //5
-                    MatchCalculator.Rajju(male, female),
-                    MatchCalculator.NadiKuta(male, female), //8
-                    MatchCalculator.VasyaKuta(male, female), //2
-                    MatchCalculator.DinaKuta(male, female), //3
-                    MatchCalculator.GunaKuta(male, female),//6
-                    MatchCalculator.Mahendra(male, female),
-                    MatchCalculator.StreeDeergha(male, female),
-                    MatchCalculator.RasiKuta(male, female),//7
-                    MatchCalculator.VedhaKuta(male, female),
-                    MatchCalculator.Varna(male, female), //1
-                    MatchCalculator.YoniKuta(male, female),//4
-                    MatchCalculator.LagnaAndHouse7Good(male, female),
-                    MatchCalculator.KujaDosa(male, female),
-                    MatchCalculator.BadConstellations(male, female),
-                    MatchCalculator.SexEnergyCompatibility(male, female)
-                }
+                PredictionList = compatibilityPredictions
             };
 
             //count the total points
-            calculateTotalPoints(ref report);
+            CalculateTotalPoints(ref report);
 
             //check results for exceptions
-            handleExceptions(ref report);
+            HandleExceptions(ref report);
 
             return report;
 
             //FUNCTIONS
 
             //checks & modifies results for exceptions 
-            void handleExceptions(ref CompatibilityReport report)
+            void HandleExceptions(ref CompatibilityReport report)
             {
 
                 var list = report.PredictionList;
@@ -191,7 +222,7 @@ namespace VedAstro.Library
 
             //Kutas analysis consist of analyzing 12 Factors.Every factor contributes
             //some points, toward a maximum total score of 36 points.
-            void calculateTotalPoints(ref CompatibilityReport report)
+            void CalculateTotalPoints(ref CompatibilityReport report)
             {
 
                 //count points total 36 points
@@ -245,7 +276,6 @@ namespace VedAstro.Library
             }
 
         }
-
 
         public static CompatibilityPrediction Mahendra(Person male, Person female)
         {

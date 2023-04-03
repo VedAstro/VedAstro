@@ -120,14 +120,18 @@ Show name of planet motion in Horoscope page (retrograde, direct, stationary) | 
  -->
 
 
-# Other Cool Projects 😎
+# 😎 Other Cool Projects
 - [VedicFeed](https://ask.vedicfeed.com) : AI Powered Astrologer
 
 <hr>
 
-# Project Architecture 🔩
-Key design notes to understand the internals of the program better during development
+# 👪 Join our family
+We're always looking for somebody to write docs, edit code, raise funds or help out in another ways.
+We pay volunteers with the money we receive from donations to compensate for their time spent.
+Drop us a mail, to get started.
 
+# ⚙️ Project Architecture
+Key design notes to understand the internals of the program better during development
 
 ## Core Function Explained
 The main part of the program is the prediction/event generator.

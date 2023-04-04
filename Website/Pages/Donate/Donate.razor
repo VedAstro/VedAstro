@@ -1,4 +1,5 @@
-﻿@attribute [Route(PageRoute.Donate)]
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.Donate)]
 
 <PageTitle>Donate</PageTitle>
 
@@ -28,35 +29,123 @@
 <hr/>
 
 
+<div style="max-width:@GR.W667px;">
+    <h4 class="fw-bold">Why Donate?</h4>
+    <p class="text-justify" >
+        Donations help to run the web servers 24/7 &amp; to continually improve the project.
+    </p>
 
+    <h4 class="fw-bold">Transparent Donations</h4>
+    <p class="text-justify">
+        Know exactly where your money is going.
+        We try to keep the fund flow as transparent as possible.
+        That's why you can choose to sponsor a specific thing
+        like domain fees or hosting costs. Leave your choice in the message box.
+    </p>
 
-<h4 class="fw-bold">Why Donate?</h4>
-<p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
-    Donations help to run the web servers 24/7 &amp; to continually improve the project.
-</p>
+    <h4 class="fw-bold"><Icon IconName="emojione:convenience-store" /> Hosting Costs</h4>
+    <p class="text-justify">
+        @*<Icon IconName="emojione:convenience-store" />*@
+        1st priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
+        as a Static Web App which reduces running costs, but it comes with minor reliability issues.
+        With support from users we hope to diversify the hosting platform for stable & reliable service anywhere in the world.
+    </p>
 
-<h4 class="fw-bold">Transparent Donations</h4>
-<p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
-    Know exactly where your money is going.
-    We try to keep the fund flow as transparent as possible.
-    That's why you can choose to sponsor a specific thing
-    like domain fees or hosting costs. Leave your choice in the message box.
-</p>
+    <h4 class="fw-bold">Programmer Costs</h4>
+    <p class="text-justify">
+        As of December 2022 more than <a target="_blank" rel="noopener noreferrer" href="https://github.com/VedAstro/VedAstro/discussions/4" class="link-primary fw-bold">88,000 lines of code</a> was written for this project not including documentation.
+        That's an impressive number. The more code there is, the more testing &amp; debugging that needs to be done. As such more developer/programmer work hours are required.
+        Your donations go a long way to help pay for this expenses.
+    </p>
 
-<h4 class="fw-bold">Hosting Costs</h4>
-<p class="text-justify" style="max-width: @AppData.ComponentWidthPx;">
-    @*<Icon IconName="emojione:convenience-store" />*@
-    1st priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
-    as a Static Web App which reduces running costs, but it comes with minor reliability issues.
-    With support from users we hope to diversify the hosting platform for stable & reliable service anywhere in the world.
-</p>
+</div>
+<div style="max-width: @GR.W667px;">
+    <style>
+        img {
+            max-width: 167px;
+        }
+    </style>
 
-<h4 class="fw-bold">Programmer Costs</h4>
-<p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
-    As of December 2022 more than <a target="_blank" rel="noopener noreferrer" href="https://github.com/VedAstro/VedAstro/discussions/4" class="link-primary fw-bold">88,000 lines of code</a> was written for this project not including documentation.
-    That's an impressive number. The more code there is, the more testing &amp; debugging that needs to be done. As such more developer/programmer work hours are required.
-    Your donations go a long way to help pay for this expenses.
-</p>
+    <hr class="mt-4 mb-4" />
+    <h4 class="fw-bold mb-3">Crypto Geeks</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @*<div class="col">
+            <div class="card text-center">
+                <img src="images/patreon-logo.jpg" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+
+                        ButtonText="Patreon" OnClickCallback="@(() => _navigation.NavigateTo(URL.PatreonPage))" />
+                    </h5>
+                    <p class="card-text">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <img src="images/ko-fi-logo.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <IconButton ButtonText="Ko-fi" OnClickCallback="@(() => _navigation.NavigateTo(URL.KoFiPage))" />
+                    </h5>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <img src="images/paypal-logo.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <IconButton ButtonText="PayPal" OnClickCallback="@(() => _navigation.NavigateTo(URL.PaypalMePage))" />
+                    </h5>
+                    <p class="card-text">
+
+                    </p>
+                </div>
+            </div>
+        </div>*@
+        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Bitcoin"))">
+            <div class="card text-center">
+                <img src="images/luno-btc-donate.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span>
+                        Bitcoin
+                    </h5>
+                    <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
+                </div>
+            </div>
+        </div>
+        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Litecoin"))">
+            <div class="card text-center">
+                <img src="images/luno-ltc-donate.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span>
+                        Litecoin
+                    </h5>
+                    <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
+                </div>
+            </div>
+        </div>
+        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Ethereum"))">
+            <div class="card text-center">
+                <img src="images/luno-eth-donate.png" class="card-img-top" style="align-self: center;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span>
+                        Ethereum
+                    </h5>
+                    <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 
 
 

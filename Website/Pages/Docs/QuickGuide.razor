@@ -8,15 +8,15 @@
         VedAstro is a WebApp designed to help people 
         use Vedic Astrology in their daily life.
     </Description>
-    <ButtonsRow>
+@*    <ButtonsRow>
         <IconButton IconName="akar-icons:chat-question" ButtonText="Ask Question" ClickUrl="@PageRoute.Contact"></IconButton>
     </ButtonsRow>
-</PageTop>
+*@</PageTop>
 
-<div>
+<div style="max-width:@GR.W667px;">
 
     <h4 class="fw-bold">How To Use?</h4>
-    <p class="text-justify gap-2" style="max-width:@AppData.ComponentWidthPx;">
+    <p class="text-justify gap-2" >
         <span class="fw-bold">Step 1:</span> Sign In, to save your data for later use<br/>
         <span class="fw-bold">Step 2:</span> Go to <a href="@PageRoute.PersonList" class="link-primary fw-bold">Person List</a>
                                             page and click "Add Person" (birth time &amp; place)<br/>
@@ -26,7 +26,7 @@
 
 
     <h4 class="fw-bold">What is a calculator?</h4>
-    <p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
+    <p class="text-justify">
         This project is a collection of Vedic astrological tools called calculators.There is a list of them in the home page.
         For example <span class="fw-bold">Match</span> is a calculator for marriage compatibility.
         <span class="fw-bold">Muhurtha</span> is used for good timing and using the <span class="fw-bold">Dasa</span> calculator
@@ -35,7 +35,7 @@
     </p>
 
    <h4 class="fw-bold">Unexpected errors?</h4>
-   <p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
+   <p class="text-justify" >
        Click &quot;Refresh&quot;, several times. This will clear the cache.
        Since there are new updates to the VedAstro WebApp almost <a target="_blank" rel="noopener noreferrer" href="https://github.com/gen-so/Genso.Astrology/commits/master" class="link-primary fw-bold">everyday!</a>
        The browser caches the old version, which causes errors
@@ -46,20 +46,20 @@
 
 
    <h4 class="fw-bold">Who is this for?</h4>
-    <p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
+    <p class="text-justify" >
         Both an average person and expert astrologer can find VedAstro useful. There are complex calculators 
         like Dasa that experts can use and there are easy to use calculators like Match that require 
         no astrological knowledge.
     </p>
 
-    <p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
+    <p class="text-justify">
         These calculators a constantly being improved. The ideal goal of this project is to make all Vedic Astrological 
         calculators easily usable by anybody. So if you find any of the calculator too difficult to use, 
         just leave a comment and it might be better the next time you visit.
     </p>
     
     <h4 class="fw-bold">Must I login to use?</h4>
-    <p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
+    <p class="text-justify" >
         @*No. VedAstro was designed with ease and speed in mind.So all tools are available 
         for use without login.But *@If you don't login, we can't save the data you add.
         For example, if you add a Person profile it will only be available the next time you 
@@ -69,7 +69,7 @@
     </p>
 
    <h4 class="fw-bold">Info For Coders</h4>
-    <p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
+    <p class="text-justify" >
         Under the hood, VedAstro is a hybrid Blazor WebAssembly + JS web application. 
         The cloud method of using VedAstro is the recommended way for most users. 
         But if you're feeling adventurous, try out VedAstro in Windows & API. 

@@ -10,7 +10,7 @@
 <div class="vstack mb-2">
     <h1 class="fw-bold"><span style="margin-top: -10px;" class="iconify" data-icon="@IconName" data-width="@IconSize"></span> @Title</h1>
     @*if no buttons row, then reduce margin bottom*@
-    <p class="fs-5 col-md-8 @(IsButtonsRow?"":"mb-0")" style="max-width: @AppData.ComponentWidthPx;">@Description</p>
+    <p class="fs-5 col-md-8 @(IsButtonsRow?"":"mb-0")" style="max-width: @GR.W667px;">@Description</p>
     @if (IsButtonsRow)
     {
         @*flex wrap needed to make button wrap nicely in mobile*@

@@ -7,38 +7,41 @@
     <Description>Funding from users like you is what keeps this project going.</Description>
 </PageTop>
 
-
-<h4 class="fw-bold">Where do donations go?</h4>
-<h5>Developers</h5>
-<p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
-    A major part of cost is developer salary.
-    A page like Match for example took 3 weeks of developer work time to build.
-    Cost of one developer work day is $20.
-    This means that Match calculator page cost $420 to develop.
-</p>
-<h5>Hosting</h5>
-<p class="text-justify" style="max-width:@AppData.ComponentWidthPx;">
-    Next priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
-    as a Static Web App which reduces running cost considerably.
-    We try our best to be transparent with the monetary flow so that
-    you know your money is spent to help the community.
-</p>
-@*<h6>Transparent Donations</h6>
+<div style="max-width:@GR.W667px;">
+    <h4 class="fw-bold">Where do donations go?</h4>
+    <h5>Developers</h5>
+    <p class="text-justify" >
+        A major part of cost is developer salary.
+        A page like Match for example took 3 weeks of developer work time to build.
+        Cost of one developer work day is $20.
+        This means that Match calculator page cost $420 to develop.
+    </p>
+    <h5>Hosting</h5>
+    <p class="text-justify" >
+        Next priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
+        as a Static Web App which reduces running cost considerably.
+        We try our best to be transparent with the monetary flow so that
+        you know your money is spent to help the community.
+    </p>
+    @*<h6>Transparent Donations</h6>
 <p class="text-justify" style="max-width:@AppData.MaxWidth;">
     Know exactly where your money is going.
     We try to keep the fund flow as transparent as possible.
     That's why you can choose to sponsor a specific thing.
     Where you know exactly what you're paying for.
 </p>*@
+</div>
 
-<style>
-    img {
-        max-width: 167px;
-    }
-</style>
 
-<div style="max-width:@AppData.ComponentWidthPx;">
-    <hr class="mt-4 mb-4" />
+
+<div style="max-width: @GR.W667px;">
+    <style>
+        img {
+            max-width: 167px;
+        }
+    </style>
+
+    <hr class="mt-4 mb-4"/>
     <h4 class="fw-bold mb-3">Donate Options</h4>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col">
@@ -46,7 +49,7 @@
                 <img src="images/patreon-logo.jpg" class="card-img-top" style="align-self: center;">
                 <div class="card-body">
                     <h5 class="card-title">
-                        
+
                         ButtonText="Patreon" OnClickCallback="@(() => _navigation.NavigateTo(URL.PatreonPage))" />
                     </h5>
                     <p class="card-text">
@@ -59,7 +62,7 @@
                 <img src="images/ko-fi-logo.png" class="card-img-top" style="align-self: center;">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <IconButton ButtonText="Ko-fi" OnClickCallback="@(() => _navigation.NavigateTo(URL.KoFiPage))" />
+                        <IconButton ButtonText="Ko-fi" OnClickCallback="@(() => _navigation.NavigateTo(URL.KoFiPage))"/>
                     </h5>
                     <p class="card-text"></p>
                 </div>
@@ -70,7 +73,7 @@
                 <img src="images/paypal-logo.png" class="card-img-top" style="align-self: center;">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <IconButton ButtonText="PayPal" OnClickCallback="@(() => _navigation.NavigateTo(URL.PaypalMePage))" />
+                        <IconButton ButtonText="PayPal" OnClickCallback="@(() => _navigation.NavigateTo(URL.PaypalMePage))"/>
                     </h5>
                     <p class="card-text">
 

@@ -1,20 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using VedAstro.Library;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.Azure.Functions.Worker.Http;
+using System.Net;
 using System.Text.Json;
-using System.Xml;
-using Newtonsoft.Json;
+using System.Xml.Linq;
+using VedAstro.Library;
 
 namespace API
 {
@@ -26,13 +16,12 @@ namespace API
         //█░█ ▄▀█ █▀█ █▀▄   █▀▄ ▄▀█ ▀█▀ ▄▀█
         //█▀█ █▀█ █▀▄ █▄▀   █▄▀ █▀█ ░█░ █▀█
 
-
         //hard coded links to files stored in storage
         //public const string ApiDataStorageContainer = "vedastro-site-data";
 
-
         //NAMES OF FILES IN AZURE STORAGE FOR ACCESS
         public const string LiveChartHtml = "LiveChart.html";
+
         public const string PersonListFile = "PersonList.xml";
         public const string VisitorLogFile = "VisitorLog.xml";
         public const string TaskListFile = "TaskList.xml";
@@ -49,7 +38,6 @@ namespace API
             Url = new URL(GetIsBetaRuntime());
         }
 
-
         /// <summary>
         /// Default success message sent to caller
         /// - .ToString(SaveOptions.DisableFormatting); to remove make xml indented
@@ -57,7 +45,7 @@ namespace API
         public static HttpResponseData PassMessage(HttpRequestData req) => PassMessage("", req);
 
         /// <summary>
-        /// we specify xml catch error at compile time, likely to fail 
+        /// we specify xml catch error at compile time, likely to fail
         /// </summary>
         public static HttpResponseData PassMessage(XElement payload, HttpRequestData req)
         {
@@ -87,7 +75,6 @@ namespace API
             return response;
         }
 
-
         /// <summary>
         /// data comes in as XML should leave as JSON ready for sending to client via HTTP
         /// </summary>
@@ -109,10 +96,10 @@ namespace API
         }
 
         public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) => MessageJson("Fail", payload, req);
-        public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
-        
-        public static HttpResponseData PassMessageJson(XElement payload, HttpRequestData req) => MessageJson("Pass", payload, req);
 
+        public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
+
+        public static HttpResponseData PassMessageJson(XElement payload, HttpRequestData req) => MessageJson("Pass", payload, req);
 
         //public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
         //public static OkObjectResult FailMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payloadXml)).ToString());
@@ -128,23 +115,13 @@ namespace API
             response.WriteString(finalXml);
 
             return response;
-
         }
 
         public static HttpResponseData FailMessage(Exception payloadException, HttpRequestData req) => FailMessage(Tools.ExceptionToXml(payloadException), req);
 
-
         public static List<HoroscopeData> SavedHoroscopeDataList { get; set; } = null; //null used for checking empty
 
-
-
-
-
-
-
-
         //----------------------------------------FUNCTIONS---------------------------------------------
-
 
         /// <summary>
         /// Gets public IP address of client sending the http request
@@ -184,7 +161,6 @@ namespace API
             }
             return result;
         }
-
 
         /// <summary>
         /// Reads data stamped build version, if "beta" is found in that name, return true
@@ -238,7 +214,6 @@ namespace API
 
             //upload modified list to storage
             await OverwriteBlobData(fileClient, updatedListXml);
-
         }
 
         /// <summary>
@@ -264,7 +239,6 @@ namespace API
 
             //upload modified list to storage
             await OverwriteBlobData(fileClient, xmlDocFile);
-
         }
 
         /// <summary>
@@ -277,9 +251,7 @@ namespace API
 
             //upload modified list to storage
             await OverwriteBlobData(fileClient, dataXml);
-
         }
-
 
         public static async Task<XElement> ExtractDataFromRequestXml(HttpRequestData request)
         {
@@ -292,12 +264,8 @@ namespace API
             return xml;
         }
 
-
-
         public static async Task<JsonElement> ExtractDataFromRequestJson(HttpRequestData request)
         {
-
-
             string jsonString = "";
 
             try
@@ -312,7 +280,6 @@ namespace API
             }
             //todo better logging
             catch (Exception e) { throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}"); }
-
         }
 
         /// <summary>
@@ -329,11 +296,9 @@ namespace API
 
                 var parsedJson = JsonDocument.Parse(jsonString);
                 return parsedJson;
-
             }
             //todo better logging
             catch (Exception e) { throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}"); }
-
         }
 
         /// <summary>
@@ -347,7 +312,6 @@ namespace API
                 XDocument document = XDocument.Parse(xmlFileString);
 
                 return document;
-
             }
             catch (Exception e)
             {
@@ -355,7 +319,6 @@ namespace API
                 Console.WriteLine(e);
                 throw new Exception($"Azure Storage Failure : {blobClient.Name}");
             }
-
         }
 
         /// <summary>
@@ -368,7 +331,6 @@ namespace API
                 var xmlFileString = await DownloadToText(blobClient);
 
                 return xmlFileString;
-
             }
             catch (Exception e)
             {
@@ -376,7 +338,6 @@ namespace API
                 Console.WriteLine(e);
                 throw new Exception($"Azure Storage Failure : {blobClient.Name}");
             }
-
 
             //Console.WriteLine(blobClient.Name);
             //Console.WriteLine(blobClient.AccountName);
@@ -393,7 +354,6 @@ namespace API
             //parse string as xml doc
             //var valueContent = blobClient.Download().Value.Content;
             //Console.WriteLine("Text:"+Tools.StreamToString(valueContent));
-
         }
 
         /// <summary>
@@ -417,14 +377,12 @@ namespace API
             return stream;
         }
 
-
         /// <summary>
         /// Extracts data from HTTP request and turn it into a XML
         /// </summary>
         public static async Task<XElement> RequestToXml(HttpRequestData requestData)
         {
             var requestXml = new XElement("Request");
-
 
             var propList = new Dictionary<string, string>()
             {
@@ -435,9 +393,7 @@ namespace API
                 ["Identities"] = Tools.ListToString(requestData?.Identities.ToList()),
                 ["Headers"] = Tools.ListToString(requestData?.Headers.ToList()) ?? "no headers!",
                 ["Body"] = await requestData?.ReadAsStringAsync() ?? "Empty",
-
             };
-
 
             foreach (var property in propList)
             {
@@ -446,10 +402,7 @@ namespace API
             }
 
             return requestXml;
-
         }
-
-
 
         public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)
         {
@@ -464,8 +417,6 @@ namespace API
                     var thisId = Chart.FromXml(chartXml).ChartId;
                     return thisId == inputChartId;
                 }).FirstOrDefault(Chart.Empty.ToXml());
-
-
             }
             catch (Exception e)
             {
@@ -539,7 +490,6 @@ namespace API
         /// </summary>
         public static async Task<XElement?> FindPersonById(string personId)
         {
-
             try
             {
                 //get latest file from server
@@ -566,7 +516,6 @@ namespace API
             //--------
             //do the finding
             bool MathcPeronId(XElement personXml) => Person.FromXml(personXml).Id.Equals(personId);
-
         }
 
         /// <summary>
@@ -591,12 +540,10 @@ namespace API
 
                 //check if inputed ID is found in list, add to return list
                 foreach (var owner in ownerList) { if (owner.Equals(inputUserId)) { returnList.Add(personXml); } }
-
             }
 
             return returnList;
         }
-
 
         /// <summary>
         /// Gets user data, if user does
@@ -630,7 +577,6 @@ namespace API
                 //return newly created user to caller
                 return newUser;
             }
-
         }
 
         /// <summary>
@@ -663,11 +609,10 @@ namespace API
                 //return newly created user to caller
                 return newUser;
             }
-
         }
 
         /// <summary>
-        /// Gets main person list xml doc file 
+        /// Gets main person list xml doc file
         /// </summary>
         /// <returns></returns>
         private static async Task<XDocument> GetPersonListFile()
@@ -701,7 +646,6 @@ namespace API
             SavedHoroscopeDataList = horoscopeDataList;
 
             return horoscopeDataList;
-
         }
 
         /// <summary>
@@ -746,13 +690,11 @@ namespace API
         /// </summary>
         public static async Task<List<HoroscopePrediction>> GetPrediction(Person person)
         {
-
             //get list of horoscope data (file from wwwroot)
             var horoscopeDataList = await GetHoroscopeDataList();
 
             //start calculating predictions (mix with time by person's birth date)
             var predictionList = calculate(person, horoscopeDataList);
-
 
             return predictionList;
 
@@ -781,7 +723,6 @@ namespace API
                             horoscopeList.Add(newHoroscopePrediction);
                         }
                     }
-
                 }
                 //catches only exceptions that indicates that user canceled the calculation (caller lost interest in the result)
                 catch (Exception)
@@ -789,7 +730,6 @@ namespace API
                     //return empty list
                     return new List<HoroscopePrediction>();
                 }
-
 
                 //return calculated event list
                 return horoscopeList;

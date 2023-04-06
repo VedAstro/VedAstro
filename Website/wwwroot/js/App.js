@@ -42,7 +42,6 @@ function NavMenuAutoActiveStyle(clickedNav) {
     $(clickedNav).addClass('active');
 }
 
-
 //-----------------------FOR JSFetchWrapper
 //calls to server from blazor come here not via blazor http client, reliable
 async function postWrapper(url, payloadXml) {
@@ -50,6 +49,7 @@ async function postWrapper(url, payloadXml) {
     console.log("JS > Sending POST request...");
 
     var response = await fetch(url, {
+        "headers": { "accept": "*/*", "Connection": "keep-alive"}, 
         "body": payloadXml,
         "method": "POST"
     });

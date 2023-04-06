@@ -59,26 +59,26 @@ async function postWrapper(url, payloadXml) {
     return responseText;
 }
 
+//uses html2pdf.js to convert any html to PDF
+//will prompt user to save file
+//don't include .pdf in file name
+function htmlToPdf(elementKey, newPdfFileName) {
+
+    //find the element
+    var element = $(elementKey)[0];
+
+    var opt = {
+        filename: `${newPdfFileName}.pdf`
+    };
+
+    html2pdf(element, opt);
+}
 
 //prints a message to console for developers to see
 function printConsoleMessage() {
-    $.get("https://vedastro.org/data/ConsoleGreeting.txt")
+    $.get(window.URL.ConsoleGreetingTxt)
         .done((result) => {
             console.log(result);
-        });
-}
-
-function saveMatchReportAsImage() {
-    var node = document.getElementById('my-node');
-
-    domtoimage.toPng(node)
-        .then(function (dataUrl) {
-            var img = new Image();
-            img.src = dataUrl;
-            document.appendChild(img);
-        })
-        .catch(function (error) {
-            console.error('oops, something went wrong!', error);
         });
 }
 

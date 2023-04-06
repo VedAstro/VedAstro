@@ -11,6 +11,7 @@
         <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
         <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
         <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+        <IconButton SmallSize="true" IconName="ic:outline-file-download" ButtonText="Download PDF" OnClickCallback="OnClickDownloadPdf"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -18,73 +19,75 @@
 @*only show once report ready*@
 @if (_report != null)
 {
-
-    <div class="container mb-4 border">
-        <div class="row justify-content-start">
-            <div class="col-2">
-                Couple
+    <div @ref="matchReportElement">
+        <div class="container mb-4 border">
+            <div class="row justify-content-start">
+                <div class="col-2">
+                    Couple
+                </div>
+                <div class="col-4">
+                    <h4>
+                        @MaleName + @FemaleName
+                    </h4>
+                </div>
             </div>
-            <div class="col-4">
-                <h4>
-                    @MaleName + @FemaleName
-                </h4>
+            <div class="row justify-content-start">
+                <div class="col-2">
+                    Score
+                </div>
+                <div class="col-4">
+                    <b style="color: @GetScoreColor(_report.KutaScore);font-size: 33px;">@_report.KutaScore%</b>
+                </div>
+            </div>
+            <div class="row justify-content-start">
+                <div class="col-2">
+                    Summary
+                </div>
+                <div class="col-4">
+                    <h4>
+                        @GetSummaryText(_report.KutaScore)
+                    </h4>
+                </div>
             </div>
         </div>
-        <div class="row justify-content-start">
-            <div class="col-2">
-                Score
-            </div>
-            <div class="col-4">
-                <b style="color: @GetScoreColor(_report.KutaScore);font-size: 33px;">@_report.KutaScore%</b>
-            </div>
-        </div>
-        <div class="row justify-content-start">
-            <div class="col-2">
-                Summary
-            </div>
-            <div class="col-4">
-                <h4>
-                    @GetSummaryText(_report.KutaScore)
-                </h4>
-            </div>
-        </div>
-    </div>
 
-    <table class="table table-striped table-hover table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col"><span class="hstack gap-2">Name<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportName"></HelpBox></span></th>
-                <th scope="col">
-                    <span class="hstack gap-2">
-                        Result<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportResult"></HelpBox>
-                    </span>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var prediction in _report.PredictionList)
-            {
-                //if no prediction then don't print
-                @if (prediction.Name == MatchPredictionName.Empty) { continue; }
-
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
                 <tr>
-                    <td scope="row">
-                        <b style="font-size: 22px;">@prediction.FormattedName</b>
-                        <p style="margin: 0px; font-size: 15px;">@prediction.Description</p>
-                        <IconButton Outline="@true" ExtraClass=" my-1" SmallSize="true" ButtonText="More Info" OnClickCallback="@(() => OnClickMoreInfo(@prediction.Name.ToString()))" />
-                    </td>
-
-                    <td>
-                        <b style="color: @GetNatureColor(prediction.Nature); font-size: 22px;">@prediction.Nature</b>
-                        <div style="color: #616161; font-size: 14px;">
-                            @prediction.Info
-                            <div class="hstack gap-2">[male: @prediction.MaleInfo, female: @prediction.FemaleInfo]</div>
-                        </div>
-                    </td>
+                    <th scope="col"><span class="hstack gap-2">Name<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportName"></HelpBox></span></th>
+                    <th scope="col">
+                        <span class="hstack gap-2">
+                            Result<HelpBox SmallIcon="true" HelpText="@HelpText.MatchReportResult"></HelpBox>
+                        </span>
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var prediction in _report.PredictionList)
+                {
+                    //if no prediction then don't print
+                    @if (prediction.Name == MatchPredictionName.Empty) { continue; }
+
+                    <tr>
+                        <td scope="row">
+                            <b style="font-size: 22px;">@prediction.FormattedName</b>
+                            <p style="margin: 0px; font-size: 15px;">@prediction.Description</p>
+                            <IconButton Outline="@true" ExtraClass=" my-1" SmallSize="true" ButtonText="More Info" OnClickCallback="@(() => OnClickMoreInfo(@prediction.Name.ToString()))" />
+                        </td>
+
+                        <td>
+                            <b style="color: @GetNatureColor(prediction.Nature); font-size: 22px;">@prediction.Nature</b>
+                            <div style="color: #616161; font-size: 14px;">
+                                @prediction.Info
+                                <div class="hstack gap-2">[male: @prediction.MaleInfo, female: @prediction.FemaleInfo]</div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
 
 }
 
@@ -92,7 +95,7 @@
 <PageHelpSection @ref="_helpSection" DefaultVisible="true">
     <Content>
         <h4 class="fw-bold">Three Factors</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             In selecting horoscopes for marriage purposes, three factors have to be
             carefully considered. They are: -
             <ol class="list-group list-group-numbered">
@@ -103,7 +106,7 @@
         </p>
 
         <h4 class="fw-bold">Longevity</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             When there is no longevity in the case of bride, the horoscope must be
             rejected even though the 7th house may be strong or the requsite
             number of units are available. Likewise when the 7th house is weak and
@@ -143,7 +146,7 @@
         </p>
 
         <h4 id="NadiKuta" class="fw-bold">Nadi Kuta</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             This is considered to be the most important and at the
             same time the most significant Kuta. In Sanskrit, Nadi means several
             things but in reference to astrology, it signifies pulse or nervous energy
@@ -155,7 +158,7 @@
             temperament. The three Nadis are ruled by the different constellations.
         </p>
         <h4 id="VasyaKuta" class="fw-bold">Vasya Kuta</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             This is important as suggesting the degree of magnetic
             control or amenability the wife or husband would be able to exercise on
             the other. For Aries - Leo and Scorpio are amenable. For Taurus -
@@ -167,7 +170,7 @@
         </p>
 
         <h4 id="DinaKuta" class="fw-bold">Dina Kuta</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             The word "Dina"" simply means day and refers to the day to day living and sharing.
             Count the constellation of the boy from that of the girl
             and divide the number by 9. If the remainder is 2, 4, 6, 8 or 0 it is good.
@@ -175,7 +178,7 @@
             agreement is found.
         </p>
         <h4 id="GunaKuta" class="fw-bold">Guna Kuta</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             This seems to have an important bearing on the
             temperament and character of the couple concerned. A difference of temperament may be harmonious and
             complimentary. But a compatibility of temperament is essential to a
@@ -200,7 +203,7 @@
         </p>
 
         <h4 id="Mahendra" class="fw-bold">Mahendra</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             Mahendra Porutham tells us about the ability of a couple to have good children or
             good progeny is indicated by this porutham/kuta.
             The constellation of the boy counted from that of the girl
@@ -209,7 +212,7 @@
         </p>
 
         <h4 id="StreeDeergha" class="fw-bold">Stree-Deergha</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             In sanskrit "Stree" means Girl &amp; "Dheerga" is Blessed forever.
             As such this kuta/porutham ensures the female counterpart's well being, longevity and prosperity.
 
@@ -222,7 +225,7 @@
         </p>
 
         <h4 id="RasiKuta" class="fw-bold">Rasi Kuta</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             If the Rasi of the boy happens to be the 2nd from that of
             the girl and if the Rasi of the girl happens to be the 12th from that of the
             boy, evil results will follow. But if, on the other hand, the Rasi of the boy
@@ -246,7 +249,7 @@
         </p>
 
         <h4 id="Vedha" class="fw-bold">Vedha</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             This means affliction. Certain constellations are capable of
             affecting or afflicting certain other constellations situated at particular
             distances from them; For instance, Aswini is said to cause Vedha to the
@@ -258,7 +261,7 @@
         </p>
 
         <h4 id="Varna" class="fw-bold">Varna</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             This seems to signify the degree of spiritual or ego
             development of the marrying partners. Pisces, Scorpio and Cancer
             represent the highest development - Brahmin; Leo, Sagittarius and Libra
@@ -271,7 +274,7 @@
         </p>
 
         <h4 id="YoniKuta" class="fw-bold">Yoni Kuta</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             Yoni Kuta is for sexual compatibility. The sexual urge of a person born for instance in Chitta is
             supposed to be as strong as that of a tiger. The human embryo in
             course of its development passes through the various stages of
@@ -369,7 +372,7 @@
             carefully examined.
         </p>
         <h4 id="BadConstellation" class="fw-bold">Bad Constellation</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             There is a belief current amongst the public that girls born in certain
             constellations cause the death of certain relatives. For instance, a girl
             born in Visakha is said to bring about the destruction of her husband's
@@ -392,7 +395,7 @@
             elder brother; and Visakha (last quarter) for husband's younger brother.
         </p>
         <h4 id="SexEnergyCompatibility" class="fw-bold">Sex Energy Compatibility</h4>
-        <p class="text-justify mb-4" >
+        <p class="text-justify mb-4">
             When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts
             and such an individual should be mated to one who has similar
             instincts and not a person having Mercury or Jupiter in the 7th, as this
@@ -408,7 +411,9 @@
 
 @code {
 
+
     //VARIABLES
+    private ElementReference matchReportElement;
     private string _pageTitle = "Match Report";
 
     [Parameter]
@@ -539,7 +544,14 @@
     private void OnClickMoreInfo(string predictionName)
     {
         //make scroll movement to place
-        _jsRuntime.InvokeVoidAsync("scrollToDiv", "#"+predictionName);
+        _jsRuntime.InvokeVoidAsync("scrollToDiv", "#" + predictionName);
+    }
+
+    private void OnClickDownloadPdf()
+    {
+        //calls special JS lib to convert html version of the chart to PDF
+        //and initiated download as well, with 1 call
+        _jsRuntime.InvokeVoidAsync("htmlToPdf", matchReportElement, _pageTitle);
     }
 
 }

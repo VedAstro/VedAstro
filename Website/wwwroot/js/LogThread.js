@@ -1,6 +1,6 @@
 ﻿
-console.log("Log Thread JS Loaded");
 
+console.log("Log Thread JS Loaded");
 
 
 self.addEventListener('message', async function (e) {
@@ -16,12 +16,13 @@ self.addEventListener('message', async function (e) {
 
 async function addVisitor(payloadXml) {
 
-    console.log("LogThread > Logging");
+    //console.log("LogThread > Logging");
+
+    //we always use stable api, event in beta mode (stable obvious)
     var response = await fetch("https://api.vedastro.org/addvisitor", {
-        "headers": { "accept": "*/*", "Connection": "keep-alive", "Content-Type": "text/plain" },
+        "headers": { "accept": "*/*", "Connection": "keep-alive" },
         "body": payloadXml,
-        "method": "POST",
-        "mode": "no-cors"
+        "method": "POST"
     });
 
     var responseText = await response.text();

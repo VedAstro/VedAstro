@@ -78,7 +78,7 @@ namespace API
         /// <summary>
         /// data comes in as XML should leave as JSON ready for sending to client via HTTP
         /// </summary>
-        public static HttpResponseData MessageJson(string statusResult, XElement payload, HttpRequestData req)
+        public static HttpResponseData MessageJson(string statusResult, object payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json");
@@ -99,7 +99,7 @@ namespace API
 
         public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
 
-        public static HttpResponseData PassMessageJson(XElement payload, HttpRequestData req) => MessageJson("Pass", payload, req);
+        public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) => MessageJson("Pass", payload, req);
 
         //public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
         //public static OkObjectResult FailMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payloadXml)).ToString());

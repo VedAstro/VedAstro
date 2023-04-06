@@ -43,8 +43,7 @@ namespace API
                 case "Motion": returnVal = AstronomicalCalculator.GetPlanetMotionName(planetName, parsedTime).ToString(); break;
             }
 
-
-            return APITools.PassMessage(returnVal, incomingRequest);
+            return APITools.PassMessageJson(returnVal, incomingRequest);
         }
 
         /// <summary>
@@ -117,7 +116,7 @@ namespace API
             }
 
 
-            return APITools.PassMessage(returnVal, incomingRequest);
+            return APITools.PassMessageJson(returnVal, incomingRequest);
         }
 
     }

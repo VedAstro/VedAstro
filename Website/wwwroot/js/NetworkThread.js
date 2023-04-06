@@ -56,8 +56,7 @@
 //    var response = await fetch(url, {
 //        "headers": { "accept": "*/*", "Connection": "keep-alive", "Content-Type": "text/plain" },
 //        "body": payloadXml,
-//        "method": "POST",
-//        "mode": "no-cors"
+//        "method": "POST"
 //    });
 
 //    var responseText = await response.text();

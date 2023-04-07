@@ -9,7 +9,7 @@
     <label class="form-label">@Label</label>
     <div class="hstack">
         @*PersonSelector class used to programatically set visible person selection*@
-        <select @bind="SelectedPersonId" class="form-control PersonSelector" style="width: fit-content;min-width: 273px;">
+        <select @bind="SelectedPersonId" class="form-control PersonSelector" style="width:@GR.W255px; height:@GR.W37px;">
             <option value="">Select Name</option>
             @DropDownOptionsHtml
         </select>

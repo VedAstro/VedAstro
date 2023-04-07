@@ -999,7 +999,7 @@ namespace VedAstro.Library
             else
             {
                 prediction.Nature = EventNature.Good;
-                prediction.Info = "male and female constellations in different groups";
+                prediction.Info = "both constellations are in different groups";
             }
 
             //Rajju Kuta need not be considered in case Graha Maitri, Rasi, Dina and Mahendra Kutas are present.
@@ -1330,7 +1330,7 @@ namespace VedAstro.Library
             else
             {
                 prediction.Nature = EventNature.Bad;
-                prediction.Info = "no good connection between male and female";
+                prediction.Info = "no good connection between these horoscopes";
             }
 
             return prediction;

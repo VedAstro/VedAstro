@@ -35,8 +35,10 @@ namespace VedAstro.Library
         public string Id { get; set; }
 
         public string Name { get; set; }
+
         /// <summary>
         /// User ID is used by website. Multiple supported, Shows owner of person's profile
+        /// todo owner ID might be better
         /// </summary>
         public string[] UserId { get; set; }
 

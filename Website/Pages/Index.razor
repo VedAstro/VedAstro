@@ -35,8 +35,14 @@
     }
 </style>
 <div class="py-4" id="icon-grid">
+    @*    
+    todo marked for deletion    
     <h3 class="pb-2 border-bottom">
         Quick Links <button @onclick="() => _navigation.NavigateTo(PageRoute.CalculatorList)" type="button" class="btn btn-sm btn-outline-secondary">View All</button>
+    </h3>
+    *@    
+    <h3 class="pb-2 border-bottom">
+        Quick Links <IconButton ButtonText="View All" ClickUrl="@PageRoute.CalculatorList" SmallSize="true" ExtraClass="ms-3" Outline="true"/>
     </h3>
     <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
         <div @onclick="() => _navigation.NavigateTo(PageRoute.Match)" style="cursor: pointer;" class="col">
@@ -63,7 +69,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Life Predictor</h5>
 
-                    <p class="card-text">Know good and bad periods of your life years ahead. Dasa &amp; Gochara</p>
+                    <p class="card-text">Know good and bad periods of your life years ahead</p>
                 </div>
             </div>
         </div>
@@ -76,7 +82,7 @@
                 </div>
             </div>
         </div>
-        <div @onclick="() => _navigation.NavigateTo(PageRoute.HoroscopeData)" style="cursor: pointer;" class="col">
+@*        <div @onclick="() => _navigation.NavigateTo(PageRoute.HoroscopeData)" style="cursor: pointer;" class="col">
             <div class="card">
                 <img src="images/horoscope-data-card.jpg" class="card-img-top">
                 <div class="card-body">
@@ -85,7 +91,7 @@
                 </div>
             </div>
         </div>
-        <div @onclick="() => _navigation.NavigateTo(PageRoute.Journal)" style="cursor: pointer;" class="col">
+*@        <div @onclick="() => _navigation.NavigateTo(PageRoute.Journal)" style="cursor: pointer;" class="col">
             <div class="card">
                 <img src="images/add-life-event-card.jpg" class="card-img-top">
                 <div class="card-body">
@@ -99,7 +105,7 @@
                 <img src="images/open-api-card.jpg" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">Open API</h5>
-                    <p class="card-text">Access powerful astrological tools via a simple HTTP request for free</p>
+                    <p class="card-text">Access powerful astrological tools via a HTTP request</p>
                 </div>
             </div>
         </div>
@@ -108,7 +114,7 @@
                 <img src="images/birth-time-finder-card.jpg" class="card-img-top">
                 <div class="card-body">
                     <h5 class="card-title">Birth Time Finder</h5>
-                    <p class="card-text">Find forgotten or lost birth time using astrological methods. </p>
+                    <p class="card-text">Find forgotten or lost birth time using astrological</p>
                 </div>
             </div>
         </div>

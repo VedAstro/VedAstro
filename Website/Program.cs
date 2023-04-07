@@ -36,6 +36,7 @@ namespace Website
             builder.Services.AddSingleton<LocationService>();
 
             //service used to place data in browser's localstorage
+            //todo marked deletion
             //builder.Services.AddSingleton<ILocalStorage, LocalStorageManager>();
 
             //ERROR HANDLING

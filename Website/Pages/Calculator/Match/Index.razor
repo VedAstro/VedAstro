@@ -1,18 +1,12 @@
-﻿@attribute [Route(PageRoute.Match)]
+@attribute [Route(PageRoute.Match)]
 @using Microsoft.AspNetCore.Components
 
 
 <PageTitle>Find Marriage Match</PageTitle>
 
 <PageTop Title="Match" IconName="bi:arrow-through-heart-fill">
-    <Description>Check marriage compatibility between horoscopes. 16 Astrological factors are used to make this accurate prediction</Description>
-@*    <ButtonsRow>
-        <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-        <IconButton IconName="fluent:people-list-24-filled" ButtonText="Person List" ClickUrl="@PageRoute.PersonList"></IconButton>
-    </ButtonsRow>
-*@</PageTop>
-
-
+    <Description>Check marriage compatibility between horoscopes. 16 astrological factors are used to make this accurate prediction.</Description>
+</PageTop>
 
 
 <div class="vstack gap-3">
@@ -20,7 +14,6 @@
     <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
     <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 </div>
-
 
 @code {
 

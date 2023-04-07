@@ -3,18 +3,6 @@
 
 @using VedAstro.Library
 
-@*<style>
-    TODO custom table hover color
-    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-        background-color: aqua !important;
-    }
-    .table {
-        border-color: #747474 !important;
-    }
-    .table-hover tbody tr:hover td {
-        background: aqua;
-    }
-</style>*@
 
 <PageTitle>@_pageTitle</PageTitle>
 
@@ -123,6 +111,10 @@
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item">Local Standard Time (STD)</li>
                         <li class="list-group-item">@_person.BirthTime.GetStdDateTimeOffsetText()</li>
+                    </ul>
+                    <ul class="list-group list-group-horizontal">
+                        <li class="list-group-item">Owners</li>
+                        <li class="list-group-item">@_person.UserIdString</li>
                     </ul>
                 </ul>
             </div>
@@ -463,7 +455,8 @@
     private async void CopyPersonProfileShareLink()
     {
         //generate the url
-        var url = AppData.URL.WebUrl + $"{PageRoute.PersonEditor}/{PersonId}";
+        //var url = AppData.URL.WebUrl + $"{PageRoute.PersonEditor}/{PersonId}";
+        var url = Path.Combine(AppData.URL.WebUrl, PageRoute.PersonEditor, PersonId); //use Combine for safety
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);

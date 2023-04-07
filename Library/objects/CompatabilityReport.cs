@@ -9,13 +9,13 @@ namespace VedAstro.Library.Compatibility
     /// </summary>
     public class CompatibilityReport : IToXml
     {
-
         public List<CompatibilityPrediction> PredictionList { get; set; }
 
         /// <summary>
         /// Final score in percentage from report
         /// </summary>
         public double KutaScore { get; set; }
+
         public Person Male { get; set; }
         public Person Female { get; set; }
 
@@ -38,7 +38,6 @@ namespace VedAstro.Library.Compatibility
             compatibilityReport.Add(kutaScore, male, female, predictionList);
 
             return compatibilityReport;
-
         }
 
         private XElement PredictionListToXml(List<CompatibilityPrediction> predictionList)
@@ -60,7 +59,6 @@ namespace VedAstro.Library.Compatibility
         /// Note: Special method done to implement IToXml
         /// </summary>
         public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
-
 
         /// <summary>
         /// If unparseable will return null
@@ -120,10 +118,8 @@ namespace VedAstro.Library.Compatibility
                     returnVal.Add(newPrediction);
                 }
 
-
                 return returnVal;
             }
-
         }
     }
 }

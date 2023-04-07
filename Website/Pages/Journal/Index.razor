@@ -7,11 +7,11 @@
 <PageTitle>@_pageTitle</PageTitle>
 <PageTop Title="Journal" IconName="game-icons:secret-book">
     <Description>Record your life events to understand the astrological reason behind them.</Description>
-    <ButtonsRow>
-        <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Dasa Chart" ClickUrl="@PageRoute.LifePredictor"></IconButton>
-        <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Muhurtha Chart" ClickUrl="@PageRoute.Muhurtha"></IconButton>
+@*    <ButtonsRow>
+        <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Life Chart" ClickUrl="@PageRoute.LifePredictor"></IconButton>
+        <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Add Life" ClickUrl="@PageRoute.Muhurtha"></IconButton>
     </ButtonsRow>
-</PageTop>
+*@</PageTop>
 
 
 <div>
@@ -24,8 +24,9 @@
             <span class="iconify bi flex-shrink-0 me-2" data-icon="ic:outline-tips-and-updates" data-width="50"></span>
             <div>
                 <strong>Quick Tip</strong><br />
-                After updating your journal, go to <a href="@PageRoute.LifePredictor"><span class="fw-bold">Dasa</span></a> or <a href="@PageRoute.Muhurtha"><span class="fw-bold">Muhurtha</span></a> chart,
+                After updating your journal, go to <a href="@PageRoute.LifePredictor"><span class="fw-bold">Life</span></a> chart,
                 to view them against astrological influence.
+                <img class="img-thumbnail" width="@GR.W412px" src="images/journal-example-life-hitler.png"/>
             </div>
         </div>
     </div>
@@ -112,7 +113,8 @@
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
         PersonIdUrl = _selectedPerson.Id; //save local copy
-        _navigation.NavigateTo($"{PageRoute.Journal}/{PersonIdUrl}"); //change url
+        var urlWithId = Path.Combine(PageRoute.Journal, PersonIdUrl);
+        _navigation.NavigateTo(urlWithId); 
 
         //life events
         await _lifeEventEditor.SetData(_selectedPerson);

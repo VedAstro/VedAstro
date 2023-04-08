@@ -91,163 +91,6 @@ namespace API
 
         }
 
-
-        [Function("findbirthtimedasa")]
-        public static async Task<HttpResponseData> FindBirthTimeDasa([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-            try
-            {
-                //get data needed to generate multiple charts
-                //accurate life event
-                var lifeEvent = new LifeEvent();
-                lifeEvent.StartTime = "00:00 01/01/2014";
-                lifeEvent.Location = "Malaysia";
-                //view little ahead & forward of event
-                var eventTime = await lifeEvent.GetDateTimeOffsetAsync();
-                var startTime = new Time(eventTime.AddMonths(-1), await lifeEvent.GetGeoLocation());
-                var endTime = new Time(eventTime.AddMonths(1), await lifeEvent.GetGeoLocation());
-
-                //person
-                var person = await APITools.GetPersonById("54041d1ffb494a79997f7987ecfcf08b5");
-                //zoom level
-                //possible birth times
-                var timeSkip = 1;// 1 hour
-                var possibleTimeList = new List<Time>();
-                Time previousTime = person.BirthTime;//start with birth time
-                for (int i = 0; i < 3; i++) //5 possibilities
-                {
-                    //save to be added upon later
-                    previousTime = previousTime.AddHours(timeSkip);
-                    possibleTimeList.Add(previousTime);
-                }
-
-                //generate the needed charts
-                var chartList = new List<Chart>();
-                var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
-                //PRECISION
-                //calculate based on max screen width,
-                //done for fast calculation only for needed viewability
-                var daysPerPixel = GetDayPerPixel(startTime, endTime, 800);
-
-
-                var combinedSvg = "";
-                var chartYPosition = 30; //start with top padding
-                var leftPadding = 10;
-                foreach (var possibleTime in possibleTimeList)
-                {
-                    //replace original birth time
-                    var personAdjusted = person.ChangeBirthTime(possibleTime);
-                    var newChart = await GetChart(personAdjusted, startTime, endTime, daysPerPixel, dasaEventTags);
-                    var adjustedBirth = personAdjusted.BirthTimeString;
-
-                    //place in group with time above the chart
-                    var wrappedChart = $@"
-                            <g transform=""matrix(1, 0, 0, 1, {leftPadding}, {chartYPosition})"">
-                                <text style=""font-size: 16px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">{adjustedBirth}</text>
-                                {newChart.ContentSvg}
-                              </g>
-                            ";
-
-                    //combine charts together
-                    combinedSvg += wrappedChart;
-
-                    //next chart goes below this one
-                    //todo get actual chart height for dynamic stacking
-                    chartYPosition += 270;
-                }
-
-                //put all charts in 1 big container
-                var finalSvg = EventsChartManager.WrapSvgElements("MultipleDasa",combinedSvg, 800, chartYPosition, Tools.GenerateId());
-
-
-                //send image back to caller
-                return SendSvgToCaller(finalSvg, incomingRequest);
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-        }
-
-        [Function("findbirthtimerisingsign")]
-        public static async Task<HttpResponseData> FindBirthTimeRisingSign([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-            try
-            {
-                //get person
-                var person = await APITools.GetPersonById("05abf671c8bf4e4badc07a086c067f26");
-
-                //get all birth time with different rising sign
-                var possibleTimeList = await GetTimeList(person);
-
-                //calculate predictions
-                List<HoroscopePrediction> predictionList = new List<HoroscopePrediction>();
-                foreach (var timeSlice in possibleTimeList)
-                {
-                    //replace original birth time
-                    var personAdjusted = person.ChangeBirthTime(timeSlice);
-
-                    var x = await APITools.GetPrediction(personAdjusted);
-                }
-                //convert list to xml string in root elm
-                var responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
-
-                return APITools.PassMessage(responseMessage, incomingRequest);
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-
-
-            //LOCAL FUNCTIONS
-            async Task<List<Time>> GetTimeList(Person person)
-            {
-
-                //start of day till end of day
-                var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-                var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-
-                var returnList = new List<Time>();
-                var timeSkip = 1;// 1 hour
-                var reachedDayEnd = false;
-                var checkTime = dayStart; //from the start of the day
-                var previousSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
-                //add 1st sign at start of day to list
-                returnList.Add(checkTime);
-
-                //scan through the day & add mark each time new sign rises
-                //stop looking when reached end of day
-                while (!reachedDayEnd)
-                {
-                    //if different from previous sign, then add time slice to list
-                    var checkSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
-                    if (checkSign != previousSign) { returnList.Add(checkTime); }
-
-                    //update previous sign
-                    previousSign = checkSign;
-
-                    //goto to next time slice
-                    checkTime = checkTime.AddHours(timeSkip);
-
-                    //if next time slice goes to next day, then end it here
-                    if (checkTime > dayEnd) { reachedDayEnd = true; }
-                }
-
-                return returnList;
-
-            }
-        }
-
-
         /// <summary>
         /// Special function to make Light Viewer(EventsChartViewer.html) work
         /// This API is called by EventsChart.js when viewing chart view lite viewer
@@ -279,25 +122,28 @@ namespace API
 
 
         /// <summary>
-        /// Gets chart from saved list, needs to be given id to find
+        /// Returns EventsChartViewer.html with injected variables
+        /// Special function to generate new Events Chart directly without website
+        /// Does not do anything to generate the chart, that is done by
+        /// geteventscharteasy API called by the JS in HTML
         /// </summary>
-        [Function("getsavedeventschart")]
-        public static async Task<HttpResponseData> GetSavedEventsChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        [Function("chart")]
+        public static async Task<HttpResponseData> GetEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "chart/{personId}/{eventPreset}/{timePreset}")]
+            HttpRequestData incomingRequest, string personId, string eventPreset, string timePreset)
         {
-
             try
             {
-                //get id that will be used find the person
-                var requestData = await APITools.ExtractDataFromRequestXml(incomingRequest);
-                var chartId = requestData.Value;
+                //get chart index.html and send that to caller
+                var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
 
-                //get the saved chart record by id
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.BlobContainerName);
-                var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
-                var chart = Chart.FromXml(foundChartXml);
+                //insert person name into page, to show ready page faster
+                var personName = (await APITools.GetPersonById(personId)).Name;
+                var jsVariables = $@"window.PersonName = ""{personName}"";";
+                jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
+                jsVariables += $@"window.PersonId = ""{personId}"";";
+                var finalHtml = eventsChartViewerHtml.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
 
-                //send image back to caller
-                return SendSvgToCaller(chart.ContentSvg, incomingRequest);
+                return APITools.SendHtmlToCaller(finalHtml, incomingRequest);
 
             }
             catch (Exception e)
@@ -308,6 +154,37 @@ namespace API
                 //format error nicely to show user
                 return APITools.FailMessage(e, incomingRequest);
             }
+
+        }
+
+        /// <summary>
+        /// Saves the chart in Azure Storage
+        /// </summary>
+        [Function(nameof(SaveEventsChart))]
+        public static async Task<HttpResponseData> SaveEventsChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        {
+            try
+            {
+                //generate report
+                var chart = await GetEventReportSvgForIncomingRequest(incomingRequest, false);
+
+                //save chart into storage
+                //note: do not wait to speed things up, beware! failure will go undetected on client
+                APITools.AddXElementToXDocumentAzure(chart.ToXml(), APITools.SavedChartListFile, APITools.BlobContainerName);
+
+                //let caller know all good
+                return APITools.PassMessage(incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+
 
         }
 
@@ -359,28 +236,25 @@ namespace API
 
 
         /// <summary>
-        /// Returns EventsChartViewer.html with injected variables
-        /// Special function to generate new Events Chart directly without website
-        /// Does not do anything to generate the chart, that is done by
-        /// geteventscharteasy API called by the JS in HTML
+        /// Gets chart from saved list, needs to be given id to find
         /// </summary>
-        [Function("chart")]
-        public static async Task<HttpResponseData> GetEventsChartDirect([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "chart/{personId}/{eventPreset}/{timePreset}")]
-            HttpRequestData incomingRequest, string personId, string eventPreset, string timePreset)
+        [Function("getsavedeventschart")]
+        public static async Task<HttpResponseData> GetSavedEventsChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
+
             try
             {
-                //get chart index.html and send that to caller
-                var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
+                //get id that will be used find the person
+                var requestData = await APITools.ExtractDataFromRequestXml(incomingRequest);
+                var chartId = requestData.Value;
 
-                //insert person name into page, to show ready page faster
-                var personName = (await APITools.GetPersonById(personId)).Name;
-                var jsVariables = $@"window.PersonName = ""{personName}"";";
-                jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
-                jsVariables += $@"window.PersonId = ""{personId}"";";
-                var finalHtml = eventsChartViewerHtml.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
+                //get the saved chart record by id
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.BlobContainerName);
+                var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
+                var chart = Chart.FromXml(foundChartXml);
 
-                return APITools.SendHtmlToCaller(finalHtml, incomingRequest);
+                //send image back to caller
+                return SendSvgToCaller(chart.ContentSvg, incomingRequest);
 
             }
             catch (Exception e)
@@ -427,38 +301,6 @@ namespace API
                 //format error nicely to show user
                 return APITools.FailMessage(Tools.ExceptionToXml(e), incomingRequest);
             }
-
-        }
-
-
-        /// <summary>
-        /// Saves the chart in Azure Storage
-        /// </summary>
-        [Function("SaveEventsChart")]
-        public static async Task<HttpResponseData> SaveEventsChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-            try
-            {
-                //generate report
-                var chart = await GetEventReportSvgForIncomingRequest(incomingRequest, false);
-
-                //save chart into storage
-                //note: do not wait to speed things up, beware! failure will go undetected on client
-                APITools.AddXElementToXDocumentAzure(chart.ToXml(), APITools.SavedChartListFile, APITools.BlobContainerName);
-
-                //let caller know all good
-                return APITools.PassMessage(incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
 
         }
 
@@ -548,6 +390,160 @@ namespace API
             }
         }
 
+        [Function("findbirthtimedasa")]
+        public static async Task<HttpResponseData> FindBirthTimeDasa([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        {
+            try
+            {
+                //get data needed to generate multiple charts
+                //accurate life event
+                var lifeEvent = new LifeEvent();
+                lifeEvent.StartTime = "00:00 01/01/2014";
+                lifeEvent.Location = "Malaysia";
+                //view little ahead & forward of event
+                var eventTime = await lifeEvent.GetDateTimeOffsetAsync();
+                var startTime = new Time(eventTime.AddMonths(-1), await lifeEvent.GetGeoLocation());
+                var endTime = new Time(eventTime.AddMonths(1), await lifeEvent.GetGeoLocation());
+
+                //person
+                var person = await APITools.GetPersonById("54041d1ffb494a79997f7987ecfcf08b5");
+                //zoom level
+                //possible birth times
+                var timeSkip = 1;// 1 hour
+                var possibleTimeList = new List<Time>();
+                Time previousTime = person.BirthTime;//start with birth time
+                for (int i = 0; i < 3; i++) //5 possibilities
+                {
+                    //save to be added upon later
+                    previousTime = previousTime.AddHours(timeSkip);
+                    possibleTimeList.Add(previousTime);
+                }
+
+                //generate the needed charts
+                var chartList = new List<Chart>();
+                var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
+                //PRECISION
+                //calculate based on max screen width,
+                //done for fast calculation only for needed viewability
+                var daysPerPixel = GetDayPerPixel(startTime, endTime, 800);
+
+
+                var combinedSvg = "";
+                var chartYPosition = 30; //start with top padding
+                var leftPadding = 10;
+                foreach (var possibleTime in possibleTimeList)
+                {
+                    //replace original birth time
+                    var personAdjusted = person.ChangeBirthTime(possibleTime);
+                    var newChart = await GetChart(personAdjusted, startTime, endTime, daysPerPixel, dasaEventTags);
+                    var adjustedBirth = personAdjusted.BirthTimeString;
+
+                    //place in group with time above the chart
+                    var wrappedChart = $@"
+                            <g transform=""matrix(1, 0, 0, 1, {leftPadding}, {chartYPosition})"">
+                                <text style=""font-size: 16px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">{adjustedBirth}</text>
+                                {newChart.ContentSvg}
+                              </g>
+                            ";
+
+                    //combine charts together
+                    combinedSvg += wrappedChart;
+
+                    //next chart goes below this one
+                    //todo get actual chart height for dynamic stacking
+                    chartYPosition += 270;
+                }
+
+                //put all charts in 1 big container
+                var finalSvg = EventsChartManager.WrapSvgElements("MultipleDasa", combinedSvg, 800, chartYPosition, Tools.GenerateId());
+
+
+                //send image back to caller
+                return SendSvgToCaller(finalSvg, incomingRequest);
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+        }
+
+        [Function("findbirthtimerisingsign")]
+        public static async Task<HttpResponseData> FindBirthTimeRisingSign([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        {
+            try
+            {
+                //get person
+                var person = await APITools.GetPersonById("05abf671c8bf4e4badc07a086c067f26");
+
+                //get all birth time with different rising sign
+                var possibleTimeList = await GetTimeList(person);
+
+                //calculate predictions
+                List<HoroscopePrediction> predictionList = new List<HoroscopePrediction>();
+                foreach (var timeSlice in possibleTimeList)
+                {
+                    //replace original birth time
+                    var personAdjusted = person.ChangeBirthTime(timeSlice);
+
+                    var x = await APITools.GetPrediction(personAdjusted);
+                }
+                //convert list to xml string in root elm
+                var responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
+
+                return APITools.PassMessage(responseMessage, incomingRequest);
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+
+
+
+            //LOCAL FUNCTIONS
+            async Task<List<Time>> GetTimeList(Person person)
+            {
+
+                //start of day till end of day
+                var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
+                var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
+
+                var returnList = new List<Time>();
+                var timeSkip = 1;// 1 hour
+                var reachedDayEnd = false;
+                var checkTime = dayStart; //from the start of the day
+                var previousSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
+                //add 1st sign at start of day to list
+                returnList.Add(checkTime);
+
+                //scan through the day & add mark each time new sign rises
+                //stop looking when reached end of day
+                while (!reachedDayEnd)
+                {
+                    //if different from previous sign, then add time slice to list
+                    var checkSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
+                    if (checkSign != previousSign) { returnList.Add(checkTime); }
+
+                    //update previous sign
+                    previousSign = checkSign;
+
+                    //goto to next time slice
+                    checkTime = checkTime.AddHours(timeSkip);
+
+                    //if next time slice goes to next day, then end it here
+                    if (checkTime > dayEnd) { reachedDayEnd = true; }
+                }
+
+                return returnList;
+
+            }
+        }
 
 
 

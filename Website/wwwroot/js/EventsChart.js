@@ -718,19 +718,37 @@ class EventsChart {
     static getHighlightColor(keyword) {
 
         switch (keyword.toLowerCase()) {
-            case "sun": return "#FFFF00";
-            case "moon": return "#00FFFF";
-            case "mars": return "#ff609b";
-            case "mercury": return "#005522";
-            case "jupiter": return "#ff60fa";
-            case "venus": return "#FF0099";
-            case "saturn": return "#60aaff";
-            case "rahu": return "#ffb460";
-            case "ketu": return "#faff60";
+            //planets
+            case "sun": return "#FFA500";  //orange #FFA500
+            case "moon": return "#7A7A7A"; //silver #7A7A7A
+            case "mars": return "#DC143C"; //crimson #DC143C
+            case "mercury": return "#00FF7F"; //springgreen #00FF7F
+            case "jupiter": return "#EEEE00"; //yellow #EEEE00
+            case "venus": return "#FF00FF";//magenta #FF00FF
+            case "saturn": return "#0000FF";//blue #0000FF
+            case "rahu": return "#FF7D40"; //flesh #FF7D40
+            case "ketu": return "#515151"; //grey #515151
+
+            //house
+            //colors is the full spectrum divided into 12
+            //done to have the most unique colors possible for each house
+            case "house 1": return "#ff0000"; //red
+            case "house 2": return "#ff7f0a"; //orange
+            case "house 3": return "#ffff00"; //yellow
+            case "house 4": return "#7fff00"; //chartreuse green
+            case "house 5": return "#00ff00"; //green
+            case "house 6": return "#00ff7f"; //spring green
+            case "house 7": return "#00ffff"; //cyan
+            case "house 8": return "#007fff"; //azure
+            case "house 9": return "#0000ff"; //blue
+            case "house 10": return "#7f00ff";//violet
+            case "house 11": return "#ff00ff";//magenta
+            case "house 12": return "#ff007f";//rose
+
         }
 
-        //default
-        return "ff60fa";
+        //default to black so we know it was not accounted for
+        return "#000000";
 
         //    var arrayValues = ["#ff60fa", "#ff60fa", "#ff60fa"];
 

@@ -52,16 +52,26 @@ public static class APILogger
 
     }
 
-
-    public static async Task Visitor(HttpRequestData req)
+    public static async Task Error(string message)
     {
-        //get caller data for more debug info
-        var ipAddress = req?.GetCallerIp()?.ToString() ?? "no ip";
-
         var visitorXml = new XElement("Visitor");
 
         visitorXml.Add(BranchXml, SourceXml);
-        visitorXml.Add(await APITools.RequestToXml(req));
+        visitorXml.Add(new XElement("Error"), message);
+        visitorXml.Add(Tools.TimeStampSystemXml);
+        visitorXml.Add(Tools.TimeStampServerXml);
+
+        //add error data to main app log file
+        await APITools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
+
+    }
+
+    public static async Task Visitor(HttpRequestData req)
+    {
+        var visitorXml = new XElement("Visitor");
+
+        visitorXml.Add(BranchXml, SourceXml);
+        visitorXml.Add(await APITools.RequestToXml(req)); //contains IP
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 
@@ -76,7 +86,7 @@ public static class APILogger
 
         visitorXml.Add(BranchXml, SourceXml);
         visitorXml.Add(await APITools.RequestToXml(req));
-        visitorXml.Add(new XElement("Data"), new XElement("Text", textData));
+        visitorXml.Add(new XElement("Data"), textData);
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 

@@ -132,7 +132,7 @@ namespace API
                 border = GetBorderSvg(timeSlices, verticalYAxis);
 
                 //note: if width & height not hard set, parent div clips it
-                var svgTotalHeight = 333;//todo for now hard set, future use: verticalYAxis;
+                var svgTotalHeight = 350;//todo for now hard set, future use: verticalYAxis;
                 var svgStyle = $@"width:{svgTotalWidth}px;height:{svgTotalHeight}px;background:{svgBackgroundColor};";//end of style tag
                 svgHead = $"<svg class=\"EventChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 

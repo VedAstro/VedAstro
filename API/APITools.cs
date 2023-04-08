@@ -384,24 +384,34 @@ namespace API
         {
             var requestXml = new XElement("Request");
 
-            var propList = new Dictionary<string, string>()
-            {
-                ["Method"] = requestData.Method,
-                ["Url"] = requestData.Url.ToString(),
-                ["IP"] = requestData?.GetCallerIp().ToString() ?? "no ip!",
-                ["Cookies"] = Tools.ListToString(requestData?.Cookies.ToList()),
-                ["Identities"] = Tools.ListToString(requestData?.Identities.ToList()),
-                ["Headers"] = Tools.ListToString(requestData?.Headers.ToList()) ?? "no headers!",
-                ["Body"] = await requestData?.ReadAsStringAsync() ?? "Empty",
-            };
+            var xmled = Tools.AnyTypeToXElement(requestData);
 
-            foreach (var property in propList)
-            {
-                var tempXml = new XElement(property.Key, property.Value);
-                requestXml.Add(tempXml);
-            }
+            requestXml.Add(xmled);
 
             return requestXml;
+
+            //var headersRaw = requestData?.Headers.ToList();
+            //System.Xml.Serialization.XmlSerializer x = new System.Xml.Serialization.XmlSerializer(headersRaw.GetType());
+            //x.Serialize(Console.Out, p);
+
+            //var propList = new Dictionary<string, string>()
+            //{
+            //    ["Method"] = requestData.Method,
+            //    ["Url"] = requestData.Url.ToString(),
+            //    ["IP"] = requestData?.GetCallerIp().ToString() ?? "no ip!",
+            //    ["Cookies"] = Tools.ListToString(requestData?.Cookies.ToList()),
+            //    ["Identities"] = Tools.ListToString(requestData?.Identities.ToList()),
+            //    ["Headers"] = headersParsed ?? "no headers!",
+            //    ["Body"] = await requestData?.ReadAsStringAsync() ?? "Empty",
+            //};
+
+            //foreach (var property in propList)
+            //{
+            //    var tempXml = new XElement(property.Key, property.Value);
+            //    requestXml.Add(tempXml);
+            //}
+
+            //return requestXml;
         }
 
         public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)
@@ -502,7 +512,14 @@ namespace API
                 var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
 
                 //do the finding (default empty)
-                var foundPerson = personXmlList?.Where(MathcPeronId)?.First() ?? Person.Empty.ToXml();
+                var foundPerson = personXmlList?.Where(MathcPeronId)?.First();
+
+                //log it (should not occur all the time)
+                if (foundPerson == null)
+                {
+                    await APILogger.Error($"No person found with ID : {personId}");
+                    foundPerson = Person.Empty.ToXml();
+                }
 
                 return foundPerson;
             }

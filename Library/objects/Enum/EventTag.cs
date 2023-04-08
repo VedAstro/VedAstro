@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -17,6 +15,7 @@ namespace VedAstro.Library
     {
         //todo made visible to public via api
         Agriculture,
+
         General,
         Personal,
         RulingConstellation,
@@ -44,7 +43,6 @@ namespace VedAstro.Library
 
     public static class EventTagExtensions
     {
-
         /// <summary>
         /// Note: Root element must be named EventTag
         /// </summary>
@@ -53,7 +51,7 @@ namespace VedAstro.Library
             //converts string to enum instance
             Enum.TryParse(eventTagXml.Value, out EventTag eventTag);
 
-            return eventTag; 
+            return eventTag;
         }
 
         /// <summary>
@@ -84,8 +82,6 @@ namespace VedAstro.Library
             return eventTagListXml;
         }
 
-
-
         /// <summary>
         /// Note root element is "EventTag"
         /// </summary>
@@ -95,8 +91,5 @@ namespace VedAstro.Library
 
             return holder;
         }
-
-
-
     }
 }

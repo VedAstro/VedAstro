@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
@@ -112,6 +113,21 @@ namespace VedAstro.Library
             var typeName = typeof(T).FullName;
 
             return new XElement(typeName, enumValueStr);
+        }
+
+        /// <summary>
+        /// will convert inputed type to xelement via .net serializer
+        /// </summary>
+        public static XElement AnyTypeToXElement(object o)
+        {
+            var doc = new XDocument();
+            using (XmlWriter writer = doc.CreateWriter())
+            {
+                XmlSerializer serializer = new XmlSerializer(o.GetType());
+                serializer.Serialize(writer, o);
+            }
+
+            return doc.Root;
         }
 
         /// <summary>

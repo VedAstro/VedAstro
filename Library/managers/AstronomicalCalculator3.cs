@@ -63,7 +63,9 @@ namespace VedAstro.Library
         /// be deemed as a full benefic. This is in accord with the injunctions of
         /// classical writers (Gurugnabbyam tu yuktasya poomamekam tu yojayet).
         /// "
-        ///
+        ///11. Benefics and Malefics. Among these, Sūrya, Śani, Mangal, decreasing Candr, Rahu and
+        /// Ketu (the ascending and the descending nodes of Candr) are malefics, while the rest are
+        /// benefics. Budh, however, is a malefic, if he joins a malefic. 
         /// 
         /// Note:
         /// ATM malefic planets override benefic
@@ -600,6 +602,13 @@ namespace VedAstro.Library
             }
 
         }
+
+        /// <summary>
+        /// get total combined strength of the inputed planet
+        /// input birth time to get strength in horoscope
+        /// note: an alias method to GetPlanetShadbalaPinda ("strength" is easier to remember)
+        /// </summary>
+        public static Shashtiamsa GetPlanetStrength(PlanetName planetName, Time time) => GetPlanetShadbalaPinda(planetName, time);
 
         /// <summary>
         /// Gets the lord of the house the inputed planet is in
@@ -2434,6 +2443,7 @@ namespace VedAstro.Library
         /// enjoy them. The strength of a bhava is composed
         /// of three factors, viz., (1) Bhavadhipathi Bala,
         /// (2) Bhava Digbala, (3) Bhava Drishti Bala.
+        /// todo change to house strength
         /// </summary>
         public static Shashtiamsa GetBhavabala(HouseName house, Time time)
         {

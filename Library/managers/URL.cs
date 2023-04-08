@@ -9,7 +9,9 @@ public class URL
 {
     //keep inside
     public const string ApiBeta = "https://beta.api.vedastro.org";
+    public const string ApiBetaDirect = "https://vedastroapibeta.azurewebsites.net";
     public const string ApiStable = "https://api.vedastro.org";
+    public const string ApiStableDirect = "https://vedastroapi.azurewebsites.net";
     public const string WebBeta = "https://beta.vedastro.org";
     public const string WebStable = "https://vedastro.org";
 
@@ -23,6 +25,7 @@ public class URL
     public URL(bool isBetaRuntime)
     {
         ApiUrl = isBetaRuntime ? ApiBeta : ApiStable;
+        ApiUrlDirect = isBetaRuntime ? ApiBetaDirect : ApiStableDirect;
         WebUrl = isBetaRuntime ? WebBeta : WebStable;
 
         //done here so that can be readonly
@@ -47,7 +50,7 @@ public class URL
         GetMatchReportApi = ApiUrl + "/getmatchreport";
         GetEventsChart = ApiUrl + "/geteventschart";
         //TODO special URL for chart because timeout Azure CDN timeout >30s
-        GetEventsChartDirect = "https://vedastroapi.azurewebsites.net/api/geteventschart"; 
+        GetEventsChartDirect = ApiUrlDirect + "/api/geteventschart"; 
         GetSavedEventsChart = ApiUrl + "/getsavedeventschart";
         GetSavedEventsChartIdList = ApiUrl + "/getsavedchartnamelist";
         SaveEventsChart = ApiUrl + "/SaveEventsChart";
@@ -73,6 +76,7 @@ public class URL
     public readonly string HoroscopeDataListXml;
     public readonly string APIHomePageTxt;
     public readonly string ApiUrl;
+    public readonly string ApiUrlDirect;
     public readonly string WebUrl;
     public readonly string AddPersonApi;
     public readonly string AddUserIdToVisitorPersons;

@@ -1,4 +1,4 @@
-﻿
+
 /*
 
 ███████╗██╗░░░██╗███████╗███╗░░██╗████████╗░██████╗    ░█████╗░██╗░░██╗░█████╗░██████╗░████████╗  
@@ -457,6 +457,10 @@ class EventsChart {
         }
 
         function autoMoveCursorLine(relativeMouseX) {
+
+            //give a tiny delay so user can aim better at event
+            setTimeout(() => {}, 157);
+
             //move vertical line to under mouse inside dasa view box
             $(ID.CursorLine).attr('transform', `matrix(1, 0, 0, 1, ${relativeMouseX}, 0)`);
         }

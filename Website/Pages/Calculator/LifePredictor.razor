@@ -4,14 +4,10 @@
 <PageTitle>@_pageTitle</PageTitle>
 <PageTop Title="Life Predictor" IconName="gis:map-time">
     <Description>
-        Each life is a story and using advanced computation algorithms fused with ancient vedic astrology this accurate chart is created.
-        It's a digital snapshot of a human's life.
+        Each life is a story. Using advanced computation algorithms fused with ancient astrology this accurate chart is created.
+        Its a digital snapshot of a human's life on earth.
     </Description>
-@*    <ButtonsRow>
-        <IconButton SmallSize="true" IconName="fluent:person-add-16-filled" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-        <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
-    </ButtonsRow>
-*@</PageTop>
+</PageTop>
 
 @*Dasas are major periods in which the indications of the planets are realised.
 Know good and bad periods of your life years ahead.
@@ -48,7 +44,7 @@ Know good and bad periods of your life years ahead.
             <PeopleSelectorBox @ref="_easyPeopleSelectorBox"/>
 
             <div>
-                <label class="form-label">Time Range<HelpBox SmallIcon="true" HelpText="@HelpText.DasaTimeRange"></HelpBox></label>
+                <label class="form-label">Time Range<HelpBox SmallIcon="true" HelpText="@HelpText.DasaTimeRange"/></label>
                 <select @bind="_selectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
                     <option value="FullLife">Full Life</option>
                     <option value="Age1to25">Age 1 to 25</option>
@@ -122,7 +118,7 @@ Know good and bad periods of your life years ahead.
     <Content>
 
         <h4 class="fw-bold">Purpose?</h4>
-        <p class="text-justify mb-4" style="max-width:@GR.W667px;">
+        <p class="text-justify mb-4" >
             The vexed question of timing events is solved to a great
             extent by the Dasa system. From a scientific point of view,
             we cannot say with any sort of definiteness, upon what basis
@@ -131,7 +127,7 @@ Know good and bad periods of your life years ahead.
         </p>
 
         <h4 class="fw-bold">What Dasa system do you use?</h4>
-        <p class="text-justify mb-4" style="max-width: @GR.W667px;">
+        <p class="text-justify mb-4">
             There are any number of Dasas in general use,
             but we propose to deal with Vimshottari. In the
             choice of any particular type of Dasa, the criterion must be
@@ -139,7 +135,7 @@ Know good and bad periods of your life years ahead.
         </p>
 
         <h4 class="fw-bold">How to calculate?</h4>
-        <p class="text-justify mb-4" style="max-width: @GR.W667px;">
+        <p class="text-justify mb-4" >
             The position of the Moon at birth is important in the
             calculation of the Dasas. Every constellation covers 13.3°
             degrees of the zodiacal space. Each nakshatra has a planet

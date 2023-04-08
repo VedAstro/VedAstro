@@ -2418,6 +2418,7 @@ namespace VedAstro.Library
             double bhuktiYears; //will be filled when getting dasa
             double antaramYears; //will be filled when getting bhukti
             double sukshmaYears; //will be filled when getting antaram
+            double pranaYears; //will be filled when getting prana
 
             //NOTE: Get Dasa prepares values for Get Bhukti and so on.
 
@@ -2433,11 +2434,43 @@ namespace VedAstro.Library
             //based on antaram get sukshma planet
             var sukshmaPlanet = GetSukshma();
 
+            //based on sukshma get prana planet
+            var pranaPlanet = GetPrana();
 
-            return new Dasas() { Dasa = dasaPlanet, Bhukti = bhuktiPlanet, Antaram = antaramPlanet, Sukshma = sukshmaPlanet };
+
+            return new Dasas() { Dasa = dasaPlanet, Bhukti = bhuktiPlanet, Antaram = antaramPlanet, Sukshma = sukshmaPlanet, Prana = pranaPlanet};
 
 
             //LOCAL FUNCTIONS
+            PlanetName GetPrana()
+            {
+                //first possible Prana planet is the Sukshma planet
+                var possiblePranaPlanet = sukshmaPlanet;
+
+            //minus the possible Prana planet's full years
+            MinusPranaYears:
+                var pranaPlanetFullYears = GetPranaPlanetFullYears(dasaPlanet, bhuktiPlanet, antaramPlanet, sukshmaPlanet, possiblePranaPlanet);
+                pranaYears -= pranaPlanetFullYears;
+
+                //if remaining prana time is negative,
+                //than current possible sukshma planet is correct
+                if (pranaYears <= 0)
+                {
+                    //return possible planet as correct
+                    return possiblePranaPlanet;
+                }
+                //else possible prana planet not correct, go to next one 
+                else
+                {
+                    //change to next prana planet in order
+                    possiblePranaPlanet = GetNextDasaPlanet(possiblePranaPlanet);
+                    //go back to minus this planet's years
+                    goto MinusPranaYears;
+                }
+
+
+            }
+            
             PlanetName GetSukshma()
             {
                 //first possible sukshma planet is the antaram planet
@@ -2452,6 +2485,11 @@ namespace VedAstro.Library
                 //than current possible sukshma planet is correct
                 if (sukshmaYears <= 0)
                 {
+                    //get back the Sukshma time before it becomes negative
+                    //this is the time inside the current Sukshma, aka Prana time
+                    //save it for late use
+                    pranaYears = sukshmaYears + sukshmaPlanetFullYears;
+
                     //return possible planet as correct
                     return possibleSukshmaPlanet;
                 }
@@ -2481,8 +2519,8 @@ namespace VedAstro.Library
                 //than current possible antaram planet is correct
                 if (antaramYears <= 0)
                 {
-                    //get back the antaram years before it became negative
-                    //this is the years inside the current antaram, aka Sukshma years
+                    //get back the antaram time before it became negative
+                    //this is the time inside the current antaram, aka Sukshma time
                     //save it for late use
                     sukshmaYears = antaramYears + antaramPlanetFullYears;
 
@@ -2720,7 +2758,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets the full years of an Sukshma planet 
+        /// Gets the full time of an Sukshma planet 
         /// Sukshma is a Sanskrit word meaning "subtle" or "dormant." The presence of sukshma is felt, but not seen.
         /// </summary>
         public static double GetSukshmaPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet, PlanetName antaramPlanet, PlanetName sukshmaPlanet)
@@ -2728,7 +2766,7 @@ namespace VedAstro.Library
             //120 years is the total of all the dasa planet's years
             const double fullHumanLifeYears = 120.0;
 
-            //the time an sukshma planet consumes in a dasa is
+            //the time an sukshma planet consumes in a antaram is
             //a fixed percentage it consumes in a person's full life
             var sukshmaPlanetPercentage = GetDasaPlanetFullYears(sukshmaPlanet) / fullHumanLifeYears;
 
@@ -2737,6 +2775,26 @@ namespace VedAstro.Library
 
             //return the calculated value
             return sukshmaPlanetFullYears;
+
+        }
+
+        /// <summary>
+        /// Gets the full time of an Prana planet 
+        /// </summary>
+        public static double GetPranaPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet, PlanetName antaramPlanet, PlanetName sukshmaPlanet, PlanetName pranaPlanet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time an Prana planet consumes in a Sukshma is
+            //a fixed percentage it consumes in a person's full life
+            var pranaPlanetPercentage = GetDasaPlanetFullYears(pranaPlanet) / fullHumanLifeYears;
+
+            //Prana planet's full time is a percentage of the Sukshma planet's full time
+            var pranaPlanetFullTime = pranaPlanetPercentage * GetSukshmaPlanetFullYears(dasaPlanet, bhuktiPlanet, antaramPlanet, sukshmaPlanet);
+
+            //return the calculated value
+            return pranaPlanetFullTime;
 
         }
 

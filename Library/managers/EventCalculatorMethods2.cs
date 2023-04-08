@@ -2050,6 +2050,8 @@ namespace VedAstro.Library
 
         #endregion
 
+        //BHUKTI
+
         #region SUN BHUKTI
 
         [EventCalculator(EventName.SunDasaSunBhukti)]
@@ -3633,6 +3635,8 @@ namespace VedAstro.Library
 
         #endregion
 
+        //ANTARAM
+
         #region SUN ANTARAMS
 
         [EventCalculator(EventName.SunBhuktiSunAntaram)]
@@ -3912,6 +3916,7 @@ namespace VedAstro.Library
 
         #endregion
 
+        //SUKSHMA
         
         #region SUN SUKSHMA
 
@@ -4189,6 +4194,288 @@ namespace VedAstro.Library
 
         [EventCalculator(EventName.VenusAntaramVenusSukshma)]
         public static CalculatorResult VenusAntaramVenusSukshma(Time time, Person person) => PlanetAntaramPlanetSukshma(time, person, PlanetName.Venus, PlanetName.Venus);
+
+        #endregion
+
+
+        //PRANA
+
+        #region SUN Prana
+
+        [EventCalculator(EventName.SunSukshmaSunPrana)]
+        public static CalculatorResult SunSukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Sun);
+
+        [EventCalculator(EventName.MoonSukshmaSunPrana)]
+        public static CalculatorResult MoonSukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Sun);
+
+        [EventCalculator(EventName.MarsSukshmaSunPrana)]
+        public static CalculatorResult MarsSukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Sun);
+
+        [EventCalculator(EventName.RahuSukshmaSunPrana)]
+        public static CalculatorResult RahuSukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Sun);
+
+        [EventCalculator(EventName.JupiterSukshmaSunPrana)]
+        public static CalculatorResult JupiterSukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Sun);
+
+        [EventCalculator(EventName.SaturnSukshmaSunPrana)]
+        public static CalculatorResult SaturnSukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Sun);
+
+        [EventCalculator(EventName.MercurySukshmaSunPrana)]
+        public static CalculatorResult MercurySukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Sun);
+
+        [EventCalculator(EventName.KetuSukshmaSunPrana)]
+        public static CalculatorResult KetuSukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Sun);
+
+        [EventCalculator(EventName.VenusSukshmaSunPrana)]
+        public static CalculatorResult VenusSukshmaSunPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Sun);
+
+        #endregion
+
+        #region MOON Prana
+
+        [EventCalculator(EventName.SunSukshmaMoonPrana)]
+        public static CalculatorResult SunSukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Moon);
+
+        [EventCalculator(EventName.MoonSukshmaMoonPrana)]
+        public static CalculatorResult MoonSukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Moon);
+
+        [EventCalculator(EventName.MarsSukshmaMoonPrana)]
+        public static CalculatorResult MarsSukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Moon);
+
+        [EventCalculator(EventName.RahuSukshmaMoonPrana)]
+        public static CalculatorResult RahuSukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Moon);
+
+        [EventCalculator(EventName.JupiterSukshmaMoonPrana)]
+        public static CalculatorResult JupiterSukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Moon);
+
+        [EventCalculator(EventName.SaturnSukshmaMoonPrana)]
+        public static CalculatorResult SaturnSukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Moon);
+
+        [EventCalculator(EventName.MercurySukshmaMoonPrana)]
+        public static CalculatorResult MercurySukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Moon);
+
+        [EventCalculator(EventName.KetuSukshmaMoonPrana)]
+        public static CalculatorResult KetuSukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Moon);
+
+        [EventCalculator(EventName.VenusSukshmaMoonPrana)]
+        public static CalculatorResult VenusSukshmaMoonPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Moon);
+
+        #endregion
+
+        #region MARS Prana
+
+        [EventCalculator(EventName.SunSukshmaMarsPrana)]
+        public static CalculatorResult SunSukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Mars);
+
+        [EventCalculator(EventName.MoonSukshmaMarsPrana)]
+        public static CalculatorResult MoonSukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Mars);
+
+        [EventCalculator(EventName.MarsSukshmaMarsPrana)]
+        public static CalculatorResult MarsSukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Mars);
+
+        [EventCalculator(EventName.RahuSukshmaMarsPrana)]
+        public static CalculatorResult RahuSukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Mars);
+
+        [EventCalculator(EventName.JupiterSukshmaMarsPrana)]
+        public static CalculatorResult JupiterSukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Mars);
+
+        [EventCalculator(EventName.SaturnSukshmaMarsPrana)]
+        public static CalculatorResult SaturnSukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Mars);
+
+        [EventCalculator(EventName.MercurySukshmaMarsPrana)]
+        public static CalculatorResult MercurySukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Mars);
+
+        [EventCalculator(EventName.KetuSukshmaMarsPrana)]
+        public static CalculatorResult KetuSukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Mars);
+
+        [EventCalculator(EventName.VenusSukshmaMarsPrana)]
+        public static CalculatorResult VenusSukshmaMarsPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Mars);
+
+        #endregion
+
+        #region RAHU Prana
+
+        [EventCalculator(EventName.SunSukshmaRahuPrana)]
+        public static CalculatorResult SunSukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Rahu);
+
+        [EventCalculator(EventName.MoonSukshmaRahuPrana)]
+        public static CalculatorResult MoonSukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Rahu);
+
+        [EventCalculator(EventName.MarsSukshmaRahuPrana)]
+        public static CalculatorResult MarsSukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Rahu);
+
+        [EventCalculator(EventName.RahuSukshmaRahuPrana)]
+        public static CalculatorResult RahuSukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Rahu);
+
+        [EventCalculator(EventName.JupiterSukshmaRahuPrana)]
+        public static CalculatorResult JupiterSukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Rahu);
+
+        [EventCalculator(EventName.SaturnSukshmaRahuPrana)]
+        public static CalculatorResult SaturnSukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Rahu);
+
+        [EventCalculator(EventName.MercurySukshmaRahuPrana)]
+        public static CalculatorResult MercurySukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Rahu);
+
+        [EventCalculator(EventName.KetuSukshmaRahuPrana)]
+        public static CalculatorResult KetuSukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Rahu);
+
+        [EventCalculator(EventName.VenusSukshmaRahuPrana)]
+        public static CalculatorResult VenusSukshmaRahuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Rahu);
+
+        #endregion
+
+        #region JUPITER Prana
+
+        [EventCalculator(EventName.SunSukshmaJupiterPrana)]
+        public static CalculatorResult SunSukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Jupiter);
+
+        [EventCalculator(EventName.MoonSukshmaJupiterPrana)]
+        public static CalculatorResult MoonSukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Jupiter);
+
+        [EventCalculator(EventName.MarsSukshmaJupiterPrana)]
+        public static CalculatorResult MarsSukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Jupiter);
+
+        [EventCalculator(EventName.RahuSukshmaJupiterPrana)]
+        public static CalculatorResult RahuSukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Jupiter);
+
+        [EventCalculator(EventName.JupiterSukshmaJupiterPrana)]
+        public static CalculatorResult JupiterSukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Jupiter);
+
+        [EventCalculator(EventName.SaturnSukshmaJupiterPrana)]
+        public static CalculatorResult SaturnSukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Jupiter);
+
+        [EventCalculator(EventName.MercurySukshmaJupiterPrana)]
+        public static CalculatorResult MercurySukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Jupiter);
+
+        [EventCalculator(EventName.KetuSukshmaJupiterPrana)]
+        public static CalculatorResult KetuSukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Jupiter);
+
+        [EventCalculator(EventName.VenusSukshmaJupiterPrana)]
+        public static CalculatorResult VenusSukshmaJupiterPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Jupiter);
+
+        #endregion
+
+        #region SATURN Prana
+
+        [EventCalculator(EventName.SunSukshmaSaturnPrana)]
+        public static CalculatorResult SunSukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Saturn);
+
+        [EventCalculator(EventName.MoonSukshmaSaturnPrana)]
+        public static CalculatorResult MoonSukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Saturn);
+
+        [EventCalculator(EventName.MarsSukshmaSaturnPrana)]
+        public static CalculatorResult MarsSukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Saturn);
+
+        [EventCalculator(EventName.RahuSukshmaSaturnPrana)]
+        public static CalculatorResult RahuSukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Saturn);
+
+        [EventCalculator(EventName.JupiterSukshmaSaturnPrana)]
+        public static CalculatorResult JupiterSukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Saturn);
+
+        [EventCalculator(EventName.SaturnSukshmaSaturnPrana)]
+        public static CalculatorResult SaturnSukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Saturn);
+
+        [EventCalculator(EventName.MercurySukshmaSaturnPrana)]
+        public static CalculatorResult MercurySukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Saturn);
+
+        [EventCalculator(EventName.KetuSukshmaSaturnPrana)]
+        public static CalculatorResult KetuSukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Saturn);
+
+        [EventCalculator(EventName.VenusSukshmaSaturnPrana)]
+        public static CalculatorResult VenusSukshmaSaturnPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Saturn);
+
+        #endregion
+
+        #region MERCURY Prana
+
+        [EventCalculator(EventName.SunSukshmaMercuryPrana)]
+        public static CalculatorResult SunSukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Mercury);
+
+        [EventCalculator(EventName.MoonSukshmaMercuryPrana)]
+        public static CalculatorResult MoonSukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Mercury);
+
+        [EventCalculator(EventName.MarsSukshmaMercuryPrana)]
+        public static CalculatorResult MarsSukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Mercury);
+
+        [EventCalculator(EventName.RahuSukshmaMercuryPrana)]
+        public static CalculatorResult RahuSukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Mercury);
+
+        [EventCalculator(EventName.JupiterSukshmaMercuryPrana)]
+        public static CalculatorResult JupiterSukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Mercury);
+
+        [EventCalculator(EventName.SaturnSukshmaMercuryPrana)]
+        public static CalculatorResult SaturnSukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Mercury);
+
+        [EventCalculator(EventName.MercurySukshmaMercuryPrana)]
+        public static CalculatorResult MercurySukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Mercury);
+
+        [EventCalculator(EventName.KetuSukshmaMercuryPrana)]
+        public static CalculatorResult KetuSukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Mercury);
+
+        [EventCalculator(EventName.VenusSukshmaMercuryPrana)]
+        public static CalculatorResult VenusSukshmaMercuryPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Mercury);
+
+        #endregion
+
+        #region KETU Prana
+
+        [EventCalculator(EventName.SunSukshmaKetuPrana)]
+        public static CalculatorResult SunSukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Ketu);
+
+        [EventCalculator(EventName.MoonSukshmaKetuPrana)]
+        public static CalculatorResult MoonSukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Ketu);
+
+        [EventCalculator(EventName.MarsSukshmaKetuPrana)]
+        public static CalculatorResult MarsSukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Ketu);
+
+        [EventCalculator(EventName.RahuSukshmaKetuPrana)]
+        public static CalculatorResult RahuSukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Ketu);
+
+        [EventCalculator(EventName.JupiterSukshmaKetuPrana)]
+        public static CalculatorResult JupiterSukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Ketu);
+
+        [EventCalculator(EventName.SaturnSukshmaKetuPrana)]
+        public static CalculatorResult SaturnSukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Ketu);
+
+        [EventCalculator(EventName.MercurySukshmaKetuPrana)]
+        public static CalculatorResult MercurySukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Ketu);
+
+        [EventCalculator(EventName.KetuSukshmaKetuPrana)]
+        public static CalculatorResult KetuSukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Ketu);
+
+        [EventCalculator(EventName.VenusSukshmaKetuPrana)]
+        public static CalculatorResult VenusSukshmaKetuPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Ketu);
+
+        #endregion
+
+        #region VENUS Prana
+
+        [EventCalculator(EventName.SunSukshmaVenusPrana)]
+        public static CalculatorResult SunSukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Sun, PlanetName.Venus);
+
+        [EventCalculator(EventName.MoonSukshmaVenusPrana)]
+        public static CalculatorResult MoonSukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Moon, PlanetName.Venus);
+
+        [EventCalculator(EventName.MarsSukshmaVenusPrana)]
+        public static CalculatorResult MarsSukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mars, PlanetName.Venus);
+
+        [EventCalculator(EventName.RahuSukshmaVenusPrana)]
+        public static CalculatorResult RahuSukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Rahu, PlanetName.Venus);
+
+        [EventCalculator(EventName.JupiterSukshmaVenusPrana)]
+        public static CalculatorResult JupiterSukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Jupiter, PlanetName.Venus);
+
+        [EventCalculator(EventName.SaturnSukshmaVenusPrana)]
+        public static CalculatorResult SaturnSukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Saturn, PlanetName.Venus);
+
+        [EventCalculator(EventName.MercurySukshmaVenusPrana)]
+        public static CalculatorResult MercurySukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Mercury, PlanetName.Venus);
+
+        [EventCalculator(EventName.KetuSukshmaVenusPrana)]
+        public static CalculatorResult KetuSukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Ketu, PlanetName.Venus);
+
+        [EventCalculator(EventName.VenusSukshmaVenusPrana)]
+        public static CalculatorResult VenusSukshmaVenusPrana(Time time, Person person) => PlanetSukshmaPlanetPrana(time, person, PlanetName.Venus, PlanetName.Venus);
 
         #endregion
 
@@ -4584,10 +4871,10 @@ namespace VedAstro.Library
             //get dasas for current time
             var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
 
-            //check bhukti
+            //check Antaram
             var isCorrectAntaram = currentDasaBhuktiAntaram.Antaram == antaramPlanet;
 
-            //check antaram
+            //check Sukshma
             var isCorrectSukshma = currentDasaBhuktiAntaram.Sukshma == sukshmaPlanet;
 
             //occuring if all conditions met
@@ -4598,6 +4885,40 @@ namespace VedAstro.Library
             {
                 //nature & description override, based on cyclic relationship between planets
                 var periodPrediction = AstronomicalCalculator.GetPlanetDasaMajorPlanetAndMinorRelationship(antaramPlanet, sukshmaPlanet);
+
+                var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
+
+                return result;
+            }
+            else
+            {
+                return CalculatorResult.NotOccuring();
+            }
+
+        }
+
+        /// <summary>
+        /// special shortcut method to make code smaller, easier to read & maintain 
+        /// </summary>
+        private static CalculatorResult PlanetSukshmaPlanetPrana(Time time, Person person, PlanetName sukshmaPlanet, PlanetName pranaPlanet)
+        {
+            //get whole dasa for current time
+            var currentDasaBhuktiAntaram = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time);
+
+            //check Sukshma
+            var isCorrectSukshma = currentDasaBhuktiAntaram.Sukshma == sukshmaPlanet;
+
+            //check prana
+            var isCorrectPrana = currentDasaBhuktiAntaram.Prana == pranaPlanet;
+
+            //occuring if all conditions met
+            var occuring = isCorrectSukshma && isCorrectPrana;
+
+            //only get prediction if event occurring, else waste compute cycles
+            if (occuring)
+            {
+                //nature & description override, based on cyclic relationship between planets
+                var periodPrediction = AstronomicalCalculator.GetPlanetDasaMajorPlanetAndMinorRelationship(sukshmaPlanet, pranaPlanet);
 
                 var result = new CalculatorResult() { Occuring = occuring, NatureOverride = periodPrediction.eventNature, DescriptionOverride = periodPrediction.desciption };
 

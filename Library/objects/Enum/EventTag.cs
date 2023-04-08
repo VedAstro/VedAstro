@@ -15,6 +15,7 @@ namespace VedAstro.Library
     /// </summary>
     public enum EventTag
     {
+        //todo made visible to public via api
         Agriculture,
         General,
         Personal,
@@ -30,7 +31,8 @@ namespace VedAstro.Library
         Dasa,
         Bhukti,
         Antaram,
-        Sukshma,
+        Sukshma, // weeks
+        Prana, // days
         DasaSpecialRules,
         Horoscope,
         Tarabala,

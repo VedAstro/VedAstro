@@ -121,6 +121,8 @@ namespace API
 
         public static List<HoroscopeData> SavedHoroscopeDataList { get; set; } = null; //null used for checking empty
 
+
+
         //----------------------------------------FUNCTIONS---------------------------------------------
 
         /// <summary>

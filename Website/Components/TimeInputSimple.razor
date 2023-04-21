@@ -170,7 +170,7 @@
         if (firstRender)
         {
             //load js script for date time picker
-            module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/TimeInput.js");
+            module = await _jsRuntime.InvokeAsync<IJSObjectReference>(JS.import, "./js/TimeInput.js");
         }
     }
 
@@ -204,7 +204,7 @@
 
         //initialize picker with needed values
         //note: we get values using JS, because set via JS and Blazor Bind doesn't get it
-        await module.InvokeVoidAsync("LoadCalendar", hour, minute, meridian, date, month, year);
+        await module.InvokeVoidAsync(JS.LoadCalendar, hour, minute, meridian, date, month, year);
 
         //toggle picker
         await _jsRuntime.ToggleClass(CalendarPickerHolder, "visually-hidden");

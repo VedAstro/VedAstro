@@ -1,6 +1,6 @@
 ﻿
 
-console.log("Log Thread JS Loaded");
+console.log("Log Thread - INIT");
 
 
 self.addEventListener('message', async function (e) {

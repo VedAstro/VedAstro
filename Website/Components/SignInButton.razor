@@ -52,7 +52,7 @@
                      data-client_id="19638836771-oflt5g9mnkft6chkl04vp4m5qpu5h569.apps.googleusercontent.com"
                      data-context="signin"
                      data-ux_mode="popup"
-                     data-callback="OnGoogleSignInSuccessHandler"
+                     data-callback="@JS.OnGoogleSignInSuccessHandler"
                      data-auto_prompt="false">
                 </div>
 
@@ -102,7 +102,7 @@
         {
             //google sign in code must be only loaded after
             //special google button has been rendered
-            await _jsRuntime.InvokeVoidAsync("loadJs", URL.GoogleSignInJs);
+            await _jsRuntime.InvokeVoidAsync(JS.loadJs, URL.GoogleSignInJs);
 
             //await _jsRuntime.LoadJs(ServerManager.GoogleSignInJs);
             //await _jsRuntime.InvokeAsync<IJSObjectReference>
@@ -110,7 +110,7 @@
 
             //makes this components instance available in JS,
             //to be used later when user clicks sign in button
-            await _jsRuntime.InvokeVoidAsync("SetSignInButtonInstance", DotNetObjectReference.Create(this));
+            await _jsRuntime.InvokeVoidAsync(JS.SetSignInButtonInstance, DotNetObjectReference.Create(this));
         }
     }
 
@@ -217,7 +217,7 @@
         //log this
         WebLogger.Click("Facebook Sign In");
 
-        await _jsRuntime.InvokeVoidAsync("facebookLogin");
+        await _jsRuntime.InvokeVoidAsync(JS.facebookLogin);
     }
 
 

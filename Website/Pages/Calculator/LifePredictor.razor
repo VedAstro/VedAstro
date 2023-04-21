@@ -103,7 +103,7 @@ Know good and bad periods of your life years ahead.
 @*hide until ready but initialized as well*@
 <div style="@(_isResultReady?"":"display:none;")">
     <div @ref="_holderDiv">
-        <EventsChartViewer @ref="_dasaChartViewer"></EventsChartViewer>
+        <EventsChartViewer @ref="_eventsChartViewer"></EventsChartViewer>
     </div>
 </div>
 
@@ -212,7 +212,7 @@ Know good and bad periods of your life years ahead.
     private PeopleSelectorBox? _peopleSelectorBox;
     private PeopleSelectorBox? _easyPeopleSelectorBox;
 
-    private EventsChartViewer? _dasaChartViewer;
+    private EventsChartViewer? _eventsChartViewer;
 
     public Person SelectedPerson { get; set; }
     public GeoLocation SelectedLocation { get; set; }
@@ -263,11 +263,11 @@ Know good and bad periods of your life years ahead.
         _isResultReady = false;
 
         //show saved chart
-        await _dasaChartViewer?.ShowSavedChart(_selectedChartId)!;
+        await _eventsChartViewer?.ShowSavedChart(_selectedChartId)!;
 
         //this is needed to generate data charts below
         //note gets person from ID stored in chart name
-        SelectedPerson = _dasaChartViewer.SelectedPerson;
+        SelectedPerson = _eventsChartViewer.SelectedPerson;
 
         //put person name into tab title for easy multi-tabbing
         //await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
@@ -305,7 +305,7 @@ Know good and bad periods of your life years ahead.
         var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Gochara };
 
         //pump data into chart
-        await _dasaChartViewer.ShowChart(SelectedPerson, startTime, endTime, inputedEventTags);
+        await _eventsChartViewer.ShowChart(SelectedPerson, startTime, endTime, inputedEventTags);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -343,7 +343,7 @@ Know good and bad periods of your life years ahead.
         var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Gochara };
 
         //pump data into chart
-        await _dasaChartViewer.ShowChart(SelectedPerson, startTime, endTime, dasaEventTags);
+        await _eventsChartViewer.ShowChart(SelectedPerson, startTime, endTime, dasaEventTags);
 
         //mark page as ready to show results
         _isResultReady = true;

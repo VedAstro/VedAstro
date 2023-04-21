@@ -47,7 +47,7 @@
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly
-        await _jsRuntime.InvokeVoidAsync("generateWebsiteTaskListTable", TableId, taskList.ToArray());
+        await _jsRuntime.InvokeVoidAsync(JS.generateWebsiteTaskListTable, TableId, taskList.ToArray());
 
         _jsRuntime.HideAlert();
 

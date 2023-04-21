@@ -39,10 +39,10 @@
         WebLogger.Data("Page Help Section Expand");
 
         //toggle first
-        _jsRuntime.InvokeVoidAsync("showAccordion", "#collapseOne");
+        _jsRuntime.InvokeVoidAsync(JS.showAccordion, "#collapseOne");
 
         //then scroll into view
-        _jsRuntime.InvokeVoidAsync("scrollIntoView", "#advancedTabAccordion");
+        _jsRuntime.InvokeVoidAsync(JS.scrollIntoView, "#advancedTabAccordion");
 
     }
 

@@ -1,7 +1,8 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
 @using VedAstro.Library
 @using System.Xml.Linq
 @using Website.Pages
+@using System.Text.Json
 
 
 @*
@@ -23,10 +24,20 @@
         <!-- DESKTOP ONLY : SIDEBAR -->
         <div class="col-auto align-items-start d-none d-md-block">
             <!--only visible in Desktop-->
-            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white"><SideBarButtons /></div>
+            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white">
+                <div class="sidebar-search">
+                    <div class="search-body">
+                        <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
+                        <div @onclick="OnClickSearchIcon" style="cursor: pointer;">
+                            <span class="iconify" data-icon="bx:search-alt" data-width="24"></span>
+                        </div>
+                    </div><!-- search-body -->
+                </div><!-- sidebar-search -->
+                <SideBarButtons />
+            </div>
 
             <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
-            <div  class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px;">
+            <div class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px;">
                 <div style="cursor: pointer;" @onclick="()=>_navigation.NavigateTo(PageRoute.MadeOnEarth)" class="hstack gap-1">
                     <span class="iconify" data-icon="ion:earth" data-width="10"></span>
                     <span>Made on Earth</span>
@@ -42,7 +53,7 @@
                     <span>2014 - 2023 VedAstro</span>
                 </div>
                 <div @onclick="OnClickStamp" class="mt-1">
-                   <img src="images/ce-fcc-recycle.svg">
+                    <img src="images/ce-fcc-recycle.svg">
                 </div>
             </div>
         </div>
@@ -92,7 +103,7 @@
 {
     //IJSObjectReference? _module;
     bool _mainPageInitDone;
-    private ElementReference searchInput, navLink1, navLink2, navLink3, navLink4, navLink5, navLink6, navLink7, navLink8, navLink9, navLink10, navLink11;
+    private ElementReference _searchInput;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -112,18 +123,11 @@
     {
         if (firstRender)
         {
-            //load js script for date time picker
-            //_module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/MainLayout.js");
 
-            await _jsRuntime.InvokeVoidAsync("InitErrorCatcher");
+            await _jsRuntime.InvokeVoidAsync(JS.InitErrorCatcher);
 
             //log visit only 1 once when page is rendered
             await WebLogger.Visitor(_jsRuntime);
-
-            //attach tooltip lib to dark mode & nav button element
-            //todo remove after update
-            await _jsRuntime.Tippy("#DarkModeButton", new { content = "Night Mode" });
-            await _jsRuntime.Tippy("#DesktopMenuBtn", new { content = "Hide Menu" });
         }
     }
 
@@ -132,6 +136,9 @@
         //NOTE
         //control comes here after Program, all needed initialization
         //done here before page/components are loaded
+
+        //do little check to make sure all functions in Interop is accounted for
+        await InteropHealthCheck();
 
         //create url based on beta or stable
         AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime());
@@ -153,6 +160,39 @@
     }
 
     /// <summary>
+    /// Checks if all functions expected by Blazor is defined Interop and vice versa
+    /// This check maintains a clean relationship, self diagnosis system
+    /// </summary>
+    /// <returns></returns>
+    private async Task InteropHealthCheck()
+    {
+        //get all JS functions in Interop.js
+        var functionsListRaw = await _jsRuntime.InvokeAsync<JsonElement>(JS.GetInteropFuncList);
+        List<string> jsList = functionsListRaw.EnumerateArray().Select(funcName => funcName.ToString()).ToList();
+
+        //calls in blazor would be more since there direct calls to libs aswell
+        List<string> blazorList = typeof(JS).GetFields().Select(prop => prop.Name).ToList();
+
+        //just make sure every call in Interop.js is accounted for
+        foreach (var jsFunc in jsList)
+        {
+            //JS function name should exist in Blazor list
+            //NOTE : meaning declared or expecting to be called, though not, just good business policy
+            var noneFound = blazorList.FindAll(blazFunc => blazFunc.Equals(jsFunc)).Count < 1;
+
+            //raise alarm
+            if (noneFound)
+            {
+                Console.WriteLine("Interop health check FAIL!!!");
+                throw new Exception($"Interop JS Function not found in Blazor : {jsFunc}");
+            }
+        }
+
+        Console.WriteLine("Interop health check PASS");
+
+    }
+
+    /// <summary>
     /// Checks if previous login data exist in browser's local storage
     /// </summary>
     private async Task TryGetPreviousLogin()
@@ -165,7 +205,7 @@
 #if DEBUG
     Console.WriteLine("BLZ: Using Previous Login Data");
 #endif
-            AppData.CurrentUser = UserData.FromXml(XElement.Parse(userDataXml));
+            AppData.CurrentUser = UserData.FromXml(XElement.Parse(userDataXml)) ?? throw new Exception("userDataXml failed to parse!");
         }
     }
 
@@ -184,7 +224,7 @@
     private async Task PerformSearch()
     {
         //get search text
-        var text = await _jsRuntime.GetValue(searchInput);
+        var text = await _jsRuntime.GetValue(_searchInput);
 
         //log
         WebLogger.Data("Search: " + text);
@@ -209,12 +249,9 @@
         switch (AppData.StampClickCount)
         {
             case 2: await _jsRuntime.ShowAlert("success", $"You clicked this 2x times, why?", true); break;
-            case 4: await _jsRuntime.ShowAlert("success", $"Stop clicking! There is no cake here.", true); break;
+            case 4: await _jsRuntime.ShowAlert("success", $"Stop clicking! There is no \"Cake\" here.", true); break;
             case 6: _navigation.NavigateTo(PageRoute.EasterEgg, true); break;
-                
         }
-
-      
     }
 }
 

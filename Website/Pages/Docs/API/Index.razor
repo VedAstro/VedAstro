@@ -56,6 +56,15 @@
         </tbody>
     </table>
 
+    
+    <h4 class="fw-bold"><Icon IconName="flat-color-icons:like" />Fair Usage Policy</h4>
+    <p class="text-justify">
+        In order to keep this API FREE for the benefit of all people. Please do not abuse it.
+        Design your app to call the API only when needed. Try to cache the data you receive.
+        If you ram the API with calls every 60s (like some people do), you'll ruin it for everybody.
+        If you need technical help on this, shoot us a mail. And we'll try our best to solve it. 
+    </p>
+
 
     @*    <p>
     Note: ... = https://api.vedastro.org
@@ -166,12 +175,5 @@
 
 @code {
 
-    protected override void OnAfterRender(bool firstRender)
-    {
-        if (firstRender)
-        {
-            _jsRuntime.InvokeVoidAsync("hljs.highlightAll");
-        }
-    }
 
 }

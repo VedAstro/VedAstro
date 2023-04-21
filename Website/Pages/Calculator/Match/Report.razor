@@ -515,27 +515,27 @@
     {
         if (reportKutaScore <= 30)
         {
-            return "Very bad compatibility, not recommended";
+            return "Not best, avoid if possible";
         }
 
         if (reportKutaScore > 30 && reportKutaScore <= 50)
         {
-            return "Bad compatibility, not best";
+            return "Average life, happiness with problems";
         }
 
         if (reportKutaScore > 50 && reportKutaScore <= 60)
         {
-            return "Average compatibility, not best";
+            return "Better than average, more good than bad";
         }
 
         if (reportKutaScore > 60 && reportKutaScore <= 80)
         {
-            return "Good marriage compatibility";
+            return "Near perfect match, overall happiness";
         }
 
         if (reportKutaScore > 80)
         {
-            return "Best marriage compatibility";
+            return "Best possible match, rare in real life";
         }
 
         return "";
@@ -544,14 +544,14 @@
     private void OnClickMoreInfo(string predictionName)
     {
         //make scroll movement to place
-        _jsRuntime.InvokeVoidAsync("scrollToDiv", "#" + predictionName);
+        _jsRuntime.InvokeVoidAsync(JS.scrollToDiv, "#" + predictionName);
     }
 
     private void OnClickDownloadPdf()
     {
         //calls special JS lib to convert html version of the chart to PDF
         //and initiated download as well, with 1 call
-        _jsRuntime.InvokeVoidAsync("htmlToPdf", matchReportElement, _pageTitle);
+        _jsRuntime.InvokeVoidAsync(JS.htmlToPdf, matchReportElement, _pageTitle);
     }
 
 }

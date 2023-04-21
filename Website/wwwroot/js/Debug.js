@@ -7,7 +7,6 @@
 //██████╔╝███████╗██████╦╝╚██████╔╝╚██████╔╝
 //╚═════╝░╚══════╝╚═════╝░░╚═════╝░░╚═════╝░
 
-
 //POLYFILL
 //this for getting max scroll vals
 (function (elmProto) {
@@ -29,20 +28,15 @@
 }
 )(Element.prototype);
 
-
 //EVENT HANDLERS
-
 
 //converts vertical scroll to horizontal scroll inside dasa view
 function dasaViewScrollEventHandler(evt) {
-
     //stop the scroll from normally moving down
     evt.preventDefault();
     //move horizontal scroll
     evt.currentTarget.scrollLeft += evt.deltaY;
-
 }
-
 
 //CUSTOM LOGIC FUNCTIONS
 //WHICH ARE CONSUMED BY OTHERS IN THIS FILE
@@ -64,10 +58,8 @@ function executeFunctionByName(functionName, context /*, args */) {
 //returns first elements in input list that is
 //underneath (visually) the inputed top element
 function getFirstElementUnder(topElement, possibleList) {
-
     //check if each possible element is under "top element"
     for (var i = 0; i < possibleList.length; i++) {
-
         //if under return it
         var isUnder = isElementUnderElement(topElement, possibleList[i]);
         if (isUnder) { return possibleList[i]; }
@@ -76,7 +68,6 @@ function getFirstElementUnder(topElement, possibleList) {
 
 // gets the year text under the auto scroll line
 function getTextUnderAutoScrollLine() {
-
     //get the elements needed
     let topElement = $("#AutoScrollLine");
     let yearElementList = $("#YearRow").children();
@@ -105,7 +96,6 @@ function isElementUnderElement(topElement, underElement) {
     return isUnder;
 }
 
-
 window.getWindowInnerWidth = function () {
     console.log(`JS : getWindowInnerWidth : ${window.innerWidth}`);
     return window.innerWidth;
@@ -128,7 +118,6 @@ window.getElementScrollWidth = function (element, parm) {
 window.setElementScrollLeft = function (element, parm) {
     element.scrollLeft = parm;
     console.log(`JS: setElementScrollLeft : ${element.scrollLeft}`);
-
 };
 
 window.setElementStyleLeft = function (element, leftValue) {
@@ -136,12 +125,10 @@ window.setElementStyleLeft = function (element, leftValue) {
     console.log(`JS: setElementStyleLeft : ${leftValue}`);
 };
 
-
 window.saveYearDivUnderTimeCursor = function (referenceParent) {
     console.log(`JS: saveYearDivUnderTimeCursor`);
 
     window.yearDivUnderTimeCursor = getFirstElementUnder($("#TimePlaceLine"), $(referenceParent).children());
-
 };
 
 window.getTextUnderElement = function (referenceParent) {
@@ -156,7 +143,6 @@ window.autoScrollDasaViewBackZoomIn = function (scrollContainer, referenceParent
 
     //move scroll until element is found
     while (!elementFound) {
-
         //increase left scroll because zoom in
         let newScrollLeft = $(scrollContainer).prop("scrollLeft") + 5;
         let maxScrollLeft = $(scrollContainer)[0].scrollLeftMax;
@@ -227,7 +213,7 @@ window.autoScrollToYear = function (scrollContainer, targetYearText) {
 
     //move scroll from start to end looking for element
     while (!autoCorrected) {
-        //calculate new left scroll because 
+        //calculate new left scroll because
         let newScrollLeft = $(scrollContainer).prop("scrollLeft") + increaseRate;
 
         //if scroll values are invalid end here
@@ -236,7 +222,7 @@ window.autoScrollToYear = function (scrollContainer, targetYearText) {
         let newScrollBelowMin = newScrollLeft <= 0;
         if (newScrollOverMax || newScrollBelowMin) { return; }
 
-        //add buffer, so that cursor doesn't stand edge of dif, 
+        //add buffer, so that cursor doesn't stand edge of dif,
         //else causes errors on next auto scroll
         newScrollLeft = newScrollLeft + 30;
 
@@ -251,10 +237,6 @@ window.autoScrollToYear = function (scrollContainer, targetYearText) {
         if (newTextUnder == targetYearText) { autoCorrected = true; }
     }
 };
-
-
-
-
 
 //ARCHIVED CODE
 

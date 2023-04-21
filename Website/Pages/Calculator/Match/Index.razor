@@ -10,54 +10,83 @@
 
 
 
-<div class="d-flex flex-wrap">
-    <div class="vstack gap-3 me-5">
-        <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonId="@SelectedMale" Label="Male" />
-        <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
-        <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
+<div class="d-flex flex-wrap mb-5">
+    <div>
+        <div class="vstack gap-3 me-5">
+            <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonId="@SelectedMale" Label="Male" />
+            <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
+            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
+        </div>
     </div>
-    <ul class="list-group rounded-3">
-        <li class="list-group-item active" aria-current="true">Factors Checked</li>
-        <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />Mars Dosa</li>
-        <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />Kuta Exceptions</li>
-        <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />7th House Check</li>
-    </ul>
+    <div>
+        <ul class="list-group rounded-3">
+            <li class="list-group-item active" aria-current="true">Full Check</li>
+            <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />Mars-Venus Dosa</li>
+            <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />12 Porutham/Kuta</li>
+            <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />Kuta Exceptions</li>
+            <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />7th House General</li>
+        </ul>
+    </div>
 </div>
 
+<hr />
 
-<h3>Perfect Predictions</h3>
-<table class="table">
+<h3 class="mt-5"><Icon NextToText="true" IconName="mdi:archive-star-outline" Size="38" />Real World Predictions</h3>
+<hr/>
+<table class="table mb-5">
     <thead>
         <tr>
             <th scope="col">Couple</th>
             <th scope="col">Prediction</th>
             <th scope="col">Real Life</th>
+            <th scope="col">Report</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <th scope="row">1</th>
-            <td>Napoleon Bonaparte + Joséphine de Beauharnai</td>
-            <td><b style="color: Red;">39%</b> <IconButton ButtonText="View Proof" ClickUrl="https://vedastro.org/Calculator/Match/Report/54041d1ffb49479997f7987ecfchf08b5/7faa6fe13ac5442d9d3dba972daa9af2" /></td>
-            <td>In 1810, Josephine's marriage with Napoleon was divorced after ~14 years together</td>
+            <td>Kristen Bell  <Icon Size="21" NextToText="true" IconName="mdi:cards-heart" />  Dax Shepard</td>
+            <td><b style="color: #00a702;">58%</b></td>
+            <td>married since 2007, @(DateTime.Now.Year - 2007) years together, 2 children</td>
+            <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/70d6a995dec84c0aa74211ac9ff50d29/8e9b5804e68a4b82a1a975ebee1643dc" /></td>
         </tr>
         <tr>
-            <th scope="row">1</th>
-            <td>Napoleon Bonaparte + Joséphine de Beauharnai</td>
-            <td><b style="color: Red;">39%</b> <IconButton ButtonText="View Proof" ClickUrl="https://vedastro.org/Calculator/Match/Report/54041d1ffb49479997f7987ecfchf08b5/7faa6fe13ac5442d9d3dba972daa9af2" /></td>
-            <td>In 1810, Josephine's marriage with Napoleon was divorced after ~14 years together</td>
+            <td>Matt Damon  <Icon Size="21" NextToText="true" IconName="mdi:cards-heart" />  Luciana Barroso</td>
+            <td><b style="color: #00a702;">56%</b></td>
+            <td>married since 2005, @(DateTime.Now.Year - 2005) years together, 3 daughters</td>
+            <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/696c62d1f429469aaf8111fc1418f7ce/ef97500191d248cd92bc43d32fed6093" /></td>
+        </tr>
+        <tr>
+            <td>Napoleon Bonaparte  <Icon Size="21" NextToText="true" IconName="material-symbols:heart-broken-rounded" />  Joséphine de Beau.</td>
+            <td><b style="color: #ff6969;">39%</b></td>
+            <td>married 14 years, divorced, no children</td>
+            <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/54041d1ffb49479997f7987ecfchf08b5/7faa6fe13ac5442d9d3dba972daa9af2" /></td>
+        </tr>
+        <tr>
+            <td>Brad Pitt  <Icon Size="21" NextToText="true" IconName="material-symbols:heart-broken-rounded" />  Angelina Jolie</td>
+            <td><b style="color: #ff6969;">33%</b></td>
+            <td>married 2 years, divorced, 3 children</td>
+            <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/1943d2df235a4848b72b7becca607492/64d9f64fd5cb47838bdede68c3048362" /></td>
+        </tr>
+        <tr>
+            <td>John Lennon  <Icon Size="21" NextToText="true" IconName="mdi:cards-heart" />  Yoko Ono</td>
+            <td><b style="color: #ff6969;">22%</b></td>
+            <td>married 10 years, end in husband death, 1 miscarriage, 1 son</td>
+            <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/188ae8f1dd4b487f9b419652aaca3518/fcc42c906530460c98163ede601d4932" /></td>
         </tr>
     </tbody>
 </table>
 
-<h4>Philosophy</h4>
+
+<hr style="margin-bottom:@GR.W157px;">
+
+@*<h4>Philosophy</h4>
 <p>
     Do we need more proof? It is high time, for us as a human species to stop hunting for partners blindly like animals based on our senses.
     Instead we shall use divine intelligence with understanding of cosmic laws that guarantee a perfect union between 2 souls.
     Just imagine a world with no divorces, a world where happy marriages is common sight. Where laughter abounds &amp; fear stands still.
     "You may say I'm dreamer, but I'm not the only one." -- John Lenon
 </p>
-
+*@
 @code {
 
     //VARIABLES
@@ -70,6 +99,14 @@
 
     //--------------------EVENT HANDLERS
 
+    //private string GetMatchColor(double score)
+    //{
+    //    //100 = #00ff00
+    //    //70 = #7dff7d
+    //    //50 = #ffffff
+    //    //25 = #ff6969
+    //    //25 = #ff0000
+    //}
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

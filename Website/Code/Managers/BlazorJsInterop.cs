@@ -41,7 +41,7 @@ namespace Website
                 //log this, don't await to reduce lag
                 WebLogger.Alert(alertData);
 
-                await jsRuntime.InvokeVoidAsync("Swal.fire", alertData);
+                await jsRuntime.InvokeVoidAsync(JS.Swal_fire, alertData);
             }
             //above code will fail when called during app start, because haven't load lib
             //as such catch failure and silently ignore
@@ -60,7 +60,7 @@ namespace Website
             //log this, don't await to reduce lag
             WebLogger.Data("Alert Close");
 
-            jsRuntime.InvokeVoidAsync("Swal.close");
+            jsRuntime.InvokeVoidAsync(JS.Swal_close);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Website
             //log this, don't await to reduce lag
             WebLogger.Alert(alertData);
 
-            return await jsRuntime.InvokeAsync<JsonElement>("Swal.fire", alertData);
+            return await jsRuntime.InvokeAsync<JsonElement>(JS.Swal_fire, alertData);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Website
         /// Shows leave email alert box and returns the email as string
         /// note: uses sweet alert js
         /// </summary>
-        public static async Task<string> ShowLeaveEmailAlert(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("ShowLeaveEmailAlert");
+        public static async Task<string> ShowLeaveEmailAlert(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.ShowLeaveEmailAlert);
 
         /// <summary>
         /// Shows loading box with auto progress bar using sweetalert
@@ -170,7 +170,7 @@ namespace Website
         {
             try
             {
-                await jsRuntime.InvokeVoidAsync("tippy", elementRef, tooltipData);
+                await jsRuntime.InvokeVoidAsync(JS.tippy, elementRef, tooltipData);
             }
             catch (Exception e)
             {
@@ -183,7 +183,7 @@ namespace Website
         {
             try
             {
-                await jsRuntime.InvokeVoidAsync("tippy", cssSelector, tooltipData);
+                await jsRuntime.InvokeVoidAsync(JS.tippy, cssSelector, tooltipData);
             }
             catch (Exception e)
             {
@@ -195,17 +195,17 @@ namespace Website
 
         //ACCESS BROWSERS LOCAL STORAGE
 
-        public static async Task<string> GetProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeAsync<string>("getProperty", propName);
+        public static async Task<string> GetProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeAsync<string>(JS.getProperty, propName);
         /// <summary>
         /// Set data into browser local storage
         /// </summary>
-        public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value) => await jsRuntime.InvokeVoidAsync("setProperty", propName, value);
-        public static async Task RemoveProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeVoidAsync("removeProperty", propName);
+        public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value) => await jsRuntime.InvokeVoidAsync(JS.setProperty, propName, value);
+        public static async Task RemoveProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeVoidAsync(JS.removeProperty, propName);
         /// <summary>
         /// Calls given handler when localstorage data changes
         /// </summary>
         public static async Task RemoveProperty<T>(this IJSRuntime jsRuntime, T instance, string handlerName) where T : class
-            => await jsRuntime.InvokeVoidAsync("watchProperty", DotNetObjectReference.Create(instance), handlerName);
+            => await jsRuntime.InvokeVoidAsync(JS.watchProperty, DotNetObjectReference.Create(instance), handlerName);
 
 
 
@@ -217,33 +217,33 @@ namespace Website
         /// <summary>
         /// Uses jQuery to show element via blazor reference
         /// </summary>
-        public static async Task Show(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync("showWrapper", element);
+        public static async Task Show(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, element);
         /// <summary>
         /// Uses jQuery to show element via selector (#ID,.class)
         /// </summary>
-        public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync("showWrapper", elementSelector);
+        public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, elementSelector);
 
         /// <summary>
         /// Uses jQuery to hide element via blazor reference
         /// </summary>
-        public static async Task Hide(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync("hideWrapper", element);
+        public static async Task Hide(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync(JS.hideWrapper, element);
 
         /// <summary>
         /// Uses jQuery to hide element via selector (#ID,.class)
         /// </summary>
-        public static async Task Hide(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync("hideWrapper", elementSelector);
+        public static async Task Hide(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync(JS.hideWrapper, elementSelector);
 
         /// <summary>
         /// Injects html/svg into an element
         /// </summary>
-        public static async Task InjectIntoElement(this IJSRuntime jsRuntime, ElementReference elmReference, string value) => await jsRuntime.InvokeVoidAsync("InjectIntoElement", elmReference, value);
+        public static async Task InjectIntoElement(this IJSRuntime jsRuntime, ElementReference elmReference, string value) => await jsRuntime.InvokeVoidAsync(JS.InjectIntoElement, elmReference, value);
 
         /// <summary>
         /// Uses jQuery to attach a function by name to a HTML element event
         /// </summary>
-        public static async Task AddEventListener(this IJSRuntime jsRuntime, ElementReference element, string eventName, string eventHandlerName) => await jsRuntime.InvokeVoidAsync("addEventListenerWrapper", element, eventName, eventHandlerName);
+        public static async Task AddEventListener(this IJSRuntime jsRuntime, ElementReference element, string eventName, string eventHandlerName) => await jsRuntime.InvokeVoidAsync(JS.addEventListenerWrapper, element, eventName, eventHandlerName);
 
-        public static async Task AddEventListener(this IJSRuntime jsRuntime, string jquerySelector, string eventName, string eventHandlerName) => await jsRuntime.InvokeVoidAsync("addEventListenerByClass", jquerySelector, eventName, eventHandlerName);
+        public static async Task AddEventListener(this IJSRuntime jsRuntime, string jquerySelector, string eventName, string eventHandlerName) => await jsRuntime.InvokeVoidAsync(JS.addEventListenerByClass, jquerySelector, eventName, eventHandlerName);
 
         /// <summary>
         /// Calls the js function specified and returns function data JSON to XML
@@ -285,61 +285,61 @@ namespace Website
             return finalXml;
         }
 
-        public static async Task AddClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("addClassWrapper", element, classNames);
+        public static async Task AddClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync(JS.addClassWrapper, element, classNames);
 
-        public static async Task RemoveClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("removeClassWrapper", element, classNames);
+        public static async Task RemoveClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync(JS.removeClassWrapper, element, classNames);
 
-        public static async Task ToggleClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync("toggleClassWrapper", element, classNames);
+        public static async Task ToggleClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync(JS.toggleClassWrapper, element, classNames);
 
-        public static async Task ToggleClass(this IJSRuntime jsRuntime, string jquerySelector, string classNames) => await jsRuntime.InvokeVoidAsync("toggleClassWrapper", jquerySelector, classNames);
+        public static async Task ToggleClass(this IJSRuntime jsRuntime, string jquerySelector, string classNames) => await jsRuntime.InvokeVoidAsync(JS.toggleClassWrapper, jquerySelector, classNames);
 
-        public static async Task<double> ElementWidth(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<double>("getElementWidth", element);
+        public static async Task<double> ElementWidth(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<double>(JS.getElementWidth, element);
 
-        public static async Task<double> AddWidthToEveryChild(this IJSRuntime jsRuntime, ElementReference element, double valueToAdd) => await jsRuntime.InvokeAsync<double>("addWidthToEveryChild", element, valueToAdd);
+        public static async Task<double> AddWidthToEveryChild(this IJSRuntime jsRuntime, ElementReference element, double valueToAdd) => await jsRuntime.InvokeAsync<double>(JS.addWidthToEveryChild, element, valueToAdd);
 
-        public static async Task<T> GetProp<T>(this IJSRuntime jsRuntime, ElementReference element, string propName) => await jsRuntime.InvokeAsync<T>("getPropWrapper", element, propName);
-
-        /// <summary>
-        /// wrapper for JQuery .prop() 
-        /// </summary>
-        public static async Task SetProp(this IJSRuntime jsRuntime, ElementReference element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
+        public static async Task<T> GetProp<T>(this IJSRuntime jsRuntime, ElementReference element, string propName) => await jsRuntime.InvokeAsync<T>(JS.getPropWrapper, element, propName);
 
         /// <summary>
         /// wrapper for JQuery .prop() 
         /// </summary>
-        public static async Task SetProp(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setPropWrapper", element, propName, propVal);
+        public static async Task SetProp(this IJSRuntime jsRuntime, ElementReference element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync(JS.setPropWrapper, element, propName, propVal);
+
+        /// <summary>
+        /// wrapper for JQuery .prop() 
+        /// </summary>
+        public static async Task SetProp(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync(JS.setPropWrapper, element, propName, propVal);
 
         /// <summary>
         /// wrapper for JQuery .attr() 
         /// </summary>
-        public static async Task SetAttr(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setAttrWrapper", element, propName, propVal);
+        public static async Task SetAttr(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync(JS.setAttrWrapper, element, propName, propVal);
 
         /// <summary>
         /// wrapper for JQuery .css() 
         /// </summary>
-        public static async Task SetCss(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync("setCssWrapper", element, propName, propVal);
+        public static async Task SetCss(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync(JS.setCssWrapper, element, propName, propVal);
 
-        public static void OpenNewTab(this IJSRuntime jsRuntime, string url) => jsRuntime.InvokeVoidAsync("open", url, "_blank");
+        public static void OpenNewTab(this IJSRuntime jsRuntime, string url) => jsRuntime.InvokeVoidAsync(JS.open, url, "_blank");
 
         /// <summary>
         /// Jquery .text()
         /// </summary>
-        public static async Task<string> GetText(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>("getTextWrapper", element);
-        public static async Task<string> GetText(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>("getTextWrapper", jquerySelector);
-        public static async Task<string> GetValue(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>("getValueWrapper", element);
-        public static async Task<string> GetValue(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>("getValueWrapper", jquerySelector);
-        public static async Task SetValue(this IJSRuntime jsRuntime, string jquerySelector, object value) => await jsRuntime.InvokeVoidAsync("setValueWrapper", jquerySelector, value);
+        public static async Task<string> GetText(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, element);
+        public static async Task<string> GetText(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, jquerySelector);
+        public static async Task<string> GetValue(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, element);
+        public static async Task<string> GetValue(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, jquerySelector);
+        public static async Task SetValue(this IJSRuntime jsRuntime, string jquerySelector, object value) => await jsRuntime.InvokeVoidAsync(JS.setValueWrapper, jquerySelector, value);
 
         /// <summary>
         /// Load page to given url using JS, reloads Blazor app as well, good for error recovery
         /// </summary>
-        public static async Task LoadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync("window.location.assign", url);
-        public static async Task ReloadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync("window.location.assign", url);
+        public static async Task LoadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync(JS.window_location_assign, url);
+        public static async Task ReloadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync(JS.window_location_assign, url);
 
         /// <summary>
         /// Checks if browser is online
         /// </summary>
-        public static async Task<bool> IsOnline(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<bool>("IsOnline");
+        public static async Task<bool> IsOnline(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<bool>(JS.IsOnline);
 
         /// <summary>
         /// Raises exception if not online
@@ -355,42 +355,32 @@ namespace Website
         /// <summary>
         /// Gets the previous page/origin url from JS
         /// </summary>
-        public static async Task<string> GetOriginUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("getOriginUrl");
+        public static async Task<string> GetOriginUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.getOriginUrl);
 
         /// <summary>
         /// Gets current page's url
         /// </summary>
-        public static async Task<string> GetCurrentUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>("getUrl");
+        public static async Task<string> GetCurrentUrl(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.getUrl);
 
         /// <summary>
         /// Equal to pressing Back button
         /// goes back to when things were simple
         /// </summary>
-        public static async Task GoBack(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync("history.back");
+        public static async Task GoBack(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync(JS.history_back);
 
-        /// <summary>
-        /// DEPRECATED BECAUSE CAUSES ERRORS
-        /// Sets new page/tab title
-        /// </summary>
-        //public static async Task SetTitle(this IJSRuntime jsRuntime, string newTitle) => await jsRuntime.InvokeVoidAsync("setTitleWrapper", newTitle);
 
         /// <summary>
         /// Load JS file programmatically
         /// </summary>
         public static async Task LoadJs(this IJSRuntime jsRuntime, string url)
         {
-            await jsRuntime.InvokeVoidAsync("loadJs", new { name = "JsInterop", url = url });
+            await jsRuntime.InvokeVoidAsync(JS.loadJs, new { name = "JsInterop", url = url });
         }
 
         /// <summary>
         /// Load JS file programmatically
         /// </summary>
-        public static async Task<IJSObjectReference> LoadJsBlazor(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeAsync<IJSObjectReference>("import", url);
-        //public static async Task LoadJsBlazorList(this IJSRuntime jsRuntime, List<s> url)
-        //{
-
-        //     await jsRuntime.InvokeAsync<IJSObjectReference>("import", url);
-        //}
+        public static async Task<IJSObjectReference> LoadJsBlazor(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeAsync<IJSObjectReference>(JS.import, url);
     }
 
 }

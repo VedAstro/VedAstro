@@ -26,7 +26,7 @@ namespace Website
         public static async Task<string> Post(string apiUrl, XElement xmlData)
         {
             //this call will take you to NetworkThread.js
-            var rawPayload = await AppData.JsRuntime.InvokeAsync<string>("postWrapper", apiUrl, xmlData.ToString(SaveOptions.DisableFormatting));
+            var rawPayload = await AppData.JsRuntime.InvokeAsync<string>(JS.postWrapper, apiUrl, xmlData.ToString(SaveOptions.DisableFormatting));
 
             //todo proper checking of status needed
             return rawPayload;

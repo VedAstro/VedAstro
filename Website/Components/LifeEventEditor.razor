@@ -58,7 +58,7 @@
 
         //convert objects to json (for js generator library)
         //and calls js code change table directly
-        await _jsRuntime.InvokeVoidAsync("generateLifeEventListTable", TableId, lifeEventList.ToArray());
+        await _jsRuntime.InvokeVoidAsync(JS.generateLifeEventListTable, TableId, lifeEventList.ToArray());
     }
 
 
@@ -69,7 +69,7 @@
     public async Task<List<LifeEvent>> GetData()
     {
         //get life events from the JS generated table
-        var lifeEventListXml = await _jsRuntime.InvokeAsyncJson("getLifeEventsListTableData", "LifeEventList");
+        var lifeEventListXml = await _jsRuntime.InvokeAsyncJson(JS.getLifeEventsListTableData, "LifeEventList");
 
         var returnList = new List<LifeEvent>();
 
@@ -106,7 +106,7 @@
         string jsonData = JsonConvert.SerializeObject(defaultLifeEvent);
 
         //call js to add data
-        await _jsRuntime.InvokeAsync<JsonObject>("addNewLifeEventToTable", jsonData);
+        await _jsRuntime.InvokeAsync<JsonObject>(JS.addNewLifeEventToTable, jsonData);
 
     }
 

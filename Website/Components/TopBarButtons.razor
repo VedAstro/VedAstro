@@ -53,7 +53,7 @@ else
     private async Task OnClickDarkModeButton()
     {
         //using JS lib toggle the dark mode
-        await _jsRuntime.InvokeVoidAsync("window.DarkMode.toggle");
+        await _jsRuntime.InvokeVoidAsync(JS.DarkMode_toggle);
 
         //get dark mode value and store it for use by event chart
         await AppData.UpdateDarkMode(_jsRuntime);

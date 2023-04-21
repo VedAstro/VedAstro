@@ -63,15 +63,15 @@
 
         //and calls js code change table directly
         //the data column to show is in js side
-        await _jsRuntime.InvokeVoidAsync("generatePlanetDataTable", PlanetTableId, planetData);
-        await _jsRuntime.InvokeVoidAsync("generatePlanetDataInfoTable", PlanetInfoTableId, planetData);
+        await _jsRuntime.InvokeVoidAsync(JS.generatePlanetDataTable, PlanetTableId, planetData);
+        await _jsRuntime.InvokeVoidAsync(JS.generatePlanetDataInfoTable, PlanetInfoTableId, planetData);
 
         //get house data
         var houseData = GetHouseData();
 
         //and calls js code change table directly
-        await _jsRuntime.InvokeVoidAsync("generateHouseDataTable", HouseTableId, houseData);
-        await _jsRuntime.InvokeVoidAsync("generateHouseDataInfoTable", HouseInfoTableId, houseData);
+        await _jsRuntime.InvokeVoidAsync(JS.generateHouseDataTable, HouseTableId, houseData);
+        await _jsRuntime.InvokeVoidAsync(JS.generateHouseDataInfoTable, HouseInfoTableId, houseData);
 
     }
 

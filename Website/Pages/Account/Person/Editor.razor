@@ -459,7 +459,7 @@
         var url = Path.Combine(AppData.URL.WebUrl, PageRoute.PersonEditor, PersonId); //use Combine for safety
 
         //use js to transfer to clipboard
-        await _jsRuntime.InvokeVoidAsync("CopyToClipboard", url);
+        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, url);
 
         //let user know link coppied
         await _jsRuntime.ShowAlert("success", $"Share Link Copied!", false, 2600);

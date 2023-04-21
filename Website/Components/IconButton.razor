@@ -7,8 +7,9 @@
 @if (IsDropDownMode)
 {
 
-    <div class="dropdown @ExtraClass"> @*extra class for dropdown direct to parent div*@
-        <button style="width:@GR.W60px;height: @GR.W37px;" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="dropdown @ExtraClass">
+        @*extra class for dropdown direct to parent div*@
+        <button style="@WidthCss height: @GR.W37px;" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             @*only show icon if specified*@
             @if (IconName != null)
             {
@@ -24,7 +25,7 @@
 @*NORMAL BUTTON*@
 else
 {
-    <button style="width:@GR.W60px;height: @GR.W37px;" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
+    <button style="@WidthCss height: @GR.W37px;" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
         @*only show icon if specified*@
         @if (IconName != null)
         {
@@ -34,7 +35,6 @@ else
     </button>
 
 }
-
 
 
 
@@ -175,6 +175,30 @@ else
     [Parameter]
     public ElementReference ElementReference { get; set; }
 
+
+    /// <summary>
+    /// if true will use Golden Ratio 60.1px
+    /// default false
+    /// </summary>
+    [Parameter]
+    public bool GoldRatioWidth { get; set; } = false;
+
+    private string WidthCss
+    {
+        get
+        {
+            var css = "";
+
+            //use golden ration if specified
+            css += GoldRatioWidth ? $"width:{GR.W60px};" : css;
+
+            return css;
+        }
+    }
+
+
+
+
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
     private async Task _OnAfterRender(bool firstRender)
@@ -214,5 +238,6 @@ else
         }
 
     }
+
 
 }

@@ -25,14 +25,10 @@
 
         _jsRuntime.ShowAlert(alertData);
 
-        //await Task.Delay(1000);
-
-        //_jsRuntime.InvokeVoidAsync("Swal.close");
-
     }
     private void Callback2()
     {
-         _jsRuntime.InvokeVoidAsync("Swal.showLoading");
+        _jsRuntime.InvokeVoidAsync(JS.Swal_showLoading);
 
     }
 

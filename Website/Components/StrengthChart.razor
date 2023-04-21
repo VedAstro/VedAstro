@@ -62,7 +62,7 @@
         //generate JS bar chart with calculated values
         //note : done here so needed element is available
         //sun, moon, mercury, mars, jupiter, saturn, venus
-        await _jsRuntime.InvokeVoidAsync("DrawPlanetStrengthChart",
+        await _jsRuntime.InvokeVoidAsync(JS.DrawPlanetStrengthChart,
             _shadbalaPindaSun,
             _shadbalaPindaMoon,
             _shadbalaPindaMercury,
@@ -92,7 +92,7 @@
         //generate JS bar chart with calculated values
         //note : done here so needed element is available
         //sun, moon, mercury, mars, jupiter, saturn, venus
-        await _jsRuntime.InvokeVoidAsync("DrawHouseStrengthChart",
+        await _jsRuntime.InvokeVoidAsync(JS.DrawHouseStrengthChart,
             _house1,
             _house2,
             _house3,

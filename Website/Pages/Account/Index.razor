@@ -3,15 +3,40 @@
 <PageTitle>User Account | VedAstro</PageTitle>
 
 <PageTop Title="User Account" IconName="carbon:gateway-api">
-    <Description>Data related to your user account in VedAstro</Description>
+    <Description>Data related to your account in VedAstro</Description>
 </PageTop>
 
 
-<h3>API Key / User ID</h3>
-<div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-    <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
-</div>
+<table class="table">
+    @*    <thead>
+    <tr>
+    <th scope="col">Last</th>
+    <th scope="col">Handle</th>
+    </tr>
+    </thead>
+    *@
+    <tbody>
+        <tr>
+            <td><Icon IconName="flat-color-icons:neutral-decision" /> Name</td>
+            <td>@AppData.CurrentUser.Name</td>
+            @*TODO ADD buttons to edit*@
+        </tr>
+        <tr>
+            <td><Icon IconName="flat-color-icons:address-book" /> Email</td>
+            <td>@AppData.CurrentUser.Email</td>
+            @*TODO ADD buttons to edit*@
+        </tr>
+        <tr>
+            <td><Icon IconName="flat-color-icons:key" /> API Key / User ID</td>
+            <td>@AppData.CurrentUser.Id</td>
+            @*TODO ADD buttons to copy*@
+        </tr>
+        <tr>
+            <td><Icon IconName="mdi:form-textbox-password" /> Password</td>
+            <td>Managed by Google/Facebook. Go there to change it.</td>
+        </tr>
+    </tbody>
+</table>
 
 @code {
 

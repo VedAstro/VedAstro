@@ -2,7 +2,7 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-<span class="iconify" data-icon="@IconName" data-width="@Size"></span>
+<span style="@CssStyle" class="iconify" data-icon="@IconName" data-width="@Size"></span>
 
 @code {
 
@@ -11,6 +11,30 @@
     /// </summary>
     [Parameter]
     public string? IconName { get; set; }
+
+
+    /// <summary>
+    /// If set true, will make icon properly align with neighboring text
+    /// defaults to false
+    /// </summary>
+    [Parameter]
+    public bool NextToText { get; set; } = false;
+
+    /// <summary>
+    /// computed style applied to 
+    /// </summary>
+    private string CssStyle
+    {
+        get
+        {
+            var compiledStyle = "";
+
+            compiledStyle += NextToText ? "vertical-align: text-bottom; " : "";
+
+            return compiledStyle;
+
+        }
+    }
 
     /// <summary>
     /// Size in pixels, default is 25

@@ -4,14 +4,16 @@
 
 <div class="py-2">
     
-    <h4 class="fw-bold">
+    <div class="hstack gap-2">
         @*only render, icon of name was specified*@
         @if (!string.IsNullOrEmpty(IconName))
         {
-            <Icon NextToText="true" IconName="@IconName"/>
+            <Icon Size="40" NextToText="false" IconName="@IconName"/>
         }
-        @Title
-    </h4>
+
+        <h4 class="fw-bold mt-2">@Title</h4>
+    </div>
+    <hr class="mt-1 mb-2" />
     <p class="text-justify">
         @TextHTML
     </p>

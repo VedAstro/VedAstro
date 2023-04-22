@@ -14,19 +14,19 @@
 
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-reference-tab" data-bs-toggle="tab" data-bs-target="#nav-reference" type="button" role="tab" aria-controls="nav-reference" aria-selected="true">
-                Reference <HelpBox HelpText="@HelpText.SearchReference" SmallIcon="true"></HelpBox>
+            <button class="nav-link active" id="nav-horoscope-tab" data-bs-toggle="tab" data-bs-target="#nav-horoscope" type="button" role="tab" aria-controls="nav-horoscope" aria-selected="true">
+                Horoscope Predictions <HelpBox HelpText="@HelpText.SearchPredictions" SmallIcon="true" /> - @foundPrediction.Count()
             </button>
-            <button class="nav-link" id="nav-horoscope-tab" data-bs-toggle="tab" data-bs-target="#nav-horoscope" type="button" role="tab" aria-controls="nav-horoscope" aria-selected="false">
-                Horoscope Predictions <HelpBox HelpText="@HelpText.SearchPredictions" SmallIcon="true"></HelpBox>
+            <button class="nav-link" id="nav-reference-tab" data-bs-toggle="tab" data-bs-target="#nav-reference" type="button" role="tab" aria-controls="nav-reference" aria-selected="false">
+                Reference <HelpBox HelpText="@HelpText.SearchReference" SmallIcon="true"/> - @foundReference.Count()
             </button>
             <button class="nav-link" id="nav-muhurtha-tab" data-bs-toggle="tab" data-bs-target="#nav-muhurtha" type="button" role="tab" aria-controls="nav-muhurtha" aria-selected="false">
-                Muhurtha Events <HelpBox HelpText="@HelpText.SearchEvents" SmallIcon="true"></HelpBox>
+                Muhurtha Events <HelpBox HelpText="@HelpText.SearchEvents" SmallIcon="true"/> - @foundEvents.Count()
             </button>
         </div>
     </nav>
     <div class="tab-content border" id="nav-tabContent">
-        <div class="tab-pane fade show active" id="nav-reference" role="tabpanel" aria-labelledby="nav-reference-tab">
+        <div class="tab-pane fade" id="nav-reference" role="tabpanel" aria-labelledby="nav-reference-tab">
             <div class="vstack gap-4 py-2">
                 @foreach (var prediction in foundReference)
                 {
@@ -46,7 +46,7 @@
                 }
             </div>
         </div>
-        <div class="tab-pane fade" id="nav-horoscope" role="tabpanel" aria-labelledby="nav-horoscope-tab">
+        <div class="tab-pane fade show active" id="nav-horoscope" role="tabpanel" aria-labelledby="nav-horoscope-tab">
             <div class="vstack gap-4 py-2">
                 @foreach (var prediction in foundPrediction)
                 {
@@ -68,7 +68,7 @@
         </div>
         <div class="tab-pane fade" id="nav-muhurtha" role="tabpanel" aria-labelledby="nav-muhurtha-tab">
             <div class="vstack gap-4 py-2">
-                @foreach (var prediction in foundEvent)
+                @foreach (var prediction in foundEvents)
                 {
                     <div class="card shadow">
                         <div class="card-header hstack">
@@ -108,7 +108,7 @@ else
 
 
     IEnumerable<XElement> foundPrediction = new List<XElement>();
-    IEnumerable<XElement> foundEvent = new List<XElement>();
+    IEnumerable<XElement> foundEvents = new List<XElement>();
     IEnumerable<XElement> foundReference = new List<XElement>();
 
 
@@ -152,11 +152,11 @@ else
         //search file
         var horoscopeDataListCached = await AppData.GetHoroscopeDataListCached();
         foundPrediction = horoscopeDataListCached?.Where(IsFound) ?? Array.Empty<XElement>();
-        foundEvent = AppData.EventDataList.Where(IsFound);
+        foundEvents = AppData.EventDataList.Where(IsFound);
         foundReference = AppData.ReferenceList.Where(IsFound);
 
         //show search result count
-        resultCount = foundPrediction.Count() + foundEvent.Count();
+        resultCount = foundPrediction.Count() + foundEvents.Count();
 
         //mark as ready to show user
         _resultReady = true;

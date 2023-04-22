@@ -1,0 +1,25 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+@*SIMPLE HEADING TITLE WITH NICELY POSITIONED ICON*@
+
+
+<div class="mt-5 hstack gap-2">
+    <Icon NextToText="true" IconName="@IconName" Size="38" />
+    <h3 class="mt-2">@Title</h3>
+</div>
+<hr class="mt-1 mb-2" />
+
+
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string IconName { get; set; } = "";
+
+}

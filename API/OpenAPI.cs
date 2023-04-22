@@ -78,7 +78,6 @@ namespace API
                         rootJson["Name"] = planetSign.GetSignName().ToString();
                         rootJson["DegreesInSign"] = planetSign.GetDegreesInSign().TotalDegrees;
                         return APITools.PassMessageJson(rootJson, incomingRequest);
-
                     }
                 case "Navamsa": returnVal = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, parsedTime).ToString(); break;
                 case "Dwadasamsa": returnVal = AstronomicalCalculator.GetPlanetDwadasamsaSign(planetName, parsedTime).ToString(); break;

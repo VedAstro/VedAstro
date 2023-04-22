@@ -4,45 +4,17 @@ using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using SwissEphNet;
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Nodes;
+using Newtonsoft.Json.Linq;
 
 
 namespace API
 {
     public static class OpenAPI
     {
-        public static async Task<HttpResponseData> SwissEph(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get",
-                Route =
-                    "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/SwissEph")]
-            HttpRequestData incomingRequest,
-            string locationName,
-            string hhmmStr,
-            string dateStr,
-            string monthStr,
-            string yearStr,
-            string offsetStr,
-            string planetNameStr)
-        {
 
-            PlanetName planetName;
-            var planetNameResult = PlanetName.TryParse(planetNameStr, out planetName);
-            var geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //check result 1st before parsing
-            if (!planetNameResult || !geoLocationResult.IsPass) { return APITools.FailMessage("Please check your input, it failed to parse.", incomingRequest); }
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
-
-            //do calculation first then return all data
-            var result = SwissEphWrapper(parsedTime, planetName);
-
-            return APITools.PassMessageJson(result, incomingRequest);
-
-
-        }
 
         /// <summary>
         /// https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
@@ -63,7 +35,8 @@ namespace API
             string propertyName)
         {
             //log the call
-            APILogger.Visitor(incomingRequest);
+            await APILogger.Visitor(incomingRequest);
+
 
             PlanetName planetName;
             var planetNameResult = PlanetName.TryParse(planetNameStr, out planetName);
@@ -76,6 +49,22 @@ namespace API
             //clean time text
             var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
             var parsedTime = new Time(timeStr, geoLocation);
+
+
+            //SWISS EPH
+
+            if (propertyName == "SwissEph")
+            {
+                var result = SwissEphWrapper(parsedTime, planetName);
+
+                JObject jsonResult = JObject.FromObject(result);
+
+                return APITools.PassMessageJson(jsonResult, incomingRequest);
+
+            }
+
+
+            //OTHER CALLS
 
             //based on property call the method
             var returnVal = "";
@@ -103,7 +92,7 @@ namespace API
         public static async Task<HttpResponseData> TwoProperty([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/{propertyName1}/{propertyName2}")] HttpRequestData incomingRequest, string locationName, string hhmmStr, string dateStr, string monthStr, string yearStr, string offsetStr, string planetNameStr, string propertyName1, string propertyName2)
         {
             //log the call
-            APILogger.Visitor(incomingRequest);
+            await APILogger.Visitor(incomingRequest);
 
             PlanetName planetName;
             var planetNameResult = PlanetName.TryParse(planetNameStr, out planetName);
@@ -193,16 +182,15 @@ namespace API
 
             //data in results at index 0 is longitude
             var sweCalcResults = new { 
-                Longitude = new Angle(degrees: results[0]),
-                Latitude = new Angle(degrees: results[1]),
-                DistanceAU = new Angle(degrees: results[2]),
-                SpeedLongitude = new Angle(degrees: results[3]),
-                SpeedLatitude = new Angle(degrees: results[4]),
-                SpeedDistance = new Angle(degrees: results[5])};
-
+                Longitude = results[0],
+                Latitude = results[1],
+                DistanceAU = results[2],
+                SpeedLongitude = results[3],
+                SpeedLatitude = results[4],
+                SpeedDistance = results[5]
+            };
 
             return sweCalcResults;
-
         }
 
     }

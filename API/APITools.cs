@@ -1,6 +1,7 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
+using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Xml.Linq;
@@ -95,11 +96,33 @@ namespace API
             return response;
         }
 
+        /// <summary>
+        /// Input JSON parsed object directly, for best conversion
+        /// </summary>
+        public static HttpResponseData MessageJson(string statusResult, JObject payload, HttpRequestData req)
+        {
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "application/json");
+
+            var finalPayloadJson = new JObject();
+            finalPayloadJson["Status"] = "Pass";
+            finalPayloadJson["Payload"] = payload;
+
+            //convert XML to Json text
+            string jsonText = finalPayloadJson.ToString();
+
+            //place in response body
+            response.WriteString(jsonText);
+
+            return response;
+        }
+
         public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) => MessageJson("Fail", payload, req);
 
         public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
 
         public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) => MessageJson("Pass", payload, req);
+        public static HttpResponseData PassMessageJson(JObject payload, HttpRequestData req) => MessageJson("Pass", payload, req);
 
         //public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
         //public static OkObjectResult FailMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payloadXml)).ToString());
@@ -386,34 +409,37 @@ namespace API
         {
             var requestXml = new XElement("Request");
 
-            var xmled = Tools.AnyTypeToXElement(requestData);
+            //STAGE 1 : HEADERS
+            var headersRaw = requestData?.Headers.ToList();
+            var headerXml = new XElement("HeaderList");
+            foreach (var keyValuePair in headersRaw)
+            {
+                var headData = string.Join(",", keyValuePair.Value);
+                var headName = keyValuePair.Key;
+                headerXml.Add(new XElement(headName, headData));
+            }
 
-            requestXml.Add(xmled);
+            //add headers separately last, because generated separately
+            requestXml.Add(headerXml);
+
+
+            //STAGE 2 : OTHER DATA
+            var propList = new Dictionary<string, string>()
+            {
+                ["Method"] = requestData.Method,
+                ["Url"] = requestData.Url.ToString(),
+                ["IP"] = requestData?.GetCallerIp().ToString() ?? "no ip!",
+                ["Body"] = await requestData?.ReadAsStringAsync() ?? "Empty",
+            };
+
+            foreach (var property in propList)
+            {
+                var tempXml = new XElement(property.Key, property.Value);
+                requestXml.Add(tempXml);
+            }
+
 
             return requestXml;
-
-            //var headersRaw = requestData?.Headers.ToList();
-            //System.Xml.Serialization.XmlSerializer x = new System.Xml.Serialization.XmlSerializer(headersRaw.GetType());
-            //x.Serialize(Console.Out, p);
-
-            //var propList = new Dictionary<string, string>()
-            //{
-            //    ["Method"] = requestData.Method,
-            //    ["Url"] = requestData.Url.ToString(),
-            //    ["IP"] = requestData?.GetCallerIp().ToString() ?? "no ip!",
-            //    ["Cookies"] = Tools.ListToString(requestData?.Cookies.ToList()),
-            //    ["Identities"] = Tools.ListToString(requestData?.Identities.ToList()),
-            //    ["Headers"] = headersParsed ?? "no headers!",
-            //    ["Body"] = await requestData?.ReadAsStringAsync() ?? "Empty",
-            //};
-
-            //foreach (var property in propList)
-            //{
-            //    var tempXml = new XElement(property.Key, property.Value);
-            //    requestXml.Add(tempXml);
-            //}
-
-            //return requestXml;
         }
 
         public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)

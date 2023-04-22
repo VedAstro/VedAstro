@@ -71,7 +71,15 @@ namespace API
             switch (propertyName)
             {
                 case "Rasi":
-                case "Sign": returnVal = AstronomicalCalculator.GetPlanetRasiSign(planetName, parsedTime).ToString(); break;
+                case "Sign":
+                    {
+                        var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, parsedTime);
+                        var rootJson = new JObject();
+                        rootJson["Name"] = planetSign.GetSignName().ToString();
+                        rootJson["DegreesInSign"] = planetSign.GetDegreesInSign().TotalDegrees;
+                        return APITools.PassMessageJson(rootJson, incomingRequest);
+
+                    }
                 case "Navamsa": returnVal = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, parsedTime).ToString(); break;
                 case "Dwadasamsa": returnVal = AstronomicalCalculator.GetPlanetDwadasamsaSign(planetName, parsedTime).ToString(); break;
                 case "Constellation": returnVal = AstronomicalCalculator.GetPlanetConstellation(parsedTime, planetName).ToString(); break;
@@ -135,7 +143,7 @@ namespace API
 
                             case "Directional":
                             case "Dig": returnVal = AstronomicalCalculator.GetPlanetDigBala(planetName, parsedTime).ToString(); break;
-                            
+
                             case "Temporal":
                             case "Kala": returnVal = AstronomicalCalculator.GetPlanetKalaBala(planetName, parsedTime).ToString(); break;
 
@@ -181,7 +189,8 @@ namespace API
             int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
 
             //data in results at index 0 is longitude
-            var sweCalcResults = new { 
+            var sweCalcResults = new
+            {
                 Longitude = results[0],
                 Latitude = results[1],
                 DistanceAU = results[2],

@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using SwissEphNet;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static VedAstro.Library.PlanetName;
@@ -1044,6 +1045,104 @@ namespace VedAstro.Library
             JsonElement root = doc.RootElement;
 
             return root;
+        }
+
+        /// <summary>
+        /// Converts VedAstro planet name to Swiss Eph planet
+        /// </summary>
+        /// <returns></returns>
+        public static int VedAstroToSwissEph(PlanetName planetName)
+        {
+            int planet = 0;
+
+            //Convert PlanetName to SE_PLANET type
+            if (planetName == PlanetName.Sun)
+                planet = SwissEph.SE_SUN;
+            else if (planetName == PlanetName.Moon)
+            {
+                planet = SwissEph.SE_MOON;
+            }
+            else if (planetName == PlanetName.Mars)
+            {
+                planet = SwissEph.SE_MARS;
+            }
+            else if (planetName == PlanetName.Mercury)
+            {
+                planet = SwissEph.SE_MERCURY;
+            }
+            else if (planetName == PlanetName.Jupiter)
+            {
+                planet = SwissEph.SE_JUPITER;
+            }
+            else if (planetName == PlanetName.Venus)
+            {
+                planet = SwissEph.SE_VENUS;
+            }
+            else if (planetName == PlanetName.Saturn)
+            {
+                planet = SwissEph.SE_SATURN;
+            }
+            else if (planetName == PlanetName.Rahu)
+            {
+                planet = SwissEph.SE_MEAN_NODE;
+            }
+            else if (planetName == PlanetName.Ketu)
+            {
+                //TODO CHECK HERE + REF BV RAMAN ADD 180 TO ketu to get rahu
+                planet = SwissEph.SE_MEAN_NODE;
+            }
+
+            return planet;
+        }
+
+        /// <summary>
+        /// Converts string name of planets, all case to swiss type
+        /// </summary>
+        public static int StringToSwissEph(string planetName)
+        {
+            int planet = 0;
+
+            //make small case, best reliablility
+            planetName = planetName.ToLower();
+
+            //Convert PlanetName to SE_PLANET type
+            if (planetName == "sun")
+                planet = SwissEph.SE_SUN;
+            else if (planetName == "moon")
+            {
+                planet = SwissEph.SE_MOON;
+            }
+            else if (planetName == "mars")
+            {
+                planet = SwissEph.SE_MARS;
+            }
+            else if (planetName == "Mercury")
+            {
+                planet = SwissEph.SE_MERCURY;
+            }
+            else if (planetName == "Jupiter")
+            {
+                planet = SwissEph.SE_JUPITER;
+            }
+            else if (planetName == "Venus")
+            {
+                planet = SwissEph.SE_VENUS;
+            }
+            else if (planetName == "Saturn")
+            {
+                planet = SwissEph.SE_SATURN;
+            }
+            else if (planetName == "Rahu")
+            {
+                planet = SwissEph.SE_MEAN_NODE;
+            }
+            else if (planetName == "Ketu")
+            {
+                //TODO CHECK HERE + REF BV RAMAN ADD 180 TO ketu to get rahu
+                planet = SwissEph.SE_MEAN_NODE;
+            }
+
+            return planet;
         }
     }
 

@@ -34,6 +34,7 @@ namespace VedAstro.Library
 
         }
 
+
         /// <summary>
         /// NOTE This method connects SwissEph Library with Muhurta Library
         /// </summary>
@@ -51,7 +52,6 @@ namespace VedAstro.Library
                 //Converts LMT to UTC (GMT)
                 //DateTimeOffset utcDate = lmtDateTime.ToUniversalTime();
 
-                int planet = 0;
                 int iflag = SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
                 double[] results = new double[6];
                 string err_msg = "";
@@ -61,46 +61,11 @@ namespace VedAstro.Library
                 // Convert DOB to ET
                 jul_day_ET = TimeToEphemerisTime(time);
 
-
-                //Convert PlanetName to SE_PLANET type
-                if (planetName == PlanetName.Sun)
-                    planet = SwissEph.SE_SUN;
-                else if (planetName == PlanetName.Moon)
-                {
-                    planet = SwissEph.SE_MOON;
-                }
-                else if (planetName == PlanetName.Mars)
-                {
-                    planet = SwissEph.SE_MARS;
-                }
-                else if (planetName == PlanetName.Mercury)
-                {
-                    planet = SwissEph.SE_MERCURY;
-                }
-                else if (planetName == PlanetName.Jupiter)
-                {
-                    planet = SwissEph.SE_JUPITER;
-                }
-                else if (planetName == PlanetName.Venus)
-                {
-                    planet = SwissEph.SE_VENUS;
-                }
-                else if (planetName == PlanetName.Saturn)
-                {
-                    planet = SwissEph.SE_SATURN;
-                }
-                else if (planetName == PlanetName.Rahu)
-                {
-                    planet = SwissEph.SE_MEAN_NODE;
-                }
-                else if (planetName == PlanetName.Ketu)
-                {
-                    //TODO CHECK HERE
-                    planet = SwissEph.SE_MEAN_NODE;
-                }
+                //convert planet name, compatible with Swiss Eph
+                int swissPlanet = Tools.VedAstroToSwissEph(planetName);
 
                 //Get planet long
-                int ret_flag = ephemeris.swe_calc(jul_day_ET, planet, iflag, results, ref err_msg);
+                int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
 
                 //data in results at index 0 is longitude
                 return new Angle(degrees: results[0]);

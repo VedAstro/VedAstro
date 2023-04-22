@@ -15,7 +15,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.14" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0-rc.1.22426.10" />
-
+		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.10.1" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.7.0" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />

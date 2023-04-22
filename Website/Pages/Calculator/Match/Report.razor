@@ -513,6 +513,9 @@
     /// </summary>
     private string GetSummaryText(double reportKutaScore)
     {
+
+        var rounded = Math.Round(reportKutaScore / 5.0) * 5;
+
         if (reportKutaScore <= 30)
         {
             return "Not best, avoid if possible";
@@ -547,11 +550,17 @@
         _jsRuntime.InvokeVoidAsync(JS.scrollToDiv, "#" + predictionName);
     }
 
-    private void OnClickDownloadPdf()
+    private async Task OnClickDownloadPdf()
     {
+        _jsRuntime.ShowLoading();
         //calls special JS lib to convert html version of the chart to PDF
         //and initiated download as well, with 1 call
-        _jsRuntime.InvokeVoidAsync(JS.htmlToPdf, matchReportElement, _pageTitle);
+        var pdfFileName = $"Match-{MaleName}-{FemaleName}";
+
+        var x = await _jsRuntime.InvokeAsync<object>(JS.htmlToPdf, matchReportElement, pdfFileName);
+
+        _jsRuntime.HideLoading();
+
     }
 
 }

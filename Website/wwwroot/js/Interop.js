@@ -21,7 +21,6 @@ export var showAccordion = (id) => $(id).collapse("show");
 export var toggleAccordion = (id) => $(id).collapse("toggle"); //Uses Bootstrap Jquery plugin to toggle any collapsible component by id
 export var scrollIntoView = (id) => $(id)[0].scrollIntoView(); //scrolls element by id into view
 
-
 //-----------------------FOR JSFetchWrapper
 //calls to server from blazor come here not via blazor http client, reliable
 export async function postWrapper(url, payloadXml) {
@@ -37,7 +36,6 @@ export async function postWrapper(url, payloadXml) {
 
     return responseText;
 }
-
 
 //gets current page url
 export function getUrl() {
@@ -218,7 +216,6 @@ export function InjectIntoElement(element, valueToInject) {
     element.appendChild(nodeToInject);
 }
 
-
 //uses UAParser library to extract user data
 export function getVisitorData() {
     console.log(`JS: getVisitorData`);
@@ -226,16 +223,13 @@ export function getVisitorData() {
     return parser.getResult();
 }
 
-
 //copies inputed text to clipboard
 //used for copying direct link to chart
 export function CopyToClipboard(text) {
-
     navigator.clipboard.writeText(text)
         .then(function () { console.log("Copied to clipboard!"); })
         .catch(function (error) { console.log(error); }); //todo raise proper error, logged
 }
-
 
 //Generates a table using Tabulator table library
 //id to where table will be generated needs to be inputed
@@ -462,7 +456,6 @@ export function DrawHouseStrengthChart(_house1,
     }
 }
 
-
 //todo check for functionality
 
 //scrolls to div on page and flashes div using JS
@@ -480,11 +473,22 @@ export function scrollToDiv(elmInput) {
     $elm.fadeTo(100, 0.4, function () { $(this).fadeTo(500, 1.0); });
 }
 
-export function htmlToPdf(elmInput) {
-    //todo implement
+export async function htmlToPdf(elmInput, pdfFileName) {
 
+    //set file name & minor formatting
+    var opt = {
+        margin: 1,
+        filename: `${pdfFileName}.pdf`,
+    //    image: { type: 'jpeg', quality: 0.98 },
+    //    html2canvas: { scale: 2 },
+        jsPDF: { unit: 'cm', format: 'A4', orientation: 'portrait' }
+    };
+
+    //generate & download to browser
+    await html2pdf().set(opt).from(elmInput).save();
+
+    return;
 }
-
 
 //▀█▀ ▄▀█ █▄▄ █░░ █▀▀   █▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ ▀█▀ █▀█ █▀█
 //░█░ █▀█ █▄█ █▄▄ ██▄   █▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ ░█░ █▄█ █▀▄

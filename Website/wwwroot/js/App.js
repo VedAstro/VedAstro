@@ -1,3 +1,5 @@
+
+
 //█▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
 //█▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 //PRODUCTIONS FUNCTION IN USE CALLED FROM BLAZOR CODE
@@ -6,7 +8,8 @@ import { URLS } from '/js/URLS.js';
 import { VedAstro } from '/js/VedAstro.js';
 import * as Tools from '/js/Tools.js';
 import * as Interop from '/js/Interop.js';
-import * as EventsChart from '/js/EventsChart.js';
+
+
 
 //make interop available to blazor
 window.Interop = Interop;
@@ -15,6 +18,7 @@ window.Interop = Interop;
 window.URLS = new URLS();
 
 var apiKey = "089J89JF9W8JFJN49"; //copy from account page
+//this will be called by blazor as window.API.GetChart()
 window.API = new VedAstro(apiKey);
 
 //hardcoded list of countries
@@ -63,19 +67,16 @@ var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('On
 //-------------------------------------------------------------------------
 
 
-
-
 //█▀ █▀█ █▀▀ █▀▀ █ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ █▀
 //▄█ █▀▀ ██▄ █▄▄ █ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ▄█
 
 //makes sure every function needed by blazor is ready to be called
 //this allows full scale gonzo development pattern
+
 window.GetInteropFuncList = () => {
     var list = Object.keys(Interop);
     return list;
 }
-
-
 
 
 //-------------------------------------------------------------------------

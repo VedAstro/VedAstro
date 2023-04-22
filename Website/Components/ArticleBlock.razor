@@ -1,0 +1,42 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+<div class="py-2">
+    
+    <h4 class="fw-bold">
+        @*only render, icon of name was specified*@
+        @if (!string.IsNullOrEmpty(IconName))
+        {
+            <Icon NextToText="true" IconName="@IconName"/>
+        }
+        @Title
+    </h4>
+    <p class="text-justify">
+        @TextHTML
+    </p>
+
+</div>
+
+@code {
+
+    /// <summary>
+    /// Title text, placed in heading
+    /// </summary>
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    /// <summary>
+    /// Icon placed nicely before title
+    /// </summary>
+    [Parameter]
+    public string IconName { get; set; } = "";
+
+
+    /// <summary>
+    /// This will be placed in side P tag, p tag not needed
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TextHTML { get; set; }
+
+}

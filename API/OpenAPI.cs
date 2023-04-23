@@ -6,6 +6,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using SwissEphNet;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json.Linq;
 
@@ -53,7 +54,7 @@ namespace API
 
             //SWISS EPH
 
-            if (propertyName == "SwissEph")
+            if (propertyName == "SwissEphemeris")
             {
                 var result = SwissEphWrapper(parsedTime, planetName);
 
@@ -64,32 +65,73 @@ namespace API
             }
 
 
-            //OTHER CALLS
+            //ALL PLANET DATA
 
-            //based on property call the method
-            var returnVal = "";
-            switch (propertyName)
+            //get all calculators that can work with the inputed data
+            var calculatorClass = typeof(AstronomicalCalculator);
+            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
+                               let parameter = calculatorInfo.GetParameters()
+                               where parameter.Length == 2 //only 2 params
+                                     && parameter[0].ParameterType == typeof(PlanetName)  //planet name
+                                     && parameter[1].ParameterType == typeof(Time)        //birth time
+                                                                                          //&& mi.ReturnType == typeof(object) todo specify interface
+                               select calculatorInfo;
+            //these are for calculators with static tag data
+            var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
+                               let parameter = calculatorInfo.GetParameters()
+                               where parameter.Length == 1 //only 2 params
+                                     && parameter[0].ParameterType == typeof(PlanetName)  //planet name
+                               select calculatorInfo;
+
+            //place the data from all possible methods nicely in JSON
+            var rootPayloadJson = new JObject();
+            object[] param1 = new object[] { planetName, parsedTime };
+            foreach (var methodInfo in calculators1)
             {
-                case "Rasi":
-                case "Sign":
-                    {
-                        var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, parsedTime);
-                        var rootJson = new JObject();
-                        rootJson["Name"] = planetSign.GetSignName().ToString();
-                        rootJson["DegreesInSign"] = planetSign.GetDegreesInSign().TotalDegrees;
-                        return APITools.PassMessageJson(rootJson, incomingRequest);
-                    }
-                case "Navamsa": returnVal = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, parsedTime).ToString(); break;
-                case "Dwadasamsa": returnVal = AstronomicalCalculator.GetPlanetDwadasamsaSign(planetName, parsedTime).ToString(); break;
-                case "Constellation": returnVal = AstronomicalCalculator.GetPlanetConstellation(parsedTime, planetName).ToString(); break;
-                case "Kranti":
-                case "Declination": returnVal = AstronomicalCalculator.GetPlanetDeclination(planetName, parsedTime).ToString(); break;
-                case "AspectingPlanets": returnVal = AstronomicalCalculator.GetPlanetsAspectingPlanet(parsedTime, planetName).ToString(); break;
-                case "Motion": returnVal = AstronomicalCalculator.GetPlanetMotionName(planetName, parsedTime).ToString(); break;
+
+                addMethodInfoToJson(methodInfo, param1);
+            }
+            object[] param2 = new object[] { planetName };
+            foreach (var methodInfo in calculators2)
+            {
+                addMethodInfoToJson(methodInfo, param2);
             }
 
-            return APITools.PassMessageJson(returnVal, incomingRequest);
+            //send the payload on it's mary way
+            return APITools.PassMessageJson(rootPayloadJson, incomingRequest);
+
+
+
+            //-----------------------------
+
+            void addMethodInfoToJson(MethodInfo methodInfo1, object[] param)
+            {
+                //try to get special API name for the calculator, possible not to exist
+                var properApiName = methodInfo1?.GetCustomAttributes(true)?.OfType<APIAttribute>()?.FirstOrDefault()?.Name ?? "";
+                //default name in-case no special
+                var defaultName = methodInfo1.Name;
+
+                //choose which name is available, prefer special
+                var name = string.IsNullOrEmpty(properApiName) ? defaultName : properApiName;
+                var output = methodInfo1.Invoke(null, param)?.ToString();
+
+                //save it nicely in json format
+                rootPayloadJson[name] = output;
+            }
+
+
         }
+
+        private static JObject GetSignDataJson(PlanetName planetName, Time parsedTime)
+        {
+            var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, parsedTime);
+            var rootJson = new JObject();
+            rootJson["Name"] = planetSign.GetSignName().ToString();
+            rootJson["DegreesInSign"] = planetSign.GetDegreesInSign().TotalDegrees;
+
+            return rootJson;
+        }
+
 
         /// <summary>
         /// Here comes calls that with 2 level properties like planet strength

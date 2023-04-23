@@ -178,7 +178,7 @@ namespace VedAstro.Library
             //note: only explicit statement of format as below works
             var stdTimeString = _stdTime.ToString("HH:mm dd/MM/yyyy zzz");
 
-            //god knows, in some time zones date comes with "." instead of "/" (despite above formatting)
+            //god knows why, in some time zones date comes with "." instead of "/" (despite above formatting)
             stdTimeString = stdTimeString.Replace('.', '/');
 
             //return formatted time

@@ -496,7 +496,6 @@ namespace VedAstro.Library
         /// <summary>
         /// Returns an array of all houses sorted by strength,
         /// 0 index being strongest to 11 index being weakest
-        ///
         /// </summary>
         public static HouseName[] GetAllHousesOrderedByStrength(Time time)
         {
@@ -1414,7 +1413,7 @@ namespace VedAstro.Library
             Shashtiamsa _getPlanetSthanaBala()
             {
                 //Get Ochcha Bala (exaltation strength)
-                var ochchaBala = GetPlanetOchchabala(planetName, time);
+                var ochchaBala = GetPlanetOchchaBala(planetName, time);
 
                 //Get Saptavargaja Bala
                 var saptavargajaBala = GetPlanetSaptavargajaBala(planetName, time);
@@ -2153,7 +2152,7 @@ namespace VedAstro.Library
         /// planet's longitude and its debilitation point, divided
         /// by 3, gives its exaltation strength or oochchabaJa.
         /// </summary>
-        public static Shashtiamsa GetPlanetOchchabala(PlanetName planetName, Time time)
+        public static Shashtiamsa GetPlanetOchchaBala(PlanetName planetName, Time time)
         {
             //1.0 Get Planet longitude
             var planetLongitude = AstronomicalCalculator.GetPlanetNirayanaLongitude(time, planetName);

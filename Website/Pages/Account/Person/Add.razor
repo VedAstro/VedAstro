@@ -12,7 +12,7 @@
 </PageTop>
 
 <div class="d-flex flex-wrap">
-    <div class="vstack gap-3 me-5 mb-4" style="max-width:286px">
+    <div class="vstack gap-3 me-5 mb-4" style="max-width:@GR.W412px">
         <div>
             <label>Name<HelpBox SmallIcon="true" HelpText="@HelpText.PrivateProfileName"></HelpBox></label>
             <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
@@ -70,10 +70,6 @@
 
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { return; }
-
-        //auto set correct Timezone based on location & birth date
-        var dateTimeOffset = await _timeInput.GetDateTimeOffset(); //offset is ignored here
-        _timeInput.TimeZone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), dateTimeOffset, ServerManager.GoogleGeoLocationApiKey);
 
         //make a new person from the details in the input
         _person = await GetPersonInstanceFromInput();
@@ -133,6 +129,9 @@
     /// </summary>
     private async Task<Person> GetPersonInstanceFromInput()
     {
+        //auto set correct Timezone based on location & birth date
+        var dateTimeOffset = await _timeInput.GetDateTimeOffset(); //offset is ignored here
+        _timeInput.TimeZone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), dateTimeOffset, ServerManager.GoogleGeoLocationApiKey);
 
         //parse data received from user
         var geoLocation = _geoLocationInput.GetGeoLocation();

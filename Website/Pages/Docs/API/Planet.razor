@@ -3,10 +3,8 @@
 <PageTitle>Planet API Doc | VedAstro</PageTitle>
 
 <PageTop Title="Planet API" IconName="carbon:gateway-api">
-    <Description>Access astrological data related to planets via a simple API call</Description>
+    <Description>Planet related data</Description>
 </PageTop>
-
-<UnderConstructionHeader PageName="Planet API" />
 
 <h3>API Call List</h3>
 <table class="table table-striped table-hover table-bordered mb-5 mt-4">
@@ -51,6 +49,11 @@
                     <kbd>.../Planet/Sun/Dwadasamsa</kbd>
                 </div>
             </td>
+            <td>
+                <kbd>.../Planet/Sun/Dwadasamsa</kbd>
+                <IconButton ExtraClass="mt-3" ButtonText="Demo Call" IconName="uil:cloud-data-connection" OnClickCallback="@(() => OnClickTestAPI("Navamsa"))" SmallSize="true" />
+            </td>
+
         </tr>
         <tr>
             <td scope="row">
@@ -112,14 +115,11 @@
 
 @code {
 
+    /// <summary>
+    /// Adds only part of the URL to final call
+    /// </summary>
     private void OnClickTestAPI(string urlPart)
     {
-        ////generate url
-        //var personId = SelectedPerson.Id;
-        //var eventPreset = _eventPreset;
-        //var timePreset = _timePreset;
-        //var url = $"{ServerManager.WebDomainToApi}/chart/{personId}/{eventPreset}/{timePreset}";
-                  //https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Jupiter/Sign
         var url = $"https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/{urlPart}";
         _jsRuntime.OpenNewTab(url);
 

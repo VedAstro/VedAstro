@@ -34,11 +34,14 @@ else
 <IconButton SmallSize="true" Outline="true" ButtonText="Developer" IconName="iconoir:developer">
     <DropDownList>
         <li><a class="dropdown-item" href="@PageRoute.OpenApi">Open API</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.SwissEphemerisApi">Swiss Ephemeris API</a></li>
+        <li><a class="dropdown-item" href="@URL.VedAstroJS" target="_blank">API via Javascript</a></li>
         <li><a class="dropdown-item" href="@PageRoute.Docker" target="_blank">Docker</a></li>
         <li><a class="dropdown-item" href="@PageRoute.NuGet" target="_blank">NuGet &amp; .NET</a></li>
-@*        <li><a class="dropdown-item" href="@PageRoute.Python">Python</a></li>
+        @*        <li><a class="dropdown-item" href="@PageRoute.Python">Python</a></li>
         <li><a class="dropdown-item" href="@PageRoute.Javascript">Javascript</a></li>
-*@    </DropDownList>
+*@
+    </DropDownList>
 </IconButton>
 
 <IconButton SmallSize="true" Outline="true" ButtonText="Download" IconName="grommet-icons:document-windows" ClickUrl="@PageRoute.Download" />

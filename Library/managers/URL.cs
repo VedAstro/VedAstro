@@ -116,6 +116,7 @@ public class URL
     public const string GeoJsApiUrl = "https://get.geojs.io/v1/ip/geo.json";
     public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";
+    public const string VedAstroJS = "https://github.com/VedAstro/VedAstro.js";
     public const string HttpHome = "https://vedastro.org";
     public const string PatreonPage = "https://patreon.com/vedastro";
     public const string KoFiPage = "https://ko-fi.com/vedastro";

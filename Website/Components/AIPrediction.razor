@@ -1,0 +1,48 @@
+﻿@*SIMPLE BOX TO RENDER SMART PREDICTIONS*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+@foreach (var prediction in predictionList)
+{
+    <div class="hstack gap-2">
+        <span>@prediction</span>
+        <IconButton SmallSize="true" IconName="carbon:thumbs-up-filled" TooltipText="Prediction is right" />
+        <IconButton SmallSize="true" IconName="carbon:thumbs-down-filled" TooltipText="Prediction is wrong" />
+    </div>
+}
+
+
+@code {
+
+
+    List<string> predictionList = new List<string>();
+
+
+    /// <summary>
+    /// Starts the render process to show AI predictions
+    /// </summary>
+    public void ShowPrediction(Time _birthTime)
+    {
+        //clear previous predictions
+        predictionList.Clear();
+
+        //strongest house
+        //source of happiness and source of sadness
+        var strongestHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(_birthTime)[0];
+        var weakestHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(_birthTime)[11];
+        var getHouseTagsGood = AstronomicalCalculator.GetHouseTags((int)strongestHouse);
+        var getHouseTagsBad = AstronomicalCalculator.GetHouseTags((int)weakestHouse);
+
+        //add prediction to list
+        predictionList.Add($"Good and happiness in life related to :- {getHouseTagsGood}");
+        predictionList.Add($"Bad and unhappiness in life related to :- {getHouseTagsBad}");
+
+
+        //render update
+        this.StateHasChanged();
+    }
+
+}

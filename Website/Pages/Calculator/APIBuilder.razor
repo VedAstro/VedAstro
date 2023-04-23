@@ -1,21 +1,123 @@
-﻿@attribute [Route(PageRoute.APIBuilder)]
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.APIBuilder)]
 
 
 <PageTitle>API Builder</PageTitle>
-    <PageTop Title="API Builder" IconName="mdi:cloud-tags">
+<PageTop Title="Easy API Builder" IconName="mdi:cloud-tags">
     <Description>
-        A simple URL builder using dropdown boxes. This should make it easy for any beginner to get started.
-        The biggest problem with consuming any API, is the learning curve. Normally the first 3-5 hours will be spent learning the small nuances or semantics used by the API provider.
-        We hope to reduce this lag with this simple API URL builder.
+       
     </Description>
 </PageTop>
 
 
-<h4>
-    <a href="@PageRoute.Donate" class="link-primary">Fund</a> this calculator for faster development.
-</h4>
+
+<div class="vstack gap-3 " style="width:@GR.W412px">
+    <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
+    <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
+    
+    <div class="form-floating">
+        <select @bind="selectedDataType" class="form-select" id="floatingSelect" aria-label="Celestial Body Select">
+            <option selected value="SwissEphemeris">Swiss Ephemeris</option>
+            <option value="Planet">Planet</option>
+            <option value="House">House</option>
+            <option value="MacthChecker">Match Checker</option>
+        </select>
+        <label for="floatingSelect">Data Type</label>
+    </div>
+
+    <div class="form-floating">
+        <select @bind="selectedBodyName" class="form-select" id="floatingSelect" aria-label="Celestial Body Select">
+            <option selected value="Sun">Sun</option>
+            <option value="Moon">Moon</option>
+            <option value="Mars">Mars</option>
+            <option value="Mercury">Mercury</option>
+            <option value="Jupiter">Jupiter</option>
+            <option value="Venus">Venus</option>
+            <option value="Saturn">Saturn</option>
+            <option value="Rahu">Rahu</option>
+            <option value="Ketu">Ketu</option>
+        </select>
+        <label for="floatingSelect">Celestial Body</label>
+    </div>
+
+    <IconButton SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" ButtonText="Generate" OnClickCallback="@OnClickSubmitButton" />
+</div>
+
+<div class="vstack gap-2 mt-2 mb-5">
+    <Icon IconName="flat-color-icons:down" Size="50"/>
+    <kbd style="padding: 12px;font-size: 18px;width: min-content;">@finalAPIGetCall</kbd>
+    <div>
+        <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true"/>
+        <IconButton ButtonText="Demo Call" IconName="carbon:link" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true"/>
+    </div>
+</div>
+
+<ArticleBlock IconName="flat-color-icons:close-up-mode" Title="Easy GUI Builder">
+    <TextHTML>
+        A simple URL builder using dropdown boxes. This should make it easy for any beginner to get started.
+        The biggest problem with consuming any API, is the learning curve. Normally the first 3-5 hours will be spent
+        learning the small nuances or semantics used by the API provider. We hope to reduce this lag with this simple API URL builder.
+    </TextHTML>
+</ArticleBlock>
+
+
+<hr class="mt-2" style="margin-bottom: 150px; "/>
+
 
 
 @code {
+    TimeInputSimple _timeInput;
+    private GeoLocationInput _geoLocationInput;
+    private string finalAPIGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
+    private string selectedBodyName = "Sun";
+    private string selectedDataType = "SwissEphemeris";
+
+    /// <summary>
+    /// After user click generate check data validity, generate final url
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnClickSubmitButton()
+    {
+        //auto set correct Timezone based on location & birth date
+        var dateTimeOffset = await _timeInput.GetDateTimeOffset(); //offset is ignored here
+        _timeInput.TimeZone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), dateTimeOffset, ServerManager.GoogleGeoLocationApiKey);
+
+        //parse data received from user
+        var geoLocation = _geoLocationInput.GetGeoLocation();
+
+        //create a new person from the inputed data
+        var timeInputed = await _timeInput.GetTime(geoLocation);
+
+        //combine the call
+        //https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
+        
+        var domain = "https://api.vedastro.org";
+        var location = $"/Location/{_geoLocationInput.LocationName}";
+        string hhmmStr = timeInputed.GetStdDateTimeOffset().ToString("HH:mm");
+        string dateSt = timeInputed.GetStdDateTimeOffset().ToString("dd");
+        string monthStr = timeInputed.GetStdDateTimeOffset().ToString("MM");
+        string yearStr = timeInputed.GetStdDateTimeOffset().ToString("yyyy");
+        string offsetStr = timeInputed.GetStdDateTimeOffset().ToString("zzz");
+        var time = $"/Time/{hhmmStr}/{dateSt}/{monthStr}/{yearStr}/{offsetStr}";
+        var planet = $"/Planet/{selectedBodyName}/{selectedDataType}/";
+
+        finalAPIGetCall = domain + location + time + planet;
+    }
+
+    private async Task OnDemoCallGeneratedUrl()
+    {
+        //make API GET direct call on new tab
+        _jsRuntime.OpenNewTab(finalAPIGetCall);
+    }
+
+    private async Task OnClickCopyChartLink()
+    {
+        //use js to transfer to clipboard
+        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, finalAPIGetCall);
+
+        //let user know link coppied
+        await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
+    }
+
 
 }

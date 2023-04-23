@@ -93,7 +93,7 @@
             var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName)houseNumber, Time);
 
             //get house details and save it for view
-            var _houseDetails = AstronomicalCalculator.GetHouseDescription(houseNumber);
+            var _houseDetails = AstronomicalCalculator.GetHouseTags(houseNumber);
             var _houseLord = lordOfHouse.ToString();
             var _planetsInHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(houseNumber, Time));
             var _planetsAspectingHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)houseNumber, Time));
@@ -105,8 +105,8 @@
             var _lordExalted = AstronomicalCalculator.IsPlanetExaltated(lordOfHouse, Time);
             var _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, Time);
 
-            var _currentSignDescription = AstronomicalCalculator.GetSignDescription(AstronomicalCalculator.GetHouseSignName(houseNumber, Time));
-            var _lordInfo = AstronomicalCalculator.GetPlanetInfo(lordOfHouse);
+            var _currentSignDescription = AstronomicalCalculator.GetSignTags(AstronomicalCalculator.GetHouseSignName(houseNumber, Time));
+            var _lordInfo = AstronomicalCalculator.GetPlanetTags(lordOfHouse);
 
             return new
             {
@@ -189,13 +189,13 @@
 
             var _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
 
-            var _currentSignDescription = AstronomicalCalculator.GetSignDescription(_planetRasiSign.GetSignName());
+            var _currentSignDescription = AstronomicalCalculator.GetSignTags(_planetRasiSign.GetSignName());
 
-            var _currentHouseDescription = AstronomicalCalculator.GetHouseDescription(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
+            var _currentHouseDescription = AstronomicalCalculator.GetHouseTags(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
 
             var _planetCurrentHouseType = AstronomicalCalculator.GetHouseType(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
 
-            var _planetInfo = AstronomicalCalculator.GetPlanetInfo(planetName);
+            var _planetInfo = AstronomicalCalculator.GetPlanetTags(planetName);
 
             var lagna = AstronomicalCalculator.GetHouseSignName(1, Time);
             var _isPlanetBeneficToLagna = AstronomicalCalculator.IsPlanetBeneficToLagna(planetName, lagna);

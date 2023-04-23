@@ -127,8 +127,38 @@ Show name of planet motion in Horoscope page (retrograde, direct, stationary) | 
 
 # 👪 Join our family
 We're always looking for somebody to write docs, edit code, raise funds or help out in another ways.
-We pay volunteers with the money we receive from donations to compensate for their time spent.
-Drop us a mail, to get started.
+You can also choose to get paid for your time spent improving VedAstro.
+
+## How to write docs or code?
+Fork the repo, make your changes and push. Start with a simple draft, nothing complicated.
+Go with what you understand and how you wish to convey it. Once you've done this let us know.
+We will double check validity and upload to the cloud. Easy and simple.
+
+## What else can I do?
+The advice we give to every volunteer is the same advice we give to ourselves. Think of this as your own project & do what you think is best.
+Self motivated enthusiasm is what we want, if you feel there is a better way of making a button appear, then just do it.
+If you run into technical trouble making the changes you want or don't know how to get started, just drop us a mail.
+And we will try our best to solve it.
+
+
+# ⚙️ Gonzo Development Pattern
+This development style celebrates the methodology of chaotic development at the benefit of low cost and fast paced prototyping.
+Inspired by the concept of "Gonzo Journalism", pioneered by Hunter S. Thompson in the 1970s.
+
+We favour this pattern for the development of VedAstro simply due to the volatile nature of this project.
+Other development styles like "Waterfall" and "Scrum" are equally good when the need is.
+We want to try out novel ideas at a heartbeat, we want the latest platform and we want it cheap.
+So the "gonzo development" pattern is best for this needs.
+
+![gonzon-dev-button](https://www.vedastro.org/images/gonzon-dev-button.png)
+
+The negative side effect is that there will be bugs forever. Because it's near impossible to constantly
+change an ever-growing code base without having to constantly fix breaking changes.
+To deal with this, we split the Web App into Beta and Stable.
+Stable version will contain an old version of the App, while beta will always contain latest buildable code.
+But the database will be shared between these. Meaning changes in Beta will seen in Stable as well.
+
+
 
 # ⚙️ Project Architecture
 Key design notes to understand the internals of the program better during development

@@ -15,21 +15,7 @@
 
 @code {
 
-    [Parameter]
-    public Time Time
-    {
-        get => _time;
-        set
-        {
-            //don't set if null
-            if (value == null) { return; }
-            
-            _time = value;
-            //needed for updates to be shown on 2nd click
-            StateHasChanged();
-        }
-    }
-
+    private Time _time { get; set; }
 
     private double _shadbalaPindaSun;
     private double _shadbalaPindaMoon;
@@ -40,24 +26,26 @@
     private double _shadbalaPindaVenus;
     private double _shadbalaPindaRahu;
     private double _shadbalaPindaKetu;
-    private Time _time;
 
     private double _house1, _house2, _house3, _house4, _house5, _house6, _house7, _house8, _house9, _house10, _house11, _house12;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+
+    public async Task Show(Person person)
     {
+
+        _time = person.BirthTime;
 
         //PLANET
         //get planet details and save it for view
-        _shadbalaPindaSun = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, Time).ToDouble();
-        _shadbalaPindaMoon = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, Time).ToDouble();
-        _shadbalaPindaMercury = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, Time).ToDouble();
-        _shadbalaPindaMars = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, Time).ToDouble();
-        _shadbalaPindaJupiter = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, Time).ToDouble();
-        _shadbalaPindaSaturn = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, Time).ToDouble();
-        _shadbalaPindaVenus = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, Time).ToDouble();
-        _shadbalaPindaRahu = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Rahu, Time).ToDouble();
-        _shadbalaPindaKetu = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Ketu, Time).ToDouble();
+        _shadbalaPindaSun = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, _time).ToDouble();
+        _shadbalaPindaMoon = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, _time).ToDouble();
+        _shadbalaPindaMercury = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, _time).ToDouble();
+        _shadbalaPindaMars = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, _time).ToDouble();
+        _shadbalaPindaJupiter = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, _time).ToDouble();
+        _shadbalaPindaSaturn = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, _time).ToDouble();
+        _shadbalaPindaVenus = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, _time).ToDouble();
+        _shadbalaPindaRahu = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Rahu, _time).ToDouble();
+        _shadbalaPindaKetu = AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Ketu, _time).ToDouble();
 
         //generate JS bar chart with calculated values
         //note : done here so needed element is available
@@ -76,18 +64,18 @@
 
 
         //HOUSE
-        _house1 = AstronomicalCalculator.GetBhavabala((HouseName)1, Time).ToDouble();
-        _house2 = AstronomicalCalculator.GetBhavabala((HouseName)2, Time).ToDouble();
-        _house3 = AstronomicalCalculator.GetBhavabala((HouseName)3, Time).ToDouble();
-        _house4 = AstronomicalCalculator.GetBhavabala((HouseName)4, Time).ToDouble();
-        _house5 = AstronomicalCalculator.GetBhavabala((HouseName)5, Time).ToDouble();
-        _house6 = AstronomicalCalculator.GetBhavabala((HouseName)6, Time).ToDouble();
-        _house7 = AstronomicalCalculator.GetBhavabala((HouseName)7, Time).ToDouble();
-        _house8 = AstronomicalCalculator.GetBhavabala((HouseName)8, Time).ToDouble();
-        _house9 = AstronomicalCalculator.GetBhavabala((HouseName)9, Time).ToDouble();
-        _house10 = AstronomicalCalculator.GetBhavabala((HouseName)10, Time).ToDouble();
-        _house11 = AstronomicalCalculator.GetBhavabala((HouseName)11, Time).ToDouble();
-        _house12 = AstronomicalCalculator.GetBhavabala((HouseName)12, Time).ToDouble();
+        _house1 = AstronomicalCalculator.GetBhavabala((HouseName)1, _time).ToDouble();
+        _house2 = AstronomicalCalculator.GetBhavabala((HouseName)2, _time).ToDouble();
+        _house3 = AstronomicalCalculator.GetBhavabala((HouseName)3, _time).ToDouble();
+        _house4 = AstronomicalCalculator.GetBhavabala((HouseName)4, _time).ToDouble();
+        _house5 = AstronomicalCalculator.GetBhavabala((HouseName)5, _time).ToDouble();
+        _house6 = AstronomicalCalculator.GetBhavabala((HouseName)6, _time).ToDouble();
+        _house7 = AstronomicalCalculator.GetBhavabala((HouseName)7, _time).ToDouble();
+        _house8 = AstronomicalCalculator.GetBhavabala((HouseName)8, _time).ToDouble();
+        _house9 = AstronomicalCalculator.GetBhavabala((HouseName)9, _time).ToDouble();
+        _house10 = AstronomicalCalculator.GetBhavabala((HouseName)10, _time).ToDouble();
+        _house11 = AstronomicalCalculator.GetBhavabala((HouseName)11, _time).ToDouble();
+        _house12 = AstronomicalCalculator.GetBhavabala((HouseName)12, _time).ToDouble();
 
         //generate JS bar chart with calculated values
         //note : done here so needed element is available
@@ -108,7 +96,7 @@
             );
 
 
-
+        this.StateHasChanged();
     }
 
 }

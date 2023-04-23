@@ -7,11 +7,8 @@
 @*default loading icon*@
 @if (readyToRender)
 {
-    <div style=" margin-bottom: -10px;">
-        <Icon IconName="eos-icons:ai-healing-outlined" Size="25" />
-        <span style="font-size: 13px; color: #8f8f8f;">Give feedback to help improve the Machine Learning (ML) model</span>
-    </div>
-    <hr class="my-0" />
+
+    <SmallIconHeading IconName="eos-icons:ai" Title="Feedback helps to improve the Machine Learning (ML) model"/>
     @foreach (var prediction in predictionList)
     {
         <div class="hstack gap-2">
@@ -25,7 +22,7 @@
 @*default loading icon*@
 else
 {
-    <img style="width:@GR.W157px;" src="images/loading-animation-progress-transparent.gif" />
+    <img style="width:@GR.W157px;align-self: center;" src="images/loading-animation-progress-transparent.gif" />
 }
 
 
@@ -53,30 +50,40 @@ else
         //--------------------------------
         //1 strongest planet in sign
         var strongestPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(_birthTime)[0];
-        var strongestPlanetSign = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet, _birthTime);
+        var strongestPlanetSign = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet, _birthTime).GetSignName();
         var allPredictions = await Tools.GetPrediction(person);
 
         //pick out planet predictions based on related body of planet and sign
-        var strPlanetPredicts = allPredictions.FindAll(x => x.RelatedBody.Contains(strongestPlanet));
-        var prediction = strPlanetPredicts.FindAll(x => x.RelatedBody.Contains(strongestPlanetSign.GetSignName()))[0]; //exp: Moon in Pisces
+        var strPlanetPredicts1 = allPredictions.FindAll(x =>
+        {
+            //prediction contains both sign and planet
+            var planetStrg = x.RelatedBody.Contains(strongestPlanet);
+            var planetSign = x.RelatedBody.Contains(strongestPlanetSign);
+            return planetSign && planetStrg;
+        }).FirstOrDefault();
 
         //only add to prediction if found
-        if (!string.IsNullOrEmpty(prediction?.Description)) { predictionList.Add($"{prediction.Description}"); }
+        if (!string.IsNullOrEmpty(strPlanetPredicts1?.Description)) { predictionList.Add($"{strPlanetPredicts1?.Description}"); }
 
-    //--------------------------------
+        //--------------------------------
         //2 2nd strongest planet in sign
         var strongestPlanet2 = AstronomicalCalculator.GetAllPlanetOrderedByStrength(_birthTime)[1];
-        var strongestPlanetSign2 = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet2, _birthTime);
+        var strongestPlanetSign2 = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet2, _birthTime).GetSignName();
 
         //pick out planet predictions based on related body of planet and sign
-        var strPlanetPredicts2 = allPredictions.FindAll(x => x.RelatedBody.Contains(strongestPlanet2));
-        var prediction2 = strPlanetPredicts2.FindAll(x => x.RelatedBody.Contains(strongestPlanetSign2.GetSignName()))[0]; //exp: Moon in Pisces
+        var strPlanetPredicts2 = allPredictions.FindAll(x =>
+        {
+            //prediction contains both sign and planet
+            var planetStrg = x.RelatedBody.Contains(strongestPlanetSign2);
+            var planetSign = x.RelatedBody.Contains(strongestPlanet2);
+            return planetSign && planetStrg;
+        }).FirstOrDefault();
 
         //only add to prediction if found
-        if (!string.IsNullOrEmpty(prediction2?.Description)) { predictionList.Add($"{prediction2.Description}"); }
+        if (!string.IsNullOrEmpty(strPlanetPredicts2?.Description)) { predictionList.Add($"{strPlanetPredicts2.Description}"); }
 
 
-    //--------------------------------
+        //--------------------------------
         //2 2nd strongest House
         var strongestHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(_birthTime)[0];
         //var strongestHouseSign = AstronomicalCalculator.GetHouseSignName((int)strongestHouse, _birthTime);
@@ -101,10 +108,10 @@ else
         var getHouseTagsBad = AstronomicalCalculator.GetHouseTags((int)weakestHouse);
 
         //add prediction to list
-        predictionList.Add($"Good things in life :- {getHouseTagsGood}");
-        predictionList.Add($"Bad things in life :- {getHouseTagsBad}");
+        predictionList.Add($"Well formed aspects of life -> {getHouseTagsGood}");
+        predictionList.Add($"Source of misfortune -> {getHouseTagsBad}");
 
-        //hide loading 
+        //hide loading
         readyToRender = true;
 
         //render update
@@ -119,7 +126,6 @@ else
             var nameMatch = x.FormattedName.ToLower().Contains(planetInSignEvent);
             return nameMatch; //important to lower before check
         }
-
     }
 
 }

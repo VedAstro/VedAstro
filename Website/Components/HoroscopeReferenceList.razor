@@ -1,0 +1,316 @@
+﻿@*SIMPLE BOX TO RENDER HOROSCOPE PREDICTIONS*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+
+@*FILTER*@
+<div class="vstack gap-3">
+    <div class="border border-1">
+        <div class="hstack">
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_sunCheckBox" /><label class="form-check-label">Sun</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_moonCheckBox" /><label class="form-check-label">Moon</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_marsCheckBox" /><label class="form-check-label">Mars</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_mercuryCheckBox" /><label class="form-check-label">Mercury</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_jupiterCheckBox" /><label class="form-check-label">Jupiter</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_venusCheckBox" /><label class="form-check-label">Venus</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_saturnCheckBox" /><label class="form-check-label">Saturn</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_rahuCheckBox" /><label class="form-check-label">Rahu</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_ketuCheckBox" /><label class="form-check-label">Ketu</label></div>
+            </div>
+        </div>
+    </div>
+    <div class="border border-1">
+        <div class="hstack">
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house1CheckBox" /><label class="form-check-label"> 1</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house2CheckBox" /><label class="form-check-label"> 2</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house3CheckBox" /><label class="form-check-label"> 3</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house4CheckBox" /><label class="form-check-label"> 4</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house5CheckBox" /><label class="form-check-label"> 5</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house6CheckBox" /><label class="form-check-label"> 6</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house7CheckBox" /><label class="form-check-label"> 7</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house8CheckBox" /><label class="form-check-label"> 8</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house9CheckBox" /><label class="form-check-label"> 9</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house10CheckBox" /><label class="form-check-label"> 10</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house11CheckBox" /><label class="form-check-label"> 11</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house12CheckBox" /><label class="form-check-label"> 12</label></div>
+            </div>
+        </div>
+    </div>
+    <div class="border border-1">
+        <div class="hstack">
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_ariesCheckBox" /><label class="form-check-label">Aries</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_taurusCheckBox" /><label class="form-check-label">Taurus</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_geminiCheckBox" /><label class="form-check-label">Gemini</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_cancerCheckBox" /><label class="form-check-label">Cancer</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_leoCheckBox" /><label class="form-check-label">Leo</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_virgoCheckBox" /><label class="form-check-label">Virgo</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_libraCheckBox" /><label class="form-check-label">Libra</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_scorpioCheckBox" /><label class="form-check-label">Scorpio</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_sagittariusCheckBox" /><label class="form-check-label">Sagittarius</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_capricornusCheckBox" /><label class="form-check-label">Capricornus</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_aquariusCheckBox" /><label class="form-check-label">Aquarius</label></div>
+            </div>
+            <div class="p-2">
+                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_piscesCheckBox" /><label class="form-check-label">Pisces</label></div>
+            </div>
+        </div>
+    </div>
+</div>
+<IconButton ButtonText="Refresh Filter" IconName="bx:search-alt" OnClickCallback="FilterButtonClicked"></IconButton>
+@*SEARCH*@
+@*                    <div class="hstack gap-3">
+            <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
+            <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
+            </div>
+            *@
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th style="min-width: 123px;">Tags</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var prediction in _filteredHoroscopePredictions)
+        {
+            @*log when when user reads a predictions*@
+            <tr @onmouseenter="@(() => WebLogger.Data("Mouse Over: " + @prediction.FormattedName))">
+                <td>@prediction.FormattedName</td>
+                <td>@prediction.Description</td>
+                <td>@prediction.RelatedBody</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private bool _sunCheckBox, _moonCheckBox, _marsCheckBox, _mercuryCheckBox, _jupiterCheckBox, _venusCheckBox, _saturnCheckBox, _rahuCheckBox, _ketuCheckBox;
+    private bool _house1CheckBox, _house2CheckBox, _house3CheckBox, _house4CheckBox, _house5CheckBox, _house6CheckBox, _house7CheckBox, _house8CheckBox, _house9CheckBox, _house10CheckBox, _house11CheckBox, _house12CheckBox;
+    private bool _ariesCheckBox, _taurusCheckBox, _geminiCheckBox, _cancerCheckBox, _leoCheckBox, _virgoCheckBox, _libraCheckBox, _scorpioCheckBox, _sagittariusCheckBox, _capricornusCheckBox, _aquariusCheckBox, _piscesCheckBox;
+    private string _searchInput = "";
+
+
+    private List<HoroscopePrediction>? _filteredHoroscopePredictions = new List<HoroscopePrediction>();
+    private List<HoroscopePrediction>? _horoscopePredictions = new List<HoroscopePrediction>();
+
+
+    private async Task _FilterButtonClicked()
+    {
+        await _jsRuntime.ShowLoading();
+
+
+        var listToShow = new List<HoroscopePrediction>();
+        foreach (var horoPredic in _horoscopePredictions)
+        {
+
+            //if there is a match between the prediction's related bodies & the user's selected filter planets,
+            //then the prediction meets the planet filter, should be included in list
+
+            //check match planet
+            var selectedPlanetFilters = GetSelectedPlanetFilters();
+            var matchPlanet = horoPredic.RelatedBody.RelatedPlanets.Intersect(selectedPlanetFilters).ToList().Any();
+
+            //check match house
+            var selectedHouseFilters = GetSelectedHouseFilters();
+            var matchHouse = horoPredic.RelatedBody.RelatedHouses.Intersect(selectedHouseFilters).ToList().Any();
+
+            //check match zodiac
+            var selectedZodiacFilters = GetSelectedZodiacFilters();
+            var matchZodiac = horoPredic.RelatedBody.RelatedZodiac.Intersect(selectedZodiacFilters).ToList().Any();
+
+            //add to list if any of the matched passed
+            var addInList = matchPlanet || matchHouse || matchZodiac;
+            if (addInList) { listToShow.Add(horoPredic); }
+        }
+
+        //update view (empty list will be handled by blazor side)
+        _filteredHoroscopePredictions = listToShow;
+
+        _jsRuntime.HideLoading();
+    }
+
+    private async Task SearchButtonClicked() => await InvokeAsync(async () => await _SearchButtonClicked()).Try(_jsRuntime);
+
+    private async Task FilterButtonClicked() => await InvokeAsync(async () => await _FilterButtonClicked()).Try(_jsRuntime);
+
+    private async Task _SearchButtonClicked()
+    {
+        await _jsRuntime.ShowLoading();
+
+        //if no search text means reset (no filter applied)
+        if (_searchInput == "") { _filteredHoroscopePredictions = _horoscopePredictions.ToList(); return; }
+
+        //else search by text
+        _filteredHoroscopePredictions = _horoscopePredictions.FindAll(x => x.Contains(_searchInput));
+
+        _jsRuntime.HideLoading();
+    }
+
+    public async Task ShowPrediction(Person selectedPerson)
+    {
+        //get horoscope predictions from API server
+        var personIdXml = new XElement("PersonId", selectedPerson.Id);
+        var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.GetHoroscope, personIdXml);
+
+        //based on pass of fail handle it
+        if (webResult.IsPass)
+        {
+            //inject horoscope prediction
+            _horoscopePredictions = HoroscopePrediction.FromXmlList(webResult.Payload);
+
+            _filteredHoroscopePredictions = _horoscopePredictions.ToList(); //make a copy for search
+        }
+        else
+        {
+            //log it
+            await WebLogger.Error(webResult.Payload);
+
+            //then tell the user
+            await _jsRuntime.ShowAlert("error", AlertText.ObliviousErrors(), true);
+        }
+
+    }
+
+
+    /// <summary>
+    /// Returns a list of zodiac name selected by user
+    /// to ONLY include in results
+    /// </summary>
+    /// <returns></returns>
+    private List<ZodiacName> GetSelectedZodiacFilters()
+    {
+        var returnList = new List<ZodiacName>();
+
+        if (_ariesCheckBox) { returnList.Add(ZodiacName.Aries); }
+        if (_taurusCheckBox) { returnList.Add(ZodiacName.Taurus); }
+        if (_geminiCheckBox) { returnList.Add(ZodiacName.Gemini); }
+        if (_cancerCheckBox) { returnList.Add(ZodiacName.Cancer); }
+        if (_leoCheckBox) { returnList.Add(ZodiacName.Leo); }
+        if (_virgoCheckBox) { returnList.Add(ZodiacName.Virgo); }
+        if (_libraCheckBox) { returnList.Add(ZodiacName.Libra); }
+        if (_scorpioCheckBox) { returnList.Add(ZodiacName.Scorpio); }
+        if (_sagittariusCheckBox) { returnList.Add(ZodiacName.Sagittarius); }
+        if (_capricornusCheckBox) { returnList.Add(ZodiacName.Capricornus); }
+        if (_aquariusCheckBox) { returnList.Add(ZodiacName.Aquarius); }
+        if (_piscesCheckBox) { returnList.Add(ZodiacName.Pisces); }
+
+        return returnList;
+    }
+
+    /// <summary>
+    /// Returns a list of planets selected by user
+    /// to ONLY include in results
+    /// </summary>
+    /// <returns></returns>
+    private List<PlanetName> GetSelectedPlanetFilters()
+    {
+        var returnList = new List<PlanetName>();
+
+        if (_sunCheckBox) { returnList.Add(PlanetName.Sun); }
+        if (_moonCheckBox) { returnList.Add(PlanetName.Moon); }
+        if (_marsCheckBox) { returnList.Add(PlanetName.Mars); }
+        if (_mercuryCheckBox) { returnList.Add(PlanetName.Mercury); }
+        if (_jupiterCheckBox) { returnList.Add(PlanetName.Jupiter); }
+        if (_venusCheckBox) { returnList.Add(PlanetName.Venus); }
+        if (_saturnCheckBox) { returnList.Add(PlanetName.Saturn); }
+        if (_rahuCheckBox) { returnList.Add(PlanetName.Rahu); }
+        if (_ketuCheckBox) { returnList.Add(PlanetName.Ketu); }
+
+        return returnList;
+    }
+
+    /// <summary>
+    /// Returns a list of houses selected by user
+    /// to ONLY include in results
+    /// </summary>
+    /// <returns></returns>
+    private List<HouseName> GetSelectedHouseFilters()
+    {
+        var returnList = new List<HouseName>();
+
+        if (_house1CheckBox) { returnList.Add(HouseName.House1); }
+        if (_house2CheckBox) { returnList.Add(HouseName.House2); }
+        if (_house3CheckBox) { returnList.Add(HouseName.House3); }
+        if (_house4CheckBox) { returnList.Add(HouseName.House4); }
+        if (_house5CheckBox) { returnList.Add(HouseName.House5); }
+        if (_house6CheckBox) { returnList.Add(HouseName.House6); }
+        if (_house7CheckBox) { returnList.Add(HouseName.House7); }
+        if (_house8CheckBox) { returnList.Add(HouseName.House8); }
+        if (_house9CheckBox) { returnList.Add(HouseName.House9); }
+        if (_house10CheckBox) { returnList.Add(HouseName.House10); }
+        if (_house11CheckBox) { returnList.Add(HouseName.House11); }
+        if (_house12CheckBox) { returnList.Add(HouseName.House12); }
+
+        return returnList;
+    }
+
+
+
+}

@@ -22,41 +22,21 @@
 
 
 @code {
-    [Parameter]
-    public Time Time
-    {
-        get => _time;
-        set
-        {
-            _time = value;
-            //needed for updates to be shown on 2nd click
-            _isDirty = true;
-        }
-    }
+
+    public Time _time { get; set; }
+
     const string PlanetTableId = "PlanetDataTable"; //change only needed here
     const string PlanetInfoTableId = "PlanetDataInfoTable"; //change only needed here
     const string HouseTableId = "HouseDataTable"; //change only needed here
     const string HouseInfoTableId = "HouseDataInfoTable"; //change only needed here
 
-    private Time _time;
     bool _isDirty = false;
 
 
-    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
-
-
-    //protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
-
-
-    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
-    private async Task _OnAfterRender(bool firstRender)
+    public async Task Show(Person person)
     {
+        //set birth time from person
+        _time = person.BirthTime;
 
         //get planet data
         var planetData = GetPlanetData();
@@ -73,8 +53,8 @@
         await _jsRuntime.InvokeVoidAsync(JS.generateHouseDataTable, HouseTableId, houseData);
         await _jsRuntime.InvokeVoidAsync(JS.generateHouseDataInfoTable, HouseInfoTableId, houseData);
 
+        
     }
-
 
     public List<object> GetHouseData()
     {
@@ -90,22 +70,22 @@
 
         object getData(int houseNumber)
         {
-            var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName)houseNumber, Time);
+            var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName)houseNumber, _time);
 
             //get house details and save it for view
             var _houseDetails = AstronomicalCalculator.GetHouseTags(houseNumber);
             var _houseLord = lordOfHouse.ToString();
-            var _planetsInHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(houseNumber, Time));
-            var _planetsAspectingHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)houseNumber, Time));
-            var rawHouseStrength = AstronomicalCalculator.GetBhavabala((HouseName)houseNumber, Time).ToDouble();
+            var _planetsInHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(houseNumber, _time));
+            var _planetsAspectingHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)houseNumber, _time));
+            var rawHouseStrength = AstronomicalCalculator.GetBhavabala((HouseName)houseNumber, _time).ToDouble();
             var _houseStrength = Math.Round(rawHouseStrength, 2).ToString();
-            var _houseSign = AstronomicalCalculator.GetHouseSignName(houseNumber, Time).ToString();
-            var _houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign((HouseName)houseNumber, Time).ToString();
+            var _houseSign = AstronomicalCalculator.GetHouseSignName(houseNumber, _time).ToString();
+            var _houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign((HouseName)houseNumber, _time).ToString();
 
-            var _lordExalted = AstronomicalCalculator.IsPlanetExaltated(lordOfHouse, Time);
-            var _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, Time);
+            var _lordExalted = AstronomicalCalculator.IsPlanetExaltated(lordOfHouse, _time);
+            var _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, _time);
 
-            var _currentSignDescription = AstronomicalCalculator.GetSignTags(AstronomicalCalculator.GetHouseSignName(houseNumber, Time));
+            var _currentSignDescription = AstronomicalCalculator.GetSignTags(AstronomicalCalculator.GetHouseSignName(houseNumber, _time));
             var _lordInfo = AstronomicalCalculator.GetPlanetTags(lordOfHouse);
 
             return new
@@ -147,57 +127,57 @@
             var isRahuKetu = planetName == PlanetName.Rahu || planetName == PlanetName.Ketu;
 
             //get planet details and save it for view
-            var _shadbalaPinda =  AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, Time).ToDouble();
+            var _shadbalaPinda = AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, _time).ToDouble();
 
-            var _positionStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetSthanaBala(planetName, Time).ToDouble(), 2);
+            var _positionStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetSthanaBala(planetName, _time).ToDouble(), 2);
 
-            var _directionalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetDigBala(planetName, Time).ToDouble(), 2);
+            var _directionalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetDigBala(planetName, _time).ToDouble(), 2);
 
-            var _motionalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetChestaBala(planetName, Time).ToDouble(), 2);
-            var _motionName = AstronomicalCalculator.GetPlanetMotionName(planetName, Time).ToString();
+            var _motionalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetChestaBala(planetName, _time).ToDouble(), 2);
+            var _motionName = AstronomicalCalculator.GetPlanetMotionName(planetName, _time).ToString();
 
-            var _temporalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetKalaBala(planetName, Time).ToDouble(), 2);
+            var _temporalStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetKalaBala(planetName, _time).ToDouble(), 2);
 
-            var _aspectStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetDrikBala(planetName, Time).ToDouble(), 2);
+            var _aspectStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetDrikBala(planetName, _time).ToDouble(), 2);
 
-            var _permanentStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetNaisargikaBala(planetName, Time).ToDouble(), 2);
+            var _permanentStrength = isRahuKetu ? 0 : Math.Round(AstronomicalCalculator.GetPlanetNaisargikaBala(planetName, _time).ToDouble(), 2);
 
-            var _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName);
+            var _planetCurrentHouse = AstronomicalCalculator.GetHousePlanetIsIn(_time, planetName);
 
-            var _planetRasiSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, Time);
+            var _planetRasiSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, _time);
 
             var _planetCurrentSign = _planetRasiSign.ToString();
-            
-            var _nirayanaLongitude = Math.Round(AstronomicalCalculator.GetPlanetNirayanaLongitude(Time, planetName).TotalDegrees, 2);
-            var _sayanaLongitude = Math.Round(AstronomicalCalculator.GetPlanetSayanaLongitude(Time, planetName).TotalDegrees, 2);
 
-            var planetNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, Time);
+            var _nirayanaLongitude = Math.Round(AstronomicalCalculator.GetPlanetNirayanaLongitude(_time, planetName).TotalDegrees, 2);
+            var _sayanaLongitude = Math.Round(AstronomicalCalculator.GetPlanetSayanaLongitude(_time, planetName).TotalDegrees, 2);
+
+            var planetNavamsaSign = AstronomicalCalculator.GetPlanetNavamsaSign(planetName, _time);
 
             var _planetCurrentNavamsaSign = planetNavamsaSign.ToString();
 
-            var _planetCurrentConstellation = AstronomicalCalculator.GetPlanetConstellation(Time, planetName).ToString();
+            var _planetCurrentConstellation = AstronomicalCalculator.GetPlanetConstellation(_time, planetName).ToString();
 
-            var _currentHouseRelation = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, Time);
+            var _currentHouseRelation = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, _time);
 
-            var _navamsaRelation = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetRelationshipWithSign(planetName, planetNavamsaSign, Time);
+            var _navamsaRelation = isRahuKetu ? 0 : AstronomicalCalculator.GetPlanetRelationshipWithSign(planetName, planetNavamsaSign, _time);
 
-            var _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(planetName, Time);
+            var _isPlanetAspectedByMaleficPlanets = AstronomicalCalculator.IsPlanetAspectedByMaleficPlanets(planetName, _time);
 
-            var _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(planetName, Time);
+            var _isPlanetConjunctWithMaleficPlanets = AstronomicalCalculator.IsPlanetConjunctWithMaleficPlanets(planetName, _time);
 
-            var _conjunctPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(Time, planetName));
+            var _conjunctPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInConjuction(_time, planetName));
 
-            var _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(Time, planetName));
+            var _aspectingPlanets = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingPlanet(_time, planetName));
 
             var _currentSignDescription = AstronomicalCalculator.GetSignTags(_planetRasiSign.GetSignName());
 
-            var _currentHouseDescription = AstronomicalCalculator.GetHouseTags(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
+            var _currentHouseDescription = AstronomicalCalculator.GetHouseTags(AstronomicalCalculator.GetHousePlanetIsIn(_time, planetName));
 
-            var _planetCurrentHouseType = AstronomicalCalculator.GetHouseType(AstronomicalCalculator.GetHousePlanetIsIn(Time, planetName));
+            var _planetCurrentHouseType = AstronomicalCalculator.GetHouseType(AstronomicalCalculator.GetHousePlanetIsIn(_time, planetName));
 
             var _planetInfo = AstronomicalCalculator.GetPlanetTags(planetName);
 
-            var lagna = AstronomicalCalculator.GetHouseSignName(1, Time);
+            var lagna = AstronomicalCalculator.GetHouseSignName(1, _time);
             var _isPlanetBeneficToLagna = AstronomicalCalculator.IsPlanetBeneficToLagna(planetName, lagna);
             var _isPlanetMaleficToLagna = AstronomicalCalculator.IsPlanetMaleficToLagna(planetName, lagna);
             var _isPlanetYogakarakaToLagna = AstronomicalCalculator.IsPlanetYogakarakaToLagna(planetName, lagna);

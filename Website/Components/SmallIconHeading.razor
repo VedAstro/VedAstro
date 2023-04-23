@@ -1,0 +1,44 @@
+﻿@*SIMPLE TEXT NEXT TO AN ICON*@
+@*EXP:Warning Slow, Build ML model*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+<div style="@(ShowLine?lineStyle:"")">
+    <Icon IconName="@IconName" Size="25" />
+    <span style="font-size: 13px; color: #8f8f8f;">@Title</span>
+</div>
+@if (ShowLine)
+{
+    <hr class="my-0" />
+}
+
+@*<div class="hstack gap-1" style="align-items: start; margin-top: -10px;">
+    <Icon IconName="mdi:snail" Size="20"/>
+    <p style="font-size: 13px; color: #8f8f8f;">Warning Slow</p>
+</div>
+*@
+
+
+@code {
+
+    /// <summary>
+    /// style only used with line below, move closer to line
+    /// </summary>
+    private string lineStyle = "margin-bottom: -10px;";
+
+    [Parameter]
+    public string IconName { get; set; } = "";
+
+    /// <summary>
+    /// If true show horizontal line below text, default false
+    /// </summary>
+    [Parameter]
+    public bool ShowLine { get; set; } = false;
+
+    [Parameter]
+    public string Title { get; set; } = "";
+
+}

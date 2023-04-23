@@ -489,7 +489,7 @@ namespace API
                     //replace original birth time
                     var personAdjusted = person.ChangeBirthTime(timeSlice);
 
-                    var x = await APITools.GetPrediction(personAdjusted);
+                    var x = await Tools.GetPrediction(personAdjusted);
                 }
                 //convert list to xml string in root elm
                 var responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();

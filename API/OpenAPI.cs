@@ -67,76 +67,17 @@ namespace API
 
             //ALL PLANET DATA
 
-            //get all calculators that can work with the inputed data
-            var calculatorClass = typeof(AstronomicalCalculator);
-            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
-                               let parameter = calculatorInfo.GetParameters()
-                               where parameter.Length == 2 //only 2 params
-                                     && parameter[0].ParameterType == typeof(PlanetName)  //planet name
-                                     && parameter[1].ParameterType == typeof(Time)        //birth time
-                               select calculatorInfo;
+            //get all calculators that can accept a planet name and time
+            var planetTimeCalcs = AstronomicalCalculator.GetTimePlanetCalcs(planetName, parsedTime);
 
-            //second possible order, technically should be aligned todo
-            var calculators3 = from calculatorInfo in calculatorClass.GetMethods()
-                               let parameter = calculatorInfo.GetParameters()
-                               where parameter.Length == 2 //only 2 params
-                                     && parameter[0].ParameterType == typeof(Time)  //birth time
-                                     && parameter[1].ParameterType == typeof(PlanetName)        //planet name
-                               select calculatorInfo;
-
-            //these are for calculators with static tag data
-            var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
-                               let parameter = calculatorInfo.GetParameters()
-                               where parameter.Length == 1 //only 2 params
-                                     && parameter[0].ParameterType == typeof(PlanetName)  //planet name
-                               select calculatorInfo;
-
-            //place the data from all possible methods nicely in JSON
-            var rootPayloadJson = new JObject();
-            object[] param1 = new object[] { planetName, parsedTime };
-            foreach (var methodInfo in calculators1) { addMethodInfoToJson(methodInfo, param1); }
-
-            object[] param3 = new object[] { parsedTime, planetName };
-            foreach (var methodInfo in calculators3) { addMethodInfoToJson(methodInfo, param3); }
-
-            object[] param2 = new object[] { planetName };
-            foreach (var methodInfo in calculators2) { addMethodInfoToJson(methodInfo, param2); }
 
             //send the payload on it's mary way
-            return APITools.PassMessageJson(rootPayloadJson, incomingRequest);
+            return APITools.PassMessageJson(planetTimeCalcs, incomingRequest);
 
 
 
             //-----------------------------
 
-            void addMethodInfoToJson(MethodInfo methodInfo1, object[] param)
-            {
-                //try to get special API name for the calculator, possible not to exist
-                var properApiName = methodInfo1?.GetCustomAttributes(true)?.OfType<APIAttribute>()?.FirstOrDefault()?.Name ?? "";
-                //default name in-case no special
-                var defaultName = methodInfo1.Name;
-
-                //choose which name is available, prefer special
-                var name = string.IsNullOrEmpty(properApiName) ? defaultName : properApiName;
-
-                string output = "";
-
-                //likely to fail during call, as such just ignore and move along
-                try
-                {
-                    output = methodInfo1?.Invoke(null, param)?.ToString() ?? "";
-                }
-                catch (Exception e)
-                {
-                    output = e.Message;
-                }
-
-                //if nothing in output then, something went wrong
-                output = string.IsNullOrEmpty(output) ? "#ERROR" : output;
-
-                //save it nicely in json format
-                rootPayloadJson[name] = output;
-            }
 
 
         }

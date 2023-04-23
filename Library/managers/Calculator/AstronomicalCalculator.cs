@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 using SwissEphNet;
 
 //using Genso.Framework;
@@ -3690,9 +3691,11 @@ namespace VedAstro.Library
 
         }
 
-        public static IEnumerable<MethodInfo> GetTimePlanetCalcs()
+        public static JObject GetTimePlanetCalcs<T1,T2>(T1 inputedPram1, T2 inputedPram2)
         {
-            var returnList = new List<MethodInfo>();
+
+            var inputedParamType1 = typeof(T1);
+            var inputedParamType2 = typeof(T2);
 
             //get all calculators that can work with the inputed data
             var calculatorClass = typeof(AstronomicalCalculator);
@@ -3700,31 +3703,66 @@ namespace VedAstro.Library
             var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
                 let parameter = calculatorInfo.GetParameters()
                 where parameter.Length == 2 //only 2 params
-                      && parameter[0].ParameterType == typeof(PlanetName)  //planet name
-                      && parameter[1].ParameterType == typeof(Time)        //birth time
-                select calculatorInfo;
+                      && parameter[0].ParameterType == inputedParamType1 
+                      && parameter[1].ParameterType == inputedParamType2       
+                               select calculatorInfo;
 
             //second possible order, technically should be aligned todo
-            var calculators3 = from calculatorInfo in calculatorClass.GetMethods()
-                let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 2 //only 2 params
-                      && parameter[0].ParameterType == typeof(Time)  //birth time
-                      && parameter[1].ParameterType == typeof(PlanetName)        //planet name
-                select calculatorInfo;
-
-            //these are for calculators with static tag data
             var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
                 let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 1 //only 2 params
-                      && parameter[0].ParameterType == typeof(PlanetName)  //planet name
-                select calculatorInfo;
+                where parameter.Length == 2 //only 2 params
+                      && parameter[0].ParameterType == inputedParamType2
+                      && parameter[1].ParameterType == inputedParamType1    
+                               select calculatorInfo;
+
+            //PRINT DEBUG DATA
+            Console.WriteLine($"Calculators Type 1 : {calculators1.Count()}");
+            Console.WriteLine($"Calculators Type 2 : {calculators2.Count()}");
+
+            //place the data from all possible methods nicely in JSON
+            var rootPayloadJson = new JObject(); //each call below adds to this root
+
+            //three possible ways these params may be ordered
+            //theoretically there should only be one signature, clean code when possible
+            object[] param1 = new object[] { inputedPram1, inputedPram2 };
+            foreach (var methodInfo in calculators1) { addMethodInfoToJson(methodInfo, param1); }
+
+            object[] param2 = new object[] { inputedPram2, inputedPram1 };
+            foreach (var methodInfo in calculators2) { addMethodInfoToJson(methodInfo, param2); }
 
 
-            returnList.AddRange(calculators1);
-            returnList.AddRange(calculators2);
-            returnList.AddRange(calculators3);
+            return rootPayloadJson;
 
-            return returnList;
+
+            //converts method info to JSON parsed
+            void addMethodInfoToJson(MethodInfo methodInfo1, object[] param)
+            {
+                //try to get special API name for the calculator, possible not to exist
+                var properApiName = methodInfo1?.GetCustomAttributes(true)?.OfType<APIAttribute>()?.FirstOrDefault()?.Name ?? "";
+                //default name in-case no special
+                var defaultName = methodInfo1.Name;
+
+                //choose which name is available, prefer special
+                var name = string.IsNullOrEmpty(properApiName) ? defaultName : properApiName;
+
+                string output = "";
+
+                //likely to fail during call, as such just ignore and move along
+                try
+                {
+                    output = methodInfo1?.Invoke(null, param)?.ToString() ?? "";
+                }
+                catch (Exception e)
+                {
+                    output = e.Message;
+                }
+
+                //if nothing in output then, something went wrong
+                output = string.IsNullOrEmpty(output) ? "#ERROR" : output;
+
+                //save it nicely in json format
+                rootPayloadJson[name] = output;
+            }
 
         }
         public static IEnumerable<MethodInfo> GetTimeHouseCalcs()

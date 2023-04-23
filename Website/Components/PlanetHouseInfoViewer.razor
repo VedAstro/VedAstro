@@ -53,6 +53,8 @@
         await _jsRuntime.InvokeVoidAsync(JS.generateHouseDataTable, HouseTableId, houseData);
         await _jsRuntime.InvokeVoidAsync(JS.generateHouseDataInfoTable, HouseInfoTableId, houseData);
 
+        //if harmful remove
+        this.StateHasChanged();
         
     }
 

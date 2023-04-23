@@ -26,7 +26,7 @@ namespace API
                 var person = await APITools.GetPersonById(personId);
 
                 //calculate predictions for current person
-                var predictionList = await APITools.GetPrediction(person);
+                var predictionList = await Tools.GetPrediction(person);
 
                 var sortedList = SortPredictionData(predictionList);
 

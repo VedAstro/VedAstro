@@ -11,48 +11,66 @@
 
 
 
-<div class="vstack gap-3 " style="width:@GR.W412px">
-    <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
-    <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
-    
-    <div class="form-floating">
-        <select @bind="selectedDataType" class="form-select" id="floatingSelect" aria-label="Celestial Body Select">
-            <option selected value="SwissEphemeris">Swiss Ephemeris</option>
-            <option value="Planet">Planet</option>
-            <option value="House">House</option>
-            <option value="MacthChecker">Match Checker</option>
-        </select>
-        <label for="floatingSelect">Data Type</label>
-    </div>
+<div>
+    <div class="d-flex flex-wrap gap-5">
+        
+        @*GENERATOR*@
+        <div class="vstack gap-3 " style="width:@GR.W412px">
+            <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
+            <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
 
-    <div class="form-floating">
-        <select @bind="selectedBodyName" class="form-select" id="floatingSelect" aria-label="Celestial Body Select">
-            <option selected value="Sun">Sun</option>
-            <option value="Moon">Moon</option>
-            <option value="Mars">Mars</option>
-            <option value="Mercury">Mercury</option>
-            <option value="Jupiter">Jupiter</option>
-            <option value="Venus">Venus</option>
-            <option value="Saturn">Saturn</option>
-            <option value="Rahu">Rahu</option>
-            <option value="Ketu">Ketu</option>
-        </select>
-        <label for="floatingSelect">Celestial Body</label>
-    </div>
+            <div class="form-floating">
+                <select @bind="selectedDataType" class="form-select" id="floatingSelect" aria-label="Celestial Body Select">
+                    <option selected value="SwissEphemeris">Swiss Ephemeris</option>
+                    <option value="Planet">Planet</option>
+                    <option value="House">House</option>
+                    <option value="MacthChecker">Match Checker</option>
+                </select>
+                <label for="floatingSelect">Data Type</label>
+            </div>
 
-    <IconButton SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" ButtonText="Generate" OnClickCallback="@OnClickSubmitButton" />
+            <div class="form-floating">
+                <select @bind="selectedBodyName" class="form-select" id="floatingSelect" aria-label="Celestial Body Select">
+                    <option selected value="Sun">Sun</option>
+                    <option value="Moon">Moon</option>
+                    <option value="Mars">Mars</option>
+                    <option value="Mercury">Mercury</option>
+                    <option value="Jupiter">Jupiter</option>
+                    <option value="Venus">Venus</option>
+                    <option value="Saturn">Saturn</option>
+                    <option value="Rahu">Rahu</option>
+                    <option value="Ketu">Ketu</option>
+                </select>
+                <label for="floatingSelect">Celestial Body</label>
+            </div>
+
+            <IconButton SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" ButtonText="Generate" OnClickCallback="@OnClickSubmitButton" />
+        </div>
+
+        @*LITTLE BOX*@
+        <InfoBox Title="Easy API Builder" IconName="flat-color-icons:close-up-mode">
+            <DescriptionHTML>
+                A simple URL builder using dropdown boxes. This should make it easy for any beginner to get started.
+                The biggest problem with consuming any API, is the learning curve. Normally the first 3-5 hours will be spent
+                learning the small nuances or semantics used by the API provider. We hope to reduce this lag with this simple API URL builder.
+            </DescriptionHTML>
+        </InfoBox>
+
+    </div>
 </div>
 
+
 <div class="vstack gap-2 mt-2 mb-5">
-    <Icon IconName="flat-color-icons:down" Size="50"/>
+    <Icon IconName="flat-color-icons:down" Size="50" />
     <kbd style="padding: 12px;font-size: 18px;width: min-content;">@finalAPIGetCall</kbd>
     <div class="hstack gap-3">
-        <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true"/>
+        <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
         <IconButton ButtonText="Demo Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
     </div>
 </div>
 
-<ArticleBlock IconName="flat-color-icons:close-up-mode" Title="Easy API Builder">
+
+@*<ArticleBlock IconName="flat-color-icons:close-up-mode" Title="Easy API Builder">
     <TextHTML>
         A simple URL builder using dropdown boxes. This should make it easy for any beginner to get started.
         The biggest problem with consuming any API, is the learning curve. Normally the first 3-5 hours will be spent
@@ -60,7 +78,7 @@
     </TextHTML>
 </ArticleBlock>
 
-
+*@
 <hr class="mt-2" style="margin-bottom: 150px; "/>
 
 

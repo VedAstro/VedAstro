@@ -37,6 +37,87 @@ namespace VedAstro.Library
     public static class Tools
     {
 
+        public static List<HoroscopeData> SavedHoroscopeDataList { get; set; } = null; //null used for checking empty
+
+        /// <summary>
+        /// Get parsed HoroscopeDataList.xml from wwwroot file / static site
+        /// Note: auto caching is used
+        /// </summary>
+        public static async Task<List<HoroscopeData>> GetHoroscopeDataList()
+        {
+            //if prediction list already loaded use that instead
+            if (SavedHoroscopeDataList != null) { return SavedHoroscopeDataList; }
+
+            //get data list from Static Website storage
+            //always get from STABLE for reliability, and also no URL instance here
+            var horoscopeDataListXml = await Tools.GetXmlFileHttp("https://vedastro.org/data/HoroscopeDataList.xml"); //todo variable it
+
+            //parse each raw event data in list
+            var horoscopeDataList = new List<HoroscopeData>();
+            foreach (var predictionDataXml in horoscopeDataListXml)
+            {
+                //add it to the return list
+                horoscopeDataList.Add(HoroscopeData.FromXml(predictionDataXml));
+            }
+
+            //make a copy to be used later if needed (speed improve)
+            SavedHoroscopeDataList = horoscopeDataList;
+
+            return horoscopeDataList;
+        }
+
+        /// <summary>
+        /// Gets all horoscope predictions for a person
+        /// </summary>
+        public static async Task<List<HoroscopePrediction>> GetPrediction(Person person)
+        {
+            //get list of horoscope data (file from wwwroot)
+            var horoscopeDataList = await GetHoroscopeDataList();
+
+            //start calculating predictions (mix with time by person's birth date)
+            var predictionList = calculate(person, horoscopeDataList);
+
+            return predictionList;
+
+            /// <summary>
+            /// Get list of predictions occurring in a time period for all the
+            /// inputed prediction types aka "prediction data"
+            /// </summary>
+            List<HoroscopePrediction> calculate(Person person, List<HoroscopeData> horoscopeDataList)
+            {
+                //get data to instantiate muhurtha time period
+                //get start & end times
+
+                //initialize empty list of event to return
+                List<HoroscopePrediction> horoscopeList = new();
+
+                try
+                {
+                    foreach (var horoscopeData in horoscopeDataList)
+                    {
+                        //only add if occuring
+                        var isOccuring = horoscopeData.IsEventOccuring(person.BirthTime, person);
+                        if (isOccuring)
+                        {
+                            var newHoroscopePrediction = new HoroscopePrediction(horoscopeData.Name, horoscopeData.Description, horoscopeData.RelatedBody);
+                            //add events to main list of event
+                            horoscopeList.Add(newHoroscopePrediction);
+                        }
+                    }
+                }
+                //catches only exceptions that indicates that user canceled the calculation (caller lost interest in the result)
+                catch (Exception)
+                {
+                    //return empty list
+                    return new List<HoroscopePrediction>();
+                }
+
+                //return calculated event list
+                return horoscopeList;
+            }
+        }
+
+
         /// <summary>
         /// "H1N1" -> ["H", "1", "N", "1"]
         /// "H" -> ["H"]

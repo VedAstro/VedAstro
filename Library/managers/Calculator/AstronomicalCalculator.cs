@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using SwissEphNet;
 
 //using Genso.Framework;
@@ -3686,6 +3687,81 @@ namespace VedAstro.Library
             {
                 return false;
             }
+
+        }
+
+        public static IEnumerable<MethodInfo> GetTimePlanetCalcs()
+        {
+            var returnList = new List<MethodInfo>();
+
+            //get all calculators that can work with the inputed data
+            var calculatorClass = typeof(AstronomicalCalculator);
+
+            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
+                let parameter = calculatorInfo.GetParameters()
+                where parameter.Length == 2 //only 2 params
+                      && parameter[0].ParameterType == typeof(PlanetName)  //planet name
+                      && parameter[1].ParameterType == typeof(Time)        //birth time
+                select calculatorInfo;
+
+            //second possible order, technically should be aligned todo
+            var calculators3 = from calculatorInfo in calculatorClass.GetMethods()
+                let parameter = calculatorInfo.GetParameters()
+                where parameter.Length == 2 //only 2 params
+                      && parameter[0].ParameterType == typeof(Time)  //birth time
+                      && parameter[1].ParameterType == typeof(PlanetName)        //planet name
+                select calculatorInfo;
+
+            //these are for calculators with static tag data
+            var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
+                let parameter = calculatorInfo.GetParameters()
+                where parameter.Length == 1 //only 2 params
+                      && parameter[0].ParameterType == typeof(PlanetName)  //planet name
+                select calculatorInfo;
+
+
+            returnList.AddRange(calculators1);
+            returnList.AddRange(calculators2);
+            returnList.AddRange(calculators3);
+
+            return returnList;
+
+        }
+        public static IEnumerable<MethodInfo> GetTimeHouseCalcs()
+        {
+            var returnList = new List<MethodInfo>();
+
+            //get all calculators that can work with the inputed data
+            var calculatorClass = typeof(AstronomicalCalculator);
+
+            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
+                let parameter = calculatorInfo.GetParameters()
+                where parameter.Length == 2 //only 2 params
+                      && parameter[0].ParameterType == typeof(HouseName)  //planet name
+                      && parameter[1].ParameterType == typeof(Time)        //birth time
+                select calculatorInfo;
+
+            //second possible order, technically should be aligned todo
+            var calculators3 = from calculatorInfo in calculatorClass.GetMethods()
+                let parameter = calculatorInfo.GetParameters()
+                where parameter.Length == 2 //only 2 params
+                      && parameter[0].ParameterType == typeof(Time)  //birth time
+                      && parameter[1].ParameterType == typeof(HouseName)        //planet name
+                select calculatorInfo;
+
+            //these are for calculators with static tag data
+            var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
+                let parameter = calculatorInfo.GetParameters()
+                where parameter.Length == 1 //only 2 params
+                      && parameter[0].ParameterType == typeof(HouseName)  //planet name
+                select calculatorInfo;
+
+
+            returnList.AddRange(calculators1);
+            returnList.AddRange(calculators2);
+            returnList.AddRange(calculators3);
+
+            return returnList;
 
         }
     }

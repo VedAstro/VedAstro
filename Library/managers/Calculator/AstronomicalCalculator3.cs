@@ -464,6 +464,9 @@ namespace VedAstro.Library
                     else if (_planet == PlanetName.Jupiter) { return 6.5; }
                     else if (_planet == PlanetName.Venus) { return 5.5; }
                     else if (_planet == PlanetName.Saturn) { return 5; }
+                    //todo rahu and ketu added later on based on saturn and mars
+                    else if (_planet == PlanetName.Rahu) { return 5; }
+                    else if (_planet == PlanetName.Ketu) { return 5; }
 
                     throw new Exception("Planet not specified!");
                 }
@@ -565,7 +568,7 @@ namespace VedAstro.Library
             Shashtiamsa _getPlanetShadbalaPinda()
             {
 
-                //if planet name is rahu or ketu then replace with house lord
+                //if planet name is rahu or ketu then replace with house lord's strength
                 if (planetName == PlanetName.Rahu || planetName == PlanetName.Ketu)
                 {
                     var houseLord = AstronomicalCalculator.GetLordOfHousePlanetIsIn(time, planetName);

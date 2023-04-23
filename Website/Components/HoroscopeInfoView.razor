@@ -18,7 +18,7 @@
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button @onclick="OnClickPredictionTab" class="nav-link" id="traditional-tab" data-bs-toggle="tab" data-bs-target="#traditional" type="button" role="tab" aria-controls="traditional" aria-selected="false">
+            <button @onclick="OnClickPredictionTab" class="nav-link" id="ai-prediction-tab" data-bs-toggle="tab" data-bs-target="#ai-prediction" type="button" role="tab" aria-controls="ai-prediction" aria-selected="false">
                 <Icon IconName="flat-color-icons:electronics" />
                 AI Prediction
             </button>
@@ -152,7 +152,7 @@
         </div>
 
         @*AI PREDICTIONS CHART*@
-        <div class="tab-pane fade" id="traditional" role="tabpanel" aria-labelledby="traditional-tab">
+        <div class="tab-pane fade" id="ai-prediction" role="tabpanel" aria-labelledby="ai-prediction-tab">
             <div class="vstack gap-3 p-4">
                 <AIPrediction @ref="_aiPrediction"/>
             </div>
@@ -352,10 +352,10 @@
     }
 
 
-    private void OnClickPredictionTab()
+    private async Task OnClickPredictionTab()
     {
         //start predictin render
-        _aiPrediction.ShowPrediction(_selectedPerson.BirthTime);
+        await _aiPrediction.ShowPrediction(_selectedPerson);
     }
 
 }

@@ -4,19 +4,35 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-
-@foreach (var prediction in predictionList)
+@*default loading icon*@
+@if (readyToRender)
 {
-    <div class="hstack gap-2">
-        <span>@prediction</span>
-        <IconButton SmallSize="true" IconName="carbon:thumbs-up-filled" TooltipText="Prediction is right" />
-        <IconButton SmallSize="true" IconName="carbon:thumbs-down-filled" TooltipText="Prediction is wrong" />
+    <div style=" margin-bottom: -10px;">
+        <Icon IconName="eos-icons:ai-healing-outlined" Size="25" />
+        <span style="font-size: 13px; color: #8f8f8f;">Give feedback to help improve the Machine Learning (ML) model</span>
     </div>
+    <hr class="my-0" />
+    @foreach (var prediction in predictionList)
+    {
+        <div class="hstack gap-2">
+            <span>@prediction</span>
+            <IconButton SmallSize="true" IconName="carbon:thumbs-up-filled" TooltipText="Prediction is right" />
+            <IconButton SmallSize="true" IconName="carbon:thumbs-down-filled" TooltipText="Prediction is wrong" />
+        </div>
+    }
 }
+
+@*default loading icon*@
+else
+{
+    <img style="width:@GR.W157px;" src="images/loading-animation-progress-transparent.gif" />
+}
+
 
 
 @code {
 
+    private bool readyToRender = false;
 
     List<string> predictionList = new List<string>();
 
@@ -24,25 +40,86 @@
     /// <summary>
     /// Starts the render process to show AI predictions
     /// </summary>
-    public void ShowPrediction(Time _birthTime)
+    public async Task ShowPrediction(Person person)
     {
+        //hide previous results
+        readyToRender = false;
+
+        Time _birthTime = person.BirthTime;
         //clear previous predictions
         predictionList.Clear();
 
-        //strongest house
-        //source of happiness and source of sadness
+
+        //--------------------------------
+        //1 strongest planet in sign
+        var strongestPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(_birthTime)[0];
+        var strongestPlanetSign = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet, _birthTime);
+        var allPredictions = await Tools.GetPrediction(person);
+
+        //pick out planet predictions based on related body of planet and sign
+        var strPlanetPredicts = allPredictions.FindAll(x => x.RelatedBody.Contains(strongestPlanet));
+        var prediction = strPlanetPredicts.FindAll(x => x.RelatedBody.Contains(strongestPlanetSign.GetSignName()))[0]; //exp: Moon in Pisces
+
+        //only add to prediction if found
+        if (!string.IsNullOrEmpty(prediction?.Description)) { predictionList.Add($"{prediction.Description}"); }
+
+    //--------------------------------
+        //2 2nd strongest planet in sign
+        var strongestPlanet2 = AstronomicalCalculator.GetAllPlanetOrderedByStrength(_birthTime)[1];
+        var strongestPlanetSign2 = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet2, _birthTime);
+
+        //pick out planet predictions based on related body of planet and sign
+        var strPlanetPredicts2 = allPredictions.FindAll(x => x.RelatedBody.Contains(strongestPlanet2));
+        var prediction2 = strPlanetPredicts2.FindAll(x => x.RelatedBody.Contains(strongestPlanetSign2.GetSignName()))[0]; //exp: Moon in Pisces
+
+        //only add to prediction if found
+        if (!string.IsNullOrEmpty(prediction2?.Description)) { predictionList.Add($"{prediction2.Description}"); }
+
+
+    //--------------------------------
+        //2 2nd strongest House
         var strongestHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(_birthTime)[0];
+        //var strongestHouseSign = AstronomicalCalculator.GetHouseSignName((int)strongestHouse, _birthTime);
+
+        //pick out planet predictions based on related body of planet and sign
+        var predictionStrongestHouse = allPredictions.FindAll(x => x.RelatedBody.Contains(strongestHouse))[0];
+
+        //only add to prediction if found
+        if (!string.IsNullOrEmpty(predictionStrongestHouse?.Description)) { predictionList.Add($"{predictionStrongestHouse.Description}"); }
+
+        //--------------------------------
+        //2 rising sign prediction
+        //var predictionRisingSign = allPredictions.FindAll(x => x.FormattedName.ToLower().Contains("rising")).FirstOrDefault(); //exp: Moon in Pisces
+        //predictionList.Add($"{predictionRisingSign}");
+
+
+        //---------------------------------
+        //3 strongest house
+        //source of happiness and source of sadness
         var weakestHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(_birthTime)[11];
         var getHouseTagsGood = AstronomicalCalculator.GetHouseTags((int)strongestHouse);
         var getHouseTagsBad = AstronomicalCalculator.GetHouseTags((int)weakestHouse);
 
         //add prediction to list
-        predictionList.Add($"Good and happiness in life related to :- {getHouseTagsGood}");
-        predictionList.Add($"Bad and unhappiness in life related to :- {getHouseTagsBad}");
+        predictionList.Add($"Good things in life :- {getHouseTagsGood}");
+        predictionList.Add($"Bad things in life :- {getHouseTagsBad}");
 
+        //hide loading 
+        readyToRender = true;
 
         //render update
         this.StateHasChanged();
+
+
+        //-----------------LOCAL FUNCTIONS ----------------------
+        //find planet in sign prediction
+        bool Match(HoroscopePrediction x)
+        {
+            var planetInSignEvent = $"{strongestPlanet.ToString().ToLower()} in"; // turns to -> venus in ...
+            var nameMatch = x.FormattedName.ToLower().Contains(planetInSignEvent);
+            return nameMatch; //important to lower before check
+        }
+
     }
 
 }

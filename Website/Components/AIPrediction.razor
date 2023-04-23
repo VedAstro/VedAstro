@@ -7,16 +7,30 @@
 @*default loading icon*@
 @if (readyToRender)
 {
+    <SmallIconHeading ShowLine="true" IconName="mdi:thumbs-up-down" Title="Feedback improves the Machine Learning (ML) model" />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Prediction</th>
+                <th scope="col"><Icon IconName="eos-icons:ai" Size="25"/> Feedback</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prediction in predictionList)
+            {
+                <tr>
+                    <td scope="row">@prediction</td>
+                    <td>
+                        <div class="hstack gap-2">
+                            <IconButton SmallSize="true" IconName="carbon:thumbs-up-filled" TooltipText="Prediction is right" />
+                            <IconButton SmallSize="true" IconName="carbon:thumbs-down-filled" TooltipText="Prediction is wrong" />
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-    <SmallIconHeading IconName="eos-icons:ai" Title="Feedback helps to improve the Machine Learning (ML) model"/>
-    @foreach (var prediction in predictionList)
-    {
-        <div class="hstack gap-2">
-            <span>@prediction</span>
-            <IconButton SmallSize="true" IconName="carbon:thumbs-up-filled" TooltipText="Prediction is right" />
-            <IconButton SmallSize="true" IconName="carbon:thumbs-down-filled" TooltipText="Prediction is wrong" />
-        </div>
-    }
 }
 
 @*default loading icon*@

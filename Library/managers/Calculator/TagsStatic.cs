@@ -303,13 +303,4 @@ namespace VedAstro.Library
 
     }
 
-    public class APIAttribute : Attribute
-    {
-        public APIAttribute(string name)
-        {
-            Name = name;
-        }
-
-        public string Name { get; set; }
-    }
 }

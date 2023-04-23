@@ -1220,6 +1220,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Get zodiac sign planet is in.
         /// </summary>
+        [API("Sign")]
         public static ZodiacSign GetPlanetRasiSign(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
@@ -1256,6 +1257,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Get navamsa sign of planet
         /// </summary>
+        [API("Navamsa")]
         public static ZodiacName GetPlanetNavamsaSign(PlanetName planetName, Time time)
         {
             //get planets longitude

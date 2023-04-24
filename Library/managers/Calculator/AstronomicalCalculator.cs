@@ -2681,6 +2681,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if a planet is in a kendra house (4,7,10)
         /// </summary>
+        [API("InKendra")]
         public static bool IsPlanetInKendra(PlanetName planet, Time time)
         {
             //The 4th, the 7th and the 10th are the Kendras
@@ -3001,6 +3002,7 @@ namespace VedAstro.Library
         /// Checks if a planet is in a longitude where it's in Debilitated
         /// Note : Rahu & ketu accounted for
         /// </summary>
+        [API("Debilitated")]
         public static bool IsPlanetDebilitated(PlanetName planet, Time time)
         {
             //get planet location
@@ -3036,6 +3038,7 @@ namespace VedAstro.Library
         ///     the planet is exalted but in a particular degree
         ///     its exaltation is at the maximum level.
         /// </summary>
+        [API("Exaltated")]
         public static bool IsPlanetExaltated(PlanetName planet, Time time)
         {
             //get planet location
@@ -3730,80 +3733,7 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// Gets all calculated data in nice JSON with matching param signature
-        /// used to create a dynamic API call list
-        /// </summary>
-        public static JObject GetTimePlanetCalcs<T1,T2>(T1 inputedPram1, T2 inputedPram2)
-        {
 
-            var inputedParamType1 = typeof(T1);
-            var inputedParamType2 = typeof(T2);
-
-            //get all calculators that can work with the inputed data
-            var calculatorClass = typeof(AstronomicalCalculator);
-
-            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
-                let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 2 //only 2 params
-                      && parameter[0].ParameterType == inputedParamType1 
-                      && parameter[1].ParameterType == inputedParamType2       
-                               select calculatorInfo;
-
-            //second possible order, technically should be aligned todo
-            var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
-                let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 2 //only 2 params
-                      && parameter[0].ParameterType == inputedParamType2
-                      && parameter[1].ParameterType == inputedParamType1    
-                               select calculatorInfo;
-
-            //PRINT DEBUG DATA
-            Console.WriteLine($"Calculators Type 1 : {calculators1.Count()}");
-            Console.WriteLine($"Calculators Type 2 : {calculators2.Count()}");
-
-            //place the data from all possible methods nicely in JSON
-            var rootPayloadJson = new JObject(); //each call below adds to this root
-
-            //three possible ways these params may be ordered
-            //theoretically there should only be one signature, clean code when possible
-            object[] param1 = new object[] { inputedPram1, inputedPram2 };
-            foreach (var methodInfo in calculators1) { addMethodInfoToJson(methodInfo, param1); }
-
-            object[] param2 = new object[] { inputedPram2, inputedPram1 };
-            foreach (var methodInfo in calculators2) { addMethodInfoToJson(methodInfo, param2); }
-
-
-            return rootPayloadJson;
-
-
-            //converts method info to JSON parsed
-            void addMethodInfoToJson(MethodInfo methodInfo1, object[] param)
-            {
-
-                string output = "";
-
-                //likely to fail during call, as such just ignore and move along
-                try
-                {
-                    output = methodInfo1?.Invoke(null, param)?.ToString() ?? "";
-                }
-                catch (Exception e)
-                {
-                    output = e.Message;
-                }
-
-                //if nothing in output then, something went wrong
-                output = string.IsNullOrEmpty(output) ? "#ERROR" : output;
-
-                //get correct name for this method, API friendly
-                var methodName = Tools.GetAPISpecialName(methodInfo1);
-
-                //save it nicely in json format
-                rootPayloadJson[methodName] = output;
-            }
-
-        }
         public static IEnumerable<MethodInfo> GetTimeHouseCalcs()
         {
             var returnList = new List<MethodInfo>();

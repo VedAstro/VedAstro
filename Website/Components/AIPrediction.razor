@@ -7,12 +7,12 @@
 @*default loading icon*@
 @if (readyToRender)
 {
-    <SmallIconHeading ShowLine="true" IconName="mdi:thumbs-up-down" Title="Feedback improves the Machine Learning (ML) model" />
+    <SmallIconHeading ExtraClass="ms-2" ShowLine="true" IconName="eos-icons:ai-operator" Title="Feedback improves Machine Learning (ML) model" />
     <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col">Prediction</th>
-                <th scope="col"><Icon IconName="eos-icons:ai" Size="25"/> Feedback</th>
+                <th scope="col"><Icon IconName="eos-icons:ai" Size="25" /> Feedback</th>
             </tr>
         </thead>
         <tbody>
@@ -22,8 +22,8 @@
                     <td scope="row">@prediction</td>
                     <td>
                         <div class="hstack gap-2">
-                            <IconButton SmallSize="true" IconName="carbon:thumbs-up-filled" TooltipText="Prediction is right" />
-                            <IconButton SmallSize="true" IconName="carbon:thumbs-down-filled" TooltipText="Prediction is wrong" />
+                            <IconButton SmallSize="true" IconName="carbon:thumbs-up-filled" OnClickCallback="OnClickVoteUp" TooltipText="Prediction is right" />
+                            <IconButton SmallSize="true" IconName="carbon:thumbs-down-filled" OnClickCallback="OnClickVoteUp" TooltipText="Prediction is wrong" />
                         </div>
                     </td>
                 </tr>
@@ -140,6 +140,12 @@ else
             var nameMatch = x.FormattedName.ToLower().Contains(planetInSignEvent);
             return nameMatch; //important to lower before check
         }
+    }
+
+    private async Task OnClickVoteUp()
+    {
+        //let user know person has been updated
+        await _jsRuntime.ShowAlert("success", "Thank you", false, timer: 1000);
     }
 
 }

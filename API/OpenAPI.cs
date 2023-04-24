@@ -83,20 +83,7 @@ namespace API
         }
 
 
-        public static JObject ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
-        {                                                                                                                                                                                                                    
-            var calculatorClass = typeof(AstronomicalCalculator);
-            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
-
-            //place the data from all possible methods nicely in JSON
-            var rootPayloadJson = new JObject(); //each call below adds to this root
-
-            object[] param = new object[] { param1, param2 }; //hopefull this works
-            rootPayloadJson[methodName] = foundMethod?.Invoke(null, param)?.ToString() ?? "";
-
-            return rootPayloadJson;
-        }
-
+        
         private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
             HttpRequestData incomingRequest)
         {
@@ -124,7 +111,7 @@ namespace API
                 {
                     //all planet related data
                     //get all calculators that can accept a planet name and time
-                    var planetTimeCalcs = AstronomicalCalculator.GetTimePlanetCalcs<PlanetName, Time>(planetName, parsedTime);
+                    var planetTimeCalcs = Tools.GetCalcsResultsByParam<PlanetName, Time>(planetName, parsedTime);
 
                     //send the payload on it's mary way
                     return APITools.PassMessageJson(planetTimeCalcs, incomingRequest);
@@ -154,7 +141,7 @@ namespace API
                 {
                     //all house related data
                     //get all calculators that can accept a house name and time
-                    var houseTimeCalcs = AstronomicalCalculator.GetTimePlanetCalcs<HouseName, Time>((HouseName)houseName, parsedTime);
+                    var houseTimeCalcs = Tools.GetCalcsResultsByParam<HouseName, Time>((HouseName)houseName, parsedTime);
 
                     //send the payload on it's mary way
                     return APITools.PassMessageJson(houseTimeCalcs, incomingRequest);
@@ -171,6 +158,26 @@ namespace API
 
 
         }
+
+
+        /// <summary>
+        /// Given an API name, will find the calc and try to call and wrap it in JSON
+        /// </summary>
+        public static JObject ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
+        {
+            var calculatorClass = typeof(AstronomicalCalculator);
+            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
+
+            //place the data from all possible methods nicely in JSON
+            var rootPayloadJson = new JObject(); //each call below adds to this root
+
+            object[] param = new object[] { param1, param2 }; //hopefull this works
+            rootPayloadJson[methodName] = foundMethod?.Invoke(null, param)?.ToString() ?? "";
+
+            return rootPayloadJson;
+        }
+
+
 
         private static JObject GetSignDataJson(PlanetName planetName, Time parsedTime)
         {

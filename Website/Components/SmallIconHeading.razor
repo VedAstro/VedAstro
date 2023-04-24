@@ -6,7 +6,7 @@
 @using System.Xml.Linq
 
 
-<div style="@(ShowLine?lineStyle:"")">
+<div class="@ExtraClass" style="@(ShowLine?lineStyle:"")">
     <Icon IconName="@IconName" Size="25" />
     <span style="font-size: 13px; color: #8f8f8f;">@Title</span>
 </div>
@@ -31,6 +31,9 @@
 
     [Parameter]
     public string IconName { get; set; } = "";
+    
+    [Parameter]
+    public string ExtraClass { get; set; } = "";
 
     /// <summary>
     /// If true show horizontal line below text, default false

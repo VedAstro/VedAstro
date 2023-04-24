@@ -38,6 +38,7 @@
                     <option value="Saturn">Saturn</option>
                     <option value="Rahu">Rahu</option>
                     <option value="Ketu">Ketu</option>
+                    <option value="House1">House 1</option>
                 </select>
                 <label for="celestialNameSelect">Celestial Body Name</label>
             </div>
@@ -46,11 +47,11 @@
                 <select @bind="selectedDataProperty" class="form-select" id="dataPropertySelect" aria-label="Data Property Select">
                     <option selected value="All">All</option>
                     @*make a dynamic selection of all available calls*@
-                    @foreach (string dataProperty in Tools.ApiDataPropertyCallList())
+                    @foreach (var dataProperty in GetDataPropListBasedOnCelesBodyType())
                     {
-                        <option value="@dataProperty">@dataProperty</option>
+                        <option value="@dataProperty.Name">@(Format.FormatName(dataProperty))</option>
                     }
-                    </select>
+                </select>
                 <label for="dataPropertySelect">Data Property</label>
             </div>
 
@@ -75,7 +76,7 @@
     <kbd style="padding: 12px;font-size: 18px;width: min-content;">@finalAPIGetCall</kbd>
     <div class="hstack gap-3">
         <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
-        <IconButton ButtonText="Demo Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
+        <IconButton ButtonText="Test Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
     </div>
 </div>
 
@@ -120,11 +121,10 @@
 
         //data property
         //if select all, leave empty as for API to give all
-        selectedDataProperty = selectedDataProperty == "All" ? "" : selectedDataProperty;
+        var realDataProperty = selectedDataProperty == "All" ? "" : selectedDataProperty;
 
         //combine the call
-
-        var domain = "https://api.vedastro.org";
+        var domain = AppData.URL.ApiUrl; //get stable or beta as needed
         var localNameNoSpace = Tools.RemoveWhiteSpace(_geoLocationInput.LocationName);
         var location = $"/Location/{localNameNoSpace}";
         string hhmmStr = timeInputed.GetStdDateTimeOffset().ToString("HH:mm");
@@ -133,10 +133,10 @@
         string yearStr = timeInputed.GetStdDateTimeOffset().ToString("yyyy");
         string offsetStr = timeInputed.GetStdDateTimeOffset().ToString("zzz");
         var time = $"/Time/{hhmmStr}/{dateSt}/{monthStr}/{yearStr}/{offsetStr}";
-        var planet = $"/Planet/{selectedBodyName}/{selectedBodyType}/{selectedDataProperty}";
+        var celestialBodyData = $"/{selectedBodyType}/{selectedBodyName}/{realDataProperty}";
 
-
-        finalAPIGetCall = domain + location + time + planet;
+        //format of the API call
+        finalAPIGetCall = domain + location + time + celestialBodyData;
     }
 
     private async Task OnDemoCallGeneratedUrl()
@@ -154,5 +154,22 @@
         await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
     }
 
+
+    /// <summary>
+    /// based on body type, house or planet, show only available api calls
+    /// </summary>
+    private IEnumerable<Tools.APICallData> GetDataPropListBasedOnCelesBodyType()
+    {
+        switch (selectedBodyType.ToLower())
+        {
+            case "planet":return Tools.GetPlanetApiCallList<PlanetName, Time>();
+
+            case "house":return Tools.GetPlanetApiCallList<HouseName, Time>();
+        }
+
+
+        throw new NotImplementedException();
+
+    }
 
 }

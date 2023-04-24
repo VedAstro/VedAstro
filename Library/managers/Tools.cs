@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Microsoft.JSInterop;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SwissEphNet;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -1277,6 +1278,162 @@ namespace VedAstro.Library
            return removed;
         }
 
+        public readonly record struct APICallData(string Name, string Description);
+
+        /// <summary>
+        /// Get all methods that is available to time and planet param
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<APICallData> GetPlanetApiCallList<T1, T2>()
+        {
+            //get all the same methods gotten by Open api func
+            var calcList =  GetCalculatorMethodInfoListByParamType<PlanetName, Time>();
+
+            //convert calculator reference to 
+            var calculatorNameList = from calculatorInfo in calcList select calculatorInfo.Name;
+
+            var finalList = new List<APICallData>();
+            //make final list with API description
+            foreach (var calcName in calculatorNameList)
+            {
+                finalList.Add(new APICallData(calcName, Tools.GetAPICallDescByName(calcName)));
+            }
+
+            return finalList;
+        }
+
+        private static string GetAPICallDescByName(string calcName)
+        {
+            //temp
+            return "temp no data, implement pls";
+        }
+
+        /// <summary>
+        /// Gets calculators by param type and count
+        /// Gets all calculated data in nice JSON with matching param signature
+        /// used to create a dynamic API call list
+        /// </summary>
+        public static JObject GetCalcsResultsByParam<T1, T2>(T1 inputedPram1, T2 inputedPram2)
+        {
+
+            var finalList = GetCalculatorMethodInfoListByParamType<T1, T2>();
+
+            //place the data from all possible methods nicely in JSON
+            var rootPayloadJson = new JObject(); //each call below adds to this root
+            object[] param1 = new object[] { inputedPram1, inputedPram2 };
+            foreach (var methodInfo in finalList) {
+                AddMethodInfoToJson(methodInfo, param1, ref rootPayloadJson); }
+
+            return rootPayloadJson;
+
+        }
+
+        private static IEnumerable<MethodInfo> GetCalculatorMethodInfoListByParamType<T1, T2>()
+        {
+            var inputedParamType1 = typeof(T1);
+            var inputedParamType2 = typeof(T2);
+
+            //get all calculators that can work with the inputed data
+            var calculatorClass = typeof(AstronomicalCalculator);
+
+            var finalList = new List<MethodInfo>();
+
+            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
+                let parameter = calculatorInfo.GetParameters()
+                where parameter.Length == 2 //only 2 params
+                      && parameter[0].ParameterType == inputedParamType1
+                      && parameter[1].ParameterType == inputedParamType2
+                select calculatorInfo;
+
+            finalList.AddRange(calculators1);
+
+            //reverse order
+            //second possible order, technically should be aligned todo
+            var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
+                let parameter = calculatorInfo.GetParameters()
+                where parameter.Length == 2 //only 2 params
+                      && parameter[0].ParameterType == inputedParamType2
+                      && parameter[1].ParameterType == inputedParamType1
+                select calculatorInfo;
+
+            finalList.AddRange(calculators2);
+
+#if true
+            //PRINT DEBUG DATA
+            Console.WriteLine($"Calculators Type 1 : {calculators1?.Count()}");
+            Console.WriteLine($"Calculators Type 2 : {calculators2?.Count()}");
+#endif
+
+            return finalList;
+        }
+
+        //converts method info to JSON parsed
+        //ref so that can call in loop
+
+        public static void AddMethodInfoToJson(MethodInfo methodInfo1, object[] param, ref JObject rootPayloadJson)
+        {
+            //reverse order
+            var paramReverse = param.Reverse();
+
+            JObject output = new JObject();
+
+            //likely to fail during call, as such just ignore and move along
+            try
+            {
+                output = Tools.AnyToJSON(methodInfo1?.Invoke(null, param));
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    //try again in reverse
+                    output = Tools.AnyToJSON(methodInfo1?.Invoke(null, (object[])paramReverse));
+                }
+                //if fail put error in data for easy detection
+                catch (Exception e2)
+                {
+                    output = Tools.AnyToJSON(e2.Message);
+                }
+            }
+
+            //if nothing in output then, something went wrong
+            //output = string.IsNullOrEmpty(output) ? "#ERROR" : output;
+
+            //get correct name for this method, API friendly
+            var methodName = Tools.GetAPISpecialName(methodInfo1);
+
+            //save it nicely in json format
+            rootPayloadJson[methodName] = output;
+        }
+
+
+        public static JObject AnyToJSON(dynamic anyTypeData)
+        {
+            var returnRootJson = new JObject();
+
+            //string goes in like normal
+            if (anyTypeData is string stringData)
+            {
+                returnRootJson.Add(stringData);
+            }
+            else if (anyTypeData is IEnumerable dataList)
+            {
+                //convert to string
+                foreach (var data in dataList)
+                {
+                    returnRootJson.Add(data.ToString());
+                }
+            }
+            else
+            {
+                //Console.WriteLine($"Unaccounted for JSON TYPE : {anyTypeData.GetType().ToString()}");
+
+                //just convert direct
+                returnRootJson.Add(anyTypeData.ToString());
+            }
+
+            return returnRootJson;
+        }
     }
 
 }

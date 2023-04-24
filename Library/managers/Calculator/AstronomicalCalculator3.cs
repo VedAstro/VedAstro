@@ -179,6 +179,7 @@ namespace VedAstro.Library
 
         }
 
+        [API("Benefic")]
         public static bool IsPlanetBenefic(PlanetName planetName, Time time)
         {
             //get list of benefic planets
@@ -214,6 +215,7 @@ namespace VedAstro.Library
             return listOfGoodPlanets;
         }
 
+        [API("Malefic")]
         public static bool IsPlanetMalefic(PlanetName planetName, Time time)
         {
             //get list of malefic planets
@@ -644,6 +646,7 @@ namespace VedAstro.Library
         /// 5th and 9th, 4th and 8th and 3rd and 10th signs
         /// respectively.
         /// </summary>
+        [API("DrikBala")]
         public static Shashtiamsa GetPlanetDrikBala(PlanetName planetName, Time time)
         {
 
@@ -799,6 +802,7 @@ namespace VedAstro.Library
         ///
         /// This is the natural or inherent strength of a planet.
         /// </summary>
+        [API("NaisargikaBala")]
         public static Shashtiamsa GetPlanetNaisargikaBala(PlanetName planetName, Time time)
         {
             if (planetName == PlanetName.Sun) { return new Shashtiamsa(60); }
@@ -834,6 +838,7 @@ namespace VedAstro.Library
         /// from the Sun, it gradually loses the power
         /// of •the Sun's gravitation and consequently, 
         /// </summary>
+        [API("ChestaBala")]
         public static Shashtiamsa GetPlanetChestaBala(PlanetName planetName, Time time)
         {
 
@@ -1021,6 +1026,7 @@ namespace VedAstro.Library
         /// Gets the planets motion name, can be Retrograde, Direct, Stationary
         /// a name version of Chesta Bala
         /// </summary>
+        [API("Motion")]
         public static PlanetMotion GetPlanetMotionName(PlanetName planetName, Time time)
         {
             //sun, moon, rahu & ketu don' have retrograde so always direct
@@ -1071,6 +1077,7 @@ namespace VedAstro.Library
         /// neutral or inimical Rasi, Hora, Drekkana, Sapthamsa,
         /// Navamsa, Dwadasamsa and Thrimsamsa.
         /// </summary>
+        [API("SaptavargajaBala")]
         public static Shashtiamsa GetPlanetSaptavargajaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
@@ -1216,6 +1223,7 @@ namespace VedAstro.Library
         /// They are (1) Rasi, {2) Hora, (3) Drekkana, (4) Navamsa, (5)
         /// Dwadasamsa and (6) Trimsamsa.
         /// </summary>
+        [API("ShadvargaBala")]
         public static Shashtiamsa GetPlanetShadvargaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
@@ -1406,6 +1414,7 @@ namespace VedAstro.Library
         /// Due to placement in first, second, or third Drekkana of a sign, male, female and hermaphrodite planets respectively,
         /// get a quarter strength according to placements in the first, second and third Drekkana.
         /// </summary>
+        [API("SthanaBala")]
         public static Shashtiamsa GetPlanetSthanaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
@@ -1445,6 +1454,7 @@ namespace VedAstro.Library
         /// the Moon and Venus in the last Drekkana, get full
         /// strength of 60 shashtiamsas.
         /// </summary>
+        [API("DrekkanaBala")]
         public static Shashtiamsa GetPlanetDrekkanaBala(PlanetName planetName, Time time)
         {
             //get sign planet is in

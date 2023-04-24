@@ -785,7 +785,7 @@ namespace API
         {
             //send image back to caller
             var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain");
+            //response.Headers.Add("Content-Type", "text/plain");
             //place in response body
             response.WriteString(chartContentSvg);
 

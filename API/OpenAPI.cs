@@ -8,7 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using Newtonsoft.Json.Linq;
+using Enum = Google.Protobuf.WellKnownTypes.Enum;
 
 
 namespace API
@@ -20,11 +22,10 @@ namespace API
         /// <summary>
         /// https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
         /// </summary>
-        [Function(nameof(OneProperty))]
-        public static async Task<HttpResponseData> OneProperty([HttpTrigger(AuthorizationLevel.Anonymous,
+        [Function(nameof(Income1))]
+        public static async Task<HttpResponseData> Income1([HttpTrigger(AuthorizationLevel.Anonymous,
                 "get",
-                Route =
-                    "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/{propertyName}")]
+                Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}/{propertyName}")]
             HttpRequestData incomingRequest,
             string locationName,
             string hhmmStr,
@@ -32,52 +33,142 @@ namespace API
             string monthStr,
             string yearStr,
             string offsetStr,
-            string planetNameStr,
+            string celestialBodyType,
+            string celestialBodyName,
             string propertyName)
         {
             //log the call
             await APILogger.Visitor(incomingRequest);
 
 
-            PlanetName planetName;
-            var planetNameResult = PlanetName.TryParse(planetNameStr, out planetName);
-            var geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
             var geoLocation = geoLocationResult.Payload;
-
-            //check result 1st before parsing
-            if (!planetNameResult || !geoLocationResult.IsPass) { return APITools.FailMessage("Please check your input, it failed to parse.", incomingRequest); }
 
             //clean time text
             var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
             var parsedTime = new Time(timeStr, geoLocation);
 
 
-            //SWISS EPH
+            //send to sorter
+            return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, geoLocationResult, incomingRequest);
+        }
 
-            if (propertyName == "SwissEphemeris")
+        [Function(nameof(Income2))]
+        public static async Task<HttpResponseData> Income2([HttpTrigger(AuthorizationLevel.Anonymous,
+                "get",
+                Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}")]
+            HttpRequestData incomingRequest,
+            string locationName,
+            string hhmmStr,
+            string dateStr,
+            string monthStr,
+            string yearStr,
+            string offsetStr,
+            string celestialBodyType,
+            string celestialBodyName)
+        {
+            //log the call
+            await APILogger.Visitor(incomingRequest);
+
+
+            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+            var geoLocation = geoLocationResult.Payload;
+
+            //clean time text
+            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
+            var parsedTime = new Time(timeStr, geoLocation);
+
+            //send to sorter (no property, set null)
+            return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest);
+        }
+
+        public static JObject ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
+        {                                                                                                                                                                                                                    
+            var calculatorClass = typeof(AstronomicalCalculator);
+            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
+
+            //place the data from all possible methods nicely in JSON
+            var rootPayloadJson = new JObject(); //each call below adds to this root
+
+            object[] param = new object[] { param1, param2 }; //hopefull this works
+            rootPayloadJson[methodName] = foundMethod?.Invoke(null, param)?.ToString() ?? "";
+
+            return rootPayloadJson;
+        }
+
+
+
+        private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
+            HttpRequestData incomingRequest)
+        {
+
+            var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
+
+            //all planet body calls
+            if (celestialBodyType.ToLower() == "planet")
             {
-                var result = SwissEphWrapper(parsedTime, planetName);
+                //get the planet data needed
+                var planetNameResult = PlanetName.TryParse(celestialBodyName, out var planetName);
+                //check result 1st before parsing
+                if (!planetNameResult || !geoLocationResult.IsPass) { return APITools.FailMessage("Invalid Planet Name", incomingRequest); }
 
-                JObject jsonResult = JObject.FromObject(result);
+                //allows to dynamically select property that would other wise come together in list below
+                if (individualPropertySelected)
+                {
+                    //find > execute > wrap to JSON matching function property
+                    var result = ExecuteCalculatorByApiName<PlanetName, Time>(propertyName, planetName, parsedTime);
 
-                return APITools.PassMessageJson(jsonResult, incomingRequest);
+                    return APITools.PassMessageJson(result, incomingRequest);
+                }
+                //else get all
+                else
+                {
+                    //all planet related data
+                    //get all calculators that can accept a planet name and time
+                    var planetTimeCalcs = AstronomicalCalculator.GetTimePlanetCalcs<PlanetName, Time>(planetName, parsedTime);
+
+                    //send the payload on it's mary way
+                    return APITools.PassMessageJson(planetTimeCalcs, incomingRequest);
+                }
+
+            }
+
+            //all house body calls
+            if (celestialBodyType.ToLower() == "house")
+            {
+                //get the house data needed
+                var houseName = HouseNameExtensions.FromString(celestialBodyName);
+
+                //check result 1st before parsing
+                if ((houseName == null) || !geoLocationResult.IsPass) { return APITools.FailMessage("Invalid House Name", incomingRequest); }
+
+                //allows to dynamically select property that would other wise come together in list below
+                if (individualPropertySelected)
+                {
+                    //find > execute > wrap to JSON matching function property
+                    var result = ExecuteCalculatorByApiName<HouseName, Time>(propertyName, (HouseName)houseName, parsedTime);
+
+                    return APITools.PassMessageJson(result, incomingRequest);
+                }
+                //else get all
+                else
+                {
+                    //all house related data
+                    //get all calculators that can accept a house name and time
+                    var houseTimeCalcs = AstronomicalCalculator.GetTimePlanetCalcs<HouseName, Time>((HouseName)houseName, parsedTime);
+
+                    //send the payload on it's mary way
+                    return APITools.PassMessageJson(houseTimeCalcs, incomingRequest);
+                }
 
             }
 
 
-            //ALL PLANET DATA
-
-            //get all calculators that can accept a planet name and time
-            var planetTimeCalcs = AstronomicalCalculator.GetTimePlanetCalcs(planetName, parsedTime);
 
 
-            //send the payload on it's mary way
-            return APITools.PassMessageJson(planetTimeCalcs, incomingRequest);
-
-
+            return APITools.FailMessage("End Of ThE Line", incomingRequest);
 
             //-----------------------------
-
 
 
         }
@@ -93,115 +184,7 @@ namespace API
         }
 
 
-        /// <summary>
-        /// Here comes calls that with 2 level properties like planet strength
-        /// https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Strength/Temporal
-        /// </summary>
-        [Function(nameof(TwoProperty))]
-        public static async Task<HttpResponseData> TwoProperty([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/Planet/{planetNameStr}/{propertyName1}/{propertyName2}")] HttpRequestData incomingRequest, string locationName, string hhmmStr, string dateStr, string monthStr, string yearStr, string offsetStr, string planetNameStr, string propertyName1, string propertyName2)
-        {
-            //log the call
-            await APILogger.Visitor(incomingRequest);
 
-            PlanetName planetName;
-            var planetNameResult = PlanetName.TryParse(planetNameStr, out planetName);
-            var geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //check result 1st before parsing
-            if (!planetNameResult || !geoLocationResult.IsPass) { return APITools.FailMessage("Please check your input, it failed to parse. Check the caps/spelling/parameter order!", incomingRequest); }
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
-
-            //based on property call the method
-            var returnVal = "";
-            switch (propertyName1)
-            {
-
-                //LONGITUDE
-                case "Longitude":
-                    {
-                        switch (propertyName2)
-                        {
-                            case "Fixed":
-                            case "Nirayana": returnVal = AstronomicalCalculator.GetPlanetNirayanaLongitude(parsedTime, planetName).ToString(); break;
-                            case "Movable":
-                            case "Sayana": returnVal = AstronomicalCalculator.GetPlanetSayanaLongitude(parsedTime, planetName).ToString(); break;
-                        }
-                        break;
-                    }
-                case "Strength":
-                    {
-                        switch (propertyName2)
-                        {
-                            case "Total":
-                            case "ShadbalaPinda": returnVal = AstronomicalCalculator.GetPlanetShadbalaPinda(planetName, parsedTime).ToString(); break;
-
-                            case "Positional":
-                            case "Sthana": returnVal = AstronomicalCalculator.GetPlanetSthanaBala(planetName, parsedTime).ToString(); break;
-
-                            case "Directional":
-                            case "Dig": returnVal = AstronomicalCalculator.GetPlanetDigBala(planetName, parsedTime).ToString(); break;
-
-                            case "Temporal":
-                            case "Kala": returnVal = AstronomicalCalculator.GetPlanetKalaBala(planetName, parsedTime).ToString(); break;
-
-                            case "Motional":
-                            case "Chesta": returnVal = AstronomicalCalculator.GetPlanetChestaBala(planetName, parsedTime).ToString(); break;
-
-                            case "Natural":
-                            case "Naisargika": returnVal = AstronomicalCalculator.GetPlanetNaisargikaBala(planetName, parsedTime).ToString(); break;
-
-                            case "Aspect":
-                            case "Drik": returnVal = AstronomicalCalculator.GetPlanetDrikBala(planetName, parsedTime).ToString(); break;
-                        }
-                        break;
-                    }
-
-            }
-
-
-            return APITools.PassMessageJson(returnVal, incomingRequest);
-        }
-
-
-
-
-        private static dynamic SwissEphWrapper(Time time, PlanetName planetName)
-        {
-            //Converts LMT to UTC (GMT)
-            //DateTimeOffset utcDate = lmtDateTime.ToUniversalTime();
-
-            int iflag = 2;//SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
-            double[] results = new double[6];
-            string err_msg = "";
-            double jul_day_ET;
-            SwissEph ephemeris = new SwissEph();
-
-            // Convert DOB to ET
-            jul_day_ET = AstronomicalCalculator.TimeToEphemerisTime(time);
-
-            //convert planet name, compatible with Swiss Eph
-            int swissPlanet = Tools.VedAstroToSwissEph(planetName);
-
-            //Get planet long
-            int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
-
-            //data in results at index 0 is longitude
-            var sweCalcResults = new
-            {
-                Longitude = results[0],
-                Latitude = results[1],
-                DistanceAU = results[2],
-                SpeedLongitude = results[3],
-                SpeedLatitude = results[4],
-                SpeedDistance = results[5]
-            };
-
-            return sweCalcResults;
-        }
 
     }
 }

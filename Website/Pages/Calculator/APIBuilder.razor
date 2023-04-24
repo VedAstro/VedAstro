@@ -5,7 +5,7 @@
 <PageTitle>API Builder</PageTitle>
 <PageTop Title="Easy API Builder" IconName="mdi:cloud-tags">
     <Description>
-       
+
     </Description>
 </PageTop>
 
@@ -13,7 +13,7 @@
 
 <div>
     <div class="d-flex flex-wrap gap-5">
-        
+
         @*GENERATOR*@
         <div class="vstack gap-3 " style="width:@GR.W412px">
             <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
@@ -79,7 +79,7 @@
 </ArticleBlock>
 
 *@
-<hr class="mt-2" style="margin-bottom: 150px; "/>
+<hr class="mt-2" style="margin-bottom: 150px; " />
 
 
 
@@ -108,7 +108,7 @@
 
         //combine the call
         //https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
-        
+
         var domain = "https://api.vedastro.org";
         var localNameNoSpace = Tools.RemoveWhiteSpace(_geoLocationInput.LocationName);
         var location = $"/Location/{localNameNoSpace}";
@@ -131,8 +131,6 @@
 
     private async Task OnClickCopyChartLink()
     {
-        /
-
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, finalAPIGetCall);
 

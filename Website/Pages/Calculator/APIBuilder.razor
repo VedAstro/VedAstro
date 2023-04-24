@@ -20,17 +20,15 @@
             <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
 
             <div class="form-floating">
-                <select @bind="selectedDataType" class="form-select" id="floatingSelect" aria-label="Celestial Body Select">
-                    <option selected value="SwissEphemeris">Swiss Ephemeris</option>
-                    <option value="Planet">Planet</option>
+                <select @bind="selectedBodyType" class="form-select" id="celestialBodySelect" aria-label="Celestial Body Select">
+                    <option selected value="Planet">Planet</option>
                     <option value="House">House</option>
-                    <option value="MacthChecker">Match Checker</option>
                 </select>
-                <label for="floatingSelect">Data Type</label>
+                <label for="celestialBodySelect">Celestial Body Type</label>
             </div>
 
             <div class="form-floating">
-                <select @bind="selectedBodyName" class="form-select" id="floatingSelect" aria-label="Celestial Body Select">
+                <select @bind="selectedBodyName" class="form-select" id="celestialNameSelect" aria-label="Celestial Name Select">
                     <option selected value="Sun">Sun</option>
                     <option value="Moon">Moon</option>
                     <option value="Mars">Mars</option>
@@ -41,7 +39,19 @@
                     <option value="Rahu">Rahu</option>
                     <option value="Ketu">Ketu</option>
                 </select>
-                <label for="floatingSelect">Celestial Body</label>
+                <label for="celestialNameSelect">Celestial Body Name</label>
+            </div>
+
+            <div class="form-floating">
+                <select @bind="selectedDataProperty" class="form-select" id="dataPropertySelect" aria-label="Data Property Select">
+                    <option selected value="All">All</option>
+                    @*make a dynamic selection of all available calls*@
+                    @foreach (string dataProperty in Tools.ApiDataPropertyCallList())
+                    {
+                        <option value="@dataProperty">@dataProperty</option>
+                    }
+                    </select>
+                <label for="dataPropertySelect">Data Property</label>
             </div>
 
             <IconButton SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" ButtonText="Generate" OnClickCallback="@OnClickSubmitButton" />
@@ -88,7 +98,8 @@
     private GeoLocationInput _geoLocationInput;
     private string finalAPIGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
     private string selectedBodyName = "Sun";
-    private string selectedDataType = "SwissEphemeris";
+    private string selectedBodyType = "Planet";
+    private string selectedDataProperty = "All";
 
     /// <summary>
     /// After user click generate check data validity, generate final url
@@ -106,8 +117,12 @@
         //create a new person from the inputed data
         var timeInputed = await _timeInput.GetTime(geoLocation);
 
+
+        //data property
+        //if select all, leave empty as for API to give all
+        selectedDataProperty = selectedDataProperty == "All" ? "" : selectedDataProperty;
+
         //combine the call
-        //https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
 
         var domain = "https://api.vedastro.org";
         var localNameNoSpace = Tools.RemoveWhiteSpace(_geoLocationInput.LocationName);
@@ -118,7 +133,8 @@
         string yearStr = timeInputed.GetStdDateTimeOffset().ToString("yyyy");
         string offsetStr = timeInputed.GetStdDateTimeOffset().ToString("zzz");
         var time = $"/Time/{hhmmStr}/{dateSt}/{monthStr}/{yearStr}/{offsetStr}";
-        var planet = $"/Planet/{selectedBodyName}/{selectedDataType}/";
+        var planet = $"/Planet/{selectedBodyName}/{selectedBodyType}/{selectedDataProperty}";
+
 
         finalAPIGetCall = domain + location + time + planet;
     }

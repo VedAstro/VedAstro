@@ -82,6 +82,7 @@ namespace API
             return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest);
         }
 
+
         public static JObject ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
         {                                                                                                                                                                                                                    
             var calculatorClass = typeof(AstronomicalCalculator);
@@ -95,8 +96,6 @@ namespace API
 
             return rootPayloadJson;
         }
-
-
 
         private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
             HttpRequestData incomingRequest)

@@ -1245,6 +1245,29 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// All possible for all celestial body types
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<string> ApiDataPropertyCallList()
+        {
+            var returnList = new List<string>();
+
+            //get all possible calls for API
+            //get all calculators that can work with the inputed data
+            var calculatorClass = typeof(AstronomicalCalculator);
+
+            foreach (var methodInfo in calculatorClass.GetMethods())
+            {
+                //get special API name
+                returnList.Add(GetAPISpecialName(methodInfo));
+            }
+            
+            return returnList;
+
+        }
+
+
+        /// <summary>
         /// Given any string will remove the white spaces
         /// </summary>
         public static string RemoveWhiteSpace(string stringWithSpace)
@@ -1253,6 +1276,7 @@ namespace VedAstro.Library
 
            return removed;
         }
+
     }
 
 }

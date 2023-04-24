@@ -3730,6 +3730,10 @@ namespace VedAstro.Library
 
         }
 
+        /// <summary>
+        /// Gets all calculated data in nice JSON with matching param signature
+        /// used to create a dynamic API call list
+        /// </summary>
         public static JObject GetTimePlanetCalcs<T1,T2>(T1 inputedPram1, T2 inputedPram2)
         {
 

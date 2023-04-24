@@ -12,6 +12,7 @@
         <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
         <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
         <IconButton SmallSize="true" IconName="ic:outline-file-download" ButtonText="Download PDF" OnClickCallback="OnClickDownloadPdf"></IconButton>
+        <IconButton SmallSize="true" IconName="material-symbols:attach-email" ButtonText="Send PDF to Email" OnClickCallback="OnClickSendPDFToEmail"></IconButton>
     </ButtonsRow>
 </PageTop>
 
@@ -549,6 +550,31 @@
         //make scroll movement to place
         _jsRuntime.InvokeVoidAsync(JS.scrollToDiv, "#" + predictionName);
     }
+
+    /// <summary>
+    /// show box to get email and log for sending todo
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnClickSendPDFToEmail()
+    {
+        //get email from user via js sweet alert lib
+        var emailFromAlert = await _jsRuntime.ShowSendMatchPDFToEmail();
+
+        //send email as message to API server for storage
+        //package message data to be sent
+        var currentUrl = await _jsRuntime.GetCurrentUrl();
+        var textXml = new XElement("Text", $"Send Match to email from page: {currentUrl}");
+        var emailXml = new XElement("Email", emailFromAlert);
+        var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
+        var messageXml = new XElement("Message", userIdXml, emailXml, Tools.TimeStampSystemXml, textXml);
+
+        //send message to API server
+        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
+
+
+    }
+
+
 
     private async Task OnClickDownloadPdf()
     {

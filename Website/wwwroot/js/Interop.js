@@ -44,7 +44,7 @@ export function getUrl() {
 };
 
 //shows an email
-async function ShowLeaveEmailAlert() {
+export async function ShowLeaveEmailAlert() {
     //show alert to get email
     const { value: email } = await Swal.fire({
         title: 'Notify me on update',
@@ -53,6 +53,19 @@ async function ShowLeaveEmailAlert() {
     });
 
     if (email) { Swal.fire('Thanks', 'We will update you soon..', 'success'); }
+
+    //send email inputed to caller
+    return email;
+}
+export async function ShowSendMatchPDFToEmail() {
+    //show alert to get email
+    const { value: email } = await Swal.fire({
+        title: 'Send PDF to...',
+        input: 'email',
+        inputPlaceholder: 'Enter your email address'
+    });
+
+    if (email) { Swal.fire('PDF Sent', 'Wait a few minutes, if not found check junk folder', 'success'); }
 
     //send email inputed to caller
     return email;

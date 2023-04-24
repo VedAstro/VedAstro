@@ -114,6 +114,7 @@ namespace Website
         /// note: uses sweet alert js
         /// </summary>
         public static async Task<string> ShowLeaveEmailAlert(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.ShowLeaveEmailAlert);
+        public static async Task<string> ShowSendMatchPDFToEmail(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.ShowSendMatchPDFToEmail);
 
         /// <summary>
         /// Shows loading box with auto progress bar using sweetalert

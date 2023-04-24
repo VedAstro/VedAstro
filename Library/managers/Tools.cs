@@ -1262,7 +1262,7 @@ namespace VedAstro.Library
                 //get special API name
                 returnList.Add(GetAPISpecialName(methodInfo));
             }
-            
+
             return returnList;
 
         }
@@ -1273,9 +1273,9 @@ namespace VedAstro.Library
         /// </summary>
         public static string RemoveWhiteSpace(string stringWithSpace)
         {
-           var removed = string.Join("", stringWithSpace.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            var removed = string.Join("", stringWithSpace.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
 
-           return removed;
+            return removed;
         }
 
         public readonly record struct APICallData(string Name, string Description);
@@ -1287,7 +1287,7 @@ namespace VedAstro.Library
         public static IEnumerable<APICallData> GetPlanetApiCallList<T1, T2>()
         {
             //get all the same methods gotten by Open api func
-            var calcList =  GetCalculatorMethodInfoListByParamType<T1, T2>();
+            var calcList = GetCalculatorMethodInfoListByParamType<T1, T2>();
 
             //convert calculator reference to 
             var calculatorNameList = from calculatorInfo in calcList select calculatorInfo.Name;
@@ -1321,8 +1321,10 @@ namespace VedAstro.Library
             //place the data from all possible methods nicely in JSON
             var rootPayloadJson = new JObject(); //each call below adds to this root
             object[] param1 = new object[] { inputedPram1, inputedPram2 };
-            foreach (var methodInfo in finalList) {
-                AddMethodInfoToJson(methodInfo, param1, ref rootPayloadJson); }
+            foreach (var methodInfo in finalList)
+            {
+                AddMethodInfoToJson(methodInfo, param1, ref rootPayloadJson);
+            }
 
             return rootPayloadJson;
 
@@ -1339,22 +1341,22 @@ namespace VedAstro.Library
             var finalList = new List<MethodInfo>();
 
             var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
-                let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 2 //only 2 params
-                      && parameter[0].ParameterType == inputedParamType1
-                      && parameter[1].ParameterType == inputedParamType2
-                select calculatorInfo;
+                               let parameter = calculatorInfo.GetParameters()
+                               where parameter.Length == 2 //only 2 params
+                                     && parameter[0].ParameterType == inputedParamType1
+                                     && parameter[1].ParameterType == inputedParamType2
+                               select calculatorInfo;
 
             finalList.AddRange(calculators1);
 
             //reverse order
             //second possible order, technically should be aligned todo
             var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
-                let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 2 //only 2 params
-                      && parameter[0].ParameterType == inputedParamType2
-                      && parameter[1].ParameterType == inputedParamType1
-                select calculatorInfo;
+                               let parameter = calculatorInfo.GetParameters()
+                               where parameter.Length == 2 //only 2 params
+                                     && parameter[0].ParameterType == inputedParamType2
+                                     && parameter[1].ParameterType == inputedParamType1
+                               select calculatorInfo;
 
             finalList.AddRange(calculators2);
 
@@ -1375,64 +1377,113 @@ namespace VedAstro.Library
             //reverse order
             var paramReverse = param.Reverse();
 
-            JObject output = new JObject();
+            JToken outputResult = JToken.Parse("{}"); //empty default
 
             //likely to fail during call, as such just ignore and move along
             try
             {
-                output = Tools.AnyToJSON(methodInfo1?.Invoke(null, param));
+                outputResult = Tools.AnyToJSON(methodInfo1?.Invoke(null, param));
             }
             catch (Exception e)
             {
                 try
                 {
                     //try again in reverse
-                    output = Tools.AnyToJSON(methodInfo1?.Invoke(null, (object[])paramReverse));
+                    outputResult = Tools.AnyToJSON(methodInfo1?.Invoke(null, (object[])paramReverse));
                 }
                 //if fail put error in data for easy detection
                 catch (Exception e2)
                 {
-                    output = Tools.AnyToJSON(e2.Message);
+                    outputResult = Tools.AnyToJSON(e2.Message);
                 }
             }
-
-            //if nothing in output then, something went wrong
-            //output = string.IsNullOrEmpty(output) ? "#ERROR" : output;
 
             //get correct name for this method, API friendly
             var methodName = Tools.GetAPISpecialName(methodInfo1);
 
             //save it nicely in json format
-            rootPayloadJson[methodName] = output;
+            rootPayloadJson[methodName] = outputResult;
         }
 
 
-        public static JObject AnyToJSON(dynamic anyTypeData)
+        public static JToken AnyToJSON(dynamic anyTypeData)
         {
-            var returnRootJson = new JObject();
 
-            //string goes in like normal
-            if (anyTypeData is string stringData)
+            try
             {
-                returnRootJson.Add(stringData);
-            }
-            else if (anyTypeData is IEnumerable dataList)
-            {
-                //convert to string
-                foreach (var data in dataList)
+
+                //string goes in like normal
+                if (anyTypeData is string stringData)
                 {
-                    returnRootJson.Add(data.ToString());
+                    JToken parsed = JToken.Parse("{}");//to identify errors by default
+                    try
+                    {
+                        parsed = JToken.Parse("'" + stringData + "'");
+                    }
+                    catch (Exception e)
+                    {
+                        //todo better error
+                        Console.WriteLine("Could not parse JSON");
+                    }
+
+                    return parsed;
                 }
+                else if (anyTypeData is IEnumerable dataList)
+                {
+                    //convert to string
+                    foreach (var data in dataList)
+                    {
+                        JToken parsed = JToken.Parse("{}");//to identify errors by default
+                        try
+                        {
+                            var rawText = data.ToString();
+                            parsed = JToken.Parse("'" + rawText + "'");
+                        }
+                        catch (Exception e)
+                        {
+                            //todo better error
+                            Console.WriteLine("Could not parse JSON");
+                        }
+
+                        return parsed;
+                    }
+                }
+                else
+                {
+                    //Console.WriteLine($"Unaccounted for JSON TYPE : {anyTypeData.GetType().ToString()}");
+
+                    JToken parsed2 = JToken.Parse("{}");//to identify errors by default
+                    try
+                    {
+                        string rawText = anyTypeData.ToString();
+                        parsed2 = JToken.Parse("'" + rawText + "'");
+                    }
+                    catch (Exception e)
+                    {
+                        //todo better error
+                        Console.WriteLine("Could not parse JSON");
+                    }
+
+
+                    //just convert direct
+                    return parsed2;
+                }
+
             }
-            else
+            catch (Exception e)
             {
-                //Console.WriteLine($"Unaccounted for JSON TYPE : {anyTypeData.GetType().ToString()}");
 
-                //just convert direct
-                returnRootJson.Add(anyTypeData.ToString());
+                //in prod log data and exist silent
+                LibLogger.Error(e);
+#if DEBUG
+                Console.WriteLine(e.Message);
+                //raise alarm
+                throw e;
+#endif
             }
 
-            return returnRootJson;
+            throw new Exception("END OF LINE");
+
         }
     }
 

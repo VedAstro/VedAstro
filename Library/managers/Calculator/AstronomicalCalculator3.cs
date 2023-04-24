@@ -321,6 +321,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all planets aspecting inputed house
         /// </summary>
+        [API("PlanetsAspectingHouse")]
         public static List<PlanetName> GetPlanetsAspectingHouse(HouseName inputHouse, Time time)
         {
             //create empty list
@@ -518,7 +519,7 @@ namespace VedAstro.Library
                 foreach (var house in House.AllHouses)
                 {
                     //get house strength
-                    var strength = GetBhavabala(house, time).ToRupa();
+                    var strength = GetBhavaBala(house, time).ToRupa();
 
                     //place in list with house number
                     houseStrenghtList[strength] = house;
@@ -2457,7 +2458,8 @@ namespace VedAstro.Library
         /// (2) Bhava Digbala, (3) Bhava Drishti Bala.
         /// todo change to house strength
         /// </summary>
-        public static Shashtiamsa GetBhavabala(HouseName house, Time time)
+        [API("BhavaBala")]
+        public static Shashtiamsa GetBhavaBala(HouseName house, Time time)
         {
 
             //CACHE MECHANISM

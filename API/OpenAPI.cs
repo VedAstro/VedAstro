@@ -38,7 +38,7 @@ namespace API
             string propertyName)
         {
             //log the call
-            await APILogger.Visitor(incomingRequest);
+            APILogger.Visitor(incomingRequest);
 
 
             WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
@@ -68,7 +68,7 @@ namespace API
             string celestialBodyName)
         {
             //log the call
-            await APILogger.Visitor(incomingRequest);
+            APILogger.Visitor(incomingRequest);
 
 
             WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);

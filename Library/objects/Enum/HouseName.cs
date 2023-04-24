@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace VedAstro.Library
 {
 
-    public enum HouseName 
+    public enum HouseName
     {
         //Note: maintain int relation for code that is still using int
         House1 = 1,
@@ -27,6 +27,18 @@ namespace VedAstro.Library
 
     public static class HouseNameExtensions
     {
+
+        /// <summary>
+        /// If fail will return null
+        /// </summary>
+        public static HouseName? FromString(string inputHouseName)
+        {
+            var result = Enum.TryParse(inputHouseName, out HouseName eventTag);
+
+            HouseName? fromString = result ? eventTag : null;
+
+            return fromString;
+        }
 
         /// <summary>
         /// Note: Root element must be named HouseName

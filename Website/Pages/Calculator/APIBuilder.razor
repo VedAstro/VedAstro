@@ -110,7 +110,8 @@
         //https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
         
         var domain = "https://api.vedastro.org";
-        var location = $"/Location/{_geoLocationInput.LocationName}";
+        var localNameNoSpace = Tools.RemoveWhiteSpace(_geoLocationInput.LocationName);
+        var location = $"/Location/{localNameNoSpace}";
         string hhmmStr = timeInputed.GetStdDateTimeOffset().ToString("HH:mm");
         string dateSt = timeInputed.GetStdDateTimeOffset().ToString("dd");
         string monthStr = timeInputed.GetStdDateTimeOffset().ToString("MM");
@@ -130,6 +131,8 @@
 
     private async Task OnClickCopyChartLink()
     {
+        /
+
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, finalAPIGetCall);
 

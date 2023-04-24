@@ -3667,6 +3667,45 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Swiss Ephemeris "swe_calc" wrapper for open API 
+        /// </summary>
+        [API("SwissEphemeris")]
+        public static dynamic swe_calc_wrapper(Time time, PlanetName planetName)
+        {
+            //Converts LMT to UTC (GMT)
+            //DateTimeOffset utcDate = lmtDateTime.ToUniversalTime();
+
+            int iflag = 2;//SwissEph.SEFLG_SWIEPH;  //+ SwissEph.SEFLG_SPEED;
+            double[] results = new double[6];
+            string err_msg = "";
+            double jul_day_ET;
+            SwissEph ephemeris = new SwissEph();
+
+            // Convert DOB to ET
+            jul_day_ET = AstronomicalCalculator.TimeToEphemerisTime(time);
+
+            //convert planet name, compatible with Swiss Eph
+            int swissPlanet = Tools.VedAstroToSwissEph(planetName);
+
+            //Get planet long
+            int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
+
+            //data in results at index 0 is longitude
+            var sweCalcResults = new
+            {
+                Longitude = results[0],
+                Latitude = results[1],
+                DistanceAU = results[2],
+                SpeedLongitude = results[3],
+                SpeedLatitude = results[4],
+                SpeedDistance = results[5]
+            };
+
+            return sweCalcResults;
+        }
+
+
+        /// <summary>
         /// Checks if a planet is same house (not nessarly conjunct) with the lord of a certain house
         /// Example : Is Sun joined with lord of 9th?
         /// </summary>
@@ -3737,13 +3776,6 @@ namespace VedAstro.Library
             //converts method info to JSON parsed
             void addMethodInfoToJson(MethodInfo methodInfo1, object[] param)
             {
-                //try to get special API name for the calculator, possible not to exist
-                var properApiName = methodInfo1?.GetCustomAttributes(true)?.OfType<APIAttribute>()?.FirstOrDefault()?.Name ?? "";
-                //default name in-case no special
-                var defaultName = methodInfo1.Name;
-
-                //choose which name is available, prefer special
-                var name = string.IsNullOrEmpty(properApiName) ? defaultName : properApiName;
 
                 string output = "";
 
@@ -3760,8 +3792,11 @@ namespace VedAstro.Library
                 //if nothing in output then, something went wrong
                 output = string.IsNullOrEmpty(output) ? "#ERROR" : output;
 
+                //get correct name for this method, API friendly
+                var methodName = Tools.GetAPISpecialName(methodInfo1);
+
                 //save it nicely in json format
-                rootPayloadJson[name] = output;
+                rootPayloadJson[methodName] = output;
             }
 
         }

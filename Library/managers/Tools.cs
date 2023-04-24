@@ -1225,6 +1225,34 @@ namespace VedAstro.Library
 
             return planet;
         }
+
+        /// <summary>
+        /// Given a reference to astro calculator method,
+        /// will return it's API friendly name
+        /// </summary>
+        public static string GetAPISpecialName(MethodInfo methodInfo1)
+        {
+            //try to get special API name for the calculator, possible not to exist
+            var properApiName = methodInfo1?.GetCustomAttributes(true)?.OfType<APIAttribute>()?.FirstOrDefault()?.Name ?? "";
+            //default name in-case no special
+            var defaultName = methodInfo1.Name;
+
+            //choose which name is available, prefer special
+            var name = string.IsNullOrEmpty(properApiName) ? defaultName : properApiName;
+
+            return name;
+
+        }
+
+        /// <summary>
+        /// Given any string will remove the white spaces
+        /// </summary>
+        public static string RemoveWhiteSpace(string stringWithSpace)
+        {
+           var removed = string.Join("", stringWithSpace.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+
+           return removed;
+        }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Google.Apis.Calendar.v3.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,11 +34,9 @@ namespace VedAstro.Library
         /// </summary>
         public static HouseName? FromString(string inputHouseName)
         {
-            var result = Enum.TryParse(inputHouseName, out HouseName eventTag);
+            var houseName = (HouseName)Enum.Parse(typeof(HouseName), inputHouseName,true);
 
-            HouseName? fromString = result ? eventTag : null;
-
-            return fromString;
+            return houseName;
         }
 
         /// <summary>

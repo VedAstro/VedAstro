@@ -126,8 +126,7 @@ export function InitErrorCatcher() {
             //to display prop when error occurs
             if (mutation.attributeName == "style") {
                 //call blazor handler
-                DotNet
-                Method('Website', 'OnAppError');
+                DotNetMethod('Website', 'OnAppError');
             }
         }
     });

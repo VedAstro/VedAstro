@@ -3,9 +3,9 @@
 
 
 <PageTitle>API Builder</PageTitle>
-<PageTop Title="Easy API Builder" IconName="mdi:cloud-tags">
+<PageTop Title="API Builder" IconName="mdi:cloud-tags">
     <Description>
-
+        Learn and build API calls fast
     </Description>
 </PageTop>
 
@@ -16,20 +16,24 @@
 
         @*GENERATOR*@
         <div class="vstack gap-3 " style="width:@GR.W412px">
-            <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
-            <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
+            <TimeInputSimple @ref="_timeInput" LabelText="Time" />
+            <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
 
+            @*Celestial Body*@
             <div class="form-floating">
                 <select @bind="SelectedBodyType" class="form-select" id="celestialBodySelect" aria-label="Celestial Body Select">
-                    <option selected value="Planet">Planet</option>
+                    <option value="" selected>Make a choice</option>
+                    <option value="Planet">Planet</option>
                     <option value="House">House</option>
                 </select>
-                <label for="celestialBodySelect">Celestial Body Type</label>
+                <label style="font-weight: 700;" for="celestialBodySelect">Celestial Body</label>
             </div>
 
-            <div class="form-floating">
-                <select @bind="selectedBodyName" class="form-select" id="celestialNameSelect" aria-label="Celestial Name Select">
-                    <option selected value="Sun">Sun</option>
+            @*Planet Name*@
+            <div @ref="planetNameSelector" style="display: none;" class="form-floating">
+                <select @bind="selectedPlanetName" class="form-select" id="planetNameSelector" aria-label="Planet Name Select">
+                    <option value="" selected>Make a choice</option>
+                    <option value="Sun">Sun</option>
                     <option value="Moon">Moon</option>
                     <option value="Mars">Mars</option>
                     <option value="Mercury">Mercury</option>
@@ -38,40 +42,58 @@
                     <option value="Saturn">Saturn</option>
                     <option value="Rahu">Rahu</option>
                     <option value="Ketu">Ketu</option>
-                    <option value="House1">House 1</option>
                 </select>
-                <label for="celestialNameSelect">Celestial Body Name</label>
+                <label style="font-weight: 700;" for="planetNameSelector">Planet Name</label>
             </div>
 
-            
+            @*House Name*@
+            <div @ref="houseNameSelector" style="display: none;" class="form-floating">
+                <select @bind="selectedHouseName" class="form-select" id="houseNameSelector" aria-label="House Name Select">
+                    <option value="" selected>Make a choice</option>
+                    <option value="House1">House 1</option>
+                    <option value="House2">House 2</option>
+                    <option value="House3">House 3</option>
+                    <option value="House4">House 4</option>
+                    <option value="House5">House 5</option>
+                    <option value="House6">House 6</option>
+                    <option value="House7">House 7</option>
+                    <option value="House8">House 8</option>
+                    <option value="House9">House 9</option>
+                    <option value="House10">House 10</option>
+                    <option value="House11">House 11</option>
+                    <option value="House12">House 12</option>
+                </select>
+                <label style="font-weight: 700;" for="houseNameSelector">House Name</label>
+            </div>
+
+
             @*show and hide to make changes pop*@
-            <div @ref="dataPropertySelectPlanet" style="display: none;" class="form-floating">
-                <select @bind="selectedDataProperty" class="form-select" id="dataPropertySelectPlanet" aria-label="Data Property Select">
-                    <option selected value="All">All</option>
+            <div @ref="planetPropertySelector" style="display: none;" class="form-floating">
+                <select @bind="selectedPlanetProperty" class="form-select" id="planetPropertySelector" aria-label="Data Property Select">
+                    <option value="" selected>Make a choice</option>
+                    <option value="All">All</option>
                     @*make a dynamic selection of all available calls*@
                     @foreach (var dataProperty in PlanetCallList)
                     {
                         <option value="@dataProperty.Name">@(Format.FormatName(dataProperty.Name))</option>
                     }
                 </select>
-                <label for="dataPropertySelect">Planet Property</label>
+                <label style="font-weight: 700;" for="planetPropertySelector">Planet Property</label>
             </div>
-            
+
             @*show and hide to make changes pop*@
-            <div @ref="dataPropertySelectHouse" style="display: none;" class="form-floating">
-                <select @bind="selectedDataProperty" class="form-select" id="dataPropertySelectHouse" aria-label="Data Property Select">
-                    <option selected value="All">All</option>
+            <div @ref="housePropertySelector" style="display: none;" class="form-floating">
+                <select @bind="selectedHouseProperty" class="form-select" id="housePropertySelector" aria-label="Data Property Select">
+                    <option value="" selected>Make a choice</option>
+                    <option value="All">All</option>
                     @*make a dynamic selection of all available calls*@
                     @foreach (var dataProperty in HouseCallList)
                     {
                         <option value="@dataProperty.Name">@(Format.FormatName(dataProperty.Name))</option>
                     }
                 </select>
-                <label for="dataPropertySelect">House Property</label>
+                <label style="font-weight: 700;" for="housePropertySelector">House Property</label>
             </div>
-
-
-
 
 
             <IconButton SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" ButtonText="Generate" OnClickCallback="@OnClickSubmitButton" />
@@ -100,29 +122,30 @@
 </div>
 
 
-@*<ArticleBlock IconName="flat-color-icons:close-up-mode" Title="Easy API Builder">
-    <TextHTML>
-        A simple URL builder using dropdown boxes. This should make it easy for any beginner to get started.
-        The biggest problem with consuming any API, is the learning curve. Normally the first 3-5 hours will be spent
-        learning the small nuances or semantics used by the API provider. We hope to reduce this lag with this simple API URL builder.
-    </TextHTML>
-</ArticleBlock>
-
-*@
 <hr class="mt-2" style="margin-bottom: 150px; " />
 
 
 
 @code {
-    private ElementReference dataPropertySelectPlanet;
-    private ElementReference dataPropertySelectHouse;
-    private bool hideDataProp = false;
-    private bool resetingData = false;
-    private IEnumerable<Tools.APICallData> VisibleDataPropList = new List<Tools.APICallData>();
+
+    private string selectedPlanetName;
+    private string selectedHouseName;
+    private string selectedPlanetProperty;
+    private string selectedHouseProperty;
+
+    private ElementReference houseNameSelector;
+    private ElementReference planetNameSelector;
+    private ElementReference housePropertySelector;
+    private ElementReference planetPropertySelector;
+
     TimeInputSimple _timeInput;
     private GeoLocationInput _geoLocationInput;
     private string finalAPIGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
-    private string selectedBodyName = "Sun";
+
+    //done so that it is cached in memory
+    private static IEnumerable<Tools.APICallData> PlanetCallList = Tools.GetPlanetApiCallList<PlanetName, Time>();
+    private static IEnumerable<Tools.APICallData> HouseCallList = Tools.GetPlanetApiCallList<HouseName, Time>();
+
 
     public string SelectedBodyType
     {
@@ -134,22 +157,23 @@
             //based on body type only show relevant related fields
             switch (value.ToLower())
             {
-                case "planet":
-                    _jsRuntime.Show(dataPropertySelectPlanet);
-                    _jsRuntime.Hide(dataPropertySelectHouse);
+                case "planet"://hide house & show planet
+                    _jsRuntime.Show(planetNameSelector);
+                    _jsRuntime.Hide(houseNameSelector);
+                    _jsRuntime.Show(planetPropertySelector);
+                    _jsRuntime.Hide(housePropertySelector);
                     break;
-                case "house":
-                    _jsRuntime.Show(dataPropertySelectHouse);
-                    _jsRuntime.Hide(dataPropertySelectPlanet); 
+                case "house"://show house & hide planet
+                    _jsRuntime.Show(houseNameSelector);
+                    _jsRuntime.Hide(planetNameSelector);
+                    _jsRuntime.Show(housePropertySelector);
+                    _jsRuntime.Hide(planetPropertySelector);
                     break;
             }
-
-            Console.WriteLine($"New VAL:{value}");
         }
     }
 
-    private string selectedDataProperty = "All";
-    private string _selectedBodyType = "Planet";
+    private string _selectedBodyType ;
 
     /// <summary>
     /// After user click generate check data validity, generate final url
@@ -157,6 +181,12 @@
     /// <returns></returns>
     private async Task OnClickSubmitButton()
     {
+        await _jsRuntime.ShowLoading();
+
+        //only continue if passed input field validation
+        if (!(await IsValidationPassed())) { return; }
+
+
         //auto set correct Timezone based on location & birth date
         var dateTimeOffset = await _timeInput.GetDateTimeOffset(); //offset is ignored here
         _timeInput.TimeZone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), dateTimeOffset, ServerManager.GoogleGeoLocationApiKey);
@@ -167,10 +197,14 @@
         //create a new person from the inputed data
         var timeInputed = await _timeInput.GetTime(geoLocation);
 
+        //get final celes name, if empty raise nice alarm
+        var finalCelesName = GetFinalCelesName();
+        var finalCelesProperty = GetFinalCelesProperty();
 
         //data property
         //if select all, leave empty as for API to give all
-        var realDataProperty = selectedDataProperty == "All" ? "" : selectedDataProperty;
+        finalCelesName = finalCelesName == "All" ? "" : finalCelesName;
+        finalCelesProperty = finalCelesProperty == "All" ? "" : finalCelesProperty;
 
         //combine the call
         var domain = AppData.URL.ApiUrl; //get stable or beta as needed
@@ -182,10 +216,98 @@
         string yearStr = timeInputed.GetStdDateTimeOffset().ToString("yyyy");
         string offsetStr = timeInputed.GetStdDateTimeOffset().ToString("zzz");
         var time = $"/Time/{hhmmStr}/{dateSt}/{monthStr}/{yearStr}/{offsetStr}";
-        var celestialBodyData = $"/{SelectedBodyType}/{selectedBodyName}/{realDataProperty}";
+        var celestialBodyData = $"/{SelectedBodyType}/{finalCelesName}/{finalCelesProperty}";
 
         //format of the API call
         finalAPIGetCall = domain + location + time + celestialBodyData;
+
+        //tactile feedback to user
+        await _jsRuntime.ShowAlert("success", $"Generated nicely!", false, 1000);
+
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private async Task<bool> IsValidationPassed()
+    {
+        //TEST 1 : Time
+        //todo check if time is 00 confirm with user
+        var timeTxt = await _timeInput.GetFullTimeString();
+        if (string.IsNullOrEmpty(timeTxt))
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Time is invalid, check it again", true);
+            return false;
+        }
+
+        //TEST 2 : Location
+        if (!_geoLocationInput.IsValid())
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", AlertText.InvalidLocation, true);
+            return false;
+        }
+
+        //TEST 3 : Celes Type
+        if (String.IsNullOrWhiteSpace(SelectedBodyType))
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Are you sleeping? Select a celestial body to continue", true);
+            return false;
+        }
+
+        //TEST 4 : Celes Name
+        if (String.IsNullOrWhiteSpace(GetFinalCelesName()))
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", $"Wake up and select {SelectedBodyType} name first!", true);
+            return false;
+        }
+
+        //TEST 5 : Celes Prop
+        if (String.IsNullOrWhiteSpace(GetFinalCelesProperty()))
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", $"Go to sleep or select a {SelectedBodyType} property!", true);
+            return false;
+        }
+
+
+        //if control reaches here than, it's valid
+        return true;
+
+    }
+
+
+    /// <summary>
+    /// if null or empty than needs selection
+    /// since only calculated when called
+    /// </summary>
+    private string GetFinalCelesName()
+    {
+        switch (SelectedBodyType.ToLower())
+        {
+            case "planet":
+                return selectedPlanetName;
+            case "house":
+                return selectedHouseName;
+        }
+
+        throw new Exception("END OF LINE");
+    }
+
+    private string GetFinalCelesProperty()
+    {
+        switch (SelectedBodyType.ToLower())
+        {
+            case "planet":
+                return selectedPlanetProperty;
+            case "house":
+                return selectedHouseProperty;
+        }
+
+        throw new Exception("END OF LINE");
     }
 
     private async Task OnDemoCallGeneratedUrl()
@@ -199,41 +321,10 @@
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, finalAPIGetCall);
 
-        //let user know link coppied
+        //let user know link copied
         await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
     }
 
 
-    /// <summary>
-    /// based on body type, house or planet, show only available api calls
-    /// </summary>
-
-    private void UpdateDataPropertyList()
-    {
-        Console.WriteLine("onselectionchange");
-        //hideDataProp = true;
-
-        //VisibleDataPropList = GetDataPropListBasedOnCelesBodyType();
-
-        ////hideDataProp = false;
-
-        //this.StateHasChanged();
-    }
-
-    private IEnumerable<Tools.APICallData> GetDataPropListBasedOnCelesBodyType()
-    {
-        switch (SelectedBodyType.ToLower())
-        {
-            case "planet": return PlanetCallList;
-
-            case "house": return HouseCallList;
-        }
-
-        throw new NotImplementedException();
-
-    }
-    //done so that it is cached in memory
-    private static IEnumerable<Tools.APICallData> PlanetCallList = Tools.GetPlanetApiCallList<PlanetName, Time>();
-    private static IEnumerable<Tools.APICallData> HouseCallList = Tools.GetPlanetApiCallList<HouseName, Time>();
 
 }

@@ -1287,7 +1287,7 @@ namespace VedAstro.Library
         public static IEnumerable<APICallData> GetPlanetApiCallList<T1, T2>()
         {
             //get all the same methods gotten by Open api func
-            var calcList =  GetCalculatorMethodInfoListByParamType<PlanetName, Time>();
+            var calcList =  GetCalculatorMethodInfoListByParamType<T1, T2>();
 
             //convert calculator reference to 
             var calculatorNameList = from calculatorInfo in calcList select calculatorInfo.Name;

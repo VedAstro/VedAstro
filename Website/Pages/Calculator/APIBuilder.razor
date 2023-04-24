@@ -20,7 +20,7 @@
             <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
 
             <div class="form-floating">
-                <select @bind="selectedBodyType" class="form-select" id="celestialBodySelect" aria-label="Celestial Body Select">
+                <select @bind="SelectedBodyType" class="form-select" id="celestialBodySelect" aria-label="Celestial Body Select">
                     <option selected value="Planet">Planet</option>
                     <option value="House">House</option>
                 </select>
@@ -43,17 +43,36 @@
                 <label for="celestialNameSelect">Celestial Body Name</label>
             </div>
 
-            <div class="form-floating">
-                <select @bind="selectedDataProperty" class="form-select" id="dataPropertySelect" aria-label="Data Property Select">
+            
+            @*show and hide to make changes pop*@
+            <div @ref="dataPropertySelectPlanet" style="display: none;" class="form-floating">
+                <select @bind="selectedDataProperty" class="form-select" id="dataPropertySelectPlanet" aria-label="Data Property Select">
                     <option selected value="All">All</option>
                     @*make a dynamic selection of all available calls*@
-                    @foreach (var dataProperty in GetDataPropListBasedOnCelesBodyType())
+                    @foreach (var dataProperty in PlanetCallList)
                     {
-                        <option value="@dataProperty.Name">@(Format.FormatName(dataProperty))</option>
+                        <option value="@dataProperty.Name">@(Format.FormatName(dataProperty.Name))</option>
                     }
                 </select>
-                <label for="dataPropertySelect">Data Property</label>
+                <label for="dataPropertySelect">Planet Property</label>
             </div>
+            
+            @*show and hide to make changes pop*@
+            <div @ref="dataPropertySelectHouse" style="display: none;" class="form-floating">
+                <select @bind="selectedDataProperty" class="form-select" id="dataPropertySelectHouse" aria-label="Data Property Select">
+                    <option selected value="All">All</option>
+                    @*make a dynamic selection of all available calls*@
+                    @foreach (var dataProperty in HouseCallList)
+                    {
+                        <option value="@dataProperty.Name">@(Format.FormatName(dataProperty.Name))</option>
+                    }
+                </select>
+                <label for="dataPropertySelect">House Property</label>
+            </div>
+
+
+
+
 
             <IconButton SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" ButtonText="Generate" OnClickCallback="@OnClickSubmitButton" />
         </div>
@@ -95,12 +114,42 @@
 
 
 @code {
+    private ElementReference dataPropertySelectPlanet;
+    private ElementReference dataPropertySelectHouse;
+    private bool hideDataProp = false;
+    private bool resetingData = false;
+    private IEnumerable<Tools.APICallData> VisibleDataPropList = new List<Tools.APICallData>();
     TimeInputSimple _timeInput;
     private GeoLocationInput _geoLocationInput;
     private string finalAPIGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
     private string selectedBodyName = "Sun";
-    private string selectedBodyType = "Planet";
+
+    public string SelectedBodyType
+    {
+        get => _selectedBodyType;
+        set
+        {
+            _selectedBodyType = value;
+
+            //based on body type only show relevant related fields
+            switch (value.ToLower())
+            {
+                case "planet":
+                    _jsRuntime.Show(dataPropertySelectPlanet);
+                    _jsRuntime.Hide(dataPropertySelectHouse);
+                    break;
+                case "house":
+                    _jsRuntime.Show(dataPropertySelectHouse);
+                    _jsRuntime.Hide(dataPropertySelectPlanet); 
+                    break;
+            }
+
+            Console.WriteLine($"New VAL:{value}");
+        }
+    }
+
     private string selectedDataProperty = "All";
+    private string _selectedBodyType = "Planet";
 
     /// <summary>
     /// After user click generate check data validity, generate final url
@@ -133,7 +182,7 @@
         string yearStr = timeInputed.GetStdDateTimeOffset().ToString("yyyy");
         string offsetStr = timeInputed.GetStdDateTimeOffset().ToString("zzz");
         var time = $"/Time/{hhmmStr}/{dateSt}/{monthStr}/{yearStr}/{offsetStr}";
-        var celestialBodyData = $"/{selectedBodyType}/{selectedBodyName}/{realDataProperty}";
+        var celestialBodyData = $"/{SelectedBodyType}/{selectedBodyName}/{realDataProperty}";
 
         //format of the API call
         finalAPIGetCall = domain + location + time + celestialBodyData;
@@ -158,18 +207,33 @@
     /// <summary>
     /// based on body type, house or planet, show only available api calls
     /// </summary>
+
+    private void UpdateDataPropertyList()
+    {
+        Console.WriteLine("onselectionchange");
+        //hideDataProp = true;
+
+        //VisibleDataPropList = GetDataPropListBasedOnCelesBodyType();
+
+        ////hideDataProp = false;
+
+        //this.StateHasChanged();
+    }
+
     private IEnumerable<Tools.APICallData> GetDataPropListBasedOnCelesBodyType()
     {
-        switch (selectedBodyType.ToLower())
+        switch (SelectedBodyType.ToLower())
         {
-            case "planet":return Tools.GetPlanetApiCallList<PlanetName, Time>();
+            case "planet": return PlanetCallList;
 
-            case "house":return Tools.GetPlanetApiCallList<HouseName, Time>();
+            case "house": return HouseCallList;
         }
-
 
         throw new NotImplementedException();
 
     }
+    //done so that it is cached in memory
+    private static IEnumerable<Tools.APICallData> PlanetCallList = Tools.GetPlanetApiCallList<PlanetName, Time>();
+    private static IEnumerable<Tools.APICallData> HouseCallList = Tools.GetPlanetApiCallList<HouseName, Time>();
 
 }

@@ -5,9 +5,15 @@
 @using System.Xml.Linq
 
 
-<div @ref="elementReference">
+<div style="cursor: pointer" @ref="elementReference">
     @Text
     @HTML
+    @*buttons related to account*@
+    <div class="hstack">
+        <IconButton TooltipText="Horoscope" IconName="bi:list-stars" ClickUrl="@PageRoute.AddPerson" />
+        <IconButton TooltipText="Add Notes" IconName="system-uicons:clipboard-notes" ClickUrl="@PageRoute.AddPerson" />
+
+    </div>
 </div>
 
 
@@ -47,14 +53,13 @@
     private async Task _OnAfterRender(bool firstRender)
     {
 
-
         if (firstRender)
         {
             //attach tooltip lib element if tooltip provided
             if (!string.IsNullOrEmpty(ImageName))
             {
                 //construct html to show image
-                var htmlContent = $"<img style=\"width:{GR.W157};\" src=\"images/{ImageName}.{ImageFormat}\" class=\"img-thumbnail mt-1\" alt=\"...\">";
+                var htmlContent = $"<img style=\"width:{GR.W97px};\" src=\"images/{ImageName}.{ImageFormat}\" class=\"img-thumbnail mt-1\" alt=\"...\">";
                 var tooltipSettings = 
                     new
                     {
@@ -63,6 +68,7 @@
                         arrow = true,
                         animation = "scale-extreme",
                     };
+
                 await _jsRuntime.Tippy(elementReference, tooltipSettings);
             }
         }

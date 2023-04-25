@@ -206,8 +206,6 @@ namespace API
 
             try
             {
-                //TODO CHECK HERE FOR SAM ENTRY
-
                 //data out of request
                 var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var userId = rootXml.Element("UserId")?.Value;
@@ -243,10 +241,13 @@ namespace API
                     goto TryAgain;
                 }
 
-
-                //combine and remove duplicates
+                //STAGE 4 : combine and remove duplicates
                 if (visitorIdList.Any()) { filteredList1.AddRange(visitorIdList); }
                 List<XElement> personListNoDupes = filteredList1.Distinct().ToList();
+
+                //STAGE 5 : don't send empty list
+                //user should always have people in the list
+
 
                 //convert list to xml
                 var xmlPayload = Tools.AnyTypeToXmlList(personListNoDupes);
@@ -262,6 +263,72 @@ namespace API
                 await APILogger.Error(e, incomingRequest);
                 //format error nicely to show user
                 return APITools.FailMessage(e, incomingRequest);
+            }
+
+
+        }
+
+        /// <summary>
+        /// Gets all person profiles owned by User ID & Visitor ID
+        /// </summary>
+        [Function(nameof(PersonList))]
+        public static async Task<HttpResponseData> PersonList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "PersonList/UserID/{userId}/VisitorID/{visitorId}")] HttpRequestData incomingRequest,
+            string userId,
+            string visitorId)
+        {
+        //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 
+        TryAgain:
+
+            try
+            {
+
+                //get all person list from storage
+                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+
+                //filter out person by user id
+                var userIdPersonList = APITools.FindPersonByUserId(personListXml, userId);
+
+                //filter out person by visitor id
+                var visitorIdPersonList = APITools.FindPersonByUserId(personListXml, visitorId);
+
+                //before sending to user, clean the data
+                //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
+                //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
+                var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId));//already logged in if true
+                var visitorProfileExists = visitorIdPersonList.Any();
+                if (loggedIn && visitorProfileExists)
+                {
+                    //transfer to user id
+                    foreach (var person in visitorIdPersonList)
+                    {
+                        //edit data direct to for speed
+                        person.Element("UserId").Value = userId;
+
+                        //save to main list
+                        await APITools.UpdatePersonRecord(person);
+                    }
+
+                    //after the transfer, restart the call as though new, so that user only gets the correct list at all times (though this might be little slow)
+                    goto TryAgain;
+                }
+
+                //STAGE 4 : combine and remove duplicates
+                if (visitorIdPersonList.Any()) { userIdPersonList.AddRange(visitorIdPersonList); }
+                List<XElement> personListNoDupes = userIdPersonList.Distinct().ToList();
+
+                var x = Tools.ListToJson<XElement>(personListNoDupes);
+
+                //send filtered list to caller
+                return APITools.PassMessageJson(x, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FailMessageJson(e, incomingRequest);
             }
 
 

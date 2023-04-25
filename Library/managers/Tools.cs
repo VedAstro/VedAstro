@@ -1113,21 +1113,29 @@ namespace VedAstro.Library
             return jsonText;
         }
 
-        /// <summary>
-        /// Parses from XML > string > .Net JSON
-        /// NOTE:
-        /// - compute heavier than just string, use wisely
-        /// </summary>
-        public static JsonElement XmlToJson(XElement xElement)
+        ///// <summary>
+        ///// Parses from XML > string > .Net JSON
+        ///// NOTE:
+        ///// - compute heavier than just string, use wisely
+        ///// </summary>
+        //public static JsonElement XmlToJson(XElement xElement)
+        //{
+        //    //convert xml to JSON string
+        //    var jsonStr = XmlToJsonString(xElement);
+
+        //    //convert string 
+        //    using JsonDocument doc = JsonDocument.Parse(jsonStr);
+        //    JsonElement root = doc.RootElement;
+
+        //    return root;
+        //}
+        public static JObject XmlToJson(XElement xElement)
         {
-            //convert xml to JSON string
-            var jsonStr = XmlToJsonString(xElement);
+            var x = XmlToJsonString(xElement);
 
-            //convert string 
-            using JsonDocument doc = JsonDocument.Parse(jsonStr);
-            JsonElement root = doc.RootElement;
+            var y = JObject.Parse(x);
 
-            return root;
+            return y;
         }
 
         /// <summary>
@@ -1475,6 +1483,32 @@ namespace VedAstro.Library
 
             throw new Exception("END OF LINE");
 
+        }
+
+        /// <summary>
+        /// Given a list of object will make into JSON
+        /// </summary>
+        public static JArray ListToJson<T>(List<T> personList)
+        {
+            //get all as converted to basic string
+
+            JArray arrayJson = new JArray();
+            foreach (var person in personList)
+            {
+                if (person is XElement personXml)
+                {
+                    var personJson= Tools.XmlToJson(personXml);
+                    arrayJson.Add(personJson);
+                }
+                //do it normal string way
+                else
+                {
+                    arrayJson.Add(person.ToString());
+                }
+
+            }
+            
+            return arrayJson;
         }
     }
 

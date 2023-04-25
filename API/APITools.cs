@@ -10,6 +10,7 @@ using Azure;
 using Azure.Communication.Email;
 using VedAstro.Library;
 using System.IO;
+using System.Xml;
 
 namespace API
 {
@@ -92,34 +93,27 @@ namespace API
         /// <summary>
         /// data comes in as XML should leave as JSON ready for sending to client via HTTP
         /// </summary>
-        public static HttpResponseData MessageJson(string statusResult, object payload, HttpRequestData req)
+        public static HttpResponseData MessageJson<T>(string statusResult, T payload, HttpRequestData req)
         {
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
-
-            //wrap data in nice tag
-            var xElement = new XElement("Root", new XElement("Status", statusResult), new XElement("Payload", payload));
-
-            //convert XML to Json text
-            string jsonText = Tools.XmlToJsonString(xElement);
-
-            //place in response body
-            response.WriteString(jsonText);
-
-            return response;
-        }
-
-        /// <summary>
-        /// Input JSON parsed object directly, for best conversion
-        /// </summary>
-        public static HttpResponseData MessageJson(string statusResult, JObject payload, HttpRequestData req)
-        {
-            var response = req.CreateResponse(HttpStatusCode.OK);
+             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
 
             var finalPayloadJson = new JObject();
             finalPayloadJson["Status"] = "Pass";
-            finalPayloadJson["Payload"] = payload;
+
+            //if xelement than use xelement converter
+            if (payload is List<XElement> payloadXmlList)
+            {
+                //convert XML to Json text
+                var finalPayload = Tools.ListToJson(payloadXmlList);
+                finalPayloadJson["Payload"] = finalPayload;
+            }
+            //if not special type than assign direct
+            else
+            {
+                finalPayloadJson["Payload"] = JToken.Parse(payload.ToString());
+            }
+
 
             //convert XML to Json text
             string jsonText = finalPayloadJson.ToString();
@@ -128,7 +122,29 @@ namespace API
             response.WriteString(jsonText);
 
             return response;
+
         }
+
+        ///// <summary>
+        ///// Input JSON parsed object directly, for best conversion
+        ///// </summary>
+        //public static HttpResponseData MessageJson(string statusResult, JObject payload, HttpRequestData req)
+        //{
+        //    var response = req.CreateResponse(HttpStatusCode.OK);
+        //    response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
+
+        //    var finalPayloadJson = new JObject();
+        //    finalPayloadJson["Status"] = "Pass";
+        //    finalPayloadJson["Payload"] = payload;
+
+        //    //convert XML to Json text
+        //    string jsonText = finalPayloadJson.ToString();
+
+        //    //place in response body
+        //    response.WriteString(jsonText);
+
+        //    return response;
+        //}
 
         public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) => MessageJson("Fail", payload, req);
 

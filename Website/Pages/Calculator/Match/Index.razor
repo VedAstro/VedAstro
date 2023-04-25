@@ -13,8 +13,8 @@
 <div class="d-flex flex-wrap mb-5">
     <div>
         <div class="vstack gap-3 me-5">
-            <PeopleSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonId="@SelectedMale" Label="Male" />
-            <PeopleSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
+            <PersonSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonId="@SelectedMale" Label="Male" />
+            <PersonSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
             <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
         </div>
     </div>
@@ -97,8 +97,8 @@
     //VARIABLES
     public string? SelectedMale { get; set; }
     public string? SelectedFemale { get; set; }
-    private PeopleSelectorBox _malePeopleSelector;
-    private PeopleSelectorBox _femalePeopleSelector;
+    private PersonSelectorBox _malePeopleSelector;
+    private PersonSelectorBox _femalePeopleSelector;
 
 
 

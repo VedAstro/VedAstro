@@ -18,7 +18,7 @@
 <div>
     <div class="d-flex flex-wrap">
         <div class="vstack gap-3">
-            <PeopleSelectorBox @ref="_peopleSelectorBox" />
+            <PersonSelectorBox @ref="_peopleSelectorBox" />
             <IconButton SmallSize="true" IconName="uim:process" ButtonText="Show journal" OnClickCallback="ShowButtonClicked"></IconButton>
         </div>
 
@@ -69,7 +69,7 @@
     private Person _selectedPerson;
     private List<LifeEvent>? _filteredLifeEvents;
 
-    private PeopleSelectorBox? _peopleSelectorBox;
+    private PersonSelectorBox? _peopleSelectorBox;
 
     private bool _isReady = false;
 

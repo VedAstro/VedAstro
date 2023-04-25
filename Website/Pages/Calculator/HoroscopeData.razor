@@ -13,7 +13,7 @@
 </PageTop>
 
 <div class="vstack gap-3">
-    <PeopleSelectorBox @ref="_peopleSelectorBox" />
+    <PersonSelectorBox @ref="_peopleSelectorBox" />
     <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
 </div>
 
@@ -31,7 +31,7 @@
 @code {
 
     private bool _isResultReady = false; //marks if the page ready to loaded
-    private PeopleSelectorBox _peopleSelectorBox;
+    private PersonSelectorBox _peopleSelectorBox;
     private Person SelectedPerson;
 
 

@@ -28,7 +28,7 @@
     @*EASY TAB*@
     <div class="tab-pane fade show active" id="easy" role="tabpanel" aria-labelledby="easy-tab">
         <div class="vstack gap-3 p-1">
-            <PeopleSelectorBox @ref="_easyPeopleSelectorBox" />
+            <PersonSelectorBox @ref="_easyPersonSelectorBox" />
             <div>
                 <label class="form-label">Event Type</label>
                 <select @bind="_selectedEventType" class="form-control" style="width: fit-content; min-width: 273px;">
@@ -62,7 +62,7 @@
     @*ADVANCED TAB*@
     <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
         <div class="vstack gap-3" style="max-width: @GR.W412px">
-            <PeopleSelectorBox @ref="_peopleSelectorBox" />
+            <PersonSelectorBox @ref="_peopleSelectorBox" />
 
             <TimeInput @ref="_startTimeInput" />
             <TimeInput @ref="_endTimeInput" />
@@ -240,8 +240,8 @@
     private TimeInput _startTimeInput;
     private TimeInput _endTimeInput;
 
-    private PeopleSelectorBox? _peopleSelectorBox;
-    private PeopleSelectorBox? _easyPeopleSelectorBox;
+    private PersonSelectorBox? _peopleSelectorBox;
+    private PersonSelectorBox? _easyPersonSelectorBox;
 
     private EventsChartViewer? _eventReportViewer;
 
@@ -311,7 +311,7 @@
         _isResultReady = false;
 
         //get needed input data
-        _selectedPerson = await _easyPeopleSelectorBox.GetSelectedPerson();
+        _selectedPerson = await _easyPersonSelectorBox.GetSelectedPerson();
         dynamic x = AutoCalculateTimeRange(_selectedTimeRange, _selectedPerson.GetBirthLocation(), Tools.GetSystemTimezone());
         var startTime = x.start;
         var endTime = x.end;
@@ -415,7 +415,7 @@
 
         //TEST 1
         //if person not selected, invalid
-        if (!_easyPeopleSelectorBox.IsPersonSelected)
+        if (!_easyPersonSelectorBox.IsPersonSelected)
         {
             //mark invalid & alert user
             _jsRuntime.ShowAlert("error", AlertText.SelectName, true);

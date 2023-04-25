@@ -47,6 +47,8 @@
         public const string generateHouseDataInfoTable = "Interop.generateHouseDataInfoTable";
         public const string scrollToDiv = "Interop.scrollToDiv";
         public const string htmlToPdf = "Interop.htmlToPdf";
+        public const string pdfToEmail = "Interop.pdfToEmail";
+        public const string htmlToEmail = "Interop.htmlToEmail";
         public const string DrawHouseStrengthChart = "Interop.DrawHouseStrengthChart";
         public const string DrawPlanetStrengthChart = "Interop.DrawPlanetStrengthChart";
         public const string generateWebsiteTaskListTable = "Interop.generateWebsiteTaskListTable";
@@ -79,9 +81,9 @@
         //BOOTSTRAP JS
         
         //SPECIAL SIGN IN FUNCS RESIDE IN APP.JS
-        public const string facebookLogin = "facebookLogin";
-        public const string SetSignInButtonInstance = "SetSignInButtonInstance";
-        public const string OnGoogleSignInSuccessHandler = "OnGoogleSignInSuccessHandler";
+        public const string facebookLogin = "window.facebookLogin";
+        public const string SetSignInButtonInstance = "window.SetSignInButtonInstance";
+        public const string OnGoogleSignInSuccessHandler = "window.OnGoogleSignInSuccessHandler";
 
         //SPECIAL APP.JS FUNCS
         public const string GetInteropFuncList = "window.GetInteropFuncList";

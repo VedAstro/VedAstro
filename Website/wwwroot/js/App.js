@@ -55,12 +55,12 @@ window.DarkMode = new Darkmode(options);
 
 //makes a reference to SignInButton instance, to be used when user clicks sign in
 //called in Blazor, after component render
-var SetSignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
+window.SetSignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
 //wrapper function to forward call to blazor (hardwired in Blazor HTML)
-var OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
+window.OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
 
 //called from Blazor when custom login button clicked
-var facebookLogin = () => FB.login(callBackFB, { scope: 'email' });
+window.facebookLogin = () => FB.login(callBackFB, { scope: 'email' });
 //wrapper function to forward call to blazor (hardwired in Blazor HTML)
 var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('OnFacebookSignInSuccessHandler', response);
 

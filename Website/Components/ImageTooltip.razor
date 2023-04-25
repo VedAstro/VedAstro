@@ -1,0 +1,72 @@
+﻿@*SIMPLE BOX TO RENDER IMAGE TOOLTIP OF PERSON BY NAME*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+<div @ref="elementReference">
+    @Text
+    @HTML
+</div>
+
+
+@code {
+
+
+    /// <summary>
+    /// image name is expected to exist in images folder with .JPG format
+    /// </summary>
+    [Parameter]
+    public string ImageName { get; set; }
+
+
+    /// <summary>
+    /// defaults to "jpg"
+    /// </summary>
+    [Parameter]
+    public string ImageFormat { get; set; } = "jpg";
+
+    /// <summary>
+    /// set either Text or HTML for content
+    /// </summary>
+    [Parameter]
+    public string Text { get; set; }
+
+    /// <summary>
+    /// any content to wrap
+    /// </summary>
+    [Parameter]
+    public RenderFragment HTML { get; set; }
+
+    private ElementReference elementReference { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
+
+    private async Task _OnAfterRender(bool firstRender)
+    {
+
+
+        if (firstRender)
+        {
+            //attach tooltip lib element if tooltip provided
+            if (!string.IsNullOrEmpty(ImageName))
+            {
+                //construct html to show image
+                var htmlContent = $"<img style=\"width:{GR.W157};\" src=\"images/{ImageName}.{ImageFormat}\" class=\"img-thumbnail mt-1\" alt=\"...\">";
+                var tooltipSettings = 
+                    new
+                    {
+                        content = htmlContent,
+                        allowHTML = true,
+                        arrow = true,
+                        animation = "scale-extreme",
+                    };
+                await _jsRuntime.Tippy(elementReference, tooltipSettings);
+            }
+        }
+    }
+
+
+}

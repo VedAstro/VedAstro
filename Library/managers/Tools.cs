@@ -1283,6 +1283,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Get all methods that is available to time and planet param
+        /// this is the lis that will appear on the fly in API Builder dropdown
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<APICallData> GetPlanetApiCallList<T1, T2>()
@@ -1290,19 +1291,19 @@ namespace VedAstro.Library
             //get all the same methods gotten by Open api func
             var calcList = GetCalculatorMethodInfoListByParamType<T1, T2>();
 
-            //convert calculator reference to 
-            var calculatorNameList = from calculatorInfo in calcList select calculatorInfo.Name;
-
             var finalList = new List<APICallData>();
+
             //make final list with API description
-            foreach (var calcName in calculatorNameList)
+            //get nice API calc name, shown in builder dropdown
+            foreach (var calc in calcList)
             {
-                finalList.Add(new APICallData(calcName, Tools.GetAPICallDescByName(calcName)));
+                finalList.Add(new APICallData(Tools.GetAPISpecialName(calc), Tools.GetAPICallDescByName("")));
             }
 
             return finalList;
         }
 
+        //todo needs improvement
         private static string GetAPICallDescByName(string calcName)
         {
             //temp
@@ -1331,7 +1332,7 @@ namespace VedAstro.Library
 
         }
 
-        private static IEnumerable<MethodInfo> GetCalculatorMethodInfoListByParamType<T1, T2>()
+        public static IEnumerable<MethodInfo> GetCalculatorMethodInfoListByParamType<T1, T2>()
         {
             var inputedParamType1 = typeof(T1);
             var inputedParamType2 = typeof(T2);

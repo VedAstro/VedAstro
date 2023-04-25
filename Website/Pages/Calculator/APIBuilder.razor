@@ -253,7 +253,7 @@
         if (String.IsNullOrWhiteSpace(SelectedBodyType))
         {
             //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", "Are you sleeping? Select a celestial body to continue", true);
+            await _jsRuntime.ShowAlert("error", "Falling asleep? <br/> Select a celestial body first", true);
             return false;
         }
 
@@ -269,7 +269,7 @@
         if (String.IsNullOrWhiteSpace(GetFinalCelesProperty()))
         {
             //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", $"Select what {SelectedBodyType} data you want first!", true);
+            await _jsRuntime.ShowAlert("error", $"What exact {SelectedBodyType} data you want?", true);
             return false;
         }
 

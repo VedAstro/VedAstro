@@ -27,7 +27,7 @@
     <div>
         <label class="form-label">
             Question
-            <HelpBox SmallIcon="true" HelpText="@HelpText.AskAstrologerQuestion"></HelpBox>
+            <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.AskAstrologerQuestion"/>
         </label>
         <select @bind="_questionInput" class="form-control">
             <option value="">Select</option>
@@ -45,7 +45,7 @@
     <div>
         <label for="messageInputId">
             Details
-            <HelpBox SmallIcon="true" HelpText="@HelpText.AskAstrologerDetails"></HelpBox>
+            <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.AskAstrologerDetails"/>
         </label>
         <textarea style="min-height: 132px;" class="form-control" @bind="_detailsInput" id="messageInputId" placeholder="Enter extra info about your question"></textarea>
     </div>

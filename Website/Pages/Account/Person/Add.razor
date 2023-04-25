@@ -14,7 +14,7 @@
 <div class="d-flex flex-wrap">
     <div class="vstack gap-3 me-5 mb-4" style="max-width:@GR.W412px">
         <div>
-            <label>Name<HelpBox SmallIcon="true" HelpText="@HelpText.PrivateProfileName"></HelpBox></label>
+            <label>Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.PrivateProfileName"/></label>
             <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
         </div>
         <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
@@ -22,7 +22,7 @@
         <div>
             <label>
                 Gender
-                <HelpBox SmallIcon="true" HelpText="@HelpText.Gender"></HelpBox>
+                <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender"/>
             </label>
             <select @bind="_genderInput" class="form-control">
                 <option value="Male">Male</option>

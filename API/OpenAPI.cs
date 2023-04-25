@@ -83,7 +83,7 @@ namespace API
         }
 
 
-        
+
         private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
             HttpRequestData incomingRequest)
         {
@@ -171,8 +171,26 @@ namespace API
             //place the data from all possible methods nicely in JSON
             var rootPayloadJson = new JObject(); //each call below adds to this root
 
-            object[] param = new object[] { param1, param2 }; //hopefull this works
-            rootPayloadJson[methodName] = foundMethod?.Invoke(null, param)?.ToString() ?? "";
+            //if method not found, possible outdated API call link, end call here
+            if (foundMethod == null)
+            {
+                //let caller know that method not found
+                var msg = $"Call not found, make sure API link is latest version : {methodName} ";
+                var parsed = JToken.Parse($"'{msg}'");
+                rootPayloadJson[""] = parsed;
+                return rootPayloadJson;
+            }
+
+
+            //get methods 1st param
+            var param1Type = foundMethod.GetParameters()[0].ParameterType;
+            object[] paramOrder1 = new object[] { param1, param2 };
+            object[] paramOrder2 = new object[] { param2, param1 };
+
+            //if first param match type, then use that
+            var finalParamOrder = param1Type == param1.GetType() ? paramOrder1 : paramOrder2;
+
+            rootPayloadJson[methodName] = foundMethod?.Invoke(null, finalParamOrder)?.ToString() ?? "";
 
             return rootPayloadJson;
         }

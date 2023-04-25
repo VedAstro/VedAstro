@@ -54,7 +54,13 @@ else
         //setup the tooltip
         //- html for multi line
         //- interactive for selecting text
-        var tooltipData = new { content = HelpText, interactive = true, allowHTML = true };
+        var tooltipData = new
+        {
+            content = HelpText, 
+            interactive = true, 
+            allowHTML = true,
+            trigger = "click"
+        };
 
         //attach tooltip lib to element
         await _jsRuntime.Tippy(helpIconHolder, tooltipData);

@@ -15,13 +15,13 @@
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-horoscope-tab" data-bs-toggle="tab" data-bs-target="#nav-horoscope" type="button" role="tab" aria-controls="nav-horoscope" aria-selected="true">
-                Horoscope Predictions <HelpBox HelpText="@HelpText.SearchPredictions" SmallIcon="true" /> - @foundPrediction.Count()
+                Horoscope Predictions <HelpIconTooltip HelpText="@HelpText.SearchPredictions" SmallIcon="true" /> - @foundPrediction.Count()
             </button>
             <button class="nav-link" id="nav-reference-tab" data-bs-toggle="tab" data-bs-target="#nav-reference" type="button" role="tab" aria-controls="nav-reference" aria-selected="false">
-                Reference <HelpBox HelpText="@HelpText.SearchReference" SmallIcon="true"/> - @foundReference.Count()
+                Reference <HelpIconTooltip HelpText="@HelpText.SearchReference" SmallIcon="true"/> - @foundReference.Count()
             </button>
             <button class="nav-link" id="nav-muhurtha-tab" data-bs-toggle="tab" data-bs-target="#nav-muhurtha" type="button" role="tab" aria-controls="nav-muhurtha" aria-selected="false">
-                Muhurtha Events <HelpBox HelpText="@HelpText.SearchEvents" SmallIcon="true"/> - @foundEvents.Count()
+                Muhurtha Events <HelpIconTooltip HelpText="@HelpText.SearchEvents" SmallIcon="true"/> - @foundEvents.Count()
             </button>
         </div>
     </nav>

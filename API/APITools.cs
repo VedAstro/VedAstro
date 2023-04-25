@@ -67,15 +67,6 @@ namespace API
             return response;
         }
 
-        public static byte[] ExtractRawImageFromRequest(HttpRequestMessage req)
-        {
-            //todo maybe can do some checking here
-            var rawStream = req.Content.ReadAsByteArrayAsync().Result;
-
-            return rawStream;
-        }
-
-
         public static HttpResponseData PassMessage(string payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
@@ -99,7 +90,7 @@ namespace API
             response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
 
             var finalPayloadJson = new JObject();
-            finalPayloadJson["Status"] = "Pass";
+            finalPayloadJson["Status"] = statusResult;
 
             //if xelement than use xelement converter
             if (payload is List<XElement> payloadXmlList)
@@ -114,7 +105,6 @@ namespace API
                 finalPayloadJson["Payload"] = JToken.Parse(payload.ToString());
             }
 
-
             //convert XML to Json text
             string jsonText = finalPayloadJson.ToString();
 
@@ -125,27 +115,6 @@ namespace API
 
         }
 
-        ///// <summary>
-        ///// Input JSON parsed object directly, for best conversion
-        ///// </summary>
-        //public static HttpResponseData MessageJson(string statusResult, JObject payload, HttpRequestData req)
-        //{
-        //    var response = req.CreateResponse(HttpStatusCode.OK);
-        //    response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
-
-        //    var finalPayloadJson = new JObject();
-        //    finalPayloadJson["Status"] = "Pass";
-        //    finalPayloadJson["Payload"] = payload;
-
-        //    //convert XML to Json text
-        //    string jsonText = finalPayloadJson.ToString();
-
-        //    //place in response body
-        //    response.WriteString(jsonText);
-
-        //    return response;
-        //}
-
         public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) => MessageJson("Fail", payload, req);
 
         public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
@@ -153,8 +122,6 @@ namespace API
         public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) => MessageJson("Pass", payload, req);
         public static HttpResponseData PassMessageJson(JObject payload, HttpRequestData req) => MessageJson("Pass", payload, req);
 
-        //public static OkObjectResult FailMessage(string msg = "") => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", msg)).ToString());
-        //public static OkObjectResult FailMessage(XElement payloadXml) => new(new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payloadXml)).ToString());
         public static HttpResponseData FailMessage(object payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
@@ -175,6 +142,14 @@ namespace API
 
 
         //----------------------------------------FUNCTIONS---------------------------------------------
+
+        public static byte[] ExtractRawImageFromRequest(HttpRequestMessage req)
+        {
+            var rawStream = req.Content.ReadAsByteArrayAsync().Result;
+
+            return rawStream;
+        }
+
 
         /// <summary>
         /// Gets public IP address of client sending the http request

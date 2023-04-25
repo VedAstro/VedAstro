@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
@@ -1408,66 +1409,39 @@ namespace VedAstro.Library
 
         public static JToken AnyToJSON(dynamic anyTypeData)
         {
+            JToken parsed = JToken.Parse("{}");//to identify errors by default
+
+            try
+            {
+                string rawText = anyTypeData.ToString();
+                parsed = JToken.Parse("'" + rawText + "'");
+            }
+            catch (Exception e)
+            {
+                //todo better error
+                Console.WriteLine("Could not parse JSON");
+            }
 
             try
             {
 
                 //string goes in like normal
-                if (anyTypeData is string stringData)
-                {
-                    JToken parsed = JToken.Parse("{}");//to identify errors by default
-                    try
-                    {
-                        parsed = JToken.Parse("'" + stringData + "'");
-                    }
-                    catch (Exception e)
-                    {
-                        //todo better error
-                        Console.WriteLine("Could not parse JSON");
-                    }
-
-                    return parsed;
-                }
+                if (anyTypeData is string stringData) { return parsed; }
                 else if (anyTypeData is IEnumerable dataList)
                 {
                     //convert to string
                     foreach (var data in dataList)
                     {
-                        JToken parsed = JToken.Parse("{}");//to identify errors by default
-                        try
-                        {
-                            var rawText = data.ToString();
-                            parsed = JToken.Parse("'" + rawText + "'");
-                        }
-                        catch (Exception e)
-                        {
-                            //todo better error
-                            Console.WriteLine("Could not parse JSON");
-                        }
+                        var rawText = data.ToString();
+                        parsed = JToken.Parse("'" + rawText + "'");
 
                         return parsed;
                     }
                 }
-                else
-                {
-                    //Console.WriteLine($"Unaccounted for JSON TYPE : {anyTypeData.GetType().ToString()}");
 
-                    JToken parsed2 = JToken.Parse("{}");//to identify errors by default
-                    try
-                    {
-                        string rawText = anyTypeData.ToString();
-                        parsed2 = JToken.Parse("'" + rawText + "'");
-                    }
-                    catch (Exception e)
-                    {
-                        //todo better error
-                        Console.WriteLine("Could not parse JSON");
-                    }
+                //just convert direct
+                return parsed;
 
-
-                    //just convert direct
-                    return parsed2;
-                }
 
             }
             catch (Exception e)
@@ -1480,6 +1454,22 @@ namespace VedAstro.Library
                 //raise alarm
                 throw e;
 #endif
+            }
+
+            throw new Exception("END OF LINE");
+
+        }
+
+        public static string StringToMimeType(string fileFormat)
+        {
+            switch (fileFormat.ToLower())
+            {
+                case "pdf": return MediaTypeNames.Application.Pdf;
+                case "xml": return MediaTypeNames.Application.Xml;
+                case "gif": return MediaTypeNames.Image.Gif;
+                case "jpeg": return MediaTypeNames.Image.Jpeg;
+                case "jpg": return MediaTypeNames.Image.Jpeg;
+                case "tiff": return MediaTypeNames.Image.Tiff;
             }
 
             throw new Exception("END OF LINE");

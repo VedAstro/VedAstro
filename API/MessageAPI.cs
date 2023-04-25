@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using VedAstro.Library;
@@ -100,23 +101,17 @@ namespace API
 
             var httpClient = new HttpClient();
 
-            var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, MediaTypeNames.Application.Json);
 
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var SlackUserMessageWebHook = Environment.GetEnvironmentVariable("SLACK_EMAIL_WEBHOOK"); //vedastro-api-data
+            var slackUserMessageWebHook = Environment.GetEnvironmentVariable("SLACK_EMAIL_WEBHOOK"); //vedastro-api-data
 
-            var response = await httpClient.PostAsync(SlackUserMessageWebHook, content);
+            var response = await httpClient.PostAsync(slackUserMessageWebHook, content);
 
             var responseData = await response.Content.ReadAsStringAsync();
 
             Console.WriteLine(responseData);
-            //return responseData;
-
-            //if (!response.IsSuccessStatusCode)
-            //{
-            //    _logger.LogWarning($"Failed invoke webhook. Status Code = {response.StatusCode}, Reason = {await response.Content.ReadAsStringAsync()}");
-            //}
         }
 
 

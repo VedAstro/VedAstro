@@ -95,7 +95,7 @@ Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMER
 Last but not least, we thank users like you who keep this project going.
 
 ### :pray: Special Thanks
-@Ceeper00 @razukc @kristaps.bunts
+@Ceeper00 @razukc @kristaps.bunts @Circuito
 
 <hr>
 

@@ -3,9 +3,13 @@ using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Text.Json;
 using System.Xml.Linq;
+using Azure;
+using Azure.Communication.Email;
 using VedAstro.Library;
+using System.IO;
 
 namespace API
 {
@@ -62,6 +66,15 @@ namespace API
             return response;
         }
 
+        public static byte[] ExtractRawImageFromRequest(HttpRequestMessage req)
+        {
+            //todo maybe can do some checking here
+            var rawStream = req.Content.ReadAsByteArrayAsync().Result;
+
+            return rawStream;
+        }
+
+
         public static HttpResponseData PassMessage(string payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
@@ -82,7 +95,7 @@ namespace API
         public static HttpResponseData MessageJson(string statusResult, object payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "application/json");
+            response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
 
             //wrap data in nice tag
             var xElement = new XElement("Root", new XElement("Status", statusResult), new XElement("Payload", payload));
@@ -102,7 +115,7 @@ namespace API
         public static HttpResponseData MessageJson(string statusResult, JObject payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "application/json");
+            response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
 
             var finalPayloadJson = new JObject();
             finalPayloadJson["Status"] = "Pass";
@@ -790,6 +803,59 @@ namespace API
             response.WriteString(chartContentSvg);
 
             return response;
+        }
+
+        public static void SendEmail(string fileName, string fileFormat, string receiverEmailAddress,  Stream rawFileBytes)
+        {
+            var emailTitle = $"Shared {fileFormat.ToUpper()} from VedAstro";
+            var fileNameFull = $"{fileName}.{fileFormat.ToLower()}";
+            // Create the email content
+            var emailContent = new EmailContent(emailTitle)
+            {
+                PlainText = $"Find attached your {fileNameFull}, from VedAstro.org -> {fileNameFull}",
+                Html = "<html><body>Shared file from VedAstro.org</body></html>"
+            };
+
+            // Create the EmailMessage
+            var emailMessage = new EmailMessage(
+                senderAddress: "contact@vedastro.org",
+                recipientAddress: receiverEmailAddress,
+                content: emailContent);
+
+            var attachmentName = fileNameFull;
+            var contentType = Tools.StringToMimeType(fileFormat) ?? MediaTypeNames.Text.Plain; //if fail just plain noodle will do
+            var content = BinaryData.FromStream(rawFileBytes);
+            var emailAttachment = new EmailAttachment(attachmentName, contentType, content);
+
+            emailMessage.Attachments.Add(emailAttachment);
+
+            try
+            {
+                EmailSendOperation emailSendOperation = getEmailClient().Send(WaitUntil.Completed, emailMessage);
+                Console.WriteLine($"Email Sent. Status = {emailSendOperation.Value.Status}");
+
+                /// Get the OperationId so that it can be used for tracking the message for troubleshooting
+                string operationId = emailSendOperation.Id;
+                Console.WriteLine($"Email operation id = {operationId}");
+            }
+            catch (RequestFailedException ex)
+            {
+                /// OperationID is contained in the exception message and can be used for troubleshooting purposes
+                Console.WriteLine($"Email send operation failed with error code: {ex.ErrorCode}, message: {ex.Message}");
+            }
+
+
+            //-------------LOCAL FUNCS
+
+            EmailClient getEmailClient()
+            {
+                //read the connection string
+                var connectionString = Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
+
+                //sign in to email
+                return new EmailClient(connectionString);
+
+            }
         }
     }
 }

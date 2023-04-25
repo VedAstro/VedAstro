@@ -1,8 +1,12 @@
 ﻿using System.Threading.Tasks;
 using System.Xml.Linq;
+using Azure.Communication.Email;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Newtonsoft.Json.Linq;
+using Azure;
+using System.Net.Http;
 
 namespace API
 {
@@ -22,6 +26,43 @@ namespace API
             var APIHomePageTxt = await APITools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
 
             return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
+
+        }
+
+
+        /// <summary>
+        /// to allow client to send match report and other files to email via a single call 
+        /// </summary>
+        [Function(nameof(SendFileToEmail))]
+        public static async Task<HttpResponseData> SendFileToEmail([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Send/{fileName}/{fileFormat}/{receiverEmail}")] HttpRequestData incomingRequest,
+            string fileName,string fileFormat,string receiverEmail)
+        {
+
+            try
+            {
+                //log the call todo log causes errors in reading body, maybe read first
+                //APILogger.Visitor(incomingRequest);
+
+                //extract file from request
+                var rawFileBytes = incomingRequest.Body;
+
+                //using Azure Email Sender, send file to given email
+                APITools.SendEmail(fileName, fileFormat, receiverEmail, rawFileBytes);
+
+                JToken jsonReply = JToken.Parse($"'Email sent to -> {receiverEmail}'"); //empty default
+
+                return APITools.PassMessageJson(jsonReply, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log it
+                APILogger.Error(e);
+
+                //let user know
+                return APITools.FailMessageJson(e, incomingRequest);
+            }
+
 
         }
 

@@ -197,10 +197,11 @@ namespace VedAstro.Library
         public override string ToString()
         {
             //prepare string
-            var returnString = $"{this.Degrees}°{Math.Abs(this.Minutes)}'{Math.Abs(this.Seconds)}\"";//Only degrees is in negative
+            var classicNotation = $"{this.Degrees}°{Math.Abs(this.Minutes)}'{Math.Abs(this.Seconds)}\"";//Only degrees is in negative
+            var degreeAll = this.TotalDegrees.ToString();//Only degrees is in negative
 
             //return string to caller
-            return returnString;
+            return $"{classicNotation},{degreeAll}";
         }
 
         /// <summary>

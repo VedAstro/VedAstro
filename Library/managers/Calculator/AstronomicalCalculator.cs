@@ -2114,6 +2114,7 @@ namespace VedAstro.Library
         /// 12th signs from any other planet becomes his
         /// (Tatkalika) friend.
         /// </summary>
+        [API("TemporaryFriends")]
         public static List<PlanetName> GetPlanetTemporaryFriendList(PlanetName planetName, Time time)
         {
             //get sign planet is currently in

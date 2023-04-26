@@ -262,6 +262,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets planet aspected by the inputed planet
         /// </summary>
+        [API("PlanetsInAspect")]
         public static List<PlanetName> GetPlanetsInAspect(PlanetName planet, Time time)
         {
             //get signs planet is aspecting
@@ -285,6 +286,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all planets the transmiting aspect to inputed planet
         /// </summary>
+        [API("PlanetsAspectingPlanet")]
         public static List<PlanetName> GetPlanetsAspectingPlanet(Time time, PlanetName receivingAspect)
         {
             //check if all planets is aspecting inputed planet
@@ -297,6 +299,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets houses aspected by the inputed planet
         /// </summary>
+        [API("HousesInAspect")]
         public static List<HouseName> GetHousesInAspect(PlanetName planet, Time time)
         {
             //get signs planet is aspecting
@@ -560,6 +563,7 @@ namespace VedAstro.Library
         ///
         /// Note: Rahu & Ketu supported, via house lord
         /// </summary>
+        [API("ShadbalaPinda")]
         public static Shashtiamsa GetPlanetShadbalaPinda(PlanetName planetName, Time time)
         {
 
@@ -613,6 +617,7 @@ namespace VedAstro.Library
         /// input birth time to get strength in horoscope
         /// note: an alias method to GetPlanetShadbalaPinda ("strength" is easier to remember)
         /// </summary>
+        [API("TotalStrength")]
         public static Shashtiamsa GetPlanetStrength(PlanetName planetName, Time time) => GetPlanetShadbalaPinda(planetName, time);
 
         /// <summary>
@@ -1507,6 +1512,7 @@ namespace VedAstro.Library
         /// Kendrtzbala: Planets in Kendras get 60
         /// shashtiamsas; in Panapara 30, and in Apoklima 15.
         /// </summary>
+        [API("KendraBala")]
         public static Shashtiamsa GetPlanetKendraBala(PlanetName planetName, Time time)
         {
             //get number of the sign planet is in
@@ -1543,6 +1549,7 @@ namespace VedAstro.Library
         /// the Sun, Mars, Jupiter, Mercury and Saturn
         /// get strength and the rest in even signs
         /// </summary>
+        [API("OjayugmarasyamsaBala")]
         public static Shashtiamsa GetPlanetOjayugmarasyamsaBala(PlanetName planetName, Time time)
         {
             //get planet rasi sign
@@ -1595,6 +1602,7 @@ namespace VedAstro.Library
             return new Shashtiamsa(totalOjayugmarasyamsaBalaInShashtiamsas);
         }
 
+        [API("KalaBala")]
         public static Shashtiamsa GetPlanetKalaBala(PlanetName planetName, Time time)
         {
 
@@ -1793,6 +1801,7 @@ namespace VedAstro.Library
         /// it seems small differences in longitude seem magnified at final value,
         /// not 100% sure, need further testing for confirmation, but final values seem ok so far
         /// </summary>
+        [API("AyanaBala")]
         public static Shashtiamsa GetPlanetAyanaBala(PlanetName planetName, Time time)
         {
 
@@ -1862,6 +1871,7 @@ namespace VedAstro.Library
         /// Declinations are reckoned plus or minus according as the planet
         /// is situated in the northern or southern celestial hemisphere
         /// </summary>
+        [API("Declination")]
         public static double GetPlanetDeclination(PlanetName planetName, Time time)
         {
 
@@ -1875,7 +1885,7 @@ namespace VedAstro.Library
                 //for degree to radian conversion
                 const double DEG2RAD = 0.0174532925199433;
 
-                var eps = GetPlanetEps(planetName, time);
+                var eps = GetEclipticObliquity(time);
 
                 var tlen = AstronomicalCalculator.GetPlanetSayanaLongitude(time, planetName);
                 var lat = AstronomicalCalculator.GetPlanetSayanaLatitude(time, planetName);
@@ -1889,14 +1899,14 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// TODO find out what on earth this calculation is
-        /// What is EPS?S
+        /// true obliquity of the Ecliptic (includes nutation)
         /// </summary>
-        public static double GetPlanetEps(PlanetName planetName, Time time)
+        [API("EclipticObliquity")]
+        public static double GetEclipticObliquity(Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetEps", planetName, time), _getPlanetEps);
+            return CacheManager.GetCache(new CacheKey("GetPlanetEps", time), _getPlanetEps);
 
 
             //UNDERLYING FUNCTION
@@ -1924,6 +1934,7 @@ namespace VedAstro.Library
         /// <summary>
         /// AKA Horadhipathi Bala
         /// </summary>
+        [API("HoraBala")]
         public static Shashtiamsa GetPlanetHoraBala(PlanetName planetName, Time time)
         {
 
@@ -1965,6 +1976,7 @@ namespace VedAstro.Library
         /// the year of birth is assigned a value of 15 Shashtiamsas
         /// as his Abdabala.
         /// </summary>
+        [API("AbdaBala")]
         public static Shashtiamsa GetPlanetAbdaBala(PlanetName planetName, Time time)
         {
             //CACHE MECHANISM
@@ -1988,12 +2000,12 @@ namespace VedAstro.Library
 
         }
 
+        [API("MasaBala")]
         public static Shashtiamsa GetPlanetMasaBala(PlanetName planetName, Time time)
         {
             //The planet who is the lord of
             //the month of birth is assigned a value of 30 Shashtiamsas
             //as his Masabala.
-
 
             //calculate month lord
             dynamic yearAndMonthLord = GetYearAndMonthLord(time);
@@ -2007,6 +2019,7 @@ namespace VedAstro.Library
 
         }
 
+        [API("VaraBala")]
         public static Shashtiamsa GetPlanetVaraBala(PlanetName planetName, Time time)
         {
             //The planet who is the lord of
@@ -2113,6 +2126,7 @@ namespace VedAstro.Library
         /// respectively. Jupiter is always strong and gets 60
         /// shashtiamsas of strength.
         /// </summary>
+        [API("TribhagaBala")]
         public static Shashtiamsa GetPlanetTribhagaBala(PlanetName planetName, Time time)
         {
             PlanetName ret = PlanetName.Jupiter;
@@ -2166,6 +2180,7 @@ namespace VedAstro.Library
         /// planet's longitude and its debilitation point, divided
         /// by 3, gives its exaltation strength or oochchabaJa.
         /// </summary>
+        [API("OchchaBala")]
         public static Shashtiamsa GetPlanetOchchaBala(PlanetName planetName, Time time)
         {
             //1.0 Get Planet longitude
@@ -2250,6 +2265,7 @@ namespace VedAstro.Library
         ///
         /// Note: Mercury is benefic or malefic based on planets conjunct with it
         /// </summary>
+        [API("PakshaBala")]
         public static Shashtiamsa GetPlanetPakshaBala(PlanetName planetName, Time time)
         {
             double pakshaBala = 0;
@@ -2326,6 +2342,7 @@ namespace VedAstro.Library
         /// midday to midnight proportionately. In the same
         /// way, Mercury is always strong and gets 60 shashtiamsas.
         /// </summary>
+        [API("NathonnathaBala")]
         public static Shashtiamsa GetPlanetNathonnathaBala(PlanetName planetName, Time time)
         {
             //get local apparent time
@@ -2380,6 +2397,7 @@ namespace VedAstro.Library
         /// distance between the longitude of the planet and
         /// its depression point by 3. Quotient is the strength.
         /// </summary>
+        [API("DigBala")]
         public static Shashtiamsa GetPlanetDigBala(PlanetName planetName, Time time)
         {
             //get planet longitude

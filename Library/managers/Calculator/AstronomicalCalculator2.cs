@@ -38,6 +38,7 @@ namespace VedAstro.Library
         /// <summary>
         /// NOTE This method connects SwissEph Library with Muhurta Library
         /// </summary>
+        [API("SayanaLongitude")]
         public static Angle GetPlanetSayanaLongitude(Time time, PlanetName planetName)
         {
 
@@ -75,6 +76,7 @@ namespace VedAstro.Library
 
         }
 
+        [API("SayanaLatitude")]
         public static Angle GetPlanetSayanaLatitude(Time time, PlanetName planetName)
         {
 
@@ -147,6 +149,8 @@ namespace VedAstro.Library
 
         }
 
+
+        [API("Speed")]
         public static double GetPlanetSpeed(Time time, PlanetName planetName)
         {
             //Converts LMT to UTC (GMT)

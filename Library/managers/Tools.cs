@@ -512,7 +512,7 @@ namespace VedAstro.Library
             {
                 //when last in row, don't add comma
                 var isLastItem = i == (list.Count - 1);
-                var ending = isLastItem ? "":", ";
+                var ending = isLastItem ? "" : ", ";
 
                 //combine to together
                 combinedNames += list[i].ToString() + ending;
@@ -1332,20 +1332,130 @@ namespace VedAstro.Library
         /// </summary>
         public static JObject GetCalcsResultsByParam<T1, T2>(T1 inputedPram1, T2 inputedPram2)
         {
-
+            //get reference to all the calculators that can be used with the inputed param types
             var finalList = GetCalculatorMethodInfoListByParamType<T1, T2>();
 
             //place the data from all possible methods nicely in JSON
             var rootPayloadJson = new JObject(); //each call below adds to this root
-            object[] param1 = new object[] { inputedPram1, inputedPram2 };
+            object[] paramList = new object[] { inputedPram1, inputedPram2 };
             foreach (var methodInfo in finalList)
             {
-                AddMethodInfoToJson(methodInfo, param1, ref rootPayloadJson);
+                var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
+                var resultParse2 = JToken.FromObject(resultParse1); //done to get JSON formatting right
+                rootPayloadJson.Add(resultParse2);
             }
 
-            return rootPayloadJson;
+            return rootPayloadJson ;
 
         }
+
+
+        /// <summary>
+        /// Given an API name, will find the calc and try to call and wrap it in JSON
+        /// </summary>
+        public static JProperty ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
+        {
+            var calculatorClass = typeof(AstronomicalCalculator);
+            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
+
+            //place the data from all possible methods nicely in JSON
+            var rootPayloadJson = new JObject(); //each call below adds to this root
+
+            //if method not found, possible outdated API call link, end call here
+            if (foundMethod == null)
+            {
+                //let caller know that method not found
+                var msg = $"Call not found, make sure API link is latest version : {methodName} ";
+                return new JProperty("Error", msg);
+            }
+
+            //pass to main function
+            return ExecuteCalculatorByApiName(foundMethod, param1, param2);
+        }
+
+        /// <summary>
+        /// Given an API name, will find the calc and try to call and wrap it in JSON
+        /// </summary>
+        public static JProperty ExecuteCalculatorByApiName<T1, T2>(MethodInfo foundMethod, T1 param1, T2 param2)
+        {
+            //get methods 1st param
+            var param1Type = foundMethod.GetParameters()[0].ParameterType;
+            object[] paramOrder1 = new object[] { param1, param2 };
+            object[] paramOrder2 = new object[] { param2, param1 };
+
+            //if first param match type, then use that
+            var finalParamOrder = param1Type == param1.GetType() ? paramOrder1 : paramOrder2;
+
+#if DEBUG
+            //print out which order is used more, helps to clean code
+            Console.WriteLine(param1Type == param1.GetType() ? "paramOrder1" : "paramOrder2");
+#endif
+
+            //based on what type it is we process accordingly, converts better to JSON
+            var rawResult = foundMethod?.Invoke(null, finalParamOrder);
+
+            //get correct name for this method, API friendly
+            var apiSpecialName = Tools.GetAPISpecialName(foundMethod);
+
+            //process list differently
+            JProperty rootPayloadJson;
+            if (rawResult is IList iList)
+            {
+                //convert list to comma separated string
+                var parsedList = iList.Cast<object>().ToList();
+                var stringComma = Tools.ListToString(parsedList);
+
+                rootPayloadJson = new JProperty(apiSpecialName, stringComma);
+            }
+            //normal conversion via to string
+            else
+            {
+                rootPayloadJson = new JProperty(apiSpecialName, rawResult?.ToString());
+            }
+
+
+            return rootPayloadJson;
+        }
+
+        /// <summary>
+        /// Executes all calculators for API based on input param type only
+        /// Wraps return data in JSON
+        /// </summary>
+        public static JProperty ExecuteAPICalculator(MethodInfo methodInfo1, object[] param)
+        {
+            //reverse order
+
+            JToken outputResult = JToken.Parse("{}"); //empty default
+
+            //likely to fail during call, as such just ignore and move along
+            try
+            {
+                var outputResult2 = ExecuteCalculatorByApiName(methodInfo1, param[0], param[1]);
+
+                return outputResult2;
+            }
+            catch (Exception e)
+            {
+                try
+                {
+#if DEBUG
+                    Console.WriteLine($"Trying again in reverse! {methodInfo1.Name}");
+#endif
+                    //try again in reverse
+                    var outputResult3 = ExecuteCalculatorByApiName(methodInfo1, param[1], param[0]);
+                    return outputResult3;
+
+                }
+                //if fail put error in data for easy detection
+                catch (Exception e2)
+                {
+                    //save it nicely in json format
+                    var jsonPacked = new JProperty("ERROR", e2.Message);
+                    return jsonPacked;
+                }
+            }
+        }
+
 
         public static IEnumerable<MethodInfo> GetCalculatorMethodInfoListByParamType<T1, T2>()
         {
@@ -1386,41 +1496,6 @@ namespace VedAstro.Library
             return finalList;
         }
 
-        //converts method info to JSON parsed
-        //ref so that can call in loop
-
-        public static void AddMethodInfoToJson(MethodInfo methodInfo1, object[] param, ref JObject rootPayloadJson)
-        {
-            //reverse order
-            var paramReverse = param.Reverse();
-
-            JToken outputResult = JToken.Parse("{}"); //empty default
-
-            //likely to fail during call, as such just ignore and move along
-            try
-            {
-                outputResult = Tools.AnyToJSON(methodInfo1?.Invoke(null, param));
-            }
-            catch (Exception e)
-            {
-                try
-                {
-                    //try again in reverse
-                    outputResult = Tools.AnyToJSON(methodInfo1?.Invoke(null, (object[])paramReverse));
-                }
-                //if fail put error in data for easy detection
-                catch (Exception e2)
-                {
-                    outputResult = Tools.AnyToJSON(e2.Message);
-                }
-            }
-
-            //get correct name for this method, API friendly
-            var methodName = Tools.GetAPISpecialName(methodInfo1);
-
-            //save it nicely in json format
-            rootPayloadJson[methodName] = outputResult;
-        }
 
 
         public static JToken AnyToJSON(dynamic anyTypeData)

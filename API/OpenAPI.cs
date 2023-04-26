@@ -2,8 +2,10 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Collections;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
 using Type = System.Type;
+using Grpc.Net.Client.Configuration;
 
 
 namespace API
@@ -95,7 +97,7 @@ namespace API
                 if (individualPropertySelected)
                 {
                     //find > execute > wrap to JSON matching function property
-                    var result = ExecuteCalculatorByApiName<PlanetName, Time>(propertyName, planetName, parsedTime);
+                    var result = Tools.ExecuteCalculatorByApiName<PlanetName, Time>(propertyName, planetName, parsedTime);
 
                     return APITools.PassMessageJson(result, incomingRequest);
                 }
@@ -125,7 +127,7 @@ namespace API
                 if (individualPropertySelected)
                 {
                     //find > execute > wrap to JSON matching function property
-                    var result = ExecuteCalculatorByApiName<HouseName, Time>(propertyName, (HouseName)houseName, parsedTime);
+                    var result = Tools.ExecuteCalculatorByApiName<HouseName, Time>(propertyName, (HouseName)houseName, parsedTime);
 
                     return APITools.PassMessageJson(result, incomingRequest);
                 }
@@ -151,65 +153,6 @@ namespace API
 
 
         }
-
-
-        /// <summary>
-        /// Given an API name, will find the calc and try to call and wrap it in JSON
-        /// </summary>
-        public static JObject ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
-        {
-            var calculatorClass = typeof(AstronomicalCalculator);
-            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
-
-            //place the data from all possible methods nicely in JSON
-            var rootPayloadJson = new JObject(); //each call below adds to this root
-
-            //if method not found, possible outdated API call link, end call here
-            if (foundMethod == null)
-            {
-                //let caller know that method not found
-                var msg = $"Call not found, make sure API link is latest version : {methodName} ";
-                var parsed = JToken.Parse($"'{msg}'");
-                rootPayloadJson[""] = parsed;
-                return rootPayloadJson;
-            }
-
-
-            //get methods 1st param
-            var param1Type = foundMethod.GetParameters()[0].ParameterType;
-            object[] paramOrder1 = new object[] { param1, param2 };
-            object[] paramOrder2 = new object[] { param2, param1 };
-
-            //if first param match type, then use that
-            var finalParamOrder = param1Type == param1.GetType() ? paramOrder1 : paramOrder2;
-
-#if DEBUG
-            //print out which order is used more, helps to clean code
-            Console.WriteLine(param1Type == param1.GetType() ? "paramOrder1" : "paramOrder2");
-#endif
-
-            //based on what type it is we process accordingly, converts better to JSON
-            var rawResult = foundMethod?.Invoke(null, finalParamOrder);
-
-            //PROCESS LIST DIFFERENTLY
-            if (rawResult is IList iList)
-            {
-                //convert list to comma separated string
-                var parsedList = iList.Cast<object>().ToList();
-                var stringComma = Tools.ListToString(parsedList);
-
-                rootPayloadJson[methodName] = stringComma;
-            }
-            //normal conversion via to string
-            else
-            {
-                rootPayloadJson[methodName] = rawResult?.ToString() ?? "";
-            }
-
-
-            return rootPayloadJson;
-        }
-
 
 
         private static JObject GetSignDataJson(PlanetName planetName, Time parsedTime)

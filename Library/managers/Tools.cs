@@ -1335,10 +1335,14 @@ namespace VedAstro.Library
             //get reference to all the calculators that can be used with the inputed param types
             var finalList = GetCalculatorMethodInfoListByParamType<T1, T2>();
 
+            //sort alphabetically so easier to eye data point
+            var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
+
+
             //place the data from all possible methods nicely in JSON
             var rootPayloadJson = new JObject(); //each call below adds to this root
             object[] paramList = new object[] { inputedPram1, inputedPram2 };
-            foreach (var methodInfo in finalList)
+            foreach (var methodInfo in aToZOrder)
             {
                 var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
                 var resultParse2 = JToken.FromObject(resultParse1); //done to get JSON formatting right

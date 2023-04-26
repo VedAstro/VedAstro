@@ -1345,7 +1345,8 @@ namespace VedAstro.Library
             foreach (var methodInfo in aToZOrder)
             {
                 var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
-                var resultParse2 = JToken.FromObject(resultParse1); //done to get JSON formatting right
+                //done to get JSON formatting right
+                var resultParse2 = JToken.FromObject(resultParse1); //jprop needs to be wrapped in JToken
                 rootPayloadJson.Add(resultParse2);
             }
 

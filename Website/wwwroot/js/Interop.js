@@ -3,7 +3,7 @@
 //░█▄▄█ ░█▄▄█ ░█─░█ ░█▄▄▄█ ░█▄▄▄█ ░█─░█ 　 ▄█▄ ░█──▀█ ─░█── ░█▄▄▄ ░█─░█ ░█▄▄▄█ ░█───
 // All code called from BLAZOR resides here
 
- console.log(`INTEROP.js - Loaded`);
+console.log(`INTEROP.js - Loaded`);
 
 //functions used by localstorage manager in Blazor
 export var getProperty = key => key in localStorage ? JSON.parse(localStorage[key]) : null;
@@ -65,7 +65,7 @@ export async function ShowSendMatchPDFToEmail() {
         inputPlaceholder: 'Enter your email address'
     });
 
-   // if (email) { Swal.fire('PDF Sent', 'Wait a few minutes, if not found check junk folder', 'success'); }
+    // if (email) { Swal.fire('PDF Sent', 'Wait a few minutes, if not found check junk folder', 'success'); }
 
     //send email inputed to caller
     return email;
@@ -496,7 +496,6 @@ export async function htmlToEmail(elmInput, fileName, fileFormat, receiverEmail)
 
     return;
 }
-
 export async function pdfToEmail(fileName, fileFormat, receiverEmail, inputedBlobFile) {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/pdf");
@@ -515,20 +514,15 @@ export async function pdfToEmail(fileName, fileFormat, receiverEmail, inputedBlo
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
 }
-
-export async function htmlToPdf(elmInput, pdfFileName) {
-
+export async function openPDFNewTab(elmInput, pdfFileName) {
     //set file name & minor formatting
     var opt = {
         margin: 2,
         filename: `${pdfFileName}.pdf`,
-    //    image: { type: 'jpeg', quality: 0.98 },
-    //    html2canvas: { scale: 2 },
+        //    image: { type: 'jpeg', quality: 0.98 },
+        //    html2canvas: { scale: 2 },
         jsPDF: { unit: 'cm', format: 'A4', orientation: 'portrait' }
     };
-
-    //generate & download to browser
-    //await html2pdf().set(opt).from(elmInput).save();
 
     window.TempMatchPDFBlob = await html2pdf().set(opt).from(elmInput).toPdf().output('blob');
 
@@ -537,7 +531,22 @@ export async function htmlToPdf(elmInput, pdfFileName) {
     window.open(url, '_blank');
 
     return window.TempMatchPDFBlob;
+
 }
+export async function htmlToPdf(elmInput, pdfFileName) {
+    //set file name & minor formatting
+    var opt = {
+        margin: 2,
+        filename: `${pdfFileName}.pdf`,
+        //    image: { type: 'jpeg', quality: 0.98 },
+        //    html2canvas: { scale: 2 },
+        jsPDF: { unit: 'cm', format: 'A4', orientation: 'portrait' }
+    };
+
+    //generate & download to browser
+    await html2pdf().set(opt).from(elmInput).save();
+}
+
 
 //▀█▀ ▄▀█ █▄▄ █░░ █▀▀   █▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ ▀█▀ █▀█ █▀█
 //░█░ █▀█ █▄█ █▄▄ ██▄   █▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ ░█░ █▄█ █▀▄
@@ -712,7 +721,7 @@ export function getScreenData() {
         //"Orientation": window.screen.orientation.type,
         "Width": window.screen.width,
         "Height": window.screen.height,
-    //    "ColorDepth": window.screen.colorDepth
+        //    "ColorDepth": window.screen.colorDepth
     }
     return screenData;
 }

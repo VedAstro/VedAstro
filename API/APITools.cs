@@ -99,6 +99,13 @@ namespace API
                 var finalPayload = Tools.ListToJson(payloadXmlList);
                 finalPayloadJson["Payload"] = finalPayload;
             }
+            else if (payload is JProperty payloadJToken)
+            {
+                //convert XML to Json text
+                //finalPayloadJson["Payload"] = JToken.FromObject(payloadJToken);
+                var temp = new JProperty("Payload", new JObject(payloadJToken));
+                finalPayloadJson.Add(temp);
+            }
             //if not special type than assign direct
             else
             {
@@ -120,7 +127,6 @@ namespace API
         public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
 
         public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) => MessageJson("Pass", payload, req);
-        public static HttpResponseData PassMessageJson(JObject payload, HttpRequestData req) => MessageJson("Pass", payload, req);
 
         public static HttpResponseData FailMessage(object payload, HttpRequestData req)
         {

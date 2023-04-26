@@ -99,7 +99,7 @@ namespace VedAstro.Library
             //send to server for storage
             await SendLogToServer(visitorXml);
 
-            Console.WriteLine("LibLogger: An unexpected error occurred and was logged.");
+            Console.WriteLine($"LibLogger > Debug > Unexpected Computation > {message}");
         }
 
         /// <summary>

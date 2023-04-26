@@ -5,7 +5,7 @@
 @using System.Xml.Linq
 
 <div  @ref="tooltipElement" class="hstack">
-    <img style="width:@GR.W97px;" src="images/@Person.ImageName" class="img-thumbnail mt-1" alt="..." />
+    <img style="width:@GR.W97px;" src="images/person/@Person.ImageName" class="img-thumbnail mt-1" alt="..." />
     @*buttons related to account*@
     <IconButton TooltipText="Horoscope" IconName="bi:list-stars" SmallSize="true" ClickUrl="@($"{PageRoute.Horoscope}/{Person.Id}")" />
     <IconButton TooltipText="Add Notes" IconName="system-uicons:clipboard-notes" SmallSize="true" ClickUrl="@($"{PageRoute.PersonEditor}/{Person.Id}")" />

@@ -6,24 +6,24 @@
 
 <PageTitle>@_pageTitle</PageTitle>
 
-<PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill">
-    <ButtonsRow>
-    </ButtonsRow>
-</PageTop>
+<PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill" />
 
-<DropDownButton ButtonMode="true" ButtonText="Actions" IconName="carbon:touch-interaction">
-    <ButtonList>
-        <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-        <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-        <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
-        <IconButton SmallSize="true" IconName="ic:outline-file-download" ButtonText="Download PDF" OnClickCallback="OnClickDownloadPdf"></IconButton>
-        <IconButton SmallSize="true" IconName="material-symbols:attach-email" ButtonText="Send PDF to Email" OnClickCallback="OnClickSendPDFToEmail"></IconButton>
 
-@*        <li><a class="dropdown-item" style="cursor: pointer;" @onclick="CopyPersonProfileShareLink"><Icon IconName="material-symbols:ios-share"/> Share Link</a></li>
-        <li><a class="dropdown-item" style="cursor: pointer;" @onclick="OnClickSubmitButton"><Icon IconName="bx:save"/> Save</a></li>
-        <li><a class="dropdown-item" style="cursor: pointer;" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded"/> Delete</a></li>
-*@    </ButtonList>
-</DropDownButton>
+<div class="hstack gap-3 my-3">
+    <IconButton SmallSize="true" IconName="" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+    <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
+    <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+    <IconButton SmallSize="true" Outline="true" ButtonText="PDF Tools" IconName="bxs:file-pdf">
+        <DropDownList>
+            <li><a class="dropdown-item" @onclick="OnClickDownloadPdf">Download PDF <Icon NextToText="true" IconName="carbon:generate-pdf" /></a></li>
+            <li><a class="dropdown-item" @onclick="OnClickSendPDFToEmail">Email PDF <Icon IconName="ic:outline-attach-email" /></a></li>
+            <li><a class="dropdown-item" @onclick="OnClickPrintPDF">Print PDF <Icon IconName="uil:print" /></a></li>
+            <li><a class="dropdown-item" @onclick="OnClickOpenPDFNewTab">Open PDF <Icon IconName="material-symbols:file-open-outline" /></a></li>
+        </DropDownList>
+    </IconButton>
+
+</div>
+
 
 
 @*only show once report ready*@
@@ -64,10 +64,10 @@
         <table class="table table-striped table-hover table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col"><span class="hstack gap-2">Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.MatchReportName"/></span></th>
+                    <th scope="col"><span class="hstack gap-2">Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.MatchReportName" /></span></th>
                     <th scope="col">
                         <span class="hstack gap-2">
-                            Result<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.MatchReportResult"/>
+                            Result<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.MatchReportResult" />
                         </span>
                     </th>
                 </tr>
@@ -560,15 +560,29 @@
         _jsRuntime.InvokeVoidAsync(JS.scrollToDiv, "#" + predictionName);
     }
 
+    private async Task OnClickPrintPDF()
+    {
+        throw new Exception();
+    }
+    private async Task OnClickOpenPDFNewTab()
+    {
+        var emailFromAlert = await _jsRuntime.ShowSendMatchPDFToEmail();
+
+    //calls special JS lib to convert html version of the chart to PDF
+    //and initiated download as well, with 1 call
+        var pdfFileName = $"Match-{MaleName}-{FemaleName}";
+
+        var x = await _jsRuntime.InvokeAsync<object>(JS.OpenPDFNewTab, matchReportElement, pdfFileName, "pdf", emailFromAlert);
+
+    }
+
     /// <summary>
     /// show box to get email and log for sending todo
     /// </summary>
-    /// <returns></returns>
     private async Task OnClickSendPDFToEmail()
     {
         //get email from user via js sweet alert lib
         var emailFromAlert = await _jsRuntime.ShowSendMatchPDFToEmail();
-
 
         //calls special JS lib to convert html version of the chart to PDF
         //and initiated download as well, with 1 call
@@ -579,26 +593,13 @@
         //tactile feedback
         await _jsRuntime.ShowAlert("success", $"Match report sent!", false, 1500);
 
-
-
-        ////send email as message to API server for storage
-        ////package message data to be sent
-        //var currentUrl = await _jsRuntime.GetCurrentUrl();
-        //var textXml = new XElement("Text", $"Send Match to email from page: {currentUrl}");
-        //var emailXml = new XElement("Email", emailFromAlert);
-        //var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
-        //var messageXml = new XElement("Message", userIdXml, emailXml, Tools.TimeStampSystemXml, textXml);
-
-        ////send message to API server
-        //await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
-
-
     }
 
 
     private async Task OnClickDownloadPdf()
     {
         _jsRuntime.ShowLoading();
+
         //calls special JS lib to convert html version of the chart to PDF
         //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";

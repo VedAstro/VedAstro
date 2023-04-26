@@ -1,4 +1,4 @@
-﻿namespace VedAstro.Library.Compatibility
+﻿namespace VedAstro.Library
 {
     /// <summary>
     /// Represents the name of the match prediction method

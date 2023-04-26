@@ -111,11 +111,17 @@ namespace Website
             return visitorList;
         }
 
+        //marked for deletion
+        public static Person GetPersonFromId2(string personId, IJSRuntime jsRuntime)
+        {
+            var result =  GetPersonById(personId, jsRuntime).Result;
+            return result;
+        }
         /// <summary>
         /// Gets person from ID
         /// Checks user's person list,
         /// </summary>
-        public static async Task<Person> GetPersonFromId(string personId, IJSRuntime jsRuntime)
+        public static async Task<Person> GetPersonById(string personId, IJSRuntime jsRuntime)
         {
             Person foundPerson;
 
@@ -519,7 +525,7 @@ namespace Website
             var chartIdXml = new XElement("ChartId", selectedChartId);
             var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetPersonIdFromSavedChartId, chartIdXml);
             var personId = result.Payload.Value;//xml named person id
-            var selectedPerson = await GetPersonFromId(personId, jsRuntime);
+            var selectedPerson = await GetPersonById(personId, jsRuntime);
 
             return selectedPerson;
         }
@@ -535,5 +541,23 @@ namespace Website
 
             return css;
         }
+
+        public static async Task<CompatibilityReport> GetCompatibilityReport(string maleId, string femaleId)
+        {
+            var male = await WebsiteTools.GetPersonById(maleId, AppData.JsRuntime);
+            var female = await WebsiteTools.GetPersonById(femaleId, AppData.JsRuntime);
+
+            //if male & female profile found, make report and return caller
+            var notEmpty = !Person.Empty.Equals(male) && !Person.Empty.Equals(female);
+            if (notEmpty)
+            {
+                return MatchCalculator.GetCompatibilityReport(male, female);
+            }
+            else
+            {
+                throw new Exception(AlertText.PersonProfileNoExist);
+            }
+        }
+
     }
 }

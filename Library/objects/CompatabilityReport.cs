@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace VedAstro.Library.Compatibility
+namespace VedAstro.Library
 {
     /// <summary>
     /// Represents the final data generated for compatibility
@@ -18,6 +18,9 @@ namespace VedAstro.Library.Compatibility
 
         public Person Male { get; set; }
         public Person Female { get; set; }
+
+        //todo should be dynamic
+        public object ScoreColor { get; set; } = "#00a702";
 
         /// <summary>
         /// Converts the instance data into XML

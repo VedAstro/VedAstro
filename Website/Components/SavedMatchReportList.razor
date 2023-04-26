@@ -1,0 +1,53 @@
+﻿@*SIMPLE BOX TO SHOW LIST OF MATCH CHARTS*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+<table class="table mb-5">
+    <thead>
+        <tr>
+            <th scope="col">Couple</th>
+            <th scope="col">Prediction</th>
+            <th scope="col">Real Life</th>
+            <th scope="col">Report</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var report in MatchReportList)
+        {
+            <tr>
+                <td>
+                    <div class="hstack gap-2">
+                        @*Kristen*@
+                        <PersonTooltip Person="@report.Male" />
+                        <Icon Size="(int)GR.W22" NextToText="true" IconName="mdi:cards-heart" />
+                        @*Dax Shepard*@
+                        <PersonTooltip Person="@report.Female" />
+                    </div>
+                </td>
+                <td><b style="color: @report.ScoreColor;">@report.KutaScore%</b></td>
+                <td>report.Notes</td>
+                <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl=@($"/Calculator/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+@code {
+
+    private List<CompatibilityReport> MatchReportList { get; set; } = new List<CompatibilityReport>();
+
+    public void Show(List<CompatibilityReport> reportToShow)
+    {
+        //add in value
+        MatchReportList = reportToShow;
+
+        //refresh view
+        this.StateHasChanged();
+    }
+
+}

@@ -4,17 +4,15 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-<div id="PersonTooltip" @ref="mainElement" class="hstack">
-    <img style="width:@GR.W97px;" src="images/@ImageName.@ImageFormat" class="img-thumbnail mt-1" alt="..." />
+<div  @ref="tooltipElement" class="hstack">
+    <img style="width:@GR.W97px;" src="images/@Person.ImageName" class="img-thumbnail mt-1" alt="..." />
     @*buttons related to account*@
-    <IconButton TooltipText="Horoscope" IconName="bi:list-stars" ClickUrl="@PageRoute.AddPerson" />
-    <IconButton TooltipText="Add Notes" IconName="system-uicons:clipboard-notes" ClickUrl="@PageRoute.AddPerson" />
+    <IconButton TooltipText="Horoscope" IconName="bi:list-stars" SmallSize="true" ClickUrl="@($"{PageRoute.Horoscope}/{Person.Id}")" />
+    <IconButton TooltipText="Add Notes" IconName="system-uicons:clipboard-notes" SmallSize="true" ClickUrl="@($"{PageRoute.PersonEditor}/{Person.Id}")" />
 </div>
 
-<div style="cursor: pointer" @ref="elementReference">
-    @*only show if has value*@
-    @(!string.IsNullOrEmpty(Text) ? Text : "")
-    @(HTML != null ? HTML : "")
+<div style="cursor: pointer" @ref="nameHolderElement">
+   @Person.Name
 </div>
 
 
@@ -25,29 +23,17 @@
     /// image name is expected to exist in images folder with .JPG format
     /// </summary>
     [Parameter]
-    public string ImageName { get; set; }
-
-
-    private ElementReference mainElement { get; set; }
-    /// <summary>
-    /// defaults to "jpg"
-    /// </summary>
-    [Parameter]
-    public string ImageFormat { get; set; } = "jpg";
+    public Person Person { get; set; }
 
     /// <summary>
-    /// set either Text or HTML for content
+    /// element that is shown in tool tip is referenced here to be accessed by Tippy.js
     /// </summary>
-    [Parameter]
-    public string Text { get; set; }
+    private ElementReference tooltipElement { get; set; }
 
     /// <summary>
-    /// any content to wrap
+    /// reference to element that shows the name, when mouse over is triggers Tippy 
     /// </summary>
-    [Parameter]
-    public RenderFragment HTML { get; set; }
-
-    private ElementReference elementReference { get; set; }
+    private ElementReference nameHolderElement { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
@@ -57,23 +43,22 @@
         if (firstRender)
         {
             //attach tooltip lib element if tooltip provided
-            if (!string.IsNullOrEmpty(ImageName))
+            if (!string.IsNullOrEmpty(Person.ImageName))
             {
                 //construct html to show image
                 var tooltipSettings =
                     new
                     {
-                        content = mainElement,
+                        content = tooltipElement,
                         allowHTML = true,
                         arrow = true,
                         animation = "scale-extreme",
                         interactive = true //so that can click button
                     };
 
-                await _jsRuntime.Tippy(elementReference, tooltipSettings);
+                await _jsRuntime.Tippy(nameHolderElement, tooltipSettings);
             }
         }
     }
-
 
 }

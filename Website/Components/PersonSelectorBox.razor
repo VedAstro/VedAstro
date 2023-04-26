@@ -116,7 +116,7 @@
 
     }
 
-    public async Task<Person> GetSelectedPerson() => await WebsiteTools.GetPersonFromId(SelectedPersonId, _jsRuntime);
+    public async Task<Person> GetSelectedPerson() => await WebsiteTools.GetPersonById(SelectedPersonId, _jsRuntime);
 
     /// <summary>
     /// True if a person has been selected else false

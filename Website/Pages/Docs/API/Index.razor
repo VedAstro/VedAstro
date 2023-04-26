@@ -8,14 +8,14 @@
 </PageTop>
 
 
-<div class="vstack gap-1" style="width:@GR.W667px;">
+<div class="vstack gap-3" style="width:@GR.W667px;">
 
     <ArticleBlock Title="Easy start" IconName="flat-color-icons:close-up-mode">
         <TextHTML>
             <div class="vstack gap-2 mt-3">
-                <div><kbd>STEP 1</kbd>  Generate API URL using dropdown <a href="@PageRoute.APIBuilder">API Builder</a></div>
-                <div><kbd>STEP 2</kbd>  Make a <code>HTTP GET</code> request using any language you want.</div>
-                <div><kbd>STEP 3</kbd>  Receive advanced astro data in JSON. Done!</div>
+                <div><kbd>STEP 1</kbd>   Generate API URL using dropdown <a href="@PageRoute.APIBuilder">API Builder</a></div>
+                <div><kbd>STEP 2</kbd>   Make a <code>HTTP GET</code> request using any language you want.</div>
+                <div><kbd>STEP 3</kbd>   Receive advanced astro data in JSON. Done!</div>
             </div>
             </TextHTML>
     </ArticleBlock>
@@ -33,8 +33,8 @@
         <TextHTML>
             In order to keep this API FREE for the benefit of all people. Please do not abuse it.
             <ul class="mt-2 gap-2">
-                <li>Design your app to call the API only when needed.</li>
-                <li>Try to cache the data you receive.</li>
+                <li>design your app to call the API only when needed</li>
+                <li>cache the data you receive</li>
             </ul>
             If you ram the API with calls every 60s (like some people do), you'll ruin it for everybody.
             <br />
@@ -43,152 +43,16 @@
     </ArticleBlock>
     
     
-    <ArticleBlock Title="Sponsor The Orchestra" IconName="emojione:violin">
+    <ArticleBlock Title="Sponsor Music" IconName="emojione:violin">
         <TextHTML>
-            This API service is like having a beautiful public orchestra playing.
-            It is only possible because of many moving parts.
-            Servers need to optimized, updated and maintained. Code needs to improved, tested and cleaned.
-            And all this has to happen at the same time to create the final product.
-            Please consider <a href="@PageRoute.Donate"><strong>sponsoring</strong></a> this service to keep the music playing.
-            Everybody can enjoy the music, so long as there's <strong>one</strong> person willing to pay for it.
+            Running this API service, is like playing a beautiful public orchestra.
+            It is only possible because of many moving parts by many people.
+            Servers need to optimized, updated and maintained. Code needs to be improved, tested and cleaned.
+            And all this has to be juggled to create the final product you see. Its a group effort.
+            Please consider <a href="@PageRoute.Donate"><strong>sponsoring</strong></a> this service to keep the "music" playing.
+            <strong>Everybody</strong> can enjoy the music, so long as there's <strong>one</strong> person left, willing to pay for it.
         </TextHTML>
     </ArticleBlock>
-
-
-    @*    <p>Below are the category of data you can access</p>
-    <table class="table table-bordered table-striped">
-    <thead class="table-dark">
-    <tr>
-    <th>Data Type</th>
-    <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td><a href="@PageRoute.SwissEphemerisApi" class="link-primary">Swiss Ephemeris</a></td>
-    <td>High precision ephemeris developed by <a href="@URL.SwissEphSource" target=”_blank” class="link-primary fw-bold">Astrodienst</a>, largely based upon the <a href="@URL.NasaJplSource" target=”_blank” class="link-primary fw-bold">DExxx ephemerides</a> from <span class="fw-bold">NASA's JPL</span>.</td>
-    </tr>
-    <tr>
-    <td><a href="@PageRoute.HouseApi" class="link-primary">Houses</a></td>
-    <td>Includes all astrological details, house sign, house position, house strength & etc.</td>
-    </tr>
-    <tr>
-    <td><a href="@PageRoute.PlanetApi" class="link-primary">Planet</a></td>
-    <td>Planet longitude for both fixed & movable zodiac (Nirayana)</td>
-    </tr>
-    <tr>
-    <td><a href="@PageRoute.MatchApi" class="link-primary">Match</a></td>
-    <td>Get match kuta system astrology data access</td>
-    </tr>
-    </tbody>
-    </table>
-    *@
-
-    @*    <p>
-    Note: ... = https://api.vedastro.org
-    So final call will look like https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign
-    </p>
-    *@
-    @*    <h3>JS Example</h3>
-    *@    @*<pre class="s-code-block "><div class="s-code-block--line-numbers"><div>43</div><div>44</div><div>45</div><div>46</div><div>47</div><div>48</div><div>49</div><div>50</div><div>51</div><div>52</div><div>53</div></div><code>import React, { Component } from 'react'
-    import { IP } from '../constants/IP'
-    import { withAuth0 } from 'auth0/auth0-react';
-
-    class AddATournament extends Component {
-    componentDidMount() {
-    this.myNewListOfAllTournamentsWithAuth()
-    }
-    }
-
-    export default withAuth0(AddATournament);</code></pre>*@
-
-    @*    <style>
-    #snippet {
-    float: left;
-    width: 30em;
-    padding: 1em;
-    background: #500;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #400 #700 #700 #400;
-    }
-
-    #snippet pre {
-    margin: 0 !important;
-    }
-
-    #snippet pre code {
-    display: block;
-    height: 19em;
-    padding: 1em !important;
-    overflow-y: auto;
-    overflow-x: hidden;
-    }
-
-    pre code.hljs {
-    display: block !important;
-    overflow-x: auto !important;
-    padding: 1em !important
-    }
-
-    code.hljs {
-    padding: 3px 5px !important
-    }
-
-    pre code {
-    font-size: 10pt !important;
-    }
-
-    code {
-    font-family: Consolas, Monaco, monospace !important;
-    }
-    </style>
-    *@
-    @*    <div style="width: 400px;">
-    <pre><code class="hljs language-javascript">import React, {
-    Component
-    } from 'react'
-    import {
-    IP
-    } from '../constants/IP'
-    import {
-    withAuth0
-    } from 'auth0/auth0-react';
-
-    class AddATournament extends Component {
-    componentDidMount() {
-    this.myNewListOfAllTournamentsWithAuth()
-    }
-    }
-
-    export default withAuth0(AddATournament);</code></pre>
-
-    </div>
-    *@
-
-
-
-
-
-    <hr class="border border-primary border-2 opacity-75 mt-3">
-    @*
-    <h4 class="fw-bold">What is Open API?</h4>
-    <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-    An open API (often referred to as a public API) is a publicly available application programming interface
-    that provides developers with programmatic access to software application or web service.
-    </p>
-
-    <h4 class="fw-bold">API Server up-time?</h4>
-    <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-    We use Azure Functions run by reputable Microsoft server farms located all over the world.
-    So because of this overall up-time is almost 99%, not taking into account failures from bad code, of course.
-    </p>
-
-    <h4 class="fw-bold">API access price?</h4>
-    <p class="text-justify" style="max-width:@AppData.MaxWidth;">
-    All API calls are free without quota, paid for by users like you.
-    Consider donating to keep this API service going.
-    </p>*@
 </div>
 
 @code {

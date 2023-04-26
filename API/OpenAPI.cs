@@ -1,16 +1,9 @@
-﻿using System.Threading.Tasks;
-using Google.Protobuf.WellKnownTypes;
-using VedAstro.Library;
+﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using SwissEphNet;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text.Json.Nodes;
-using Microsoft.Extensions.FileSystemGlobbing.Internal;
+using System.Collections;
 using Newtonsoft.Json.Linq;
-using Enum = Google.Protobuf.WellKnownTypes.Enum;
+using Type = System.Type;
 
 
 namespace API
@@ -190,7 +183,29 @@ namespace API
             //if first param match type, then use that
             var finalParamOrder = param1Type == param1.GetType() ? paramOrder1 : paramOrder2;
 
-            rootPayloadJson[methodName] = foundMethod?.Invoke(null, finalParamOrder)?.ToString() ?? "";
+#if DEBUG
+            //print out which order is used more, helps to clean code
+            Console.WriteLine(param1Type == param1.GetType() ? "paramOrder1" : "paramOrder2");
+#endif
+
+            //based on what type it is we process accordingly, converts better to JSON
+            var rawResult = foundMethod?.Invoke(null, finalParamOrder);
+
+            //PROCESS LIST DIFFERENTLY
+            if (rawResult is IList iList)
+            {
+                //convert list to comma separated string
+                var parsedList = iList.Cast<object>().ToList();
+                var stringComma = Tools.ListToString(parsedList);
+
+                rootPayloadJson[methodName] = stringComma;
+            }
+            //normal conversion via to string
+            else
+            {
+                rootPayloadJson[methodName] = rawResult?.ToString() ?? "";
+            }
+
 
             return rootPayloadJson;
         }

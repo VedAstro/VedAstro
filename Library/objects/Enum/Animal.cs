@@ -1,4 +1,4 @@
-﻿namespace VedAstro.Library.Compatibility
+﻿namespace VedAstro.Library
 {
     //simple type to hold animal names
     //used in yoni calculations

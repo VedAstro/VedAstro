@@ -507,9 +507,16 @@ namespace VedAstro.Library
         public static string ListToString<T>(List<T> list)
         {
             var combinedNames = "";
-            foreach (var item in list)
+
+            for (int i = 0; i < list.Count; i++)
             {
-                combinedNames += item.ToString() + ", ";
+                //when last in row, don't add comma
+                var isLastItem = i == (list.Count - 1);
+                var ending = isLastItem ? "":", ";
+
+                //combine to together
+                combinedNames += list[i].ToString() + ending;
+
             }
 
             return combinedNames;
@@ -1497,7 +1504,7 @@ namespace VedAstro.Library
             {
                 if (person is XElement personXml)
                 {
-                    var personJson= Tools.XmlToJson(personXml);
+                    var personJson = Tools.XmlToJson(personXml);
                     arrayJson.Add(personJson);
                 }
                 //do it normal string way
@@ -1507,9 +1514,10 @@ namespace VedAstro.Library
                 }
 
             }
-            
+
             return arrayJson;
         }
+
     }
 
 }

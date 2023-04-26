@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace VedAstro.Library.Compatibility
+namespace VedAstro.Library
 {
     /// <summary>
     /// simple data type to contain info on a kuta prediction

@@ -1,5 +1,7 @@
 @attribute [Route(PageRoute.Match)]
 @using Microsoft.AspNetCore.Components
+@using Microsoft.Extensions.FileSystemGlobbing.Internal
+@using VedAstro.Library
 
 
 <PageTitle>Find Marriage Match</PageTitle>
@@ -32,55 +34,7 @@
 <hr />
 
 <IconTitle Title="Accurate Predictions" IconName="flat-color-icons:filing-cabinet" />
-<table class="table mb-5">
-    <thead>
-        <tr>
-            <th scope="col">Couple</th>
-            <th scope="col">Prediction</th>
-            <th scope="col">Real Life</th>
-            <th scope="col">Report</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <div class="hstack gap-2">
-                    <ImageTooltip Text="Kristen Bell" ImageName="kristen-bell"/>
-                    <Icon Size="(int)GR.W22" NextToText="true" IconName="mdi:cards-heart"/>
-                    <ImageTooltip Text="Dax Shepard" ImageName="dax-shepard"/>
-                </div>
-            </td>
-    <td><b style="color: #00a702;">58%</b></td>
-    <td>married since 2007, @(DateTime.Now.Year - 2007) years together, 2 children</td>
-    <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/70d6a995dec84c0aa74211ac9ff50d29/8e9b5804e68a4b82a1a975ebee1643dc" /></td>
-</tr>
-<tr>
-    <td>Matt Damon  <Icon Size="21" NextToText="true" IconName="mdi:cards-heart" />  Luciana Barroso</td>
-    <td><b style="color: #00a702;">56%</b></td>
-    <td>married since 2005, @(DateTime.Now.Year - 2005) years together, 3 daughters</td>
-    <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/696c62d1f429469aaf8111fc1418f7ce/ef97500191d248cd92bc43d32fed6093" /></td>
-</tr>
-<tr>
-    <td>Napoleon Bonaparte  <Icon Size="21" NextToText="true" IconName="material-symbols:heart-broken-rounded" />  Joséphine de Beau.</td>
-    <td><b style="color: #ff6969;">39%</b></td>
-    <td>married 14 years, divorced, no children</td>
-    <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/54041d1ffb49479997f7987ecfchf08b5/7faa6fe13ac5442d9d3dba972daa9af2" /></td>
-</tr>
-<tr>
-    <td>Brad Pitt  <Icon Size="21" NextToText="true" IconName="material-symbols:heart-broken-rounded" />  Angelina Jolie</td>
-    <td><b style="color: #ff6969;">33%</b></td>
-    <td>married 2 years, divorced, 3 children</td>
-    <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/1943d2df235a4848b72b7becca607492/64d9f64fd5cb47838bdede68c3048362" /></td>
-</tr>
-<tr>
-    <td>John Lennon  <Icon Size="21" NextToText="true" IconName="mdi:cards-heart" />  Yoko Ono</td>
-    <td><b style="color: #ff6969;">22%</b></td>
-    <td>married 10 years, end in husband death, 1 miscarriage, 1 son</td>
-    <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl="/Calculator/Match/Report/188ae8f1dd4b487f9b419652aaca3518/fcc42c906530460c98163ede601d4932" /></td>
-</tr>
-</tbody>
-</table>
-
+<SavedMatchReportList @ref="savedMatchReportList" />
 
 <hr style="margin-bottom:@GR.W157px;">
 
@@ -99,6 +53,8 @@
     public string? SelectedFemale { get; set; }
     private PersonSelectorBox _malePeopleSelector;
     private PersonSelectorBox _femalePeopleSelector;
+    private PersonSelectorBox _SavedMatchReport;
+    private SavedMatchReportList savedMatchReportList;
 
 
 
@@ -117,6 +73,8 @@
     {
         if (firstRender)
         {
+            var exampleReport = await GetExampleReports();
+            savedMatchReportList.Show(exampleReport);
             //show loading box
             //await _jsRuntime.ShowLoading();
 
@@ -131,6 +89,19 @@
             //this.StateHasChanged();
 
         }
+    }
+
+
+
+    private async Task<List<CompatibilityReport>> GetExampleReports()
+    {
+        var returnVal = new List<CompatibilityReport>()
+        {
+            await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc"),
+            await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc")
+        };
+
+        return returnVal;
     }
 
     private async Task OnClickCalculate()

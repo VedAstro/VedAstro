@@ -26,10 +26,16 @@
 else
 {
     <button style="@WidthCss height: @GR.W37px;" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
+        @*SPECIAL LITTLE EXTRA INFO TEXT*@
+        @if (!string.IsNullOrEmpty(RetinaText))
+        {
+            <span style=" position: absolute; margin-top: -3px; margin-left: 35px; font-size: 7px; writing-mode: tb-rl; font-weight: 700; ">@RetinaText</span>
+        }
+
         @*only show icon if specified*@
         @if (IconName != null)
         {
-            <span class="iconify" data-icon="@IconName" data-width="25" />
+            <span class="iconify" data-icon="@IconName" data-width="25"/>
         }
         @ButtonText
     </button>
@@ -97,6 +103,12 @@ else
 
     [Parameter]
     public bool SmallSize { get; set; } = false;
+
+    /// <summary>
+    /// Very small text next to button to give more info, visible only in high DPI screens
+    /// </summary>
+    [Parameter]
+    public string RetinaText { get; set; } = "";
 
     /// <summary>
     /// Defaults to false, if true button will be 100% of parent by adding w-100

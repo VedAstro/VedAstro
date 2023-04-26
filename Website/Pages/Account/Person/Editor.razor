@@ -217,7 +217,7 @@
     {
 
         //try get person profile from ID
-        _person = await WebsiteTools.GetPersonFromId(PersonId, _jsRuntime);
+        _person = await WebsiteTools.GetPersonById(PersonId, _jsRuntime);
 
         //set page title
         _pageTitle = $"Profile | {_person.Name}";

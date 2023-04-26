@@ -1,4 +1,4 @@
-﻿namespace VedAstro.Library.Compatibility
+﻿namespace VedAstro.Library
 {
     /// <summary>
     /// used for Guna Kuta

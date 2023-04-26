@@ -1,6 +1,6 @@
 @attribute [Route(PageRoute.MatchReportParam)]
 
-@using VedAstro.Library.Compatibility
+
 @using VedAstro.Library
 @using System.Xml.Linq
 
@@ -484,8 +484,8 @@
         await _jsRuntime.ShowLoading();
 
         //show names on page
-        MaleName = (await WebsiteTools.GetPersonFromId(maleId, _jsRuntime)).Name;
-        FemaleName = (await WebsiteTools.GetPersonFromId(femaleId, _jsRuntime)).Name;
+        MaleName = (await WebsiteTools.GetPersonById(maleId, _jsRuntime)).Name;
+        FemaleName = (await WebsiteTools.GetPersonById(femaleId, _jsRuntime)).Name;
 
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"{MaleName} + {FemaleName}";

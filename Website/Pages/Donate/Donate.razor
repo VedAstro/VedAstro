@@ -20,20 +20,100 @@
             <p>
                 Free Gifts:
             </p>
-            <InfoBox MaxWidth="365" FullWidth="@true" Title="Full Life Chart" Description="Written full life analysis by expert astrologer" IconName="icon-park:table-report"/>
-            <InfoBox MaxWidth="365" FullWidth="@true" Title="Astrologer Call" Description="45 minute live call consultation with vedic astrologer" IconName="flat-color-icons:customer-support"/>
-            <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Monthly Updates" Description="We'll keep you updated on latest astro events" IconName="emojione:closed-mailbox-with-raised-flag"/>
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Full Life Chart" Description="Written full life analysis by expert astrologer" IconName="icon-park:table-report" />
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Astrologer Call" Description="45 minute live call consultation with vedic astrologer" IconName="flat-color-icons:customer-support" />
+            <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Monthly Updates" Description="We'll keep you updated on latest astro events" IconName="emojione:closed-mailbox-with-raised-flag" />
         </div>
     </div>
 
 </div>
 
-<hr/>
+<hr />
 
+<hr class="mt-4 mb-4" />
+<h4 class="fw-bold mb-3">Crypto Geeks</h4>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @*<div class="col">
+    <div class="card text-center">
+    <img src="images/patreon-logo.jpg" class="card-img-top" style="align-self: center;">
+    <div class="card-body">
+    <h5 class="card-title">
+
+    ButtonText="Patreon" OnClickCallback="@(() => _navigation.NavigateTo(URL.PatreonPage))" />
+    </h5>
+    <p class="card-text">
+    </p>
+    </div>
+    </div>
+    </div>
+    <div class="col">
+    <div class="card text-center">
+    <img src="images/ko-fi-logo.png" class="card-img-top" style="align-self: center;">
+    <div class="card-body">
+    <h5 class="card-title">
+    <IconButton ButtonText="Ko-fi" OnClickCallback="@(() => _navigation.NavigateTo(URL.KoFiPage))" />
+    </h5>
+    <p class="card-text"></p>
+    </div>
+    </div>
+    </div>
+    <div class="col">
+    <div class="card text-center">
+    <img src="images/paypal-logo.png" class="card-img-top" style="align-self: center;">
+    <div class="card-body">
+    <h5 class="card-title">
+    <IconButton ButtonText="PayPal" OnClickCallback="@(() => _navigation.NavigateTo(URL.PaypalMePage))" />
+    </h5>
+    <p class="card-text">
+
+    </p>
+    </div>
+    </div>
+    </div>*@
+    <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Bitcoin"))">
+        <div class="card text-center">
+            <img src="images/luno-btc-donate.png" class="card-img-top" style="align-self: center;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span>
+                    Bitcoin
+                </h5>
+                <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
+            </div>
+        </div>
+    </div>
+    <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Litecoin"))">
+        <div class="card text-center">
+            <img src="images/luno-ltc-donate.png" class="card-img-top" style="align-self: center;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span>
+                    Litecoin
+                </h5>
+                <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
+            </div>
+        </div>
+    </div>
+    <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Ethereum"))">
+        <div class="card text-center">
+            <img src="images/luno-eth-donate.png" class="card-img-top" style="align-self: center;">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span>
+                    Ethereum
+                </h5>
+                <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr />
 
 <div style="max-width:@GR.W667px;">
     <h4 class="fw-bold">Why Donate?</h4>
-    <p class="text-justify" >
+    <p class="text-justify">
         Donations help to run the web servers 24/7 &amp; to continually improve the project.
     </p>
 
@@ -68,83 +148,6 @@
         }
     </style>
 
-    <hr class="mt-4 mb-4" />
-    <h4 class="fw-bold mb-3">Crypto Geeks</h4>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @*<div class="col">
-            <div class="card text-center">
-                <img src="images/patreon-logo.jpg" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-
-                        ButtonText="Patreon" OnClickCallback="@(() => _navigation.NavigateTo(URL.PatreonPage))" />
-                    </h5>
-                    <p class="card-text">
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card text-center">
-                <img src="images/ko-fi-logo.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <IconButton ButtonText="Ko-fi" OnClickCallback="@(() => _navigation.NavigateTo(URL.KoFiPage))" />
-                    </h5>
-                    <p class="card-text"></p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card text-center">
-                <img src="images/paypal-logo.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <IconButton ButtonText="PayPal" OnClickCallback="@(() => _navigation.NavigateTo(URL.PaypalMePage))" />
-                    </h5>
-                    <p class="card-text">
-
-                    </p>
-                </div>
-            </div>
-        </div>*@
-        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Bitcoin"))">
-            <div class="card text-center">
-                <img src="images/luno-btc-donate.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <span class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span>
-                        Bitcoin
-                    </h5>
-                    <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
-                </div>
-            </div>
-        </div>
-        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Litecoin"))">
-            <div class="card text-center">
-                <img src="images/luno-ltc-donate.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <span class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span>
-                        Litecoin
-                    </h5>
-                    <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
-                </div>
-            </div>
-        </div>
-        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Ethereum"))">
-            <div class="card text-center">
-                <img src="images/luno-eth-donate.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <span class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span>
-                        Ethereum
-                    </h5>
-                    <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
 

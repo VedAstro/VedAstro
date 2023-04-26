@@ -11,16 +11,15 @@
 @*<IconButton SmallSize="true" IconName="akar-icons:arrow-back" OnClickCallback="_jsRuntime.GoBack" TooltipText="Go Back" />*@
 <IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Night Reader Mode" />
 <IconButton SmallSize="true" IconName="codicon:feedback" ClickUrl="@PageRoute.Contact" TooltipText="Give Feedback" />
-@*<IconButton SmallSize="true" IconName="jam:code" IsNewTabOpen="true" ClickUrl="@URL.GitHubRepo" TooltipText="Open Source Code" />*@
 
 @*show links to beta & stable from vice versa*@
 @if (@WebsiteTools.GetIsBetaRuntime())
 {
-    <IconButton SmallSize="true" Color="warning" IconName="mdi:bench-back" ClickUrl="@URL.WebStable" TooltipText="Back To Classic" />
+    <IconButton RetinaText="STABLE" SmallSize="true" Color="warning" IconName="mdi:bench-back" ClickUrl="@URL.WebStable" TooltipText="Back To Classic" />
 }
 else
 {
-    <IconButton SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview New Features" />
+    <IconButton RetinaText="PREVIEW" SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview New Features" />
 }
 
 <IconButton ExtraClass="ms-md-auto" SmallSize="true" Outline="true" ButtonText="Guide" IconName="cil:book">

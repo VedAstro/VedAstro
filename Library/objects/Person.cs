@@ -23,7 +23,8 @@ namespace VedAstro.Library
         /// All internal properties are initialized with empty values
         /// so use that to detect
         /// </summary>
-        public static Person Empty = new Person("0", "Empty", Time.Now(GeoLocation.Empty), Gender.Empty, DefaultUserId, "Empty", new List<LifeEvent>());
+        public static Person Empty = new Person("0", "Empty", Time.Now(GeoLocation.Empty), Gender.Empty, DefaultUserId,
+            "Empty", new List<LifeEvent>());
 
         private string _notes;
 
@@ -52,8 +53,14 @@ namespace VedAstro.Library
                 var userIdString = "";
 
                 //joining can fail, so return error note if that happens
-                try { userIdString = string.Join(",", UserId); }
-                catch (Exception e) { userIdString = e.Message; }
+                try
+                {
+                    userIdString = string.Join(",", UserId);
+                }
+                catch (Exception e)
+                {
+                    userIdString = e.Message;
+                }
 
                 return userIdString;
             }
@@ -76,12 +83,14 @@ namespace VedAstro.Library
         /// List of events that mark important moments in a persons life
         /// This is used later by calculators like Dasa to show against astrological predictions
         /// </summary>
-        public List<LifeEvent> LifeEventList { get; set; } = new List<LifeEvent>(); //default empty list to stop null errors
+        public List<LifeEvent> LifeEventList { get; set; } =
+            new List<LifeEvent>(); //default empty list to stop null errors
 
 
 
         //CTOR
-        public Person(string id, string name, Time birthTime, Gender gender, string[] userId, string notes = "", List<LifeEvent> lifeEventList = null)
+        public Person(string id, string name, Time birthTime, Gender gender, string[] userId, string notes = "",
+            List<LifeEvent> lifeEventList = null)
         {
             Id = id;
             Name = name;
@@ -108,13 +117,15 @@ namespace VedAstro.Library
         /// Gets STD birth hour minute for person (24H format)
         /// exp: 15:30
         /// </summary>
-        public string BirthHourMinute => this.BirthTime.GetStdDateTimeOffset().ToString("HH:mm");//note "HH" is 24H format vs "hh" is 12H format 
+        public string BirthHourMinute =>
+            this.BirthTime.GetStdDateTimeOffset().ToString("HH:mm"); //note "HH" is 24H format vs "hh" is 12H format 
 
         /// <summary>
         /// Gets STD birth Date Month Year for person
         /// exp: 31/12/1999
         /// </summary>
-        public string BirthDateMonthYear => BirthTime.GetStdDateTimeOffset().ToString("dd/MM/yyyy");//note "MM" is month, not "mm"
+        public string BirthDateMonthYear =>
+            BirthTime.GetStdDateTimeOffset().ToString("dd/MM/yyyy"); //note "MM" is month, not "mm"
 
 
         /// <summary>
@@ -136,10 +147,14 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets now time at birth location of person (STD time)
         /// </summary>
-        public DateTimeOffset StdTimeNowAtBirthLocation => DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset);
+        public DateTimeOffset StdTimeNowAtBirthLocation =>
+            DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset);
 
-
-
+        /// <summary>
+        /// image name is ID with .jpg at back
+        /// </summary>
+        public string ImageName => $"{this.Id}.jpg";
+        
 
 
         //PUBLIC PROPERTIES

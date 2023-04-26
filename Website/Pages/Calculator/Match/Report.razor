@@ -8,13 +8,22 @@
 
 <PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill">
     <ButtonsRow>
+    </ButtonsRow>
+</PageTop>
+
+<DropDownButton ButtonMode="true" ButtonText="Actions" IconName="carbon:touch-interaction">
+    <ButtonList>
         <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
         <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
         <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
         <IconButton SmallSize="true" IconName="ic:outline-file-download" ButtonText="Download PDF" OnClickCallback="OnClickDownloadPdf"></IconButton>
         <IconButton SmallSize="true" IconName="material-symbols:attach-email" ButtonText="Send PDF to Email" OnClickCallback="OnClickSendPDFToEmail"></IconButton>
-    </ButtonsRow>
-</PageTop>
+
+@*        <li><a class="dropdown-item" style="cursor: pointer;" @onclick="CopyPersonProfileShareLink"><Icon IconName="material-symbols:ios-share"/> Share Link</a></li>
+        <li><a class="dropdown-item" style="cursor: pointer;" @onclick="OnClickSubmitButton"><Icon IconName="bx:save"/> Save</a></li>
+        <li><a class="dropdown-item" style="cursor: pointer;" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded"/> Delete</a></li>
+*@    </ButtonList>
+</DropDownButton>
 
 
 @*only show once report ready*@

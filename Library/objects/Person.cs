@@ -45,7 +45,19 @@ namespace VedAstro.Library
         /// <summary>
         /// Comma sperated string of Person's all user ID
         /// </summary>
-        public string UserIdString => string.Join(",", UserId);
+        public string UserIdString
+        {
+            get
+            {
+                var userIdString = "";
+
+                //joining can fail, so return error note if that happens
+                try { userIdString = string.Join(",", UserId); }
+                catch (Exception e) { userIdString = e.Message; }
+
+                return userIdString;
+            }
+        }
 
 
         /// <summary>

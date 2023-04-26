@@ -1,0 +1,54 @@
+﻿@*SIMPLE BOX TO RENDER SMART PREDICTIONS*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+
+
+@if (ButtonMode)
+{
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <Icon IconName="@IconName" /> @ButtonText
+        </button>
+        <ul class="dropdown-menu">
+            @ButtonList
+        </ul>
+    </div>
+}
+else
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+            <Icon IconName="@IconName" /> @ButtonText
+        </a>
+        <ul class="dropdown-menu">
+            @ButtonList
+        </ul>
+    </li>
+}
+
+
+
+@code {
+
+    [Parameter]
+    public string IconName { get; set; } = "";
+
+    /// <summary>
+    /// defaults to false, list mode for using in tabs
+    /// </summary>
+    [Parameter]
+    public bool ButtonMode { get; set; } = false;
+
+    [Parameter]
+    public string ButtonText { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment ButtonList { get; set; }
+
+
+
+}

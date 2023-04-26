@@ -253,7 +253,9 @@
         if (String.IsNullOrWhiteSpace(SelectedBodyType))
         {
             //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", "Falling asleep? <br/> Select a celestial body first", true);
+            //todo change to render fragment
+            var htmlMessage = $@"<span class=""iconify"" data-icon=""emojione:zzz"" data-width=""20"" /> Falling asleep? <br/> Select a celestial body first";
+            await _jsRuntime.ShowAlert("error", htmlMessage, true);
             return false;
         }
 

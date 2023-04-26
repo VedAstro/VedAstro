@@ -271,9 +271,9 @@ namespace API
         /// <summary>
         /// Gets all person profiles owned by User ID & Visitor ID
         /// </summary>
-        [Function(nameof(PersonList))]
-        public static async Task<HttpResponseData> PersonList(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "PersonList/UserID/{userId}/VisitorID/{visitorId}")] HttpRequestData incomingRequest,
+        [Function(nameof(Account))]
+        public static async Task<HttpResponseData> Account(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Account/UserID/{userId}/VisitorID/{visitorId}")] HttpRequestData incomingRequest,
             string userId,
             string visitorId)
         {

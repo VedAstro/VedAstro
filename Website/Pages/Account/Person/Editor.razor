@@ -41,20 +41,14 @@
             </a>
         </li>
         @*DROP DOWN ACTIONS*@
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                <Icon IconName="carbon:touch-interaction" /> Actions
-            </a>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" style="cursor:pointer;" @onclick="CopyPersonProfileShareLink"><Icon IconName="material-symbols:ios-share" /> Share Link</a></li>
-                <li><a class="dropdown-item" style="cursor:pointer;" @onclick="OnClickSubmitButton"><Icon IconName="bx:save" /> Save</a></li>
-                <li><a class="dropdown-item" style="cursor:pointer;" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded" /> Delete</a></li>
-                @*                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Separated link</a></li>
-                *@
-            </ul>
-        </li>
+        <DropDownButton ButtonText="Actions" IconName="carbon:touch-interaction">
+            <ButtonList>
+                <li><a class="dropdown-item" style="cursor: pointer;" @onclick="CopyPersonProfileShareLink"><Icon IconName="material-symbols:ios-share" /> Share Link</a></li>
+                <li><a class="dropdown-item" style="cursor: pointer;" @onclick="OnClickSubmitButton"><Icon IconName="bx:save" /> Save</a></li>
+                <li><a class="dropdown-item" style="cursor: pointer;" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded" /> Delete</a></li>
+            </ButtonList>
+        </DropDownButton>
+
     </ul>
 
     @*TAB BODY*@
@@ -76,7 +70,7 @@
                 <div>
                     <label class="form-label">
                         Gender
-                        <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender"/>
+                        <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender" />
                     </label>
                     <select @bind="_genderInput" class="form-control">
                         <option value="Male">Male</option>

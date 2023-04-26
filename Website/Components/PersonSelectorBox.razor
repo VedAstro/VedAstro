@@ -81,18 +81,17 @@
     private async Task _OnInitialized()
     {
 
-        //show loading box
-        await _jsRuntime.ShowLoading();
 
         //else use already available list
         await FillDropDown();
 
-        //hide loading box
-        _jsRuntime.HideLoading();
     }
 
     private async Task FillDropDown()
     {
+        //show loading box
+        await _jsRuntime.ShowLoading();
+
         var html = "";
 
         var personList = await AppData.TryGetPersonListSortedAZ();
@@ -108,8 +107,12 @@
         //set drop down list into view
         DropDownOptionsHtml = new MarkupString(html);
 
+
         //need to propagate changes
         this.StateHasChanged();
+
+        //hide loading box
+        _jsRuntime.HideLoading();
 
     }
 

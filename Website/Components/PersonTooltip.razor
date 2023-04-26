@@ -4,16 +4,17 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
+<div id="PersonTooltip" @ref="mainElement" class="hstack">
+    <img style="width:@GR.W97px;" src="images/@ImageName.@ImageFormat" class="img-thumbnail mt-1" alt="..." />
+    @*buttons related to account*@
+    <IconButton TooltipText="Horoscope" IconName="bi:list-stars" ClickUrl="@PageRoute.AddPerson" />
+    <IconButton TooltipText="Add Notes" IconName="system-uicons:clipboard-notes" ClickUrl="@PageRoute.AddPerson" />
+</div>
 
 <div style="cursor: pointer" @ref="elementReference">
-    @Text
-    @HTML
-    @*buttons related to account*@
-    <div class="hstack">
-        <IconButton TooltipText="Horoscope" IconName="bi:list-stars" ClickUrl="@PageRoute.AddPerson" />
-        <IconButton TooltipText="Add Notes" IconName="system-uicons:clipboard-notes" ClickUrl="@PageRoute.AddPerson" />
-
-    </div>
+    @*only show if has value*@
+    @(!string.IsNullOrEmpty(Text) ? Text : "")
+    @(HTML != null ? HTML : "")
 </div>
 
 
@@ -27,6 +28,7 @@
     public string ImageName { get; set; }
 
 
+    private ElementReference mainElement { get; set; }
     /// <summary>
     /// defaults to "jpg"
     /// </summary>
@@ -47,7 +49,6 @@
 
     private ElementReference elementReference { get; set; }
 
-
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
     private async Task _OnAfterRender(bool firstRender)
@@ -59,14 +60,14 @@
             if (!string.IsNullOrEmpty(ImageName))
             {
                 //construct html to show image
-                var htmlContent = $"<img style=\"width:{GR.W97px};\" src=\"images/{ImageName}.{ImageFormat}\" class=\"img-thumbnail mt-1\" alt=\"...\">";
-                var tooltipSettings = 
+                var tooltipSettings =
                     new
                     {
-                        content = htmlContent,
+                        content = mainElement,
                         allowHTML = true,
                         arrow = true,
                         animation = "scale-extreme",
+                        interactive = true //so that can click button
                     };
 
                 await _jsRuntime.Tippy(elementReference, tooltipSettings);

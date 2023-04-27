@@ -86,7 +86,7 @@ namespace API
         /// </summary>
         public static HttpResponseData MessageJson<T>(string statusResult, T payload, HttpRequestData req)
         {
-             var response = req.CreateResponse(HttpStatusCode.OK);
+            var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
 
             var finalPayloadJson = new JObject();
@@ -105,6 +105,10 @@ namespace API
                 //finalPayloadJson["Payload"] = JToken.FromObject(payloadJToken);
                 var temp = new JProperty("Payload", new JObject(payloadJToken));
                 finalPayloadJson.Add(temp);
+            }
+            else if (payload is string payloadStr)
+            {
+                finalPayloadJson["Payload"] = payloadStr;
             }
             //if not special type than assign direct
             else
@@ -802,25 +806,29 @@ namespace API
             return response;
         }
 
-        public static void SendEmail(string fileName, string fileFormat, string receiverEmailAddress,  Stream rawFileBytes)
+        public static void SendEmail(string fileName, string fileFormat, string receiverEmailAddress, Stream rawFileBytes)
         {
-            var emailTitle = $"Shared {fileFormat.ToUpper()} from VedAstro";
+            var emailClient = getEmailClient();
+
             var fileNameFull = $"{fileName}.{fileFormat.ToLower()}";
-            // Create the email content
+
+            var emailTitle = $"Shared {fileFormat.ToUpper()} from VedAstro";
+
+            // Create the email content, visible to user
             var emailContent = new EmailContent(emailTitle)
             {
-                PlainText = $"Find attached your {fileNameFull}, from VedAstro.org -> {fileNameFull}",
+                PlainText = $"Find attached your {fileName}, from VedAstro.org -> {fileNameFull}",
                 Html = "<html><body>Shared file from VedAstro.org</body></html>"
             };
 
-            // Create the EmailMessage
             var emailMessage = new EmailMessage(
-                senderAddress: "contact@vedastro.org",
-                recipientAddress: receiverEmailAddress,
-                content: emailContent);
+                senderAddress: "contact@vedastro.org", // The email address of the domain registered with the Communication Services resource
+            recipientAddress: receiverEmailAddress,
+            content: emailContent);
 
             var attachmentName = fileNameFull;
             var contentType = Tools.StringToMimeType(fileFormat) ?? MediaTypeNames.Text.Plain; //if fail just plain noodle will do
+
             var content = BinaryData.FromStream(rawFileBytes);
             var emailAttachment = new EmailAttachment(attachmentName, contentType, content);
 
@@ -828,7 +836,7 @@ namespace API
 
             try
             {
-                EmailSendOperation emailSendOperation = getEmailClient().Send(WaitUntil.Completed, emailMessage);
+                EmailSendOperation emailSendOperation = emailClient.Send(WaitUntil.Completed, emailMessage);
                 Console.WriteLine($"Email Sent. Status = {emailSendOperation.Value.Status}");
 
                 /// Get the OperationId so that it can be used for tracking the message for troubleshooting
@@ -840,6 +848,9 @@ namespace API
                 /// OperationID is contained in the exception message and can be used for troubleshooting purposes
                 Console.WriteLine($"Email send operation failed with error code: {ex.ErrorCode}, message: {ex.Message}");
             }
+
+
+
 
 
             //-------------LOCAL FUNCS

@@ -46,12 +46,13 @@ namespace API
                 //extract file from request
                 var rawFileBytes = incomingRequest.Body;
 
+                //if no file received, end here
+                if (rawFileBytes.Length <= 0) { return APITools.FailMessage("No File Received!", incomingRequest); }
+
                 //using Azure Email Sender, send file to given email
                 APITools.SendEmail(fileName, fileFormat, receiverEmail, rawFileBytes);
 
-                JToken jsonReply = JToken.Parse($"'Email sent to -> {receiverEmail}'"); //empty default
-
-                return APITools.PassMessageJson(jsonReply, incomingRequest);
+                return APITools.PassMessageJson("Email sent success", incomingRequest);
 
             }
             catch (Exception e)

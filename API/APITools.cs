@@ -860,6 +860,9 @@ namespace API
                 //read the connection string
                 var connectionString = Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
 
+                //raise alarm if no connection string
+                if (string.IsNullOrEmpty(connectionString)) { throw new Exception($"Failed to get connection string : AutoEmailerConnectString!"); }
+
                 //sign in to email
                 return new EmailClient(connectionString);
 

@@ -35,15 +35,10 @@
     }
 </style>
 <div class="py-4" id="icon-grid">
-    @*    
-    todo marked for deletion    
-    <h3 class="pb-2 border-bottom">
-        Quick Links <button @onclick="() => _navigation.NavigateTo(PageRoute.CalculatorList)" type="button" class="btn btn-sm btn-outline-secondary">View All</button>
-    </h3>
-    *@    
-    <h3 class="pb-2 border-bottom">
-        Quick Links <IconButton ButtonText="View All" ClickUrl="@PageRoute.CalculatorList" SmallSize="true" ExtraClass="ms-3" Outline="true"/>
-    </h3>
+    <IconTitle Title="Quick Links" IconName="flat-color-icons:mind-map" TitleHolder="h4">
+        <ButtonRow><IconButton ButtonText="View All" ClickUrl="@PageRoute.CalculatorList" SmallSize="true" ExtraClass="ms-3" Outline="true" /></ButtonRow>
+    </IconTitle>
+    
     <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
         <div @onclick="() => _navigation.NavigateTo(PageRoute.Match)" style="cursor: pointer;" class="col">
             <div class="card">
@@ -82,7 +77,7 @@
                 </div>
             </div>
         </div>
-@*        <div @onclick="() => _navigation.NavigateTo(PageRoute.HoroscopeData)" style="cursor: pointer;" class="col">
+        @*        <div @onclick="() => _navigation.NavigateTo(PageRoute.HoroscopeData)" style="cursor: pointer;" class="col">
             <div class="card">
                 <img src="images/horoscope-data-card.jpg" class="card-img-top">
                 <div class="card-body">
@@ -91,7 +86,8 @@
                 </div>
             </div>
         </div>
-*@        <div @onclick="() => _navigation.NavigateTo(PageRoute.Journal)" style="cursor: pointer;" class="col">
+*@
+        <div @onclick="() => _navigation.NavigateTo(PageRoute.Journal)" style="cursor: pointer;" class="col">
             <div class="card">
                 <img src="images/add-life-event-card.jpg" class="card-img-top">
                 <div class="card-body">

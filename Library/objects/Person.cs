@@ -280,12 +280,7 @@ namespace VedAstro.Library
             var notes = personXml.Element("Notes")?.Value;
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
-            var userIdRaw = personXml.Element("UserId")?.Value ?? "";
-            //clean, remove white space & new line if any
-            userIdRaw = userIdRaw.Replace("\n", "");
-            userIdRaw = userIdRaw.Replace(" ", "");
-
-            var userId = userIdRaw.Split(',');//split by comma
+            var userId = Tools.GetUserIdFromXmlData(personXml);
             var lifeEventList = getLifeEventListFromXml();
 
             var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);

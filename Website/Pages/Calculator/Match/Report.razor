@@ -127,7 +127,6 @@
         </table>
 
     </div>
-
 }
 
 @*HELP SECTION*@
@@ -520,6 +519,46 @@
         //get report from server
         var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
         var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.GetMatchReportApi, rootXml);
+
+        //check the results, if fail let user know
+        if (!webResult.IsPass)
+        {
+            //let user know
+            await _jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
+
+            //send empty view
+            return null;
+        }
+        else
+        {
+            var matchReportXml = webResult.Payload;
+
+            //try parse report (null if fail)
+            var matchReport = CompatibilityReport.FromXml(matchReportXml);
+
+            _jsRuntime.HideAlert();
+
+            //return parsed report to caller
+            return matchReport;
+        }
+    }
+    
+    private async Task<CompatibilityReport?> SaveCompatibilityReport(string maleId, string femaleId)
+    {
+
+        //show loading box
+        await _jsRuntime.ShowLoading();
+
+        //show names on page
+        MaleName = (await WebsiteTools.GetPersonById(maleId, _jsRuntime)).Name;
+        FemaleName = (await WebsiteTools.GetPersonById(femaleId, _jsRuntime)).Name;
+
+        //put person name into tab title for easy multi-tabbing
+        _pageTitle = $"{MaleName} + {FemaleName}";
+
+        //get report from server
+        var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
+        var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.SaveMatchReportApi, rootXml);
 
         //check the results, if fail let user know
         if (!webResult.IsPass)

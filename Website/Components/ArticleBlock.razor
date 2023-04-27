@@ -3,17 +3,10 @@
 @using System.Xml.Linq
 
 <div class="py-2">
-    
-    <div class="hstack gap-2">
-        @*only render, icon of name was specified*@
-        @if (!string.IsNullOrEmpty(IconName))
-        {
-            <Icon Size="40" NextToText="false" IconName="@IconName"/>
-        }
 
-        <h4 class="fw-bold mt-2">@Title</h4>
-    </div>
-    <hr class="mt-1 mb-2" />
+    <IconTitle Title="@Title" IconName="@IconName" TitleHolder="h4">
+        <ButtonRow>@ButtonRow</ButtonRow>
+    </IconTitle>
     <p class="text-justify">
         @TextHTML
     </p>
@@ -40,5 +33,11 @@
     /// </summary>
     [Parameter]
     public RenderFragment? TextHTML { get; set; }
+
+    /// <summary>
+    /// buttons next to title
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ButtonRow { get; set; }
 
 }

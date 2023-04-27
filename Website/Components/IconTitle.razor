@@ -6,9 +6,30 @@
 @*SIMPLE HEADING TITLE WITH NICELY POSITIONED ICON*@
 
 
-<div class="mt-5 hstack gap-2">
-    <Icon NextToText="true" IconName="@IconName" Size="38" />
-    <h3 class="mt-2">@Title</h3>
+<div class="hstack gap-2 d-flex">
+    <Icon NextToText="true" IconName="@IconName" Size="@IconSize" />
+    @switch (TitleHolder.ToLower())
+    {
+        case "h1":
+            <h1 class="mt-2 me-auto">@Title</h1>
+            break;
+        case "h2":
+            <h2 class="mt-2 me-auto">@Title</h2>
+            break;
+        case "h3":
+            <h3 class="mt-2 me-auto">@Title</h3>
+            break;
+        case "h4":
+            <h4 class="mt-2 me-auto">@Title</h4>
+            break;
+        case "h5":
+            <h5 class="mt-2 me-auto">@Title</h5>
+            break;
+        case "h6":
+            <h6 class="mt-2 me-auto">@Title</h6>
+            break;
+    }
+    @ButtonRow
 </div>
 <hr class="mt-1 mb-2" />
 
@@ -17,12 +38,18 @@
 @code {
 
     [Parameter]
+    public int IconSize { get; set; } = 38;
+
+    [Parameter]
     public string Title { get; set; } = "Demo Title";
 
     [Parameter]
-    public string TitleHolder { get; set; } = "Demo Title";
+    public string TitleHolder { get; set; } = "h3";
 
     [Parameter]
     public string IconName { get; set; } = "mingcute:airplane-line";
+
+    [Parameter]
+    public RenderFragment ButtonRow { get; set; }
 
 }

@@ -13,14 +13,17 @@
     <ArticleBlock Title="Easy start" IconName="flat-color-icons:close-up-mode">
         <TextHTML>
             <div class="vstack gap-2 mt-3">
-                <div><kbd>STEP 1</kbd>   Generate API URL using dropdown <a href="@PageRoute.APIBuilder">API Builder</a></div>
-                <div><kbd>STEP 2</kbd>   Make a <code>HTTP GET</code> request using any language you want.</div>
-                <div><kbd>STEP 3</kbd>   Receive advanced astro data in JSON. Done!</div>
+                <div><kbd>STEP 1</kbd>  -  Generate API URL using dropdown <a href="@PageRoute.APIBuilder">API Builder</a></div>
+                <div><kbd>STEP 2</kbd>  -  Make a <code>HTTP GET</code> request using any language you want.</div>
+                <div><kbd>STEP 3</kbd>  -  Receive advanced astro data in JSON. Done!</div>
             </div>
             </TextHTML>
     </ArticleBlock>
 
     <ArticleBlock Title="GUI Builder" IconName="emojione:clamp">
+        <ButtonRow>
+            <IconButton Outline="true" ClickUrl="@PageRoute.APIBuilder" ButtonText="Start Building"></IconButton>
+        </ButtonRow>
         <TextHTML>
             A simple URL builder using dropdown boxes. This should make it easy for any beginner to get started.
             The biggest problem with consuming any API, is the learning curve.

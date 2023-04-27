@@ -28,9 +28,6 @@
                 <div class="sidebar-search">
                     <div class="search-body">
                         <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
-                        @*<div @onclick="OnClickSearchIcon" style="cursor: pointer;">
-                            <span class="iconify" data-icon="bx:search-alt" data-width="24"></span>
-                        </div>*@
                     </div><!-- search-body -->
                 </div><!-- sidebar-search -->
                 <SideBarButtons />
@@ -88,7 +85,9 @@
             <!-- REFERENCE BUTTONS : buttons placed here are
             linked to places not needed all the time, like About and Docs -->
             <!--only visible in Desktop-->
-            <div class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white"><TopBarButtons /></div>
+            <div style="min-width:954px;" class="rounded-3 mb-4 p-2 border shadow d-none d-md-flex gap-2 justify-content-between bg-white">
+                <TopBarButtons />
+            </div>
 
             <!-- PAGE CONTENT INSERTED HERE -->
             <div>@Body</div>
@@ -126,7 +125,6 @@
     {
         if (firstRender)
         {
-
             await _jsRuntime.InvokeVoidAsync(JS.InitErrorCatcher);
 
             //log visit only 1 once when page is rendered

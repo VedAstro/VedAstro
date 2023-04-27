@@ -1598,6 +1598,46 @@ namespace VedAstro.Library
             return arrayJson;
         }
 
+        /// <summary>
+        /// Used for Person, Match Report, Chart and all things made by end user
+        /// </summary>
+        public static string[] GetUserIdFromXmlData(XElement inputXml)
+        {
+            var userIdRaw = inputXml.Element("UserId")?.Value ?? "";
+            //clean, remove white space & new line if any
+            userIdRaw = userIdRaw.Replace("\n", "");
+            userIdRaw = userIdRaw.Replace(" ", "");
+
+            var userId = userIdRaw.Split(',');//split by comma
+
+            return userId;
+        }
+
+        /// <summary>
+        /// Given a doc os records will find by user ID , owners
+        /// used by to get stuff created by end user
+        /// </summary>
+        public static List<XElement> FindXmlByUserId(XDocument allListXmlDoc, string inputUserId)
+        {
+            var returnList = new List<XElement>();
+
+            //add all  profiles that have the given user ID
+            var allItems = allListXmlDoc.Root?.Elements();
+            foreach (var itemXml in allItems)
+            {
+                var allOwnerId = itemXml.Element("UserId")?.Value ?? "";
+
+                //must be split before can be used
+                var ownerList = allOwnerId.Split(',');
+
+                //check if inputed ID is found in list, add to return list
+                foreach (var owner in ownerList) { if (owner.Equals(inputUserId)) { returnList.Add(itemXml); } }
+            }
+
+            return returnList;
+        }
+
+
     }
 
 }

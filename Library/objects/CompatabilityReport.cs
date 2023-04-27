@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace VedAstro.Library
@@ -9,6 +10,8 @@ namespace VedAstro.Library
     /// </summary>
     public class CompatibilityReport : IToXml
     {
+        private static string[] DefaultUserId = new[] { "101" };
+
         public List<CompatibilityPrediction> PredictionList { get; set; }
 
         /// <summary>
@@ -17,10 +20,40 @@ namespace VedAstro.Library
         public double KutaScore { get; set; }
 
         public Person Male { get; set; }
+
         public Person Female { get; set; }
 
         //todo should be dynamic
         public object ScoreColor { get; set; } = "#00a702";
+
+        /// <summary>
+        /// User ID is used by website. Multiple supported, Shows owners
+        /// todo owner ID might be better
+        /// </summary>
+        public string[] UserId { get; set; }
+
+        /// <summary>
+        /// Comma separated string of Owners
+        /// </summary>
+        public string UserIdString
+        {
+            get
+            {
+                var userIdString = "";
+
+                //joining can fail, so return error note if that happens
+                try
+                {
+                    userIdString = string.Join(",", UserId);
+                }
+                catch (Exception e)
+                {
+                    userIdString = e.Message;
+                }
+
+                return userIdString;
+            }
+        }
 
         /// <summary>
         /// Converts the instance data into XML
@@ -36,9 +69,10 @@ namespace VedAstro.Library
             var male = new XElement("Male", Male.ToXml());
             var female = new XElement("Female", Female.ToXml());
             var predictionList = PredictionListToXml(this.PredictionList);
+            var userId = new XElement("UserId", this.UserIdString);
 
             //add in the data
-            compatibilityReport.Add(kutaScore, male, female, predictionList);
+            compatibilityReport.Add(userId, male, female, kutaScore,  predictionList);
 
             return compatibilityReport;
         }
@@ -78,6 +112,7 @@ namespace VedAstro.Library
             var male = Person.FromXml(compatibilityReportXml.Element("Male")?.Element("Person"));
             var female = Person.FromXml(compatibilityReportXml.Element("Female")?.Element("Person"));
             var kutaScore = Double.Parse(compatibilityReportXml.Element("KutaScore")?.Value ?? "0");
+            var userId = Tools.GetUserIdFromXmlData(compatibilityReportXml);
 
             var predictionListXml = compatibilityReportXml.Element("PredictionList");
             var predictionList = ParseXmlToPredictionList(predictionListXml);
@@ -87,7 +122,8 @@ namespace VedAstro.Library
                 Male = male,
                 Female = female,
                 KutaScore = kutaScore,
-                PredictionList = predictionList
+                PredictionList = predictionList,
+                UserId = userId.Any() ? userId : DefaultUserId
             };
 
             return newCompatibilityReport;

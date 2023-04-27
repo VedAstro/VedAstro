@@ -9,26 +9,49 @@
 <PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill" />
 
 
-<div class="hstack gap-3 my-3">
-    <IconButton SmallSize="true" IconName="" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-    <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-    <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
-    <IconButton SmallSize="true" Outline="true" ButtonText="PDF Tools" IconName="bxs:file-pdf">
-        <DropDownList>
-            <li><a class="dropdown-item" @onclick="OnClickDownloadPdf">Download PDF <Icon NextToText="true" IconName="carbon:generate-pdf" /></a></li>
-            <li><a class="dropdown-item" @onclick="OnClickSendPDFToEmail">Email PDF <Icon IconName="ic:outline-attach-email" /></a></li>
-            <li><a class="dropdown-item" @onclick="OnClickPrintPDF">Print PDF <Icon IconName="uil:print" /></a></li>
-            <li><a class="dropdown-item" @onclick="OnClickOpenPDFNewTab">Open PDF <Icon IconName="material-symbols:file-open-outline" /></a></li>
-        </DropDownList>
-    </IconButton>
-
-</div>
 
 
 
 @*only show once report ready*@
 @if (_report != null)
 {
+    <div class="hstack gap-3 my-3">
+        <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+        <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
+        <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+        <IconButton SmallSize="true" Outline="true" ButtonText="PDF Tools" IconName="bxs:file-pdf">
+            <DropDownList>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadPdf">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="carbon:generate-pdf"/>
+                        <span>Download PDF</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="OnClickSendPDFToEmail">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
+                        <span>Email PDF</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="OnClickPrintPDF">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:print" />
+                        <span>Print PDF</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="OnClickOpenPDFNewTab">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="material-symbols:file-open-outline" />
+                        <span>Open PDF</span>
+                    </a>
+                </li>
+            </DropDownList>
+        </IconButton>
+
+    </div>
+
+    <hr />
+
     <div @ref="matchReportElement">
         <div class="container mb-4 border">
             <div class="row justify-content-start">
@@ -568,8 +591,8 @@
     {
         var emailFromAlert = await _jsRuntime.ShowSendMatchPDFToEmail();
 
-    //calls special JS lib to convert html version of the chart to PDF
-    //and initiated download as well, with 1 call
+        //calls special JS lib to convert html version of the chart to PDF
+        //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";
 
         var x = await _jsRuntime.InvokeAsync<object>(JS.openPDFNewTab, matchReportElement, pdfFileName, "pdf", emailFromAlert);
@@ -587,8 +610,9 @@
         //calls special JS lib to convert html version of the chart to PDF
         //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";
+        var cleanFileName = Tools.RemoveWhiteSpace(pdfFileName); //remove spaces so that no errors and looks clean in URL
 
-        var x = await _jsRuntime.InvokeAsync<object>(JS.htmlToEmail, matchReportElement, pdfFileName, "pdf", emailFromAlert);
+        var x = await _jsRuntime.InvokeAsync<object>(JS.htmlToEmail, matchReportElement, cleanFileName, "pdf", emailFromAlert);
 
         //tactile feedback
         await _jsRuntime.ShowAlert("success", $"Match report sent!", false, 1500);

@@ -33,6 +33,7 @@ namespace API
         public const string TaskListFile = "TaskList.xml";
         public const string MessageListFile = "MessageList.xml";
         public const string SavedChartListFile = "SavedChartList.xml";
+        public const string SavedMatchReportList = "SavedMatchReportList.xml";
         public const string RecycleBinFile = "RecycleBin.xml";
         public const string UserDataListXml = "UserDataList.xml";
         public const string BlobContainerName = "vedastro-site-data";
@@ -553,7 +554,7 @@ namespace API
                 var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
 
                 //do the finding (default empty)
-                var foundPerson = personXmlList?.Where(MathcPeronId)?.First();
+                var foundPerson = personXmlList?.Where(MatchPersonId)?.First();
 
                 //log it (should not occur all the time)
                 if (foundPerson == null)
@@ -573,35 +574,40 @@ namespace API
 
             //--------
             //do the finding
-            bool MathcPeronId(XElement personXml) => Person.FromXml(personXml).Id.Equals(personId);
+            bool MatchPersonId(XElement personXml) => Person.FromXml(personXml).Id.Equals(personId);
         }
+
+        ///// <summary>
+        ///// Find all person's xml element owned by User/Visitor ID
+        ///// Note:
+        ///// - multiple comma seperated UserId in Person profile
+        ///// - 1 person profile can have multiple user id (shared)
+        ///// - document is inputed instead for wide compatibilty
+        ///// </summary>
+        //public static List<XElement> FindPersonByUserId(XDocument personListXml, string inputUserId)
+        //{
+        //    var returnList = new List<XElement>();
+
+        //    //add all person profiles that have the given user ID
+        //    var allPersonList = personListXml.Root?.Elements();
+        //    foreach (var personXml in allPersonList)
+        //    {
+        //        var allOwnerId = personXml.Element("UserId")?.Value ?? "";
+
+        //        //must be split before can be used
+        //        var ownerList = allOwnerId.Split(',');
+
+        //        //check if inputed ID is found in list, add to return list
+        //        foreach (var owner in ownerList) { if (owner.Equals(inputUserId)) { returnList.Add(personXml); } }
+        //    }
+
+        //    return returnList;
+        //}
+
 
         /// <summary>
-        /// Find all person's xml element owned by User/Visitor ID
-        /// Note:
-        /// - multiple comma seperated UserId in Person profile
-        /// - 1 person profile can have multiple user id (shared)
-        /// - document is inputed instead for wide compatibilty
+        /// Get all charts belonging to owner ID
         /// </summary>
-        public static List<XElement> FindPersonByUserId(XDocument personListXml, string inputUserId)
-        {
-            var returnList = new List<XElement>();
-
-            //add all person profiles that have the given user ID
-            var allPersonList = personListXml.Root?.Elements();
-            foreach (var personXml in allPersonList)
-            {
-                var allOwnerId = personXml.Element("UserId")?.Value ?? "";
-
-                //must be split before can be used
-                var ownerList = allOwnerId.Split(',');
-
-                //check if inputed ID is found in list, add to return list
-                foreach (var owner in ownerList) { if (owner.Equals(inputUserId)) { returnList.Add(personXml); } }
-            }
-
-            return returnList;
-        }
 
         /// <summary>
         /// Gets user data, if user does
@@ -773,6 +779,22 @@ namespace API
             var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
             await SaveXDocumentToAzure(personListXmlDoc, PersonListFile, BlobContainerName);
         }
+        public static async Task UpdateRecordInDoc<T>(XElement updatedPersonXml, string cloudFileName) where T : IToXml
+        {
+            var allListXmlDoc = await GetXmlFileFromAzureStorage(cloudFileName, BlobContainerName);
+
+            var updatedPerson = Person.FromXml(updatedPersonXml);
+
+            //get the person record that needs to be updated
+            var personToUpdate = await FindPersonById(updatedPerson.Id);
+
+            //delete the previous person record,
+            //and insert updated record in the same place
+            personToUpdate?.ReplaceWith(updatedPersonXml);
+
+            //upload modified list file to storage
+            await SaveXDocumentToAzure(allListXmlDoc, cloudFileName, BlobContainerName);
+        }
 
         public static async Task<List<Person>> GetAllPersonList()
         {
@@ -867,6 +889,48 @@ namespace API
                 return new EmailClient(connectionString);
 
             }
+        }
+
+        //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
+        //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
+        public static async Task SwapUserId(string? visitorId, string? userId, string cloudXmlFile)
+        {
+            var allListXmlDoc = await APITools.GetXmlFileFromAzureStorage(cloudXmlFile, APITools.BlobContainerName);
+
+            //filter out record by visitor id
+            var visitorIdList = Tools.FindXmlByUserId(allListXmlDoc, visitorId);
+
+            //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
+            //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
+            var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId));//already logged in if true
+            var visitorProfileExists = visitorIdList.Any();
+
+            if (loggedIn && visitorProfileExists)
+            {
+                //convert visitor to user
+                foreach (var xmlRecord in visitorIdList)
+                {
+                    //get existing data
+                    var existingOwners = xmlRecord?.Element("UserId")?.Value ?? "";
+
+                    //replace visitor id with user id
+                    var updatedOwners = existingOwners.Replace(visitorId, userId);
+
+                    //check if data is valid, should not match
+                    if (updatedOwners.Equals(existingOwners)) { throw new Exception("ID Swap Failed"); }
+
+                    //pump value into local updated list
+                    var cleaned = Tools.RemoveWhiteSpace(updatedOwners); //remove any space crept it
+                    xmlRecord.Element("UserId")!.Value = cleaned;
+                }
+
+                //upload modified list file to storage
+                await SaveXDocumentToAzure(allListXmlDoc, cloudXmlFile, BlobContainerName);
+
+                //since heavy computation, log if happens
+                APILogger.Data($"Profiles swapped : {visitorIdList.Count}", AppInstance.IncomingRequest);
+            }
+
         }
     }
 }

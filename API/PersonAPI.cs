@@ -60,7 +60,7 @@ namespace API
 
                 //find all person's with inputed visitor ID
                 var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-                var foundPersonList = APITools.FindPersonByUserId(personListXmlDoc, visitorId);
+                var foundPersonList = Tools.FindXmlByUserId(personListXmlDoc, visitorId);
 
                 //add User ID to each person (if not already added, avoid duplicates)
                 foreach (var foundPerson in foundPersonList)
@@ -201,57 +201,31 @@ namespace API
         [Function(nameof(GetPersonList))]
         public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
-        //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 
-        TryAgain:
+            AppInstance.IncomingRequest = incomingRequest;
+            var personListFileUrl = APITools.PersonListFile;
 
             try
             {
+
+                //STAGE 1 : GET DATA OUT
                 //data out of request
                 var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var userId = rootXml.Element("UserId")?.Value;
                 var visitorId = rootXml.Element("VisitorId")?.Value;
 
-                //get all person list from storage
-                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+                //STAGE 2 : SWAP DATA
+                //swap visitor ID with user ID if any (data follows user when log in)
+                await APITools.SwapUserId(visitorId, userId, personListFileUrl);
 
-                //filter out person by user id
-                var filteredList1 = APITools.FindPersonByUserId(personListXml, userId);
+                //STAGE 3 : FILTER 
+                //get latest all match reports
+                var personListXml = await APITools.GetXmlFileFromAzureStorage(personListFileUrl, APITools.BlobContainerName);
+                //filter out record by user id
+                var userIdList = Tools.FindXmlByUserId(personListXml, userId);
 
-                //filter out person by visitor id
-                var visitorIdList = APITools.FindPersonByUserId(personListXml, visitorId);
-
-                //before sending to user, clean the data
-                //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
-                //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-                var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId));//already logged in if true
-                var visitorProfileExists = visitorIdList.Any();
-                if (loggedIn && visitorProfileExists)
-                {
-                    //transfer to user id
-                    foreach (var person in visitorIdList)
-                    {
-                        //edit data direct to for speed
-                        person.Element("UserId").Value = userId;
-
-                        //save to main list
-                        await APITools.UpdatePersonRecord(person);
-                    }
-
-                    //after the transfer, restart the call as though new, so that user only gets the correct list at all times (though this might be little slow)
-                    goto TryAgain;
-                }
-
-                //STAGE 4 : combine and remove duplicates
-                if (visitorIdList.Any()) { filteredList1.AddRange(visitorIdList); }
-                List<XElement> personListNoDupes = filteredList1.Distinct().ToList();
-
-                //STAGE 5 : don't send empty list
-                //user should always have people in the list
-
-
+                //STAGE 4 : SEND XML todo JSON 
                 //convert list to xml
-                var xmlPayload = Tools.AnyTypeToXmlList(personListNoDupes);
-
+                var xmlPayload = Tools.AnyTypeToXmlList(userIdList);
 
                 //send filtered list to caller
                 return APITools.PassMessage(xmlPayload, incomingRequest);
@@ -264,7 +238,6 @@ namespace API
                 //format error nicely to show user
                 return APITools.FailMessage(e, incomingRequest);
             }
-
 
         }
 
@@ -287,10 +260,10 @@ namespace API
                 var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
 
                 //filter out person by user id
-                var userIdPersonList = APITools.FindPersonByUserId(personListXml, userId);
+                var userIdPersonList = Tools.FindXmlByUserId(personListXml, userId);
 
                 //filter out person by visitor id
-                var visitorIdPersonList = APITools.FindPersonByUserId(personListXml, visitorId);
+                var visitorIdPersonList = Tools.FindXmlByUserId(personListXml, visitorId);
 
                 //before sending to user, clean the data
                 //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id

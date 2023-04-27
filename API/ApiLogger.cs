@@ -79,14 +79,13 @@ public static class APILogger
         await APITools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
 
     }
-    public static async Task Data(string textData, HttpRequestData req)
+    public static async Task Data(string textData, HttpRequestData req = null)
     {
 
         var visitorXml = new XElement("Visitor");
-
         visitorXml.Add(BranchXml, SourceXml);
-        visitorXml.Add(await APITools.RequestToXml(req));
         visitorXml.Add(new XElement("Data"), textData);
+        if (req != null) { visitorXml.Add(await APITools.RequestToXml(req)); } //only add if specified
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 

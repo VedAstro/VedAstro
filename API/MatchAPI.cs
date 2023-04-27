@@ -49,7 +49,6 @@ namespace API
             }
         }
 
-
         [Function("getmatchreport")]
         public static async Task<HttpResponseData> GetMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
@@ -63,6 +62,79 @@ namespace API
                 //generate compatibility report
                 var compatibilityReport = await GetCompatibilityReport(maleId, femaleId);
                 return APITools.PassMessage((XElement)compatibilityReport.ToXml(), incomingRequest);
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+        }
+
+        /// <summary>
+        /// Saves match data between people in SavedMatchReportList.xml
+        /// </summary>
+        [Function("SaveMatchReport")]
+        public static async Task<HttpResponseData> SaveMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData incomingRequest)
+        {
+            try
+            {
+                //get name of male & female
+                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
+                var maleId = rootXml.Element("MaleId")?.Value;
+                var femaleId = rootXml.Element("FemaleId")?.Value;
+
+                //generate compatibility report
+                var compatibilityReport = await GetCompatibilityReport(maleId, femaleId);
+                var chartReadyToInject = compatibilityReport.ToXml();
+
+                //save chart into storage
+                //note: do not wait to speed things up, beware! failure will go undetected on client
+                await APITools.AddXElementToXDocumentAzure(chartReadyToInject, APITools.SavedMatchReportList, APITools.BlobContainerName);
+
+                //let caller know all good
+                return APITools.PassMessage(incomingRequest);
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+        }
+
+        [Function("GetMatchChartList")]
+        public static async Task<HttpResponseData> GetMatchChartList([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData incomingRequest)
+        {
+            AppInstance.IncomingRequest = incomingRequest;
+
+            try
+            {
+                //STAGE 1 : GET DATA OUT
+                //data out of request
+                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
+                var userId = rootXml.Element("UserId")?.Value;
+                var visitorId = rootXml.Element("VisitorId")?.Value;
+
+                //STAGE 2 : SWAP DATA
+                //swap visitor ID with user ID if any (data follows user when log in)
+                await APITools.SwapUserId(visitorId, userId, APITools.SavedMatchReportList);
+
+                //STAGE 3 : FILTER 
+                //get latest all match reports
+                var savedMatchReportList = await APITools.GetXmlFileFromAzureStorage(APITools.SavedMatchReportList, APITools.BlobContainerName);
+                //filter out record by user id
+                var userIdList = Tools.FindXmlByUserId(savedMatchReportList, userId);
+
+                //STAGE 4 : SEND XML todo JSON 
+                //convert list to xml
+                var xmlPayload = Tools.AnyTypeToXmlList(userIdList);
+
+                //send filtered list to caller
+                return APITools.PassMessage(xmlPayload, incomingRequest);
+
             }
             catch (Exception e)
             {
@@ -90,8 +162,6 @@ namespace API
 
 
         //PRIVATE
-
-        private const string dataPersonlistXml = "data\\PersonList.xml";
 
         private static async Task<List<Person>> JsonPersonListToPerson(JsonElement personListArray, string apiKey)
         {
@@ -291,5 +361,10 @@ namespace API
             //return reports that got saved
             return goodReports;
         }
+    }
+
+    public class AppInstance
+    {
+        public static HttpRequestData IncomingRequest { get; set; }
     }
 }

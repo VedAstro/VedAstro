@@ -186,7 +186,7 @@
             //raise alarm
             if (noneFound)
             {
-                Console.WriteLine("Interop health check FAIL!!!");
+                Console.WriteLine($"BLZ : Interop health check FAIL > {jsFunc}");
                 throw new Exception($"Interop JS Function not found in Blazor : {jsFunc}");
             }
         }

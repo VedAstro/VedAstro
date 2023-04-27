@@ -49,7 +49,7 @@
         public const string htmlToPdf = "Interop.htmlToPdf";
         public const string pdfToEmail = "Interop.pdfToEmail";
         public const string htmlToEmail = "Interop.htmlToEmail";
-        public const string OpenPDFNewTab = "Interop.openPDFNewTab";
+        public const string openPDFNewTab = "Interop.openPDFNewTab";
         public const string DrawHouseStrengthChart = "Interop.DrawHouseStrengthChart";
         public const string DrawPlanetStrengthChart = "Interop.DrawPlanetStrengthChart";
         public const string generateWebsiteTaskListTable = "Interop.generateWebsiteTaskListTable";

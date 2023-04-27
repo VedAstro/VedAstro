@@ -572,7 +572,7 @@
     //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";
 
-        var x = await _jsRuntime.InvokeAsync<object>(JS.OpenPDFNewTab, matchReportElement, pdfFileName, "pdf", emailFromAlert);
+        var x = await _jsRuntime.InvokeAsync<object>(JS.openPDFNewTab, matchReportElement, pdfFileName, "pdf", emailFromAlert);
 
     }
 

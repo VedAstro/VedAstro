@@ -9,34 +9,40 @@
 <PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill" />
 
 
-
-
-
 @*only show once report ready*@
 @if (_report != null)
 {
     <div class="hstack gap-3 my-3">
         <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-        <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-        <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
-        <IconButton SmallSize="true" Outline="true" ButtonText="PDF Tools" IconName="bxs:file-pdf">
+        <IconButton SmallSize="true" Outline="true" IconName="flat-color-icons:good-decision" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
+        <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="flat-color-icons:briefcase">
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadPdf">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="carbon:generate-pdf"/>
-                        <span>Download PDF</span>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="carbon:generate-pdf" />
+                        <span>Download</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="OnClickSendPDFToEmail">
+                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>_jsRuntime.ShowAlert("error","WORK IN PROGRESS", true, 0))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="material-symbols:cloud-upload" />
+                        <span>Cloud</span>
+                    </a>
+                </li>
+            </DropDownList>
+        </IconButton>
+        <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="flat-color-icons:tree-structure">
+            <DropDownList>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickSendToEmail(PdfFileName, matchReportElement))">
                         <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
                         <span>Email PDF</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="OnClickPrintPDF">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:print" />
-                        <span>Print PDF</span>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickShareFacebook(PdfFileName, matchReportElement))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
+                        <span>Facebook</span>
                     </a>
                 </li>
                 <li>
@@ -47,7 +53,7 @@
                 </li>
             </DropDownList>
         </IconButton>
-
+        <IconButton SmallSize="true" Outline="true" IconName="flat-color-icons:print" ButtonText="Print" OnClickCallback="OnClickPrintPDF"></IconButton>
     </div>
 
     <hr />
@@ -435,15 +441,11 @@
             makes one under-sexed. When sexual incompatibility sets in marriage,
             life proves charmless and friction arises between the couple.
         </p>
-
-
-
     </Content>
 </PageHelpSection>
 
 
 @code {
-
 
     //VARIABLES
     private ElementReference matchReportElement;
@@ -458,6 +460,8 @@
     bool showAdvanced = false;
     string MaleName;
     string FemaleName;
+    string PdfFileName => $"Match-{MaleName}-{FemaleName}";
+
 
     CompatibilityReport? _report = null; //when needs to be show before init
 
@@ -512,7 +516,6 @@
 
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"{MaleName} + {FemaleName}";
-
 
         //get report from server
         var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
@@ -585,40 +588,32 @@
 
     private async Task OnClickPrintPDF()
     {
-        throw new Exception();
+        _jsRuntime.ShowLoading();
+
+        //todo maybe better print dialog
+        //calls special JS lib to convert html version of the chart to PDF
+        //and initiated download as well, with 1 call
+        var pdfFileName = $"Match-{MaleName}-{FemaleName}";
+
+        await _jsRuntime.InvokeVoidAsync(JS.openPDFNewTab, matchReportElement, pdfFileName);
+
+        _jsRuntime.HideLoading();
+
     }
+
     private async Task OnClickOpenPDFNewTab()
     {
-        var emailFromAlert = await _jsRuntime.ShowSendMatchPDFToEmail();
+        _jsRuntime.ShowLoading();
 
         //calls special JS lib to convert html version of the chart to PDF
         //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";
 
-        var x = await _jsRuntime.InvokeAsync<object>(JS.openPDFNewTab, matchReportElement, pdfFileName, "pdf", emailFromAlert);
+        await _jsRuntime.InvokeVoidAsync(JS.openPDFNewTab, matchReportElement, pdfFileName);
+
+        _jsRuntime.HideLoading();
 
     }
-
-    /// <summary>
-    /// show box to get email and log for sending todo
-    /// </summary>
-    private async Task OnClickSendPDFToEmail()
-    {
-        //get email from user via js sweet alert lib
-        var emailFromAlert = await _jsRuntime.ShowSendMatchPDFToEmail();
-
-        //calls special JS lib to convert html version of the chart to PDF
-        //and initiated download as well, with 1 call
-        var pdfFileName = $"Match-{MaleName}-{FemaleName}";
-        var cleanFileName = Tools.RemoveWhiteSpace(pdfFileName); //remove spaces so that no errors and looks clean in URL
-
-        var x = await _jsRuntime.InvokeAsync<object>(JS.htmlToEmail, matchReportElement, cleanFileName, "pdf", emailFromAlert);
-
-        //tactile feedback
-        await _jsRuntime.ShowAlert("success", $"Match report sent!", false, 1500);
-
-    }
-
 
     private async Task OnClickDownloadPdf()
     {
@@ -628,10 +623,11 @@
         //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";
 
-        var x = await _jsRuntime.InvokeAsync<object>(JS.htmlToPdf, matchReportElement, pdfFileName);
+        var x = await _jsRuntime.InvokeAsync<object>(JS.htmlToPdfAutoDownload, matchReportElement, pdfFileName);
 
         _jsRuntime.HideLoading();
 
     }
+
 
 }

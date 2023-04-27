@@ -65,8 +65,6 @@ export async function ShowSendMatchPDFToEmail() {
         inputPlaceholder: 'Enter your email address'
     });
 
-    // if (email) { Swal.fire('PDF Sent', 'Wait a few minutes, if not found check junk folder', 'success'); }
-
     //send email inputed to caller
     return email;
 }
@@ -490,11 +488,13 @@ export function scrollToDiv(elmInput) {
 
 export async function htmlToEmail(elmInput, fileName, fileFormat, receiverEmail) {
 
-    var pdfBlob = await htmlToPdf(elmInput, fileName);
+    //converts to pdf
+    var pdfBlob = await htmlToPdfBlob(elmInput);
 
+    //send to server for forwarding to email
     await pdfToEmail(fileName, fileFormat, receiverEmail, pdfBlob);
 
-    return;
+    Swal.fire(`Email Sent`, 'Wait a few minutes, if not found check junk folder', 'success');
 }
 export async function pdfToEmail(fileName, fileFormat, receiverEmail, inputedBlobFile) {
     var myHeaders = new Headers();
@@ -509,44 +509,38 @@ export async function pdfToEmail(fileName, fileFormat, receiverEmail, inputedBlo
         redirect: 'follow'
     };
 
-    fetch(`${window.URLS.APIDomain}/Send/${fileName}/${fileFormat}/${receiverEmail}`, requestOptions)
+    var apiDomain = window.URLS.APIDomain;
+    fetch(`${apiDomain}/Send/${fileName}/${fileFormat}/${receiverEmail}`, requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
 }
+export async function htmlToPdfBlob(elmInput) {
+
+    //create the PDF
+    var tempMatchPDFBlob = await html2pdf().set(window.PDFOptions).from(elmInput).toPdf().output('blob');
+
+    return tempMatchPDFBlob;
+}
+
 export async function openPDFNewTab(elmInput, pdfFileName) {
-    //set file name & minor formatting
-    var opt = {
-        margin: 2,
-        filename: `${pdfFileName}.pdf`,
-        //    image: { type: 'jpeg', quality: 0.98 },
-        //    html2canvas: { scale: 2 },
-        jsPDF: { unit: 'cm', format: 'A4', orientation: 'portrait' }
-    };
 
-    window.TempMatchPDFBlob = await html2pdf().set(opt).from(elmInput).toPdf().output('blob');
+    var tempMatchPDFBlob = await htmlToPdfBlob(elmInput);
 
-    //const blob = new Blob([arrayBuffer], { type: "application/pdf" });
-    const url = URL.createObjectURL(window.TempMatchPDFBlob);
+    //open a link in new tab to it, user than has choice to save or leave as is
+    const url = URL.createObjectURL(tempMatchPDFBlob);
     window.open(url, '_blank');
 
-    return window.TempMatchPDFBlob;
-
+    return tempMatchPDFBlob;
 }
-export async function htmlToPdf(elmInput, pdfFileName) {
-    //set file name & minor formatting
-    var opt = {
-        margin: 2,
-        filename: `${pdfFileName}.pdf`,
-        //    image: { type: 'jpeg', quality: 0.98 },
-        //    html2canvas: { scale: 2 },
-        jsPDF: { unit: 'cm', format: 'A4', orientation: 'portrait' }
-    };
+
+//html to PDF, starts save as well
+//note options set in APP.JS
+export async function htmlToPdfAutoDownload(elmInput, pdfFileName) {
 
     //generate & download to browser
-    await html2pdf().set(opt).from(elmInput).save();
+    await html2pdf().set(window.PDFOptions).from(elmInput).save();
 }
-
 
 //▀█▀ ▄▀█ █▄▄ █░░ █▀▀   █▀▀ █▀▀ █▄░█ █▀▀ █▀█ ▄▀█ ▀█▀ █▀█ █▀█
 //░█░ █▀█ █▄█ █▄▄ ██▄   █▄█ ██▄ █░▀█ ██▄ █▀▄ █▀█ ░█░ █▄█ █▀▄
@@ -712,6 +706,15 @@ export function generateHouseDataInfoTable(tableId, tableData) {
             { title: "House Info", width: 450, resizable: true, field: "houseDetails", responsive: 0 },
             { title: "Sign Info", width: 450, resizable: true, field: "currentSignDescription", responsive: 0 },
         ],
+    });
+}
+
+export function shareDialogFacebook(shareUrl) {
+    FB.ui({
+        method: 'share',
+        href: shareUrl,
+    }, function (response) {
+        console.log(response);
     });
 }
 

@@ -46,10 +46,11 @@
         public const string generateHouseDataTable = "Interop.generateHouseDataTable";
         public const string generateHouseDataInfoTable = "Interop.generateHouseDataInfoTable";
         public const string scrollToDiv = "Interop.scrollToDiv";
-        public const string htmlToPdf = "Interop.htmlToPdf";
+        public const string htmlToPdfAutoDownload = "Interop.htmlToPdfAutoDownload";
         public const string pdfToEmail = "Interop.pdfToEmail";
         public const string htmlToEmail = "Interop.htmlToEmail";
         public const string openPDFNewTab = "Interop.openPDFNewTab";
+        public const string htmlToPdfBlob = "Interop.htmlToPdfBlob";
         public const string DrawHouseStrengthChart = "Interop.DrawHouseStrengthChart";
         public const string DrawPlanetStrengthChart = "Interop.DrawPlanetStrengthChart";
         public const string generateWebsiteTaskListTable = "Interop.generateWebsiteTaskListTable";
@@ -61,6 +62,7 @@
         public const string getAllLocalStorageKeys = "Interop.getAllLocalStorageKeys";
         public const string postWrapper = "Interop.postWrapper";
         public const string getScreenData = "Interop.getScreenData";
+        public const string shareDialogFacebook = "Interop.shareDialogFacebook";
 
 
         public const string Swal_fire = "Swal.fire";

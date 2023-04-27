@@ -3,22 +3,48 @@
 @using System.Xml.Linq
 
 
-    <div @ref="Element" class="vstack gap-1" style="width: fit-content;">
+<div @ref="MainElement" class="vstack gap-1" style="width: fit-content;">
     @*dont show controls until after chart has been made*@
     @if (_isReady)
     {
         <div class="hstack gap-3 mt-2">
+            <IconTitle IconName="" />
             <HelpIconTooltip Label="Chart" HelpText="@HelpText.DasaChart" />
 
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <Icon IconName="entypo:save" /> Save
-                </button>
-                <ul class="dropdown-menu">
-                    <li><div class="dropdown-item d-flex justify-content-between" @onclick="OnClickSaveAsImage"><Icon IconName="uil:image-download" /><span>Download</span></div></li>
-                    <li><div class="dropdown-item d-flex justify-content-between" @onclick="OnClickSaveChartAPI"><Icon IconName="material-symbols:cloud-upload" /><span>Cloud</span></div></li>
-                </ul>
-            </div>
+            <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="mdi:content-save-cog">
+                <DropDownList>
+                    <li>
+                        <a class="dropdown-item hstack gap-1" @onclick="OnClickSaveAsImage">
+                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:image-download" />
+                            <span>Download</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item hstack gap-1" @onclick="OnClickSaveChartAPI">
+                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="material-symbols:cloud-upload" />
+                            <span>Cloud</span>
+                        </a>
+                    </li>
+                </DropDownList>
+            </IconButton>
+            <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="ic:sharp-ios-share">
+                <DropDownList>
+                    <li>
+                        <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickSendToEmail(PdfFileName, eventsChartSvgHolder))">
+                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email"/>
+                            <span>Email</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item hstack gap-1" @onclick="OnClickShareToFacebook">
+                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
+                            <span>Facebook</span>
+                        </a>
+                    </li>
+                </DropDownList>
+            </IconButton>
+
+
 
             @*PLANET*@
             <div class="dropdown">
@@ -227,14 +253,14 @@
         </div>
     }
 
-        @*
+    @*
     dark mode is disabled for chart with mix-blend-mode
     note: extra logic to remove filter in normal mode
     *@
-        <div class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
+    <div @ref="eventsChartSvgHolder" class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
 
-        @*bottom chart options row*@
-    </div>
+    @*bottom chart options row*@
+</div>
 
 
 
@@ -248,7 +274,10 @@
     /// <summary>
     /// Reference to main holder div
     /// </summary>
-    public ElementReference Element;
+    public ElementReference MainElement;
+    public ElementReference eventsChartSvgHolder;
+
+    private string PdfFileName = "";
 
     /// <summary>
     /// Id of chart that is shown
@@ -609,6 +638,14 @@
         //the downloading of the chart as image is done by JS
         //this is done because, because save as image will be implemented directly in future
         await _jsRuntime.InvokeVoidAsync(JS.DownloadChartFileSVG);
+
+    }
+
+
+    private async Task OnClickShareToFacebook()
+    {
+
+        var x = await AppData.JsRuntime.InvokeAsync<object>(JS.shareDialogFacebook, _jsRuntime.GetCurrentUrl());
 
     }
 

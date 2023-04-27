@@ -32,6 +32,30 @@ namespace Website
             return rawPayload;
         }
 
+        public static async Task OnClickShareFacebook(string pdfFileName, ElementReference elementToConvert)
+        {
+            var currentUrl = await AppData.JsRuntime.GetCurrentUrl();
+            await AppData.JsRuntime.InvokeVoidAsync(JS.shareDialogFacebook,  currentUrl);
+        }
+
+        /// <summary>
+        /// show box to get email and log for sending todo
+        /// </summary>
+        public static async Task OnClickSendToEmail(string pdfFileName, ElementReference elementToConvert)
+        {
+            //get email from user via js sweet alert lib
+            var emailFromAlert = await AppData.JsRuntime.ShowSendMatchPDFToEmail();
+
+            //calls special JS lib to convert html version of the chart to PDF
+            //and initiated download as well, with 1 call
+            var cleanFileName = Tools.RemoveWhiteSpace(pdfFileName); //remove spaces so that no errors and looks clean in URL
+
+            //will also show complete alert after done
+            await AppData.JsRuntime.InvokeVoidAsync(JS.htmlToEmail, elementToConvert, cleanFileName, "pdf", emailFromAlert);
+
+        }
+
+
         /// <summary>
         /// Extension method for setting a Timeout for a Task
         /// </summary>

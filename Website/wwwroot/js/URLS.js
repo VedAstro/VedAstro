@@ -15,7 +15,7 @@ export class URLS {
 
         //check URL address if beta or stable to set correct mode
         var domain = window.location.hostname;
-        var isBeta = domain.includes("beta");
+        var isBeta = domain.includes("beta") || domain.includes("localhost"); //when in local
 
         //let dev know in beta or stable mode
         console.log(`URL MODE -> ${isBeta ? "BETA" : "STABLE"}`);

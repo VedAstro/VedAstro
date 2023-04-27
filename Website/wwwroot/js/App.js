@@ -17,6 +17,28 @@ window.Interop = Interop;
 //URL specific to this instance
 window.URLS = new URLS();
 
+//options for printing PDF, interop uses it
+window.PDFOptions  = {
+    margin: 3,
+    filename: `match-report.pdf`,
+    //    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 3 },
+    jsPDF: { unit: 'cm', format: 'A4', orientation: 'portrait' }
+};
+
+function handleErr(msg, url, line_no) {
+    var errorMsg = "Error: " + msg + "\n";
+    errorMsg += "URL: " + url + "\n";
+    errorMsg += "Line: " + line_no + "\n\n";
+
+    alert(errorMsg);
+
+    return true;
+}
+
+// Set the global onerror; 
+onerror = handleErr;
+
 var apiKey = "089J89JF9W8JFJN49"; //copy from account page
 //this will be called by blazor as window.API.GetChart()
 window.API = new VedAstro(apiKey);

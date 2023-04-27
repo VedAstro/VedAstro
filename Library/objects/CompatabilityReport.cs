@@ -30,7 +30,7 @@ namespace VedAstro.Library
         /// User ID is used by website. Multiple supported, Shows owners
         /// todo owner ID might be better
         /// </summary>
-        public string[] UserId { get; set; }
+        public string[] UserId { get; set; } = new[] { "101" };
 
         /// <summary>
         /// Comma separated string of Owners
@@ -48,6 +48,7 @@ namespace VedAstro.Library
                 }
                 catch (Exception e)
                 {
+                    //add message to data to be spotted later
                     userIdString = e.Message;
                 }
 

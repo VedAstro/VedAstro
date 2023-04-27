@@ -23,7 +23,7 @@ namespace API
                 var rootJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
 
                 //api key to ID the call
-                var apiKey = rootJson.GetProperty("APIKey").ToString(); //treated here as owner ID
+                var apiKey = rootJson.GetProperty("APIKey").ToString(); //treated here as owner ID also User ID
 
                 //get person list
                 var personListArray = rootJson.GetProperty("PersonList");
@@ -37,7 +37,7 @@ namespace API
                 var female = personList[1];
 
                 //generate compatibility report
-                var compatibilityReport = MatchCalculator.GetCompatibilityReport(male, female);
+                var compatibilityReport = MatchCalculator.GetCompatibilityReport(male, female, ownerId);
                 return APITools.PassMessageJson((XElement)compatibilityReport.ToXml(), incomingRequest);
             }
             catch (Exception e)
@@ -60,7 +60,7 @@ namespace API
                 var femaleId = rootXml.Element("FemaleId")?.Value;
 
                 //generate compatibility report
-                var compatibilityReport = await GetCompatibilityReport(maleId, femaleId);
+                var compatibilityReport = await GetCompatibilityReport(maleId, femaleId, "101"); //todo use real id
                 return APITools.PassMessage((XElement)compatibilityReport.ToXml(), incomingRequest);
             }
             catch (Exception e)
@@ -84,9 +84,10 @@ namespace API
                 var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var maleId = rootXml.Element("MaleId")?.Value;
                 var femaleId = rootXml.Element("FemaleId")?.Value;
+                var userId = rootXml.Element("UserId")?.Value; //id of the owner can be visitor id
 
                 //generate compatibility report
-                var compatibilityReport = await GetCompatibilityReport(maleId, femaleId);
+                var compatibilityReport = await GetCompatibilityReport(maleId, femaleId, userId);
                 var chartReadyToInject = compatibilityReport.ToXml();
 
                 //save chart into storage
@@ -214,7 +215,7 @@ namespace API
             return returnList;
         }
 
-        public static async Task<CompatibilityReport> GetCompatibilityReport(string maleId, string femaleId)
+        public static async Task<CompatibilityReport> GetCompatibilityReport(string maleId, string femaleId, string userId)
         {
             var male = await APITools.GetPersonById(maleId);
             var female = await APITools.GetPersonById(femaleId);
@@ -223,7 +224,7 @@ namespace API
             var notEmpty = !Person.Empty.Equals(male) && !Person.Empty.Equals(female);
             if (notEmpty)
             {
-                return MatchCalculator.GetCompatibilityReport(male, female);
+                return MatchCalculator.GetCompatibilityReport(male, female, userId);
             }
             else
             {
@@ -270,14 +271,14 @@ namespace API
                 if (inputPersonIsMale && personMatchIsFemale)
                 {
                     //add report to list
-                    var report = MatchCalculator.GetCompatibilityReport(inputPerson, personMatch);
+                    var report = MatchCalculator.GetCompatibilityReport(inputPerson, personMatch, "101");
                     returnList.Add(report);
                 }
 
                 if (inputPersonIsFemale && personMatchIsMale)
                 {
                     //add report to list
-                    var report = MatchCalculator.GetCompatibilityReport(personMatch, inputPerson);
+                    var report = MatchCalculator.GetCompatibilityReport(personMatch, inputPerson, "101");
                     returnList.Add(report);
                 }
             }
@@ -308,12 +309,12 @@ namespace API
                 //       & male can be checked from female position
                 if (inputPersonIsMale)
                 {
-                    report = MatchCalculator.GetCompatibilityReport(inputPerson, personMatch);
+                    report = MatchCalculator.GetCompatibilityReport(inputPerson, personMatch, "101");
                 }
                 //input person is female
                 else
                 {
-                    report = MatchCalculator.GetCompatibilityReport(personMatch, inputPerson);
+                    report = MatchCalculator.GetCompatibilityReport(personMatch, inputPerson, "101");
                 }
 
                 resultList.Add(report);
@@ -349,7 +350,7 @@ namespace API
             {
                 foreach (var male in maleList)
                 {
-                    var report = MatchCalculator.GetCompatibilityReport(male, female);
+                    var report = MatchCalculator.GetCompatibilityReport(male, female, "101");
                     //if report meets criteria save it
                     if (report.KutaScore > 50)
                     {

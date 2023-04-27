@@ -14,7 +14,6 @@ namespace Website
 
         private static XElement BranchXml = new XElement("Branch", ThisAssembly.Version);
 
-
         /// <summary>
         /// Tries to ID the user, and sends a log of the visit to API server
         /// Called from MainLayout everytime page is loaded
@@ -47,7 +46,6 @@ namespace Website
             }
 
         }
-
 
         public static async Task Error(XElement errorDataXml)
         {
@@ -211,8 +209,6 @@ namespace Website
             return visitorXml;
         }
 
-
-
         //all possible details are logged
         private static async Task<XElement> NewVisitor(XElement userIdXml, XElement urlXml)
         {
@@ -273,7 +269,7 @@ namespace Website
         {
             try
             {
-                //send using worker JS
+                //send using worker JS (the faster way, avoids congestion)
                 await AppData.JsRuntime.InvokeAsync<string>(JS.LogThread_postMessage, visitorElement.ToString());
 
                 //send to API for save keeping

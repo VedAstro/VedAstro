@@ -85,7 +85,7 @@ namespace Website
 #endif
                 //console log everything we got to ID this error,
                 //so that it never happens again!
-                var extraInfo = "Error from UnhandledExceptionProvider.Log() \n";
+                var extraInfo = "UNEXPECTED ERROR > STATUS CRITICAL \n";
                 extraInfo += ($"{eventId.Id} {eventId.Name} \n");
                 extraInfo += ($"{state} \n");
                 extraInfo += ($"{formatter.Method.Name} \n");

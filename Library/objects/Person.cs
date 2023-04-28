@@ -324,10 +324,7 @@ namespace VedAstro.Library
         /// </summary>
         /// <param name="personXmlList"></param>
         /// <returns></returns>
-        public static List<Person> FromXml(IEnumerable<XElement> personXmlList)
-        {
-            return personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
-        }
+        public static List<Person> FromXml(IEnumerable<XElement> personXmlList) => personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
 
         /// <summary>
         /// Replaces life event list and returns new Person with modified val

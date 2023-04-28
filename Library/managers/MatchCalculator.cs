@@ -15,7 +15,7 @@ namespace VedAstro.Library
         /// Gets the compatibility report for a male & female
         /// The place where compatibility report gets generated
         /// </summary>
-        public static CompatibilityReport GetCompatibilityReport(Person male, Person female, string userId)
+        public static MatchReport GetCompatibilityReport(Person male, Person female, string userId)
         {
             //calculators are designed to fail 1st,
             //as such if they fail don't shut down the whole show!
@@ -66,13 +66,8 @@ namespace VedAstro.Library
                 compatibilityPredictions.Add(prediction);
             }
 
-            var report = new CompatibilityReport
-            {
-                Male = male,
-                Female = female,
-                //do the calculations & add results to a list
-                PredictionList = compatibilityPredictions
-            };
+            //parse data
+            var report = new MatchReport(male, female,0,"Notes", compatibilityPredictions, new []{""});
 
             //count the total points
             CalculateTotalPoints(ref report);
@@ -82,10 +77,10 @@ namespace VedAstro.Library
 
             return report;
 
-            //FUNCTIONS
+            //-------------------------LOCAL FUNCTIONS
 
             //checks & modifies results for exceptions 
-            void HandleExceptions(ref CompatibilityReport report)
+            void HandleExceptions(ref MatchReport report)
             {
 
                 var list = report.PredictionList;
@@ -221,7 +216,7 @@ namespace VedAstro.Library
 
             //Kutas analysis consist of analyzing 12 Factors.Every factor contributes
             //some points, toward a maximum total score of 36 points.
-            void CalculateTotalPoints(ref CompatibilityReport report)
+            void CalculateTotalPoints(ref MatchReport report)
             {
 
                 //count points total 36 points

@@ -45,7 +45,10 @@ namespace VedAstro.Library
         /// and since it's hard to detect during failure, for now select on random, to tell user both possible related errors info
         /// </summary>
         /// <returns></returns>
-        public static string ServerConnectionProblem() => Tools.RandomSelect(new[] { SlowUnstableInternet, NewFeatures, ImproveWebsite });
+        public static string ServerConnectionProblem() => Tools.RandomSelect(new[]
+        {
+            SlowUnstableInternet, NewFeatures, ImproveWebsite, Unexpected
+        });
         
         /// <summary>
         /// Random selection of errors messages for unexpected errors 

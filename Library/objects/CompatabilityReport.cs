@@ -8,8 +8,9 @@ namespace VedAstro.Library
     /// <summary>
     /// Represents the final data generated for compatibility
     /// </summary>
-    public class CompatibilityReport : IToXml
+    public class MatchReport : IToXml
     {
+     
         private static string[] DefaultUserId = new[] { "101" };
 
         public List<CompatibilityPrediction> PredictionList { get; set; }
@@ -24,11 +25,10 @@ namespace VedAstro.Library
         public Person Female { get; set; }
 
         //todo should be dynamic
-        public object ScoreColor { get; set; } = "#00a702";
+        private string ScoreColor => this.KutaScore > 50 ? "Green" : "Red";
 
         /// <summary>
         /// User ID is used by website. Multiple supported, Shows owners
-        /// todo owner ID might be better
         /// </summary>
         public string[] UserId { get; set; } = new[] { "101" };
 
@@ -57,13 +57,34 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Notes to be filled by user more about the match report
+        /// </summary>
+        public string Notes { get; set; }
+
+        public string Id { get; set; }
+
+
+
+        public MatchReport(Person male, Person female, double kutaScore,string notes, List<CompatibilityPrediction> predictionList, string[] userId)
+        {
+            Male = male;
+            Female = female;
+            KutaScore = kutaScore;
+            Notes = notes;
+            PredictionList = predictionList;
+            UserId = userId.Any() ? userId : DefaultUserId;
+        }
+
+
+
+        /// <summary>
         /// Converts the instance data into XML
         /// Used for transmitting across net
         /// </summary>
         public XElement ToXml()
         {
             //create root tag to hold data
-            var compatibilityReport = new XElement("CompatibilityReport");
+            var compatibilityReport = new XElement("MatchReport");
 
             //place data in individual tags
             var kutaScore = new XElement("KutaScore", this.KutaScore);
@@ -101,7 +122,7 @@ namespace VedAstro.Library
         /// <summary>
         /// If unparseable will return null
         /// </summary>
-        public static CompatibilityReport FromXml(XElement compatibilityReportXml)
+        public static MatchReport FromXml(XElement compatibilityReportXml)
         {
             //end here if null
             if (compatibilityReportXml == null) { return null; }
@@ -118,15 +139,9 @@ namespace VedAstro.Library
             var predictionListXml = compatibilityReportXml.Element("PredictionList");
             var predictionList = ParseXmlToPredictionList(predictionListXml);
 
-            var newCompatibilityReport = new CompatibilityReport()
-            {
-                Male = male,
-                Female = female,
-                KutaScore = kutaScore,
-                PredictionList = predictionList,
-                UserId = userId.Any() ? userId : DefaultUserId
-            };
 
+            //package as new data
+            var newCompatibilityReport = new MatchReport(male, female, kutaScore, "Notes", predictionList, userId);
             return newCompatibilityReport;
 
             //----------------------------------------------
@@ -161,5 +176,11 @@ namespace VedAstro.Library
                 return returnVal;
             }
         }
+
+        /// <summary>
+        /// Parse list of XML directly
+        /// </summary>
+        public static List<MatchReport> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(matchXml => MatchReport.FromXml(matchXml)).ToList();
+
     }
 }

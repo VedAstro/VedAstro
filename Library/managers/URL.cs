@@ -41,13 +41,16 @@ public class URL
         AddTaskApi = ApiUrl + "/addtask";
         AddVisitorApi = ApiUrl + "/addvisitor";
         GetPersonList = ApiUrl + "/GetPersonList";
-        GetPersonApi = ApiUrl + "/getperson";
-        GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
-        UpdatePersonApi = ApiUrl + "/updateperson";
         GetTaskListApi = ApiUrl + "/gettasklist";
         GetVisitorList = ApiUrl + "/getvisitorlist";
         GetMessageList = ApiUrl + "/getmessagelist";
+
+        GetMatchReportList = ApiUrl + "/GetMatchReportList";
+        GetPersonApi = ApiUrl + "/getperson";
+        GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
+        UpdatePersonApi = ApiUrl + "/updateperson";
         GetMatchReportApi = ApiUrl + "/getmatchreport";
+        GetSavedMatchReport = ApiUrl + "/GetSavedMatchReport";
         SaveMatchReportApi = ApiUrl + "/SaveMatchReport";
         GetEventsChart = ApiUrl + "/geteventschart";
         //TODO special URL for chart because timeout Azure CDN timeout >30s
@@ -92,16 +95,21 @@ public class URL
     public readonly string AddVisitorApi;
     public static readonly string AddVisitorApiStable = "https://api.vedastro.org/addvisitor";
 
+    //MATCH
+    public readonly string GetSavedMatchReport;
+    public readonly string GetMatchReportApi;
+    public readonly string SaveMatchReportApi;
+    public readonly string GetMatchReportList;
+
+    //PERSON
     public readonly string GetPersonList;
     public readonly string GetPersonApi;
     public readonly string GetPersonIdFromSavedChartId;
-
     public readonly string UpdatePersonApi;
+
     public readonly string GetTaskListApi;
     public readonly string GetVisitorList;
     public readonly string GetMessageList;
-    public readonly string GetMatchReportApi;
-    public readonly string SaveMatchReportApi;
     public readonly string GetEventsChart;
     public readonly string GetEventsChartDirect;
     public readonly string GetSavedEventsChart;

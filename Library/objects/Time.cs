@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Xml.Linq;
 
@@ -298,6 +300,13 @@ namespace VedAstro.Library
                 return Time.Empty;
             }
         }
+
+        /// <summary>
+        /// Parse list of XML directly
+        /// </summary>
+        public static List<Time> FromXml(IEnumerable<XElement> xmlList) =>
+            xmlList.Select(timeXml => Time.FromXml(timeXml)).ToList();
+
 
         /// <summary>
         /// Gets the Time now in current system, needs location

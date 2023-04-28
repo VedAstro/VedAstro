@@ -14,20 +14,14 @@
     @if (IsButtonsRow)
     {
         @*flex wrap needed to make button wrap nicely in mobile*@
-        <div class="hstack gap-4 d-flex flex-wrap">
+        <div class="hstack gap-4 d-flex flex-wrap" >
             @ButtonsRow
         </div>
     }
-    <hr class="border-secondary border" />
-        
-@*    <hr class="border border-secondary border-0 opacity-50">
-*@</div>
+    <hr class="border-secondary border @(IsButtonsRow?"":"mt-1")" />
+</div>
 
 @code {
-    //protected override void OnAfterRender(bool firstRender)
-    //{ TODO
-    //    Console.WriteLine(Description?.ToString());
-    //}
 
     [Parameter]
     public string? Title { get; set; }
@@ -48,18 +42,6 @@
 
     [Parameter]
     public RenderFragment? Description { get; set; }
-
-    /// <summary>
-    /// Based on length of descrition text 
-    /// </summary>
-    //public string DescriptionWidthPx
-    //{
-    //    get
-    //    {
-    //        return Description.ToString()?:;
-    //    }
-       
-    //}
 
     [Parameter]
     public RenderFragment? ButtonsRow { get; set; }

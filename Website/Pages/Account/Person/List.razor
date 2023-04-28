@@ -1,5 +1,7 @@
-@using VedAstro.Library
 @attribute [Route(PageRoute.PersonList)]
+
+@using VedAstro.Library
+
 
 <PageTitle>Person List</PageTitle>
 
@@ -44,33 +46,13 @@ else
 
 @code {
 
-    //FIELDS
-    const string TableId = "PersonListTable"; //change only needed here
-
     private List<Person> _personListAsync = new List<Person>();
     private bool _isReady = false;
-
-
-
-    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
-
-    //code executed after page has been rendered
-    //protected override async Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    //generate table
-    //    if (firstRender)
-    //    {
-    //        await InvokeAsync(async () => await GenerateTable()).Try();
-    //    }
-    //}
 
     protected override async Task OnInitializedAsync()
     {
         await GenerateTable();
     }
-
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█

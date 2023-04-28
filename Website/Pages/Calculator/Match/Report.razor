@@ -1,6 +1,5 @@
 @attribute [Route(PageRoute.MatchReportParam)]
 
-
 @using VedAstro.Library
 @using System.Xml.Linq
 
@@ -12,9 +11,11 @@
 @*only show once report ready*@
 @if (_report != null)
 {
+    @*TOP BUTTON ROW*@
     <div class="hstack gap-3 my-3">
         <IconButton SmallSize="true" Outline="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
         <IconButton SmallSize="true" Outline="true" IconName="flat-color-icons:good-decision" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
+        <IconButton SmallSize="true" Outline="true" IconName="emojione:scroll" ButtonText="Saved Match" ClickUrl="@PageRoute.SavedMatchReports"></IconButton>
         <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="flat-color-icons:briefcase">
             <DropDownList>
                 <li>
@@ -24,7 +25,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>_jsRuntime.ShowAlert("error","WORK IN PROGRESS", true, 0))">
+                    <a class="dropdown-item hstack gap-1" @onclick="OnClickSaveToCloud">
                         <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="material-symbols:cloud-upload" />
                         <span>Cloud</span>
                     </a>
@@ -34,13 +35,13 @@
         <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="flat-color-icons:tree-structure">
             <DropDownList>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickSendToEmail(PdfFileName, matchReportElement))">
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickSendToEmail(PdfFileName, matchReportElement))">
                         <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
                         <span>Email PDF</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickShareFacebook(PdfFileName, matchReportElement))">
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickShareFacebook(PdfFileName, matchReportElement))">
                         <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
                         <span>Facebook</span>
                     </a>
@@ -58,6 +59,7 @@
 
     <hr />
 
+    @*CHART RENDERING*@
     <div @ref="matchReportElement">
         <div class="container mb-4 border">
             <div class="row justify-content-start">
@@ -130,318 +132,318 @@
 }
 
 @*HELP SECTION*@
-<PageHelpSection @ref="_helpSection" DefaultVisible="true">
-    <Content>
-        <h4 class="fw-bold">Three Factors</h4>
-        <p class="text-justify mb-4">
-            In selecting horoscopes for marriage purposes, three factors have to be
-            carefully considered. They are: -
-            <ol class="list-group list-group-numbered">
-                <li class="list-group-item">The longevity of the bride and the bridegroom.</li>
-                <li class="list-group-item">The larger strength of the 7th and 8th houses.</li>
-                <li class="list-group-item">Agreeability in regard to the Kutas or Pooruththam.</li>
-            </ol>
-        </p>
+    <PageHelpSection @ref="_helpSection" DefaultVisible="true">
+        <Content>
+            <h4 class="fw-bold">Three Factors</h4>
+            <p class="text-justify mb-4">
+                In selecting horoscopes for marriage purposes, three factors have to be
+                carefully considered. They are: -
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item">The longevity of the bride and the bridegroom.</li>
+                    <li class="list-group-item">The larger strength of the 7th and 8th houses.</li>
+                    <li class="list-group-item">Agreeability in regard to the Kutas or Pooruththam.</li>
+                </ol>
+            </p>
 
-        <h4 class="fw-bold">Longevity</h4>
-        <p class="text-justify mb-4">
-            When there is no longevity in the case of bride, the horoscope must be
-            rejected even though the 7th house may be strong or the requsite
-            number of units are available. Likewise when the 7th house is weak and
-            is considerably blemished, the horoscope to be matched should have
-            antidotes or counteracting influences.
-        </p>
+            <h4 class="fw-bold">Longevity</h4>
+            <p class="text-justify mb-4">
+                When there is no longevity in the case of bride, the horoscope must be
+                rejected even though the 7th house may be strong or the requsite
+                number of units are available. Likewise when the 7th house is weak and
+                is considerably blemished, the horoscope to be matched should have
+                antidotes or counteracting influences.
+            </p>
 
-        <hr />
+            <hr />
 
 
-        <h4 id="GrahaMaitram" class="fw-bold">Rasyadhipathi or Graha Maitram</h4>
-        <p class="text-justify mb-4">
-            This is the most important Kuta
-            inasmuch as it deals with the psychological dispositions of the Couple.
-            The mental qualities of the parties and their affection for each other are
-            admittedly of vital importance to their happiness. This must be tested
-            before marriage. In considering Graha Maitram the friendship or
-            otherwise between the lords of the Janma Rasis of the persons
-            concerned is very important.
-            Some suggest that in considering the planetary relations, the temporary
-            dispositions should also be taken into account. This in my humble
-            opinion is not necessary, because, the entire subject of adaptability
-            hinges on the birth constellations and not on birth charts as a whole.
-        </p>
+            <h4 id="GrahaMaitram" class="fw-bold">Rasyadhipathi or Graha Maitram</h4>
+            <p class="text-justify mb-4">
+                This is the most important Kuta
+                inasmuch as it deals with the psychological dispositions of the Couple.
+                The mental qualities of the parties and their affection for each other are
+                admittedly of vital importance to their happiness. This must be tested
+                before marriage. In considering Graha Maitram the friendship or
+                otherwise between the lords of the Janma Rasis of the persons
+                concerned is very important.
+                Some suggest that in considering the planetary relations, the temporary
+                dispositions should also be taken into account. This in my humble
+                opinion is not necessary, because, the entire subject of adaptability
+                hinges on the birth constellations and not on birth charts as a whole.
+            </p>
 
-        <h4 id="Rajju" class="fw-bold">Rajju</h4>
-        <p class="text-justify mb-4">
-            This indicates the strength or duration of married life and
-            therefore it merits special attention. The 27 constellations have been
-            grouped into five types of Rajju.
-            The Janma Nakshatras of the couple should not fall in the same Rajju. If
-            they fall in Sira (head) husband's death is likely; if in Kantha (neck) the
-            wife may die; if in Udara (stomach) the children may die; if in Kati
-            (waist) poverty may ensue; and if in Pada (foot) the couple may be
-            always wandering. Hence, it is desirable that the boy and the girl have
-            constellations belonging to different Rajjus or groups.
-        </p>
+            <h4 id="Rajju" class="fw-bold">Rajju</h4>
+            <p class="text-justify mb-4">
+                This indicates the strength or duration of married life and
+                therefore it merits special attention. The 27 constellations have been
+                grouped into five types of Rajju.
+                The Janma Nakshatras of the couple should not fall in the same Rajju. If
+                they fall in Sira (head) husband's death is likely; if in Kantha (neck) the
+                wife may die; if in Udara (stomach) the children may die; if in Kati
+                (waist) poverty may ensue; and if in Pada (foot) the couple may be
+                always wandering. Hence, it is desirable that the boy and the girl have
+                constellations belonging to different Rajjus or groups.
+            </p>
 
-        <h4 id="NadiKuta" class="fw-bold">Nadi Kuta</h4>
-        <p class="text-justify mb-4">
-            This is considered to be the most important and at the
-            same time the most significant Kuta. In Sanskrit, Nadi means several
-            things but in reference to astrology, it signifies pulse or nervous energy
-            indicating the physiological and to a certain extent hereditary factors.
-            The Hindu medical works enumerate three Nadis or humours, viz.,
-            Vatha (wind), Pitha (bile) and Sleshma (phlegm). A boy with a
-            predominantly windy or phlegmatic or bilious constitution should not
-            marry a girl of the same type. The girl should belong to a different
-            temperament. The three Nadis are ruled by the different constellations.
-        </p>
-        <h4 id="VasyaKuta" class="fw-bold">Vasya Kuta</h4>
-        <p class="text-justify mb-4">
-            This is important as suggesting the degree of magnetic
-            control or amenability the wife or husband would be able to exercise on
-            the other. For Aries - Leo and Scorpio are amenable. For Taurus -
-            Cancer and Libra; for Gemini - Virgo; for Cancer - Scorpio and
-            Sagittarius; for Leo - Libra; for Virgo - Pisces and Gemini; for Libra -
-            Capricorn and Virgo; for Scorpio - Cancer; for Sagittarius - Pisces; for
-            Capricorn - Aries and Aquarius; for Aquarius - Aries; arid for Pisces -
-            Capricorn.
-        </p>
+            <h4 id="NadiKuta" class="fw-bold">Nadi Kuta</h4>
+            <p class="text-justify mb-4">
+                This is considered to be the most important and at the
+                same time the most significant Kuta. In Sanskrit, Nadi means several
+                things but in reference to astrology, it signifies pulse or nervous energy
+                indicating the physiological and to a certain extent hereditary factors.
+                The Hindu medical works enumerate three Nadis or humours, viz.,
+                Vatha (wind), Pitha (bile) and Sleshma (phlegm). A boy with a
+                predominantly windy or phlegmatic or bilious constitution should not
+                marry a girl of the same type. The girl should belong to a different
+                temperament. The three Nadis are ruled by the different constellations.
+            </p>
+            <h4 id="VasyaKuta" class="fw-bold">Vasya Kuta</h4>
+            <p class="text-justify mb-4">
+                This is important as suggesting the degree of magnetic
+                control or amenability the wife or husband would be able to exercise on
+                the other. For Aries - Leo and Scorpio are amenable. For Taurus -
+                Cancer and Libra; for Gemini - Virgo; for Cancer - Scorpio and
+                Sagittarius; for Leo - Libra; for Virgo - Pisces and Gemini; for Libra -
+                Capricorn and Virgo; for Scorpio - Cancer; for Sagittarius - Pisces; for
+                Capricorn - Aries and Aquarius; for Aquarius - Aries; arid for Pisces -
+                Capricorn.
+            </p>
 
-        <h4 id="DinaKuta" class="fw-bold">Dina Kuta</h4>
-        <p class="text-justify mb-4">
-            The word "Dina"" simply means day and refers to the day to day living and sharing.
-            Count the constellation of the boy from that of the girl
-            and divide the number by 9. If the remainder is 2, 4, 6, 8 or 0 it is good.
-            The number of units of compatibility assigned to this Kuta is 3 in case
-            agreement is found.
-        </p>
-        <h4 id="GunaKuta" class="fw-bold">Guna Kuta</h4>
-        <p class="text-justify mb-4">
-            This seems to have an important bearing on the
-            temperament and character of the couple concerned. A difference of temperament may be harmonious and
-            complimentary. But a compatibility of temperament is essential to a
-            satisfactory marriage union. Astrologically three Gunas (temperaments
-            of natures) are recognized viz., Deva (divine), Manusha (human), and
-            Rakshasa (diabolical). Deva represents piety, goodness of character
-            end charitable nature. Manusha is a mixture of good and bad, while
-            Rakshasa suggests dominance, self-will and violence. These different
-            natures are indicated by the birth, constellation. A distaste for piety and
-            religious disposition cannot be easily associated with piety and religious
-            nature. A difference in beliefs and dogmas cannot always be
-            overbalanced by sexual compatibility. Hence one born in a Deva
-            constellation is not able to get on well with a person born in Rakshasa
-            constellation. A Deva can marry a Deva, a Manusha can marry a
-            Manusha and a Rakshasa can marry a Rakshasa.
-            Manusha or a Deva man should not marry a Rakshasa girl unless there
-            are other neutralizing factors. But marriage between a Rakshasa man
-            and a Deva or Manusha girl is passable. If marriage is brought about
-            between prohibited Ganas there will be quarrels and disharmony. So
-            that the couple would always welcome an opportunity for separation and
-            divorce.
-        </p>
+            <h4 id="DinaKuta" class="fw-bold">Dina Kuta</h4>
+            <p class="text-justify mb-4">
+                The word "Dina"" simply means day and refers to the day to day living and sharing.
+                Count the constellation of the boy from that of the girl
+                and divide the number by 9. If the remainder is 2, 4, 6, 8 or 0 it is good.
+                The number of units of compatibility assigned to this Kuta is 3 in case
+                agreement is found.
+            </p>
+            <h4 id="GunaKuta" class="fw-bold">Guna Kuta</h4>
+            <p class="text-justify mb-4">
+                This seems to have an important bearing on the
+                temperament and character of the couple concerned. A difference of temperament may be harmonious and
+                complimentary. But a compatibility of temperament is essential to a
+                satisfactory marriage union. Astrologically three Gunas (temperaments
+                of natures) are recognized viz., Deva (divine), Manusha (human), and
+                Rakshasa (diabolical). Deva represents piety, goodness of character
+                end charitable nature. Manusha is a mixture of good and bad, while
+                Rakshasa suggests dominance, self-will and violence. These different
+                natures are indicated by the birth, constellation. A distaste for piety and
+                religious disposition cannot be easily associated with piety and religious
+                nature. A difference in beliefs and dogmas cannot always be
+                overbalanced by sexual compatibility. Hence one born in a Deva
+                constellation is not able to get on well with a person born in Rakshasa
+                constellation. A Deva can marry a Deva, a Manusha can marry a
+                Manusha and a Rakshasa can marry a Rakshasa.
+                Manusha or a Deva man should not marry a Rakshasa girl unless there
+                are other neutralizing factors. But marriage between a Rakshasa man
+                and a Deva or Manusha girl is passable. If marriage is brought about
+                between prohibited Ganas there will be quarrels and disharmony. So
+                that the couple would always welcome an opportunity for separation and
+                divorce.
+            </p>
 
-        <h4 id="Mahendra" class="fw-bold">Mahendra</h4>
-        <p class="text-justify mb-4">
-            Mahendra Porutham tells us about the ability of a couple to have good children or
-            good progeny is indicated by this porutham/kuta.
-            The constellation of the boy counted from that of the girl
-            should be the 4th, 7th, 10th, 13th, 16th, 19th, 22nd or 25th. This
-            promotes well-being and increases longevity.
-        </p>
+            <h4 id="Mahendra" class="fw-bold">Mahendra</h4>
+            <p class="text-justify mb-4">
+                Mahendra Porutham tells us about the ability of a couple to have good children or
+                good progeny is indicated by this porutham/kuta.
+                The constellation of the boy counted from that of the girl
+                should be the 4th, 7th, 10th, 13th, 16th, 19th, 22nd or 25th. This
+                promotes well-being and increases longevity.
+            </p>
 
-        <h4 id="StreeDeergha" class="fw-bold">Stree-Deergha</h4>
-        <p class="text-justify mb-4">
-            In sanskrit "Stree" means Girl &amp; "Dheerga" is Blessed forever.
-            As such this kuta/porutham ensures the female counterpart's well being, longevity and prosperity.
+            <h4 id="StreeDeergha" class="fw-bold">Stree-Deergha</h4>
+            <p class="text-justify mb-4">
+                In sanskrit "Stree" means Girl &amp; "Dheerga" is Blessed forever.
+                As such this kuta/porutham ensures the female counterpart's well being, longevity and prosperity.
 
-            The boy's constellation should preferably be beyond
-            the 9th from that of the girl. According to some authorities the distance
-            should be more than 7 constellations.
+                The boy's constellation should preferably be beyond
+                the 9th from that of the girl. According to some authorities the distance
+                should be more than 7 constellations.
 
-            Exception: - This consideration may be ignored if Rasi Kuta and Graha
-            Maitram obtain.
-        </p>
+                Exception: - This consideration may be ignored if Rasi Kuta and Graha
+                Maitram obtain.
+            </p>
 
-        <h4 id="RasiKuta" class="fw-bold">Rasi Kuta</h4>
-        <p class="text-justify mb-4">
-            If the Rasi of the boy happens to be the 2nd from that of
-            the girl and if the Rasi of the girl happens to be the 12th from that of the
-            boy, evil results will follow. But if, on the other hand, the Rasi of the boy
-            falls in the 12th from the girl's or the Rasi of the girl is in the 2nd from
-            that of the boy astrology predicts longevity for the couple. If the Rasi of
-            the boy is the 3rd from that of the girl. there will be misery and sorrow.
-            But if the Rasi of the girl is the 3rd from that of the boy, there will be
-            happiness. If the boy's falls in the 4th from that of the girl's, then there
-            will be great poverty; but if the. Rasi of the girl happens to fall in the 4th
-            from the boy's there will be great wealth. If the boy's Rasi falls in the 5th
-            from that of the girl, there will be unhappiness. But if the girl's Rasi falls
-            in the 5th from that of the boy, there will be enjoyment and prosperity.
-            But where the Rasis of the boy and the girl are in the 7th houses
-            mutually, then there will be health, agreement and happiness. If the
-            boy's Rasi falls in the 6th from the girl's there will be loss of children, but
-            if the girl's is the 6th from the boy's, then the progeny will prosper.
+            <h4 id="RasiKuta" class="fw-bold">Rasi Kuta</h4>
+            <p class="text-justify mb-4">
+                If the Rasi of the boy happens to be the 2nd from that of
+                the girl and if the Rasi of the girl happens to be the 12th from that of the
+                boy, evil results will follow. But if, on the other hand, the Rasi of the boy
+                falls in the 12th from the girl's or the Rasi of the girl is in the 2nd from
+                that of the boy astrology predicts longevity for the couple. If the Rasi of
+                the boy is the 3rd from that of the girl. there will be misery and sorrow.
+                But if the Rasi of the girl is the 3rd from that of the boy, there will be
+                happiness. If the boy's falls in the 4th from that of the girl's, then there
+                will be great poverty; but if the. Rasi of the girl happens to fall in the 4th
+                from the boy's there will be great wealth. If the boy's Rasi falls in the 5th
+                from that of the girl, there will be unhappiness. But if the girl's Rasi falls
+                in the 5th from that of the boy, there will be enjoyment and prosperity.
+                But where the Rasis of the boy and the girl are in the 7th houses
+                mutually, then there will be health, agreement and happiness. If the
+                boy's Rasi falls in the 6th from the girl's there will be loss of children, but
+                if the girl's is the 6th from the boy's, then the progeny will prosper.
 
-            Exception: - When both the Rasis are owned by one planet or if the
-            lords of the two Rasis happen to be friends, the evil attributed above to
-            the inauspicious disposition of Rasis gets cancelled.
-        </p>
+                Exception: - When both the Rasis are owned by one planet or if the
+                lords of the two Rasis happen to be friends, the evil attributed above to
+                the inauspicious disposition of Rasis gets cancelled.
+            </p>
 
-        <h4 id="Vedha" class="fw-bold">Vedha</h4>
-        <p class="text-justify mb-4">
-            This means affliction. Certain constellations are capable of
-            affecting or afflicting certain other constellations situated at particular
-            distances from them; For instance, Aswini is said to cause Vedha to the
-            18th constellation (viz., Jyeshta) from it; Bharani to the 16th (viz.,
-            Anuradha) and so on. The following pairs of constellations affect each
-            other and, therefore, no marriage should be brought about between a
-            boy and girl who's Janma Nakshatras belong to the same pair unless the
-            are other relieving factors.
-        </p>
+            <h4 id="Vedha" class="fw-bold">Vedha</h4>
+            <p class="text-justify mb-4">
+                This means affliction. Certain constellations are capable of
+                affecting or afflicting certain other constellations situated at particular
+                distances from them; For instance, Aswini is said to cause Vedha to the
+                18th constellation (viz., Jyeshta) from it; Bharani to the 16th (viz.,
+                Anuradha) and so on. The following pairs of constellations affect each
+                other and, therefore, no marriage should be brought about between a
+                boy and girl who's Janma Nakshatras belong to the same pair unless the
+                are other relieving factors.
+            </p>
 
-        <h4 id="Varna" class="fw-bold">Varna</h4>
-        <p class="text-justify mb-4">
-            This seems to signify the degree of spiritual or ego
-            development of the marrying partners. Pisces, Scorpio and Cancer
-            represent the highest development - Brahmin; Leo, Sagittarius and Libra
-            indicate the second grade - or Kshatriya; Aries, Gemini and Aquarius
-            suggest the third or the Vaisya; while Taurus, Virgo and Capricorn
-            indicate the last grade, viz., Sudra. A girl belonging to a higher grade of
-            spiritual development should not be mated to a boy of lesser
-            development. The vice verse or both belonging to the same grade or
-            degree is allowed.
-        </p>
+            <h4 id="Varna" class="fw-bold">Varna</h4>
+            <p class="text-justify mb-4">
+                This seems to signify the degree of spiritual or ego
+                development of the marrying partners. Pisces, Scorpio and Cancer
+                represent the highest development - Brahmin; Leo, Sagittarius and Libra
+                indicate the second grade - or Kshatriya; Aries, Gemini and Aquarius
+                suggest the third or the Vaisya; while Taurus, Virgo and Capricorn
+                indicate the last grade, viz., Sudra. A girl belonging to a higher grade of
+                spiritual development should not be mated to a boy of lesser
+                development. The vice verse or both belonging to the same grade or
+                degree is allowed.
+            </p>
 
-        <h4 id="YoniKuta" class="fw-bold">Yoni Kuta</h4>
-        <p class="text-justify mb-4">
-            Yoni Kuta is for sexual compatibility. The sexual urge of a person born for instance in Chitta is
-            supposed to be as strong as that of a tiger. The human embryo in
-            course of its development passes through the various stages of
-            evolution - mammals, quadrupeds, etc., so that the tendencies of certain
-            animals will be predominant The birth constellation seems to show this
-            predominance. Each sign and degree of the zodiac expresses the
-            degree of evolution of the individual concerned. Thus, one born in Leo
-            will have in him the characteristics of a lion while the other born in Aries
-            will be timid and mild. It is these biological influences that seem to be at
-            the root of all astrological considerations. If both the couple belong to
-            the male constellations, there will be frequent quarrels and want of
-            agreement in sex-matters. So the best way is to mate a male belonging
-            to a male constellation with a female belonging to a female
-            constellation. Therefore the Yoni Kuta takes into account the sexual aspect of
-            marriage and indicates the sex affinities such as the degree of sex-urge,
-            sex-compatibility, the size of copulatory organs and so on.
-            This reveals to us the importance of Yoni Kuta. All the 27 constellations
-            have been assigned certain animals. Marriage between the constellations indicating same class of yoni and
-            between the male and female stars of that yoni said to conduce to great
-            happiness, perfect harmony and progeny. If the male and female
-            happen to be born in friendly Yonis, but both representing female
-            constellations there will be fair happiness and agreement. If the couple
-            belong both to male constellations there will be constant quarrels and
-            unhappiness. If marriage takes place between constellations indicating
-            unfriendly Yonis it is better marriage is avoided. For example, if marriage
-            takes place between a male born in Moola and female born in Aridra it
-            will turn out a very happy. The constellations Moola and Aridra
-            represent the male and female organs of a dog. The union of these is
-            agreeable and conduces to favourable results to the fullest extent. If
-            marriage takes place between a man born in the constellation
-            Satabhisha and a girl born in Punarvasu, both representing the female
-            stars, the marriage is passable but not so good as in the first instance.
-            Marriages between parsons belonging to constellations indicating
-            inimical yonis are not recommended.
-        </p>
+            <h4 id="YoniKuta" class="fw-bold">Yoni Kuta</h4>
+            <p class="text-justify mb-4">
+                Yoni Kuta is for sexual compatibility. The sexual urge of a person born for instance in Chitta is
+                supposed to be as strong as that of a tiger. The human embryo in
+                course of its development passes through the various stages of
+                evolution - mammals, quadrupeds, etc., so that the tendencies of certain
+                animals will be predominant The birth constellation seems to show this
+                predominance. Each sign and degree of the zodiac expresses the
+                degree of evolution of the individual concerned. Thus, one born in Leo
+                will have in him the characteristics of a lion while the other born in Aries
+                will be timid and mild. It is these biological influences that seem to be at
+                the root of all astrological considerations. If both the couple belong to
+                the male constellations, there will be frequent quarrels and want of
+                agreement in sex-matters. So the best way is to mate a male belonging
+                to a male constellation with a female belonging to a female
+                constellation. Therefore the Yoni Kuta takes into account the sexual aspect of
+                marriage and indicates the sex affinities such as the degree of sex-urge,
+                sex-compatibility, the size of copulatory organs and so on.
+                This reveals to us the importance of Yoni Kuta. All the 27 constellations
+                have been assigned certain animals. Marriage between the constellations indicating same class of yoni and
+                between the male and female stars of that yoni said to conduce to great
+                happiness, perfect harmony and progeny. If the male and female
+                happen to be born in friendly Yonis, but both representing female
+                constellations there will be fair happiness and agreement. If the couple
+                belong both to male constellations there will be constant quarrels and
+                unhappiness. If marriage takes place between constellations indicating
+                unfriendly Yonis it is better marriage is avoided. For example, if marriage
+                takes place between a male born in Moola and female born in Aridra it
+                will turn out a very happy. The constellations Moola and Aridra
+                represent the male and female organs of a dog. The union of these is
+                agreeable and conduces to favourable results to the fullest extent. If
+                marriage takes place between a man born in the constellation
+                Satabhisha and a girl born in Punarvasu, both representing the female
+                stars, the marriage is passable but not so good as in the first instance.
+                Marriages between parsons belonging to constellations indicating
+                inimical yonis are not recommended.
+            </p>
 
-        <h4 id="KujaDosha" class="fw-bold">Kuja Dosha</h4>
-        <p class="text-justify mb-4">
-            The position of Venus and Mars is very important in judging marital
-            relations. Mars whose element is fire rules marriage. Where he is badly
-            situated or associated in the horoscope of a male or female, it follows
-            that the sacerdotal fire gets extinguished soon. Such unfavourable
-            situation goes under the name of Kuja Dosha.
+            <h4 id="KujaDosha" class="fw-bold">Kuja Dosha</h4>
+            <p class="text-justify mb-4">
+                The position of Venus and Mars is very important in judging marital
+                relations. Mars whose element is fire rules marriage. Where he is badly
+                situated or associated in the horoscope of a male or female, it follows
+                that the sacerdotal fire gets extinguished soon. Such unfavourable
+                situation goes under the name of Kuja Dosha.
 
-            It must be noted that in determining marriage adaptability between two
-            parties, there are several elements of much more importance than Kuja
-            Dosha. And the evil influences occuring from the bad position of Mars is
-            only one of the several elements.
+                It must be noted that in determining marriage adaptability between two
+                parties, there are several elements of much more importance than Kuja
+                Dosha. And the evil influences occuring from the bad position of Mars is
+                only one of the several elements.
 
-            So far as our humble experience goes it is only in the Kerala Sastra that
-            mention is made of Kuja Dosha. The stanza runs thus:
-            Dhana vyayecha pathale jamitre chashtame kuja; Strinam bharthru vinasamcha
-            bharthunam strivinasanam.
-            This means: - "If Mars is in the 2nd, 12th,
-            4th, 7th and 8th houses in the horoscope of the female, the death of the
-            husband will occur; similar situation in the husband's horoscope causes
-            the death of wife."
+                So far as our humble experience goes it is only in the Kerala Sastra that
+                mention is made of Kuja Dosha. The stanza runs thus:
+                Dhana vyayecha pathale jamitre chashtame kuja; Strinam bharthru vinasamcha
+                bharthunam strivinasanam.
+                This means: - "If Mars is in the 2nd, 12th,
+                4th, 7th and 8th houses in the horoscope of the female, the death of the
+                husband will occur; similar situation in the husband's horoscope causes
+                the death of wife."
 
-            The Lagna represents body, the Moon, mind and Venus, sexual
-            relations. Therefore, the houses have to be reckoned with reference to
-            all the three, viz., Lagna, Moon and Venus. The dosha (evil) is
-            considered weak when it exists from Lagna, a little stronger from the
-            Moon and still more powerful from Venus.
+                The Lagna represents body, the Moon, mind and Venus, sexual
+                relations. Therefore, the houses have to be reckoned with reference to
+                all the three, viz., Lagna, Moon and Venus. The dosha (evil) is
+                considered weak when it exists from Lagna, a little stronger from the
+                Moon and still more powerful from Venus.
 
-            The second house signifies family; the twelth represents comforts and
-            pleasures of bed. The fourth rules sukha or happiness. The seventh
-            indicates husband and eighth represents longevity of the wife or
-            husband. Hence the position of Mars in these houses is supposed to
-            produce this peculiar dosham or evil. If Kuja Dosham obtains in the
-            horoscopes of both the bride and bridegroom, the dosham gets
-            cancelled.
+                The second house signifies family; the twelth represents comforts and
+                pleasures of bed. The fourth rules sukha or happiness. The seventh
+                indicates husband and eighth represents longevity of the wife or
+                husband. Hence the position of Mars in these houses is supposed to
+                produce this peculiar dosham or evil. If Kuja Dosham obtains in the
+                horoscopes of both the bride and bridegroom, the dosham gets
+                cancelled.
 
-            There are, of course, many good combinations which assure
-            marital felicity and much importance need not be given to Kuja Dosham.
-            Granting that Kuja Dosham is a factor whose occurrence should not be
-            ignored, there are antidotes which are not generally known to the rank
-            and file of Hindu astrologers.
+                There are, of course, many good combinations which assure
+                marital felicity and much importance need not be given to Kuja Dosham.
+                Granting that Kuja Dosham is a factor whose occurrence should not be
+                ignored, there are antidotes which are not generally known to the rank
+                and file of Hindu astrologers.
 
-            The exceptions are:
-            Mars in the 2nd can
-            be said to be bad provided such 2nd house is any other than Gemini
-            and Virgo; in the 12th the dosha is produced when such 12th house is
-            any other than Taurus and Libra in the 4th house Mars causes dosha
-            provided the house falls in any sign other than Aries and Scorpio; when
-            the 7th is other than Capricorn and Cancer, the dosha is given rise to;
-            and Mars gives bad effects in the 8th, provided the 8th is any other than
-            Sagittarius and Pisces. In Aquarius and Leo, Mars produces no dosha
-            whatsoever. The dosha is counteracted by the conjunction of Mars and
-            Jupiter or Mars and the Moon; or by the presence of Jupiter or Venus in
-            the ascendant.
+                The exceptions are:
+                Mars in the 2nd can
+                be said to be bad provided such 2nd house is any other than Gemini
+                and Virgo; in the 12th the dosha is produced when such 12th house is
+                any other than Taurus and Libra in the 4th house Mars causes dosha
+                provided the house falls in any sign other than Aries and Scorpio; when
+                the 7th is other than Capricorn and Cancer, the dosha is given rise to;
+                and Mars gives bad effects in the 8th, provided the 8th is any other than
+                Sagittarius and Pisces. In Aquarius and Leo, Mars produces no dosha
+                whatsoever. The dosha is counteracted by the conjunction of Mars and
+                Jupiter or Mars and the Moon; or by the presence of Jupiter or Venus in
+                the ascendant.
 
-            Thus, it will be seen that Kuja Dosha does not deserve that
-            consideration which is now being paid to it. In the consideration of
-            marriage adaptability there are various other factors which should be
-            carefully examined.
-        </p>
-        <h4 id="BadConstellation" class="fw-bold">Bad Constellation</h4>
-        <p class="text-justify mb-4">
-            There is a belief current amongst the public that girls born in certain
-            constellations cause the death of certain relatives. For instance, a girl
-            born in Visakha is said to bring about the destruction of her husband's
-            younger brother so that parents generally try to find out a bridegroom
-            who does not have a younger brother. Even when there are other merits
-            in the horoscope, it is rejected on the simple ground that the girl is born
-            in Visakha. This is entirely due to ignorance of the real astrological
-            factors governing such considerations. Only certain Padas or quarters
-            should be held inauspicious and not the entire constellation. Thus, in
-            regard to Visakha, only the last quarter is evil and not the first three.
-            Therefore a girl born in the first three quarters of Visakha should not be
-            considered to bring misfortune to her husband's younger brother.
-            Similarly, the boy or girl born in the first quarter of Moola is to be
-            rejected as it is said to cause the death of the father-in-law. The last
-            three quarters of Moola are beneficial. A girl born in Jyeshta is said to
-            cause evil to her husband's elder brother. Almost all authors agree that
-            (certain parts of) Moola, Astesha, Jyeshta and Visakha are destructive
-            constellations - Moola (first quarter) for husband's father; Aslesha (first
-            quarter) for husband's mother; Jyeshta (first quarter) for girl's husband's
-            elder brother; and Visakha (last quarter) for husband's younger brother.
-        </p>
-        <h4 id="SexEnergyCompatibility" class="fw-bold">Sex Energy Compatibility</h4>
-        <p class="text-justify mb-4">
-            When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts
-            and such an individual should be mated to one who has similar
-            instincts and not a person having Mercury or Jupiter in the 7th, as this
-            makes one under-sexed. When sexual incompatibility sets in marriage,
-            life proves charmless and friction arises between the couple.
-        </p>
-    </Content>
-</PageHelpSection>
+                Thus, it will be seen that Kuja Dosha does not deserve that
+                consideration which is now being paid to it. In the consideration of
+                marriage adaptability there are various other factors which should be
+                carefully examined.
+            </p>
+            <h4 id="BadConstellation" class="fw-bold">Bad Constellation</h4>
+            <p class="text-justify mb-4">
+                There is a belief current amongst the public that girls born in certain
+                constellations cause the death of certain relatives. For instance, a girl
+                born in Visakha is said to bring about the destruction of her husband's
+                younger brother so that parents generally try to find out a bridegroom
+                who does not have a younger brother. Even when there are other merits
+                in the horoscope, it is rejected on the simple ground that the girl is born
+                in Visakha. This is entirely due to ignorance of the real astrological
+                factors governing such considerations. Only certain Padas or quarters
+                should be held inauspicious and not the entire constellation. Thus, in
+                regard to Visakha, only the last quarter is evil and not the first three.
+                Therefore a girl born in the first three quarters of Visakha should not be
+                considered to bring misfortune to her husband's younger brother.
+                Similarly, the boy or girl born in the first quarter of Moola is to be
+                rejected as it is said to cause the death of the father-in-law. The last
+                three quarters of Moola are beneficial. A girl born in Jyeshta is said to
+                cause evil to her husband's elder brother. Almost all authors agree that
+                (certain parts of) Moola, Astesha, Jyeshta and Visakha are destructive
+                constellations - Moola (first quarter) for husband's father; Aslesha (first
+                quarter) for husband's mother; Jyeshta (first quarter) for girl's husband's
+                elder brother; and Visakha (last quarter) for husband's younger brother.
+            </p>
+            <h4 id="SexEnergyCompatibility" class="fw-bold">Sex Energy Compatibility</h4>
+            <p class="text-justify mb-4">
+                When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts
+                and such an individual should be mated to one who has similar
+                instincts and not a person having Mercury or Jupiter in the 7th, as this
+                makes one under-sexed. When sexual incompatibility sets in marriage,
+                life proves charmless and friction arises between the couple.
+            </p>
+        </Content>
+    </PageHelpSection>
 
 
 @code {
@@ -452,6 +454,7 @@
 
     [Parameter]
     public string? MaleId { get; set; } //data from URL not necessary provided
+
     [Parameter]
     public string? FemaleId { get; set; } //data from URL not necessary provided
 
@@ -506,79 +509,78 @@
     private async Task<CompatibilityReport?> GetCompatibilityReport(string maleId, string femaleId)
     {
 
-        //show loading box
+    //show loading box
         await _jsRuntime.ShowLoading();
 
-        //show names on page
+    //show names on page
         MaleName = (await WebsiteTools.GetPersonById(maleId, _jsRuntime)).Name;
         FemaleName = (await WebsiteTools.GetPersonById(femaleId, _jsRuntime)).Name;
 
-        //put person name into tab title for easy multi-tabbing
+    //put person name into tab title for easy multi-tabbing
         _pageTitle = $"{MaleName} + {FemaleName}";
 
-        //get report from server
+    //get report from server
         var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
         var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.GetMatchReportApi, rootXml);
 
-        //check the results, if fail let user know
+    //check the results, if fail let user know
         if (!webResult.IsPass)
         {
-            //let user know
+    //let user know
             await _jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
 
-            //send empty view
+    //send empty view
             return null;
         }
         else
         {
             var matchReportXml = webResult.Payload;
 
-            //try parse report (null if fail)
+    //try parse report (null if fail)
             var matchReport = CompatibilityReport.FromXml(matchReportXml);
 
             _jsRuntime.HideAlert();
 
-            //return parsed report to caller
+    //return parsed report to caller
             return matchReport;
         }
     }
-    
+
     private async Task<CompatibilityReport?> SaveCompatibilityReport(string maleId, string femaleId)
     {
-
-        //show loading box
+    //show loading box
         await _jsRuntime.ShowLoading();
 
-        //show names on page
+    //show names on page
         MaleName = (await WebsiteTools.GetPersonById(maleId, _jsRuntime)).Name;
         FemaleName = (await WebsiteTools.GetPersonById(femaleId, _jsRuntime)).Name;
 
-        //put person name into tab title for easy multi-tabbing
+    //put person name into tab title for easy multi-tabbing
         _pageTitle = $"{MaleName} + {FemaleName}";
 
-        //get report from server
-        var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
+    //get report from server
+        var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId), new XElement("UserId", AppData.CurrentUser.Id));
         var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.SaveMatchReportApi, rootXml);
 
-        //check the results, if fail let user know
+    //check the results, if fail let user know
         if (!webResult.IsPass)
         {
-            //let user know
+    //let user know
             await _jsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
 
-            //send empty view
+    //send empty view
             return null;
         }
         else
         {
             var matchReportXml = webResult.Payload;
 
-            //try parse report (null if fail)
+    //try parse report (null if fail)
             var matchReport = CompatibilityReport.FromXml(matchReportXml);
 
             _jsRuntime.HideAlert();
 
-            //return parsed report to caller
+    //return parsed report to caller
             return matchReport;
         }
     }
@@ -621,7 +623,7 @@
 
     private void OnClickMoreInfo(string predictionName)
     {
-        //make scroll movement to place
+    //make scroll movement to place
         _jsRuntime.InvokeVoidAsync(JS.scrollToDiv, "#" + predictionName);
     }
 
@@ -629,9 +631,9 @@
     {
         _jsRuntime.ShowLoading();
 
-        //todo maybe better print dialog
-        //calls special JS lib to convert html version of the chart to PDF
-        //and initiated download as well, with 1 call
+    //todo maybe better print dialog
+    //calls special JS lib to convert html version of the chart to PDF
+    //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";
 
         await _jsRuntime.InvokeVoidAsync(JS.openPDFNewTab, matchReportElement, pdfFileName);
@@ -644,8 +646,8 @@
     {
         _jsRuntime.ShowLoading();
 
-        //calls special JS lib to convert html version of the chart to PDF
-        //and initiated download as well, with 1 call
+    //calls special JS lib to convert html version of the chart to PDF
+    //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";
 
         await _jsRuntime.InvokeVoidAsync(JS.openPDFNewTab, matchReportElement, pdfFileName);
@@ -658,8 +660,8 @@
     {
         _jsRuntime.ShowLoading();
 
-        //calls special JS lib to convert html version of the chart to PDF
-        //and initiated download as well, with 1 call
+    //calls special JS lib to convert html version of the chart to PDF
+    //and initiated download as well, with 1 call
         var pdfFileName = $"Match-{MaleName}-{FemaleName}";
 
         var x = await _jsRuntime.InvokeAsync<object>(JS.htmlToPdfAutoDownload, matchReportElement, pdfFileName);
@@ -668,5 +670,16 @@
 
     }
 
+    private async Task OnClickSaveToCloud()
+    {
+        _jsRuntime.ShowLoading();
+
+    //save to cloud via API
+        await SaveCompatibilityReport(MaleId ?? "", FemaleId ?? "");
+
+    //let user know
+        var html = $@"<h3>Saved</h3><a href=""{PageRoute.SavedMatchReports}"">View all</a> saved match reports";
+        await _jsRuntime.ShowAlert("success", html, true, 0, true);
+    }
 
 }

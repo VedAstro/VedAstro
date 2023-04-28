@@ -40,7 +40,7 @@
         public const string JournalAdd = "Journal/Add";
         public const string JournalEditor = "Journal/Editor";
 
-
+        
         //CALCULATORS
         public const string CalculatorList = "Calculator/";
         public const string LifePredictor = "Calculator/LifePredictor";
@@ -52,6 +52,7 @@
         public const string HoroscopeData = "Calculator/HoroscopeData";
         public const string Muhurtha = "Calculator/Muhurtha";
         public const string Match = "Calculator/Match";
+        public const string SavedMatchReports = "Calculator/Match/Saved";
         public const string MatchFinder = "Calculator/Finder";
         public const string FamilyChart = "Calculator/FamilyChart";
         public const string MatchReport = "Calculator/Match/Report";

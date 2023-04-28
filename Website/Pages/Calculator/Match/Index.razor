@@ -75,23 +75,8 @@
         {
             var exampleReport = await GetExampleReports();
             savedMatchReportList.Show(exampleReport);
-            //show loading box
-            //await _jsRuntime.ShowLoading();
-
-            //get male list from api server & save it for later
-            //_malePeopleSelector.SetData(await WebsiteTools.GetMalePeopleList(AppData.CurrentUser?.Id));
-            //_femalePeopleSelector.SetData(await WebsiteTools.GetFemalePeopleList(AppData.CurrentUser?.Id));
-
-            //hide loading box
-            //_jsRuntime.HideAlert();
-
-            ////called last because will loop back
-            //this.StateHasChanged();
-
         }
     }
-
-
 
     private async Task<List<CompatibilityReport>> GetExampleReports()
     {

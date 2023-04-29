@@ -2,14 +2,24 @@
 
 <PageTitle>About</PageTitle>
 
-<PageTop Title="About" IconName="emojione:shinto-shrine" />
+@*<IconTitle IconName="emojione:shinto-shrine" IconSize="50" TitleHolder="h1" Title="About">
+    <ButtonRow>
+        <IconButton ButtonText="Join Us" IconName="carbon:pedestrian-family" ClickUrl="@PageRoute.JoinOurFamily" />
+    </ButtonRow>
+</IconTitle>
+*@
 
 
+<IconTitle Title="About" TitleHolder="h1" MaxWidthPx="@((int)GR.W667)">
+    <ButtonRow>
+        <IconButton ExtraClass="align-self: self-end; mb-2" ButtonText="Join Us" IconName="carbon:pedestrian-family" ClickUrl="@PageRoute.JoinOurFamily" />
+    </ButtonRow>
+</IconTitle>
 
-<div class="gap-3" style="max-width:@GR.W667px">
-    
+<div class="vstack gap-2" style="max-width:@GR.W667px">
+
     <p class="text-justify">
-        Anybody who has studied Vedic Astrology knows well how accurate it can be.
+        <DropCap Alphabet="A" />nybody who has studied Vedic Astrology knows well how accurate it can be.
         But also how complex it can get to make accurate predictions.
         It takes decades of experience to be able make accurate prediction.
         As such this knowledge only reaches a limited people.
@@ -20,35 +30,39 @@
         <TextHTML>
             Our goal is to make Vedic Astrology easily accessible to anybody.
             So that people can use it in their daily lives for their benefit.
-            Vedic Astrology in Sanskrit mean "Light". And that is exactly what it is.
+            Vedic Astrology in Sanskrit mean <strong>"Light"</strong> And that is exactly what it is.
             It lights our future so we can change it. And it lights our past, to understand our mistakes.
         </TextHTML>
     </ArticleBlock>
     <ArticleBlock Title="How" IconName="flat-color-icons:electronics">
         <TextHTML>
-            Using modern computational technologies & methods we can simplify the complexity of Vedic Astrology.
-            For example, calculating planet strength (Bhava Bala) used to take hours, now with computers we can calculate it in milliseconds.
-            Combining databases & innovative programming methods. There's no need to remember thousands of planetary combinations,
-            allowing you to make accurate predictions with little to no knowledge.
+            Using modern computational technologies &amp; methods we can simplify the complexity of Vedic Astrology.
+            For example, calculating planet strength (Bhava Bala) used to take hours, now with computers we can calculate it in
+            <strong>milliseconds</strong>. Combining databases &amp; innovative programming methods. There's no need to remember thousands of planetary combinations,
+            allowing you to make <strong>accurate predictions</strong> with little to no knowledge.
         </TextHTML>
     </ArticleBlock>
 
     <ArticleBlock Title="9 Years Old" IconName="emojione:birthday-cake">
         <TextHTML>
-            The first line of code for this project was written in 2014. Back then it was a simple desktop software,
+            The first line of code for this project was written in <strong>2014</strong>. Back then it was a simple desktop software,
             with no UI and only text display. With continued support from users, this project has steadily developed to what it is today.
             Helping people from all over the world.
         </TextHTML>
     </ArticleBlock>
 
-    <img src="images/bv-raman-rao.png" class="img-thumbnail mt-3 mb-1" alt="...">
 
     <ArticleBlock Title="Credits &amp; Reference" IconName="emojione:books">
         <TextHTML>
-            Thanks to B.V. Raman and his grandfather B. Suryanarain Rao. Information from their books is the source
-            material & inspiration for this project. Please buy their books to show your support.
-            Astronomical calculation was made possible by NASA's JPL data via "SWISS EPHEMERIS" ported by "SwissEphNet".
-            Last but not least, we thank users like you who keep this project going.
+            <p class="text-justify">
+                Thanks to B.V. Raman and his grandfather B. Suryanarain Rao. Information from their books is the source
+                material & inspiration for this project. Please buy their books to show your support.
+            </p>
+            <img src="images/bv-raman-rao.png" class="img-thumbnail my-1 " alt="...">
+            <p class="text-justify">
+                Astronomical calculation was made possible by <strong>NASA JPL</strong> data via "SWISS EPHEMERIS" ported by "SwissEphNet".
+                Last but not least, we thank users like you who keep this project going.
+            </p>
         </TextHTML>
     </ArticleBlock>
 

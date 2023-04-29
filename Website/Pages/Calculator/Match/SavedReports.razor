@@ -9,18 +9,17 @@
     <Description>Match report saved under your account</Description>
 </PageTop>
 
-<SavedMatchReportList @ref="savedMatchReportList" />
+<MatchReportListViewer @ref="savedMatchReportList" />
 
 @code {
 
-    private SavedMatchReportList savedMatchReportList;
+    private MatchReportListViewer savedMatchReportList;
 
-    private List<CompatibilityReport> matchReportList = new List<CompatibilityReport>();
-    private bool _isReady = false;
+    private List<MatchReport> _matchReportList = new();
 
-    private async Task<List<CompatibilityReport>> GetExampleReports()
+    private async Task<List<MatchReport>> GetExampleReports()
     {
-        var returnVal = new List<CompatibilityReport>()
+        var returnVal = new List<MatchReport>()
         {
             await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc"),
             await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc")
@@ -43,17 +42,9 @@
     {
         await _jsRuntime.ShowLoading();
 
-        _isReady = false;
+        _matchReportList = await GetExampleReports();
+        savedMatchReportList.Show(_matchReportList);
 
-        //get all people from API server
-        //auto checks if people list already loaded before
-        //await AppData.TryGetPersonList();
-
-        matchReportList = await GetExampleReports();
-        savedMatchReportList.Show(matchReportList);
-
-
-        _isReady = true;
 
         _jsRuntime.HideAlert();
     }

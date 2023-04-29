@@ -113,7 +113,7 @@
 
 <div class="vstack gap-2 mt-2 mb-5">
     <Icon IconName="flat-color-icons:down" Size="55" />
-    <kbd style="padding: 12px;font-size: 18px;width: min-content;">@finalAPIGetCall</kbd>
+    <kbd style="padding: 12px;font-size: 18px;width: min-content;">@_finalApiGetCall</kbd>
     <div class="hstack gap-3">
         <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
         <IconButton ButtonText="Test Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
@@ -139,7 +139,7 @@
 
     TimeInputSimple _timeInput;
     private GeoLocationInput _geoLocationInput;
-    private string finalAPIGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
+    private string _finalApiGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
 
     //done so that it is cached in memory
     private static IEnumerable<Tools.APICallData> PlanetCallList = Tools.GetPlanetApiCallList<PlanetName, Time>();
@@ -218,7 +218,7 @@
         var celestialBodyData = $"/{SelectedBodyType}/{finalCelesName}/{finalCelesProperty}";
 
         //format of the API call
-        finalAPIGetCall = domain + location + time + celestialBodyData;
+        _finalApiGetCall = domain + location + time + celestialBodyData;
 
         //tactile feedback to user
         await _jsRuntime.ShowAlert("success", $"Generated nicely!", false, 2000);
@@ -253,7 +253,7 @@
         {
             //mark invalid & alert user
             //todo change to render fragment
-            var htmlMessage = $@"<span class=""iconify"" data-icon=""emojione:zzz"" data-width=""20"" /> Falling asleep? <br/> Select a celestial body first";
+            var htmlMessage = $@"Falling asleep? <br/> Select a celestial body first";
             await _jsRuntime.ShowAlert("error", htmlMessage, true);
             return false;
         }
@@ -314,13 +314,13 @@
     private async Task OnDemoCallGeneratedUrl()
     {
         //make API GET direct call on new tab
-        _jsRuntime.OpenNewTab(finalAPIGetCall);
+        _jsRuntime.OpenNewTab(_finalApiGetCall);
     }
 
     private async Task OnClickCopyChartLink()
     {
         //use js to transfer to clipboard
-        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, finalAPIGetCall);
+        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, _finalApiGetCall);
 
         //let user know link copied
         await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);

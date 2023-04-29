@@ -4,11 +4,16 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-<div  @ref="tooltipElement" class="hstack">
-    <img style="width:@GR.W97px;" src="images/person/@Person.ImageName" class="img-thumbnail mt-1" alt="..." />
+
+<div @ref="tooltipElement" class="hstack gap-2">
+    <img style="width:@GR.W157px;" src="images/person/@Person.ImageName" class="img-thumbnail mt-1" alt="..." />
     @*buttons related to account*@
-    <IconButton TooltipText="Horoscope" IconName="bi:list-stars" SmallSize="true" ClickUrl="@($"{PageRoute.Horoscope}/{Person.Id}")" />
-    <IconButton TooltipText="Add Notes" IconName="system-uicons:clipboard-notes" SmallSize="true" ClickUrl="@($"{PageRoute.PersonEditor}/{Person.Id}")" />
+    <div class="vstack gap-2 mt-1">
+        <span class="ms-2">12:12 10/03/1980</span>
+        <IconButton FullWidth="true" ButtonText="Horoscope" IconName="fluent:book-star-20-filled" SmallSize="true" ClickUrl="@($"{PageRoute.Horoscope}/{Person.Id}")" />
+        <IconButton FullWidth="true" ButtonText="Journal" IconName="game-icons:secret-book" SmallSize="true" ClickUrl="@($"{PageRoute.Journal}/{Person.Id}")" />
+        <IconButton FullWidth="true" ButtonText="Life Predictor" IconName="gis:map-time" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
+    </div>
 </div>
 
 <div style="cursor: pointer" @ref="nameHolderElement">
@@ -50,9 +55,9 @@
                     new
                     {
                         content = tooltipElement,
+                        theme = "light",
                         allowHTML = true,
                         arrow = true,
-                        animation = "scale-extreme",
                         interactive = true //so that can click button
                     };
 

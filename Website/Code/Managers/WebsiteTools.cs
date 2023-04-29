@@ -35,7 +35,7 @@ namespace Website
         public static async Task OnClickShareFacebook(string pdfFileName, ElementReference elementToConvert)
         {
             var currentUrl = await AppData.JsRuntime.GetCurrentUrl();
-            await AppData.JsRuntime.InvokeVoidAsync(JS.shareDialogFacebook,  currentUrl);
+            await AppData.JsRuntime.InvokeVoidAsync(JS.shareDialogFacebook, currentUrl);
         }
 
         /// <summary>
@@ -113,6 +113,29 @@ namespace Website
         }
 
         /// <summary>
+        /// Gets a list of saved match reports for a user/visitor
+        /// </summary>
+        /// <returns></returns>
+        public static async Task<List<MatchReport>?> GetSavedMatchList()
+        {
+            //get all person profile owned by current user/visitor
+            var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
+            var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetMatchReportList, payload);
+
+            //get match data out and parse it (if all went well)
+            if (result.IsPass) { return MatchReport.FromXml(result.Payload.Elements()); }
+
+            //if fail log it and return empty list as not to break the caller
+            else
+            {
+                await AppData.JsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
+                return new List<MatchReport>();
+            }
+
+
+        }
+
+        /// <summary>
         /// Gets all visitor list from API server
         /// </summary>
         public static async Task<List<XElement>> GetVisitorList(string userId)
@@ -138,7 +161,7 @@ namespace Website
         //marked for deletion
         public static Person GetPersonFromId2(string personId, IJSRuntime jsRuntime)
         {
-            var result =  GetPersonById(personId, jsRuntime).Result;
+            var result = GetPersonById(personId, jsRuntime).Result;
             return result;
         }
         /// <summary>
@@ -566,7 +589,7 @@ namespace Website
             return css;
         }
 
-        public static async Task<CompatibilityReport> GetCompatibilityReport(string maleId, string femaleId)
+        public static async Task<MatchReport> GetCompatibilityReport(string maleId, string femaleId)
         {
             var male = await WebsiteTools.GetPersonById(maleId, AppData.JsRuntime);
             var female = await WebsiteTools.GetPersonById(femaleId, AppData.JsRuntime);

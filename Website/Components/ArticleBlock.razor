@@ -4,7 +4,7 @@
 
 <div class="py-2">
 
-    <IconTitle Title="@Title" IconName="@IconName" TitleHolder="h4">
+    <IconTitle IconSize="@IconSize" Title="@Title" IconName="@IconName" TitleHolder="h4">
         <ButtonRow>@ButtonRow</ButtonRow>
     </IconTitle>
     <p class="text-justify">
@@ -26,6 +26,12 @@
     /// </summary>
     [Parameter]
     public string IconName { get; set; } = "";
+
+    /// <summary>
+    /// Default 38
+    /// </summary>
+    [Parameter]
+    public int IconSize { get; set; } = AppData.DefaultIconSize;
 
 
     /// <summary>

@@ -8,31 +8,101 @@
 *@
 
 <div class="vstack mb-2">
-    <h1 class="fw-bold"><span style="margin-top: -10px;" class="iconify" data-icon="@IconName" data-width="@IconSize"></span> @Title</h1>
-    @*if no buttons row, then reduce margin bottom*@
-    <p class="fs-5 col-md-8 @(IsButtonsRow?"":"mb-0")" style="max-width: @GR.W667px;">@Description</p>
+    @*TITLE, IMAGE, ICON, TEXT DESC*@
+    <div class="hstack">
+        <div class="vstack gap-2">
+            @*MAIN TITLE*@
+            @if (IsIconMode)
+            {
+                <div class="hstack gap-3 mb-2">
+                    <span style="margin-top: -10px;" class="iconify" data-icon="@IconName" data-width="@IconSize"/>
+                    <h1 class="fw-bold">@Title</h1>
+                </div>
+            }
+            @if (!IsIconMode)
+            {
+                <h1 class="fw-bold">@Title</h1>
+            }
+
+            @*DESC TEXT*@
+            @if (IsDescriptionText)
+            {
+                <span style="@MaxWidthCss font-size: 21px; font-weight: lighter; font-family: inherit;">@DescriptionText</span>
+            }
+        </div>
+
+        @*SIDE IMAGE*@
+        @if (IsImageMode)
+        {
+            <img src="images/@ImageName" style="width: 235px;" class=""/>
+        }
+    </div>
+
+    @*HTML DESC*@
+    @if (IsDescriptionHtml)
+    {
+        @*if no buttons row, then reduce margin bottom*@
+        <p class="fs-5 col-md-8 @(IsButtonsRow ? "" : "mb-0")" style="@MaxWidthGRCss">@Description</p>
+    }
+    
+    @*BUTTONS*@
     @if (IsButtonsRow)
     {
         @*flex wrap needed to make button wrap nicely in mobile*@
-        <div class="hstack gap-4 d-flex flex-wrap" >
+        <div class="hstack gap-4 d-flex flex-wrap">
             @ButtonsRow
         </div>
     }
-    <hr class="border-secondary border @(IsButtonsRow?"":"mt-1")" />
+
+    @*DIVIDER*@
+    <hr class="border-secondary border @(IsButtonsRow ? "" : "mt-3")"/>
 </div>
 
 @code {
 
-    [Parameter]
-    public string? Title { get; set; }
+    /// <summary>
+    /// setting custom css based on props
+    /// </summary>
+    private string MaxWidthGRCss => $" max-width:{GR.W667px};";
+    private string MaxWidthCss => $" max-width:516px;";
 
-    [Parameter]
-    public string? IconName { get; set; }
+
+    /// <summary>
+    /// will be true when image name is specified, used in rendering
+    /// </summary>
+    private bool IsImageMode => !string.IsNullOrEmpty(ImageName);
+
+    /// <summary>
+    /// will be true when icon name is specified, used in rendering
+    /// </summary>
+    private bool IsIconMode => !string.IsNullOrEmpty(IconName);
+
+    /// <summary>
+    /// will be true when text only desc is specified, used in rendering
+    /// </summary>
+    private bool IsDescriptionText => !string.IsNullOrEmpty(ImageName);
+
+    /// <summary>
+    /// description specified with html
+    /// </summary>
+    private bool IsDescriptionHtml => Description != null;
 
     /// <summary>
     /// If true, then buttons row data provided
     /// </summary>
     private bool IsButtonsRow => ButtonsRow != null;
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    /// <summary>
+    /// Name of image in wwwroot images folder, will override icons
+    /// </summary>
+    [Parameter]
+    public string? ImageName { get; set; } = "";
+
+    [Parameter]
+    public string? IconName { get; set; }
 
     /// <summary>
     /// Default to 50
@@ -42,6 +112,12 @@
 
     [Parameter]
     public RenderFragment? Description { get; set; }
+
+    /// <summary>
+    /// Text only version
+    /// </summary>
+    [Parameter]
+    public string DescriptionText { get; set; }
 
     [Parameter]
     public RenderFragment? ButtonsRow { get; set; }

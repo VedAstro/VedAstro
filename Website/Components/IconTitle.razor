@@ -5,9 +5,12 @@
 
 @*SIMPLE HEADING TITLE WITH NICELY POSITIONED ICON*@
 
+<div class="fw-bold hstack gap-2 d-flex" style="@MaxWidthCss">
+    @if (IsIconMode)
+    {
+        <Icon NextToText="true" IconName="@IconName" Size="@IconSize"/>
+    }
 
-<div class="hstack gap-2 d-flex">
-    <Icon NextToText="true" IconName="@IconName" Size="@IconSize" />
     @switch (TitleHolder.ToLower())
     {
         case "h1":
@@ -37,8 +40,29 @@
 
 @code {
 
+    /// <summary>
+    /// If true max width has been specified
+    /// </summary>
+    private bool IsCustomWidth => MaxWidthPx != 0;
+
+    /// <summary>
+    /// If true then icon name specified
+    /// </summary>
+    private bool IsIconMode => !string.IsNullOrEmpty(IconName);
+
+    /// <summary>
+    /// setting custom css based on props
+    /// </summary>
+    private string MaxWidthCss => IsCustomWidth ? $" max-width:{MaxWidthPx}px;" : "";
+
     [Parameter]
-    public int IconSize { get; set; } = 38;
+    public int MaxWidthPx { get; set; } = 0;
+
+    /// <summary>
+    /// Default 38
+    /// </summary>
+    [Parameter]
+    public int IconSize { get; set; } = AppData.DefaultIconSize;
 
     [Parameter]
     public string Title { get; set; } = "Demo Title";
@@ -47,7 +71,7 @@
     public string TitleHolder { get; set; } = "h3";
 
     [Parameter]
-    public string IconName { get; set; } = "mingcute:airplane-line";
+    public string IconName { get; set; } = "";
 
     [Parameter]
     public RenderFragment ButtonRow { get; set; }

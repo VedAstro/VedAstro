@@ -1,0 +1,66 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.JoinOurFamily)]
+
+<PageTitle>Join VedAstro Family</PageTitle>
+
+<PageTop ImageName="join-our-family.png"
+         Title="Join Our Family"
+         DescriptionText="Brainstorm ideas, solve problems, learn and share new skills. We are not just a dev team, we are a dev family." 
+         >
+</PageTop>
+
+
+<div class="gap-3" style="max-width:@GR.W667px">
+
+    The advice we give to every volunteer is the same advice we give to ourselves.
+    Think of this as your own project & do what you think is best.
+    Self motivated enthusiasm is the key. If you feel there is a better way of making a button appear, then just do it.
+    If you run into technical trouble making the changes you want or don't know how to get started, just drop us a mail or start an
+    <a href="@URL.GitHubIssues">issue</a> in GitHub.
+    And we will try our best to solve it.
+
+
+    <ArticleBlock Title="Get Started">
+        <TextHTML>
+            Fork the repo, make your changes and push. Start with a simple draft, nothing complicated.
+            Go with what you understand and how you wish to convey it.
+            Once you've done this let us know. We will double check validity and upload to the cloud. Easy and simple.
+        </TextHTML>
+    </ArticleBlock>
+
+
+    <ArticleBlock Title="Office &amp; Factory" IconSize="40" IconName="openmoji:office-building">
+        <ButtonRow>
+            <IconButton IconName="logos:slack-icon" ButtonText="Visit Office" ClickUrl="@URL.SlackInviteURL" />
+            <IconButton IconName="ant-design:github-outlined" ButtonText="Task List" ClickUrl="@URL.GitDeveloperRoomProject" />
+        </ButtonRow>
+        <TextHTML>
+            Our office is in Slack Street and the factory is located in GitHub Lane. Welcome to a company of the 21st century.
+            We converse, discuss and share using Slack, it's free and easy to join. GitHub is used to manage, track and assign tasks to the team.
+            Most importantly we use GitHub, to source control the code base up to deployment.
+            You can join there also. All in all, we strive to keep VedAstro's office near to every team member's house.
+            So developers can spend <strong>time &amp; energy</strong> todo creative work and not waste it on "getting to" work and finding parking.
+        </TextHTML>
+    </ArticleBlock>
+    
+    <ArticleBlock Title="How members benefit">
+        <TextHTML>
+            We want this to be a win-win for everybody. Realistically there are many ways you
+            can benefit both personally and professionally by working with this project.
+            Below is a few we could think of:
+            - learn new technologies &amp; skills
+            - experience working with an international team
+            - financial compensation for work
+        </TextHTML>
+    </ArticleBlock>
+
+
+
+</div>
+
+
+
+
+@code {
+
+}

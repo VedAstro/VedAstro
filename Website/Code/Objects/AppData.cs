@@ -123,6 +123,11 @@ namespace Website
         public static HttpClient HttpClient { get; set; }
 
         /// <summary>
+        /// Default icon size used in pages
+        /// </summary>
+        public static int DefaultIconSize => 38;
+
+        /// <summary>
         /// Base address currently used by App,
         /// could be http://localhost / www.vedastro.org / vedastro.org / beta.vedastro.org
         /// </summary>

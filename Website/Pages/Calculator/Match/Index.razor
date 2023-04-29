@@ -34,7 +34,7 @@
 <hr />
 
 <IconTitle Title="Accurate Predictions" IconName="flat-color-icons:filing-cabinet" />
-<SavedMatchReportList @ref="savedMatchReportList" />
+<MatchReportListViewer @ref="savedMatchReportList" />
 
 <hr style="margin-bottom:@GR.W157px;">
 
@@ -54,7 +54,7 @@
     private PersonSelectorBox _malePeopleSelector;
     private PersonSelectorBox _femalePeopleSelector;
     private PersonSelectorBox _SavedMatchReport;
-    private SavedMatchReportList savedMatchReportList;
+    private MatchReportListViewer savedMatchReportList;
 
 
 
@@ -78,9 +78,9 @@
         }
     }
 
-    private async Task<List<CompatibilityReport>> GetExampleReports()
+    private async Task<List<MatchReport>> GetExampleReports()
     {
-        var returnVal = new List<CompatibilityReport>()
+        var returnVal = new List<MatchReport>()
         {
             await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc"),
             await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc")

@@ -1,0 +1,16 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+@*image names are all lower case*@
+<img src="images/@generatedFileName" style="width: 89px;height: 97px;float: left;margin-right: 6px;">
+
+@code {
+
+    private string generatedFileName => $"dropcap-{Alphabet.ToLower()}.svg";
+
+    [Parameter]
+    public string Alphabet { get; set; } = "A";
+
+}

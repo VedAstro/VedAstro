@@ -10,7 +10,7 @@
 </PageTop>
 
 
-
+@*API DROP DOWN SELECTORS*@
 <div>
     <div class="d-flex flex-wrap gap-5">
 
@@ -26,7 +26,7 @@
                     <option value="Planet">Planet</option>
                     <option value="House">House</option>
                 </select>
-                <label style="font-weight: 700;" for="celestialBodySelect">Celestial Body</label>
+                <label style="font-weight: 700; color: black;" for="celestialBodySelect">Celestial Body</label>
             </div>
 
             @*Planet Name*@
@@ -43,7 +43,7 @@
                     <option value="Rahu">Rahu</option>
                     <option value="Ketu">Ketu</option>
                 </select>
-                <label style="font-weight: 700;" for="planetNameSelector">Planet Name</label>
+                <label style="font-weight: 700; color: black;" for="planetNameSelector">Planet Name</label>
             </div>
 
             @*House Name*@
@@ -63,11 +63,10 @@
                     <option value="House11">House 11</option>
                     <option value="House12">House 12</option>
                 </select>
-                <label style="font-weight: 700;" for="houseNameSelector">House Name</label>
+                <label style="font-weight: 700; color: black;" for="houseNameSelector">House Name</label>
             </div>
 
-
-            @*show and hide to make changes pop*@
+            @*Planet Property*@
             <div @ref="planetPropertySelector" style="display: none;" class="form-floating">
                 <select @bind="selectedPlanetProperty" class="form-select" id="planetPropertySelector" aria-label="Data Property Select">
                     <option value="" selected>Make a choice</option>
@@ -78,10 +77,10 @@
                         <option value="@dataProperty.Name">@(Format.FormatName(dataProperty.Name))</option>
                     }
                 </select>
-                <label style="font-weight: 700;" for="planetPropertySelector">Planet Property</label>
+                <label style="font-weight: 700; color: black;" for="planetPropertySelector">Planet Property</label>
             </div>
 
-            @*show and hide to make changes pop*@
+            @*House Property*@
             <div @ref="housePropertySelector" style="display: none;" class="form-floating">
                 <select @bind="selectedHouseProperty" class="form-select" id="housePropertySelector" aria-label="Data Property Select">
                     <option value="" selected>Make a choice</option>
@@ -92,10 +91,24 @@
                         <option value="@dataProperty.Name">@(Format.FormatName(dataProperty.Name))</option>
                     }
                 </select>
-                <label style="font-weight: 700;" for="housePropertySelector">House Property</label>
+                <label style="font-weight: 700; color: black;" for="housePropertySelector">House Property</label>
+            </div>
+            
+            <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickSubmitButton" />
+
+            @*OUTPUT*@
+            <Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="55" />
+
+            @*ARROW DOWN*@
+            <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
+            
+            @*COPY AND CALL BUTTON*@
+            <div class="hstack gap-3">
+                <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+                <IconButton ButtonText="Test Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
             </div>
 
-            <IconButton SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" ButtonText="Generate" OnClickCallback="@OnClickSubmitButton" />
+
         </div>
 
         @*LITTLE BOX*@
@@ -109,19 +122,6 @@
 
     </div>
 </div>
-
-
-<div class="vstack gap-2 mt-2 mb-5">
-    <Icon IconName="flat-color-icons:down" Size="55" />
-    <kbd style="padding: 12px;font-size: 18px;width: min-content;">@_finalApiGetCall</kbd>
-    <div class="hstack gap-3">
-        <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
-        <IconButton ButtonText="Test Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
-    </div>
-</div>
-
-
-<hr class="mt-2" style="margin-bottom: 150px; " />
 
 
 
@@ -145,7 +145,9 @@
     private static IEnumerable<Tools.APICallData> PlanetCallList = Tools.GetPlanetApiCallList<PlanetName, Time>();
     private static IEnumerable<Tools.APICallData> HouseCallList = Tools.GetPlanetApiCallList<HouseName, Time>();
 
-
+    /// <summary>
+    /// Controls the showing and hiding of other dropdowns
+    /// </summary>
     public string SelectedBodyType
     {
         get => _selectedBodyType;
@@ -172,7 +174,7 @@
         }
     }
 
-    private string _selectedBodyType ;
+    private string _selectedBodyType;
 
     /// <summary>
     /// After user click generate check data validity, generate final url

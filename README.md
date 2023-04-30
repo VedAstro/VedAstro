@@ -1,7 +1,7 @@
 ﻿
-<a href="https://www.vedastro.org">
+<a href="https://vedastro.org">
 <img
-  src="https://www.vedastro.org/images/website-header-screenshot.png"
+  src="https://vedastro.org/images/website-header-screenshot.png"
   alt="VedAstro.org"
   title="VedAstro.org">
 </a>
@@ -36,12 +36,12 @@
 
 # 🌍 Links
 - [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
-- [Open API](https://vedastro.org/Docs/API) easily get astrology data for your app or website
-- [Swiss Ephemris API](https://vedastro.org/Docs/API/SwissEphemeris) access powerful astronomical library with a simple `HTTP GET`
+- [Open API](https://vedastro.org/Docs/API) easily get astrology data for your app or website with a simple `HTTP GET`(SwissEphemris)
 - [Calculators](https://vedastro.org/Calculator) each calculator shows an aspect of vedic astrology
 - [Docker](https://github.com/orgs/VedAstro/discussions/8) supported for easy deployement anywhere
-- [Contact](https://www.vedastro.org/Contact) us and we'll get back to you ASAP.
-- [Donate](https://www.vedastro.org/Donate) to keep this project going
+- [Contact](https://vedastro.org/Contact) us and we'll get back to you ASAP.
+- [Donate](https://vedastro.org/Donate) to keep this project going
+- [Join Us](https://vedastro.org/JoinOurFamily) join the VedAstro development team
 
 <!--
 
@@ -52,8 +52,8 @@ can be clearly seen predicted by the chart in the "Summary Row". Red for a bad e
 Using a combination of Dasa, Bhukti, Antaram and Gocharam of 9 planets this complex chart can give perfect predictions!
 The chart takes alot of computational power to generate, so please be patient after you click the Calculate button.
 
-[![](GithubImages/napoleon-dasa-chart.png)](https://www.vedastro.org)
-[![](GithubImages/elizabeth-dasa-chart.png)](https://www.vedastro.org)
+[![](GithubImages/napoleon-dasa-chart.png)](https://vedastro.org)
+[![](GithubImages/elizabeth-dasa-chart.png)](https://vedastro.org)
  -->
 
 
@@ -99,8 +99,6 @@ Last but not least, we thank users like you who keep this project going.
 
 <hr>
 
-[![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
-
 <!--
 # Help us and get paid!
 Complete tasks for this project and get paid instantly! Each task has a different value based on complexity.
@@ -121,7 +119,7 @@ Show name of planet motion in Horoscope page (retrograde, direct, stationary) | 
 
 
 # 😎 Other Cool Projects
-- [VedicFeed](https://ask.vedicfeed.com) : AI Powered Astrologer
+- [VedicFeed](https://ask.vedicfeed.com) : ChatGPT Powered Astrologer
 
 <hr>
 
@@ -129,28 +127,22 @@ Show name of planet motion in Horoscope page (retrograde, direct, stationary) | 
 We're always looking for somebody to write docs, edit code, raise funds or help out in another ways.
 You can also choose to get paid for your time spent improving VedAstro.
 
-## How to write docs or code?
-Fork the repo, make your changes and push. Start with a simple draft, nothing complicated.
-Go with what you understand and how you wish to convey it. Once you've done this let us know.
-We will double check validity and upload to the cloud. Easy and simple.
+[Read More](https://vedastro.org/JoinOurFamily)
 
-## What else can I do?
-The advice we give to every volunteer is the same advice we give to ourselves. Think of this as your own project & do what you think is best.
-Self motivated enthusiasm is what we want, if you feel there is a better way of making a button appear, then just do it.
-If you run into technical trouble making the changes you want or don't know how to get started, just drop us a mail.
-And we will try our best to solve it.
+<!-- SLACK JOIN IMAGE -->
+[![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
 
 
 # ⚙️ Gonzo Development Pattern
 This development style celebrates the methodology of chaotic development at the benefit of low cost and fast paced prototyping.
-Inspired by the concept of "Gonzo Journalism", pioneered by Hunter S. Thompson in the 1970s.
+Inspired by the concept of "Gonzo Journalism", pioneered by [Hunter S. Thompson](https://en.wikipedia.org/wiki/Hunter_S._Thompson) in the 1970s.
 
 We favour this pattern for the development of VedAstro simply due to the volatile nature of this project.
 Other development styles like "Waterfall" and "Scrum" are equally good when the need is.
 We want to try out novel ideas at a heartbeat, we want the latest platform and we want it cheap.
 So the "gonzo development" pattern is best for this needs.
 
-![gonzon-dev-button](https://www.vedastro.org/images/gonzon-dev-button.png)
+![gonzon-dev-button](https://vedastro.org/images/gonzon-dev-button.png)
 
 The negative side effect is that there will be bugs forever. Because it's near impossible to constantly
 change an ever-growing code base without having to constantly fix breaking changes.

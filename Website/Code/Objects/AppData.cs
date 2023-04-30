@@ -128,6 +128,14 @@ namespace Website
         public static int DefaultIconSize => 38;
 
         /// <summary>
+        /// updated every time location is set by user, when making new geo location this is used as default
+        /// </summary>
+        public static string? LastUsedLocation { get; set; } = DefaultLocationCountry;
+
+        public static string DefaultLocationCountry = "Singapore";
+
+
+        /// <summary>
         /// Base address currently used by App,
         /// could be http://localhost / www.vedastro.org / vedastro.org / beta.vedastro.org
         /// </summary>

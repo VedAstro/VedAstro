@@ -525,8 +525,6 @@ namespace Website
             }
         }
 
-
-
         /// <summary>
         /// Gets XML file from any URL and parses it into xelement list
         /// </summary>

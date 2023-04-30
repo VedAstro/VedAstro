@@ -8,10 +8,8 @@
 - REFERENCE BUTTONS : buttons placed here are linked to places not needed all the time, like About and Docs -->
 *@
 
-@*<IconButton SmallSize="true" IconName="akar-icons:arrow-back" OnClickCallback="_jsRuntime.GoBack" TooltipText="Go Back" />*@
 <IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Night Reader Mode" />
-@*<IconButton SmallSize="true" IconName="codicon:feedback" ClickUrl="@PageRoute.Contact" TooltipText="Give Feedback" />
-*@
+
 @*show links to beta & stable from vice versa*@
 @if (@WebsiteTools.GetIsBetaRuntime())
 {
@@ -23,7 +21,7 @@ else
 }
 
 <IconButton ExtraClass="ms-md-auto" SmallSize="true" Outline="true" ButtonText="Guide" IconName="mdi:book-open-page-variant-outline" ClickUrl="@PageRoute.QuickGuide" />
-<IconButton SmallSize="true" Outline="true" ButtonText="Developer" IconName="iconoir:developer">
+<IconButton SmallSize="true" Outline="true" ButtonText="Coders" IconName="iconoir:developer">
     <DropDownList>
         <li><a class="dropdown-item" href="@PageRoute.OpenApi">Open API</a></li>
         <li><a class="dropdown-item" href="@PageRoute.Docker" target="_blank">Docker</a></li>
@@ -41,8 +39,9 @@ else
     <DropDownList>
         <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Blog</a></li>
         <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Forum</a></li>
-        <li><a class="dropdown-item" href="@PageRoute.Glossary" target="_blank">Glossary</a></li>
-        <li><a class="dropdown-item" href="@PageRoute.CalculatorList" target="_blank">Calculators</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.Glossary">Glossary</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.CalculatorList">Calculators</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.JoinOurFamily">Join Us</a></li>
     </DropDownList>
 </IconButton>
 

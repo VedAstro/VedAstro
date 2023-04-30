@@ -2,7 +2,7 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-<div class="@ExtraClass">
+<div class="@ExtraClass" style="@ExtraStyle">
     <span style="@CssStyle" class="iconify" data-icon="@IconName" data-width="@Size" />
 </div>
 
@@ -19,6 +19,12 @@
     /// </summary>
     [Parameter]
     public string ExtraClass { get; set; } = "";
+
+    /// <summary>
+    /// add extra styles to SVG icon parent div
+    /// </summary>
+    [Parameter]
+    public string ExtraStyle { get; set; } = "";
 
     /// <summary>
     /// If set true, will make icon properly align with neighboring text

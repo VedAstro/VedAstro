@@ -8,7 +8,7 @@
 {
     <div class="dropdown @ExtraClass">
         @*extra class for dropdown direct to parent div*@
-        <button style="@WidthCss height: @GR.W37px;" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button style="@FinalCss" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             @*only show icon if specified*@
             @if (IconName != null)
             {
@@ -24,7 +24,7 @@
 @*NORMAL BUTTON*@
 else
 {
-    <button style="@WidthCss height: @GR.W37px;" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
+    <button style="@FinalCss" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
         @*SPECIAL LITTLE EXTRA INFO TEXT*@
         @if (!string.IsNullOrEmpty(RetinaText))
         {
@@ -50,6 +50,7 @@ else
 }
 
 @code {
+
 
     /// <summary>
     /// the final class list added to button elm generates based on the parameters set
@@ -80,6 +81,12 @@ else
     /// </summary>
     [Parameter]
     public bool Outline { get; set; } = false;
+
+    /// <summary>
+    /// adds align-self: self-end; which pushes it down bottom of parent
+    /// </summary>
+    [Parameter]
+    public bool PlaceBottom { get; set; } = false;
 
     /// <summary>
     /// Text that will be displayed in button
@@ -170,6 +177,18 @@ else
     public string? ClickUrl { get; set; } = "";
 
     /// <summary>
+    /// if set is used, else will default
+    /// </summary>
+    [Parameter]
+    public string FontWeight { get; set; } = "";
+
+    /// <summary>
+    /// if set is used, else will default
+    /// </summary>
+    [Parameter]
+    public string FontSize { get; set; } = "";
+
+    /// <summary>
     /// Checks if click URL has been specified
     /// </summary>
     public bool IsClickMode => !string.IsNullOrEmpty(ClickUrl);
@@ -178,7 +197,13 @@ else
     /// Related to ClickURL, if set true opens in new tab, default is false
     /// </summary>
     [Parameter]
-    public bool IsNewTabOpen { get; set; } = false;
+    public bool OpenNewTab { get; set; } = false;
+
+    /// <summary>
+    /// will place text in center of true, default false
+    /// </summary>
+    [Parameter]
+    public bool TextCenter { get; set; } = false;
 
     [Parameter]
     public ElementReference ElementReference { get; set; }
@@ -191,21 +216,26 @@ else
     [Parameter]
     public bool GoldRatioWidth { get; set; } = false;
 
-    private string WidthCss
+    /// <summary>
+    /// Computes the final css based on set variables
+    /// </summary>
+    private string FinalCss
     {
         get
         {
             var css = "";
 
             //use golden ration if specified
-            css += GoldRatioWidth ? $"width:{GR.W60px};" : css;
+            css += GoldRatioWidth ? $" width:{GR.W60px} !important;" : "";
+            css += PlaceBottom ? $" align-self: self-end !important;" : "";
+            css += TextCenter ? $" place-content: center !important;" : "";
+            css += !string.IsNullOrEmpty(FontWeight) ? $"font-weight: {FontWeight} !important;" : "";
+            css += !string.IsNullOrEmpty(FontSize) ? $"font-size: {FontSize} !important;" : "";
+            css += $" height:{GR.W37px};";
 
             return css;
         }
     }
-
-
-
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
@@ -241,7 +271,7 @@ else
         else if (IsClickMode)
         {
             //if specified opens link in new tab
-            if (IsNewTabOpen) { _jsRuntime.OpenNewTab(ClickUrl); }
+            if (OpenNewTab) { _jsRuntime.OpenNewTab(ClickUrl); }
             else { _navigation.NavigateTo(ClickUrl); }
         }
 

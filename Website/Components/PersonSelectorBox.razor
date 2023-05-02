@@ -5,17 +5,23 @@
 
 @*Component shows combo box with people list*@
 
-<div>
-    <label class="form-label">@Label</label>
+
+<div class="@ExtraClass">
+    @if (!HideTitle) @*only show if no hide*@
+    {
+        <label class="form-label">@Label</label>
+    }
     <div class="hstack">
         @*PersonSelector class used to programatically set visible person selection*@
-        <select @bind="SelectedPersonId" class="form-control PersonSelector" style="width:@GR.W255px; height:@GR.W37px;">
+        <select @ref="selectorElement" @bind="SelectedPersonId" class="form-control PersonSelector" style="width: @GR.W255px; height: @GR.W37px;">
             <option value="">Select Name</option>
             @DropDownOptionsHtml
         </select>
-        <IconButton TooltipText="Add new person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
+        @*add person icon*@
+        <IconButton ExtraClass="ms-2" TooltipText="Add new person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
     </div>
 </div>
+
 
 
 @code {
@@ -25,9 +31,16 @@
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
     private const string NotSelectedPersonId = "0";
     private string _selectedPersonId = NotSelectedPersonId;
-
+    private ElementReference selectorElement;
 
     //PARAMETERS
+
+    /// <summary>
+    /// If specified extra, added directly to button class attribute
+    /// </summary>
+    [Parameter]
+    public string? ExtraClass { get; set; }
+
 
     /// <summary>
     /// Get selected person name
@@ -45,7 +58,7 @@
             WebLogger.Data($"Selected Person:{value}");
 
             _selectedPersonId = value;
-            //update value in parent page
+            //update value in parent page (for parent to listen in)
             SelectedPersonIdChanged.InvokeAsync(value);
         }
     }
@@ -58,11 +71,19 @@
     [Parameter]
     public string? Label { get; set; } = DefaultLabel;
 
+    /// <summary>
+    /// by default show label
+    /// </summary>
+    [Parameter]
+    public bool HideTitle { get; set; } = false;
+
 
     //below prop needed for 2-way binding between page & component to work
     [Parameter]
     public EventCallback<string> SelectedPersonIdChanged { get; set; }
 
+
+    private List<Person> PersonList { get; set; }
 
 
 
@@ -94,19 +115,19 @@
 
         var html = "";
 
-        var personList = await AppData.TryGetPersonListSortedAZ();
+        //get person list from server or cache and stores reference for later use
+        PersonList = await AppData.TryGetPersonListSortedAZ();
 
         //generate drop down options in html
-        foreach (var person in personList)
+        foreach (var person in PersonList)
         {
             //auto select person set by parent
             var isSelected = person.Id == SelectedPersonId ? "selected" : "";
-            html += $"<option value=\"{person.Id}\" {isSelected}>{person.Name} - {person.BirthYear}</option>";
+            html += $"<option value=\"{person.Id}\" {isSelected}>{person.DisplayName}</option>";
         }
 
         //set drop down list into view
         DropDownOptionsHtml = new MarkupString(html);
-
 
         //need to propagate changes
         this.StateHasChanged();
@@ -128,8 +149,23 @@
     /// </summary>
     public async Task SetPerson(string personIdUrl)
     {
-        //set the backend data
+        //update the internal data
         SelectedPersonId = personIdUrl;
+        var inputPerson = await GetSelectedPerson();
+
+        //note : we need the person option to be in the HTML list
+        //otherwise, setting value will only result in blank, value has
+        //match the value in HTML option tag, we do not select by visible value
+
+        //check if person exists already in the list
+        var isExist = PersonList.Where(person => person.Equals(inputPerson)).Any();
+
+        //if doesn't exist, add in first (inject via JS)
+        if (!isExist) { await _jsRuntime.AddOptionToSelectDropdown(selectorElement, inputPerson.DisplayName, inputPerson.Id); }
+
+        //now select that person by ID, makes it visible
+        await AppData.JsRuntime.SetValue(selectorElement, personIdUrl);
+
     }
 
 

@@ -728,3 +728,14 @@ export function getScreenData() {
     }
     return screenData;
 }
+
+//inject an option into select button directly
+export function addOptionToSelectDropdown(selectElementRef, visibleText, selectValue) {
+
+    //create artificially new option for select box
+    var newOption = $("<option></option>").attr("value", selectValue).text(visibleText);
+
+    //parse and inject into element
+    $(selectElementRef).append(newOption);
+
+}

@@ -117,6 +117,13 @@ namespace Website
         public static async Task<string> ShowSendMatchPDFToEmail(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.ShowSendMatchPDFToEmail);
 
         /// <summary>
+        /// Will inject an option with the data given the data
+        /// </summary>
+        public static async Task AddOptionToSelectDropdown(this IJSRuntime jsRuntime, object elementRef, string visibleText, string selectValue)
+        {
+            await jsRuntime.InvokeVoidAsync(JS.addOptionToSelectDropdown, elementRef, visibleText, selectValue); //select value is the hidden value
+        }
+        /// <summary>
         /// Shows loading box with auto progress bar using sweetalert
         /// note: hide using HideAlert()
         /// set 0 delay to skip auto wait
@@ -137,7 +144,7 @@ namespace Website
             };
 
             //log it
-            WebLogger.Data("Show Loading Box");
+            await WebLogger.Data("Show Loading Box");
 
             //don't wait here
             jsRuntime.ShowAlert(alertData);
@@ -329,7 +336,11 @@ namespace Website
         public static async Task<string> GetText(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, jquerySelector);
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, element);
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, jquerySelector);
-        public static async Task SetValue(this IJSRuntime jsRuntime, string jquerySelector, object value) => await jsRuntime.InvokeVoidAsync(JS.setValueWrapper, jquerySelector, value);
+
+        /// <summary>
+        /// wrapper for JQuery .val() set only
+        /// </summary>
+        public static async Task SetValue(this IJSRuntime jsRuntime, object elementRef, object value) => await jsRuntime.InvokeVoidAsync(JS.setValueWrapper, elementRef, value);
 
         /// <summary>
         /// Load page to given url using JS, reloads Blazor app as well, good for error recovery

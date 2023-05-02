@@ -11,7 +11,7 @@
 <div class="d-flex flex-wrap">
     @*KO-FI WIDGET*@
     <div class="me-5" style="">
-        <iframe id='kofiframe' src='https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true' style="width: @GR.W412px; height: 557px;" class="border shadow rounded-4" title='vedastro'></iframe>
+        <iframe id='kofiframe' src='@URL.KoFiDonateIframe' style="width: @GR.W412px; height: 557px;" class="border shadow rounded-4" title='vedastro'></iframe>
     </div>
 
     @*STACK BOXES ON RIGHT*@
@@ -112,10 +112,17 @@
 <hr />
 
 <div style="max-width:@GR.W667px;">
-    <h4 class="fw-bold">Why Donate?</h4>
-    <p class="text-justify">
-        Donations help to run the web servers 24/7 &amp; to continually improve the project.
-    </p>
+
+    
+    <ArticleBlock Title="Why Donate?" IconName="emojione:convenience-store">
+        <TextHTML>
+            Donations help to run the web servers 24/7 and to continually improve the project.
+            1st priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
+            as a Static Web App which reduces running costs, but it comes with reliability issues.
+            With support from users we hope to diversify the hosting platform for a more stable & reliable service.
+        </TextHTML>
+    </ArticleBlock>
+
 
     <h4 class="fw-bold">Transparent Donations</h4>
     <p class="text-justify">
@@ -125,17 +132,9 @@
         like domain fees or hosting costs. Leave your choice in the message box.
     </p>
 
-    <h4 class="fw-bold"><Icon IconName="emojione:convenience-store" /> Hosting Costs</h4>
-    <p class="text-justify">
-        @*<Icon IconName="emojione:convenience-store" />*@
-        1st priority goes to hosting costs. Currently VedAstro is hosted in Microsoft Azure
-        as a Static Web App which reduces running costs, but it comes with minor reliability issues.
-        With support from users we hope to diversify the hosting platform for stable & reliable service anywhere in the world.
-    </p>
-
     <h4 class="fw-bold">Programmer Costs</h4>
     <p class="text-justify">
-        As of December 2022 more than <a target="_blank" rel="noopener noreferrer" href="https://github.com/VedAstro/VedAstro/discussions/4" class="link-primary fw-bold">88,000 lines of code</a> was written for this project not including documentation.
+        As of December 2022 more than <BoldLink URL="@URL.GitHub88000Lines">88,000 lines of code</BoldLink> was written for this project not including documentation.
         That's an impressive number. The more code there is, the more testing &amp; debugging that needs to be done. As such more developer/programmer work hours are required.
         Your donations go a long way to help pay for this expenses.
     </p>

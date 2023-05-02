@@ -4,16 +4,25 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-<table class="table mb-5">
-    <thead>
+
+@*show loading first*@
+@if (NothingToShow)
+{
+    <img style="position: relative; left: 39%; top: 30%;" src="images/loading-animation-progress-transparent.gif" />
+}
+else
+{
+    
+    <table class="table mb-5">
+        <thead>
         <tr>
             <th scope="col">Couple</th>
             <th scope="col">Prediction</th>
             <th scope="col">Real Life</th>
             <th scope="col">Report</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @foreach (var report in MatchReportList)
         {
             <tr>
@@ -28,16 +37,19 @@
                 </td>
                 <td><b style="color: @report.ScoreColor;">@report.KutaScore%</b></td>
                 <td>report.Notes</td>
-                <td><IconButton ButtonText="View" IsNewTabOpen="true" ClickUrl=@($"/Calculator/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
+                <td><IconButton ButtonText="View" OpenNewTab="true" ClickUrl=@($"/Calculator/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
             </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+}
 
 
 
 
 @code {
+
+    private bool NothingToShow => !MatchReportList.Any();
 
     private List<MatchReport> MatchReportList { get; set; } = new List<MatchReport>();
 

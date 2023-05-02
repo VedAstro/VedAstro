@@ -1,0 +1,150 @@
+﻿@using VedAstro.Library
+@using System.Xml.Linq
+@attribute [Route(PageRoute.JoinOurFamily)]
+
+<PageTitle>Join VedAstro Family</PageTitle>
+
+<PageTop ImageName="join-our-family.png"
+         Title="Join Our Family"
+         DescriptionText="Brainstorm ideas, solve problems, learn &amp; share new skills. We are not just a dev team, we are a dev family.">
+</PageTop>
+
+
+<div class="gap-3" style="max-width:@GR.W667px">
+    
+
+    <ArticleBlock Title="Where to begin?" IconName="flat-color-icons:sports-mode">
+        <ButtonRow>
+            <IconButton OpenNewTab="true" SmallSize="true" IconName="ant-design:github-outlined" ButtonText="Task List" ClickUrl="@URL.GitDeveloperRoomProject" />
+        </ButtonRow>
+        <TextHTML>
+            Get started today. Tell us what category of work you're interested in.
+            And we'll help you to work on tasks best suited to your needs. You can also view all ongoing task in GitHub.
+
+            <div class="hstack gap-3 mt-3">
+                <span style="font-size: 18px;background-color: #72ff7080;font-weight: 700;color: black;" class="py-1 px-3 border rounded-4">I like work related to...</span>
+                <Icon IconName="flat-color-icons:advance" Size="55" />
+                @*PersonSelector class used to programatically set visible person selection*@
+                <select @bind="SelectedExperience" class="form-control" style="width:@GR.W255px; height:@GR.W37px;">
+                    <option value="" selected>Make a choice...</option>
+                    <option value="plainTextDocs">Documentation in Plain Text</option>
+                    <option value="htmlCssDocs">Documentation in HTML, CSS</option>
+                    <option value="photoshopIllustrator">Adobe Illustrator or Photoshop</option>
+                    <option value="mlTraining">ML pipeline &amp; AI model management</option>
+                    <option value="azure">Azure, Google Cloud, AWS, etc...</option>
+                    <option value="vedicAstrology">Vedic Astrology</option>
+                    <option value="jsCode">JS Code</option>
+                    <option value="pythonCode">Python Code</option>
+                    <option value="cSharpCode" >C# Code</option>
+                    <option value="wasmCode" >WebAssembly</option>
+                    <option value="others" >Others, not in this list</option>
+                </select>
+
+                @*Task Category*@
+@*                <div class="form-floating">
+                    <select @bind="SelectedExperience" class="form-select" id="experienceSelect" aria-label="Experience Select">
+                        <option value="" selected>Make a choice...</option>
+                        <option value="plainTextDocs">Documentation in Plain Text</option>
+                        <option value="htmlCssDocs">Documentation in HTML, CSS</option>
+                        <option value="photoshopIllustrator">Adobe Illustrator or Photoshop</option>
+                        <option value="mlTraining">ML pipeline &amp; AI model management</option>
+                        <option value="azure">Azure, Google Cloud, AWS, etc...</option>
+                        <option value="vedicAstrology">Vedic Astrology</option>
+                        <option value="jsCode">JS Code</option>
+                        <option value="pythonCode">Python Code</option>
+                        <option value="cSharpCode" >C# Code</option>
+                        <option value="wasmCode" >WebAssembly</option>
+                        <option value="others" >Others, not in this list</option>
+                    </select>
+                    <label style="font-weight: 700; color: black;" for="experienceSelect">Experience</label>
+               </div>
+*@                <IconButton OnClickCallback="OnClickSubmit" ButtonText="Join Team"></IconButton>
+            </div>
+        </TextHTML>
+    </ArticleBlock>
+
+    <ArticleBlock Title="Publish changes" IconName="flat-color-icons:multiple-inputs">
+        <TextHTML>
+            <p class="text-justify">
+                Fork the repo, make your changes and push. Start with a simple draft, nothing complicated.
+                Go with what you understand and how you wish to convey it.
+                Once you've done this let us know. We will double check validity and upload to the cloud. Easy and simple.
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+
+    <ArticleBlock Title="Office &amp; Factory" IconName="flat-color-icons:department">
+        <ButtonRow>
+            <IconButton OpenNewTab="true" SmallSize="true" IconName="logos:slack-icon" ButtonText="Visit Office" ClickUrl="@URL.SlackInviteURL" />
+        </ButtonRow>
+        <TextHTML>
+            Our office is on <strong>Slack Street</strong> and the factory is located in <strong>GitHub Lane</strong>. Welcome to a company of the 21st century.
+            We converse, discuss and share using Slack, it's free and easy to join. GitHub is used to manage, track and assign tasks to the team.
+            Most importantly we use GitHub, to source control the code base up to deployment.
+            You can join there also. All in all, we strive to keep VedAstro's office near to every team member's house.
+            So developers can spend <strong>time &amp; energy</strong> todo creative work and not waste it on "getting to" work and finding parking.
+        </TextHTML>
+    </ArticleBlock>
+
+    <ArticleBlock Title="Member Benefit" IconName="flat-color-icons:manager">
+        <TextHTML>
+            We want your time at VedAstro to be a win-win for everybody. Realistically there are many ways you
+            can benefit both personally and professionally while working with this project.
+            <br />
+            Below is a few we could think of:
+            <br />
+            - learn new technologies &amp; skills
+            <br />
+            - experience working with an international team
+            <br />
+            - financial compensation for work
+        </TextHTML>
+    </ArticleBlock>
+    
+    <ArticleBlock Title="Work Ethic" IconName="flat-color-icons:biotech">
+        <TextHTML>
+            The advice we give to every member is the same advice we give to ourselves.
+            Think of this as your own project & do what you think is best.
+            <strong>Self motivated enthusiasm</strong> is the key. If you feel there is a better way of making a button appear, then just do it.
+            If you run into technical trouble making the changes you want or don't know how to get started, just drop us a mail or start an
+            <a href="@URL.GitHubIssues">issue</a> in GitHub.
+            And we will try our best to help you.
+        </TextHTML>
+    </ArticleBlock>
+
+</div>
+
+
+
+
+@code {
+
+    private ElementReference houseNameSelector;
+    private ElementReference planetNameSelector;
+
+    public string SelectedExperience;
+
+
+    private async Task OnClickSubmit()
+    {
+        _jsRuntime.ShowLoading();
+
+        //get email from user via js sweet alert lib
+        var emailFromAlert = await AppData.JsRuntime.ShowSendMatchPDFToEmail();
+
+        //send to message to API
+        //package message data to be sent
+        var textXml = new XElement("Text", $"Join Family > Tasks > {SelectedExperience}");
+        var emailXml = new XElement("Email", emailFromAlert);
+        var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
+        var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
+        var messageXml = new XElement("Message", userIdXml, visitorIdXml, emailXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, textXml);
+
+        //send message to API server
+        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
+
+        //say thank you and will get back
+        await _jsRuntime.ShowAlert("success", "Thank you, we'll get back to you soon", true, 0);
+    }
+
+}

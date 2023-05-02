@@ -34,7 +34,7 @@
             </div>
 
             <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
-            <div class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px;">
+            <div class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px; z-index: 1;"> @*stack below other elms*@
                 <div style="cursor: pointer;" @onclick="()=>_navigation.NavigateTo(PageRoute.MadeOnEarth)" class="hstack gap-1">
                     <span class="iconify" data-icon="ion:earth" data-width="10"></span>
                     <span>Made on Earth</span>

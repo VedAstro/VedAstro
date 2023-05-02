@@ -24,15 +24,18 @@
                 <th>Name</th>
                 <th>Birth Date & Time</th>
                 <th>Location</th>
+                <th>Notes</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var person in _personListAsync)
+            @for (int index = 0; index < _personListAsync.Count; index++)
             {
-                <tr style="cursor: pointer;" @onclick="() => PersonNameClicked(person)">
-                    <td>@person.Name</td>
-                    <td>@person.BirthTimeString</td>
-                    <td>@person.GetBirthLocation().ToString()</td>
+                <tr>
+                    @*only make the name click able*@
+                    <td><PersonTooltip Person="_personListAsync[index]" /></td>
+                    <td>@_personListAsync[index].BirthTimeString</td>
+                    <td>@_personListAsync[index].GetBirthLocation().ToString()</td>
+                    <td @ref="tempRef[index]">@TippyfyNotes(_personListAsync[index],index)</td> @*make sure doesn't go overboard long, cut beyond*@
                 </tr>
             }
         </tbody>
@@ -40,12 +43,19 @@
 }
 else
 {
-    <p class="fw-bold">No person profiles found.<br /> Click "Add Person" to get started.</p>
+    <p class="fw-bold">No person profiles found.</p>
+    <br />
+    <p>Possible reasons:</p>
+    <ol>
+        <li><BoldLink OpenInNewTab="false" URL="@PageRoute.AddPerson">Add Person</BoldLink> first, then it will appear here</li>
+        <li>Make sure you're "Log In" into correct account</li>
+    </ol>
 }
 
 
 @code {
 
+    private ElementReference[] tempRef = new ElementReference[1000];
     private List<Person> _personListAsync = new List<Person>();
     private bool _isReady = false;
 
@@ -77,5 +87,51 @@ else
     {
         _navigation.NavigateTo($"{PageRoute.PersonEditor}/{person.Id}");
     }
+
+    private IDictionary<ElementReference, string> TippNoteElmList = new Dictionary<ElementReference, string>();
+
+    private string TippyfyNotes(Person person, int indexOfNoteElm)
+    {
+        //get reference to the element were tippy needs to shine
+        var elementReference = tempRef[indexOfNoteElm];
+
+        //make a copy for later hooking with Tippy JS
+        TippNoteElmList[elementReference] = person.Notes;
+
+        return person.Notes.Truncate(16) ?? "";
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
+
+    private async Task _OnAfterRender(bool firstRender)
+    {
+
+        if (firstRender)
+        {
+            //inject for each element one by one
+            //done here because only element in ready in DOM to be used by Tippy
+            foreach (var noteElemRef in TippNoteElmList)
+            {
+                var fullNoteText = noteElemRef.Value; //what to inject
+                var elemRef = noteElemRef.Key;  //where to inject
+
+                //hook on tooltip
+                var tooltipSettings =
+                    new
+                    {
+                        content = fullNoteText,
+                        theme = "light",
+                        allowHTML = true,
+                        arrow = true,
+                        interactive = true //so that can click button
+                    };
+
+                _jsRuntime.Tippy(elemRef, tooltipSettings);
+
+            }
+        }
+    }
+
 
 }

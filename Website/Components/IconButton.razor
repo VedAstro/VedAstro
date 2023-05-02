@@ -8,7 +8,7 @@
 {
     <div class="dropdown @ExtraClass">
         @*extra class for dropdown direct to parent div*@
-        <button style="@FinalCss" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button style="@FinalCss" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             @*only show icon if specified*@
             @if (IconName != null)
             {
@@ -16,7 +16,7 @@
             }
             @ButtonText
         </button>
-        <ul style="cursor: pointer;" class="dropdown-menu">
+        <ul style="cursor: pointer;" class="dropdown-menu w-100"> @*auto match size with button width*@
             @DropDownList
         </ul>
     </div>
@@ -24,11 +24,11 @@
 @*NORMAL BUTTON*@
 else
 {
-    <button style="@FinalCss" @ref="ElementReference" @onclick="OnClickButton" class="@ButtonClassStr">
+    <button style="@FinalCss" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr">
         @*SPECIAL LITTLE EXTRA INFO TEXT*@
         @if (!string.IsNullOrEmpty(RetinaText))
         {
-            <span style=" position: absolute; margin-top: -3px; margin-left: 35px; font-size: 7px; writing-mode: tb-rl; font-weight: 700; ">@RetinaText</span>
+            <span style=" position: absolute; margin-top: -3px; margin-left: 35px; font-size: 6px; writing-mode: tb-rl; font-weight: 700; ">@RetinaText</span>
         }
 
         @*only show icon if specified*@
@@ -274,6 +274,13 @@ else
             if (OpenNewTab) { _jsRuntime.OpenNewTab(ClickUrl); }
             else { _navigation.NavigateTo(ClickUrl); }
         }
+
+    }
+
+    private async Task OnMouseOver(MouseEventArgs obj)
+    {
+        //log this
+        Console.WriteLine("Mouse Over Button!");
 
     }
 

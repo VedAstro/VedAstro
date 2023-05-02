@@ -10,6 +10,7 @@
     /// </summary>
     public static class JS
     {
+        public const string addOptionToSelectDropdown = "Interop.addOptionToSelectDropdown";
         public const string getProperty = "Interop.getProperty";
         public const string removeProperty = "Interop.removeProperty";
         public const string setProperty = "Interop.setProperty";

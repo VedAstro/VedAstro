@@ -5,11 +5,16 @@
 @using System.Xml.Linq
 
 
+@*this element is auto hidden by Tippy, and made visible when on hover*@
 <div @ref="tooltipElement" class="hstack gap-2">
-    <img style="width:@GR.W157px;" src="images/person/@Person.ImageName" class="img-thumbnail mt-1" alt="..." />
+    @*only show image if exist, don't waste that nice space*@
+    @if (ImageExist)
+    {
+        <img style="width: @GR.W157px;" src="@ImageUrl" class="img-thumbnail mt-1" alt="..." />
+    }
     @*buttons related to account*@
     <div class="vstack gap-2 mt-1">
-        <span class="ms-2">12:12 10/03/1980</span>
+        <span class="ms-2">@Person.BirthTimeString</span>
         <IconButton FullWidth="true" ButtonText="Horoscope" IconName="fluent:book-star-20-filled" SmallSize="true" ClickUrl="@($"{PageRoute.Horoscope}/{Person.Id}")" />
         <IconButton FullWidth="true" ButtonText="Journal" IconName="game-icons:secret-book" SmallSize="true" ClickUrl="@($"{PageRoute.Journal}/{Person.Id}")" />
         <IconButton FullWidth="true" ButtonText="Life Predictor" IconName="gis:map-time" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
@@ -17,18 +22,22 @@
 </div>
 
 <div style="cursor: pointer" @ref="nameHolderElement">
-   @Person.Name
+    @Person.Name
 </div>
 
 
 @code {
 
+    /// <summary>
+    /// final URL placed in src to get image
+    /// </summary>
+    private string ImageUrl = $"images/person/{Person.ImageName}";
 
     /// <summary>
     /// image name is expected to exist in images folder with .JPG format
     /// </summary>
     [Parameter]
-    public Person Person { get; set; }
+    public static Person Person { get; set; }
 
     /// <summary>
     /// element that is shown in tool tip is referenced here to be accessed by Tippy.js
@@ -36,9 +45,25 @@
     private ElementReference tooltipElement { get; set; }
 
     /// <summary>
-    /// reference to element that shows the name, when mouse over is triggers Tippy 
+    /// reference to element that shows the name, when mouse over is triggers Tippy
     /// </summary>
     private ElementReference nameHolderElement { get; set; }
+
+    /// <summary>
+    /// if true image exists and it will be shown
+    /// </summary>
+    private bool ImageExist { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //make sure image is there else, no need to waste that nice space
+        //this will be used when rendering
+        var wwwUrl = Path.Combine(_navigation.BaseUri, ImageUrl);
+        ImageExist = await Tools.IsFileExistInTheBigNet(wwwUrl);
+    }
+
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
@@ -48,7 +73,7 @@
         if (firstRender)
         {
             //attach tooltip lib element if tooltip provided
-            if (!string.IsNullOrEmpty(Person.ImageName))
+            if (!string.IsNullOrEmpty(Person.ImageName)) //todo needs update
             {
                 //construct html to show image
                 var tooltipSettings =

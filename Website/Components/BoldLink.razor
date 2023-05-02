@@ -1,0 +1,34 @@
+﻿@*make links bold*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+@*remove text underline*@
+<a target="@TargetAttribute" rel="@RelAttribute" style="text-decoration-line: none;" href="@URL" class="link-primary fw-bold">@ChildContent</a>
+
+@code {
+
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string URL { get; set; }
+
+
+    /// <summary>
+    /// Default is true, will open in new tab
+    /// since most use cases for need to open in new tab
+    /// </summary>
+    [Parameter]
+    public bool OpenInNewTab { get; set; } = true;
+
+    /// <summary>
+    /// set based on set open new tab
+    /// - the link’s target loading in the same tab where the link was clicked
+    /// - backlink from appearing as referral traffic in the destination site’s analytics
+    /// </summary>
+    private string TargetAttribute => OpenInNewTab ? "_blank" : "";
+    private string RelAttribute => OpenInNewTab ? "noopener noreferrer" : "";
+}

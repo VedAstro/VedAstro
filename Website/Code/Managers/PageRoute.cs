@@ -15,6 +15,7 @@
         public const string SearchResultParam = "/SearchResult/{SearchText}";
         public const string Debug = "/Debug";
         public const string AskAstrologer = "/AskAstrologer";
+        public const string TrainAIAstrologer = "/TrainAIAstrologer";
 
         //DOCS
         public const string QuickGuide = "Docs/QuickGuide";

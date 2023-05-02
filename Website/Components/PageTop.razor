@@ -34,7 +34,10 @@
         @*SIDE IMAGE*@
         @if (IsImageMode)
         {
-            <img src="images/@ImageName" style="width: 235px;" class=""/>
+            @*center the image in available space after header text (top right)*@
+            <div class="w-100" style="max-width: @GR.W412px; text-align: center;">
+                <img src="images/@ImageName" style="width: 235px;" class=""/>
+            </div>
         }
     </div>
 

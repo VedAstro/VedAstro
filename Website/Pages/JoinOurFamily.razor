@@ -4,14 +4,14 @@
 
 <PageTitle>Join VedAstro Family</PageTitle>
 
-<PageTop ImageName="join-our-family.png"
+<PageTop ImageName="join-our-family.svg"
          Title="Join Our Family"
          DescriptionText="Brainstorm ideas, solve problems, learn &amp; share new skills. We are not just a dev team, we are a dev family.">
 </PageTop>
 
 
 <div class="gap-3" style="max-width:@GR.W667px">
-    
+
 
     <ArticleBlock Title="Where to begin?" IconName="flat-color-icons:sports-mode">
         <ButtonRow>
@@ -24,7 +24,7 @@
             <div class="hstack gap-3 mt-3">
                 <span style="font-size: 18px;background-color: #72ff7080;font-weight: 700;color: black;" class="py-1 px-3 border rounded-4">I like work related to...</span>
                 <Icon IconName="flat-color-icons:advance" Size="55" />
-                @*PersonSelector class used to programatically set visible person selection*@
+
                 <select @bind="SelectedExperience" class="form-control" style="width:@GR.W255px; height:@GR.W37px;">
                     <option value="" selected>Make a choice...</option>
                     <option value="plainTextDocs">Documentation in Plain Text</option>
@@ -35,30 +35,12 @@
                     <option value="vedicAstrology">Vedic Astrology</option>
                     <option value="jsCode">JS Code</option>
                     <option value="pythonCode">Python Code</option>
-                    <option value="cSharpCode" >C# Code</option>
-                    <option value="wasmCode" >WebAssembly</option>
-                    <option value="others" >Others, not in this list</option>
+                    <option value="cSharpCode">C# Code</option>
+                    <option value="wasmCode">WebAssembly</option>
+                    <option value="officeClerk">Office Clerk</option>
+                    <option value="others">Others, not in this list</option>
                 </select>
-
-                @*Task Category*@
-@*                <div class="form-floating">
-                    <select @bind="SelectedExperience" class="form-select" id="experienceSelect" aria-label="Experience Select">
-                        <option value="" selected>Make a choice...</option>
-                        <option value="plainTextDocs">Documentation in Plain Text</option>
-                        <option value="htmlCssDocs">Documentation in HTML, CSS</option>
-                        <option value="photoshopIllustrator">Adobe Illustrator or Photoshop</option>
-                        <option value="mlTraining">ML pipeline &amp; AI model management</option>
-                        <option value="azure">Azure, Google Cloud, AWS, etc...</option>
-                        <option value="vedicAstrology">Vedic Astrology</option>
-                        <option value="jsCode">JS Code</option>
-                        <option value="pythonCode">Python Code</option>
-                        <option value="cSharpCode" >C# Code</option>
-                        <option value="wasmCode" >WebAssembly</option>
-                        <option value="others" >Others, not in this list</option>
-                    </select>
-                    <label style="font-weight: 700; color: black;" for="experienceSelect">Experience</label>
-               </div>
-*@                <IconButton OnClickCallback="OnClickSubmit" ButtonText="Join Team"></IconButton>
+                <IconButton OnClickCallback="OnClickSubmit" ButtonText="Join"></IconButton>
             </div>
         </TextHTML>
     </ArticleBlock>
@@ -100,7 +82,7 @@
             - financial compensation for work
         </TextHTML>
     </ArticleBlock>
-    
+
     <ArticleBlock Title="Work Ethic" IconName="flat-color-icons:biotech">
         <TextHTML>
             The advice we give to every member is the same advice we give to ourselves.

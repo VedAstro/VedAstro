@@ -1,21 +1,21 @@
 ﻿@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
+<PageTitle>Easy API Builder</PageTitle>
 
-<PageTitle>API Builder</PageTitle>
-<PageTop Title="API Builder" IconName="mdi:cloud-tags">
-    <Description>
-        Learn and build API calls fast
-    </Description>
+<PageTop ImageName="api-builder-banner.svg"
+         Title="Easy API Builder"
+         DescriptionText="Build your HTTP calls fast, up &amp; running in less than 5 minutes.
+        Powered by .NET Roslyn reflection to auto generate calls dynamically from code.">
 </PageTop>
 
 
 @*API DROP DOWN SELECTORS*@
 <div>
-    <div class="d-flex flex-wrap gap-5">
+    <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
 
         @*GENERATOR*@
-        <div class="vstack gap-3 " style="width:@GR.W412px">
+        <div class="vstack gap-3" style="max-width:@GR.W412px;">
             <TimeInputSimple @ref="_timeInput" LabelText="Time" />
             <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
 
@@ -93,7 +93,7 @@
                 </select>
                 <label style="font-weight: 700; color: black;" for="housePropertySelector">House Property</label>
             </div>
-            
+
             <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickSubmitButton" />
 
             @*OUTPUT*@
@@ -101,7 +101,7 @@
 
             @*ARROW DOWN*@
             <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
-            
+
             @*COPY AND CALL BUTTON*@
             <div class="hstack gap-3">
                 <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
@@ -110,49 +110,39 @@
 
 
         </div>
-        
+
         @*GUIDE TEXT*@
-        <ArticleBlock Title="After Generate?" IconName="flat-color-icons:workflow">
-            <TextHTML>
-                Make a GET request from your app or website. It can be in any language,
-                PHP, JS, Python, even your browsers' URL.
-            </TextHTML>
-        </ArticleBlock>
+        <div>
+            <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
+                <TextHTML>
+                    Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language,
+                    PHP, JS, Python, even your browsers' URL. Design your app to cache the received data.
+                    Note : calls have been known to fail once in a blue moon, if and when that happens,
+                    just make sure your app just replays the same call again. Design your code to try
+                    HTTP call at least 2 times be reporting as failed. Even a small network issue on the
+                    client side may cause this.
+                </TextHTML>
+            </ArticleBlock>
 
-        <ArticleBlock Title="Understand the response" IconName="flat-color-icons:workflow">
-            <TextHTML>
-                Data is returned in JSON. Only 2 properties. First field is always "Status", it can be only "Pass" or "Fail".
-                If it shows "Fail" then most likely cause is invalid data on your part. More details about the
-                error will be in "Payload" property.
-            </TextHTML>
-        </ArticleBlock>
+            <ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
+                <TextHTML>
+                    Data is returned in <strong>JSON</strong>. Only 2 properties. First field is always <kbd>Status</kbd>, it can be only <kbd>Pass</kbd> or <kbd>Fail</kbd>.
+                    If it shows <kbd>Fail</kbd> then most likely cause is invalid data on your part. More details about the
+                    error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alpabetically stored in <kbd>Payload</kbd> property.
+                </TextHTML>
+            </ArticleBlock>
 
-        <ArticleBlock Title="Reverse Engineer" IconName="flat-color-icons:workflow">
-            <TextHTML>
-                To maximize the use of the API, you need to understand its basic structure.
-                And the best way todo so is to play with it. Try modifying the API URL in your browser,
-                and see what data you get. Experiment with different data formats.
-                The API is designed to handle this, so don't worry about breaking it. Have fun.
-            </TextHTML>
-        </ArticleBlock>
+            <ArticleBlock Title="Reverse Engineer" IconName="emojione:hammer-and-wrench">
+                <TextHTML>
+                    To maximize the use of the API, you need to understand its basic structure.
+                    And the best way todo so is to play with it. Try modifying the API URL in your browser,
+                    and see what data you get. Experiment with different data formats.
+                    The API is designed to handle this, so don't worry about breaking it. Have fun.
+                </TextHTML>
+            </ArticleBlock>
 
 
-
-        @*LITTLE BOX*@
-        <InfoBox Title="" IconName="flat-color-icons:close-up-mode">
-            <DescriptionHTML>
-            </DescriptionHTML>
-        </InfoBox>
-
-        @*LITTLE BOX*@
-        <InfoBox Title="Reverse Engineer" IconName="emojione:hammer-and-wrench">
-            <DescriptionHTML>
-                To maximize the use of the API, you need understand its basic structure.
-                And the best way todo so is to play with it. Try modifying the API URL in your browser,
-                and see what data you get. Experiment with different formats data.
-                The API is designed to handle this so, don't wo'
-            </DescriptionHTML>
-        </InfoBox>
+        </div>
 
     </div>
 </div>

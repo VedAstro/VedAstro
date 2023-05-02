@@ -533,6 +533,13 @@ namespace VedAstro.Library
         //▀▀▀ ▀░▀ ░░▀░░ ▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀ ▀▀▀▀ ▀░░▀ 　 ▀░░░▀ ▀▀▀ ░░▀░░ ▀░░▀ ▀▀▀▀ ▀▀▀░ ▀▀▀
 
 
+        public static string? Truncate(this string? value, int maxLength, string truncationSuffix = "…")
+        {
+            return value?.Length > maxLength
+                ? value.Substring(0, maxLength) + truncationSuffix
+                : value;
+        }
+
         /// <summary>
         /// Find the first offset in the string that might contain the characters
         /// in `needle`, in any order. Returns -1 if not found.
@@ -624,8 +631,15 @@ namespace VedAstro.Library
         /// </summary>
         public static TimeSpan GetSystemTimezone() => DateTimeOffset.Now.Offset;
 
+
+        /// <summary>
+        /// Given a place's name, using google API will get location
+        /// </summary>
         public static async Task<WebResult<GeoLocation>> AddressToGeoLocation(string address)
         {
+            //if null or empty turn back as nothing
+            if (string.IsNullOrEmpty(address)) { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
+
             //create the request url for Google API
             var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
             var url = $"https://maps.googleapis.com/maps/api/geocode/xml?key={apiKey}&address={Uri.EscapeDataString(address)}&sensor=false";
@@ -641,8 +655,10 @@ namespace VedAstro.Library
             var resultXml = geocodeResponseXml.Element("result");
             var statusXml = geocodeResponseXml.Element("status");
 
+#if DEBUG
             //DEBUG
-            //Console.WriteLine(geocodeResponseXml.ToString());
+            Console.WriteLine(geocodeResponseXml.ToString());
+#endif
 
             //check the data, if location was NOT found by google API, end here
             if (statusXml == null || statusXml.Value == "ZERO_RESULTS") { return new WebResult<GeoLocation>(false, GeoLocation.Empty); }
@@ -1637,6 +1653,49 @@ namespace VedAstro.Library
             return returnList;
         }
 
+        /// <summary>
+        /// Check if inputed time was within last hour
+        /// </summary>
+        public static bool IsWithinLastHour(Time logItemTime)
+        {
+            //get time 1 hour ago
+            var time1HourAgo = DateTimeOffset.Now.AddHours(-1);
+
+            //check if inputed time is after this 1 ago mark
+            var isAfter = logItemTime.GetStdDateTimeOffset() >= time1HourAgo;
+
+            return isAfter;
+        }
+
+        public static async Task<bool> IsFileExistInTheBigNet( string imageUrl)
+        {
+            bool result = false;
+
+            WebRequest webRequest = WebRequest.Create(imageUrl);
+            webRequest.Timeout = Timeout.Infinite; // keep it going, slow servers is very likely
+            webRequest.Method = "HEAD";
+
+            HttpWebResponse response = null;
+
+            try
+            {
+                response = (HttpWebResponse)await webRequest.GetResponseAsync();
+                result = true;
+            }
+            catch (WebException webException)
+            {
+                Console.WriteLine(imageUrl + " doesn't exist: " + webException.Message);
+            }
+            finally
+            {
+                if (response != null)
+                {
+                    response.Close();
+                }
+            }
+
+            return result;
+        }
 
     }
 

@@ -10,8 +10,11 @@ namespace VedAstro.Library
     /// </summary>
     public class MatchReport : IToXml
     {
-     
-        private static string[] DefaultUserId = new[] { "101" };
+
+        public static MatchReport Empty = new MatchReport(Person.Empty, Person.Empty, 0, "Empty Notes",
+            new List<CompatibilityPrediction>(), new[] { "101" }); //have to use direct variables
+
+        private static readonly string[] DefaultUserId = new[] { "101" };
 
         public List<CompatibilityPrediction> PredictionList { get; set; }
 
@@ -25,7 +28,7 @@ namespace VedAstro.Library
         public Person Female { get; set; }
 
         //todo should be dynamic
-        private string ScoreColor => this.KutaScore > 50 ? "Green" : "Red";
+        public string ScoreColor => this.KutaScore > 50 ? "Green" : "Red";
 
         /// <summary>
         /// User ID is used by website. Multiple supported, Shows owners

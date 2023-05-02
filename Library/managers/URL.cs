@@ -126,10 +126,12 @@ public class URL
     public const string GeoJsApiUrl = "https://get.geojs.io/v1/ip/geo.json";
     public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";
+    public const string GitHub88000Lines = "https://github.com/VedAstro/VedAstro/discussions/4";
     public const string VedAstroJS = "https://github.com/VedAstro/VedAstro.js";
     public const string HttpHome = "https://vedastro.org";
     public const string PatreonPage = "https://patreon.com/vedastro";
     public const string KoFiPage = "https://ko-fi.com/vedastro";
+    public const string KoFiDonateIframe = "https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true";
     public const string PaypalMePage = "https://paypal.me/VedAstroOrg";
     public const string AddPersonGuideVideo = "https://youtu.be/RDUPsFOrr3c";
     public const string NasaJplSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";
@@ -138,4 +140,8 @@ public class URL
     public const string WhatsAppContact = "https://wa.me/60142938084?text=Hi";
     public const string EmailToClick = "mailto:contact@vedastro.org";
     public const string GitHubRepo = "https://github.com/VedAstro/VedAstro";
+    public const string GitHubIssues = "https://github.com/VedAstro/VedAstro/issues";
+    public const string GitHubCommits = "https://github.com/gen-so/Genso.Astrology/commits/master";
+    public const string GitDeveloperRoomProject = "https://github.com/orgs/VedAstro/projects/1";
+    public const string SlackInviteURL = "https://join.slack.com/t/vedastro/shared_invite/zt-1u7pdqjky-hrJZ7e3_vM2dZOmVY8FeHA";
 }

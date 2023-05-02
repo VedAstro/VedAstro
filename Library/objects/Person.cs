@@ -154,7 +154,12 @@ namespace VedAstro.Library
         /// image name is ID with .jpg at back
         /// </summary>
         public string ImageName => $"{this.Id}.jpg";
-        
+
+        /// <summary>
+        /// Format name with birth year for easy identification
+        /// used for showing to  in website
+        /// </summary>
+        public string DisplayName => $"{Name} - {BirthYear}";
 
 
         //PUBLIC PROPERTIES

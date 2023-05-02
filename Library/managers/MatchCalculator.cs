@@ -67,7 +67,7 @@ namespace VedAstro.Library
             }
 
             //parse data
-            var report = new MatchReport(male, female,0,"Notes", compatibilityPredictions, new []{""});
+            var report = new MatchReport(male, female,0,"Notes", compatibilityPredictions, new[] { "101" });
 
             //count the total points
             CalculateTotalPoints(ref report);

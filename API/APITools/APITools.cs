@@ -541,10 +541,8 @@ namespace API
             }
         }
 
-        public static async Task<List<LogItem>> GetOnlineVisitors()
+        public static IEnumerable<LogItem> GetOnlineVisitors(XDocument visitorLogDocument)
         {
-            //get visitor log from storage
-            var visitorLogDocument = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
 
             //parse all logs
             var xmlRecordList = visitorLogDocument.Root?.Elements() ?? new List<XElement>();

@@ -36,7 +36,7 @@ namespace API
         public static async Task<XDocument> GetXmlFileFromAzureStorage(string fileName, string blobContainerName)
         {
             var fileClient = await GetBlobClientAzure(fileName, blobContainerName);
-            var xmlFile = await BlobClientToXmlDoc(fileClient);
+            var xmlFile = await DownloadToXDoc(fileClient);
 
             return xmlFile;
         }
@@ -77,7 +77,7 @@ namespace API
             //access to file
             var fileClient = await GetBlobClientAzure(fileName, containerName);
             //get xml file
-            var xmlDocFile = await BlobClientToXmlDoc(fileClient);
+            var xmlDocFile = await DownloadToXDoc(fileClient);
 
             //check if record to delete exists
             //if not found, raise alarm

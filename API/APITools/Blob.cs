@@ -10,24 +10,6 @@ namespace API
     /// </summary>
     public static partial class APITools
     {
-        /// <summary>
-        /// Converts a blob client of a file to an XML document
-        /// </summary>
-        public static async Task<XDocument> BlobClientToXmlDoc(BlobClient blobClient)
-        {
-            try
-            {
-                XDocument document = await DownloadToXDoc(blobClient);
-
-                return document;
-            }
-            catch (Exception e)
-            {
-                //todo log the error here
-                Console.WriteLine(e);
-                throw new Exception($"Azure Storage Failure : {blobClient.Name}");
-            }
-        }
 
         /// <summary>
         /// Converts a blob client of a file to string
@@ -91,6 +73,9 @@ namespace API
 
         }
 
+        /// <summary>
+        /// Converts a blob client of a file to an XML document
+        /// </summary>
         public static async Task<XDocument> DownloadToXDoc(BlobClient blobClient)
         {
             var isFileExist = (await blobClient.ExistsAsync()).Value;
@@ -98,20 +83,21 @@ namespace API
             if (isFileExist)
             {
                 XDocument xDoc;
-                using (var stream = (await blobClient.DownloadStreamingAsync()).Value.Content)
+                await using (var stream = (await blobClient.DownloadStreamingAsync()).Value.Content)
                 {
                     xDoc = await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
-#if DEBUG
-                    Console.WriteLine($"Downloaded: {blobClient.Name}");
-#endif
                 }
+
+#if DEBUG
+                Console.WriteLine($"Downloaded: {blobClient.Name}");
+#endif
 
                 return xDoc;
             }
             else
             {
                 //will be logged by caller
-                throw new Exception($"No File in Cloud : {blobClient.Name}");
+                throw new Exception($"No File in Cloud! : {blobClient.Name}");
             }
 
         }

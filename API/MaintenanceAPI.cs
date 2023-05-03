@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs.Models;
+using Google.Protobuf;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Xml.Linq;
@@ -63,17 +64,47 @@ namespace API
         [Function("getipaddress")]
         public static HttpResponseData GetIpAddress([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-            return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
+
+            try
+            {
+                return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
+            }
+            catch (Exception e)
+            {
+                //log it
+                APILogger.Error(e);
+
+                //let user know
+                return APITools.FailMessageJson(e, incomingRequest);
+            }
+
+
         }
 
         [Function("version")]
         public static HttpResponseData GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-            var holder = new XElement("Root");
-            var versionNumberXml = new XElement("Version", ThisAssembly.Version);
-            holder.Add(versionNumberXml, Tools.TimeStampServerXml);
 
-            return APITools.PassMessage(holder, incomingRequest);
+
+            try
+            {
+                var holder = new XElement("Root");
+                var versionNumberXml = new XElement("Version", ThisAssembly.Version);
+                holder.Add(versionNumberXml, Tools.TimeStampServerXml);
+
+                return APITools.PassMessage(holder, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log it
+                APILogger.Error(e);
+
+                //let user know
+                return APITools.FailMessageJson(e, incomingRequest);
+            }
+
+
         }
 
 
@@ -81,12 +112,30 @@ namespace API
         public static async Task<HttpResponseData> GetStats([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
 
-            //unique visitors
-            var uniqueList = await APITools.GetOnlineVisitors();
 
-            //convert list to nice string before sending to caller
-            var visitorLogXmlString = Tools.ListToString(uniqueList);
-            return APITools.PassMessage(visitorLogXmlString, incomingRequest);
+            try
+            {
+                //get visitor log from storage
+                var visitorLogDocument = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
+
+                //unique visitors
+                var uniqueList = APITools.GetOnlineVisitors(visitorLogDocument);
+
+                //convert list to nice string before sending to caller
+                var x = uniqueList.ToList();
+                var visitorLogXmlString = Tools.ListToString(x);
+                return APITools.PassMessage(visitorLogXmlString, incomingRequest);
+            }
+            catch (Exception e)
+            {
+                //log it
+                APILogger.Error(e);
+
+                //let user know
+                return APITools.FailMessageJson(e, incomingRequest);
+            }
+
+
 
         }
 
@@ -96,15 +145,29 @@ namespace API
         [Function("health")]
         public static HttpResponseData GetHealth([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
-            //so long as respond as OK 200, then will pass
-            //todo real health check please
-            //check if all data files are accessible
 
-            var holder = new XElement("Root");
-            var versionNumberXml = new XElement("Version", ThisAssembly.Version);
-            holder.Add(versionNumberXml, Tools.TimeStampServerXml);
+            try
+            {
+                //so long as respond as OK 200, then will pass (Render server)
+                //todo real health check please
+                //check if all data files are accessible
 
-            return APITools.PassMessage(holder, incomingRequest);
+                var holder = new XElement("Root");
+                var versionNumberXml = new XElement("Version", ThisAssembly.Version);
+                holder.Add(versionNumberXml, Tools.TimeStampServerXml);
+
+                return APITools.PassMessage(holder, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log it
+                APILogger.Error(e);
+
+                //let user know
+                return APITools.FailMessageJson(e, incomingRequest);
+            }
+
         }
     }
 }

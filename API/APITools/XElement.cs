@@ -47,7 +47,7 @@ namespace API
         public static async Task<XDocument> AddXElementToXDocument(BlobClient xDocuBlobClient, XElement newElement)
         {
             //get person list from storage
-            var xDocument = await BlobClientToXmlDoc(xDocuBlobClient);
+            var xDocument = await DownloadToXDoc(xDocuBlobClient);
 
             //add new person to list
             xDocument.Root.Add(newElement);

@@ -43,22 +43,10 @@ namespace API
             try
             {
 
-                //get user id
-                //var userId = APITools.ExtractDataFromRequest(incomingRequest).Value;
-
                 //get visitor log from storage
                 var visitorLogXml = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
 
-                //get all unique visitor elements only
-                //var uniqueVisitorList = from visitorXml in visitorLogXml.Root?.Elements()
-                //                        where
-                //                            //note: location tag only exists for new visitor log,
-                //                            //so use that to get unique list
-                //                            visitorXml.Element("Location") != null
-                //                        select visitorXml;
-
                 //convert list to nice string before sending to caller
-                //var visitorLogXmlString = visitorLogXml?.Root?.ToString(SaveOptions.DisableFormatting) ?? "<Empty/>";
                 var visitorLogXmlString = visitorLogXml?.Root ?? new XElement("Empty");
                 return APITools.PassMessage(visitorLogXmlString, incomingRequest);
 
@@ -85,7 +73,7 @@ namespace API
 
                 //get all visitor elements that needs to be deleted
                 var visitorLogClient = await APITools.GetBlobClientAzure(APITools.VisitorLogFile, APITools.BlobContainerName);
-                var visitorListXml = await APITools.BlobClientToXmlDoc(visitorLogClient);
+                var visitorListXml = await APITools.DownloadToXDoc(visitorLogClient);
                 var visitorLogsToDelete = visitorListXml.Root?.Elements().Where(x => x.Element("UserId")?.Value == userId).ToList();
 
                 //delete each record
@@ -122,7 +110,7 @@ namespace API
 
                 //get all visitor elements that needs to be deleted
                 var visitorLogClient = await APITools.GetBlobClientAzure(APITools.VisitorLogFile, APITools.BlobContainerName);
-                var visitorListXml = await APITools.BlobClientToXmlDoc(visitorLogClient);
+                var visitorListXml = await APITools.DownloadToXDoc(visitorLogClient);
                 var visitorLogsToDelete = (from xml in visitorListXml.Root?.Elements()
                                            where xml.Element("VisitorId")?.Value == visitorId
                                            select xml).ToList();

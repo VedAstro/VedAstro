@@ -346,7 +346,8 @@ namespace Website
         /// Load page to given url using JS, reloads Blazor app as well, good for error recovery
         /// </summary>
         public static async Task LoadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync(JS.window_location_assign, url);
-        public static async Task ReloadPage(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync(JS.window_location_assign, url);
+        public static async Task ReloadPageToUrl(this IJSRuntime jsRuntime, string url) => await jsRuntime.InvokeVoidAsync(JS.window_location_assign, url);
+        public static async Task ReloadPage(this IJSRuntime jsRuntime) => await jsRuntime.InvokeVoidAsync(JS.window_location_reload);
 
         /// <summary>
         /// Checks if browser is online

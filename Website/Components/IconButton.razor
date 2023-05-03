@@ -46,7 +46,7 @@ else
 @*text below button*@
 @if (ShowDelayWarning)
 {
-    <SmallIconHeading IconName="mdi:snail" Title="Warning Slow" />
+    <IconText FontColor="#8f8f8f" IconName="mdi:snail">Warning Slow</IconText>
 }
 
 @code {
@@ -232,6 +232,7 @@ else
             css += !string.IsNullOrEmpty(FontWeight) ? $"font-weight: {FontWeight} !important;" : "";
             css += !string.IsNullOrEmpty(FontSize) ? $"font-size: {FontSize} !important;" : "";
             css += $" height:{GR.W37px};";
+            css += $" width: fit-content;";
 
             return css;
         }

@@ -32,7 +32,7 @@ namespace VedAstro.Library
         public const string AskAstrologer = "Thank you\nOur astrologer will contact you soon!";
         public const string AskAstrologerEmail = "Please give email for astrologer to contact you!";
         public const string SelectEventType = "Select at least 1 Event Type!";
-        public const string LoginFailed = "Login failed\nPlease try again";
+        public const string LoginFailed = "Could not login.\nDon't give up, try again";
         public const string FacebookLoginFail = "Error in OnFacebookSignInSuccessHandler where authResponse is null";
         public const string NoSavedCharts = "No saved charts, calculate a chart and save it to view here.";
         public const string NoPersonFound = "Person profile not found,\nrefresh or check profile share link";

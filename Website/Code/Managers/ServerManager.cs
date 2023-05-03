@@ -213,9 +213,26 @@ namespace Website
         /// </summary>
         public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData)
         {
+
+            Console.WriteLine("Untested Code yeah!!");
+
+            TryAgain:
+            // throws TimeoutException on timeout
+            string receivedData;
+
+            try
+            {
+                receivedData = await Tools.TaskWithTimeoutAndException(WebsiteTools.Post(apiUrl, xmlData), TimeSpan.FromSeconds(1));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("FAILED TRY AGAIN TIMEOUT 10S");
+                goto TryAgain;
+            }
+
             //ACT 1:
             //send data to URL, using JS for reliability & speed
-            var receivedData = await WebsiteTools.Post(apiUrl, xmlData);
+           // var receivedData = await WebsiteTools.Post(apiUrl, xmlData);
 
             //ACT 2:
             //check raw data 

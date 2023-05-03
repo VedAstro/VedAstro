@@ -6,20 +6,14 @@
 @using System.Xml.Linq
 
 
-<div class="@ExtraClass" style="@(ShowLine?lineStyle:"")">
+<div class="@ExtraClass hstack gap-2" style="@(ShowLine?lineStyle:"")">
     <Icon IconName="@IconName" Size="25" />
-    <span style="font-size: 13px; color: #8f8f8f;">@Title</span>
+    <span style="font-size: @(FontSize)px; color: @FontColor;">@ChildContent</span>
 </div>
 @if (ShowLine)
 {
     <hr class="my-0" />
 }
-
-@*<div class="hstack gap-1" style="align-items: start; margin-top: -10px;">
-    <Icon IconName="mdi:snail" Size="20"/>
-    <p style="font-size: 13px; color: #8f8f8f;">Warning Slow</p>
-</div>
-*@
 
 
 @code {
@@ -31,6 +25,24 @@
 
     [Parameter]
     public string IconName { get; set; } = "";
+
+    /// <summary>
+    /// Defaults to black
+    /// </summary>
+    [Parameter]
+    public string FontColor { get; set; } = "#000";
+
+    /// <summary>
+    /// default 13px
+    /// </summary>
+    [Parameter]
+    public int FontSize { get; set; } = 13;
+
+    /// <summary>
+    /// Title can be HTML also
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
     
     [Parameter]
     public string ExtraClass { get; set; } = "";
@@ -41,7 +53,5 @@
     [Parameter]
     public bool ShowLine { get; set; } = false;
 
-    [Parameter]
-    public string Title { get; set; } = "";
 
 }

@@ -68,6 +68,8 @@ else
 
     private async Task OnClickSignOutButton()
     {
+        _jsRuntime.ShowLoading();
+
         //log this
         await WebLogger.Click("Sign Out");
 
@@ -82,7 +84,14 @@ else
         //reset app data
         AppData.CurrentUser = UserData.Empty;
 
+        this.StateHasChanged();
+
+
+        //before reload page let user know log out went well
+        await _jsRuntime.ShowAlert("success", "Logged out, we hope you come back", false, 2300);
+
         //refresh page
+        _jsRuntime.ReloadPage();
         WebsiteTools.ReloadPage(_navigation);
 
     }

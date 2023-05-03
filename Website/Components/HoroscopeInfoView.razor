@@ -9,34 +9,35 @@
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item active" role="presentation">
-            <button class="nav-link" id="ai-prediction-tab" data-bs-toggle="tab" data-bs-target="#ai-prediction" type="button" role="tab" aria-controls="ai-prediction" aria-selected="false">
+            <button class="nav-link" id="aiPrediction-tab" data-bs-toggle="tab" data-bs-target="#aiPrediction" type="button" role="tab" aria-controls="aiPrediction" aria-selected="true">
                 <Icon IconName="flat-color-icons:electronics" />
-                AI Prediction
+                <span class="mt-1">AI Prediction</span>
+               
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">
+            <button class="nav-link" id="references-tab" data-bs-toggle="tab" data-bs-target="#references" type="button" role="tab" aria-controls="references" aria-selected="false">
                 <Icon IconName="flat-color-icons:filing-cabinet" /><span class="mt-1">References</span>
             </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
+            <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">
                 <Icon IconName="flat-color-icons:negative-dynamic" />
-                Data
+                <span class="mt-1">Data</span>
             </button>
         </li>
     </ul>
     <div class="tab-content border" id="myTabContent">
 
         @*AI PREDICTIONS CHART*@
-        <div class="tab-pane fade show active" id="ai-prediction" role="tabpanel" aria-labelledby="ai-prediction-tab">
+        <div class="tab-pane fade show active" id="aiPrediction" role="tabpanel" aria-labelledby="aiPrediction-tab">
             <div class="vstack gap-3 p-4">
                 <AIPrediction @ref="_aiPrediction" />
             </div>
         </div>
 
         @*MATCHED REFERENCE*@
-        <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div class="tab-pane fade" id="references" role="tabpanel" aria-labelledby="references-tab">
             <div class="vstack gap-2 p-2">
 
                 @*LIST OF PREDICTIONS*@
@@ -46,7 +47,7 @@
         </div>
 
         @*ASTRO DATA CHART*@
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
             <div class="vstack gap-3">
                 @*only show when all is loaded*@
                 <StrengthChart @ref="_strengthChart" />

@@ -104,10 +104,6 @@
             //special google button has been rendered
             await _jsRuntime.InvokeVoidAsync(JS.loadJs, URL.GoogleSignInJs);
 
-            //await _jsRuntime.LoadJs(ServerManager.GoogleSignInJs);
-            //await _jsRuntime.InvokeAsync<IJSObjectReference>
-            //    ("import", ServerManager.GoogleSignInJs);
-
             //makes this components instance available in JS,
             //to be used later when user clicks sign in button
             await _jsRuntime.InvokeVoidAsync(JS.SetSignInButtonInstance, DotNetObjectReference.Create(this));
@@ -117,6 +113,7 @@
     /// <summary>
     /// This method is called from JS when user signs in
     /// note: works because SignInButtonInstance was called earlier
+    /// User Click > Google Login Button > here
     /// </summary>
     [JSInvokable]
     public async Task OnGoogleSignInSuccessHandler(JsonNode credentialResponse)
@@ -126,10 +123,10 @@
     Console.WriteLine("BLZ: OnGoogleSignInSuccessHandler");
 #endif
 
+        _jsRuntime.ShowLoading();
+
         //log this
         await WebLogger.Click("Google Sign In");
-
-        //todo show loading box
 
         //get the ID Token/JWT from the response
         var idToken = (string)credentialResponse["credential"]!;
@@ -162,10 +159,10 @@
             //tell API to add current user ID to all people created with current VisitorID
             //note: this is done to auto move profiles created before login, then user decides to login
             //but expects all the profiles created before to be there in new account/logged in account
-            var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
-            var resultAddUser = await ServerManager.WriteToServerXmlReply(AppData.URL.AddUserIdToVisitorPersons, payload);
-            //TODO handle result better
-            Console.WriteLine(resultAddUser);
+            //var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
+            //var resultAddUser = await ServerManager.WriteToServerXmlReply(AppData.URL.AddUserIdToVisitorPersons, payload);
+            ////TODO handle result better
+            //Console.WriteLine(resultAddUser);
 
             //refresh page
             WebsiteTools.ReloadPage(_navigation);

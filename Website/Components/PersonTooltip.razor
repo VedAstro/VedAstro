@@ -10,7 +10,7 @@
     @*only show image if exist, don't waste that nice space*@
     @if (ImageExist)
     {
-        <img style="width: @GR.W157px;" src="@ImageUrl" class="img-thumbnail mt-1" alt="..." />
+        <img style="width: @GR.W157px;" src="@(ImageUrl(Person))" class="img-thumbnail mt-1" alt="..." />
     }
     @*buttons related to account*@
     <div class="vstack gap-2 mt-1">
@@ -31,13 +31,13 @@
     /// <summary>
     /// final URL placed in src to get image
     /// </summary>
-    private string ImageUrl = $"images/person/{Person.ImageName}";
+    private string ImageUrl(Person person) => $"images/person/{person.ImageName}";
 
     /// <summary>
     /// image name is expected to exist in images folder with .JPG format
     /// </summary>
     [Parameter]
-    public static Person Person { get; set; }
+    public Person Person { get; set; }
 
     /// <summary>
     /// element that is shown in tool tip is referenced here to be accessed by Tippy.js
@@ -54,14 +54,14 @@
     /// </summary>
     private bool ImageExist { get; set; }
 
-
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         //make sure image is there else, no need to waste that nice space
         //this will be used when rendering
-        var wwwUrl = Path.Combine(_navigation.BaseUri, ImageUrl);
-        ImageExist = await Tools.IsFileExistInTheBigNet(wwwUrl);
+        var wwwUrl = Path.Combine(_navigation.BaseUri, ImageUrl(Person));
+        ImageExist = await Tools.DoesFileExist(wwwUrl);
     }
+
 
 
 

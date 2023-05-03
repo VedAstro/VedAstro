@@ -2,50 +2,68 @@
 @using Microsoft.AspNetCore.Components
 @using Microsoft.Extensions.FileSystemGlobbing.Internal
 @using VedAstro.Library
+@using System.Xml.Linq
 
 
 <PageTitle>Find Marriage Match</PageTitle>
 
-<PageTop Title="Match" IconName="bi:arrow-through-heart-fill">
-    <Description>Check compatibility between 2 people. 16 astrological factors used to make this accurate prediction.</Description>
+<PageTop ImageName="match-checker.svg"
+         Title="Match"
+         DescriptionText="Check compatibility between 2 people. 16 astrological factors used to make this accurate prediction.">
 </PageTop>
 
 
-
 <div class="d-flex flex-wrap mb-5">
+    @*SELECTOR*@
     <div>
         <div class="vstack gap-3 me-5">
             <PersonSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonId="@SelectedMale" Label="Male" />
             <PersonSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
-            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate"></IconButton>
+            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate" />
         </div>
     </div>
-    <div>
-        <ul class="list-group rounded-3">
-            <li class="list-group-item active" aria-current="true">Full Check</li>
-            <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />Mars-Venus Dosa</li>
-            <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />12 Porutham/Kuta</li>
-            <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />Kuta Exceptions</li>
-            <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark" />7th House General</li>
-        </ul>
-    </div>
+    @*SIDEBAR*@
+    @* <div>
+    <ul class="list-group rounded-3">
+    <li class="list-group-item active" aria-current="true">Full Check</li>
+    <li class="list-group-item"><IconText FontSize="24" IconName="flat-color-icons:checkmark">Mars-Venus Dosa</IconText></li>
+    <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark"/>12 Porutham/Kuta</li>
+    <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark"/>Kuta Exceptions</li>
+    <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark"/>7th House General</li>
+    </ul>
+    </div>*@
 </div>
 
-<hr />
 
 <IconTitle Title="Accurate Predictions" IconName="flat-color-icons:filing-cabinet" />
 <MatchReportListViewer @ref="savedMatchReportList" />
 
-<hr style="margin-bottom:@GR.W157px;">
+<div style="max-width: @GR.W667px">
 
-@*<h4>Philosophy</h4>
-<p>
-    Do we need more proof? It is high time, for us as a human species to stop hunting for partners blindly like animals based on our senses.
-    Instead we shall use divine intelligence with understanding of cosmic laws that guarantee a perfect union between 2 souls.
-    Just imagine a world with no divorces, a world where happy marriages is common sight. Where laughter abounds &amp; fear stands still.
-    "You may say I'm dreamer, but I'm not the only one." -- John Lenon
-</p>
-*@
+    <ArticleBlock Title="Perfect Marriages" IconName="emojione:amphora">
+        <TextHTML>
+            Do we need more proof? It is high time, for us as a human species to stop hunting for partners blindly like
+            animals based on our senses and circumstance. The age of "imperfection", the age of "Kali" is over.
+            Instead we shall use divine intelligence with understanding of cosmic laws that guarantee a perfect union between 2 souls.
+            <br />
+            Just imagine a world with no divorces, a world where happy marriages is common sight. Where laughter abounds &amp; fear stands still.
+@*            <strong>"" -- </strong>
+*@        </TextHTML>
+    </ArticleBlock>
+
+</div>
+
+<div style="text-align: center;">
+    <figure class="text-center mt-1" style="max-width:@GR.W412px ">
+        <blockquote class="blockquote">
+            <p>You may say I'm dreamer, <br /> but I'm not the only one.</p>
+        </blockquote>
+        <figcaption class="blockquote-footer">
+            John Lenon @*<cite title="Source Title">Singer Beatles 60'</cite>*@
+        </figcaption>
+    </figure>
+</div>
+
 @code {
 
     //VARIABLES
@@ -73,7 +91,7 @@
     {
         if (firstRender)
         {
-            var exampleReport = await GetExampleReports();
+            var exampleReport = await WebsiteTools.GetSavedMatchList();
             savedMatchReportList.Show(exampleReport);
         }
     }
@@ -82,12 +100,22 @@
     {
         var returnVal = new List<MatchReport>()
         {
+            //Kristen Bell  Dax Shepard
             await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc"),
-            await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc")
+            //Matt Damon  Luciana Barroso
+            await WebsiteTools.GetCompatibilityReport("696c62d1f429469aaf8111fc1418f7ce", "ef97500191d248cd92bc43d32fed6093"),
+            //Napoleon Bonaparte  Joséphine de Beau.
+            await WebsiteTools.GetCompatibilityReport("54041d1ffb49479997f7987ecfchf08b5", "7faa6fe13ac5442d9d3dba972daa9af2"),
+            //Brad Pitt  Angelina Jolie
+            await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc"),
+            //John Lennon  Yoko Ono
+            await WebsiteTools.GetCompatibilityReport("70d6a995dec84c0aa74211ac9ff50d29", "8e9b5804e68a4b82a1a975ebee1643dc"),
         };
 
         return returnVal;
     }
+
+  
 
     private async Task OnClickCalculate()
     {

@@ -84,10 +84,14 @@
 
         //BOOTSTRAP JS
         
-        //SPECIAL SIGN IN FUNCS RESIDE IN APP.JS
+        //SPECIAL SIGN IN FUNCS RESIDE IN index.html
         public const string facebookLogin = "window.facebookLogin";
         public const string SetSignInButtonInstance = "window.SetSignInButtonInstance";
-        public const string OnGoogleSignInSuccessHandler = "window.OnGoogleSignInSuccessHandler";
+        /// <summary>
+        /// can't use window. needs direct method name
+        /// declared in index.html, no dots just direct method name
+        /// </summary>
+        public const string OnGoogleSignInSuccessHandler = "OnGoogleSignInSuccessHandler";
 
         //SPECIAL APP.JS FUNCS
         public const string GetInteropFuncList = "window.GetInteropFuncList";
@@ -101,6 +105,7 @@
 
         //native browser
         public const string window_location_assign = "window.location.assign";
+        public const string window_location_reload = "window.location.reload";
         public const string history_back = "history.back";
         public const string open = "open";
         public const string import = "import";

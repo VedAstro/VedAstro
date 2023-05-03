@@ -19,54 +19,53 @@
 
     <ArticleBlock Title="How To Use?" IconName="flat-color-icons:close-up-mode">
         <TextHTML>
-            <div class="vstack gap-2 mt-3">
-                <div class="d-flex gap-3">
-                    <kbd>STEP 1</kbd>
-                    <span>Add new Person profile</span>
-                    <PersonSelectorBox ExtraClass="ms-auto" HideTitle="true" @ref="_peopleSelectorBox" />
+            <div class="container ">
+                <div class="row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto">
+                        <kbd>STEP 1</kbd>
+                    </div>
+                    <div class="col" style=" width: @GR.W255px; ">
+                        <span>Choose or add person's horoscope</span>
+                    </div>
+                    <div class="col">
+                        <PersonSelectorBox HideTitle="true" @ref="_peopleSelectorBox" />
+                    </div>
                 </div>
-                <div class="d-flex gap-3">
-                    <kbd>STEP 2</kbd>
-                    <span>Choose calculator</span>
-                    <select @bind="SelectedCalculator" class="ms-auto form-control" style="width:@GR.W255px; height:@GR.W37px;">
-                        <option value="">Match</option>
-                        <option value="">Life Predictor</option>
-                        <option value="">Muhurtha</option>
-                    </select>
+                <div class="row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto">
+                        <kbd>STEP 2</kbd>
+                    </div>
+                    <div class="col" style=" width: @GR.W255px; ">
+                        <span>Choose calculator to use</span>
+                    </div>
+                    <div class="col">
+                        <select @bind="SelectedCalculator" class="form-control" style="width: @GR.W255px; height: @GR.W37px;">
+                            <option value="Match">Match</option>
+                            <option value="Horoscope">Horoscope</option>
+                            <option value="LifePredictor">Life Predictor</option>
+                            <option value="Muhurtha">Muhurtha</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="d-flex gap-3">
-                    <kbd>STEP 3</kbd>
-                    <span>View astro predictions and data. Done!</span>
-                    <IconButton ExtraClass="ms-auto" TooltipText="Done" IconName="fluent-mdl2:completed-solid" ClickUrl="@PageRoute.AddPerson" />
-                </div>
-            </div>
-        </TextHTML>
-    </ArticleBlock>
-
-@*    <ArticleBlock Title="How To Use?" IconName="flat-color-icons:close-up-mode">
-        <TextHTML>
-            <div class="vstack gap-2 mt-3">
-                <div class="d-flex gap-3">
-                    <kbd>STEP 1</kbd>
-                    <span>Add new Person profile</span>
-                    <IconButton ExtraClass="ms-auto" TooltipText="Add new person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
-                    <PersonSelectorBox @ref="_peopleSelectorBox" />
-                </div>
-                <div class="d-flex gap-3">
-                    <kbd>STEP 2</kbd>
-                    <span>Choose calculator</span>
-                    <IconButton ExtraClass="ms-auto" TooltipText="Add new person" IconName="ph:calculator" ClickUrl="@PageRoute.AddPerson" />
-                </div>
-                <div class="d-flex gap-3">
-                    <kbd>STEP 3</kbd>
-                    <span>View astro predictions and data. Done!</span>
-                    <IconButton ExtraClass="ms-auto" TooltipText="Add new person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
+                <div class="row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto">
+                        <kbd>STEP 3</kbd>
+                    </div>
+                    <div class="col" style=" width: @GR.W255px; ">
+                        <span>Click calculate to view predictions. <strong style="color: #007e21">Easypeasy!</strong></span>
+                    </div>
+                    <div class="col">
+                        <IconButton ButtonText="Goto Calculator" OnClickCallback="OnClickCalculateEasypeasy" TooltipText="Goto Calculator Page" TextCenter="true" FullWidth="true" IconName="fluent:calculator-20-regular" />
+                    </div>
                 </div>
             </div>
         </TextHTML>
     </ArticleBlock>
 
-*@    <ArticleBlock Title="What is a calculator?" IconName="icon-park:calculator">
+    <ArticleBlock Title="What is a calculator?" IconName="icon-park:calculator">
+        <ButtonRow>
+            <IconButton ButtonText="View All" IconName="fluent:calculator-multiple-24-regular" ClickUrl="@PageRoute.CalculatorList" />
+        </ButtonRow>
         <TextHTML>
             Each calculator shows aspect of astrology. For example <BoldLink URL="@PageRoute.Match">Match</BoldLink> is a calculator for
             checking marriage or friendship compatibility. <BoldLink URL="@PageRoute.Muhurtha">Muhurtha</BoldLink> is used for finding good
@@ -135,4 +134,8 @@
     private PersonSelectorBox? _peopleSelectorBox;
     private string? SelectedCalculator;
 
+    private void OnClickCalculateEasypeasy()
+    {
+        throw new NotImplementedException();
+    }
 }

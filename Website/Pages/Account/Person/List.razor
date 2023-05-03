@@ -10,14 +10,22 @@
     <ButtonsRow>
         <IconButton IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
         <IconButton IconName="flat-color-icons:calculator" ButtonText="Calculators" ClickUrl="@PageRoute.CalculatorList"></IconButton>
-        @*        <IconButton IconName="dashicons:video-alt3" ButtonText="Watch Guide" OnClickCallback="()=> _jsRuntime.OpenNewTab(PageRoute.AddPersonGuideVideo)"></IconButton>
-        *@
     </ButtonsRow>
 </PageTop>
 
+@*dont wrap table, looks untidy*@
+<style>
+    th {
+        white-space: nowrap;
+    }
+    td {
+        white-space: nowrap;
+    }
+</style>
+
+
 @if (_isReady)
 {
-
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
             <tr>
@@ -34,7 +42,7 @@
                     @*only make the name click able*@
                     <td><PersonTooltip Person="_personListAsync[index]" /></td>
                     <td>@_personListAsync[index].BirthTimeString</td>
-                    <td>@_personListAsync[index].GetBirthLocation().ToString()</td>
+                    <td>@_personListAsync[index].GetBirthLocation().ToString().Truncate(30)</td> @*we don't need whole location*@
                     <td @ref="tempRef[index]">@TippyfyNotes(_personListAsync[index],index)</td> @*make sure doesn't go overboard long, cut beyond*@
                 </tr>
             }

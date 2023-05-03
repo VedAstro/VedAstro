@@ -30,7 +30,6 @@ public class URL
 
         //done here so that can be readonly
         AddPersonApi = ApiUrl + "/addperson";
-        AddUserIdToVisitorPersons = ApiUrl + "/AddUserIdToVisitorPersons";
         GetHoroscope = ApiUrl + "/gethoroscope";
         AddLifeEventApi = ApiUrl + "/addlifeevent";
         AddMessageApi = ApiUrl + "/addmessage";
@@ -83,7 +82,6 @@ public class URL
     public readonly string ApiUrlDirect;
     public readonly string WebUrl;
     public readonly string AddPersonApi;
-    public readonly string AddUserIdToVisitorPersons;
     public readonly string GetHoroscope;
     public readonly string AddLifeEventApi;
     public readonly string AddMessageApi;

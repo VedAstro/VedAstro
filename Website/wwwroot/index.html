@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" style="background-color: #f0f2f5">
 <!--special HACK to make background appear with no end-->
 <head>
@@ -37,6 +37,12 @@
 
     <!-- FACEBOOK SDK (for login, future share, post...)-->
     <script>
+
+        //█░░ █▀█ █▀▀ █ █▄░█   █▀▀ █▀█ █▀▄ █▀▀
+        //█▄▄ █▄█ █▄█ █ █░▀█   █▄▄ █▄█ █▄▀ ██▄
+
+        console.log("Login Code Loading");
+
         window.fbAsyncInit = function () {
             FB.init({
                 appId: '2092940567762345',
@@ -59,6 +65,19 @@
             js.src = "https://connect.facebook.net/en_US/sdk.js";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
+
+        //makes a reference to SignInButton instance, to be used when user clicks sign in
+        //called in Blazor, after component render
+        window.SetSignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
+        //wrapper function to forward call to blazor (hardwired in Blazor HTML)
+        window.OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
+
+        //called from Blazor when custom login button clicked
+        window.facebookLogin = () => FB.login(callBackFB, { scope: 'email' });
+        //wrapper function to forward call to blazor (hardwired in Blazor HTML)
+        var callBackFB = (response) => window.SignInButtonInstance.invokeMethodAsync('OnFacebookSignInSuccessHandler', response);
+
     </script>
 
 </head>
@@ -147,7 +166,7 @@
     <!-- html2pdf : used for Match report conversion-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script src="js/App.js" type="module"></script><!-- APP logic DEFER to confirm run last-->
+    <script src="js/App.js" type="module"></script><!-- module needed to make internal imports work-->
     <script src="_framework/blazor.webassembly.js" defer></script><!--START BLAZOR DEFER to confirm run last-->
 
 </body>

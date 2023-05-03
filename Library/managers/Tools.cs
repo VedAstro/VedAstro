@@ -38,6 +38,23 @@ namespace VedAstro.Library
     /// </summary>
     public static class Tools
     {
+        public static async Task<T> DelayedResultTask<T>(TimeSpan delay, Func<T> fallbackMaker)
+        {
+            await Task.Delay(delay);
+            return fallbackMaker();
+        }
+
+        public static async Task<T> DelayedTimeoutExceptionTask<T>(TimeSpan delay)
+        {
+            await Task.Delay(delay);
+            throw new TimeoutException();
+        }
+
+        public static async Task<T> TaskWithTimeoutAndException<T>(Task<T> task, TimeSpan timeout)
+        {
+            //two task are fired at once, real task and countdown
+            return await await Task.WhenAny(task, DelayedTimeoutExceptionTask<T>(timeout));
+        }
 
         public static List<HoroscopeData> SavedHoroscopeDataList { get; set; } = null; //null used for checking empty
 
@@ -1366,7 +1383,7 @@ namespace VedAstro.Library
                 rootPayloadJson.Add(resultParse2);
             }
 
-            return rootPayloadJson ;
+            return rootPayloadJson;
 
         }
 
@@ -1656,10 +1673,10 @@ namespace VedAstro.Library
         /// <summary>
         /// Check if inputed time was within last hour
         /// </summary>
-        public static bool IsWithinLastHour(Time logItemTime)
+        public static bool IsWithinLastHour(Time logItemTime, double hours)
         {
             //get time 1 hour ago
-            var time1HourAgo = DateTimeOffset.Now.AddHours(-1);
+            var time1HourAgo = DateTimeOffset.Now.AddHours(hours);
 
             //check if inputed time is after this 1 ago mark
             var isAfter = logItemTime.GetStdDateTimeOffset() >= time1HourAgo;
@@ -1667,36 +1684,26 @@ namespace VedAstro.Library
             return isAfter;
         }
 
-        public static async Task<bool> IsFileExistInTheBigNet( string imageUrl)
+        private static HttpClient _httpClient;
+
+        /// <summary>
+        /// sends a simple head request to check if file exists
+        /// </summary>
+        public static async Task<bool> DoesFileExist(string url)
         {
-            bool result = false;
-
-            WebRequest webRequest = WebRequest.Create(imageUrl);
-            webRequest.Timeout = Timeout.Infinite; // keep it going, slow servers is very likely
-            webRequest.Method = "HEAD";
-
-            HttpWebResponse response = null;
-
-            try
+            if (_httpClient == null)
             {
-                response = (HttpWebResponse)await webRequest.GetResponseAsync();
-                result = true;
+                _httpClient = new HttpClient();
             }
-            catch (WebException webException)
+
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, url))
             {
-                Console.WriteLine(imageUrl + " doesn't exist: " + webException.Message);
-            }
-            finally
-            {
-                if (response != null)
+                using (HttpResponseMessage response = await _httpClient.SendAsync(request))
                 {
-                    response.Close();
+                    return response.StatusCode == System.Net.HttpStatusCode.OK;
                 }
             }
-
-            return result;
         }
-
     }
 
 }

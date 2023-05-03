@@ -6,19 +6,24 @@
 
 
 @*this element is auto hidden by Tippy, and made visible when on hover*@
-<div @ref="tooltipElement" class="hstack gap-2">
+<div @ref="tooltipElement" class="hstack gap-2 shadow rounded-4 border-dark-subtle">
     @*only show image if exist, don't waste that nice space*@
     @if (ImageExist)
     {
         <img style="width: @GR.W157px;" src="@(ImageUrl(Person))" class="img-thumbnail mt-1" alt="..." />
     }
     @*buttons related to account*@
-    <div class="vstack gap-2 mt-1">
-        <span class="ms-2">@Person.BirthTimeString</span>
+    <div class="vstack gap-2 my-1">
+        <span class="ms-2" style="text-align: center;">@Person.BirthTimeString</span>
         <IconButton FullWidth="true" ButtonText="Horoscope" IconName="fluent:book-star-20-filled" SmallSize="true" ClickUrl="@($"{PageRoute.Horoscope}/{Person.Id}")" />
         <IconButton FullWidth="true" ButtonText="Journal" IconName="game-icons:secret-book" SmallSize="true" ClickUrl="@($"{PageRoute.Journal}/{Person.Id}")" />
         <IconButton FullWidth="true" ButtonText="Life Predictor" IconName="gis:map-time" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
-    </div>
+        <div class="hstack gap-2">
+            <IconButton FullWidth="true" IconName="ic:baseline-ios-share" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
+            <IconButton FullWidth="true" IconName="material-symbols:edit-square" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
+            <IconButton FullWidth="true" IconName="gis:map-time" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
+        </div>
+        </div>
 </div>
 
 <div style="cursor: pointer" @ref="nameHolderElement">

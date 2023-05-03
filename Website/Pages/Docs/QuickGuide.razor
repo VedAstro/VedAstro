@@ -15,31 +15,32 @@
     *@
 </PageTop>
 
-<div style="max-width:@GR.W667px;">
+<div class="vstack gap-4" style="max-width:@GR.W667px;">
 
     <ArticleBlock Title="How To Use?" IconName="flat-color-icons:close-up-mode">
         <TextHTML>
             <div class="container ">
                 <div class="row row-cols-3 align-items-center justify-content-start">
-                    <div class="col-auto">
+                    <div class="col-auto p-0">
                         <kbd>STEP 1</kbd>
                     </div>
-                    <div class="col" style=" width: @GR.W255px; ">
+                    <div class="col-6">
                         <span>Choose or add person's horoscope</span>
                     </div>
                     <div class="col">
                         <PersonSelectorBox HideTitle="true" @ref="_peopleSelectorBox" />
                     </div>
                 </div>
-                <div class="row row-cols-3 align-items-center justify-content-start">
-                    <div class="col-auto">
+                <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto p-0">
                         <kbd>STEP 2</kbd>
                     </div>
-                    <div class="col" style=" width: @GR.W255px; ">
+                    <div class="col-6">
                         <span>Choose calculator to use</span>
                     </div>
                     <div class="col">
-                        <select @bind="SelectedCalculator" class="form-control" style="width: @GR.W255px; height: @GR.W37px;">
+                        <select @bind="SelectedCalculator" class="form-control" style="width: 225px; height: @GR.W37px;">
+                            @*width made to fit name above box*@
                             <option value="Match">Match</option>
                             <option value="Horoscope">Horoscope</option>
                             <option value="LifePredictor">Life Predictor</option>
@@ -47,15 +48,15 @@
                         </select>
                     </div>
                 </div>
-                <div class="row row-cols-3 align-items-center justify-content-start">
-                    <div class="col-auto">
+                <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
+                    <div class="col-auto p-0">
                         <kbd>STEP 3</kbd>
                     </div>
-                    <div class="col" style=" width: @GR.W255px; ">
-                        <span>Click calculate to view predictions. <strong style="color: #007e21">Easypeasy!</strong></span>
+                    <div class="col-6">
+                        <span>Click calculate to view predictions. <strong style="color: #007e21;">Easy!</strong></span>
                     </div>
                     <div class="col">
-                        <IconButton ButtonText="Goto Calculator" OnClickCallback="OnClickCalculateEasypeasy" TooltipText="Goto Calculator Page" TextCenter="true" FullWidth="true" IconName="fluent:calculator-20-regular" />
+                        <IconButton SmallSize="true" ButtonText="Goto Calculator" OnClickCallback="OnClickCalculateEasypeasy" TooltipText="Goto Calculator Page" TextCenter="true" IconName="gg:calendar-next" />
                     </div>
                 </div>
             </div>
@@ -64,7 +65,7 @@
 
     <ArticleBlock Title="What is a calculator?" IconName="icon-park:calculator">
         <ButtonRow>
-            <IconButton ButtonText="View All" IconName="fluent:calculator-multiple-24-regular" ClickUrl="@PageRoute.CalculatorList" />
+            <IconButton SmallSize="true" ButtonText="View All" IconName="fluent:calculator-multiple-24-regular" ClickUrl="@PageRoute.CalculatorList" />
         </ButtonRow>
         <TextHTML>
             Each calculator shows aspect of astrology. For example <BoldLink URL="@PageRoute.Match">Match</BoldLink> is a calculator for
@@ -136,6 +137,17 @@
 
     private void OnClickCalculateEasypeasy()
     {
+
+
+
+        var personId = _peopleSelectorBox?.SelectedPersonId ?? "101";
+
+        switch (SelectedCalculator)
+        {
+            case "Horoscope": _navigation.NavigateTo($"{PageRoute.Horoscope}/{personId}"); break;
+        }
+
+
         throw new NotImplementedException();
     }
 }

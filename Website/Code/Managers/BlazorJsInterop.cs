@@ -110,6 +110,16 @@ namespace Website
         }
 
         /// <summary>
+        /// Shows alert using sweet alert js
+        /// will show okay button, no timeout
+        /// </summary>
+        public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, string descriptionText)
+        {
+            //call SweetAlert kib directly via constructor
+            await jsRuntime.InvokeVoidAsync(JS.Swal_fire, title, descriptionText, icon);
+        }
+
+        /// <summary>
         /// Shows leave email alert box and returns the email as string
         /// note: uses sweet alert js
         /// </summary>

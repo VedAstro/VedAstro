@@ -1,3 +1,5 @@
+using Azure;
+using Azure.Communication.Email;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -6,18 +8,14 @@ using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 using System.Xml.Linq;
-using Azure;
-using Azure.Communication.Email;
 using VedAstro.Library;
-using System.IO;
-using System.Xml;
 
 namespace API
 {
     /// <summary>
     /// A collection of general tools used by API
     /// </summary>
-    public static class APITools
+    public static partial class APITools
     {
         //█░█ ▄▀█ █▀█ █▀▄   █▀▄ ▄▀█ ▀█▀ ▄▀█
         //█▀█ █▀█ █▀▄ █▄▀   █▄▀ █▀█ ░█░ █▀█
@@ -32,7 +30,7 @@ namespace API
         public const string VisitorLogFile = "VisitorLog.xml";
         public const string TaskListFile = "TaskList.xml";
         public const string MessageListFile = "MessageList.xml";
-        public const string SavedChartListFile = "SavedChartList.xml";
+        public const string SavedEventsChartListFile = "SavedChartList.xml";
         public const string SavedMatchReportList = "SavedMatchReportList.xml";
         public const string RecycleBinFile = "RecycleBin.xml";
         public const string UserDataListXml = "UserDataList.xml";
@@ -124,7 +122,6 @@ namespace API
             response.WriteString(jsonText);
 
             return response;
-
         }
 
         public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) => MessageJson("Fail", payload, req);
@@ -150,8 +147,6 @@ namespace API
         public static HttpResponseData FailMessage(Exception payloadException, HttpRequestData req) => FailMessage(Tools.ExceptionToXml(payloadException), req);
 
 
-
-
         //----------------------------------------FUNCTIONS---------------------------------------------
 
         public static byte[] ExtractRawImageFromRequest(HttpRequestMessage req)
@@ -160,7 +155,6 @@ namespace API
 
             return rawStream;
         }
-
 
         /// <summary>
         /// Gets public IP address of client sending the http request
@@ -206,103 +200,6 @@ namespace API
         /// </summary>
         public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");
 
-        /// <summary>
-        /// Overwrites new XML data to a blob file
-        /// </summary>
-        public static async Task OverwriteBlobData(BlobClient blobClient, XDocument newData)
-        {
-            //convert xml data to string
-            var dataString = newData.ToString();
-
-            //convert xml string to stream
-            var dataStream = GenerateStreamFromString(dataString);
-
-            //upload stream to blob
-            await blobClient.UploadAsync(dataStream, overwrite: true);
-
-            //auto correct content type from wrongly set "octet/stream"
-            var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/xml" };
-            await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
-        }
-
-        /// <summary>
-        /// Adds an XML element to XML document in blob form
-        /// </summary>
-        public static async Task<XDocument> AddXElementToXDocument(BlobClient xDocuBlobClient, XElement newElement)
-        {
-            //get person list from storage
-            var xDocument = await BlobClientToXmlDoc(xDocuBlobClient);
-
-            //add new person to list
-            xDocument.Root.Add(newElement);
-
-            return xDocument;
-        }
-
-        /// <summary>
-        /// Adds an XML element to XML document in by file & container name
-        /// and saves files directly to Azure blob store
-        /// </summary>
-        public static async Task AddXElementToXDocumentAzure(XElement dataXml, string fileName, string containerName)
-        {
-            //get user data list file (UserDataList.xml) Azure storage
-            var fileClient = await GetBlobClientAzure(fileName, containerName);
-
-            //add new log to main list
-            var updatedListXml = await AddXElementToXDocument(fileClient, dataXml);
-
-            //upload modified list to storage
-            await OverwriteBlobData(fileClient, updatedListXml);
-        }
-
-        /// <summary>
-        /// Deletes an XML element from an XML document in by file & container name
-        /// and saves files directly to Azure blob store
-        /// </summary>
-        public static async Task DeleteXElementFromXDocumentAzure(XElement dataXmlToDelete, string fileName, string containerName)
-        {
-            //access to file
-            var fileClient = await GetBlobClientAzure(fileName, containerName);
-            //get xml file
-            var xmlDocFile = await BlobClientToXmlDoc(fileClient);
-
-            //check if record to delete exists
-            //if not found, raise alarm
-            var xmlRecordList = xmlDocFile.Root.Elements();
-            var personToDelete = Person.FromXml(dataXmlToDelete);
-            var foundRecords = xmlRecordList.Where(x => Person.FromXml(x).Id == personToDelete.Id);
-            if (!foundRecords.Any()) { throw new Exception("Could not find XML record to delete in main list!"); }
-
-            //continue with delete
-            foundRecords.First().Remove();
-
-            //upload modified list to storage
-            await OverwriteBlobData(fileClient, xmlDocFile);
-        }
-
-        /// <summary>
-        /// Saves XML file direct to Azure storage
-        /// </summary>
-        public static async Task SaveXDocumentToAzure(XDocument dataXml, string fileName, string containerName)
-        {
-            //get file client for file
-            var fileClient = await GetBlobClientAzure(fileName, containerName);
-
-            //upload modified list to storage
-            await OverwriteBlobData(fileClient, dataXml);
-        }
-
-        public static async Task<XElement> ExtractDataFromRequestXml(HttpRequestData request)
-        {
-            //get xml string from caller
-            var xmlString = (await request?.ReadAsStringAsync()) ?? "<Empty/>";
-
-            //parse xml string
-            var xml = XElement.Parse(xmlString);
-
-            return xml;
-        }
-
         public static async Task<JsonElement> ExtractDataFromRequestJson(HttpRequestData request)
         {
             string jsonString = "";
@@ -340,71 +237,6 @@ namespace API
             catch (Exception e) { throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}"); }
         }
 
-        /// <summary>
-        /// Converts a blob client of a file to an XML document
-        /// </summary>
-        public static async Task<XDocument> BlobClientToXmlDoc(BlobClient blobClient)
-        {
-            try
-            {
-                var xmlFileString = await DownloadToText(blobClient);
-                XDocument document = XDocument.Parse(xmlFileString);
-
-                return document;
-            }
-            catch (Exception e)
-            {
-                //todo log the error here
-                Console.WriteLine(e);
-                throw new Exception($"Azure Storage Failure : {blobClient.Name}");
-            }
-        }
-
-        /// <summary>
-        /// Converts a blob client of a file to string
-        /// </summary>
-        public static async Task<string> BlobClientToString(BlobClient blobClient)
-        {
-            try
-            {
-                var xmlFileString = await DownloadToText(blobClient);
-
-                return xmlFileString;
-            }
-            catch (Exception e)
-            {
-                //todo log the error here
-                Console.WriteLine(e);
-                throw new Exception($"Azure Storage Failure : {blobClient.Name}");
-            }
-
-            //Console.WriteLine(blobClient.Name);
-            //Console.WriteLine(blobClient.AccountName);
-            //Console.WriteLine(blobClient.BlobContainerName);
-            //Console.WriteLine(blobClient.Uri);
-            //Console.WriteLine(blobClient.CanGenerateSasUri);
-
-            //if does not exist raise alarm
-            if (!await blobClient.ExistsAsync())
-            {
-                Console.WriteLine("NO FILE!");
-            }
-
-            //parse string as xml doc
-            //var valueContent = blobClient.Download().Value.Content;
-            //Console.WriteLine("Text:"+Tools.StreamToString(valueContent));
-        }
-
-        /// <summary>
-        /// Method from Azure Website
-        /// </summary>
-        public static async Task<string> DownloadToText(BlobClient blobClient)
-        {
-            BlobDownloadResult downloadResult = await blobClient.DownloadContentAsync();
-            string downloadedData = downloadResult.Content.ToString();
-            //Console.WriteLine("Downloaded data:", downloadedData);
-            return downloadedData;
-        }
 
         public static Stream GenerateStreamFromString(string s)
         {
@@ -416,193 +248,6 @@ namespace API
             return stream;
         }
 
-        /// <summary>
-        /// Extracts data from HTTP request and turn it into a XML
-        /// </summary>
-        public static async Task<XElement> RequestToXml(HttpRequestData requestData)
-        {
-            var requestXml = new XElement("Request");
-
-            //STAGE 1 : HEADERS
-            var headersRaw = requestData?.Headers.ToList();
-            var headerXml = new XElement("HeaderList");
-            foreach (var keyValuePair in headersRaw)
-            {
-                var headData = string.Join(",", keyValuePair.Value);
-                var headName = keyValuePair.Key;
-                headerXml.Add(new XElement(headName, headData));
-            }
-
-            //add headers separately last, because generated separately
-            requestXml.Add(headerXml);
-
-
-            //STAGE 2 : OTHER DATA
-            var propList = new Dictionary<string, string>()
-            {
-                ["Method"] = requestData.Method,
-                ["Url"] = requestData.Url.ToString(),
-                ["IP"] = requestData?.GetCallerIp().ToString() ?? "no ip!",
-                ["Body"] = await requestData?.ReadAsStringAsync() ?? "Empty",
-            };
-
-            foreach (var property in propList)
-            {
-                var tempXml = new XElement(property.Key, property.Value);
-                requestXml.Add(tempXml);
-            }
-
-
-            return requestXml;
-        }
-
-        public static async Task<XElement> FindChartById(XDocument savedChartListXml, string inputChartId)
-        {
-            try
-            {
-                var chartXmlList = savedChartListXml.Root.Elements();
-
-                //Console.WriteLine(savedChartListXml.ToString());
-
-                return chartXmlList.Where(delegate (XElement chartXml)
-                {   //use chart id to find chart record
-                    var thisId = Chart.FromXml(chartXml).ChartId;
-                    return thisId == inputChartId;
-                }).FirstOrDefault(Chart.Empty.ToXml());
-            }
-            catch (Exception e)
-            {
-                //if fail log it and return empty xelement
-                await APILogger.Error(e, null);
-                return new XElement("Chart");
-            }
-        }
-
-        /// <summary>
-        /// Gets file blob client from azure storage by name
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="blobContainerName"></param>
-        /// <returns></returns>
-        public static async Task<BlobClient> GetBlobClientAzure(string fileName, string blobContainerName)
-        {
-            //get the connection string stored separately (for security reasons)
-            //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Environment.GetEnvironmentVariable("API_STORAGE"); //vedastro-api-data
-
-            //get image from storage
-            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
-            var fileBlobClient = blobContainerClient.GetBlobClient(fileName);
-
-            return fileBlobClient;
-
-            //var returnStream = new MemoryStream();
-            //await fileBlobClient.DownloadToAsync(returnStream);
-
-            //return returnStream;
-        }
-
-        public static XElement FindVisitorById(XDocument visitorListXml, string visitorId)
-        {
-            try
-            {
-                var uniqueVisitorList = from visitorXml in visitorListXml.Root?.Elements()
-                                        where visitorXml.Element("VisitorId")?.Value == visitorId
-                                        select visitorXml;
-
-                return uniqueVisitorList.FirstOrDefault();
-            }
-            catch (Exception e)
-            {
-                //if fail log it and return empty xelement
-                //todo log failure
-                return new XElement("Visitor");
-            }
-        }
-
-        /// <summary>
-        /// Given a id will return parsed person from main list
-        /// Returns empty person if, no person found
-        /// </summary>
-        public static async Task<Person> GetPersonById(string personId)
-        {
-            var foundPersonXml = await FindPersonById(personId);
-
-            if (foundPersonXml == null) { return Person.Empty; }
-
-            var foundPerson = Person.FromXml(foundPersonXml);
-
-            return foundPerson;
-        }
-
-        /// <summary>
-        /// Will look for a person in a given list
-        /// returns null if no person found
-        /// This a unique id representing the unique person record
-        /// </summary>
-        public static async Task<XElement?> FindPersonById(string personId)
-        {
-            try
-            {
-                //get latest file from server
-                //note how this creates & destroys per call to method
-                //might cost little extra cycles but it's a functionality
-                //to always get the latest list
-                var personListXmlDoc = await GetPersonListFile();
-
-                //list of person XMLs
-                var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
-
-                //do the finding (default empty)
-                var foundPerson = personXmlList?.Where(MatchPersonId)?.First();
-
-                //log it (should not occur all the time)
-                if (foundPerson == null)
-                {
-                    await APILogger.Error($"No person found with ID : {personId}");
-                    foundPerson = Person.Empty.ToXml();
-                }
-
-                return foundPerson;
-            }
-            catch (Exception e)
-            {
-                //if fail log it and return empty value so caller will know
-                await APILogger.Error(e);
-                return null;
-            }
-
-            //--------
-            //do the finding
-            bool MatchPersonId(XElement personXml) => Person.FromXml(personXml).Id.Equals(personId);
-        }
-
-        ///// <summary>
-        ///// Find all person's xml element owned by User/Visitor ID
-        ///// Note:
-        ///// - multiple comma seperated UserId in Person profile
-        ///// - 1 person profile can have multiple user id (shared)
-        ///// - document is inputed instead for wide compatibilty
-        ///// </summary>
-        //public static List<XElement> FindPersonByUserId(XDocument personListXml, string inputUserId)
-        //{
-        //    var returnList = new List<XElement>();
-
-        //    //add all person profiles that have the given user ID
-        //    var allPersonList = personListXml.Root?.Elements();
-        //    foreach (var personXml in allPersonList)
-        //    {
-        //        var allOwnerId = personXml.Element("UserId")?.Value ?? "";
-
-        //        //must be split before can be used
-        //        var ownerList = allOwnerId.Split(',');
-
-        //        //check if inputed ID is found in list, add to return list
-        //        foreach (var owner in ownerList) { if (owner.Equals(inputUserId)) { returnList.Add(personXml); } }
-        //    }
-
-        //    return returnList;
-        //}
 
 
         /// <summary>
@@ -675,17 +320,7 @@ namespace API
             }
         }
 
-        /// <summary>
-        /// Gets main person list xml doc file
-        /// </summary>
-        /// <returns></returns>
-        private static async Task<XDocument> GetPersonListFile()
-        {
-            var personListXml = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
-
-            return personListXml;
-        }
-
+       
 
         /// <summary>
         /// Gets any file at given url as string
@@ -700,28 +335,6 @@ namespace API
             var fileString = await client.GetStringAsync(url);
 
             return fileString;
-        }
-
-        /// <summary>
-        /// Gets XML file from Azure blob storage
-        /// </summary>
-        public static async Task<XDocument> GetXmlFileFromAzureStorage(string fileName, string blobContainerName)
-        {
-            var fileClient = await GetBlobClientAzure(fileName, blobContainerName);
-            var xmlFile = await BlobClientToXmlDoc(fileClient);
-
-            return xmlFile;
-        }
-
-        /// <summary>
-        /// Gets any file from Azure blob storage in string form
-        /// </summary>
-        public static async Task<string> GetStringFileFromAzureStorage(string fileName, string blobContainerName)
-        {
-            var fileClient = await GetBlobClientAzure(fileName, blobContainerName);
-            var xmlFile = await BlobClientToString(fileClient);
-
-            return xmlFile;
         }
 
 
@@ -769,7 +382,7 @@ namespace API
             var updatedPerson = Person.FromXml(updatedPersonXml);
 
             //get the person record that needs to be updated
-            var personToUpdate = await FindPersonById(updatedPerson.Id);
+            var personToUpdate = await FindPersonXMLById(updatedPerson.Id);
 
             //delete the previous person record,
             //and insert updated record in the same place
@@ -779,6 +392,7 @@ namespace API
             var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
             await SaveXDocumentToAzure(personListXmlDoc, PersonListFile, BlobContainerName);
         }
+
         public static async Task UpdateRecordInDoc<T>(XElement updatedPersonXml, string cloudFileName) where T : IToXml
         {
             var allListXmlDoc = await GetXmlFileFromAzureStorage(cloudFileName, BlobContainerName);
@@ -786,7 +400,7 @@ namespace API
             var updatedPerson = Person.FromXml(updatedPersonXml);
 
             //get the person record that needs to be updated
-            var personToUpdate = await FindPersonById(updatedPerson.Id);
+            var personToUpdate = await FindPersonXMLById(updatedPerson.Id);
 
             //delete the previous person record,
             //and insert updated record in the same place
@@ -871,10 +485,6 @@ namespace API
                 Console.WriteLine($"Email send operation failed with error code: {ex.ErrorCode}, message: {ex.Message}");
             }
 
-
-
-
-
             //-------------LOCAL FUNCS
 
             EmailClient getEmailClient()
@@ -887,7 +497,6 @@ namespace API
 
                 //sign in to email
                 return new EmailClient(connectionString);
-
             }
         }
 
@@ -930,7 +539,26 @@ namespace API
                 //since heavy computation, log if happens
                 APILogger.Data($"Profiles swapped : {visitorIdList.Count}", AppInstance.IncomingRequest);
             }
+        }
 
+        public static async Task<List<LogItem>> GetOnlineVisitors()
+        {
+            //get visitor log from storage
+            var visitorLogDocument = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
+
+            //parse all logs
+            var xmlRecordList = visitorLogDocument.Root?.Elements() ?? new List<XElement>();
+            List<LogItem> logItemList = LogItem.FromXml(xmlRecordList);
+
+            //last hour
+            var lastHourRecords = from logItem in logItemList
+                where Tools.IsWithinLastHour(logItem.Time, -24)
+                select logItem;
+
+            //unique visitors
+            List<LogItem> uniqueList = lastHourRecords.DistinctBy(p => p.VisitorId).ToList();
+
+            return uniqueList;
         }
     }
 }

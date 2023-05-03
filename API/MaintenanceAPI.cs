@@ -1,12 +1,8 @@
-﻿using System.Threading.Tasks;
-using System.Xml.Linq;
-using Azure.Communication.Email;
-using VedAstro.Library;
+﻿using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Newtonsoft.Json.Linq;
-using Azure;
-using System.Net.Http;
+using System.Xml.Linq;
+using VedAstro.Library;
 
 namespace API
 {
@@ -21,23 +17,19 @@ namespace API
         [Function(nameof(Home))]
         public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", "put", "delete", "post", "head", "trace", "patch", "connect", "options", Route = "Home")] HttpRequestData incomingRequest)
         {
-
             //get chart special API home page and send that to caller
             var APIHomePageTxt = await APITools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
 
             return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
-
         }
 
-
         /// <summary>
-        /// to allow client to send match report and other files to email via a single call 
+        /// to allow client to send match report and other files to email via a single call
         /// </summary>
         [Function(nameof(SendFileToEmail))]
         public static async Task<HttpResponseData> SendFileToEmail([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "Send/{fileName}/{fileFormat}/{receiverEmail}")] HttpRequestData incomingRequest,
-            string fileName,string fileFormat,string receiverEmail)
+            string fileName, string fileFormat, string receiverEmail)
         {
-
             try
             {
                 //log the call todo log causes errors in reading body, maybe read first
@@ -53,7 +45,6 @@ namespace API
                 APITools.SendEmail(fileName, fileFormat, receiverEmail, rawFileBytes);
 
                 return APITools.PassMessageJson("Email sent success", incomingRequest);
-
             }
             catch (Exception e)
             {
@@ -63,11 +54,7 @@ namespace API
                 //let user know
                 return APITools.FailMessageJson(e, incomingRequest);
             }
-
-
         }
-
-
 
         /// <summary>
         /// Function for debugging purposes
@@ -79,7 +66,6 @@ namespace API
             return APITools.PassMessage(incomingRequest?.GetCallerIp()?.ToString() ?? "no ip", incomingRequest);
         }
 
-
         [Function("version")]
         public static HttpResponseData GetVersion([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
         {
@@ -88,6 +74,20 @@ namespace API
             holder.Add(versionNumberXml, Tools.TimeStampServerXml);
 
             return APITools.PassMessage(holder, incomingRequest);
+        }
+
+
+        [Function("Stats")]
+        public static async Task<HttpResponseData> GetStats([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequestData incomingRequest)
+        {
+
+            //unique visitors
+            var uniqueList = await APITools.GetOnlineVisitors();
+
+            //convert list to nice string before sending to caller
+            var visitorLogXmlString = Tools.ListToString(uniqueList);
+            return APITools.PassMessage(visitorLogXmlString, incomingRequest);
+
         }
 
         /// <summary>
@@ -106,6 +106,5 @@ namespace API
 
             return APITools.PassMessage(holder, incomingRequest);
         }
-
     }
 }

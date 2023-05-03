@@ -58,7 +58,8 @@ namespace API
                 //                        select visitorXml;
 
                 //convert list to nice string before sending to caller
-                var visitorLogXmlString = visitorLogXml?.Root?.ToString(SaveOptions.DisableFormatting) ?? "<Empty/>";
+                //var visitorLogXmlString = visitorLogXml?.Root?.ToString(SaveOptions.DisableFormatting) ?? "<Empty/>";
+                var visitorLogXmlString = visitorLogXml?.Root ?? new XElement("Empty");
                 return APITools.PassMessage(visitorLogXmlString, incomingRequest);
 
             }

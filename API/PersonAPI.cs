@@ -42,53 +42,6 @@ namespace API
         }
 
         /// <summary>
-        /// API to add current user ID to all people created with current VisitorID
-        /// note: this is done to auto move profiles created before login, then user decides to login
-        /// but expects all the profiles created before to be there in new account/logged in account
-        /// </summary>
-        [Function(nameof(AddUserIdToVisitorPersons))]
-        public static async Task<HttpResponseData> AddUserIdToVisitorPersons([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-
-            try
-            {
-                //get new person data out of incoming request
-                //note: inside new person xml already contains user id
-                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
-                var userId = rootXml.Element("UserId")?.Value;
-                var visitorId = rootXml.Element("VisitorId")?.Value ?? "";
-
-                //find all person's with inputed visitor ID
-                var personListXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-                var foundPersonList = Tools.FindXmlByUserId(personListXmlDoc, visitorId);
-
-                //add User ID to each person (if not already added, avoid duplicates)
-                foreach (var foundPerson in foundPersonList)
-                {
-                    var currentOwners = foundPerson?.Element("UserId")?.Value ?? "";
-                    var notInList = !currentOwners.Equals(userId);
-                    //if not in list, add to current person's owners user ID list
-                    if (notInList) { foundPerson.Element("UserId").Value = currentOwners + "," + userId; }
-                }
-
-                //upload modified list file to storage
-                await APITools.SaveXDocumentToAzure(personListXmlDoc, APITools.PersonListFile, APITools.BlobContainerName);
-
-                return APITools.PassMessage(incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
-
-        /// <summary>
         /// Gets person all details from only hash
         /// </summary>
         [Function("getperson")]
@@ -101,8 +54,8 @@ namespace API
                 var requestData = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var personId = requestData.Value;
 
-                //get the person record by hash
-                var foundPerson = await APITools.FindPersonById(personId);
+                //get the person record by ID
+                var foundPerson = await APITools.FindPersonXMLById(personId);
 
                 //send person to caller
                 return APITools.PassMessage(foundPerson, incomingRequest);
@@ -174,7 +127,7 @@ namespace API
                 var personId = requestData.Value;
 
                 //get the person record that needs to be deleted
-                var personToDelete = await APITools.FindPersonById(personId);
+                var personToDelete = await APITools.FindPersonXMLById(personId);
 
                 //add deleted person to recycle bin 
                 await APITools.AddXElementToXDocumentAzure(personToDelete, APITools.RecycleBinFile, APITools.BlobContainerName);

@@ -137,7 +137,7 @@ namespace API
                 var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
-                var personName = (await APITools.GetPersonById(personId)).Name;
+                var personName = (await APITools.FindPersonXMLById(personId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
                 jsVariables += $@"window.PersonId = ""{personId}"";";
@@ -170,7 +170,7 @@ namespace API
 
                 //save chart into storage
                 //note: do not wait to speed things up, beware! failure will go undetected on client
-                APITools.AddXElementToXDocumentAzure(chart.ToXml(), APITools.SavedChartListFile, APITools.BlobContainerName);
+                APITools.AddXElementToXDocumentAzure(chart.ToXml(), APITools.SavedEventsChartListFile, APITools.BlobContainerName);
 
                 //let caller know all good
                 return APITools.PassMessage(incomingRequest);
@@ -200,8 +200,7 @@ namespace API
             {
 
                 //get the saved chart record by id
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.BlobContainerName);
-                var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
+                var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
                 var chart = Chart.FromXml(foundChartXml);
                 var svgString = chart.ContentSvg;
 
@@ -249,8 +248,7 @@ namespace API
                 var chartId = requestData.Value;
 
                 //get the saved chart record by id
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.BlobContainerName);
-                var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
+                var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
                 var chart = Chart.FromXml(foundChartXml);
 
                 //send image back to caller
@@ -283,8 +281,7 @@ namespace API
                 var chartId = requestData.Value;
 
                 //get the saved chart record by id
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.BlobContainerName);
-                var foundChartXml = await APITools.FindChartById(savedChartListXml, chartId);
+                var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
                 var chart = Chart.FromXml(foundChartXml);
 
                 //extract out the person id from chart and send it to caller
@@ -318,7 +315,7 @@ namespace API
             {
 
                 //get ful saved chart list
-                var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.BlobContainerName);
+                var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.SavedEventsChartListFile, APITools.BlobContainerName);
 
                 //extract out the name & id
                 var rootXml = new XElement("Root");
@@ -368,14 +365,15 @@ namespace API
 
 
                 //get the person record that needs to be deleted
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedChartListFile, APITools.BlobContainerName);
-                var chartToDelete = await APITools.FindChartById(savedChartListXml, chartId);
+                var chartToDelete = await APITools.FindSavedEventsChartXMLById(chartId);
 
                 //delete the chart record,
                 chartToDelete.Remove();
 
                 //upload modified list to storage
-                var savedChartListClient = await APITools.GetBlobClientAzure(APITools.SavedChartListFile, APITools.BlobContainerName);
+                //todo methodify or already exist
+                var savedChartListClient = await APITools.GetBlobClientAzure(APITools.SavedEventsChartListFile, APITools.BlobContainerName);
+                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedEventsChartListFile, APITools.BlobContainerName);
                 await APITools.OverwriteBlobData(savedChartListClient, savedChartListXml);
 
                 return APITools.PassMessage(incomingRequest);

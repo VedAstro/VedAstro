@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System;
 using System.Text.Json;
 using System.Xml.Linq;
 using VedAstro.Library;
@@ -72,6 +71,28 @@ namespace API
             }
         }
 
+        [Function("GetSavedMatchReport")]
+        public static async Task<HttpResponseData> GetSavedMatchReport([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        {
+            try
+            {
+                //get name of male & female
+                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
+                var matchId = rootXml.Element("MatchId")?.Value;
+
+                //find match based on match ID
+                var MatchReport = await APITools.FindSavedMatchReportById(matchId);
+                return APITools.PassMessage((XElement)MatchReport.ToXml(), incomingRequest);
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+        }
+
         /// <summary>
         /// Saves match data between people in SavedMatchReportList.xml
         /// </summary>
@@ -84,14 +105,15 @@ namespace API
                 var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
                 var maleId = rootXml.Element("MaleId")?.Value;
                 var femaleId = rootXml.Element("FemaleId")?.Value;
-                var userId = rootXml.Element("UserId")?.Value; //id of the owner can be visitor id
+                var userId = rootXml.Element("UserId")?.Value; //
+                var visitorId = rootXml.Element("VisitorId")?.Value; //id of the owner can be visitor id
 
                 //generate compatibility report
                 var compatibilityReport = await GetCompatibilityReport(maleId, femaleId, userId);
                 var chartReadyToInject = compatibilityReport.ToXml();
 
                 //save chart into storage
-                //note: do not wait to speed things up, beware! failure will go undetected on client
+                //note: todo do not wait to speed things up, beware! failure will go undetected on client
                 await APITools.AddXElementToXDocumentAzure(chartReadyToInject, APITools.SavedMatchReportList, APITools.BlobContainerName);
 
                 //let caller know all good
@@ -106,8 +128,8 @@ namespace API
             }
         }
 
-        [Function("GetMatchChartList")]
-        public static async Task<HttpResponseData> GetMatchChartList([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData incomingRequest)
+        [Function("GetMatchReportList")]
+        public static async Task<HttpResponseData> GetMatchReportList([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData incomingRequest)
         {
             AppInstance.IncomingRequest = incomingRequest;
 
@@ -123,19 +145,18 @@ namespace API
                 //swap visitor ID with user ID if any (data follows user when log in)
                 await APITools.SwapUserId(visitorId, userId, APITools.SavedMatchReportList);
 
-                //STAGE 3 : FILTER 
-                //get latest all match reports
+                //STAGE 3 : FILTER
+                //get updated all match reports (after swap)
                 var savedMatchReportList = await APITools.GetXmlFileFromAzureStorage(APITools.SavedMatchReportList, APITools.BlobContainerName);
                 //filter out record by user id
                 var userIdList = Tools.FindXmlByUserId(savedMatchReportList, userId);
 
-                //STAGE 4 : SEND XML todo JSON 
+                //STAGE 4 : SEND XML todo JSON
                 //convert list to xml
                 var xmlPayload = Tools.AnyTypeToXmlList(userIdList);
 
                 //send filtered list to caller
                 return APITools.PassMessage(xmlPayload, incomingRequest);
-
             }
             catch (Exception e)
             {
@@ -160,8 +181,6 @@ namespace API
             return APITools.PassMessage(text, incomingRequest);
         }
 
-
-
         //PRIVATE
 
         private static async Task<List<Person>> JsonPersonListToPerson(JsonElement personListArray, string apiKey)
@@ -179,7 +198,7 @@ namespace API
                 var genderText = personJson.GetProperty("Gender").ToString();
                 var birthTimeJson = personJson.GetProperty("BirthTime");
 
-                //we're inside birth time 
+                //we're inside birth time
                 var stdTime = birthTimeJson.GetProperty("StdTime").ToString();
                 var locationName = birthTimeJson.GetProperty("LocationName").ToString();
 
@@ -215,7 +234,7 @@ namespace API
             return returnList;
         }
 
-        public static async Task<CompatibilityReport> GetCompatibilityReport(string maleId, string femaleId, string userId)
+        public static async Task<MatchReport> GetCompatibilityReport(string maleId, string femaleId, string userId)
         {
             var male = await APITools.GetPersonById(maleId);
             var female = await APITools.GetPersonById(femaleId);
@@ -244,7 +263,7 @@ namespace API
             //show final results to user
             printResultList(ref goodMatches);
 
-            void printResultList(ref List<CompatibilityReport> reportList)
+            void printResultList(ref List<MatchReport> reportList)
             {
                 foreach (var report in reportList)
                 {
@@ -255,9 +274,9 @@ namespace API
             }
         }
 
-        private static List<CompatibilityReport> GetAllMatchesForPersonByStrength(Person inputPerson, List<Person> personList)
+        private static List<MatchReport> GetAllMatchesForPersonByStrength(Person inputPerson, List<Person> personList)
         {
-            var returnList = new List<CompatibilityReport>();
+            var returnList = new List<MatchReport>();
 
             //this makes sure each person is cross checked against this person correctly
             foreach (var personMatch in personList)
@@ -291,7 +310,7 @@ namespace API
 
         private static async Task<List<Person>> GetAllPersonByMatchStrength(Person inputPerson)
         {
-            var resultList = new List<CompatibilityReport>();
+            var resultList = new List<MatchReport>();
 
             var inputPersonIsMale = inputPerson.Gender == Gender.Male;
 
@@ -301,7 +320,7 @@ namespace API
             foreach (var personMatch in personList)
             {
                 //add report to list
-                CompatibilityReport report;
+                MatchReport report;
 
                 //sex orientation depends on input person only
                 //in other words input person is always placed in correct sex calculator
@@ -335,7 +354,7 @@ namespace API
         /// <summary>
         /// Finds good matches from a list of people who meet the criteria
         /// </summary>
-        private static List<CompatibilityReport> FindGoodMatches(List<Person> peopleList)
+        private static List<MatchReport> FindGoodMatches(List<Person> peopleList)
         {
             //from a list of people find good matches
 
@@ -343,7 +362,7 @@ namespace API
             var femaleList = peopleList.FindAll(person => person.Gender == Gender.Female);
             var maleList = peopleList.FindAll(person => person.Gender == Gender.Male);
 
-            var goodReports = new List<CompatibilityReport>();
+            var goodReports = new List<MatchReport>();
 
             //cross reference male & female list
             foreach (var female in femaleList)

@@ -110,12 +110,8 @@
     private async Task OnClickSubmit()
     {
 
-        Console.WriteLine("ON CLICK");
-
-        _jsRuntime.ShowLoading();
-
         //get email from user via js sweet alert lib
-        var emailFromAlert = await AppData.JsRuntime.ShowSendMatchPDFToEmail();
+        var emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Email me at...");
 
         //send to message to API
         //package message data to be sent
@@ -126,7 +122,7 @@
         var messageXml = new XElement("Message", userIdXml, visitorIdXml, emailXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, textXml);
 
         //send message to API server
-        ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
+        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
 
         //say thank you and will get back
         await _jsRuntime.ShowAlert("success", "Thank you, we'll get back to you soon", true, 0);

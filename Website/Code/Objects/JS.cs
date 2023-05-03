@@ -23,7 +23,7 @@
         public const string IsOnline = "Interop.IsOnline";
         public const string getUrl = "Interop.getUrl";
         public const string ShowLeaveEmailAlert = "Interop.ShowLeaveEmailAlert";
-        public const string ShowSendMatchPDFToEmail = "Interop.ShowSendMatchPDFToEmail";
+        public const string ShowSendToEmail = "Interop.ShowSendToEmail";
         public const string loadJs = "Interop.loadJs";
         public const string getOriginUrl = "Interop.getOriginUrl";
         public const string InitErrorCatcher = "Interop.InitErrorCatcher";

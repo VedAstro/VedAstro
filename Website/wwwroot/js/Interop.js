@@ -57,10 +57,10 @@ export async function ShowLeaveEmailAlert() {
     //send email inputed to caller
     return email;
 }
-export async function ShowSendMatchPDFToEmail() {
+export async function ShowSendToEmail(message) {
     //show alert to get email
     const { value: email } = await Swal.fire({
-        title: 'Send PDF to...',
+        title: message,
         input: 'email',
         inputPlaceholder: 'Enter your email address'
     });

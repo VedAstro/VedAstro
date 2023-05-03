@@ -114,7 +114,11 @@ namespace Website
         /// note: uses sweet alert js
         /// </summary>
         public static async Task<string> ShowLeaveEmailAlert(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.ShowLeaveEmailAlert);
-        public static async Task<string> ShowSendMatchPDFToEmail(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.ShowSendMatchPDFToEmail);
+        
+        /// <summary>
+        /// Shows a dialog box with request for email, done via SweetAlert JS
+        /// </summary>
+        public static async Task<string> ShowSendToEmail(this IJSRuntime jsRuntime, string message) => await jsRuntime.InvokeAsync<string>(JS.ShowSendToEmail, message);
 
         /// <summary>
         /// Will inject an option with the data given the data

@@ -44,7 +44,7 @@ namespace Website
         public static async Task OnClickSendToEmail(string pdfFileName, ElementReference elementToConvert)
         {
             //get email from user via js sweet alert lib
-            var emailFromAlert = await AppData.JsRuntime.ShowSendMatchPDFToEmail();
+            var emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Send PDF to...");
 
             //calls special JS lib to convert html version of the chart to PDF
             //and initiated download as well, with 1 call

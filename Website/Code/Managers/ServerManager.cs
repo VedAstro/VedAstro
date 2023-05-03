@@ -211,7 +211,7 @@ namespace Website
         /// <summary>
         /// HTTP Post via JS interop
         /// </summary>
-        public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData)
+        public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData, int timeout = 10)
         {
 
             TryAgain:

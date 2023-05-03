@@ -95,7 +95,8 @@ namespace Website
 
             //get all person profile owned by current user/visitor
             var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
-            var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetPersonList, payload);
+            int timeout = 5;//probability of GOOD reply from API goes down after 5s, so no point waiting
+            var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetPersonList, payload, timeout);  
 
             if (result.IsPass)
             {
@@ -116,10 +117,10 @@ namespace Website
         /// Gets a list of saved match reports for a user/visitor
         /// </summary>
         /// <returns></returns>
-        public static async Task<List<MatchReport>?> GetSavedMatchList()
+        public static async Task<List<MatchReport>?> GetSavedMatchList(string userId, string visitorId)
         {
             //get all person profile owned by current user/visitor
-            var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
+            var payload = new XElement("Root", new XElement("UserId", userId), new XElement("VisitorId", visitorId));
             var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetMatchReportList, payload);
 
             //get match data out and parse it (if all went well)

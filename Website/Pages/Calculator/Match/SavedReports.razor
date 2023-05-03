@@ -45,18 +45,11 @@
     {
         await _jsRuntime.ShowLoading();
 
-        _matchReportList = await GetExampleReports();
+        _matchReportList = await WebsiteTools.GetSavedMatchList("101", "101");
         savedMatchReportList.Show(_matchReportList);
 
 
         _jsRuntime.HideAlert();
     }
-
-
-    private void PersonNameClicked(Person person)
-    {
-        _navigation.NavigateTo($"{PageRoute.PersonEditor}/{person.Id}");
-    }
-
 
 }

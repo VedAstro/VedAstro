@@ -138,16 +138,15 @@
     private void OnClickCalculateEasypeasy()
     {
 
-
-
         var personId = _peopleSelectorBox?.SelectedPersonId ?? "101";
 
         switch (SelectedCalculator)
         {
             case "Horoscope": _navigation.NavigateTo($"{PageRoute.Horoscope}/{personId}"); break;
+            case "LifePredictor": _navigation.NavigateTo($"{PageRoute.LifePredictor}/{personId}"); break;
+            case "Match": _navigation.NavigateTo($"{PageRoute.Match}/{personId}"); break; //fill only first name
+            case "Muhurtha": _navigation.NavigateTo($"{PageRoute.Muhurtha}/{personId}"); break; //fill only first name
         }
 
-
-        throw new NotImplementedException();
     }
 }

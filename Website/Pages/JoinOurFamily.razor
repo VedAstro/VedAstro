@@ -125,7 +125,7 @@
         await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
 
         //say thank you and will get back
-        await _jsRuntime.ShowAlert("success", "Thank you, we'll get back to you soon", true, 0);
+        await _jsRuntime.ShowAlert("success", "Thank you", "we'll get back to you soon");
     }
 
 }

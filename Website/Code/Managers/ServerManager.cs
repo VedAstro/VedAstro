@@ -214,15 +214,13 @@ namespace Website
         public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData)
         {
 
-            Console.WriteLine("Untested Code yeah!!");
-
             TryAgain:
             // throws TimeoutException on timeout
             string receivedData;
 
             try
             {
-                receivedData = await Tools.TaskWithTimeoutAndException(WebsiteTools.Post(apiUrl, xmlData), TimeSpan.FromSeconds(1));
+                receivedData = await Tools.TaskWithTimeoutAndException(WebsiteTools.Post(apiUrl, xmlData), TimeSpan.FromSeconds(10));
             }
             catch (Exception e)
             {

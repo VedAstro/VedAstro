@@ -65,40 +65,5 @@ else
         await _jsRuntime.SetCss("#EventsChartSvgHolder", "mix-blend-mode", value);
 
     }
-
-
-    private void OnClickNavBarLoginButton()
-    {
-
-        //remember previous page to come back to after login
-        //saved in browser, so doesn't get deleted by refresh
-        _jsRuntime.SetProperty("PreviousPage", _navigation.Uri);
-
-        //goto page
-        _navigation.NavigateTo(PageRoute.Login);
-
-    }
-
-
-    private async Task OnClickSignOutButton()
-    {
-        //log this
-        await WebLogger.Click("Sign Out");
-
-        //clear local storage of user data
-        //since login status is basically the existence of user data in localstorage
-        //removing it removes user's login
-        await _jsRuntime.RemoveProperty("UserData");
-
-        //reset person's list
-        AppData.ClearPersonList();
-
-        //reset app data
-        AppData.CurrentUser = UserData.Empty;
-
-        //refresh page
-        WebsiteTools.ReloadPage(_navigation);
-
-    }
-
+    
 }

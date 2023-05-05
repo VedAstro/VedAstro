@@ -145,4 +145,5 @@ public class URL
     public const string GitHubCommits = "https://github.com/gen-so/Genso.Astrology/commits/master";
     public const string GitDeveloperRoomProject = "https://github.com/orgs/VedAstro/projects/1";
     public const string SlackInviteURL = "https://join.slack.com/t/vedastro/shared_invite/zt-1u7pdqjky-hrJZ7e3_vM2dZOmVY8FeHA";
+    public const string JohnLenonImagine = "https://youtu.be/rAn-AWXtHv0";
 }

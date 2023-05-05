@@ -38,31 +38,36 @@
 <IconTitle Title="Accurate Predictions" IconName="flat-color-icons:filing-cabinet" />
 <MatchReportListViewer @ref="savedMatchReportList" />
 
-<div style="max-width: @GR.W667px">
+<div class="mt-3" style="max-width: @GR.W667px">
 
-    <ArticleBlock Title="Perfect Marriages" IconName="emojione:amphora">
+    <ArticleBlock Title="Imagine Perfect Marriages" IconName="emojione:amphora">
         <TextHTML>
-            Do we need more proof? It is high time, for us as a human species to stop hunting for partners blindly like
-            animals based on our senses and circumstance. The age of "imperfection", the age of "Kali" is over.
-            Instead we shall use divine intelligence with understanding of cosmic laws that guarantee a perfect union between 2 souls.
-            <br />
-            Just imagine a world with no divorces, a world where happy marriages is common sight. Where laughter abounds &amp; fear stands still.
-@*            <strong>"" -- </strong>
-*@        </TextHTML>
+            <p>
+                Do we need more proof? Is it not high time, for us as a human species to stop hunting for partners blindly like
+                animals based on our senses and circumstance. But rather use divine intelligence guided by cosmic laws that guarantee
+                a perfect union.
+            </p>
+            <p>
+                The age of "imperfection", the age of "Kali" is over. We have before us the new age of thinking men, the age of "Dwarpara". Gone are the ways of old.
+                Just imagine a world with <strong>no divorces</strong>, a world where <strong>happy marriages</strong> is common sight. Where laughter abounds &amp; fear stands still.
+            </p>
+
+            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.JohnLenonImagine)">
+                <figure class="text-center mt-4">
+                    <blockquote class="blockquote">
+                        <p>You may say I'm dreamer, <br /> but I'm not the only one.</p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer">
+                        John Lenon @*<cite title="Source Title">Singer Beatles 60'</cite>*@
+                    </figcaption>
+                </figure>
+            </div>
+
+        </TextHTML>
     </ArticleBlock>
 
 </div>
 
-<div style="text-align: center;">
-    <figure class="text-center mt-1" style="max-width:@GR.W412px ">
-        <blockquote class="blockquote">
-            <p>You may say I'm dreamer, <br /> but I'm not the only one.</p>
-        </blockquote>
-        <figcaption class="blockquote-footer">
-            John Lenon @*<cite title="Source Title">Singer Beatles 60'</cite>*@
-        </figcaption>
-    </figure>
-</div>
 
 @code {
 

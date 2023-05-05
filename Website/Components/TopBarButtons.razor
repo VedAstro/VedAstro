@@ -13,11 +13,11 @@
 @*show links to beta & stable from vice versa*@
 @if (@WebsiteTools.GetIsBetaRuntime())
 {
-    <IconButton RetinaText="NOW BETA" SmallSize="true" Color="warning" IconName="mdi:bench-back" ClickUrl="@URL.WebStable" TooltipText="Back To Classic" />
+    <IconButton RetinaText="NOW BETA" SmallSize="true" Color="warning" IconName="mdi:bench-back" OnClickCallback="() => ChangeDomainMaintainURL(URL.WebStable)" TooltipText="Back To Classic" />
 }
 else
 {
-    <IconButton RetinaText="NOW STABLE" SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="@URL.WebBeta" TooltipText="Preview New Features" />
+    <IconButton RetinaText="NOW STABLE" SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="() => ChangeDomainMaintainURL(URL.WebBeta)" TooltipText="Preview New Features" />
 }
 
 <IconButton ExtraClass="ms-md-auto" SmallSize="true" Outline="true" ButtonText="Guide" IconName="mdi:book-open-page-variant-outline" ClickUrl="@PageRoute.QuickGuide" />
@@ -28,13 +28,13 @@ else
         <li><a class="dropdown-item" href="@PageRoute.NuGet" target="_blank">NuGet &amp; .NET</a></li>
         @*        <li><a class="dropdown-item" href="@PageRoute.Python">Python</a></li>
         <li><a class="dropdown-item" href="@PageRoute.Javascript">Javascript</a></li>
-*@
+        *@
     </DropDownList>
 </IconButton>
 <IconButton SmallSize="true" Outline="true" ButtonText="Download" IconName="grommet-icons:document-windows" ClickUrl="@PageRoute.Download" />
-<IconButton  SmallSize="true" Outline="true" ButtonText="Donate" IconName="iconoir:donate" ClickUrl="@PageRoute.Donate" />
-<IconButton  SmallSize="true" Outline="true" ButtonText="Contact" IconName="ci:mail" ClickUrl="@PageRoute.Contact" />
-<IconButton  SmallSize="true" Outline="true" ButtonText="About" IconName="akar-icons:info" ClickUrl="@PageRoute.About" />
+<IconButton SmallSize="true" Outline="true" ButtonText="Donate" IconName="iconoir:donate" ClickUrl="@PageRoute.Donate" />
+<IconButton SmallSize="true" Outline="true" ButtonText="Contact" IconName="ci:mail" ClickUrl="@PageRoute.Contact" />
+<IconButton SmallSize="true" Outline="true" ButtonText="About" IconName="akar-icons:info" ClickUrl="@PageRoute.About" />
 <IconButton SmallSize="true" Outline="true" IconName="ep:guide">
     <DropDownList>
         <li><a class="dropdown-item" href="@PageRoute.JoinOurFamily">Join Us</a></li>
@@ -65,5 +65,24 @@ else
         await _jsRuntime.SetCss("#EventsChartSvgHolder", "mix-blend-mode", value);
 
     }
-    
+
+    /// <summary>
+    /// Allows to switch between STABLE and BETA in the same page
+    /// </summary>
+    private void ChangeDomainMaintainURL(string newDomain)
+    {
+
+        //get current url without domain
+        var domain = _navigation.BaseUri; //domain
+        var fullUrl = _navigation.Uri; //full url
+                                            //remove domain, to get url without domain
+        var pathUrl = fullUrl.Remove(0, (domain.Length - 1)); //note we don't delete last slash
+
+        //add in new new domain
+        var newUrl = newDomain + pathUrl;
+
+        //goto new URL (same tab, but refresh)
+        _navigation.NavigateTo(newUrl, true);
+    }
+
 }

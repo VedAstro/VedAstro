@@ -50,7 +50,6 @@
         public const string LocalMeanTime = "Calculator/LocalMeanTime";
         public const string Horoscope = "Calculator/Horoscope";
         public const string HoroscopeParam = "Calculator/Horoscope/{PersonIdUrl}";
-        public const string HoroscopeData = "Calculator/HoroscopeData";
         public const string Muhurtha = "Calculator/Muhurtha";
         public const string Match = "Calculator/Match";
         public const string SavedMatchReports = "Calculator/Match/Saved";

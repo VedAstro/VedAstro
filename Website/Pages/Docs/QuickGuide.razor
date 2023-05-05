@@ -2,17 +2,12 @@
 @attribute [Route(PageRoute.QuickGuide)]
 
 
-<PageTitle>Quick Guide</PageTitle>
+<PageTitle>Hitchhiker's Guide To VedAstro</PageTitle>
 
-<PageTop Title="Quick Guide" IconName="flat-color-icons:reading">
-    <Description>
-        VedAstro is a WebApp designed to use Vedic Astrology in their daily life.
-    </Description>
-    @*    <ButtonsRow>
-    <IconButton IconName="akar-icons:chat-question" ButtonText="Ask Question" ClickUrl="@PageRoute.Contact"></IconButton>
-    </ButtonsRow>
-    *@
-</PageTop>
+<PageTop Title="Quick Guide"
+         ImageName="quick-guide-banner.svg"
+         DescriptionText="This is a web app to help you use vedic astrology"/>
+    
 
 <div class="vstack gap-4" style="max-width:@GR.W667px;">
 
@@ -90,12 +85,12 @@
         <TextHTML>
 
             <p class="text-justify">
-                Both an average person and expert astrologer can find VedAstro useful. There are complex calculators
-                like Dasa that experts can use and there are easy to use calculators like Match that require
+                Both an <strong>average</strong> person and expert astrologer can find VedAstro useful. There are complex calculators
+                like Dasa that <strong>experts</strong> can use and there are easy to use calculators like Match that require
                 no astrological knowledge.
             </p>
             <p class="text-justify">
-                These calculators a constantly being improved. The ideal goal of this project is to make all tools easily usable by anybody.
+                These calculators a constantly being improved. The ideal goal of this project is to make all tools <strong>easily usable</strong> by anybody.
                 So if you find any of the calculator too difficult, just leave a comment and it might be better the next time you visit.
             </p>
         </TextHTML>
@@ -104,24 +99,35 @@
 
     <ArticleBlock Title="Must I login to use?" IconName="flat-color-icons:neutral-decision">
         <TextHTML>
-            No. VedAstro was designed with <strong>ease and speed</strong> in mind. So all tools are available
-            for use without login. But if you don't login, we can't save the data you add.
-            For example, if you add a Person profile it will only be available the next time you
-            visit if you login first. Else it <strong>will be deleted</strong> when you close &amp; clear cache.
-            We've simplified the login process using <BoldLink OpenInNewTab="false" URL="@PageRoute.Login">Google &amp; Facebook</BoldLink> login. So you don't have to waste
-            your time creating a new account with boring passwords to remember.
+            <p>
+                <strong>No</strong>. VedAstro was designed with <strong>ease and speed</strong> in mind. So all tools are available
+                for use without login. But if you don't login, we can't save the data you add.
+                For example, if you add a Person profile it will only be available the next time you
+                visit if you login first.
+            </p>
+            <p>
+                Else it <strong>will be deleted</strong> when you close &amp; clear cache.
+                To login is very simple using <BoldLink OpenInNewTab="false" URL="@PageRoute.Login">Google &amp; Facebook</BoldLink>. So you don't have to waste
+                your time creating a new account with boring passwords to remember. We strongly believe in user <strong>privacy</strong>.
+                So we <strong>don't collect or connect</strong> to any data from your Google or Facebook account, it is only to authenticate your access.
+                You can verify this in the open source code.
+            </p>
         </TextHTML>
 
     </ArticleBlock>
 
     <ArticleBlock Title="Info For Coders" IconName="flat-color-icons:engineering">
         <TextHTML>
-            Under the hood, VedAstro is a hybrid Blazor WebAssembly + JS web application.
-            The cloud method of using VedAstro is the recommended way for most users.
-            But if you're feeling adventurous, try out VedAstro in Windows & API.
-            You can find the Windows exe build in our github repo. And for now the best way you can
-            learn to use the API is to read the code in our repo. As we have yet to reach the documentation stage of this project.
-            If you need help with our API or Code, just drop us a mail.
+            <p>
+                Under the hood, VedAstro is a hybrid Blazor WebAssembly + JS web application.
+                The cloud method of using VedAstro is the recommended way for most users.
+                But if you're feeling adventurous, try out VedAstro in Windows & API.
+            </p>
+            <p>
+                You can find the Windows exe build in our github repo. And for now the best way you can
+                learn to use the API is to read the code in our repo. As we have yet to reach the documentation stage of this project.
+                If you need help with our API or Code, just drop us a mail.
+            </p>
         </TextHTML>
 
     </ArticleBlock>

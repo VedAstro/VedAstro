@@ -95,7 +95,7 @@ namespace Website
 
             //get all person profile owned by current user/visitor
             var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
-            int timeout = 5;//probability of GOOD reply from API goes down after 5s, so no point waiting
+            int timeout = 2;//probability of GOOD reply from API goes down after 2s, so no point waiting
             var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetPersonList, payload, timeout);  
 
             if (result.IsPass)

@@ -34,6 +34,7 @@ namespace API
         public const string SavedMatchReportList = "SavedMatchReportList.xml";
         public const string RecycleBinFile = "RecycleBin.xml";
         public const string UserDataListXml = "UserDataList.xml";
+        public const string HoroscopeDataListFile = "https://vedastro.org/data/HoroscopeDataList.xml"; //todo should be getting beta version
         public const string BlobContainerName = "vedastro-site-data";
         public static URL Url { get; set; } //instance of beta or stable URLs
 
@@ -69,7 +70,7 @@ namespace API
         public static HttpResponseData PassMessage(string payload, HttpRequestData req)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/xml"); //todo check if charset is needed
+            //response.Headers.Add("Content-Type", "text/xml"); //todo check if charset is needed
 
             //wrap data in nice tag
             var finalXml = new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
@@ -558,5 +559,60 @@ namespace API
 
             return uniqueList;
         }
+
+
+        /// <summary>
+        /// Uses name and birth year to generate human readable ID for a new person record
+        /// created so that user can type ID direct into URL based on only memory of name and birth year
+        /// </summary>
+        public static async Task<string> GeneratePersonId(string personName, string birthYear)
+        {
+            //remove all space from name : Jamés Brown > JamésBrown
+            var spaceLessName = Tools.RemoveWhiteSpace(personName);
+
+            //almost done, name with birth year at the back
+            var humanId = spaceLessName + birthYear;
+
+            //check if ID is really unique, else it would need a number at the back 
+            //try to find a person, if null then no new id is unique
+            //jamesbrown and JamesBrown, both should by common sense work
+            var idIsSafe = await CheckBothCase(humanId);
+
+            //if id NOT safe, add nonce and try again, possible nonce has been used
+            //JamésBrown > JamésBrown1
+            var nonceCount = 1; //start nonce at 1
+            TryAgain:
+            var noncedId = humanId; //clear pre nonce if any 
+            if (!idIsSafe)
+            {
+                //make unique
+                noncedId += nonceCount;
+                nonceCount++; //increment for next if needed
+                //try again
+                idIsSafe = await CheckBothCase(noncedId); ; //anybody with same id found?
+                goto TryAgain;
+            }
+
+            //once control reaches here id should be all good
+            return noncedId;
+
+
+            //---------------LOCAL FUNCTIONS-------------------------------
+
+            //check both case to allow user to make mistake of adding in
+            //jamesbrown and JamesBrown, both should by common sense work
+            async Task<bool> CheckBothCase(string checkThis)
+            {
+                var x = (await APITools.FindPersonXMLById(checkThis)) == null;
+                var y = (await APITools.FindPersonXMLById(checkThis.ToLower())) == null;
+                return x || y;
+            }
+
+
+
+
+        }
+
+
     }
 }

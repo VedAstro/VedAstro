@@ -62,14 +62,14 @@ namespace VedAstro.Library
         /// Get parsed HoroscopeDataList.xml from wwwroot file / static site
         /// Note: auto caching is used
         /// </summary>
-        public static async Task<List<HoroscopeData>> GetHoroscopeDataList()
+        public static async Task<List<HoroscopeData>> GetHoroscopeDataList(string fileUrl)
         {
             //if prediction list already loaded use that instead
             if (SavedHoroscopeDataList != null) { return SavedHoroscopeDataList; }
 
             //get data list from Static Website storage
             //always get from STABLE for reliability, and also no URL instance here
-            var horoscopeDataListXml = await Tools.GetXmlFileHttp("https://vedastro.org/data/HoroscopeDataList.xml"); //todo variable it
+            var horoscopeDataListXml = await Tools.GetXmlFileHttp(fileUrl); 
 
             //parse each raw event data in list
             var horoscopeDataList = new List<HoroscopeData>();
@@ -88,10 +88,10 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all horoscope predictions for a person
         /// </summary>
-        public static async Task<List<HoroscopePrediction>> GetPrediction(Person person)
+        public static async Task<List<HoroscopePrediction>> GetHoroscopePrediction(Person person, string fileUrl)
         {
             //get list of horoscope data (file from wwwroot)
-            var horoscopeDataList = await GetHoroscopeDataList();
+            var horoscopeDataList = await GetHoroscopeDataList(fileUrl);
 
             //start calculating predictions (mix with time by person's birth date)
             var predictionList = calculate(person, horoscopeDataList);

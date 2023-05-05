@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace VedAstro.Library
@@ -11,17 +12,34 @@ namespace VedAstro.Library
     public class MatchReport : IToXml
     {
 
-        public static MatchReport Empty = new MatchReport(Person.Empty, Person.Empty, 0, "Empty Notes",
+        public static MatchReport Empty = new MatchReport("0",Person.Empty, Person.Empty, 0, "Empty Notes",
             new List<CompatibilityPrediction>(), new[] { "101" }); //have to use direct variables
 
         private static readonly string[] DefaultUserId = new[] { "101" };
+
+        /// <summary>
+        /// This is the raw kuta score made by calc, this is hard rounded to nearest 5
+        /// by all who access it via prop
+        /// </summary>
+        private double _rawKutaScore;
 
         public List<CompatibilityPrediction> PredictionList { get; set; }
 
         /// <summary>
         /// Final score in percentage from report
+        /// note hard rounded to nearest for better accuracy
         /// </summary>
-        public double KutaScore { get; set; }
+        public double KutaScore
+        {
+            
+            get
+            {
+                //before giving value hard round to nearest 5
+                var rounded = Math.Round(_rawKutaScore / 5.0) * 5;
+                return rounded;
+            }
+            set => _rawKutaScore = value;
+        }
 
         public Person Male { get; set; }
 
@@ -66,10 +84,15 @@ namespace VedAstro.Library
 
         public string Id { get; set; }
 
+        /// <summary>
+        /// Dynamic text to summarize the compatibility based on Kuta score
+        /// </summary>
+        public MatchSummaryData Summary => GetSummary(KutaScore);
 
 
-        public MatchReport(Person male, Person female, double kutaScore,string notes, List<CompatibilityPrediction> predictionList, string[] userId)
+        public MatchReport(string id, Person male, Person female, double kutaScore,string notes, List<CompatibilityPrediction> predictionList, string[] userId)
         {
+            Id = id;
             Male = male;
             Female = female;
             KutaScore = kutaScore;
@@ -77,8 +100,6 @@ namespace VedAstro.Library
             PredictionList = predictionList;
             UserId = userId.Any() ? userId : DefaultUserId;
         }
-
-
 
         /// <summary>
         /// Converts the instance data into XML
@@ -95,25 +116,12 @@ namespace VedAstro.Library
             var female = new XElement("Female", Female.ToXml());
             var predictionList = PredictionListToXml(this.PredictionList);
             var userId = new XElement("UserId", this.UserIdString);
+            var matchId = new XElement("Id", Id);
 
             //add in the data
             compatibilityReport.Add(userId, male, female, kutaScore,  predictionList);
 
             return compatibilityReport;
-        }
-
-        private XElement PredictionListToXml(List<CompatibilityPrediction> predictionList)
-        {
-            //create root tag to hold data
-            var predictionListXml = new XElement("PredictionList");
-
-            //convert each prediction to XML and add it in
-            foreach (var prediction in predictionList)
-            {
-                predictionListXml.Add(prediction.ToXml());
-            }
-
-            return predictionListXml;
         }
 
         /// <summary>
@@ -134,6 +142,7 @@ namespace VedAstro.Library
             if (compatibilityReportXml?.Element("Male")?.Element("Person") == null) { return null; }
 
             //extract out data from xml
+            var matchId = compatibilityReportXml.Element("Id")?.Value ?? "0";
             var male = Person.FromXml(compatibilityReportXml.Element("Male")?.Element("Person"));
             var female = Person.FromXml(compatibilityReportXml.Element("Female")?.Element("Person"));
             var kutaScore = Double.Parse(compatibilityReportXml.Element("KutaScore")?.Value ?? "0");
@@ -144,7 +153,7 @@ namespace VedAstro.Library
 
 
             //package as new data
-            var newCompatibilityReport = new MatchReport(male, female, kutaScore, "Notes", predictionList, userId);
+            var newCompatibilityReport = new MatchReport(matchId, male, female, kutaScore, "Notes", predictionList, userId);
             return newCompatibilityReport;
 
             //----------------------------------------------
@@ -184,6 +193,92 @@ namespace VedAstro.Library
         /// Parse list of XML directly
         /// </summary>
         public static List<MatchReport> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(matchXml => MatchReport.FromXml(matchXml)).ToList();
+
+
+
+        
+        //█ █▄░█ ▀█▀ █▀▀ █▀█ █▄░█ ▄▀█ █░░   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+        //█ █░▀█ ░█░ ██▄ █▀▄ █░▀█ █▀█ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+        //----------------------------------------------------------------------------------------------------------------
+
+
+        private XElement PredictionListToXml(List<CompatibilityPrediction> predictionList)
+        {
+            //create root tag to hold data
+            var predictionListXml = new XElement("PredictionList");
+
+            //convert each prediction to XML and add it in
+            foreach (var prediction in predictionList)
+            {
+                predictionListXml.Add(prediction.ToXml());
+            }
+
+            return predictionListXml;
+        }
+
+        /// <summary>
+        /// Based on kuta score will summary data
+        /// text color, heart icon, summary text for given score
+        /// </summary>
+        /// <param name="kutaScore"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static MatchSummaryData GetSummary(double kutaScore)
+        {
+
+            if (kutaScore < 15)
+            {
+                var heartIcon = "ic:round-heart-broken";
+                var scoreColor = "#ff0000"; //darkest red
+                var scoreSummary = "Not best, avoid if possible";
+                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary ) ;
+            }
+
+            if (kutaScore >= 15 && kutaScore < 30)
+            {
+                var heartIcon = "mdi:heart-flash";
+                var scoreColor = "#ff8080"; // light red
+                var scoreSummary = "Problematic relationship";
+                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
+            }
+
+            if (kutaScore >= 30 && kutaScore < 50)
+            {
+                var heartIcon = "mdi:heart-half-full";
+                var scoreColor = "#71ef72"; //light green
+                var scoreSummary = "Average relationship, equal good and bad";
+                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
+
+            }
+
+            if (kutaScore >= 50 && kutaScore < 60)
+            {
+                var heartIcon = "mdi:cards-heart";
+                var scoreColor = "#3be93d"; //greener
+                var scoreSummary = "Better than average, more good than bad";
+                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
+            }
+
+            if (kutaScore >= 60 && kutaScore <= 80)
+            {
+                var heartIcon = "mdi:heart-plus";
+                var scoreColor = "#20e623"; 
+                var scoreSummary = "Near perfect match, overall happiness";
+                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
+            }
+
+            if (kutaScore > 80)
+            {
+                var heartIcon = "bi:arrow-through-heart-fill";
+                var scoreColor = "#00ff03";
+                var scoreSummary = "Best possible match, rare in real life";
+                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
+            }
+
+            throw new Exception("END OF THE LINE");
+
+        }
+
 
     }
 }

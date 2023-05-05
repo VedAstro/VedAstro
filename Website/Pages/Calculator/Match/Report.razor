@@ -59,7 +59,7 @@
 
     <hr />
 
-    @*CHART RENDERING*@
+    @*CHART RENDERING: used to make PDF report*@
     <div @ref="matchReportElement">
         <div class="container mb-4 border">
             <div class="row justify-content-start">
@@ -86,12 +86,21 @@
                 </div>
                 <div class="col-4">
                     <h4>
-                        @GetSummaryText(_report.KutaScore)
+                        @_report.Summary
                     </h4>
                 </div>
             </div>
         </div>
 
+
+        @*EASY REPORT : simplified version of the vedic table*@
+        <IconTitle Title="Easy" IconName="maki:school" TitleHolder="h4" />
+        <EasyMatchReport Report="@_report" />
+        
+        <div class="my-2"/>
+
+        @*VEDIC TABLE*@
+        <IconTitle Title="Advanced" IconName="tabler:school" TitleHolder="h4" />
         <table class="table table-striped table-hover table-bordered">
             <thead class="table-dark">
                 <tr>
@@ -590,41 +599,6 @@
         }
     }
 
-    /// <summary>
-    /// based on marriage score give out summary text
-    /// </summary>
-    private string GetSummaryText(double reportKutaScore)
-    {
-
-        var rounded = Math.Round(reportKutaScore / 5.0) * 5;
-
-        if (reportKutaScore <= 30)
-        {
-            return "Not best, avoid if possible";
-        }
-
-        if (reportKutaScore > 30 && reportKutaScore <= 50)
-        {
-            return "Average life, happiness with problems";
-        }
-
-        if (reportKutaScore > 50 && reportKutaScore <= 60)
-        {
-            return "Better than average, more good than bad";
-        }
-
-        if (reportKutaScore > 60 && reportKutaScore <= 80)
-        {
-            return "Near perfect match, overall happiness";
-        }
-
-        if (reportKutaScore > 80)
-        {
-            return "Best possible match, rare in real life";
-        }
-
-        return "";
-    }
 
     private void OnClickMoreInfo(string predictionName)
     {

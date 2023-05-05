@@ -487,7 +487,7 @@ namespace API
                     //replace original birth time
                     var personAdjusted = person.ChangeBirthTime(timeSlice);
 
-                    var x = await Tools.GetPrediction(personAdjusted);
+                    var x = await Tools.GetHoroscopePrediction(personAdjusted, APITools.HoroscopeDataListFile);
                 }
                 //convert list to xml string in root elm
                 var responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();

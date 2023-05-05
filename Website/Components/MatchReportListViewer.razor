@@ -12,34 +12,32 @@
 }
 else
 {
-    
+
     <table class="table mb-5">
         <thead>
-        <tr>
-            <th scope="col">Couple</th>
-            <th scope="col">Prediction</th>
-            <th scope="col">Real Life</th>
-            <th scope="col">Report</th>
-        </tr>
+            <tr>
+                <th scope="col">Couple</th>
+                <th scope="col">Prediction</th>
+                <th scope="col">Real Life</th>
+                <th scope="col">Report</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var report in MatchReportList)
-        {
-            <tr>
-                <td>
-                    <div class="hstack gap-2">
-                        @*Kristen*@
-                        <PersonTooltip Person="@report.Male" />
-                        <Icon Size="(int)GR.W22" NextToText="true" IconName="mdi:cards-heart" />
-                        @*Dax Shepard*@
-                        <PersonTooltip Person="@report.Female" />
-                    </div>
-                </td>
-                <td><b style="color: @report.ScoreColor;">@report.KutaScore%</b></td>
-                <td>report.Notes</td>
-                <td><IconButton ButtonText="View" OpenNewTab="true" ClickUrl=@($"/Calculator/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
-            </tr>
-        }
+            @foreach (var report in MatchReportList)
+            {
+                <tr>
+                    <td>
+                        <div class="hstack gap-2">
+                            <PersonTooltip Person="@report.Male" />
+                            <Icon Size="(int)GR.W22" NextToText="true" IconName="@GetPerfectHeartIcon(report.KutaScore)" />
+                            <PersonTooltip Person="@report.Female" />
+                        </div>
+                    </td>
+                    <td><b style="color: @report.ScoreColor;">@report.KutaScore%</b></td>
+                    <td>report.Notes</td>
+                    <td><IconButton ButtonText="View" OpenNewTab="true" ClickUrl=@($"/Calculator/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
+                </tr>
+            }
         </tbody>
     </table>
 }
@@ -60,6 +58,21 @@ else
 
         //refresh view
         this.StateHasChanged();
+    }
+
+    //based on score will get a the best icon to represent the relationship
+    private string GetPerfectHeartIcon(double score)
+    {
+        switch (score)
+        {
+            case >= 45:
+                return "mdi:cards-heart";
+            case < 45:
+                return "material-symbols:heart-broken-rounded";
+        }
+
+
+        throw new Exception("END OF THE LINE");
     }
 
 }

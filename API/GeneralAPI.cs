@@ -26,7 +26,7 @@ namespace API
                 var person = await APITools.GetPersonById(personId);
 
                 //calculate predictions for current person
-                var predictionList = await Tools.GetPrediction(person);
+                var predictionList = await Tools.GetHoroscopePrediction(person, APITools.HoroscopeDataListFile);
 
                 var sortedList = SortPredictionData(predictionList);
 

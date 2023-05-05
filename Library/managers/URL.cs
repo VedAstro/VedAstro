@@ -45,7 +45,8 @@ public class URL
         GetMessageList = ApiUrl + "/getmessagelist";
 
         GetMatchReportList = ApiUrl + "/GetMatchReportList";
-        GetPersonApi = ApiUrl + "/getperson";
+        GetPersonApi = ApiUrl + "/getperson"; 
+        GetNewPersonId = ApiUrl + "/GetNewPersonId";
         GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
         UpdatePersonApi = ApiUrl + "/updateperson";
         GetMatchReportApi = ApiUrl + "/getmatchreport";
@@ -59,7 +60,7 @@ public class URL
         SaveEventsChart = ApiUrl + "/SaveEventsChart";
         GetEventsApi = ApiUrl + "/getevents";
         SignInGoogle = ApiUrl + "/SignInGoogle";
-        SignInFacebook = ApiUrl + "/SignInFacebook";
+        SignInFacebook = ApiUrl + "/SignInFacebook"; 
         HoroscopeDataListXml = $"{WebUrl}/data/HoroscopeDataList.xml";//used in horoscope prediction
         EventsChartViewerHtml = $"{WebUrl}/data/EventsChartViewer.html";
         ToolbarSvgAzure = $"{WebUrl}/svg/Toolbar.svg";// Toolbar.svg used in when rendering events chart
@@ -102,6 +103,7 @@ public class URL
     //PERSON
     public readonly string GetPersonList;
     public readonly string GetPersonApi;
+    public readonly string GetNewPersonId;
     public readonly string GetPersonIdFromSavedChartId;
     public readonly string UpdatePersonApi;
 

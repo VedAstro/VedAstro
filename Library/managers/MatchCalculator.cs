@@ -67,7 +67,8 @@ namespace VedAstro.Library
             }
 
             //parse data
-            var report = new MatchReport(male, female,0,"Notes", compatibilityPredictions, new[] { "101" });
+            //note KUTA score added below
+            var report = new MatchReport(Tools.GenerateId(), male, female, 0, "...", compatibilityPredictions, new[] { "101" });
 
             //count the total points
             CalculateTotalPoints(ref report);
@@ -698,7 +699,7 @@ namespace VedAstro.Library
                     prediction.Nature = EventNature.Good;
                     prediction.Info = "favourable results to the fullest extent, harmony and progeny";
                 }
-                else if(sameAnimal && sameGender) //same animal same gender 
+                else if (sameAnimal && sameGender) //same animal same gender 
                 {
                     prediction.Nature = EventNature.Good;
                     prediction.Info = "not perfect, better than normal."; //(not 100% known)

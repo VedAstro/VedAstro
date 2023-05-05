@@ -31,7 +31,8 @@ namespace VedAstro.Library
         //DATA FIELDS
         /// <summary>
         /// Represents permanent identity to this record, generated only once during creation
-        /// made of random alphanumeric string 
+        /// made of human readable ID made of person name and birth year
+        /// should be camel case, would look nicer
         /// </summary>
         public string Id { get; set; }
 
@@ -280,8 +281,13 @@ namespace VedAstro.Library
         /// </summary>
         public static Person FromXml(XElement personXml)
         {
+
+            //if no id place 0 find the error
+            //note:
+            //  - do not just generate a new ID, it should only be generated in one place for easy maintenance
+            //  - some times can use to clean data, but once done change back
+            var id = personXml.Element("PersonId")?.Value ?? "0";
             var name = personXml.Element("Name")?.Value;
-            var id = personXml.Element("PersonId")?.Value ?? Tools.GenerateId(); //if no id generate new
             var notes = personXml.Element("Notes")?.Value;
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);

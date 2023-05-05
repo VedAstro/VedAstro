@@ -14,6 +14,42 @@ namespace API
     /// </summary>
     public class PersonAPI
     {
+
+
+
+        /// <summary>
+        /// Generate a human readable Person ID
+        /// 
+        /// </summary>
+        [Function("GetNewPersonId")]
+        public static async Task<HttpResponseData> GetNewPersonId([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        {
+
+            try
+            {
+                //STAGE 1 : GET DATA OUT
+                //data out of request
+                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
+                var name = rootXml.Element("Name")?.Value;
+                var birthYear = rootXml.Element("BirthYear")?.Value;
+
+                //special ID made for human brains
+                var brandNewHumanReadyID = await APITools.GeneratePersonId(name, birthYear);
+
+                return APITools.PassMessage(brandNewHumanReadyID, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+
+        }
+
         [Function("addperson")]
         public static async Task<HttpResponseData> AddPerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {

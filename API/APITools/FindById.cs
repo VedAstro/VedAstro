@@ -113,7 +113,7 @@ namespace API
         /// returns null if no person found
         /// This a unique id representing the unique person record
         /// </summary>
-        public static async Task<XElement?> FindPersonXMLById(string personId)
+        public static async Task<XElement?> FindPersonXMLById(string personIdToFind)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace API
                 //log it (should not occur all the time)
                 if (foundPerson == null)
                 {
-                    await APILogger.Error($"No person found with ID : {personId}");
+                    await APILogger.Error($"No person found with ID : {personIdToFind}");
                     foundPerson = Person.Empty.ToXml();
                 }
 
@@ -146,8 +146,19 @@ namespace API
             }
 
             //--------
-            //do the finding
-            bool MatchPersonId(XElement personXml) => Person.FromXml(personXml).Id.Equals(personId);
+            //do the finding, for id both case should match, but stored in upper case because looks nice
+            //but user might pump in with mixed case, who knows, so compensate.
+            bool MatchPersonId(XElement personXml)
+            {
+                if (personXml == null) { return false; }
+
+                var inputPersonId = personXml?.Element("PersonId")?.Value ?? ""; //todo PersonId has to be just Id
+
+                //lower case it before checking
+                var isMatch = inputPersonId == personIdToFind; //hoisting alert
+
+                return isMatch;
+            }
         }
 
     }

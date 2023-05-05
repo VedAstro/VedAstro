@@ -1,0 +1,28 @@
+﻿@*SIMPLE BOX TO RENDER SMART PREDICTIONS*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+<div class="container text-center">
+    <div class="row  row-cols-3">
+        <div class="col">
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Full Life Chart" Description="Written full life analysis by expert astrologer" IconName="icon-park:table-report" />
+        </div>
+        <div class="col">
+            <InfoBox MaxWidth="365" FullWidth="@true" Title="Astrologer Call" Description="45 minute live call consultation with vedic astrologer" IconName="flat-color-icons:customer-support" />
+        </div>
+        <div class="col">
+            <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Monthly Updates" Description="We'll keep you updated on latest astro events" IconName="emojione:closed-mailbox-with-raised-flag" />
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public MatchReport Report { get; set; }
+
+}

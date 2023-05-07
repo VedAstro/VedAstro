@@ -40,6 +40,7 @@ public class URL
         AddTaskApi = ApiUrl + "/addtask";
         AddVisitorApi = ApiUrl + "/addvisitor";
         GetPersonList = ApiUrl + "/GetPersonList";
+        GetPersonListAsync = ApiUrl + "/GetPersonListAsync";
         GetTaskListApi = ApiUrl + "/gettasklist";
         GetVisitorList = ApiUrl + "/getvisitorlist";
         GetMessageList = ApiUrl + "/getmessagelist";
@@ -102,6 +103,7 @@ public class URL
 
     //PERSON
     public readonly string GetPersonList;
+    public readonly string GetPersonListAsync;
     public readonly string GetPersonApi;
     public readonly string GetNewPersonId;
     public readonly string GetPersonIdFromSavedChartId;

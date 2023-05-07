@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
 		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
@@ -9,6 +9,7 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>.</DockerfileContext>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Communication.Email" Version="1.0.0" />
@@ -17,9 +18,13 @@
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />
+
 		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.13.0" />
-		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.10.0" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.DurableTask" Version="1.0.2" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.10.0" />
+
+
 		<!--<PackageReference Include="VedAstro.Library" Version="1.2.0" />-->
 	</ItemGroup>
 	<ItemGroup>

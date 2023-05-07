@@ -1,4 +1,4 @@
-﻿using VedAstro.Library;
+using VedAstro.Library;
 using System.Xml.Linq;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -211,26 +211,29 @@ namespace Website
         /// <summary>
         /// HTTP Post via JS interop
         /// </summary>
-        public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData, int timeout = 10)
+        public static async Task<WebResult<XElement>> WriteToServerXmlReply(string apiUrl, XElement xmlData, int timeout = 60)
         {
 
-            TryAgain:
-            // throws TimeoutException on timeout
-            string receivedData;
 
-            try
-            {
-                receivedData = await Tools.TaskWithTimeoutAndException(WebsiteTools.Post(apiUrl, xmlData), TimeSpan.FromSeconds(10));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("FAILED TRY AGAIN TIMEOUT 10S");
-                goto TryAgain;
-            }
+        TryAgain:
 
             //ACT 1:
             //send data to URL, using JS for reliability & speed
-           // var receivedData = await WebsiteTools.Post(apiUrl, xmlData);
+            //also if call does not respond in time, we replay the call over & over
+            string receivedData;
+            try { receivedData = await Tools.TaskWithTimeoutAndException(WebsiteTools.Post(apiUrl, xmlData), TimeSpan.FromSeconds(timeout)); }
+
+            //if fail replay and log it
+            catch (Exception e)
+            {
+                var debugInfo = $"Call to \"{apiUrl}\" timeout at : {timeout}s";
+
+                WebLogger.Data(debugInfo);
+#if DEBUG
+                Console.WriteLine(debugInfo);
+#endif
+                goto TryAgain;
+            }
 
             //ACT 2:
             //check raw data 

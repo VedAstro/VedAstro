@@ -21,7 +21,7 @@ namespace VedAstro.Library
             //as such if they fail don't shut down the whole show!
 
             //list all calculators here, to be processed one by one
-            List<Func<Person, Person, CompatibilityPrediction>> calculatorList = new List<Func<Person, Person, CompatibilityPrediction>>()
+            List<Func<Person, Person, MatchPrediction>> calculatorList = new List<Func<Person, Person, MatchPrediction>>()
             {
                 MatchCalculator.GrahaMaitram, //5
                 MatchCalculator.Rajju,
@@ -42,12 +42,12 @@ namespace VedAstro.Library
             };
 
             //place to put results
-            List<CompatibilityPrediction> compatibilityPredictions = new List<CompatibilityPrediction>();
+            List<MatchPrediction> compatibilityPredictions = new List<MatchPrediction>();
 
             //now calculate one by one safely
             foreach (var calculator in calculatorList)
             {
-                CompatibilityPrediction prediction;
+                MatchPrediction prediction;
 
                 try
                 {
@@ -59,7 +59,7 @@ namespace VedAstro.Library
                     LibLogger.Error(e, $"Male:{male.Name} Female:{female.Name}");
 
                     //return empty
-                    prediction = CompatibilityPrediction.Empty; //default empty
+                    prediction = MatchPrediction.Empty; //default empty
                 }
 
                 //add to return list
@@ -98,7 +98,7 @@ namespace VedAstro.Library
 
                 //FUNCTIONS
 
-                void streeDeerghaException(List<CompatibilityPrediction> list)
+                void streeDeerghaException(List<MatchPrediction> list)
                 {
                     //1.The absence of Stree-Deerga may be ignored if
                     //  Rasi Kuta add Graha Maitri are present.
@@ -116,7 +116,7 @@ namespace VedAstro.Library
                     if (streeDeergaIsBad && rasiKutaIsGood && grahaMaitramIsGood)
                     {
                         //create new prediction
-                        var newPrediction = new CompatibilityPrediction()
+                        var newPrediction = new MatchPrediction()
                         {
                             Name = streeDeerga.Name,
                             Description = streeDeerga.Description,
@@ -134,7 +134,7 @@ namespace VedAstro.Library
 
                 }
 
-                void rajjuException(List<CompatibilityPrediction> list)
+                void rajjuException(List<MatchPrediction> list)
                 {
                     //2.Rajju Kuta need not be considered in case Graha Maitri, Rasi, Dina
                     //  and Mahendra Kuta are present.
@@ -158,7 +158,7 @@ namespace VedAstro.Library
                     if (rajjuIsBad && grahaMaitramIsGood && rasiKutaIsGood && dinaKutaIsGood && mahendraIsGood)
                     {
                         //create new prediction
-                        var newPrediction = new CompatibilityPrediction()
+                        var newPrediction = new MatchPrediction()
                         {
                             Name = rajju.Name,
                             Description = rajju.Description,
@@ -176,7 +176,7 @@ namespace VedAstro.Library
 
                 }
 
-                void nadiKutaException(List<CompatibilityPrediction> list)
+                void nadiKutaException(List<MatchPrediction> list)
                 {
                     //The evil due to Nadi Kuta can be ignored subject to the following
                     // conditions: -
@@ -195,7 +195,7 @@ namespace VedAstro.Library
                     if (nadiKutaIsBad && rasiKutaIsGood && rajjuIsGood)
                     {
                         //create new prediction
-                        var newPrediction = new CompatibilityPrediction()
+                        var newPrediction = new MatchPrediction()
                         {
                             Name = nadiKuta.Name,
                             Description = nadiKuta.Description,
@@ -272,9 +272,9 @@ namespace VedAstro.Library
 
         }
 
-        public static CompatibilityPrediction Mahendra(Person male, Person female)
+        public static MatchPrediction Mahendra(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.Mahendra,
                 Description = "well-being and longevity"
@@ -309,9 +309,9 @@ namespace VedAstro.Library
             return prediction;
         }
 
-        public static CompatibilityPrediction NadiKuta(Person male, Person female)
+        public static MatchPrediction NadiKuta(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.NadiKuta,
                 Description = "nervous energy compatibility (important)"
@@ -413,9 +413,9 @@ namespace VedAstro.Library
             }
         }
 
-        public static CompatibilityPrediction GunaKuta(Person male, Person female)
+        public static MatchPrediction GunaKuta(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.GunaKuta,
                 Description = "temperament and character compatibility"
@@ -484,7 +484,7 @@ namespace VedAstro.Library
             if (maleToFemale > 14 && prediction.Nature == EventNature.Bad)
             {
                 //create new prediction
-                var newPrediction = new CompatibilityPrediction()
+                var newPrediction = new MatchPrediction()
                 {
                     Name = prediction.Name,
                     Description = prediction.Description,
@@ -551,9 +551,9 @@ namespace VedAstro.Library
 
         }
 
-        public static CompatibilityPrediction Varna(Person male, Person female)
+        public static MatchPrediction Varna(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.Varna,
                 Description = "spiritual/ego compatibility"
@@ -640,10 +640,10 @@ namespace VedAstro.Library
             }
         }
 
-        public static CompatibilityPrediction YoniKuta(Person male, Person female)
+        public static MatchPrediction YoniKuta(Person male, Person female)
         {
 
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.YoniKuta,
                 Description = "sex compatibility"
@@ -851,9 +851,9 @@ namespace VedAstro.Library
             }
         }
 
-        public static CompatibilityPrediction VedhaKuta(Person male, Person female)
+        public static MatchPrediction VedhaKuta(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.Vedha,
                 Description = "birth constellations compatibility"
@@ -936,9 +936,9 @@ namespace VedAstro.Library
             }
         }
 
-        public static CompatibilityPrediction Rajju(Person male, Person female)
+        public static MatchPrediction Rajju(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.Rajju,
                 Description = "strength/duration of married life (important)"
@@ -1062,9 +1062,9 @@ namespace VedAstro.Library
 
         }
 
-        public static CompatibilityPrediction VasyaKuta(Person male, Person female)
+        public static MatchPrediction VasyaKuta(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.VasyaKuta,
                 Description = "degree of magnetic control"
@@ -1247,9 +1247,9 @@ namespace VedAstro.Library
             return prediction;
         }
 
-        public static CompatibilityPrediction GrahaMaitram(Person male, Person female)
+        public static MatchPrediction GrahaMaitram(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.GrahaMaitram,
                 Description = "happiness, mental compatibility (important)"
@@ -1331,9 +1331,9 @@ namespace VedAstro.Library
             return prediction;
         }
 
-        public static CompatibilityPrediction RasiKuta(Person male, Person female)
+        public static MatchPrediction RasiKuta(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.RasiKuta,
                 Description = "rasi compatibility"
@@ -1502,7 +1502,7 @@ namespace VedAstro.Library
                 if (sameJanmaLord || janmaIsFriend)
                 {
                     //create new prediction
-                    var newPrediction = new CompatibilityPrediction()
+                    var newPrediction = new MatchPrediction()
                     {
                         Name = prediction.Name,
                         Description = prediction.Description,
@@ -1525,9 +1525,9 @@ namespace VedAstro.Library
 
         }
 
-        public static CompatibilityPrediction StreeDeergha(Person male, Person female)
+        public static MatchPrediction StreeDeergha(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.StreeDeergha,
                 Description = "husband well being, longevity and prosperity"
@@ -1562,9 +1562,9 @@ namespace VedAstro.Library
             return prediction;
         }
 
-        public static CompatibilityPrediction DinaKuta(Person male, Person female)
+        public static MatchPrediction DinaKuta(Person male, Person female)
         {
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.DinaKuta,
                 Description = "day to day living compatibility"
@@ -1605,7 +1605,7 @@ namespace VedAstro.Library
 
         }
 
-        public static CompatibilityPrediction LagnaAndHouse7Good(Person male, Person female)
+        public static MatchPrediction LagnaAndHouse7Good(Person male, Person female)
         {
 
             //get birth moon sign & lagna, details needed for prediction
@@ -1634,7 +1634,7 @@ namespace VedAstro.Library
 
 
             //fill details to show user if occuring, else nothing
-            var prediction = new CompatibilityPrediction();
+            var prediction = new MatchPrediction();
             if (occuring)
             {
                 prediction.Name = MatchPredictionName.LagnaAnd7thGood;
@@ -1649,7 +1649,7 @@ namespace VedAstro.Library
 
         }
 
-        public static CompatibilityPrediction KujaDosa(Person male, Person female)
+        public static MatchPrediction KujaDosa(Person male, Person female)
         {
 
             //get kuja dosha score for male & female
@@ -1913,9 +1913,9 @@ namespace VedAstro.Library
             }
 
             //interpret kuja dosa & creates the prediction
-            CompatibilityPrediction interpretScore(double scoreMale, double scoreFemale)
+            MatchPrediction interpretScore(double scoreMale, double scoreFemale)
             {
-                var prediction = new CompatibilityPrediction
+                var prediction = new MatchPrediction
                 {
                     Name = MatchPredictionName.KujaDosa,
                     Description = "if bad, may cause death/bad health to spouse"
@@ -1978,7 +1978,7 @@ namespace VedAstro.Library
             }
         }
 
-        public static CompatibilityPrediction BadConstellations(Person male, Person female)
+        public static MatchPrediction BadConstellations(Person male, Person female)
         {
             // Almost all authors agree that certain parts of Moola, Astesha, Jyeshta and Visakha are destructive
             // constellations -
@@ -1987,7 +1987,7 @@ namespace VedAstro.Library
             // and Visakha (last quarter) for husband's younger brother.
 
 
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.BadConstellation,
                 Description = "checks if evil constellation is in chart"
@@ -2048,14 +2048,14 @@ namespace VedAstro.Library
 
         }
 
-        public static CompatibilityPrediction SexEnergyCompatibility(Person male, Person female)
+        public static MatchPrediction SexEnergyCompatibility(Person male, Person female)
         {
             //When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts and
             //such an individual should be mated to one who has similar instincts and not a person having Mercury or Jupiter in the 7th,
             //as this makes one under-sexed. When sexual incompatibility sets in marriage,
             //life proves charmless and friction arises between the couple.
 
-            var prediction = new CompatibilityPrediction
+            var prediction = new MatchPrediction
             {
                 Name = MatchPredictionName.SexEnergyCompatibility,
                 Description = "sexual compatibility based on planets in 7th house"

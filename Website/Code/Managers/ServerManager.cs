@@ -1,4 +1,4 @@
-using VedAstro.Library;
+﻿using VedAstro.Library;
 using System.Xml.Linq;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
@@ -141,7 +141,6 @@ namespace Website
         }
 
         /// <summary>
-        /// TODO DEPRECATED MARKED FOR DELETION
         /// Send xml as string to server and returns xml as response
         /// Note:
         /// - on failure payload will contain error info
@@ -246,17 +245,17 @@ namespace Website
                 return new WebResult<XElement>(false, new XElement("CallEmptyError"));
             }
 
-            //ACT 2:
+            //ACT 3:
             //return data as XML
             //problems might occur when parsing
             //try to parse as XML
             var writeToServerXmlReply = XElement.Parse(receivedData);
             var returnVal = WebResult<XElement>.FromXml(writeToServerXmlReply);
 
-            //ACT 3:
+            //ACT 4:
             return returnVal;
         }
-        
+
 
         //PRIVATE METHODS
 

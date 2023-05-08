@@ -399,11 +399,10 @@ namespace VedAstro.Library
                 var id = jToken["PersonId"].Value<string>();
                 var name = jToken["Name"].Value<string>();
                 var notes = jToken["Notes"].Value<string>();
-                var birthTime = jToken["BirthTime"];
-                var time = Time.FromJson(birthTime["Time"]);
+                var time = Time.FromJson(jToken["BirthTime"]);
                 var gender = Enum.Parse<Gender>(jToken["Gender"].Value<string>());
                 var userId = Tools.GetUserIdFromData(jToken);
-                var lifeEventList = LifeEvent.FromJsonList(jToken["LifeEventList"]);
+                var lifeEventList = LifeEvent.FromJsonList(jToken["LifeEventList"]); //json array
 
                 var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);
 

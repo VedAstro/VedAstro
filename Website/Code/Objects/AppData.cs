@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Xml.Linq;
+using Library.API;
 using VedAstro.Library;
 using Website.Pages;
 
@@ -132,6 +133,7 @@ namespace Website
         /// </summary>
         public static string? LastUsedLocation { get; set; } = DefaultLocationCountry;
 
+
         public static string DefaultLocationCountry = "Singapore";
 
 
@@ -147,6 +149,11 @@ namespace Website
         /// Counts the number of times the stamp was clicked
         /// </summary>
         public static int StampClickCount;
+
+        /// <summary>
+        /// manager to access everything API
+        /// </summary>
+        public static VedAstroAPI API;
 
         /// <summary>
         /// if data already loaded then return the that one,
@@ -202,36 +209,11 @@ namespace Website
             //_waitingInLineCount = 0;
         }
 
-        /// <summary>
-        /// data may be cached or from API
-        /// Sorted alphabetically
-        /// </summary>
-        public static async Task<List<Person>> TryGetPersonListSortedAZ()
-        {
-            var unsorted = await AppData.TryGetPersonList();
-            var sortedList = unsorted.OrderBy(person => person.Name).ToList();
-            return sortedList;
-        }
-
-        public static async Task<List<Person>> TryGetPersonList()
-        {
-            //check if people list already loaded before
-            if (AppData.PersonList == null)
-            {
-                Console.WriteLine("BLZ:Get Fresh PersonList");
-                AppData.PersonList = await WebsiteTools.GetPeopleList();
-            }
-            else
-            {
-                Console.WriteLine("BLZ:Using PersonList Cache");
-            }
-
-            return AppData.PersonList;
-        }
 
         /// <summary>
         /// When called clears person list from memory, so new list is auto loaded from API on next get
         /// </summary>
         public static void ClearPersonList() => AppData.PersonList = null;
+
     }
 }

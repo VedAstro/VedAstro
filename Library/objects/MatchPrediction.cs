@@ -8,9 +8,9 @@ namespace VedAstro.Library
     /// Note : properties can only be set once,
     /// so that doesn't accidentally get changed
     /// </summary>
-    public class CompatibilityPrediction : IToXml
+    public class MatchPrediction : IToXml
     {
-        public static CompatibilityPrediction Empty = new CompatibilityPrediction(MatchPredictionName.Empty, EventNature.Empty, "Empty", "Empty","Empty", "Empty");
+        public static MatchPrediction Empty = new MatchPrediction(MatchPredictionName.Empty, EventNature.Empty, "Empty", "Empty","Empty", "Empty");
 
         //DATA FIELDS
         private string _info = "";
@@ -18,7 +18,7 @@ namespace VedAstro.Library
         private string _femaleInfo = "";
         private string _description = "";
 
-        public CompatibilityPrediction(MatchPredictionName name, EventNature nature, string maleInfo, string femaleInfo, string info, string description)
+        public MatchPrediction(MatchPredictionName name, EventNature nature, string maleInfo, string femaleInfo, string info, string description)
         {
             Name = name;
             Nature = nature;
@@ -28,7 +28,7 @@ namespace VedAstro.Library
             Description = description;
         }
 
-        public CompatibilityPrediction() { }
+        public MatchPrediction() { }
 
 
         //PUBLIC PROPERTIES
@@ -91,7 +91,7 @@ namespace VedAstro.Library
         /// </summary>
         public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
-        public CompatibilityPrediction FromXml(XElement xml)
+        public MatchPrediction FromXml(XElement xml)
         {
             var name = Enum.Parse<MatchPredictionName>(xml.Element("Name")?.Value);
             var nature = Enum.Parse<EventNature>(xml.Element("Nature")?.Value);
@@ -100,7 +100,7 @@ namespace VedAstro.Library
             var info = xml.Element("Info")?.Value;
             var description = xml.Element("Description")?.Value;
 
-            var parsed = new CompatibilityPrediction(name, nature, maleInfo, femaleInfo, info, description);
+            var parsed = new MatchPrediction(name, nature, maleInfo, femaleInfo, info, description);
 
             return parsed;
 
@@ -109,7 +109,7 @@ namespace VedAstro.Library
         public XElement ToXml()
         {
             //create root tag to hold data
-            var predictionXml = new XElement(nameof(CompatibilityPrediction));
+            var predictionXml = new XElement(nameof(MatchPrediction));
             var name = new XElement("Name", this.Name);
             var nature = new XElement("Nature", this.Nature);
             var maleInfo = new XElement("MaleInfo", this.MaleInfo);

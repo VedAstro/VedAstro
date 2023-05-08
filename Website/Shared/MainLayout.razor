@@ -3,6 +3,7 @@
 @using System.Xml.Linq
 @using Website.Pages
 @using System.Text.Json
+@using Library.API
 
 
 @*
@@ -34,7 +35,8 @@
             </div>
 
             <!-- DEPLOYMENT STAMP : Not visible in mobile, no space to joke around -->
-            <div class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px; z-index: 1;"> @*stack below other elms*@
+            <div class="sticky-bottom position-fixed mb-3 ms-5" style="color:#969696; font-size: 8px; z-index: 1;">
+                @*stack below other elms*@
                 <div style="cursor: pointer;" @onclick="()=>_navigation.NavigateTo(PageRoute.MadeOnEarth)" class="hstack gap-1">
                     <span class="iconify" data-icon="ion:earth" data-width="10"></span>
                     <span>Made on Earth</span>
@@ -138,23 +140,29 @@
         //control comes here after Program, all needed initialization
         //done here before page/components are loaded
 
-        //do little check to make sure all functions in Interop is accounted for
+
+        //1: do little check to make sure all functions in Interop is accounted for
         await InteropHealthCheck();
 
-        //create url based on beta or stable
+        //2: create url based on beta or stable
         AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime());
 
-        //to be accessed by classes
+        //3: to be accessed by classes
         AppData.HttpClient = _client;
 
-        //used later to create HTTP client with correct base address
+        //4: used later to create HTTP client with correct base address
         AppData.BaseAddress = new Uri(_navigation.BaseUri);
 
-        //get visitor ID if available
+        //5: get visitor ID if available
         AppData.VisitorId = await WebsiteTools.TryGetVisitorId(_jsRuntime);
 
-        //retrieve login status from previous visit if available
+        //6: retrieve login status from previous visit if available
         await TryGetPreviousLogin();
+
+        //7: prepare server communicator
+        AppData.API = new VedAstroAPI(AppData.CurrentUser.Id, AppData.VisitorId, _jsRuntime, AppData.URL, _client);
+        //ask server to prepare person list, will be available instantly later when user needs it
+        await AppData.API.PreparePersonList();
 
         //other components can start loading now
         _mainPageInitDone = true;

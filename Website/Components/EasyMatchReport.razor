@@ -5,6 +5,38 @@
 @using System.Xml.Linq
 
 
+<div class="container mb-4 border">
+    <div class="row justify-content-start">
+        <div class="col-2">
+            Couple
+        </div>
+        <div class="col-4 w-auto">
+            <h4 class="hstack gap-3">
+                @MaleDisplayName() <Icon Size="(int)GR.W37" NextToText="true" IconName="@Report.Summary.heartIcon" /> @FemaleDisplayName()
+            </h4>
+        </div>
+    </div>
+    <div class="row justify-content-start">
+        <div class="col-2">
+            Score
+        </div>
+        <div class="col-4">
+            <b style="color: @Report.ScoreColor;font-size: 33px;">@Report.KutaScore%</b>
+        </div>
+    </div>
+    <div class="row justify-content-start">
+        <div class="col-2">
+            Summary
+        </div>
+        <div class="col-4">
+            <h4>
+                @Report.Summary.scoreSummary
+            </h4>
+        </div>
+    </div>
+</div>
+
+@* TODO Multiple KUTA points combined and summed
 <div class="container text-center">
     <div class="row  row-cols-3">
         <div class="col">
@@ -17,12 +49,17 @@
             <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Monthly Updates" Description="We'll keep you updated on latest astro events" IconName="emojione:closed-mailbox-with-raised-flag" />
         </div>
     </div>
-</div>
+</div>*@
 
 
 @code {
 
+    //shorten name so that doesn't break formatting
+    private string MaleDisplayName() => Report.Male.Name.Truncate(50);
+    private string FemaleDisplayName() => Report.Female.Name.Truncate(50);
+
     [Parameter]
     public MatchReport Report { get; set; }
+
 
 }

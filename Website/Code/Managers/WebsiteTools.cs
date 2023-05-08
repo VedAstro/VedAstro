@@ -2,6 +2,7 @@ using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Threading;
 
 namespace Website
 {
@@ -84,34 +85,7 @@ namespace Website
         /// </summary>
         public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");
 
-        /// <summary>
-        /// Gets all people list from API server
-        /// This is the central place all person list is gotten for a User ID/Visitor ID
-        /// NOTE: API combines person list from visitor id and 
-        /// - if API fail will return empty list
-        /// </summary>
-        public static async Task<List<Person>?> GetPeopleList()
-        {
 
-            //get all person profile owned by current user/visitor
-            var payload = new XElement("Root", new XElement("UserId", AppData.CurrentUser.Id), new XElement("VisitorId", AppData.VisitorId));
-            int timeout = 2;//probability of GOOD reply from API goes down after 2s, so no point waiting
-            var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetPersonList, payload, timeout);  
-
-            if (result.IsPass)
-            {
-                var personList = Person.FromXml(result.Payload.Elements());
-                return personList;
-            }
-            //if fail log it and return empty list as not to break the caller
-            else
-            {
-                await AppData.JsRuntime.ShowAlert("error", AlertText.FailedNameList, true);
-                return new List<Person>();
-            }
-
-
-        }
 
         /// <summary>
         /// Gets a list of saved match reports for a user/visitor
@@ -215,7 +189,7 @@ namespace Website
             async Task<Person> GetFromPersonList(string personId)
             {
                 //try to get from person's own user list
-                var personList = await AppData.TryGetPersonList();
+                var personList = await AppData.API.GetPersonList();
                 var personFromId = personList.Where(p => p.Id == personId);
 
                 //will return Empty person if none found
@@ -616,7 +590,7 @@ namespace Website
             var payload = new XElement("Root", new XElement("Name", nameInput), new XElement("BirthYear", stdBirthYear));
             var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetNewPersonId, payload);
 
-            //get match data out and parse it (if all went well)
+            //get  data out and parse it (if all went well)
             if (result.IsPass) { return result.Payload.Value; }
 
             //if fail log it and return empty list as not to break the caller
@@ -625,10 +599,9 @@ namespace Website
                 await AppData.JsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
                 return null;
             }
-
-
         }
 
+       
 
     }
 }

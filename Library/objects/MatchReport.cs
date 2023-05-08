@@ -13,7 +13,7 @@ namespace VedAstro.Library
     {
 
         public static MatchReport Empty = new MatchReport("0",Person.Empty, Person.Empty, 0, "Empty Notes",
-            new List<CompatibilityPrediction>(), new[] { "101" }); //have to use direct variables
+            new List<MatchPrediction>(), new[] { "101" }); //have to use direct variables
 
         private static readonly string[] DefaultUserId = new[] { "101" };
 
@@ -23,7 +23,7 @@ namespace VedAstro.Library
         /// </summary>
         private double _rawKutaScore;
 
-        public List<CompatibilityPrediction> PredictionList { get; set; }
+        public List<MatchPrediction> PredictionList { get; set; }
 
         /// <summary>
         /// Final score in percentage from report
@@ -90,7 +90,7 @@ namespace VedAstro.Library
         public MatchSummaryData Summary => GetSummary(KutaScore);
 
 
-        public MatchReport(string id, Person male, Person female, double kutaScore,string notes, List<CompatibilityPrediction> predictionList, string[] userId)
+        public MatchReport(string id, Person male, Person female, double kutaScore,string notes, List<MatchPrediction> predictionList, string[] userId)
         {
             Id = id;
             Male = male;
@@ -159,9 +159,9 @@ namespace VedAstro.Library
             //----------------------------------------------
             //FUNCTIONS
 
-            List<CompatibilityPrediction> ParseXmlToPredictionList(XElement xmlData)
+            List<MatchPrediction> ParseXmlToPredictionList(XElement xmlData)
             {
-                var returnVal = new List<CompatibilityPrediction>();
+                var returnVal = new List<MatchPrediction>();
 
                 foreach (var xElement in xmlData.Elements())
                 {
@@ -172,7 +172,7 @@ namespace VedAstro.Library
                     var description = xElement.Element("Description")?.Value;
                     var info = xElement.Element("Info")?.Value;
 
-                    var newPrediction = new CompatibilityPrediction()
+                    var newPrediction = new MatchPrediction()
                     {
                         Name = name,
                         Nature = nature,
@@ -202,7 +202,7 @@ namespace VedAstro.Library
         //----------------------------------------------------------------------------------------------------------------
 
 
-        private XElement PredictionListToXml(List<CompatibilityPrediction> predictionList)
+        private XElement PredictionListToXml(List<MatchPrediction> predictionList)
         {
             //create root tag to hold data
             var predictionListXml = new XElement("PredictionList");

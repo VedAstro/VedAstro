@@ -349,20 +349,20 @@ namespace API
         public static async Task<JsonDocument> FilterData([Microsoft.Azure.Functions.Worker.ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
         {
 
-            //STAGE 3 : FILTER 
             //get latest all match reports
             var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+           
             //filter out record by user id
             var userIdList = Tools.FindXmlByUserId(personListXml, swapOptions.UserId);
 
-            //STAGE 4 : format to JSON 
-            //convert list to JSON string
-            var x = APITools.AnyTypeToJson(userIdList).ToString();
+            //convert raw XML to Person Json
+            var personListJson = Person.XmlListToJsonList(userIdList);
 
-            //note: important to convert back to .NET's json converter
-            var final = System.Text.Json.JsonDocument.Parse(x);
+            //convert to type accepted by durable
+            var jsonText = personListJson.ToString();
+            var personListJsonDurable = System.Text.Json.JsonDocument.Parse(jsonText); //done for compatibility with durable
 
-            return final;
+            return personListJsonDurable;
 
         }
 

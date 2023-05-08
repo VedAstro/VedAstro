@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -261,6 +262,17 @@ namespace VedAstro.Library
             return timeHolder;
         }
 
+        public JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["StdTime"] = this.GetStdDateTimeOffsetText();
+            temp["Location"] = this.GetGeoLocation().ToJson();
+
+            //compile into an JSON array
+            return temp;
+        }
+
+
         /// <summary>
         /// The root element is expected to be name of Type
         /// Note: Special method done to implement IToXml
@@ -300,6 +312,23 @@ namespace VedAstro.Library
                 return Time.Empty;
             }
         }
+        
+        public static Time FromJson(JToken timeJson)
+        {
+            var timeString = timeJson["StdTime"].Value<string>();// ?.Value ?? "00:00 01/01/2000 +08:00";
+
+            //know issue to have "." instead of "/" for date separator, so change it here if at all
+            timeString = timeString.Replace('.', '/');
+
+            var locationJson = timeJson["Location"];
+            GeoLocation geoLocation = GeoLocation.FromJson(locationJson);
+
+            var parsedTime = new Time(timeString, geoLocation);
+
+            return parsedTime;
+
+        }
+
 
         /// <summary>
         /// Parse list of XML directly
@@ -501,5 +530,6 @@ namespace VedAstro.Library
                 return false;
             }
         }
+
     }
 }

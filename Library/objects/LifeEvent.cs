@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -102,6 +103,22 @@ namespace VedAstro.Library
         //░█──░█ ░█▄▄▄ ─░█── ░█─░█ ░█▄▄▄█ ░█▄▄▀ ░█▄▄▄█
 
 
+        public JObject ToJson()
+        {
+            var temp = new JObject();
+            temp["Name"] = this.Name;
+            temp["StartTime"] = this.StartTime;
+            temp["Timezone"] = this.Timezone;
+            temp["Location"] = this.Location;
+            temp["Description"] = this.Description;
+            temp["Nature"] = this.Nature;
+
+            //compile into an JSON array
+            return temp;
+
+        }
+
+
         public XElement ToXml()
         {
             var lifeEventXml = new XElement("LifeEvent");
@@ -142,6 +159,30 @@ namespace VedAstro.Library
 
             return lifeEventParsed;
 
+        }
+
+        /// <summary>
+        /// input is json array
+        /// </summary>
+        public static List<LifeEvent> FromJsonList(JToken lifeEventList)
+        {
+            var returnList = new List<LifeEvent>();
+
+            foreach (var lifeEvent in lifeEventList)
+            {
+                var temp = new LifeEvent();
+
+                temp.Name = lifeEvent["Name"].Value<string>();
+                temp.StartTime = lifeEvent["StartTime"].Value<string>();
+                temp.Timezone = lifeEvent["Timezone"].Value<string>();
+                temp.Location = lifeEvent["Location"].Value<string>();
+                temp.Description = lifeEvent["Description"].Value<string>();
+                temp.Nature = lifeEvent["Nature"].Value<string>();
+
+                returnList.Add(temp);
+            }
+
+            return returnList;
         }
 
 

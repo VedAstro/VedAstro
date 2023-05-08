@@ -146,7 +146,7 @@ namespace VedAstro.Library
             var male = Person.FromXml(compatibilityReportXml.Element("Male")?.Element("Person"));
             var female = Person.FromXml(compatibilityReportXml.Element("Female")?.Element("Person"));
             var kutaScore = Double.Parse(compatibilityReportXml.Element("KutaScore")?.Value ?? "0");
-            var userId = Tools.GetUserIdFromXmlData(compatibilityReportXml);
+            var userId = Tools.GetUserIdFromData(compatibilityReportXml);
 
             var predictionListXml = compatibilityReportXml.Element("PredictionList");
             var predictionList = ParseXmlToPredictionList(predictionListXml);

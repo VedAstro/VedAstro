@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace VedAstro.Library
@@ -235,6 +237,53 @@ namespace VedAstro.Library
 
 
         //METHODS
+
+        public static JArray XmlListToJsonList(List<XElement> personXmlList)
+        {
+            //parse to person first (don't care about speed we are on durable API yeah!)
+            var personList = Person.FromXml(personXmlList);
+            JArray returnArray = new JArray();
+            foreach (var person in personList)
+            {
+                
+                //compile into an JSON array
+                returnArray.Add(person.ToJson());
+            }
+
+
+            return returnArray;
+        }
+
+        private JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["PersonId"] = this.Id;
+            temp["Name"] = this.Name;
+            temp["Notes"] = this.Notes;
+            temp["BirthTime"] = this.BirthTime.ToJson();
+            temp["Gender"] = this.GenderString;
+            temp["UserId"] = this.UserIdString;
+            temp["LifeEventList"] = this.LifeEventListJson; //json array
+
+            return temp;
+        }
+
+        /// <summary>
+        /// Converts life event list to JSON on the fly
+        /// </summary>
+        public JArray LifeEventListJson
+        {
+            get
+            {
+                JArray array = new JArray();
+                foreach (var lifeEvent in LifeEventList)
+                {
+                    array.Add(lifeEvent.ToJson());
+                }
+                return array;
+            }
+        }
+
         public XElement ToXml()
         {
             var person = new XElement("Person");
@@ -291,7 +340,7 @@ namespace VedAstro.Library
             var notes = personXml.Element("Notes")?.Value;
             var time = Time.FromXml(personXml.Element("BirthTime")?.Element("Time"));
             var gender = Enum.Parse<Gender>(personXml.Element("Gender")?.Value);
-            var userId = Tools.GetUserIdFromXmlData(personXml);
+            var userId = Tools.GetUserIdFromData(personXml);
             var lifeEventList = getLifeEventListFromXml();
 
             var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);
@@ -330,6 +379,52 @@ namespace VedAstro.Library
             }
         }
 
+        public static List<Person> FromJsonList(JToken personList)
+        {
+            var returnList = new List<Person>();
+
+            foreach (var personJson in personList)
+            {
+                returnList.Add(Person.FromJson(personJson));
+            }
+
+            return returnList;
+        }
+
+        public static Person FromJson(JToken jToken)
+        {
+            try
+            {
+
+                var id = jToken["PersonId"].Value<string>();
+                var name = jToken["Name"].Value<string>();
+                var notes = jToken["Notes"].Value<string>();
+                var birthTime = jToken["BirthTime"];
+                var time = Time.FromJson(birthTime["Time"]);
+                var gender = Enum.Parse<Gender>(jToken["Gender"].Value<string>());
+                var userId = Tools.GetUserIdFromData(jToken);
+                var lifeEventList = LifeEvent.FromJsonList(jToken["LifeEventList"]);
+
+                var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);
+
+                return parsedPerson;
+            }
+            catch (Exception e)
+            {
+#if DEBUG
+                Console.WriteLine($"PERSON XML INVALID : {jToken["PersonId"].Value<string>()}");
+                throw;
+#endif
+#if RELEASE
+                //todo if in the wild log it to server
+                throw;
+#endif
+
+            }
+
+        }
+
+
         /// <summary>
         /// Parses a list of person's
         /// </summary>
@@ -355,5 +450,6 @@ namespace VedAstro.Library
             var newPerson = new Person(this.Id, Name, newBirthTime, Gender, UserId, Notes, LifeEventList);
             return newPerson;
         }
+
     }
 }

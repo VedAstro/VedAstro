@@ -1634,9 +1634,20 @@ namespace VedAstro.Library
         /// <summary>
         /// Used for Person, Match Report, Chart and all things made by end user
         /// </summary>
-        public static string[] GetUserIdFromXmlData(XElement inputXml)
+        public static string[] GetUserIdFromData(XElement inputXml)
         {
             var userIdRaw = inputXml.Element("UserId")?.Value ?? "";
+            //clean, remove white space & new line if any
+            userIdRaw = userIdRaw.Replace("\n", "");
+            userIdRaw = userIdRaw.Replace(" ", "");
+
+            var userId = userIdRaw.Split(',');//split by comma
+
+            return userId;
+        }
+        public static string[] GetUserIdFromData(JToken input)
+        {
+            var userIdRaw = input["UserId"].Value<string>();
             //clean, remove white space & new line if any
             userIdRaw = userIdRaw.Replace("\n", "");
             userIdRaw = userIdRaw.Replace(" ", "");

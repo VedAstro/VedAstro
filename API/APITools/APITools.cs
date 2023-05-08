@@ -321,7 +321,7 @@ namespace API
             }
         }
 
-       
+
 
         /// <summary>
         /// Gets any file at given url as string
@@ -503,7 +503,7 @@ namespace API
 
         //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
         //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-        public static async Task SwapUserId(string? visitorId, string? userId, string cloudXmlFile)
+        public static async Task<bool> SwapUserId(string? visitorId, string? userId, string cloudXmlFile)
         {
             var allListXmlDoc = await APITools.GetXmlFileFromAzureStorage(cloudXmlFile, APITools.BlobContainerName);
 
@@ -539,7 +539,12 @@ namespace API
 
                 //since heavy computation, log if happens
                 APILogger.Data($"Profiles swapped : {visitorIdList.Count}", AppInstance.IncomingRequest);
+
+                //return true of swap was done
+                return true;
             }
+            //false if no swap
+            else { return false; }
         }
 
         public static IEnumerable<LogItem> GetOnlineVisitors(XDocument visitorLogDocument)
@@ -551,8 +556,8 @@ namespace API
 
             //last hour
             var lastHourRecords = from logItem in logItemList
-                where Tools.IsWithinLastHour(logItem.Time, -24)
-                select logItem;
+                                  where Tools.IsWithinLastHour(logItem.Time, -24)
+                                  select logItem;
 
             //unique visitors
             List<LogItem> uniqueList = lastHourRecords.DistinctBy(p => p.VisitorId).ToList();
@@ -581,7 +586,7 @@ namespace API
             //if id NOT safe, add nonce and try again, possible nonce has been used
             //JamésBrown > JamésBrown1
             var nonceCount = 1; //start nonce at 1
-            TryAgain:
+        TryAgain:
             var noncedId = humanId; //clear pre nonce if any 
             if (!idIsSafe)
             {
@@ -611,6 +616,50 @@ namespace API
 
 
 
+        }
+
+        /// <summary>
+        /// data comes in as XML should leave as JSON ready for sending to client via HTTP
+        /// </summary>
+        public static JObject AnyTypeToJson<T>(T payload)
+        {
+            var finalPayloadJson = new JObject();
+
+            //if xelement than use xelement converter
+            if (payload is List<XElement> payloadXmlList)
+            {
+                //convert XML to Json text
+                var finalPayload = Tools.ListToJson(payloadXmlList);
+                finalPayloadJson["Payload"] = finalPayload;
+            }
+            else if (payload is JProperty payloadJToken)
+            {
+                //convert XML to Json text
+                //finalPayloadJson["Payload"] = JToken.FromObject(payloadJToken);
+                var temp = new JProperty("Payload", new JObject(payloadJToken));
+                finalPayloadJson.Add(temp);
+            }
+            else if (payload is string payloadStr)
+            {
+                finalPayloadJson["Payload"] = payloadStr;
+            }
+            //if not special type than assign direct
+            else
+            {
+                finalPayloadJson["Payload"] = JToken.Parse(payload.ToString());
+            }
+
+            //convert XML to Json text
+           // string jsonText = finalPayloadJson.ToString(); //todo can be direct aslo
+
+            return finalPayloadJson;
+        }
+
+
+        public static string GetHeaderValue(HttpResponseData request, string headerName)
+        {
+            IEnumerable<string> list;
+            return request.Headers.TryGetValues(headerName, out list) ? list.FirstOrDefault() : null;
         }
 
 

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Net;
 using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.DurableTask;
+using Microsoft.DurableTask.Client;
+using System.Text.Json;
+
 
 namespace API
 {
@@ -15,6 +16,71 @@ namespace API
     public class PersonAPI
     {
 
+        /// <summary>
+        /// Gets all person profiles owned by User ID & Visitor ID
+        /// </summary>
+        [Function(nameof(Account))]
+        public static async Task<HttpResponseData> Account(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Account/UserID/{userId}/VisitorID/{visitorId}")] HttpRequestData incomingRequest,
+            string userId,
+            string visitorId)
+        {
+        //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 
+        TryAgain:
+
+            try
+            {
+
+                //get all person list from storage
+                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+
+                //filter out person by user id
+                var userIdPersonList = Tools.FindXmlByUserId(personListXml, userId);
+
+                //filter out person by visitor id
+                var visitorIdPersonList = Tools.FindXmlByUserId(personListXml, visitorId);
+
+                //before sending to user, clean the data
+                //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
+                //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
+                var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId));//already logged in if true
+                var visitorProfileExists = visitorIdPersonList.Any();
+                if (loggedIn && visitorProfileExists)
+                {
+                    //transfer to user id
+                    foreach (var person in visitorIdPersonList)
+                    {
+                        //edit data direct to for speed
+                        person.Element("UserId").Value = userId;
+
+                        //save to main list
+                        await APITools.UpdatePersonRecord(person);
+                    }
+
+                    //after the transfer, restart the call as though new, so that user only gets the correct list at all times (though this might be little slow)
+                    goto TryAgain;
+                }
+
+                //STAGE 4 : combine and remove duplicates
+                if (visitorIdPersonList.Any()) { userIdPersonList.AddRange(visitorIdPersonList); }
+                List<XElement> personListNoDupes = userIdPersonList.Distinct().ToList();
+
+                var x = Tools.ListToJson<XElement>(personListNoDupes);
+
+                //send filtered list to caller
+                return APITools.PassMessageJson(x, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FailMessageJson(e, incomingRequest);
+            }
+
+
+        }
 
 
         /// <summary>
@@ -191,7 +257,7 @@ namespace API
         public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             AppInstance.IncomingRequest = incomingRequest;
-            var personListFileUrl = APITools.PersonListFile;
+            var personListFileUrl = APITools.PersonListFile; 
 
             try
             {
@@ -230,72 +296,84 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Gets all person profiles owned by User ID & Visitor ID
-        /// </summary>
-        [Function(nameof(Account))]
-        public static async Task<HttpResponseData> Account(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Account/UserID/{userId}/VisitorID/{visitorId}")] HttpRequestData incomingRequest,
-            string userId,
-            string visitorId)
+
+        //------------- ASYNC FUNCTIONS----------------------------------------------
+
+        [Function(nameof(GetPersonListAsync))]
+        public static async Task<HttpResponseData> GetPersonListAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonListAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
+            [Microsoft.Azure.Functions.Worker.DurableClient] DurableTaskClient client,
+            string userId, string visitorId)
         {
-        //used when visitor id person were moved to user id, shouldn't happen all the time, obviously adds to the lag (needs speed testing) 
-        TryAgain:
+            //STAGE 1 : GET DATA OUT
+            var parsedRequest = new ParsedRequest(userId, visitorId);
 
-            try
-            {
+            //start processing
+            string instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_getPersonListAsync), parsedRequest);
 
-                //get all person list from storage
-                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+            //give user the url to query for status and data
+            //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
+            var x = client.CreateCheckStatusResponse(req, instanceId);
+            var pollingUrl = APITools.GetHeaderValue(x, "Location");
 
-                //filter out person by user id
-                var userIdPersonList = Tools.FindXmlByUserId(personListXml, userId);
+            //send URL direct to caller
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteStringAsync(pollingUrl);
+            return response;
+        }
 
-                //filter out person by visitor id
-                var visitorIdPersonList = Tools.FindXmlByUserId(personListXml, visitorId);
 
-                //before sending to user, clean the data
-                //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
-                //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-                var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId));//already logged in if true
-                var visitorProfileExists = visitorIdPersonList.Any();
-                if (loggedIn && visitorProfileExists)
-                {
-                    //transfer to user id
-                    foreach (var person in visitorIdPersonList)
-                    {
-                        //edit data direct to for speed
-                        person.Element("UserId").Value = userId;
+        [Function(nameof(_getPersonListAsync))]
+        public static async Task<JsonDocument> _getPersonListAsync([Microsoft.Azure.Functions.Worker.OrchestrationTrigger] TaskOrchestrationContext context)
+        {
+            var requestData = context.GetInput<ParsedRequest>();
 
-                        //save to main list
-                        await APITools.UpdatePersonRecord(person);
-                    }
+            var swapStatus = await context.CallActivityAsync<bool>(nameof(SwapData), requestData); //note swap done before get list
+            var personList = await context.CallActivityAsync<JsonDocument>(nameof(FilterData), requestData);
 
-                    //after the transfer, restart the call as though new, so that user only gets the correct list at all times (though this might be little slow)
-                    goto TryAgain;
-                }
+            return personList;
+        }
 
-                //STAGE 4 : combine and remove duplicates
-                if (visitorIdPersonList.Any()) { userIdPersonList.AddRange(visitorIdPersonList); }
-                List<XElement> personListNoDupes = userIdPersonList.Distinct().ToList();
+        [Function(nameof(SwapData))]
+        public static async Task<bool> SwapData([Microsoft.Azure.Functions.Worker.ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
+        {
 
-                var x = Tools.ListToJson<XElement>(personListNoDupes);
+            //STAGE 2 : SWAP DATA
+            //swap visitor ID with user ID if any (data follows user when log in)
+            bool didSwap = await APITools.SwapUserId(swapOptions.VisitorId, swapOptions.UserId, APITools.PersonListFile);
 
-                //send filtered list to caller
-                return APITools.PassMessageJson(x, incomingRequest);
+            return didSwap;
+        }
 
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FailMessageJson(e, incomingRequest);
-            }
+        [Function(nameof(FilterData))]
+        public static async Task<JsonDocument> FilterData([Microsoft.Azure.Functions.Worker.ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
+        {
 
+            //STAGE 3 : FILTER 
+            //get latest all match reports
+            var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+            //filter out record by user id
+            var userIdList = Tools.FindXmlByUserId(personListXml, swapOptions.UserId);
+
+            //STAGE 4 : format to JSON 
+            //convert list to JSON string
+            var x = APITools.AnyTypeToJson(userIdList).ToString();
+
+            //note: important to convert back to .NET's json converter
+            var final = System.Text.Json.JsonDocument.Parse(x);
+
+            return final;
 
         }
 
 
+    }
+
+    public record ParsedRequest(string UserId, string VisitorId)
+    {
+        public override string ToString()
+        {
+            return $"{{ UserId = {UserId}, VisitorId = {VisitorId} }}";
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -122,5 +124,30 @@ namespace VedAstro.Library
             return predictionXml;
         }
 
+        public JToken ToJson()
+        {
+            var temp = new JObject();
+            temp["Name"] = this.Name.ToString();
+            temp["Nature"] = this.Nature.ToString();
+            temp["MaleInfo"] = this.MaleInfo;
+            temp["FemaleInfo"] = this.FemaleInfo;
+            temp["Info"] = this.Info;
+            temp["Description"] = this.Description;
+
+            return temp;
+        }
+
+
+        public static JArray ToJsonList(List<MatchPrediction> predictionList)
+        {
+            var jsonList = new JArray();
+
+            foreach (var matchPrediction in predictionList)
+            {
+                jsonList.Add(matchPrediction.ToJson());
+            }
+
+            return jsonList;
+        }
     }
 }

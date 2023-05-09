@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -89,7 +90,6 @@ namespace VedAstro.Library
         /// </summary>
         public MatchSummaryData Summary => GetSummary(KutaScore);
 
-
         public MatchReport(string id, Person male, Person female, double kutaScore,string notes, List<MatchPrediction> predictionList, string[] userId)
         {
             Id = id;
@@ -123,6 +123,21 @@ namespace VedAstro.Library
 
             return compatibilityReport;
         }
+        
+        public JToken ToJson()
+        {
+
+            var temp = new JObject();
+            temp["KutaScore"] = this.KutaScore;
+            temp["Male"] = Male.ToJson();
+            temp["Female"] = Female.ToJson();
+            temp["PredictionList"] = MatchPrediction.ToJsonList(this.PredictionList);
+            temp["UserId"] = this.UserIdString;
+            temp["Id"] = this.Id;
+
+            return temp;
+        }
+
 
         /// <summary>
         /// The root element is expected to be Person
@@ -220,9 +235,6 @@ namespace VedAstro.Library
         /// Based on kuta score will summary data
         /// text color, heart icon, summary text for given score
         /// </summary>
-        /// <param name="kutaScore"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
         private static MatchSummaryData GetSummary(double kutaScore)
         {
 

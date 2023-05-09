@@ -30,6 +30,7 @@ public class URL
 
         //done here so that can be readonly
         AddPersonApi = ApiUrl + "/addperson";
+        AddPersonAsync = ApiUrl + "/AddPersonAsync";
         GetHoroscope = ApiUrl + "/gethoroscope";
         AddLifeEventApi = ApiUrl + "/addlifeevent";
         AddMessageApi = ApiUrl + "/addmessage";
@@ -102,6 +103,7 @@ public class URL
     public readonly string GetMatchReportList;
 
     //PERSON
+    public readonly string AddPersonAsync;
     public readonly string GetPersonList;
     public readonly string GetPersonListAsync;
     public readonly string GetPersonApi;

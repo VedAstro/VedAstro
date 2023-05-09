@@ -1,12 +1,11 @@
 ﻿using System.Net;
+using System.Text.Json;
 using System.Xml.Linq;
-using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask;
 using Microsoft.DurableTask.Client;
-using System.Text.Json;
-
+using VedAstro.Library;
 
 namespace API
 {
@@ -65,7 +64,7 @@ namespace API
                 if (visitorIdPersonList.Any()) { userIdPersonList.AddRange(visitorIdPersonList); }
                 List<XElement> personListNoDupes = userIdPersonList.Distinct().ToList();
 
-                var x = Tools.ListToJson<XElement>(personListNoDupes);
+                var x = Tools.ListToJson(personListNoDupes);
 
                 //send filtered list to caller
                 return APITools.PassMessageJson(x, incomingRequest);
@@ -142,6 +141,7 @@ namespace API
             }
 
         }
+
 
         /// <summary>
         /// Gets person all details from only hash
@@ -257,7 +257,7 @@ namespace API
         public static async Task<HttpResponseData> GetPersonList([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
         {
             AppInstance.IncomingRequest = incomingRequest;
-            var personListFileUrl = APITools.PersonListFile; 
+            var personListFileUrl = APITools.PersonListFile;
 
             try
             {
@@ -299,32 +299,77 @@ namespace API
 
         //------------- ASYNC FUNCTIONS----------------------------------------------
 
-        [Function(nameof(GetPersonListAsync))]
-        public static async Task<HttpResponseData> GetPersonListAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonListAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
-            [Microsoft.Azure.Functions.Worker.DurableClient] DurableTaskClient client,
+        [Function(nameof(AddPersonAsync))]
+        public static async Task<HttpResponseData> AddPersonAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "AddPersonAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
+            [DurableClient] DurableTaskClient client,
             string userId, string visitorId)
         {
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
-            //start processing
-            string instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_getPersonListAsync), parsedRequest);
+            //get caller ID, so can use back any data if available
+            string callerId = APITools.GetCallerId(parsedRequest);
+
+            //adding new person needs make sure all cache is cleared if any
+            //NOTE: this call kill the entire webhook url to 404
+            var purgeResult = await client.PurgeInstanceAsync(callerId);
+            var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
+
+            //get new person data out of incoming request
+            //note: inside new person xml already contains user id
+            var personJson = await APITools.ExtractDataFromRequestJson(req);
+            var newPerson = Person.FromJson(personJson);
+
+            //add new person to main list
+            await APITools.AddXElementToXDocumentAzure(newPerson.ToXml(), APITools.PersonListFile, APITools.BlobContainerName);
+
+            return APITools.PassMessageJson("", req);
+
+        }
+
+
+        [Function(nameof(GetPersonListAsync))]
+        public static async Task<HttpResponseData> GetPersonListAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonListAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
+            [DurableClient] DurableTaskClient client,
+            string userId, string visitorId)
+        {
+            //STAGE 1 : GET DATA OUT
+            var parsedRequest = new ParsedRequest(userId, visitorId);
+
+            //get caller ID, so can use back any data if available
+            string callerId = APITools.GetCallerId(parsedRequest);
+
+            //check if new call or old call 
+            var result = await client.GetInstanceAsync(callerId, CancellationToken.None);
+            var needsRestart = result?.RuntimeStatus == OrchestrationRuntimeStatus.Failed ||
+                               result?.RuntimeStatus == OrchestrationRuntimeStatus.Terminated||
+                               result?.RuntimeStatus == OrchestrationRuntimeStatus.Suspended; 
+            var isNewCall = result == null; //no old calls found will null
+            if (isNewCall || needsRestart)
+            {
+                //start processing
+                var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
+                var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_getPersonListAsync), parsedRequest, options, CancellationToken.None); //should match caller ID
+            }
 
             //give user the url to query for status and data
             //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
-            var x = client.CreateCheckStatusResponse(req, instanceId);
+            var x = client.CreateCheckStatusResponse(req, callerId);
             var pollingUrl = APITools.GetHeaderValue(x, "Location");
 
             //send URL direct to caller
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteStringAsync(pollingUrl);
             return response;
+
         }
 
 
         [Function(nameof(_getPersonListAsync))]
-        public static async Task<JsonDocument> _getPersonListAsync([Microsoft.Azure.Functions.Worker.OrchestrationTrigger] TaskOrchestrationContext context)
+        public static async Task<JsonDocument> _getPersonListAsync([OrchestrationTrigger]
+            TaskOrchestrationContext context)
         {
             var requestData = context.GetInput<ParsedRequest>();
 
@@ -335,7 +380,7 @@ namespace API
         }
 
         [Function(nameof(SwapData))]
-        public static async Task<bool> SwapData([Microsoft.Azure.Functions.Worker.ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
+        public static async Task<bool> SwapData([ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
         {
 
             //STAGE 2 : SWAP DATA
@@ -346,12 +391,12 @@ namespace API
         }
 
         [Function(nameof(FilterData))]
-        public static async Task<JsonDocument> FilterData([Microsoft.Azure.Functions.Worker.ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
+        public static async Task<JsonDocument> FilterData([ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
         {
 
             //get latest all match reports
             var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-           
+
             //filter out record by user id
             var userIdList = Tools.FindXmlByUserId(personListXml, swapOptions.UserId);
 
@@ -360,20 +405,12 @@ namespace API
 
             //convert to type accepted by durable
             var jsonText = personListJson.ToString();
-            var personListJsonDurable = System.Text.Json.JsonDocument.Parse(jsonText); //done for compatibility with durable
+            var personListJsonDurable = JsonDocument.Parse(jsonText); //done for compatibility with durable
 
             return personListJsonDurable;
 
         }
 
 
-    }
-
-    public record ParsedRequest(string UserId, string VisitorId)
-    {
-        public override string ToString()
-        {
-            return $"{{ UserId = {UserId}, VisitorId = {VisitorId} }}";
-        }
     }
 }

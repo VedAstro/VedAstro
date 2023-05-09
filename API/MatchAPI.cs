@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System.Text.Json;
+using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
 using VedAstro.Library;
 
@@ -22,14 +22,14 @@ namespace API
                 var rootJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
 
                 //api key to ID the call
-                var apiKey = rootJson.GetProperty("APIKey").ToString(); //treated here as owner ID also User ID
+                var apiKey = rootJson["APIKey"]?.Value<string>(); //treated here as owner ID also User ID todo if no id handle
 
                 //get person list
-                var personListArray = rootJson.GetProperty("PersonList");
+                var personListArray = rootJson["PersonList"];
 
                 //convert json list to parsed person list
                 var ownerId = apiKey; //every person needs owner
-                var personList = await JsonPersonListToPerson(personListArray, ownerId);
+                var personList = await MatchAPIGetPersons(personListArray, ownerId);
 
                 //get 1st and 2nd only for now (todo support more)
                 var male = personList[0];
@@ -37,7 +37,8 @@ namespace API
 
                 //generate compatibility report
                 var compatibilityReport = MatchCalculator.GetCompatibilityReport(male, female, ownerId);
-                return APITools.PassMessageJson((XElement)compatibilityReport.ToXml(), incomingRequest);
+                var reportJSON = compatibilityReport.ToJson();
+                return APITools.PassMessageJson(reportJSON, incomingRequest);
             }
             catch (Exception e)
             {
@@ -181,26 +182,31 @@ namespace API
             return APITools.PassMessage(text, incomingRequest);
         }
 
+
+
         //PRIVATE
 
-        private static async Task<List<Person>> JsonPersonListToPerson(JsonElement personListArray, string apiKey)
+        /// <summary>
+        /// special converter for MATCH API anonymous call
+        /// when caller asks for match direct with person details
+        /// </summary>
+        private static async Task<List<Person>> MatchAPIGetPersons(JToken personListArray, string apiKey)
         {
             var returnList = new List<Person>();
-            var personList = personListArray.EnumerateArray();
 
-            while (personList.MoveNext())
+            foreach (var personJson in personListArray)
             {
                 //NOTE: the person data received here is akin to user entering it via simple editor (so keep it human ready)
 
                 //1: extract the data out
-                var personJson = personList.Current;
-                var name = personJson.GetProperty("Name").ToString();
-                var genderText = personJson.GetProperty("Gender").ToString();
-                var birthTimeJson = personJson.GetProperty("BirthTime");
+                //var personJson = personList.Current;
+                var name = personJson["Name"].Value<string>();
+                var genderText = personJson["Gender"].Value<string>();
+                var birthTimeJson = personJson["BirthTime"];
 
                 //we're inside birth time
-                var stdTime = birthTimeJson.GetProperty("StdTime").ToString();
-                var locationName = birthTimeJson.GetProperty("LocationName").ToString();
+                var stdTime = birthTimeJson["StdTime"].Value<string>();
+                var locationName = birthTimeJson["LocationName"].Value<string>();
 
                 //2: make new person
 
@@ -218,7 +224,7 @@ namespace API
                 //there is possibility user has put invalid characters, clean it!
                 var nameInput = Tools.CleanNameText(name);
 
-                //new person ID made from thin air
+                //new person ID made from thin air todo should be generated for human consumption, use new generator
                 var newPersonProfileId = Tools.GenerateId();
 
                 //get gender from gender string
@@ -229,6 +235,7 @@ namespace API
 
                 //add to list
                 returnList.Add(newPerson);
+
             }
 
             return returnList;

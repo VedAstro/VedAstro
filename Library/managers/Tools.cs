@@ -1024,6 +1024,25 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Packages the data into ready form for the HTTP client to use in final sending stage
+        /// </summary>
+        public static StringContent JsontoHttpContent(JToken data)
+        {
+            //gets the main XML data as a string
+            var dataString = data.ToString();
+
+            //specify the data encoding todo es mui nesasito?
+            var encoding = Encoding.UTF8;
+
+            //specify the type of the data sent
+            //plain text, stops auto formatting
+            var mediaType = "application/json";
+
+            //return packaged data to caller
+            return new StringContent(dataString, encoding, mediaType);
+        }
+
+        /// <summary>
         /// Extracts data from an Exception puts it in a nice XML
         /// </summary>
         public static XElement ExtractDataFromException(Exception e)

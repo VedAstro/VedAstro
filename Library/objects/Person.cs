@@ -238,6 +238,13 @@ namespace VedAstro.Library
 
         //METHODS
 
+        /// <summary>
+        /// Given an XML list of persons record from storage
+        /// converts to json
+        /// TODO CHANGE TO SELECT BASED METHOD
+        /// </summary>
+        /// <param name="personXmlList"></param>
+        /// <returns></returns>
         public static JArray XmlListToJsonList(List<XElement> personXmlList)
         {
             //parse to person first (don't care about speed we are on durable API yeah!)
@@ -254,7 +261,7 @@ namespace VedAstro.Library
             return returnArray;
         }
 
-        private JToken ToJson()
+        public JToken ToJson()
         {
             var temp = new JObject();
             temp["PersonId"] = this.Id;

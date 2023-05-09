@@ -201,7 +201,7 @@ namespace API
         /// </summary>
         public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");
 
-        public static async Task<JsonElement> ExtractDataFromRequestJson(HttpRequestData request)
+        public static async Task<JsonElement> ExtractDataFromRequestJsonNET(HttpRequestData request)
         {
             string jsonString = "";
 
@@ -218,6 +218,20 @@ namespace API
             //todo better logging
             catch (Exception e) { throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}"); }
         }
+
+
+        public static async Task<JObject> ExtractDataFromRequestJson(HttpRequestData request)
+        {
+            //get xml string from caller
+            var xmlString = (await request?.ReadAsStringAsync()) ?? "{}";
+
+            //parse xml string todo needs catch here
+            var parsedJson = JObject.Parse(xmlString);
+
+            return parsedJson;
+        }
+
+
 
         /// <summary>
         /// data received as json is converted to
@@ -663,5 +677,29 @@ namespace API
         }
 
 
+        public static object GetHeaderValue(HttpResponseMessage request, string headerName)
+        {
+            IEnumerable<string> list;
+            return request.Headers.TryGetValues(headerName, out list) ? list.FirstOrDefault() : null;
+        }
+
+        /// <summary>
+        /// for getting cache not data from xml
+        /// </summary>
+        public static string GetCallerId(ParsedRequest parsedRequest)
+        {
+            
+            if (parsedRequest.IsLoggedIn)
+            {
+                return parsedRequest.UserId;
+            }
+            //if user NOT logged in then take his visitor ID as caller id
+            else
+            {
+                return parsedRequest.VisitorId;
+            }
+
+
+        }
     }
 }

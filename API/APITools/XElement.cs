@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 
 namespace API
@@ -40,7 +41,6 @@ namespace API
 
             return xml;
         }
-
         /// <summary>
         /// Adds an XML element to XML document in blob form
         /// </summary>

@@ -531,8 +531,16 @@ namespace VedAstro.Library
                 var isLastItem = i == (list.Count - 1);
                 var ending = isLastItem ? "" : ", ";
 
-                //combine to together
-                combinedNames += list[i].ToString() + ending;
+                //combine to together based on type
+                var item = list[i];
+                if (item is IToJson iToJson)
+                {
+                    combinedNames += iToJson.ToJson() + ending;
+                }
+                else
+                {
+                    combinedNames += item.ToString() + ending;
+                }
 
             }
 
@@ -1456,13 +1464,18 @@ namespace VedAstro.Library
 
             //process list differently
             JProperty rootPayloadJson;
-            if (rawResult is IList iList)
+            if (rawResult is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris
             {
                 //convert list to comma separated string
                 var parsedList = iList.Cast<object>().ToList();
                 var stringComma = Tools.ListToString(parsedList);
 
                 rootPayloadJson = new JProperty(apiSpecialName, stringComma);
+            }
+            //custom JSON converter available
+            else if (rawResult is IToJson iToJson)
+            {
+                rootPayloadJson = new JProperty(apiSpecialName, iToJson.ToJson());
             }
             //normal conversion via to string
             else

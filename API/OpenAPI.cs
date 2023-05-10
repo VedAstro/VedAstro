@@ -108,7 +108,7 @@ namespace API
                     //get all calculators that can accept a planet name and time
                     var planetTimeCalcs = Tools.GetCalcsResultsByParam<PlanetName, Time>(planetName, parsedTime);
 
-                    //send the payload on it's mary way
+                    //send the payload on it's merry way
                     return APITools.PassMessageJson(planetTimeCalcs, incomingRequest);
                 }
 

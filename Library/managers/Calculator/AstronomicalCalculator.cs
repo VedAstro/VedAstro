@@ -92,7 +92,7 @@ namespace VedAstro.Library
         /// Number from 0 to 360, represent the degrees in the zodiac as viewed from earth
         /// Note: Since Niryana is corrected, in actuality 0 degrees will start at Taurus not Aries
         /// </summary>
-        [API("Nirayana")]
+        [API("NirayanaLongitude")]
         public static Angle GetPlanetNirayanaLongitude(Time time, PlanetName planetName)
         {
             //CACHE MECHANISM

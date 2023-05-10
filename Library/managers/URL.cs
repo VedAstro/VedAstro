@@ -35,6 +35,8 @@ public class URL
         AddPerson = ApiUrl + "/AddPerson";
         DeletePerson = ApiUrl + "/DeletePerson";
         UpdatePerson = ApiUrl + "/UpdatePerson";
+        GetPerson = ApiUrl + "/getperson";
+        GetNewPersonId = ApiUrl + "/GetNewPersonId";
 
         GetHoroscope = ApiUrl + "/gethoroscope";
         AddLifeEventApi = ApiUrl + "/addlifeevent";
@@ -49,8 +51,6 @@ public class URL
         GetMessageList = ApiUrl + "/getmessagelist";
 
         GetMatchReportList = ApiUrl + "/GetMatchReportList";
-        GetPersonApi = ApiUrl + "/getperson"; 
-        GetNewPersonId = ApiUrl + "/GetNewPersonId";
         GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
         GetMatchReportApi = ApiUrl + "/getmatchreport";
         GetSavedMatchReport = ApiUrl + "/GetSavedMatchReport";
@@ -105,7 +105,7 @@ public class URL
     //PERSON
     public readonly string AddPerson;
     public readonly string GetPersonListAsync;
-    public readonly string GetPersonApi;
+    public readonly string GetPerson;
     public readonly string GetNewPersonId;
     public readonly string GetPersonIdFromSavedChartId;
     public readonly string UpdatePerson;

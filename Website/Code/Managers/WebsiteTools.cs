@@ -139,6 +139,7 @@ namespace Website
             var result = GetPersonById(personId, jsRuntime).Result;
             return result;
         }
+        
         /// <summary>
         /// Gets person from ID
         /// Checks user's person list,
@@ -159,32 +160,12 @@ namespace Website
             //user's person profile, which is allowed but also monitored
             await WebLogger.Data($"Direct Link Access:{personId}");
 
-            foundPerson = await GetFromApi(personId, jsRuntime);
+            foundPerson = await AppData.API.GetPerson(personId);
 
             return foundPerson;
 
 
             //LOCAL FUNCTION
-            async Task<Person> GetFromApi(string personId, IJSRuntime jsRuntime)
-            {
-                //send request to API
-                var xmlData = Tools.AnyTypeToXml(personId);
-                var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetPersonApi, xmlData);
-
-                //check result
-                if (result.IsPass)
-                {
-                    //if pass get person data out & return to caller
-                    var personXml = result.Payload;
-                    return Person.FromXml(personXml);
-                }
-                else
-                {
-                    //let user know fail, and return empty person
-                    await jsRuntime.ShowAlert("error", AlertText.NoPersonFound, true);
-                    return Person.Empty;
-                }
-            }
 
             async Task<Person> GetFromPersonList(string personId)
             {

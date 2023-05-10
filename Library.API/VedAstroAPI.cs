@@ -117,7 +117,7 @@ namespace Library.API
             var url = $"{_url.AddPerson}/UserId/{_userId}/VisitorId/{_visitorId}";
             var jsonResult = await Tools.WriteServer(url, personJson);
 
-            await HandleResult(jsonResult);
+            await HandleResultClearLocalCache(jsonResult);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace Library.API
             //API gives a url to check on poll fo results
             var jsonResult = await Tools.WriteServer(url);
 
-            await HandleResult(jsonResult);
+            await HandleResultClearLocalCache(jsonResult);
 
         }
 
@@ -156,14 +156,41 @@ namespace Library.API
             var url = $"{_url.UpdatePerson}/UserId/{_userId}/VisitorId/{_visitorId}";
             var jsonResult = await Tools.WriteServer(url, updatedPerson);
 
-            await HandleResult(jsonResult);
+            await HandleResultClearLocalCache(jsonResult);
+
+        }
+
+        /// <summary>
+        /// used to get person direct not in users list for easy sharing
+        /// </summary>
+        public async Task<Person> GetPerson(string personId)
+        {
+            var url = $"{_url.GetPerson}/PersonId/{personId}";
+            var result = await Tools.ReadServer(url);
+            var parsedResult = JObject.Parse(result);
+
+            //check result, display error if needed
+            var isPass = parsedResult["Status"].Value<string>() == "Pass";
+            if (isPass)
+            {
+                var personJson = Person.FromJson(parsedResult["Payload"]);
+
+                return personJson;
+            }
+            else
+            {
+                //todo handle reply properly
+                Console.WriteLine("API SAID : FAIL");
+                return Person.Empty;
+            }
 
         }
 
 
+
         //---------------------------------------------PRIVATE
 
-        private async Task HandleResult(JObject jsonResult)
+        private async Task HandleResultClearLocalCache(JObject jsonResult)
         {
             //check result, display error if needed
             var isPass = jsonResult["Status"].Value<string>() == "Pass";
@@ -179,6 +206,8 @@ namespace Library.API
                 Console.WriteLine("API SAID : FAIL");
             }
         }
+
+
 
     }
 }

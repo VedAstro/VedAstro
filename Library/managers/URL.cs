@@ -29,8 +29,7 @@ public class URL
         WebUrl = isBetaRuntime ? WebBeta : WebStable;
 
         //done here so that can be readonly
-        AddPersonApi = ApiUrl + "/addperson";
-        AddPersonAsync = ApiUrl + "/AddPersonAsync";
+        AddPerson = ApiUrl + "/AddPerson";
         GetHoroscope = ApiUrl + "/gethoroscope";
         AddLifeEventApi = ApiUrl + "/addlifeevent";
         AddMessageApi = ApiUrl + "/addmessage";
@@ -84,7 +83,6 @@ public class URL
     public readonly string ApiUrl;
     public readonly string ApiUrlDirect;
     public readonly string WebUrl;
-    public readonly string AddPersonApi;
     public readonly string GetHoroscope;
     public readonly string AddLifeEventApi;
     public readonly string AddMessageApi;
@@ -103,7 +101,7 @@ public class URL
     public readonly string GetMatchReportList;
 
     //PERSON
-    public readonly string AddPersonAsync;
+    public readonly string AddPerson;
     public readonly string GetPersonList;
     public readonly string GetPersonListAsync;
     public readonly string GetPersonApi;

@@ -115,34 +115,6 @@ namespace API
 
         }
 
-        [Function("addperson")]
-        public static async Task<HttpResponseData> AddPerson([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-
-            try
-            {
-                //get new person data out of incoming request
-                //note: inside new person xml already contains user id
-                var newPersonXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
-
-                //add new person to main list
-                await APITools.AddXElementToXDocumentAzure(newPersonXml, APITools.PersonListFile, APITools.BlobContainerName);
-
-                return APITools.PassMessage(incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
-
-
         /// <summary>
         /// Gets person all details from only hash
         /// </summary>
@@ -297,11 +269,19 @@ namespace API
         }
 
 
-        //------------- ASYNC FUNCTIONS----------------------------------------------
+        
+        //░█████╗░░██████╗██╗░░░██╗███╗░░██╗░█████╗░
+        //██╔══██╗██╔════╝╚██╗░██╔╝████╗░██║██╔══██╗
+        //███████║╚█████╗░░╚████╔╝░██╔██╗██║██║░░╚═╝
+        //██╔══██║░╚═══██╗░░╚██╔╝░░██║╚████║██║░░██╗
+        //██║░░██║██████╔╝░░░██║░░░██║░╚███║╚█████╔╝
+        //╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░░╚══╝░╚════╝░
+        //POWERED BY AZURE DURABLE FUNCTIONS
+        //-------------------------------------------------------------------------------------------
 
-        [Function(nameof(AddPersonAsync))]
-        public static async Task<HttpResponseData> AddPersonAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "AddPersonAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
+        [Function(nameof(AddPerson))]
+        public static async Task<HttpResponseData> AddPerson(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "AddPerson/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,
             string userId, string visitorId)
         {
@@ -312,9 +292,9 @@ namespace API
             string callerId = APITools.GetCallerId(parsedRequest);
 
             //adding new person needs make sure all cache is cleared if any
-            //NOTE: this call kill the entire webhook url to 404
-            var purgeResult = await client.PurgeInstanceAsync(callerId);
-            var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
+            //NOTE: we mark the cache as "Terminated", rather than delete, so that client can call and know its has gone sour
+            //if we "Purge" here than it will go 404, always room for improvement
+            await client.TerminateInstanceAsync(callerId);
 
             //get new person data out of incoming request
             //note: inside new person xml already contains user id
@@ -324,7 +304,7 @@ namespace API
             //add new person to main list
             await APITools.AddXElementToXDocumentAzure(newPerson.ToXml(), APITools.PersonListFile, APITools.BlobContainerName);
 
-            return APITools.PassMessageJson("", req);
+            return APITools.PassMessageJson(req);
 
         }
 
@@ -349,6 +329,11 @@ namespace API
             var isNewCall = result == null; //no old calls found will null
             if (isNewCall || needsRestart)
             {
+                //if already exist than we must kill it first completely of the face of the earth aka PURGE
+                //NOTE: this should help make sure brand new instance is created after without error effecting restart
+                var purgeResult = await client.PurgeInstanceAsync(callerId);
+                var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
+
                 //start processing
                 var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
                 var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_getPersonListAsync), parsedRequest, options, CancellationToken.None); //should match caller ID

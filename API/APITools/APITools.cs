@@ -113,7 +113,11 @@ namespace API
             //if not special type than assign direct
             else
             {
-                finalPayloadJson["Payload"] = JToken.Parse(payload.ToString());
+                //if no payload just status, used for status only messages
+                if (payload != null)
+                {
+                    finalPayloadJson["Payload"] = JToken.Parse(payload.ToString());
+                }
             }
 
             //convert XML to Json text
@@ -130,6 +134,7 @@ namespace API
         public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
 
         public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) => MessageJson("Pass", payload, req);
+        public static HttpResponseData PassMessageJson(HttpRequestData req) => MessageJson<object>("Pass", null, req);
 
         public static HttpResponseData FailMessage(object payload, HttpRequestData req)
         {
@@ -664,7 +669,7 @@ namespace API
             }
 
             //convert XML to Json text
-           // string jsonText = finalPayloadJson.ToString(); //todo can be direct aslo
+            // string jsonText = finalPayloadJson.ToString(); //todo can be direct aslo
 
             return finalPayloadJson;
         }
@@ -688,7 +693,7 @@ namespace API
         /// </summary>
         public static string GetCallerId(ParsedRequest parsedRequest)
         {
-            
+
             if (parsedRequest.IsLoggedIn)
             {
                 return parsedRequest.UserId;

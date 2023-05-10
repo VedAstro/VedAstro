@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using Google.Protobuf.WellKnownTypes;
+using System.Xml.Linq;
 using VedAstro.Library;
 
 namespace API
@@ -133,7 +134,8 @@ namespace API
                 if (foundPerson == null)
                 {
                     await APILogger.Error($"No person found with ID : {personIdToFind}");
-                    foundPerson = Person.Empty.ToXml();
+                    //return empty value so caller will know
+                    foundPerson = null; 
                 }
 
                 return foundPerson;

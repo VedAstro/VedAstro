@@ -335,8 +335,10 @@ namespace VedAstro.Library
         /// <summary>
         /// The root element is expected to be Person
         /// </summary>
-        public static Person FromXml(XElement personXml)
+        public static Person FromXml(XElement? personXml)
         {
+            //if null return empty, end here
+            if (personXml == null) { return Person.Empty; }
 
             //if no id place 0 find the error
             //note:
@@ -398,18 +400,21 @@ namespace VedAstro.Library
             return returnList;
         }
 
-        public static Person FromJson(JToken jToken)
+        public static Person FromJson(JToken personInput)
         {
+            //if null return empty, end here
+            if (personInput == null) { return Person.Empty; }
+
             try
             {
 
-                var id = jToken["PersonId"].Value<string>();
-                var name = jToken["Name"].Value<string>();
-                var notes = jToken["Notes"].Value<string>();
-                var time = Time.FromJson(jToken["BirthTime"]);
-                var gender = Enum.Parse<Gender>(jToken["Gender"].Value<string>());
-                var userId = Tools.GetUserIdFromData(jToken);
-                var lifeEventList = LifeEvent.FromJsonList(jToken["LifeEventList"]); //json array
+                var id = personInput["PersonId"].Value<string>();
+                var name = personInput["Name"].Value<string>();
+                var notes = personInput["Notes"].Value<string>();
+                var time = Time.FromJson(personInput["BirthTime"]);
+                var gender = Enum.Parse<Gender>(personInput["Gender"].Value<string>());
+                var userId = Tools.GetUserIdFromData(personInput);
+                var lifeEventList = LifeEvent.FromJsonList(personInput["LifeEventList"]); //json array
 
                 var parsedPerson = new Person(id, name, time, gender, userId, notes, lifeEventList);
 
@@ -418,7 +423,7 @@ namespace VedAstro.Library
             catch (Exception e)
             {
 #if DEBUG
-                Console.WriteLine($"PERSON XML INVALID : {jToken["PersonId"].Value<string>()}");
+                Console.WriteLine($"PERSON XML INVALID : {personInput["PersonId"].Value<string>()}");
                 throw;
 #endif
 #if RELEASE

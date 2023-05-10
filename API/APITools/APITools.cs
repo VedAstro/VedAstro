@@ -130,7 +130,7 @@ namespace API
         }
 
         public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) => MessageJson("Fail", payload, req);
-
+        public static HttpResponseData FailMessageJson(string payload, HttpRequestData req) => MessageJson("Fail", payload, req);
         public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
 
         public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) => MessageJson("Pass", payload, req);
@@ -397,16 +397,14 @@ namespace API
             return response;
         }
 
-        public static async Task UpdatePersonRecord(XElement updatedPersonXml)
+        public static async Task UpdatePersonRecord(Person updatedPerson)
         {
-            var updatedPerson = Person.FromXml(updatedPersonXml);
-
             //get the person record that needs to be updated
             var personToUpdate = await FindPersonXMLById(updatedPerson.Id);
 
             //delete the previous person record,
             //and insert updated record in the same place
-            personToUpdate?.ReplaceWith(updatedPersonXml);
+            personToUpdate?.ReplaceWith(updatedPerson.ToXml());
 
             //upload modified list file to storage
             var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);

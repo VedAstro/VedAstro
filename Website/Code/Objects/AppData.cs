@@ -27,15 +27,16 @@ namespace Website
         /// Represents the currently logged in User
         /// If null then nobody logged in, default Empty/Public User
         /// </summary>
-        public static UserData CurrentUser { get; set; } = UserData.Empty;
+        public static UserData CurrentUser { get; set; } = UserData.Guest;
 
         /// <summary>
+        /// default to 101, though it should be updated when running, else must be error
         /// A copy of this visitor's ID, set when logging new visit
         /// Different from User Id in current user
         /// Used to log user flow
         /// Note: defaults to empty string
         /// </summary>
-        public static string? VisitorId { get; set; } = "";
+        public static string VisitorId { get; set; } = "101"; 
 
         /// <summary>
         /// Place where global event data list is stored for quick access
@@ -84,7 +85,7 @@ namespace Website
         /// <summary>
         /// Return true if User ID is 101
         /// </summary>
-        public static bool IsGuestUser => AppData.CurrentUser?.Id == UserData.Empty.Id;
+        public static bool IsGuestUser => AppData.CurrentUser?.Id == UserData.Guest.Id;
 
         public static bool DarkMode { get; set; } = false;
 
@@ -111,7 +112,7 @@ namespace Website
         /// <summary>
         /// If true login is success
         /// </summary>
-        public static bool IsLoginSuccess => AppData.CurrentUser != UserData.Empty;
+        public static bool IsLoginSuccess => AppData.CurrentUser != UserData.Guest;
 
         /// <summary>
         /// set by when app starts
@@ -213,7 +214,7 @@ namespace Website
         /// <summary>
         /// When called clears person list from memory, so new list is auto loaded from API on next get
         /// </summary>
-        public static void ClearPersonList() => AppData.PersonList = null;
+        //public static void ClearPersonList() => AppData.PersonList = null;
 
     }
 }

@@ -197,27 +197,6 @@ namespace Website
             }
         }
 
-        /// <summary>
-        /// Deletes person from API server  main list
-        /// note:
-        /// - if fail will show alert message
-        /// - cached person list is cleared here
-        /// </summary>
-        public static async Task DeletePerson(string personId, IJSRuntime jsRuntime)
-        {
-            var personIdXml = new XElement("PersonId", personId);
-            var result = await ServerManager.WriteToServerXmlReply(AppData.URL.DeletePerson, personIdXml);
-
-            //check result, display error if needed
-            if (!result.IsPass)
-            {
-                WebLogger.Error($"BLZ:DeletePerson() Fail:\n{result.Payload}");
-                await jsRuntime.ShowAlert("error", AlertText.DeletePersonFail, true);
-            }
-
-            //if all went well clear stored person list
-            else { AppData.ClearPersonList(); }
-        }
 
         public static async Task DeleteSavedChart(string chartId, IJSRuntime jsRuntime)
         {
@@ -233,49 +212,7 @@ namespace Website
 
         }
 
-        /// <summary>
-        /// Send updated person to API server to be saved in main list
-        /// note:
-        /// - if fail will show alert message
-        /// - cached person list is cleared here
-        /// </summary>
-        public static async Task UpdatePerson(Person person, IJSRuntime jsRuntime)
-        {
-            //prepare and send updated person to API server
-            var updatedPersonXml = person.ToXml();
-            var result = await ServerManager.WriteToServerXmlReply(AppData.URL.UpdatePersonApi, updatedPersonXml);
 
-            //check result, display error if needed
-            if (!result.IsPass)
-            {
-                WebLogger.Error($"BLZ:UpdatePerson() Fail:\n{result.Payload}");
-                await jsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
-            }
-
-            //if all went well clear stored person list
-            else { AppData.ClearPersonList(); }
-        }
-
-        /// <summary>
-        /// Adds new person to API server main list
-        /// </summary>
-        public static async Task AddPerson(Person person)
-        {
-            //send newly created person to API server
-            var xmlData = person.ToXml();
-            var result = await ServerManager.WriteToServerXmlReply(AppData.URL.AddPersonApi, xmlData);
-
-            //check result, display error if needed
-            if (!result.IsPass)
-            {
-                WebLogger.Error($"BLZ:AddPerson() Fail:\n{result.Payload}");
-                await AppData.JsRuntime.ShowAlert("error", AlertText.UpdatePersonFail, true);
-            }
-
-            //if all went well clear stored person list
-            else { AppData.ClearPersonList(); }
-
-        }
         public static void ReloadPage(NavigationManager navigation) => navigation.NavigateTo(navigation.Uri, forceLoad: true);
 
         /// <summary>
@@ -521,11 +458,11 @@ namespace Website
         /// Tries to get visitor ID from browser else makes new Visitor ID
         /// also update is new visitor flag
         /// </summary>
-        public static async Task<string?> TryGetVisitorId(IJSRuntime jsRuntime)
+        public static async Task<string> TryGetVisitorId(IJSRuntime jsRuntime)
         {
             //find out if new visitor just arriving or old one browsing
-            var visitorId = await jsRuntime.GetProperty("VisitorId"); //local storage
-            AppData.IsNewVisitor = visitorId is null or "";
+            var visitorId = await jsRuntime.GetProperty("VisitorId") ; //local storage
+            AppData.IsNewVisitor = string.IsNullOrEmpty(visitorId);
 
             //generate new ID if not found
             if (AppData.IsNewVisitor)

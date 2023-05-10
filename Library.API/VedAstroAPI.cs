@@ -18,31 +18,34 @@ namespace Library.API
         private readonly string _visitorId;
         private readonly IJSRuntime _jsRuntime;
 
+        private List<Person> CachedPersonList { get; set; }
+
         private readonly URL _url;
-        private readonly HttpClient _httpClient;
-
-        /// <summary>
-        /// Standard xml identity payload sent to API for calls, contains user ID and visitor ID
-        /// </summary>
-        public  XElement StandardPayload => new XElement("Root", new XElement("UserId", _userId), new XElement("VisitorId", _visitorId));
-
 
         /// <summary>
         /// Durable function API URL to get ready personlist for this caller
         /// </summary>
-        public static string PersonListWebhook { get; set; } = "";
+        private static string PersonListWebhook { get; set; } = "";
 
-        public static bool IsPersonListReady => string.IsNullOrEmpty(PersonListWebhook);
+        /// <summary>
+        /// true of person is already prepared
+        /// </summary>
+        private static bool IsPersonPrepared => !string.IsNullOrEmpty(PersonListWebhook);
 
 
-        public VedAstroAPI(string userId, string visitorId, IJSRuntime jsRuntime, URL url, HttpClient httpClient)
+        //--------CTOR
+        public VedAstroAPI(string userId, string visitorId, IJSRuntime jsRuntime, URL url)
         {
             _userId = userId;
             _visitorId = visitorId;
             _jsRuntime = jsRuntime;
             _url = url;
-            _httpClient = httpClient;
         }
+
+
+
+
+        //--------------------------------------------------
 
 
         /// <summary>
@@ -55,23 +58,44 @@ namespace Library.API
             var url = $"{_url.GetPersonListAsync}/UserId/{_userId}/VisitorId/{_visitorId}";
 
             //API gives a url to check on poll fo results
-            PersonListWebhook = await Tools.ReadServer(url, _httpClient);
+            PersonListWebhook = await Tools.ReadServer(url);
 
         }
 
-
+        /// <summary>
+        /// person will be auto prepared, but might be slow
+        /// as such prepare before hand if possible, like when app load
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Person>> GetPersonList()
         {
-            //check if person list is ready
-            //here result can contain payload if ready
-            TryAgain:
-            var result = await Tools.ReadServer(PersonListWebhook, _httpClient);
+            //take cache if available
+            //cache will be cleared when update is needed
+            if (CachedPersonList.Any()) { return CachedPersonList; }
+
+            //if person not prepared then prepare before continuing
+            if (!IsPersonPrepared) { await PreparePersonList(); }
+
+            
+        //check if person list is ready
+        //here result can contain payload if ready
+        TryAgain:
+            var result = await Tools.ReadServer(PersonListWebhook);
             var parsed = JObject.Parse(result);
             var runtimeStatus = parsed["runtimeStatus"]?.Value<string>() ?? "";
+
+            //note : if error status, will be corrected by API,
+            //so here we wait till complete
             var isDone = runtimeStatus == "Completed";
 
             //if not yet done, wait little and call back
-            if (!isDone) { await Task.Delay(100); goto TryAgain;}
+            if (!isDone)
+            {
+                //print holding status for easy debug
+                Console.WriteLine($"API SAID : {runtimeStatus}");
+                await Task.Delay(250);
+                goto TryAgain;
+            }
 
             //once done, get data out
             //person list json to parsed
@@ -81,91 +105,80 @@ namespace Library.API
             return CachedPersonList;
         }
 
-        public List<Person> CachedPersonList { get; set; }
-
-
-        //--------------------------------------------------
 
         /// <summary>
-        /// data may be cached or from API
-        /// Sorted alphabetically
+        /// Adds new person to API server main list
         /// </summary>
-        //private async Task<List<Person>> TryGetPersonListSortedAZ()
-        //{
-        //    var unsorted = await this.TryGetPersonList();
-        //    var sortedList = unsorted.OrderBy(person => person.Name).ToList();
-        //    return sortedList;
-        //}
+        public async Task AddPerson(Person person)
+        {
+            //send newly created person to API server
+            var personJson = person.ToJson();
+            //pass in user id to make sure user has right to delete
+            var url = $"{_url.AddPerson}/UserId/{_userId}/VisitorId/{_visitorId}";
+            var jsonResult = await Tools.WriteServer(url, personJson);
 
-        //private  async Task<List<Person>> TryGetPersonList()
-        //{
-        //    //check if people list already loaded before
-        //    if (AppData.PersonList == null)
-        //    {
-        //        Console.WriteLine("BLZ:Get Fresh PersonList");
-        //        AppData.PersonList = await WebsiteTools.GetPeopleList();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("BLZ:Using PersonList Cache");
-        //    }
-
-        //    return AppData.PersonList;
-        //}
-
-        ///// <summary>
-        ///// Gets all people list from API server
-        ///// This is the central place all person list is gotten for a User ID/Visitor ID
-        ///// NOTE: API combines person list from visitor id and 
-        ///// - if API fail will return empty list
-        ///// </summary>
-        //public static async Task<List<Person>?> GetPeopleList()
-        //{
-        //    //STEP 1: make request if needed
-        //    if (!AppData.IsPersonListReady)
-        //    {
-        //        var x = await ServerManager.WriteToServerXmlReply(AppData.URL.GetPersonListAsync, AppData.StandardPayload);
-        //        var y = x.Payload.Value;
-        //    }
-
-        //    //STEP 2: check request status, wait for completion
-
-
-        //    //STEP 3: get result
-
-
-
-        //}
-
-
+            await HandleResult(jsonResult);
+        }
 
         /// <summary>
-        /// Gets all people list from API server
-        /// This is the central place all person list is gotten for a User ID/Visitor ID
-        /// NOTE: API combines person list from visitor id and 
-        /// - if API fail will return empty list
+        /// Deletes person from API server  main list
+        /// note:
+        /// - if fail will show alert message
+        /// - cached person list is cleared here
         /// </summary>
-        //public async Task<List<Person>?> GetPeopleListOLD()
-        //{
+        public async Task DeletePerson(string personId)
+        {
+            //tell API to get started
+            //pass in user id to make sure user has right to delete
+            var url = $"{_url.DeletePerson}/UserId/{_userId}/VisitorId/{_visitorId}/PersonId/{personId}";
 
-        //    //get all person profile owned by current user/visitor
-        //    int timeout = 2;//probability of GOOD reply from API goes down after 2s, so no point waiting
-        //    var result = await Tools.WriteToServerXmlReply(_url.GetPersonList,StandardPayload, timeout);
+            //API gives a url to check on poll fo results
+            var jsonResult = await Tools.WriteServer(url);
 
-        //    if (result.IsPass)
-        //    {
-        //        var personList = Person.FromXml(result.Payload.Elements());
-        //        return personList;
-        //    }
-        //    //if fail log it and return empty list as not to break the caller
-        //    else
-        //    {
-        //        //await AppData.JsRuntime.ShowAlert("error", AlertText.FailedNameList, true);
-        //        return new List<Person>();
-        //    }
+            await HandleResult(jsonResult);
+
+        }
+
+        /// <summary>
+        /// Send updated person to API server to be saved in main list
+        /// note:
+        /// - if fail will show alert message
+        /// - cached person list is cleared here
+        /// </summary>
+        public async Task UpdatePerson(Person person)
+        {
+
+            //todo should check if local copy matches server before updating, cause could overwrite
+            //todo detect first using async list if possible to see change from others or use versioning
+
+            //prepare and send updated person to API server
+            var updatedPerson = person.ToJson();
+            var url = $"{_url.UpdatePerson}/UserId/{_userId}/VisitorId/{_visitorId}";
+            var jsonResult = await Tools.WriteServer(url, updatedPerson);
+
+            await HandleResult(jsonResult);
+
+        }
 
 
-        //}
+        //---------------------------------------------PRIVATE
+
+        private async Task HandleResult(JObject jsonResult)
+        {
+            //check result, display error if needed
+            var isPass = jsonResult["Status"].Value<string>() == "Pass";
+            if (isPass)
+            {
+
+                //if all went well clear stored person list
+                this.CachedPersonList.Clear();
+            }
+            else
+            {
+                //todo handle reply properly
+                Console.WriteLine("API SAID : FAIL");
+            }
+        }
 
     }
 }

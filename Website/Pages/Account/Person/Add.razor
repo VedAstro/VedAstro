@@ -75,7 +75,7 @@
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
-        await WebsiteTools.AddPerson(_person);
+        await AppData.API.AddPerson(_person);
 
         //page ready
         _jsRuntime.HideAlert();

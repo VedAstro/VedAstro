@@ -28,19 +28,22 @@ public class URL
         ApiUrlDirect = isBetaRuntime ? ApiBetaDirect : ApiStableDirect;
         WebUrl = isBetaRuntime ? WebBeta : WebStable;
 
-        //done here so that can be readonly
+        //--------------done here so that can be readonly------------------
+
+        //PERSON
+        GetPersonListAsync = ApiUrl + "/GetPersonListAsync";
         AddPerson = ApiUrl + "/AddPerson";
+        DeletePerson = ApiUrl + "/DeletePerson";
+        UpdatePerson = ApiUrl + "/UpdatePerson";
+
         GetHoroscope = ApiUrl + "/gethoroscope";
         AddLifeEventApi = ApiUrl + "/addlifeevent";
         AddMessageApi = ApiUrl + "/addmessage";
-        DeletePerson = ApiUrl + "/DeletePerson";
         DeleteChartApi = ApiUrl + "/deletesavedchart";
         DeleteVisitorByUserId = ApiUrl + "/deletevisitorbyuserid";
         DeleteVisitorByVisitorId = ApiUrl + "/deletevisitorbyvisitorid";
         AddTaskApi = ApiUrl + "/addtask";
         AddVisitorApi = ApiUrl + "/addvisitor";
-        GetPersonList = ApiUrl + "/GetPersonList";
-        GetPersonListAsync = ApiUrl + "/GetPersonListAsync";
         GetTaskListApi = ApiUrl + "/gettasklist";
         GetVisitorList = ApiUrl + "/getvisitorlist";
         GetMessageList = ApiUrl + "/getmessagelist";
@@ -49,7 +52,6 @@ public class URL
         GetPersonApi = ApiUrl + "/getperson"; 
         GetNewPersonId = ApiUrl + "/GetNewPersonId";
         GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
-        UpdatePersonApi = ApiUrl + "/updateperson";
         GetMatchReportApi = ApiUrl + "/getmatchreport";
         GetSavedMatchReport = ApiUrl + "/GetSavedMatchReport";
         SaveMatchReportApi = ApiUrl + "/SaveMatchReport";
@@ -102,12 +104,11 @@ public class URL
 
     //PERSON
     public readonly string AddPerson;
-    public readonly string GetPersonList;
     public readonly string GetPersonListAsync;
     public readonly string GetPersonApi;
     public readonly string GetNewPersonId;
     public readonly string GetPersonIdFromSavedChartId;
-    public readonly string UpdatePersonApi;
+    public readonly string UpdatePerson;
 
     public readonly string GetTaskListApi;
     public readonly string GetVisitorList;

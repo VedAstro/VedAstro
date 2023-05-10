@@ -10,9 +10,10 @@ namespace VedAstro.Library
     public class UserData
     {        
         /// <summary>
+        /// Guest users default account
         /// Empty instance of User with id 101
         /// </summary>
-        public static UserData Empty = new UserData("101", "Guest", "guest@example.com", "", "", "");
+        public static UserData Guest = new UserData("101", "Guest", "guest@example.com", "", "", "");
 
         private string _name;
 

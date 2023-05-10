@@ -255,29 +255,6 @@
         this.StateHasChanged();
     }
 
-    //sends the newly created person to API server
-    private async Task SubmitNewPerson()
-    {
-        //only continue if passed input field validation
-        if (!(await IsValidationPassed())) { return; }
-
-        await _jsRuntime.ShowLoading();
-
-        //make a new person from the details in the input
-        _person = await GetPersonInstanceFromInput();
-
-        //send newly created person to API server
-        await WebsiteTools.AddPerson(_person);
-
-        //page ready
-        _jsRuntime.HideAlert();
-
-        await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
-
-        //send user to person list page after period of time
-        await Task.Delay(100);
-        _navigation.NavigateTo(PageRoute.PersonList);
-    }
 
     /// <summary>
     /// Checks if validation of all input fields
@@ -376,7 +353,7 @@
         var birthTime = _timeInput.GetTime(geoLocation);
         //if user not signed in, use their visitor id as user ID
         //done so that public list is not clouded
-        var currentUserId = AppData.CurrentUser?.Id == UserData.Empty.Id ? AppData.VisitorId : AppData.CurrentUser?.Id;
+        var currentUserId = AppData.CurrentUser?.Id == UserData.Guest.Id ? AppData.VisitorId : AppData.CurrentUser?.Id;
 
         //get all owner list & add this user id if not included
         //this way 1 user does not delete other users when click save
@@ -406,7 +383,7 @@
         _person = await GetPersonInstanceFromInput();
 
         //update person in API by hash
-        await WebsiteTools.UpdatePerson(_person, _jsRuntime);
+        await AppData.API.UpdatePerson(_person);
 
         //let user know person has been updated
         await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
@@ -426,13 +403,13 @@
         await _jsRuntime.ShowLoading();
 
         //tell API to delete person, using person id
-        await WebsiteTools.DeletePerson(PersonId, _jsRuntime);
+        await AppData.API.DeletePerson(PersonId);
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);
 
         //refresh the page variables
-        //todo marked for deletion, test without = no difference > delete
+        //todo marked for deletion, test without = no difference -> delete
         this.StateHasChanged();
 
         //page ready

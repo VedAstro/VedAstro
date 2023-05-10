@@ -1,4 +1,5 @@
 ﻿@using VedAstro.Library
+@using Library.API
 @namespace Website.Pages
 
 @*
@@ -79,19 +80,15 @@ else
         //removing it removes user's login
         await _jsRuntime.RemoveProperty("UserData");
 
-        //reset person's list
-        AppData.ClearPersonList();
-
-        //reset app data
-        AppData.CurrentUser = UserData.Empty;
+        //put api access back in guest mode
+        AppData.CurrentUser = UserData.Guest;
+        AppData.API = new VedAstroAPI(AppData.CurrentUser.Id, AppData.VisitorId, _jsRuntime, AppData.URL);
 
         //before reload page let user know log out went well
         await _jsRuntime.ShowAlert("success", "Logged out, we hope you come back", false, 2300);
 
         //refresh page
         await _jsRuntime.ReloadPage();
-
-        //WebsiteTools.ReloadPage(_navigation);
 
     }
 

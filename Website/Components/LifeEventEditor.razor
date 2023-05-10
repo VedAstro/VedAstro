@@ -126,7 +126,8 @@
         InputedPerson = InputedPerson.SetNewLifeEvents(lifeEventList);
 
         //send updated person to API
-        await WebsiteTools.UpdatePerson(InputedPerson, _jsRuntime);
+        //todo check for accidental multi tab scenario overwrite
+        await AppData.API.UpdatePerson(InputedPerson);
 
         _jsRuntime.HideLoading();
 

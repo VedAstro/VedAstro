@@ -18,7 +18,7 @@ namespace Library.API
         private readonly string _visitorId;
         private readonly IJSRuntime _jsRuntime;
 
-        private List<Person> CachedPersonList { get; set; }
+        private List<Person> CachedPersonList { get; set; } = new List<Person>();
 
         private readonly URL _url;
 

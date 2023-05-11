@@ -106,7 +106,7 @@ namespace API
                 {
                     //all planet related data
                     //get all calculators that can accept a planet name and time
-                    var planetTimeCalcs = Tools.GetCalcsResultsByParam<PlanetName, Time>(planetName, parsedTime);
+                    var planetTimeCalcs = Tools.ExecuteCalculatorByParam<PlanetName, Time>(planetName, parsedTime);
 
                     //send the payload on it's merry way
                     return APITools.PassMessageJson(planetTimeCalcs, incomingRequest);
@@ -136,7 +136,7 @@ namespace API
                 {
                     //all house related data
                     //get all calculators that can accept a house name and time
-                    var houseTimeCalcs = Tools.GetCalcsResultsByParam<HouseName, Time>((HouseName)houseName, parsedTime);
+                    var houseTimeCalcs = Tools.ExecuteCalculatorByParam<HouseName, Time>((HouseName)houseName, parsedTime);
 
                     //send the payload on it's mary way
                     return APITools.PassMessageJson(houseTimeCalcs, incomingRequest);

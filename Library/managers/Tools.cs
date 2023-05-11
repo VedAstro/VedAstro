@@ -1310,7 +1310,10 @@ namespace VedAstro.Library
         public static string GetAPISpecialName(MethodInfo methodInfo1)
         {
             //try to get special API name for the calculator, possible not to exist
-            var properApiName = methodInfo1?.GetCustomAttributes(true)?.OfType<APIAttribute>()?.FirstOrDefault()?.Name ?? "";
+            var customAttributes = methodInfo1?.GetCustomAttributes(true);
+            var apiAttributes = customAttributes?.OfType<APIAttribute>();
+            var firstOrDefault = apiAttributes?.FirstOrDefault();
+            var properApiName = firstOrDefault?.Name ?? "";
             //default name in-case no special
             var defaultName = methodInfo1.Name;
 
@@ -1364,7 +1367,7 @@ namespace VedAstro.Library
         public static IEnumerable<APICallData> GetPlanetApiCallList<T1, T2>()
         {
             //get all the same methods gotten by Open api func
-            var calcList = GetCalculatorMethodInfoListByParamType<T1, T2>();
+            var calcList = GetCalculatorListByParam<T1, T2>();
 
             var finalList = new List<APICallData>();
 
@@ -1390,10 +1393,10 @@ namespace VedAstro.Library
         /// Gets all calculated data in nice JSON with matching param signature
         /// used to create a dynamic API call list
         /// </summary>
-        public static JObject GetCalcsResultsByParam<T1, T2>(T1 inputedPram1, T2 inputedPram2)
+        public static JObject ExecuteCalculatorByParam<T1, T2>(T1 inputedPram1, T2 inputedPram2)
         {
             //get reference to all the calculators that can be used with the inputed param types
-            var finalList = GetCalculatorMethodInfoListByParamType<T1, T2>();
+            var finalList = GetCalculatorListByParam<T1, T2>();
 
             //sort alphabetically so easier to eye data point
             var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
@@ -1402,6 +1405,30 @@ namespace VedAstro.Library
             //place the data from all possible methods nicely in JSON
             var rootPayloadJson = new JObject(); //each call below adds to this root
             object[] paramList = new object[] { inputedPram1, inputedPram2 };
+            foreach (var methodInfo in aToZOrder)
+            {
+                var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
+                //done to get JSON formatting right
+                var resultParse2 = JToken.FromObject(resultParse1); //jprop needs to be wrapped in JToken
+                rootPayloadJson.Add(resultParse2);
+            }
+
+            return rootPayloadJson;
+
+        }
+
+        public static JObject ExecuteCalculatorByParam<T1>(T1 inputedPram1)
+        {
+            //get reference to all the calculators that can be used with the inputed param types
+            var finalList = GetCalculatorListByParam<T1>();
+
+            //sort alphabetically so easier to eye data point
+            var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
+
+
+            //place the data from all possible methods nicely in JSON
+            var rootPayloadJson = new JObject(); //each call below adds to this root
+            object[] paramList = new object[] { inputedPram1 };
             foreach (var methodInfo in aToZOrder)
             {
                 var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
@@ -1486,6 +1513,44 @@ namespace VedAstro.Library
 
             return rootPayloadJson;
         }
+        
+        public static JProperty ExecuteCalculatorByApiName<T1>(MethodInfo foundMethod, T1 param1)
+        {
+            //get methods 1st param
+            var param1Type = foundMethod.GetParameters()[0].ParameterType;
+            object[] paramOrder1 = new object[] { param1 };
+
+
+            //based on what type it is we process accordingly, converts better to JSON
+            var rawResult = foundMethod?.Invoke(null, paramOrder1);
+
+            //get correct name for this method, API friendly
+            var apiSpecialName = Tools.GetAPISpecialName(foundMethod);
+
+            //process list differently
+            JProperty rootPayloadJson;
+            if (rawResult is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris
+            {
+                //convert list to comma separated string
+                var parsedList = iList.Cast<object>().ToList();
+                var stringComma = Tools.ListToString(parsedList);
+
+                rootPayloadJson = new JProperty(apiSpecialName, stringComma);
+            }
+            //custom JSON converter available
+            else if (rawResult is IToJson iToJson)
+            {
+                rootPayloadJson = new JProperty(apiSpecialName, iToJson.ToJson());
+            }
+            //normal conversion via to string
+            else
+            {
+                rootPayloadJson = new JProperty(apiSpecialName, rawResult?.ToString());
+            }
+
+
+            return rootPayloadJson;
+        }
 
         /// <summary>
         /// Executes all calculators for API based on input param type only
@@ -1493,16 +1558,28 @@ namespace VedAstro.Library
         /// </summary>
         public static JProperty ExecuteAPICalculator(MethodInfo methodInfo1, object[] param)
         {
-            //reverse order
-
-            JToken outputResult = JToken.Parse("{}"); //empty default
 
             //likely to fail during call, as such just ignore and move along
             try
             {
-                var outputResult2 = ExecuteCalculatorByApiName(methodInfo1, param[0], param[1]);
+                JProperty outputResult;
+                //execute based on param count
+                if (param.Length == 1)
+                {       
+                    outputResult = ExecuteCalculatorByApiName(methodInfo1, param[0]);
+                }
+                else if (param.Length == 2)
+                {
+                    outputResult = ExecuteCalculatorByApiName(methodInfo1, param[0], param[1]);
+                }
+                else
+                {
+                    //if not filled than not accounted for
+                    throw new Exception("END OF THE LINE!");
+                }
 
-                return outputResult2;
+
+                return outputResult;
             }
             catch (Exception e)
             {
@@ -1526,8 +1603,11 @@ namespace VedAstro.Library
             }
         }
 
-
-        public static IEnumerable<MethodInfo> GetCalculatorMethodInfoListByParamType<T1, T2>()
+        /// <summary>
+        /// Gets all methods in Astronomical calculator that has the pram types inputed
+        /// Note : also gets when order is reversed
+        /// </summary>
+        public static IEnumerable<MethodInfo> GetCalculatorListByParam<T1, T2>()
         {
             var inputedParamType1 = typeof(T1);
             var inputedParamType2 = typeof(T2);
@@ -1561,6 +1641,33 @@ namespace VedAstro.Library
             //PRINT DEBUG DATA
             Console.WriteLine($"Calculators Type 1 : {calculators1?.Count()}");
             Console.WriteLine($"Calculators Type 2 : {calculators2?.Count()}");
+#endif
+
+            return finalList;
+        }
+
+
+        public static IEnumerable<MethodInfo> GetCalculatorListByParam<T1>()
+        {
+            var inputedParamType1 = typeof(T1);
+
+            //get all calculators that can work with the inputed data
+            var calculatorClass = typeof(AstronomicalCalculator);
+
+            var finalList = new List<MethodInfo>();
+
+            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
+                               let parameter = calculatorInfo.GetParameters()
+                               where parameter.Length == 1 //only 2 params
+                                     && parameter[0].ParameterType == inputedParamType1
+                               select calculatorInfo;
+
+            finalList.AddRange(calculators1);
+
+
+#if true
+            //PRINT DEBUG DATA
+            Console.WriteLine($"Calculators with 1 param : {calculators1?.Count()}");
 #endif
 
             return finalList;

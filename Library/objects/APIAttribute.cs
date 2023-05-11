@@ -12,12 +12,22 @@ namespace VedAstro.Library
     /// </summary>
     public class APIAttribute : Attribute
     {
-        public APIAttribute(string name)
+        /// <summary>
+        /// nice and sweet name to id the Astro data
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// include alternate names and explanation for data
+        /// </summary>
+        public string Description { get; }
+
+        public APIAttribute(string name, string description = "")
         {
+            Description = description;
             Name = name;
         }
 
-        public string Name { get; set; }
     }
 
 }

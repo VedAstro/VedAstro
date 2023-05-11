@@ -209,8 +209,8 @@ namespace VedAstro.Library
         {
             var returnVal = new JObject();
             //classical notation (DMS)
-            returnVal["DMS"] = $"{this.Degrees}°{Math.Abs(this.Minutes)}'{Math.Abs(this.Seconds)}\"";//Only degrees is in negative
-            returnVal["TotalDegree"] = this.TotalDegrees.ToString();//Only degrees is in negative
+            returnVal["DegreeMinuteSecond"] = $"{this.Degrees}° {Math.Abs(this.Minutes)}' {Math.Abs(this.Seconds)}";//Only degrees is in negative
+            returnVal["TotalDegrees"] = this.TotalDegrees.ToString();//Only degrees is in negative
 
             return returnVal;
             

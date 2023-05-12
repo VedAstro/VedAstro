@@ -1,7 +1,72 @@
-﻿
+﻿@using VedAstro.Library
+@using System.Xml.Linq
+@attribute [Route(PageRoute.Remedy)]
+
+<PageTitle>Astro Remedy | VedAstro</PageTitle>
+
+<PageTop ImageName="join-our-family.svg"
+         Title="Astro Remedy"
+         DescriptionText="Brainstorm ideas, solve problems, learn &amp; share new skills. We are not just a dev team, we are a dev family.">
+</PageTop>
 
 
-<h3>Remedy</h3>
+<div class="gap-3" style="max-width:@GR.W667px">
+
+
+    <ArticleBlock Title="Then, dear Master, why do you want me to wear an astrological bangle?" IconName="flat-color-icons:multiple-inputs">
+        <TextHTML>
+            <p class="text-justify">
+                It is only when a traveler has reached his goal that he is justified in discarding his maps.
+                During the journey, he takes advantage of any convenient short cut. The ancient rishis discovered many
+                ways to curtail the period of man's exile in delusion. There are certain mechanical features in the
+                law of karma which can be skillfully adjusted by the fingers of wisdom
+            </p>
+            <p class="text-justify">
+                "All human ills arise from some transgression of universal law. The scriptures point out that man
+                must satisfy the laws of nature, while not discrediting the divine omnipotence.
+                He should say: 'Lord, I trust in Thee, and know Thou canst help me, but I too will do my best to undo any wrong I have done.'
+                By a number of means-by prayer, by will power, by yoga meditation, by consultation with saints,
+                by use of astrological bangles-the adverse effects of past wrongs can be minimized or nullified
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+
+    <ArticleBlock Title="Office &amp; Factory" IconName="flat-color-icons:department">
+        <ButtonRow>
+            <IconButton OpenNewTab="true" SmallSize="true" IconName="logos:slack-icon" ButtonText="Visit Office" ClickUrl="@URL.SlackInviteURL" />
+        </ButtonRow>
+        <TextHTML>
+            <p class="text-justify">
+                Just as a house can be fitted with a copper rod to absorb the shock of lightning, so the bodily temple can be benefited by
+                various protective measures. Ages ago our yogis discovered that pure metals emit an astral light which is powerfully
+                counteractive to negative pulls of the planets. Subtle electrical and magnetic radiations are constantly circulating
+                in the universe; when a man's body is being aided, he does not know it; when it is being disintegrated, he is still in ignorance.
+                Can he do anything about it?
+            </p>
+            <p class="text-justify">
+                This problem received attention from our rishis; they found helpful not only a combination of metals, but also of plants and-most effective of all-faultless jewels of not less than two carats. The preventive uses of astrology have seldom been seriously studied outside of India. One little-known fact is that the proper jewels, metals, or plant preparations are valueless
+                unless the required weight is secured, and unless these remedial agents are worn next to the skin.
+            </p>
+            
+            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YoganandaWiki)">
+                <figure class="text-center mt-5">
+                    <blockquote class="blockquote">
+                        <p>Sir, of course I shall take your advice and get a bangle. I am intrigued at the thought of outwitting a planet!</p>
+                    </blockquote>
+                    <figcaption class="blockquote-footer">
+                        Yogananda @*<cite title="Source Title">Singer Beatles 60'</cite>*@
+                    </figcaption>
+                </figure>
+            </div>
+
+        </TextHTML>
+    </ArticleBlock>
+
+
+
+</div>
+
+
 
 
 

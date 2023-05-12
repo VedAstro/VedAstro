@@ -9,10 +9,10 @@
 </PageTop>
 
 
-<div class="hstack gap-2">
+<div class="hstack gap-3">
     <TimeInputSimple @ref="_timeInput" LabelText="Time" /> @*todo default to now*@
     <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
-    <IconButton ButtonText="Refresh" IconName="icon-park:refresh-one" OnClickCallback="RefreshData" />
+    <IconButton ButtonText="Refresh" Color="success" ExtraClass="align-self-end" IconName="" OnClickCallback="RefreshData" />
 </div>
 
 
@@ -38,7 +38,7 @@
 <hr />
 
 <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.CarlSaganWiki)">
-    <figure class="text-center mt-4">
+    <figure class="text-center mt-5">
         <blockquote class="blockquote">
             <p>We're made of star stuff</p>
         </blockquote>

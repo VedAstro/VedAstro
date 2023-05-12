@@ -355,6 +355,7 @@ namespace VedAstro.Library
 
         #endregion
 
+        [API("DayOfWeek")]
         public static DayOfWeek GetDayOfWeek(Time time)
         {
             //CACHE MECHANISM

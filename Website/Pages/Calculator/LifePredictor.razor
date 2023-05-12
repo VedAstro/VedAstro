@@ -15,7 +15,7 @@ Know good and bad periods of your life years ahead.*@
 
 <div>
     <div class="d-flex flex-wrap">
-        <div class="me-md-5">
+        <div class="me-md-5" style="width: @GR.W412px;">
             @*TAB BUTTONS*@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -30,13 +30,13 @@ Know good and bad periods of your life years ahead.*@
                         Advanced
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
+@*                <li class="nav-item" role="presentation">
                     <button @onclick="OnClickSavedTab" class="nav-link" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button" role="tab" aria-controls="saved" aria-selected="false">
                         <Icon IconName="prime:save" />
                         Saved
                     </button>
                 </li>
-            </ul>
+*@            </ul>
 
             @*TAB CONTENT*@
             @*all border except top*@
@@ -83,7 +83,7 @@ Know good and bad periods of your life years ahead.*@
                 </div>
 
                 @*SAVED*@
-                <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
+@*                <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
                     <div class="vstack gap-3 p-3">
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
@@ -95,11 +95,10 @@ Know good and bad periods of your life years ahead.*@
                                 }
                             </select>
                         </div>
-                        @*CALCULATE BTN*@
                         <IconButton SmallSize="true" IconName="ant-design:folder-view-outlined" ButtonText="Show" OnClickCallback="OnClickShowSaved"></IconButton>
                     </div>
                 </div>
-            </div>
+*@            </div>
 
         </div>
         

@@ -80,6 +80,7 @@
 
 
         //LITTLE PAGES
+        public const string Remedy = "/Remedy";
         public const string Download = "/Download";
         public const string VisitorList = "/VisitorList";
         public const string FAQ = "/FAQ";

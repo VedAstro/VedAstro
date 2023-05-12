@@ -69,7 +69,7 @@ namespace VedAstro.Library
 
             //get data list from Static Website storage
             //always get from STABLE for reliability, and also no URL instance here
-            var horoscopeDataListXml = await Tools.GetXmlFileHttp(fileUrl); 
+            var horoscopeDataListXml = await Tools.GetXmlFileHttp(fileUrl);
 
             //parse each raw event data in list
             var horoscopeDataList = new List<HoroscopeData>();
@@ -1514,7 +1514,7 @@ namespace VedAstro.Library
 
             return rootPayloadJson;
         }
-        
+
         public static JProperty ExecuteCalculatorByApiName<T1>(MethodInfo foundMethod, T1 param1)
         {
             //get methods 1st param
@@ -1566,7 +1566,7 @@ namespace VedAstro.Library
                 JProperty outputResult;
                 //execute based on param count
                 if (param.Length == 1)
-                {       
+                {
                     outputResult = ExecuteCalculatorByApiName(methodInfo1, param[0]);
                 }
                 else if (param.Length == 2)
@@ -1587,18 +1587,24 @@ namespace VedAstro.Library
                 try
                 {
 #if DEBUG
-                    Console.WriteLine($"Trying again in reverse! {methodInfo1.Name}");
+                    Console.WriteLine($"Trying again in reverse! {methodInfo1.Name}:\n{e.Message}\n{e.StackTrace}");
 #endif
                     //try again in reverse
-                    var outputResult3 = ExecuteCalculatorByApiName(methodInfo1, param[1], param[0]);
-                    return outputResult3;
+                    if (param.Length == 2)
+                    {
+                        var outputResult3 = ExecuteCalculatorByApiName(methodInfo1, param[1], param[0]);
+                        return outputResult3;
+                    }
+
+                    var jsonPacked = new JProperty(methodInfo1.Name, $"ERROR: {e.Message}");
+                    return jsonPacked;
 
                 }
                 //if fail put error in data for easy detection
                 catch (Exception e2)
                 {
                     //save it nicely in json format
-                    var jsonPacked = new JProperty(methodInfo1.Name, $"ERROR:{e2.Message}");
+                    var jsonPacked = new JProperty(methodInfo1.Name, $"ERROR: {e2.Message}");
                     return jsonPacked;
                 }
             }

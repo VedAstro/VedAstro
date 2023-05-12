@@ -1,0 +1,85 @@
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.StarsAboveMe)]
+
+<PageTitle>Stars Above Me</PageTitle>
+
+<PageTop ImageName="api-builder-banner.svg"
+         Title="Stars Above Me"
+         DescriptionText="All astrological info of the stars and planets above you now">
+</PageTop>
+
+
+<div class="hstack gap-2">
+    <TimeInputSimple @ref="_timeInput" LabelText="Time" /> @*todo default to now*@
+    <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
+    <IconButton ButtonText="Refresh" IconName="icon-park:refresh-one" OnClickCallback="RefreshData" />
+</div>
+
+
+<hr />
+
+<table class="table  table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Value</th>
+            <th scope="col">Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">Ruling Constellation</th>
+            <td>@(AstronomicalCalculator.GetMoonConstellation(finalTime))</td>
+            <td>Constellation behind the moon</td>
+        </tr>
+    </tbody>
+</table>
+
+<hr />
+
+<div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.CarlSaganWiki)">
+    <figure class="text-center mt-4">
+        <blockquote class="blockquote">
+            <p>We're made of star stuff</p>
+        </blockquote>
+        <figcaption class="blockquote-footer">
+            Carl Sagan
+        </figcaption>
+    </figure>
+</div>
+
+
+@code {
+
+
+    private Time finalTime = Time.Empty;
+    private GeoLocation finalGeoLocation = GeoLocation.Empty;
+    private TimeInputSimple _timeInput;
+    private GeoLocationInput _geoLocationInput;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //page should auto show data for user at current location
+        if (firstRender)
+        {
+            await RefreshData();
+        }
+
+
+    }
+
+
+    private async Task RefreshData()
+    {
+
+        finalGeoLocation = _geoLocationInput.GetGeoLocation();
+        finalTime = await _timeInput.GetTime(finalGeoLocation);
+
+        //get all methods that have only time as input
+        var timeOnlyCalcs = Tools.ExecuteCalculatorByParam<Time>(finalTime);
+
+        Console.WriteLine(timeOnlyCalcs);
+    }
+
+}

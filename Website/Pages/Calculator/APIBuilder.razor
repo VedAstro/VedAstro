@@ -112,7 +112,7 @@
         </div>
 
         @*GUIDE TEXT*@
-        <div>
+        <div class="vstack gap-3">
             <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
                 <TextHTML>
                     Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language,
@@ -129,6 +129,13 @@
                     Data is returned in <strong>JSON</strong>. Only 2 properties. First field is always <kbd>Status</kbd>, it can be only <kbd>Pass</kbd> or <kbd>Fail</kbd>.
                     If it shows <kbd>Fail</kbd> then most likely cause is invalid data on your part. More details about the
                     error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alpabetically stored in <kbd>Payload</kbd> property.
+                </TextHTML>
+            </ArticleBlock>
+
+            <ArticleBlock Title="Ready Made Library" IconName="bi:filetype-json">
+                <TextHTML>
+                    There are libraries to make using the API even easier.
+                    Calls to API is nicely wrapped into functions, that your app can use.
                 </TextHTML>
             </ArticleBlock>
 

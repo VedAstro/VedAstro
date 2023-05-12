@@ -1334,6 +1334,7 @@ namespace VedAstro.Library
 
         }
 
+        [API("JulianDays")]
         public static double ConvertLmtToJulian(Time time)
         {
 

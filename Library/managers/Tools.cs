@@ -535,6 +535,7 @@ namespace VedAstro.Library
                 var item = list[i];
                 if (item is IToJson iToJson)
                 {
+                    //todo can wrap into jobject if needed
                     combinedNames += iToJson.ToJson() + ending;
                 }
                 else
@@ -1458,7 +1459,7 @@ namespace VedAstro.Library
             {
                 //let caller know that method not found
                 var msg = $"Call not found, make sure API link is latest version : {methodName} ";
-                return new JProperty("Error", msg);
+                return new JProperty(methodName, $"ERROR:{msg}");
             }
 
             //pass to main function
@@ -1597,7 +1598,7 @@ namespace VedAstro.Library
                 catch (Exception e2)
                 {
                     //save it nicely in json format
-                    var jsonPacked = new JProperty("ERROR", e2.Message);
+                    var jsonPacked = new JProperty(methodInfo1.Name, $"ERROR:{e2.Message}");
                     return jsonPacked;
                 }
             }

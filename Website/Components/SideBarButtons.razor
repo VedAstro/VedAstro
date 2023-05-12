@@ -26,6 +26,7 @@
         <li><a class="dropdown-item" href="@PageRoute.SunRiseSetTime">Sunrise/Sunset Time</a></li>
     </DropDownList>
 </IconButton>
+<IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Stars Above Me" IconName="solar:moon-stars-bold" ClickUrl="@PageRoute.StarsAboveMe" />
 <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="API Builder" IconName="mdi:cloud-tags" ClickUrl="@PageRoute.APIBuilder" />
 
 <!--ACCOUNT OR LOGIN-->
@@ -36,7 +37,6 @@
                 Color="warning"
                 FullWidth="true"
                 IconName="mdi:user-circle" OnClickCallback="OnClickNavBarLoginButton" SmallSize="true" TooltipText="Login to save your data" />
-
 }
 else
 {

@@ -3,13 +3,16 @@
 @using System.Xml.Linq
 
 <div @onclick="OnClick" class="@(FullWidth?"":"w-50")" style="@InlineStyle">
-    <div class="alert alert-@Color d-flex align-items-center" role="alert">
-        <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
-        <div>
-            <strong>@Title</strong><br />
-            @Description
-            @DescriptionHTML
+    <div class="alert alert-@Color d-flex align-items-center vstack" role="alert">
+        <div class="hstack mb-2">
+            <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
+            <div>
+                <strong>@Title</strong><br />
+                @Description
+                @DescriptionHTML
+            </div>
         </div>
+        @ImageHTML
     </div>
 </div>
 
@@ -50,6 +53,9 @@
 
     [Parameter]
     public RenderFragment? DescriptionHTML { get; set; }
+
+    [Parameter]
+    public RenderFragment? ImageHTML { get; set; }
 
 
     /// <summary>

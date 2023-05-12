@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Library.API;
 using VedAstro.Library;
 using Website.Pages;
+using Website.Pages.Account;
 
 namespace Website
 {
@@ -36,7 +37,7 @@ namespace Website
         /// Used to log user flow
         /// Note: defaults to empty string
         /// </summary>
-        public static string VisitorId { get; set; } = "101"; 
+        public static string VisitorId { get; set; } = "101";
 
         /// <summary>
         /// Place where global event data list is stored for quick access
@@ -155,6 +156,7 @@ namespace Website
         /// manager to access everything API
         /// </summary>
         public static VedAstroAPI API;
+
 
         /// <summary>
         /// if data already loaded then return the that one,

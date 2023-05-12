@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using Google.Apis.Auth;
 
@@ -26,6 +27,7 @@ namespace VedAstro.Library
             FamilyName = familyName;
             Locale = locale;
             Picture = picture;
+            LocationList = new List<GeoLocation>();
         }
 
         public string Id { get; set; }
@@ -36,6 +38,7 @@ namespace VedAstro.Library
             set => _name = value == "Vignes" ? "James Brown" : value;
         }
 
+        public List<GeoLocation> LocationList { get; set; }
         public string Email { get; set; }
         public string Locale { get; set; }
         public string FamilyName { get; set; }

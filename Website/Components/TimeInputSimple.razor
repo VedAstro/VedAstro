@@ -214,6 +214,7 @@
     /// using a module, we need to make sure we explicitly dispose of it for garbage collection.
     /// If we don't, the JSRuntime will continue holding a reference to our module for the lifetime of the application.
     /// To do this, our component must implement IAsyncDisposable, then we can dispose of our module in the DisposeAsync method.
+    /// TODO CHECK RELEVANCE
     /// </summary>
     async ValueTask IAsyncDisposable.DisposeAsync()
     {

@@ -1,4 +1,5 @@
-﻿@using VedAstro.Library
+﻿
+@using VedAstro.Library
 @attribute [Route(PageRoute.About)]
 
 <PageTitle>About</PageTitle>
@@ -87,7 +88,7 @@
                 It's their gift to us, the <strong>"world folk"</strong>.
             </p>
 
-            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
+           @* <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
                 <figure class="text-center mt-4">
                     <blockquote class="blockquote">
                         <p>
@@ -97,31 +98,31 @@
                         </p>
                     </blockquote>
                     <figcaption class="blockquote-footer">
-                        Yukteswar @*<cite title="Source Title">Singer Beatles 60'</cite>*@
+                        Yukteswar <cite title="Source Title">Sage</cite>
                     </figcaption>
                 </figure>
-            </div>
+            </div>*@
             <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
                 <figure class="text-center mt-4">
                     <blockquote class="blockquote">
                         <p>Mechanical features in the law of karma,<br> can be skillfully adjusted by the fingers of wisdom.</p>
                     </blockquote>
                     <figcaption class="blockquote-footer">
-                        Yukteswar @*<cite title="Source Title">Singer Beatles 60'</cite>*@
+                        Yukteswar
                     </figcaption>
                 </figure>
             </div>
-            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
+@*            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
                 <figure class="text-center mt-4">
                     <blockquote class="blockquote">
                         <p>he has spiritual resources which are not subject to planetary pressure</p>
                     </blockquote>
                     <figcaption class="blockquote-footer">
-                        Yukteswar @*<cite title="Source Title">Singer Beatles 60'</cite>*@
+                        Yukteswar <cite title="Source Title">Sage</cite>
                     </figcaption>
                 </figure>
             </div>
-
+*@
         </TextHTML>
     </ArticleBlock>
 

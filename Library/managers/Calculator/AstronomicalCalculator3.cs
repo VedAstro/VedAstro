@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -2477,37 +2478,34 @@ namespace VedAstro.Library
         /// todo change to house strength
         /// </summary>
         [API("BhavaBala")]
-        public static Shashtiamsa GetBhavaBala(HouseName house, Time time)
+        public static Shashtiamsa GetBhavaBala(HouseName inputHouse, Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetBhavabala", house, time), _getBhavabala);
+            return CacheManager.GetCache(new CacheKey("GetBhavabala", inputHouse, time), _getBhavabala);
 
 
             //UNDERLYING FUNCTION
             Shashtiamsa _getBhavabala()
             {
-                var BhavaBala = new Dictionary<string, Dictionary<HouseName, double>>();
-                BhavaBala["BhavaAdhipathiBala"] = CalcBhavaAdhipathiBala(time);
-                BhavaBala["BhavaDigBala"] = CalcBhavaDigBala(time);
-                BhavaBala["BhavaDrishtiBala"] = CalcBhavaDrishtiBala(time);
+                //get all the sub-strengths into a list 
+                var subStrengthList = new List<HouseSubStrength>();
 
-                var balaTypes = new List<string>() { "BhavaAdhipathiBala", "BhavaDigBala", "BhavaDrishtiBala" };
+                subStrengthList.Add(CalcBhavaAdhipathiBala(time));
+                subStrengthList.Add(CalcBhavaDigBala(time));
+                subStrengthList.Add(CalcBhavaDrishtiBala(time));
 
                 var totalBhavaBala = new Dictionary<HouseName, double>();
 
-                foreach (var _house in House.AllHouses)
+                foreach (var houseToTotal in House.AllHouses)
                 {
+                    //to get the total strength of the a house, we combine 3 types sub-strengths
                     double total = 0;
-                    foreach (var b in balaTypes)
-                    {
-                        total = total + BhavaBala[b][_house];
-                    }
-                    totalBhavaBala[_house] = total;
-
+                    foreach (var subStrength in subStrengthList) { total += subStrength.Power[houseToTotal]; }
+                    totalBhavaBala[houseToTotal] = total;
                 }
 
-                return new Shashtiamsa(totalBhavaBala[house]);
+                return new Shashtiamsa(totalBhavaBala[inputHouse]);
 
             }
 
@@ -2521,15 +2519,16 @@ namespace VedAstro.Library
         /// as it is aspected by benefics or malefics.
         /// For all 12 houses
         /// </summary>
-        public static Dictionary<HouseName, double> CalcBhavaDrishtiBala(Time time)
+        [API("BhavaDrishtiBala", "House received aspect strength")]
+        public static HouseSubStrength CalcBhavaDrishtiBala(Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("CalcBhavaDrishtiBala", time), _calcBhavaDrishtiBala);
+            return CacheManager.GetCache(new CacheKey(nameof(CalcBhavaDrishtiBala), time), _calcBhavaDrishtiBala);
 
 
             //UNDERLYING FUNCTION
-            Dictionary<HouseName, double> _calcBhavaDrishtiBala()
+            HouseSubStrength _calcBhavaDrishtiBala()
             {
                 double vdrishti;
 
@@ -2552,17 +2551,21 @@ namespace VedAstro.Library
                     foreach (var planet in PlanetName.All7Planets)
                     {
 
-                        bala = bala + (sp[planet] * drishti[planet.ToString() + house.ToString()]);
+                        bala += (sp[planet] * drishti[planet.ToString() + house.ToString()]);
 
                     }
 
                     BhavaDrishtiBala[house] = bala;
                 }
 
-                return BhavaDrishtiBala;
+
+                var newHouseResult = new HouseSubStrength(BhavaDrishtiBala, "BhavaDrishtiBala");
+
+                return newHouseResult;
 
 
-                //------------------FUNCTIONS---------------------
+
+                //------------------LOCAL FUNCTIONS---------------------
 
                 Dictionary<PlanetName, int> goodAndBad()
                 {
@@ -2652,7 +2655,8 @@ namespace VedAstro.Library
         /// different groups or types of signs.
         /// For all 12 houses
         /// </summary>
-        public static Dictionary<HouseName, double> CalcBhavaDigBala(Time time)
+        [API("BhavaDigBala", "House strength from different types of signs")]
+        public static HouseSubStrength CalcBhavaDigBala(Time time)
         {
 
             var BhavaDigBala = new Dictionary<HouseName, double>();
@@ -2660,14 +2664,14 @@ namespace VedAstro.Library
             int dig = 0;
 
             //for every house
-            foreach (var i in House.AllHouses)
+            foreach (var houseNumber in House.AllHouses)
             {
                 //a particular bhava acquires strength by its mid-point
                 //falling in a particular kind of sign.
 
                 //so get mid point of house
-                var mid = AstronomicalCalculator.GetHouse(i, time).GetMiddleLongitude().TotalDegrees;
-                var houseSign = AstronomicalCalculator.GetHouseSignName((int)i, time);
+                var mid = AstronomicalCalculator.GetHouse(houseNumber, time).GetMiddleLongitude().TotalDegrees;
+                var houseSign = AstronomicalCalculator.GetHouseSignName((int)houseNumber, time);
 
                 //Therefore first find the number of a given Bhava Madhya and subtract
                 // it from 1, if the given Bhava Madhya is situated
@@ -2675,7 +2679,7 @@ namespace VedAstro.Library
                 if ((mid >= 210.00)
                     && (mid <= 240.00))
                 {
-                    dig = 1 - (int)i;
+                    dig = 1 - (int)houseNumber;
                 }
                 //Subtract it from 4, if the given Bhava
                 // Madhya is situated in Mesha, Vrishabha, Simha,
@@ -2684,7 +2688,7 @@ namespace VedAstro.Library
                          || ((mid >= 120.00) && (mid <= 150.00))
                          || ((mid >= 255.00) && (mid <= 285.00)))
                 {
-                    dig = 4 - (int)i;
+                    dig = 4 - (int)houseNumber;
                 }
                 //Subtract it from 7 if in Mithuna, Thula, Kumbha, Kanya or
                 // first half of Dhanus
@@ -2693,18 +2697,18 @@ namespace VedAstro.Library
                          || ((mid >= 300.00) && (mid <= 330.00))
                          || ((mid >= 240.00) && (mid <= 255.00)))
                 {
-                    dig = 7 - (int)i;
+                    dig = 7 - (int)houseNumber;
                 }
                 //and lastly from 1O if in Kataka, Meena and last half of Makara.
                 else if (((mid >= 90.00) && (mid <= 120.00))
                          || ((mid >= 330.00) && (mid <= 360.00))
                          || ((mid >= 285.00) && (mid <= 300.00)))
                 {
-                    dig = 10 - (int)i;
+                    dig = 10 - (int)houseNumber;
                 }
 
 
-                //If the diffcfrence exceeds 6, subtract it from 12, otherwise
+                //If the difference exceeds 6, subtract it from 12, otherwise
                 //take it as it is and multiply this difference by 1O.
                 //And you will get Bhava digbala of the particular bhava.
 
@@ -2719,12 +2723,14 @@ namespace VedAstro.Library
                 }
 
                 //store digbala value in return list with house number
-                BhavaDigBala[i] = (double)dig * 10;
+                 BhavaDigBala[houseNumber] = (double)dig * 10;
 
             }
 
-            return BhavaDigBala;
 
+            var newHouseResult = new HouseSubStrength(BhavaDigBala, "BhavaDigBala");
+
+            return newHouseResult;
 
         }
 
@@ -2733,14 +2739,15 @@ namespace VedAstro.Library
         /// of the lord of the bhava.
         /// For all 12 houses
         /// </summary>
-        public static Dictionary<HouseName, double> CalcBhavaAdhipathiBala(Time time)
+        [API("BhavaAdhipathiBala", "House Lord Strength")]
+        public static HouseSubStrength CalcBhavaAdhipathiBala(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("CalcBhavaAdhipathiBala", time), _calcBhavaAdhipathiBala);
+            return CacheManager.GetCache(new CacheKey(nameof(CalcBhavaAdhipathiBala), time), _calcBhavaAdhipathiBala);
 
 
             //UNDERLYING FUNCTION
-            Dictionary<HouseName, double> _calcBhavaAdhipathiBala()
+            HouseSubStrength _calcBhavaAdhipathiBala()
             {
                 PlanetName houseLord;
 
@@ -2754,19 +2761,63 @@ namespace VedAstro.Library
 
                     //The Shadbala Pinda (aggregate of the Shadbalas) of the lord of the
                     //bhava constitutes its Bhavadhipathi Bala.
-
                     //get Shadbala Pinda of lord (total strength) in shashtiamsas
                     BhavaAdhipathiBala[house] = GetPlanetShadbalaPinda(houseLord, time).ToDouble();
 
                 }
 
-                return BhavaAdhipathiBala;
+                var newHouseResult = new HouseSubStrength(BhavaAdhipathiBala, "BhavaAdhipathiBala");
+
+                return newHouseResult;
 
             }
 
         }
 
         #endregion
+
+    }
+
+    /// <summary>
+    /// Represents the mini strengths that mae the final strength of a house
+    /// </summary>
+    public class HouseSubStrength : IToJson
+    {
+        public string Name = "";
+
+        public Dictionary<HouseName, double> Power { get; }
+
+        public HouseSubStrength(Dictionary<HouseName, double> power, string name)
+        {
+            Power = power;
+            Name = name;
+        }
+
+
+        public JObject ToJson()
+        {
+            var returnList =  new JArray();
+
+            //add into a list for each house
+            foreach (var houseData in Power)
+            {
+                //pack data nicely
+                var temp = new JObject();
+                temp["House"] = (int)houseData.Key; //show as number
+                temp["Strength"] = houseData.Value; //show as number
+
+                Console.WriteLine(temp.ToString());
+
+                //add to main list
+                returnList.Add(temp);
+            }
+
+            //send list on its way
+            var wrap = new JObject();
+            wrap.Add(returnList);
+
+            return wrap;
+        }
 
     }
 }

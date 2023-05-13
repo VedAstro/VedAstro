@@ -13,11 +13,11 @@
 @*show links to beta & stable from vice versa*@
 @if (@WebsiteTools.GetIsBetaRuntime())
 {
-    <IconButton RetinaText="NOW BETA" SmallSize="true" Color="warning" IconName="mdi:bench-back" OnClickCallback="() => ChangeDomainMaintainURL(URL.WebStable)" TooltipText="Back To Classic" />
+    <IconButton RetinaText="NOW BETA" SmallSize="true" Color="warning" IconName="mdi:bench-back" OnClickCallback="() => ChangeDomainMaintainURL(URL.WebStable)" TooltipText="Old version" />
 }
 else
 {
-    <IconButton RetinaText="NOW STABLE" SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="() => ChangeDomainMaintainURL(URL.WebBeta)" TooltipText="Preview New Features" />
+    <IconButton RetinaText="NOW STABLE" SmallSize="true" Color="warning" IconName="icomoon-free:lab" ClickUrl="() => ChangeDomainMaintainURL(URL.WebBeta)" TooltipText="Latest version" />
 }
 
 <IconButton ExtraClass="ms-md-auto" SmallSize="true" Outline="true" ButtonText="Guide" IconName="mdi:book-open-page-variant-outline" ClickUrl="@PageRoute.QuickGuide" />

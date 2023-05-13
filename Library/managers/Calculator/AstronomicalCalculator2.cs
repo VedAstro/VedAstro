@@ -1335,43 +1335,6 @@ namespace VedAstro.Library
 
         }
 
-        [API("JulianDays")]
-        public static double ConvertLmtToJulian(Time time)
-        {
-
-            //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("ConvertLmtToJulian", time), _convertLmtToJulian);
-
-
-            //UNDERLYING FUNCTION
-            double _convertLmtToJulian()
-            {
-                //get lmt time
-                DateTimeOffset lmtDateTime = time.GetLmtDateTimeOffset();
-
-                //split lmt time to pieces
-                int year = lmtDateTime.Year;
-                int month = lmtDateTime.Month;
-                int day = lmtDateTime.Day;
-                double hour = (lmtDateTime.TimeOfDay).TotalHours;
-
-                //set calender type
-                int gregflag = SwissEph.SE_GREG_CAL; //GREGORIAN CALENDAR
-
-                //declare output variables
-                double localMeanTimeInJulian_UT;
-
-                //initialize ephemeris
-                SwissEph ephemeris = new SwissEph();
-
-                //get lmt in julian day in Universal Time (UT)
-                localMeanTimeInJulian_UT = ephemeris.swe_julday(year, month, day, hour, gregflag);//time to Julian Day
-
-                return localMeanTimeInJulian_UT;
-
-            }
-
-        }
 
         /// <summary>
         /// Gets Local mean time (LMT) at Greenwich (UTC) in Julian days based on the inputed time
@@ -1440,8 +1403,30 @@ namespace VedAstro.Library
                 return cusps;
             }
 
+            //special function localized to allow caching
+            //note: there is another version that does caching
+            double TimeToJulianDay(Time time)
+            {
+                //get lmt time
+                var lmtDateTime = time.GetLmtDateTimeOffset();
+
+                //Converts LMT to UTC (GMT)
+                DateTimeOffset utcDateTime = lmtDateTime.ToUniversalTime();
+
+                SwissEph swissEph = new SwissEph();
+
+                double jul_day_UT;
+                jul_day_UT = swissEph.swe_julday(utcDateTime.Year, utcDateTime.Month, utcDateTime.Day,
+                    utcDateTime.TimeOfDay.TotalHours, SwissEph.SE_GREG_CAL);
+                return jul_day_UT;
+
+            }
+
+
+
         }
 
+        [API("UTC")]
         public static DateTimeOffset LmtToUtc(Time time)
         {
             //CACHE MECHANISM
@@ -2409,7 +2394,7 @@ namespace VedAstro.Library
             var pranaPlanet = GetPrana();
 
 
-            return new Dasas() { Dasa = dasaPlanet, Bhukti = bhuktiPlanet, Antaram = antaramPlanet, Sukshma = sukshmaPlanet, Prana = pranaPlanet};
+            return new Dasas() { Dasa = dasaPlanet, Bhukti = bhuktiPlanet, Antaram = antaramPlanet, Sukshma = sukshmaPlanet, Prana = pranaPlanet };
 
 
             //LOCAL FUNCTIONS
@@ -2441,7 +2426,7 @@ namespace VedAstro.Library
 
 
             }
-            
+
             PlanetName GetSukshma()
             {
                 //first possible sukshma planet is the antaram planet
@@ -2604,6 +2589,7 @@ namespace VedAstro.Library
         ///  Gets years left in birth dasa at birth
         ///  Note : Returned years can only be 0 or above
         /// </summary>
+        [API("YearsLeftInBirthDasa")]
         public static double GetTimeLeftInBirthDasa(Time birthTime)
         {
             //get years already passed in birth dasa

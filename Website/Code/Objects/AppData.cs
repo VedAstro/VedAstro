@@ -135,6 +135,13 @@ namespace Website
         /// </summary>
         public static string? LastUsedLocation { get; set; } = DefaultLocationCountry;
 
+        /// <summary>
+        /// image html of loading icon ready to be used razor page (shortcut method)
+        /// </summary>
+        public static RenderFragment LoadingImage => (builder) =>
+        {
+            builder.AddMarkupContent(0, $"<img style=\"position: relative; left: 39%; top: 30%;\" src=\"images/loading-animation-progress-transparent.gif\" />");
+        };
 
         public static string DefaultLocationCountry = "Singapore";
 

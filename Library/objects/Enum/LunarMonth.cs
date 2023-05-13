@@ -10,6 +10,7 @@
     /// </summary>
     public enum LunarMonth
     {
+        Empty = 0,
         /// <summary>
         /// Chitta
         /// </summary>

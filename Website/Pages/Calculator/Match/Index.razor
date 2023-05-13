@@ -19,7 +19,7 @@
         <div class="vstack gap-3 me-5">
             <PersonSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonId="@SelectedMale" Label="Male" />
             <PersonSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
-            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate" />
+            <IconButton IconName="uim:process" ExtraClass="mt-1" Color="success" ButtonText="Calculate" OnClickCallback="OnClickCalculate" />
         </div>
     </div>
     @*SIDEBAR*@

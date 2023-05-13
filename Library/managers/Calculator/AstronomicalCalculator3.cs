@@ -196,6 +196,7 @@ namespace VedAstro.Library
         /// Benefics, on the other hand, tend to do good ; but
         /// sometimes they also become capable of doing harm.
         /// </summary>
+        [API("BeneficPlanets", "tend to do good", Category.StarsAboveMe)]
         public static List<PlanetName> GetBeneficPlanetList(Time time)
         {
             //Add permanent good planets to list first
@@ -235,6 +236,7 @@ namespace VedAstro.Library
         /// Malefics are always inclined to do harm, but under certain
         /// conditions, the intensity of the mischief is tempered.
         /// </summary>
+        [API("MaleficPlanets", "", Category.StarsAboveMe)]
         public static List<PlanetName> GetMaleficPlanetList(Time time)
         {
             //Add permanent evil planets to list first
@@ -2041,6 +2043,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets year & month lord at inputed time
         /// </summary>
+        [API("YearAndMonthLord")]
         public static object GetYearAndMonthLord(Time time)
         {
             //CACHE MECHANISM

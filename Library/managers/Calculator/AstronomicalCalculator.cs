@@ -32,7 +32,7 @@ namespace VedAstro.Library
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
         /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
         /// </summary>
-        [API("Longitude")]
+        [API("Longitude", "time back to longitude", Category.Astronomical)]
         public static Angle TimeToLongitude(TimeSpan time)
         {
             //TODO function is a candidate for caching
@@ -48,7 +48,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the ephemris time that is consumed by Swiss Ephemeris
         /// </summary>
-        [API("EphemerisTime")]
+        [API("EphemerisTime", "", Category.Astronomical)]
         public static double TimeToEphemerisTime(Time time)
         {
 
@@ -168,10 +168,11 @@ namespace VedAstro.Library
 
         }
 
+
         /// <summary>
         /// Gets constellation behind the moon (shortcut function)
         /// </summary>
-        [API("MoonConstellation")]
+        [API("MoonConstellation", "constellation behind the moon", Category.StarsAboveMe)]
         public static PlanetConstellation GetMoonConstellation(Time time) => GetPlanetConstellation(time, PlanetName.Moon);
 
         /// <summary>
@@ -290,7 +291,7 @@ namespace VedAstro.Library
 
         }
 
-        [API("MoonSign")]
+        [API("MoonSign", "", Category.StarsAboveMe)]
         public static ZodiacName GetMoonSignName(Time time)
         {
             //get zodiac sign behind the moon
@@ -300,7 +301,7 @@ namespace VedAstro.Library
             return moonSign.GetSignName();
         }
 
-        [API("NithyaYoga")]
+        [API("NithyaYoga", "", Category.StarsAboveMe)]
         public static NithyaYoga GetNithyaYoga(Time time)
         {
             //Nithya Yoga = (Longitude of Sun + Longitude of Moon) / 13°20' (or 800')
@@ -327,7 +328,7 @@ namespace VedAstro.Library
             return nithyaYoga;
         }
 
-        [API("Karana")]
+        [API("Karana", "", Category.StarsAboveMe)]
         public static Karana GetKarana(Time time)
         {
             //declare karana as empty first
@@ -420,7 +421,7 @@ namespace VedAstro.Library
             return (Karana)karanaToReturn;
         }
 
-        [API("SunSign")]
+        [API("SunSign", "", Category.StarsAboveMe)]
         public static ZodiacSign GetSunSign(Time time)
         {
 
@@ -759,24 +760,44 @@ namespace VedAstro.Library
 
         }
 
-        [API("JulianDay")]
-        public static double TimeToJulianDay(Time time)
+        [API("JulianDays")]
+        public static double ConvertLmtToJulian(Time time)
         {
-            //get lmt time
-            var lmtDateTime = time.GetLmtDateTimeOffset();
 
-            //Converts LMT to UTC (GMT)
-            DateTimeOffset utcDateTime = lmtDateTime.ToUniversalTime();
+            //CACHE MECHANISM
+            return CacheManager.GetCache(new CacheKey(nameof(ConvertLmtToJulian), time), _convertLmtToJulian);
 
-            SwissEph swissEph = new SwissEph();
 
-            double jul_day_UT;
-            jul_day_UT = swissEph.swe_julday(utcDateTime.Year, utcDateTime.Month, utcDateTime.Day,
-                utcDateTime.TimeOfDay.TotalHours, SwissEph.SE_GREG_CAL);
-            return jul_day_UT;
+            //UNDERLYING FUNCTION
+            double _convertLmtToJulian()
+            {
+                //get lmt time
+                DateTimeOffset lmtDateTime = time.GetLmtDateTimeOffset();
 
+                //split lmt time to pieces
+                int year = lmtDateTime.Year;
+                int month = lmtDateTime.Month;
+                int day = lmtDateTime.Day;
+                double hour = (lmtDateTime.TimeOfDay).TotalHours;
+
+                //set calender type
+                int gregflag = SwissEph.SE_GREG_CAL; //GREGORIAN CALENDAR
+
+                //declare output variables
+                double localMeanTimeInJulian_UT;
+
+                //initialize ephemeris
+                SwissEph ephemeris = new SwissEph();
+
+                //get lmt in julian day in Universal Time (UT)
+                localMeanTimeInJulian_UT = ephemeris.swe_julday(year, month, day, hour, gregflag);//time to Julian Day
+
+                return localMeanTimeInJulian_UT;
+
+            }
 
         }
+
 
         /// <summary>
         /// Gets all the planets that are in conjunction with the inputed planet
@@ -1730,79 +1751,6 @@ namespace VedAstro.Library
             return false;
         }
 
-        [API("Hora")]
-        public static ZodiacName GetPlanetHoraSign(PlanetName planetName, Time time)
-        {
-            //get planet sign
-            var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, time);
-
-            //get planet sign name
-            var planetSignName = planetSign.GetSignName();
-
-            //get planet degrees in sign
-            var degreesInSign = planetSign.GetDegreesInSign().TotalDegrees;
-
-            //declare flags
-            var planetInFirstHora = false;
-            var planetInSecondHora = false;
-
-            //1.0 get which hora planet is in
-            //if sign in first hora (0 to 15 degrees)
-            if (degreesInSign >= 0 && degreesInSign <= 15)
-            {
-                planetInFirstHora = true;
-            }
-
-            //if sign in second hora (15 to 30 degrees)
-            if (degreesInSign > 15 && degreesInSign <= 30)
-            {
-                planetInSecondHora = true;
-            }
-
-            //2.0 check which type of sign the planet is in
-
-            //if planet is in odd sign
-            if (IsOddSign(planetSignName))
-            {
-                //if planet in first hora
-                if (planetInFirstHora == true && planetInSecondHora == false)
-                {
-                    //governed by the Sun (Leo)
-                    return ZodiacName.Leo;
-                }
-
-                //if planet in second hora
-                if (planetInFirstHora == false && planetInSecondHora == true)
-                {
-                    //governed by the Moon (Cancer)
-                    return ZodiacName.Cancer;
-                }
-
-            }
-
-
-            //if planet is in even sign
-            if (IsEvenSign(planetSignName))
-            {
-                //if planet in first hora
-                if (planetInFirstHora == true && planetInSecondHora == false)
-                {
-                    //governed by the Moon (Cancer)
-                    return ZodiacName.Cancer;
-
-                }
-
-                //if planet in second hora
-                if (planetInFirstHora == false && planetInSecondHora == true)
-                {
-                    //governed by the Sun (Leo)
-                    return ZodiacName.Leo;
-                }
-
-            }
-
-            throw new Exception("Planet hora not found, error!");
-        }
 
         /// <summary>
         /// Gets a planet's relationship to a sign, based on the relation to the lord
@@ -2253,6 +2201,7 @@ namespace VedAstro.Library
 
         }
 
+        [API("Panchaka", "", Category.StarsAboveMe)]
         public static PanchakaName GetPanchaka(Time time)
         {
             //If the remainder is 1 (mrityu panchakam), it
@@ -2311,6 +2260,7 @@ namespace VedAstro.Library
 
         }
 
+        [API("LordOfWeekday", "", Category.StarsAboveMe)]
         public static PlanetName GetLordOfWeekday(Time time)
         {
             //Sunday Sun
@@ -2381,6 +2331,7 @@ namespace VedAstro.Library
         /// first hour after sunrise and the last hora, the hour
         /// before sunrise the next day.
         /// </summary>
+        [API("Hora", "A hora is equal to 1/24th part of a day", Category.StarsAboveMe)]
         public static int GetHoraAtBirth(Time time)
         {
             TimeSpan hours;
@@ -2418,9 +2369,86 @@ namespace VedAstro.Library
 
         }
 
+
+        [API("PlanetHoraSign", "", Category.StarsAboveMe)]
+        public static ZodiacName GetPlanetHoraSign(PlanetName planetName, Time time)
+        {
+            //get planet sign
+            var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, time);
+
+            //get planet sign name
+            var planetSignName = planetSign.GetSignName();
+
+            //get planet degrees in sign
+            var degreesInSign = planetSign.GetDegreesInSign().TotalDegrees;
+
+            //declare flags
+            var planetInFirstHora = false;
+            var planetInSecondHora = false;
+
+            //1.0 get which hora planet is in
+            //if sign in first hora (0 to 15 degrees)
+            if (degreesInSign >= 0 && degreesInSign <= 15)
+            {
+                planetInFirstHora = true;
+            }
+
+            //if sign in second hora (15 to 30 degrees)
+            if (degreesInSign > 15 && degreesInSign <= 30)
+            {
+                planetInSecondHora = true;
+            }
+
+            //2.0 check which type of sign the planet is in
+
+            //if planet is in odd sign
+            if (IsOddSign(planetSignName))
+            {
+                //if planet in first hora
+                if (planetInFirstHora == true && planetInSecondHora == false)
+                {
+                    //governed by the Sun (Leo)
+                    return ZodiacName.Leo;
+                }
+
+                //if planet in second hora
+                if (planetInFirstHora == false && planetInSecondHora == true)
+                {
+                    //governed by the Moon (Cancer)
+                    return ZodiacName.Cancer;
+                }
+
+            }
+
+
+            //if planet is in even sign
+            if (IsEvenSign(planetSignName))
+            {
+                //if planet in first hora
+                if (planetInFirstHora == true && planetInSecondHora == false)
+                {
+                    //governed by the Moon (Cancer)
+                    return ZodiacName.Cancer;
+
+                }
+
+                //if planet in second hora
+                if (planetInFirstHora == false && planetInSecondHora == true)
+                {
+                    //governed by the Sun (Leo)
+                    return ZodiacName.Leo;
+                }
+
+            }
+
+            throw new Exception("Planet hora not found, error!");
+        }
+
+
         /// <summary>
         /// get sunrise time for that day
         /// </summary>
+        [API("Sunrise")]
         public static Time GetSunriseTime(Time time)
         {
 
@@ -2477,6 +2505,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Get actual sunset time for that day at that place
         /// </summary>
+        [API("Sunset")]
         public static Time GetSunsetTime(Time time)
         {
 
@@ -2540,6 +2569,7 @@ namespace VedAstro.Library
         /// almost the same for all places.
         /// *Center of disk is not actually used for now (future implementation)
         /// </summary>
+        [API("LocalNoonTime", "Sun is exactly overhead at location")]
         public static DateTime GetNoonTime(Time time)
         {
             //get apparent time
@@ -2911,6 +2941,7 @@ namespace VedAstro.Library
         /// Thus if Aquarius is ascendant and its lord Saturn is in the 4th (Taurus)
         /// then the 4th from Taurus, viz., Leo becomes Arudha Lagna.
         /// </summary>
+        [API("ArudhaLagna", "bearing on the financial status", Category.StarsAboveMe)]
         public static ZodiacName GetArudhaLagnaSign(Time time)
         {
             //get janma lagna
@@ -3075,8 +3106,12 @@ namespace VedAstro.Library
             return planetIsExaltation;
         }
 
+        [API("LunarMonth")]
         public static LunarMonth GetLunarMonth(Time time)
         {
+
+            return LunarMonth.Empty;
+
             //TODO NEEDS WORK
             throw new NotImplementedException();
 
@@ -3251,6 +3286,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if the moon is FULL, moon day 15
         /// </summary>
+        [API("IsFullMoon", "moon day 15", Category.StarsAboveMe)]
         public static bool IsFullMoon(Time time)
         {
             //get the lunar date number

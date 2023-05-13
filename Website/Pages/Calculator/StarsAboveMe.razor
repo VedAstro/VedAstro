@@ -3,42 +3,69 @@
 
 <PageTitle>Stars Above Me</PageTitle>
 
-<PageTop ImageName="api-builder-banner.svg"
+<PageTop ImageName="stars-above-me-banner.png"
          Title="Stars Above Me"
-         DescriptionText="All astrological info of the stars and planets above you now">
+         DescriptionText="Info of stars and planets above you now. View pure astronomical and inteprated Vedic data for past and future anywhere in the world.">
 </PageTop>
 
 
-<div class="hstack gap-3">
+<div class="hstack gap-3 my-4">
     <TimeInputSimple @ref="_timeInput" LabelText="Time" /> @*todo default to now*@
     <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
-    <IconButton ButtonText="Refresh" Color="success" ExtraClass="align-self-end" IconName="" OnClickCallback="RefreshData" />
+    <IconButton ButtonText="Refresh" Color="success" ExtraClass="align-self-end" IconName="uim:process" OnClickCallback="RefreshData" />
 </div>
 
 
+@if (isReady)
+{
+    <IconTitle Title="Vedic" IconName="ph:star-of-david-duotone" />
+    <table class="table-striped table-hover table-bordered mb-5">
+        <thead>
+            <tr>
+                <th scope="col" class="p-1">Data</th>
+                <th scope="col" class="p-1">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var calcResult in astrologyCalcs)
+            {
+                <tr>
+                    <th scope="row" class="p-1">@Format.FormatName(calcResult.Name)</th>
+                    <td class="p-1">@calcResult.ToString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <IconTitle Title="Astronomy" IconName="streamline:ecology-science-planet-solar-system-ring-planet-saturn-space-astronomy" />
+    <table class="table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Data</th>
+                <th scope="col">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var calcResult in astronomyCalcs)
+            {
+                <tr>
+                    <th scope="row">@calcResult.Name</th>
+                    <td>@calcResult.ToString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    @AppData.LoadingImage
+}
+
 <hr />
 
-<table class="table  table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Data</th>
-            <th scope="col">Value</th>
-            <th scope="col">Info</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">Ruling Constellation</th>
-            <td>@(AstronomicalCalculator.GetMoonConstellation(finalTime))</td>
-            <td>Constellation behind the moon</td>
-        </tr>
-    </tbody>
-</table>
-
-<hr />
-
-<div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.CarlSaganWiki)">
-    <figure class="text-center mt-5">
+<div>
+    <figure style="cursor: pointer;" class="text-center mt-5" @onclick="() => _jsRuntime.OpenNewTab(URL.CarlSaganWiki)">
         <blockquote class="blockquote">
             <p>We're made of star stuff</p>
         </blockquote>
@@ -51,6 +78,10 @@
 
 @code {
 
+    private bool isReady = false;
+
+    private List<APIFunctionResult> astrologyCalcs;
+    private List<APIFunctionResult> astronomyCalcs;
 
     private Time finalTime = Time.Empty;
     private GeoLocation finalGeoLocation = GeoLocation.Empty;
@@ -61,25 +92,30 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //page should auto show data for user at current location
-        if (firstRender)
-        {
-            await RefreshData();
-        }
-
+        //we wait after render to get ready time and location
+        if (firstRender) { await RefreshData(); }
 
     }
 
 
     private async Task RefreshData()
     {
+        //trigger loading icon
+        isReady = false;
 
         finalGeoLocation = _geoLocationInput.GetGeoLocation();
         finalTime = await _timeInput.GetTime(finalGeoLocation);
 
         //get all methods that have only time as input
-        var timeOnlyCalcs = Tools.ExecuteCalculatorByParam<Time>(finalTime);
+        astronomyCalcs = AutoCalculator.ExecuteFunctions(Category.Astronomical, finalTime);
 
-        Console.WriteLine(timeOnlyCalcs);
+        astrologyCalcs = AutoCalculator.ExecuteFunctions(Category.StarsAboveMe, finalTime);
+
+
+        isReady = true;
+
+        StateHasChanged();
+
     }
 
 }

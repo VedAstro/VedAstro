@@ -9,9 +9,29 @@ namespace VedAstro.Library;
 /// </summary>
 public record APIFunctionResult(string Name, object Result)
 {
+
+    /// <summary>
+    /// special override to print out any type of data
+    /// nicely for HUMAN EYES
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
-        return $"{{ Name = {Name}, Result = {Result} }}";
+        var returnData = "";
+        if (Result is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris
+        {
+            //convert list to comma separated string
+            var parsedList = iList.Cast<object>().ToList(); //cast otherwise won't masuk
+            var stringComma = Tools.ListToString(parsedList);
+
+            return stringComma;
+        }
+        //normal conversion via to string
+        else
+        {
+           return Result?.ToString();
+        }
+
     }
 
     public JProperty ToJson()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -1841,21 +1841,17 @@ namespace VedAstro.Library
             return isAfter;
         }
 
-        private static HttpClient _httpClient;
 
         /// <summary>
-        /// sends a simple head request to check if file exists
+        /// sends a simple head request to check if file exists (low cost)
         /// </summary>
         public static async Task<bool> DoesFileExist(string url)
         {
-            if (_httpClient == null)
-            {
-                _httpClient = new HttpClient();
-            }
+            var client = new HttpClient();
 
             using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, url))
             {
-                using (HttpResponseMessage response = await _httpClient.SendAsync(request))
+                using (HttpResponseMessage response = await client.SendAsync(request))
                 {
                     return response.StatusCode == System.Net.HttpStatusCode.OK;
                 }
@@ -1863,4 +1859,5 @@ namespace VedAstro.Library
         }
     }
 
+  
 }

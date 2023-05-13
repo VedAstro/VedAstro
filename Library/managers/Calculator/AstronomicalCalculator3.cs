@@ -263,7 +263,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets planet aspected by the inputed planet
         /// </summary>
-        [API("PlanetsInAspect")]
+        [API("TransmittingAspectToPlanet")]
         public static List<PlanetName> GetPlanetsInAspect(PlanetName planet, Time time)
         {
             //get signs planet is aspecting
@@ -287,7 +287,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all planets the transmiting aspect to inputed planet
         /// </summary>
-        [API("PlanetsAspectingPlanet")]
+        [API("ReceivingAspectFrom")]
         public static List<PlanetName> GetPlanetsAspectingPlanet(Time time, PlanetName receivingAspect)
         {
             //check if all planets is aspecting inputed planet
@@ -300,7 +300,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets houses aspected by the inputed planet
         /// </summary>
-        [API("HousesInAspect")]
+        [API("TransmittingAspectToHouse")]
         public static List<HouseName> GetHousesInAspect(PlanetName planet, Time time)
         {
             //get signs planet is aspecting

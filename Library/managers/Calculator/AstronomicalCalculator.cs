@@ -2657,10 +2657,11 @@ namespace VedAstro.Library
         /// max = hightest possible value
         /// min = lowest possible value
         /// </summary>
+        [API("ShadvargaBalaNeutralPoint")]
         public static double GetPlanetShadvargaBalaNeutralPoint(PlanetName planet)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetShadvargaBalaNeutralPoint", planet), _getPlanetShadvargaBalaNeutralPoint);
+            return CacheManager.GetCache(new CacheKey(nameof(GetPlanetShadvargaBalaNeutralPoint), planet), _getPlanetShadvargaBalaNeutralPoint);
 
 
 
@@ -2725,6 +2726,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if a planet is conjuct with an evil/malefic planet
         /// </summary>
+        [API("ConjunctWithMalefics")]
         public static bool IsPlanetConjunctWithMaleficPlanets(PlanetName planetName, Time time)
         {
             //get all the planets conjuct with inputed planet
@@ -2885,6 +2887,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Checks if a planet is receiving aspects from an evil planet
         /// </summary>
+        [API("AspectedByMalefics")]
         public static bool IsPlanetAspectedByMaleficPlanets(PlanetName lord, Time time)
         {
             //get list of evil planets

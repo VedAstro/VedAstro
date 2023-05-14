@@ -232,41 +232,41 @@ namespace VedAstro.Library
                     {
                         //Dina Kuta (3 pts)
                         case MatchPredictionName.DinaKuta:
-                            report.KutaScore += 3;
+                            report.KutaScoreRounded += 3;
                             break;
                         //Gana Kuta: (6 pts)
                         case MatchPredictionName.GunaKuta:
-                            report.KutaScore += 6;
+                            report.KutaScoreRounded += 6;
                             break;
                         //Nadi Kuta: (8 pts)
                         case MatchPredictionName.NadiKuta:
-                            report.KutaScore += 8;
+                            report.KutaScoreRounded += 8;
                             break;
                         //Rashi Kuta - (7 pts)
                         case MatchPredictionName.RasiKuta:
-                            report.KutaScore += 7;
+                            report.KutaScoreRounded += 7;
                             break;
                         //Graha Maitram - (5 pts)
                         case MatchPredictionName.GrahaMaitram:
-                            report.KutaScore += 5;
+                            report.KutaScoreRounded += 5;
                             break;
                         // Vasyu Kuta - (2 pts).
                         case MatchPredictionName.VasyaKuta:
-                            report.KutaScore += 2;
+                            report.KutaScoreRounded += 2;
                             break;
                         // Varna Kuta - (1 pt)
                         case MatchPredictionName.Varna:
-                            report.KutaScore += 1;
+                            report.KutaScoreRounded += 1;
                             break;
                         //Yoni Kuta - (4 pts)
                         case MatchPredictionName.YoniKuta:
-                            report.KutaScore += 4;
+                            report.KutaScoreRounded += 4;
                             break;
                     }
                 }
 
                 //convert score to percentage of 36
-                report.KutaScore = Math.Round((report.KutaScore / 36) * 100);
+                report.KutaScoreRounded = Math.Round((report.KutaScoreRounded / 36) * 100);
 
             }
 

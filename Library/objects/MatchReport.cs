@@ -30,7 +30,7 @@ namespace VedAstro.Library
         /// Final score in percentage from report
         /// note hard rounded to nearest for better accuracy
         /// </summary>
-        public double KutaScore
+        public double KutaScoreRounded
         {
             
             get
@@ -45,9 +45,6 @@ namespace VedAstro.Library
         public Person Male { get; set; }
 
         public Person Female { get; set; }
-
-        //todo should be dynamic
-        public string ScoreColor => this.KutaScore > 50 ? "Green" : "Red";
 
         /// <summary>
         /// User ID is used by website. Multiple supported, Shows owners
@@ -88,14 +85,14 @@ namespace VedAstro.Library
         /// <summary>
         /// Dynamic text to summarize the compatibility based on Kuta score
         /// </summary>
-        public MatchSummaryData Summary => GetSummary(KutaScore);
+        public MatchSummaryData Summary => GetSummary(KutaScoreRounded);
 
         public MatchReport(string id, Person male, Person female, double kutaScore,string notes, List<MatchPrediction> predictionList, string[] userId)
         {
             Id = id;
             Male = male;
             Female = female;
-            KutaScore = kutaScore;
+            KutaScoreRounded = kutaScore;
             Notes = notes;
             PredictionList = predictionList;
             UserId = userId.Any() ? userId : DefaultUserId;
@@ -111,7 +108,7 @@ namespace VedAstro.Library
             var compatibilityReport = new XElement("MatchReport");
 
             //place data in individual tags
-            var kutaScore = new XElement("KutaScore", this.KutaScore);
+            var kutaScore = new XElement("KutaScore", this._rawKutaScore); //not rounded
             var male = new XElement("Male", Male.ToXml());
             var female = new XElement("Female", Female.ToXml());
             var predictionList = PredictionListToXml(this.PredictionList);
@@ -128,7 +125,7 @@ namespace VedAstro.Library
         {
 
             var temp = new JObject();
-            temp["KutaScore"] = this.KutaScore;
+            temp["KutaScore"] = this._rawKutaScore;  //not rounded
             temp["Male"] = Male.ToJson();
             temp["Female"] = Female.ToJson();
             temp["PredictionList"] = MatchPrediction.ToJsonList(this.PredictionList);

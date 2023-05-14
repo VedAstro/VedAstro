@@ -33,7 +33,7 @@ else
                             <PersonTooltip Person="@report.Female" />
                         </div>
                     </td>
-                    <td><b style="color: @report.ScoreColor;">@report.KutaScore%</b></td>
+                    <td><b style="color: @report.Summary.scoreColor;">@report.KutaScoreRounded%</b></td>
                     <td>@report.Notes</td>
                     <td><IconButton ButtonText="View" OpenNewTab="true" ClickUrl=@($"/Calculator/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
                 </tr>

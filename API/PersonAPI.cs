@@ -104,9 +104,9 @@ namespace API
             string callerId = APITools.GetCallerId(parsedRequest);
 
             //adding new person needs make sure all cache is cleared if any
-            //NOTE: we mark the cache as "Terminated", rather than delete, so that client can call and know its has gone sour
-            //if we "Purge" here than it will go 404, always room for improvement
-            await client.TerminateInstanceAsync(callerId);
+            //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
+            var purgeResult = await client.PurgeInstanceAsync(callerId);
+            var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
 
             //STAGE 2 : NOW WE WORK
@@ -139,9 +139,9 @@ namespace API
             string callerId = APITools.GetCallerId(parsedRequest);
 
             //adding new person needs make sure all cache is cleared if any
-            //NOTE: we mark the cache as "Terminated", rather than delete, so that client can call and know its has gone sour
-            //if we "Purge" here than it will go 404, always room for improvement
-            await client.TerminateInstanceAsync(callerId);
+            //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
+            var purgeResult = await client.PurgeInstanceAsync(callerId);
+            var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
 
             //STAGE 2 : NOW WE WORK
@@ -207,9 +207,9 @@ namespace API
             string callerId = APITools.GetCallerId(parsedRequest);
 
             //adding new person needs make sure all cache is cleared if any
-            //NOTE: we mark the cache as "Terminated", rather than delete, so that client can call and know its has gone sour
-            //if we "Purge" here than it will go 404, always room for improvement
-            await client.TerminateInstanceAsync(callerId);
+            //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
+            var purgeResult = await client.PurgeInstanceAsync(callerId);
+            var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
 
             //STAGE 2 : NOW WE WORK

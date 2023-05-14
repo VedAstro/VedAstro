@@ -297,6 +297,11 @@ namespace API
         }
 
 
+        /// <summary>
+        /// The underlying async func that actually gets the list
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         [Function(nameof(_getPersonListAsync))]
         public static async Task<JsonDocument> _getPersonListAsync([OrchestrationTrigger]
             TaskOrchestrationContext context)
@@ -328,10 +333,13 @@ namespace API
             var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
 
             //filter out record by user id
-            var userIdList = Tools.FindXmlByUserId(personListXml, swapOptions.UserId);
+            var personListByUserIdXml = Tools.FindXmlByUserId(personListXml, swapOptions.UserId);
+
+            //sort a to z by name for ease of user (done here for speed vs client)
+            var sortedList = personListByUserIdXml.OrderBy(personXml => personXml.Element("Name")?.Value ?? "").ToList();
 
             //convert raw XML to Person Json
-            var personListJson = Person.XmlListToJsonList(userIdList);
+            var personListJson = Person.XmlListToJsonList(sortedList);
 
             //convert to type accepted by durable
             var jsonText = personListJson.ToString();

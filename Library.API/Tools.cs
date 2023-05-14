@@ -24,7 +24,7 @@ namespace Library.API
     internal static class Tools
     {
 
-        public static async Task<string> ReadServer(string receiverAddress)
+        public static async Task<JObject> ReadServer(string receiverAddress)
         {
             //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
@@ -38,14 +38,14 @@ namespace Library.API
 
             //return the raw reply to caller
             var dataReturned = await response.Content.ReadAsStringAsync();
-            return dataReturned;
+            return JObject.Parse(dataReturned);
         }
 
-        public static async Task<JObject> WriteServer(string receiverAddress, JToken? payloadJson = null)
+        public static async Task<JObject> WriteServer(HttpMethod method, string receiverAddress, JToken? payloadJson = null)
         {
 
             //prepare the data to be sent
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+            var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
 
             //tell sender to wait for complete reply before exiting
             var waitForContent = HttpCompletionOption.ResponseContentRead;

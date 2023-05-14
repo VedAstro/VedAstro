@@ -58,7 +58,9 @@ namespace Library.API
             var url = $"{_url.GetPersonListAsync}/UserId/{_userId}/VisitorId/{_visitorId}";
 
             //API gives a url to check on poll fo results
-            PersonListWebhook = await Tools.ReadServer(url);
+            var rawResult = await Tools.ReadServer(url);
+
+            PersonListWebhook = GetPayload<string>(rawResult, null);
 
         }
 
@@ -76,13 +78,13 @@ namespace Library.API
             //if person not prepared then prepare before continuing
             if (!IsPersonPrepared) { await PreparePersonList(); }
 
-            
+
         //check if person list is ready
         //here result can contain payload if ready
         TryAgain:
             var result = await Tools.ReadServer(PersonListWebhook);
-            var parsed = JObject.Parse(result);
-            var runtimeStatus = parsed["runtimeStatus"]?.Value<string>() ?? "";
+            //todo change to payload standard
+            var runtimeStatus = result["runtimeStatus"]?.Value<string>() ?? "";
 
             //note : if error status, will be corrected by API,
             //so here we wait till complete
@@ -99,12 +101,11 @@ namespace Library.API
 
             //once done, get data out
             //person list json to parsed
-            var outputToken = parsed["output"]; //json array
+            var outputToken = result["output"]; //json array
             CachedPersonList = Person.FromJsonList(outputToken); //cache for later use
 
             return CachedPersonList;
         }
-
 
         /// <summary>
         /// Adds new person to API server main list
@@ -115,8 +116,13 @@ namespace Library.API
             var personJson = person.ToJson();
             //pass in user id to make sure user has right to delete
             var url = $"{_url.AddPerson}/UserId/{_userId}/VisitorId/{_visitorId}";
-            var jsonResult = await Tools.WriteServer(url, personJson);
+            var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, personJson);
 
+#if DEBUG
+            Console.WriteLine($"SERVER SAID:\n{jsonResult}");
+#endif
+
+            //if pass, clear local person cache
             await HandleResultClearLocalCache(jsonResult);
         }
 
@@ -133,8 +139,9 @@ namespace Library.API
             var url = $"{_url.DeletePerson}/UserId/{_userId}/VisitorId/{_visitorId}/PersonId/{personId}";
 
             //API gives a url to check on poll fo results
-            var jsonResult = await Tools.WriteServer(url);
+            var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
 
+            //if pass, clear local person cache
             await HandleResultClearLocalCache(jsonResult);
 
         }
@@ -154,8 +161,9 @@ namespace Library.API
             //prepare and send updated person to API server
             var updatedPerson = person.ToJson();
             var url = $"{_url.UpdatePerson}/UserId/{_userId}/VisitorId/{_visitorId}";
-            var jsonResult = await Tools.WriteServer(url, updatedPerson);
+            var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, updatedPerson);
 
+            //if pass, clear local person cache
             await HandleResultClearLocalCache(jsonResult);
 
         }
@@ -167,22 +175,31 @@ namespace Library.API
         {
             var url = $"{_url.GetPerson}/PersonId/{personId}";
             var result = await Tools.ReadServer(url);
-            var parsedResult = JObject.Parse(result);
 
-            //check result, display error if needed
-            var isPass = parsedResult["Status"].Value<string>() == "Pass";
-            if (isPass)
-            {
-                var personJson = Person.FromJson(parsedResult["Payload"]);
+            //get parsed payload from raw result
+            var person = GetPayload(result, Person.FromJson);
 
-                return personJson;
-            }
-            else
-            {
-                //todo handle reply properly
-                Console.WriteLine("API SAID : FAIL");
-                return Person.Empty;
-            }
+            return person;
+        }
+
+
+        /// <summary>
+        /// calls API to generate a new person ID, unique and human readable
+        /// NOTE:
+        /// - API has faster access to person list to cross refer, so done there and not in client
+        /// - called before person new person is made on client
+        /// </summary>
+        public async Task<string> GetNewPersonId(string personName, int stdBirthYear)
+        {
+
+            //get all person profile owned by current user/visitor
+            var url = $"{_url.GetNewPersonId}/Name/{personName}/BirthYear/{stdBirthYear}";
+            var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
+
+            //get parsed payload from raw result
+            string personId = GetPayload<string>(jsonResult, null);
+
+            return personId;
 
         }
 
@@ -190,6 +207,10 @@ namespace Library.API
 
         //---------------------------------------------PRIVATE
 
+
+        /// <summary>
+        /// checks status, if pass clears person list cache, for update, delete and add
+        /// </summary>
         private async Task HandleResultClearLocalCache(JObject jsonResult)
         {
             //check result, display error if needed
@@ -207,6 +228,47 @@ namespace Library.API
             }
         }
 
+
+        /// <summary>
+        /// takes in raw response from API and
+        /// gets payload after checking status and shows error if status "Fail"
+        /// note :  no parser use direct, support for string, int and double
+        /// </summary>
+        private T? GetPayload<T>(JObject rawResult, Func<JToken, T>? parser)
+        {
+            //result must say Pass, else it has failed
+            var isPass = rawResult["Status"]?.Value<string>() == "Pass";
+            var payloadJson = rawResult["Payload"] ?? new JObject();
+
+            if (isPass)
+            {
+#if DEBUG
+                Console.WriteLine("API SAID: PASS"); //debug to know all went well
+#endif
+
+                //use parser if available, use that, end here
+                if (parser != null)
+                {
+                    var personJson = parser(payloadJson);
+                    return personJson;
+                }
+
+                //if no parser use direct, support for string, int and double
+                return payloadJson.Value<T>();
+
+            }
+            else
+            {
+#if DEBUG
+                Console.WriteLine($"API SAID : FAIL :\n{payloadJson}");
+#endif
+                //for now this should notify errors nicely, todo maybe exceptions is not best 
+                throw new Exception($"Failed to get {typeof(T).AssemblyQualifiedName} from API payload");
+
+                return default; //backup future
+            }
+
+        }
 
 
     }

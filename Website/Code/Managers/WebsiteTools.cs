@@ -497,27 +497,6 @@ namespace Website
             }
         }
 
-        /// <summary>
-        /// calls API to generate a new person ID, unique and human readable
-        /// NOTE: API has faster access to person list to cross refer, so done there and not in client
-        /// </summary>
-        public static async Task<string> GetNewPersonId(string nameInput, int stdBirthYear)
-        {
-
-            //get all person profile owned by current user/visitor
-            var payload = new XElement("Root", new XElement("Name", nameInput), new XElement("BirthYear", stdBirthYear));
-            var result = await ServerManager.WriteToServerXmlReply(AppData.URL.GetNewPersonId, payload);
-
-            //get  data out and parse it (if all went well)
-            if (result.IsPass) { return result.Payload.Value; }
-
-            //if fail log it and return empty list as not to break the caller
-            else
-            {
-                await AppData.JsRuntime.ShowAlert("error", AlertText.ServerConnectionProblem(), true);
-                return null;
-            }
-        }
 
        
 

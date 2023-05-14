@@ -385,7 +385,7 @@
         _finalSvg = await GetSavedEventsChartSvgFromApi(selectedChartId);
 
         //gets person profile used to generate the saved chart being showed now
-        //needs to be set else parent depending will fail
+        //needs to be set else parent depending will fail todo funny code
         SelectedPerson = await WebsiteTools.GetPersonIdFromChartId(selectedChartId, _jsRuntime);
 
         //2 LOAD CHART INTO PAGE

@@ -21,21 +21,16 @@ namespace API
         /// 
         /// </summary>
         [Function("GetNewPersonId")]
-        public static async Task<HttpResponseData> GetNewPersonId([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        public static async Task<HttpResponseData> GetNewPersonId([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetNewPersonId/Name/{personName}/BirthYear/{birthYear}")] HttpRequestData incomingRequest,
+            string personName, string birthYear)
         {
 
             try
             {
-                //STAGE 1 : GET DATA OUT
-                //data out of request
-                var rootXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
-                var name = rootXml.Element("Name")?.Value;
-                var birthYear = rootXml.Element("BirthYear")?.Value;
-
                 //special ID made for human brains
-                var brandNewHumanReadyID = await APITools.GeneratePersonId(name, birthYear);
+                var brandNewHumanReadyID = await APITools.GeneratePersonId(personName, birthYear);
 
-                return APITools.PassMessage(brandNewHumanReadyID, incomingRequest);
+                return APITools.PassMessageJson(brandNewHumanReadyID, incomingRequest);
 
             }
             catch (Exception e)
@@ -98,7 +93,7 @@ namespace API
 
         [Function(nameof(AddPerson))]
         public static async Task<HttpResponseData> AddPerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "AddPerson/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "AddPerson/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,
             string userId, string visitorId)
         {
@@ -133,7 +128,7 @@ namespace API
         /// </summary>
         [Function(nameof(UpdatePerson))]
         public static async Task<HttpResponseData> UpdatePerson(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "UpdatePerson/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "UpdatePerson/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,
             string userId, string visitorId)
         {
@@ -276,6 +271,9 @@ namespace API
                                result?.RuntimeStatus == OrchestrationRuntimeStatus.Terminated ||
                                result?.RuntimeStatus == OrchestrationRuntimeStatus.Suspended;
             var isNewCall = result == null; //no old calls found will null
+
+
+            //STAGE 2 : PROCESS
             if (isNewCall || needsRestart)
             {
                 //if already exist than we must kill it first completely of the face of the earth aka PURGE
@@ -293,10 +291,8 @@ namespace API
             var x = client.CreateCheckStatusResponse(req, callerId);
             var pollingUrl = APITools.GetHeaderValue(x, "Location");
 
-            //send URL direct to caller
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteStringAsync(pollingUrl);
-            return response;
+            //send polling URL to caller as Passed payload, client should know what todo
+            return APITools.PassMessageJson(pollingUrl, req);
 
         }
 

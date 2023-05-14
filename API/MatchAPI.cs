@@ -274,7 +274,7 @@ namespace API
             {
                 foreach (var report in reportList)
                 {
-                    Console.WriteLine($"{report.Male.Name}\t{report.Female.Name}\t{report.KutaScoreRounded}");
+                    Console.WriteLine($"{report.Male.Name}\t{report.Female.Name}\t{report.KutaScore}");
                 }
 
                 Console.ReadLine();
@@ -310,7 +310,7 @@ namespace API
             }
 
             //order the list by strength, highest at 0 index
-            var SortedList = returnList.OrderBy(o => o.KutaScoreRounded).ToList();
+            var SortedList = returnList.OrderBy(o => o.KutaScore).ToList();
 
             return SortedList;
         }
@@ -347,7 +347,7 @@ namespace API
             }
 
             //order the list by strength, highest at 0 index
-            var resultListOrdered = resultList.OrderBy(o => o.KutaScoreRounded).ToList();
+            var resultListOrdered = resultList.OrderBy(o => o.KutaScore).ToList();
 
             //get needed details
 
@@ -378,7 +378,7 @@ namespace API
                 {
                     var report = MatchCalculator.GetCompatibilityReport(male, female, "101");
                     //if report meets criteria save it
-                    if (report.KutaScoreRounded > 50)
+                    if (report.KutaScore > 50)
                     {
                         goodReports.Add(report);
                     }

@@ -71,7 +71,7 @@ namespace VedAstro.Library
             var report = new MatchReport(Tools.GenerateId(), male, female, 0, "...", compatibilityPredictions, new[] { "101" });
 
             //count the total points
-            CalculateTotalPoints(ref report);
+            report.KutaScore = CalculateTotalPoints(report);
 
             //check results for exceptions
             HandleExceptions(ref report);
@@ -217,8 +217,10 @@ namespace VedAstro.Library
 
             //Kutas analysis consist of analyzing 12 Factors.Every factor contributes
             //some points, toward a maximum total score of 36 points.
-            void CalculateTotalPoints(ref MatchReport report)
+            double CalculateTotalPoints(MatchReport report)
             {
+
+                double totalPoints = 0; //this is over 36
 
                 //count points total 36 points
                 foreach (var prediction in report.PredictionList)
@@ -232,42 +234,43 @@ namespace VedAstro.Library
                     {
                         //Dina Kuta (3 pts)
                         case MatchPredictionName.DinaKuta:
-                            report.KutaScoreRounded += 3;
+                            totalPoints += 3;
                             break;
                         //Gana Kuta: (6 pts)
                         case MatchPredictionName.GunaKuta:
-                            report.KutaScoreRounded += 6;
+                            totalPoints += 6;
                             break;
                         //Nadi Kuta: (8 pts)
                         case MatchPredictionName.NadiKuta:
-                            report.KutaScoreRounded += 8;
+                            totalPoints += 8;
                             break;
                         //Rashi Kuta - (7 pts)
                         case MatchPredictionName.RasiKuta:
-                            report.KutaScoreRounded += 7;
+                            totalPoints += 7;
                             break;
                         //Graha Maitram - (5 pts)
                         case MatchPredictionName.GrahaMaitram:
-                            report.KutaScoreRounded += 5;
+                            totalPoints += 5;
                             break;
                         // Vasyu Kuta - (2 pts).
                         case MatchPredictionName.VasyaKuta:
-                            report.KutaScoreRounded += 2;
+                            totalPoints += 2;
                             break;
                         // Varna Kuta - (1 pt)
                         case MatchPredictionName.Varna:
-                            report.KutaScoreRounded += 1;
+                            totalPoints += 1;
                             break;
                         //Yoni Kuta - (4 pts)
                         case MatchPredictionName.YoniKuta:
-                            report.KutaScoreRounded += 4;
+                            totalPoints += 4;
                             break;
                     }
                 }
 
                 //convert score to percentage of 36
-                report.KutaScoreRounded = Math.Round((report.KutaScoreRounded / 36) * 100);
+                var kutaPercentage = (totalPoints / 36.0) * 100.0;
 
+                return kutaPercentage;
             }
 
         }

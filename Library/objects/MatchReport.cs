@@ -18,29 +18,13 @@ namespace VedAstro.Library
 
         private static readonly string[] DefaultUserId = new[] { "101" };
 
-        /// <summary>
-        /// This is the raw kuta score made by calc, this is hard rounded to nearest 5
-        /// by all who access it via prop
-        /// </summary>
-        private double _rawKutaScore;
-
         public List<MatchPrediction> PredictionList { get; set; }
 
         /// <summary>
         /// Final score in percentage from report
         /// note hard rounded to nearest for better accuracy
         /// </summary>
-        public double KutaScoreRounded
-        {
-            
-            get
-            {
-                //before giving value hard round to nearest 5
-                var rounded = Math.Round(_rawKutaScore / 5.0) * 5;
-                return rounded;
-            }
-            set => _rawKutaScore = value;
-        }
+        public double KutaScore { get; set; }
 
         public Person Male { get; set; }
 
@@ -85,14 +69,14 @@ namespace VedAstro.Library
         /// <summary>
         /// Dynamic text to summarize the compatibility based on Kuta score
         /// </summary>
-        public MatchSummaryData Summary => GetSummary(KutaScoreRounded);
+        public MatchSummaryData Summary => GetSummary(KutaScore);
 
         public MatchReport(string id, Person male, Person female, double kutaScore,string notes, List<MatchPrediction> predictionList, string[] userId)
         {
             Id = id;
             Male = male;
             Female = female;
-            KutaScoreRounded = kutaScore;
+            KutaScore = kutaScore;
             Notes = notes;
             PredictionList = predictionList;
             UserId = userId.Any() ? userId : DefaultUserId;
@@ -108,7 +92,7 @@ namespace VedAstro.Library
             var compatibilityReport = new XElement("MatchReport");
 
             //place data in individual tags
-            var kutaScore = new XElement("KutaScore", this._rawKutaScore); //not rounded
+            var kutaScore = new XElement("KutaScore", this.KutaScore); //not rounded
             var male = new XElement("Male", Male.ToXml());
             var female = new XElement("Female", Female.ToXml());
             var predictionList = PredictionListToXml(this.PredictionList);
@@ -125,7 +109,7 @@ namespace VedAstro.Library
         {
 
             var temp = new JObject();
-            temp["KutaScore"] = this._rawKutaScore;  //not rounded
+            temp["KutaScore"] = this.KutaScore;  //not rounded
             temp["Male"] = Male.ToJson();
             temp["Female"] = Female.ToJson();
             temp["PredictionList"] = MatchPrediction.ToJsonList(this.PredictionList);

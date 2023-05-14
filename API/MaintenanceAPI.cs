@@ -2,6 +2,7 @@
 using Google.Protobuf;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.DurableTask.Client;
 using System.Xml.Linq;
 using VedAstro.Library;
 
@@ -23,6 +24,24 @@ namespace API
 
             return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
         }
+
+        /// <summary>
+        /// Clears all cache, run manually when code is updated and new data is needed
+        /// </summary>
+        [Function(nameof(ClearCache))]
+        public static async Task<HttpResponseData> ClearCache(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
+            HttpRequestData req,
+            [DurableClient] DurableTaskClient client)
+        {
+            var purgeInstancesFilter = new PurgeInstancesFilter(DateTimeOffset.MinValue); //get all
+            var result = await client.PurgeAllInstancesAsync(purgeInstancesFilter, CancellationToken.None);
+
+            var message = $"CLEARED COUNT:{result.PurgedInstanceCount}";
+
+            return APITools.PassMessageJson(message, req);
+        }
+
 
         /// <summary>
         /// to allow client to send match report and other files to email via a single call

@@ -60,7 +60,7 @@ namespace VedAstro.Library
 
         public override string ToString()
         {
-            return $"{_signName} : {_degreesInSign}";
+            return $"{_signName} : {_degreesInSign.Rounded}";
         }
 
         public JObject ToJson()

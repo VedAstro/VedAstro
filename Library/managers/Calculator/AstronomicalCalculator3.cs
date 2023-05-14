@@ -2043,11 +2043,11 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets year & month lord at inputed time
         /// </summary>
-        [API("YearAndMonthLord")]
+        [API("YearAndMonthLord", "", Category.StarsAboveMe)]
         public static object GetYearAndMonthLord(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetYearAndMonthLord", time), _getYearAndMonthLord);
+            return CacheManager.GetCache(new CacheKey(nameof(GetYearAndMonthLord), time), _getYearAndMonthLord);
 
 
             //UNDERLYING FUNCTION
@@ -2056,7 +2056,6 @@ namespace VedAstro.Library
                 //set default
                 var yearLord = PlanetName.Sun;
                 var monthLord = PlanetName.Sun;
-
 
                 //initialize ephemeris
                 using SwissEph ephemeris = new SwissEph();
@@ -2215,28 +2214,13 @@ namespace VedAstro.Library
             return new Shashtiamsa(ochchabalaInShashtiamsa);
         }
 
-        //private static Time JulianTimeToTime(double riseTimeRaw, GeoLocation geoLocation)
-        //{
-        //    SwissEph ephemeris = new SwissEph();
 
-        //    int year = 0;
-        //    int month = 0;
-        //    int day = 0;
-        //    double hour = 0;
-
-        //    ephemeris.swe_revjul(riseTimeRaw, 1, ref year, ref month, ref day, ref hour);
-
-        //    var seperatedHour = TimeSpan.FromHours(hour);
-
-
-        //    var time = new DateTimeOffset(year, month, day, seperatedHour.Hours, seperatedHour.Minutes, seperatedHour.Seconds, seperatedHour.Milliseconds, new TimeSpan(0, 0, 0));
-
-        //}
 
         /// <summary>
         /// Determines if the input time is day during day, used for birth times
         /// if day returns true
         /// </summary>
+        [API("IsDayTime", "input time is day during day, used for birth times", Category.StarsAboveMe)]
         public static bool IsDayBirth(Time time)
         {
             //get sunrise & sunset times

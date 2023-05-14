@@ -138,7 +138,7 @@ namespace VedAstro.Library
 
         }
 
-        [API("LunarDay")]
+        [API("LunarDay", "", Category.StarsAboveMe)]
         public static LunarDay GetLunarDay(Time time)
         {
             //get position of sun & moon
@@ -437,7 +437,7 @@ namespace VedAstro.Library
         ///Find time when Sun was in 0.001 degrees
         ///in current sign (just entered sign)
         ///</summary>
-        [API("TimeSunEnteredCurrentSign")]
+        [API("TimeSunEnteredCurrentSign", "", Category.StarsAboveMe)]
         public static Time GetTimeSunEnteredCurrentSign(Time time)
         {
 
@@ -517,7 +517,7 @@ namespace VedAstro.Library
         ///     1. degrees Sun is in sign is more than 29.999 degress (very very close to leaving sign)
         ///     2. accuracy limit is hit
         ///</summary>
-        [API("TimeSunLeavesCurrentSign")]
+        [API("TimeSunLeavesCurrentSign", "", Category.StarsAboveMe)]
         public static Time GetTimeSunLeavesCurrentSign(Time time)
         {
 
@@ -591,7 +591,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Calculates & creates all houses as list
         /// </summary>
-        [API("Houses")]
+        [API("HouseLongitudes", "", Category.Astrology)]
         public static List<House> GetHouses(Time time)
         {
             //CACHE MECHANISM
@@ -2647,6 +2647,7 @@ namespace VedAstro.Library
         /// max = hightest possible value
         /// min = lowest possible value
         /// </summary>
+        [API("PlanetSthanaBalaNeutralPoint", "", Category.Astronomical)]
         public static double GetPlanetSthanaBalaNeutralPoint(PlanetName planet)
         {
             //CACHE MECHANISM
@@ -3106,7 +3107,7 @@ namespace VedAstro.Library
             return planetIsExaltation;
         }
 
-        [API("LunarMonth")]
+        [API("LunarMonth", "name of vedic month", Category.StarsAboveMe)]
         public static LunarMonth GetLunarMonth(Time time)
         {
 

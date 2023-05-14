@@ -117,7 +117,7 @@ namespace VedAstro.Library
         public override string ToString()
         {
             //return location name
-            return $"{_houseNumber} - {_beginLongitude} - {_middleLongitude} - {_endLongitude}";
+            return $"House {_houseNumber} - Begin:{_beginLongitude.Rounded}, Middle:{_middleLongitude.Rounded}, End:{_endLongitude.Rounded}\n";
         }
 
         public override int GetHashCode()

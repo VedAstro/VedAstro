@@ -50,6 +50,10 @@ namespace VedAstro.Library
         public double TotalDegrees => SecondsToDegrees(_seconds);
         public double TotalMinutes => SecondsToMinutes(_seconds);
 
+        /// <summary>
+        /// Total degrees rounded nicely for human eyes, used to show in site
+        /// </summary>
+        public double Rounded => Math.Round(TotalDegrees, 4);
 
 
         //METHODS

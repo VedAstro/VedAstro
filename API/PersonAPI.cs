@@ -100,12 +100,10 @@ namespace API
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
-            //get caller ID, so can use back any data if available
-            string callerId = APITools.GetCallerId(parsedRequest);
 
             //adding new person needs make sure all cache is cleared if any
             //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
-            var purgeResult = await client.PurgeInstanceAsync(callerId);
+            var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
             var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
 
@@ -135,12 +133,10 @@ namespace API
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
-            //get caller ID, so can use back any data if available
-            string callerId = APITools.GetCallerId(parsedRequest);
 
             //adding new person needs make sure all cache is cleared if any
             //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
-            var purgeResult = await client.PurgeInstanceAsync(callerId);
+            var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
             var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
 
@@ -154,7 +150,7 @@ namespace API
 
 
                 //only owner can delete so make sure here
-                var isOwner = updatedPerson.UserIdString.ToLower().Contains(callerId.ToLower());
+                var isOwner = Tools.IsUserIdMatch(updatedPerson.UserIdString, parsedRequest.CallerId);
                 if (isOwner)
                 {
                     //save a copy of the original person record in recycle bin, just in-case accidental update
@@ -203,12 +199,10 @@ namespace API
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
-            //get caller ID, so can use back any data if available
-            string callerId = APITools.GetCallerId(parsedRequest);
 
             //adding new person needs make sure all cache is cleared if any
             //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
-            var purgeResult = await client.PurgeInstanceAsync(callerId);
+            var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
             var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
 
@@ -220,7 +214,7 @@ namespace API
 
                 //only owner can delete so make sure here
                 var personParsed = Person.FromXml(personToDelete);
-                var isOwner = personParsed.UserIdString.ToLower().Contains(callerId.ToLower());
+                var isOwner = Tools.IsUserIdMatch(personParsed.UserIdString, parsedRequest.CallerId);
                 if (isOwner)
                 {
                     //add deleted person to recycle bin 
@@ -264,11 +258,9 @@ namespace API
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
-            //get caller ID, so can use back any data if available
-            string callerId = APITools.GetCallerId(parsedRequest);
 
             //check if new call or old call 
-            var result = await client.GetInstanceAsync(callerId, CancellationToken.None);
+            var result = await client.GetInstanceAsync(parsedRequest.CallerId, CancellationToken.None);
             var needsRestart = result?.RuntimeStatus == OrchestrationRuntimeStatus.Failed ||
                                result?.RuntimeStatus == OrchestrationRuntimeStatus.Terminated ||
                                result?.RuntimeStatus == OrchestrationRuntimeStatus.Suspended;
@@ -276,21 +268,22 @@ namespace API
 
 
             //STAGE 2 : PROCESS
+            //NOTE: only recalculate if non existent or corrupt
             if (isNewCall || needsRestart)
             {
                 //if already exist than we must kill it first completely of the face of the earth aka PURGE
                 //NOTE: this should help make sure brand new instance is created after without error effecting restart
-                var purgeResult = await client.PurgeInstanceAsync(callerId);
+                var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
                 var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
                 //start processing
-                var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
+                var options = new StartOrchestrationOptions(parsedRequest.CallerId); //set caller id so can callback
                 var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_getPersonListAsync), parsedRequest, options, CancellationToken.None); //should match caller ID
             }
 
             //give user the url to query for status and data
             //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
-            var x = client.CreateCheckStatusResponse(req, callerId);
+            var x = client.CreateCheckStatusResponse(req, parsedRequest.CallerId);
             var pollingUrl = APITools.GetHeaderValue(x, "Location");
 
             //send polling URL to caller as Passed payload, client should know what todo
@@ -328,17 +321,17 @@ namespace API
         }
 
         [Function(nameof(FilterData))]
-        public static async Task<JsonDocument> FilterData([ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
+        public static async Task<JsonDocument> FilterData([ActivityTrigger] ParsedRequest requestData, FunctionContext executionContext)
         {
 
             //get latest all match reports
             var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
 
-            //filter out record by user id
-            var personListByUserIdXml = Tools.FindXmlByUserId(personListXml, swapOptions.UserId);
+            //filter out record by caller id, which will be visitor id when user not logged in
+            var personListByCallerIdXml = Tools.FindXmlByUserId(personListXml, requestData.CallerId);
 
             //sort a to z by name for ease of user (done here for speed vs client)
-            var sortedList = personListByUserIdXml.OrderBy(personXml => personXml.Element("Name")?.Value ?? "").ToList();
+            var sortedList = personListByCallerIdXml.OrderBy(personXml => personXml.Element("Name")?.Value ?? "").ToList();
 
             //convert raw XML to Person Json
             var personListJson = Person.XmlListToJsonList(sortedList);

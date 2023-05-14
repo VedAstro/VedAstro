@@ -85,7 +85,7 @@ else
         AppData.API = new VedAstroAPI(AppData.CurrentUser.Id, AppData.VisitorId, _jsRuntime, AppData.URL);
 
         //before reload page let user know log out went well
-        await _jsRuntime.ShowAlert("success", "Logged out, we hope you come back", false, 2300);
+        await _jsRuntime.ShowAlert("success", "Logged out, we hope you come back", false, 4000);
 
         //refresh page
         await _jsRuntime.ReloadPage();

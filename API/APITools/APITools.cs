@@ -686,23 +686,5 @@ namespace API
             return request.Headers.TryGetValues(headerName, out list) ? list.FirstOrDefault() : null;
         }
 
-        /// <summary>
-        /// for getting cache not data from xml
-        /// </summary>
-        public static string GetCallerId(ParsedRequest parsedRequest)
-        {
-
-            if (parsedRequest.IsLoggedIn)
-            {
-                return parsedRequest.UserId;
-            }
-            //if user NOT logged in then take his visitor ID as caller id
-            else
-            {
-                return parsedRequest.VisitorId;
-            }
-
-
-        }
     }
 }

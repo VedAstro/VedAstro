@@ -1820,14 +1820,39 @@ namespace VedAstro.Library
             {
                 var allOwnerId = itemXml.Element("UserId")?.Value ?? "";
 
-                //must be split before can be used
-                var ownerList = allOwnerId.Split(',');
-
                 //check if inputed ID is found in list, add to return list
-                foreach (var owner in ownerList) { if (owner.Equals(inputUserId)) { returnList.Add(itemXml); } }
+                var match = IsUserIdMatch(allOwnerId, inputUserId);
+                if (match) { returnList.Add(itemXml); }
             }
 
             return returnList;
+        }
+
+        /// <summary>
+        /// check if 2 user id strings match, can't just use contains since 101 can be anywhere
+        /// split by comma, and check by direct equality lower case
+        /// </summary>
+        public static bool IsUserIdMatch(string userIdStringA, string userIdStringB)
+        {
+
+            //must be split before can be used
+            var userListA = userIdStringA.Split(',');
+            var userListB = userIdStringB.Split(',');
+
+            foreach (var userIdA in userListA)
+            {
+                foreach (var userIdB in userListB)
+                {
+                    //check direct match with lower case todo maybe lower case not needed since user ID, not person ID
+                    var match = userIdA.ToLower() == userIdB.ToLower();
+
+                    //if found even 1 match then return
+                    if (match) { return true; }
+                }
+            }
+
+            //if control reaches here than confirm no match
+            return false;
         }
 
         /// <summary>
@@ -1862,5 +1887,5 @@ namespace VedAstro.Library
         }
     }
 
-  
+
 }

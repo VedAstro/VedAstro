@@ -95,7 +95,7 @@ namespace Library.API
             {
                 //print holding status for easy debug
                 Console.WriteLine($"API SAID : {runtimeStatus}");
-                await Task.Delay(250);
+                await Task.Delay(300);
                 goto TryAgain;
             }
 

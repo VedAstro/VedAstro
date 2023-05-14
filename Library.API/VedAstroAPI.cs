@@ -25,12 +25,12 @@ namespace Library.API
         /// <summary>
         /// Durable function API URL to get ready personlist for this caller
         /// </summary>
-        private static string PersonListWebhook { get; set; } = "";
+        private string PersonListWebhook { get; set; } = "";
 
         /// <summary>
         /// true of person is already prepared
         /// </summary>
-        private static bool IsPersonPrepared => !string.IsNullOrEmpty(PersonListWebhook);
+        private bool IsPersonPrepared => !string.IsNullOrEmpty(PersonListWebhook);
 
 
         //--------CTOR
@@ -217,9 +217,12 @@ namespace Library.API
             var isPass = jsonResult["Status"].Value<string>() == "Pass";
             if (isPass)
             {
-
-                //if all went well clear stored person list
+                //1: clear stored person list
                 this.CachedPersonList.Clear();
+
+                //2: clear link to get person list, this will cause to fetch new list
+                //since already purged by API, the webhook link will go 404
+                this.PersonListWebhook = "";
             }
             else
             {

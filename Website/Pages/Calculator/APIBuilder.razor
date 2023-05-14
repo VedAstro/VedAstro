@@ -1,12 +1,12 @@
 ﻿@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
-<PageTitle>Easy API Builder</PageTitle>
+<PageTitle>Easy API Builder | VedAstro</PageTitle>
 
 <PageTop ImageName="api-builder-banner.svg"
          Title="Easy API Builder"
-         DescriptionText="Build your HTTP calls fast, done in less than 5 minutes.
-        Powered by .NET Roslyn reflection to auto generate calls dynamically from source code">
+         DescriptionText="Build your HTTP calls fast and easy. No manuals needed.
+         Powered by .NET Roslyn compiler to auto generate calls dynamically from source code.">
 </PageTop>
 
 
@@ -128,14 +128,7 @@
                 <TextHTML>
                     Data is returned in <strong>JSON</strong>. Only 2 properties. First field is always <kbd>Status</kbd>, it can be only <kbd>Pass</kbd> or <kbd>Fail</kbd>.
                     If it shows <kbd>Fail</kbd> then most likely cause is invalid data on your part. More details about the
-                    error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alpabetically stored in <kbd>Payload</kbd> property.
-                </TextHTML>
-            </ArticleBlock>
-
-            <ArticleBlock Title="Ready Made Library" IconName="bi:filetype-json">
-                <TextHTML>
-                    There are libraries to make using the API even easier.
-                    Calls to API is nicely wrapped into functions, that your app can use.
+                    error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alphabetically stored in <kbd>Payload</kbd> property.
                 </TextHTML>
             </ArticleBlock>
 
@@ -145,6 +138,14 @@
                     And the best way todo so is to <strong>play with it</strong>. Try modifying the API URL in your browser,
                     and see what data you get. Experiment with different data formats.
                     The API is designed to handle this, so don't worry about breaking it. Have fun.
+                </TextHTML>
+            </ArticleBlock>
+
+            <ArticleBlock Title="Library (coming soon)" IconName="clarity:thin-client-line">
+                <TextHTML>
+                    There are also client libraries to help you access the API even more easily. It simply wraps HTTP calls into easy to consume functions, that your app can use.
+                    Please note, these sub-projects is under <strong>prototype</strong> stage and much remains to be done. If you've created a library already please share it with the community.
+                    <BoldLink URL="@URL.VedAstroJS">JavaScript</BoldLink>, <BoldLink URL="@URL.VedAstroNuget">.NET NuGet</BoldLink> &amp; <BoldLink URL="@URL.VedAstroSwift">Swift iOS &amp; MacOS</BoldLink>. 
                 </TextHTML>
             </ArticleBlock>
 
@@ -286,9 +287,8 @@
         if (String.IsNullOrWhiteSpace(SelectedBodyType))
         {
             //mark invalid & alert user
-            //todo change to render fragment
-            var htmlMessage = $@"Falling asleep? <br/> Select a celestial body first";
-            await _jsRuntime.ShowAlert("error", htmlMessage, true);
+            await _jsRuntime.ShowAlert("error", "Falling asleep?", "Select a celestial body first");
+
             return false;
         }
 

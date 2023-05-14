@@ -131,7 +131,8 @@ public class URL
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";
     public const string GitHub88000Lines = "https://github.com/VedAstro/VedAstro/discussions/4";
     public const string VedAstroJS = "https://github.com/VedAstro/VedAstro.js";
-    public const string HttpHome = "https://vedastro.org";
+    public const string VedAstroSwift = "https://github.com/VedAstro/VedAstro.Swift";
+    public const string VedAstroNuget = "https://www.nuget.org/packages/VedAstro.Library";
     public const string PatreonPage = "https://patreon.com/vedastro";
     public const string KoFiPage = "https://ko-fi.com/vedastro";
     public const string KoFiDonateIframe = "https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true";

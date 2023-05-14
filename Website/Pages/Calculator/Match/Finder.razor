@@ -1,13 +1,146 @@
-﻿@attribute [Route(PageRoute.MatchFinder)]
+﻿@using System.Xml.Linq
+@using VedAstro.Library
+@attribute [Route(PageRoute.MatchFinder)]
 
 <PageTitle>Match Finder | VedAstro</PageTitle>
 
-<PageTop Title="Match Finder" IconName="carbon:gateway-api">
-    <Description>Find your astrologically perfect match, based on your horoscope the matching algorithm will find for your soul mate match in our world wide database.</Description>
+
+<PageTop ImageName="match-checker.svg"
+         Title="Match Finder"
+         DescriptionText="Find your astrologically perfect match, the matching algorithm will find for your soulmate in our world wide database.">
 </PageTop>
 
-<UnderConstructionHeader PageName="Match Finder" />
+
+
+<div class="d-flex justify-content-between mb-5">
+    @*SELECTOR*@
+    <div>
+        <div class="vstack gap-3 me-5">
+            <PersonSelectorBox @ref="_personSelector" @bind-SelectedPersonId="@_selectedPersonId" Label="Person" />
+            <IconButton IconName="uim:process" ExtraClass="mt-1" Color="success" ButtonText="Find Match" OnClickCallback="OnClickSubmit" />
+        </div>
+    </div>
+    @*SIDEBAR*@
+    <div class="me-md-4">
+        <InfoBox Title="Love Letter" Description="Leave a love letter for your soulmate when they find you" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="twemoji:love-letter" />
+    </div>
+
+</div>
+
+
+
+<div class="gap-3 mt-3" style="max-width: @GR.W667px">
+
+    <ArticleBlock Title="How it works?" IconName="noto-v1:control-knobs">
+        <TextHTML>
+            <p class="text-justify">
+                After you click "Submit" a person's profile for matching. Our servers start crunching numbers, each profile in database is scrutinized from every
+                available vedic astrological aspect to see if they match you perfectly. This process takes time, so sit back and relax.
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+
+    <ArticleBlock Title="No match?" IconName="openmoji:crossed-fingers">
+        <TextHTML>
+            <p class="text-justify">
+                Fear not, this is normal. Our global database is growing everyday, just because we could not find your match today, it does not mean
+                we wont find out tomorrow. So keep your fingers crossed, as soon as your soulmate signs up, we will notify you.
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+
+    <ArticleBlock Title="Privacy" IconName="flat-color-icons:privacy">
+        <TextHTML>
+            <p class="text-justify">
+                We take privacy seriously. Even though the project is open-source the database is locked and only accessible to the algorithm. <strong>None</strong> of the profiles submitted for match checking is shown publicly.
+                Another benefit of being open-source, is that if there is a security vulnerability in the source code, it is quickly found and fixed by the community.
+                Only you &amp; your perfectly matched soulmate, will be notified of each others profile.
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+    
+    <ArticleBlock Title="Is this normal?" IconName="noto-v1:rocket">
+        <TextHTML>
+            <p class="text-justify">
+                We as humans have <strong>put a man on the moon</strong>, but have not solved our marriage and relationship problems!
+                Finding life partners based on <strong>cosmic math</strong>, is not only the right path but the direction of our <strong>natural evolution</strong>.
+                The world we face today is not the same as it was before. Why then should we cling to old ways that clearly don't work.
+                Global <strong>divorce rates</strong> have been climbing with every passing decade. <strong>Why?</strong>
+                What have humans done so wrong, that so many are denied a happy marriage. It is time for us to put a stop this madness. 
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+
+
+</div>
+
 
 @code {
+
+    private PersonSelectorBox? _personSelector;
+    private string? _selectedPersonId;
+
+
+
+    private async Task OnClickSubmit()
+    {
+
+        //only continue if passed input field validation
+        if (!(await ValidationPassed())) { return; }
+
+        //based on login state show appropriate message (make it easy and fast for dear user)
+        //NOTE: don't force login, if this is valuable they will login on their own
+        string emailFromAlert;
+        if (AppData.IsGuestUser)
+        {
+            emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Soulmate can reach me at...");
+        }
+        else
+        {
+            //todo ask user if current email is ok
+            emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Soulmate can reach me at...");
+        }
+
+        _jsRuntime.ShowLoading();
+
+        //send to message to API
+        //package message data to be sent
+        var textXml = new XElement("Text", $"Find Match For : {_selectedPersonId}");
+        var emailXml = new XElement("Email", emailFromAlert);
+        var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
+        var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
+        var messageXml = new XElement("Message", userIdXml, visitorIdXml, emailXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, textXml);
+
+        //send message to API server
+        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
+
+        //say thank you and will get back
+        //todo can show found matches page, show status of finding
+        await _jsRuntime.ShowAlert("success", "Finding soulmate...", "Once found we'll email you, stay tuned");
+
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private async Task<bool> ValidationPassed()
+    {
+
+        //TEST 1
+        //if person not selected, invalid
+        if (!_personSelector.IsPersonSelected)
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Dreaming?", "Select a person to find match");
+
+            return false;
+
+        }
+
+
+        //if control reaches here than, it's valid
+        return true;
+
+    }
 
 }

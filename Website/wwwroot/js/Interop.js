@@ -515,7 +515,10 @@ export async function pdfToEmail(fileName, fileFormat, receiverEmail, inputedBlo
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
 }
-export async function htmlToPdfBlob(elmInput) {
+export async function htmlToPdfBlob(elmInput, pdfFileName) {
+
+    //set a nice name for the file
+    window.PDFOptions.filename = pdfFileName;
 
     //create the PDF
     var tempMatchPDFBlob = await html2pdf().set(window.PDFOptions).from(elmInput).toPdf().output('blob');
@@ -525,7 +528,7 @@ export async function htmlToPdfBlob(elmInput) {
 
 export async function openPDFNewTab(elmInput, pdfFileName) {
 
-    var tempMatchPDFBlob = await htmlToPdfBlob(elmInput);
+    var tempMatchPDFBlob = await htmlToPdfBlob(elmInput, pdfFileName);
 
     //open a link in new tab to it, user than has choice to save or leave as is
     const url = URL.createObjectURL(tempMatchPDFBlob);
@@ -537,6 +540,9 @@ export async function openPDFNewTab(elmInput, pdfFileName) {
 //html to PDF, starts save as well
 //note options set in APP.JS
 export async function htmlToPdfAutoDownload(elmInput, pdfFileName) {
+
+    //set a nice name for the file
+    window.PDFOptions.filename = pdfFileName;
 
     //generate & download to browser
     await html2pdf().set(window.PDFOptions).from(elmInput).save();

@@ -115,7 +115,7 @@ namespace Website
         /// </summary>
         public static async Task ShowAlert(this IJSRuntime jsRuntime, string icon, string title, string descriptionText)
         {
-            //call SweetAlert kib directly via constructor
+            //call SweetAlert lib directly via constructor
             await jsRuntime.InvokeVoidAsync(JS.Swal_fire, title, descriptionText, icon);
         }
 

@@ -27,7 +27,7 @@
             @*DESC TEXT*@
             @if (IsDescriptionText)
             {
-                <span style="@MaxWidthCss font-size: 21px; font-weight: lighter; font-family: inherit;">@DescriptionText</span>
+                <span style="@DescriptionWidthCss font-size: 21px; font-weight: lighter; font-family: inherit;">@DescriptionText</span>
             }
         </div>
 
@@ -68,7 +68,21 @@
     /// setting custom css based on props
     /// </summary>
     private string MaxWidthGRCss => $" max-width:{GR.W667px};";
-    private string MaxWidthCss => $" max-width:516px;";
+
+    /// <summary>
+    /// auto set width of description based on text length
+    /// </summary>
+    private string DescriptionWidthCss
+    {
+        get
+        {
+            var charCount = DescriptionText.Length;
+
+            var finalWidth = charCount < 100 ? GR.W412px : GR.W667px;
+            
+            return $" max-width:{finalWidth};";
+        }
+    }
 
 
     /// <summary>

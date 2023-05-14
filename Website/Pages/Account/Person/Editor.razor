@@ -132,7 +132,7 @@
     /// editor passed, else becomes creator
     /// </summary>
     [Parameter]
-    public string PersonId { get; set; }
+    public string PersonIdUrl { get; set; }
 
     /// <summary>
     /// represents the Person instance that this page represents
@@ -188,6 +188,7 @@
     }
 
 
+
     /// <summary>
     /// Function that is called on click of button
     /// </summary>
@@ -197,16 +198,6 @@
         //UpdateExistingPerson();
         await UpdateExistingPerson();
 
-
-        ////button does different stuff based on page mode
-        //if (IsCreator)
-        //{
-        //    //SubmitNewPerson();
-        //    await SubmitNewPerson();
-        //}
-        //else
-        //{
-        //}
     }
 
 
@@ -217,13 +208,13 @@
     {
 
         //try get person profile from ID
-        _person = await WebsiteTools.GetPersonById(PersonId, _jsRuntime);
+        _person = await WebsiteTools.GetPersonById(PersonIdUrl, _jsRuntime);
 
         //set page title
         _pageTitle = $"Profile | {_person.Name}";
 
         //place data into fields
-        PersonId = _person.Id;
+        PersonIdUrl = _person.Id;
         _nameInput = _person.Name;
         _notesInput = _person.Notes;
         _genderInput = _person.Gender.ToString();
@@ -238,8 +229,6 @@
         var birthTimeDate = _person.BirthDateMonthYear;
         _timeInput.DateMonthYear = birthTimeDate;
 
-
-        //geolocation only needs to be set in Editor mode
         var geoLocation = new GeoLocation
         (
             _person.GetBirthLocation().GetName(),
@@ -403,7 +392,7 @@
         await _jsRuntime.ShowLoading();
 
         //tell API to delete person, using person id
-        await AppData.API.DeletePerson(PersonId);
+        await AppData.API.DeletePerson(PersonIdUrl);
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);
@@ -427,7 +416,7 @@
     {
         //generate the url
         //var url = AppData.URL.WebUrl + $"{PageRoute.PersonEditor}/{PersonId}";
-        var url = Path.Combine(AppData.URL.WebUrl, PageRoute.PersonEditor, PersonId); //use Combine for safety
+        var url = Path.Combine(AppData.URL.WebUrl, PageRoute.PersonEditor, PersonIdUrl); //use Combine for safety
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, url);

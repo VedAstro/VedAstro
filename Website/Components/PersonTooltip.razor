@@ -19,11 +19,11 @@
         <IconButton FullWidth="true" ButtonText="Journal" IconName="game-icons:secret-book" SmallSize="true" ClickUrl="@($"{PageRoute.Journal}/{Person.Id}")" />
         <IconButton FullWidth="true" ButtonText="Life Predictor" IconName="gis:map-time" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
         <div class="hstack gap-2">
-            <IconButton FullWidth="true" IconName="ic:baseline-ios-share" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
-            <IconButton FullWidth="true" IconName="material-symbols:edit-square" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
+            <IconButton TooltipText="Edit" FullWidth="true" IconName="ic:baseline-ios-share" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
+            <IconButton TooltipText="Edit" FullWidth="true" IconName="material-symbols:edit-square" SmallSize="true" ClickUrl="@($"{PageRoute.PersonEditor}/{Person.Id}")" />
             <IconButton FullWidth="true" IconName="gis:map-time" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
         </div>
-        </div>
+    </div>
 </div>
 
 <div style="cursor: pointer" @ref="nameHolderElement">
@@ -84,7 +84,7 @@
                 var tooltipSettings =
                     new
                     {
-                        placement= "right",
+                        placement = "right",
                         content = tooltipElement,
                         theme = "light",
                         allowHTML = true,

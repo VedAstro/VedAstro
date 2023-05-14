@@ -3,16 +3,13 @@
 @using VedAstro.Library
 
 
-
 <PageTitle>@_pageTitle</PageTitle>
-<PageTop Title="Journal" IconName="game-icons:secret-book">
-    <Description>Record your life events to understand the astrological reason behind them.</Description>
-    @*    <ButtonsRow>
-    <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Life Chart" ClickUrl="@PageRoute.LifePredictor"></IconButton>
-    <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Add Life" ClickUrl="@PageRoute.Muhurtha"></IconButton>
-    </ButtonsRow>
-    *@
+
+<PageTop ImageName="journal-banner.png"
+         Title="Astro Journal"
+         DescriptionText="Record your life events to understand the astrological reason behind them.">
 </PageTop>
+
 
 
 <div>
@@ -24,7 +21,7 @@
 
         <InfoBox Title="Quick Tip" IconName="flat-color-icons:idea">
             <DescriptionHTML>
-                After updating your journal, go to <a href="@PageRoute.LifePredictor"><span class="fw-bold">Life</span></a> chart,
+                After updating your journal, go to <BoldLink URL="@PageRoute.LifePredictor">Life Predictor</BoldLink>,
                 to view them against astrological influence.
             </DescriptionHTML>
             <ImageHTML>
@@ -70,33 +67,48 @@
     private string _searchInput = "";
     private Person _selectedPerson;
     private List<LifeEvent>? _filteredLifeEvents;
-
     private PersonSelectorBox? _peopleSelectorBox;
 
     private bool _isReady = false;
 
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
+
+
+
+    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    private async Task _OnAfterRenderAsync(bool firstRender)
     {
         //if parameter has been set then auto load person data as
         //though person was selected and calculate was clicked
         if (PersonIdUrl != null && firstRender)
         {
+            await _jsRuntime.ShowLoading();
+
             //programmatically select the person
             await _peopleSelectorBox.SetPerson(PersonIdUrl);
 
             //start the same process as show button click
             await ShowButtonClicked();
 
-            //needed to see updates because any changes in OnAfterRender
-            //have to be manually set
+    //needed to see updates because any changes in OnAfterRender
+    //have to be manually set
             StateHasChanged();
 
+            _jsRuntime.HideLoading();
+
             //little delay for renderer to complete
-            await Task.Delay(200);
+            //await Task.Delay(200);
 
             //HACK: done because StateHasChanged will clear the one by SetPerson above
-            await _jsRuntime.SetValue(".PersonSelector", PersonIdUrl);
+            //await _jsRuntime.SetValue(".PersonSelector", PersonIdUrl);
         }
     }
 
@@ -117,7 +129,7 @@
         //note:this improves UX, as links can lead faster to data
         PersonIdUrl = _selectedPerson.Id; //save local copy
         var urlWithId = Path.Combine(PageRoute.Journal, PersonIdUrl);
-        _navigation.NavigateTo(urlWithId);
+        _navigation.NavigateTo(urlWithId); //does not reload page since same URL
 
         //life events
         await _lifeEventEditor.SetData(_selectedPerson);

@@ -3,7 +3,7 @@
 @using System.Xml.Linq
 
 <div @onclick="OnClick" class="@(FullWidth?"":"w-50")" style="@InlineStyle">
-    <div class="alert alert-@Color d-flex align-items-center vstack" role="alert">
+    <div class="alert alert-primary d-flex align-items-center vstack" role="alert" style="background-color: @Color !important; ">
         <div class="hstack mb-2">
             <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
             <div>
@@ -22,11 +22,11 @@
 @code {
 
     /// <summary>
-    /// Text that will be displayed in button
+    /// custom color code exp: #ffbdf7
     /// Default : primary
     /// </summary>
     [Parameter]
-    public string? Color { get; set; } = "primary";
+    public string? Color { get; set; } = "";
 
     /// <summary>
     /// Special icon name from icon-sets.iconify.design

@@ -45,6 +45,7 @@
         //CALCULATORS
         public const string CalculatorList = "Calculator/";
         public const string LifePredictor = "Calculator/LifePredictor";
+        public const string LifePredictorParam = "Calculator/LifePredictor/{PersonIdUrl}";
         public const string StarsAboveMe = "Calculator/StarsAboveMe";
         public const string SunRiseSetTime = "Calculator/SunRiseSetTime";
         public const string BirthTimeFinder = "Calculator/BirthTimeFinder";
@@ -75,8 +76,8 @@
         public const string SavedCharts = "Account/SavedCharts";
         public const string PersonList = "Account/Person/List";
         public const string AddPerson = "Account/Person/Add";
-        public const string PersonEditor = "Account/Person/Editor";
-        public const string PersonEditorParam = "Account/Person/Editor/{PersonId}";
+        public const string PersonEditor = "Account/Person/Editor"; //used to make nav link
+        public const string PersonEditorParam = "Account/Person/Editor/{PersonIdUrl}"; //actual page access
 
 
         //LITTLE PAGES

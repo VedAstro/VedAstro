@@ -5,15 +5,15 @@
 @using System.Xml.Linq
 
 
-<PageTitle>Find Marriage Match</PageTitle>
+<PageTitle>Match Checker | VedAstro</PageTitle>
 
 <PageTop ImageName="match-checker.svg"
-         Title="Match"
-         DescriptionText="Check compatibility between 2 people. 16 astrological factors used to make this accurate prediction.">
+         Title="Match Checker"
+         DescriptionText="Check compatibility between two people. Easily predict your relationship's future.">
 </PageTop>
 
 
-<div class="d-flex flex-wrap mb-5">
+<div class="d-flex justify-content-between mb-5">
     @*SELECTOR*@
     <div>
         <div class="vstack gap-3 me-5">
@@ -23,23 +23,19 @@
         </div>
     </div>
     @*SIDEBAR*@
-    @* <div>
-    <ul class="list-group rounded-3">
-    <li class="list-group-item active" aria-current="true">Full Check</li>
-    <li class="list-group-item"><IconText FontSize="24" IconName="flat-color-icons:checkmark">Mars-Venus Dosa</IconText></li>
-    <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark"/>12 Porutham/Kuta</li>
-    <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark"/>Kuta Exceptions</li>
-    <li class="list-group-item"><Icon IconName="flat-color-icons:checkmark"/>7th House General</li>
-    </ul>
-    </div>*@
+    <div class="gap-3 me-md-4">
+        <InfoBox Title="Find Perfect Match" Description="Your soulmate is out there. Start a search in our global database" Color="#ffbdf7" ClickUrl="@PageRoute.MatchFinder" MaxWidth="365" FullWidth="@true" IconName="emojione:heart-with-arrow" />
+        <InfoBox Title="Full Check" Description="16 astrological factors used to make this accurate prediction" Color="#d1e7dd" MaxWidth="365" FullWidth="@true" IconName="line-md:check-list-3-twotone" />
+    </div>
 </div>
 
 
-<IconTitle Title="Accurate Predictions" IconName="flat-color-icons:filing-cabinet" />
-<MatchReportListViewer @ref="savedMatchReportList" />
+<div class="mt-3">
+    <IconTitle Title="Accurate Predictions" IconName="flat-color-icons:filing-cabinet" />
+    <MatchReportListViewer @ref="savedMatchReportList" />
+</div>
 
 <div class="mt-3" style="max-width: @GR.W667px">
-
 
     <ArticleBlock Title="Marriage Karma" IconName="mdi:state-machine">
         <TextHTML>
@@ -71,8 +67,8 @@
                 Just imagine a world with <strong>no divorces</strong>, a world where <strong>happy marriages</strong> is common sight. Where laughter abounds &amp; fear stands still.
             </p>
 
-            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.JohnLenonImagine)">
-                <figure class="text-center mt-5">
+            <div>
+                <figure class="text-center mt-5" style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.JohnLenonImagine)">
                     <blockquote class="blockquote">
                         <p>You may say I'm dreamer, <br /> but I'm not the only one.</p>
                     </blockquote>
@@ -174,7 +170,6 @@
 
         //if control reaches here than, it's valid
         return true;
-
 
     }
 

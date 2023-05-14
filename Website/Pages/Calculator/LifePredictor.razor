@@ -1,20 +1,22 @@
 @attribute [Route(PageRoute.LifePredictor)]
+@attribute [Route(PageRoute.LifePredictorParam)]
 @using VedAstro.Library
 
 <PageTitle>@_pageTitle</PageTitle>
-<PageTop Title="Life Predictor" IconName="gis:map-time">
-    <Description>
-        Each life is a story. Advanced computation algorithms fused with ancient astrology makes this chart possible.
-        Its a digital snapshot of a human's life on earth.
-    </Description>
+
+<PageTop ImageName="match-checker.svg"
+         Title="Life Predictor"
+         DescriptionText="Each life is a story. Advanced computation algorithms fused with ancient astrology makes this chart possible.
+        Its a digital snapshot of a human's life on earth.">
 </PageTop>
+
 
 @*Dasas are major periods in which the indications of the planets are realised.
 Know good and bad periods of your life years ahead.*@
 
 
 <div>
-    <div class="d-flex flex-wrap">
+    <div class="d-flex justify-content-between">
         <div class="me-md-5" style="width: @GR.W412px;">
             @*TAB BUTTONS*@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -30,13 +32,14 @@ Know good and bad periods of your life years ahead.*@
                         Advanced
                     </button>
                 </li>
-@*                <li class="nav-item" role="presentation">
-                    <button @onclick="OnClickSavedTab" class="nav-link" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button" role="tab" aria-controls="saved" aria-selected="false">
-                        <Icon IconName="prime:save" />
-                        Saved
-                    </button>
+                @*                <li class="nav-item" role="presentation">
+                <button @onclick="OnClickSavedTab" class="nav-link" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button" role="tab" aria-controls="saved" aria-selected="false">
+                <Icon IconName="prime:save" />
+                Saved
+                </button>
                 </li>
-*@            </ul>
+                *@
+            </ul>
 
             @*TAB CONTENT*@
             @*all border except top*@
@@ -83,39 +86,40 @@ Know good and bad periods of your life years ahead.*@
                 </div>
 
                 @*SAVED*@
-@*                <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
-                    <div class="vstack gap-3 p-3">
-                        <div class="input-group mb-3">
-                            <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
-                            <select class="form-select" @bind="_selectedChartId" id="inputGroupSelect01">
-                                <option selected>Choose...</option>
-                                @foreach (var chart in _allChartList)
-                                {
-                                    <option value="@(chart.ChartId)">@(chart.Name)</option>
-                                }
-                            </select>
-                        </div>
-                        <IconButton SmallSize="true" IconName="ant-design:folder-view-outlined" ButtonText="Show" OnClickCallback="OnClickShowSaved"></IconButton>
-                    </div>
+                @*                <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
+                <div class="vstack gap-3 p-3">
+                <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
+                <select class="form-select" @bind="_selectedChartId" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                @foreach (var chart in _allChartList)
+                {
+                <option value="@(chart.ChartId)">@(chart.Name)</option>
+                }
+                </select>
                 </div>
-*@            </div>
+                <IconButton SmallSize="true" IconName="ant-design:folder-view-outlined" ButtonText="Show" OnClickCallback="OnClickShowSaved"></IconButton>
+                </div>
+                </div>
+                *@
+            </div>
 
         </div>
-        
-        <InfoBox Title="Accurate" MaxWidth="@((int)GR.W255)" IconName="flat-color-icons:planner">
-            <DescriptionHTML>
-                Predict your life with zero astrological knowledge
-            </DescriptionHTML>
-            <ImageHTML>
-                <img class="img-thumbnail" width="@GR.W255px" src="images/life-predictor-main-example.svg" />
-            </ImageHTML>
-        </InfoBox>
+
+        <div class="me-md-4">
+            <InfoBox Title="Accurate" MaxWidth="@((int)(GR.W255+GR.W157))" IconName="noto-v1:direct-hit">
+                <DescriptionHTML>
+                    Predict your life with zero astrological knowledge
+                </DescriptionHTML>
+                <ImageHTML>
+                    <img class="img-thumbnail" src="images/life-predictor-banner.jpg" />
+                </ImageHTML>
+            </InfoBox>
+        </div>
 
     </div>
 
 </div>
-
-
 
 <hr>
 
@@ -123,18 +127,33 @@ Know good and bad periods of your life years ahead.*@
 @*hide until ready but initialized as well*@
 <div style="@(_isResultReady?"":"display:none;")">
     <div @ref="_holderDiv">
-        <EventsChartViewer @ref="_eventsChartViewer"></EventsChartViewer>
+        <EventsChartViewer @ref="_eventsChartViewer" />
     </div>
 </div>
 
-<div class="mt-4">
-    @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
-    <HoroscopeInfoView @ref="_horoscopeInfoView" />
+<div class="gap-3" style="max-width: @GR.W667px">
+    
+    <ArticleBlock Title="Colors" IconName="noto-v1:artist-palette">
+        <TextHTML>
+            <p class="text-justify">
+                Our eyes and brain process color much more easily than text. That is why we converted complicated predictions into easy to
+                understand colors. <span style="color: red;font-weight: 900;">RED</span> is for bad life events, <span style="color: green;font-weight: 900;">GREEN</span> is
+                for good. Quickly read your life chart with <strong>zero</strong> astrological knowledge. No manuals needed.
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+
 </div>
 
 
+@*<div class="mt-4">
+    SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS
+    <HoroscopeInfoView @ref="_horoscopeInfoView" />
+</div>
+*@
+
 @*HELP SECTION*@
-<PageHelpSection @ref="_helpSection">
+@*<PageHelpSection @ref="_helpSection">
     <Content>
 
         <h4 class="fw-bold">Purpose?</h4>
@@ -214,9 +233,16 @@ Know good and bad periods of your life years ahead.*@
 
     </Content>
 </PageHelpSection>
-
+*@
 
 @code {
+
+    /// <summary>
+    /// Param used in URL to set Person ID via URL
+    /// also set via URL when page is loaded
+    /// </summary>
+    [Parameter]
+    public string PersonIdUrl { get; set; } = "";
 
     private HoroscopeInfoView _horoscopeInfoView;
 
@@ -248,25 +274,39 @@ Know good and bad periods of your life years ahead.*@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    //protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitializedAsync()).Try(_jsRuntime);
 
     private async Task OnClickCalculate() => await InvokeAsync(async () => await _OnClickCalculate()).Try(_jsRuntime);
     private async Task OnClickShowSaved() => await InvokeAsync(async () => await _OnClickShowSaved()).Try(_jsRuntime);
     private async Task OnClickCalculateEasy() => await InvokeAsync(async () => await _OnClickCalculateEasy()).Try(_jsRuntime);
+    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-    //private async Task _OnInitializedAsync()
-    //{
-    //    ////show loading box
-    //    //await _jsRuntime.ShowLoading();
+    private async Task _OnAfterRenderAsync(bool firstRender)
+    {
+        //if parameter has been set then auto load person data as
+        //though person was selected and calculate was clicked
+        if (PersonIdUrl != null && firstRender)
+        {
+            await _jsRuntime.ShowLoading();
 
-    //    ////hide loading box
-    //    //_jsRuntime.HideAlert();
+            //programmatically select the person
+            await _peopleSelectorBox.SetPerson(PersonIdUrl);
 
-    //}
+            //start the same process as show button click
+            //todo loading box disappears here, needs fix
+            await _OnClickCalculate();
+
+            //needed to see updates because any changes in OnAfterRender
+            //have to be manually set
+            StateHasChanged();
+
+            _jsRuntime.HideLoading();
+        }
+    }
+
 
     /// <summary>
     /// Saves current chart to local storage
@@ -329,6 +369,12 @@ Know good and bad periods of your life years ahead.*@
 
         //mark page as ready to show results
         _isResultReady = true;
+
+        //only set url if not already set
+        //note:this improves UX, as links can lead faster to data
+        PersonIdUrl = SelectedPerson.Id; //save local copy
+        _navigation.NavigateTo($"{PageRoute.LifePredictor}/{PersonIdUrl}"); //change url
+
 
         //inject selected person into component to show horoscope data
         //do last so that loading box is not closed too soon

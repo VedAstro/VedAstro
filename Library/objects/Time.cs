@@ -179,16 +179,20 @@ namespace VedAstro.Library
         {
             //format time with formatting info
             //note: only explicit statement of format as below works
-            var stdTimeString = _stdTime.ToString("HH:mm dd/MM/yyyy zzz");
+            var stdDateTimeString = _stdTime.ToString("HH:mm dd/MM/yyyy");
+            var stdTimeZoneString = _stdTime.ToString("zzz"); //timezone separate so can clean date time
 
             //god knows why, in some time zones date comes with "." instead of "/" (despite above formatting)
-            stdTimeString = stdTimeString.Replace('.', '/');
+            stdDateTimeString = stdDateTimeString.Replace('.', '/');
 
             //god knows why, in some time zones date comes with "-" instead of "/" (despite above formatting)
-            stdTimeString = stdTimeString.Replace('-', '/');
+            stdDateTimeString = stdDateTimeString.Replace('-', '/');
+
+            //recombine
+            var final = $"{stdDateTimeString} {stdTimeZoneString}";
 
             //return formatted time
-            return stdTimeString;
+            return final;
         }
 
         public DateTimeOffset GetStdDateTimeOffset()
@@ -315,29 +319,36 @@ namespace VedAstro.Library
                 return Time.Empty;
             }
         }
-        
+
         public static Time FromJson(JToken timeJson)
         {
-            var timeString = timeJson["StdTime"].Value<string>();// ?.Value ?? "00:00 01/01/2000 +08:00";
+            try
+            {
+                var timeString = timeJson["StdTime"].Value<string>();// ?.Value ?? "00:00 01/01/2000 +08:00";
 
-            //know issue to have "." instead of "/" for date separator, so change it here if at all
-            timeString = timeString.Replace('.', '/');
+                //know issue to have "." instead of "/" for date separator, so change it here if at all
+                timeString = timeString.Replace('.', '/');
 
-            var locationJson = timeJson["Location"];
-            GeoLocation geoLocation = GeoLocation.FromJson(locationJson);
+                var locationJson = timeJson["Location"];
+                GeoLocation geoLocation = GeoLocation.FromJson(locationJson);
 
-            var parsedTime = new Time(timeString, geoLocation);
+                var parsedTime = new Time(timeString, geoLocation);
 
-            return parsedTime;
+                return parsedTime;
 
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"JSON PARSE FAIL:\n{timeJson}\n{e}");
+                return Empty;
+            }
         }
 
 
         /// <summary>
         /// Parse list of XML directly
         /// </summary>
-        public static List<Time> FromXml(IEnumerable<XElement> xmlList) =>
-            xmlList.Select(timeXml => Time.FromXml(timeXml)).ToList();
+        public static List<Time> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(timeXml => Time.FromXml(timeXml)).ToList();
 
 
         /// <summary>
@@ -352,6 +363,7 @@ namespace VedAstro.Library
         }
 
         public int GetStdYear() => this.GetStdDateTimeOffset().Year;
+        
         public int GetStdMonth() => this.GetStdDateTimeOffset().Month;
 
         /// <summary>

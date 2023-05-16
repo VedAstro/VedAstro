@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -268,9 +269,13 @@ namespace VedAstro.Library
                 }
 
                 //convert score to percentage of 36
-                var kutaPercentage = (totalPoints / 36.0) * 100.0;
+                //note : should look like this here 42.4444444
+                var rawKutaPercentage = (totalPoints / 36.0) * 100.0;
 
-                return kutaPercentage;
+                //round to nearest for best accuracy
+                var rounded = Math.Round(rawKutaPercentage / 5.0) * 5;
+
+                return rounded;
             }
 
         }

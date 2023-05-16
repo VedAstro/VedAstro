@@ -244,7 +244,7 @@ Know good and bad periods of your life years ahead.*@
     [Parameter]
     public string PersonIdUrl { get; set; } = "";
 
-    private HoroscopeInfoView _horoscopeInfoView;
+    private HoroscopeInfoView? horoscopeInfoView;
 
     private ElementReference _holderDiv;
 
@@ -378,7 +378,7 @@ Know good and bad periods of your life years ahead.*@
 
         //inject selected person into component to show horoscope data
         //do last so that loading box is not closed too soon
-        await _horoscopeInfoView.SetPerson(SelectedPerson);
+        await horoscopeInfoView?.SetPerson(SelectedPerson);
 
         _jsRuntime.HideAlert();
     }
@@ -416,7 +416,7 @@ Know good and bad periods of your life years ahead.*@
 
         //inject selected person into component to show horoscope data
         //do last so that loading box is not closed too soon
-        await _horoscopeInfoView.SetPerson(SelectedPerson);
+        await horoscopeInfoView?.SetPerson(SelectedPerson);
 
         _jsRuntime.HideAlert();
 

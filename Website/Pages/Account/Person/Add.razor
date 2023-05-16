@@ -118,6 +118,29 @@
             return false;
         }
 
+        //TEST 4 : check if user is sleeping by letting time be set as current year and date and month
+        var tempTime = await _timeInput.GetDateTimeOffset();
+        var thisYear = tempTime.Year == DateTimeOffset.Now.Year;
+        var thisMonth = tempTime.Month == DateTimeOffset.Now.Month;
+        var thisDate = tempTime.Month == DateTimeOffset.Now.Month;
+        isValid = !(thisYear && thisMonth);
+        if (!isValid)
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Are you sleeping?", "It says you are <strong>born today</strong>, looks like you forgot to input correct birth date. Go wash your face dear.");
+            return false;
+        }
+
+        //TEST 4 : Time Traveler Detection
+        var futureTime = DateTimeOffset.Now > tempTime; //future large than now
+        if (futureTime)
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Time traveler?", "It says you are <strong>born in future</strong> date, looks like you input wrong birth date. Time travelers not supported yet, maybe in the future.");
+            return false;
+        }
+
+
         //if control reaches here than, it's valid
         return true;
 

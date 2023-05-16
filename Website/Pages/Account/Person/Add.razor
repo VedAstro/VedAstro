@@ -132,7 +132,7 @@
         }
 
         //TEST 4 : Time Traveler Detection
-        var futureTime = DateTimeOffset.Now > tempTime; //future large than now
+        var futureTime = tempTime > DateTimeOffset.Now; //future large than now
         if (futureTime)
         {
             //mark invalid & alert user

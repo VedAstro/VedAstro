@@ -53,13 +53,17 @@
         public const string Horoscope = "Calculator/Horoscope";
         public const string HoroscopeParam = "Calculator/Horoscope/{PersonIdUrl}";
         public const string Muhurtha = "Calculator/Muhurtha";
-        public const string Match = "Calculator/Match";
-        public const string SavedMatchReports = "Calculator/Match/Saved";
-        public const string MatchFinder = "Calculator/Finder";
         public const string FamilyChart = "Calculator/FamilyChart";
         public const string MatchReport = "Calculator/Match/Report";
-        public const string MatchReportParam = "Calculator/Match/Report/{MaleId}/{FemaleId}";
         public const string APIBuilder = "Calculator/APIBuilder";
+
+
+        //MATCH
+        public const string Match = "Calculator/Match";
+        public const string SavedMatchReports = "Calculator/Match/Saved";
+        public const string MatchProfile = "Calculator/Match/Profile";
+        public const string MatchReportParam = "Calculator/Match/Report/{MaleId}/{FemaleId}";
+        public const string MatchFinder = "Calculator/Match/Finder";
 
 
 
@@ -81,6 +85,7 @@
 
 
         //LITTLE PAGES
+        public const string NowInDwapara = "/NowInDwapara";
         public const string Remedy = "/Remedy";
         public const string Download = "/Download";
         public const string VisitorList = "/VisitorList";

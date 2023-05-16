@@ -17,12 +17,12 @@
     <div>
         <div class="vstack gap-3 me-5">
             <PersonSelectorBox @ref="_personSelector" @bind-SelectedPersonId="@_selectedPersonId" Label="Person" />
-            <IconButton IconName="uim:process" ExtraClass="mt-1" Color="success" ButtonText="Find Match" OnClickCallback="OnClickSubmit" />
+            <IconButton IconName="uim:process" ExtraClass="mt-1" Color="success" ButtonText="Submit" OnClickCallback="OnClickSubmit" />
         </div>
     </div>
     @*SIDEBAR*@
     <div class="me-md-4">
-        <InfoBox Title="Love Letter" Description="Leave a love letter for your soulmate when they find you" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="twemoji:love-letter" />
+        <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Love Letter" Description="Leave a love letter for your soulmate when they find you" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="twemoji:love-letter" />
     </div>
 
 </div>
@@ -34,7 +34,7 @@
     <ArticleBlock Title="How it works?" IconName="noto-v1:control-knobs">
         <TextHTML>
             <p class="text-justify">
-                After you click "Submit" a person's profile for matching. Our servers start crunching numbers, each profile in database is scrutinized from every
+                After you click "Submit". Our servers will start crunching numbers, each profile in the database is scrutinized from every
                 available vedic astrological aspect to see if they match you perfectly. This process takes time, so sit back and relax.
             </p>
         </TextHTML>
@@ -44,7 +44,7 @@
         <TextHTML>
             <p class="text-justify">
                 Fear not, this is normal. Our global database is growing everyday, just because we could not find your match today, it does not mean
-                we wont find out tomorrow. So keep your fingers crossed, as soon as your soulmate signs up, we will notify you.
+                we won't find out tomorrow. So keep your fingers crossed, as soon as your soulmate signs up, we will notify you.
             </p>
         </TextHTML>
     </ArticleBlock>
@@ -66,7 +66,8 @@
                 Finding life partners based on <strong>cosmic math</strong>, is not only the right path but the direction of our <strong>natural evolution</strong>.
                 The world we face today is not the same as it was before. Why then should we cling to old ways that clearly don't work.
                 Global <strong>divorce rates</strong> have been climbing with every passing decade. <strong>Why?</strong>
-                What have humans done so wrong, that so many are denied a happy marriage. It is time for us to put a stop this madness. 
+                What have humans done so wrong, that so many are denied a happy marriage. It is time for us to put a stop this material madness.
+                Dear reader, realize!
             </p>
         </TextHTML>
     </ArticleBlock>

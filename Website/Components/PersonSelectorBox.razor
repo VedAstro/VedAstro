@@ -12,10 +12,46 @@
         <label class="form-label">@Label</label>
     }
     <div class="hstack">
+
+        @if (IsReady)
+        {
+            <!-- Example single danger button -->
+            <div class="btn-group">
+                <button type="button" class="btn dropdown-toggle btn-outline-primary" data-bs-toggle="dropdown" aria-expanded="false">
+                    @DropDownDisplayText
+                </button>
+                <ul class="dropdown-menu pe-3" style="height: @GR.W412px; overflow-y: scroll;">
+                    <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control mx-2" placeholder="Search...">
+
+                    @foreach (var person in PersonListDisplay)
+                    {
+                        <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
+                    }
+                    <li><hr class="dropdown-divider"></li>
+                    <div class="d-flex justify-content-between">
+                        <span>Examples</span><IconButton IconName="clarity:eye-hide-line" Outline="true" SmallSize="true" OnClickCallback="OnClickHidePublic" />
+                    </div>
+                    <li><hr class="dropdown-divider"></li>
+                    @foreach (var person in PublicPersonList)
+                    {
+                        <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
+                    }
+
+                    <li><a class="dropdown-item" href="#">James Brown</a></li>
+                </ul>
+            </div>
+
+        }
+
         @*PersonSelector class used to programatically set visible person selection*@
-        <select @ref="selectorElement" @bind="SelectedPersonId" class="form-control PersonSelector" style="width: @GR.W255px; height: @GR.W37px;">
+        <select @ref="selectorElement" @bind="SelectedPersonId" class="form-control PersonSelector d-none" style="width: @GR.W255px; height: @GR.W37px;">
             <option value="">Select Name</option>
             @DropDownOptionsHtml
+            <hr />
+            <span>Examples</span>
+            <hr />
+            <option>James Brown</option>
+            <option>James Brown</option>
         </select>
         @*add person icon*@
         <IconButton ExtraClass="ms-2" TooltipText="Add new person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
@@ -26,10 +62,13 @@
 
 @code {
 
+    private ElementReference _searchInput;
+
     //DEFAULTS
+    private string DropDownDisplayText = "Select Person";
     const string DefaultLabel = "Person";
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
-    private const string NotSelectedPersonId = "0";
+    private const string NotSelectedPersonId = "0"; //needed to detect empty
     private string _selectedPersonId = NotSelectedPersonId;
     private ElementReference selectorElement;
 
@@ -82,16 +121,28 @@
     [Parameter]
     public EventCallback<string> SelectedPersonIdChanged { get; set; }
 
+    /// <summary>
+    /// main list that is not effected by search
+    /// </summary>
+    private List<Person> PersonList { get; set; } = new List<Person>();
 
-    private List<Person> PersonList { get; set; }
+    /// <summary>
+    /// list that is shown to user and is changed by search
+    /// </summary>
+    private List<Person> PersonListDisplay { get; set; } = new List<Person>();
+    private List<Person> PublicPersonList { get; set; } = new List<Person>();
 
+    /// <summary>
+    /// only this way of marking works
+    /// </summary>
+    private bool IsReady = false;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
-    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
+    protected override async Task OnParametersSetAsync() => await FillDropDown();
 
 
 
@@ -99,7 +150,25 @@
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
 
-    private async Task _OnInitialized() => await FillDropDown();
+    /// <summary>
+    /// Handle when user uses the Search
+    /// </summary>
+    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
+    {
+        //get search text, lower case for more results
+        var text = (await _jsRuntime.GetValue(_searchInput)).ToLower();
+
+        //if no search text then show all
+        if (string.IsNullOrEmpty(text))
+        {
+            PersonListDisplay = PersonList;
+        }
+        else
+        {
+            PersonListDisplay = PersonList.FindAll(person => person.DisplayName.ToLower().Contains(text)); //todo possible to search by birth date
+        }
+
+    }
 
 
     private async Task FillDropDown()
@@ -107,21 +176,17 @@
         //show loading box
         await _jsRuntime.ShowLoading();
 
-        var html = "";
+        //only this way of marking works
+        IsReady = false;
 
         //get person list from server or cache and stores reference for later use
         PersonList = await AppData.API.GetPersonList();
+        PublicPersonList = await AppData.API.GetPublicPersonList();
 
-        //generate drop down options in html
-        foreach (var person in PersonList)
-        {
-            //auto select person set by parent
-            var isSelected = person.Id == SelectedPersonId ? "selected" : "";
-            html += $"<option value=\"{person.Id}\" {isSelected}>{person.DisplayName}</option>";
-        }
+        //make visible, do so to support search feature
+        PersonListDisplay = PersonList;
 
-        //set drop down list into view
-        DropDownOptionsHtml = new MarkupString(html);
+        IsReady = true;
 
         //need to propagate changes
         this.StateHasChanged();
@@ -129,9 +194,12 @@
         //hide loading box
         _jsRuntime.HideLoading();
 
+
     }
 
     public async Task<Person> GetSelectedPerson() => await WebsiteTools.GetPersonById(SelectedPersonId, _jsRuntime);
+
+    //private Person selectedPerson;
 
     /// <summary>
     /// True if a person has been selected else false
@@ -162,5 +230,19 @@
 
     }
 
+
+    private void OnClickPersonName(Person person)
+    {
+        //make visible when drop down is closed as selected name
+        DropDownDisplayText = person.DisplayName;
+
+        //save the selected person, we only use ID because in sync with id in URL
+        SelectedPersonId = person.Id;
+    }
+
+    private void OnClickHidePublic()
+    {
+        PublicPersonList.Clear();
+    }
 
 }

@@ -26,11 +26,7 @@
         <div class="col-auto align-items-start d-none d-md-block">
             <!--only visible in Desktop-->
             <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white">
-                <div class="sidebar-search">
-                    <div class="search-body">
-                        <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
-                    </div><!-- search-body -->
-                </div><!-- sidebar-search -->
+                <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
                 <SideBarButtons />
             </div>
 

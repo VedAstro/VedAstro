@@ -20,17 +20,25 @@ namespace Library.API
 
         private List<Person> CachedPersonList { get; set; } = new List<Person>(); //if empty que to get new list
 
+        /// <summary>
+        /// public examples profiles always here if needed, list should never be empty, bad UX
+        /// </summary>
+        private List<Person> CachedPublicPersonList { get; set; } = new List<Person>(); //if empty que to get new list
+
         private readonly URL _url;
 
         /// <summary>
         /// Durable function API URL to get ready personlist for this caller
         /// </summary>
         private string PersonListWebhook { get; set; } = "";
+        private string PublicPersonListWebhook { get; set; } = "";
 
         /// <summary>
         /// true of person is already prepared
         /// </summary>
         private bool IsPersonPrepared => !string.IsNullOrEmpty(PersonListWebhook);
+
+        private bool IsPublicPersonPrepared => !string.IsNullOrEmpty(PublicPersonListWebhook);
 
 
         //--------CTOR
@@ -54,13 +62,23 @@ namespace Library.API
         /// </summary>
         public async Task PreparePersonList()
         {
+            //STAGE 1 :get person list for current user, can be empty
             //tell API to get started
             var url = $"{_url.GetPersonListAsync}/UserId/{_userId}/VisitorId/{_visitorId}";
 
             //API gives a url to check on poll fo results
             var rawResult = await Tools.ReadServer(url);
-
             PersonListWebhook = GetPayload<string>(rawResult, null);
+
+
+            //STAGE 2 : get person list for public, example profiles
+            //tell API to get started
+            url = $"{_url.GetPersonListAsync}/UserId/101/VisitorId/101";
+
+            //API gives a url to check on poll fo results
+            rawResult = await Tools.ReadServer(url);
+            PublicPersonListWebhook = GetPayload<string>(rawResult, null);
+
 
         }
 
@@ -68,7 +86,6 @@ namespace Library.API
         /// person will be auto prepared, but might be slow
         /// as such prepare before hand if possible, like when app load
         /// </summary>
-        /// <returns></returns>
         public async Task<List<Person>> GetPersonList()
         {
             //take cache if available
@@ -105,6 +122,43 @@ namespace Library.API
             CachedPersonList = Person.FromJsonList(outputToken); //cache for later use
 
             return CachedPersonList;
+        }
+        public async Task<List<Person>> GetPublicPersonList()
+        {
+            //take cache if available
+            //cache will be cleared when update is needed
+            if (CachedPublicPersonList.Any()) { return CachedPublicPersonList; }
+
+            //if person not prepared then prepare before continuing
+            if (!IsPublicPersonPrepared) { await PreparePersonList(); }
+
+
+        //check if person list is ready
+        //here result can contain payload if ready
+        TryAgain:
+            var result = await Tools.ReadServer(PublicPersonListWebhook);
+            //todo change to payload standard
+            var runtimeStatus = result["runtimeStatus"]?.Value<string>() ?? "";
+
+            //note : if error status, will be corrected by API,
+            //so here we wait till complete
+            var isDone = runtimeStatus == "Completed";
+
+            //if not yet done, wait little and call back
+            if (!isDone)
+            {
+                //print holding status for easy debug
+                Console.WriteLine($"API SAID : {runtimeStatus}");
+                await Task.Delay(300);
+                goto TryAgain;
+            }
+
+            //once done, get data out
+            //person list json to parsed
+            var outputToken = result["output"]; //json array
+            CachedPublicPersonList = Person.FromJsonList(outputToken); //cache for later use
+
+            return CachedPublicPersonList;
         }
 
         /// <summary>
@@ -182,7 +236,6 @@ namespace Library.API
             return person;
         }
 
-
         /// <summary>
         /// calls API to generate a new person ID, unique and human readable
         /// NOTE:
@@ -237,7 +290,7 @@ namespace Library.API
         /// gets payload after checking status and shows error if status "Fail"
         /// note :  no parser use direct, support for string, int and double
         /// </summary>
-        private T? GetPayload<T>(JObject rawResult, Func<JToken, T>? parser)
+        private T GetPayload<T>(JObject rawResult, Func<JToken, T>? parser)
         {
             //result must say Pass, else it has failed
             var isPass = rawResult["Status"]?.Value<string>() == "Pass";
@@ -267,8 +320,6 @@ namespace Library.API
 #endif
                 //for now this should notify errors nicely, todo maybe exceptions is not best 
                 throw new Exception($"Failed to get {typeof(T).AssemblyQualifiedName} from API payload");
-
-                return default; //backup future
             }
 
         }

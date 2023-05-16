@@ -184,6 +184,9 @@ namespace VedAstro.Library
             //god knows why, in some time zones date comes with "." instead of "/" (despite above formatting)
             stdTimeString = stdTimeString.Replace('.', '/');
 
+            //god knows why, in some time zones date comes with "-" instead of "/" (despite above formatting)
+            stdTimeString = stdTimeString.Replace('-', '/');
+
             //return formatted time
             return stdTimeString;
         }

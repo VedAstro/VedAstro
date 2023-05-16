@@ -31,7 +31,7 @@
                 <DropDownList>
                     <li>
                         <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickSendToEmail(PdfFileName, eventsChartSvgHolder))">
-                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email"/>
+                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
                             <span>Email</span>
                         </a>
                     </li>
@@ -335,36 +335,44 @@
     /// </summary>
     public async Task ShowChart(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
-        //close previous if any
-        _isReady = false;
+        try
+        {
+            //close previous if any
+            _isReady = false;
 
-        //saved to be accessed later
-        SelectedPerson = person;
-        StartTime = startTime;
-        EndTime = endTime;
-        InputedEventTags = inputedEventTags;
+            //saved to be accessed later
+            SelectedPerson = person;
+            StartTime = startTime;
+            EndTime = endTime;
+            InputedEventTags = inputedEventTags;
 
-        //1 : package data to get chart
-        var payloadXml = GetChartGeneratorData(person, startTime, endTime, inputedEventTags);
+            //1 : package data to get chart
+            var payloadXml = GetChartGeneratorData(person, startTime, endTime, inputedEventTags);
 
-        //2 : use EventsChart.js to take over from here
-        //note : JS code will generate, inject & animate chart
-        //create new chart from svg string
-        await _jsRuntime.InvokeVoidAsync(JS.ChartFromGenerateDataXML, payloadXml.ToString());
+            //2 : use EventsChart.js to take over from here
+            //note : JS code will generate, inject & animate chart
+            //create new chart from svg string
+            await _jsRuntime.InvokeVoidAsync(JS.ChartFromGenerateDataXML, payloadXml.ToString());
 
-        //get latest dark mode setting
-        //so that event chart is not lost in darkness
-        await AppData.UpdateDarkMode(_jsRuntime);
+            //get latest dark mode setting
+            //so that event chart is not lost in darkness
+            await AppData.UpdateDarkMode(_jsRuntime);
 
-        //set current chart as not from saved version
-        //note: used to show and hide buttons
-        _nowSavedChart = false;
+            //set current chart as not from saved version
+            //note: used to show and hide buttons
+            _nowSavedChart = false;
 
-        //render html
-        _isReady = true;
+            //render html
+            _isReady = true;
 
-        //needed to make save button appear again
-        StateHasChanged();
+            //needed to make save button appear again
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            //should not happen, let user know
+            await _jsRuntime.ShowAlert("error", AlertText.ObliviousErrors(), true);
+        }
 
     }
 

@@ -71,7 +71,7 @@ namespace API
                 //get dasa report for sending
                 var chart = await GetEventReportSvgForIncomingRequest(incomingRequest, false);
 
-                return SendSvgToCaller(chart.ContentSvg, incomingRequest);
+                return APITools.SendSvgToCaller(chart.ContentSvg, incomingRequest);
 
                 //marked for deletion
                 ////convert svg string to stream for sending
@@ -108,7 +108,7 @@ namespace API
                 var chart = await GetEventReportSvgForIncomingRequestEasy(incomingRequest);
 
                 //send image back to caller
-                return SendSvgToCaller(chart.ContentSvg, incomingRequest);
+                return APITools.SendSvgToCaller(chart.ContentSvg, incomingRequest);
             }
             catch (Exception e)
             {
@@ -252,7 +252,7 @@ namespace API
                 var chart = Chart.FromXml(foundChartXml);
 
                 //send image back to caller
-                return SendSvgToCaller(chart.ContentSvg, incomingRequest);
+                return APITools.SendSvgToCaller(chart.ContentSvg, incomingRequest);
 
             }
             catch (Exception e)
@@ -457,7 +457,7 @@ namespace API
 
 
                 //send image back to caller
-                return SendSvgToCaller(finalSvg, incomingRequest);
+                return APITools.SendSvgToCaller(finalSvg, incomingRequest);
             }
             catch (Exception e)
             {
@@ -549,16 +549,6 @@ namespace API
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-        private static HttpResponseData SendSvgToCaller(string chartContentSvg, HttpRequestData incomingRequest)
-        {
-            //send image back to caller
-            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "image/svg+xml");
-            //place in response body
-            response.WriteString(chartContentSvg);
-            return response;
-        }
-
 
         /// <summary>
         /// processes incoming xml request and outputs events svg report
@@ -636,17 +626,16 @@ namespace API
             return await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
         }
 
+
+        /// <summary>
+        /// Cache stored in running memory
+        /// </summary>
         private static async Task<Chart> GetChartCached(Person foundPerson, Time startTime, Time endTime,
             double daysPerPixel, List<EventTag> eventTags)
         {
-
-            //convert events into 1 signature
-            var eventTagsHash = 0;
-            foreach (var eventTag in eventTags) { eventTagsHash += eventTag.GetHashCode(); }
-
-            //convert input data into a signature
-            var dataSignature = foundPerson.Hash + startTime.GetHashCode() + endTime.GetHashCode() + daysPerPixel + eventTagsHash;
-
+            //create a unique signature to identify all future calls that is exactly alike
+            var dataSignature = GetSignature(foundPerson, startTime,endTime,daysPerPixel, eventTags);
+                
             //use cache if exist else use new one
             var result = _cacheList.TryGetValue(dataSignature, out var cachedChartXml);
 
@@ -665,6 +654,23 @@ namespace API
             var oldChart = Chart.FromXml(XElement.Parse(cachedChartXml ?? "<Empty/>"));
             return oldChart;
 
+        }
+
+        /// <summary>
+        /// create a unique signature to identify all future calls that is exactly alike
+        /// todo use this for DURABALE ID when caching chart calls
+        /// </summary>
+        private static double GetSignature(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
+        {
+
+            //convert events into 1 signature
+            var eventTagsHash = 0;
+            foreach (var eventTag in eventTags) { eventTagsHash += eventTag.GetHashCode(); }
+
+            //convert input data into a signature
+            var dataSignature = foundPerson.Hash + startTime.GetHashCode() + endTime.GetHashCode() + daysPerPixel + eventTagsHash;
+
+            return dataSignature;
         }
 
         private static async Task<Chart> GetChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)

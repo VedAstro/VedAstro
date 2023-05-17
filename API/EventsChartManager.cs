@@ -66,7 +66,7 @@ namespace API
 
             //PART III : compile in right placement
             var final =
-                $@"
+                $@" <!--MADE BY MACHINES FOR HUMAN EYES-->
                     {svgHead}
                         <!--inside border-->
                         {contentHead}

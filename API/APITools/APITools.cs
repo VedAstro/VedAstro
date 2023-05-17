@@ -686,5 +686,18 @@ namespace API
             return request.Headers.TryGetValues(headerName, out list) ? list.FirstOrDefault() : null;
         }
 
+
+        public static HttpResponseData SendSvgToCaller(string chartContentSvg, HttpRequestData incomingRequest)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "image/svg+xml");
+            //place in response body
+            response.WriteString(chartContentSvg);
+            return response;
+        }
+
+
+       
     }
 }

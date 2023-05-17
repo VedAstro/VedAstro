@@ -97,10 +97,11 @@ namespace VedAstro.Library
             var female = new XElement("Female", Female.ToXml());
             var predictionList = PredictionListToXml(this.PredictionList);
             var userId = new XElement("UserId", this.UserIdString);
+            var notes = new XElement("Notes", this.Notes);
             var matchId = new XElement("Id", Id);
 
             //add in the data
-            compatibilityReport.Add(matchId, userId, male, female, kutaScore, predictionList);
+            compatibilityReport.Add(matchId, userId, notes, male, female, kutaScore, predictionList);
 
             return compatibilityReport;
         }
@@ -110,6 +111,7 @@ namespace VedAstro.Library
 
             var temp = new JObject();
             temp["KutaScore"] = this.KutaScore;  //not rounded
+            temp["Notes"] = this.Notes;  //not rounded
             temp["Male"] = Male.ToJson();
             temp["Female"] = Female.ToJson();
             temp["PredictionList"] = MatchPrediction.ToJsonList(this.PredictionList);
@@ -129,27 +131,28 @@ namespace VedAstro.Library
         /// <summary>
         /// If unparseable will return null
         /// </summary>
-        public static MatchReport FromXml(XElement compatibilityReportXml)
+        public static MatchReport FromXml(XElement reportXml)
         {
             //end here if null
-            if (compatibilityReportXml == null) { return null; }
+            if (reportXml == null) { return null; }
 
             //it is possible xml is not valid data, possible error xml, so end here
-            if (compatibilityReportXml?.Element("Male")?.Element("Person") == null) { return null; }
+            if (reportXml?.Element("Male")?.Element("Person") == null) { return null; }
 
             //extract out data from xml
-            var matchId = compatibilityReportXml.Element("Id")?.Value ?? "0";
-            var male = Person.FromXml(compatibilityReportXml.Element("Male")?.Element("Person"));
-            var female = Person.FromXml(compatibilityReportXml.Element("Female")?.Element("Person"));
-            var kutaScore = Double.Parse(compatibilityReportXml.Element("KutaScore")?.Value ?? "0");
-            var userId = Tools.GetUserIdFromData(compatibilityReportXml);
+            var matchId = reportXml.Element("Id")?.Value ?? "0";
+            var notes = reportXml.Element("Notes")?.Value ?? "Notes";
+            var male = Person.FromXml(reportXml.Element("Male")?.Element("Person"));
+            var female = Person.FromXml(reportXml.Element("Female")?.Element("Person"));
+            var kutaScore = Double.Parse(reportXml.Element("KutaScore")?.Value ?? "0");
+            var userId = Tools.GetUserIdFromData(reportXml);
 
-            var predictionListXml = compatibilityReportXml.Element("PredictionList");
+            var predictionListXml = reportXml.Element("PredictionList");
             var predictionList = ParseXmlToPredictionList(predictionListXml);
 
 
             //package as new data
-            var newCompatibilityReport = new MatchReport(matchId, male, female, kutaScore, "Notes", predictionList, userId);
+            var newCompatibilityReport = new MatchReport(matchId, male, female, kutaScore, notes, predictionList, userId);
             return newCompatibilityReport;
 
             //----------------------------------------------
@@ -222,7 +225,7 @@ namespace VedAstro.Library
             if (kutaScore < 15)
             {
                 var heartIcon = "ic:round-heart-broken";
-                var scoreColor = "#ff0000"; //darkest red
+                var scoreColor = "#ff6969";
                 var scoreSummary = "Not best, avoid if possible";
                 return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
             }
@@ -230,15 +233,23 @@ namespace VedAstro.Library
             if (kutaScore >= 15 && kutaScore < 30)
             {
                 var heartIcon = "mdi:heart-flash";
-                var scoreColor = "#ff8080"; // light red
+                var scoreColor = "#ff6969"; 
                 var scoreSummary = "Problematic relationship";
                 return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
             }
 
-            if (kutaScore >= 30 && kutaScore < 50)
+            if (kutaScore >= 30 && kutaScore < 40)
             {
                 var heartIcon = "mdi:heart-half-full";
-                var scoreColor = "#71ef72"; //light green
+                var scoreColor = "#ff6969"; 
+                var scoreSummary = "Better than the worst but not best";
+                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
+
+            }
+            if (kutaScore >= 40 && kutaScore < 50)
+            {
+                var heartIcon = "mdi:heart-half-full";
+                var scoreColor = "#ff6969"; 
                 var scoreSummary = "Average relationship, equal good and bad";
                 return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
 
@@ -247,7 +258,7 @@ namespace VedAstro.Library
             if (kutaScore >= 50 && kutaScore < 60)
             {
                 var heartIcon = "mdi:cards-heart";
-                var scoreColor = "#3be93d"; //greener
+                var scoreColor = "#00a702"; 
                 var scoreSummary = "Better than average, more good than bad";
                 return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
             }
@@ -255,7 +266,7 @@ namespace VedAstro.Library
             if (kutaScore >= 60 && kutaScore <= 80)
             {
                 var heartIcon = "mdi:heart-plus";
-                var scoreColor = "#20e623";
+                var scoreColor = "#00a702";
                 var scoreSummary = "Near perfect match, overall happiness";
                 return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
             }
@@ -263,7 +274,7 @@ namespace VedAstro.Library
             if (kutaScore > 80)
             {
                 var heartIcon = "bi:arrow-through-heart-fill";
-                var scoreColor = "#00ff03";
+                var scoreColor = "#00a702";
                 var scoreSummary = "Best possible match, rare in real life";
                 return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
             }

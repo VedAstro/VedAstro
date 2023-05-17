@@ -13,7 +13,7 @@ namespace VedAstro.Library
     public class MatchReport : IToXml
     {
 
-        public static MatchReport Empty = new MatchReport("0",Person.Empty, Person.Empty, 0, "Empty Notes",
+        public static MatchReport Empty = new MatchReport("0", Person.Empty, Person.Empty, 0, "Empty Notes",
             new List<MatchPrediction>(), new[] { "101" }); //have to use direct variables
 
         private static readonly string[] DefaultUserId = new[] { "101" };
@@ -71,7 +71,7 @@ namespace VedAstro.Library
         /// </summary>
         public MatchSummaryData Summary => GetSummary(KutaScore);
 
-        public MatchReport(string id, Person male, Person female, double kutaScore,string notes, List<MatchPrediction> predictionList, string[] userId)
+        public MatchReport(string id, Person male, Person female, double kutaScore, string notes, List<MatchPrediction> predictionList, string[] userId)
         {
             Id = id;
             Male = male;
@@ -100,11 +100,11 @@ namespace VedAstro.Library
             var matchId = new XElement("Id", Id);
 
             //add in the data
-            compatibilityReport.Add(userId, male, female, kutaScore,  predictionList);
+            compatibilityReport.Add(matchId, userId, male, female, kutaScore, predictionList);
 
             return compatibilityReport;
         }
-        
+
         public JToken ToJson()
         {
 
@@ -192,7 +192,7 @@ namespace VedAstro.Library
 
 
 
-        
+
         //█ █▄░█ ▀█▀ █▀▀ █▀█ █▄░█ ▄▀█ █░░   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█ █░▀█ ░█░ ██▄ █▀▄ █░▀█ █▀█ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
         //----------------------------------------------------------------------------------------------------------------
@@ -224,7 +224,7 @@ namespace VedAstro.Library
                 var heartIcon = "ic:round-heart-broken";
                 var scoreColor = "#ff0000"; //darkest red
                 var scoreSummary = "Not best, avoid if possible";
-                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary ) ;
+                return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
             }
 
             if (kutaScore >= 15 && kutaScore < 30)
@@ -255,7 +255,7 @@ namespace VedAstro.Library
             if (kutaScore >= 60 && kutaScore <= 80)
             {
                 var heartIcon = "mdi:heart-plus";
-                var scoreColor = "#20e623"; 
+                var scoreColor = "#20e623";
                 var scoreSummary = "Near perfect match, overall happiness";
                 return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
             }

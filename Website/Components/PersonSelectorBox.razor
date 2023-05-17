@@ -55,7 +55,7 @@ KEEP IT REAL
                         @*<IconButton IconName="clarity:eye-hide-line" Outline="true" SmallSize="true" OnClickCallback="OnClickHidePublic" />*@
                     </div>
                     <li><hr class="dropdown-divider"></li>
-                    @foreach (var person in PublicPersonList)
+                    @foreach (var person in PublicPersonListDisplay)
                     {
                         <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
                     }
@@ -151,6 +151,7 @@ KEEP IT REAL
     /// list that is shown to user and is changed by search
     /// </summary>
     private List<Person> PersonListDisplay { get; set; } = new List<Person>();
+    private List<Person> PublicPersonListDisplay { get; set; } = new List<Person>();
     private List<Person> PublicPersonList { get; set; } = new List<Person>();
 
     /// <summary>
@@ -183,10 +184,12 @@ KEEP IT REAL
         if (string.IsNullOrEmpty(text))
         {
             PersonListDisplay = PersonList;
+            PublicPersonListDisplay = PublicPersonList;
         }
         else
         {
             PersonListDisplay = PersonList.FindAll(person => person.DisplayName.ToLower().Contains(text)); //todo possible to search by birth date
+            PublicPersonListDisplay = PublicPersonList.FindAll(person => person.DisplayName.ToLower().Contains(text)); //todo possible to search by birth date
         }
 
     }
@@ -206,6 +209,7 @@ KEEP IT REAL
 
         //make visible, do so to support search feature
         PersonListDisplay = PersonList;
+        PublicPersonListDisplay = PublicPersonList;
 
         IsReady = true;
 

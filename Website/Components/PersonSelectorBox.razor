@@ -36,12 +36,12 @@ KEEP IT REAL
         @if (IsReady)
         {
             <!-- Example single danger button -->
-            <div class="btn-group">
-                <button type="button" class="btn dropdown-toggle btn-outline-primary" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="btn-group" style="width: @GR.W255px;">
+                <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
                     @DropDownDisplayText
                 </button>
-                <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll;">
-                    <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control mx-2" placeholder="Search...">
+                <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
+                    <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
 
                     @foreach (var person in PersonListDisplay)
                     {
@@ -52,7 +52,7 @@ KEEP IT REAL
                         <IconText FontColor="#8f8f8f" IconName="material-symbols:demography-rounded">
                             Examples
                         </IconText>
-                        <IconButton IconName="clarity:eye-hide-line" Outline="true" SmallSize="true" OnClickCallback="OnClickHidePublic" />
+                        @*<IconButton IconName="clarity:eye-hide-line" Outline="true" SmallSize="true" OnClickCallback="OnClickHidePublic" />*@
                     </div>
                     <li><hr class="dropdown-divider"></li>
                     @foreach (var person in PublicPersonList)

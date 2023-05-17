@@ -1,3 +1,23 @@
+@*⠀⠀⠀⠀⠀⠀⠀⢠⣶⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⢀⣴⣾⣶⣄⠘⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠈⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠙⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣾⣿⣿⣿⠿⠿⠓⢀⣀⣠⣤⣤⣄⠀⠀⠀
+⠀⣀⣤⡀⠀⠀⢀⣤⣶⣤⡙⢿⣿⣿⣿⡟⣩⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀
+⢸⣿⣿⣿⣦⡀⠸⣿⣿⣿⣿⣦⡙⢿⣿⡇⣿⣿⣿⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⡆
+⠈⠻⣿⣿⣿⣿⣦⡉⢿⣿⣿⣿⣿⣦⡙⢿⣬⣉⣩⣭⣤⣴⣶⣿⣿⣿⣿⣿⣿⣧
+⠀⠀⠈⠻⣿⣿⣿⣿⣦⡉⠻⣿⣿⣿⣿⣦⡙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟
+⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣷⣍⠻⣿⣿⣿⠇⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇
+⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣷⣬⣭⣥⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⣿⣿⣿⡿⠿⠿⠛⠉⠀⠀⠀⠀⠀⠀
+KEEP IT REAL
+*@
+
+
+
 @namespace Website.Pages
 @using VedAstro.Library;
 @using System.Xml.Linq
@@ -20,7 +40,7 @@
                 <button type="button" class="btn dropdown-toggle btn-outline-primary" data-bs-toggle="dropdown" aria-expanded="false">
                     @DropDownDisplayText
                 </button>
-                <ul class="dropdown-menu pe-3" style="height: @GR.W412px; overflow-y: scroll;">
+                <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll;">
                     <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control mx-2" placeholder="Search...">
 
                     @foreach (var person in PersonListDisplay)
@@ -28,16 +48,17 @@
                         <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
                     }
                     <li><hr class="dropdown-divider"></li>
-                    <div class="d-flex justify-content-between">
-                        <span>Examples</span><IconButton IconName="clarity:eye-hide-line" Outline="true" SmallSize="true" OnClickCallback="OnClickHidePublic" />
+                    <div class="ms-3 d-flex justify-content-between">
+                        <IconText FontColor="#8f8f8f" IconName="material-symbols:demography-rounded">
+                            Examples
+                        </IconText>
+                        <IconButton IconName="clarity:eye-hide-line" Outline="true" SmallSize="true" OnClickCallback="OnClickHidePublic" />
                     </div>
                     <li><hr class="dropdown-divider"></li>
                     @foreach (var person in PublicPersonList)
                     {
                         <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
                     }
-
-                    <li><a class="dropdown-item" href="#">James Brown</a></li>
                 </ul>
             </div>
 

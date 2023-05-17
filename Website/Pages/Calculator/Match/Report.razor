@@ -14,8 +14,8 @@
     @*TOP BUTTON ROW*@
     <div class="hstack gap-3 my-3">
         <IconButton SmallSize="true" Outline="true" ButtonText="Back" IconName="akar-icons:arrow-back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-@*        <IconButton SmallSize="true" Outline="true" ButtonText="Add Person" IconName="flat-color-icons:good-decision" ClickUrl="@PageRoute.AddPerson"></IconButton>
-*@        <IconButton SmallSize="true" Outline="true" ButtonText="View Saved" IconName="flat-color-icons:filing-cabinet" ClickUrl="@PageRoute.SavedMatchReports"></IconButton>
+        @*        <IconButton SmallSize="true" Outline="true" ButtonText="Add Person" IconName="flat-color-icons:good-decision" ClickUrl="@PageRoute.AddPerson"></IconButton>
+    *@        <IconButton SmallSize="true" Outline="true" ButtonText="View Saved" IconName="flat-color-icons:filing-cabinet" ClickUrl="@PageRoute.SavedMatchReports"></IconButton>
         <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="emojione:floppy-disk">
             <DropDownList>
                 <li>
@@ -64,8 +64,8 @@
         @*EASY REPORT : simplified version of the vedic table*@
         <IconTitle Title="Easy" IconName="maki:school" TitleHolder="h4" />
         <EasyMatchReport Report="@_report" />
-        
-        <div class="my-2"/>
+
+        <div class="my-2" />
 
         @*VEDIC TABLE*@
         <IconTitle Title="Advanced" IconName="tabler:school" TitleHolder="h4" />
@@ -629,15 +629,19 @@
             //
             _navigation.NavigateTo(PageRoute.Login);
         }
+        //only start the save if already logged in
+        else
+        {
+            _jsRuntime.ShowLoading();
 
-        _jsRuntime.ShowLoading();
+            //save to cloud via API
+            await SaveCompatibilityReport(MaleId ?? "", FemaleId ?? "");
 
-        //save to cloud via API
-        await SaveCompatibilityReport(MaleId ?? "", FemaleId ?? "");
+            //let user know
+            var html = $@"<h3>Saved</h3><a href=""{PageRoute.SavedMatchReports}"">View all</a> saved match reports";
+            await _jsRuntime.ShowAlert("success", html, true, 0, true);
+        }
 
-        //let user know
-        var html = $@"<h3>Saved</h3><a href=""{PageRoute.SavedMatchReports}"">View all</a> saved match reports";
-        await _jsRuntime.ShowAlert("success", html, true, 0, true);
     }
 
 }

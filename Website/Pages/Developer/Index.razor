@@ -3,9 +3,64 @@
 
 
 
+<PageTitle>Join Family | VedAstro</PageTitle>
+
+<PageTop ImageName="join-our-family.svg"
+         Title="VedAstro in 4 Parts"
+         DescriptionText="Modules that you can import into your app or service. These 4 parts come together to make VedAstro.">
+</PageTop>
 
 
-<img src="images/4-parts-of-vedastro.svg" width="@GR.W412px" class="img-thumbnail" alt="...">
+
+<div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
+    
+    <div @onclick="() => _navigation.NavigateTo(PageRoute.OpenApi)" style="cursor: pointer;" class="col">
+        <div class="card">
+            <img src="images/open-api-card.jpg" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">Open API</h5>
+                <p class="card-text">Access powerful astrological tools via a HTTP request</p>
+            </div>
+        </div>
+    </div>
+    <div @onclick="() => _navigation.NavigateTo(PageRoute.Docker)" style="cursor: pointer;" class="col">
+        <div class="card">
+            <img src="images/docker-card.jpg" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">Docker</h5>
+                <p class="card-text">Run your flavor of the API as a Docker instance</p>
+            </div>
+        </div>
+    </div>
+    <div @onclick="() => _navigation.NavigateTo(PageRoute.NuGet)" style="cursor: pointer;" class="col">
+        <div class="card">
+            <img src="images/nuget-card.jpg" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">.NET NuGet</h5>
+                <p class="card-text">Embed advanced astro calculations into your app or service with .NET NuGet</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<ArticleBlock Title="How they fit" IconName="flat-color-icons:multiple-inputs">
+    <TextHTML>
+        <img src="images/4-parts-of-vedastro.jpg" width="@GR.W412px" class="img-thumbnail" alt="...">
+
+    </TextHTML>
+</ArticleBlock>
+
+@*
+
+<div class="hstack">
+    <InfoBox MaxWidth="365" FullWidth="@true" Title="Secure" Description="Login safe & fast with Google or Facebook authentication." IconName="flat-color-icons:approval" />
+    <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Save" Description="Person horoscope data is saved for easy access on your next visit" IconName="emojione:floppy-disk" />
+    <InfoBox MaxWidth="365" FullWidth="@true" Title="Privacy" Description="We don't collect or connect to any data from your Google or Facebook account." IconName="flat-color-icons:customer-support" />
+</div>
+
 
 
 
@@ -15,7 +70,7 @@ There are 3 ways you can use VedAstro in your project.
     <li class="list-group-item">Docker</li>
     <li class="list-group-item">NuGet</li>
 </ol>
-
+*@
 
 
 

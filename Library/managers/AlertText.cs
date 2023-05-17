@@ -38,6 +38,12 @@ namespace VedAstro.Library
         public const string NoPersonFound = "Person profile not found,\nrefresh or check profile share link";
         public const string PersonProfileNoExist = "Person profile no longer exists, could not make chart.";
         public const string Unexpected = "Unexpected error, we are working on the fix.\nPlease try again later.";
+        public const string PleaseLogin1 = "If you don't login how can we save your data and ID it?";
+        public const string PleaseLogin2 = "Don't worry we won't spam you. Servers got better things todo.";
+
+
+        //return "";
+        //return "";
 
 
         /// <summary>
@@ -49,11 +55,12 @@ namespace VedAstro.Library
         {
             SlowUnstableInternet, NewFeatures, ImproveWebsite, Unexpected
         });
-        
+
         /// <summary>
         /// Random selection of errors messages for unexpected errors 
         /// </summary>
         public static string ObliviousErrors() => Tools.RandomSelect(new[] { Unexpected, SlowUnstableInternet, NewFeatures, ImproveWebsite });
+        public static string FunnyLoginText() => Tools.RandomSelect(new[] { PleaseLogin1, PleaseLogin2 });
 
 
     }

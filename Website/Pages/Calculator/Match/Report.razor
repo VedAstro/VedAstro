@@ -619,6 +619,17 @@
 
     private async Task OnClickSaveToCloud()
     {
+        //if not logged in send user to login page
+        if (AppData.IsGuestUser)
+        {
+
+            //tell user to login
+            await _jsRuntime.ShowAlert("success", "Please login first", AlertText.FunnyLoginText());
+
+            //
+            _navigation.NavigateTo(PageRoute.Login);
+        }
+
         _jsRuntime.ShowLoading();
 
         //save to cloud via API

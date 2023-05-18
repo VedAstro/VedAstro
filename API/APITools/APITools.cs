@@ -697,6 +697,15 @@ namespace API
             response.WriteString(chartContentSvg);
             return response;
         }
+        public static HttpResponseData SendGifToCaller(byte[] gif, HttpRequestData incomingRequest)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "image/gif");
+            //place in response body
+            response.WriteBytes(gif);
+            return response;
+        }
 
 
         //gets the exact width of a text based on Font size & type

@@ -26,6 +26,7 @@
                     <option value="Planet">Planet</option>
                     <option value="House">House</option>
                     <option value="SkyChart">Sky Chart</option>
+                    <option value="SkyChartGIF">Sky Chart GIF</option>
                 </select>
                 <label style="font-weight: 700; color: black;" for="celestialBodySelect">Celestial Body</label>
             </div>
@@ -203,7 +204,17 @@
                     _jsRuntime.Show(housePropertySelector);
                     _jsRuntime.Hide(planetPropertySelector);
                     break;
-                case "skychart"://sky chart as svg
+                case "skychart"://show house & hide planet
+                    _jsRuntime.Hide(houseNameSelector);
+                    _jsRuntime.Hide(planetNameSelector);
+                    _jsRuntime.Hide(housePropertySelector);
+                    _jsRuntime.Hide(planetPropertySelector);
+                    break;
+                case "skychartgif"://show house & hide planet
+                    _jsRuntime.Hide(houseNameSelector);
+                    _jsRuntime.Hide(planetNameSelector);
+                    _jsRuntime.Hide(housePropertySelector);
+                    _jsRuntime.Hide(planetPropertySelector);
                     break;
             }
         }
@@ -262,6 +273,10 @@
         if (SelectedBodyType == "SkyChart")
         {
             placeHolder = domain + location + time + "/SkyChart";
+        }
+        else if (SelectedBodyType == "SkyChartGIF")
+        {
+            placeHolder = domain + location + time + "/SkyChartGIF";
         }
         else
         {

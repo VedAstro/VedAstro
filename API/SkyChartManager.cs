@@ -1,9 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VedAstro.Library;
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using Gif.Components;
+using System.Drawing.Printing;
+using System.Reflection.Metadata;
+using iText.IO.Image;
+using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
 
 namespace API
 {
@@ -75,6 +86,85 @@ namespace API
             }
 
         }
+
+
+        public static byte[] GenerateChartGif(Time time)
+        {
+            //STAGE 1: get charts as SVG list frames
+            var startTime = time.SubtractHours(300);
+            var endTime = time.AddHours(300);
+            var timeList = EventManager.GetTimeListFromRange(startTime, endTime, 100);
+            var chartSvglist = timeList.Select(x => GenerateChart(x)).ToList();
+
+
+            //STAGE 2: Convert SVG to PNG frames
+            var pngFrameListByteTransparent = chartSvglist.Select(x=> SvgConverter.Svg2Png(x, 360, 360)).ToList();
+            var pngFrameLisWhite = pngFrameListByteTransparent.Select(x=> tansparencyToWhite((Bitmap)x, ImageFormat.Png)).ToList();
+            var pngFrameList = pngFrameLisWhite.Select(x=> byteArrayToImage(x)).ToList();
+
+
+            //STAGE 3: Make GIF from PNGs
+            /* create Gif */
+            //you should replace filepath
+            AnimatedGifEncoder e = new AnimatedGifEncoder();
+
+            // read file as memorystream
+           // byte[] fileBytes = File.ReadAllBytes(outputFilePath);
+            var memStream = new MemoryStream();
+            e.Start(memStream);
+            e.SetDelay(500);
+            //-1:no repeat,0:always repeat
+            e.SetRepeat(0);
+            foreach (var pngFrame in pngFrameList)
+            {
+                e.AddFrame(pngFrame);
+            }
+
+            var x = e.Output();
+
+            e.Finish();
+
+            return x.ToArray();
+        }
+
+
+        public static Image byteArrayToImage(byte[] bytesArr)
+        {
+            using (MemoryStream memstr = new MemoryStream(bytesArr))
+            {
+                Image img = Image.FromStream(memstr);
+                return img;
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// Prepares the bitmap to be converted to jpg,
+        /// by setting transparency fill color to white
+        /// </summary>
+        private static byte[] tansparencyToWhite(Bitmap input, ImageFormat outputFormat)
+        {
+            var stream = new MemoryStream();
+
+            using (var b = new Bitmap(input.Width, input.Height))
+            {
+                //this will avoid some scaling issues during the conversion
+                b.SetResolution(input.HorizontalResolution, input.VerticalResolution);
+
+                using (var g = Graphics.FromImage(b))
+                {
+                    g.Clear(Color.White);
+                    g.DrawImageUnscaled(input, 0, 0);
+                }
+
+                b.Save(stream, outputFormat); ;
+            }
+
+            return stream.ToArray();
+        }
+
 
 
         private static string GenerateTimeHeaderRow(List<Time> timeSlices, double daysPerPixel, int _widthPerSlice, ref int headerY)

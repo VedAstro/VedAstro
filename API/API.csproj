@@ -14,8 +14,10 @@
 	<ItemGroup>
 		<PackageReference Include="Azure.Communication.Email" Version="1.0.0" />
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
+		<PackageReference Include="itext7" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+		<PackageReference Include="Svg" Version="3.4.4" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.0-preview.2.23128.3" />
 		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />
 
@@ -28,6 +30,7 @@
 		<!--<PackageReference Include="VedAstro.Library" Version="1.2.0" />-->
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Gif.Components\Components.csproj" />
 		<ProjectReference Include="..\Library\Library.csproj" />
 	</ItemGroup>
 	<ItemGroup>

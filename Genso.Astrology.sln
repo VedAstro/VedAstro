@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desktop", "Desktop\Desktop.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.API", "Library.API\Library.API.csproj", "{BBC2261A-BB33-4C9D-B920-843348B2FBBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Components", "Gif.Components\Components.csproj", "{1C3A03CA-5E55-4CC4-9746-194A4188960A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,12 @@ Global
 		{BBC2261A-BB33-4C9D-B920-843348B2FBBC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBC2261A-BB33-4C9D-B920-843348B2FBBC}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
 		{BBC2261A-BB33-4C9D-B920-843348B2FBBC}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
+		{1C3A03CA-5E55-4CC4-9746-194A4188960A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C3A03CA-5E55-4CC4-9746-194A4188960A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C3A03CA-5E55-4CC4-9746-194A4188960A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C3A03CA-5E55-4CC4-9746-194A4188960A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C3A03CA-5E55-4CC4-9746-194A4188960A}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
+		{1C3A03CA-5E55-4CC4-9746-194A4188960A}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

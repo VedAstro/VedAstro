@@ -173,13 +173,22 @@ namespace API
             }
 
 
-            //all house body calls
+            //sky chart
             if (celestialBodyType.ToLower() == "skychart")
             {
                 //squeeze the Sky Juice!
                 var chart = SkyChartManager.GenerateChart(parsedTime);
 
                 return APITools.SendSvgToCaller(chart, incomingRequest);
+
+            }
+
+            if (celestialBodyType.ToLower() == "skychartgif")
+            {
+                //squeeze the Sky Juice!
+                var chart = SkyChartManager.GenerateChartGif(parsedTime);
+
+                return APITools.SendGifToCaller(chart, incomingRequest);
 
             }
 

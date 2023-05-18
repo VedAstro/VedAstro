@@ -1,0 +1,29 @@
+<Configuration>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Qualified:@System">
+      <Item value="Drawing" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@">
+      <Item value="SetRepeat" priority="0" />
+      <Item value="Length" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Drawing.Image">
+      <Item value="FromFile" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean />
+  </SettingsComponent>
+  <RecentFilesTracker>
+    <RecentFilesTracker>
+      <TrackedFile location="G:\Visual Studio Projects\Gif\Example\ExampleMain.cs" offset="164" line="0" column="0" />
+      <TrackedFile location="G:\Visual Studio Projects\Gif\Components\AnimatedGifEncoder.cs" offset="1486" line="0" column="0" />
+      <TrackedFile location="G:\Visual Studio Projects\Gif\Components\LZWEncoder.cs" offset="4657" line="106" column="0" />
+      <TrackedFile location="G:\Visual Studio Projects\Gif\Components\AssemblyInfo.cs" offset="461" line="0" column="0" />
+      <TrackedFile location="G:\Visual Studio Projects\Gif\Components\GifDecoder.cs" offset="2136" line="12" column="0" />
+      <TrackedFile location="G:\Visual Studio Projects\Gif\Components\NeuQuant.cs" offset="13120" line="419" column="0" />
+    </RecentFilesTracker>
+  </RecentFilesTracker>
+</Configuration>

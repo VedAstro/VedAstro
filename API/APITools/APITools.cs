@@ -4,6 +4,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
+using System.Drawing;
 using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
@@ -698,6 +699,26 @@ namespace API
         }
 
 
-       
+        //gets the exact width of a text based on Font size & type
+        //used to generate nicely fitting background for text
+        public static double GetTextWidthPx(string textInput)
+        {
+            //TODO handle max & min
+            //set max & min width background
+            //const int maxWidth = 70;
+            //backgroundWidth = backgroundWidth > maxWidth ? maxWidth : backgroundWidth;
+            //const int minWidth = 30;
+            //backgroundWidth = backgroundWidth > minWidth ? minWidth : backgroundWidth;
+
+
+            SizeF size;
+            using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                size = graphics.MeasureString(textInput, new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
+            }
+            var widthPx = Math.Round(size.Width);
+
+            return widthPx;
+        }
     }
 }

@@ -390,7 +390,7 @@ namespace API
 
             //based on length of event name make the background
             //mainly done to shorten background of short names (saving space)
-            var backgroundWidth = GetTextWidthPx(formattedEventName);
+            var backgroundWidth = APITools.GetTextWidthPx(formattedEventName);
 
             int iconYAxis = lineHeight; //start icon at end of line
             var iconXAxis = $"-{backgroundWidth / 2}"; //use negative to move center under line
@@ -449,27 +449,6 @@ namespace API
                 return returnVal;
             }
 
-            //gets the exact width of a text based on Font size & type
-            //used to generate nicely fitting background for text
-            double GetTextWidthPx(string textInput)
-            {
-                //TODO handle max & min
-                //set max & min width background
-                //const int maxWidth = 70;
-                //backgroundWidth = backgroundWidth > maxWidth ? maxWidth : backgroundWidth;
-                //const int minWidth = 30;
-                //backgroundWidth = backgroundWidth > minWidth ? minWidth : backgroundWidth;
-
-
-                SizeF size;
-                using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
-                {
-                    size = graphics.MeasureString(formattedEventName, new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
-                }
-                var widthPx = Math.Round(size.Width);
-
-                return widthPx;
-            }
         }
 
         /// <summary>
@@ -513,7 +492,6 @@ namespace API
         /// </summary>
         private static string GetLifeEventLinesSvg(Person person, int verticalYAxis, Time startTime, List<Time> timeSlices)
         {
-            //wait!, add in life events also
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
             var lineHeight = verticalYAxis + 6; //space between icon & last row

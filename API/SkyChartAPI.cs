@@ -27,9 +27,17 @@ namespace API
         {
             try
             {
+
+
                 //get dasa report for sending
-                var location = await GeoLocation.FromName(locationName);
-                var chart = SkyChartManager.GenerateChart(Time.Now(location));
+                var geoLocation = await GeoLocation.FromName(locationName);
+
+                //clean time text
+                var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
+                var parsedTime = new Time(timeStr, geoLocation);
+                
+                //squeeze the Sky Juice!
+                var chart = SkyChartManager.GenerateChart(parsedTime);
 
                 return  APITools.SendSvgToCaller(chart, incomingRequest);
 

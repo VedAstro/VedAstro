@@ -58,6 +58,7 @@ namespace VedAstro.Library
         /// </summary>
         public static string ObliviousErrors() => Tools.RandomSelect(new[] { Unexpected, SlowUnstableInternet, NewFeatures, ImproveWebsite });
         public static string FunnyLoginText() => Tools.RandomSelect(new[] { PleaseLogin1, PleaseLogin2, PleaseLogin3 });
+        public static string IsDoneText() => Tools.RandomSelect(new[] { "Your pizza is ready!", "Generated nicely!", "Bingo done!", "Oh yeah, its done!" });
 
 
     }

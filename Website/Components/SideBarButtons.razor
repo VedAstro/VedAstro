@@ -54,6 +54,10 @@ else
 
 @code {
 
+
+    private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
+
+
     private async Task OnClickNavBarLoginButton()
     {
 
@@ -68,12 +72,12 @@ else
     }
 
 
-    private async Task OnClickSignOutButton()
+    private async Task _OnClickSignOutButton()
     {
-        _jsRuntime.ShowLoading();
+        //NOTE: don't use show loading box here, for some reason breaks the whole thing
 
         //log this
-        await WebLogger.Click("Sign Out");
+        WebLogger.Click("Sign Out");
 
         //clear local storage of user data
         //since login status is basically the existence of user data in localstorage
@@ -85,10 +89,10 @@ else
         AppData.API = new VedAstroAPI(AppData.CurrentUser.Id, AppData.VisitorId, _jsRuntime, AppData.URL);
 
         //before reload page let user know log out went well
-        await _jsRuntime.ShowAlert("success", "Logged out, we hope you come back", false, 4000);
+        await _jsRuntime.ShowAlert("success", "Logged out, we hope you come back", false, 3000);
 
         //refresh page
-        await _jsRuntime.ReloadPage();
+        await _jsRuntime.LoadPage(PageRoute.Home);
 
     }
 

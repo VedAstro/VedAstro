@@ -496,7 +496,12 @@
         _pageTitle = $"{MaleName} + {FemaleName}";
 
         //get report from server
-        var rootXml = new XElement("Root", new XElement("MaleId", maleId), new XElement("FemaleId", femaleId));
+        var rootXml = new XElement("Root",
+            new XElement("MaleId", maleId),
+            new XElement("FemaleId", femaleId),
+            new XElement("UserId", AppData.CurrentUser.Id),
+            new XElement("VisitorId", AppData.VisitorId)
+            );
         var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.GetMatchReportApi, rootXml);
 
         //check the results, if fail let user know

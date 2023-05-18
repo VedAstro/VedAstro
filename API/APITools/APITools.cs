@@ -720,5 +720,21 @@ namespace API
 
             return widthPx;
         }
+
+        public static string GetCallerId(string userId,string visitorId )
+        {
+            var IsLoggedIn = userId != "101";
+            if (IsLoggedIn)
+            {
+                return userId;
+            }
+            //if user NOT logged in then take his visitor ID as caller id
+            else
+            {
+                return visitorId;
+            }
+
+        }
+
     }
 }

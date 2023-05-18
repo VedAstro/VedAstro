@@ -16,7 +16,7 @@ namespace VedAstro.Library
         /// Gets the compatibility report for a male & female
         /// The place where compatibility report gets generated
         /// </summary>
-        public static MatchReport GetCompatibilityReport(Person male, Person female, string userId)
+        public static MatchReport GetNewMatchReport(Person male, Person female, string userId)
         {
             //calculators are designed to fail 1st,
             //as such if they fail don't shut down the whole show!
@@ -69,7 +69,7 @@ namespace VedAstro.Library
 
             //parse data
             //note KUTA score added below
-            var report = new MatchReport(Tools.GenerateId(), male, female, 0, "...", compatibilityPredictions, new[] { "101" });
+            var report = new MatchReport(Tools.GenerateId(), male, female, 0, "...", compatibilityPredictions, new[] { userId }); //at creation only 1 user
 
             //count the total points
             report.KutaScore = CalculateTotalPoints(report);

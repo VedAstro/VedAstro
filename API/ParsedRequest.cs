@@ -8,7 +8,7 @@ public record ParsedRequest(string UserId, string VisitorId)
     }
 
     //get caller ID, so can use back any data if available
-    public string CallerId => GetCallerId();
+    public string CallerId => APITools.GetCallerId(UserId, VisitorId);
 
 
     /// <summary>
@@ -20,20 +20,5 @@ public record ParsedRequest(string UserId, string VisitorId)
     /// <summary>
     /// for getting cache not data from xml
     /// </summary>
-    private  string GetCallerId()
-    {
-
-        if (this.IsLoggedIn)
-        {
-            return this.UserId;
-        }
-        //if user NOT logged in then take his visitor ID as caller id
-        else
-        {
-            return this.VisitorId;
-        }
-
-
-    }
 
 }

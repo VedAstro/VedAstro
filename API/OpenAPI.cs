@@ -77,6 +77,34 @@ namespace API
             return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest);
         }
 
+        [Function(nameof(Income3))]
+        public static async Task<HttpResponseData> Income3([HttpTrigger(AuthorizationLevel.Anonymous,
+                "get",
+                Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}")]
+            HttpRequestData incomingRequest,
+            string locationName,
+            string hhmmStr,
+            string dateStr,
+            string monthStr,
+            string yearStr,
+            string offsetStr,
+            string celestialBodyType)
+        {
+            //log the call
+            APILogger.Visitor(incomingRequest);
+
+
+            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+            var geoLocation = geoLocationResult.Payload;
+
+            //clean time text
+            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
+            var parsedTime = new Time(timeStr, geoLocation);
+
+            //send to sorter (no property, set null)
+            return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, geoLocationResult, incomingRequest);
+        }
+
 
 
         private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
@@ -145,6 +173,15 @@ namespace API
             }
 
 
+            //all house body calls
+            if (celestialBodyType.ToLower() == "skychart")
+            {
+                //squeeze the Sky Juice!
+                var chart = SkyChartManager.GenerateChart(parsedTime);
+
+                return APITools.SendSvgToCaller(chart, incomingRequest);
+
+            }
 
 
             return APITools.FailMessage("End Of ThE Line", incomingRequest);

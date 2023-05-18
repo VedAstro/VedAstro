@@ -25,6 +25,7 @@
                     <option value="" selected>Make a choice</option>
                     <option value="Planet">Planet</option>
                     <option value="House">House</option>
+                    <option value="SkyChart">Sky Chart</option>
                 </select>
                 <label style="font-weight: 700; color: black;" for="celestialBodySelect">Celestial Body</label>
             </div>
@@ -145,7 +146,7 @@
                 <TextHTML>
                     There are also client libraries to help you access the API even more easily. It simply wraps HTTP calls into easy to consume functions, that your app can use.
                     Please note, these sub-projects is under <strong>prototype</strong> stage and much remains to be done. If you've created a library already please share it with the community.
-                    <BoldLink URL="@URL.VedAstroJS">JavaScript</BoldLink>, <BoldLink URL="@URL.VedAstroNuget">.NET NuGet</BoldLink> &amp; <BoldLink URL="@URL.VedAstroSwift">Swift iOS &amp; MacOS</BoldLink>. 
+                    <BoldLink URL="@URL.VedAstroJS">JavaScript</BoldLink>, <BoldLink URL="@URL.VedAstroNuget">.NET NuGet</BoldLink> &amp; <BoldLink URL="@URL.VedAstroSwift">Swift iOS &amp; MacOS</BoldLink>.
                 </TextHTML>
             </ArticleBlock>
 
@@ -202,6 +203,8 @@
                     _jsRuntime.Show(housePropertySelector);
                     _jsRuntime.Hide(planetPropertySelector);
                     break;
+                case "skychart"://sky chart as svg
+                    break;
             }
         }
     }
@@ -239,23 +242,37 @@
         finalCelesName = finalCelesName == "All" ? "" : finalCelesName;
         finalCelesProperty = finalCelesProperty == "All" ? "" : finalCelesProperty;
 
+        //STAGE 2 :
         //combine the call
+        //---
         var domain = AppData.URL.ApiUrl; //get stable or beta as needed
+                                         //---
         var localNameNoSpace = Tools.RemoveWhiteSpace(_geoLocationInput.LocationName);
         var location = $"/Location/{localNameNoSpace}";
+        //---
         string hhmmStr = timeInputed.GetStdDateTimeOffset().ToString("HH:mm");
         string dateSt = timeInputed.GetStdDateTimeOffset().ToString("dd");
         string monthStr = timeInputed.GetStdDateTimeOffset().ToString("MM");
         string yearStr = timeInputed.GetStdDateTimeOffset().ToString("yyyy");
         string offsetStr = timeInputed.GetStdDateTimeOffset().ToString("zzz");
         var time = $"/Time/{hhmmStr}/{dateSt}/{monthStr}/{yearStr}/{offsetStr}";
-        var celestialBodyData = $"/{SelectedBodyType}/{finalCelesName}/{finalCelesProperty}";
 
         //format of the API call
-        _finalApiGetCall = domain + location + time + celestialBodyData;
+        var placeHolder = "";
+        if (SelectedBodyType == "SkyChart")
+        {
+            placeHolder = domain + location + time + "/SkyChart";
+        }
+        else
+        {
+            var celestialBodyData = $"/{SelectedBodyType}/{finalCelesName}/{finalCelesProperty}";
+            placeHolder = domain + location + time + celestialBodyData;
+        }
+
+        _finalApiGetCall = placeHolder;
 
         //tactile feedback to user
-        await _jsRuntime.ShowAlert("success", $"Generated nicely!", false, 2000);
+        await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
 
     }
 
@@ -329,7 +346,8 @@
                 return selectedHouseName;
         }
 
-        throw new Exception("END OF LINE");
+        //if not specified than not needed, return empty
+        return "pass"; //something to escape validation
     }
 
     private string GetFinalCelesProperty()
@@ -342,7 +360,8 @@
                 return selectedHouseProperty;
         }
 
-        throw new Exception("END OF LINE");
+        //if not specified than not needed, return empty
+        return "pass"; //something to escape validation
     }
 
     private async Task OnDemoCallGeneratedUrl()

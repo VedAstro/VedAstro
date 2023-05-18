@@ -23,11 +23,11 @@ namespace API
             string border = null;
             string contentTail = null;
             string content = null;
+            string angleHeader = null;
 
 
 
             //PART II : fill the components in order
-
             GenerateComponents();
 
 
@@ -36,6 +36,7 @@ namespace API
             var final =
                 $@" <!--MADE BY MACHINES FOR HUMAN EYES-->
                     {svgHead}
+                        {angleHeader}
                         {content}
                     {svgTail}
                 ";
@@ -54,6 +55,9 @@ namespace API
                 var svgBackgroundColor = "#f0f9ff"; //not bleach white
                 var randomId = Tools.GenerateId();
 
+                //angleHeader = GenerateTimeHeaderRow();
+                angleHeader = "";
+
                 var planetList = AstronomicalCalculator.GetAllPlanetLongitude(time);
 
                 content = GetLifeEventLinesSvg(planetList);
@@ -67,6 +71,516 @@ namespace API
                 svgTail = "</svg>";
                 contentTail = "</g>";
 
+
+            }
+
+        }
+
+
+        private static string GenerateTimeHeaderRow(List<Time> timeSlices, double daysPerPixel, int _widthPerSlice, ref int headerY)
+        {
+            var dasaSvgWidth = 0; //will be filled when calling row generator
+            var compiledRow = "";
+
+            var beginYear = timeSlices[0].GetStdYear();
+            var endYear = timeSlices.Last().GetStdYear();
+            var difYears = endYear - beginYear;
+
+            //header rows are dynamically generated as needed, hence the extra logic below
+            var headerGenerator = new List<Func<List<Time>, int, int, int, string>>();
+            var showYearRow = daysPerPixel <= 15;
+            headerGenerator.Add(GenerateDecadeRowSvg);
+            //if (difYears >= 10 && !showYearRow) { headerGenerator.Add(GenerateDecadeRowSvg); }
+            //if (difYears is >= 5 and < 10) { headerGenerator.Add(Generate5YearRowSvg); }
+            //if (showYearRow) { headerGenerator.Add(GenerateYearRowSvg); }
+            //if (daysPerPixel <= 1.3) { headerGenerator.Add(GenerateMonthRowSvg); }
+            //if (daysPerPixel <= 0.07) { headerGenerator.Add(GenerateDateRowSvg); }
+            //if (daysPerPixel <= 0.001) { headerGenerator.Add(GenerateHourRowSvg); }
+
+            var padding = 2;//space between rows
+            int headerHeight = 11;
+            foreach (var generator in headerGenerator)
+            {
+                compiledRow += generator(timeSlices, headerY, 0, headerHeight);
+
+                //update for next generator
+                headerY = headerY + headerHeight + padding;
+            }
+
+            return compiledRow;
+
+
+            string GenerateYearRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousYear = 0; //start 0 for first draw
+                var yearBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new year box when year changes or at
+                    //end of time slices to draw the last year box
+                    var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var yearChanged = previousYear != slice.GetStdYear();
+                    if (yearChanged || lastTimeSlice)
+                    {
+                        //and it is in the beginning
+                        if (previousYear == 0)
+                        {
+                            yearBoxWidthCount = 0; //reset width
+                        }
+                        else
+                        {
+                            //generate previous year data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = yearBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                                $"<rect " +
+                                                    $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                                    $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                                        $" style=\"fill: rgb(255, 255, 255);" +
+                                                        $" font-size: 10px;" +
+                                                        $" font-weight: 700;" +
+                                                        $" text-anchor: middle;" +
+                                                        $" white-space: pre;\"" +
+                                                        //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                                        $">" +
+                                                        $"{previousYear}" + //previous year generate at begin of new year
+                                                    $"</text>" +
+                                             $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            yearBoxWidthCount = 0;
+
+                        }
+                    }
+                    //year same as before
+                    else
+                    {
+                        //update width only, position is same
+                        //as when created the year box
+                        //yearBoxWidthCount *= _widthPerSlice;
+
+                    }
+
+                    //update previous year for next slice
+                    previousYear = slice.GetStdYear();
+
+                    yearBoxWidthCount++;
+
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+            }
+
+            string GenerateDecadeRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousYear = 0; //start 0 for first draw
+                var yearBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                const int decade = 10;
+
+                var beginYear = timeSlices[0].GetStdYear();
+                var endYear = beginYear + decade; //decade
+
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new year box when year changes or at
+                    //end of time slices to draw the last year box
+                    var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var yearChanged = previousYear != slice.GetStdYear();
+                    if (yearChanged || lastTimeSlice)
+                    {
+                        //is this slice end year & last month (month for accuracy, otherwise border at jan not december)
+                        //todo begging of box is not beginning of year, possible solution month
+                        //var isLastMonth = slice.GetStdMonth() is 10 or 11 or 12; //use oct & nov in-case december is not generated at low precision 
+                        var isEndYear = endYear == slice.GetStdYear();
+                        if (isEndYear)
+                        {
+                            //generate previous year data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = yearBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{beginYear} - {endYear}" + //previous year generate at begin of new year
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            yearBoxWidthCount = 0;
+
+                            //set new begin & end
+                            beginYear = endYear + 1;
+                            endYear = beginYear + decade;
+
+                        }
+
+                    }
+
+                    //update previous year for next slice
+                    previousYear = slice.GetStdYear();
+
+                    yearBoxWidthCount++;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+            }
+
+            string Generate5YearRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousYear = 0; //start 0 for first draw
+                var yearBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                //int rowHeight = 11;
+
+                const int yearRange = 5;
+
+                var beginYear = timeSlices[0].GetStdYear();
+                var endYear = beginYear + yearRange;
+
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new year box when year changes or at
+                    //end of time slices to draw the last year box
+                    var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var yearChanged = previousYear != slice.GetStdYear();
+                    if (yearChanged || lastTimeSlice)
+                    {
+                        //is this slice end year
+                        var isEndYear = endYear == slice.GetStdYear();
+                        if (isEndYear)
+                        {
+                            //generate previous year data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = yearBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{beginYear} - {endYear}" + //previous year generate at begin of new year
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            yearBoxWidthCount = 0;
+
+                            //set new begin & end
+                            beginYear = endYear + 1;
+                            endYear = beginYear + yearRange;
+
+                        }
+
+                    }
+
+                    //update previous year for next slice
+                    previousYear = slice.GetStdYear();
+
+                    yearBoxWidthCount++;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+            }
+
+            string GenerateMonthRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousMonth = 0; //start 0 for first draw
+                var yearBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                //int rowHeight = 11;
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new year box when year changes or at
+                    //end of time slices to draw the last year box
+                    var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var monthChanged = previousMonth != slice.GetStdMonth();
+                    if (monthChanged || lastTimeSlice)
+                    {
+                        //and it is in the beginning
+                        if (previousMonth == 0)
+                        {
+                            yearBoxWidthCount = 0; //reset width
+                        }
+                        else
+                        {
+                            //generate previous month data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = yearBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{GetMonthName(previousMonth)}" + //previous year generate at begin of new year
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            yearBoxWidthCount = 0;
+
+                        }
+                    }
+                    //year same as before
+                    else
+                    {
+                        //update width only, position is same
+                        //as when created the year box
+                        //yearBoxWidthCount *= _widthPerSlice;
+
+                    }
+
+                    //update previous month for next slice
+                    previousMonth = slice.GetStdMonth();
+
+                    yearBoxWidthCount++;
+
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+
+                string GetMonthName(int monthNum)
+                {
+                    switch (monthNum)
+                    {
+                        case 1: return "JAN";
+                        case 2: return "FEB";
+                        case 3: return "MAR";
+                        case 4: return "APR";
+                        case 5: return "MAY";
+                        case 6: return "JUN";
+                        case 7: return "JUL";
+                        case 8: return "AUG";
+                        case 9: return "SEP";
+                        case 10: return "OCT";
+                        case 11: return "NOV";
+                        case 12: return "DEC";
+                        default: throw new Exception($"Invalid Month: {monthNum}");
+                    }
+                }
+            }
+
+            string GenerateDateRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousDate = 0; //start 0 for first draw
+                var dateBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                //int rowHeight = 11;
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new date box when date changes or at
+                    //end of time slices to draw the last date box
+                    var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var dateChanged = previousDate != slice.GetStdDate();
+                    if (dateChanged || lastTimeSlice)
+                    {
+                        //and it is in the beginning
+                        if (previousDate == 0)
+                        {
+                            dateBoxWidthCount = 0; //reset width
+                        }
+                        else
+                        {
+                            //generate previous date data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = dateBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{previousDate}" + //previous date generate at begin of new date
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            dateBoxWidthCount = 0;
+
+                        }
+                    }
+
+                    //update previous date for next slice
+                    previousDate = slice.GetStdDate();
+
+                    dateBoxWidthCount++;
+
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
+
+            }
+
+            string GenerateHourRowSvg(List<Time> timeSlices, int yAxis, int xAxis, int rowHeight)
+            {
+
+                //generate the row for each time slice
+                var rowHtml = "";
+                var previousHour = -1; //so that hour 0 is counted
+                var hourBoxWidthCount = 0;
+                int rectWidth = 0;
+                int childAxisX = 0;
+                //int rowHeight = 11;
+
+                foreach (var slice in timeSlices)
+                {
+
+                    //only generate new date box when hour changes or at
+                    //end of time slices to draw the last hour box
+                    var isLastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
+                    var hourChanged = previousHour != slice.GetStdHour();
+                    if (hourChanged || isLastTimeSlice)
+                    {
+                        //and it is in the beginning
+                        if (previousHour == -1)
+                        {
+                            hourBoxWidthCount = 0; //reset width
+                        }
+                        else
+                        {
+                            //generate previous hour data first before resetting
+                            childAxisX += rectWidth; //use previous rect width to position this
+                            rectWidth = hourBoxWidthCount * _widthPerSlice; //calculate new rect width
+                            var textX = rectWidth / 2; //center of box divide 2
+                            var rect = $"<g transform=\"matrix(1, 0, 0, 1, {childAxisX}, 0)\">" + //y is 0 because already set in parent group
+                                       $"<rect " +
+                                       $"fill=\"#0d6efd\" x=\"0\" y=\"0\" width=\"{rectWidth}\" height=\"{rowHeight}\" " + $" style=\"paint-order: stroke; stroke: rgb(255, 255, 255); stroke-opacity: 1; stroke-linejoin: round;\"/>" +
+                                       $"<text x=\"{textX}\" y=\"{9}\" width=\"{rectWidth}\" fill=\"white\"" +
+                                       $" style=\"fill: rgb(255, 255, 255);" +
+                                       $" font-size: 10px;" +
+                                       $" font-weight: 700;" +
+                                       $" text-anchor: middle;" +
+                                       $" white-space: pre;\"" +
+                                       //$" transform=\"matrix(0.966483, 0, 0, 0.879956, 2, -6.779947)\"" +
+                                       $">" +
+                                       $"{previousHour}" + //previous hour generate at begin of new hour
+                                       $"</text>" +
+                                       $"</g>";
+
+
+                            //add to final return
+                            rowHtml += rect;
+
+                            //reset width
+                            hourBoxWidthCount = 0;
+
+                        }
+                    }
+
+                    //update previous hour for next slice
+                    previousHour = slice.GetStdHour();
+
+                    hourBoxWidthCount++;
+                }
+
+                //wrap all the rects inside a svg so they can me moved together
+                //svg tag here acts as group, svg nesting
+                rowHtml = $"<g transform=\"matrix(1, 0, 0, 1, {xAxis}, {yAxis})\">{rowHtml}</g>";
+
+                return rowHtml;
 
             }
 

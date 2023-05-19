@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Text.Json;
-using System.Xml.Linq;
+﻿using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask;

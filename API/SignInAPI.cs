@@ -1,7 +1,5 @@
-﻿using Google.Apis.Auth;
-using System;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Nodes;
+using Google.Apis.Auth;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 

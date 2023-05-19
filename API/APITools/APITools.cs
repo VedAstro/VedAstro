@@ -1,7 +1,5 @@
 using Azure;
 using Azure.Communication.Email;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
 using System.Drawing;

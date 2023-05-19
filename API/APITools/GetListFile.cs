@@ -1,8 +1,4 @@
-﻿using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using Microsoft.Azure.Functions.Worker.Http;
-using System.Xml.Linq;
-using VedAstro.Library;
+﻿using System.Xml.Linq;
 
 namespace API
 {

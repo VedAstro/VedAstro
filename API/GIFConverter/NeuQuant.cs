@@ -37,8 +37,6 @@
 // Ported to Java 12/00 K Weiner
 #endregion
 
-using System;
-
 namespace Gif.Components
 {
 	public class NeuQuant 

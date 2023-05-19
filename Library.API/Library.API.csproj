@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.JSInterop" Version="7.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Library\Library.csproj" />
   </ItemGroup>
 

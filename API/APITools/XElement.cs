@@ -2,8 +2,6 @@
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
-using VedAstro.Library;
 
 namespace API
 {

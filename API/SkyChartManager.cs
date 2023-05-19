@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing.Imaging;
 using VedAstro.Library;
-using System;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using Gif.Components;
-using System.Drawing.Printing;
-using System.Reflection.Metadata;
-using iText.IO.Image;
-using iText.Kernel.Geom;
-using iText.Kernel.Pdf;
 
 namespace API
 {

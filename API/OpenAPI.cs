@@ -1,11 +1,7 @@
 ﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System.Collections;
-using System.Reflection;
 using Newtonsoft.Json.Linq;
-using Type = System.Type;
-using Grpc.Net.Client.Configuration;
 
 
 namespace API

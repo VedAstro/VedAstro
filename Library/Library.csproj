@@ -35,10 +35,8 @@
 	<ItemGroup>
 		<None Include="icon.png" Pack="true" PackagePath="\" />
 		<None Include="README.md" Pack="true" PackagePath="\" />
-		<PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
-		<PackageReference Include="Google.Apis.Calendar.v3" Version="1.60.0.3017" />
-		<PackageReference Include="Google.Apis.Core" Version="1.60.0" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />
 	</ItemGroup>
 

@@ -1,6 +1,4 @@
-﻿using Azure.Storage.Blobs.Models;
-using Google.Protobuf;
-using Microsoft.Azure.Functions.Worker;
+﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
 using System.Xml.Linq;

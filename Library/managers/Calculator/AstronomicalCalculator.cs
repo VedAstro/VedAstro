@@ -94,7 +94,7 @@ namespace VedAstro.Library
         public static Angle GetPlanetNirayanaLongitude(Time time, PlanetName planetName)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetPlanetNirayanaLongitude", time, planetName), _getPlanetNirayanaLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(GetPlanetNirayanaLongitude), time, planetName), _getPlanetNirayanaLongitude);
 
 
             //UNDERLYING FUNCTION

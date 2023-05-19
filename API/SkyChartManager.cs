@@ -25,6 +25,7 @@ namespace API
     {
         /// <summary>
         /// Sweet heart takes this away!
+        /// Basically generating 1 frame
         /// </summary>
         public static string GenerateChart(Time time)
         {
@@ -71,11 +72,11 @@ namespace API
 
                 var planetList = AstronomicalCalculator.GetAllPlanetLongitude(time);
 
-                content = GetLifeEventLinesSvg(planetList);
+                content = GetAllPlanetLineIcons(planetList, 720.0);
 
                 //note: if width & height not hard set, parent div clips it
-                var svgTotalHeight = 350;//todo for now hard set, future use: verticalYAxis;
-                var svgTotalWidth = 360;//todo for now hard set, future use: verticalYAxis;
+                var svgTotalHeight = 420;//todo for now hard set, future use: verticalYAxis;
+                var svgTotalWidth = 720;//todo for now hard set, future use: verticalYAxis;
                 var svgStyle = $@"width:{svgTotalWidth}px;height:{svgTotalHeight}px;background:{svgBackgroundColor};";//end of style tag
                 svgHead = $"<svg class=\"SkyChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
@@ -91,16 +92,16 @@ namespace API
         public static byte[] GenerateChartGif(Time time)
         {
             //STAGE 1: get charts as SVG list frames
-            var startTime = time.SubtractHours(300);
-            var endTime = time.AddHours(300);
-            var timeList = EventManager.GetTimeListFromRange(startTime, endTime, 100);
+            var startTime = time.SubtractHours(Tools.DaysToHours(15));
+            var endTime = time.AddHours(Tools.DaysToHours(15));
+            var timeList = EventManager.GetTimeListFromRange(startTime, endTime, 24); //should be 30 frames
             var chartSvglist = timeList.Select(x => GenerateChart(x)).ToList();
 
 
             //STAGE 2: Convert SVG to PNG frames
-            var pngFrameListByteTransparent = chartSvglist.Select(x=> SvgConverter.Svg2Png(x, 360, 360)).ToList();
-            var pngFrameLisWhite = pngFrameListByteTransparent.Select(x=> tansparencyToWhite((Bitmap)x, ImageFormat.Png)).ToList();
-            var pngFrameList = pngFrameLisWhite.Select(x=> byteArrayToImage(x)).ToList();
+            var pngFrameListByteTransparent = chartSvglist.Select(x => SvgConverter.Svg2Png(x, 720, 420)).ToList();
+            var pngFrameLisWhite = pngFrameListByteTransparent.Select(x => tansparencyToWhite((Bitmap)x, ImageFormat.Png)).ToList();
+            var pngFrameList = pngFrameLisWhite.Select(x => byteArrayToImage(x)).ToList();
 
 
             //STAGE 3: Make GIF from PNGs
@@ -109,7 +110,7 @@ namespace API
             AnimatedGifEncoder e = new AnimatedGifEncoder();
 
             // read file as memorystream
-           // byte[] fileBytes = File.ReadAllBytes(outputFilePath);
+            // byte[] fileBytes = File.ReadAllBytes(outputFilePath);
             var memStream = new MemoryStream();
             e.Start(memStream);
             e.SetDelay(500);
@@ -679,7 +680,7 @@ namespace API
 
 
 
-        private static string GetLifeEventLinesSvg(List<PlanetLongitude> planetList)
+        private static string GetAllPlanetLineIcons(List<PlanetLongitude> planetList, double widthPx)
         {
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
@@ -687,10 +688,7 @@ namespace API
                                  //var inputOffset = startTime.GetStdDateTimeOffset().Offset; //timezone the chart will be in
 
 
-            //add 1 to offset 0 index
-            //each 1 cell is 1 px
-            //var maxSlices = timeSlices.Count + 1;
-            var maxSlices = 360 + 1;
+            var maxSlices = widthPx + 1;
             var rowList = new List<bool[]>();
 
             //space smaller than this is set as crowded
@@ -699,9 +697,6 @@ namespace API
 
 
             //sort by earliest to latest event
-            //var lifeEventList = person.LifeEventList;
-            //lifeEventList.Sort((x, y) => x.CompareTo(y));
-
             var incrementRate = 20; //for overcrowded jump
             var adjustedLineHeight = lineHeight; //keep copy for resetting after overcrowded jum
 
@@ -710,8 +705,6 @@ namespace API
             {
 
                 //get timezone at place event happened
-                //var lifeEvtTime = lifeEvent.GetDateTimeOffset();//time at the place of event with correct standard timezone
-                //var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
                 var positionX = (int)planet.GetPlanetLongitude().TotalDegrees;
 
                 //if line is not in report time range, don't generate it
@@ -727,7 +720,11 @@ namespace API
                 adjustedLineHeight += rowNumber * incrementRate;
 
                 //put together icon + line + event data
-                var generateLifeEventLine = GetLine(planet, adjustedLineHeight, positionX);
+                double input = widthPx;
+                var confirmedOutput = 360.0;
+                double yy = input / confirmedOutput;
+                var transformedxAxis = positionX * yy;
+                var generateLifeEventLine = GetPlanetLineIcon(planet, adjustedLineHeight, transformedxAxis);
 
                 //save it under its row with others
                 while (rowNumber > (listRowData.Count - 1)) { listRowData.Add(""); } //add empty row if 1st
@@ -771,7 +768,7 @@ namespace API
 
                 //set limits on width of chart
                 startX = startX < 0 ? 0 : startX;
-                endX = endX > (maxSlices - 1) ? (maxSlices - 1) : endX;
+                endX = (int)(endX > (maxSlices - 1) ? (maxSlices - 1) : endX);
 
 
                 for (int i = startX; i <= endX; i++)
@@ -789,7 +786,7 @@ namespace API
 
                 //set limits
                 startX = startX < 0 ? 0 : startX;
-                endX = endX > (maxSlices - 1) ? (maxSlices - 1) : endX;
+                endX = (int)(endX > (maxSlices - 1) ? (maxSlices - 1) : endX);
 
             TryAgain:
                 //check if space is free in rows
@@ -804,7 +801,7 @@ namespace API
                 }
 
                 //if control comes here, than not enough rows so add some
-                rowList.Add(new bool[maxSlices]);
+                rowList.Add(new bool[(int)maxSlices]);
                 goto TryAgain;
 
                 throw new Exception("Row count exceed!");
@@ -829,7 +826,7 @@ namespace API
         }
 
 
-        private static string GetLine(PlanetLongitude planet, int lineHeight, double positionX)
+        private static string GetPlanetLineIcon(PlanetLongitude planet, int lineHeight, double positionX)
         {
 
             //based on length of event name make the background

@@ -14,7 +14,7 @@ namespace API
         /// Sweet heart takes this away!
         /// Basically generating 1 frame
         /// </summary>
-        public static string GenerateChart(Time time)
+        public static string GenerateChart(Time time, double widthPx, double heightPx)
         {
             //PART I : declare the components
             string svgHead = null;
@@ -51,16 +51,15 @@ namespace API
             void GenerateComponents()
             {
                 //STEP 1: USER INPUT > USABLE DATA
-                var svgBackgroundColor = "#f0f9ff"; //not bleach white
+                var svgBackgroundColor = "#f0f2f5"; //not bleach white
                 var randomId = Tools.GenerateId();
 
-                //angleHeader = GenerateTimeHeaderRow();
-                angleHeader = "";
 
                 var planetList = AstronomicalCalculator.GetAllPlanetLongitude(time);
+                
+                angleHeader = GenerateAngleRuler(widthPx, 10);
 
-                var widthPx = 720.0;
-                var heightPx = 300.0;
+
                 content = GetAllPlanetLineIcons(planetList, widthPx);
 
                 //note: if width & height not hard set, parent div clips it
@@ -78,17 +77,17 @@ namespace API
         }
 
 
-        public static byte[] GenerateChartGif(Time time)
+        public static byte[] GenerateChartGif(Time time, double width, double height)
         {
             //STAGE 1: get charts as SVG list frames
             var startTime = time.SubtractHours(Tools.DaysToHours(15));
             var endTime = time.AddHours(Tools.DaysToHours(15));
             var timeList = EventManager.GetTimeListFromRange(startTime, endTime, 24); //should be 30 frames
-            var chartSvglist = timeList.Select(x => GenerateChart(x)).ToList();
+            var chartSvglist = timeList.Select(x => GenerateChart(x, width, height)).ToList();
 
 
             //STAGE 2: Convert SVG to PNG frames
-            var pngFrameListByteTransparent = chartSvglist.Select(x => SvgConverter.Svg2Png(x, 720, 420)).ToList();
+            var pngFrameListByteTransparent = chartSvglist.Select(x => SvgConverter.Svg2Png(x, (int)width, (int)height)).ToList();
             var pngFrameLisWhite = pngFrameListByteTransparent.Select(x => tansparencyToWhite((Bitmap)x, ImageFormat.Png)).ToList();
             var pngFrameList = pngFrameLisWhite.Select(x => byteArrayToImage(x)).ToList();
 
@@ -118,7 +117,51 @@ namespace API
         }
 
 
-        public static Image byteArrayToImage(byte[] bytesArr)
+
+        //----------PRIVATE
+
+        private static string GenerateAngleRuler(double widthPx, int yAxis)
+        {
+
+            var barChartRow = "";
+            var widthPerSlice = 1;
+            for (int i = 0; i < widthPx; i++)
+            {
+                //print for every even number
+                var barHeight = 0;
+                Int32 lastNumber = (int)(widthPx % 10);
+                var lastIsZero = lastNumber == 0;
+                var lastIsFive = lastNumber == 5;
+                if (lastIsZero) { barHeight = 20; }
+                if (lastIsFive) { barHeight = 10; }
+                else if (i % 2 == 0) { barHeight = 5; }
+
+                //print if above 0
+                if (barHeight > 0)
+                {
+                    var xAxis = i;
+                    //double totalNatureScore = summarySlice.Value.NatureScore; //possible negative
+                    var rect = $"<rect " +
+                               $"x=\"{xAxis}\" " +
+                               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                               $"width=\"{widthPerSlice}\" " +
+                               $"height=\"{barHeight}\" " +
+                               $"fill=\"black\" />";
+
+                    //add rect to row
+                    barChartRow += rect;
+                }
+
+            }
+
+            //note: chart is flipped 180, to start bar from bottom to top
+            //default hidden
+            var returnVal = $"<g id=\"AngleRuler\" transform=\"matrix(1, 0, 0, 1, 0, 0)\">{barChartRow}</g>";
+
+            return returnVal;
+        }
+
+        private static Image byteArrayToImage(byte[] bytesArr)
         {
             using (MemoryStream memstr = new MemoryStream(bytesArr))
             {
@@ -126,9 +169,6 @@ namespace API
                 return img;
             }
         }
-
-
-
 
         /// <summary>
         /// Prepares the bitmap to be converted to jpg,
@@ -154,8 +194,6 @@ namespace API
 
             return stream.ToArray();
         }
-
-
 
         private static string GenerateTimeHeaderRow(List<Time> timeSlices, double daysPerPixel, int _widthPerSlice, ref int headerY)
         {
@@ -666,9 +704,6 @@ namespace API
 
         }
 
-
-
-
         private static string GetAllPlanetLineIcons(List<PlanetLongitude> planetList, double widthPx)
         {
             //use offset of input time, this makes sure life event lines
@@ -813,7 +848,6 @@ namespace API
                 return isOverLapping;
             }
         }
-
 
         private static string GetPlanetLineIcon(PlanetLongitude planet, int lineHeight, double positionX)
         {

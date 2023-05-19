@@ -72,11 +72,13 @@ namespace API
 
                 var planetList = AstronomicalCalculator.GetAllPlanetLongitude(time);
 
-                content = GetAllPlanetLineIcons(planetList, 720.0);
+                var widthPx = 720.0;
+                var heightPx = 300.0;
+                content = GetAllPlanetLineIcons(planetList, widthPx);
 
                 //note: if width & height not hard set, parent div clips it
-                var svgTotalHeight = 420;//todo for now hard set, future use: verticalYAxis;
-                var svgTotalWidth = 720;//todo for now hard set, future use: verticalYAxis;
+                var svgTotalHeight = heightPx;//todo for now hard set, future use: verticalYAxis;
+                var svgTotalWidth = widthPx;//todo for now hard set, future use: verticalYAxis;
                 var svgStyle = $@"width:{svgTotalWidth}px;height:{svgTotalHeight}px;background:{svgBackgroundColor};";//end of style tag
                 svgHead = $"<svg class=\"SkyChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 

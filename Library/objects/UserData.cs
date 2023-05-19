@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Google.Apis.Auth;
 
 namespace VedAstro.Library
 {

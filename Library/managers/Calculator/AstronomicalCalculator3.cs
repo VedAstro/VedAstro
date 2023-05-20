@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using VedAstro.Library;
 
 namespace VedAstro.Library
 {
@@ -412,7 +413,7 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Returns an array of all planets sorted by strenght,
-        /// 0 index being strongest to 6 index being weakest
+        /// 0 index being strongest to 8 index being weakest
         ///
         /// Note:
         /// Significance of being Powerful.-Among
@@ -448,11 +449,10 @@ namespace VedAstro.Library
 
 
                 //sort that list from strongest planet to weakest planet
-                var keys_sorted = planetStrenghtList.Keys.ToList();
-                keys_sorted.Sort();
+                var sortedList = planetStrenghtList.Keys.OrderByDescending(item => item);
 
                 var sortedArray = new List<PlanetName>();
-                foreach (var key in keys_sorted)
+                foreach (var key in sortedList)
                 {
                     //strongest planet added first
                     sortedArray.Add(planetStrenghtList[key]);
@@ -2711,7 +2711,7 @@ namespace VedAstro.Library
                 }
 
                 //store digbala value in return list with house number
-                 BhavaDigBala[houseNumber] = (double)dig * 10;
+                BhavaDigBala[houseNumber] = (double)dig * 10;
 
             }
 
@@ -2764,48 +2764,203 @@ namespace VedAstro.Library
 
         #endregion
 
-    }
-
-    /// <summary>
-    /// Represents the mini strengths that mae the final strength of a house
-    /// </summary>
-    public class HouseSubStrength : IToJson
-    {
-        public string Name = "";
-
-        public Dictionary<HouseName, double> Power { get; }
-
-        public HouseSubStrength(Dictionary<HouseName, double> power, string name)
+        /// <summary>
+        /// 0 index is strongest
+        /// </summary>
+        public static List<PlanetName> GetBeneficPlanetListByShadbala(Time personBirthTime, int threshold)
         {
-            Power = power;
-            Name = name;
+
+            //get all planets
+            //var allPlanetByStrenght = AstronomicalCalculator.GetAllPlanetOrderedByStrength(personBirthTime);
+
+            //take top 3 as needed planets
+            var returnList = new List<PlanetName>();
+            var yyy = AstronomicalCalculator.GetAllPlanetStrength(personBirthTime);
+            foreach (var planet in yyy)
+            {
+                if (planet.Item1 > threshold)
+                {
+                    returnList.Add(planet.Item2);
+                }
+            }
+            return returnList;
         }
 
-
-        public JObject ToJson()
+        public static List<PlanetName> GetBeneficPlanetListByShadbala(Time personBirthTime)
         {
-            var returnList =  new JArray();
 
-            //add into a list for each house
-            foreach (var houseData in Power)
+            //get all planets
+            var allPlanetByStrenght = AstronomicalCalculator.GetAllPlanetOrderedByStrength(personBirthTime);
+
+            //take top 3 as needed planets
+            var returnList = new List<PlanetName>();
+            returnList.Add(allPlanetByStrenght[0]);
+            returnList.Add(allPlanetByStrenght[1]);
+            returnList.Add(allPlanetByStrenght[2]);
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// 0 index is strongest
+        /// </summary>
+        public static List<HouseName> GetBeneficHouseListByShadbala(Time personBirthTime, int threshold)
+        {
+            var returnList = new List<HouseName>();
+
+            //create a list with planet names & its strength (unsorted)
+            foreach (var house in House.AllHouses)
             {
-                //pack data nicely
-                var temp = new JObject();
-                temp["House"] = (int)houseData.Key; //show as number
-                temp["Strength"] = houseData.Value; //show as number
+                //get house strength
+                var strength = GetBhavaBala(house, personBirthTime).ToDouble();
 
-                Console.WriteLine(temp.ToString());
+                if (strength > threshold)
+                {
+                    returnList.Add(house);
+                }
 
-                //add to main list
-                returnList.Add(temp);
+
             }
 
-            //send list on its way
-            var wrap = new JObject();
-            wrap.Add(returnList);
+            return returnList;
 
-            return wrap;
+
+        }
+        public static List<HouseName> GetBeneficHouseListByShadbala(Time personBirthTime)
+        {
+            //get all planets
+            var allPlanetByStrenght = AstronomicalCalculator.GetAllHousesOrderedByStrength(personBirthTime);
+
+            //take top 3 as needed planets
+            var returnList = new List<HouseName>();
+            returnList.Add(allPlanetByStrenght[0]);
+            returnList.Add(allPlanetByStrenght[1]);
+            returnList.Add(allPlanetByStrenght[2]);
+
+            return returnList;
+
+
         }
 
+        /// <summary>
+        /// 0 index is most malefic
+        /// </summary>
+        public static List<PlanetName> GetMaleficPlanetListByShadbala(Time personBirthTime, int threshold)
+        {
+
+            var returnList = new List<PlanetName>();
+            var yyy = AstronomicalCalculator.GetAllPlanetStrength(personBirthTime);
+            foreach (var planet in yyy)
+            {
+                if (planet.Item1 < threshold)
+                {
+                    returnList.Add(planet.Item2);
+                }
+            }
+            return returnList;
+        }
+
+        /// <summary>
+        /// 0 index is most malefic
+        /// </summary>
+        public static List<PlanetName> GetMaleficPlanetListByShadbala(Time personBirthTime)
+        {
+
+            //get all planets
+            var allPlanetByStrenght = AstronomicalCalculator.GetAllPlanetOrderedByStrength(personBirthTime);
+
+            //take top 3 as needed planets
+            var returnList = new List<PlanetName>();
+            returnList.Add(allPlanetByStrenght[^1]);
+            returnList.Add(allPlanetByStrenght[^2]);
+            returnList.Add(allPlanetByStrenght[^3]);
+
+            return returnList;
+
+        }
+
+        /// <summary>
+        /// 0 index is most malefic
+        /// </summary>
+        public static List<HouseName> GetMaleficHouseListByShadbala(Time personBirthTime, int threshold)
+        {
+            var returnList = new List<HouseName>();
+
+            //create a list with planet names & its strength (unsorted)
+            foreach (var house in House.AllHouses)
+            {
+                //get house strength
+                var strength = GetBhavaBala(house, personBirthTime).ToDouble();
+
+                if (strength < threshold)
+                {
+                    returnList.Add(house);
+                }
+
+
+            }
+
+            return returnList;
+        }
+        public static List<HouseName> GetMaleficHouseListByShadbala(Time personBirthTime)
+        {
+
+            //get all planets
+            var allPlanetByStrenght = AstronomicalCalculator.GetAllHousesOrderedByStrength(personBirthTime);
+
+            //take top 3 as needed planets
+            var returnList = new List<HouseName>();
+            returnList.Add(allPlanetByStrenght[^1]);
+            returnList.Add(allPlanetByStrenght[^2]);
+            returnList.Add(allPlanetByStrenght[^3]);
+
+            return returnList;
+
+        }
     }
+
 }
+
+/// <summary>
+/// Represents the mini strengths that mae the final strength of a house
+/// </summary>
+public class HouseSubStrength : IToJson
+{
+    public string Name = "";
+
+    public Dictionary<HouseName, double> Power { get; }
+
+    public HouseSubStrength(Dictionary<HouseName, double> power, string name)
+    {
+        Power = power;
+        Name = name;
+    }
+
+
+    public JObject ToJson()
+    {
+        var returnList = new JArray();
+
+        //add into a list for each house
+        foreach (var houseData in Power)
+        {
+            //pack data nicely
+            var temp = new JObject();
+            temp["House"] = (int)houseData.Key; //show as number
+            temp["Strength"] = houseData.Value; //show as number
+
+            Console.WriteLine(temp.ToString());
+
+            //add to main list
+            returnList.Add(temp);
+        }
+
+        //send list on its way
+        var wrap = new JObject();
+        wrap.Add(returnList);
+
+        return wrap;
+    }
+
+}
+

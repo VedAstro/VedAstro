@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml.Linq;
@@ -228,5 +229,57 @@ namespace VedAstro.Library
             return result;
 
         }
+
+        /// <summary>
+        /// gets all planets that this event is influenced by
+        /// extracted from name
+        /// </summary>
+        public List<PlanetName> GetRelatedPlanet()
+        {
+            //every time planet is mentioned add to list
+            var eventName = this.FormattedName.ToLower(); //take formatted name with spacing
+            var returnList = new List<PlanetName>();
+            foreach (var planetName in PlanetName.All9Planets)
+            {
+                var found = eventName.Contains(planetName.ToString().ToLower());
+                if (found)
+                {
+                    returnList.Add(planetName);
+                }
+            }
+
+            //remove duplicates
+            returnList = new List<PlanetName>(returnList.Distinct());
+
+            //return to caller
+            return returnList;
+        }
+
+        /// <summary>
+        /// gets all planets that this event is influenced by
+        /// extracted from name
+        /// </summary>
+        public List<HouseName> GetRelatedHouse()
+        {
+            //every time planet is mentioned add to list
+            var eventName = this.Name.ToString().ToLower(); //take without spacing
+            var returnList = new List<HouseName>();
+            foreach (var houseName in House.AllHouses)
+            {
+                var found = eventName.Contains(houseName.ToString().ToLower());
+                if (found)
+                {
+                    returnList.Add(houseName);
+                }
+            }
+
+            //remove duplicates
+            returnList = new List<HouseName>(returnList.Distinct());
+
+            //return to caller
+            return returnList;
+        }
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using VedAstro.Library;
 using System.Web;
+using System.Linq;
 
 namespace API
 {
@@ -56,7 +57,7 @@ namespace API
 
             //PART II : fill the components in order
 
-            await GenerateComponents( inputPerson,  startTime,  endTime,  daysPerPixel,  inputedEventTags);
+            await GenerateComponents(inputPerson, startTime, endTime, daysPerPixel, inputedEventTags);
 
 
             //PART III : compile in right placement
@@ -169,7 +170,7 @@ namespace API
                           $"\" " +//end of style tag
                           $"xmlns=\"http://www.w3.org/2000/svg\" " +
                           $"xmlns:xlink=\"http://www.w3.org/1999/xlink\">" + //much needed for use tags to work
-                          //$"<title>{chartTitle}</title>" + //title visible in browser when open direct
+                                                                             //$"<title>{chartTitle}</title>" + //title visible in browser when open direct
                           $"{combinedSvgString}</svg>";
 
             return svgBody;
@@ -1542,18 +1543,14 @@ namespace API
                         //add rect to return list
                         rowHtml += rect;
 
+
+                        //STAGE 2 : SAVE SUMMARY DATA
                         //every time a rect is added, we keep track of it in a list to generate the summary row at last
                         //based on event nature minus or plus 1
                         double natureScore = 0;
-                        switch (foundEvent?.Nature)
-                        {
-                            case EventNature.Good:
-                                natureScore = 1;
-                                break;
-                            case EventNature.Bad:
-                                natureScore = -1;
-                                break;
-                        }
+
+                        //calculate accurate nature score
+                        natureScore = CalculateNatureScore(foundEvent, inputPerson);
 
                         //compile nature score for making summary row later (defaults to 0)
                         var previousNatureScoreSum = (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition].NatureScore : 0);
@@ -1601,6 +1598,94 @@ namespace API
 
         }
 
+        private static double CalculateNatureScore(Event foundEvent, Person person)
+        {
+            //STAGE 1:
+            //score from general nature of event
+            var generalScore = 0;
+            switch (foundEvent?.Nature)
+            {
+                case EventNature.Good:
+                    generalScore = 1;
+                    break;
+                case EventNature.Bad:
+                    generalScore = -1;
+                    break;
+            }
 
+            //STAGE 2: Special score
+            var eventScore = GetEventScoreFromShadvarga(foundEvent, person);
+
+            var final = 0;
+            final += generalScore;
+            final += eventScore;
+
+            return final;
+        }
+
+        private static int GetEventScoreFromShadvarga(Event foundEvent, Person person)
+        {
+            var finalScore = 0;
+
+            var planetInEventList = foundEvent.GetRelatedPlanet();
+            var beneficPlanetList = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime);
+            //var beneficPlanetList2 = AstronomicalCalculator.GetBeneficPlanetListByShadbala(person.BirthTime, 500);
+            var maleficPlanetList = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime);
+            //var maleficPlanetList2 = AstronomicalCalculator.GetMaleficPlanetListByShadbala(person.BirthTime, 300);
+
+            //add and remove score based on planet good and bad todo add remove by voting power
+            foreach (var planetInEvent in planetInEventList)
+            {
+                //has good planet plus 1
+                var beneficFound = beneficPlanetList.Contains(planetInEvent);
+                if (beneficFound) { finalScore += 1; }
+
+                //has good planet plus 1
+                //var beneficFound2 = beneficPlanetList2.Contains(planetInEvent);
+                //if (beneficFound2) { finalScore += 1; }
+
+                //has bad planet minus 1
+                var maleficFound = maleficPlanetList.Contains(planetInEvent);
+                if (maleficFound) { finalScore += -1; }
+
+                //has bad planet minus 1
+                //var maleficFound2 = maleficPlanetList2.Contains(planetInEvent);
+                //if (maleficFound2) { finalScore += -1; }
+
+            }
+
+            
+
+            var houseInEventList = foundEvent.GetRelatedHouse();
+
+            var beneficHouseList = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime);
+           // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
+            var maleficHouseList = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime);
+            //var maleficHouseList2 = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime, 250);
+
+            foreach (var houseName in houseInEventList)
+            {
+                //has good planet plus 1
+                var beneficFound = beneficHouseList.Contains(houseName);
+                if (beneficFound) { finalScore += 1; }
+
+                //has good planet plus 1
+                //var beneficFound2 = beneficHouseList2.Contains(houseName);
+                //if (beneficFound2) { finalScore += 1; }
+
+                //has bad planet minus 1
+                var maleficFound = maleficHouseList.Contains(houseName);
+                if (maleficFound) { finalScore += -1; }
+
+                //has bad planet minus 1
+                //var maleficFound2 = maleficHouseList2.Contains(houseName);
+                //if (maleficFound2) { finalScore += -1; }
+
+            }
+
+
+            //return the compiled score to caller
+            return finalScore;
+        }
     }
 }

@@ -48,6 +48,11 @@ window.API = new VedAstro(apiKey);
 //print console greeting (file in wwwroot)
 Tools.printConsoleMessage();
 
+
+//small screen i told you so message
+//will only show if small screen
+await SmallScreenGreetingMessage();
+
 /*
       Customized JS for initializing Darkmode.js
  */
@@ -80,6 +85,19 @@ window.DarkMode = new Darkmode(options);
 window.GetInteropFuncList = () => {
     var list = Object.keys(Interop);
     return list;
+}
+
+//will show warning message to users with small screen or windows
+//for site is better viewed above 1080p
+function SmallScreenGreetingMessage() {
+
+    //check if screen is too small
+    var isTooSmall = window.innerWidth < 1080;
+
+    if (isTooSmall) {
+        //show special message
+        Swal.fire('Small Screen Warning!', 'This site might not work on such a <strong>small screen</strong>. Don\'t say we didn\'t warn you.', 'warning'); 
+    }
 }
 
 //allows to override browser default error handler

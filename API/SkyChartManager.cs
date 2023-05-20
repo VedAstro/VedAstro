@@ -27,6 +27,7 @@ namespace API
             string angleRuler = null;
             string signRuler = null;
             string zodiacRuler = null;
+            string dateTimeLocation = null;
 
 
 
@@ -39,9 +40,16 @@ namespace API
             var final =
                 $@" <!--MADE BY MACHINES FOR HUMAN EYES-->
                     {svgHead}
-                        {angleRuler}
-                        {zodiacRuler}
-                        {content}
+                        {dateTimeLocation}
+                        <!--inside border-->
+	                    <g transform=""translate(14, 16)"">
+                            {angleRuler}
+                            {zodiacRuler}
+                            {content}
+	                    </g>
+
+                        <!--outside border-->
+                        {border} <!--border painted last-->
                     {svgTail}
                 ";
 
@@ -62,20 +70,24 @@ namespace API
 
                 var planetList = AstronomicalCalculator.GetAllPlanetLongitude(time);
 
-                angleRuler = GenerateAngleRuler(widthPx, 10);
+                var renderWidth = widthPx - 30; // 750 -> 720
+                angleRuler = GenerateAngleRuler(renderWidth, 10);
 
                 //signRuler = GenerateSignRuler(widthPx, 20);
 
-                zodiacRuler = GenerateZodiacRuler(widthPx, 15);
+                zodiacRuler = GenerateZodiacRuler(renderWidth, 15);
 
+                dateTimeLocation = GetDateTimeLocationHeader(time);
+
+                border = GetBorderSvg((int)widthPx, (int)heightPx);
 
                 content = GetAllPlanetLineIcons(planetList, widthPx);
 
                 //note: if width & height not hard set, parent div clips it
                 var svgTotalHeight = heightPx;//todo for now hard set, future use: verticalYAxis;
                 var svgTotalWidth = widthPx;//todo for now hard set, future use: verticalYAxis;
-                var svgStyle = $@"width:{svgTotalWidth}px;height:{svgTotalHeight}px;background:{svgBackgroundColor};";//end of style tag
-                svgHead = $"<svg class=\"SkyChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
+                var svgStyle = $@"background:#f0f2f5;";//end of style tag
+                svgHead = $"<svg viewBox=\"0 0 {svgTotalWidth} {svgTotalHeight}\" width=\"{svgTotalWidth}px\" height=\"{svgTotalHeight}px\" style=\"{svgStyle}\" class=\"SkyChartHolder\" id=\"{randomId}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
                 svgTail = "</svg>";
                 contentTail = "</g>";
@@ -84,6 +96,27 @@ namespace API
             }
 
         }
+
+        private static string? GetDateTimeLocationHeader(Time time)
+        {
+            return $@"<text transform=""translate(290,12)"" style=""font-size:14px;"">{time.GetStdDateTimeOffsetText()}</text>";
+        }
+
+        private static string GetBorderSvg(int svgWidth, int svgTotalHeight)
+        {
+            //save a copy of the number of time slices used to calculate the svg total width later
+            //var dasaSvgWidth = timeSlices.Count;
+
+            //add border around svg element
+            //note:compensate for padding, makes border fit nicely around content
+            var borderWidth = svgWidth + 2; //contentPadding = 2 todo centralize
+            var roundedBorder = 3;
+            //var compiledRow = $"<rect class=\"Border\" rx=\"{roundedBorder}\" width=\"{borderWidth}\" height=\"{svgTotalHeight}\" style=\"stroke-width: 1; fill: none; paint-order: stroke; stroke:#333;\"></rect>";
+            var compiledRow = $"\t<rect transform=\"translate(10, 15)\" class=\"Border\" rx=\"3\" width=\"{borderWidth-30}\" height=\"{svgTotalHeight-30}\" style=\"stroke-width: 1; fill: none; paint-order: stroke; stroke: rgb(51, 51, 51);\"/>";
+
+            return compiledRow;
+        }
+
 
         private static string? GenerateZodiacRuler(double widthPx, int yAxis)
         {

@@ -173,7 +173,7 @@ namespace API
             if (celestialBodyType.ToLower() == "skychart")
             {
                 //squeeze the Sky Juice!
-                var chart = SkyChartManager.GenerateChart(parsedTime, 720.0, 420.0);
+                var chart = SkyChartManager.GenerateChart(parsedTime, 750.0, 230.0);
 
                 return APITools.SendSvgToCaller(chart, incomingRequest);
 
@@ -182,7 +182,7 @@ namespace API
             if (celestialBodyType.ToLower() == "skychartgif")
             {
                 //squeeze the Sky Juice!
-                var chart = SkyChartManager.GenerateChartGif(parsedTime, 720.0, 420.0);
+                var chart = SkyChartManager.GenerateChartGif(parsedTime, 750.0, 230.0);
 
                 return APITools.SendGifToCaller(chart, incomingRequest);
 

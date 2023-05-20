@@ -1444,29 +1444,29 @@ namespace API
 
 
                 //STEP 3 : generate color summary SMART
-                var colorRowSmart = "";
-                foreach (var summarySlice in summaryRowData)
-                {
-                    int xAxis = summarySlice.Key;
-                    //total nature score is sum of negative & positive 1s of all events
-                    //that occurred at this point in time, possible negative number
-                    //exp: -4 bad + 5 good = 1 total nature score
-                    double totalNatureScore = summarySlice.Value.NatureScore;
-                    var planetPowerFactor = GetPlanetPowerFactor(summarySlice.Value.Planet, summarySlice.Value.BirthTime);
-                    var smartNatureScore = totalNatureScore * planetPowerFactor;
-                    var rect = $"<rect " +
-                               $"x=\"{xAxis}\" " +
-                               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                               $"width=\"{widthPerSlice}\" " +
-                               $"height=\"{singleRowHeight}\" " +
-                               $"fill=\"{GetSummaryColor(smartNatureScore, -100, 100)}\" />";
+                //var colorRowSmart = "";
+                //foreach (var summarySlice in summaryRowData)
+                //{
+                //    int xAxis = summarySlice.Key;
+                //    //total nature score is sum of negative & positive 1s of all events
+                //    //that occurred at this point in time, possible negative number
+                //    //exp: -4 bad + 5 good = 1 total nature score
+                //    double totalNatureScore = summarySlice.Value.NatureScore;
+                //    var planetPowerFactor = GetPlanetPowerFactor(summarySlice.Value.Planet, summarySlice.Value.BirthTime);
+                //    var smartNatureScore = totalNatureScore * planetPowerFactor;
+                //    var rect = $"<rect " +
+                //               $"x=\"{xAxis}\" " +
+                //               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                //               $"width=\"{widthPerSlice}\" " +
+                //               $"height=\"{singleRowHeight}\" " +
+                //               $"fill=\"{GetSummaryColor(smartNatureScore, -100, 100)}\" />";
 
-                    //add rect to row
-                    colorRowSmart += rect;
-                }
-                //note: chart is flipped 180, to start bar from bottom to top
-                //default hidden
-                rowHtml += $"<g id=\"BarChartRowSmart\" transform=\"matrix(1, 0, 0, 1, 0, 43)\">{colorRowSmart}</g>";
+                //    //add rect to row
+                //    colorRowSmart += rect;
+                //}
+                ////note: chart is flipped 180, to start bar from bottom to top
+                ////default hidden
+                //rowHtml += $"<g id=\"BarChartRowSmart\" transform=\"matrix(1, 0, 0, 1, 0, 43)\">{colorRowSmart}</g>";
 
 
                 //STEP 4 : final wrapper

@@ -2073,7 +2073,8 @@ namespace API
             var startTime = time.SubtractHours(Tools.DaysToHours(15));
             var endTime = time.AddHours(Tools.DaysToHours(15));
             var timeList = EventManager.GetTimeListFromRange(startTime, endTime, 24); //should be 30 frames
-            var chartSvglist = timeList.Select(x => GenerateChart(x, width, height)).ToList();
+            List<string> chartSvglist = new List<string>();
+            chartSvglist = timeList.Select(x => GenerateChart(x, width, height)).ToList();
 
 
             //STAGE 2: Convert SVG to PNG frames
@@ -2118,7 +2119,7 @@ namespace API
             var tempY = yAxis;
             for (int xAxis = 0; xAxis < widthPx; xAxis++)
             {
-                tempY = yAxis; 
+                tempY = yAxis;
 
                 //get back actual angle
                 double ratio = widthPx / 360;

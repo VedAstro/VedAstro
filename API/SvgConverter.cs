@@ -21,7 +21,8 @@ namespace API
 
 
             //convert svg string to byte array
-            byte_array = Encoding.ASCII.GetBytes(svg);
+            //NOTE : proper encoding needed else will shown funny values when render
+            byte_array = Encoding.UTF8.GetBytes(svg);
 
             //convert byte array to stream
             stream = new MemoryStream(byte_array);

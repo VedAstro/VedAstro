@@ -33,6 +33,10 @@
 
 
 
+## Examples
+![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk1.gif)
+
+
 
 # 🌍 Links
 - [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
@@ -55,6 +59,8 @@ The chart takes alot of computational power to generate, so please be patient af
 [![](GithubImages/napoleon-dasa-chart.png)](https://vedastro.org)
 [![](GithubImages/elizabeth-dasa-chart.png)](https://vedastro.org)
  -->
+
+
 
 
 # 📜 About

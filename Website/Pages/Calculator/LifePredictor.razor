@@ -131,7 +131,7 @@ Know good and bad periods of your life years ahead.*@
     </div>
 </div>
 
-<div class="gap-3" style="max-width: @GR.W667px">
+<div class="gap-3 mt-3" style="max-width: @GR.W667px">
     
     <ArticleBlock Title="Colors" IconName="noto-v1:artist-palette">
         <TextHTML>
@@ -362,7 +362,7 @@ Know good and bad periods of your life years ahead.*@
         var endTime = timeRange.End;
 
         //generate the events row & time header row
-        var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Gochara };
+        var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Prana, EventTag.Gochara };
 
         //pump data into chart
         await _eventsChartViewer.ShowChart(SelectedPerson, startTime, endTime, inputedEventTags);
@@ -406,7 +406,7 @@ Know good and bad periods of your life years ahead.*@
         var endTime = timeRange.end;
 
         //generate the events row & time header row
-        var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Gochara };
+        var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Prana, EventTag.Gochara };
 
         //pump data into chart
         await _eventsChartViewer.ShowChart(SelectedPerson, startTime, endTime, dasaEventTags);

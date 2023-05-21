@@ -33,7 +33,7 @@
 
 
 
-## Examples
+## What You Can Do
 ![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk1.gif)
 
 

@@ -1364,23 +1364,31 @@ namespace API
             //2 STACK & GENERATED ROWS FROM ABOVE DATA
             var padding = 1;//space between rows
             var compiledRow = "";
+            double maxValue;
+            double minValue;
+            Dictionary<int, SumData> summaryRowData;
+            if (eventList.Any())
+            {
 
-            //note: summary data is filled when generating rows
-            var summaryRowData = new Dictionary<int, SumData>();//x axis, total nature score, planet name
-            //generate svg for each row & add to final row
-            compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
-            //set y axis (horizontal) for next row
-            yAxis = yAxis + finalHeight + padding;
 
-            //4 GENERATE SUMMARY ROW
-            //min & max used to calculate color later
-            var maxValue = summaryRowData.Values.Max(x => x.NatureScore);
-            var minValue = summaryRowData.Values.Min(x => x.NatureScore);
-            compiledRow += GenerateSummaryRow(yAxis);
+                //note: summary data is filled when generating rows
+                //x axis, total nature score, planet name
+                summaryRowData = new Dictionary<int, SumData>();
+                //generate svg for each row & add to final row
+                compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
+                //set y axis (horizontal) for next row
+                yAxis = yAxis + finalHeight + padding;
 
-            //note caller checks final height by checking y axis by ref
-            yAxis += 15;//add in height of summary row
+                //4 GENERATE SUMMARY ROW
+                //min & max used to calculate color later
+                maxValue = summaryRowData?.Values?.Max(x => x.NatureScore) ?? 0;
+                minValue = summaryRowData?.Values?.Min(x => x.NatureScore) ?? 0;
+                compiledRow += GenerateSummaryRow(yAxis);
 
+                //note caller checks final height by checking y axis by ref
+                yAxis += 15;//add in height of summary row
+
+            }
 
             return compiledRow;
 

@@ -2,6 +2,13 @@ using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.DurableTask.Client;
+using Microsoft.DurableTask;
+using iText.Commons.Bouncycastle.Cert.Ocsp;
+using System.Diagnostics.Tracing;
+using System.Text.Json;
+using Newtonsoft.Json.Linq;
+using iText.Kernel.Pdf.Canvas.Parser.ClipperLib;
 
 namespace API
 {
@@ -86,6 +93,186 @@ namespace API
                 return APITools.FailMessage(e, incomingRequest);
             }
 
+        }
+
+
+
+        //[Function(nameof(GetPersonListAsync))]
+        //public static async Task<HttpResponseData> GetPersonListAsync(
+        //    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonListAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
+        //    [DurableClient] DurableTaskClient client,
+        //    string userId, string visitorId)
+        //{
+
+
+        [Function(nameof(GetEventsChartAsync))]
+        public static async Task<HttpResponseData> GetEventsChartAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] 
+            HttpRequestData incomingRequest,
+            [DurableClient] DurableTaskClient client
+            )
+        {
+            try
+            {
+                //get data out
+                var requestJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
+
+                var requestChart = await GetDataParsed(requestJson);
+
+                var chartId = requestChart.GetEventsChartSignature();
+
+                //start processing
+                var options = new StartOrchestrationOptions(chartId); //set caller id so can callback
+                var jsonText = requestJson.ToString();
+                var jsonDurable = JsonDocument.Parse(jsonText); //done for compatibility with durable
+
+                var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_GetEventsChartAsync), jsonDurable, options, CancellationToken.None); //should match caller ID
+
+
+                //get dasa report for sending
+                //var chart = await GetEventReportSvgForIncomingRequest(incomingRequest, false);
+
+                //give user the url to query for status and data
+                //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
+                //var x = client.CreateCheckStatusResponse(incomingRequest, sign.ToString());
+                //var pollingUrl = APITools.GetHeaderValue(x, "Location");
+
+                //send polling URL to caller as Passed payload, client should know what todo
+                return APITools.PassMessageJson(instanceId, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+
+        }
+
+        /// <summary>
+        /// Call here after calling prepare chart
+        /// </summary>
+        [Function(nameof(GetEventsChartResult))]
+        public static async Task<HttpResponseData> GetEventsChartResult(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetEventsChartResult/{chartId}")] 
+            HttpRequestData incomingRequest,
+            [DurableClient] DurableTaskClient client,
+            string chartId
+            )
+        {
+            try
+            {
+                //try to get chached version, if not available then make new one
+               var result = await client.GetInstanceAsync(chartId, true, CancellationToken.None);
+               if (result != null)
+               {
+                   //var xxsss = await client.GetInstanceAsync(chartId, true, CancellationToken.None);
+
+                   if (result.RuntimeStatus == OrchestrationRuntimeStatus.Completed)
+                   {
+
+                       
+                       //give user the url to query for status and data
+                       //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
+                       var x = client.CreateCheckStatusResponse(incomingRequest, chartId);
+                       var pollingUrl = APITools.GetHeaderValue(x, "Location");
+                       var zzz = result.SerializedOutput;
+                       var zssszz = result.ReadOutputAs<string>();
+                       return APITools.SendSvgToCaller(zssszz, incomingRequest);
+
+                        //return x;
+                       //var xx = x.Body;
+                       //StreamReader reader = new StreamReader(x.Body);
+                       //string text = reader.ReadToEnd();
+                       //var jobjects = JObject.Parse(text);
+
+                    }
+                    var svgString = result.ReadOutputAs<string>();
+
+                   return APITools.SendSvgToCaller(svgString, incomingRequest);
+               }
+
+               return APITools.FailMessageJson("No Record Call Found", incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+
+        }
+
+        /// <summary>
+        /// Call here after calling prepare chart
+        /// </summary>
+        [Function(nameof(GetCallStatus))]
+        public static async Task<HttpResponseData> GetCallStatus(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallStatus/{callerId}")] 
+            HttpRequestData incomingRequest,
+            [DurableClient] DurableTaskClient client,
+            string callerId
+            )
+        {
+            try
+            {
+
+                //try to get chached version, if not available then make new one
+               var result = await client.GetInstanceAsync(callerId, false, CancellationToken.None);
+
+              var x = result?.RuntimeStatus.ToString() ?? "No Exist";
+
+               return APITools.PassMessageJson(x, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+
+        }
+
+
+
+        /// <summary>
+        /// The underlying async func that actually gets the list
+        /// </summary>
+        [Function(nameof(_GetEventsChartAsync))]
+        public static async Task<string> _GetEventsChartAsync([OrchestrationTrigger]
+            TaskOrchestrationContext context)
+        {
+            var requestData = context.GetInput<string>();
+
+
+            var parsed = JObject.Parse(requestData);
+
+            var requestChart = await Chart.GetDataParsed(parsed);
+
+            //from person get svg report
+            var foundPerson = await APITools.GetPersonById(requestChart.PersonId);
+
+            var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, requestChart.StartTime,
+                requestChart.EndTime, requestChart.DaysPerPixel, requestChart.EventTagList);
+
+            //x.ContentSvg = eventsChartSvgString;
+
+            return eventsChartSvgString;
+
+
+
+            //var swapStatus = await context.CallActivityAsync<string>(nameof(GetChartAsync), requestData); //note swap done before get list
+
+            //return swapStatus;
         }
 
         /// <summary>
@@ -430,7 +617,7 @@ namespace API
                 {
                     //replace original birth time
                     var personAdjusted = person.ChangeBirthTime(possibleTime);
-                    var newChart = await GetChart(personAdjusted, startTime, endTime, daysPerPixel, dasaEventTags);
+                    var newChart = await GenerateNewChart(personAdjusted, startTime, endTime, daysPerPixel, dasaEventTags);
                     var adjustedBirth = personAdjusted.BirthTimeString;
 
                     //place in group with time above the chart
@@ -566,18 +753,18 @@ namespace API
             //get the person instance by id
             var foundPerson = await APITools.GetPersonById(personId);
 
-            Chart chart;
+            Chart chart = Chart.Empty;
 
             if (cacheEnable)
             {
                 //todo needs testing
                 //based on mode set by caller use cache
-                chart = await GetChartCached(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+                //chart = await GetChartCached(foundPerson, startTime, endTime, daysPerPixel, eventTags);
             }
             else
             {
                 //based on mode set by caller use cache
-                chart = await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+                chart = await GenerateNewChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
             }
 
             return chart;
@@ -620,67 +807,69 @@ namespace API
             var daysPerPixel = GetDayPerPixel(startTime, endTime, maxWidth);
 
 
-            return await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+            return await GenerateNewChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
         }
 
 
-        /// <summary>
-        /// Cache stored in running memory
-        /// </summary>
-        private static async Task<Chart> GetChartCached(Person foundPerson, Time startTime, Time endTime,
-            double daysPerPixel, List<EventTag> eventTags)
-        {
-            //create a unique signature to identify all future calls that is exactly alike
-            var dataSignature = GetSignature(foundPerson, startTime,endTime,daysPerPixel, eventTags);
+        ///// <summary>
+        ///// Cache stored in running memory
+        ///// </summary>
+        //private static async Task<Chart> GetChartCached(Person foundPerson, Time startTime, Time endTime,
+        //    double daysPerPixel, List<EventTag> eventTags)
+        //{
+        //    //create a unique signature to identify all future calls that is exactly alike
+        //    var dataSignature = GetEventsChartSignature(foundPerson, startTime,endTime,daysPerPixel, eventTags);
                 
-            //use cache if exist else use new one
-            var result = _cacheList.TryGetValue(dataSignature, out var cachedChartXml);
+        //    //use cache if exist else use new one
+        //    var result = _cacheList.TryGetValue(dataSignature, out var cachedChartXml);
 
-            if (string.IsNullOrEmpty(cachedChartXml))
-            {
-                //a new chart is born
-                var newChart = await GetChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+        //    if (string.IsNullOrEmpty(cachedChartXml))
+        //    {
+        //        //a new chart is born
+        //        var newChart = await GenerateNewChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
-                //add new chart into cache for future use
-                _cacheList[dataSignature] = newChart.ToXml().ToString();
+        //        //add new chart into cache for future use
+        //        _cacheList[dataSignature] = newChart.ToXml().ToString();
 
-                return newChart;
-            }
+        //        return newChart;
+        //    }
 
-            //if available use cached chart
-            var oldChart = Chart.FromXml(XElement.Parse(cachedChartXml ?? "<Empty/>"));
-            return oldChart;
+        //    //if available use cached chart
+        //    var oldChart = Chart.FromXml(XElement.Parse(cachedChartXml ?? "<Empty/>"));
+        //    return oldChart;
 
-        }
+        //}
 
-        /// <summary>
-        /// create a unique signature to identify all future calls that is exactly alike
-        /// todo use this for DURABALE ID when caching chart calls
-        /// </summary>
-        private static double GetSignature(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
+
+        [Function(nameof(GetChartAsync))]
+        public static async Task<string> GetChartAsync([ActivityTrigger] string input)
         {
+            //var strind = input.RootElement.GetString();
 
-            //convert events into 1 signature
-            var eventTagsHash = 0;
-            foreach (var eventTag in eventTags) { eventTagsHash += eventTag.GetHashCode(); }
+            var parsed = JObject.Parse(input);
 
-            //convert input data into a signature
-            var dataSignature = foundPerson.Hash + startTime.GetHashCode() + endTime.GetHashCode() + daysPerPixel + eventTagsHash;
+            var requestChart = await GetDataParsed(parsed);
 
-            return dataSignature;
+            //from person get svg report
+            var foundPerson = await APITools.GetPersonById(requestChart.PersonId);
+
+            var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, requestChart.StartTime,
+                requestChart.EndTime, requestChart.DaysPerPixel, requestChart.EventTagList);
+
+            //x.ContentSvg = eventsChartSvgString;
+
+            return eventsChartSvgString;
         }
-
-        private static async Task<Chart> GetChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
+        private static async Task<Chart> GenerateNewChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
         {
             //from person get svg report
             var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
-            var eventTagListXml = EventTagExtensions.ToXmlList(eventTags);
             var startTimeXml = startTime.ToXml();
             var endTimeXml = endTime.ToXml();
-            var newChart = new Chart(newChartId, eventsChartSvgString, foundPerson.Id, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+            var newChart = new Chart(newChartId, eventsChartSvgString, foundPerson.Id, startTimeXml, endTimeXml, daysPerPixel, eventTags);
 
             return newChart;
         }

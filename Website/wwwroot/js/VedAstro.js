@@ -15,10 +15,11 @@ export class VedAstro {
         return this;
     }
 
-    async ChartFromGenerateDataXML(chartGenerateDataXML) {
+    //special URL to access ready made chart by async
+    async ChartFromGenerateDataXML(chartUrl) {
 
         //get raw chart from API
-        var chartStr = await getEventsChartFromApiXml(this.URLS.GetEventsChartDirect, chartGenerateDataXML);
+        var chartStr = await getEventsChartFromApiXml(chartUrl);
 
         //inject into default div on page to hold, "EventsChartSvgHolder"
         var $chartElm = injectIntoElement($(ID.EventsChartSvgHolder)[0], chartStr);
@@ -38,7 +39,7 @@ export class VedAstro {
             var response = await window.fetch(url, {
                 "headers": { "accept": "*/*", "Connection": "keep-alive" },
                 "body": payload,
-                "method": "POST"
+                "method": "GET"
             });
 
             //API should always give a OK reply, else it has failed internally

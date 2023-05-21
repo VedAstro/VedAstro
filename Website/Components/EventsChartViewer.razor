@@ -1,6 +1,7 @@
 @namespace Website.Pages
 @using VedAstro.Library
 @using System.Xml.Linq
+@using Newtonsoft.Json.Linq
 
 
 <div @ref="MainElement" class="vstack gap-1" style="width: fit-content;">
@@ -347,12 +348,53 @@
             InputedEventTags = inputedEventTags;
 
             //1 : package data to get chart
-            var payloadXml = GetChartGeneratorData(person, startTime, endTime, inputedEventTags);
+            var payloadJson = GetChartGeneratorDataJson(person, startTime, endTime, inputedEventTags);
+
+            var fff = await Chart.GetDataParsed(payloadJson);
+            string chartId = fff.GetEventsChartSignature();
+            
+
+            //skip getting new chart if old chart is there
+            var reply3 = await Library.API.Tools.WriteServer(HttpMethod.Get, $"{AppData.URL.GetCallStatus}/{chartId}");
+            var runtimeStatus3 = reply3["Payload"].Value<string>();
+            var isCompleted = runtimeStatus3 == "Completed";
+            if (isCompleted)
+            {
+                goto ShowChart;
+            }
+
 
             //2 : use EventsChart.js to take over from here
             //note : JS code will generate, inject & animate chart
             //create new chart from svg string
-            await _jsRuntime.InvokeVoidAsync(JS.ChartFromGenerateDataXML, payloadXml.ToString());
+            //await _jsRuntime.InvokeVoidAsync(JS.ChartFromGenerateDataXML, payloadXml.ToString());
+            var reply = await Library.API.Tools.WriteServer(HttpMethod.Post, AppData.URL.GetEventsChartAsync, payloadJson);
+            chartId = reply["Payload"].Value<string>();
+
+
+    //start calling API till complete
+            var isNotComplete = true;
+            while (isNotComplete)
+            {
+                var reply2 = await Library.API.Tools.WriteServer(HttpMethod.Get, $"{AppData.URL.GetCallStatus}/{chartId}");
+                var runtimeStatus = reply2["Payload"].Value<string>();
+                isNotComplete = runtimeStatus != "Completed";
+
+                Console.WriteLine($"API SAID : {runtimeStatus}");
+
+                //check every once in a while
+                await Task.Delay(450);
+            }
+
+
+            ShowChart:
+            //control reahes here than already complete
+            var url = $"{AppData.URL.GetEventsChartResult}/{chartId}";
+            await _jsRuntime.InvokeVoidAsync(JS.ChartFromGenerateDataXML, url);
+
+            //var svg = await Library.API.Tools.WriteServer(HttpMethod.Get, );
+
+            //Console.WriteLine(svg.ToString());
 
             //get latest dark mode setting
             //so that event chart is not lost in darkness
@@ -370,6 +412,10 @@
         }
         catch (Exception e)
         {
+            //todo log it
+            Console.WriteLine(e.Message);
+            Console.WriteLine(e.StackTrace);
+
             //should not happen, let user know
             await _jsRuntime.ShowAlert("error", AlertText.ObliviousErrors(), true);
         }
@@ -462,7 +508,37 @@
     /// <summary>
     /// Packages the data to send to API to generate the chart
     /// </summary>
-    private XElement GetChartGeneratorData(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
+    //private XElement GetChartGeneratorData(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
+    //{
+    //    //auto calculate precision
+    //    var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
+    //    //if not defined, use input
+    //    double daysPerPixelInput = 30;
+    //    daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
+
+
+    //    var personIdXml = new XElement("PersonId", inputPerson.Id);
+    //    var startTimeXml = new XElement("StartTime", startTime.ToXml());
+    //    var endTimeXml = new XElement("EndTime", endTime.ToXml());
+    //    var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
+    //    var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
+    //    var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+
+    //    return rootXml;
+
+    //    //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
+    //    //var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetEventsChartDirect, rootXml, _jsRuntime);
+
+    //    //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
+    //    // convert stream to string
+    //    //svgStream.Position = 0; //reset position otherwise can be null value out
+    //    //var reader = new StreamReader(svgStream);
+    //    //var svgText = await reader.ReadToEndAsync();
+
+    //    //return svgText;
+    //}
+
+    private JObject GetChartGeneratorDataJson(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
     {
         //auto calculate precision
         var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
@@ -470,26 +546,17 @@
         double daysPerPixelInput = 30;
         daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
 
+        var returnPayload = new JObject();
 
-        var personIdXml = new XElement("PersonId", inputPerson.Id);
-        var startTimeXml = new XElement("StartTime", startTime.ToXml());
-        var endTimeXml = new XElement("EndTime", endTime.ToXml());
-        var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
-        var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
-        var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+        returnPayload["PersonId"] = inputPerson.Id;
+        returnPayload["StartTime"] = startTime.ToJson();
+        returnPayload["EndTime"] = endTime.ToJson();
+        returnPayload["DaysPerPixel"] = daysPerPixelInput;
+        returnPayload["EventTagList"] = EventTagExtensions.ToJsonList(inputedEventTags);
 
-        return rootXml;
+        return returnPayload;
 
-        //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-        //var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetEventsChartDirect, rootXml, _jsRuntime);
 
-        //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
-        // convert stream to string
-        //svgStream.Position = 0; //reset position otherwise can be null value out
-        //var reader = new StreamReader(svgStream);
-        //var svgText = await reader.ReadToEndAsync();
-
-        //return svgText;
     }
 
     private async Task<bool> SaveReportSvgInApi(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)

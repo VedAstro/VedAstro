@@ -21,7 +21,7 @@ namespace Library.API
     /// <summary>
     /// Collection of static doers
     /// </summary>
-    internal static class Tools
+    public static class Tools
     {
 
         public static async Task<JObject> ReadServer(string receiverAddress)

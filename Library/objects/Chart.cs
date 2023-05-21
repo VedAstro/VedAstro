@@ -1,4 +1,9 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -9,24 +14,26 @@ namespace VedAstro.Library
     public class Chart
     {
 
-        public static Chart Empty = new Chart("Empty", "Empty", "Empty", new XElement("EventTagList"), new XElement("StartTime"), new XElement("EndTime"), 0);
+        public static Chart Empty = new Chart("Empty", "Empty", "Empty", new XElement("StartTime"), new XElement("EndTime"), 0, new List<EventTag>());
 
         public string ChartId { get; set; }
         public string ContentSvg { get; set; }
         public string PersonId { get; }
-        public XElement EventTagListXml { get; }
         public XElement StartTimeXml { get; }
         public XElement EndTimeXml { get; }
         public double DaysPerPixel { get; }
+        public List<EventTag> EventTagList { get; set; }
+        public Time StartTime => Time.FromXml(StartTimeXml);
+        public Time EndTime => Time.FromXml(EndTimeXml);
 
 
-        public Chart(string chartId, string contentSvg, string personId, XElement eventTagListXml, XElement startTimeXml,
-            XElement endTimeXml, double daysPerPixel)
+        public Chart(string chartId, string contentSvg, string personId, XElement startTimeXml,
+            XElement endTimeXml, double daysPerPixel, List<EventTag> eventTagList)
         {
             ChartId = chartId;
             ContentSvg = contentSvg;
             PersonId = personId;
-            EventTagListXml = eventTagListXml;
+            EventTagList = eventTagList;
             StartTimeXml = startTimeXml; //root time xml
             EndTimeXml = endTimeXml; //root time xml
             DaysPerPixel = daysPerPixel;
@@ -40,12 +47,13 @@ namespace VedAstro.Library
             var contentSvg = new XElement("ContentSvg", ContentSvg);
             var personId = new XElement("PersonId", PersonId);
             var daysPerPixel = new XElement("DaysPerPixel", DaysPerPixel);
+            var eventTagListXml = EventTagExtensions.ToXmlList(EventTagList);
 
             chartXml.Add(
                 chartIdXml,
                 personId,
                 daysPerPixel,
-                EventTagListXml,
+                eventTagListXml,
                 new XElement("StartTime", StartTimeXml),
                 new XElement("EndTime", EndTimeXml),
                 contentSvg);
@@ -62,11 +70,12 @@ namespace VedAstro.Library
             var chartId = personXml.Element("ChartId")?.Value; //if no id tag generate new one
             var contentSvg = personXml.Element("ContentSvg")?.Value;
             var eventTagListXml = personXml.Element("EventTagList");
+            var eventTagList = EventTagExtensions.FromXmlList(eventTagListXml);
             var startTimeXml = personXml.Element("StartTime").Element("Time");
             var endTimeXml = personXml.Element("EndTime").Element("Time");
             var daysPerPixel = double.Parse(personXml.Element("DaysPerPixel")?.Value);
 
-            var parsedPerson = new Chart(chartId, contentSvg, personId, eventTagListXml, startTimeXml, endTimeXml, daysPerPixel);
+            var parsedPerson = new Chart(chartId, contentSvg, personId, startTimeXml, endTimeXml, daysPerPixel, eventTagList);
 
             return parsedPerson;
         }
@@ -103,6 +112,49 @@ namespace VedAstro.Library
             var endYear = endTime.GetStdYear();
             var endMonth = endTime.GetStdMonth();
             return $"{personName} - {startMonth}/{startYear} to {endMonth}/{endYear}";
+        }
+
+        /// <summary>
+        /// create a unique signature to identify all future calls that is exactly alike
+        /// todo use this for DURABALE ID when caching chart calls
+        /// </summary>
+        public string GetEventsChartSignature()
+        {
+
+            //convert events into 1 signature
+            var eventTagsHash = 0;
+            foreach (var eventTag in this.EventTagList) { eventTagsHash += (int)eventTag; }
+
+            //convert input data into a signature
+            var dataSignature = this.PersonId + this.StartTime.GetHashCode() + this.EndTime.GetHashCode() + this.DaysPerPixel + eventTagsHash;
+
+            return dataSignature;
+        }
+
+
+        public static async Task<Chart> GetDataParsed(JObject? requestJson)
+        {
+
+
+            //get all the data needed out of the incoming request
+            //var rootXml = await APITools.ExtractDataFromRequestXml(req);
+            var personId = requestJson["PersonId"].Value<string>();
+            var eventTagListJson = requestJson["EventTagList"];
+            var eventTags = EventTagExtensions.FromJsonList(eventTagListJson);
+            var startTimeJson = requestJson["StartTime"];
+            var startTime = Time.FromJson(startTimeJson);
+            var endTimeJson = requestJson["EndTime"];
+            var endTime = Time.FromJson(endTimeJson);
+            var daysPerPixel = requestJson["DaysPerPixel"].Value<double>();
+
+
+            //a new chart is born
+            var newChartId = Tools.GenerateId();
+            var startTimeXml = startTime.ToXml();
+            var endTimeXml = endTime.ToXml();
+            var newChart = new Chart(newChartId, "", personId, startTimeXml, endTimeXml, daysPerPixel, eventTags);
+
+            return newChart;
         }
 
     }

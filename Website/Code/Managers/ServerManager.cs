@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
+using Newtonsoft.Json.Linq;
 
 namespace Website
 {
@@ -255,6 +256,40 @@ namespace Website
             //ACT 4:
             return returnVal;
         }
+        //public static async Task<WebResult<JToken>> WriteToServerJsonReply(string apiUrl, JObject xmlData, int timeout = 60)
+        //{
+        //    //prepare the data to be sent
+        //    var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+        //    httpRequestMessage.Content = Tools.XmLtoHttpContent(xmlData);
+
+        //    //tell sender to wait for complete reply before exiting
+        //    var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+        //    //send the data on its way 
+        //    var response = await AppData.HttpClient.SendAsync(httpRequestMessage, waitForContent);
+
+        //    //keep for error logging if needed
+        //    statusCode = response?.StatusCode.ToString();
+
+        //    //extract the content of the reply data
+        //    rawMessage = await response?.Content.ReadAsStringAsync() ?? "";
+
+        //    //problems might occur when parsing
+        //    //try to parse as XML
+        //    var writeToServerXmlReply = XElement.Parse(rawMessage);
+        //    returnVal = WebResult<XElement>.FromXml(writeToServerXmlReply);
+
+
+        //    //ACT 3:
+        //    //return data as XML
+        //    //problems might occur when parsing
+        //    //try to parse as XML
+        //    var writeToServerXmlReply = JObject.Parse(receivedData);
+        //    var returnVal = WebResult<JObject>.FromJson(writeToServerXmlReply);
+
+        //    //ACT 4:
+        //    return returnVal;
+        //}
 
 
         //PRIVATE METHODS

@@ -334,7 +334,7 @@ namespace API
             //convert raw XML to Person Json
             var personListJson = Person.XmlListToJsonList(sortedList);
 
-            //convert to type accepted by durable
+            //convert to type .NET's JSON accepted by durable
             var jsonText = personListJson.ToString();
             var personListJsonDurable = JsonDocument.Parse(jsonText); //done for compatibility with durable
 

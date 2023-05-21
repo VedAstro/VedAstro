@@ -15,13 +15,46 @@ namespace API
         /// API Home page
         /// </summary>
         [Function(nameof(Home))]
-        public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", "put", "delete", "post", "head", "trace", "patch", "connect", "options", Route = "Home")] HttpRequestData incomingRequest)
+        public static async Task<HttpResponseData> Home([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "Home")] HttpRequestData incomingRequest)
         {
             //get chart special API home page and send that to caller
             var APIHomePageTxt = await APITools.GetStringFileHttp(APITools.Url.APIHomePageTxt);
 
             return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
         }
+
+
+        /// <summary>
+        /// Call here after calling prepare chart or anything with ID
+        /// </summary>
+        [Function(nameof(GetCallStatus))]
+        public static async Task<HttpResponseData> GetCallStatus(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallStatus/{callerId}")]
+            HttpRequestData incomingRequest,
+            [DurableClient] DurableTaskClient client,
+            string callerId
+        )
+        {
+            try
+            {
+                //try to get cached version, if not available then make new one
+                var result = await client.GetInstanceAsync(callerId, false, CancellationToken.None);
+                var statusMessage = result?.RuntimeStatus.ToString() ?? "No Exist";
+
+                return APITools.PassMessageJson(statusMessage, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+
+        }
+
 
         /// <summary>
         /// Clears all cache, run manually when code is updated and new data is needed

@@ -67,7 +67,7 @@ public class URL
         HoroscopeDataListXml = $"{WebUrl}/data/HoroscopeDataList.xml";//used in horoscope prediction
         EventsChartViewerHtml = $"{WebUrl}/data/EventsChartViewer.html";
         ToolbarSvgAzure = $"{WebUrl}/svg/Toolbar.svg";// Toolbar.svg used in when rendering events chart
-        APIHomePageTxt = $"{WebUrl}/data/APIHomePage.txt";
+        APIHomePageTxt = $"{WebUrl}/data/APIHomePage.html";
 
 
         //let dev user know

@@ -105,7 +105,7 @@ namespace API
 
         [Function(nameof(GetEventsChartAsync))]
         public static async Task<HttpResponseData> GetEventsChartAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
             HttpRequestData incomingRequest,
             [DurableClient] DurableTaskClient client
             )
@@ -154,7 +154,7 @@ namespace API
         /// </summary>
         [Function(nameof(GetEventsChartResult))]
         public static async Task<HttpResponseData> GetEventsChartResult(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetEventsChartResult/{chartId}")] 
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetEventsChartResult/{chartId}")]
             HttpRequestData incomingRequest,
             [DurableClient] DurableTaskClient client,
             string chartId
@@ -162,49 +162,27 @@ namespace API
         {
             try
             {
-                //try to get chached version, if not available then make new one
-               var result = await client.GetInstanceAsync(chartId, false, CancellationToken.None);
-               if (result != null)
-               {
-                   //var xxsss = await client.GetInstanceAsync(chartId, true, CancellationToken.None);
+                //try to get already calculated chart
+                var result = await client.GetInstanceAsync(chartId, false, CancellationToken.None);
+                if (result?.RuntimeStatus == OrchestrationRuntimeStatus.Completed)
+                {
+                    //note : todo hack to get polling URL via RESPONSE header, should be a better way
+                    var x = client.CreateCheckStatusResponse(incomingRequest, chartId);
+                    var pollingUrl = APITools.GetHeaderValue(x, "Location");
 
-                   if (result.RuntimeStatus == OrchestrationRuntimeStatus.Completed)
-                   {
+                    //call polling URL
+                    //call status endpoint and get oversized output data
+                    using var httpClient = new HttpClient();
+                    var taskStatusResult = await httpClient.GetStringAsync(pollingUrl);
+                    var parsedResult = JObject.Parse(taskStatusResult);
+                    var largeSvgString = parsedResult["output"].Value<string>();
 
-                       
-                       //give user the url to query for status and data
-                       //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
-                       var x = client.CreateCheckStatusResponse(incomingRequest, chartId);
-                       var pollingUrl = APITools.GetHeaderValue(x, "Location");
+                    //send to caller as SVG image
+                    return APITools.SendSvgToCaller(largeSvgString, incomingRequest);
+                }
 
-                        //call polling URL
-                        //get the data sender
-                        using var httpclient = new HttpClient();
 
-                        //load xml event data files before hand to be used quickly later for search
-                        //get main horoscope prediction file (located in wwwroot)
-                        var fileString = await httpclient.GetStringAsync(pollingUrl);
-
-                        var file = JObject.Parse(fileString);
-                        var svgStr = file["output"].Value<string>();
-
-                        return APITools.SendSvgToCaller(svgStr, incomingRequest);
-
-                        //var zzz = result.SerializedOutput;
-
-                        //var zssszz = result.ReadOutputAs<string>();
-                        //return APITools.SendSvgToCaller(zssszz, incomingRequest);
-
-                       //return x;
-                       //var xx = x.Body;
-                       //StreamReader reader = new StreamReader(x.Body);
-                       //string text = reader.ReadToEnd();
-                       //var jobjects = JObject.Parse(text);
-
-                   }
-               }
-
-               return APITools.FailMessageJson("No Record Call Found", incomingRequest);
+                return APITools.FailMessageJson("No Record Call Found", incomingRequest);
 
             }
             catch (Exception e)
@@ -218,38 +196,6 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Call here after calling prepare chart
-        /// </summary>
-        [Function(nameof(GetCallStatus))]
-        public static async Task<HttpResponseData> GetCallStatus(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallStatus/{callerId}")] 
-            HttpRequestData incomingRequest,
-            [DurableClient] DurableTaskClient client,
-            string callerId
-            )
-        {
-            try
-            {
-
-                //try to get chached version, if not available then make new one
-               var result = await client.GetInstanceAsync(callerId, false, CancellationToken.None);
-
-              var x = result?.RuntimeStatus.ToString() ?? "No Exist";
-
-               return APITools.PassMessageJson(x, incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
 
 
 
@@ -811,7 +757,7 @@ namespace API
         //{
         //    //create a unique signature to identify all future calls that is exactly alike
         //    var dataSignature = GetEventsChartSignature(foundPerson, startTime,endTime,daysPerPixel, eventTags);
-                
+
         //    //use cache if exist else use new one
         //    var result = _cacheList.TryGetValue(dataSignature, out var cachedChartXml);
 
@@ -849,7 +795,7 @@ namespace API
 
             return eventsChartSvgString;
         }
-        
+
         private static async Task<Chart> GenerateNewChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
         {
             //from person get svg report

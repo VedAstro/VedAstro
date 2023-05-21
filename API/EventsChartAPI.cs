@@ -4,11 +4,9 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
 using Microsoft.DurableTask;
-using iText.Commons.Bouncycastle.Cert.Ocsp;
-using System.Diagnostics.Tracing;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
-using iText.Kernel.Pdf.Canvas.Parser.ClipperLib;
+using Time = VedAstro.Library.Time;
 
 namespace API
 {
@@ -117,16 +115,15 @@ namespace API
                 //get data out
                 var requestJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
 
-                var requestChart = await GetDataParsed(requestJson);
+                var requestChart = await Chart.GetDataParsed(requestJson);
 
                 var chartId = requestChart.GetEventsChartSignature();
 
                 //start processing
                 var options = new StartOrchestrationOptions(chartId); //set caller id so can callback
                 var jsonText = requestJson.ToString();
-                var jsonDurable = JsonDocument.Parse(jsonText); //done for compatibility with durable
 
-                var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_GetEventsChartAsync), jsonDurable, options, CancellationToken.None); //should match caller ID
+                var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_GetEventsChartAsync), jsonText, options, CancellationToken.None); //should match caller ID
 
 
                 //get dasa report for sending
@@ -166,7 +163,7 @@ namespace API
             try
             {
                 //try to get chached version, if not available then make new one
-               var result = await client.GetInstanceAsync(chartId, true, CancellationToken.None);
+               var result = await client.GetInstanceAsync(chartId, false, CancellationToken.None);
                if (result != null)
                {
                    //var xxsss = await client.GetInstanceAsync(chartId, true, CancellationToken.None);
@@ -179,20 +176,32 @@ namespace API
                        //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
                        var x = client.CreateCheckStatusResponse(incomingRequest, chartId);
                        var pollingUrl = APITools.GetHeaderValue(x, "Location");
-                       var zzz = result.SerializedOutput;
-                       var zssszz = result.ReadOutputAs<string>();
-                       return APITools.SendSvgToCaller(zssszz, incomingRequest);
 
-                        //return x;
+                        //call polling URL
+                        //get the data sender
+                        using var httpclient = new HttpClient();
+
+                        //load xml event data files before hand to be used quickly later for search
+                        //get main horoscope prediction file (located in wwwroot)
+                        var fileString = await httpclient.GetStringAsync(pollingUrl);
+
+                        var file = JObject.Parse(fileString);
+                        var svgStr = file["output"].Value<string>();
+
+                        return APITools.SendSvgToCaller(svgStr, incomingRequest);
+
+                        //var zzz = result.SerializedOutput;
+
+                        //var zssszz = result.ReadOutputAs<string>();
+                        //return APITools.SendSvgToCaller(zssszz, incomingRequest);
+
+                       //return x;
                        //var xx = x.Body;
                        //StreamReader reader = new StreamReader(x.Body);
                        //string text = reader.ReadToEnd();
                        //var jobjects = JObject.Parse(text);
 
-                    }
-                    var svgString = result.ReadOutputAs<string>();
-
-                   return APITools.SendSvgToCaller(svgString, incomingRequest);
+                   }
                }
 
                return APITools.FailMessageJson("No Record Call Found", incomingRequest);
@@ -253,26 +262,9 @@ namespace API
         {
             var requestData = context.GetInput<string>();
 
+            var swapStatus = await context.CallActivityAsync<string>(nameof(GetChartAsync), requestData); //note swap done before get list
 
-            var parsed = JObject.Parse(requestData);
-
-            var requestChart = await Chart.GetDataParsed(parsed);
-
-            //from person get svg report
-            var foundPerson = await APITools.GetPersonById(requestChart.PersonId);
-
-            var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, requestChart.StartTime,
-                requestChart.EndTime, requestChart.DaysPerPixel, requestChart.EventTagList);
-
-            //x.ContentSvg = eventsChartSvgString;
-
-            return eventsChartSvgString;
-
-
-
-            //var swapStatus = await context.CallActivityAsync<string>(nameof(GetChartAsync), requestData); //note swap done before get list
-
-            //return swapStatus;
+            return swapStatus;
         }
 
         /// <summary>
@@ -844,11 +836,10 @@ namespace API
         [Function(nameof(GetChartAsync))]
         public static async Task<string> GetChartAsync([ActivityTrigger] string input)
         {
-            //var strind = input.RootElement.GetString();
 
             var parsed = JObject.Parse(input);
 
-            var requestChart = await GetDataParsed(parsed);
+            var requestChart = await Chart.GetDataParsed(parsed);
 
             //from person get svg report
             var foundPerson = await APITools.GetPersonById(requestChart.PersonId);
@@ -856,10 +847,9 @@ namespace API
             var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, requestChart.StartTime,
                 requestChart.EndTime, requestChart.DaysPerPixel, requestChart.EventTagList);
 
-            //x.ContentSvg = eventsChartSvgString;
-
             return eventsChartSvgString;
         }
+        
         private static async Task<Chart> GenerateNewChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
         {
             //from person get svg report

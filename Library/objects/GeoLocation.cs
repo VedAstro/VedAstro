@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
@@ -171,5 +172,45 @@ namespace VedAstro.Library
             return results.Payload;
         }
 
+        public static async Task<GeoLocation> FromIpAddress()
+        {
+            try
+            {
+                var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
+                var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";
+                var resultString = await Tools.WriteServer(HttpMethod.Post, url);
+                //var parsed = JObject.Parse(resultString);
+                var lat = resultString["location"]["lat"].Value<double>();
+                var lng = resultString["location"]["lng"].Value<double>();
+
+                //get name from lat and long
+                var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={apiKey}";
+                var resultString2 = await Tools.WriteServer(HttpMethod.Post, urlReverse);
+                //var parsed2 = JObject.Parse(resultString2);
+                var resultsJson = resultString2["results"][0];
+
+                var locationNameLong = resultsJson["formatted_address"].Value<string>();
+                var splitted = locationNameLong.Split(',');
+                //keep only the last parts, country, state...
+                var newLocationName = $"{splitted[splitted.Length - 3]},{splitted[splitted.Length - 2]},{splitted[splitted.Length-1]}";
+
+                var fromIpAddress = new GeoLocation(newLocationName, lng, lat);
+
+                Console.WriteLine($"Client Location:{fromIpAddress}");
+
+                //new geo location from the depths
+                return fromIpAddress;
+            }
+            catch (Exception e)
+            {
+                //log it
+                Console.WriteLine($"Client Location: FAILED!!!");
+                await LibLogger.Error(e);
+
+                //return empty to avert meltdown
+                return GeoLocation.Empty;
+
+            }
+        }
     }
 }

@@ -22,12 +22,13 @@ else
 
 <IconButton ExtraClass="ms-md-auto" SmallSize="true" Outline="true" ButtonText="Guide" IconName="mdi:book-open-page-variant-outline" ClickUrl="@PageRoute.QuickGuide" />
 <IconButton SmallSize="true" Outline="true" ButtonText="Open API" IconName="carbon:gateway-api" ClickUrl="@PageRoute.APIBuilder" />
-<IconButton SmallSize="true" Outline="true" ButtonText="Download" IconName="grommet-icons:document-windows" ClickUrl="@PageRoute.Download" />
 <IconButton SmallSize="true" Outline="true" ButtonText="Donate" IconName="iconoir:donate" ClickUrl="@PageRoute.Donate" />
-<IconButton SmallSize="true" Outline="true" ButtonText="Contact" IconName="ci:mail" ClickUrl="@PageRoute.Contact" />
-<IconButton SmallSize="true" Outline="true" ButtonText="About" IconName="akar-icons:info" ClickUrl="@PageRoute.About" />
+@*<IconButton SmallSize="true" Outline="true" ButtonText="Contact" IconName="ci:mail" ClickUrl="@PageRoute.Contact" />
+<IconButton SmallSize="true" Outline="true" ButtonText="About" IconName="akar-icons:info" ClickUrl="@PageRoute.About" />*@
 <IconButton SmallSize="true" Outline="true" IconName="ep:guide">
     <DropDownList>
+        <li><a class="dropdown-item" href="@PageRoute.Contact">Contact Us</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.About">About</a></li>
         <li><a class="dropdown-item" href="@PageRoute.JoinOurFamily">Join Us</a></li>
         <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Blog</a></li>
         <li><a class="dropdown-item" href="@URL.GitHubDiscussions" target="_blank">Forum</a></li>
@@ -36,6 +37,7 @@ else
         <li><a class="dropdown-item" href="@PageRoute.PersonList">Person List</a></li>
         <li><a class="dropdown-item" href="@PageRoute.TrainAIAstrologer">Train AI</a></li>
         <li><a class="dropdown-item" href="@PageRoute.Remedy">Remedy</a></li>
+        <li><a class="dropdown-item" href="@PageRoute.Download">Download</a></li>
     </DropDownList>
 </IconButton>
 

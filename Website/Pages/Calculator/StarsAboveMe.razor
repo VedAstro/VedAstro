@@ -18,7 +18,11 @@
 
 @if (isReady)
 {
-    <img src="https://beta.api.vedastro.org/Location/Lunas,Kedah,Malaysia/Time/00:00/22/05/2023/+08:00/SkyChartGIF" class="my-2">
+    <IconButton/>
+    <img src="@GetUrl("SkyChart")" class="my-2">
+
+    <hr />
+    <img src="@GetUrl("SkyChartGIF")" class="my-2">
 
 
     <IconTitle Title="Vedic" IconName="ph:star-of-david-duotone" />
@@ -106,12 +110,13 @@ else
         //trigger loading icon
         isReady = false;
 
+        //get data from input fields,
+        //on page load, will get today and user's location from IP address
         finalGeoLocation = _geoLocationInput.GetGeoLocation();
         finalTime = await _timeInput.GetTime(finalGeoLocation);
 
         //get all methods that have only time as input
         astronomyCalcs = AutoCalculator.ExecuteFunctions(Category.Astronomical, finalTime);
-
         astrologyCalcs = AutoCalculator.ExecuteFunctions(Category.StarsAboveMe, finalTime);
 
 
@@ -119,6 +124,15 @@ else
 
         StateHasChanged();
 
+    }
+
+    private string GetUrl(string ending)
+    {
+        var locationName = Tools.RemoveWhiteSpace(_geoLocationInput.GetGeoLocation().GetName());
+        var url = $"https://beta.api.vedastro.org/Location/{locationName}/Time/{_timeInput.GetUrlString()}/{ending}";
+
+
+        return url;
     }
 
 }

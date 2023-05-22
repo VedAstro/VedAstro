@@ -143,6 +143,12 @@ namespace Website
             builder.AddMarkupContent(0, $"<img style=\"position: relative; left: 39%; top: 30%;\" src=\"images/loading-animation-progress-transparent.gif\" />");
         };
 
+        /// <summary>
+        /// filled when loading app via Google API IP location detect
+        /// used as backup location for selector
+        /// </summary>
+        public static GeoLocation ClientLocation { get; set; }
+
         public static string DefaultLocationCountry = "Singapore";
 
 

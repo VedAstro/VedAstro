@@ -49,7 +49,7 @@
     private ElementReference _longitudeInput;
     private ElementReference _latitudeInput;
     private string? _locationName = AppData.LastUsedLocation; //set default location, so that input is not blank
-    private double? _longitude = null;
+    private double? _longitude = null;//note needs to be nullable to be detected and filled
     private double? _latitude = null;
 
 
@@ -76,12 +76,12 @@
     /// If true means latitude or longitude has been set by code or user
     /// used to check location validity
     /// </summary>
-    private bool IsLatitudeLongitudeDirty { get; set; } = false; //start as not dirty, clean
+    //private bool IsLatitudeLongitudeDirty { get; set; } = false; //start as not dirty, clean
 
     //PARAMETERS
     public string LocationName
     {
-        get => _locationName ?? "";
+        get => _locationName ?? AppData.ClientLocation.GetName();
         set
         {
             //avoid same value to stop loops
@@ -103,7 +103,7 @@
 
     public double Longitude
     {
-        get => _longitude ?? 0;
+        get => _longitude ?? AppData.ClientLocation.GetLongitude();
         set
         {
             //avoid same value to stop loops
@@ -117,13 +117,13 @@
             _longitude = value;
 
             //used to check location validity
-            IsLatitudeLongitudeDirty = true;
+            //IsLatitudeLongitudeDirty = true;
         }
     }
 
     public double Latitude
     {
-        get => _latitude ?? 0;
+        get => _latitude ?? AppData.ClientLocation.GetLatitude();
         set
         {
             //avoid same value to stop loops
@@ -137,7 +137,7 @@
             _latitude = value;
 
             //used to check location validity
-            IsLatitudeLongitudeDirty = true;
+           // IsLatitudeLongitudeDirty = true;
         }
 
     }
@@ -166,27 +166,23 @@
     /// Note:
     /// technically this should not fail since defaulting of location
     /// will handle invalid input, this is if that fails,
-    /// which it has so yeah keep it
+    /// which it has so yeah, keep it up!
     /// </summary>
     public async Task<bool> IsValid()
     {
-        TryAgain:
+    TryAgain:
 
         //check if name has been set
-        if (string.IsNullOrEmpty(_locationName)) { return false; }
+        if (string.IsNullOrEmpty(LocationName)) { return false; }
 
         //if name already set but not yet load lat & long, then do it now
         //this makes it possible to save person with preset historical locations
-        if (!IsLatitudeLongitudeDirty)
-        {
-            //update coordinates based on name
-            await SetCoordinatesFromNameInput();
-            goto TryAgain; //possible infinite loop (todo count check maybe)
-        }
-
-        //check the values incase it got nulled (wrong location name)
-        if (_longitude is null) { return false; }
-        if (_latitude is null) { return false; }
+        //if (!IsLatitudeLongitudeDirty)
+        //{
+        //    //update coordinates based on name
+        //    await SetCoordinatesFromNameInput();
+        //    goto TryAgain; //possible infinite loop (todo count check maybe)
+        //}
 
         //if control reaches here than all good
         return true;
@@ -206,6 +202,9 @@
 
 
     //PRIVATE METHODS
+
+
+
 
     private async Task _OnAfterRender(bool firstRender)
     {
@@ -271,6 +270,8 @@
     /// </summary>
     private async Task AutoSetLocation()
     {
+        Console.WriteLine("Auto Setting Location");
+
         try
         {
             //try get location from Browser

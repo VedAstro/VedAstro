@@ -224,5 +224,17 @@
         }
     }
 
+    /// <summary>
+    /// time converted to the format used in OPEN API url
+    /// Time/ + 00:00/22/05/2023/+00:00
+    /// </summary>
+    /// <returns></returns>
+    public string GetUrlString()
+    {
+        //reconstruct into URL pattern
+        //00:00/22/05/2023/+00:00
+        var returnVal = $"{this.Hour}:{this.Minute}/{this.Date}/{this.Month}/{this.Year}/{this.TimeZone}";
+        return returnVal;
+    }
 
 }

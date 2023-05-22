@@ -1873,6 +1873,55 @@ namespace VedAstro.Library
                 }
             }
         }
+
+        public static string TimeZoneToLocation(string timeZone)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task<JObject> ReadServer(string receiverAddress)
+        {
+            //prepare the data to be sent
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+            //send the data on its way
+            using var client = new HttpClient();
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+            //return the raw reply to caller
+            var dataReturned = await response.Content.ReadAsStringAsync();
+            return JObject.Parse(dataReturned);
+        }
+
+
+        public static async Task<JObject> WriteServer(HttpMethod method, string receiverAddress, JToken? payloadJson = null)
+        {
+
+            //prepare the data to be sent
+            var httpRequestMessage = new HttpRequestMessage(method, receiverAddress);
+
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+            //add in payload if specified
+            if (payloadJson != null) { httpRequestMessage.Content = VedAstro.Library.Tools.JsontoHttpContent(payloadJson); }
+
+            //send the data on its way (wait forever no timeout)
+            using var client = new HttpClient();
+            client.Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite);
+
+            //send the data on its way
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+            //return the raw reply to caller
+            var dataReturned = await response.Content.ReadAsStringAsync();
+
+            //return data as JSON as expected from API 
+            return JObject.Parse(dataReturned);
+        }
     }
 
 

@@ -4,6 +4,8 @@
 @using Website.Pages
 @using System.Text.Json
 @using Library.API
+@using Newtonsoft.Json.Linq
+@using Tools = Library.API.Tools
 
 
 @*
@@ -160,6 +162,12 @@
 
         //ask server to prepare person list, will be available instantly later when user needs it
         await AppData.API.PreparePersonList();
+
+        //get location from IP
+        AppData.ClientLocation = await GeoLocation.FromIpAddress();
+
+        //log it
+        WebLogger.Data(AppData.ClientLocation.ToString());
 
         //other components can start loading now
         _mainPageInitDone = true;

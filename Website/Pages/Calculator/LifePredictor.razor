@@ -132,7 +132,7 @@ Know good and bad periods of your life years ahead.*@
 </div>
 
 <div class="gap-3 mt-3" style="max-width: @GR.W667px">
-    
+
     <ArticleBlock Title="Colors" IconName="noto-v1:artist-palette">
         <TextHTML>
             <p class="text-justify">
@@ -287,17 +287,13 @@ Know good and bad periods of your life years ahead.*@
     private async Task _OnAfterRenderAsync(bool firstRender)
     {
         //if parameter has been set then auto load person data as
-        //though person was selected and calculate was clicked
+        //though person was selected and don't do click cause we don't know where user whats to click
         if (PersonIdUrl != null && firstRender)
         {
             await _jsRuntime.ShowLoading();
 
             //programmatically select the person
             await _peopleSelectorBox.SetPerson(PersonIdUrl);
-
-            //start the same process as show button click
-            //todo loading box disappears here, needs fix
-            await _OnClickCalculate();
 
             //needed to see updates because any changes in OnAfterRender
             //have to be manually set
@@ -410,6 +406,12 @@ Know good and bad periods of your life years ahead.*@
 
         //pump data into chart
         await _eventsChartViewer.ShowChart(SelectedPerson, startTime, endTime, dasaEventTags);
+
+        //only set url if not already set
+        //note:this improves UX, as links can lead faster to data
+        PersonIdUrl = SelectedPerson.Id; //save local copy
+        _navigation.NavigateTo($"{PageRoute.LifePredictor}/{PersonIdUrl}"); //change url
+
 
         //mark page as ready to show results
         _isResultReady = true;

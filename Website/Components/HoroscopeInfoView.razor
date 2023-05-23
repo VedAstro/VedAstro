@@ -4,59 +4,31 @@
 
 
 @*render, but visibily hide untill ready to show data*@
-<div style="@(_isReadyToShow ? "" : "display: none;")">
+<div style="@(_isReadyToShow ? "" : "display: none;")" class="vstack gap-3">
 
 
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item active" role="presentation">
-            <button class="nav-link" id="aiPrediction-tab" data-bs-toggle="tab" data-bs-target="#aiPrediction" type="button" role="tab" aria-controls="aiPrediction" aria-selected="true">
-                <Icon IconName="flat-color-icons:electronics" />
-                <span class="mt-1">AI Prediction</span>
-               
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="references-tab" data-bs-toggle="tab" data-bs-target="#references" type="button" role="tab" aria-controls="references" aria-selected="false">
-                <Icon IconName="flat-color-icons:filing-cabinet" /><span class="mt-1">References</span>
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data" type="button" role="tab" aria-controls="data" aria-selected="false">
-                <Icon IconName="flat-color-icons:negative-dynamic" />
-                <span class="mt-1">Data</span>
-            </button>
-        </li>
-    </ul>
-    <div class="tab-content border" id="myTabContent">
+    <IconTitle Title="Prediction" IconName="maki:school" TitleHolder="h4" />
+    <AIPrediction @ref="_aiPrediction" />
 
-        @*AI PREDICTIONS CHART*@
-        <div class="tab-pane fade show active" id="aiPrediction" role="tabpanel" aria-labelledby="aiPrediction-tab">
-            <div class="vstack gap-3 p-4">
-                <AIPrediction @ref="_aiPrediction" />
-            </div>
-        </div>
+    <div class="my-2" />
 
-        @*MATCHED REFERENCE*@
-        <div class="tab-pane fade" id="references" role="tabpanel" aria-labelledby="references-tab">
-            <div class="vstack gap-2 p-2">
+    <IconTitle Title="Chart" IconName="maki:school" TitleHolder="h4" />
+    @*only show when all is loaded*@
+    <StrengthChart @ref="_strengthChart" />
 
-                @*LIST OF PREDICTIONS*@
-                <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
+    <div class="my-2" />
 
-            </div>
-        </div>
+    <IconTitle Title="Data" IconName="maki:school" TitleHolder="h4">
+        <ButtonRow>
+            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" />
+        </ButtonRow>
+    </IconTitle>
+    <PlanetHouseInfoViewer @ref="_planetHouseInfoViewer" />
 
-        @*ASTRO DATA CHART*@
-        <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
-            <div class="vstack gap-3">
-                @*only show when all is loaded*@
-                <StrengthChart @ref="_strengthChart" />
-                <hr>
-                <PlanetHouseInfoViewer @ref="_planetHouseInfoViewer" />
-            </div>
-        </div>
-    </div>
+    <div class="my-2" />
 
+    <IconTitle Title="Reference" IconName="maki:school" TitleHolder="h4" />
+    <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
 
 </div>
 

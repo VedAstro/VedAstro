@@ -1,0 +1,10 @@
+<svg version=""1.1""  xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"" >
+<style type=""text/css"">
+	.st0{{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}}
+	.st1{{font-family:'MyriadPro-Regular';}}
+	.st2{{font-size:4.9451px;}}
+</style>
+<line class=""st0"" x1=""0.55"" y1=""0"" x2=""0.55"" y2=""10.19""/>
+<text transform=""matrix(1 0 0 1 5.7812 6.8604)"" class=""st1 st2"">HOUSE {houseEvent.HouseNumber}</text>
+<line class=""st0"" x1=""29.51"" y1=""0"" x2=""29.51"" y2=""10.19""/>
+</svg>

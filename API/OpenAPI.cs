@@ -1,7 +1,11 @@
 ﻿using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.DurableTask;
+using Microsoft.DurableTask.Client;
 using Newtonsoft.Json.Linq;
+using iText.Commons.Bouncycastle.Cert.Ocsp;
+using Newtonsoft.Json;
 
 
 namespace API
@@ -18,6 +22,7 @@ namespace API
                 "get",
                 Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}/{propertyName}")]
             HttpRequestData incomingRequest,
+            [DurableClient] DurableTaskClient durableTaskClient,
             string locationName,
             string hhmmStr,
             string dateStr,
@@ -41,7 +46,7 @@ namespace API
 
 
             //send to sorter
-            return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, geoLocationResult, incomingRequest);
+            return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, geoLocationResult, incomingRequest, durableTaskClient);
         }
 
         [Function(nameof(Income2))]
@@ -49,6 +54,7 @@ namespace API
                 "get",
                 Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}")]
             HttpRequestData incomingRequest,
+            [DurableClient] DurableTaskClient durableTaskClient,
             string locationName,
             string hhmmStr,
             string dateStr,
@@ -70,7 +76,7 @@ namespace API
             var parsedTime = new Time(timeStr, geoLocation);
 
             //send to sorter (no property, set null)
-            return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest);
+            return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest, durableTaskClient);
         }
 
         [Function(nameof(Income3))]
@@ -78,6 +84,7 @@ namespace API
                 "get",
                 Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}")]
             HttpRequestData incomingRequest,
+            [DurableClient] DurableTaskClient durableTaskClient,
             string locationName,
             string hhmmStr,
             string dateStr,
@@ -98,13 +105,13 @@ namespace API
             var parsedTime = new Time(timeStr, geoLocation);
 
             //send to sorter (no property, set null)
-            return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, geoLocationResult, incomingRequest);
+            return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, geoLocationResult, incomingRequest, durableTaskClient);
         }
 
 
 
         private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
-            HttpRequestData incomingRequest)
+            HttpRequestData incomingRequest, DurableTaskClient durableTaskClient)
         {
 
             var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
@@ -170,10 +177,29 @@ namespace API
 
 
             //sky chart
+            var skyChartWidth = 750.0;
+            var skyChartHeight = 230.0;
             if (celestialBodyType.ToLower() == "skychart")
             {
-                //squeeze the Sky Juice!
-                var chart = SkyChartManager.GenerateChart(parsedTime, 750.0, 230.0);
+                //create unique id based on params to recognize future calls (caching)
+                var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}";
+
+                //check if cache exist
+                var isExist = await AzureCache.IsExist(callerId);
+
+                string chart;
+
+                if (!isExist)
+                {
+                    //squeeze the Sky Juice!
+                    chart = await SkyChartManager.GenerateChart(parsedTime, skyChartWidth, skyChartHeight);
+                    //save for future
+                    AzureCache.AddLarge(callerId, chart);
+                }
+                else
+                {
+                    chart = await AzureCache.GetLarge(callerId);
+                }
 
                 return APITools.SendSvgToCaller(chart, incomingRequest);
 
@@ -182,7 +208,47 @@ namespace API
             if (celestialBodyType.ToLower() == "skychartgif")
             {
                 //squeeze the Sky Juice!
-                var chart = SkyChartManager.GenerateChartGif(parsedTime, 750.0, 230.0);
+                var chart = await SkyChartManager.GenerateChartGif(parsedTime, skyChartWidth, skyChartHeight);
+
+                return APITools.SendGifToCaller(chart, incomingRequest);
+
+            }
+            if (celestialBodyType.ToLower() == "skychartgifasync")
+            {
+                //ready data needed to make chart
+                var chartSpecs = new JObject();
+                chartSpecs["Time"] = parsedTime.ToJson();
+                chartSpecs["Width"] = skyChartWidth;
+                chartSpecs["Height"] = skyChartHeight;
+                var chartSpecsStr = chartSpecs.ToString(Formatting.None); //convert to string else can't be parsed by JSON.NET
+
+                //create unique id based on params to recognize future calls (caching)
+                var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}";
+
+
+                //only process new if no ready and valid cache
+                //note : done with durable for easy caching
+                await APITools.CallIfInvalid(durableTaskClient, nameof(SkyChartAPI.GetSkyChartGIFAsync), callerId, chartSpecsStr);
+
+
+                //wait for completion and return the gif in one call
+                var notComplete = true;
+                OrchestrationMetadata taskRef;
+                while (notComplete)
+                {
+                    //check if complete
+                    taskRef = await durableTaskClient.GetInstanceAsync(callerId);
+
+                    //mark if need to wait or result is ready
+                    notComplete = !(taskRef.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
+
+                    //wait
+                    await Task.Delay(100);
+                }
+
+                taskRef = await durableTaskClient.GetInstanceAsync(callerId, true, CancellationToken.None);
+                var chart = taskRef.ReadOutputAs<byte[]>();
+
 
                 return APITools.SendGifToCaller(chart, incomingRequest);
 

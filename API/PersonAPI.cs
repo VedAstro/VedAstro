@@ -159,7 +159,7 @@ namespace API
                     await APITools.UpdatePersonRecord(updatedPerson);
 
                     //all is good baby
-                    return APITools.PassMessage(req);
+                    return APITools.PassMessageJson(req);
 
                 }
                 else
@@ -175,7 +175,7 @@ namespace API
                 await APILogger.Error(e, req);
 
                 //format error nicely to show user
-                return APITools.FailMessage(e, req);
+                return APITools.FailMessageJson(e, req);
             }
 
         }

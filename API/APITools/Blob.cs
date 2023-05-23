@@ -54,15 +54,10 @@ namespace API
 
             if (isFileExist)
             {
-                var downloadResult2 = (await blobClient.DownloadStreamingAsync()).Value.Content;
-
-                var xDoc = await XDocument.LoadAsync(downloadResult2, LoadOptions.None, CancellationToken.None);
-
                 BlobDownloadResult downloadResult = await blobClient.DownloadContentAsync();
                 string downloadedData = downloadResult.Content.ToString();
-                //Console.WriteLine("Downloaded data:", downloadedData);
-                return downloadedData;
 
+                return downloadedData;
             }
             else
             {

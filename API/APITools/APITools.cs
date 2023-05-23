@@ -2,11 +2,14 @@ using Azure;
 using Azure.Communication.Email;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
+using Svg;
 using System.Drawing;
 using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 using System.Xml.Linq;
+using Microsoft.DurableTask;
+using Microsoft.DurableTask.Client;
 using VedAstro.Library;
 
 namespace API
@@ -33,7 +36,11 @@ namespace API
         public const string SavedMatchReportList = "SavedMatchReportList.xml";
         public const string RecycleBinFile = "RecycleBin.xml";
         public const string UserDataListXml = "UserDataList.xml";
-        public const string HoroscopeDataListFile = "https://vedastro.org/data/HoroscopeDataList.xml"; //todo should be getting beta version
+
+        public const string
+            HoroscopeDataListFile =
+                "https://vedastro.org/data/HoroscopeDataList.xml"; //todo should be getting beta version
+
         public const string BlobContainerName = "vedastro-site-data";
         public static URL Url { get; set; } //instance of beta or stable URLs
 
@@ -58,7 +65,9 @@ namespace API
             response.Headers.Add("Content-Type", "text/xml"); //todo check if charset is needed
 
             //wrap data in nice tag
-            var finalXml = new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
+            var finalXml =
+                new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(
+                    SaveOptions.DisableFormatting); //no XML indent
 
             //place in response body
             response.WriteString(finalXml);
@@ -72,7 +81,9 @@ namespace API
             //response.Headers.Add("Content-Type", "text/xml"); //todo check if charset is needed
 
             //wrap data in nice tag
-            var finalXml = new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
+            var finalXml =
+                new XElement("Root", new XElement("Status", "Pass"), new XElement("Payload", payload)).ToString(
+                    SaveOptions.DisableFormatting); //no XML indent
 
             //place in response body
             response.WriteString(finalXml);
@@ -128,11 +139,18 @@ namespace API
             return response;
         }
 
-        public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) => MessageJson("Fail", payload, req);
-        public static HttpResponseData FailMessageJson(string payload, HttpRequestData req) => MessageJson("Fail", payload, req);
-        public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) => MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
+        public static HttpResponseData FailMessageJson(XElement payload, HttpRequestData req) =>
+            MessageJson("Fail", payload, req);
 
-        public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) => MessageJson("Pass", payload, req);
+        public static HttpResponseData FailMessageJson(string payload, HttpRequestData req) =>
+            MessageJson("Fail", payload, req);
+
+        public static HttpResponseData FailMessageJson(Exception payloadException, HttpRequestData req) =>
+            MessageJson("Fail", Tools.ExceptionToXml(payloadException), req);
+
+        public static HttpResponseData PassMessageJson(object payload, HttpRequestData req) =>
+            MessageJson("Pass", payload, req);
+
         public static HttpResponseData PassMessageJson(HttpRequestData req) => MessageJson<object>("Pass", null, req);
 
         public static HttpResponseData FailMessage(object payload, HttpRequestData req)
@@ -141,7 +159,9 @@ namespace API
             response.Headers.Add("Content-Type", "text/plain");
 
             //wrap data in nice tag
-            var finalXml = new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payload)).ToString(SaveOptions.DisableFormatting); //no XML indent
+            var finalXml =
+                new XElement("Root", new XElement("Status", "Fail"), new XElement("Payload", payload)).ToString(
+                    SaveOptions.DisableFormatting); //no XML indent
 
             //place in response body
             response.WriteString(finalXml);
@@ -149,7 +169,8 @@ namespace API
             return response;
         }
 
-        public static HttpResponseData FailMessage(Exception payloadException, HttpRequestData req) => FailMessage(Tools.ExceptionToXml(payloadException), req);
+        public static HttpResponseData FailMessage(Exception payloadException, HttpRequestData req) =>
+            FailMessage(Tools.ExceptionToXml(payloadException), req);
 
 
         //----------------------------------------FUNCTIONS---------------------------------------------
@@ -174,14 +195,16 @@ namespace API
             if (headerDictionary.ContainsKey(key) || headerDictionary.ContainsKey(key2))
             {
                 var headerValues = headerDictionary[key];
-                var ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()?.Split(new char[] { ':' }).FirstOrDefault();
+                var ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()
+                    ?.Split(new char[] { ':' }).FirstOrDefault();
                 var key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
 
                 //if key 1 fail , try key 2
                 if (!key1ParseResult)
                 {
                     headerValues = headerDictionary[key];
-                    ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()?.Split(new char[] { ':' }).FirstOrDefault();
+                    ipn = headerValues?.FirstOrDefault()?.Split(new char[] { ',' }).FirstOrDefault()
+                        ?.Split(new char[] { ':' }).FirstOrDefault();
                     key1ParseResult = IPAddress.TryParse(ipn, out ipAddress);
                 }
             }
@@ -194,9 +217,11 @@ namespace API
             IPAddress result = null;
             if (request.Headers.TryGetValues("X-Forwarded-For", out IEnumerable<string> values))
             {
-                var ipn = values.FirstOrDefault().Split(new char[] { ',' }).FirstOrDefault().Split(new char[] { ':' }).FirstOrDefault();
+                var ipn = values.FirstOrDefault().Split(new char[] { ',' }).FirstOrDefault().Split(new char[] { ':' })
+                    .FirstOrDefault();
                 IPAddress.TryParse(ipn, out result);
             }
+
             return result;
         }
 
@@ -204,7 +229,6 @@ namespace API
         /// Reads data stamped build version, if "beta" is found in that name, return true
         /// </summary>
         public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");
-
         public static async Task<JsonElement> ExtractDataFromRequestJsonNET(HttpRequestData request)
         {
             string jsonString = "";
@@ -220,9 +244,11 @@ namespace API
                 return root;
             }
             //todo better logging
-            catch (Exception e) { throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}"); }
+            catch (Exception e)
+            {
+                throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}");
+            }
         }
-
 
         public static async Task<JObject> ExtractDataFromRequestJson(HttpRequestData request)
         {
@@ -234,8 +260,6 @@ namespace API
 
             return parsedJson;
         }
-
-
 
         /// <summary>
         /// data received as json is converted to
@@ -253,9 +277,11 @@ namespace API
                 return parsedJson;
             }
             //todo better logging
-            catch (Exception e) { throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}"); }
+            catch (Exception e)
+            {
+                throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}");
+            }
         }
-
 
         public static Stream GenerateStreamFromString(string s)
         {
@@ -266,8 +292,6 @@ namespace API
             stream.Position = 0;
             return stream;
         }
-
-
 
         /// <summary>
         /// Get all charts belonging to owner ID
@@ -291,7 +315,10 @@ namespace API
                 .FirstOrDefault();
 
             //if user found, initialize xml and send that
-            if (foundUserXml != null) { return UserData.FromXml(foundUserXml); }
+            if (foundUserXml != null)
+            {
+                return UserData.FromXml(foundUserXml);
+            }
 
             //if no user found, make new user and send that
             else
@@ -323,7 +350,10 @@ namespace API
                 .FirstOrDefault();
 
             //if user found, initialize xml and send that
-            if (foundUserXml != null) { return UserData.FromXml(foundUserXml); }
+            if (foundUserXml != null)
+            {
+                return UserData.FromXml(foundUserXml);
+            }
 
             //if no user found, make new user and send that
             else
@@ -339,23 +369,34 @@ namespace API
             }
         }
 
-
-
         /// <summary>
         /// Gets any file at given url as string
         /// </summary>
         public static async Task<string> GetStringFileHttp(string url)
         {
-            //get the data sender
-            using var client = new HttpClient();
+            try
+            {
 
-            //load xml event data files before hand to be used quickly later for search
-            //get main horoscope prediction file (located in wwwroot)
-            var fileString = await client.GetStringAsync(url);
+                //get the data sender
+                using var client = new HttpClient();
 
-            return fileString;
+                client.Timeout = Timeout.InfiniteTimeSpan;
+
+                //load xml event data files before hand to be used quickly later for search
+                //get main horoscope prediction file (located in wwwroot)
+                var fileString = await client.GetStringAsync(url, CancellationToken.None);
+
+                return fileString;
+            }
+            catch (Exception e)
+            {
+                //todo better handling
+                Console.WriteLine($"FAILED TO GET FILE:/n{url}");
+                return "";
+            }
+
+
         }
-
 
         /// <summary>
         /// If start time and end time is same then will only return 1 time in list
@@ -366,7 +407,9 @@ namespace API
             var timeList = new List<Time>();
 
             //create list
-            for (var day = startTime; day.GetStdDateTimeOffset() <= endTime.GetStdDateTimeOffset(); day = day.AddHours(precisionInHours))
+            for (var day = startTime;
+                 day.GetStdDateTimeOffset() <= endTime.GetStdDateTimeOffset();
+                 day = day.AddHours(precisionInHours))
             {
                 timeList.Add(day);
             }
@@ -459,7 +502,8 @@ namespace API
             return response;
         }
 
-        public static void SendEmail(string fileName, string fileFormat, string receiverEmailAddress, Stream rawFileBytes)
+        public static void SendEmail(string fileName, string fileFormat, string receiverEmailAddress,
+            Stream rawFileBytes)
         {
             var emailClient = getEmailClient();
 
@@ -476,11 +520,12 @@ namespace API
 
             var emailMessage = new EmailMessage(
                 senderAddress: "contact@vedastro.org", // The email address of the domain registered with the Communication Services resource
-            recipientAddress: receiverEmailAddress,
-            content: emailContent);
+                recipientAddress: receiverEmailAddress,
+                content: emailContent);
 
             var attachmentName = fileNameFull;
-            var contentType = Tools.StringToMimeType(fileFormat) ?? MediaTypeNames.Text.Plain; //if fail just plain noodle will do
+            var contentType =
+                Tools.StringToMimeType(fileFormat) ?? MediaTypeNames.Text.Plain; //if fail just plain noodle will do
 
             var content = BinaryData.FromStream(rawFileBytes);
             var emailAttachment = new EmailAttachment(attachmentName, contentType, content);
@@ -499,7 +544,8 @@ namespace API
             catch (RequestFailedException ex)
             {
                 /// OperationID is contained in the exception message and can be used for troubleshooting purposes
-                Console.WriteLine($"Email send operation failed with error code: {ex.ErrorCode}, message: {ex.Message}");
+                Console.WriteLine(
+                    $"Email send operation failed with error code: {ex.ErrorCode}, message: {ex.Message}");
             }
 
             //-------------LOCAL FUNCS
@@ -507,10 +553,14 @@ namespace API
             EmailClient getEmailClient()
             {
                 //read the connection string
-                var connectionString = Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
+                var connectionString =
+                    Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
 
                 //raise alarm if no connection string
-                if (string.IsNullOrEmpty(connectionString)) { throw new Exception($"Failed to get connection string : AutoEmailerConnectString!"); }
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    throw new Exception($"Failed to get connection string : AutoEmailerConnectString!");
+                }
 
                 //sign in to email
                 return new EmailClient(connectionString);
@@ -528,7 +578,7 @@ namespace API
 
             //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
             //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-            var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId));//already logged in if true
+            var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId)); //already logged in if true
             var visitorProfileExists = visitorIdList.Any();
 
             if (loggedIn && visitorProfileExists)
@@ -543,7 +593,10 @@ namespace API
                     var updatedOwners = existingOwners.Replace(visitorId, userId);
 
                     //check if data is valid, should not match
-                    if (updatedOwners.Equals(existingOwners)) { throw new Exception("ID Swap Failed"); }
+                    if (updatedOwners.Equals(existingOwners))
+                    {
+                        throw new Exception("ID Swap Failed");
+                    }
 
                     //pump value into local updated list
                     var cleaned = Tools.RemoveWhiteSpace(updatedOwners); //remove any space crept it
@@ -560,7 +613,10 @@ namespace API
                 return true;
             }
             //false if no swap
-            else { return false; }
+            else
+            {
+                return false;
+            }
         }
 
         public static IEnumerable<LogItem> GetOnlineVisitors(XDocument visitorLogDocument)
@@ -580,7 +636,6 @@ namespace API
 
             return uniqueList;
         }
-
 
         /// <summary>
         /// Uses name and birth year to generate human readable ID for a new person record
@@ -610,7 +665,8 @@ namespace API
                 noncedId += nonceCount;
                 nonceCount++; //increment for next if needed
                 //try again
-                idIsSafe = await CheckBothCase(noncedId); ; //anybody with same id found?
+                idIsSafe = await CheckBothCase(noncedId);
+                ; //anybody with same id found?
                 goto TryAgain;
             }
 
@@ -671,20 +727,17 @@ namespace API
             return finalPayloadJson;
         }
 
-
         public static string GetHeaderValue(HttpResponseData request, string headerName)
         {
             IEnumerable<string> list;
             return request.Headers.TryGetValues(headerName, out list) ? list.FirstOrDefault() : null;
         }
 
-
         public static object GetHeaderValue(HttpResponseMessage request, string headerName)
         {
             IEnumerable<string> list;
             return request.Headers.TryGetValues(headerName, out list) ? list.FirstOrDefault() : null;
         }
-
 
         public static HttpResponseData SendSvgToCaller(string chartContentSvg, HttpRequestData incomingRequest)
         {
@@ -695,6 +748,7 @@ namespace API
             response.WriteString(chartContentSvg);
             return response;
         }
+
         public static HttpResponseData SendGifToCaller(byte[] gif, HttpRequestData incomingRequest)
         {
             //send image back to caller
@@ -704,7 +758,6 @@ namespace API
             response.WriteBytes(gif);
             return response;
         }
-
 
         //gets the exact width of a text based on Font size & type
         //used to generate nicely fitting background for text
@@ -721,14 +774,16 @@ namespace API
             SizeF size;
             using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
             {
-                size = graphics.MeasureString(textInput, new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
+                size = graphics.MeasureString(textInput,
+                    new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
             }
+
             var widthPx = Math.Round(size.Width);
 
             return widthPx;
         }
 
-        public static string GetCallerId(string userId,string visitorId )
+        public static string GetCallerId(string userId, string visitorId)
         {
             var IsLoggedIn = userId != "101";
             if (IsLoggedIn)
@@ -743,5 +798,55 @@ namespace API
 
         }
 
+        /// <summary>
+        /// Gets a SVG icon file direct from Illustrator, removes not needed
+        /// attributes and makes it ready to be injected into another SVG
+        /// </summary>
+        public static async Task<string> GetSvgIconHttp(string svgFileUrl, double width, double height)
+        {
+
+            //get raw icon as SVG (if exist)
+            var svgIconString = await APITools.GetStringFileHttp(svgFileUrl);
+            if (!string.IsNullOrEmpty(svgIconString))
+            {
+                //remove XML file header
+
+                var parsedIcon = Svg.SvgDocument.FromSvg<Svg.SvgDocument>(svgIconString);
+
+                //set custom width & height
+                parsedIcon.Height = (SvgUnit)width;
+                parsedIcon.Width = (SvgUnit)height;
+
+
+                var final = parsedIcon.GetXML();
+
+                //<?xml version="1.0" encoding="utf-8"?>
+                final = final.Replace("<?xml version=\"1.0\" encoding=\"utf-8\"?>", "");
+                //<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+                final = final.Replace("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">", "");
+
+                return final;
+            }
+
+            //if control reaches here than no file
+            return "";
+
+        }
+
+        /// <summary>
+        /// Will call only if invalid, else will not call
+        /// </summary>
+        public static async Task CallIfInvalid(DurableTaskClient durableTaskClient,  string methodName, string callerId, string inputString)
+        {
+            OrchestrationMetadata? cc = await durableTaskClient.GetInstanceAsync(callerId);
+            var noValidCache = !(cc.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
+            if (noValidCache)
+            {
+                //start processing
+                var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
+                //squeeze the Sky Juice!
+                var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(nameof(SkyChartAPI.GetSkyChartGIFAsync), inputString, options, CancellationToken.None); //should match caller ID
+            }
+        }
     }
 }

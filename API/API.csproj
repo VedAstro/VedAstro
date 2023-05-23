@@ -13,6 +13,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Communication.Email" Version="1.0.0" />
+		<PackageReference Include="Azure.Data.Tables" Version="12.8.0" />
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
 		<PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
 		<PackageReference Include="itext7" Version="8.0.0" />

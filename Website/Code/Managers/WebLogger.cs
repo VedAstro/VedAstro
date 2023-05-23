@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.JSInterop;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Website
 {
@@ -181,6 +182,22 @@ namespace Website
 
             //send to server for storage
             await SendLogToServer(visitorXml);
+        }
+
+        /// <summary>
+        /// called from JS to have generate payload for data log
+        /// used when JS side needs to talk to API with same payload
+        /// </summary>
+        [JSInvokable]
+        public static async Task<string> GetDataLogPayload(string dataValue)
+        {
+            //get basic visitor data
+            var visitorXml = await GetVisitorDataXml();
+
+            //add in button click data
+            visitorXml.Add(BranchXml, SourceXml, new XElement("Data", dataValue), Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+
+            return visitorXml.ToString();
         }
 
 

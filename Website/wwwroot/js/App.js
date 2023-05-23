@@ -24,6 +24,9 @@ window.PDFOptions = {
 };
 
 
+
+
+
 //SOFT DATA
 //initialize separate worker thread to handle all logging
 //goes first to make sure logger is ready to catch everybody else
@@ -69,7 +72,9 @@ const options = {
 //makes dark mode toggle available to Blazor
 window.DarkMode = new Darkmode(options);
 
-
+//eyes on page logger
+window.MinutesPassed = 0.5;
+setInterval(EyesOnPageLogger, 30 * 1000);
 
 
 
@@ -79,9 +84,39 @@ window.DarkMode = new Darkmode(options);
 //█▀ █▀█ █▀▀ █▀▀ █ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ █▀
 //▄█ █▀▀ ██▄ █▄▄ █ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ▄█
 
+
+
+//simple log on time spent on page analytic
+//track time spent to read page
+async function EyesOnPageLogger() {
+
+    //based on page make count of minutes
+    var onSamePage = window.MinutedPassedPage == window.location.href;
+    if (onSamePage) {
+        //increment time on page
+        window.MinutesPassed = window.MinutesPassed + 0.5;
+        window.MinutedPassedPage = window.location.href; //save page
+    } else {
+        //reset since new page
+        window.MinutedPassedPage = 0.5;
+        window.MinutedPassedPage = window.location.href; //save page
+    }
+
+    //current page url
+    var msg = `EYES ON PAGE ${window.MinutesPassed} MIN`;
+
+    //get log payload from blazor
+    var payload = await DotNet.invokeMethodAsync('Website', 'GetDataLogPayload', msg);
+
+    console.log(payload);
+
+    //send a copy to server for logging
+    window.LogThread.postMessage(payload);
+}
+
+
 //makes sure every function needed by blazor is ready to be called
 //this allows full scale gonzo development pattern
-
 window.GetInteropFuncList = () => {
     var list = Object.keys(Interop);
     return list;
@@ -96,7 +131,7 @@ function SmallScreenGreetingMessage() {
 
     if (isTooSmall) {
         //show special message
-        Swal.fire('Small Screen Warning!', 'This site might not work on such a <strong>small screen</strong>. Don\'t say we didn\'t warn you.', 'warning'); 
+        Swal.fire('Small Screen Warning!', 'This site might not work on such a <strong>small screen</strong>. Don\'t say we didn\'t warn you.', 'warning');
     }
 }
 

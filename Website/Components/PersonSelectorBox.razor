@@ -111,15 +111,19 @@ KEEP IT REAL
         get => _selectedPersonId;
         set
         {
-            //this stops update loops
-            if (_selectedPersonId == value) return;
 
-            //log this, don't await to reduce lag
-            WebLogger.Data($"Selected Person:{value}");
+            if (!(string.IsNullOrEmpty(value)))
+            {
+                //this stops update loops
+                if (_selectedPersonId == value) return;
 
-            _selectedPersonId = value;
-            //update value in parent page (for parent to listen in)
-            SelectedPersonIdChanged.InvokeAsync(value);
+                //log this, don't await to reduce lag
+                WebLogger.Data($"Selected Person:{value}");
+
+                _selectedPersonId = value;
+                //update value in parent page (for parent to listen in)
+                SelectedPersonIdChanged.InvokeAsync(value);
+            }
         }
     }
 

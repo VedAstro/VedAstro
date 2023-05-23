@@ -198,15 +198,17 @@ namespace API
             if (celestialBodyType.ToLower() == "skychartgif")
             {
                 //create unique id based on params to recognize future calls (caching)
-                var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}";
+                var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}GIF";
 
+                //var chartGif = await SkyChartManager.GenerateChartGif(parsedTime, skyChartWidth, skyChartHeight);
+                
                 //squeeze the Sky Juice!
                 var chartTask = () => SkyChartManager.GenerateChartGif(parsedTime, skyChartWidth, skyChartHeight);
 
                 //get chart if in cache, else make and save in cache
                 var chartGif = await APITools.CacheExecuteTask2(chartTask, callerId, MediaTypeNames.Image.Gif);
 
-                return APITools.SendGifToCaller(chartGif, incomingRequest, MediaTypeNames.Image.Gif);
+                return APITools.SendFileToCaller(chartGif, incomingRequest, MediaTypeNames.Image.Gif);
 
             }
             if (celestialBodyType.ToLower() == "skychartgifasync")

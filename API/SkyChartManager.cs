@@ -161,26 +161,23 @@ namespace API
             }
 
             var chartSvglist = new List<string>();
-            await Parallel.ForEachAsync(xxList, Body);
+            //await Parallel.ForEachAsync(xxList, Body);
+
+            foreach (var timesSlice in timeSliceList)
+            {
+
+                //create unique id based on params to recognize future calls (caching)
+                var callerId = $"{timesSlice.GetHashCode()}{width}{height}";
+
+                Func<Task<string>> generateChart = () => SkyChartManager.GenerateChart(timesSlice, width, height);
+
+                var chart = await APITools.CacheExecuteTask(generateChart, callerId);
+                chartSvglist.Add(chart);
 
 
-
-            //foreach (var timesSlice in timeSliceList)
-            //{
-
-            //    //create unique id based on params to recognize future calls (caching)
-            //    var callerId = $"{timesSlice.GetHashCode()}{width}{height}";
-
-            //    Func<Task<string>> generateChart = () => SkyChartManager.GenerateChart(timesSlice, width, height);
-
-            //    var chart = await APITools.CacheExecuteTask(generateChart, callerId);
-            //    chartSvglist.Add(chart);
-
-
-
-            //    //var xss = await GenerateChart(timesSlice, width, height);
-            //    //chartSvglist.Add(xss);
-            //}
+                //var xss = await GenerateChart(timesSlice, width, height);
+                //chartSvglist.Add(xss);
+            }
 
 
             //STAGE 2: Convert SVG to PNG frames
@@ -241,7 +238,7 @@ namespace API
             var ratio = widthPx / 360;
             //var startOfStar = zodiacEvent.StartX / ratio; //position in final x where zodiac starts
             var final = $@"
-                           <g transform=""scale({ratio}) translate(0,{yAxis})"">
+                           <g id=""ZodiacRuler"" transform=""scale({ratio}) translate(0,{yAxis})"">
                             {svgIconHttp}
                            </g>
                         ";

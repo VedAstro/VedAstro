@@ -751,11 +751,11 @@ namespace API
             return response;
         }
 
-        public static HttpResponseData SendGifToCaller(byte[] gif, HttpRequestData incomingRequest)
+        public static HttpResponseData SendFileToCaller(byte[] gif, HttpRequestData incomingRequest, string mimeType)
         {
             //send image back to caller
             var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "image/gif");
+            response.Headers.Add("Content-Type", mimeType);
             //place in response body
             response.WriteBytes(gif);
             return response;
@@ -765,7 +765,7 @@ namespace API
         /// SPECIAL METHOD made to allow files straight from blob to be sent to caller
         /// as fast as possible
         /// </summary>
-        public static HttpResponseData SendGifToCaller(BlobClient fileBlobClient, HttpRequestData incomingRequest, string mimeType)
+        public static HttpResponseData SendFileToCaller(BlobClient fileBlobClient, HttpRequestData incomingRequest, string mimeType)
         {
             //send image back to caller
             var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
@@ -835,9 +835,9 @@ namespace API
                 var parsedIcon = Svg.SvgDocument.FromSvg<Svg.SvgDocument>(svgIconString);
 
                 //set custom width & height
-                parsedIcon.Height = (SvgUnit)width;
-                parsedIcon.Width = (SvgUnit)height;
-
+                parsedIcon.Height = (SvgUnit)height;
+                parsedIcon.Width = (SvgUnit)width;
+                //parsedIcon.ViewBox = new SvgViewBox(0, 0, (float)width, (float)height);
 
                 var final = parsedIcon.GetXML();
 

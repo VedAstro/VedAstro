@@ -117,18 +117,6 @@ namespace VedAstro.Library
                     ? (longitude + Angle.Degrees360) - birthAyanamsa
                     : longitude - birthAyanamsa;
 
-                //Calculates Kethu with inital values from Rahu
-                if (planetName == PlanetName.Ketu)
-                {
-                    //TODO unsure code, if below should u add 360 as done above instead of changing minus order?
-#if DEBUG_LOG
-                    LibLogger.Debug("!!!Running untested code!!! in GetPlanetNirayanaLongitude");
-#endif
-                    returnValue = returnValue < Angle.Degrees180
-                        ? Angle.Degrees180 - returnValue
-                        : returnValue - Angle.Degrees180;
-                }
-
 
                 return returnValue;
             }

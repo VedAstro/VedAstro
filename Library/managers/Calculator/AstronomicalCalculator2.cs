@@ -113,7 +113,17 @@ namespace VedAstro.Library
                 int ret_flag = ephemeris.swe_calc(jul_day_ET, swissPlanet, iflag, results, ref err_msg);
 
                 //data in results at index 0 is longitude
-                return new Angle(degrees: results[0]);
+                var planetSayanaLongitude = new Angle(degrees: results[0]);
+
+                //if ketu add 180 to rahu
+                if (planetName == PlanetName.Ketu)
+                {
+                    var x = planetSayanaLongitude + Angle.Degrees180;
+                    planetSayanaLongitude = x.Expunge360();
+                }
+
+
+                return planetSayanaLongitude;
 
             }
 

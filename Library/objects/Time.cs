@@ -64,13 +64,22 @@ namespace VedAstro.Library
         /// </summary>
         public Time(string stdDateTimeText, GeoLocation geoLocation)
         {
-            var stdDateTime = DateTimeOffset.ParseExact(stdDateTimeText, Time.DateTimeFormat, null);
+            try
+            {
+                var stdDateTime = DateTimeOffset.ParseExact(stdDateTimeText, Time.DateTimeFormat, null);
 
-            //store std time
-            _stdTime = stdDateTime;
+                //store std time
+                _stdTime = stdDateTime;
 
-            //store geo location for later use
-            _geoLocation = geoLocation;
+                //store geo location for later use
+                _geoLocation = geoLocation;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+               //return Empty;
+            }
         }
 
         /// <summary>

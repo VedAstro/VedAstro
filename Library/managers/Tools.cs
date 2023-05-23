@@ -1233,12 +1233,11 @@ namespace VedAstro.Library
             }
             else if (planetName == PlanetName.Rahu)
             {
-                planet = SwissEph.SE_MEAN_NODE;
+                planet = SwissEph.SE_TRUE_NODE;
             }
             else if (planetName == PlanetName.Ketu)
             {
-                //TODO CHECK HERE + REF BV RAMAN ADD 180 TO ketu to get rahu
-                planet = SwissEph.SE_MEAN_NODE;
+                planet = SwissEph.SE_TRUE_NODE; //ask for rahu values then add 180 later
             }
 
             return planet;

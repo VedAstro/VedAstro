@@ -854,21 +854,21 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Will call only if invalid, else will not call
-        /// </summary>
-        public static async Task CallIfInvalid(DurableTaskClient durableTaskClient, string methodName, string callerId, string inputString)
-        {
-            OrchestrationMetadata? cc = await durableTaskClient.GetInstanceAsync(callerId);
-            var noValidCache = !(cc.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
-            if (noValidCache)
-            {
-                //start processing
-                var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
-                //squeeze the Sky Juice!
-                var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(nameof(SkyChartAPI.GetSkyChartGIFAsync), inputString, options, CancellationToken.None); //should match caller ID
-            }
-        }
+        ///// <summary>
+        ///// Will call only if invalid, else will not call
+        ///// </summary>
+        //public static async Task CallIfInvalid(DurableTaskClient durableTaskClient, string methodName, string callerId, string inputString)
+        //{
+        //    OrchestrationMetadata? cc = await durableTaskClient.GetInstanceAsync(callerId);
+        //    var noValidCache = !(cc.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
+        //    if (noValidCache)
+        //    {
+        //        //start processing
+        //        var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
+        //        //squeeze the Sky Juice!
+        //        var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(nameof(SkyChartAPI.GetSkyChartGIFAsync), inputString, options, CancellationToken.None); //should match caller ID
+        //    }
+        //}
 
         public static async Task<T> CacheExecuteTask<T>(Func<Task<T>> generateChart, string callerId, string mimeType = "")
         {

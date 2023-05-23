@@ -184,10 +184,13 @@ namespace API
 
 
             //STAGE 2: Convert SVG to PNG frames
-            var pngFrameListByteTransparent = chartSvglist.AsParallel().Select(x => SvgConverter.Svg2Png(x, (int)width, (int)height)).ToList();
-            var pngFrameLisWhite = pngFrameListByteTransparent.AsParallel().Select(x => TransparencyToWhite((Bitmap)x, ImageFormat.Png)).ToList();
-            var pngFrameList = pngFrameLisWhite.AsParallel().Select(x => ByteArrayToImage(x)).ToList();
+            var pngFrameListByteTransparent = chartSvglist.Select(x => SvgConverter.Svg2Png(x, (int)width, (int)height)).ToList();
+            var pngFrameLisWhite = pngFrameListByteTransparent.Select(x => TransparencyToWhite((Bitmap)x, ImageFormat.Png)).ToList();
+            var pngFrameList = pngFrameLisWhite.Select(x => ByteArrayToImage(x)).ToList();
 
+            //order correctly according to time
+            //because parallel makes it mixed
+            //var ordered = pngFrameList.OrderBy(x=>x)
 
             //STAGE 3: Make GIF from PNGs
             AnimatedGifEncoder e = new AnimatedGifEncoder();

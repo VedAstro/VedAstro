@@ -8,8 +8,10 @@ using System.Net;
 using System.Net.Mime;
 using System.Text.Json;
 using System.Xml.Linq;
+using Azure.Storage.Blobs;
 using Microsoft.DurableTask;
 using Microsoft.DurableTask.Client;
+using Microsoft.Extensions.Azure;
 using VedAstro.Library;
 
 namespace API
@@ -759,6 +761,24 @@ namespace API
             return response;
         }
 
+        /// <summary>
+        /// SPECIAL METHOD made to allow files straight from blob to be sent to caller
+        /// as fast as possible
+        /// </summary>
+        public static HttpResponseData SendGifToCaller(BlobClient fileBlobClient, HttpRequestData incomingRequest, string mimeType)
+        {
+            //send image back to caller
+            var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            response.Body = fileBlobClient.OpenRead();
+            return response;
+        }
+
         //gets the exact width of a text based on Font size & type
         //used to generate nicely fitting background for text
         public static double GetTextWidthPx(string textInput)
@@ -801,6 +821,7 @@ namespace API
         /// <summary>
         /// Gets a SVG icon file direct from Illustrator, removes not needed
         /// attributes and makes it ready to be injected into another SVG
+        /// no file return nothing
         /// </summary>
         public static async Task<string> GetSvgIconHttp(string svgFileUrl, double width, double height)
         {
@@ -836,7 +857,7 @@ namespace API
         /// <summary>
         /// Will call only if invalid, else will not call
         /// </summary>
-        public static async Task CallIfInvalid(DurableTaskClient durableTaskClient,  string methodName, string callerId, string inputString)
+        public static async Task CallIfInvalid(DurableTaskClient durableTaskClient, string methodName, string callerId, string inputString)
         {
             OrchestrationMetadata? cc = await durableTaskClient.GetInstanceAsync(callerId);
             var noValidCache = !(cc.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
@@ -861,7 +882,7 @@ namespace API
                 //squeeze the Sky Juice!
                 chart = await generateChart.Invoke();
                 //save for future
-                AzureCache.AddLarge<T>(callerId, chart, mimeType);
+                var blobClient = await AzureCache.AddLarge<T>(callerId, chart, mimeType);
             }
             else
             {
@@ -869,6 +890,28 @@ namespace API
             }
 
             return chart;
+        }
+
+        public static async Task<BlobClient> CacheExecuteTask2(Func<Task<byte[]>> generateChart, string callerId, string mimeType = "")
+        {
+            //check if cache exist
+            var isExist = await AzureCache.IsExist(callerId);
+
+            BlobClient chartBlobClient;
+
+            if (!isExist)
+            {
+                //squeeze the Sky Juice!
+                var chartBytes = await generateChart.Invoke();
+                //save for future
+                chartBlobClient = await AzureCache.AddLarge<byte[]>(callerId, chartBytes, mimeType);
+            }
+            else
+            {
+                chartBlobClient = await AzureCache.GetLarge<BlobClient>(callerId);
+            }
+
+            return chartBlobClient;
         }
     }
 }

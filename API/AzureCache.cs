@@ -96,6 +96,11 @@ namespace API
                 await blobClient.DownloadToAsync(ms);
                 return ms.ToArray();
             }
+            else if (typeof(T) == typeof(BlobClient))
+            {
+               
+                return blobClient;
+            }
 
             throw new Exception("END OF LINE!");
 
@@ -136,27 +141,22 @@ namespace API
 
 
         //}
-        public static void AddLarge<T>(string callerId, T value, string mimeType = "")
+        public static async Task<BlobClient> AddLarge<T>(string callerId, T value, string mimeType = "")
         {
-            BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
+             var blobClient = blobContainerClient.GetBlobClient(callerId);
 
             if (typeof(T) == typeof(string))
             {
-                //set UTF 8 so when taking out will go fine
+                //NOTE:set UTF 8 so when taking out will go fine
                 var content = Encoding.UTF8.GetBytes(value as string ?? string.Empty);
-                using (var ms = new MemoryStream(content))
-                {
-                    blobClient.Upload(ms);
-                }
-
+                using var ms = new MemoryStream(content);
+                await blobClient.UploadAsync(ms, overwrite: true);
             }
             else if (typeof(T) == typeof(byte[]))
             {
                 var vv = value as byte[];
-                using (var ms = new MemoryStream(vv, false))
-                {
-                    blobClient.Upload(ms);
-                }
+                using var ms = new MemoryStream(vv, false);
+                await blobClient.UploadAsync(ms, overwrite:true);
 
                 //var xx = new BinaryData(value, JsonSerializerOptions.Default);
                 //blobClient.Upload(xx);
@@ -167,15 +167,15 @@ namespace API
             {
                 //auto correct content type from wrongly set "octet/stream"
                 var blobHttpHeaders = new BlobHttpHeaders { ContentType = mimeType };
-                blobClient.SetHttpHeaders(blobHttpHeaders);
+                await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
             }
 
+            //set as hot since file should be living for long
+            //note : can be changed to cool once in stable production,
+            //where cache is expected to live long
+            await blobClient.SetAccessTierAsync(AccessTier.Hot);
 
-            //note using binary data needs extra conversion back to UTF8 on way out
-            //var xx = new BinaryData(value, JsonSerializerOptions.Default);
-            //blobClient.Upload(xx);
-
-            blobClient.SetAccessTier(AccessTier.Hot);
+            return blobClient;
 
         }
     }

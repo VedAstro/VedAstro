@@ -1,4 +1,5 @@
-﻿using VedAstro.Library;
+﻿using System.Net.Mime;
+using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask;
@@ -184,22 +185,9 @@ namespace API
                 //create unique id based on params to recognize future calls (caching)
                 var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}";
 
-                //check if cache exist
-                var isExist = await AzureCache.IsExist(callerId);
+                Func<Task<string>> generateChart = () => SkyChartManager.GenerateChart(parsedTime, skyChartWidth, skyChartHeight);
 
-                string chart;
-
-                if (!isExist)
-                {
-                    //squeeze the Sky Juice!
-                    chart = await SkyChartManager.GenerateChart(parsedTime, skyChartWidth, skyChartHeight);
-                    //save for future
-                    AzureCache.AddLarge(callerId, chart);
-                }
-                else
-                {
-                    chart = await AzureCache.GetLarge(callerId);
-                }
+                var chart = await APITools.CacheExecuteTask(generateChart, callerId);
 
                 return APITools.SendSvgToCaller(chart, incomingRequest);
 
@@ -207,8 +195,14 @@ namespace API
 
             if (celestialBodyType.ToLower() == "skychartgif")
             {
+                //create unique id based on params to recognize future calls (caching)
+                var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}";
+
                 //squeeze the Sky Juice!
-                var chart = await SkyChartManager.GenerateChartGif(parsedTime, skyChartWidth, skyChartHeight);
+                var chartTask = () => SkyChartManager.GenerateChartGif(parsedTime, skyChartWidth, skyChartHeight);
+
+                var chart = await APITools.CacheExecuteTask<byte[]>(chartTask, callerId, MediaTypeNames.Image.Gif);
+
 
                 return APITools.SendGifToCaller(chart, incomingRequest);
 

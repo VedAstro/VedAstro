@@ -848,5 +848,27 @@ namespace API
                 var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(nameof(SkyChartAPI.GetSkyChartGIFAsync), inputString, options, CancellationToken.None); //should match caller ID
             }
         }
+
+        public static async Task<T> CacheExecuteTask<T>(Func<Task<T>> generateChart, string callerId, string mimeType = "")
+        {
+            //check if cache exist
+            var isExist = await AzureCache.IsExist(callerId);
+
+            T chart;
+
+            if (!isExist)
+            {
+                //squeeze the Sky Juice!
+                chart = await generateChart.Invoke();
+                //save for future
+                AzureCache.AddLarge<T>(callerId, chart, mimeType);
+            }
+            else
+            {
+                chart = await AzureCache.GetLarge<T>(callerId);
+            }
+
+            return chart;
+        }
     }
 }

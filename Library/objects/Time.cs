@@ -506,7 +506,7 @@ namespace VedAstro.Library
         public override int GetHashCode()
         {
             //combine all the hash of the fields
-            var hash1 = _stdTime.GetHashCode();
+            var hash1 = (int)_stdTime.Ticks;
             var hash2 = _geoLocation.GetHashCode();
 
             return hash1 + hash2;

@@ -2,7 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
+using System.Reflection.Metadata;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
@@ -10,6 +13,7 @@ using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using VedAstro.Library;
 
 namespace API
 {
@@ -68,12 +72,33 @@ namespace API
         }
 
 
-        public static async Task<string> GetLarge(string callerId)
+        //public static async Task<string> GetLarge(string callerId)
+        //{
+        //    BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
+
+        //    var data = await APITools.BlobClientToString(blobClient);
+        //    return data;
+        //}
+        public static async Task<dynamic> GetLarge<T>(string callerId)
         {
             BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
 
-            var data = await APITools.BlobClientToString(blobClient);
-            return data;
+
+            if (typeof(T) == typeof(string))
+            {
+                var data = await APITools.BlobClientToString(blobClient);
+                return data;
+
+            }
+            else if (typeof(T) == typeof(byte[]))
+            {
+                using var ms = new MemoryStream();
+                await blobClient.DownloadToAsync(ms);
+                return ms.ToArray();
+            }
+
+            throw new Exception("END OF LINE!");
+
         }
 
         public static string Get(string callerId)
@@ -100,20 +125,57 @@ namespace API
             tableClient.AddEntity(tableEntity);
 
         }
-        public static void AddLarge(string callerId, string value)
-        {
+        //public static void AddLarge(string callerId, string value)
+        //{
+        //    BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
 
+        //    var xx = new BinaryData(value, JsonSerializerOptions.Default);
+        //    blobClient.Upload(xx);
+
+        //    blobClient.SetAccessTier(AccessTier.Hot);
+
+
+        //}
+        public static void AddLarge<T>(string callerId, T value, string mimeType = "")
+        {
             BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
 
-
-            var content = Encoding.UTF8.GetBytes(value);
-            using (var ms = new MemoryStream(content))
+            if (typeof(T) == typeof(string))
             {
-                blobClient.Upload(ms);
+                //set UTF 8 so when taking out will go fine
+                var content = Encoding.UTF8.GetBytes(value as string ?? string.Empty);
+                using (var ms = new MemoryStream(content))
+                {
+                    blobClient.Upload(ms);
+                }
+
+            }
+            else if (typeof(T) == typeof(byte[]))
+            {
+                var vv = value as byte[];
+                using (var ms = new MemoryStream(vv, false))
+                {
+                    blobClient.Upload(ms);
+                }
+
+                //var xx = new BinaryData(value, JsonSerializerOptions.Default);
+                //blobClient.Upload(xx);
             }
 
-            blobClient.SetAccessTier(AccessTier.Hot);
+            //if specified
+            if (!(string.IsNullOrEmpty(mimeType)))
+            {
+                //auto correct content type from wrongly set "octet/stream"
+                var blobHttpHeaders = new BlobHttpHeaders { ContentType = mimeType };
+                blobClient.SetHttpHeaders(blobHttpHeaders);
+            }
 
+
+            //note using binary data needs extra conversion back to UTF8 on way out
+            //var xx = new BinaryData(value, JsonSerializerOptions.Default);
+            //blobClient.Upload(xx);
+
+            blobClient.SetAccessTier(AccessTier.Hot);
 
         }
     }

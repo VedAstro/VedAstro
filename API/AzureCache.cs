@@ -44,7 +44,7 @@ namespace API
             var storageConnectionString = Environment.GetEnvironmentVariable("API_STORAGE"); //vedastro-api-data
 
             //get image from storage
-             blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+            blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
 
 
         }
@@ -63,12 +63,21 @@ namespace API
                 return true;
             }
 
+            return IsExistTable(callerId);
+        }
+
+        /// <summary>
+        /// checks only in table
+        /// </summary>
+        private static bool IsExistTable(string callerId)
+        {
             //else continue to look in table
 
             Pageable<TableEntity> queryResultsFilter = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{callerId}'");
 
             //if more exist there will be something found
             return queryResultsFilter.Any();
+
         }
 
 
@@ -81,43 +90,55 @@ namespace API
         //}
         public static async Task<dynamic> GetLarge<T>(string callerId)
         {
-            BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
+
+            //check if table or blob
+            var dataInTable = IsExistTable(callerId);
+            if (dataInTable)
+            {
+                var yyy = GetDataFromTable(callerId);
+                return yyy;
+            }
+            else
+            {
+                BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
 
 
-            if (typeof(T) == typeof(string))
-            {
-                var data = await APITools.BlobClientToString(blobClient);
-                return data;
+                if (typeof(T) == typeof(string))
+                {
+                    var data = await APITools.BlobClientToString(blobClient);
+                    return data;
 
+                }
+                else if (typeof(T) == typeof(byte[]))
+                {
+                    using var ms = new MemoryStream();
+                    await blobClient.DownloadToAsync(ms);
+                    return ms.ToArray();
+                }
+                else if (typeof(T) == typeof(BlobClient))
+                {
+
+                    return blobClient;
+                }
             }
-            else if (typeof(T) == typeof(byte[]))
-            {
-                using var ms = new MemoryStream();
-                await blobClient.DownloadToAsync(ms);
-                return ms.ToArray();
-            }
-            else if (typeof(T) == typeof(BlobClient))
-            {
-               
-                return blobClient;
-            }
+
 
             throw new Exception("END OF LINE!");
 
         }
 
-        public static string Get(string callerId)
+        public static object GetDataFromTable(string callerId)
         {
-            Pageable<TableEntity> queryResultsFilter = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{callerId}'");
+            var queryResultsFilter = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{callerId}'");
 
             //if more exist there will be something found
             var cacheRow = queryResultsFilter.FirstOrDefault();
-            var cachedData = cacheRow?.GetString("Value") ?? "EMPTY!";
+            var cachedData = cacheRow?["Value"] ?? "EMPTY!";
 
             return cachedData;
         }
 
-        public static void Add(string callerId, string value)
+        public static void AddDataToTable(string callerId, string value)
         {
 
             //create the data
@@ -143,20 +164,33 @@ namespace API
         //}
         public static async Task<BlobClient> AddLarge<T>(string callerId, T value, string mimeType = "")
         {
-             var blobClient = blobContainerClient.GetBlobClient(callerId);
+            var blobClient = blobContainerClient.GetBlobClient(callerId);
 
             if (typeof(T) == typeof(string))
             {
-                //NOTE:set UTF 8 so when taking out will go fine
-                var content = Encoding.UTF8.GetBytes(value as string ?? string.Empty);
-                using var ms = new MemoryStream(content);
-                await blobClient.UploadAsync(ms, overwrite: true);
+                var stringToSave = value as string ?? string.Empty;
+
+                //based on string length place at in table or blob
+                if (stringToSave.Length < 200)
+                {
+                    AddDataToTable(callerId, stringToSave);
+                }
+                //if text is long then off it goes to BLOB (slow but big)
+                else
+                {
+                    //NOTE:set UTF 8 so when taking out will go fine
+                    var content = Encoding.UTF8.GetBytes(stringToSave);
+                    using var ms = new MemoryStream(content);
+                    await blobClient.UploadAsync(ms, overwrite: true);
+
+                }
+
             }
             else if (typeof(T) == typeof(byte[]))
             {
                 var vv = value as byte[];
                 using var ms = new MemoryStream(vv, false);
-                await blobClient.UploadAsync(ms, overwrite:true);
+                await blobClient.UploadAsync(ms, overwrite: true);
 
                 //var xx = new BinaryData(value, JsonSerializerOptions.Default);
                 //blobClient.Upload(xx);

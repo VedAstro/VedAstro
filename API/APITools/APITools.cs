@@ -856,18 +856,20 @@ namespace API
 
         /// <summary>
         /// will call durable task that has completed successful 
-        /// Will call only if invalid, else will not call
+        /// Will call only if invalid, else will not call, and be certain that data is ready
         /// </summary>
-        public static async Task CallIfInvalid(DurableTaskClient durableTaskClient, string methodName, string callerId, string inputString)
+        public static async Task CallIfInvalid(DurableTaskClient durableTaskClient, string methodName, string callerId, dynamic inputData)
         {
             OrchestrationMetadata? cc = await durableTaskClient.GetInstanceAsync(callerId);
-            var noValidCache = !(cc.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
+            //has to be n
+            var notValid = !(cc.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
+            var noValidCache = notValid && cc.IsCompleted;
             if (noValidCache)
             {
                 //start processing
                 var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
                 //squeeze the Sky Juice!
-                var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(methodName, inputString, options, CancellationToken.None); //should match caller ID
+                var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(methodName, inputData, options, CancellationToken.None); //should match caller ID
             }
         }
 

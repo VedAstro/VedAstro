@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask;
 using Microsoft.DurableTask.Client;
+using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 
 namespace API
@@ -246,7 +247,9 @@ namespace API
 
 
 
-
+        /// <summary>
+        /// This is both STATUS POLL and WORK START endpoint for person list
+        /// </summary>
         [Function(nameof(GetPersonListAsync))]
         public static async Task<HttpResponseData> GetPersonListAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonListAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
@@ -257,35 +260,46 @@ namespace API
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
 
-            //check if new call or old call 
-            var result = await client.GetInstanceAsync(parsedRequest.CallerId, CancellationToken.None);
-            var needsRestart = result?.RuntimeStatus == OrchestrationRuntimeStatus.Failed ||
-                               result?.RuntimeStatus == OrchestrationRuntimeStatus.Terminated ||
-                               result?.RuntimeStatus == OrchestrationRuntimeStatus.Suspended;
-            var isNewCall = result == null; //no old calls found will null
+            //SET THE WORK OFF! we don't expect to hear from you
+            await APITools.CallIfInvalid(client, nameof(_getPersonListAsync), parsedRequest.CallerId, parsedRequest);
+
+            //get a beeper on the status of the work
+            var workStatus = await client.GetInstanceAsync(parsedRequest.CallerId, true, CancellationToken.None);
+            var asyncPayload = new JObject();
+            asyncPayload["CallStatus"] = workStatus.RuntimeStatus.ToString();
+            asyncPayload["CallId"] = workStatus.RuntimeStatus.ToString();
+            return APITools.PassMessageJson(asyncPayload, req);
 
 
-            //STAGE 2 : PROCESS
-            //NOTE: only recalculate if non existent or corrupt
-            if (isNewCall || needsRestart)
-            {
-                //if already exist than we must kill it first completely of the face of the earth aka PURGE
-                //NOTE: this should help make sure brand new instance is created after without error effecting restart
-                var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
-                var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
+            ////check if new call or old call 
+            //var result = await client.GetInstanceAsync(parsedRequest.CallerId, CancellationToken.None);
+            //var needsRestart = result?.RuntimeStatus == OrchestrationRuntimeStatus.Failed ||
+            //                   result?.RuntimeStatus == OrchestrationRuntimeStatus.Terminated ||
+            //                   result?.RuntimeStatus == OrchestrationRuntimeStatus.Suspended;
+            //var isNewCall = result == null; //no old calls found will null
 
-                //start processing
-                var options = new StartOrchestrationOptions(parsedRequest.CallerId); //set caller id so can callback
-                var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_getPersonListAsync), parsedRequest, options, CancellationToken.None); //should match caller ID
-            }
 
-            //give user the url to query for status and data
-            //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
-            var x = client.CreateCheckStatusResponse(req, parsedRequest.CallerId);
-            var pollingUrl = APITools.GetHeaderValue(x, "Location");
+            ////STAGE 2 : PROCESS
+            ////NOTE: only recalculate if non existent or corrupt
+            //if (isNewCall || needsRestart)
+            //{
+            //    //if already exist than we must kill it first completely of the face of the earth aka PURGE
+            //    //NOTE: this should help make sure brand new instance is created after without error effecting restart
+            //    var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
+            //    var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
-            //send polling URL to caller as Passed payload, client should know what todo
-            return APITools.PassMessageJson(pollingUrl, req);
+            //    //start processing
+            //    var options = new StartOrchestrationOptions(parsedRequest.CallerId); //set caller id so can callback
+            //    var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_getPersonListAsync), parsedRequest, options, CancellationToken.None); //should match caller ID
+            //}
+
+            ////give user the url to query for status and data
+            ////note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
+            //var x = client.CreateCheckStatusResponse(req, parsedRequest.CallerId);
+            //var pollingUrl = APITools.GetHeaderValue(x, "Location");
+
+            ////send polling URL to caller as Passed payload, client should know what todo
+            //return APITools.PassMessageJson(pollingUrl, req);
 
         }
 
@@ -296,15 +310,13 @@ namespace API
         /// <param name="context"></param>
         /// <returns></returns>
         [Function(nameof(_getPersonListAsync))]
-        public static async Task<JsonDocument> _getPersonListAsync([OrchestrationTrigger]
+        public static async Task _getPersonListAsync([OrchestrationTrigger]
             TaskOrchestrationContext context)
         {
             var requestData = context.GetInput<ParsedRequest>();
 
-            var swapStatus = await context.CallActivityAsync<bool>(nameof(SwapData), requestData); //note swap done before get list
-            var personList = await context.CallActivityAsync<JsonDocument>(nameof(FilterData), requestData);
-
-            return personList;
+            await context.CallActivityAsync<bool>(nameof(SwapData), requestData); //note swap done before get list
+            await context.CallActivityAsync<bool>(nameof(FilterData), requestData);
         }
 
         [Function(nameof(SwapData))]
@@ -319,7 +331,7 @@ namespace API
         }
 
         [Function(nameof(FilterData))]
-        public static async Task<JsonDocument> FilterData([ActivityTrigger] ParsedRequest requestData, FunctionContext executionContext)
+        public static async Task FilterData([ActivityTrigger] ParsedRequest requestData, FunctionContext executionContext)
         {
 
             //get latest all match reports
@@ -336,9 +348,12 @@ namespace API
 
             //convert to type .NET's JSON accepted by durable
             var jsonText = personListJson.ToString();
-            var personListJsonDurable = JsonDocument.Parse(jsonText); //done for compatibility with durable
 
-            return personListJsonDurable;
+            await AzureCache.AddLarge(requestData.CallerId, jsonText);
+
+            //var personListJsonDurable = JsonDocument.Parse(jsonText); //done for compatibility with durable
+
+            //return personListJsonDurable;
 
         }
 

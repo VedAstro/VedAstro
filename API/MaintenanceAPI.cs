@@ -73,6 +73,23 @@ namespace API
             return APITools.PassMessageJson(message, req);
         }
 
+        /// <summary>
+        /// Clears all cache, run manually when code is updated and new data is needed
+        /// </summary>
+        [Function(nameof(GetCallData))]
+        public static async Task<HttpResponseData> GetCallData(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallData/CallerId/{callerId}")]
+            HttpRequestData req,
+            [DurableClient] DurableTaskClient client,
+            string callerId)
+        {
+
+            //expect data to be there when called
+            var xxx = await AzureCache.GetLarge<string>(callerId);
+
+            return APITools.PassMessageJson(xxx, req);
+        }
+
 
         /// <summary>
         /// to allow client to send match report and other files to email via a single call

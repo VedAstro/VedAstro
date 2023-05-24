@@ -102,6 +102,7 @@ namespace API
 
             //adding new person needs make sure all cache is cleared if any
             //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
+            await AzureCache.Delete(parsedRequest.CallerId);
             var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
             var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
 
@@ -131,6 +132,8 @@ namespace API
         {
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
+
+            await AzureCache.Delete(parsedRequest.CallerId);
 
 
             //adding new person needs make sure all cache is cleared if any
@@ -198,6 +201,7 @@ namespace API
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
+            await AzureCache.Delete(parsedRequest.CallerId);
 
             //adding new person needs make sure all cache is cleared if any
             //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
@@ -259,15 +263,14 @@ namespace API
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
-
-            //SET THE WORK OFF! we don't expect to hear from you
+            //check if cache exist already exist based , 
             await APITools.CallIfInvalid(client, nameof(_getPersonListAsync), parsedRequest.CallerId, parsedRequest);
 
             //get a beeper on the status of the work
             var workStatus = await client.GetInstanceAsync(parsedRequest.CallerId, true, CancellationToken.None);
             var asyncPayload = new JObject();
             asyncPayload["CallStatus"] = workStatus.RuntimeStatus.ToString();
-            asyncPayload["CallId"] = workStatus.RuntimeStatus.ToString();
+            asyncPayload["CallId"] = parsedRequest.CallerId;
             return APITools.PassMessageJson(asyncPayload, req);
 
 

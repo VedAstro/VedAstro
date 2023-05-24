@@ -91,37 +91,46 @@ namespace API
         public static async Task<dynamic> GetLarge<T>(string callerId)
         {
 
-            //check if table or blob
-            var dataInTable = IsExistTable(callerId);
-            if (dataInTable)
+            try
             {
-                var yyy = GetDataFromTable(callerId);
-                return yyy;
+                //check if table or blob
+                var dataInTable = IsExistTable(callerId);
+                if (dataInTable)
+                {
+                    var yyy = GetDataFromTable(callerId);
+                    return yyy;
+                }
+                else
+                {
+                    BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
+
+
+                    if (typeof(T) == typeof(string))
+                    {
+                        var data = await APITools.BlobClientToString(blobClient);
+                        return data;
+
+                    }
+                    else if (typeof(T) == typeof(byte[]))
+                    {
+                        using var ms = new MemoryStream();
+                        await blobClient.DownloadToAsync(ms);
+                        return ms.ToArray();
+                    }
+                    else if (typeof(T) == typeof(BlobClient))
+                    {
+
+                        return blobClient;
+                    }
+                }
+
             }
-            else
+            catch (Exception e)
             {
-                BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
-
-
-                if (typeof(T) == typeof(string))
-                {
-                    var data = await APITools.BlobClientToString(blobClient);
-                    return data;
-
-                }
-                else if (typeof(T) == typeof(byte[]))
-                {
-                    using var ms = new MemoryStream();
-                    await blobClient.DownloadToAsync(ms);
-                    return ms.ToArray();
-                }
-                else if (typeof(T) == typeof(BlobClient))
-                {
-
-                    return blobClient;
-                }
+                //todo proper log
+                Console.WriteLine(e.Message);
+                return "";
             }
-
 
             throw new Exception("END OF LINE!");
 
@@ -138,17 +147,28 @@ namespace API
             return cachedData;
         }
 
-        public static void AddDataToTable(string callerId, string value)
+        public static async Task AddDataToTable(string callerId, string value)
         {
-
             //create the data
             var tableEntity = new TableEntity(callerId, "")
             {
                 { "Value", value }
             };
 
-            // add to cloud store
-            tableClient.AddEntity(tableEntity);
+            //check if exist
+            var xx = await tableClient.GetEntityIfExistsAsync<TableEntity>(callerId, "");
+
+            //not yet born
+            if (xx == null)
+            {
+                // add to cloud store
+                await tableClient.AddEntityAsync(tableEntity);
+            }
+            //update existing
+            else
+            {
+                await tableClient.UpdateEntityAsync(tableEntity, ETag.All, TableUpdateMode.Replace);
+            }
 
         }
         //public static void AddLarge(string callerId, string value)
@@ -162,7 +182,7 @@ namespace API
 
 
         //}
-        public static async Task<BlobClient> AddLarge<T>(string callerId, T value, string mimeType = "")
+        public static async Task<BlobClient?> AddLarge<T>(string callerId, T value, string mimeType = "")
         {
             var blobClient = blobContainerClient.GetBlobClient(callerId);
 
@@ -173,7 +193,8 @@ namespace API
                 //based on string length place at in table or blob
                 if (stringToSave.Length < 200)
                 {
-                    AddDataToTable(callerId, stringToSave);
+                    await AddDataToTable(callerId, stringToSave);
+                    return null;
                 }
                 //if text is long then off it goes to BLOB (slow but big)
                 else
@@ -210,6 +231,20 @@ namespace API
             await blobClient.SetAccessTierAsync(AccessTier.Hot);
 
             return blobClient;
+
+        }
+
+        public static async Task Delete(string callerId)
+        {
+            var blobClient = blobContainerClient.GetBlobClient(callerId);
+
+            var result = await blobClient.DeleteIfExistsAsync();
+
+            //if did not delete blob then most likely table data
+            if (!result.Value)
+            {
+                await tableClient.DeleteEntityAsync(callerId, "");
+            }
 
         }
     }

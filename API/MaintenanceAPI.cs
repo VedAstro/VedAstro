@@ -2,7 +2,12 @@
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
 using VedAstro.Library;
+using Azure;
+using System.Net.Mime;
+using System.Net;
+using Azure.Storage.Blobs;
 
 namespace API
 {
@@ -74,20 +79,45 @@ namespace API
         }
 
         /// <summary>
-        /// Clears all cache, run manually when code is updated and new data is needed
+        /// designed to be called directly, getting ANY and ALL needed data in one simple GET call
         /// </summary>
         [Function(nameof(GetCallData))]
         public static async Task<HttpResponseData> GetCallData(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallData/CallerId/{callerId}")]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallData/CallerId/{callerId}/Format/{formatName}")]
             HttpRequestData req,
             [DurableClient] DurableTaskClient client,
-            string callerId)
+            string callerId, string formatName)
         {
 
-            //expect data to be there when called
-            var xxx = await AzureCache.GetLarge<string>(callerId);
+            if (formatName.ToLower() == "json")
+            {
+                string jsonText = await AzureCache.GetLarge<string>(callerId);
 
-            return APITools.PassMessageJson(xxx, req);
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
+
+                //place in response body
+                await response.WriteStringAsync(jsonText);
+
+                return response;
+            }
+
+             else if (formatName.ToLower() == "gif")
+            {
+                //for images get and send direct with as less operations as possible
+                var fileBlobClient = await AzureCache.GetLarge<BlobClient>(callerId);
+
+                return APITools.SendFileToCaller(fileBlobClient, req, MediaTypeNames.Image.Gif);
+            }
+            else if (formatName.ToLower() == "svg")
+            {
+                //for images get and send direct with as less operations as possible
+                var fileBlobClient = await AzureCache.GetLarge<BlobClient>(callerId);
+
+                return APITools.SendFileToCaller(fileBlobClient, req, "image/svg+xml");
+            }
+
+            throw new Exception("END OF THE LINE");
         }
 
 

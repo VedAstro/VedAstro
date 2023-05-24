@@ -27,6 +27,9 @@ public class URL
 
         //--------------done here so that can be readonly------------------
 
+        //GENERAL
+        GetCallData = ApiUrl + "/GetCallData";
+
         //PERSON
         GetPersonListAsync = ApiUrl + "/GetPersonListAsync";
         AddPerson = ApiUrl + "/AddPerson";
@@ -104,6 +107,10 @@ public class URL
 
     //PERSON
     public readonly string AddPerson;
+    /// <summary>
+    /// Gets raw data at API data cache
+    /// </summary>
+    public readonly string GetCallData;
     public readonly string GetPersonListAsync;
     public readonly string GetPerson;
     public readonly string GetNewPersonId;

@@ -24,9 +24,11 @@ namespace Library.API
     public static class Tools
     {
 
-        public static async Task<JObject> ReadServer(string receiverAddress)
+        /// <summary>
+        /// No parsing direct from horses mouth
+        /// </summary>
+        public static async Task<string> ReadServerRaw(string receiverAddress)
         {
-            //prepare the data to be sent
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
 
             //tell sender to wait for complete reply before exiting
@@ -34,11 +36,39 @@ namespace Library.API
 
             //send the data on its way
             using var client = new HttpClient();
+            client.Timeout = Timeout.InfiniteTimeSpan;
             var response = await client.SendAsync(httpRequestMessage, waitForContent);
 
             //return the raw reply to caller
             var dataReturned = await response.Content.ReadAsStringAsync();
-            return JObject.Parse(dataReturned);
+
+            return dataReturned;
+        }
+
+        public static async Task<T?> ReadServer<T>(string receiverAddress) where T : JToken
+        {
+            //prepare the data to be sent
+            var dataReturned = await ReadServerRaw(receiverAddress);
+
+            JToken parsed;
+
+            try
+            {
+                parsed = JToken.Parse(dataReturned);
+                return parsed as T;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                //act as though nothing transpired
+                var readServer = new JObject();
+                return readServer as T;
+
+            }
+
+           
+
         }
 
         public static async Task<JObject> WriteServer(HttpMethod method, string receiverAddress, JToken? payloadJson = null)

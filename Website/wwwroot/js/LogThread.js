@@ -25,8 +25,8 @@ async function addVisitor(payloadXml) {
         "method": "POST"
     });
 
-    var responseText = await response.text();
+    var responseText = await response?.text();
 
-    return responseText;
+    return responseText ?? "";
 
 }

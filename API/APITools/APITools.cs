@@ -111,12 +111,26 @@ namespace API
                 var finalPayload = Tools.ListToJson(payloadXmlList);
                 finalPayloadJson["Payload"] = finalPayload;
             }
-            else if (payload is JProperty payloadJToken)
+            else if (payload is JProperty payloadJProperty)
             {
                 //convert XML to Json text
-                //finalPayloadJson["Payload"] = JToken.FromObject(payloadJToken);
-                var temp = new JProperty("Payload", new JObject(payloadJToken));
+                var temp = new JProperty("Payload", new JObject(payloadJProperty));
                 finalPayloadJson.Add(temp);
+            }
+            else if (payload is JArray payloadJArray)
+            {
+                //place directly in
+                finalPayloadJson["Payload"] = payloadJArray;
+            }
+            else if (payload is JToken payloadJToken)
+            {
+                //place directly in
+                finalPayloadJson["Payload"] = payloadJToken;
+            }
+            else if (payload is JObject payloadJObject)
+            {
+                //place directly in
+                finalPayloadJson["Payload"] = payloadJObject;
             }
             else if (payload is string payloadStr)
             {
@@ -860,16 +874,36 @@ namespace API
         /// </summary>
         public static async Task CallIfInvalid(DurableTaskClient durableTaskClient, string methodName, string callerId, dynamic inputData)
         {
-            OrchestrationMetadata? cc = await durableTaskClient.GetInstanceAsync(callerId);
-            //has to be n
-            var notValid = !(cc.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
-            var noValidCache = notValid && cc.IsCompleted;
-            if (noValidCache)
+            var cacheExist = await AzureCache.IsExist(callerId);
+            OrchestrationMetadata? callInstance = await durableTaskClient.GetInstanceAsync(callerId);
+
+            //possible call does not exist
+            var notValid = callInstance?.RuntimeStatus != OrchestrationRuntimeStatus.Completed;
+            var notRunning = !(callInstance?.IsRunning ?? false);
+            var noValidCall = notValid && notRunning;
+            var noCache = !cacheExist;
+
+            //start new call if does not exist or call marked as failed
+            if (noCache || noValidCall)
             {
                 //start processing
                 var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
                 //squeeze the Sky Juice!
                 var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(methodName, inputData, options, CancellationToken.None); //should match caller ID
+
+
+                ////possible call does not exist
+                //var notValid = callInstance?.RuntimeStatus != OrchestrationRuntimeStatus.Completed;
+                //var notRunning = !(callInstance?.IsRunning ?? false);
+                //var noValidCache = notValid && notRunning;
+                //if (noValidCache)
+                //{
+                //    //start processing
+                //    var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
+                //    //squeeze the Sky Juice!
+                //    var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(methodName, inputData, options, CancellationToken.None); //should match caller ID
+                //}
+
             }
         }
 

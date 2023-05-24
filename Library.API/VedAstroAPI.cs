@@ -27,18 +27,9 @@ namespace Library.API
 
         private readonly URL _url;
 
-        /// <summary>
-        /// Durable function API URL to get ready personlist for this caller
-        /// </summary>
-        private string PersonListWebhook { get; set; } = "";
-        private string PublicPersonListWebhook { get; set; } = "";
 
-        /// <summary>
-        /// true of person is already prepared
-        /// </summary>
-        private bool IsPersonPrepared => !string.IsNullOrEmpty(PersonListWebhook);
 
-        private bool IsPublicPersonPrepared => !string.IsNullOrEmpty(PublicPersonListWebhook);
+        private bool IsPublicPersonPrepared => PublicPersonListCallStatus == "Completed";
 
 
         //--------CTOR
@@ -62,13 +53,18 @@ namespace Library.API
         /// </summary>
         public async Task PreparePersonList()
         {
+            //send the calls end of story, dont expect to check on it untill needed let server handle it
+            //later when needed assume prepare was not called
+
             //STAGE 1 :get person list for current user, can be empty
             //tell API to get started
             var url = $"{_url.GetPersonListAsync}/UserId/{_userId}/VisitorId/{_visitorId}";
 
-            //API gives a url to check on poll fo results
-            var rawResult = await Tools.ReadServer(url);
-            PersonListWebhook = GetPayload<string>(rawResult, null);
+            //we get call status and id to get data from when ready
+            var rawResult = await Tools.ReadServer<JObject>(url);
+            //JObject privatePayload = GetPayload<JObject>(rawResult, null);
+            //PersonListCallStatus = privatePayload["CallStatus"].Value<string>();
+            //PersonListCallId = privatePayload["CallId"].Value<string>();
 
 
             //STAGE 2 : get person list for public, example profiles
@@ -76,11 +72,21 @@ namespace Library.API
             url = $"{_url.GetPersonListAsync}/UserId/101/VisitorId/101";
 
             //API gives a url to check on poll fo results
-            rawResult = await Tools.ReadServer(url);
-            PublicPersonListWebhook = GetPayload<string>(rawResult, null);
+            rawResult = await Tools.ReadServer<JObject>(url);
+            //JObject publicPayload = GetPayload<JObject>(rawResult, null);
+           // PublicPersonListCallStatus = publicPayload["CallStatus"]?.Value<string>();
+            //PublicPersonListCallId = publicPayload["CallId"]?.Value<string>();
 
 
         }
+
+        public string? PublicPersonListCallId { get; set; }
+
+        public string? PublicPersonListCallStatus { get; set; }
+
+        public string? PersonListCallId { get; set; }
+
+        //public string? PersonListCallStatus { get; set; }
 
         /// <summary>
         /// person will be auto prepared, but might be slow
@@ -88,77 +94,62 @@ namespace Library.API
         /// </summary>
         public async Task<List<Person>> GetPersonList()
         {
-            //take cache if available
+            //CHECK CACHE
             //cache will be cleared when update is needed
             if (CachedPersonList.Any()) { return CachedPersonList; }
 
-            //if person not prepared then prepare before continuing
-            if (!IsPersonPrepared) { await PreparePersonList(); }
-
-
-        //check if person list is ready
-        //here result can contain payload if ready
-        TryAgain:
-            var result = await Tools.ReadServer(PersonListWebhook);
-            //todo change to payload standard
-            var runtimeStatus = result["runtimeStatus"]?.Value<string>() ?? "";
-
-            //note : if error status, will be corrected by API,
-            //so here we wait till complete
-            var isDone = runtimeStatus == "Completed";
-
-            //if not yet done, wait little and call back
-            if (!isDone)
-            {
-                //print holding status for easy debug
-                Console.WriteLine($"API SAID : {runtimeStatus}");
-                await Task.Delay(300);
-                goto TryAgain;
-            }
-
-            //once done, get data out
-            //person list json to parsed
-            var outputToken = result["output"]; //json array
-            CachedPersonList = Person.FromJsonList(outputToken); //cache for later use
+            //tell API to get started
+            var url2 = $"{_url.GetPersonListAsync}/UserId/{_userId}/VisitorId/{_visitorId}";
+            CachedPersonList = await GetPersonListBehind(url2);
 
             return CachedPersonList;
         }
         public async Task<List<Person>> GetPublicPersonList()
         {
-            //take cache if available
+            //CHECK CACHE
             //cache will be cleared when update is needed
             if (CachedPublicPersonList.Any()) { return CachedPublicPersonList; }
 
-            //if person not prepared then prepare before continuing
-            if (!IsPublicPersonPrepared) { await PreparePersonList(); }
-
-
-        //check if person list is ready
-        //here result can contain payload if ready
-        TryAgain:
-            var result = await Tools.ReadServer(PublicPersonListWebhook);
-            //todo change to payload standard
-            var runtimeStatus = result["runtimeStatus"]?.Value<string>() ?? "";
-
-            //note : if error status, will be corrected by API,
-            //so here we wait till complete
-            var isDone = runtimeStatus == "Completed";
-
-            //if not yet done, wait little and call back
-            if (!isDone)
-            {
-                //print holding status for easy debug
-                Console.WriteLine($"API SAID : {runtimeStatus}");
-                await Task.Delay(300);
-                goto TryAgain;
-            }
-
-            //once done, get data out
-            //person list json to parsed
-            var outputToken = result["output"]; //json array
-            CachedPublicPersonList = Person.FromJsonList(outputToken); //cache for later use
+            //tell API to get started
+            var url2 = $"{_url.GetPersonListAsync}/UserId/101/VisitorId/101";
+            CachedPublicPersonList = await GetPersonListBehind(url2);
 
             return CachedPublicPersonList;
+        }
+
+        private async Task<List<Person>> GetPersonListBehind(string url2)
+        {
+
+            //LOOP
+            string? personListCallId = "";
+            string? personListCallStatus = "";
+
+            var isProcessing = true; //start as true always to get latest if available
+            while (isProcessing)
+            {
+                //we get call status and id to get data from when ready
+                var rawResult = await Tools.ReadServer<JObject>(url2);
+                JObject privatePayload = GetPayload<JObject>(rawResult, null);
+                personListCallStatus = privatePayload["CallStatus"]?.Value<string>();
+                personListCallId = privatePayload["CallId"]?.Value<string>();
+
+                isProcessing = personListCallStatus != "Completed";
+
+#if DEBUG
+                Console.WriteLine($"SERVER SAID:{personListCallStatus}:{personListCallId}");
+#endif
+
+                await Task.Delay(500);
+            }
+
+
+            //GET DATA OUT (same call for all)
+            var url1 = $"{_url.GetCallData}/CallerId/{personListCallId}/Format/JSON";
+            var personListJson = await Tools.ReadServer<JArray>(url1);
+            var cachedPersonList = Person.FromJsonList(personListJson); //cache for later use
+
+            return cachedPersonList;
+
         }
 
         /// <summary>
@@ -228,7 +219,7 @@ namespace Library.API
         public async Task<Person> GetPerson(string personId)
         {
             var url = $"{_url.GetPerson}/PersonId/{personId}";
-            var result = await Tools.ReadServer(url);
+            var result = await Tools.ReadServer<JObject>(url);
 
             //get parsed payload from raw result
             var person = GetPayload(result, Person.FromJson);
@@ -275,7 +266,8 @@ namespace Library.API
 
                 //2: clear link to get person list, this will cause to fetch new list
                 //since already purged by API, the webhook link will go 404
-                this.PersonListWebhook = "";
+                //note no need to clear public, expect to stay same for life of app
+                //this.PersonListCallStatus = "";
             }
             else
             {
@@ -301,6 +293,9 @@ namespace Library.API
 #if DEBUG
                 Console.WriteLine("API SAID: PASS"); //debug to know all went well
 #endif
+
+                ////if complex JSON object then pass along
+                //if (typeof(T) == typeof(JObject)) { return payloadJson; }
 
                 //use parser if available, use that, end here
                 if (parser != null)

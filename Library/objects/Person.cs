@@ -385,6 +385,9 @@ namespace VedAstro.Library
 
         public static List<Person> FromJsonList(JToken personList)
         {
+            //if null empty list please
+            if (personList == null) { return new List<Person>(); }
+
             var returnList = new List<Person>();
 
             foreach (var personJson in personList)

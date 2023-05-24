@@ -161,7 +161,7 @@
         AppData.API = new VedAstroAPI(AppData.CurrentUser.Id, AppData.VisitorId, _jsRuntime, AppData.URL);
 
         //ask server to prepare person list, will be available instantly later when user needs it
-        await AppData.API.PreparePersonList();
+        AppData.API.PreparePersonList();
 
         //get location from IP
         AppData.ClientLocation = await GeoLocation.FromIpAddress();

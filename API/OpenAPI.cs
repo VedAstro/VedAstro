@@ -208,6 +208,29 @@ namespace API
                 //get chart if in cache, else make and save in cache
                 var chartGif = await APITools.CacheExecuteTask2(chartTask, callerId, MediaTypeNames.Image.Gif);
 
+
+                //await APITools.CallIfInvalid(durableTaskClient, nameof(SkyChartAPI.GetSkyChartGIFAsync), callerId, chartSpecsStr);
+
+
+                ////wait for completion and return the gif in one call
+                //var notComplete = true;
+                //OrchestrationMetadata taskRef;
+                //while (notComplete)
+                //{
+                //    //check if complete
+                //    taskRef = await durableTaskClient.GetInstanceAsync(callerId);
+
+                //    //mark if need to wait or result is ready
+                //    notComplete = !(taskRef.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
+
+                //    //wait
+                //    await Task.Delay(100);
+                //}
+
+                //taskRef = await durableTaskClient.GetInstanceAsync(callerId, true, CancellationToken.None);
+                //var chart = taskRef.ReadOutputAs<byte[]>();
+
+
                 return APITools.SendFileToCaller(chartGif, incomingRequest, MediaTypeNames.Image.Gif);
 
             }

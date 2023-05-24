@@ -95,14 +95,6 @@ namespace API
 
 
 
-        //[Function(nameof(GetPersonListAsync))]
-        //public static async Task<HttpResponseData> GetPersonListAsync(
-        //    [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonListAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
-        //    [DurableClient] DurableTaskClient client,
-        //    string userId, string visitorId)
-        //{
-
-
         [Function(nameof(GetEventsChartAsync))]
         public static async Task<HttpResponseData> GetEventsChartAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]

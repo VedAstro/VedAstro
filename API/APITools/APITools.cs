@@ -878,14 +878,18 @@ namespace API
             OrchestrationMetadata? callInstance = await durableTaskClient.GetInstanceAsync(callerId);
 
             //possible call does not exist
-            var notValid = callInstance?.RuntimeStatus != OrchestrationRuntimeStatus.Completed;
-            var notRunning = !(callInstance?.IsRunning ?? false);
-            var noValidCall = notValid && notRunning;
+            //var notValid = callInstance?.RuntimeStatus != OrchestrationRuntimeStatus.Completed;
+            //var notRunning = !(callInstance?.IsRunning ?? false);
+            //var noValidCall = notValid && notRunning;
             var noCache = !cacheExist;
 
             //start new call if does not exist or call marked as failed
-            if (noCache || noValidCall)
+            if (noCache)
             {
+                var purgeResult = await durableTaskClient.PurgeInstanceAsync(callerId);
+                var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
+
+
                 //start processing
                 var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
                 //squeeze the Sky Juice!
@@ -942,6 +946,27 @@ namespace API
                 var chartBytes = await generateChart.Invoke();
                 //save for future
                 chartBlobClient = await AzureCache.AddLarge<byte[]>(callerId, chartBytes, mimeType);
+            }
+            else
+            {
+                chartBlobClient = await AzureCache.GetLarge<BlobClient>(callerId);
+            }
+
+            return chartBlobClient;
+        }
+        public static async Task<BlobClient> CacheExecuteTask3(Func<Task<string>> generateChart, string callerId, string mimeType = "")
+        {
+            //check if cache exist
+            var isExist = await AzureCache.IsExist(callerId);
+
+            BlobClient chartBlobClient;
+
+            if (!isExist)
+            {
+                //squeeze the Sky Juice!
+                var chartBytes = await generateChart.Invoke();
+                //save for future
+                chartBlobClient = await AzureCache.AddLarge<string>(callerId, chartBytes, mimeType);
             }
             else
             {

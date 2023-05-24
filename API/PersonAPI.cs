@@ -1,10 +1,12 @@
-﻿using System.Text.Json;
+﻿using System.Net.Mime;
+using System.Net;
+using System.Text.Json;
+using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.DurableTask;
-using Microsoft.DurableTask.Client;
 using Newtonsoft.Json.Linq;
 using VedAstro.Library;
+using Azure.Storage.Blobs;
 
 namespace API
 {
@@ -45,17 +47,52 @@ namespace API
 
 
 
+        /// <summary>
+        /// This is both STATUS POLL and WORK START endpoint for person list
+        /// </summary>
+        [Function(nameof(GetPersonList))]
+        public static async Task<HttpResponseData> GetPersonList(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonList/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
+            string userId, string visitorId)
+        {
+            //STAGE 1 : GET DATA OUT
+            var parsedRequest = new ParsedRequest(userId, visitorId);
+
+            Func<Task<string>> generateChart = () => _getPersonList(parsedRequest);
+
+            var personListJson = await APITools.CacheExecuteTask3(generateChart, parsedRequest.CallerId);
+            return APITools.SendFileToCaller(personListJson, req, MediaTypeNames.Application.Json);
 
 
+            //--------------------------------
+            async Task<string> _getPersonList(ParsedRequest requestData)
+            {
 
-        //░█████╗░░██████╗██╗░░░██╗███╗░░██╗░█████╗░
-        //██╔══██╗██╔════╝╚██╗░██╔╝████╗░██║██╔══██╗
-        //███████║╚█████╗░░╚████╔╝░██╔██╗██║██║░░╚═╝
-        //██╔══██║░╚═══██╗░░╚██╔╝░░██║╚████║██║░░██╗
-        //██║░░██║██████╔╝░░░██║░░░██║░╚███║╚█████╔╝
-        //╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░░╚══╝░╚════╝░
-        //POWERED BY AZURE DURABLE FUNCTIONS
-        //-------------------------------------------------------------------------------------------
+                //STAGE 2 : SWAP DATA
+                //swap visitor ID with user ID if any (data follows user when log in)
+                bool didSwap = await APITools.SwapUserId(requestData.VisitorId, requestData.UserId, APITools.PersonListFile);
+
+                //get latest all match reports
+                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+
+                //filter out record by caller id, which will be visitor id when user not logged in
+                var personListByCallerIdXml = Tools.FindXmlByUserId(personListXml, requestData.CallerId);
+
+                //sort a to z by name for ease of user (done here for speed vs client)
+                var sortedList = personListByCallerIdXml.OrderBy(personXml => personXml.Element("Name")?.Value ?? "").ToList();
+
+                //convert raw XML to Person Json
+                var personListJson = Person.XmlListToJsonList(sortedList);
+
+                //convert to type .NET's JSON accepted by durable
+                var jsonText = personListJson.ToString();
+
+                return jsonText;
+
+            }
+
+        }
+
 
         /// <summary>
         /// Gets person all details from only hash
@@ -63,7 +100,6 @@ namespace API
         [Function(nameof(GetPerson))]
         public static async Task<HttpResponseData> GetPerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPerson/PersonId/{personId}")] HttpRequestData req,
-            [DurableClient] DurableTaskClient client,
             string personId)
         {
 
@@ -73,7 +109,7 @@ namespace API
                 var foundPersonXml = await APITools.FindPersonXMLById(personId);
 
                 var personToReturn = Person.FromXml(foundPersonXml);
-                
+
                 //send person to caller
                 return APITools.PassMessageJson(personToReturn.ToJson(), req);
 
@@ -93,19 +129,13 @@ namespace API
         [Function(nameof(AddPerson))]
         public static async Task<HttpResponseData> AddPerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "AddPerson/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
-            [DurableClient] DurableTaskClient client,
             string userId, string visitorId)
         {
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
-
             //adding new person needs make sure all cache is cleared if any
-            //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
             await AzureCache.Delete(parsedRequest.CallerId);
-            var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
-            var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
-
 
             //STAGE 2 : NOW WE WORK
             //get new person data out of incoming request
@@ -127,20 +157,12 @@ namespace API
         [Function(nameof(UpdatePerson))]
         public static async Task<HttpResponseData> UpdatePerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "UpdatePerson/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
-            [DurableClient] DurableTaskClient client,
             string userId, string visitorId)
         {
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
             await AzureCache.Delete(parsedRequest.CallerId);
-
-
-            //adding new person needs make sure all cache is cleared if any
-            //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
-            var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
-            var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
-
 
             //STAGE 2 : NOW WE WORK
             try
@@ -195,19 +217,12 @@ namespace API
         [Function(nameof(DeletePerson))]
         public static async Task<HttpResponseData> DeletePerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "DeletePerson/UserId/{userId}/VisitorId/{visitorId}/PersonId/{personId}")] HttpRequestData req,
-            [DurableClient] DurableTaskClient client,
             string userId, string visitorId, string personId)
         {
             //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
             await AzureCache.Delete(parsedRequest.CallerId);
-
-            //adding new person needs make sure all cache is cleared if any
-            //NOTE: only choice here is "Purge", "Terminate" does not work, will cause webhook url to 404
-            var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
-            var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
-
 
             //STAGE 2 : NOW WE WORK
             try
@@ -247,118 +262,7 @@ namespace API
 
 
 
-        //-------------------TODO CLEAN
 
-
-
-        /// <summary>
-        /// This is both STATUS POLL and WORK START endpoint for person list
-        /// </summary>
-        [Function(nameof(GetPersonListAsync))]
-        public static async Task<HttpResponseData> GetPersonListAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonListAsync/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
-            [DurableClient] DurableTaskClient client,
-            string userId, string visitorId)
-        {
-            //STAGE 1 : GET DATA OUT
-            var parsedRequest = new ParsedRequest(userId, visitorId);
-
-            //check if cache exist already exist based , 
-            await APITools.CallIfInvalid(client, nameof(_getPersonListAsync), parsedRequest.CallerId, parsedRequest);
-
-            //get a beeper on the status of the work
-            var workStatus = await client.GetInstanceAsync(parsedRequest.CallerId, true, CancellationToken.None);
-            var asyncPayload = new JObject();
-            asyncPayload["CallStatus"] = workStatus.RuntimeStatus.ToString();
-            asyncPayload["CallId"] = parsedRequest.CallerId;
-            return APITools.PassMessageJson(asyncPayload, req);
-
-
-            ////check if new call or old call 
-            //var result = await client.GetInstanceAsync(parsedRequest.CallerId, CancellationToken.None);
-            //var needsRestart = result?.RuntimeStatus == OrchestrationRuntimeStatus.Failed ||
-            //                   result?.RuntimeStatus == OrchestrationRuntimeStatus.Terminated ||
-            //                   result?.RuntimeStatus == OrchestrationRuntimeStatus.Suspended;
-            //var isNewCall = result == null; //no old calls found will null
-
-
-            ////STAGE 2 : PROCESS
-            ////NOTE: only recalculate if non existent or corrupt
-            //if (isNewCall || needsRestart)
-            //{
-            //    //if already exist than we must kill it first completely of the face of the earth aka PURGE
-            //    //NOTE: this should help make sure brand new instance is created after without error effecting restart
-            //    var purgeResult = await client.PurgeInstanceAsync(parsedRequest.CallerId);
-            //    var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
-
-            //    //start processing
-            //    var options = new StartOrchestrationOptions(parsedRequest.CallerId); //set caller id so can callback
-            //    var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_getPersonListAsync), parsedRequest, options, CancellationToken.None); //should match caller ID
-            //}
-
-            ////give user the url to query for status and data
-            ////note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
-            //var x = client.CreateCheckStatusResponse(req, parsedRequest.CallerId);
-            //var pollingUrl = APITools.GetHeaderValue(x, "Location");
-
-            ////send polling URL to caller as Passed payload, client should know what todo
-            //return APITools.PassMessageJson(pollingUrl, req);
-
-        }
-
-
-        /// <summary>
-        /// The underlying async func that actually gets the list
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        [Function(nameof(_getPersonListAsync))]
-        public static async Task _getPersonListAsync([OrchestrationTrigger]
-            TaskOrchestrationContext context)
-        {
-            var requestData = context.GetInput<ParsedRequest>();
-
-            await context.CallActivityAsync<bool>(nameof(SwapData), requestData); //note swap done before get list
-            await context.CallActivityAsync<bool>(nameof(FilterData), requestData);
-        }
-
-        [Function(nameof(SwapData))]
-        public static async Task<bool> SwapData([ActivityTrigger] ParsedRequest swapOptions, FunctionContext executionContext)
-        {
-
-            //STAGE 2 : SWAP DATA
-            //swap visitor ID with user ID if any (data follows user when log in)
-            bool didSwap = await APITools.SwapUserId(swapOptions.VisitorId, swapOptions.UserId, APITools.PersonListFile);
-
-            return didSwap;
-        }
-
-        [Function(nameof(FilterData))]
-        public static async Task FilterData([ActivityTrigger] ParsedRequest requestData, FunctionContext executionContext)
-        {
-
-            //get latest all match reports
-            var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
-
-            //filter out record by caller id, which will be visitor id when user not logged in
-            var personListByCallerIdXml = Tools.FindXmlByUserId(personListXml, requestData.CallerId);
-
-            //sort a to z by name for ease of user (done here for speed vs client)
-            var sortedList = personListByCallerIdXml.OrderBy(personXml => personXml.Element("Name")?.Value ?? "").ToList();
-
-            //convert raw XML to Person Json
-            var personListJson = Person.XmlListToJsonList(sortedList);
-
-            //convert to type .NET's JSON accepted by durable
-            var jsonText = personListJson.ToString();
-
-            await AzureCache.AddLarge(requestData.CallerId, jsonText);
-
-            //var personListJsonDurable = JsonDocument.Parse(jsonText); //done for compatibility with durable
-
-            //return personListJsonDurable;
-
-        }
 
 
     }

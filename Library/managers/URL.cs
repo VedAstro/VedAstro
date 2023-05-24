@@ -31,7 +31,7 @@ public class URL
         GetCallData = ApiUrl + "/GetCallData";
 
         //PERSON
-        GetPersonListAsync = ApiUrl + "/GetPersonListAsync";
+        GetPersonList = ApiUrl + "/GetPersonList";
         AddPerson = ApiUrl + "/AddPerson";
         DeletePerson = ApiUrl + "/DeletePerson";
         UpdatePerson = ApiUrl + "/UpdatePerson";
@@ -111,7 +111,7 @@ public class URL
     /// Gets raw data at API data cache
     /// </summary>
     public readonly string GetCallData;
-    public readonly string GetPersonListAsync;
+    public readonly string GetPersonList;
     public readonly string GetPerson;
     public readonly string GetNewPersonId;
     public readonly string GetPersonIdFromSavedChartId;

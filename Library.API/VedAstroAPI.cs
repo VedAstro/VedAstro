@@ -58,7 +58,7 @@ namespace Library.API
 
             //STAGE 1 :get person list for current user, can be empty
             //tell API to get started
-            var url = $"{_url.GetPersonListAsync}/UserId/{_userId}/VisitorId/{_visitorId}";
+            var url = $"{_url.GetPersonList}/UserId/{_userId}/VisitorId/{_visitorId}";
 
             //we get call status and id to get data from when ready
             var rawResult = await Tools.ReadServer<JObject>(url);
@@ -69,7 +69,7 @@ namespace Library.API
 
             //STAGE 2 : get person list for public, example profiles
             //tell API to get started
-            url = $"{_url.GetPersonListAsync}/UserId/101/VisitorId/101";
+            url = $"{_url.GetPersonList}/UserId/101/VisitorId/101";
 
             //API gives a url to check on poll fo results
             rawResult = await Tools.ReadServer<JObject>(url);
@@ -99,7 +99,7 @@ namespace Library.API
             if (CachedPersonList.Any()) { return CachedPersonList; }
 
             //tell API to get started
-            var url2 = $"{_url.GetPersonListAsync}/UserId/{_userId}/VisitorId/{_visitorId}";
+            var url2 = $"{_url.GetPersonList}/UserId/{_userId}/VisitorId/{_visitorId}";
             CachedPersonList = await GetPersonListBehind(url2);
 
             return CachedPersonList;
@@ -111,7 +111,7 @@ namespace Library.API
             if (CachedPublicPersonList.Any()) { return CachedPublicPersonList; }
 
             //tell API to get started
-            var url2 = $"{_url.GetPersonListAsync}/UserId/101/VisitorId/101";
+            var url2 = $"{_url.GetPersonList}/UserId/101/VisitorId/101";
             CachedPublicPersonList = await GetPersonListBehind(url2);
 
             return CachedPublicPersonList;
@@ -124,28 +124,28 @@ namespace Library.API
             string? personListCallId = "";
             string? personListCallStatus = "";
 
-            var isProcessing = true; //start as true always to get latest if available
-            while (isProcessing)
-            {
+            //var isProcessing = true; //start as true always to get latest if available
+            //while (isProcessing)
+            //{
                 //we get call status and id to get data from when ready
-                var rawResult = await Tools.ReadServer<JObject>(url2);
-                JObject privatePayload = GetPayload<JObject>(rawResult, null);
-                personListCallStatus = privatePayload["CallStatus"]?.Value<string>();
-                personListCallId = privatePayload["CallId"]?.Value<string>();
+               // var personListJson = await Tools.ReadServer<JArray>(url2);
+                //JObject privatePayload = GetPayload<JObject>(rawResult, null);
+                //personListCallStatus = privatePayload["CallStatus"]?.Value<string>();
+                //personListCallId = privatePayload["CallId"]?.Value<string>();
 
-                isProcessing = personListCallStatus != "Completed";
+                //isProcessing = personListCallStatus != "Completed";
 
 #if DEBUG
-                Console.WriteLine($"SERVER SAID:{personListCallStatus}:{personListCallId}");
+               // Console.WriteLine($"SERVER SAID:{personListCallStatus}:{personListCallId}");
 #endif
 
-                await Task.Delay(500);
-            }
+                //await Task.Delay(500);
+            //}
 
 
             //GET DATA OUT (same call for all)
-            var url1 = $"{_url.GetCallData}/CallerId/{personListCallId}/Format/JSON";
-            var personListJson = await Tools.ReadServer<JArray>(url1);
+            //var url1 = $"{_url.GetCallData}/CallerId/{personListCallId}/Format/JSON";
+            var personListJson = await Tools.ReadServer<JArray>(url2);
             var cachedPersonList = Person.FromJsonList(personListJson); //cache for later use
 
             return cachedPersonList;

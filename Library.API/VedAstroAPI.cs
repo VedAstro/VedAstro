@@ -28,10 +28,6 @@ namespace Library.API
         private readonly URL _url;
 
 
-
-        private bool IsPublicPersonPrepared => PublicPersonListCallStatus == "Completed";
-
-
         //--------CTOR
         public VedAstroAPI(string userId, string visitorId, IJSRuntime jsRuntime, URL url)
         {
@@ -42,51 +38,34 @@ namespace Library.API
         }
 
 
-
-
         //--------------------------------------------------
-
 
         /// <summary>
         /// getting people list is a long process, because of clean up and stuff
         /// so ask server to start prepare, will get results later when needed
         /// </summary>
-        public async Task PreparePersonList()
+        public void PreparePersonList()
         {
-            //send the calls end of story, dont expect to check on it untill needed let server handle it
-            //later when needed assume prepare was not called
+            //send the calls end of story, dont expect to check on it until needed let server handle it
 
             //STAGE 1 :get person list for current user, can be empty
             //tell API to get started
             var url = $"{_url.GetPersonList}/UserId/{_userId}/VisitorId/{_visitorId}";
 
+            //no wait for speed
             //we get call status and id to get data from when ready
-            var rawResult = await Tools.ReadServer<JObject>(url);
-            //JObject privatePayload = GetPayload<JObject>(rawResult, null);
-            //PersonListCallStatus = privatePayload["CallStatus"].Value<string>();
-            //PersonListCallId = privatePayload["CallId"].Value<string>();
+            Tools.ReadServer<JObject>(url);
 
 
             //STAGE 2 : get person list for public, example profiles
             //tell API to get started
             url = $"{_url.GetPersonList}/UserId/101/VisitorId/101";
 
+            //no wait for speed
             //API gives a url to check on poll fo results
-            rawResult = await Tools.ReadServer<JObject>(url);
-            //JObject publicPayload = GetPayload<JObject>(rawResult, null);
-           // PublicPersonListCallStatus = publicPayload["CallStatus"]?.Value<string>();
-            //PublicPersonListCallId = publicPayload["CallId"]?.Value<string>();
-
+            Tools.ReadServer<JObject>(url);
 
         }
-
-        public string? PublicPersonListCallId { get; set; }
-
-        public string? PublicPersonListCallStatus { get; set; }
-
-        public string? PersonListCallId { get; set; }
-
-        //public string? PersonListCallStatus { get; set; }
 
         /// <summary>
         /// person will be auto prepared, but might be slow
@@ -104,6 +83,7 @@ namespace Library.API
 
             return CachedPersonList;
         }
+        
         public async Task<List<Person>> GetPublicPersonList()
         {
             //CHECK CACHE
@@ -115,41 +95,6 @@ namespace Library.API
             CachedPublicPersonList = await GetPersonListBehind(url2);
 
             return CachedPublicPersonList;
-        }
-
-        private async Task<List<Person>> GetPersonListBehind(string url2)
-        {
-
-            //LOOP
-            string? personListCallId = "";
-            string? personListCallStatus = "";
-
-            //var isProcessing = true; //start as true always to get latest if available
-            //while (isProcessing)
-            //{
-                //we get call status and id to get data from when ready
-               // var personListJson = await Tools.ReadServer<JArray>(url2);
-                //JObject privatePayload = GetPayload<JObject>(rawResult, null);
-                //personListCallStatus = privatePayload["CallStatus"]?.Value<string>();
-                //personListCallId = privatePayload["CallId"]?.Value<string>();
-
-                //isProcessing = personListCallStatus != "Completed";
-
-#if DEBUG
-               // Console.WriteLine($"SERVER SAID:{personListCallStatus}:{personListCallId}");
-#endif
-
-                //await Task.Delay(500);
-            //}
-
-
-            //GET DATA OUT (same call for all)
-            //var url1 = $"{_url.GetCallData}/CallerId/{personListCallId}/Format/JSON";
-            var personListJson = await Tools.ReadServer<JArray>(url2);
-            var cachedPersonList = Person.FromJsonList(personListJson); //cache for later use
-
-            return cachedPersonList;
-
         }
 
         /// <summary>
@@ -186,6 +131,10 @@ namespace Library.API
             //API gives a url to check on poll fo results
             var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
 
+#if DEBUG
+            Console.WriteLine($"SERVER SAID:\n{jsonResult}");
+#endif
+
             //if pass, clear local person cache
             await HandleResultClearLocalCache(jsonResult);
 
@@ -199,7 +148,6 @@ namespace Library.API
         /// </summary>
         public async Task UpdatePerson(Person person)
         {
-
             //todo should check if local copy matches server before updating, cause could overwrite
             //todo detect first using async list if possible to see change from others or use versioning
 
@@ -207,6 +155,10 @@ namespace Library.API
             var updatedPerson = person.ToJson();
             var url = $"{_url.UpdatePerson}/UserId/{_userId}/VisitorId/{_visitorId}";
             var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, updatedPerson);
+
+#if DEBUG
+            Console.WriteLine($"SERVER SAID:\n{jsonResult}");
+#endif
 
             //if pass, clear local person cache
             await HandleResultClearLocalCache(jsonResult);
@@ -250,6 +202,14 @@ namespace Library.API
 
 
         //---------------------------------------------PRIVATE
+        private async Task<List<Person>> GetPersonListBehind(string inputUrl)
+        {
+            var personListJson = await Tools.ReadServer<JArray>(inputUrl);
+            var cachedPersonList = Person.FromJsonList(personListJson); //cache for later use
+
+            return cachedPersonList;
+
+        }
 
 
         /// <summary>
@@ -293,9 +253,6 @@ namespace Library.API
 #if DEBUG
                 Console.WriteLine("API SAID: PASS"); //debug to know all went well
 #endif
-
-                ////if complex JSON object then pass along
-                //if (typeof(T) == typeof(JObject)) { return payloadJson; }
 
                 //use parser if available, use that, end here
                 if (parser != null)

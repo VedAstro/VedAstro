@@ -455,18 +455,32 @@ namespace API
             return response;
         }
 
+
+        /// <summary>
+        /// deletes old person record by ID and saves in new one as updated
+        /// </summary>
         public static async Task UpdatePersonRecord(Person updatedPerson)
         {
+            //var originalPerson = await APITools.GetPersonById(updatedPerson.Id);
+
             //get the person record that needs to be updated
             var personToUpdate = await FindPersonXMLById(updatedPerson.Id);
 
+            //only way it works manual update
             //delete the previous person record,
-            //and insert updated record in the same place
-            personToUpdate?.ReplaceWith(updatedPerson.ToXml());
+
+            //delete the old person record,
+            await APITools.DeleteXElementFromXDocumentAzure(personToUpdate, APITools.PersonListFile, APITools.BlobContainerName);
+
+            //and insert updated record in the updated as new
+            //add new person to main list
+            await APITools.AddXElementToXDocumentAzure(updatedPerson.ToXml(), APITools.PersonListFile, APITools.BlobContainerName);
+
+            // personToUpdate?.ReplaceWith(updatedPerson.ToXml());
 
             //upload modified list file to storage
-            var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
-            await SaveXDocumentToAzure(personListXmlDoc, PersonListFile, BlobContainerName);
+            //var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
+            //await SaveXDocumentToAzure(personListXmlDoc, PersonListFile, BlobContainerName);
         }
 
         public static async Task UpdateRecordInDoc<T>(XElement updatedPersonXml, string cloudFileName) where T : IToXml

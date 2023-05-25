@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -18,6 +18,16 @@ namespace VedAstro.Library
         /// for debugging and generating empty dasa svg lines
         /// </summary>
         public static GeoLocation Empty = new("Empty", 101, 4.59); //ipoh
+
+        /// <summary>
+        /// Fail Safe Location
+        /// </summary>
+        public static GeoLocation Tokyo = new GeoLocation("Tokyo, Japan", 139.83, 35.65);
+
+        /// <summary>
+        /// Fail Safe Location
+        /// </summary>
+        public static GeoLocation Bangkok = new GeoLocation("Bangkok, Thailand", 100.50, 13.75);
 
 
         //FIELDS
@@ -172,6 +182,11 @@ namespace VedAstro.Library
             return results.Payload;
         }
 
+        /// <summary>
+        /// Tries to get location from IP address of fail uses sample location
+        /// important is to always have some location for app to use
+        /// </summary>
+        /// <returns></returns>
         public static async Task<GeoLocation> FromIpAddress()
         {
             try
@@ -207,10 +222,11 @@ namespace VedAstro.Library
                 Console.WriteLine($"Client Location: FAILED!!!");
                 await LibLogger.Error(e);
 
-                //return empty to avert meltdown
-                return GeoLocation.Empty;
-
+                //return some location to avert meltdown
+                return Tokyo;
             }
         }
+
+        
     }
 }

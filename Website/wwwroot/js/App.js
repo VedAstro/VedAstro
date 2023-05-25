@@ -25,8 +25,6 @@ window.PDFOptions = {
 
 
 
-
-
 //SOFT DATA
 //initialize separate worker thread to handle all logging
 //goes first to make sure logger is ready to catch everybody else
@@ -122,14 +120,20 @@ window.GetInteropFuncList = () => {
 
 //will show warning message to users with small screen or windows
 //for site is better viewed above 1080p
-function SmallScreenGreetingMessage() {
+async function SmallScreenGreetingMessage() {
 
     //check if screen is too small
     var isTooSmall = window.innerWidth < 1080;
 
+    //get log payload from blazor
+    //var payload = await DotNet.invokeMethodAsync('Website', 'GetDataLogPayload', "TEST");
+
+    //console.log(payload);
+
     if (isTooSmall) {
         //show special message
-        Swal.fire('Small Screen Warning!', 'This site might not work on such a <strong>small screen</strong>. Don\'t say we didn\'t warn you.', 'warning');
+        //Swal.fire('Small Screen Warning!', 'This site might not work on such a <strong>small screen</strong>. Don\'t say we didn\'t warn you.', 'warning');
+        Swal.fire('Screen Little Small!', 'Not designed for such a small screen, probably works but dont expect perfection', 'warning');
     }
 }
 

@@ -5,7 +5,7 @@
 @using System.Xml.Linq
 
 
-<div class="d-flex justify-content-center">
+<div class="d-flex justify-content-center gap-3">
     
     @*Planet Name*@
     <div @ref="planetNameSelector"  class="form-floating">
@@ -44,131 +44,30 @@
         <label style="font-weight: 700; color: black;" for="houseNameSelector">House</label>
     </div>
 
-    <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"/>
+    @*House Name*@
+    <div @ref="signNameSelector" class="form-floating">
+        <select @bind="SelectedSign" class="form-select" id="signNameSelector" aria-label="Sign Select">
+            <option value="" selected>Filter by Sign</option>
+            <option value="Aries">House</option>
+            <option value="Taurus">Taurus</option>
+            <option value="Gemini">Gemini</option>
+            <option value="Cancer">Cancer</option>
+            <option value="Leo">Leo</option>
+            <option value="Virgo">Virgo</option>
+            <option value="Libra">Libra</option>
+            <option value="Scorpio">Scorpio</option>
+            <option value="Sagittarius">Sagittarius</option>
+            <option value="Capricornus">Capricornus</option>
+            <option value="Aquarius">Aquarius</option>
+            <option value="Pisces">Pisces</option>
+        </select>
+        <label style="font-weight: 700; color: black;" for="houseNameSelector">Sign</label>
+    </div>
+
+    <IconButton ExtraClass="h-auto" ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"/>
 
 </div>
 
-@*FILTER*@
-@*<div class="vstack gap-3">
-    <div class="border border-1">
-        <div class="hstack">
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_sunCheckBox" /><label class="form-check-label">Sun</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_moonCheckBox" /><label class="form-check-label">Moon</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_marsCheckBox" /><label class="form-check-label">Mars</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_mercuryCheckBox" /><label class="form-check-label">Mercury</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_jupiterCheckBox" /><label class="form-check-label">Jupiter</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_venusCheckBox" /><label class="form-check-label">Venus</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_saturnCheckBox" /><label class="form-check-label">Saturn</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_rahuCheckBox" /><label class="form-check-label">Rahu</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_ketuCheckBox" /><label class="form-check-label">Ketu</label></div>
-            </div>
-        </div>
-    </div>
-    <div class="border border-1">
-        <div class="hstack">
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house1CheckBox" /><label class="form-check-label"> 1</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house2CheckBox" /><label class="form-check-label"> 2</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house3CheckBox" /><label class="form-check-label"> 3</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house4CheckBox" /><label class="form-check-label"> 4</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house5CheckBox" /><label class="form-check-label"> 5</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house6CheckBox" /><label class="form-check-label"> 6</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house7CheckBox" /><label class="form-check-label"> 7</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house8CheckBox" /><label class="form-check-label"> 8</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house9CheckBox" /><label class="form-check-label"> 9</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house10CheckBox" /><label class="form-check-label"> 10</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house11CheckBox" /><label class="form-check-label"> 11</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_house12CheckBox" /><label class="form-check-label"> 12</label></div>
-            </div>
-        </div>
-    </div>
-    <div class="border border-1">
-        <div class="hstack">
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_ariesCheckBox" /><label class="form-check-label">Aries</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_taurusCheckBox" /><label class="form-check-label">Taurus</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_geminiCheckBox" /><label class="form-check-label">Gemini</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_cancerCheckBox" /><label class="form-check-label">Cancer</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_leoCheckBox" /><label class="form-check-label">Leo</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_virgoCheckBox" /><label class="form-check-label">Virgo</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_libraCheckBox" /><label class="form-check-label">Libra</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_scorpioCheckBox" /><label class="form-check-label">Scorpio</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_sagittariusCheckBox" /><label class="form-check-label">Sagittarius</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_capricornusCheckBox" /><label class="form-check-label">Capricornus</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_aquariusCheckBox" /><label class="form-check-label">Aquarius</label></div>
-            </div>
-            <div class="p-2">
-                <div class="form-check"><input type="checkbox" class="form-check-input" @bind="_piscesCheckBox" /><label class="form-check-label">Pisces</label></div>
-            </div>
-        </div>
-    </div>
-</div>
-<IconButton ButtonText="Refresh Filter" IconName="bx:search-alt" OnClickCallback="FilterButtonClicked"></IconButton>
-*@@*SEARCH*@
-@*                    <div class="hstack gap-3">
-            <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
-            <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
-            </div>
-            *@
 
 <table class="table table-bordered table-striped table-hover">
     <thead class="table-dark">
@@ -196,7 +95,9 @@
 
     private string SelectedHouse;
     private string SelectedPlanet;
+    private string SelectedSign;
 
+    private ElementReference signNameSelector;
     private ElementReference houseNameSelector;
     private ElementReference planetNameSelector;
 

@@ -3,21 +3,22 @@
 @using System.Xml.Linq
 
 
+<div class="hstack">
+    <div @ref="imageHolder" class="vstack" style="width: fit-content;">
+    </div>
+    <div id="SkyChartLoadingIcon" style="display: none;">
+        @AppData.LoadingImage
+    </div>
 
-<div @ref="imageHolder" class="vstack" style="width: fit-content;">
+    @*BUTTON ROW*@
+    <div class="vstack gap-3">
+        <IconButton SmallSize="true" Outline="true" TooltipText="Print" IconName="flat-color-icons:print" OnClickCallback="_jsRuntime.GoBack"/>
+        <IconButton SmallSize="true" Outline="true" TooltipText="Save as Image" IconName="emojione:floppy-disk" OnClickCallback="_jsRuntime.GoBack"/>
+        <IconButton SmallSize="true" Outline="true" TooltipText="Embed in app or website" IconName="dashicons:embed-photo" OnClickCallback="_jsRuntime.GoBack"/>
+    </div>
 
-    <img id="SkyChartHolder" src="#" class="my-2">
-
-@*
-    <hr />
-    <img src="@SkyChartUrlGif" class="my-2 d-none" onload="javascript: SkyChartUrlGifLoaded()">
-*@
-    
 </div>
 
-<div id="SkyChartLoadingIcon" class="d-none">
-    @AppData.LoadingImage
-</div>
 
 
 
@@ -45,9 +46,8 @@
 
     }
 
-    public void Update(Time finalTime)
+    public async Task Update(Time finalTime)
     {
-
         isReady = false;
         showLoading = true;
 
@@ -55,8 +55,7 @@
         SkyChartUrl = GetUrl("SkyChart");
         SkyChartUrlGif = GetUrl("SkyChartGIF");
 
-        _jsRuntime.InvokeVoidAsync("Interop.SkyChartInit", imageHolder, SkyChartUrl);
-
+        await _jsRuntime.InvokeVoidAsync("Interop.SkyChartInit", imageHolder, SkyChartUrl);
 
         showLoading = false;
         isReady = true;

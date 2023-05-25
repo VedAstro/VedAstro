@@ -5,18 +5,14 @@
 
 <PageTitle>@_pageTitle</PageTitle>
 
-<PageTop Title="Horoscope" IconName="fluent:book-star-20-filled">
-    <Description>Astrological predictions of a person's horoscope.<br />Over +370 planetary combinations are checked.</Description>
-    @*    <ButtonsRow>
-    <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-    <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
-    <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
-    </ButtonsRow>
-    *@
+<PageTop ImageName="join-our-family.svg"
+         Title="Horoscope"
+         DescriptionText="Astrological predictions of a person's horoscope.Over +370 planetary combinations are checked.">
 </PageTop>
 
 
-<div class="gap-3" style="max-width:@GR.W1080px">
+
+<div class="gap-3" style="max-width: @(GR.W667 +GR.W157)px;">
 
     @*SELECTOR & BUTTON*@
 
@@ -25,8 +21,8 @@
             <PersonSelectorBox @ref="_peopleSelectorBox" />
             <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"></IconButton>
         </div>
-        <InfoBox Title="Pro Tip" Description="Combine matched references with astrological data to make final accurate predictions" IconName="flat-color-icons:idea" />
-    </div>
+@*        <InfoBox Title="Pro Tip" Description="Combine matched references with astrological data to make final accurate predictions" IconName="flat-color-icons:idea" />
+*@    </div>
 
 
 
@@ -166,7 +162,7 @@
         _pageTitle = $"Horoscope | {_selectedPerson.Name}";
 
         //update sky chart
-        skyChartViewer.Update(_selectedPerson.BirthTime);
+        await skyChartViewer.Update(_selectedPerson.BirthTime);
 
 
         //inject selected person into component to show horoscope data

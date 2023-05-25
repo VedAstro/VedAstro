@@ -105,7 +105,7 @@
             <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
 
             @*COPY AND CALL BUTTON*@
-            <div class="hstack gap-3">
+            <div class="d-flex justify-content-center gap-3">
                 <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
                 <IconButton ButtonText="Test Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
             </div>
@@ -117,12 +117,12 @@
         <div class="vstack gap-3">
             <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
                 <ButtonRow>
-                    <IconButton ButtonText="Read More" ClickUrl="@PageRoute.OpenApi" IconName="octicon:info-16"/>
+                    <IconButton SmallSize="true" Color="info" ButtonText="Read More" ClickUrl="@PageRoute.OpenApi" IconName="octicon:info-16"/>
                 </ButtonRow>
                 <TextHTML>
                     Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language,
                     PHP, JS, Python, even your browsers' URL. Design your app to cache the received data.
-                    Note : calls have been known to fail once in a blue moon, if and when that happens,
+                    Note : calls have been known to fail once in a <strong>blue moon</strong>, if and when that happens,
                     just make sure your app just replays the same call again. Design your code to try
                     HTTP call at least 2 times be reporting as failed. Even a small network issue on the
                     client side may cause this.

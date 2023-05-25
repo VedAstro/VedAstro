@@ -113,12 +113,11 @@ else
         finalTime = await _timeInput.GetTime(finalGeoLocation);
 
         //update sky chart
-        skyChartViewer.Update(finalTime);
+        await skyChartViewer.Update(finalTime);
 
         //get all methods that have only time as input
         astronomyCalcs = AutoCalculator.ExecuteFunctions(Category.Astronomical, finalTime);
         astrologyCalcs = AutoCalculator.ExecuteFunctions(Category.StarsAboveMe, finalTime);
-
 
         isReady = true;
 

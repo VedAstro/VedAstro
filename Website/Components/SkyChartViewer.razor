@@ -4,51 +4,64 @@
 
 
 
+<div @ref="imageHolder" class="vstack" style="width: fit-content;">
 
-@if (isReady)
-{
-    <div class="vstack mb-3">
+    <img id="SkyChartHolder" src="#" class="my-2">
 
-        <img src="@SkyChartUrl" class="my-2">
+@*
+    <hr />
+    <img src="@SkyChartUrlGif" class="my-2 d-none" onload="javascript: SkyChartUrlGifLoaded()">
+*@
+    
+</div>
 
-        <hr />
-        <img src="@SkyChartUrl" class="my-2">
-
-    </div>
-}
-else
-{
+<div id="SkyChartLoadingIcon" class="d-none">
     @AppData.LoadingImage
-}
+</div>
 
 
 
 
 @code {
 
+    private ElementReference imageHolder;
     private bool isReady { get; set; } = false;//start as not ready
+    private bool showLoading { get; set; } = false;//start as not ready separate loading because model loading not enough
 
     private Time? time { get; set; }
-    private string SkyChartUrl { get; set; }
-    private string SkyChartUrlGif { get; set; }
+    private string SkyChartUrl { get; set; } = "#";
+    private string SkyChartUrlGif { get; set; } = "#";
 
     private string GetUrl(string ending)
     {
-        var locationName = Tools.RemoveWhiteSpace(time?.GetGeoLocation().GetName());
-        var url = $"{AppData.URL.ApiUrl}/Location/{locationName}/Time/{time?.GetUrlString()}/{ending}";
+        var stringWithSpace = time?.GetGeoLocation().GetName();
 
+        //if null end here
+        if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }
+
+        var locationName = Tools.RemoveWhiteSpace(stringWithSpace);
+        var url = $"{AppData.URL.ApiUrl}/Location/{locationName}/Time/{time?.GetUrlString()}/{ending}";
         return url;
+
     }
 
     public void Update(Time finalTime)
     {
-        isReady = false;
 
+        isReady = false;
+        showLoading = true;
+
+        time = finalTime; //save value to be access later
         SkyChartUrl = GetUrl("SkyChart");
         SkyChartUrlGif = GetUrl("SkyChartGIF");
 
+        _jsRuntime.InvokeVoidAsync("Interop.SkyChartInit", imageHolder, SkyChartUrl);
+
+
+        showLoading = false;
         isReady = true;
 
+        //needed to make appear else no change will appear
         StateHasChanged();
     }
 

@@ -62,6 +62,8 @@
         public const string scrollIntoView = "Interop.scrollIntoView";
         public const string getAllLocalStorageKeys = "Interop.getAllLocalStorageKeys";
         public const string postWrapper = "Interop.postWrapper";
+        public const string SkyChartAnimate = "Interop.SkyChartAnimate";
+        public const string SkyChartInit = "Interop.SkyChartInit";
         public const string ReadOnlyIfPass = "Interop.ReadOnlyIfPass";
         public const string getScreenData = "Interop.getScreenData";
         public const string shareDialogFacebook = "Interop.shareDialogFacebook";

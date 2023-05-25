@@ -16,7 +16,7 @@
 </PageTop>
 
 
-<div>
+<div class="gap-3" style="max-width:@GR.W1080px">
 
     @*SELECTOR & BUTTON*@
 
@@ -165,11 +165,13 @@
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"Horoscope | {_selectedPerson.Name}";
 
+        //update sky chart
+        skyChartViewer.Update(_selectedPerson.BirthTime);
+
+
         //inject selected person into component to show horoscope data
         await _horoscopeInfoView.SetPerson(_selectedPerson);
 
-        //update sky chart
-        skyChartViewer.Update(_selectedPerson.BirthTime);
 
     }
 

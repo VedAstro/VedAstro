@@ -21,8 +21,132 @@ export var showAccordion = (id) => $(id).collapse("show");
 export var toggleAccordion = (id) => $(id).collapse("toggle"); //Uses Bootstrap Jquery plugin to toggle any collapsible component by id
 export var scrollIntoView = (id) => $(id)[0].scrollIntoView(); //scrolls element by id into view
 
+const RETRY_COUNT = 5;
+
+
 //-----------------------FOR JSFetchWrapper
 //calls to server from blazor come here not via blazor http client, reliable
+export async function SkyChartInit(imageHolder, SkyChartUrl) {
+
+    //remove previous on multiple calculates
+    $(imageHolder).empty();
+
+    var loadingIcon = $('#SkyChartLoadingIcon');
+
+    loadingIcon.show();
+
+    let count = RETRY_COUNT;
+    while (count > 0) {
+        try {
+            var res = await fetch(SkyChartUrl + "GIF");
+            var myBlob = await res.blob();
+
+            window.SkyChartBlobGIF = myBlob;
+            console.log(myBlob);
+
+            var imagesrc = URL.createObjectURL(window.SkyChartBlobGIF);
+            var img = $('<img  />', { id: 'SkyChartBlobGIF', src: imagesrc });
+            img.appendTo($(imageHolder));
+
+            //show animation first since most likely user's mouse hasn't graced chart
+            img.show();
+
+            loadingIcon.hide();
+
+            //exit fail save
+            count = 0;
+
+        } catch (error) {
+            // logging ?
+            console.log("Retry iN aCTION");
+        }
+
+        // logging / waiting?
+
+        count -= 1;
+    }
+
+
+
+
+    //now load normal image to show when cursor is placed over
+    fetch(SkyChartUrl)
+        .then((res) => res.blob())
+        .then((myBlob) => {
+            window.SkyChartBlob = myBlob;
+            console.log(myBlob);
+
+            var imagesrc = URL.createObjectURL(window.SkyChartBlob);
+            var img = $('<img />', { id: 'SkyChartBlob', src: imagesrc });
+            img.appendTo($(imageHolder));
+
+            img.hide();
+
+            loadingIcon.hide();
+
+        });
+
+    $(imageHolder).on("mouseout", function () {
+
+        $('#SkyChartBlobGIF').show();
+        $('#SkyChartBlob').hide();
+    });
+
+    $(imageHolder).on("mouseover", function () {
+        $('#SkyChartBlobGIF').hide();
+        $('#SkyChartBlob').show();
+    });
+
+
+    console.log("SKY CHART AUTO PREVIEW");
+
+
+    //$.ajax({
+    //    url: SkyChartUrl,
+    //    xhrFields: {
+    //        responseType: 'blob'
+    //    },
+    //    success: function (data) {
+    //        var blobData = data;
+    //        var url = window.URL || window.webkitURL;
+    //        var src = url.createObjectURL(blobData);
+    //        alert(src);
+    //        $('#SkyChartHolder').attr("src", src);
+    //    }
+    //});
+
+    //var response = await fetch(SkyChartUrl);
+    //window.SkyChartBlob = await response.Blob();
+
+    ////response = await fetch(SkyChartUrl+"GIF");
+    ////window.SkyChartBlobGIF = await response.Blob();
+
+    ////var blobData = data;
+    //var url = window.URL || window.webkitURL;
+    //var src = url.createObjectURL(window.SkyChartBlob);
+    //$('#SkyChartHolder').attr("src", src);
+
+    //alert("BOTH LOADED");
+
+
+}
+
+export async function SkyChartAnimate(imageHolder, SkyChartUrl) {
+
+    var img = $('<img />', { src: SkyChartUrl });
+    img.appendTo($(imageHolder));
+
+    console.log("Normal loaded");
+    $(imageHolder).on("mouseleave", function () {
+        $("#log").append("<div>Handler for `mouseleave` called.</div>");
+    });
+
+    $(imageHolder);
+    var img = $('<img />', { src: SkyChartUrl+'GIF' });
+    img.appendTo($(imageHolder));
+
+}
+
 export async function postWrapper(url, payloadXml) {
     console.log("JS > Sending POST request...");
 

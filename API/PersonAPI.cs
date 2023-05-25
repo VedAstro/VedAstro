@@ -66,7 +66,6 @@ namespace API
             {
                 var response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Call-Status", "Running"); //caller checks this
-                response.Headers.Add("Call-Id", parsedRequest.CallerId); //caller checks this
                 return response;
             }
 
@@ -96,7 +95,6 @@ namespace API
                 {
                     var response = req.CreateResponse(HttpStatusCode.OK);
                     response.Headers.Add("Call-Status", "Running"); //caller checks this
-                    response.Headers.Add("Call-Id", parsedRequest.CallerId); //caller checks this
                     return response;
                 }
 

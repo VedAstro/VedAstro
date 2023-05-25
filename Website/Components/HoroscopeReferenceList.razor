@@ -5,9 +5,51 @@
 @using System.Xml.Linq
 
 
+<div class="d-flex justify-content-center">
+    
+    @*Planet Name*@
+    <div @ref="planetNameSelector"  class="form-floating">
+        <select @bind="SelectedPlanet" class="form-select" id="planetNameSelector" aria-label="Planet Name Select">
+            <option value="" selected>Filter by Planet</option>
+            <option value="Sun">Sun</option>
+            <option value="Moon">Moon</option>
+            <option value="Mars">Mars</option>
+            <option value="Mercury">Mercury</option>
+            <option value="Jupiter">Jupiter</option>
+            <option value="Venus">Venus</option>
+            <option value="Saturn">Saturn</option>
+            <option value="Rahu">Rahu</option>
+            <option value="Ketu">Ketu</option>
+        </select>
+        <label style="font-weight: 700; color: black;" for="planetNameSelector">Planet</label>
+    </div>
+
+    @*House Name*@
+    <div @ref="houseNameSelector" class="form-floating">
+        <select @bind="SelectedHouse" class="form-select" id="houseNameSelector" aria-label="House Name Select">
+            <option value="" selected>Filter by House</option>
+            <option value="House1">House 1</option>
+            <option value="House2">House 2</option>
+            <option value="House3">House 3</option>
+            <option value="House4">House 4</option>
+            <option value="House5">House 5</option>
+            <option value="House6">House 6</option>
+            <option value="House7">House 7</option>
+            <option value="House8">House 8</option>
+            <option value="House9">House 9</option>
+            <option value="House10">House 10</option>
+            <option value="House11">House 11</option>
+            <option value="House12">House 12</option>
+        </select>
+        <label style="font-weight: 700; color: black;" for="houseNameSelector">House</label>
+    </div>
+
+    <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"/>
+
+</div>
 
 @*FILTER*@
-<div class="vstack gap-3">
+@*<div class="vstack gap-3">
     <div class="border border-1">
         <div class="hstack">
             <div class="p-2">
@@ -121,7 +163,7 @@
     </div>
 </div>
 <IconButton ButtonText="Refresh Filter" IconName="bx:search-alt" OnClickCallback="FilterButtonClicked"></IconButton>
-@*SEARCH*@
+*@@*SEARCH*@
 @*                    <div class="hstack gap-3">
             <input @bind="_searchInput" type="text" class="form-control" placeholder="Search">
             <IconButton ButtonText="Search" IconName="bx:search-alt" OnClickCallback="SearchButtonClicked"></IconButton>
@@ -151,6 +193,13 @@
 
 
 @code {
+
+    private string SelectedHouse;
+    private string SelectedPlanet;
+
+    private ElementReference houseNameSelector;
+    private ElementReference planetNameSelector;
+
     private bool _sunCheckBox, _moonCheckBox, _marsCheckBox, _mercuryCheckBox, _jupiterCheckBox, _venusCheckBox, _saturnCheckBox, _rahuCheckBox, _ketuCheckBox;
     private bool _house1CheckBox, _house2CheckBox, _house3CheckBox, _house4CheckBox, _house5CheckBox, _house6CheckBox, _house7CheckBox, _house8CheckBox, _house9CheckBox, _house10CheckBox, _house11CheckBox, _house12CheckBox;
     private bool _ariesCheckBox, _taurusCheckBox, _geminiCheckBox, _cancerCheckBox, _leoCheckBox, _virgoCheckBox, _libraCheckBox, _scorpioCheckBox, _sagittariusCheckBox, _capricornusCheckBox, _aquariusCheckBox, _piscesCheckBox;
@@ -235,6 +284,9 @@
             //then tell the user
             await _jsRuntime.ShowAlert("error", AlertText.ObliviousErrors(), true);
         }
+
+        //needed to make visible
+        StateHasChanged();
 
     }
 

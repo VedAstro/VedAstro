@@ -108,8 +108,6 @@ async function EyesOnPageLogger() {
     //get log payload from blazor
     var payload = await DotNet.invokeMethodAsync('Website', 'GetDataLogPayload', msg);
 
-    console.log(payload);
-
     //send a copy to server for logging
     window.LogThread.postMessage(payload);
 }

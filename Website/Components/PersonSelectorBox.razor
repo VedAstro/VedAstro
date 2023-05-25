@@ -81,7 +81,6 @@ KEEP IT REAL
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
     private const string NotSelectedPersonId = "0"; //needed to detect empty
     private string _selectedPersonId = NotSelectedPersonId;
-    private ElementReference selectorElement;
 
     //PARAMETERS
 
@@ -239,13 +238,13 @@ KEEP IT REAL
         //match the value in HTML option tag, we do not select by visible value
 
         //check if person exists already in the list
-        var isExist = PersonList.Where(person => person.Equals(inputPerson)).Any();
+        //var isExist = PersonList.Where(person => person.Equals(inputPerson)).Any();
 
-        //if doesn't exist, add in first (inject via JS)
-        if (!isExist) { await _jsRuntime.AddOptionToSelectDropdown(selectorElement, inputPerson.DisplayName, inputPerson.Id); }
+        //simulate click
+        OnClickPersonName(inputPerson);
 
         //now select that person by ID, makes it visible
-        await AppData.JsRuntime.SetValue(selectorElement, personIdUrl);
+        //await AppData.JsRuntime.SetValue(selectorElement, personIdUrl);
 
     }
 

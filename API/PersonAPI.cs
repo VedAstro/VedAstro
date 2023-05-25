@@ -7,6 +7,9 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 using Azure.Storage.Blobs;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Threading;
+using SwissEphNet;
 
 namespace API
 {
@@ -48,21 +51,56 @@ namespace API
 
 
         /// <summary>
-        /// This is both STATUS POLL and WORK START endpoint for person list
+        /// Gets person list
         /// </summary>
         [Function(nameof(GetPersonList))]
         public static async Task<HttpResponseData> GetPersonList(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonList/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
             string userId, string visitorId)
         {
-            //STAGE 1 : GET DATA OUT
             var parsedRequest = new ParsedRequest(userId, visitorId);
 
-            Func<Task<string>> generateChart = () => _getPersonList(parsedRequest);
+            //check if call already made and is running
+            //call is made again (polling), don't disturb running
+            if (CallTracker.IsRunning(parsedRequest.CallerId))
+            {
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Call-Status", "Running"); //caller checks this
+                response.Headers.Add("Call-Id", parsedRequest.CallerId); //caller checks this
+                return response;
+            }
 
-            var personListJson = await APITools.CacheExecuteTask3(generateChart, parsedRequest.CallerId);
-            return APITools.SendFileToCaller(personListJson, req, MediaTypeNames.Application.Json);
+            //start new call
+            else
+            {
+                //PREPARE THE CALL
+                Func<Task<string>> generateChart = () => _getPersonList(parsedRequest);
+                Func<Task<BlobClient>> cacheExecuteTask3 = () => APITools.CacheExecuteTask3(generateChart, parsedRequest.CallerId);
 
+
+                //EXECUTE
+                //2 possibilities:
+                //1 -> got cache, can reply caller ASAP (within 3s computation)
+                //2 -> no cache, need to calculate slowly (tell caller to come back later)
+                var task = Task.Run(cacheExecuteTask3);
+                if (task.Wait(3000)) //within 3s must complete
+                {
+                    // get the data out of the heavy computation function
+                    BlobClient personListJson = task.Result;
+                    var httpResponseData = APITools.SendPassHeaderToCaller(personListJson, req, MediaTypeNames.Application.Json);
+                    return httpResponseData;
+
+                }
+                //tell caller to come back later
+                else
+                {
+                    var response = req.CreateResponse(HttpStatusCode.OK);
+                    response.Headers.Add("Call-Status", "Running"); //caller checks this
+                    response.Headers.Add("Call-Id", parsedRequest.CallerId); //caller checks this
+                    return response;
+                }
+
+            }
 
             //--------------------------------
             async Task<string> _getPersonList(ParsedRequest requestData)

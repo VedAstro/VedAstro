@@ -64,16 +64,6 @@ KEEP IT REAL
 
         }
 
-        @*PersonSelector class used to programatically set visible person selection*@
-        <select @ref="selectorElement" @bind="SelectedPersonId" class="form-control PersonSelector d-none" style="width: @GR.W255px; height: @GR.W37px;">
-            <option value="">Select Name</option>
-            @DropDownOptionsHtml
-            <hr />
-            <span>Examples</span>
-            <hr />
-            <option>James Brown</option>
-            <option>James Brown</option>
-        </select>
         @*add person icon*@
         <IconButton ExtraClass="ms-2" TooltipText="Add new person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
     </div>

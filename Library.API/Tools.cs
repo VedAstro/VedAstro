@@ -44,6 +44,37 @@ namespace Library.API
 
             return dataReturned;
         }
+        public static async Task<string?> ReadOnlyIfPass(string receiverAddress)
+        {
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+            //tell sender to wait for complete reply before exiting
+            var waitForContent = HttpCompletionOption.ResponseContentRead;
+
+            //send the data on its way
+            using var client = new HttpClient();
+            client.Timeout = Timeout.InfiniteTimeSpan;
+            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+
+            //only get content if response is pass
+            var callStatus = response.Headers.GetValues("Call-Status").FirstOrDefault() ?? "Fail"; //fail if null
+#if DEBUG
+            Console.WriteLine($"API SAID : {callStatus}");
+#endif
+            var isPass = callStatus == "Pass";
+            if (isPass)
+            {
+                //return the raw reply to caller
+                var dataReturned = await response.Content.ReadAsStringAsync();
+
+                return dataReturned;
+
+            }
+
+            //if anything but pass, don't look inside just say nothing
+            return null;
+
+        }
 
         public static async Task<T?> ReadServer<T>(string receiverAddress) where T : JToken
         {

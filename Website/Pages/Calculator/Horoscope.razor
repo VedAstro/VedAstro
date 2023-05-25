@@ -7,12 +7,13 @@
 
 <PageTop Title="Horoscope" IconName="fluent:book-star-20-filled">
     <Description>Astrological predictions of a person's horoscope.<br />Over +370 planetary combinations are checked.</Description>
-@*    <ButtonsRow>
-        <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
-        <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
-        <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
+    @*    <ButtonsRow>
+    <IconButton SmallSize="true" IconName="ant-design:user-add-outlined" ButtonText="Add Person" ClickUrl="@PageRoute.AddPerson"></IconButton>
+    <IconButton SmallSize="true" IconName="carbon:graphical-data-flow" ButtonText="Horoscope Data" ClickUrl="@PageRoute.HoroscopeData"></IconButton>
+    <IconButton SmallSize="true" IconName="bx:book-reader" ButtonText="Help" OnClickCallback="@_helpSection.Show"></IconButton>
     </ButtonsRow>
-*@</PageTop>
+    *@
+</PageTop>
 
 
 <div>
@@ -27,8 +28,14 @@
         <InfoBox Title="Pro Tip" Description="Combine matched references with astrological data to make final accurate predictions" IconName="flat-color-icons:idea" />
     </div>
 
+
+
+
     @*divider*@
     <hr />
+
+    <SkyChartViewer @ref="skyChartViewer" />
+
 
     @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
     <HoroscopeInfoView @ref="_horoscopeInfoView" />
@@ -59,6 +66,8 @@
 
 
 @code {
+
+    private SkyChartViewer skyChartViewer;
 
     /// <summary>
     /// Param used in URL to set Person ID via URL
@@ -158,6 +167,9 @@
 
         //inject selected person into component to show horoscope data
         await _horoscopeInfoView.SetPerson(_selectedPerson);
+
+        //update sky chart
+        skyChartViewer.Update(_selectedPerson.BirthTime);
 
     }
 

@@ -19,14 +19,7 @@
 @if (isReady)
 {
 
-    <div class="vstack mb-3">
-
-        <img src="@GetUrl("SkyChart")" class="my-2">
-
-        <hr />
-        <img src="@GetUrl("SkyChartGIF")" class="my-2">
-
-    </div>
+    <SkyChartViewer @ref="skyChartViewer" />
 
     <IconTitle Title="Vedic" IconName="ph:star-of-david-duotone" />
     <table class="table-striped table-hover table-bordered mb-5">
@@ -93,6 +86,7 @@ else
     private List<APIFunctionResult> astrologyCalcs;
     private List<APIFunctionResult> astronomyCalcs;
 
+    private SkyChartViewer skyChartViewer;
     private Time finalTime = Time.Empty;
     private GeoLocation finalGeoLocation = GeoLocation.Empty;
     private TimeInputSimple _timeInput;
@@ -118,6 +112,9 @@ else
         finalGeoLocation = _geoLocationInput.GetGeoLocation();
         finalTime = await _timeInput.GetTime(finalGeoLocation);
 
+        //update sky chart
+        skyChartViewer.Update(finalTime);
+
         //get all methods that have only time as input
         astronomyCalcs = AutoCalculator.ExecuteFunctions(Category.Astronomical, finalTime);
         astrologyCalcs = AutoCalculator.ExecuteFunctions(Category.StarsAboveMe, finalTime);
@@ -129,13 +126,5 @@ else
 
     }
 
-    private string GetUrl(string ending)
-    {
-        var locationName = Tools.RemoveWhiteSpace(_geoLocationInput.GetGeoLocation().GetName());
-        var url = $"https://beta.api.vedastro.org/Location/{locationName}/Time/{_timeInput.GetUrlString()}/{ending}";
-
-
-        return url;
-    }
 
 }

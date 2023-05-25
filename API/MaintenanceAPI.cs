@@ -91,7 +91,7 @@ namespace API
 
             if (formatName.ToLower() == "json")
             {
-                string jsonText = await AzureCache.GetLarge<string>(callerId);
+                string jsonText = await AzureCache.GetData<string>(callerId);
 
                 var response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
@@ -105,14 +105,14 @@ namespace API
              else if (formatName.ToLower() == "gif")
             {
                 //for images get and send direct with as less operations as possible
-                var fileBlobClient = await AzureCache.GetLarge<BlobClient>(callerId);
+                var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
 
                 return APITools.SendFileToCaller(fileBlobClient, req, MediaTypeNames.Image.Gif);
             }
             else if (formatName.ToLower() == "svg")
             {
                 //for images get and send direct with as less operations as possible
-                var fileBlobClient = await AzureCache.GetLarge<BlobClient>(callerId);
+                var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
 
                 return APITools.SendFileToCaller(fileBlobClient, req, "image/svg+xml");
             }

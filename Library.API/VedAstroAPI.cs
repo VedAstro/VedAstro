@@ -77,13 +77,13 @@ namespace Library.API
             //cache will be cleared when update is needed
             if (CachedPersonList.Any()) { return CachedPersonList; }
 
-            //tell API to get started
+            //prepare url to call
             var url2 = $"{_url.GetPersonList}/UserId/{_userId}/VisitorId/{_visitorId}";
             CachedPersonList = await GetPersonListBehind(url2);
 
             return CachedPersonList;
         }
-        
+
         public async Task<List<Person>> GetPublicPersonList()
         {
             //CHECK CACHE
@@ -204,8 +204,13 @@ namespace Library.API
         //---------------------------------------------PRIVATE
         private async Task<List<Person>> GetPersonListBehind(string inputUrl)
         {
-            var personListJson = await Tools.ReadServer<JArray>(inputUrl);
-            var cachedPersonList = Person.FromJsonList(personListJson); //cache for later use
+
+            //call until data appears, API takes of everything
+            string? personListJson = null;
+            var pollRate = 300;
+            while (personListJson == null) { personListJson = await Tools.ReadOnlyIfPass(inputUrl); await Task.Delay(pollRate); }
+
+            var cachedPersonList = Person.FromJsonList(personListJson); 
 
             return cachedPersonList;
 

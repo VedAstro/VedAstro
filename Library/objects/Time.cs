@@ -554,5 +554,18 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// time converted to the format used in OPEN API url
+        /// Time/ + 00:00/22/05/2023/+00:00
+        /// </summary>
+        /// <returns></returns>
+        public string GetUrlString()
+        {
+            //reconstruct into URL pattern
+            //00:00/22/05/2023/+00:00
+            var returnVal = this.GetStdDateTimeOffsetText(); //date time with space
+            var formatted = returnVal.Replace(" ", "/"); //replace spacing between to slash
+            return formatted;
+        }
     }
 }

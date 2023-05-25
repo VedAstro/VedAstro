@@ -2,43 +2,55 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-@*default loading icon
-@if (readyToRender)
-{
-    <IconText FontColor="#8f8f8f" ExtraClass="ms-2" ShowLine="true" IconName="eos-icons:ai-operator">
-        Help train Machine Learning (ML) model. <a href="@PageRoute.TrainAIAstrologer">Read more</a>
-    </IconText>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Prediction</th>
-                <th scope="col"><Icon IconName="eos-icons:ai" Size="25" /> Feedback</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var prediction in predictionList)
-            {
-                <tr>
-                    <td scope="row">@prediction</td>
-                    <td>
-                        <div class="hstack gap-2">
-                            <IconButton SmallSize="true" IconName="carbon:thumbs-up-filled" OnClickCallback="OnClickVoteUp" TooltipText="Prediction is right" />
-                            <IconButton SmallSize="true" IconName="carbon:thumbs-down-filled" OnClickCallback="OnClickVoteUp" TooltipText="Prediction is wrong" />
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
 
+
+
+@if (isReady)
+{
+    <div class="vstack mb-3">
+
+        <img src="@SkyChartUrl" class="my-2">
+
+        <hr />
+        <img src="@SkyChartUrl" class="my-2">
+
+    </div>
 }
-*@
-@*default loading icon*@
 else
 {
-    <img style="width:@GR.W157px;align-self: center;" src="images/loading-animation-progress-transparent.gif" />
+    @AppData.LoadingImage
 }
 
+
+
+
 @code {
+
+    private bool isReady { get; set; } = false;//start as not ready
+
+    private Time? time { get; set; }
+    private string SkyChartUrl { get; set; }
+    private string SkyChartUrlGif { get; set; }
+
+    private string GetUrl(string ending)
+    {
+        var locationName = Tools.RemoveWhiteSpace(time?.GetGeoLocation().GetName());
+        var url = $"{AppData.URL.ApiUrl}/Location/{locationName}/Time/{time?.GetUrlString()}/{ending}";
+
+        return url;
+    }
+
+    public void Update(Time finalTime)
+    {
+        isReady = false;
+
+        SkyChartUrl = GetUrl("SkyChart");
+        SkyChartUrlGif = GetUrl("SkyChartGIF");
+
+        isReady = true;
+
+        StateHasChanged();
+    }
+
 
 }

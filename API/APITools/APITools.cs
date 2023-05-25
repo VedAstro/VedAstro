@@ -13,6 +13,7 @@ using Microsoft.DurableTask;
 using Microsoft.DurableTask.Client;
 using Microsoft.Extensions.Azure;
 using VedAstro.Library;
+using iText.Commons.Bouncycastle.Cert.Ocsp;
 
 namespace API
 {
@@ -807,6 +808,23 @@ namespace API
             return response;
         }
 
+
+        public static HttpResponseData SendPassHeaderToCaller(BlobClient fileBlobClient, HttpRequestData req, string mimeType)
+        {
+            //send image back to caller
+            //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            response.Body = fileBlobClient.OpenRead();
+            return response;
+        }
+
         //gets the exact width of a text based on Font size & type
         //used to generate nicely fitting background for text
         public static double GetTextWidthPx(string textInput)
@@ -941,7 +959,7 @@ namespace API
             }
             else
             {
-                chart = await AzureCache.GetLarge<T>(callerId);
+                chart = await AzureCache.GetData<T>(callerId);
             }
 
             return chart;
@@ -963,28 +981,47 @@ namespace API
             }
             else
             {
-                chartBlobClient = await AzureCache.GetLarge<BlobClient>(callerId);
+                chartBlobClient = await AzureCache.GetData<BlobClient>(callerId);
             }
 
             return chartBlobClient;
         }
-        public static async Task<BlobClient> CacheExecuteTask3(Func<Task<string>> generateChart, string callerId, string mimeType = "")
+
+        /// <summary>
+        /// starts a call if no cache exist, not on previous call state
+        /// </summary>
+        public static async Task<BlobClient?> CacheExecuteTask3(Func<Task<string>> generateChart, string callerId, string mimeType = "")
         {
             //check if cache exist
             var isExist = await AzureCache.IsExist(callerId);
 
-            BlobClient chartBlobClient;
 
+            BlobClient? chartBlobClient;
+
+            //no cache, have calculate new
             if (!isExist)
             {
-                //squeeze the Sky Juice!
-                var chartBytes = await generateChart.Invoke();
-                //save for future
-                chartBlobClient = await AzureCache.AddLarge<string>(callerId, chartBytes, mimeType);
+                try
+                {
+                    //lets everybody know call is running
+                    CallTracker.CallStart(callerId);
+
+                    //squeeze the Sky Juice!
+                    var chartBytes = await generateChart.Invoke();
+                    //save for future
+                    chartBlobClient = await AzureCache.AddLarge(callerId, chartBytes, mimeType);
+
+                }
+                //always mark the call as ended
+                finally
+                {
+                    CallTracker.CallEnd(callerId); //mark the call as ended
+                }
+
             }
             else
             {
-                chartBlobClient = await AzureCache.GetLarge<BlobClient>(callerId);
+                chartBlobClient = await AzureCache.GetData<BlobClient>(callerId);
             }
 
             return chartBlobClient;

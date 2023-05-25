@@ -22,22 +22,12 @@ namespace API
     /// </summary>
     public static class AzureCache
     {
-        private static readonly TableServiceClient tableServiceClient;
-        private static string tableName = "FunctionCache";
-        private static readonly TableClient tableClient;
         private static readonly BlobContainerClient blobContainerClient;
         private const string blobContainerName = "cache";
 
         static AzureCache()
         {
-            //storageexplorer://v=1&accountid=%2Fsubscriptions%2Ff453f954-107f-4b85-b1d3-744b013dfd5d%2FresourceGroups%2FVedAstro%2Fproviders%2FMicrosoft.Storage%2FstorageAccounts%2Fvedastroapistorage&subscriptionid=f453f954-107f-4b85-b1d3-744b013dfd5d&resourcetype=Azure.Table&resourcename=FunctionCache
-            var storageUri = "https://vedastroapistorage.table.core.windows.net/FunctionCache";
-            string accountName = "vedastroapistorage";
-            string storageAccountKey = "kquBbAE8QKhe/Iyny4F0we3Yx6Y/zJv7yZgrERuFq7nRoEa53o6rb50W88II+PsSEP7RzYYNQizDHPOlt0kwxw==";
 
-            //save reference for late use
-            tableServiceClient = new TableServiceClient(new Uri(storageUri), new TableSharedKeyCredential(accountName, storageAccountKey));
-            tableClient = tableServiceClient.GetTableClient(tableName);
 
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
@@ -58,27 +48,9 @@ namespace API
             bool isExists = await blobClient.ExistsAsync(CancellationToken.None);
 
             //if found in blob then end here
-            if (isExists)
-            {
-                return true;
-            }
-
-            return IsExistTable(callerId);
+           return isExists;
         }
 
-        /// <summary>
-        /// checks only in table
-        /// </summary>
-        private static bool IsExistTable(string callerId)
-        {
-            //else continue to look in table
-
-            Pageable<TableEntity> queryResultsFilter = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{callerId}'");
-
-            //if more exist there will be something found
-            return queryResultsFilter.Any();
-
-        }
 
 
         //public static async Task<string> GetLarge(string callerId)
@@ -88,41 +60,32 @@ namespace API
         //    var data = await APITools.BlobClientToString(blobClient);
         //    return data;
         //}
-        public static async Task<dynamic> GetLarge<T>(string callerId)
+        public static async Task<dynamic> GetData<T>(string callerId)
         {
 
             try
             {
-                //check if table or blob
-                var dataInTable = IsExistTable(callerId);
-                if (dataInTable)
+                BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
+
+
+                if (typeof(T) == typeof(string))
                 {
-                    var yyy = GetDataFromTable(callerId);
-                    return yyy;
+                    var data = await APITools.BlobClientToString(blobClient);
+                    return data;
+
                 }
-                else
+                else if (typeof(T) == typeof(byte[]))
                 {
-                    BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
-
-
-                    if (typeof(T) == typeof(string))
-                    {
-                        var data = await APITools.BlobClientToString(blobClient);
-                        return data;
-
-                    }
-                    else if (typeof(T) == typeof(byte[]))
-                    {
-                        using var ms = new MemoryStream();
-                        await blobClient.DownloadToAsync(ms);
-                        return ms.ToArray();
-                    }
-                    else if (typeof(T) == typeof(BlobClient))
-                    {
-
-                        return blobClient;
-                    }
+                    using var ms = new MemoryStream();
+                    await blobClient.DownloadToAsync(ms);
+                    return ms.ToArray();
                 }
+                else if (typeof(T) == typeof(BlobClient))
+                {
+
+                    return blobClient;
+                }
+
 
             }
             catch (Exception e)
@@ -136,50 +99,6 @@ namespace API
 
         }
 
-        public static object GetDataFromTable(string callerId)
-        {
-            var queryResultsFilter = tableClient.Query<TableEntity>(filter: $"PartitionKey eq '{callerId}'");
-
-            //if more exist there will be something found
-            var cacheRow = queryResultsFilter.FirstOrDefault();
-            var cachedData = cacheRow?["Value"] ?? "EMPTY!";
-
-            return cachedData;
-        }
-
-        public static async Task AddDataToTable(string callerId, string value)
-        {
-            //create the data
-            var tableEntity = new TableEntity(callerId, "")
-            {
-                { "Value", value }
-            };
-
-            //check if exist
-            var xx = await tableClient.GetEntityIfExistsAsync<TableEntity>(callerId, "");
-
-            //not yet born
-            if (xx == null)
-            {
-                // add to cloud store
-                await tableClient.AddEntityAsync(tableEntity);
-            }
-            //update existing
-            else
-            {
-                await tableClient.UpdateEntityAsync(tableEntity, ETag.All, TableUpdateMode.Replace);
-            }
-
-        }
-        //public static void AddLarge(string callerId, string value)
-        //{
-        //    BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
-
-        //    var xx = new BinaryData(value, JsonSerializerOptions.Default);
-        //    blobClient.Upload(xx);
-
-        //    blobClient.SetAccessTier(AccessTier.Hot);
-
 
         //}
         public static async Task<BlobClient?> AddLarge<T>(string callerId, T value, string mimeType = "")
@@ -190,21 +109,10 @@ namespace API
             {
                 var stringToSave = value as string ?? string.Empty;
 
-                //based on string length place at in table or blob
-                if (stringToSave.Length < 200)
-                {
-                    await AddDataToTable(callerId, stringToSave);
-                    return null;
-                }
-                //if text is long then off it goes to BLOB (slow but big)
-                else
-                {
-                    //NOTE:set UTF 8 so when taking out will go fine
-                    var content = Encoding.UTF8.GetBytes(stringToSave);
-                    using var ms = new MemoryStream(content);
-                    await blobClient.UploadAsync(ms, overwrite: true);
-
-                }
+                //NOTE:set UTF 8 so when taking out will go fine
+                var content = Encoding.UTF8.GetBytes(stringToSave);
+                using var ms = new MemoryStream(content);
+                await blobClient.UploadAsync(ms, overwrite: true);
 
             }
             else if (typeof(T) == typeof(byte[]))
@@ -240,12 +148,11 @@ namespace API
 
             var result = await blobClient.DeleteIfExistsAsync();
 
-            //if did not delete blob then most likely table data
-            if (!result.Value)
+            //if result unexpected raise alarm
+            if (result?.Value == false)
             {
-                await tableClient.DeleteEntityAsync(callerId, "");
+                Console.WriteLine($"WARNING! FILE DID NOT EXIST : {callerId}");
             }
-
         }
     }
 }

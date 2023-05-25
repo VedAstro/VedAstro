@@ -206,11 +206,18 @@ namespace Library.API
         {
 
             //call until data appears, API takes of everything
-            string? personListJson = null;
-            var pollRate = 300;
-            while (personListJson == null) { personListJson = await Tools.ReadOnlyIfPass(inputUrl); await Task.Delay(pollRate); }
+            JToken? personListJson = null;
+            var pollRate = 250;
+            JToken x;
+            var notReady = true;
+            while (notReady)
+            {
+                await Task.Delay(pollRate);
+                personListJson = await Tools.ReadOnlyIfPassJS(inputUrl, _jsRuntime);
+                notReady = personListJson == null;
+            }
 
-            var cachedPersonList = Person.FromJsonList(personListJson); 
+            var cachedPersonList = Person.FromJsonList(personListJson);
 
             return cachedPersonList;
 

@@ -24,16 +24,20 @@ namespace Website
                 //wait forever
                 Timeout = new TimeSpan(0, 0, 0, 0, Timeout.Infinite),
                 BaseAddress = new Uri(builder.HostEnvironment.BaseAddress),
-                DefaultRequestHeaders = { ConnectionClose = false } //keep alive
+                //DefaultRequestHeaders = { ConnectionClose = false } //keep alive
             };
 
             //specify to use TLS 1.2 as default connection
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             builder.Services.AddScoped(sp => httpClient);
 
             //setup for getting location from browser
             //used by geolocation input
             builder.Services.AddSingleton<LocationService>();
+
+
+      
+
 
             //service used to place data in browser's localstorage
             //todo marked deletion

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Library.API;
@@ -44,20 +45,59 @@ namespace Library.API
 
             return dataReturned;
         }
+
+        public static async Task<JToken?> ReadOnlyIfPassJS(string receiverAddress, IJSRuntime jsRuntime)
+        {
+            //this call will take you to NetworkThread.js
+            var rawPayloadStr = await jsRuntime.InvokeAsync<JsonElement>("Interop.ReadOnlyIfPass", receiverAddress);
+
+            var status = rawPayloadStr.GetProperty("Status").GetString();
+            var payload = rawPayloadStr.GetProperty("Payload").GetString() ?? "{}";
+
+
+
+            var isPass = status == "Pass";
+            //var payload = rawPayload["Payload"]?.Value<JToken>() ?? new JObject();
+            if (isPass)
+            {
+                var rawPayload = JToken.Parse(payload);
+
+                //return the raw reply to caller
+                return rawPayload;
+
+            }
+
+            //if anything but pass, don't look inside just say nothing
+            return null;
+
+
+
+        }
+
+
+
+
         public static async Task<string?> ReadOnlyIfPass(string receiverAddress)
         {
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
 
             //tell sender to wait for complete reply before exiting
-            var waitForContent = HttpCompletionOption.ResponseContentRead;
-
+            //var waitForContent = HttpCompletionOption.ResponseHeadersRead;
             //send the data on its way
             using var client = new HttpClient();
-            client.Timeout = Timeout.InfiniteTimeSpan;
-            var response = await client.SendAsync(httpRequestMessage, waitForContent);
+            //client.Timeout = Timeout.InfiniteTimeSpan;
+            var response = await client.SendAsync(httpRequestMessage);
 
+            //if not pass end here
+            //if (!response.IsSuccessStatusCode) { return null; }
+
+            //var sss = response.Headers.AsEnumerable().Where(x => x.Key.ToLower() == "call-status")?.FirstOrDefault().Value?.FirstOrDefault() ?? "EMPTY";
             //only get content if response is pass
-            var callStatus = response.Headers.GetValues("Call-Status").FirstOrDefault() ?? "Fail"; //fail if null
+            //var callStatus = response?.Headers?.GetValues("Call-Status")?.FirstOrDefault() ?? "Fail"; //fail if null
+            //response.TrailingHeaders.TryGetValues("call-status", out var calls);
+            response.Headers.TryGetValues("Call-Status", out var calls); //fail if null
+            var callStatus = calls?.FirstOrDefault() ?? "Fail";
+
 #if DEBUG
             Console.WriteLine($"API SAID : {callStatus}");
 #endif

@@ -32,9 +32,37 @@ export async function postWrapper(url, payloadXml) {
         "method": "POST"
     });
 
-    var responseText = await response.text();
+    var responseText = await response?.text();
 
-    return responseText;
+    return responseText ?? "";
+}
+
+//only give response if header says ok
+export async function ReadOnlyIfPass(url) {
+    console.log("JS > Sending POST request...");
+
+    var response = await fetch(url, {
+        "headers": { "accept": "*/*", "Connection": "keep-alive" },
+        "method": "GET"
+    });
+
+    var callStatus = response.headers.get('Call-Status');
+
+    if (callStatus === "Pass") {
+
+        var responseText = await response?.text();
+
+        var payload = { Status: "Pass", Payload: responseText };
+
+        return payload;
+
+    } else {
+
+        var payload = { Status: "Fail", Payload: null };
+
+        return payload;
+    }
+
 }
 
 //gets current page url

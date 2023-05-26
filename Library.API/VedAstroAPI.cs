@@ -156,6 +156,14 @@ namespace Library.API
             var url = $"{_url.UpdatePerson}/UserId/{_userId}/VisitorId/{_visitorId}";
             var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, updatedPerson);
 
+            //if anything but pass, raise alarm
+            var status = jsonResult["Status"]?.Value<string>() ?? "";
+            if (status != "PASS")
+            {
+                var failMessage = jsonResult["Payload"]?.Value<string>() ?? "";
+                await ShowAlert("error", $"Server is not happy! Why?", failMessage);
+            }
+
 #if DEBUG
             Console.WriteLine($"SERVER SAID:\n{jsonResult}");
 #endif
@@ -164,6 +172,18 @@ namespace Library.API
             await HandleResultClearLocalCache(jsonResult);
 
         }
+
+        /// <summary>
+        /// Shows alert using sweet alert js
+        /// will show okay button, no timeout
+        /// </summary>
+        private  async Task ShowAlert(string icon, string title, string descriptionText)
+        {
+            //call SweetAlert lib directly via constructor
+            const string Swal_fire = "Swal.fire";
+            await _jsRuntime.InvokeVoidAsync(Swal_fire, title, descriptionText, icon);
+        }
+
 
         /// <summary>
         /// used to get person direct not in users list for easy sharing

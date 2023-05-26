@@ -14,22 +14,22 @@
     @switch (TitleHolder.ToLower())
     {
         case "h1":
-            <h1 class="mt-2 me-auto">@Title</h1>
+            <h1 class="mt-2 me-auto">@Title @TitleHTML</h1>
             break;
         case "h2":
-            <h2 class="mt-2 me-auto">@Title</h2>
+            <h2 class="mt-2 me-auto">@Title @TitleHTML</h2>
             break;
         case "h3":
-            <h3 class="mt-2 me-auto">@Title</h3>
+            <h3 class="mt-2 me-auto">@Title @TitleHTML</h3>
             break;
         case "h4":
-            <h4 class="mt-2 me-auto">@Title</h4>
+            <h4 class="mt-2 me-auto">@Title @TitleHTML</h4>
             break;
         case "h5":
-            <h5 class="mt-2 me-auto">@Title</h5>
+            <h5 class="mt-2 me-auto">@Title @TitleHTML</h5>
             break;
         case "h6":
-            <h6 class="mt-2 me-auto">@Title</h6>
+            <h6 class="mt-2 me-auto">@Title @TitleHTML</h6>
             break;
     }
     @ButtonRow
@@ -66,6 +66,9 @@
 
     [Parameter]
     public string Title { get; set; } = "Demo Title";
+
+    [Parameter]
+    public RenderFragment? TitleHTML { get; set; }
 
     /// <summary>
     /// H3 default

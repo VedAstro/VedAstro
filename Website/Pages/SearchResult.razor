@@ -10,27 +10,68 @@
 
 @if (_resultReady)
 {
-    <h4 class="mb-3">Found "@resultCount" results for "@SearchText"</h4>
 
-    <nav>
-        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-horoscope-tab" data-bs-toggle="tab" data-bs-target="#nav-horoscope" type="button" role="tab" aria-controls="nav-horoscope" aria-selected="true">
+    <div class="gap-3" style="max-width:@GR.W667px">
+
+        <ArticleBlock IconName="flat-color-icons:department">
+            <TitleHTML>
+                Muhurtha Events <HelpIconTooltip HelpText="@HelpText.SearchEvents" SmallIcon="true" /> - @foundEvents.Count()
+            </TitleHTML>
+            <TextHTML>
+                @foreach (var prediction in foundEvents)
+                {
+                    <div class="card shadow mt-2">
+                        <div class="card-header hstack">
+                            <h6 class="mb-0">
+                                @Format.FormatName(prediction.Element("Name")?.Value)
+                            </h6>
+                            <span class="fw-light mx-3" style="font-size: 13px;">
+                                @prediction.Element("Nature")?.Value @prediction.Element("Source")?.Value
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@prediction.Element("Description")?.Value</p>
+                        </div>
+                    </div>
+                }
+            </TextHTML>
+        </ArticleBlock>
+
+        <ArticleBlock IconName="flat-color-icons:manager">
+            <TitleHTML>
                 Horoscope Predictions <HelpIconTooltip HelpText="@HelpText.SearchPredictions" SmallIcon="true" /> - @foundPrediction.Count()
-            </button>
-            <button class="nav-link" id="nav-reference-tab" data-bs-toggle="tab" data-bs-target="#nav-reference" type="button" role="tab" aria-controls="nav-reference" aria-selected="false">
-                Reference <HelpIconTooltip HelpText="@HelpText.SearchReference" SmallIcon="true"/> - @foundReference.Count()
-            </button>
-            <button class="nav-link" id="nav-muhurtha-tab" data-bs-toggle="tab" data-bs-target="#nav-muhurtha" type="button" role="tab" aria-controls="nav-muhurtha" aria-selected="false">
-                Muhurtha Events <HelpIconTooltip HelpText="@HelpText.SearchEvents" SmallIcon="true"/> - @foundEvents.Count()
-            </button>
-        </div>
-    </nav>
-    <div class="tab-content border" id="nav-tabContent">
-        <div class="tab-pane fade" id="nav-reference" role="tabpanel" aria-labelledby="nav-reference-tab">
-            <div class="vstack gap-4 py-2">
+            </TitleHTML>
+            <TextHTML>
+                @foreach (var prediction in foundPrediction)
+                {
+                    <div class="card shadow mt-2">
+                        <div class="card-header hstack">
+                            <h6 class="mb-0">
+                                @Format.FormatName(prediction.Element("Name")?.Value)
+                            </h6>
+                            <span class="fw-light mx-3" style="font-size: 13px;">
+                                @prediction.Element("Nature")?.Value @prediction.Element("Source")?.Value
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@prediction.Element("Description")?.Value</p>
+                        </div>
+                    </div>
+                }
+            </TextHTML>
+        </ArticleBlock>
+
+        <ArticleBlock  IconName="flat-color-icons:biotech">
+            <TitleHTML>
+                Reference <HelpIconTooltip HelpText="@HelpText.SearchReference" SmallIcon="true" /> - @foundReference.Count()
+            </TitleHTML>
+
+            <TextHTML>
                 @foreach (var prediction in foundReference)
                 {
-                    <div class="card shadow">
+                    @*only generate if got desc*@
+
+                    <div class="card shadow mt-2">
                         <div class="card-header hstack">
                             <h6 class="mb-0">
                                 @Format.FormatName(prediction.Element("Name")?.Value)
@@ -44,46 +85,37 @@
                         </div>
                     </div>
                 }
+
+            </TextHTML>
+        </ArticleBlock>
+
+    </div>
+
+
+
+    <h4 class="mb-3">Found "@resultCount" results for "@SearchText"</h4>
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-horoscope-tab" data-bs-toggle="tab" data-bs-target="#nav-horoscope" type="button" role="tab" aria-controls="nav-horoscope" aria-selected="true">
+            </button>
+            <button class="nav-link" id="nav-reference-tab" data-bs-toggle="tab" data-bs-target="#nav-reference" type="button" role="tab" aria-controls="nav-reference" aria-selected="false">
+            </button>
+            <button class="nav-link" id="nav-muhurtha-tab" data-bs-toggle="tab" data-bs-target="#nav-muhurtha" type="button" role="tab" aria-controls="nav-muhurtha" aria-selected="false">
+            </button>
+        </div>
+    </nav>
+    <div class="tab-content border" id="nav-tabContent">
+        <div class="tab-pane fade" id="nav-reference" role="tabpanel" aria-labelledby="nav-reference-tab">
+            <div class="vstack gap-4 py-2">
             </div>
         </div>
         <div class="tab-pane fade show active" id="nav-horoscope" role="tabpanel" aria-labelledby="nav-horoscope-tab">
             <div class="vstack gap-4 py-2">
-                @foreach (var prediction in foundPrediction)
-                {
-                    <div class="card shadow">
-                        <div class="card-header hstack">
-                            <h6 class="mb-0">
-                                @Format.FormatName(prediction.Element("Name")?.Value)
-                            </h6>
-                            <span class="fw-light mx-3" style="font-size: 13px;">
-                                @prediction.Element("Nature")?.Value  @prediction.Element("Source")?.Value
-                            </span>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">@prediction.Element("Description")?.Value</p>
-                        </div>
-                    </div>
-                }
             </div>
         </div>
         <div class="tab-pane fade" id="nav-muhurtha" role="tabpanel" aria-labelledby="nav-muhurtha-tab">
             <div class="vstack gap-4 py-2">
-                @foreach (var prediction in foundEvents)
-                {
-                    <div class="card shadow">
-                        <div class="card-header hstack">
-                            <h6 class="mb-0">
-                                @Format.FormatName(prediction.Element("Name")?.Value)
-                            </h6>
-                            <span class="fw-light mx-3" style="font-size: 13px;">
-                                @prediction.Element("Nature")?.Value  @prediction.Element("Source")?.Value
-                            </span>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">@prediction.Element("Description")?.Value</p>
-                        </div>
-                    </div>
-                }
             </div>
         </div>
     </div>
@@ -134,6 +166,9 @@ else
     public async Task Search(string searchText)
     {
         await _jsRuntime.ShowLoading();
+
+        //log it
+        WebLogger.Data($"Seacrch:{searchText}");
 
         //only load the xml files if not yet loaded
         if (!filesLoaded) { await LoadFiles(); }

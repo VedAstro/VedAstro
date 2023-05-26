@@ -16,7 +16,8 @@
             }
             @ButtonText
         </button>
-        <ul style="cursor: pointer;" class="dropdown-menu w-100"> @*auto match size with button width*@
+        <ul style="cursor: pointer;" class="dropdown-menu w-100">
+            @*auto match size with button width*@
             @DropDownList
         </ul>
     </div>
@@ -34,7 +35,7 @@ else
         @*only show icon if specified*@
         @if (IconName != null)
         {
-            <span class="iconify" data-icon="@IconName" data-width="25"/>
+            <span class="iconify" data-icon="@IconName" data-width="25" />
         }
         @ButtonText
     </button>
@@ -271,9 +272,79 @@ else
         //else if URL has been specified use that
         else if (IsClickMode)
         {
+
+            //sometimes we need spread the butter little
+            //NOTES: quantum probability we can't predict every motion
+            //      we can only know for certain it will occur at a point
+            //      as such we send user to places not based on priority and not certainty
+            ClickUrl = OverriteNavigationUrlBasedPriority(ClickUrl ?? "");
+
+
+            //url is modified above first only then we check if same url
+            //don't stop navigation just little greet to user
+            await HandleSamePageClick(ClickUrl ?? "");
+
+
             //if specified opens link in new tab
             if (OpenNewTab) { _jsRuntime.OpenNewTab(ClickUrl); }
             else { _navigation.NavigateTo(ClickUrl); }
+        }
+    }
+
+    //sometimes we need spread the butter little
+    //NOTES: quantum probability we can't predict every motion
+    //      we can only know for certain it will occur at a point
+    //      as such we send user to places not based on priority and not certainty
+    private string? OverriteNavigationUrlBasedPriority(string? inputRelativeUrl)
+    {
+        //get current page url
+        var xxx = _navigation.Uri;
+        var urlTool = new Uri(xxx);
+        var currentRelativePath = urlTool.PathAndQuery;
+
+        var sameUrl = currentRelativePath == Path.Combine("/", inputRelativeUrl);
+
+        //if no overrides then same url as usual
+        var returnVal = inputRelativeUrl;
+
+        if (sameUrl)
+        {
+            switch (inputRelativeUrl)
+            {
+                case PageRoute.OpenApi: returnVal = PageRoute.APIBuilder; break;
+                case PageRoute.APIBuilder: returnVal = PageRoute.OpenApi; break;
+                    //case PageRoute.OpenApi:
+                    //case PageRoute.APIBuilder:
+                    //    returnVal = Tools.RandomSelect(new[] { PageRoute.OpenApi, PageRoute.APIBuilder });
+                    //    break;
+            }
+        }
+
+
+        return returnVal;
+    }
+
+    //if already on page wanting to go, then say something about it's pointlessness
+    // you just wasted a click, you are already on the Home page my friend
+    private async Task HandleSamePageClick(string inputRelativeUrl)
+    {
+        //get current page url
+        var xxx = _navigation.Uri;
+        var urlTool = new Uri(xxx);
+        var currentRelativePath = urlTool.PathAndQuery;
+
+        var possibleMsg = new []
+        {
+            
+            "You are already where you want to go, my friend",
+            "You just wasted a click. Never getting that back.",
+            "Looks like you're sleepy. Go take a break.",
+        };
+
+        var sameUrl = currentRelativePath == Path.Combine("/", inputRelativeUrl);
+        if (sameUrl)
+        {
+            await _jsRuntime.ShowAlert("info", $"Already on <strong>{ButtonText}</strong>", Tools.RandomSelect(possibleMsg));
         }
 
     }
@@ -281,7 +352,7 @@ else
     private async Task OnMouseOver(MouseEventArgs obj)
     {
         //log this
-        Console.WriteLine("Mouse Over Button!");
+        WebLogger.Data($"Almost Click : {this.ButtonText}");
 
     }
 

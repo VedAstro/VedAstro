@@ -4,7 +4,7 @@
 
 <div class="py-2">
 
-    <IconTitle IconSize="@IconSize" Title="@Title" IconName="@IconName" TitleHolder="h4">
+    <IconTitle TitleHTML="@TitleHTML" IconSize="@IconSize" Title="@Title" IconName="@IconName" TitleHolder="h4">
         <ButtonRow>@ButtonRow</ButtonRow>
     </IconTitle>
     <p class="text-justify">
@@ -39,6 +39,12 @@
     /// </summary>
     [Parameter]
     public RenderFragment? TextHTML { get; set; }
+
+    /// <summary>
+    /// tit le in HTML
+    /// </summary>
+    [Parameter]
+    public RenderFragment? TitleHTML { get; set; }
 
     /// <summary>
     /// buttons next to title

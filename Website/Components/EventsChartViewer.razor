@@ -264,10 +264,11 @@
 </div>
 
 
-
+<NotificationSound @ref="soundPlayer" />
 
 @code {
 
+    public NotificationSound soundPlayer;
 
     //█▀▄ ▄▀█ ▀█▀ ▄▀█
     //█▄▀ █▀█ ░█░ █▀█
@@ -294,6 +295,7 @@
     ElementReference _eventsChartSvgHolder;
     public Time StartTime { get; set; }
     public Time EndTime { get; set; }
+    public TimeRange TimeRange => new TimeRange(StartTime, EndTime);
     public List<EventTag> InputedEventTags { get; set; }
 
     private IconButton _showButton;
@@ -334,7 +336,7 @@
     /// Sets the data that is processed and fill the content
     /// - Parent element calls here to start display chart process
     /// </summary>
-    public async Task ShowChart(Person person, Time startTime, Time endTime, List<EventTag> inputedEventTags)
+    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags)
     {
         try
         {
@@ -343,54 +345,13 @@
 
             //saved to be accessed later
             SelectedPerson = person;
-            StartTime = startTime;
-            EndTime = endTime;
             InputedEventTags = inputedEventTags;
 
-            //1 : package data to get chart
-            var payloadJson = GetChartGeneratorDataJson(person, startTime, endTime, inputedEventTags);
+    //poll till get
+            string chartSvg = await AppData.API.GetEventsChart(person, timeRange, inputedEventTags);
 
-            var fff = await Chart.GetDataParsed(payloadJson);
-            string chartId = fff.GetEventsChartSignature();
-            
-
-            //skip getting new chart if old chart is there
-            var reply3 = await Library.API.Tools.WriteServer(HttpMethod.Get, $"{AppData.URL.GetCallStatus}/{chartId}");
-            var runtimeStatus3 = reply3["Payload"].Value<string>();
-            var isCompleted = runtimeStatus3 == "Completed";
-            if (isCompleted)
-            {
-                goto ShowChart;
-            }
-
-
-            //2 : use EventsChart.js to take over from here
-            //note : JS code will generate, inject & animate chart
-            //create new chart from svg string
-            //await _jsRuntime.InvokeVoidAsync(JS.ChartFromGenerateDataXML, payloadXml.ToString());
-            var reply = await Library.API.Tools.WriteServer(HttpMethod.Post, AppData.URL.GetEventsChartAsync, payloadJson);
-            chartId = reply["Payload"].Value<string>();
-
-
-    //start calling API till complete
-            var isNotComplete = true;
-            while (isNotComplete)
-            {
-                var reply2 = await Library.API.Tools.WriteServer(HttpMethod.Get, $"{AppData.URL.GetCallStatus}/{chartId}");
-                var runtimeStatus = reply2["Payload"].Value<string>();
-                isNotComplete = runtimeStatus != "Completed";
-
-                Console.WriteLine($"API SAID : {runtimeStatus}");
-
-                //check every once in a while
-                await Task.Delay(450);
-            }
-
-
-            ShowChart:
             //control reahes here than already complete
-            var url = $"{AppData.URL.GetEventsChartResult}/{chartId}";
-            await _jsRuntime.InvokeVoidAsync(JS.ChartFromGenerateDataXML, url);
+            await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, chartSvg);
 
             //var svg = await Library.API.Tools.WriteServer(HttpMethod.Get, );
 
@@ -409,319 +370,242 @@
 
             //needed to make save button appear again
             StateHasChanged();
-        }
-        catch (Exception e)
-        {
-            //todo log it
-            Console.WriteLine(e.Message);
-            Console.WriteLine(e.StackTrace);
 
-            //should not happen, let user know
-            await _jsRuntime.ShowAlert("error", AlertText.ObliviousErrors(), true);
-        }
 
-    }
+        }
 
     /// <summary>
     /// Given a saved chart name in local storage, it will load it into page
     /// </summary>
     public async Task ShowSavedChart(string selectedChartId)
-    {
-        //save chart id, used to generate direct link
-        CurrentChartId = selectedChartId;
-
-        //set current chart as from saved version (to hide save button)
-        //only show "Save" button if viewing newly generated chart, so that no erroneous double save
-        _nowSavedChart = true;
-
-        //1 GENERATE CHART IN SVG FROM SERVER
-        //saved for later use by Chart Saver
-        _finalSvg = await GetSavedEventsChartSvgFromApi(selectedChartId);
-
-        //gets person profile used to generate the saved chart being showed now
-        //needs to be set else parent depending will fail todo funny code
-        SelectedPerson = await WebsiteTools.GetPersonIdFromChartId(selectedChartId, _jsRuntime);
-
-        //2 LOAD CHART INTO PAGE
-        await LoadChartIntoPage(_finalSvg);
-
-        //needed to make save button appear again
-        StateHasChanged();
-
-    }
-
-    /// <summary>
-    /// calculates the precision of the events to fit inside 1000px width
-    /// </summary>
-    public static double GetDayPerPixel(Time start, Time end)
-    {
-        const int maxWidth = 1000; //px
-
-        var daysBetween = end.Subtract(start).TotalDays;
-        var daysPerPixel = Math.Round(daysBetween / maxWidth, 3); //small val = higher precision
-                                                                  //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
-                                                                  //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
-
-        return daysPerPixel;
-    }
-
-
-
-
-    //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
-
-    /// <summary>
-    /// Given an SVG as string, it will inject it into page & attach
-    /// the needed JS handlers for animation
-    /// </summary>
-    private async Task LoadChartIntoPage(string rawSvgChart)
-    {
-        //create new chart from svg string
-        await _jsRuntime.InvokeVoidAsync(JS.ChartFromSvgString, rawSvgChart, _eventsChartSvgHolder);
-
-        //get latest dark mode setting
-        //so that event chart is set properly
-        await AppData.UpdateDarkMode(_jsRuntime);
-
-        //needed to show changes to inputs
-        StateHasChanged();
-    }
-
-
-    private async Task<string> GetSavedEventsChartSvgFromApi(string chartId)
-    {
-        var chartIdXml = new XElement("ChartId", chartId);
-        var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetSavedEventsChart, chartIdXml, _jsRuntime);
-
-        //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
-        // convert stream to string
-        svgStream.Position = 0; //reset position otherwise can be null value out
-        var reader = new StreamReader(svgStream);
-        var svgText = await reader.ReadToEndAsync();
-
-        return svgText;
-
-    }
-
-    /// <summary>
-    /// Packages the data to send to API to generate the chart
-    /// </summary>
-    //private XElement GetChartGeneratorData(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
-    //{
-    //    //auto calculate precision
-    //    var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
-    //    //if not defined, use input
-    //    double daysPerPixelInput = 30;
-    //    daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
-
-
-    //    var personIdXml = new XElement("PersonId", inputPerson.Id);
-    //    var startTimeXml = new XElement("StartTime", startTime.ToXml());
-    //    var endTimeXml = new XElement("EndTime", endTime.ToXml());
-    //    var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
-    //    var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
-    //    var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
-
-    //    return rootXml;
-
-    //    //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-    //    //var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetEventsChartDirect, rootXml, _jsRuntime);
-
-    //    //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
-    //    // convert stream to string
-    //    //svgStream.Position = 0; //reset position otherwise can be null value out
-    //    //var reader = new StreamReader(svgStream);
-    //    //var svgText = await reader.ReadToEndAsync();
-
-    //    //return svgText;
-    //}
-
-    private JObject GetChartGeneratorDataJson(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
-    {
-        //auto calculate precision
-        var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
-        //if not defined, use input
-        double daysPerPixelInput = 30;
-        daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
-
-        var returnPayload = new JObject();
-
-        returnPayload["PersonId"] = inputPerson.Id;
-        returnPayload["StartTime"] = startTime.ToJson();
-        returnPayload["EndTime"] = endTime.ToJson();
-        returnPayload["DaysPerPixel"] = daysPerPixelInput;
-        returnPayload["EventTagList"] = EventTagExtensions.ToJsonList(inputedEventTags);
-
-        return returnPayload;
-
-
-    }
-
-    private async Task<bool> SaveReportSvgInApi(Person inputPerson, Time startTime, Time endTime, List<EventTag> inputedEventTags)
-    {
-        //auto calculate precision
-        var daysPerPixelRaw = GetDayPerPixel(startTime, endTime);
-        //if not defined, use input
-        double daysPerPixelInput = 30;
-        daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
-
-
-        var personIdXml = new XElement("PersonId", inputPerson.Id);
-        var startTimeXml = new XElement("StartTime", startTime.ToXml());
-        var endTimeXml = new XElement("EndTime", endTime.ToXml());
-        var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
-        var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
-        var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
-        //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
-        Console.WriteLine(rootXml.ToString());
-        var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SaveEventsChart, rootXml);
-
-        return result.IsPass;
-    }
-
-
-    private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
-    {
-        //based on checked value hide or show
-        if ((bool)obj.Value)
         {
-            await _jsRuntime.Show("#LifeEventLinesHolder");
-        }
-        else
-        {
-            await _jsRuntime.Hide("#LifeEventLinesHolder");
-        }
-    }
+            //save chart id, used to generate direct link
+            CurrentChartId = selectedChartId;
 
-    /// <summary>
-    /// Generates the needed url and opens new tab with it
-    /// </summary>
-    /// <returns></returns>
-    private async Task OnClickMobileViewButton()
-    {
-        //generate url
-        var personId = SelectedPerson.Id;
-        var eventPreset = _eventPreset;
-        var timePreset = _timePreset;
-        var url = $"{AppData.URL.ApiUrl}/chart/{personId}/{eventPreset}/{timePreset}";
+            //set current chart as from saved version (to hide save button)
+            //only show "Save" button if viewing newly generated chart, so that no erroneous double save
+            _nowSavedChart = true;
 
-        _jsRuntime.OpenNewTab(url);
-    }
+            //1 GENERATE CHART IN SVG FROM SERVER
+            //saved for later use by Chart Saver
+            _finalSvg = await GetSavedEventsChartSvgFromApi(selectedChartId);
 
-    private async Task OnClickDeleteChart()
-    {
-        //show loading message
-        await _jsRuntime.ShowLoading();
+            //gets person profile used to generate the saved chart being showed now
+            //needs to be set else parent depending will fail todo funny code
+            SelectedPerson = await WebsiteTools.GetPersonIdFromChartId(selectedChartId, _jsRuntime);
 
-        //tell API to delete chart, using chart id
-        await WebsiteTools.DeleteSavedChart(CurrentChartId, _jsRuntime);
+            //2 LOAD CHART INTO PAGE
+            await LoadChartIntoPage(_finalSvg);
 
-        //let user know chart has been deleted
-        await _jsRuntime.ShowAlert("success", $"Chart deleted successfully!", false, timer: 2000);
+            //needed to make save button appear again
+            StateHasChanged();
 
-        //refresh the page variables
-        //todo marked for deletion, test without = no difference > delete
-        this.StateHasChanged();
-
-        //page ready
-        _jsRuntime.HideAlert();
-
-        ////send user to task list page after period of time
-        //await Task.Delay(100);
-        //_navigation.NavigateTo(PageRoute.PersonList);
-    }
-
-    private async Task OnClickCopyChartLink()
-    {
-        //generate the url
-        var url = AppData.URL.ApiUrl + $"/savedchart/{CurrentChartId}";
-
-        //use js to transfer to clipboard
-        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, url);
-
-        //let user know link coppied
-        await _jsRuntime.ShowAlert("success", $"Chart Link Copied!", false, 2600);
-    }
-
-    /// <summary>
-    /// saves chart to server
-    /// </summary>
-    /// <returns></returns>
-    private async Task OnClickSaveChartAPI()
-    {
-        //todo for some reason after click there still remains a lag
-        await _jsRuntime.ShowLoading();
-
-        //hold control until loading box popped
-        await AppData.IfNoLoadingBoxPleaseHold();
-
-        //tell server to generate & save this chart
-        //give the server settings used to generate this chart
-        var result = await SaveReportSvgInApi(SelectedPerson, StartTime, EndTime, InputedEventTags);
-
-        _jsRuntime.HideLoading();
-
-
-        //show message to user based on success or failure
-        if (result) { await _jsRuntime.ShowAlert("success", $"Chart saved successfully!", false, 2600); }
-        else { await _jsRuntime.ShowAlert("error", $"Chart failed to save! Try again.", true); }
-
-    }
-
-    //todo use for lite viewer
-    private async Task OnClickSaveChartLocal()
-    {
-        await _jsRuntime.ShowLoading();
-
-        //check if number of charts exceed 3 (real 4), as that seems to be chrome limit
-        var savedChartCount = (await WebsiteTools.GetSavedChartNameList()).Count;
-        if (savedChartCount > 3)
-        {
-            await _jsRuntime.ShowAlert("success", $"Saved charts is full!", false, 2600);
         }
 
-        //a name to uniquely identify this chart
-        var chartName = $"{SelectedPerson.Id}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart|{SelectedPerson.Name}"; //"Chart" important used later to find
-        await _jsRuntime.SetProperty(chartName, _finalSvg);
 
-        _jsRuntime.HideLoading();
 
-        //show message to user
-        await _jsRuntime.ShowAlert("success", $"Chart saved successfully!", false, 2600);
+
+
+        //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+        //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+
+        /// <summary>
+        /// Given an SVG as string, it will inject it into page & attach
+        /// the needed JS handlers for animation
+        /// </summary>
+        private async Task LoadChartIntoPage(string rawSvgChart)
+        {
+            //create new chart from svg string
+            await _jsRuntime.InvokeVoidAsync(JS.ChartFromSvgString, rawSvgChart, _eventsChartSvgHolder);
+
+            //get latest dark mode setting
+            //so that event chart is set properly
+            await AppData.UpdateDarkMode(_jsRuntime);
+
+            //needed to show changes to inputs
+            StateHasChanged();
+        }
+
+
+        private async Task<string> GetSavedEventsChartSvgFromApi(string chartId)
+        {
+            var chartIdXml = new XElement("ChartId", chartId);
+            var svgStream = await ServerManager.WriteToServerStreamReply(AppData.URL.GetSavedEventsChart, chartIdXml, _jsRuntime);
+
+            //todo just send as string to remove lags of using stream (testing needed 1st, maybe same or faster)
+            // convert stream to string
+            svgStream.Position = 0; //reset position otherwise can be null value out
+            var reader = new StreamReader(svgStream);
+            var svgText = await reader.ReadToEndAsync();
+
+            return svgText;
+
+        }
+
+        //private async Task<bool> SaveReportSvgInApi(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags)
+        //{
+        //    //auto calculate precision
+        //    var daysPerPixelRaw = EventsChart.GetDayPerPixel(timeRange);
+        //    //if not defined, use input
+        //    double daysPerPixelInput = 30;
+        //    daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
+
+
+        //    var personIdXml = new XElement("PersonId", inputPerson.Id);
+        //    var startTimeXml = new XElement("StartTime", timeRange.start.ToXml());
+        //    var endTimeXml = new XElement("EndTime", timeRange.end.ToXml());
+        //    var daysPerPixelXml = new XElement("DaysPerPixel", daysPerPixelInput);
+        //    var eventTagListXml = EventTagExtensions.ToXmlList(inputedEventTags);
+        //    var rootXml = new XElement("Root", personIdXml, startTimeXml, endTimeXml, eventTagListXml, daysPerPixelXml);
+        //    //note: when calling this api via postman, svg needs to be parsed in boxy-svg before viewable
+        //    Console.WriteLine(rootXml.ToString());
+        //    var result = await ServerManager.WriteToServerXmlReply(AppData.URL.SaveEventsChart, rootXml);
+
+        //    return result.IsPass;
+        //}
+
+
+        private async Task OnChangeLifeEventCheckBox(ChangeEventArgs obj)
+        {
+            //based on checked value hide or show
+            if ((bool)obj.Value)
+            {
+                await _jsRuntime.Show("#LifeEventLinesHolder");
+            }
+            else
+            {
+                await _jsRuntime.Hide("#LifeEventLinesHolder");
+            }
+        }
+
+        /// <summary>
+        /// Generates the needed url and opens new tab with it
+        /// </summary>
+        /// <returns></returns>
+        private async Task OnClickMobileViewButton()
+        {
+            //generate url
+            var personId = SelectedPerson.Id;
+            var eventPreset = _eventPreset;
+            var timePreset = _timePreset;
+            var url = $"{AppData.URL.ApiUrl}/chart/{personId}/{eventPreset}/{timePreset}";
+
+            _jsRuntime.OpenNewTab(url);
+        }
+
+        private async Task OnClickDeleteChart()
+        {
+            //show loading message
+            await _jsRuntime.ShowLoading();
+
+            //tell API to delete chart, using chart id
+            await WebsiteTools.DeleteSavedChart(CurrentChartId, _jsRuntime);
+
+            //let user know chart has been deleted
+            await _jsRuntime.ShowAlert("success", $"Chart deleted successfully!", false, timer: 2000);
+
+            //refresh the page variables
+            //todo marked for deletion, test without = no difference > delete
+            this.StateHasChanged();
+
+            //page ready
+            _jsRuntime.HideAlert();
+
+            ////send user to task list page after period of time
+            //await Task.Delay(100);
+            //_navigation.NavigateTo(PageRoute.PersonList);
+        }
+
+        private async Task OnClickCopyChartLink()
+        {
+            //generate the url
+            var url = AppData.URL.ApiUrl + $"/savedchart/{CurrentChartId}";
+
+            //use js to transfer to clipboard
+            await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, url);
+
+            //let user know link coppied
+            await _jsRuntime.ShowAlert("success", $"Chart Link Copied!", false, 2600);
+        }
+
+        /// <summary>
+        /// saves chart to server
+        /// </summary>
+        /// <returns></returns>
+        private async Task OnClickSaveChartAPI()
+        {
+            //todo for some reason after click there still remains a lag
+            await _jsRuntime.ShowLoading();
+
+            //hold control until loading box popped
+            await AppData.IfNoLoadingBoxPleaseHold();
+
+            //same command as to generate chart, but just change url
+
+            var result = await SaveReportSvgInApi(SelectedPerson, TimeRange, InputedEventTags);
+
+            _jsRuntime.HideLoading();
+
+
+            //show message to user based on success or failure
+            if (result) { await _jsRuntime.ShowAlert("success", $"Chart saved successfully!", false, 2600); }
+            else { await _jsRuntime.ShowAlert("error", $"Chart failed to save! Try again.", true); }
+
+        }
+
+        //todo use for lite viewer
+        private async Task OnClickSaveChartLocal()
+        {
+            await _jsRuntime.ShowLoading();
+
+            //check if number of charts exceed 3 (real 4), as that seems to be chrome limit
+            var savedChartCount = (await WebsiteTools.GetSavedChartNameList()).Count;
+            if (savedChartCount > 3)
+            {
+                await _jsRuntime.ShowAlert("success", $"Saved charts is full!", false, 2600);
+            }
+
+            //a name to uniquely identify this chart
+            var chartName = $"{SelectedPerson.Id}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart|{SelectedPerson.Name}"; //"Chart" important used later to find
+            await _jsRuntime.SetProperty(chartName, _finalSvg);
+
+            _jsRuntime.HideLoading();
+
+            //show message to user
+            await _jsRuntime.ShowAlert("success", $"Chart saved successfully!", false, 2600);
+
+        }
+
+        /// <summary>
+        /// when user clicked tab saved tab, refresh saved list immediately
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<string>> GetSavedChartNameListLocal()
+        {
+            //get all latest keys from browser
+            var allKeys = await _jsRuntime.InvokeAsync<List<string>>(JS.getAllLocalStorageKeys);
+
+            //find the keys that hold the needed charts
+            var filtered = allKeys.Where(x => x.Contains("Chart")).ToList();
+
+            return filtered;
+        }
+
+        private async Task OnClickSaveAsImage()
+        {
+            //the downloading of the chart as image is done by JS
+            //this is done because, because save as image will be implemented directly in future
+            await _jsRuntime.InvokeVoidAsync(JS.DownloadChartFileSVG);
+
+        }
+
+
+        private async Task OnClickShareToFacebook()
+        {
+
+            var x = await AppData.JsRuntime.InvokeAsync<object>(JS.shareDialogFacebook, _jsRuntime.GetCurrentUrl());
+
+        }
 
     }
-
-    /// <summary>
-    /// when user clicked tab saved tab, refresh saved list immediately
-    /// </summary>
-    /// <returns></returns>
-    public async Task<List<string>> GetSavedChartNameListLocal()
-    {
-        //get all latest keys from browser
-        var allKeys = await _jsRuntime.InvokeAsync<List<string>>(JS.getAllLocalStorageKeys);
-
-        //find the keys that hold the needed charts
-        var filtered = allKeys.Where(x => x.Contains("Chart")).ToList();
-
-        return filtered;
-    }
-
-    private async Task OnClickSaveAsImage()
-    {
-        //the downloading of the chart as image is done by JS
-        //this is done because, because save as image will be implemented directly in future
-        await _jsRuntime.InvokeVoidAsync(JS.DownloadChartFileSVG);
-
-    }
-
-
-    private async Task OnClickShareToFacebook()
-    {
-
-        var x = await AppData.JsRuntime.InvokeAsync<object>(JS.shareDialogFacebook, _jsRuntime.GetCurrentUrl());
-
-    }
-
-}

@@ -1,4 +1,5 @@
-﻿@using VedAstro.Library
+﻿@using Newtonsoft.Json.Linq;
+@using VedAstro.Library
 @*A simple page specialized for adding new Person profiles fast & easy*@
 @attribute [Route(PageRoute.AddPerson)]
 
@@ -11,32 +12,41 @@
     </Description>
 </PageTop>
 
-<div class="d-flex flex-wrap">
-    <div class="vstack gap-3 me-5 mb-4" style="max-width:@GR.W412px">
-        <div>
-            <label>Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.PrivateProfileName" /></label>
-            <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+
+@*show loading first*@
+@if (NothingToShow)
+{
+    @AppData.LoadingImage
+}
+else
+{
+    <div class="d-flex flex-wrap">
+        <div class="vstack gap-3 me-5 mb-4" style="max-width:@GR.W412px">
+            <div>
+                <label>Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.PrivateProfileName" /></label>
+                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+            </div>
+            <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
+            <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
+            <div>
+                <label>
+                    Gender
+                    <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender" />
+                </label>
+                <select @bind="_genderInput" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="hstack gap-4">
+                <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+                <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton" />
+            </div>
         </div>
-        <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
-        <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
-        <div>
-            <label>
-                Gender
-                <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender" />
-            </label>
-            <select @bind="_genderInput" class="form-control">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
-        </div>
-        <div class="hstack gap-4">
-            <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton" />
-        </div>
+        @*PRIVATE DATA MESSAGE*@
+        <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
     </div>
-    @*PRIVATE DATA MESSAGE*@
-    <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
-</div>
+}
 
 
 
@@ -46,6 +56,7 @@
     private GeoLocationInput _geoLocationInput;
     private string? _genderInput = "Male"; //since Male is first in combobox
     private Person _person;
+    private bool NothingToShow = false; //start by showing when start
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -68,24 +79,42 @@
     private async Task _OnClickSubmitButton()
     {
         await _jsRuntime.ShowLoading();
+        NothingToShow = true; //compensate for multiple popups
+
 
         //only continue if passed input field validation
-        if (!(await IsValidationPassed())) { return; }
+        if (!(await IsValidationPassed())) { NothingToShow = false; return; } //if nothing than back to normal
+
+        StateHasChanged();//needed to make change appear instantly, work
 
         //make a new person from the details in the input
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
-        await AppData.API.AddPerson(_person);
+        var serverReply = await AppData.API.AddPerson(_person);
 
         //page ready
         _jsRuntime.HideAlert();
+        //hide final loading, needed because SweetAlert fails when to many calls
+        NothingToShow = false;
 
-        await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
 
-        //wait a little and send user back to previous page
-        await Task.Delay(500);
-        _jsRuntime.GoBack();
+        if (serverReply["Status"]?.Value<string>() == "Pass")
+        {
+            await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
+
+            //wait a little and send user back to previous page
+            await Task.Delay(500);
+            _jsRuntime?.GoBack();
+        }
+        else
+        {
+            var xxx = serverReply["Payload"]?.Value<string>() ?? "";
+            await _jsRuntime.ShowAlert("error", $"Server said fail. Why?", xxx);
+        }
+
+
+
 
     }
 

@@ -39,6 +39,8 @@ KEEP IT REAL
             <div class="btn-group" style="width: @GR.W255px;">
                 <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
                     @DropDownDisplayText
+                    <PersonTooltip Person="@SelectedPerson" />
+
                 </button>
                 <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
                     <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
@@ -81,6 +83,7 @@ KEEP IT REAL
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
     private const string NotSelectedPersonId = "0"; //needed to detect empty
     private string _selectedPersonId = NotSelectedPersonId;
+    private Person SelectedPerson { get; set; } = Person.Empty;
 
     //PARAMETERS
 
@@ -251,6 +254,9 @@ KEEP IT REAL
 
     private void OnClickPersonName(Person person)
     {
+        //set tooltip as well
+        SelectedPerson = person;
+
         //make visible when drop down is closed as selected name
         DropDownDisplayText = person.DisplayName;
 

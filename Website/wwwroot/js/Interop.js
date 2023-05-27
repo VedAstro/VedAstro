@@ -158,8 +158,9 @@ export async function postWrapper(url, payloadXml) {
 }
 
 //only give response if header says ok
-export async function ReadOnlyIfPass(url) {
-    console.log("JS > Sending POST request...");
+//todo special to hadnle empty person list
+export async function ReadOnlyIfPassJson(url) {
+    console.log("JS > Read Only If Pass Json...");
 
     var response = await fetch(url, {
         "headers": { "accept": "*/*", "Connection": "keep-alive" },
@@ -181,6 +182,40 @@ export async function ReadOnlyIfPass(url) {
         var payload = { Status: "Fail", Payload: null };
 
         return payload;
+    }
+
+}
+
+//will auto set GET or POST on if data to send is provided
+//only gets data once done
+export async function ReadOnlyIfPassString(url, dataToSend) {
+    console.log("JS > Read Only If Pass String...");
+
+    //make get or post based on if got data to send or not
+    var httpCallProtocol = dataToSend == null ? "GET" : "POST";
+
+    var callStatus = "";
+    while (callStatus !== "Pass") { //must be pass
+
+
+        //make call
+        var response = await fetch(url, {
+            "headers": { "accept": "*/*", "Connection": "keep-alive" },
+            "method": httpCallProtocol
+        });
+
+        var callStatus = response.headers.get('Call-Status');
+
+        //easy debug
+        console.log(`API SAID : ${callStatus}`);
+
+        //if pass end here send data to caller
+        if (callStatus === "Pass") {
+            var responseText = await response?.text();
+
+            return responseText;
+        }
+        if (callStatus === "Fail") { return null; } //don't bang API if said fail, tell caller with null
     }
 
 }

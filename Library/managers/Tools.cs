@@ -1873,9 +1873,16 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// given a time zone will return famous cities using said timezone
+        /// </summary>
         public static string TimeZoneToLocation(string timeZone)
         {
-            throw new NotImplementedException();
+            return "Earth";
+            //switch (timeZone)
+            //{
+               
+            //}
         }
 
         public static async Task<JObject> ReadServer(string receiverAddress)

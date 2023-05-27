@@ -15,11 +15,9 @@ export class VedAstro {
         return this;
     }
 
-    //special URL to access ready made chart by async
-    async ChartFromGenerateDataXML(chartUrl) {
 
-        //get raw chart from API
-        var chartStr = await getEventsChartFromApiXml(chartUrl);
+    //expects EventsChartSvgHolder to exist on page
+    async ChartFromSVG(chartStr) {
 
         //inject into default div on page to hold, "EventsChartSvgHolder"
         var $chartElm = injectIntoElement($(ID.EventsChartSvgHolder)[0], chartStr);
@@ -28,11 +26,17 @@ export class VedAstro {
         //- get the unique ID of the chart
         //- use ID to maintain clean code
         //- chart is available in window.EventsChartList
-        var index = new EventsChart($chartElm.attr('id'));
+        var chartId = $chartElm.attr('id');
+        var index = new EventsChart(chartId); //brings to life
+
+        //let caller know all went well
+        console.log(`Amen! Chart Loaded : INDEX:${index}, ID:${chartId}`);
+
 
 
         //-----------------------------LOCAL FUNCS---------------------------------------
 
+        //todo marked for update
         async function getEventsChartFromApiXml(url, payload) {
             console.log(`JS : Getting events chart from API...`);
 

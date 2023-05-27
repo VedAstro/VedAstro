@@ -18,99 +18,45 @@ Know good and bad periods of your life years ahead.*@
 <div>
     <div class="d-flex justify-content-between">
         
-        @*EASY*@
-        <div class="tab-pane fade show active" id="easy" role="tabpanel" aria-labelledby="easy-tab">
-            <div class="vstack gap-3 p-3">
-                <PersonSelectorBox @ref="_easyPersonSelectorBox" />
+        <div class="vstack gap-3 p-3">
+            <PersonSelectorBox @ref="_easyPersonSelectorBox" />
 
-                <div>
-                    <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
-                    <select @bind="_selectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
-                        <option value="FullLife">Full Life</option>
-                        <option value="ThisWeek">This Week</option>
-                        <option value="ThisMonth">This Month</option>
-                        <option value="ThisYear">This Year</option>
-                        <option value="ThisDecade">This Decade</option>
-                        <option value="Age1to25">Age 1 to 25</option>
-                        <option value="Age10to35">Age 10 to 35</option>
-                        <option value="Age25to50">Age 25 to 50</option>
-                        <option value="Age35to60">Age 35 to 60</option>
-                        <option value="Age50to75">Age 50 to 75</option>
-                        <option value="Age60to85">Age 60 to 85</option>
-                        <option value="Age75to100">Age 75 to 100</option>
-                    </select>
-                </div>
-
-                <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
-
+            <div>
+                <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
+                <select @bind="_selectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
+                    <option value="FullLife">Full Life</option>
+                    <option value="ThisWeek">This Week</option>
+                    <option value="ThisMonth">This Month</option>
+                    <option value="ThisYear">This Year</option>
+                    <option value="ThisDecade">This Decade</option>
+                    <option value="Age1to25">Age 1 to 25</option>
+                    <option value="Age10to35">Age 10 to 35</option>
+                    <option value="Age25to50">Age 25 to 50</option>
+                    <option value="Age35to60">Age 35 to 60</option>
+                    <option value="Age50to75">Age 50 to 75</option>
+                    <option value="Age60to85">Age 60 to 85</option>
+                    <option value="Age75to100">Age 75 to 100</option>
+                </select>
             </div>
+
+            <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
+
         </div>
 
 
-        <div class="me-md-5" style="width: @GR.W412px;">
-            @*TAB BUTTONS*@
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="easy-tab" data-bs-toggle="tab" data-bs-target="#easy" type="button" role="tab" aria-controls="easy" aria-selected="true">
-                        <Icon IconName="maki:school"/>
-                        Easy
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced" aria-selected="false">
-                        <Icon IconName="tabler:school"/>
-                        Advanced
-                    </button>
-                </li>
-                @*                <li class="nav-item" role="presentation">
-                <button @onclick="OnClickSavedTab" class="nav-link" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button" role="tab" aria-controls="saved" aria-selected="false">
-                <Icon IconName="prime:save" />
-                Saved
-                </button>
-                </li>
-                *@
-            </ul>
-
-            @*TAB CONTENT*@
-            @*all border except top*@
-            <div class="tab-content border" id="myTabContent">
-
-                @*ADVANCED*@
-                <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
-                    <div class="vstack gap-3 p-3">
-                        @*PERSON SELECTOR
+        <div class="vstack gap-3 p-3 d-none">
+            @*PERSON SELECTOR
                         note: selector placed here because multiple components use it
                         *@
-                        <PersonSelectorBox @ref="_peopleSelectorBox"/>
-                        <MonthYearSelectorBox LabelText="Start" @ref="_startTimeSelector"/>
-                        <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector"/>
+            <PersonSelectorBox @ref="_peopleSelectorBox" />
+            <MonthYearSelectorBox LabelText="Start" @ref="_startTimeSelector" />
+            <MonthYearSelectorBox LabelText="End" @ref="_endTimeSelector" />
 
-                        @*CALCULATE BTN*@
-                        <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"></IconButton>
-
-                    </div>
-                </div>
-
-                @*SAVED*@
-                @*                <div class="tab-pane fade" id="saved" role="tabpanel" aria-labelledby="saved-tab">
-                <div class="vstack gap-3 p-3">
-                <div class="input-group mb-3">
-                <label class="input-group-text" for="inputGroupSelect01">Saved Chart</label>
-                <select class="form-select" @bind="_selectedChartId" id="inputGroupSelect01">
-                <option selected>Choose...</option>
-                @foreach (var chart in _allChartList)
-                {
-                <option value="@(chart.ChartId)">@(chart.Name)</option>
-                }
-                </select>
-                </div>
-                <IconButton SmallSize="true" IconName="ant-design:folder-view-outlined" ButtonText="Show" OnClickCallback="OnClickShowSaved"></IconButton>
-                </div>
-                </div>
-                *@
-            </div>
+            @*CALCULATE BTN*@
+            <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" OnClickCallback="OnClickCalculate" ShowDelayWarning="true"></IconButton>
 
         </div>
+
 
         <div>
             <InfoBox Title="Accurate" FullWidth="true" MaxWidth="@((int)(GR.W255 + GR.W157))" IconName="noto-v1:direct-hit">
@@ -118,7 +64,7 @@ Know good and bad periods of your life years ahead.*@
                     Predict your life with zero astrological knowledge
                 </DescriptionHTML>
                 <ImageHTML>
-                    <img class="img-thumbnail" src="images/life-predictor-alertbox-examples.jpg"/>
+                    <img class="img-thumbnail" src="images/life-predictor-alertbox-examples.jpg" />
                 </ImageHTML>
             </InfoBox>
         </div>
@@ -142,20 +88,20 @@ Know good and bad periods of your life years ahead.*@
     <ArticleBlock Title="Colors" IconName="noto-v1:artist-palette">
         <TextHTML>
             <p class="text-justify">
-                Our eyes and brain process color much more easily than text. Even a child can understand colors better.
+                Our eyes and brain can <strong>process and understand</strong> info as colors much more easily than text.
+                That is why we converted  complicated predictions into easy to understand colors.
             </p>
 
             <img src="images/life-predictor-image-1.jpg" class="img-thumbnail my-3" alt="...">
 
             <p class="text-justify">
-                That is why we converted  complicated predictions into easy to understand colors.
                 <span style="color: red; font-weight: 900;">RED</span> is for bad life events, <span style="color: green; font-weight: 900;">GREEN</span> is
-                for good. Quickly read your life chart with <strong>zero</strong> astrological knowledge. No manuals needed.
+                for good. This makes it possible to quickly read a life chart with <strong>zero</strong> astrological knowledge. No manuals needed.
             </p>
         </TextHTML>
     </ArticleBlock>
 
-    <ArticleBlock Title="Intensity" >
+    <ArticleBlock Title="Intensity" IconName="emojione:level-slider">
         <TextHTML>
             <p class="text-justify">
                 To see how <strong>good or bad </strong> the life event is going to be. Look carefully at the summary row.
@@ -171,25 +117,25 @@ Know good and bad periods of your life years ahead.*@
 
 
 
-    <ArticleBlock Title="Coincidence?">
+    <ArticleBlock Title="Coincidence?" IconName="line-md:moon-rising-loop">
         <TextHTML>
-            We use the aspect of "Mind" in astrology to make this chart. Why? because anything that effects your mind will make a difference to you.
-            For instance we can make a chart to predict only "Weather" over your head, but if you live in the city and don't really care about rain or shine.
+            We use the aspect of "<strong>Mind</strong>" in astrology to make this chart. <strong>Why?</strong> because anything that effects your mind will make a difference to you.
+            For instance we can make a chart to predict only "<strong>Weather</strong>" over your head, but if you live in the city and don't really care about rain or shine.
             Than what use is that complex chart to you. Most people will say the prediction is wrong. Of course it never effected the them, can't tell even if correct.
 
             We have seen to many cases to call this <strong>prediction lines</strong> a "coincidence".
-            You will be aware of it. But when it says green, than one can only say it is <strong>impossible</strong> to have a worried mind or troubled heart.
+            You will be aware of it. But when it says <span style="color: green;font-weight: 900;">GREEN</span>, than one can say it is <strong>impossible</strong> to have a worried mind or troubled heart.
         </TextHTML>
 
     </ArticleBlock>
 
     <ArticleBlock Title="Fear Death Date?" IconName="mdi:death">
         <TextHTML>
-            There are many recorded accounts of people through history dying peacfully in their sleep.
-            Death will not be a tragedy to everybody, just not possible.
-            It is only a transition date, to be affraid of it is like being affraid of your birthday. Life will not be fun that way, we have all tried it.
+            There are many recorded accounts of people through history dying peacefully in their sleep.
+            Death will not be a tragedy to everybody, <strong>just not possible</strong>.
+            It is only a transition date, to be afraid of it is like being afraid of your birthday. Life will not be fun that way, we have all tried it.
             And know very well what life without knowing tomorrows tragedy is like.
-            Even death during <span style="color: green;font-weight: 900;">GREEN</span> period will be happy or peacfull and never tragic.
+            Even death during <span style="color: green;font-weight: 900;">GREEN</span> period will be happy or peaceful and never tragic.
             Keep in mind this algorithm does "NOT" count <strong>death</strong> as a bad life event, it is <strong>how</strong> you die that is predicted to be good or bad.
             Some say, "I like not knowing". We say, "<strong>Good luck</strong>".
         </TextHTML>
@@ -198,7 +144,7 @@ Know good and bad periods of your life years ahead.*@
 
     <ArticleBlock Title="Winning The Lotto" IconName="noto-v1:money-bag">
         <TextHTML>
-            Since it is without doubt that we can predict when will a person smile or frown. Than it is possible to predict when a person 
+            Since it is without doubt that we can predict when will a person smile or frown. Than it is possible to predict when a person
             will win the lottery. The "lottery prize" is different for every person. Not everybody wants money. Some people are very
             happy when they are with others. When lonely they are sad and dont't like it. For example, for this person we can accurately predict
             that when <span style="color: red;font-weight: 900;">RED</span> lines appear that this person will most likely be left alone,
@@ -420,15 +366,13 @@ Know good and bad periods of your life years ahead.*@
         _pageTitle = $"Dasa | {SelectedPerson.Name}";
 
         //set data into dasa viewer
-        dynamic timeRange = ComputeStartEndTimeFromInput();
-        var startTime = timeRange.Start;
-        var endTime = timeRange.End;
+        var timeRange = ComputeStartEndTimeFromInput();
 
         //generate the events row & time header row
         var inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Prana, EventTag.Gochara };
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, startTime, endTime, inputedEventTags);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, inputedEventTags);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -464,15 +408,13 @@ Know good and bad periods of your life years ahead.*@
         _pageTitle = $"Dasa | {SelectedPerson.Name}";
 
         //set data into dasa viewer
-        dynamic timeRange = AutoCalculateTimeRangeYear();
-        var startTime = timeRange.start;
-        var endTime = timeRange.end;
-
+        var systemTimezone = Tools.GetSystemTimezone();
+        var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, _selectedTimeRange, systemTimezone);
         //generate the events row & time header row
         var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Prana, EventTag.Gochara };
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, startTime, endTime, dasaEventTags);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, dasaEventTags);
 
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
@@ -488,57 +430,6 @@ Know good and bad periods of your life years ahead.*@
         //await horoscopeInfoView?.SetPerson(SelectedPerson);
 
         _jsRuntime.HideAlert();
-
-        //LOCAL FUNCTIONS
-        object AutoCalculateTimeRangeYear()
-        {
-            Time start, end;
-            var birthDateMonthYear = SelectedPerson.BirthDateMonthYear;
-
-            //note the use of system timezone and not birth timezone
-            //birth time is adjusted to show for clients timezone
-            var birthTimeStr = $"00:00 {birthDateMonthYear} {Tools.GetSystemTimezoneStr()}";
-            var birthTimeClient = new Time(birthTimeStr, SelectedPerson.GetBirthLocation());
-
-
-            switch (_selectedTimeRange)
-            {
-                case "Age1to25":
-                    start = birthTimeClient;
-                    end = birthTimeClient.AddYears(25);
-                    return new { start = start, end = end };
-                case "Age10to35":
-                    start = birthTimeClient.AddYears(10);
-                    end = birthTimeClient.AddYears(35);
-                    return new { start = start, end = end };
-                case "Age25to50":
-                    start = birthTimeClient.AddYears(25);
-                    end = birthTimeClient.AddYears(50);
-                    return new { start = start, end = end };
-                case "Age35to60":
-                    start = birthTimeClient.AddYears(35);
-                    end = birthTimeClient.AddYears(60);
-                    return new { start = start, end = end };
-                case "Age50to75":
-                    start = birthTimeClient.AddYears(50);
-                    end = birthTimeClient.AddYears(75);
-                    return new { start = start, end = end };
-                case "Age60to85":
-                    start = birthTimeClient.AddYears(60);
-                    end = birthTimeClient.AddYears(85);
-                    return new { start = start, end = end };
-                case "Age75to100":
-                    start = birthTimeClient.AddYears(75);
-                    end = birthTimeClient.AddYears(100);
-                    return new { start = start, end = end };
-                case "FullLife":
-                    start = birthTimeClient;
-                    end = birthTimeClient.AddYears(100);
-                    return new { start = start, end = end };
-                default:
-                    return new { start = Time.Empty, end = Time.Empty };
-            }
-        }
 
     }
 
@@ -580,7 +471,7 @@ Know good and bad periods of your life years ahead.*@
         return true;
     }
 
-    private object ComputeStartEndTimeFromInput()
+    private TimeRange ComputeStartEndTimeFromInput()
     {
         var startMonthYear = _startTimeSelector.GetSelectedTimeText();
         //note the use of system timezone and not birth
@@ -592,7 +483,11 @@ Know good and bad periods of your life years ahead.*@
         var y = $"11:59 {GetLastDay(endMonthYear)}/{endMonthYear} {Tools.GetSystemTimezoneStr()}";
         var endTime = new Time(y, SelectedPerson.GetBirthLocation());
 
-        return new { Start = startTime, End = endTime };
+        return new TimeRange(startTime, endTime);
+
+
+
+        //-------------------------------
 
         //gets last day of any month at any time
         int GetLastDay(string monthYearText)

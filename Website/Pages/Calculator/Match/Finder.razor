@@ -17,12 +17,13 @@
     <div>
         <div class="vstack gap-3 me-5">
             <PersonSelectorBox @ref="_personSelector" @bind-SelectedPersonId="@_selectedPersonId" Label="Person" />
-            <IconButton IconName="uim:process" ExtraClass="mt-1" Color="success" ButtonText="Submit" OnClickCallback="OnClickSubmitButton" />
+            <IconButton TooltipText="Search database for perfect match" IconName="mdi:heart-search" ExtraClass="mt-1" Color="success" ButtonText="Search" OnClickCallback="OnClickSubmitButton" />
         </div>
     </div>
     @*SIDEBAR*@
     <div class="me-md-4">
         <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Love Letter" Description="Leave a love letter for your soulmate when they find you" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="twemoji:love-letter" />
+        <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Cute Pic" Description="Let your soulmate see how you look when you send frend request" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="flat-color-icons:selfie" />
     </div>
 
 </div>

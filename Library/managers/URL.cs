@@ -55,9 +55,7 @@ public class URL
         GetMatchReportApi = ApiUrl + "/getmatchreport";
         GetSavedMatchReport = ApiUrl + "/GetSavedMatchReport";
         SaveMatchReportApi = ApiUrl + "/SaveMatchReport";
-        GetEventsChart = ApiUrl + "/geteventschart";
-        GetEventsChartAsync = ApiUrl + "/GetEventsChartAsync";
-        GetEventsChartResult = ApiUrl + "/GetEventsChartResult";
+        GetEventsChart = ApiUrl + "/GetEventsChart";
         GetCallStatus = ApiUrl + "/GetCallStatus";
         //TODO special URL for chart because timeout Azure CDN timeout >30s
         GetEventsChartDirect = ApiUrlDirect + "/api/geteventschart"; 
@@ -121,8 +119,6 @@ public class URL
     public readonly string GetVisitorList;
     public readonly string GetMessageList;
     public readonly string GetEventsChart;
-    public readonly string GetEventsChartAsync;
-    public readonly string GetEventsChartResult;
     public readonly string GetCallStatus;
     public readonly string GetEventsChartDirect;
     public readonly string GetSavedEventsChart;

@@ -64,10 +64,17 @@
         public const string postWrapper = "Interop.postWrapper";
         public const string SkyChartAnimate = "Interop.SkyChartAnimate";
         public const string SkyChartInit = "Interop.SkyChartInit";
-        public const string ReadOnlyIfPass = "Interop.ReadOnlyIfPass";
         public const string getScreenData = "Interop.getScreenData";
         public const string shareDialogFacebook = "Interop.shareDialogFacebook";
 
+
+        //
+        public const string ReadOnlyIfPassJson = "Interop.ReadOnlyIfPassJson";
+        public const string ReadOnlyIfPassString = "Interop.ReadOnlyIfPassString";
+
+
+
+        //CHART
 
         public const string Swal_fire = "Swal.fire";
         public const string Swal_close = "Swal.close";
@@ -114,7 +121,7 @@
         public const string import = "import";
 
 
-        public const string ChartFromGenerateDataXML = "window.API.ChartFromGenerateDataXML";
+        public const string ChartFromSVG = "window.API.ChartFromSVG";
 
     }
 }

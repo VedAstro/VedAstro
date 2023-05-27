@@ -290,9 +290,8 @@
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"Muhurtha | {_selectedPerson.Name}";
 
-
         //inputedEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.Personal, EventTag.General };
-        await _eventReportViewer.ShowChart(_selectedPerson, startTime, endTime, getSelectedEventTypes);
+        await _eventReportViewer?.ShowChart(_selectedPerson, new TimeRange(startTime, endTime), getSelectedEventTypes);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -312,9 +311,7 @@
 
         //get needed input data
         _selectedPerson = await _easyPersonSelectorBox.GetSelectedPerson();
-        dynamic x = AutoCalculateTimeRange(_selectedTimeRange, _selectedPerson.GetBirthLocation(), Tools.GetSystemTimezone());
-        var startTime = x.start;
-        var endTime = x.end;
+        var timeRange = AutoCalculateTimeRange(_selectedTimeRange, _selectedPerson.GetBirthLocation(), Tools.GetSystemTimezone());
         var getSelectedEventTypes = GetSelectedEventTypesEasy();
 
         //put person name into tab title for easy multi-tabbing
@@ -325,7 +322,7 @@
         _eventReportViewer._timePreset = _selectedTimeRange;
         _eventReportViewer._eventPreset = _selectedEventType;
 
-        await _eventReportViewer.ShowChart(_selectedPerson, startTime, endTime, getSelectedEventTypes);
+        await _eventReportViewer.ShowChart(_selectedPerson, timeRange, getSelectedEventTypes);
 
         //mark page as ready to show results
         _isResultReady = true;
@@ -335,7 +332,7 @@
 
         //LOCAL FUNCTIONS
 
-        object AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation, TimeSpan timezone)
+        TimeRange AutoCalculateTimeRange(string timePreset, GeoLocation birthLocation, TimeSpan timezone)
         {
 
             Time start, end;
@@ -352,29 +349,29 @@
                     var endHour = now.AddHours(1);//front 1 hour
                     start = new Time(startHour, birthLocation);
                     end = new Time(endHour, birthLocation);
-                    return new { start = start, end = end };
+                    return new TimeRange(start, end);
                 case "Today":
                 case "Day":
                     start = new Time($"00:00 {today}", birthLocation);
                     end = new Time($"23:59 {today}", birthLocation);
-                    return new { start = start, end = end };
+                    return new TimeRange(start, end);
                 case "Week":
                     start = new Time($"00:00 {yesterday}", birthLocation);
                     var weekEnd = now.AddDays(7).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {weekEnd}", birthLocation);
-                    return new { start = start, end = end };
+                    return new TimeRange(start, end);
                 case "Month":
                     start = new Time($"00:00 {yesterday}", birthLocation);
                     var monthEnd = now.AddDays(30).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {monthEnd}", birthLocation);
-                    return new { start = start, end = end };
+                    return new TimeRange(start, end);
                 case "Year":
                     start = new Time($"00:00 {yesterday}", birthLocation);
                     var yearEnd = now.AddDays(365).ToString("dd/MM/yyyy zzz");
                     end = new Time($"23:59 {yearEnd}", birthLocation);
-                    return new { start = start, end = end };
+                    return new TimeRange(start, end);
                 default:
-                    return new { start = Time.Empty, end = Time.Empty };
+                    return new TimeRange(Time.Empty, Time.Empty);
             }
         }
     }

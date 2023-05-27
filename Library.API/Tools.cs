@@ -24,7 +24,6 @@ namespace Library.API
     /// </summary>
     public static class Tools
     {
-
         /// <summary>
         /// No parsing direct from horses mouth
         /// </summary>
@@ -45,15 +44,17 @@ namespace Library.API
 
             return dataReturned;
         }
-
-        public static async Task<JToken?> ReadOnlyIfPassJS(string receiverAddress, IJSRuntime jsRuntime)
+        
+        /// <summary>
+        /// Only returns 
+        /// </summary>
+        public static async Task<JToken?> ReadOnlyIfPassJSJson(string receiverAddress, IJSRuntime jsRuntime)
         {
             //this call will take you to NetworkThread.js
-            var rawPayloadStr = await jsRuntime.InvokeAsync<JsonElement>("Interop.ReadOnlyIfPass", receiverAddress);
-
+            //todo handle empty response
+            var rawPayloadStr = await jsRuntime.InvokeAsync<JsonElement>("Interop.ReadOnlyIfPassJson", receiverAddress);
             var status = rawPayloadStr.GetProperty("Status").GetString();
             var payload = rawPayloadStr.GetProperty("Payload").GetString() ?? "{}";
-
 
 
             var isPass = status == "Pass";
@@ -73,46 +74,34 @@ namespace Library.API
 
 
         }
+        
 
-
-
-
-        public static async Task<string?> ReadOnlyIfPass(string receiverAddress)
+        /// <summary>
+        /// give null data to send to get auto use GET instead of POST done by JS side
+        /// </summary>
+        public static async Task<string?> ReadOnlyIfPassJSString(string receiverUrl, string? dataToSend, IJSRuntime jsRuntime)
         {
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+            //holds control till get
+            var rawPayloadStr = await jsRuntime.InvokeAsync<string?>("Interop.ReadOnlyIfPassString", receiverUrl, dataToSend);
 
-            //tell sender to wait for complete reply before exiting
-            //var waitForContent = HttpCompletionOption.ResponseHeadersRead;
-            //send the data on its way
-            using var client = new HttpClient();
-            //client.Timeout = Timeout.InfiniteTimeSpan;
-            var response = await client.SendAsync(httpRequestMessage);
+            return rawPayloadStr;
 
-            //if not pass end here
-            //if (!response.IsSuccessStatusCode) { return null; }
+            //var status = rawPayloadStr.GetProperty("Status").GetString();
+            //var payload = rawPayloadStr.GetProperty("Payload").GetString() ?? "{}";
 
-            //var sss = response.Headers.AsEnumerable().Where(x => x.Key.ToLower() == "call-status")?.FirstOrDefault().Value?.FirstOrDefault() ?? "EMPTY";
-            //only get content if response is pass
-            //var callStatus = response?.Headers?.GetValues("Call-Status")?.FirstOrDefault() ?? "Fail"; //fail if null
-            //response.TrailingHeaders.TryGetValues("call-status", out var calls);
-            response.Headers.TryGetValues("Call-Status", out var calls); //fail if null
-            var callStatus = calls?.FirstOrDefault() ?? "Fail";
+            //var isPass = status == "Pass";
+            ////var payload = rawPayload["Payload"]?.Value<JToken>() ?? new JObject();
+            //if (isPass)
+            //{
+            //    var rawPayload = JToken.Parse(payload);
 
-#if DEBUG
-            Console.WriteLine($"API SAID : {callStatus}");
-#endif
-            var isPass = callStatus == "Pass";
-            if (isPass)
-            {
-                //return the raw reply to caller
-                var dataReturned = await response.Content.ReadAsStringAsync();
+            //    //return the raw reply to caller
+            //    return rawPayload;
 
-                return dataReturned;
+            //}
 
-            }
-
-            //if anything but pass, don't look inside just say nothing
-            return null;
+            ////if anything but pass, don't look inside just say nothing
+            //return null;
 
         }
 
@@ -138,7 +127,7 @@ namespace Library.API
             return null;
         }
 
-        public static async Task<JObject> WriteServer(HttpMethod method, string receiverAddress, JToken? payloadJson = null)
+        public static async Task<JToken> WriteServer(HttpMethod method, string receiverAddress, JToken? payloadJson = null)
         {
 
             //prepare the data to be sent
@@ -163,6 +152,48 @@ namespace Library.API
             //return data as JSON as expected from API 
             return JObject.Parse(dataReturned);
         }
+
+
+
+        //        public static async Task<string?> ReadOnlyIfPass(string receiverAddress)
+        //        {
+        //            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, receiverAddress);
+
+        //            //tell sender to wait for complete reply before exiting
+        //            //var waitForContent = HttpCompletionOption.ResponseHeadersRead;
+        //            //send the data on its way
+        //            using var client = new HttpClient();
+        //            //client.Timeout = Timeout.InfiniteTimeSpan;
+        //            var response = await client.SendAsync(httpRequestMessage);
+
+        //            //if not pass end here
+        //            //if (!response.IsSuccessStatusCode) { return null; }
+
+        //            //var sss = response.Headers.AsEnumerable().Where(x => x.Key.ToLower() == "call-status")?.FirstOrDefault().Value?.FirstOrDefault() ?? "EMPTY";
+        //            //only get content if response is pass
+        //            //var callStatus = response?.Headers?.GetValues("Call-Status")?.FirstOrDefault() ?? "Fail"; //fail if null
+        //            //response.TrailingHeaders.TryGetValues("call-status", out var calls);
+        //            response.Headers.TryGetValues("Call-Status", out var calls); //fail if null
+        //            var callStatus = calls?.FirstOrDefault() ?? "Fail";
+
+        //#if DEBUG
+        //            Console.WriteLine($"API SAID : {callStatus}");
+        //#endif
+        //            var isPass = callStatus == "Pass";
+        //            if (isPass)
+        //            {
+        //                //return the raw reply to caller
+        //                var dataReturned = await response.Content.ReadAsStringAsync();
+
+        //                return dataReturned;
+
+        //            }
+
+        //            //if anything but pass, don't look inside just say nothing
+        //            return null;
+
+        //        }
+
     }
 }
 

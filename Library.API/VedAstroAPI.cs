@@ -100,7 +100,7 @@ namespace Library.API
         /// <summary>
         /// Adds new person to API server main list
         /// </summary>
-        public async Task AddPerson(Person person)
+        public async Task<JToken> AddPerson(Person person)
         {
             //send newly created person to API server
             var personJson = person.ToJson();
@@ -114,6 +114,9 @@ namespace Library.API
 
             //if pass, clear local person cache
             await HandleResultClearLocalCache(jsonResult);
+
+            //up to caller to interpret data, can be failed one also
+            return jsonResult;
         }
 
         /// <summary>
@@ -225,15 +228,14 @@ namespace Library.API
         private async Task<List<Person>> GetPersonListBehind(string inputUrl)
         {
 
-            //call until data appears, API takes of everything
+            //call until data appears, API takes care of everything
             JToken? personListJson = null;
             var pollRate = 250;
-            JToken x;
             var notReady = true;
             while (notReady)
             {
                 await Task.Delay(pollRate);
-                personListJson = await Tools.ReadOnlyIfPassJS(inputUrl, _jsRuntime);
+                personListJson = await Tools.ReadOnlyIfPassJSJson(inputUrl, _jsRuntime);
                 notReady = personListJson == null;
             }
 
@@ -243,11 +245,32 @@ namespace Library.API
 
         }
 
+        /// <summary>
+        /// Calls API till surrender
+        /// </summary>
+        private async Task<string?> PollApiTillData(string inputUrl, string dataToSend)
+        {
+
+            //call until data appears, API takes care of everything
+            string? parsedJsonReply = null;
+            var pollRate = 250;
+            var notReady = true;
+            while (notReady)
+            {
+                await Task.Delay(pollRate);
+                parsedJsonReply = await Tools.ReadOnlyIfPassJSString(inputUrl, dataToSend, _jsRuntime);
+                notReady = parsedJsonReply == null; //if null no data, continue wait
+            }
+
+            return parsedJsonReply;
+
+        }
+
 
         /// <summary>
         /// checks status, if pass clears person list cache, for update, delete and add
         /// </summary>
-        private async Task HandleResultClearLocalCache(JObject jsonResult)
+        private async Task HandleResultClearLocalCache(JToken jsonResult)
         {
             //check result, display error if needed
             var isPass = jsonResult["Status"].Value<string>() == "Pass";
@@ -274,7 +297,7 @@ namespace Library.API
         /// gets payload after checking status and shows error if status "Fail"
         /// note :  no parser use direct, support for string, int and double
         /// </summary>
-        private T GetPayload<T>(JObject rawResult, Func<JToken, T>? parser)
+        private T GetPayload<T>(JToken rawResult, Func<JToken, T>? parser)
         {
             //result must say Pass, else it has failed
             var isPass = rawResult["Status"]?.Value<string>() == "Pass";
@@ -309,5 +332,19 @@ namespace Library.API
         }
 
 
+        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags)
+        {
+
+            //1 : package data to get chart
+            var chartSpecsJson = EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags);
+
+            //ask API to make new chart
+            var eventsChartApiCallUrl = $"{_url.GetEventsChart}/UserId/{_userId}/VisitorId/{_visitorId}";
+
+            //NOTE:call is held here
+            var chartString = await PollApiTillData(eventsChartApiCallUrl, chartSpecsJson.ToString());
+
+            return chartString;
+        }
     }
 }

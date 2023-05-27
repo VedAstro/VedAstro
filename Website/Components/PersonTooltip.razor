@@ -53,7 +53,24 @@
     /// image name is expected to exist in images folder with .JPG format
     /// </summary>
     [Parameter]
-    public Person Person { get; set; }
+    public Person Person
+    {
+        get => _person;
+        set
+        {
+            //if person is empty no tooltip please
+            if (Person.Empty.Equals(value))
+            {
+                _jsRuntime.Hide(tooltipElement);
+            }
+            else
+            {
+                _jsRuntime.Show(tooltipElement);
+
+            }
+            _person = value;
+        }
+    }
 
     /// <summary>
     /// element that is shown in tool tip is referenced here to be accessed by Tippy.js
@@ -89,23 +106,22 @@
         if (firstRender)
         {
             //attach tooltip lib element if tooltip provided
-            if (!string.IsNullOrEmpty(Person.ImageName)) //todo needs update
-            {
-                //construct html to show image
-                var tooltipSettings =
-                    new
-                    {
-                        placement = "right",
-                        content = tooltipElement,
-                        theme = "light",
-                        allowHTML = true,
-                        arrow = true,
-                        interactive = true //so that can click button
-                    };
+            //construct html to show image
+            var tooltipSettings =
+                new
+                {
+                    placement = "right",
+                    content = tooltipElement,
+                    theme = "light",
+                    allowHTML = true,
+                    arrow = true,
+                    interactive = true //so that can click button
+                };
 
-                await _jsRuntime.Tippy(nameHolderElement, tooltipSettings);
-            }
+            await _jsRuntime.Tippy(nameHolderElement, tooltipSettings);
+
         }
     }
 
+    private Person _person;
 }

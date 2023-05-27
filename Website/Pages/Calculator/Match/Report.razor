@@ -8,6 +8,7 @@
 <PageTop Title="Match Report" IconName="bi:arrow-through-heart-fill" />
 
 
+
 @*only show once report ready*@
 @if (_report != null)
 {
@@ -107,6 +108,11 @@
 
     </div>
 }
+else
+{
+    @AppData.LoadingImage
+}
+
 
 @*HELP SECTION*@
 <PageHelpSection @ref="_helpSection" DefaultVisible="true">

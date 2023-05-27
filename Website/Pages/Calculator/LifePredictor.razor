@@ -289,7 +289,6 @@ Know good and bad periods of your life years ahead.*@
 
 
     private async Task OnClickCalculate() => await InvokeAsync(async () => await _OnClickCalculate()).Try(_jsRuntime);
-    private async Task OnClickShowSaved() => await InvokeAsync(async () => await _OnClickShowSaved()).Try(_jsRuntime);
     private async Task OnClickCalculateEasy() => await InvokeAsync(async () => await _OnClickCalculateEasy()).Try(_jsRuntime);
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
 
@@ -317,37 +316,6 @@ Know good and bad periods of your life years ahead.*@
     }
 
 
-    /// <summary>
-    /// Saves current chart to local storage
-    /// </summary>
-    /// <returns></returns>
-    private async Task _OnClickShowSaved()
-    {
-        await _jsRuntime.ShowLoading();
-
-        //todo make sure a chart is selected
-        //if (!ValidationPassed()) { return; }
-
-        //mark page as NOT ready (when button clicked 2nd time)
-        _isResultReady = false;
-
-        //show saved chart
-        await _eventsChartViewer?.ShowSavedChart(_selectedChartId)!;
-
-        //this is needed to generate data charts below
-        //note gets person from ID stored in chart name
-        SelectedPerson = _eventsChartViewer.SelectedPerson;
-
-        //put person name into tab title for easy multi-tabbing
-        //await _jsRuntime.SetTitle($"Dasa | {SelectedPerson.Name}");
-        _pageTitle = $"Dasa | {SelectedPerson.Name}";
-
-
-        //mark page as ready to show results
-        _isResultReady = true;
-
-        _jsRuntime.HideLoading();
-    }
 
     private async Task _OnClickCalculate()
     {

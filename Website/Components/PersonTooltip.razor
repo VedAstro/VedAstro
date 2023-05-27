@@ -3,10 +3,11 @@
 @namespace Website.Pages
 @using VedAstro.Library;
 @using System.Xml.Linq
+@using System.ComponentModel.DataAnnotations
 
 
 @*this element is auto hidden by Tippy, and made visible when on hover*@
-<div @ref="tooltipElement" class="hstack gap-2 shadow rounded-4 border-dark-subtle">
+<div @ref="tooltipElement" class="@nameof(this.GetType) hstack gap-2 shadow rounded-4 border-dark-subtle" style="width: max-content;">
     @*only show image if exist, don't waste that nice space*@
     @if (ImageExist)
     {
@@ -26,8 +27,9 @@
     </div>
 </div>
 
-<div style="cursor: pointer;white-space: nowrap;" @ref="nameHolderElement">
-    @Person.Name
+@*extra css to make always appear inline*@
+<div style="cursor: pointer;white-space: nowrap; display: inline-table;" @ref="nameHolderElement">
+    @DisplayName
 </div>
 
 
@@ -37,6 +39,15 @@
     /// final URL placed in src to get image
     /// </summary>
     private string ImageUrl(Person person) => $"images/person/{person.ImageName}";
+
+    private string DisplayName
+    {
+        get
+        {
+            //if person empty, than say please select name, used in sub sub-component in dropdown
+            return Person.Equals(Person.Empty) ? "Select Person" : Person.DisplayName;
+        }
+    }
 
     /// <summary>
     /// image name is expected to exist in images folder with .JPG format

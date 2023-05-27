@@ -38,9 +38,7 @@ KEEP IT REAL
             <!-- Example single danger button -->
             <div class="btn-group" style="width: @GR.W255px;">
                 <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-                    @DropDownDisplayText
                     <PersonTooltip Person="@SelectedPerson" />
-
                 </button>
                 <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
                     <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">

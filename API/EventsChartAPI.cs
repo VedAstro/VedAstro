@@ -74,13 +74,15 @@ namespace API
                 };
 
                 //NOTE USING CHART ID INSTEAD OF CALLER ID, FOR CACHE SHARING BETWEEN ALL WHO COME
-                Func<Task<BlobClient>> cacheExecuteTask = () => APITools.CacheExecuteTask3(generateChart, chartId);
+                Func<Task<BlobClient>> cacheExecuteTask = () => APITools.CacheExecuteTask4(generateChart, chartId);
 
 
                 //CACHE MECHANISM
                 //get who or what is calling
                 var callerInfo = new CallerInfo(userId, visitorId);
-                var httpResponseData = AzureCache.CacheExecute(cacheExecuteTask, callerInfo, incomingRequest);
+                //NOTE OVERIIDE CALLER ID TO CHART FOR CACHE SHARING
+                callerInfo.CallerId = chartId;
+                var httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask, callerInfo, incomingRequest);
 
                 return httpResponseData;
 

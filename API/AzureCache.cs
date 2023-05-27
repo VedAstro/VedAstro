@@ -15,6 +15,7 @@ using Azure.Data.Tables.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using iText.Commons.Bouncycastle.Cert.Ocsp;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
 
@@ -53,8 +54,6 @@ namespace API
             //if found in blob then end here
             return isExists;
         }
-
-
 
         //public static async Task<string> GetLarge(string callerId)
         //{
@@ -102,10 +101,15 @@ namespace API
 
         }
 
-
         //}
-        public static async Task<BlobClient?> AddLarge<T>(string callerId, T value, string mimeType = "")
+        public static async Task<BlobClient?> Add<T>(string callerId, T value, string mimeType = "")
         {
+
+#if DEBUG
+            Console.WriteLine($"SAVING NEW DATA TO CACHE: {callerId}");
+#endif
+
+
             var blobClient = blobContainerClient.GetBlobClient(callerId);
 
             if (typeof(T) == typeof(string))
@@ -164,41 +168,68 @@ namespace API
         /// response will auto change to full data file when needed
         /// NOTE : HEADERS USED TO MARK STATUS PASS OR FAIL
         /// </summary>
-        public static HttpResponseData CacheExecute(Func<Task<BlobClient>> cacheExecuteTask3,
-            CallerInfo parsedRequest, HttpRequestData httpRequestData)
+        public static async Task<HttpResponseData> CacheExecute(Func<Task<BlobClient>> cacheExecuteTask3,
+            CallerInfo callerInfo, HttpRequestData httpRequestData)
         {
             //check if call already made and is running
             //call is made again (polling), don't disturb running
-            if (CallTracker.IsRunning(parsedRequest.CallerId))
+            var isRunning = CallTracker.IsRunning(callerInfo.CallerId);
+
+#if DEBUG
+            var status = isRunning ? "RUNNING" : "DONE";
+            Console.WriteLine($"CALL IS {status}");
+#endif
+
+            //already running end here for quick reply
+            if (isRunning)
             {
                 var response = httpRequestData.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Call-Status", "Running"); //caller checks this
                 return response;
             }
-
             //start new call
             else
             {
-                //EXECUTE
-                //2 possibilities:
-                //1 -> got cache, can reply caller ASAP (within 10s computation)
-                //2 -> no cache, need to calculate slowly (tell caller to come back later)
-                var task = Task.Run(cacheExecuteTask3);
-                if (task.Wait(10000)) //note: if too low will cause endless loop, have to give time to retrieve data also
+
+                //if task not running next check cache
+                var gotCache = await AzureCache.IsExist(callerInfo.CallerId);
+                if (gotCache)
                 {
-                    // get the data out of the heavy computation function
-                    BlobClient personListJson = task.Result;
-                    var httpResponseData = APITools.SendPassHeaderToCaller(personListJson, httpRequestData, MediaTypeNames.Application.Json);
+                    BlobClient chartBlobClient = await AzureCache.GetData<BlobClient>(callerInfo.CallerId);
+
+#if DEBUG
+                    var xxx = chartBlobClient.GetProperties().Value.ContentLength;
+                    Console.WriteLine($"USING CACHE : {callerInfo.CallerId} SIZE:{xxx}");
+#endif
+
+                    var httpResponseData = APITools.SendPassHeaderToCaller(chartBlobClient, httpRequestData, MediaTypeNames.Application.Json);
                     return httpResponseData;
 
                 }
-                //tell caller to come back later
+                //if no cache only now start task
                 else
                 {
+
+#if DEBUG
+                    Console.WriteLine($"NO CACHE! RUNNING COMPUTE : {callerInfo.CallerId}");
+#endif
+                    //no waiting
+                    //will execute and save the data to cache,
+                    //so on next call will retreive from cache
+                    cacheExecuteTask3.Invoke();
+
+
+#if DEBUG
+                    Console.WriteLine($"BUSY NOW COME BACK LATER : {callerInfo.CallerId}");
+#endif
+
                     var response = httpRequestData.CreateResponse(HttpStatusCode.OK);
                     response.Headers.Add("Call-Status", "Running"); //caller checks this
                     return response;
+
                 }
+
+
 
             }
         }

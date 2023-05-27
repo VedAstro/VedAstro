@@ -39,6 +39,9 @@ public static class CallTracker
         }
         catch (Exception e)
         {
+#if DEBUG
+            Console.WriteLine($"FAILURE!!! : {e.Message} /n {e.StackTrace}");
+#endif
             return false;
         }
 

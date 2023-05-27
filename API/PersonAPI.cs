@@ -63,7 +63,7 @@ namespace API
                 Func<Task<BlobClient>> cacheExecuteTask3 = () => APITools.CacheExecuteTask3(generateChart, parsedRequest.CallerId);
 
                 //CACHE MECHANISM
-                var httpResponseData = AzureCache.CacheExecute(cacheExecuteTask3, parsedRequest, req);
+                var httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask3, parsedRequest, req);
 
                 return httpResponseData;
 

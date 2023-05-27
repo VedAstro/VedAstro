@@ -14,6 +14,7 @@ using Microsoft.DurableTask.Client;
 using Microsoft.Extensions.Azure;
 using VedAstro.Library;
 using iText.Commons.Bouncycastle.Cert.Ocsp;
+using System.Dynamic;
 
 namespace API
 {
@@ -955,7 +956,7 @@ namespace API
                 //squeeze the Sky Juice!
                 chart = await generateChart.Invoke();
                 //save for future
-                var blobClient = await AzureCache.AddLarge<T>(callerId, chart, mimeType);
+                var blobClient = await AzureCache.Add<T>(callerId, chart, mimeType);
             }
             else
             {
@@ -977,7 +978,7 @@ namespace API
                 //squeeze the Sky Juice!
                 var chartBytes = await generateChart.Invoke();
                 //save for future
-                chartBlobClient = await AzureCache.AddLarge<byte[]>(callerId, chartBytes, mimeType);
+                chartBlobClient = await AzureCache.Add<byte[]>(callerId, chartBytes, mimeType);
             }
             else
             {
@@ -1009,7 +1010,7 @@ namespace API
                     //squeeze the Sky Juice!
                     var chartBytes = await generateChart.Invoke();
                     //save for future
-                    chartBlobClient = await AzureCache.AddLarge(callerId, chartBytes, mimeType);
+                    chartBlobClient = await AzureCache.Add(callerId, chartBytes, mimeType);
 
                 }
                 //always mark the call as ended
@@ -1023,6 +1024,39 @@ namespace API
             {
                 chartBlobClient = await AzureCache.GetData<BlobClient>(callerId);
             }
+
+            return chartBlobClient;
+        }
+        
+        
+        //we know there is no cache
+        public static async Task<BlobClient> CacheExecuteTask4(Func<Task<string>> generateChart, string callerId, string mimeType = "")
+        {
+
+#if DEBUG
+            Console.WriteLine($"NO CACHE! RUNNING COMPUTE : {callerId}");
+#endif
+
+
+            BlobClient? chartBlobClient;
+
+            try
+            {
+                //lets everybody know call is running
+                CallTracker.CallStart(callerId);
+
+                //squeeze the Sky Juice!
+                var chartBytes = await generateChart.Invoke();
+                //save for future
+                chartBlobClient = await AzureCache.Add(callerId, chartBytes, mimeType);
+
+            }
+            //always mark the call as ended
+            finally
+            {
+                CallTracker.CallEnd(callerId); //mark the call as ended
+            }
+
 
             return chartBlobClient;
         }

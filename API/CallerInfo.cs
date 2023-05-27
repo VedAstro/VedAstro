@@ -1,15 +1,31 @@
 ﻿namespace API;
 
-public record CallerInfo(string UserId, string VisitorId)
+public class CallerInfo
 {
-    public override string ToString()
+    public CallerInfo(string visitorId, string userId)
     {
-        return $"{{ UserId = {UserId}, VisitorId = {VisitorId} }}";
+        this.VisitorId = visitorId;
+        this.UserId = userId;
+
+        //set caller ID here 
+        CallerId = APITools.GetCallerId(UserId, VisitorId);
     }
 
-    //get caller ID, so can use back any data if available
-    public string CallerId => APITools.GetCallerId(UserId, VisitorId);
+    /// <summary>
+    /// Can be overriden if needed for cache sharing
+    /// </summary>
+    public string CallerId { get; set; }
 
+    public string VisitorId { get; set; }
+
+    public string UserId { get; set; }
+
+
+    public override string ToString()
+    {
+
+        return $"{{ UserId = {UserId}, VisitorId = {VisitorId} }}";
+    }
 
     /// <summary>
     /// true if user is logged in uses 101

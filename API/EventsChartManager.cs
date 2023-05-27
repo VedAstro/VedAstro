@@ -38,7 +38,7 @@ namespace API
         //▒█░░░ ░▀▄▄▀ ▒█▄▄█ ▒█▄▄█ ▄█▄ ▒█▄▄█
 
 
-        public static async Task<string> GenerateEventsChart(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
+        public static async Task<string> GenerateEventsChart(Person inputPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> inputedEventTags)
         {
 
             //PART I : declare the components
@@ -57,7 +57,7 @@ namespace API
 
             //PART II : fill the components in order
 
-            await GenerateComponents(inputPerson, startTime, endTime, daysPerPixel, inputedEventTags);
+            await GenerateComponents(inputPerson, timeRange.start, timeRange.end, daysPerPixel, inputedEventTags);
 
 
             //PART III : compile in right placement

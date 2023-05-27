@@ -990,7 +990,7 @@ namespace API
         /// <summary>
         /// starts a call if no cache exist, not on previous call state
         /// </summary>
-        public static async Task<BlobClient?> CacheExecuteTask3(Func<Task<string>> generateChart, string callerId, string mimeType = "")
+        public static async Task<BlobClient> CacheExecuteTask3(Func<Task<string>> generateChart, string callerId, string mimeType = "")
         {
             //check if cache exist
             var isExist = await AzureCache.IsExist(callerId);

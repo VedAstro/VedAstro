@@ -7,6 +7,9 @@ using Microsoft.DurableTask;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
 using Time = VedAstro.Library.Time;
+using Azure.Storage.Blobs;
+using iText.Commons.Bouncycastle.Cert.Ocsp;
+using System.Net;
 
 namespace API
 {
@@ -37,107 +40,65 @@ namespace API
         //█▀█ █▀▀ █   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
 
-        /// <summary>
-        /// Generates a new SVG dasa report given a person id
-        /// Exp call:
-        /// <Root>
-        //      <PersonId>374117709</PersonId>
-        //      <StartTime>
-        //          <Time>
-        //              <StdTime>00:00 01/01/1994 +08:00</StdTime>
-        //              <Location>
-        //                  <Name>Teluk Intan</Name>
-        //                  <Longitude>101.0206</Longitude>
-        //                  <Latitude>4.0224</Latitude>
-        //              </Location>
-        //          </Time>
-        //  </StartTime>
-        //  <EndTime>
-        //      <Time>
-        //          <StdTime>11:59 31/12/2024 +08:00</StdTime>
-        //          <Location>
-        //              <Name>Teluk Intan</Name>
-        //              <Longitude>101.0206</Longitude>
-        //              <Latitude>4.0224</Latitude>
-        //          </Location>
-        //      </Time>
-        //  </EndTime>
-        //  <DaysPerPixel>11</DaysPerPixel>
-        //</Root>
-        /// </summary>
-        [Function("geteventschart")]
-        public static async Task<HttpResponseData> GetEventsChart([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+
+
+
+        [Function(nameof(GetEventsChart))]
+        public static async Task<HttpResponseData> GetEventsChart(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetEventsChart/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData incomingRequest,
+            string userId, string visitorId)
         {
+
             try
             {
-                //get dasa report for sending
-                var chart = await GetEventReportSvgForIncomingRequest(incomingRequest, false);
-
-                return APITools.SendSvgToCaller(chart.ContentSvg, incomingRequest);
-
-                //marked for deletion
-                ////convert svg string to stream for sending
-                //var stream = GenerateStreamFromString(chart.ContentSvg);
-                //var x = StreamToByteArray(stream);
-                //return new FileContentResult(x, "image/svg+xml");
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
-
-
-
-        [Function(nameof(GetEventsChartAsync))]
-        public static async Task<HttpResponseData> GetEventsChartAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
-            HttpRequestData incomingRequest,
-            [DurableClient] DurableTaskClient client
-            )
-        {
-            try
-            {
-                //get data out
+                //data comes out of caller, basic on how the chart should be
                 var requestJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
 
-                var requestChart = await Chart.GetDataParsed(requestJson);
+                //check if the specs given is correct and readable
+                //this is partially filled chart with no generated svg content only specs
+                var chartSpecsOnly = await EventsChart.FromJsonSpecOnly(requestJson);
 
-                var chartId = requestChart.GetEventsChartSignature();
+                //a hash to id the chart's specs (caching)
+                var chartId = chartSpecsOnly.GetEventsChartSignature();
 
-                //start processing
-                var options = new StartOrchestrationOptions(chartId); //set caller id so can callback
-                var jsonText = requestJson.ToString();
+                //PREPARE THE CALL
+                Func<Task<string>> generateChart = async delegate //chart string as task to be
+                {
+                    var foundPerson = await APITools.GetPersonById(chartSpecsOnly.PersonId);
+                    var chartSvg = await EventsChartManager.GenerateEventsChart(
+                                            foundPerson,
+                                            chartSpecsOnly.TimeRange,
+                                            chartSpecsOnly.DaysPerPixel,
+                                            chartSpecsOnly.EventTagList);
+                    return chartSvg;
+                };
 
-                var instanceId = await client.ScheduleNewOrchestrationInstanceAsync(nameof(_GetEventsChartAsync), jsonText, options, CancellationToken.None); //should match caller ID
+                //NOTE USING CHART ID INSTEAD OF CALLER ID, FOR CACHE SHARING BETWEEN ALL WHO COME
+                Func<Task<BlobClient>> cacheExecuteTask = () => APITools.CacheExecuteTask3(generateChart, chartId);
 
 
-                //get dasa report for sending
-                //var chart = await GetEventReportSvgForIncomingRequest(incomingRequest, false);
+                //CACHE MECHANISM
+                //get who or what is calling
+                var callerInfo = new CallerInfo(userId, visitorId);
+                var httpResponseData = AzureCache.CacheExecute(cacheExecuteTask, callerInfo, incomingRequest);
 
-                //give user the url to query for status and data
-                //note : todo this is hack to get polling URL via RESPONSE creator, should be able to create directly
-                //var x = client.CreateCheckStatusResponse(incomingRequest, sign.ToString());
-                //var pollingUrl = APITools.GetHeaderValue(x, "Location");
-
-                //send polling URL to caller as Passed payload, client should know what todo
-                return APITools.PassMessageJson(instanceId, incomingRequest);
+                return httpResponseData;
 
             }
             catch (Exception e)
             {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
+                //log it
+                await APILogger.Error(e);
+                var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Call-Status", "Fail"); //caller checks this
+                return response;
             }
+
+
+
+
+
+
 
         }
 
@@ -190,20 +151,8 @@ namespace API
 
 
 
+        //---------------------------------------
 
-        /// <summary>
-        /// The underlying async func that actually gets the list
-        /// </summary>
-        [Function(nameof(_GetEventsChartAsync))]
-        public static async Task<string> _GetEventsChartAsync([OrchestrationTrigger]
-            TaskOrchestrationContext context)
-        {
-            var requestData = context.GetInput<string>();
-
-            var swapStatus = await context.CallActivityAsync<string>(nameof(GetChartAsync), requestData); //note swap done before get list
-
-            return swapStatus;
-        }
 
         /// <summary>
         /// Special function to make Light Viewer(EventsChartViewer.html) work
@@ -214,9 +163,6 @@ namespace API
         {
             try
             {
-                //TODO caching
-                //TODO get saved chart if any
-                //var rootXml = APITools.ExtractDataFromRequest(req);
 
                 //get dasa report for sending
                 var chart = await GetEventReportSvgForIncomingRequestEasy(incomingRequest);
@@ -279,15 +225,17 @@ namespace API
         {
             try
             {
-                //generate report
-                var chart = await GetEventReportSvgForIncomingRequest(incomingRequest, false);
+                throw new NotImplementedException("NOT YET DONE BRO!!");
 
-                //save chart into storage
-                //note: do not wait to speed things up, beware! failure will go undetected on client
-                APITools.AddXElementToXDocumentAzure(chart.ToXml(), APITools.SavedEventsChartListFile, APITools.BlobContainerName);
+                ////generate report
+                //var chart = await GetEventReportSvgForIncomingRequest(incomingRequest, false);
 
-                //let caller know all good
-                return APITools.PassMessage(incomingRequest);
+                ////save chart into storage
+                ////note: do not wait to speed things up, beware! failure will go undetected on client
+                //APITools.AddXElementToXDocumentAzure(chart.ToXml(), APITools.SavedEventsChartListFile, APITools.BlobContainerName);
+
+                ////let caller know all good
+                //return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)
@@ -315,7 +263,7 @@ namespace API
 
                 //get the saved chart record by id
                 var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
-                var chart = Chart.FromXml(foundChartXml);
+                var chart = EventsChart.FromXml(foundChartXml);
                 var svgString = chart.ContentSvg;
 
                 //get chart index.html and send that to caller
@@ -363,7 +311,7 @@ namespace API
 
                 //get the saved chart record by id
                 var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
-                var chart = Chart.FromXml(foundChartXml);
+                var chart = EventsChart.FromXml(foundChartXml);
 
                 //send image back to caller
                 return APITools.SendSvgToCaller(chart.ContentSvg, incomingRequest);
@@ -396,7 +344,7 @@ namespace API
 
                 //get the saved chart record by id
                 var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
-                var chart = Chart.FromXml(foundChartXml);
+                var chart = EventsChart.FromXml(foundChartXml);
 
                 //extract out the person id from chart and send it to caller
                 var personIdXml = new XElement("PersonId", chart.PersonId);
@@ -439,7 +387,7 @@ namespace API
                 var savedChartXmlList = savedChartXmlDoc?.Root?.Elements().ToList() ?? new List<XElement>(); //empty list so no failure
                 foreach (var chartXml in savedChartXmlList)
                 {
-                    var parsedChart = Chart.FromXml(chartXml);
+                    var parsedChart = EventsChart.FromXml(chartXml);
                     var person = await APITools.GetPersonById(parsedChart.PersonId);
                     var chartNameXml = new XElement("ChartName",
                         new XElement("Name",
@@ -532,12 +480,13 @@ namespace API
                 }
 
                 //generate the needed charts
-                var chartList = new List<Chart>();
+                var chartList = new List<EventsChart>();
                 var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
                 //PRECISION
                 //calculate based on max screen width,
                 //done for fast calculation only for needed viewability
-                var daysPerPixel = GetDayPerPixel(startTime, endTime, 800);
+                var timeRange = new TimeRange(startTime, endTime);
+                var daysPerPixel = GetDayPerPixel(timeRange, 800);
 
 
                 var combinedSvg = "";
@@ -547,7 +496,7 @@ namespace API
                 {
                     //replace original birth time
                     var personAdjusted = person.ChangeBirthTime(possibleTime);
-                    var newChart = await GenerateNewChart(personAdjusted, startTime, endTime, daysPerPixel, dasaEventTags);
+                    var newChart = await GenerateNewChart(personAdjusted, timeRange, daysPerPixel, dasaEventTags);
                     var adjustedBirth = personAdjusted.BirthTimeString;
 
                     //place in group with time above the chart
@@ -664,43 +613,43 @@ namespace API
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
 
-        /// <summary>
-        /// processes incoming xml request and outputs events svg report
-        /// </summary>
-        private static async Task<Chart> GetEventReportSvgForIncomingRequest(HttpRequestData req, bool cacheEnable)
-        {
-            //get all the data needed out of the incoming request
-            var rootXml = await APITools.ExtractDataFromRequestXml(req);
-            var personId = rootXml.Element("PersonId")?.Value;
-            var eventTagListXml = rootXml.Element("EventTagList");
-            var eventTags = EventTagExtensions.FromXmlList(eventTagListXml);
-            var startTimeXml = rootXml.Element("StartTime")?.Elements().First();
-            var startTime = Time.FromXml(startTimeXml);
-            var endTimeXml = rootXml.Element("EndTime")?.Elements().First();
-            var endTime = Time.FromXml(endTimeXml);
-            var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value ?? "0");
+        ///// <summary>
+        ///// processes incoming xml request and outputs events svg report
+        ///// </summary>
+        //private static async Task<EventsChart> GetEventReportSvgForIncomingRequest(HttpRequestData req, bool cacheEnable)
+        //{
+        //    //get all the data needed out of the incoming request
+        //    var rootXml = await APITools.ExtractDataFromRequestXml(req);
+        //    var personId = rootXml.Element("PersonId")?.Value;
+        //    var eventTagListXml = rootXml.Element("EventTagList");
+        //    var eventTags = EventTagExtensions.FromXmlList(eventTagListXml);
+        //    var startTimeXml = rootXml.Element("StartTime")?.Elements().First();
+        //    var startTime = Time.FromXml(startTimeXml);
+        //    var endTimeXml = rootXml.Element("EndTime")?.Elements().First();
+        //    var endTime = Time.FromXml(endTimeXml);
+        //    var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value ?? "0");
 
-            //get the person instance by id
-            var foundPerson = await APITools.GetPersonById(personId);
+        //    //get the person instance by id
+        //    var foundPerson = await APITools.GetPersonById(personId);
 
-            Chart chart = Chart.Empty;
+        //    EventsChart chart = EventsChart.Empty;
 
-            if (cacheEnable)
-            {
-                //todo needs testing
-                //based on mode set by caller use cache
-                //chart = await GetChartCached(foundPerson, startTime, endTime, daysPerPixel, eventTags);
-            }
-            else
-            {
-                //based on mode set by caller use cache
-                chart = await GenerateNewChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
-            }
+        //    if (cacheEnable)
+        //    {
+        //        //todo needs testing
+        //        //based on mode set by caller use cache
+        //        //chart = await GetChartCached(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+        //    }
+        //    else
+        //    {
+        //        //based on mode set by caller use cache
+        //        chart = await GenerateNewChart(foundPerson, timeRange, daysPerPixel, eventTags);
+        //    }
 
-            return chart;
-        }
+        //    return chart;
+        //}
 
-        private static async Task<Chart> GetEventReportSvgForIncomingRequestEasy(HttpRequestData req)
+        private static async Task<EventsChart> GetEventReportSvgForIncomingRequestEasy(HttpRequestData req)
         {
             //get all the data needed out of the incoming request
             var rootXml = await APITools.ExtractDataFromRequestXml(req);
@@ -724,9 +673,7 @@ namespace API
             var foundPerson = await APITools.GetPersonById(personId);
 
             //TIME
-            dynamic x = AutoCalculateTimeRange(timePreset, foundPerson.GetBirthLocation(), timezone);
-            Time startTime = x.start;
-            Time endTime = x.end;
+            var timeRange = EventChartTools.AutoCalculateTimeRange(foundPerson, timePreset, timezone);
 
             //EVENTS
             var eventTags = GetSelectedEventTypesEasy(eventPreset);
@@ -734,10 +681,10 @@ namespace API
             //PRECISION
             //calculate based on max screen width,
             //done for fast calculation only for needed viewability
-            var daysPerPixel = GetDayPerPixel(startTime, endTime, maxWidth);
+            var daysPerPixel = GetDayPerPixel(timeRange, maxWidth);
 
 
-            return await GenerateNewChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+            return await GenerateNewChart(foundPerson, timeRange, daysPerPixel, eventTags);
         }
 
 
@@ -771,33 +718,14 @@ namespace API
         //}
 
 
-        [Function(nameof(GetChartAsync))]
-        public static async Task<string> GetChartAsync([ActivityTrigger] string input)
-        {
-
-            var parsed = JObject.Parse(input);
-
-            var requestChart = await Chart.GetDataParsed(parsed);
-
-            //from person get svg report
-            var foundPerson = await APITools.GetPersonById(requestChart.PersonId);
-
-            var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, requestChart.StartTime,
-                requestChart.EndTime, requestChart.DaysPerPixel, requestChart.EventTagList);
-
-            return eventsChartSvgString;
-        }
-
-        private static async Task<Chart> GenerateNewChart(Person foundPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> eventTags)
+        private static async Task<EventsChart> GenerateNewChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags)
         {
             //from person get svg report
-            var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, startTime, endTime, daysPerPixel, eventTags);
+            var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags);
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
-            var startTimeXml = startTime.ToXml();
-            var endTimeXml = endTime.ToXml();
-            var newChart = new Chart(newChartId, eventsChartSvgString, foundPerson.Id, startTimeXml, endTimeXml, daysPerPixel, eventTags);
+            var newChart = new EventsChart(newChartId, eventsChartSvgString, foundPerson.Id, timeRange, daysPerPixel, eventTags);
 
             return newChart;
         }
@@ -805,17 +733,15 @@ namespace API
         /// <summary>
         /// calculates the precision of the events to fit inside 1000px width
         /// </summary>
-        private static double GetDayPerPixel(Time start, Time end, int maxWidth)
+        private static double GetDayPerPixel(TimeRange timeRange, int maxWidth)
         {
             //const int maxWidth = 1000; //px
-
-            var daysBetween = end.Subtract(start).TotalDays;
-            var daysPerPixel = Math.Round(daysBetween / maxWidth, 3); //small val = higher precision
-                                                                      //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
-                                                                      //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
+            var daysPerPixel = Math.Round(timeRange.daysBetween / maxWidth, 3); //small val = higher precision
+                                                                                //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision
+                                                                                //daysPerPixel = daysPerPixel < 1 ? 1 : daysPerPixel; // minimum 1 day per px
 
             //if final value is 0 then recalculate without rounding
-            daysPerPixel = daysPerPixel <= 0 ? daysBetween / maxWidth : daysPerPixel;
+            daysPerPixel = daysPerPixel <= 0 ? timeRange.daysBetween / maxWidth : daysPerPixel;
 
             return daysPerPixel;
         }
@@ -857,80 +783,6 @@ namespace API
         /// a precise start and end time will be returned
         /// used in dasa/muhurtha easy calculator
         /// </summary>
-        private static object AutoCalculateTimeRange(string timePresetRaw, GeoLocation birthLocation, TimeSpan timezone)
-        {
-
-            Time start, end;
-            //use the inputed user's timezone
-            DateTimeOffset now = DateTimeOffset.Now.ToOffset(timezone);
-            var today = now.ToString("dd/MM/yyyy zzz");
-
-            var yesterday = now.AddDays(-1).ToString("dd/MM/yyyy zzz");
-            var timePreset = timePresetRaw.ToLower(); //so that all cases are accepted
-
-            //assume input is "3days", number + date type
-            //so split by number
-            var split = Tools.SplitAlpha(timePreset);
-            var result = int.TryParse(split[0], out int number);
-            number = number < 1 ? 1 : number; //min 1, so user can in put just, "year" and except 1 year
-            //if no number, than data type in 1st place
-            var dateType = result ? split[1] : split[0];
-
-            int days;
-            double hoursToAdd;
-            string _2MonthsAgo;
-            var timeNow = Time.Now(birthLocation);
-            switch (dateType)
-            {
-                case "hour":
-                case "hours":
-                    var startHour = now.AddHours(-1); //back 1 hour
-                    var endHour = now.AddHours(number); //front by input
-                    start = new Time(startHour, birthLocation);
-                    end = new Time(endHour, birthLocation);
-                    return new { start, end };
-                case "today":
-                case "day":
-                case "days":
-                    start = new Time($"00:00 {today}", birthLocation);
-                    end = timeNow.AddHours(Tools.DaysToHours(number));
-                    return new { start, end };
-                case "week":
-                case "weeks":
-                    days = number * 7;
-                    hoursToAdd = Tools.DaysToHours(days);
-                    start = new Time($"00:00 {yesterday}", birthLocation);
-                    end = timeNow.AddHours(hoursToAdd);
-                    return new { start, end };
-                case "month":
-                case "months":
-                    days = number * 30;
-                    hoursToAdd = Tools.DaysToHours(days);
-                    var _1WeekAgo = now.AddDays(-7).ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {_1WeekAgo}", birthLocation);
-                    end = timeNow.AddHours(hoursToAdd);
-                    return new { start, end };
-                case "year":
-                case "years":
-                    days = number * 365;
-                    hoursToAdd = Tools.DaysToHours(days);
-                    _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
-                    end = timeNow.AddHours(hoursToAdd);
-                    return new { start, end };
-                case "decades":
-                case "decade":
-                    days = number * 3652;
-                    hoursToAdd = Tools.DaysToHours(days);
-                    _2MonthsAgo = now.AddDays(-60).ToString("dd/MM/yyyy zzz");
-                    start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
-                    end = timeNow.AddHours(hoursToAdd);
-                    return new { start, end };
-                default:
-                    return new { start = Time.Empty, end = Time.Empty };
-
-            }
-        }
 
         private static byte[] StreamToByteArray(Stream input)
         {

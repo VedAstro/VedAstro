@@ -1,15 +1,9 @@
 ﻿using System.Net.Mime;
 using System.Net;
-using System.Text.Json;
-using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 using Azure.Storage.Blobs;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Threading;
-using SwissEphNet;
 
 namespace API
 {
@@ -32,9 +26,9 @@ namespace API
             try
             {
                 //special ID made for human brains
-                var brandNewHumanReadyID = await APITools.GeneratePersonId(personName, birthYear);
+                var brandNewHumanReadyId = await APITools.GeneratePersonId(personName, birthYear);
 
-                return APITools.PassMessageJson(brandNewHumanReadyID, incomingRequest);
+                return APITools.PassMessageJson(brandNewHumanReadyId, incomingRequest);
 
             }
             catch (Exception e)
@@ -58,50 +52,34 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonList/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
             string userId, string visitorId)
         {
-            var parsedRequest = new ParsedRequest(userId, visitorId);
 
-            //check if call already made and is running
-            //call is made again (polling), don't disturb running
-            if (CallTracker.IsRunning(parsedRequest.CallerId))
+            try
             {
-                var response = req.CreateResponse(HttpStatusCode.OK);
-                response.Headers.Add("Call-Status", "Running"); //caller checks this
-                return response;
-            }
+                //GET THE DATA FROM CALLER
+                var parsedRequest = new CallerInfo(userId, visitorId);
 
-            //start new call
-            else
-            {
                 //PREPARE THE CALL
                 Func<Task<string>> generateChart = () => _getPersonList(parsedRequest);
                 Func<Task<BlobClient>> cacheExecuteTask3 = () => APITools.CacheExecuteTask3(generateChart, parsedRequest.CallerId);
 
+                //CACHE MECHANISM
+                var httpResponseData = AzureCache.CacheExecute(cacheExecuteTask3, parsedRequest, req);
 
-                //EXECUTE
-                //2 possibilities:
-                //1 -> got cache, can reply caller ASAP (within 3s computation)
-                //2 -> no cache, need to calculate slowly (tell caller to come back later)
-                var task = Task.Run(cacheExecuteTask3);
-                if (task.Wait(3000)) //within 3s must complete
-                {
-                    // get the data out of the heavy computation function
-                    BlobClient personListJson = task.Result;
-                    var httpResponseData = APITools.SendPassHeaderToCaller(personListJson, req, MediaTypeNames.Application.Json);
-                    return httpResponseData;
-
-                }
-                //tell caller to come back later
-                else
-                {
-                    var response = req.CreateResponse(HttpStatusCode.OK);
-                    response.Headers.Add("Call-Status", "Running"); //caller checks this
-                    return response;
-                }
+                return httpResponseData;
 
             }
+            catch (Exception e)
+            {
+                //log it
+                await APILogger.Error(e);
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Call-Status", "Fail"); //caller checks this
+                return response;
+            }
+
 
             //--------------------------------
-            async Task<string> _getPersonList(ParsedRequest requestData)
+            async Task<string> _getPersonList(CallerInfo requestData)
             {
 
                 //STAGE 2 : SWAP DATA
@@ -168,7 +146,7 @@ namespace API
             string userId, string visitorId)
         {
             //STAGE 1 : GET DATA OUT
-            var parsedRequest = new ParsedRequest(userId, visitorId);
+            var parsedRequest = new CallerInfo(userId, visitorId);
 
             //adding new person needs make sure all cache is cleared if any
             await AzureCache.Delete(parsedRequest.CallerId);
@@ -196,7 +174,7 @@ namespace API
             string userId, string visitorId)
         {
             //STAGE 1 : GET DATA OUT
-            var parsedRequest = new ParsedRequest(userId, visitorId);
+            var parsedRequest = new CallerInfo(userId, visitorId);
 
             await AzureCache.Delete(parsedRequest.CallerId);
 
@@ -256,7 +234,7 @@ namespace API
             string userId, string visitorId, string personId)
         {
             //STAGE 1 : GET DATA OUT
-            var parsedRequest = new ParsedRequest(userId, visitorId);
+            var parsedRequest = new CallerInfo(userId, visitorId);
 
             await AzureCache.Delete(parsedRequest.CallerId);
 

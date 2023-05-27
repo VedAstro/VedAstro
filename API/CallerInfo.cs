@@ -1,6 +1,6 @@
 ﻿namespace API;
 
-public record ParsedRequest(string UserId, string VisitorId)
+public record CallerInfo(string UserId, string VisitorId)
 {
     public override string ToString()
     {

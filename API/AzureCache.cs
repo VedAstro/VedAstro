@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mime;
 using System.Reflection.Metadata;
 using System.Text;
@@ -13,6 +14,8 @@ using Azure.Data.Tables;
 using Azure.Data.Tables.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using iText.Commons.Bouncycastle.Cert.Ocsp;
+using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
 
 namespace API
@@ -48,7 +51,7 @@ namespace API
             bool isExists = await blobClient.ExistsAsync(CancellationToken.None);
 
             //if found in blob then end here
-           return isExists;
+            return isExists;
         }
 
 
@@ -152,6 +155,51 @@ namespace API
             if (result?.Value == false)
             {
                 Console.WriteLine($"WARNING! FILE DID NOT EXIST : {callerId}");
+            }
+        }
+
+        /// <summary>
+        /// If got data use that, else do calculations and give that
+        /// Also acts as polling URL, client only has to refresh to poll
+        /// response will auto change to full data file when needed
+        /// NOTE : HEADERS USED TO MARK STATUS PASS OR FAIL
+        /// </summary>
+        public static HttpResponseData CacheExecute(Func<Task<BlobClient>> cacheExecuteTask3,
+            CallerInfo parsedRequest, HttpRequestData httpRequestData)
+        {
+            //check if call already made and is running
+            //call is made again (polling), don't disturb running
+            if (CallTracker.IsRunning(parsedRequest.CallerId))
+            {
+                var response = httpRequestData.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Call-Status", "Running"); //caller checks this
+                return response;
+            }
+
+            //start new call
+            else
+            {
+                //EXECUTE
+                //2 possibilities:
+                //1 -> got cache, can reply caller ASAP (within 10s computation)
+                //2 -> no cache, need to calculate slowly (tell caller to come back later)
+                var task = Task.Run(cacheExecuteTask3);
+                if (task.Wait(10000)) //note: if too low will cause endless loop, have to give time to retrieve data also
+                {
+                    // get the data out of the heavy computation function
+                    BlobClient personListJson = task.Result;
+                    var httpResponseData = APITools.SendPassHeaderToCaller(personListJson, httpRequestData, MediaTypeNames.Application.Json);
+                    return httpResponseData;
+
+                }
+                //tell caller to come back later
+                else
+                {
+                    var response = httpRequestData.CreateResponse(HttpStatusCode.OK);
+                    response.Headers.Add("Call-Status", "Running"); //caller checks this
+                    return response;
+                }
+
             }
         }
     }

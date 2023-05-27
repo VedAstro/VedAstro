@@ -62,26 +62,24 @@ namespace API
                 var chartId = chartSpecsOnly.GetEventsChartSignature();
 
                 //PREPARE THE CALL
-                Func<Task<string>> generateChart = async delegate //chart string as task to be
+                Func<Task<string>> generateChart = async () =>
                 {
                     var foundPerson = await APITools.GetPersonById(chartSpecsOnly.PersonId);
                     var chartSvg = await EventsChartManager.GenerateEventsChart(
-                                            foundPerson,
-                                            chartSpecsOnly.TimeRange,
-                                            chartSpecsOnly.DaysPerPixel,
-                                            chartSpecsOnly.EventTagList);
+                        foundPerson,
+                        chartSpecsOnly.TimeRange,
+                        chartSpecsOnly.DaysPerPixel,
+                        chartSpecsOnly.EventTagList);
                     return chartSvg;
                 };
 
                 //NOTE USING CHART ID INSTEAD OF CALLER ID, FOR CACHE SHARING BETWEEN ALL WHO COME
-                Func<Task<BlobClient>> cacheExecuteTask = () => APITools.CacheExecuteTask4(generateChart, chartId);
+                Func<Task<BlobClient>> cacheExecuteTask = () => APITools.ExecuteAndSaveToCache(generateChart, chartId);
 
 
                 //CACHE MECHANISM
-                //get who or what is calling
-                var callerInfo = new CallerInfo(userId, visitorId);
-                //NOTE OVERIIDE CALLER ID TO CHART FOR CACHE SHARING
-                callerInfo.CallerId = chartId;
+                var callerInfo = new CallerInfo(userId, visitorId);//get who or what is calling
+                callerInfo.CallerId = chartId;//NOTE OVERIIDE CALLER ID TO CHART FOR CACHE SHARING
                 var httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask, callerInfo, incomingRequest);
 
                 return httpResponseData;

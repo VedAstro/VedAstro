@@ -457,7 +457,6 @@ namespace API
             return response;
         }
 
-
         /// <summary>
         /// deletes old person record by ID and saves in new one as updated
         /// </summary>
@@ -809,7 +808,6 @@ namespace API
             return response;
         }
 
-
         public static HttpResponseData SendPassHeaderToCaller(BlobClient fileBlobClient, HttpRequestData req, string mimeType)
         {
             //send image back to caller
@@ -901,6 +899,11 @@ namespace API
 
         }
 
+
+
+
+
+        //--------------------TODO NEEDS MOVING
         /// <summary>
         /// will call durable task that has completed successful 
         /// Will call only if invalid, else will not call, and be certain that data is ready
@@ -944,6 +947,7 @@ namespace API
             }
         }
 
+
         public static async Task<T> CacheExecuteTask<T>(Func<Task<T>> generateChart, string callerId, string mimeType = "")
         {
             //check if cache exist
@@ -966,7 +970,8 @@ namespace API
             return chart;
         }
 
-        public static async Task<BlobClient> CacheExecuteTask2(Func<Task<byte[]>> generateChart, string callerId, string mimeType = "")
+        //todo do as below
+        public static async Task<BlobClient> CacheExecuteTaskOpenAPI(Func<Task<byte[]>> generateChart, string callerId, string mimeType = "")
         {
             //check if cache exist
             var isExist = await AzureCache.IsExist(callerId);
@@ -988,49 +993,8 @@ namespace API
             return chartBlobClient;
         }
 
-        /// <summary>
-        /// starts a call if no cache exist, not on previous call state
-        /// </summary>
-        public static async Task<BlobClient> CacheExecuteTask3(Func<Task<string>> generateChart, string callerId, string mimeType = "")
-        {
-            //check if cache exist
-            var isExist = await AzureCache.IsExist(callerId);
-
-
-            BlobClient? chartBlobClient;
-
-            //no cache, have calculate new
-            if (!isExist)
-            {
-                try
-                {
-                    //lets everybody know call is running
-                    CallTracker.CallStart(callerId);
-
-                    //squeeze the Sky Juice!
-                    var chartBytes = await generateChart.Invoke();
-                    //save for future
-                    chartBlobClient = await AzureCache.Add(callerId, chartBytes, mimeType);
-
-                }
-                //always mark the call as ended
-                finally
-                {
-                    CallTracker.CallEnd(callerId); //mark the call as ended
-                }
-
-            }
-            else
-            {
-                chartBlobClient = await AzureCache.GetData<BlobClient>(callerId);
-            }
-
-            return chartBlobClient;
-        }
-        
-        
         //we know there is no cache
-        public static async Task<BlobClient> CacheExecuteTask4(Func<Task<string>> generateChart, string callerId, string mimeType = "")
+        public static async Task<BlobClient> ExecuteAndSaveToCache(Func<Task<string>> generateChart, string callerId, string mimeType = "")
         {
 
 #if DEBUG

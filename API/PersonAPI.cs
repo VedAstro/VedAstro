@@ -60,7 +60,7 @@ namespace API
 
                 //PREPARE THE CALL
                 Func<Task<string>> generateChart = () => _getPersonList(parsedRequest);
-                Func<Task<BlobClient>> cacheExecuteTask3 = () => APITools.CacheExecuteTask3(generateChart, parsedRequest.CallerId);
+                Func<Task<BlobClient>> cacheExecuteTask3 = () => APITools.ExecuteAndSaveToCache(generateChart, parsedRequest.CallerId);
 
                 //CACHE MECHANISM
                 var httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask3, parsedRequest, req);

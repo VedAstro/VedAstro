@@ -200,78 +200,15 @@ namespace API
                 //create unique id based on params to recognize future calls (caching)
                 var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}GIF";
 
-                //var chartGif = await SkyChartManager.GenerateChartGif(parsedTime, skyChartWidth, skyChartHeight);
-                
                 //squeeze the Sky Juice!
                 var chartTask = () => SkyChartManager.GenerateChartGif(parsedTime, skyChartWidth, skyChartHeight);
 
                 //get chart if in cache, else make and save in cache
-                var chartGif = await APITools.CacheExecuteTask2(chartTask, callerId, MediaTypeNames.Image.Gif);
+                var chartGif = await APITools.CacheExecuteTaskOpenAPI(chartTask, callerId, MediaTypeNames.Image.Gif);
 
-
-                //await APITools.CallIfInvalid(durableTaskClient, nameof(SkyChartAPI.GetSkyChartGIFAsync), callerId, chartSpecsStr);
-
-
-                ////wait for completion and return the gif in one call
-                //var notComplete = true;
-                //OrchestrationMetadata taskRef;
-                //while (notComplete)
-                //{
-                //    //check if complete
-                //    taskRef = await durableTaskClient.GetInstanceAsync(callerId);
-
-                //    //mark if need to wait or result is ready
-                //    notComplete = !(taskRef.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
-
-                //    //wait
-                //    await Task.Delay(100);
-                //}
-
-                //taskRef = await durableTaskClient.GetInstanceAsync(callerId, true, CancellationToken.None);
-                //var chart = taskRef.ReadOutputAs<byte[]>();
 
 
                 return APITools.SendFileToCaller(chartGif, incomingRequest, MediaTypeNames.Image.Gif);
-
-            }
-            if (celestialBodyType.ToLower() == "skychartgifasync")
-            {
-                ////ready data needed to make chart
-                //var chartSpecs = new JObject();
-                //chartSpecs["Time"] = parsedTime.ToJson();
-                //chartSpecs["Width"] = skyChartWidth;
-                //chartSpecs["Height"] = skyChartHeight;
-                //var chartSpecsStr = chartSpecs.ToString(Formatting.None); //convert to string else can't be parsed by JSON.NET
-
-                ////create unique id based on params to recognize future calls (caching)
-                //var callerId = $"{parsedTime.GetHashCode()}{skyChartWidth}{skyChartHeight}";
-
-
-                ////only process new if no ready and valid cache
-                ////note : done with durable for easy caching
-                //await APITools.CallIfInvalid(durableTaskClient, nameof(SkyChartAPI.GetSkyChartGIFAsync), callerId, chartSpecsStr);
-
-
-                ////wait for completion and return the gif in one call
-                //var notComplete = true;
-                //OrchestrationMetadata taskRef;
-                //while (notComplete)
-                //{
-                //    //check if complete
-                //    taskRef = await durableTaskClient.GetInstanceAsync(callerId);
-
-                //    //mark if need to wait or result is ready
-                //    notComplete = !(taskRef.RuntimeStatus == OrchestrationRuntimeStatus.Completed);
-
-                //    //wait
-                //    await Task.Delay(100);
-                //}
-
-                //taskRef = await durableTaskClient.GetInstanceAsync(callerId, true, CancellationToken.None);
-                //var chart = taskRef.ReadOutputAs<byte[]>();
-
-
-                //return APITools.SendGifToCaller(chart, incomingRequest);
 
             }
 

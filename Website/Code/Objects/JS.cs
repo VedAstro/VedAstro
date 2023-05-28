@@ -10,6 +10,7 @@
     /// </summary>
     public static class JS
     {
+        public const string PlaySoundFromUrl = "Interop.PlaySoundFromUrl";
         public const string addOptionToSelectDropdown = "Interop.addOptionToSelectDropdown";
         public const string getProperty = "Interop.getProperty";
         public const string removeProperty = "Interop.removeProperty";
@@ -108,7 +109,6 @@
 
 
         //SPECIAL EVENTS CHART JS TODO CALLED INSIDE EVENTS CHART
-        public const string ChartFromSvgString = "ChartFromSvgString";
         public const string DownloadChartFileSVG = "DownloadChartFileSVG";
 
 

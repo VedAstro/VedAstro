@@ -137,7 +137,7 @@
         if (!ValidationPassed()) { return; }
 
         //navigate page to match report
-        _navigation.NavigateTo($"{PageRoute.MatchReport}/{SelectedMale}/{SelectedFemale}");
+       AppData.Go($"{PageRoute.MatchReport}/{SelectedMale}/{SelectedFemale}");
     }
 
     /// <summary>

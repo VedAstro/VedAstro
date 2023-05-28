@@ -129,7 +129,7 @@
         //note:this improves UX, as links can lead faster to data
         PersonIdUrl = _selectedPerson.Id; //save local copy
         var urlWithId = Path.Combine(PageRoute.Journal, PersonIdUrl);
-        _navigation.NavigateTo(urlWithId); //does not reload page since same URL
+       AppData.Go(urlWithId); //does not reload page since same URL
 
         //life events
         await _lifeEventEditor.SetData(_selectedPerson);

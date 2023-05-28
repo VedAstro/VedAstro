@@ -41,8 +41,6 @@ namespace API
 
 
 
-
-
         [Function(nameof(GetEventsChart))]
         public static async Task<HttpResponseData> GetEventsChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetEventsChart/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData incomingRequest,
@@ -96,52 +94,6 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Call here after calling prepare chart
-        /// </summary>
-        [Function(nameof(GetEventsChartResult))]
-        public static async Task<HttpResponseData> GetEventsChartResult(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetEventsChartResult/{chartId}")]
-            HttpRequestData incomingRequest,
-            [DurableClient] DurableTaskClient client,
-            string chartId
-            )
-        {
-            try
-            {
-                //try to get already calculated chart
-                var result = await client.GetInstanceAsync(chartId, false, CancellationToken.None);
-                if (result?.RuntimeStatus == OrchestrationRuntimeStatus.Completed)
-                {
-                    //note : todo hack to get polling URL via RESPONSE header, should be a better way
-                    var x = client.CreateCheckStatusResponse(incomingRequest, chartId);
-                    var pollingUrl = APITools.GetHeaderValue(x, "Location");
-
-                    //call polling URL
-                    //call status endpoint and get oversized output data
-                    using var httpClient = new HttpClient();
-                    var taskStatusResult = await httpClient.GetStringAsync(pollingUrl);
-                    var parsedResult = JObject.Parse(taskStatusResult);
-                    var largeSvgString = parsedResult["output"].Value<string>();
-
-                    //send to caller as SVG image
-                    return APITools.SendSvgToCaller(largeSvgString, incomingRequest);
-                }
-
-
-                return APITools.FailMessageJson("No Record Call Found", incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
 
 
 

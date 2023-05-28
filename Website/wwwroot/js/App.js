@@ -54,18 +54,19 @@ Tools.printConsoleMessage();
 //will only show if small screen
 await SmallScreenGreetingMessage();
 
+
 /*
       Customized JS for initializing Darkmode.js
  */
 
 const options = {
     mixColor: '#fff', // default: '#fff'
-    backgroundColor: '#fff',  // default: '#fff'
-    buttonColorDark: '#100f2c',  // default: '#100f2c'
+    backgroundColor: '#fff', // default: '#fff'
+    buttonColorDark: '#100f2c', // default: '#100f2c'
     buttonColorLight: '#fff', // default: '#fff'
     saveInCookies: true, // default: true,
     autoMatchOsTheme: false // default: true
-}
+};
 
 //makes dark mode toggle available to Blazor
 window.DarkMode = new Darkmode(options);
@@ -135,6 +136,7 @@ async function SmallScreenGreetingMessage() {
         //Swal.fire('Small Screen Warning!', 'This site might not work on such a <strong>small screen</strong>. Don\'t say we didn\'t warn you.', 'warning');
         Swal.fire('Screen Little Small!', 'Not designed for such a small screen, probably works but dont expect perfection', 'warning');
     }
+
 }
 
 //allows to override browser default error handler

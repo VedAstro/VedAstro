@@ -116,7 +116,7 @@
 
         //send user to task list page after period of time
         await Task.Delay(100);
-        _navigation.NavigateTo(PageRoute.TaskList);
+       AppData.Go(PageRoute.TaskList);
 
     }
 

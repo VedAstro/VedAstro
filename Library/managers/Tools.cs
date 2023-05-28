@@ -965,6 +965,18 @@ namespace VedAstro.Library
             return msgList[randomIndexNumber];
         }
 
+        public static int GetRandomNumber(int maxNumber)
+        {
+            // Create a Random object  
+            Random rand = new Random();
+
+            // Generate a random index less than the size of the array.  
+            int randomIndexNumber = rand.Next(maxNumber);
+
+            //return random text from list to caller
+            return randomIndexNumber;
+        }
+
         /// <summary>
         /// Split string by character count
         /// </summary>

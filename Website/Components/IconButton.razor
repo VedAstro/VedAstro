@@ -287,7 +287,7 @@ else
 
             //if specified opens link in new tab
             if (OpenNewTab) { _jsRuntime.OpenNewTab(ClickUrl); }
-            else { _navigation.NavigateTo(ClickUrl); }
+            else {AppData.Go(ClickUrl); }
         }
     }
 

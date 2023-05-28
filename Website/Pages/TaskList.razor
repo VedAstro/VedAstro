@@ -56,6 +56,6 @@
 
     //--------------------EVENT HANDLERS
 
-    public void OnClickAddTask(MouseEventArgs obj) => _navigation.NavigateTo(PageRoute.TaskEditor);
+    public void OnClickAddTask(MouseEventArgs obj) =>AppData.Go(PageRoute.TaskEditor);
 
 }

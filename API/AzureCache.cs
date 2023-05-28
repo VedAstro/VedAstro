@@ -92,8 +92,7 @@ namespace API
             }
             catch (Exception e)
             {
-                //todo proper log
-                Console.WriteLine(e.Message);
+                await APILogger.Error(e); //log it
                 return "";
             }
 

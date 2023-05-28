@@ -88,7 +88,7 @@
     /// Note: Needs to be nullable so that can detect if was set
     /// </summary>
     [Parameter]
-    public int? MaxWidth { get; set; }
+    public double? MaxWidth { get; set; }
 
     /// <summary>
     /// used to make class applied in style attribute
@@ -109,7 +109,7 @@
             }
             else
             {
-                _navigation.NavigateTo(ClickUrl);
+               AppData.Go(ClickUrl);
             }
         }
     }

@@ -157,6 +157,21 @@ export async function postWrapper(url, payloadXml) {
     return responseText ?? "";
 }
 
+
+//give a relative URL will play
+export async function PlaySoundFromUrl(fileUrl) {
+
+    console.log("JS > Notification Play");
+
+    var $audio = $("#NotificationPlayer");
+    $audio.attr("src", fileUrl);
+    /****************/
+    $audio[0].pause();
+    $audio[0].load();//suspends and restores all audio element
+    $audio[0].oncanplaythrough = $audio[0].play();
+    /****************/
+}
+
 //only give response if header says ok
 //todo special to hadnle empty person list
 export async function ReadOnlyIfPassJson(url) {
@@ -201,7 +216,8 @@ export async function ReadOnlyIfPassString(url, dataToSend) {
         //make call
         var response = await fetch(url, {
             "headers": { "accept": "*/*", "Connection": "keep-alive" },
-            "method": httpCallProtocol
+            "method": httpCallProtocol,
+            "body": dataToSend
         });
 
         var callStatus = response.headers.get('Call-Status');

@@ -28,7 +28,7 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                await APILogger.Error(e, null);
+                await APILogger.Error(e);
                 return new XElement("Chart");
             }
         }
@@ -71,7 +71,7 @@ namespace API
             catch (Exception e)
             {
                 //if fail log it and return empty xelement
-                //todo log failure
+                 APILogger.Error(e); //log it
                 return new XElement("Visitor");
             }
         }

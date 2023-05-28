@@ -159,7 +159,7 @@
             //tell user to login
             await _jsRuntime.ShowAlert("success", "Please Login", AlertText.FunnyLoginText());
 
-            _navigation.NavigateTo(PageRoute.Login);
+           AppData.Go(PageRoute.Login);
             return false;
 
         }

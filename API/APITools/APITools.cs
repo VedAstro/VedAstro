@@ -264,40 +264,30 @@ namespace API
             //todo better logging
             catch (Exception e)
             {
+                await APILogger.Error(e); //log it
                 throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}");
             }
         }
 
         public static async Task<JObject> ExtractDataFromRequestJson(HttpRequestData request)
         {
-            //get xml string from caller
-            var xmlString = (await request?.ReadAsStringAsync()) ?? "{}";
-
-            //parse xml string todo needs catch here
-            var parsedJson = JObject.Parse(xmlString);
-
-            return parsedJson;
-        }
-
-        /// <summary>
-        /// data received as json is converted to
-        /// </summary>
-        public static async Task<JsonDocument> ExtractDataFromRequestJsonToXml(HttpRequestData request)
-        {
-            string jsonString = "";
-
             try
             {
-                //get raw string from caller
-                jsonString = (await request?.ReadAsStringAsync()) ?? "{Root:\"Empty\"}";
 
-                var parsedJson = JsonDocument.Parse(jsonString);
+                //get xml string from caller
+                var readAsStringAsync = await request?.ReadAsStringAsync();
+                var xmlString = readAsStringAsync ?? (new JObject()).ToString();
+
+                //parse xml string todo needs catch here
+                var parsedJson = JObject.Parse(xmlString);
+
                 return parsedJson;
             }
-            //todo better logging
             catch (Exception e)
             {
-                throw new Exception($"ExtractDataFromRequestJson : FAILED : {jsonString} \n {e.Message}");
+                await APILogger.Data("ERROR NO DATA FROM CALLER"); //log it
+                await APILogger.Error(e); //log it
+                return new JObject(); //null to be detected by caller
             }
         }
 
@@ -408,8 +398,9 @@ namespace API
             }
             catch (Exception e)
             {
-                //todo better handling
-                Console.WriteLine($"FAILED TO GET FILE:/n{url}");
+                var msg = $"FAILED TO GET FILE:/n{url}";
+                Console.WriteLine(msg);
+                await APILogger.Data(msg); //log it
                 return "";
             }
 

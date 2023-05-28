@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickShareFacebook(PdfFileName, matchReportElement))">
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.ShareCurrentPageOnFacebook())">
                         <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
                         <span>Facebook</span>
                     </a>
@@ -112,6 +112,7 @@ else
 {
     @AppData.LoadingImage
 }
+
 
 
 @*HELP SECTION*@
@@ -429,7 +430,10 @@ else
 </PageHelpSection>
 
 
+
+
 @code {
+
 
     //VARIABLES
     private ElementReference matchReportElement;
@@ -510,6 +514,9 @@ else
             );
         var webResult = await ServerManager.WriteToServerXmlReply(AppData.URL.GetMatchReportApi, rootXml);
 
+        //play sound for better ux
+        _jsRuntime.PlayDoneSound();
+
         //check the results, if fail let user know
         if (!webResult.IsPass)
         {
@@ -528,7 +535,7 @@ else
 
             _jsRuntime.HideAlert();
 
-            //return parsed report to caller
+    //return parsed report to caller
             return matchReport;
         }
     }
@@ -644,7 +651,7 @@ else
             await _jsRuntime.SetProperty("PreviousPage", afterLoginPage);
 
             //now go to login page
-            _navigation.NavigateTo(PageRoute.Login);
+           AppData.Go(PageRoute.Login);
         }
         //only start the save if already logged in
         else

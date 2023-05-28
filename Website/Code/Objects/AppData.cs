@@ -102,6 +102,15 @@ namespace Website
                 _jsRuntime = value;
             }
         }
+        public static NavigationManager Navigation
+        {
+            get { return _navigation; }
+            set
+            {
+                Console.WriteLine("BLZ:Global Navigation Manager Initialized");
+                _navigation = value;
+            }
+        }
 
         /// <summary>
         /// If true means, loading box is still in show mode
@@ -149,6 +158,7 @@ namespace Website
         /// </summary>
         public static GeoLocation ClientLocation { get; set; }
 
+
         public static string DefaultLocationCountry = "Singapore";
 
 
@@ -159,6 +169,7 @@ namespace Website
         public static Uri? BaseAddress;
 
         private static IJSRuntime _jsRuntime;
+        private static NavigationManager _navigation;
 
         /// <summary>
         /// Counts the number of times the stamp was clicked
@@ -226,10 +237,15 @@ namespace Website
         }
 
 
-        /// <summary>
-        /// When called clears person list from memory, so new list is auto loaded from API on next get
-        /// </summary>
-        //public static void ClearPersonList() => AppData.PersonList = null;
 
+        /// <summary>
+        /// Simple blazor navigation wrapper with standard logging
+        /// </summary>
+        public static void Go(string url, bool forceReload = false)
+        {
+            WebLogger.Data($"NAVIGATE -> {url}");
+
+            Navigation.NavigateTo(url, forceReload);
+        }
     }
 }

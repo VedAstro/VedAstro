@@ -10,13 +10,15 @@
         @AppData.LoadingImage
     </div>
 
-    @*BUTTON ROW*@
-    <div class="vstack gap-3">
-        <IconButton SmallSize="true" Outline="true" TooltipText="Print" IconName="flat-color-icons:print" OnClickCallback="_jsRuntime.GoBack"/>
-        <IconButton SmallSize="true" Outline="true" TooltipText="Save as Image" IconName="emojione:floppy-disk" OnClickCallback="_jsRuntime.GoBack"/>
-        <IconButton SmallSize="true" Outline="true" TooltipText="Embed in app or website" IconName="dashicons:embed-photo" OnClickCallback="_jsRuntime.GoBack"/>
-    </div>
-
+    @if (isReady)
+    {
+        @*BUTTON ROW*@
+        <div class="vstack gap-3">
+            <IconButton SmallSize="true" Outline="true" TooltipText="Print" IconName="flat-color-icons:print" OnClickCallback="_jsRuntime.GoBack" />
+            <IconButton SmallSize="true" Outline="true" TooltipText="Save as Image" IconName="emojione:floppy-disk" OnClickCallback="_jsRuntime.GoBack" />
+            <IconButton SmallSize="true" Outline="true" TooltipText="Embed in app or website" IconName="dashicons:embed-photo" OnClickCallback="_jsRuntime.GoBack" />
+        </div>
+    }
 </div>
 
 
@@ -27,7 +29,6 @@
 
     private ElementReference imageHolder;
     private bool isReady { get; set; } = false;//start as not ready
-    private bool showLoading { get; set; } = false;//start as not ready separate loading because model loading not enough
 
     private Time? time { get; set; }
     private string SkyChartUrl { get; set; } = "#";
@@ -49,7 +50,6 @@
     public async Task Update(Time finalTime)
     {
         isReady = false;
-        showLoading = true;
 
         time = finalTime; //save value to be access later
         SkyChartUrl = GetUrl("SkyChart");
@@ -57,7 +57,6 @@
 
         await _jsRuntime.InvokeVoidAsync("Interop.SkyChartInit", imageHolder, SkyChartUrl);
 
-        showLoading = false;
         isReady = true;
 
         //needed to make appear else no change will appear

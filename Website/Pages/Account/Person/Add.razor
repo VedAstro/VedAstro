@@ -51,6 +51,11 @@ else
 
 
 @code {
+    /// <summary>
+    /// notification after chart complete for UX sake
+    /// </summary>
+    private NotificationSound soundPlayer;
+
     TimeInputSimple _timeInput;
     private string? _nameInput;
     private GeoLocationInput _geoLocationInput;
@@ -99,6 +104,8 @@ else
         NothingToShow = false;
 
 
+        _jsRuntime.PlayDoneSound();
+
         if (serverReply["Status"]?.Value<string>() == "Pass")
         {
             await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
@@ -112,10 +119,6 @@ else
             var xxx = serverReply["Payload"]?.Value<string>() ?? "";
             await _jsRuntime.ShowAlert("error", $"Server said fail. Why?", xxx);
         }
-
-
-
-
     }
 
     /// <summary>

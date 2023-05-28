@@ -10,9 +10,7 @@
          DescriptionText="Astrological predictions of a person's horoscope.Over +370 planetary combinations are checked.">
 </PageTop>
 
-
-
-<div class="gap-3" style="max-width: @(GR.W667 +GR.W157)px;">
+<div class="gap-3" style="max-width: @GR.W824px;">
 
     @*SELECTOR & BUTTON*@
 
@@ -21,10 +19,9 @@
             <PersonSelectorBox @ref="_peopleSelectorBox" />
             <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"></IconButton>
         </div>
-@*        <InfoBox Title="Pro Tip" Description="Combine matched references with astrological data to make final accurate predictions" IconName="flat-color-icons:idea" />
-*@    </div>
-
-
+        @*        <InfoBox Title="Pro Tip" Description="Combine matched references with astrological data to make final accurate predictions" IconName="flat-color-icons:idea" />
+        *@
+    </div>
 
 
     @*divider*@
@@ -32,10 +29,8 @@
 
     <SkyChartViewer @ref="skyChartViewer" />
 
-
     @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
     <HoroscopeInfoView @ref="_horoscopeInfoView" />
-
 
     @*HELP SECTION*@
     <PageHelpSection @ref="_helpSection">
@@ -73,25 +68,24 @@
     public string PersonIdUrl { get; set; } = "";
 
     private string _pageTitle = "Horoscope | VedAstro";
+
     private PersonSelectorBox? _peopleSelectorBox;
+
     private Person _selectedPerson;
+
     private HoroscopeInfoView _horoscopeInfoView;
 
     private PageHelpSection _helpSection;
 
-    private bool _isReady = false;
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
-
     private async Task CalculateButtonClicked() => await InvokeAsync(async () => await _CalculateAndUpdateEvents()).Try(_jsRuntime);
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRenderAsync(firstRender)).Try(_jsRuntime);
-
-
 
 
 
@@ -121,7 +115,6 @@
         }
     }
 
-
     /// <summary>
     /// Checks if validation of all input fields
     /// </summary>
@@ -147,16 +140,13 @@
         //only continue if passed input field validation
         if (!await ValidationPassed()) { return; }
 
-        //hide data while loading, only after validation
-        _isReady = false;
-
         //get person from person dropdown
         _selectedPerson = await _peopleSelectorBox?.GetSelectedPerson();
 
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
         PersonIdUrl = _selectedPerson.Id; //save local copy
-        _navigation.NavigateTo($"{PageRoute.Horoscope}/{PersonIdUrl}"); //change url
+       AppData.Go($"{PageRoute.Horoscope}/{PersonIdUrl}"); //change url
 
         //put person name into tab title for easy multi-tabbing
         _pageTitle = $"Horoscope | {_selectedPerson.Name}";
@@ -164,10 +154,11 @@
         //update sky chart
         await skyChartViewer.Update(_selectedPerson.BirthTime);
 
-
         //inject selected person into component to show horoscope data
         await _horoscopeInfoView.SetPerson(_selectedPerson);
 
+        //play sound for better ux
+        _jsRuntime.PlayDoneSound();
 
     }
 

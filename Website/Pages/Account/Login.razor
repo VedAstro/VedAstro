@@ -24,7 +24,7 @@
             //get the previously saved page before login, if any else deafult to home
             var previousPage = await _jsRuntime.GetProperty("PreviousPage");
             previousPage = string.IsNullOrEmpty(previousPage) ? PageRoute.Home : previousPage;
-            _navigation.NavigateTo(previousPage);
+           AppData.Go(previousPage);
 
         }
     }

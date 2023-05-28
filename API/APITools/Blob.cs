@@ -23,8 +23,7 @@ namespace API
             }
             catch (Exception e)
             {
-                //todo log the error here
-                Console.WriteLine(e);
+                await APILogger.Error(e); //log it
                 throw new Exception($"Azure Storage Failure : {blobClient.Name}");
             }
 

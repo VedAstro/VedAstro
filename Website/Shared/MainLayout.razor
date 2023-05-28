@@ -7,6 +7,7 @@
 @using Newtonsoft.Json.Linq
 @using Tools = Library.API.Tools
 
+<NotificationSound @ref="soundPlayer" />
 
 @*
     NOTE : Components here are loaded same time as page,
@@ -103,6 +104,11 @@
 
 @code
 {
+    /// <summary>
+    /// notification after chart complete for UX sake
+    /// </summary>
+    private NotificationSound soundPlayer;
+
     //IJSObjectReference? _module;
     bool _mainPageInitDone;
     private ElementReference _searchInput;
@@ -125,10 +131,15 @@
     {
         if (firstRender)
         {
+
+            //play sound for better ux
+            //_jsRuntime.PlayStartupMusic();
+
             await _jsRuntime.InvokeVoidAsync(JS.InitErrorCatcher);
 
             //log visit only 1 once when page is rendered
             await WebLogger.Visitor(_jsRuntime);
+
         }
     }
 
@@ -137,7 +148,6 @@
         //NOTE
         //control comes here after Program, all needed initialization
         //done here before page/components are loaded
-
 
         //1: do little check to make sure all functions in Interop is accounted for
         await InteropHealthCheck();
@@ -172,6 +182,8 @@
 
         //other components can start loading now
         _mainPageInitDone = true;
+
+
     }
 
     /// <summary>
@@ -245,10 +257,10 @@
         WebLogger.Data("Search: " + text);
 
         //go home when no text
-        if (text.Length == 0) { _navigation.NavigateTo(PageRoute.Home); return; }
+        if (text.Length == 0) {AppData.Go(PageRoute.Home); return; }
 
         //show search page & input the search text
-        _navigation.NavigateTo(PageRoute.SearchResult);
+       AppData.Go(PageRoute.SearchResult);
         await Task.Delay(250);//little time for page to load (needed else fails)
         await AppData.SearchPage.Search(text);
     }
@@ -265,7 +277,7 @@
         {
             case 2: await _jsRuntime.ShowAlert("success", $"You clicked this 2x times, why?", true); break;
             case 4: await _jsRuntime.ShowAlert("success", $"Stop clicking! There is no \"Cake\" here.", true); break;
-            case 6: _navigation.NavigateTo(PageRoute.EasterEgg, true); break;
+            case 6:AppData.Go(PageRoute.EasterEgg, true); break;
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using System.Runtime.CompilerServices;
 using Microsoft.JSInterop;
 using System.Net;
+using Microsoft.AspNetCore.Components;
 
 namespace Website
 {
@@ -74,6 +75,10 @@ namespace Website
             //make the JS runtime globally accessible
             var jsRuntime = webAssemblyHost.Services.GetRequiredService<IJSRuntime>();
             AppData.JsRuntime = jsRuntime;
+
+            //make wrapping for BLAZOR navigation easy, also overrides 
+            var navigation = webAssemblyHost.Services.GetRequiredService<NavigationManager>();
+            AppData.Navigation = navigation;
 
             //run like the wind, Bullseye!
             await webAssemblyHost.RunAsync();

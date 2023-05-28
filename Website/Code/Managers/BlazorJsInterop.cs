@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using VedAstro.Library;
 
 
 namespace Website
@@ -124,7 +125,7 @@ namespace Website
         /// note: uses sweet alert js
         /// </summary>
         public static async Task<string> ShowLeaveEmailAlert(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.ShowLeaveEmailAlert);
-        
+
         /// <summary>
         /// Shows a dialog box with request for email, done via SweetAlert JS
         /// </summary>
@@ -183,6 +184,18 @@ namespace Website
         }
 
 
+        /// <summary>
+        /// uses basic JS plays sound stored in wwwroot via element in index.html
+        /// </summary>
+        /// <param name="jsRuntime"></param>
+        public static void PlayDoneSound(this IJSRuntime jsRuntime)
+        {
+            var notifySoundFile = "/sound/positive-notification.mp3";
+
+            jsRuntime.InvokeVoidAsync(JS.PlaySoundFromUrl, Path.Combine(AppData.URL.WebUrl, notifySoundFile));
+        }
+
+
         //TIPPY TOOLTIP LIBRARY
 
         /// <summary>
@@ -218,11 +231,14 @@ namespace Website
         //ACCESS BROWSERS LOCAL STORAGE
 
         public static async Task<string> GetProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeAsync<string>(JS.getProperty, propName);
+
         /// <summary>
         /// Set data into browser local storage
         /// </summary>
         public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value) => await jsRuntime.InvokeVoidAsync(JS.setProperty, propName, value);
+        
         public static async Task RemoveProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeVoidAsync(JS.removeProperty, propName);
+        
         /// <summary>
         /// Calls given handler when localstorage data changes
         /// </summary>
@@ -240,6 +256,7 @@ namespace Website
         /// Uses jQuery to show element via blazor reference
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, element);
+        
         /// <summary>
         /// Uses jQuery to show element via selector (#ID,.class)
         /// </summary>
@@ -347,8 +364,11 @@ namespace Website
         /// Jquery .text()
         /// </summary>
         public static async Task<string> GetText(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, element);
+        
         public static async Task<string> GetText(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, jquerySelector);
+        
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, element);
+        
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, jquerySelector);
 
         /// <summary>

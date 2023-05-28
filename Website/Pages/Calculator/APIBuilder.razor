@@ -96,7 +96,7 @@
                 <label style="font-weight: 700; color: black;" for="housePropertySelector">House Property</label>
             </div>
 
-            <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickSubmitButton" />
+            <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
 
             @*OUTPUT*@
             <Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="55" />
@@ -117,7 +117,7 @@
         <div class="vstack gap-3">
             <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
                 <ButtonRow>
-                    <IconButton SmallSize="true" Color="info" ButtonText="Read More" ClickUrl="@PageRoute.OpenApi" IconName="octicon:info-16"/>
+                    <IconButton SmallSize="true" Color="info" ButtonText="Read More" ClickUrl="@PageRoute.OpenApi" IconName="octicon:info-16" />
                 </ButtonRow>
                 <TextHTML>
                     Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language,
@@ -229,13 +229,12 @@
     /// After user click generate check data validity, generate final url
     /// </summary>
     /// <returns></returns>
-    private async Task OnClickSubmitButton()
+    private async Task OnClickGenerateButton()
     {
         await _jsRuntime.ShowLoading();
 
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { return; }
-
 
         //auto set correct Timezone based on location & birth date
         var dateTimeOffset = await _timeInput.GetDateTimeOffset(); //offset is ignored here
@@ -292,6 +291,7 @@
         //tactile feedback to user
         await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
 
+        _jsRuntime.PlayDoneSound();
     }
 
     /// <summary>

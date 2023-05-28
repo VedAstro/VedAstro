@@ -138,7 +138,7 @@ namespace VedAstro.Library
 
             //get all the data needed out of the incoming request
             //var rootXml = await APITools.ExtractDataFromRequestXml(req);
-            var personId = requestJson["PersonId"].Value<string>();
+            var personId = requestJson["PersonId"]?.Value<string>() ?? "101";
             var eventTagListJson = requestJson["EventTagList"];
             var eventTags = EventTagExtensions.FromJsonList(eventTagListJson);
             var startTimeJson = requestJson["StartTime"];

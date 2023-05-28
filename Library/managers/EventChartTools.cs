@@ -48,7 +48,7 @@ namespace VedAstro.Library
             double hoursToAdd;
             string _2MonthsAgo;
             var timeNow = Time.Now(birthLocation);
-            switch (dateType)
+            switch (dateType.ToLower())
             {
                 case "hour":
                 case "hours":
@@ -94,35 +94,35 @@ namespace VedAstro.Library
                     start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
                     end = timeNow.AddHours(hoursToAdd);
                     return new TimeRange(start, end);
-                case "Age1to25":
+                case "age1to25":
                     start = birthTimeClient;
                     end = birthTimeClient.AddYears(25);
                     return new TimeRange(start, end);
-                case "Age10to35":
+                case "age10to35":
                     start = birthTimeClient.AddYears(10);
                     end = birthTimeClient.AddYears(35);
                     return new TimeRange(start, end);
-                case "Age25to50":
+                case "age25to50":
                     start = birthTimeClient.AddYears(25);
                     end = birthTimeClient.AddYears(50);
                     return new TimeRange(start, end);
-                case "Age35to60":
+                case "age35to60":
                     start = birthTimeClient.AddYears(35);
                     end = birthTimeClient.AddYears(60);
                     return new TimeRange(start, end);
-                case "Age50to75":
+                case "age50to75":
                     start = birthTimeClient.AddYears(50);
                     end = birthTimeClient.AddYears(75);
                     return new TimeRange(start, end);
-                case "Age60to85":
+                case "age60to85":
                     start = birthTimeClient.AddYears(60);
                     end = birthTimeClient.AddYears(85);
                     return new TimeRange(start, end);
-                case "Age75to100":
+                case "age75to100":
                     start = birthTimeClient.AddYears(75);
                     end = birthTimeClient.AddYears(100);
                     return new TimeRange(start, end);
-                case "FullLife":
+                case "fulllife":
                     start = birthTimeClient;
                     end = birthTimeClient.AddYears(100);
                     return new TimeRange(start, end);

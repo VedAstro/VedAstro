@@ -151,10 +151,10 @@
 
         switch (SelectedCalculator)
         {
-            case "Horoscope": _navigation.NavigateTo($"{PageRoute.Horoscope}/{personId}"); break;
-            case "LifePredictor": _navigation.NavigateTo($"{PageRoute.LifePredictor}/{personId}"); break;
-            case "Match": _navigation.NavigateTo($"{PageRoute.Match}/{personId}"); break; //fill only first name
-            case "Muhurtha": _navigation.NavigateTo($"{PageRoute.Muhurtha}/{personId}"); break; //fill only first name
+            case "Horoscope":AppData.Go($"{PageRoute.Horoscope}/{personId}"); break;
+            case "LifePredictor":AppData.Go($"{PageRoute.LifePredictor}/{personId}"); break;
+            case "Match":AppData.Go($"{PageRoute.Match}/{personId}"); break; //fill only first name
+            case "Muhurtha":AppData.Go($"{PageRoute.Muhurtha}/{personId}"); break; //fill only first name
         }
 
     }

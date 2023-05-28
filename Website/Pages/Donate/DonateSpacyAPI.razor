@@ -46,7 +46,7 @@
                 <img src="images/patreon-logo.jpg" class="card-img-top" style="align-self: center;">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <IconButton SmallSize="true" ButtonText="Patreon" OnClickCallback="@(() => _navigation.NavigateTo(URL.PatreonPage))" />
+                        <IconButton SmallSize="true" ButtonText="Patreon" OnClickCallback="@(() =>AppData.Go(URL.PatreonPage))" />
                     </h5>
                     <p class="card-text">
                     </p>
@@ -58,7 +58,7 @@
                 <img src="images/ko-fi-logo.png" class="card-img-top" style="align-self: center;">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <IconButton SmallSize="true" ButtonText="Ko-fi" OnClickCallback="@(() => _navigation.NavigateTo(URL.KoFiPage))" />
+                        <IconButton SmallSize="true" ButtonText="Ko-fi" OnClickCallback="@(() =>AppData.Go(URL.KoFiPage))" />
                     </h5>
                     <p class="card-text"></p>
                 </div>
@@ -69,7 +69,7 @@
                 <img src="images/paypal-logo.png" class="card-img-top" style="align-self: center;">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <IconButton SmallSize="true" ButtonText="PayPal" OnClickCallback="@(() => _navigation.NavigateTo(URL.PaypalMePage))" />
+                        <IconButton SmallSize="true" ButtonText="PayPal" OnClickCallback="@(() =>AppData.Go(URL.PaypalMePage))" />
                     </h5>
                     <p class="card-text">
 

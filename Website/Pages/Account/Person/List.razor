@@ -93,7 +93,7 @@ else
 
     private void PersonNameClicked(Person person)
     {
-        _navigation.NavigateTo($"{PageRoute.PersonEditor}/{person.Id}");
+       AppData.Go($"{PageRoute.PersonEditor}/{person.Id}");
     }
 
     private IDictionary<ElementReference, string> TippNoteElmList = new Dictionary<ElementReference, string>();

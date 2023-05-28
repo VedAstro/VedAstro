@@ -33,11 +33,6 @@ namespace Website
             return rawPayload;
         }
 
-        public static async Task OnClickShareFacebook(string pdfFileName, ElementReference elementToConvert)
-        {
-            var currentUrl = await AppData.JsRuntime.GetCurrentUrl();
-            await AppData.JsRuntime.InvokeVoidAsync(JS.shareDialogFacebook, currentUrl);
-        }
 
         /// <summary>
         /// show box to get email and log for sending todo
@@ -497,8 +492,11 @@ namespace Website
             }
         }
 
-
-       
+        public static async Task ShareCurrentPageOnFacebook()
+        {
+            var currentUrl = await AppData.JsRuntime.GetCurrentUrl();
+            await AppData.JsRuntime.InvokeVoidAsync(JS.shareDialogFacebook, currentUrl);
+        }
 
     }
 }

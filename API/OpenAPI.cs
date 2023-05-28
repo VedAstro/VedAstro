@@ -2,11 +2,7 @@
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.DurableTask.Client;
 using Newtonsoft.Json.Linq;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
-using Microsoft.AspNetCore.Mvc;
-using System.Numerics;
 
 
 namespace API
@@ -23,7 +19,6 @@ namespace API
                 "get",
                 Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}/{propertyName}")]
             HttpRequestData incomingRequest,
-            [DurableClient] DurableTaskClient durableTaskClient,
             string locationName,
             string hhmmStr,
             string dateStr,
@@ -47,7 +42,7 @@ namespace API
 
 
             //send to sorter
-            return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, geoLocationResult, incomingRequest, durableTaskClient);
+            return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, geoLocationResult, incomingRequest);
         }
 
         [Function(nameof(Income2))]
@@ -55,7 +50,6 @@ namespace API
                 "get",
                 Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}")]
             HttpRequestData incomingRequest,
-            [DurableClient] DurableTaskClient durableTaskClient,
             string locationName,
             string hhmmStr,
             string dateStr,
@@ -77,7 +71,7 @@ namespace API
             var parsedTime = new Time(timeStr, geoLocation);
 
             //send to sorter (no property, set null)
-            return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest, durableTaskClient);
+            return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest);
         }
 
         [Function(nameof(Income3))]
@@ -85,7 +79,6 @@ namespace API
                 "get",
                 Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}")]
             HttpRequestData incomingRequest,
-            [DurableClient] DurableTaskClient durableTaskClient,
             string locationName,
             string hhmmStr,
             string dateStr,
@@ -106,13 +99,13 @@ namespace API
             var parsedTime = new Time(timeStr, geoLocation);
 
             //send to sorter (no property, set null)
-            return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, geoLocationResult, incomingRequest, durableTaskClient);
+            return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, geoLocationResult, incomingRequest);
         }
 
 
 
         private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
-            HttpRequestData incomingRequest, DurableTaskClient durableTaskClient)
+            HttpRequestData incomingRequest)
         {
 
             var individualPropertySelected = !string.IsNullOrEmpty(propertyName);

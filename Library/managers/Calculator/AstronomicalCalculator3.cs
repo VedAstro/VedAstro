@@ -659,7 +659,11 @@ namespace VedAstro.Library
         [API("DrikBala")]
         public static Shashtiamsa GetPlanetDrikBala(PlanetName planetName, Time time)
         {
-
+            //no calculation for rahu and ketu here
+            var isRahu = planetName.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planetName.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return Shashtiamsa.Zero; }
 
             double dk;
             var drishti = new Dictionary<String, double>();
@@ -815,6 +819,13 @@ namespace VedAstro.Library
         [API("NaisargikaBala")]
         public static Shashtiamsa GetPlanetNaisargikaBala(PlanetName planetName, Time time)
         {
+            //no calculation for rahu and ketu here
+            var isRahu = planetName.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planetName.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return Shashtiamsa.Zero; }
+
+
             if (planetName == PlanetName.Sun) { return new Shashtiamsa(60); }
             else if (planetName == PlanetName.Moon) { return new Shashtiamsa(51.43); }
             else if (planetName == PlanetName.Venus) { return new Shashtiamsa(42.85); }
@@ -1427,6 +1438,13 @@ namespace VedAstro.Library
         [API("SthanaBala")]
         public static Shashtiamsa GetPlanetSthanaBala(PlanetName planetName, Time time)
         {
+
+            //no calculation for rahu and ketu here
+            var isRahu = planetName.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planetName.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return Shashtiamsa.Zero; }
+
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey("GetPlanetSthanaBala", planetName, time), _getPlanetSthanaBala);
 
@@ -1609,6 +1627,13 @@ namespace VedAstro.Library
         [API("KalaBala")]
         public static Shashtiamsa GetPlanetKalaBala(PlanetName planetName, Time time)
         {
+            //no calculation for rahu and ketu here
+            var isRahu = planetName.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planetName.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return Shashtiamsa.Zero; }
+
+
 
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey("GetPlanetKalaBala", planetName, time), _getPlanetKalaBala);
@@ -2334,6 +2359,14 @@ namespace VedAstro.Library
         [API("NathonnathaBala")]
         public static Shashtiamsa GetPlanetNathonnathaBala(PlanetName planetName, Time time)
         {
+
+            //no calculation for rahu and ketu here
+            var isRahu = planetName.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planetName.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return Shashtiamsa.Zero; }
+
+
             //get local apparent time
             var localApparentTime = AstronomicalCalculator.GetLocalApparentTime(time);
 
@@ -2389,6 +2422,13 @@ namespace VedAstro.Library
         [API("DigBala")]
         public static Shashtiamsa GetPlanetDigBala(PlanetName planetName, Time time)
         {
+            //no calculation for rahu and ketu here
+            var isRahu = planetName.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planetName.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return Shashtiamsa.Zero; }
+
+
             //get planet longitude
             var planetLongitude = AstronomicalCalculator.GetPlanetNirayanaLongitude(time, planetName);
 
@@ -2428,7 +2468,8 @@ namespace VedAstro.Library
             //get Digbala arc
             //Digbala arc= planet's long. - its powerless cardinal point.
             //var digBalaArc = planetLongitude.GetDifference(powerlessPointLongitude);
-            var digBalaArc = AstronomicalCalculator.GetDistanceBetweenPlanets(planetLongitude, powerlessPointLongitude);
+            var xxx = powerlessPointLongitude.TotalDegrees == null ? Angle.Zero : powerlessPointLongitude;
+            var digBalaArc = AstronomicalCalculator.GetDistanceBetweenPlanets(planetLongitude, xxx);
 
             //If difference is more than 180° 
             if (digBalaArc > Angle.Degrees180)

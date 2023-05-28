@@ -1747,6 +1747,14 @@ namespace VedAstro.Library
         [API("PlanetRelationshipWithSign")]
         public static PlanetToSignRelationship GetPlanetRelationshipWithSign(PlanetName planetName, ZodiacName zodiacSignName, Time time)
         {
+
+            //no calculation for rahu and ketu here
+            var isRahu = planetName.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planetName.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return PlanetToSignRelationship.Empty; }
+
+
             //types of relationship
             //Swavarga - own varga
             //Samavarga - neutral's varga
@@ -1797,6 +1805,16 @@ namespace VedAstro.Library
         [API("PlanetCombinedRelationshipWithPlanet")]
         public static PlanetToPlanetRelationship GetPlanetCombinedRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet, Time time)
         {
+
+            //no calculation for rahu and ketu here
+            var isRahu = mainPlanet.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = mainPlanet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahu2 = secondaryPlanet.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu2 = secondaryPlanet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu || isRahu2 || isKetu2;
+            if (isRahuKetu) { return PlanetToPlanetRelationship.Empty; }
+
+
             //if main planet & secondary planet is same, then it is own plant (same planet), end here
             if (mainPlanet == secondaryPlanet) { return PlanetToPlanetRelationship.SamePlanet; }
 
@@ -2636,6 +2654,13 @@ namespace VedAstro.Library
         [API("PlanetSthanaBalaNeutralPoint", "", Category.Astronomical)]
         public static double GetPlanetSthanaBalaNeutralPoint(PlanetName planet)
         {
+            //no calculation for rahu and ketu here
+            var isRahu = planet.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return 0; }
+
+
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey("GetPlanetSthanaBalaNeutralPoint", planet), _getPlanetSthanaBalaNeutralPoint);
 
@@ -2677,6 +2702,14 @@ namespace VedAstro.Library
         [API("ShadvargaBalaNeutralPoint")]
         public static double GetPlanetShadvargaBalaNeutralPoint(PlanetName planet)
         {
+
+            //no calculation for rahu and ketu here
+            var isRahu = planet.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = planet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu;
+            if (isRahuKetu) { return 0; }
+
+
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey(nameof(GetPlanetShadvargaBalaNeutralPoint), planet), _getPlanetShadvargaBalaNeutralPoint);
 

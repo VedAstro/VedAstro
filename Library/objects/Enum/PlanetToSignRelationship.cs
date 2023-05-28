@@ -2,6 +2,9 @@
 {
     public enum PlanetToSignRelationship
     {
+
+        Empty = 0,
+
         /// <summary>
         /// Swavarga - own varga
         /// </summary>
@@ -35,6 +38,6 @@
         /// <summary>
         /// Special position Note: use special calculator
         /// </summary>
-        Moolatrikona = 7
+        Moolatrikona = 7,
     }
 }

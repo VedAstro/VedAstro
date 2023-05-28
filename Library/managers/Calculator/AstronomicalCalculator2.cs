@@ -1164,6 +1164,16 @@ namespace VedAstro.Library
         public static PlanetToPlanetRelationship GetPlanetPermanentRelationshipWithPlanet(PlanetName mainPlanet, PlanetName secondaryPlanet)
         {
 
+            //no calculation for rahu and ketu here
+            var isRahu = mainPlanet.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu = mainPlanet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahu2 = secondaryPlanet.Name == PlanetName.PlanetNameEnum.Rahu;
+            var isKetu2 = secondaryPlanet.Name == PlanetName.PlanetNameEnum.Ketu;
+            var isRahuKetu = isRahu || isKetu || isRahu2 || isKetu2;
+            if (isRahuKetu) { return PlanetToPlanetRelationship.Empty; }
+
+
+
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey("GetPlanetPermanentRelationshipWithPlanet", mainPlanet, secondaryPlanet), _getPlanetPermanentRelationshipWithPlanet);
 

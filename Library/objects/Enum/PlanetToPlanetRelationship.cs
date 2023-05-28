@@ -10,6 +10,8 @@
     /// </summary>
     public enum PlanetToPlanetRelationship
     {
+        Empty = 0,
+
         /// <summary>
         /// Same Planet
         /// </summary>
@@ -43,6 +45,6 @@
         /// Neutral
         /// Sama
         /// </summary>
-        Neutral
+        Neutral,
     }
 }

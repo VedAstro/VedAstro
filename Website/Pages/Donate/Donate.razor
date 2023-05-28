@@ -3,8 +3,14 @@
 
 <PageTitle>Donate</PageTitle>
 
-<PageTop Title="Support us" IconName="iconoir:donate">
+@* <PageTop Title="Support us" IconName="iconoir:donate">
     <Description>With every donation you'll receive free astro gifts as a sign of our thanks</Description>
+</PageTop>
+ *@
+
+<PageTop ImageName="join-our-family.svg"
+         Title="Support us"
+         DescriptionText="Help pay bills, maintain servers and improve this project. Your money will go for the benefit of all people. Opportunity for good karma.">
 </PageTop>
 
 
@@ -111,9 +117,9 @@
 
 <hr />
 
-<div style="max-width:@GR.W667px;">
+<div class="vstack gap-3" style="max-width:@GR.W667px;">
 
-    
+
     <ArticleBlock Title="Why Donate?" IconName="emojione:convenience-store">
         <TextHTML>
             Donations help to run the web servers <strong>24/7</strong> and to continually improve the project.
@@ -123,22 +129,18 @@
         </TextHTML>
     </ArticleBlock>
 
-
-    <h4 class="fw-bold">Transparent Donations</h4>
-    <p class="text-justify">
+    <SubArticleBlock Title="Transparent Donations">
         Know exactly where your money is going.
         We try to keep the fund flow as transparent as possible.
         That's why you can choose to sponsor a specific thing
         like <strong>domain fees</strong> or hosting costs. Leave your choice in the message box.
-    </p>
+    </SubArticleBlock>
 
-    <h4 class="fw-bold">Programmer Costs</h4>
-    <p class="text-justify">
+    <SubArticleBlock Title="Programmer Costs">
         As of December 2022 more than <BoldLink URL="@URL.GitHub88000Lines">88,000 lines of code</BoldLink> was written for this project not including documentation.
         That's an impressive number. The more code there is, the more testing &amp; debugging that needs to be done. As such more developer/programmer work hours are required.
         Every dollar donated <strong>goes a long way</strong> to help pay for this expenses.
-    </p>
-
+    </SubArticleBlock>
 </div>
 <div style="max-width: @GR.W667px;">
     <style>

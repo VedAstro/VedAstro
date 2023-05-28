@@ -1,4 +1,4 @@
-\@using VedAstro.Library
+@using VedAstro.Library
 @attribute [Route(PageRoute.Home)]
 
 
@@ -40,90 +40,25 @@
     </IconTitle>
 
 
-   
-    <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
-        <div @onclick="() =>AppData.Go(PageRoute.MatchFinder)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/match-finder-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Find Soulmate</h5>
-                    <p class="card-text">Free search astrological database for perfect match</p>
-                </div>
-            </div>
-        </div>
-        <div @onclick="() =>AppData.Go(PageRoute.LifePredictor)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/dasa-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Life Predictor</h5>
 
-                    <p class="card-text">Know good and bad periods of your life years ahead</p>
+    <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
+
+        @* done so for dynamic UX *@
+        @foreach (var quickLink in quickLinkList)
+        {
+
+            <div @onclick="() => AppData.Go(quickLink.PageRoute)" style="cursor: pointer;" class="col">
+                <div class="card">
+                    <img src="images/@(quickLink.ImageName)" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">@quickLink.Title</h5>
+                        <p class="card-text">@quickLink.Description</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div @onclick="() => AppData.Go(PageRoute.Match)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/match-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Match</h5>
-                    <p class="card-text">Check compatibility between two people, predict the relationship</p>
-                </div>
-            </div>
-        </div>
-        <div @onclick="() => AppData.Go(PageRoute.Horoscope)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/horoscope-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Horoscope</h5>
-                    <p class="card-text">Predict a person's chartacter, speech, body and general life style</p>
-                </div>
-            </div>
-        </div>
-        <div @onclick="() => AppData.Go(PageRoute.Muhurtha)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/muhurtha-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Muhurtha</h5>
-                    <p class="card-text">Find a good time for buying car, travel, studies, building house etc..</p>
-                </div>
-            </div>
-        </div>
-        <div @onclick="() => AppData.Go(PageRoute.Journal)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/add-life-event-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Journal</h5>
-                    <p class="card-text">Astrological journal to help understand your life events</p>
-                </div>
-            </div>
-        </div>
-        <div @onclick="() => AppData.Go(PageRoute.OpenApi)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/open-api-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Open API</h5>
-                    <p class="card-text">Access powerful astrological tools via a HTTP request</p>
-                </div>
-            </div>
-        </div>
-        <div @onclick="() => AppData.Go(PageRoute.BirthTimeFinder)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/birth-time-finder-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Birth Time Finder</h5>
-                    <p class="card-text">Find forgotten or lost birth time using astrological</p>
-                </div>
-            </div>
-        </div>
-        <div @onclick="() => AppData.Go(PageRoute.SunRiseSetTime)" style="cursor: pointer;" class="col">
-            <div class="card">
-                <img src="images/sunrise-card.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">Sunrise Time</h5>
-                    <p class="card-text">Time when Sun's disc center meets the horizon</p>
-                </div>
-            </div>
-        </div>
+
+        }
+
     </div>
 
 </div>
@@ -133,6 +68,31 @@
 
     private void OnClickSourceCodeButton() => _jsRuntime.OpenNewTab(URL.GitHubRepo);
     private void OnClickGuideButton() => AppData.Go(PageRoute.QuickGuide);
+    private List<QuickLink> quickLinkList = new List<QuickLink>();
+
+
+    protected override void OnInitialized()
+    {
+        var niceOrder = new List<QuickLink>()
+        {
+            new(PageRoute.MatchFinder, "match-finder-card.jpg", "Find Soulmate", "Free search astrological database for perfect match"),
+            new(PageRoute.LifePredictor, "dasa-card.jpg", "Life Predictor", "Know good and bad periods of your life years ahead"),
+            new(PageRoute.Match, "match-card.jpg", "Match", "Check compatibility between two people, predict the relationship"),
+            new(PageRoute.Horoscope, "horoscope-card.jpg", "Horoscope", "Predict a person's character, speech, body and general life style"),
+            new(PageRoute.Muhurtha, "muhurtha-card.jpg", "Muhurtha", "Find a good time for buying car, travel, studies, building house etc.."),
+            new(PageRoute.Journal, "add-life-event-card.jpg", "Journal", "Astrological journal to help understand your life events"),
+            new(PageRoute.OpenApi, "open-api-card.jpg", "Open API", "Access powerful astrological tools via a HTTP request"),
+            new(PageRoute.BirthTimeFinder, "birth-time-finder-card.jpg", "Birth Time Finder", "Find forgotten or lost birth time using astrological"),
+            new(PageRoute.SunRiseSetTime, "sunrise-card.jpg", "Sunrise Time", "Time when Sun's disc center meets the horizon"),
+        };
+
+        //mix the list up for newness effect
+        var randotron = new Random();
+        quickLinkList = niceOrder.OrderBy(quickLink => randotron.Next()).ToList();
+
+    }
+
+    public record QuickLink(string PageRoute, string ImageName, string Title, string Description);
 
 }
 

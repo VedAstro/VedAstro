@@ -1,0 +1,24 @@
+﻿@*SIMPLE BOX TO RENDER SMART PREDICTIONS*@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+<div>
+    <h4 class="fw-bold">@Title</h4>
+    <p class="text-justify">
+        @ChildContent
+    </p>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public string? Title { get; set; } = "";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+}

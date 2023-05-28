@@ -4,7 +4,7 @@
 
 <PageTitle>@_pageTitle</PageTitle>
 
-<PageTop ImageName="life-predictor-banner.png"
+<PageTop ImageName="@Tools.RandomSelect(new []{"life-predictor-banner.png","horoscope-banner.png"})"
          Title="Life Predictor"
          DescriptionText="Each life is a story. Advanced computation algorithms fused with ancient astrology makes this chart possible.
         Its a digital snapshot of a human's life on earth.">
@@ -87,6 +87,8 @@ Know good and bad periods of your life years ahead.*@
             </p>
         </TextHTML>
     </ArticleBlock>
+    
+
 
     <ArticleBlock Title="Intensity" IconName="emojione:level-slider">
         <TextHTML>
@@ -101,7 +103,8 @@ Know good and bad periods of your life years ahead.*@
             </p>
         </TextHTML>
     </ArticleBlock>
-
+    
+    <img src="images/life-predictor-connection.jpg" class="img-thumbnail my-3" alt="...">
 
 
     <ArticleBlock Title="Coincidence?" IconName="line-md:moon-rising-loop">

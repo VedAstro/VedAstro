@@ -32,6 +32,11 @@ public class CallerInfo
     /// </summary>
     public bool IsLoggedIn => UserId != "101";
 
+    /// <summary>
+    /// Used to get guest public account data
+    /// </summary>
+    public bool Both101 => UserId == "101" && VisitorId == "101";
+
 
     /// <summary>
     /// for getting cache not data from xml

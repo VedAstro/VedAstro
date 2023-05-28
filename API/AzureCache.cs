@@ -175,7 +175,7 @@ namespace API
             var isRunning = CallTracker.IsRunning(callerInfo.CallerId);
 
 #if DEBUG
-            var status = isRunning ? "RUNNING" : "DONE";
+            var status = isRunning ? "ATM RUNNING" : "NOT RUNNING / NON EXIST";
             Console.WriteLine($"CALL IS {status}");
 #endif
 

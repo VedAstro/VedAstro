@@ -79,18 +79,21 @@ namespace API
 
 
             //--------------------------------
-            async Task<string> _getPersonList(CallerInfo requestData)
+            async Task<string> _getPersonList(CallerInfo callerInfo)
             {
 
                 //STAGE 2 : SWAP DATA
                 //swap visitor ID with user ID if any (data follows user when log in)
-                bool didSwap = await APITools.SwapUserId(requestData.VisitorId, requestData.UserId, APITools.PersonListFile);
+                if (!callerInfo.Both101) //only swap if needed
+                {
+                    bool didSwap = await APITools.SwapUserId(callerInfo.VisitorId, callerInfo.UserId, APITools.PersonListFile);
+                }
 
                 //get latest all match reports
                 var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
 
                 //filter out record by caller id, which will be visitor id when user not logged in
-                var personListByCallerIdXml = Tools.FindXmlByUserId(personListXml, requestData.CallerId);
+                var personListByCallerIdXml = Tools.FindXmlByUserId(personListXml, callerInfo.CallerId);
 
                 //sort a to z by name for ease of user (done here for speed vs client)
                 var sortedList = personListByCallerIdXml.OrderBy(personXml => personXml.Element("Name")?.Value ?? "").ToList();

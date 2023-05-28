@@ -132,8 +132,10 @@ namespace API
                     foreach (var planet in PlanetName.All9Planets)
                     {
                         var planetName = planet.Name.ToString();
-                        var planetData = Test(planetName, propertyName, parsedTime);
+                        var planetData = GetPlanetDataJSON(planet, propertyName, parsedTime);
 
+                        //JSON format used for all planet data and selected data is different
+                        //as such when building for all planets needs to be done properly to match
                         if (!individualPropertySelected)
                         {
                             var xxx = new JObject();
@@ -142,9 +144,10 @@ namespace API
                         }
                         else
                         {
-                            var ssss = new JObject(planetData);
-                            var xxx = new JProperty(planetName, ssss);
-                            compiledObj.Add(xxx);
+                            //nicely packed
+                            var wrapped = new JObject(planetData);
+                            var named = new JProperty(planetName, wrapped);
+                            compiledObj.Add(named);
                         }
                     }
 
@@ -155,9 +158,12 @@ namespace API
                     else { return APITools.PassMessageJson(compiledObj, incomingRequest); }
 
                 }
+
+                //users selects 1 particular planet
                 else
                 {
-                    var result = Test(celestialBodyName, propertyName, parsedTime);
+                    var planetName = PlanetName.Parse(celestialBodyName);
+                    var result = GetPlanetDataJSON(planetName, propertyName, parsedTime);
                     return APITools.PassMessageJson(result, incomingRequest);
                 }
 
@@ -166,33 +172,60 @@ namespace API
             //all house body calls
             if (celestialBodyType.ToLower() == "house")
             {
-                //get the house data needed
-                var houseName = HouseNameExtensions.FromString(celestialBodyName);
 
-                //check result 1st before parsing
-                if ((houseName == null) || !geoLocationResult.IsPass) { return APITools.FailMessage("Invalid House Name", incomingRequest); }
-
-                //allows to dynamically select property that would other wise come together in list below
-                if (individualPropertySelected)
+                //if all house
+                if (celestialBodyName.ToLower() == "all")
                 {
-                    //find > execute > wrap to JSON matching function property
-                    var result = Tools.ExecuteCalculatorByApiName<HouseName, Time>(propertyName, (HouseName)houseName, parsedTime);
 
-                    return APITools.PassMessageJson(result, incomingRequest);
+                    //compile together all the data
+                    var compiledObj = new JObject();
+                    var compiledAry = new JArray();
+                    foreach (var house in House.AllHouses)
+                    {
+                        var houseData = GetHouseDataJSON(house, propertyName, parsedTime);
+
+                        //JSON format used for all planet data and selected data is different
+                        //as such when building for all planets needs to be done properly to match
+                        if (!individualPropertySelected)
+                        {
+                            var xxx = new JObject();
+                            xxx[house.ToString()] = houseData;
+                            compiledAry.Add(xxx);
+                        }
+                        else
+                        {
+                            var wrapped = new JObject(houseData);
+                            var named = new JProperty(house.ToString(), wrapped);
+                            compiledObj.Add(named);
+                        }
+                    }
+
+                    //for ALL property
+                    if (!individualPropertySelected) { return APITools.PassMessageJson(compiledAry, incomingRequest); }
+
+                    //for selected property
+                    else { return APITools.PassMessageJson(compiledObj, incomingRequest); }
+
                 }
-                //else get all
+
+                //users selects 1 particular house
                 else
                 {
-                    //all house related data
-                    //get all calculators that can accept a house name and time
-                    var houseTimeCalcs = Tools.ExecuteCalculatorByParam<HouseName, Time>((HouseName)houseName, parsedTime);
+                    //get the planet data needed
+                    var planetNameResult = Enum.TryParse<HouseName>(celestialBodyName, out var houseName);
 
-                    //send the payload on it's mary way
-                    return APITools.PassMessageJson(houseTimeCalcs, incomingRequest);
+                    var result = GetHouseDataJSON(houseName, propertyName, parsedTime);
+                    return APITools.PassMessageJson(result, incomingRequest);
                 }
+
+                //-------------
+
 
             }
 
+
+
+            //------------------------------------------------------
 
             //sky chart
             var skyChartWidth = 750.0;
@@ -237,18 +270,15 @@ namespace API
 
         }
 
-        private static JToken Test(string planetNameString, string propertyName, Time parsedTime)
+        private static JToken GetPlanetDataJSON(PlanetName planetName, string propertyName, Time parsedTime)
         {
             var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
-
-            //get the planet data needed
-            var planetNameResult = PlanetName.TryParse(planetNameString, out var planetName);
 
             //allows to dynamically select property that would other wise come together in list below
             if (individualPropertySelected)
             {
                 //find > execute > wrap to JSON matching function property
-                var result = Tools.ExecuteCalculatorByApiName<PlanetName, Time>(propertyName, planetName, parsedTime);
+                var result = Tools.ExecuteCalculatorByApiName(propertyName, planetName, parsedTime);
 
                 return result;
             }
@@ -257,11 +287,37 @@ namespace API
             {
                 //all planet related data
                 //get all calculators that can accept a planet name and time
-                var planetTimeCalcs = Tools.ExecuteCalculatorByParam<PlanetName, Time>(planetName, parsedTime);
+                var planetTimeCalcs = Tools.ExecuteCalculatorByParam(planetName, parsedTime);
 
                 //send the payload on it's merry way
                 return planetTimeCalcs;
             }
+
+        }
+
+        private static JToken GetHouseDataJSON(HouseName houseName, string propertyName, Time parsedTime)
+        {
+            var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
+
+            //allows to dynamically select property that would other wise come together in list below
+            if (individualPropertySelected)
+            {
+                //find > execute > wrap to JSON matching function property
+                var result = Tools.ExecuteCalculatorByApiName(propertyName, houseName, parsedTime);
+
+                return result;
+            }
+            //else get all
+            else
+            {
+                //all house related data
+                //get all calculators that can accept a house name and time
+                var houseTimeCalcs = Tools.ExecuteCalculatorByParam(houseName, parsedTime);
+
+                //send the payload on it's mary way
+                return houseTimeCalcs;
+            }
+
 
         }
 

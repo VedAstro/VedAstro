@@ -4,6 +4,9 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
 using Newtonsoft.Json.Linq;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
 
 
 namespace API
@@ -122,12 +125,35 @@ namespace API
                 //if all planets
                 if (celestialBodyName.ToLower() == "all")
                 {
-                    var compiled = new JArray();
+
+                    //compile together all the data
+                    var compiledObj = new JObject();
+                    var compiledAry = new JArray();
                     foreach (var planet in PlanetName.All9Planets)
                     {
-                        var result = Test(planet.ToString(), propertyName, parsedTime);
-                        compiled.Add(result);
+                        var planetName = planet.Name.ToString();
+                        var planetData = Test(planetName, propertyName, parsedTime);
+
+                        if (!individualPropertySelected)
+                        {
+                            var xxx = new JObject();
+                            xxx[planetName] = planetData;
+                            compiledAry.Add(xxx);
+                        }
+                        else
+                        {
+                            var ssss = new JObject(planetData);
+                            var xxx = new JProperty(planetName, ssss);
+                            compiledObj.Add(xxx);
+                        }
                     }
+
+                    //for ALL property
+                    if (!individualPropertySelected) { return APITools.PassMessageJson(compiledAry, incomingRequest); }
+
+                    //for selected property
+                    else { return APITools.PassMessageJson(compiledObj, incomingRequest); }
+
                 }
                 else
                 {
@@ -217,7 +243,7 @@ namespace API
 
             //get the planet data needed
             var planetNameResult = PlanetName.TryParse(planetNameString, out var planetName);
-            
+
             //allows to dynamically select property that would other wise come together in list below
             if (individualPropertySelected)
             {

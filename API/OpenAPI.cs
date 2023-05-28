@@ -2,11 +2,8 @@
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.DurableTask;
 using Microsoft.DurableTask.Client;
 using Newtonsoft.Json.Linq;
-using iText.Commons.Bouncycastle.Cert.Ocsp;
-using Newtonsoft.Json;
 
 
 namespace API
@@ -43,7 +40,7 @@ namespace API
 
             //clean time text
             var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
+            var parsedTime = new VedAstro.Library.Time(timeStr, geoLocation);
 
 
             //send to sorter
@@ -117,31 +114,25 @@ namespace API
 
             var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
 
+
             //all planet body calls
             if (celestialBodyType.ToLower() == "planet")
             {
-                //get the planet data needed
-                var planetNameResult = PlanetName.TryParse(celestialBodyName, out var planetName);
-                //check result 1st before parsing
-                if (!planetNameResult || !geoLocationResult.IsPass) { return APITools.FailMessage("Invalid Planet Name", incomingRequest); }
 
-                //allows to dynamically select property that would other wise come together in list below
-                if (individualPropertySelected)
+                //if all planets
+                if (celestialBodyName.ToLower() == "all")
                 {
-                    //find > execute > wrap to JSON matching function property
-                    var result = Tools.ExecuteCalculatorByApiName<PlanetName, Time>(propertyName, planetName, parsedTime);
-
-                    return APITools.PassMessageJson(result, incomingRequest);
+                    var compiled = new JArray();
+                    foreach (var planet in PlanetName.All9Planets)
+                    {
+                        var result = Test(planet.ToString(), propertyName, parsedTime);
+                        compiled.Add(result);
+                    }
                 }
-                //else get all
                 else
                 {
-                    //all planet related data
-                    //get all calculators that can accept a planet name and time
-                    var planetTimeCalcs = Tools.ExecuteCalculatorByParam<PlanetName, Time>(planetName, parsedTime);
-
-                    //send the payload on it's merry way
-                    return APITools.PassMessageJson(planetTimeCalcs, incomingRequest);
+                    var result = Test(celestialBodyName, propertyName, parsedTime);
+                    return APITools.PassMessageJson(result, incomingRequest);
                 }
 
             }
@@ -217,6 +208,34 @@ namespace API
 
             //-----------------------------
 
+
+        }
+
+        private static JToken Test(string planetNameString, string propertyName, Time parsedTime)
+        {
+            var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
+
+            //get the planet data needed
+            var planetNameResult = PlanetName.TryParse(planetNameString, out var planetName);
+            
+            //allows to dynamically select property that would other wise come together in list below
+            if (individualPropertySelected)
+            {
+                //find > execute > wrap to JSON matching function property
+                var result = Tools.ExecuteCalculatorByApiName<PlanetName, Time>(propertyName, planetName, parsedTime);
+
+                return result;
+            }
+            //else get all
+            else
+            {
+                //all planet related data
+                //get all calculators that can accept a planet name and time
+                var planetTimeCalcs = Tools.ExecuteCalculatorByParam<PlanetName, Time>(planetName, parsedTime);
+
+                //send the payload on it's merry way
+                return planetTimeCalcs;
+            }
 
         }
 

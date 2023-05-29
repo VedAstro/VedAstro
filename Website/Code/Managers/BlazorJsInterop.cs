@@ -145,16 +145,24 @@ namespace Website
         /// </summary>
         public static async Task ShowLoading(this IJSRuntime jsRuntime, int delayMs = 300)
         {
-            var loadingBoxOptions = @"
-
-                <div style=""width: fit-content;"">
-                    <img src=""images/loading-animation-progress-transparent.gif"">
-                    <div class=""my-1 d-flex justify-content-center gap-5"">
-                        <button onclick=""window.location.href=window.location.href"" style="" height:37.1px; width: fit-content;"" class=""btn-sm iconOnlyButton btn-outline-danger btn"" ><svg xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"" aria-hidden=""true"" role=""img"" class=""iconify iconify--ooui"" width=""25"" height=""25"" preserveAspectRatio=""xMidYMid meet"" viewBox=""0 0 20 20"" data-icon=""ooui:reload"" data-width=""25""><path fill=""currentColor"" d=""M15.65 4.35A8 8 0 1 0 17.4 13h-2.22a6 6 0 1 1-1-7.22L11 9h7V2z""></path></svg></button><!--!-->
-                        <button onclick=""window.open('https://vedastro.org')"" style="" height:37.1px; width: fit-content;"" class=""btn-sm iconOnlyButton btn-outline-primary btn"" ><svg xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"" aria-hidden=""true"" role=""img"" class=""iconify iconify--iconoir"" width=""25"" height=""25"" preserveAspectRatio=""xMidYMid meet"" viewBox=""0 0 24 24"" data-icon=""iconoir:new-tab"" data-width=""25""><g fill=""none"" stroke=""currentColor"" stroke-width=""1.5""><path d=""M2 19V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z""></path><path stroke-linecap=""round"" stroke-linejoin=""round"" d=""M2 7h20M9 14h3m3 0h-3m0 0v-3m0 3v3""></path></g></svg></button>
+            //note: - id needed for tooltip js, init from app js
+            //      - div need to wrap image for nice formatting
+            //      - all code placed here for easy of maintainer and it works!
+            var clear = "function hi(){$('#LoadingBoxStatus').text('');};hi()";
+            var showReload = "function hi(){$('#LoadingBoxStatus').text('reload');};hi()";
+            var newTab = "function hi(){$('#LoadingBoxStatus').text('new tab');};hi()";
+            var styleText = "font-size: 15px; align-self: center;color: #a3a3a3; width:64px;white-space: nowrap;";
+            var loadingBoxOptions = $@"
+                <div class=""vstack"">
+                    <div>
+                        <img src=""images/loading-animation-progress-transparent.gif"">
                     </div>
-                </div>
-";
+                    <div class=""my-1 d-flex justify-content-center gap-3"">
+                        <button onmouseout=""{clear}"" onmouseover=""{showReload}"" onclick=""window.location.href=window.location.href"" style=""width: fit-content;"" class=""btn-sm iconOnlyButton btn-outline-danger btn"" ><svg xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"" aria-hidden=""true"" role=""img"" class=""iconify iconify--ooui"" width=""25"" height=""25"" preserveAspectRatio=""xMidYMid meet"" viewBox=""0 0 20 20"" data-icon=""ooui:reload"" data-width=""25""><path fill=""currentColor"" d=""M15.65 4.35A8 8 0 1 0 17.4 13h-2.22a6 6 0 1 1-1-7.22L11 9h7V2z""></path></svg></button><!--!-->
+                        <span id=""LoadingBoxStatus"" style=""{styleText}"" class=""px-2""></span>                
+                        <button  onmouseout=""{clear}"" onmouseover=""{newTab}"" onclick=""window.open('https://vedastro.org')"" style=""width: fit-content;"" class=""btn-sm iconOnlyButton btn-outline-primary btn"" ><svg xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"" aria-hidden=""true"" role=""img"" class=""iconify iconify--iconoir"" width=""25"" height=""25"" preserveAspectRatio=""xMidYMid meet"" viewBox=""0 0 24 24"" data-icon=""iconoir:new-tab"" data-width=""25""><g fill=""none"" stroke=""currentColor"" stroke-width=""1.5""><path d=""M2 19V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z""></path><path stroke-linecap=""round"" stroke-linejoin=""round"" d=""M2 7h20M9 14h3m3 0h-3m0 0v-3m0 3v3""></path></g></svg></button>
+                    </div>
+                </div>";
 
             var alertData = new
             {
@@ -247,9 +255,9 @@ namespace Website
         /// Set data into browser local storage
         /// </summary>
         public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value) => await jsRuntime.InvokeVoidAsync(JS.setProperty, propName, value);
-        
+
         public static async Task RemoveProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeVoidAsync(JS.removeProperty, propName);
-        
+
         /// <summary>
         /// Calls given handler when localstorage data changes
         /// </summary>
@@ -267,7 +275,7 @@ namespace Website
         /// Uses jQuery to show element via blazor reference
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, element);
-        
+
         /// <summary>
         /// Uses jQuery to show element via selector (#ID,.class)
         /// </summary>
@@ -375,11 +383,11 @@ namespace Website
         /// Jquery .text()
         /// </summary>
         public static async Task<string> GetText(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, element);
-        
+
         public static async Task<string> GetText(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getTextWrapper, jquerySelector);
-        
+
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, element);
-        
+
         public static async Task<string> GetValue(this IJSRuntime jsRuntime, string jquerySelector) => await jsRuntime.InvokeAsync<string>(JS.getValueWrapper, jquerySelector);
 
         /// <summary>

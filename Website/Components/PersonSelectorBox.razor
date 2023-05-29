@@ -33,16 +33,22 @@ KEEP IT REAL
     }
     <div class="hstack">
 
-        @if (IsReady)
-        {
-            <!-- Example single danger button -->
-            <div class="btn-group" style="width: @GR.W255px;">
-                <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+        <!-- Example single danger button -->
+        <div class="btn-group" style="width: @GR.W255px;">
+            <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+                @if (!SelectedPerson.Equals(Person.Empty))
+                {
                     <PersonTooltip Person="@SelectedPerson" />
-                </button>
-                <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
-                    <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
-
+                }
+                else
+                {
+                    @("Select Person")
+                }
+            </button>
+            <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
+                <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                @if (IsReady)
+                {
                     @foreach (var person in PersonListDisplay)
                     {
                         <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
@@ -52,20 +58,29 @@ KEEP IT REAL
                         <IconText FontColor="#8f8f8f" IconName="material-symbols:demography-rounded">
                             Examples
                         </IconText>
-                        @*<IconButton IconName="clarity:eye-hide-line" Outline="true" SmallSize="true" OnClickCallback="OnClickHidePublic" />*@
                     </div>
                     <li><hr class="dropdown-divider"></li>
                     @foreach (var person in PublicPersonListDisplay)
                     {
                         <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
                     }
-                </ul>
-            </div>
+                }
+                @* loading icon when list is being made, no loading popup because reduces user UX *@
+                else
+                {
+                    <div class="d-flex justify-content-center mt-5">
+                        <Icon Size="60" IconName="line-md:loading-twotone-loop" />
+                    </div>
+                }
 
-        }
+
+            </ul>
+
+        </div>
+
 
         @*add person icon*@
-        <IconButton ExtraClass="ms-2" TooltipText="Add new person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
+        <IconButton ExtraClass="ms-2" TooltipText="Add New Person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
     </div>
 </div>
 
@@ -76,13 +91,11 @@ KEEP IT REAL
     private ElementReference _searchInput;
 
     //DEFAULTS
-    private string DropDownDisplayText = "Select Person";
     const string DefaultLabel = "Person";
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
     private const string NotSelectedPersonId = "0"; //needed to detect empty
     private string _selectedPersonId = NotSelectedPersonId;
     public Person SelectedPerson { get; set; } = Person.Empty;
-
     //PARAMETERS
 
     /// <summary>
@@ -158,8 +171,16 @@ KEEP IT REAL
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
-    protected override async Task OnParametersSetAsync() => await FillDropDown();
+    //protected override async Task OnParametersSetAsync() => await FillDropDown();
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await FillDropDown();
+        }
+
+    }
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -191,9 +212,6 @@ KEEP IT REAL
 
     private async Task FillDropDown()
     {
-        //show loading box
-        await _jsRuntime.ShowLoading();
-
         //only this way of marking works
         IsReady = false;
 
@@ -209,11 +227,6 @@ KEEP IT REAL
 
         //need to propagate changes
         this.StateHasChanged();
-
-        //hide loading box
-        _jsRuntime.HideLoading();
-
-
     }
 
     public async Task<Person> GetSelectedPerson() => await WebsiteTools.GetPersonById(SelectedPersonId, _jsRuntime);
@@ -223,7 +236,7 @@ KEEP IT REAL
     /// <summary>
     /// True if a person has been selected else false
     /// </summary>
-    public bool IsPersonSelected => SelectedPersonId != NotSelectedPersonId && SelectedPersonId != null && SelectedPersonId != "";
+    public bool IsPersonSelected => SelectedPersonId != NotSelectedPersonId && SelectedPersonId != null && SelectedPersonId != "" && SelectedPersonId != "101";
 
     /// <summary>
     /// Programmatically sets a person from ID, as though selected by user
@@ -234,19 +247,8 @@ KEEP IT REAL
         SelectedPersonId = personIdUrl;
         var inputPerson = await GetSelectedPerson();
 
-        //note : we need the person option to be in the HTML list
-        //otherwise, setting value will only result in blank, value has
-        //match the value in HTML option tag, we do not select by visible value
-
-        //check if person exists already in the list
-        //var isExist = PersonList.Where(person => person.Equals(inputPerson)).Any();
-
         //simulate click
         OnClickPersonName(inputPerson);
-
-        //now select that person by ID, makes it visible
-        //await AppData.JsRuntime.SetValue(selectorElement, personIdUrl);
-
     }
 
 
@@ -255,12 +257,10 @@ KEEP IT REAL
         //set tooltip as well
         SelectedPerson = person;
 
-        //make visible when drop down is closed as selected name
-        DropDownDisplayText = person.DisplayName;
-
         //save the selected person, we only use ID because in sync with id in URL
         SelectedPersonId = person.Id;
 
+        //needed to make change appear
         StateHasChanged();
     }
 

@@ -78,8 +78,8 @@ namespace Library.API
             if (CachedPersonList.Any()) { return CachedPersonList; }
 
             //prepare url to call
-            var url2 = $"{_url.GetPersonList}/UserId/{_userId}/VisitorId/{_visitorId}";
-            CachedPersonList = await GetPersonListBehind(url2);
+            var url = $"{_url.GetPersonList}/UserId/{_userId}/VisitorId/{_visitorId}";
+            CachedPersonList = await GetPersonListBehind(url);
 
             return CachedPersonList;
         }
@@ -159,13 +159,7 @@ namespace Library.API
             var url = $"{_url.UpdatePerson}/UserId/{_userId}/VisitorId/{_visitorId}";
             var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, updatedPerson);
 
-            //if anything but pass, raise alarm
-            var status = jsonResult["Status"]?.Value<string>() ?? "";
-            if (status != "PASS")
-            {
-                var failMessage = jsonResult["Payload"]?.Value<string>() ?? "";
-                await ShowAlert("error", $"Server is not happy! Why?", failMessage);
-            }
+
 
 #if DEBUG
             Console.WriteLine($"SERVER SAID:\n{jsonResult}");
@@ -253,7 +247,7 @@ namespace Library.API
 
             //call until data appears, API takes care of everything
             string? parsedJsonReply = null;
-            var pollRate = 250;
+            var pollRate = 300;
             var notReady = true;
             while (notReady)
             {
@@ -272,22 +266,18 @@ namespace Library.API
         /// </summary>
         private async Task HandleResultClearLocalCache(JToken jsonResult)
         {
-            //check result, display error if needed
-            var isPass = jsonResult["Status"].Value<string>() == "Pass";
-            if (isPass)
+
+            //if anything but pass, raise alarm
+            var status = jsonResult["Status"]?.Value<string>() ?? "";
+            if (status != "Pass") //FAIL
+            {
+                var failMessage = jsonResult["Payload"]?.Value<string>() ?? "";
+                await ShowAlert("error", $"Server is not happy! Why?", failMessage);
+            }
+            else //PASS
             {
                 //1: clear stored person list
                 this.CachedPersonList.Clear();
-
-                //2: clear link to get person list, this will cause to fetch new list
-                //since already purged by API, the webhook link will go 404
-                //note no need to clear public, expect to stay same for life of app
-                //this.PersonListCallStatus = "";
-            }
-            else
-            {
-                //todo handle reply properly
-                Console.WriteLine("API SAID : FAIL");
             }
         }
 

@@ -18,7 +18,7 @@ namespace API
         /// Generate a human readable Person ID
         /// 
         /// </summary>
-        [Function("GetNewPersonId")]
+        [Function(nameof(GetNewPersonId))]
         public static async Task<HttpResponseData> GetNewPersonId([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetNewPersonId/Name/{personName}/BirthYear/{birthYear}")] HttpRequestData incomingRequest,
             string personName, string birthYear)
         {
@@ -86,7 +86,7 @@ namespace API
                 //swap visitor ID with user ID if any (data follows user when log in)
                 if (!callerInfo.Both101) //only swap if needed
                 {
-                    bool didSwap = await APITools.SwapUserId(callerInfo.VisitorId, callerInfo.UserId, APITools.PersonListFile);
+                    bool didSwap = await APITools.SwapUserId(callerInfo, APITools.PersonListFile);
                 }
 
                 //get latest all match reports

@@ -591,16 +591,16 @@ namespace API
 
         //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
         //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-        public static async Task<bool> SwapUserId(string? visitorId, string? userId, string cloudXmlFile)
+        public static async Task<bool> SwapUserId(CallerInfo callerInfo, string cloudXmlFile)
         {
             var allListXmlDoc = await APITools.GetXmlFileFromAzureStorage(cloudXmlFile, APITools.BlobContainerName);
 
             //filter out record by visitor id
-            var visitorIdList = Tools.FindXmlByUserId(allListXmlDoc, visitorId);
+            var visitorIdList = Tools.FindXmlByUserId(allListXmlDoc, callerInfo.VisitorId);
 
             //if user made profile while logged out then logs in, transfer the profiles created with visitor id to the new user id
             //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
-            var loggedIn = userId != "101" && !(string.IsNullOrEmpty(userId)); //already logged in if true
+            var loggedIn = callerInfo.UserId != "101" && !(string.IsNullOrEmpty(callerInfo.UserId)); //already logged in if true
             var visitorProfileExists = visitorIdList.Any();
 
             if (loggedIn && visitorProfileExists)
@@ -630,6 +630,10 @@ namespace API
 
                 //since heavy computation, log if happens
                 APILogger.Data($"Profiles swapped : {visitorIdList.Count}", AppInstance.IncomingRequest);
+
+
+                //clear cache
+                await AzureCache.Delete(callerInfo.CallerId);
 
                 //return true of swap was done
                 return true;

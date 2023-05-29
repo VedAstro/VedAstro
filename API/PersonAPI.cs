@@ -56,7 +56,7 @@ namespace API
             try
             {
                 //GET THE DATA FROM CALLER
-                var parsedRequest = new CallerInfo(userId, visitorId);
+                var parsedRequest = new CallerInfo(visitorId, userId);
 
                 //PREPARE THE CALL
                 Func<Task<string>> generateChart = () => _getPersonList(parsedRequest);
@@ -149,7 +149,7 @@ namespace API
             string userId, string visitorId)
         {
             //STAGE 1 : GET DATA OUT
-            var parsedRequest = new CallerInfo(userId, visitorId);
+            var parsedRequest = new CallerInfo(visitorId,userId);
 
             //adding new person needs make sure all cache is cleared if any
             await AzureCache.Delete(parsedRequest.CallerId);
@@ -177,7 +177,7 @@ namespace API
             string userId, string visitorId)
         {
             //STAGE 1 : GET DATA OUT
-            var parsedRequest = new CallerInfo(userId, visitorId);
+            var parsedRequest = new CallerInfo(visitorId, userId);
 
             await AzureCache.Delete(parsedRequest.CallerId);
 
@@ -237,7 +237,7 @@ namespace API
             string userId, string visitorId, string personId)
         {
             //STAGE 1 : GET DATA OUT
-            var parsedRequest = new CallerInfo(userId, visitorId);
+            var parsedRequest = new CallerInfo(visitorId, userId);
 
             await AzureCache.Delete(parsedRequest.CallerId);
 

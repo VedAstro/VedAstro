@@ -76,7 +76,7 @@ namespace API
 
 
                 //CACHE MECHANISM
-                var callerInfo = new CallerInfo(userId, visitorId);//get who or what is calling
+                var callerInfo = new CallerInfo(visitorId, userId);//get who or what is calling
                 callerInfo.CallerId = chartId;//NOTE OVERIIDE CALLER ID TO CHART FOR CACHE SHARING
                 var httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask, callerInfo, incomingRequest);
 

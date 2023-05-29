@@ -233,7 +233,7 @@
     /// <returns></returns>
     private async Task OnClickGenerateButton()
     {
-        await _jsRuntime.ShowLoading();
+        await _jsRuntime.ShowLoading(); 
 
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { return; }
@@ -284,7 +284,10 @@
         }
         else
         {
-            var celestialBodyData = $"/{SelectedBodyType}/{finalCelesName}/{finalCelesProperty}";
+            var x = string.IsNullOrEmpty(finalCelesProperty) ? "" : $"/{finalCelesProperty}";
+            var xx = string.IsNullOrEmpty(SelectedBodyType) ? "" : $"/{SelectedBodyType}";
+            var xxd = string.IsNullOrEmpty(finalCelesName) ? "" : $"/{finalCelesName}";
+            var celestialBodyData = x+xx+xxd;
             placeHolder = domain + location + time + celestialBodyData;
         }
 

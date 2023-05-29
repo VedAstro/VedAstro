@@ -154,7 +154,7 @@ namespace API
 
                 //STAGE 2 : SWAP DATA
                 //swap visitor ID with user ID if any (data follows user when log in)
-                await APITools.SwapUserId(visitorId, userId, APITools.SavedMatchReportList);
+                await APITools.SwapUserId(new CallerInfo(visitorId, userId), APITools.SavedMatchReportList);
 
                 //STAGE 3 : FILTER
                 //get updated all match reports (after swap)

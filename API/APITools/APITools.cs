@@ -612,7 +612,7 @@ namespace API
                     var existingOwners = xmlRecord?.Element("UserId")?.Value ?? "";
 
                     //replace visitor id with user id
-                    var updatedOwners = existingOwners.Replace(visitorId, userId);
+                    var updatedOwners = existingOwners.Replace(callerInfo.VisitorId, callerInfo.UserId);
 
                     //check if data is valid, should not match
                     if (updatedOwners.Equals(existingOwners))

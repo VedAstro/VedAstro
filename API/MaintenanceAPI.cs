@@ -1,10 +1,7 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.DurableTask.Client;
 using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
 using VedAstro.Library;
-using Azure;
 using System.Net.Mime;
 using System.Net;
 using Azure.Storage.Blobs;
@@ -30,62 +27,12 @@ namespace API
 
 
         /// <summary>
-        /// Call here after calling prepare chart or anything with ID
-        /// </summary>
-        [Function(nameof(GetCallStatus))]
-        public static async Task<HttpResponseData> GetCallStatus(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallStatus/{callerId}")]
-            HttpRequestData incomingRequest,
-            [DurableClient] DurableTaskClient client,
-            string callerId
-        )
-        {
-            try
-            {
-                //try to get cached version, if not available then make new one
-                var result = await client.GetInstanceAsync(callerId, false, CancellationToken.None);
-                var statusMessage = result?.RuntimeStatus.ToString() ?? "No Exist";
-
-                return APITools.PassMessageJson(statusMessage, incomingRequest);
-
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-        }
-
-
-        /// <summary>
-        /// Clears all cache, run manually when code is updated and new data is needed
-        /// </summary>
-        [Function(nameof(ClearCache))]
-        public static async Task<HttpResponseData> ClearCache(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
-            HttpRequestData req,
-            [DurableClient] DurableTaskClient client)
-        {
-            var purgeInstancesFilter = new PurgeInstancesFilter(DateTimeOffset.MinValue); //get all
-            var result = await client.PurgeAllInstancesAsync(purgeInstancesFilter, CancellationToken.None);
-
-            var message = $"CLEARED COUNT:{result.PurgedInstanceCount}";
-
-            return APITools.PassMessageJson(message, req);
-        }
-
-        /// <summary>
         /// designed to be called directly, getting ANY and ALL needed data in one simple GET call
         /// </summary>
         [Function(nameof(GetCallData))]
         public static async Task<HttpResponseData> GetCallData(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetCallData/CallerId/{callerId}/Format/{formatName}")]
             HttpRequestData req,
-            [DurableClient] DurableTaskClient client,
             string callerId, string formatName)
         {
 

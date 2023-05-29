@@ -1,23 +1,9 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mime;
-using System.Reflection.Metadata;
 using System.Text;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using Azure;
-using Azure.Data.Tables;
-using Azure.Data.Tables.Models;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using iText.Commons.Bouncycastle.Cert.Ocsp;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker.Http;
-using VedAstro.Library;
 
 namespace API
 {

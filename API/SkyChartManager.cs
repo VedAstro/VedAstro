@@ -3,11 +3,6 @@ using System.Drawing.Imaging;
 using VedAstro.Library;
 using System.Drawing;
 using Gif.Components;
-using Microsoft.AspNetCore.Routing.Template;
-using static API.SkyChartManager;
-using Svg;
-using Microsoft.Azure.Functions.Worker;
-using Newtonsoft.Json.Linq;
 
 namespace API
 {
@@ -17,19 +12,50 @@ namespace API
     public static class SkyChartManager
     {
 
-
-        [Function(nameof(GenerateChartAsync))]
-        public static async Task<string> GenerateChartAsync([ActivityTrigger] string payloadString, FunctionContext executionContext)
+        public static async Task<byte[]> GenerateChartGif(Time time, double width, double height)
         {
-            var payload = JObject.Parse(payloadString);
-            Time time = Time.FromJson(payload["Time"]);
-            double widthPx = payload["Width"].Value<double>();
-            double heightPx = payload["Height"].Value<double>();
+            //STAGE 1: get charts as SVG list frames
+            var startTime = time.SubtractHours(Tools.DaysToHours(10));
+            var endTime = time.AddHours(Tools.DaysToHours(10));
+            var timeSliceList = EventManager.GetTimeListFromRange(startTime, endTime, 24); //should be 30 frames\
+            var xxList = new List<object>();
+            foreach (var time1 in timeSliceList)
+            {
+                xxList.Add(new { Time = time1, Height = height, Width = width });
+            }
+            var chartSvgList = new List<string>();
+            foreach (var timesSlice in timeSliceList)
+            {
+                var xss = await SkyChartManager.GenerateChart(timesSlice, width, height);
+                chartSvgList.Add(xss);
+            }
 
-            var x = await GenerateChart(time, widthPx, heightPx);
 
-            return x;
+            //STAGE 2: Convert SVG to PNG frames
+            var pngFrameListByteTransparent = chartSvgList.Select(x => SvgConverter.Svg2Png(x, (int)width, (int)height)).ToList();
+            var pngFrameLisWhite = pngFrameListByteTransparent.Select(x => TransparencyToWhite((Bitmap)x, ImageFormat.Png)).ToList();
+            var pngFrameList = pngFrameLisWhite.Select(x => ByteArrayToImage(x)).ToList();
+
+            
+            //STAGE 3: Make GIF from PNGs
+            AnimatedGifEncoder e = new AnimatedGifEncoder();
+            var memStream = new MemoryStream();
+            e.Start(memStream);
+            e.SetDelay(500);
+            //-1:no repeat,0:always repeat
+            e.SetRepeat(0);
+            //make gif frame by frame
+            foreach (var pngFrame in pngFrameList) { e.AddFrame(pngFrame); }
+
+            //take the gif out as binary data
+            var x = e.Output();
+            e.Finish();
+            return x.ToArray();
+
+            //--------------------------------
+
         }
+
 
         /// <summary>
         /// Sweet heart takes this away!
@@ -125,6 +151,7 @@ namespace API
         {
             return $@"<text transform=""translate(290,12)"" style=""font-size:14px;"">{time.GetStdDateTimeOffsetText()}</text>";
         }
+        
         private static string? GetLocationHeader(Time time)
         {
             return $@"<text transform=""translate(580,12)"" style=""font-size:14px;"">{time.GetGeoLocation().ToString()}</text>";
@@ -145,83 +172,6 @@ namespace API
             return compiledRow;
         }
 
-
-
-
-        public static async Task<byte[]> GenerateChartGif(Time time, double width, double height)
-        {
-            //STAGE 1: get charts as SVG list frames
-            var startTime = time.SubtractHours(Tools.DaysToHours(15));
-            var endTime = time.AddHours(Tools.DaysToHours(15));
-            var timeSliceList = EventManager.GetTimeListFromRange(startTime, endTime, 24); //should be 30 frames\
-            var xxList = new List<object>();
-            foreach (var time1 in timeSliceList)
-            {
-                xxList.Add(new { Time = time1, Height = height, Width = width });
-            }
-
-            var chartSvglist = new List<string>();
-            //await Parallel.ForEachAsync(xxList, Body);
-
-            foreach (var timesSlice in timeSliceList)
-            {
-
-                //create unique id based on params to recognize future calls (caching)
-                var callerId = $"{timesSlice.GetHashCode()}{width}{height}";
-
-                Func<Task<string>> generateChart = () => SkyChartManager.GenerateChart(timesSlice, width, height);
-
-                var chart = await APITools.CacheExecuteTask(generateChart, callerId);
-                chartSvglist.Add(chart);
-
-
-                //var xss = await GenerateChart(timesSlice, width, height);
-                //chartSvglist.Add(xss);
-            }
-
-
-            //STAGE 2: Convert SVG to PNG frames
-            var pngFrameListByteTransparent = chartSvglist.Select(x => SvgConverter.Svg2Png(x, (int)width, (int)height)).ToList();
-            var pngFrameLisWhite = pngFrameListByteTransparent.Select(x => TransparencyToWhite((Bitmap)x, ImageFormat.Png)).ToList();
-            var pngFrameList = pngFrameLisWhite.Select(x => ByteArrayToImage(x)).ToList();
-
-            //order correctly according to time
-            //because parallel makes it mixed
-            //var ordered = pngFrameList.OrderBy(x=>x)
-
-            //STAGE 3: Make GIF from PNGs
-            AnimatedGifEncoder e = new AnimatedGifEncoder();
-            // read file as memorystream
-            var memStream = new MemoryStream();
-            e.Start(memStream);
-            e.SetDelay(700);
-            //-1:no repeat,0:always repeat
-            e.SetRepeat(0);
-            foreach (var pngFrame in pngFrameList)
-            {
-                e.AddFrame(pngFrame);
-            }
-
-            var x = e.Output();
-
-            e.Finish();
-
-            return x.ToArray();
-
-
-            async ValueTask Body(dynamic dataObject, CancellationToken arg2)
-            {
-                //create unique id based on params to recognize future calls (caching)
-                var callerId = $"{dataObject.Time.GetHashCode()}{dataObject.Width}{dataObject.Height}";
-
-                Func<Task<string>> generateChart = () => SkyChartManager.GenerateChart(dataObject.Time, dataObject.Width, dataObject.Height);
-
-                var chart = await APITools.CacheExecuteTask(generateChart, callerId);
-                chartSvglist.Add(chart);
-            }
-
-
-        }
 
 
 

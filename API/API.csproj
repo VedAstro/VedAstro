@@ -24,7 +24,6 @@
 		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />
 
 		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.14.1" />
-		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.DurableTask" Version="1.0.2" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
 		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.10.0" />
 

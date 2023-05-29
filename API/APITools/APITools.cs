@@ -9,12 +9,7 @@ using System.Net.Mime;
 using System.Text.Json;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
-using Microsoft.DurableTask;
-using Microsoft.DurableTask.Client;
-using Microsoft.Extensions.Azure;
 using VedAstro.Library;
-using iText.Commons.Bouncycastle.Cert.Ocsp;
-using System.Dynamic;
 
 namespace API
 {
@@ -899,48 +894,7 @@ namespace API
 
 
         //--------------------TODO NEEDS MOVING
-        /// <summary>
-        /// will call durable task that has completed successful 
-        /// Will call only if invalid, else will not call, and be certain that data is ready
-        /// </summary>
-        public static async Task CallIfInvalid(DurableTaskClient durableTaskClient, string methodName, string callerId, dynamic inputData)
-        {
-            var cacheExist = await AzureCache.IsExist(callerId);
-            OrchestrationMetadata? callInstance = await durableTaskClient.GetInstanceAsync(callerId);
-
-            //possible call does not exist
-            //var notValid = callInstance?.RuntimeStatus != OrchestrationRuntimeStatus.Completed;
-            //var notRunning = !(callInstance?.IsRunning ?? false);
-            //var noValidCall = notValid && notRunning;
-            var noCache = !cacheExist;
-
-            //start new call if does not exist or call marked as failed
-            if (noCache)
-            {
-                var purgeResult = await durableTaskClient.PurgeInstanceAsync(callerId);
-                var successPurge = purgeResult.PurgedInstanceCount > 0; //if purged will be 1
-
-
-                //start processing
-                var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
-                //squeeze the Sky Juice!
-                var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(methodName, inputData, options, CancellationToken.None); //should match caller ID
-
-
-                ////possible call does not exist
-                //var notValid = callInstance?.RuntimeStatus != OrchestrationRuntimeStatus.Completed;
-                //var notRunning = !(callInstance?.IsRunning ?? false);
-                //var noValidCache = notValid && notRunning;
-                //if (noValidCache)
-                //{
-                //    //start processing
-                //    var options = new StartOrchestrationOptions(callerId); //set caller id so can callback
-                //    //squeeze the Sky Juice!
-                //    var instanceId = await durableTaskClient.ScheduleNewOrchestrationInstanceAsync(methodName, inputData, options, CancellationToken.None); //should match caller ID
-                //}
-
-            }
-        }
+      
 
 
         public static async Task<T> CacheExecuteTask<T>(Func<Task<T>> generateChart, string callerId, string mimeType = "")

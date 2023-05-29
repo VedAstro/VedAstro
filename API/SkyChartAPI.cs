@@ -1,19 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Gif.Components;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.DurableTask;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using VedAstro.Library;
-
-namespace API
+﻿namespace API
 {
     public static class SkyChartAPI
     {

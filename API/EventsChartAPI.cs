@@ -2,13 +2,8 @@ using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.DurableTask.Client;
-using Microsoft.DurableTask;
-using System.Text.Json;
-using Newtonsoft.Json.Linq;
 using Time = VedAstro.Library.Time;
 using Azure.Storage.Blobs;
-using iText.Commons.Bouncycastle.Cert.Ocsp;
 using System.Net;
 
 namespace API

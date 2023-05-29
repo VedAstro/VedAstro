@@ -1750,34 +1750,74 @@ namespace API
 
         }
 
-        private static ConcurrentDictionary<PlanetName.PlanetNameEnum, string> PlanetIconMemoryCache = new ConcurrentDictionary<PlanetName.PlanetNameEnum, string>();
+        private static ConcurrentDictionary<string, string> PlanetIconMemoryCache = new ConcurrentDictionary<PlanetName.PlanetNameEnum, string>();
 
         /// <summary>
         /// creates a url to image that should exist in SkyChart folder, auto cached
         /// in memory cache for per instance only
         /// </summary>
-        private static async Task<string> GetPlanetIcon(PlanetName planet)
+        private static async Task<string> GetPlanetIcon(PlanetName planet, Time time)
         {
             string svgIconHttp = "";
-            PlanetIconMemoryCache.TryGetValue(planet.Name, out svgIconHttp);
 
-            //if no cache then get new
-            if (string.IsNullOrEmpty(svgIconHttp))
+            //SPECIAL FOR MOON SINCE SHE CHANGES EVERY DAY
+            //for moon special changing icon based on lunar day
+            if (planet.Name == PlanetName.PlanetNameEnum.Moon)
             {
-                var svgFileUrl = $"{APITools.Url.WebUrl}/images/SkyChart/{planet.Name.ToString().ToLower()}.svg";
+                //get moon lunar day to 
+                var lunarDay = AstronomicalCalculator.GetLunarDay(time).GetLunarDateNumber();
 
-                //makes it ready to be injected into another SVG
-                svgIconHttp = await APITools.GetSvgIconHttp(svgFileUrl, 45, 45);
+                //make url for specific lunar frame
+                var svgFileUrl = $"{APITools.Url.WebUrl}/images/SkyChart/{planet.Name.ToString().ToLower()}-{lunarDay}.svg";
 
-                //place in memory
-                PlanetIconMemoryCache[planet.Name] = svgIconHttp;
+                //check if icon already gotten before
+                PlanetIconMemoryCache.TryGetValue(svgFileUrl, out svgIconHttp); //note use with lunar date
+                
+                if (string.IsNullOrEmpty(svgIconHttp))
+                {
+
+                    //makes it ready to be injected into another SVG
+                    svgIconHttp = await APITools.GetSvgIconHttp(svgFileUrl, 45, 45);
+
+                    //place in memory
+                    PlanetIconMemoryCache[planet.Name.ToString()] = svgIconHttp;
+                }
+                else
+                {
+                    Console.WriteLine("PLANET ICON CACHE USED!");
+                }
+
+                return svgIconHttp ?? "";
+
+
             }
+
+            //ALL OTHER PLANETS
             else
             {
-                Console.WriteLine("PLANET ICON CACHE USED!");
+
+                //check if icon already gotten before
+                PlanetIconMemoryCache.TryGetValue(planet.Name.ToString(), out svgIconHttp);
+
+                //if no cache then get new
+                if (string.IsNullOrEmpty(svgIconHttp))
+                {
+                    var svgFileUrl = $"{APITools.Url.WebUrl}/images/SkyChart/{planet.Name.ToString().ToLower()}.svg";
+
+                    //makes it ready to be injected into another SVG
+                    svgIconHttp = await APITools.GetSvgIconHttp(svgFileUrl, 45, 45);
+
+                    //place in memory
+                    PlanetIconMemoryCache[planet.Name.ToString()] = svgIconHttp;
+                }
+                else
+                {
+                    Console.WriteLine("PLANET ICON CACHE USED!");
+                }
+
+                return svgIconHttp ?? "";
             }
 
-            return svgIconHttp ?? "";
 
         }
 

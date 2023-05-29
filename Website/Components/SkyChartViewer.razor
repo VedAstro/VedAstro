@@ -13,10 +13,16 @@
     @if (isReady)
     {
         @*BUTTON ROW*@
+        <div class="vstack gap-2 px-1 p-1 ms-1 rounded-3 border shadow d-flex  align-items-center">
+            <IconButton SmallSize="true"  TooltipText="Play" IconName="ph:play-bold" OnClickCallback="_jsRuntime.GoBack" />
+            <IconButton SmallSize="true" TooltipText="Previous" IconName="fluent:previous-24-filled" OnClickCallback="_jsRuntime.GoBack" />
+            <IconButton SmallSize="true" TooltipText="Next" IconName="fluent:next-24-filled" OnClickCallback="_jsRuntime.GoBack" />
+
+            <IconButton SmallSize="true" Outline="true" TooltipText="Print" IconName="flat-color-icons:print" OnClickCallback="_jsRuntime.GoBack"/>
+            <IconButton SmallSize="true" Outline="true" TooltipText="Save as Image" IconName="emojione:floppy-disk" OnClickCallback="_jsRuntime.GoBack"/>
+            <IconButton SmallSize="true" Outline="true" TooltipText="Embed in app or website" IconName="dashicons:embed-photo" OnClickCallback="_jsRuntime.GoBack"/>
+        </div>
         <div class="vstack gap-3">
-            <IconButton SmallSize="true" Outline="true" TooltipText="Print" IconName="flat-color-icons:print" OnClickCallback="_jsRuntime.GoBack" />
-            <IconButton SmallSize="true" Outline="true" TooltipText="Save as Image" IconName="emojione:floppy-disk" OnClickCallback="_jsRuntime.GoBack" />
-            <IconButton SmallSize="true" Outline="true" TooltipText="Embed in app or website" IconName="dashicons:embed-photo" OnClickCallback="_jsRuntime.GoBack" />
         </div>
     }
 </div>

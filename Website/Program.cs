@@ -80,6 +80,11 @@ namespace Website
             var navigation = webAssemblyHost.Services.GetRequiredService<NavigationManager>();
             AppData.Navigation = navigation;
 
+            foreach (var builderService in builder.Services) 
+            {
+                Console.WriteLine(builderService.ToString());
+            }
+
             //run like the wind, Bullseye!
             await webAssemblyHost.RunAsync();
         }

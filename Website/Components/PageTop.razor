@@ -37,7 +37,7 @@
             @*center the image in available space after header text (top right)*@
             <!-- Not visible in mobile, no space to joke around -->
             <div class="w-100 d-none d-md-block" style="max-width: @GR.W412px; text-align: center;">
-                <img src="images/@ImageName" style="width: 235px;" class=""/>
+                <img src="images/@ImageName" style="width: @(ImageWidth)px;" class=""/>
             </div>
         }
     </div>
@@ -64,6 +64,9 @@
 
 @code {
 
+    [Parameter]
+    public double ImageWidth { get; set; } = 235;
+
     /// <summary>
     /// setting custom css based on props
     /// </summary>
@@ -78,7 +81,7 @@
         {
             var charCount = DescriptionText.Length;
 
-            var finalWidth = charCount < 100 ? GR.W412px : GR.W667px;
+            var finalWidth = charCount < 120 ? GR.W412px : GR.W667px;
             
             return $" max-width:{finalWidth};";
         }

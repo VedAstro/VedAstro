@@ -191,13 +191,29 @@ namespace Website
         [JSInvokable]
         public static async Task<string> GetDataLogPayload(string dataValue)
         {
-            //get basic visitor data
-            var visitorXml = await GetVisitorDataXml();
+            try
+            {
+                //get basic visitor data
+                var visitorXml = await GetVisitorDataXml();
 
-            //add in button click data
-            visitorXml.Add(BranchXml, SourceXml, new XElement("Data", dataValue), Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+                //add in button click data
+                visitorXml.Add(BranchXml, SourceXml, new XElement("Data", dataValue), Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
 
-            return visitorXml.ToString();
+                return visitorXml.ToString();
+            }
+            catch (Exception e)
+            {
+                WebLogger.Error(e);
+
+                //get basic visitor data
+                var visitorXml = new XElement("Visitor");
+
+                //add in button click data
+                visitorXml.Add(BranchXml, SourceXml, new XElement("Data", dataValue), Tools.TimeStampSystemXml, Tools.TimeStampServerXml);
+
+                return visitorXml.ToString();
+            }
+
         }
 
 

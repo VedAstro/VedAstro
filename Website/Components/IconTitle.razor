@@ -5,37 +5,39 @@
 
 @*SIMPLE HEADING TITLE WITH NICELY POSITIONED ICON*@
 
-<div class="fw-bold hstack gap-2 d-flex" style="@MaxWidthCss">
-    @if (IsIconMode)
-    {
-        <Icon NextToText="true" IconName="@IconName" Size="@IconSize"/>
-    }
+@*extra div wrap so that parent hstack spacing does not break here *@
+<div>
+    <div class="fw-bold hstack gap-2 d-flex" style="@MaxWidthCss">
+        @if (IsIconMode)
+        {
+            <Icon NextToText="true" IconName="@IconName" Size="@IconSize"/>
+        }
 
-    @switch (TitleHolder.ToLower())
-    {
-        case "h1":
-            <h1 class="mt-2 me-auto">@Title @TitleHTML</h1>
-            break;
-        case "h2":
-            <h2 class="mt-2 me-auto">@Title @TitleHTML</h2>
-            break;
-        case "h3":
-            <h3 class="mt-2 me-auto">@Title @TitleHTML</h3>
-            break;
-        case "h4":
-            <h4 class="mt-2 me-auto">@Title @TitleHTML</h4>
-            break;
-        case "h5":
-            <h5 class="mt-2 me-auto">@Title @TitleHTML</h5>
-            break;
-        case "h6":
-            <h6 class="mt-2 me-auto">@Title @TitleHTML</h6>
-            break;
-    }
-    @ButtonRow
+        @switch (TitleHolder.ToLower())
+        {
+            case "h1":
+                <h1 class="mt-2 me-auto">@Title @TitleHTML</h1>
+                break;
+            case "h2":
+                <h2 class="mt-2 me-auto">@Title @TitleHTML</h2>
+                break;
+            case "h3":
+                <h3 class="mt-2 me-auto">@Title @TitleHTML</h3>
+                break;
+            case "h4":
+                <h4 class="mt-2 me-auto">@Title @TitleHTML</h4>
+                break;
+            case "h5":
+                <h5 class="mt-2 me-auto">@Title @TitleHTML</h5>
+                break;
+            case "h6":
+                <h6 class="mt-2 me-auto">@Title @TitleHTML</h6>
+                break;
+        }
+        @ButtonRow
+    </div>
+    <hr class="mt-1 mb-2" />
 </div>
-<hr class="mt-1 mb-2" />
-
 
 
 @code {

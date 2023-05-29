@@ -81,7 +81,7 @@ KEEP IT REAL
     private MarkupString DropDownOptionsHtml { get; set; } = new("");
     private const string NotSelectedPersonId = "0"; //needed to detect empty
     private string _selectedPersonId = NotSelectedPersonId;
-    private Person SelectedPerson { get; set; } = Person.Empty;
+    public Person SelectedPerson { get; set; } = Person.Empty;
 
     //PARAMETERS
 
@@ -260,6 +260,8 @@ KEEP IT REAL
 
         //save the selected person, we only use ID because in sync with id in URL
         SelectedPersonId = person.Id;
+
+        StateHasChanged();
     }
 
     private void OnClickHidePublic()

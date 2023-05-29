@@ -86,7 +86,7 @@ else
     private List<APIFunctionResult> astrologyCalcs;
     private List<APIFunctionResult> astronomyCalcs;
 
-    private SkyChartViewer skyChartViewer;
+    private SkyChartViewer? skyChartViewer;
     private Time finalTime = Time.Empty;
     private GeoLocation finalGeoLocation = GeoLocation.Empty;
     private TimeInputSimple _timeInput;
@@ -113,7 +113,7 @@ else
         finalTime = await _timeInput.GetTime(finalGeoLocation);
 
         //update sky chart
-        await skyChartViewer.Update(finalTime);
+        await skyChartViewer?.Update(finalTime);
 
         //get all methods that have only time as input
         astronomyCalcs = AutoCalculator.FindAndExecuteFunctions(Category.Astronomical, finalTime);

@@ -5,9 +5,9 @@
 
 <PageTitle>@_pageTitle</PageTitle>
 
-<PageTop ImageName="horoscope-banner.png"
+<PageTop ImageWidth="@(GR.W255+GR.W97)" ImageName="horoscope-banner.png"
          Title="Horoscope"
-         DescriptionText="Astrological predictions of a person's horoscope.Over +370 planetary combinations are checked.">
+         DescriptionText="Insight into a peron's character, nature and general future. Over +370 planetary combinations are used.">
 </PageTop>
 
 <div class="gap-3" style="max-width: @GR.W824px;">
@@ -17,10 +17,8 @@
     <div class="d-flex flex-wrap">
         <div class="vstack gap-3">
             <PersonSelectorBox @ref="_peopleSelectorBox" />
-            <IconButton IconName="uim:process" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"></IconButton>
+            <IconButton IconName="uim:process" Color="success" ButtonText="Calculate" OnClickCallback="CalculateButtonClicked"/>
         </div>
-        @*        <InfoBox Title="Pro Tip" Description="Combine matched references with astrological data to make final accurate predictions" IconName="flat-color-icons:idea" />
-        *@
     </div>
 
 

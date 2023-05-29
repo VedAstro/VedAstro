@@ -46,7 +46,7 @@ namespace Website
             }
             //above code will fail when called during app start, because haven't load lib
             //as such catch failure and silently ignore
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine($"BLZ: ShowAlert Not Yet Load Lib Silent Fail!");
             }
@@ -145,6 +145,17 @@ namespace Website
         /// </summary>
         public static async Task ShowLoading(this IJSRuntime jsRuntime, int delayMs = 300)
         {
+            var loadingBoxOptions = @"
+
+                <div style=""width: fit-content;"">
+                    <img src=""images/loading-animation-progress-transparent.gif"">
+                    <div class=""my-1 d-flex justify-content-center gap-5"">
+                        <button onclick=""window.location.href=window.location.href"" style="" height:37.1px; width: fit-content;"" class=""btn-sm iconOnlyButton btn-outline-danger btn"" ><svg xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"" aria-hidden=""true"" role=""img"" class=""iconify iconify--ooui"" width=""25"" height=""25"" preserveAspectRatio=""xMidYMid meet"" viewBox=""0 0 20 20"" data-icon=""ooui:reload"" data-width=""25""><path fill=""currentColor"" d=""M15.65 4.35A8 8 0 1 0 17.4 13h-2.22a6 6 0 1 1-1-7.22L11 9h7V2z""></path></svg></button><!--!-->
+                        <button onclick=""window.open('https://vedastro.org')"" style="" height:37.1px; width: fit-content;"" class=""btn-sm iconOnlyButton btn-outline-primary btn"" ><svg xmlns=""http://www.w3.org/2000/svg"" xmlns:xlink=""http://www.w3.org/1999/xlink"" aria-hidden=""true"" role=""img"" class=""iconify iconify--iconoir"" width=""25"" height=""25"" preserveAspectRatio=""xMidYMid meet"" viewBox=""0 0 24 24"" data-icon=""iconoir:new-tab"" data-width=""25""><g fill=""none"" stroke=""currentColor"" stroke-width=""1.5""><path d=""M2 19V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z""></path><path stroke-linecap=""round"" stroke-linejoin=""round"" d=""M2 7h20M9 14h3m3 0h-3m0 0v-3m0 3v3""></path></g></svg></button>
+                    </div>
+                </div>
+";
+
             var alertData = new
             {
                 showConfirmButton = false,
@@ -154,8 +165,7 @@ namespace Website
                 allowEscapeKey = false,
                 stopKeydownPropagation = true,
                 keydownListenerCapture = true,
-                html = "<img src=\"images/loading-animation-progress-transparent.gif\" />"
-
+                html = loadingBoxOptions
             };
 
             //log it
@@ -171,6 +181,7 @@ namespace Website
             //let others know loading box has popped
             AppData.IsShowLoading = true;
         }
+
 
         public static void HideLoading(this IJSRuntime jsRuntime)
         {
@@ -220,7 +231,7 @@ namespace Website
             {
                 await jsRuntime.InvokeVoidAsync(JS.tippy, cssSelector, tooltipData);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //not important ignore if fail
                 Console.WriteLine("BLZ: Tippy Silent Fail!");

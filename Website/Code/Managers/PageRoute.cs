@@ -88,6 +88,7 @@
         public const string Remedy = "/Remedy";
         public const string Download = "/Download";
         public const string VisitorList = "/VisitorList";
+        public const string VisitorListOld = "/VisitorListOld";
         public const string FAQ = "/FAQ";
         public const string TaskEditor = "/TaskEditor";
         public const string TaskEditorParam = "/TaskEditor/{TaskHash}";

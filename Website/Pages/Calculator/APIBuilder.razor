@@ -254,7 +254,7 @@
 
         //data property
         //if select all, leave empty as for API to give all
-        finalCelesName = finalCelesName == "All" ? "" : finalCelesName;
+        //finalCelesName = finalCelesName == "All" ? "All" : finalCelesName;
         finalCelesProperty = finalCelesProperty == "All" ? "" : finalCelesProperty;
 
         //STAGE 2 :
@@ -284,10 +284,10 @@
         }
         else
         {
-            var x = string.IsNullOrEmpty(finalCelesProperty) ? "" : $"/{finalCelesProperty}";
-            var xx = string.IsNullOrEmpty(SelectedBodyType) ? "" : $"/{SelectedBodyType}";
-            var xxd = string.IsNullOrEmpty(finalCelesName) ? "" : $"/{finalCelesName}";
-            var celestialBodyData = x+xx+xxd;
+            var celesPropertyStr = string.IsNullOrEmpty(finalCelesProperty) ? "" : $"/{finalCelesProperty}"; // sign, angle
+            var selectedBodyTypeStr = string.IsNullOrEmpty(SelectedBodyType) ? "" : $"/{SelectedBodyType}"; //planet, house 
+            var finalCelesNameStr = string.IsNullOrEmpty(finalCelesName) ? "" : $"/{finalCelesName}"; // sun, moon, house 1
+            var celestialBodyData = selectedBodyTypeStr + finalCelesNameStr + celesPropertyStr;
             placeHolder = domain + location + time + celestialBodyData;
         }
 

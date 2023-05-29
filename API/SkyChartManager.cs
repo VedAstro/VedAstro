@@ -1750,7 +1750,7 @@ namespace API
 
         }
 
-        private static ConcurrentDictionary<string, string> PlanetIconMemoryCache = new ConcurrentDictionary<PlanetName.PlanetNameEnum, string>();
+        private static ConcurrentDictionary<string, string> PlanetIconMemoryCache = new ConcurrentDictionary<string, string>();
 
         /// <summary>
         /// creates a url to image that should exist in SkyChart folder, auto cached

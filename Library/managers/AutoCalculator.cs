@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
@@ -13,7 +15,83 @@ namespace VedAstro.Library
         /// <summary>
         /// based on number and type of params all available methods are taken and 
         /// </summary>
-        public static List<APIFunctionResult> ExecuteFunctions(Category calcCategory, params object[] paramInput)
+        public static List<APIFunctionResult> FindAndExecuteFunctions(Category calcCategory, params object[] paramInput)
+        {
+
+            var foundCalcs = FindCalcs(calcCategory, paramInput);
+
+            //STAGE 2: EXECUTE
+            var returnList = ExecuteCals(foundCalcs, paramInput);
+
+
+            //STAGE 3: HALLELUJAH
+            return returnList;
+
+        }
+
+        /// <summary>
+        /// Given a list of already found calcs will execute it
+        /// </summary>
+        public static JToken ExecuteFunctionsJSON(string methodName, params object[] paramInput)
+        {
+            var methodInfo = Tools.MethodNameToMethodInfo(methodName);
+            var list = new List<MethodInfo> { methodInfo };
+
+            //STAGE 2: EXECUTE
+            var returnList = ExecuteCals(list, paramInput);
+
+            var parsed = APIFunctionResult.ToJsonList(returnList);
+
+            return parsed;
+        }
+
+        public static JToken FindAndExecuteFunctionsJSON(Category calcCategory, params object[] paramInput)
+        {
+            var raw = FindAndExecuteFunctions(calcCategory, paramInput);
+
+            var parsed = APIFunctionResult.ToJsonList(raw);
+
+            return parsed;
+        }
+
+
+
+
+        private static List<APIFunctionResult> ExecuteCals(IEnumerable<MethodInfo> foundCalcs, params object[] paramInput)
+        {
+            var returnList = new List<APIFunctionResult>();
+            foreach (var calc in foundCalcs)
+            {
+                //get the params ordered nicely to match methods
+                var paramOrder = OrderParamToMatch(calc, paramInput);
+
+                object rawResult;
+                try //likely to fail, don't let one stop the train
+                {
+                    rawResult = calc?.Invoke(null, paramOrder);
+                }
+                catch (Exception e)
+                {
+                    rawResult = e; //pass in failure to make easy detect by caller
+                }
+
+                //get correct name for this method, API friendly
+                var apiSpecialName = GetApiSpecialName(calc);
+
+                //add to main list
+                var temp = new APIFunctionResult(apiSpecialName, rawResult);
+                returnList.Add(temp);
+
+            }
+
+
+            return returnList;
+        }
+
+        /// <summary>
+        /// given a category will find those method's info only
+        /// </summary>
+        private static IEnumerable<MethodInfo> FindCalcs(Category calcCategory, params object[] paramInput)
         {
             //STAGE 1: FIND
             //get the data needed to 
@@ -36,38 +114,14 @@ namespace VedAstro.Library
             Console.WriteLine($"FOUND CALCS :{aToZOrder.Count()}");
 #endif
 
-            //STAGE 2: EXECUTE
-            var returnList = new List<APIFunctionResult>();
-            foreach (var calc in aToZOrder)
-            {
-                //get the params ordered nicely to match methods
-                var paramOrder = OrderParamToMatch(calc, paramInput);
-                
-                object rawResult;
-                try //likely to fail, don't let one stop the train
-                {
-                    rawResult = calc?.Invoke(null, paramOrder);
-                }
-                catch(Exception e)
-                {
-                    rawResult = e; //pass in failure to make easy detect by caller
-                }
-
-                //get correct name for this method, API friendly
-                var apiSpecialName = GetApiSpecialName(calc);
-
-                //add to main list
-                var temp = new APIFunctionResult(apiSpecialName, rawResult);
-                returnList.Add(temp);
-
-            }
-
-
-            //STAGE 3: HALLELUJAH
-            return returnList;
+            return aToZOrder;
 
         }
 
+
+
+
+        //------------------------
         /// <summary>
         /// checks if a calc matches the category, handles not specified as well
         /// </summary>

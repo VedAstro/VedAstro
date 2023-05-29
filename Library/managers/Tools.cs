@@ -1452,9 +1452,6 @@ namespace VedAstro.Library
             var calculatorClass = typeof(AstronomicalCalculator);
             var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
 
-            //place the data from all possible methods nicely in JSON
-            var rootPayloadJson = new JObject(); //each call below adds to this root
-
             //if method not found, possible outdated API call link, end call here
             if (foundMethod == null)
             {
@@ -1939,6 +1936,18 @@ namespace VedAstro.Library
 
             //return data as JSON as expected from API 
             return JObject.Parse(dataReturned);
+        }
+
+        /// <summary>
+        /// for open api AstronomicalCalculator
+        /// </summary>
+        public static MethodInfo MethodNameToMethodInfo(string methodName)
+        {
+            var calculatorClass = typeof(AstronomicalCalculator);
+            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
+
+            return foundMethod;
+
         }
     }
 

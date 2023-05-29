@@ -105,7 +105,7 @@ namespace API
 
                 border = GetBorderSvg((int)widthPx, (int)heightPx);
 
-                content = await GetAllPlanetLineIcons(planetList, widthPx, 120); //130px from top is planet icon
+                content = await GetAllPlanetLineIcons(planetList, widthPx, 120, time); //130px from top is planet icon
 
                 //note: if width & height not hard set, parent div clips it
                 var svgTotalHeight = heightPx;//todo for now hard set, future use: verticalYAxis;
@@ -1577,7 +1577,7 @@ namespace API
 
         }
 
-        private static async Task<string> GetAllPlanetLineIcons(List<PlanetLongitude> planetList, double widthPx, int iconStartYAxis)
+        private static async Task<string> GetAllPlanetLineIcons(List<PlanetLongitude> planetList, double widthPx, int iconStartYAxis, Time time)
         {
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
@@ -1621,7 +1621,7 @@ namespace API
                 var confirmedOutput = 360.0;
                 double yy = input / confirmedOutput;
                 var transformedxAxis = positionX * yy;
-                var generateLifeEventLine = await GetPlanetLineIcon(planet, adjustedLineHeight, transformedxAxis);
+                var generateLifeEventLine = await GetPlanetLineIcon(planet, adjustedLineHeight, transformedxAxis, time);
 
                 //save it under its row with others
                 while (rowNumber > (listRowData.Count - 1)) { listRowData.Add(""); } //add empty row if 1st
@@ -1722,7 +1722,7 @@ namespace API
             }
         }
 
-        private static async Task<string> GetPlanetLineIcon(PlanetLongitude planet, int lineHeight, double positionX)
+        private static async Task<string> GetPlanetLineIcon(PlanetLongitude planet, int lineHeight, double positionX, Time time)
         {
 
             //based on length of event name make the background
@@ -1730,7 +1730,7 @@ namespace API
             var planetName = planet.GetPlanetName().ToString();
             var backgroundWidth = APITools.GetTextWidthPx(planetName);
 
-            var planetIcon = await GetPlanetIcon(planet.GetPlanetName());
+            var planetIcon = await GetPlanetIcon(planet.GetPlanetName(), time);
 
             int iconYAxis = lineHeight; //start icon at end of line
             var iconXAxis = $"-{backgroundWidth / 2}"; //use negative to move center under main line

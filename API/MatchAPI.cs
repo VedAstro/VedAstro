@@ -11,6 +11,12 @@ namespace API
     /// </summary>
     public class MatchAPI
     {
+        //NEW
+
+
+
+        //------------
+
         //PUBLIC API
 
         [Function(nameof(Match))]
@@ -48,7 +54,6 @@ namespace API
                 return APITools.FailMessageJson(e, incomingRequest);
             }
         }
-
 
         /// <summary>
         /// called by match report page
@@ -178,18 +183,28 @@ namespace API
             }
         }
 
-        [Function("GetAllMatchForPerson")]
-        public static async Task<HttpResponseData> GetAllMatchForPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequestData incomingRequest, string personId)
+        [Function(nameof(FindMatch))]
+        public static async Task<HttpResponseData> FindMatch([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "FindMatch/PersonId/{personId}")] HttpRequestData incomingRequest, string personId)
         {
-            //todo needs work person ID  is not being fed in
 
             var person = await APITools.GetPersonById(personId);
 
             var personList = await GetAllPersonByMatchStrength(person);
 
-            var text = Tools.ListToString(personList);
+            var returnJson = new JArray();
+            foreach (var personKutaScore in personList)
+            {
+                //wrap data nicely
+                var wrapped = new JObject();
+                wrapped["PersonId"] = personKutaScore.Person.Id;
+                wrapped["PersonName"] = personKutaScore.Person.Name;
+                wrapped["KutaScore"] = personKutaScore.KutaScore;
 
-            return APITools.PassMessage(text, incomingRequest);
+                //add to final list
+                returnJson.Add(wrapped);
+            }
+
+            return APITools.PassMessageJson(returnJson, incomingRequest);
         }
 
 
@@ -328,17 +343,26 @@ namespace API
             return SortedList;
         }
 
-        private static async Task<List<Person>> GetAllPersonByMatchStrength(Person inputPerson)
+        /// <summary>
+        /// Gets all people ordered by kuta total strength 0 is highest kuta score
+        /// note : chart created to make score is discarded
+        /// </summary>
+        private static async Task<List<PersonKutaScore>> GetAllPersonByMatchStrength(Person inputPerson)
         {
             var resultList = new List<MatchReport>();
 
+            //set input person in correct gender order
             var inputPersonIsMale = inputPerson.Gender == Gender.Male;
 
-            var personList = await APITools.GetAllPersonList();
+            //get everybody
+            var everybody = await APITools.GetAllPersonList();
 
             //this makes sure each person is cross checked against this person correctly
-            foreach (var personMatch in personList)
+            foreach (var personMatch in everybody)
             {
+                //skip own record
+                if (personMatch.Equals(inputPerson)) { continue; }
+
                 //add report to list
                 MatchReport report;
 
@@ -359,14 +383,17 @@ namespace API
                 resultList.Add(report);
             }
 
+            //SORT
             //order the list by strength, highest at 0 index
             var resultListOrdered = resultList.OrderBy(o => o.KutaScore).ToList();
 
-            //get needed details
-
-            List<Person> personList2;
-            if (inputPersonIsMale) { personList2 = resultListOrdered.Select(x => x.Female).ToList(); }
-            else { personList2 = resultListOrdered.Select(x => x.Male).ToList(); }
+            //get needed details, person name and score to them
+            List<PersonKutaScore> personList2;
+            //if male put in female
+            if (inputPersonIsMale) { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Female, x.KutaScore)).ToList(); }
+            
+            //if female put in male
+            else { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Male,x.KutaScore)).ToList(); }
 
             return personList2;
         }
@@ -402,6 +429,8 @@ namespace API
             return goodReports;
         }
     }
+
+    public record PersonKutaScore(Person Person, double KutaScore);
 
     public class AppInstance
     {

@@ -192,6 +192,9 @@
         get => _selectedBodyType;
         set
         {
+            //log this, don't await to reduce lag
+            WebLogger.Data($"Selected Body:{value}");
+
             _selectedBodyType = value;
 
             //based on body type only show relevant related fields

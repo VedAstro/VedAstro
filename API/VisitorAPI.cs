@@ -14,6 +14,13 @@ namespace API
                 //get new visitor data out of incoming request 
                 var newVisitorXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 
+                //if user id local skip
+                var isLocal = newVisitorXml.Element("UserId")?.Value == "102111269113114363117";
+                if (isLocal)
+                {
+                    return APITools.PassMessage(incomingRequest);
+                }
+
                 //add new visitor to main list
                 await APITools.AddXElementToXDocumentAzure(newVisitorXml, APITools.VisitorLogFile, APITools.BlobContainerName);
 

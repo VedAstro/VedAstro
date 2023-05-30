@@ -429,7 +429,7 @@ namespace VedAstro.Library
             //UNDERLYING FUNCTION
             List<PlanetName> _getAllPlanetOrderedByStrength()
             {
-                var planetStrenghtList = new Dictionary<double, PlanetName>();
+                var planetStrenghtList = new Dictionary<PlanetName, double>();
 
                 //create a list with planet names & its strength (unsorted)
                 foreach (var planet in PlanetName.All9Planets)
@@ -441,23 +441,15 @@ namespace VedAstro.Library
                     var strengthAfterLimit = strength / getLimit(planet);
 
                     //place in list with planet name
-                    planetStrenghtList[strengthAfterLimit] = planet;
-
+                    planetStrenghtList.Add(planet, strengthAfterLimit);
                 }
 
 
                 //sort that list from strongest planet to weakest planet
-                var sortedList = planetStrenghtList.Keys.OrderByDescending(item => item);
+                var sortedList= planetStrenghtList.OrderByDescending(item => item.Value);
+                var nameOnlyList = sortedList.Select(x => x.Key).ToList();
 
-                var sortedArray = new List<PlanetName>();
-                foreach (var key in sortedList)
-                {
-                    //strongest planet added first
-                    sortedArray.Add(planetStrenghtList[key]);
-                }
-
-                return sortedArray;
-
+                return nameOnlyList;
 
                 /*--------------FUNCTIONS----------------*/
 

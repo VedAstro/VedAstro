@@ -26,6 +26,8 @@
     <hr />
 
     <SkyChartViewer @ref="skyChartViewer" />
+    
+    <PlanetChart @ref="planetChart"/>
 
     @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
     <HoroscopeInfoView @ref="_horoscopeInfoView" />
@@ -55,6 +57,8 @@
 
 
 @code {
+
+    private PlanetChart planetChart;
 
     private SkyChartViewer skyChartViewer;
 
@@ -151,6 +155,9 @@
 
         //update sky chart
         await skyChartViewer.Update(_selectedPerson.BirthTime);
+
+        //update planet chart
+         planetChart.UpdateTime(_selectedPerson.BirthTime);
 
         //inject selected person into component to show horoscope data
         await _horoscopeInfoView.SetPerson(_selectedPerson);

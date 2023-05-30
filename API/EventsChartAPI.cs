@@ -44,7 +44,7 @@ namespace API
 
             try
             {
-                //data comes out of caller, basic on how the chart should be
+                //data comes out of caller, basic spec on how the chart should be
                 var requestJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
 
                 //check if the specs given is correct and readable

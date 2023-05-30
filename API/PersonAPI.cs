@@ -42,7 +42,6 @@ namespace API
         }
 
 
-
         /// <summary>
         /// Gets person list
         /// </summary>
@@ -58,11 +57,10 @@ namespace API
                 var parsedRequest = new CallerInfo(visitorId, userId);
 
                 //PREPARE THE CALL
-                Func<Task<string>> generateChart = () => _getPersonList(parsedRequest);
-                Func<Task<BlobClient>> cacheExecuteTask3 = () => APITools.ExecuteAndSaveToCache(generateChart, parsedRequest.CallerId);
+                Func<Task<BlobClient>> getPersonList = () => APITools.ExecuteAndSaveToCache(() => _getPersonList(parsedRequest), parsedRequest.CallerId);
 
                 //CACHE MECHANISM
-                var httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask3, parsedRequest, req);
+                var httpResponseData = await AzureCache.CacheExecute(getPersonList, parsedRequest, req);
 
                 return httpResponseData;
 
@@ -142,6 +140,7 @@ namespace API
 
         }
 
+
         [Function(nameof(AddPerson))]
         public static async Task<HttpResponseData> AddPerson(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "AddPerson/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData req,
@@ -158,6 +157,10 @@ namespace API
             //note: inside new person xml already contains user id
             var personJson = await APITools.ExtractDataFromRequestJson(req);
             var newPerson = Person.FromJson(personJson);
+
+            //possible old cache of person with same id lived, so clear cache if any
+            //delete data related to person (NOT USER, PERSON PROFILE)
+            await AzureCache.DeleteStuffRelatedToPerson(newPerson);
 
             //add new person to main list
             await APITools.AddXElementToXDocumentAzure(newPerson.ToXml(), APITools.PersonListFile, APITools.BlobContainerName);
@@ -193,6 +196,9 @@ namespace API
                 var isOwner = Tools.IsUserIdMatch(updatedPerson.UserIdString, parsedRequest.CallerId);
                 if (isOwner)
                 {
+                    //delete data related to person (NOT USER, PERSON PROFILE)
+                    await AzureCache.DeleteStuffRelatedToPerson(updatedPerson);
+
                     //save a copy of the original person record in recycle bin, just in-case accidental update
                     var originalPerson = await APITools.GetPersonById(updatedPerson.Id);
                     await APITools.AddXElementToXDocumentAzure(originalPerson.ToXml(), APITools.RecycleBinFile, APITools.BlobContainerName);
@@ -245,12 +251,16 @@ namespace API
             {
                 //get the person record that needs to be deleted
                 var personToDelete = await APITools.FindPersonXMLById(personId);
+                var personParsed = Person.FromXml(personToDelete);
+
 
                 //only owner can delete so make sure here
-                var personParsed = Person.FromXml(personToDelete);
                 var isOwner = Tools.IsUserIdMatch(personParsed.UserIdString, parsedRequest.CallerId);
                 if (isOwner)
                 {
+                    //delete data related to person (NOT USER, PERSON PROFILE)
+                    await AzureCache.DeleteStuffRelatedToPerson(personParsed);
+
                     //add deleted person to recycle bin 
                     await APITools.AddXElementToXDocumentAzure(personToDelete, APITools.RecycleBinFile, APITools.BlobContainerName);
 

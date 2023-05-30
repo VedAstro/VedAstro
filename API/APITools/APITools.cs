@@ -950,7 +950,6 @@ namespace API
             Console.WriteLine($"NO CACHE! RUNNING COMPUTE : {callerId}");
 #endif
 
-
             BlobClient? chartBlobClient;
 
             try
@@ -960,6 +959,7 @@ namespace API
 
                 //squeeze the Sky Juice!
                 var chartBytes = await generateChart.Invoke();
+
                 //save for future
                 chartBlobClient = await AzureCache.Add(callerId, chartBytes, mimeType);
 

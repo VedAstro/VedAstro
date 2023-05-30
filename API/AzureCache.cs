@@ -4,6 +4,7 @@ using System.Text;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
+using VedAstro.Library;
 
 namespace API
 {
@@ -141,10 +142,7 @@ namespace API
             var result = await blobClient.DeleteIfExistsAsync();
 
             //if result unexpected raise alarm
-            if (result?.Value == false)
-            {
-                Console.WriteLine($"WARNING! FILE DID NOT EXIST : {callerId}");
-            }
+            if (result?.Value == false) { APILogger.Error($"WARNING! FILE DID NOT EXIST : {callerId}"); }
         }
 
         /// <summary>
@@ -216,6 +214,25 @@ namespace API
 
 
 
+            }
+        }
+
+        /// <summary>
+        /// clears cache of person chart after person update or delete
+        /// </summary>
+        public static async Task DeleteStuffRelatedToPerson(Person newPerson)
+        {
+            //if empty id, end here
+            if (Person.Empty.Equals(newPerson)) { return;}
+
+            //person is placed infront if that cache belongs to that person
+            //as such get all cache such way and delete
+            var foundCaches =  blobContainerClient.GetBlobs(BlobTraits.All, BlobStates.None, newPerson.Id);
+
+            //delete all cache
+            foreach (var cache in foundCaches)
+            {
+                await blobContainerClient.DeleteBlobIfExistsAsync(cache.Name, DeleteSnapshotsOption.None);
             }
         }
     }

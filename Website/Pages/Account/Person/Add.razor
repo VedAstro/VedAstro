@@ -12,42 +12,37 @@
     </Description>
 </PageTop>
 
-
-@*show loading first*@
-@if (NothingToShow)
-{
+@*show loading first, note done by style because need element alive*@
+<div class="@(!NothingToShow?"d-none":"")">
     @AppData.LoadingImage
-}
-else
-{
-    <div class="d-flex flex-wrap">
-        <div class="vstack gap-3 me-5 mb-4" style="max-width:@GR.W412px">
-            <div>
-                <label>Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.PrivateProfileName" /></label>
-                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
-            </div>
-            <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
-            <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
-            <div>
-                <label>
-                    Gender
-                    <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender" />
-                </label>
-                <select @bind="_genderInput" class="form-control">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                </select>
-            </div>
-            <div class="hstack gap-4">
-                <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-                <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton" />
-            </div>
-        </div>
-        @*PRIVATE DATA MESSAGE*@
-        <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
-    </div>
-}
+</div>
 
+<div class="d-flex flex-wrap @(NothingToShow?"d-none":"")">
+    <div class="vstack gap-3 me-5 mb-4" style="max-width:@GR.W412px">
+        <div>
+            <label>Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.PrivateProfileName" /></label>
+            <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+        </div>
+        <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
+        <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
+        <div>
+            <label>
+                Gender
+                <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender" />
+            </label>
+            <select @bind="_genderInput" class="form-control">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+        <div class="hstack gap-4">
+            <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton" />
+        </div>
+    </div>
+    @*PRIVATE DATA MESSAGE*@
+    <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
+</div>
 
 
 @code {
@@ -83,7 +78,7 @@ else
     private async Task _OnClickSubmitButton()
     {
         await _jsRuntime.ShowLoading();
-        NothingToShow = true; //compensate for multiple popups
+        NothingToShow = true; //compensate for multiple popups, hides the input elm via css
 
 
         //only continue if passed input field validation
@@ -92,6 +87,8 @@ else
         StateHasChanged();//needed to make change appear instantly, work
 
         //make a new person from the details in the input
+        //NOTE : element has to be in DOM when called to get date info from calendar
+        //      hence the the use of css to hide loading
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server

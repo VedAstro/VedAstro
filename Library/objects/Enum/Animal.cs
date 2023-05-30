@@ -2,7 +2,7 @@
 {
     //simple type to hold animal names
     //used in yoni calculations
-    public enum Animal
+    public enum AnimalName
     {
         Horse = 1,
         Elephant = 2,

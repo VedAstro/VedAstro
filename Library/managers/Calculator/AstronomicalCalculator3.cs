@@ -5,8 +5,6 @@ using SwissEphNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Linq;
-using VedAstro.Library;
 
 namespace VedAstro.Library
 {
@@ -2958,50 +2956,86 @@ namespace VedAstro.Library
             return returnList;
 
         }
-    }
 
-}
-
-/// <summary>
-/// Represents the mini strengths that mae the final strength of a house
-/// </summary>
-public class HouseSubStrength : IToJson
-{
-    public string Name = "";
-
-    public Dictionary<HouseName, double> Power { get; }
-
-    public HouseSubStrength(Dictionary<HouseName, double> power, string name)
-    {
-        Power = power;
-        Name = name;
-    }
-
-
-    public JObject ToJson()
-    {
-        var returnList = new JArray();
-
-        //add into a list for each house
-        foreach (var houseData in Power)
+        public static string GetAstralBodyPrediction(Person person)
         {
-            //pack data nicely
-            var temp = new JObject();
-            temp["House"] = (int)houseData.Key; //show as number
-            temp["Strength"] = houseData.Value; //show as number
+            var finalPrediction = "";
 
-            Console.WriteLine(temp.ToString());
+            var birthConst = AstronomicalCalculator.GetMoonConstellation(person.BirthTime);
+            var animal = AstronomicalCalculator.GetAnimal(birthConst.GetConstellationName());
 
-            //add to main list
-            returnList.Add(temp);
+            finalPrediction += animal.ToString();
+
+            return finalPrediction;
         }
 
-        //send list on its way
-        var wrap = new JObject();
-        wrap.Add(returnList);
+        /// <summary>
+        /// Given a constellation will give animal with sex, used for yoni kuta calculations
+        /// and body appearance prediction
+        /// </summary>
+        public static ConstellationAnimal GetAnimal(ConstellationName sign)
+        {
+            switch (sign)
+            {
+                case ConstellationName.Aswini:
+                    return new ConstellationAnimal("Male", AnimalName.Horse);
+                case ConstellationName.Satabhisha:
+                    return new ConstellationAnimal("Female", AnimalName.Horse);
+                case ConstellationName.Bharani:
+                    return new ConstellationAnimal("Male", AnimalName.Elephant);
+                case ConstellationName.Revathi:
+                    return new ConstellationAnimal("Female", AnimalName.Elephant);
+                case ConstellationName.Pushyami:
+                    return new ConstellationAnimal("Male", AnimalName.Sheep);
+                case ConstellationName.Krithika:
+                    return new ConstellationAnimal("Female", AnimalName.Sheep);
+                case ConstellationName.Rohini:
+                    return new ConstellationAnimal("Male", AnimalName.Serpent);
+                case ConstellationName.Mrigasira:
+                    return new ConstellationAnimal("Female", AnimalName.Serpent);
+                case ConstellationName.Moola:
+                    return new ConstellationAnimal("Male", AnimalName.Dog);
+                case ConstellationName.Aridra:
+                    return new ConstellationAnimal("Female", AnimalName.Dog);
+                case ConstellationName.Aslesha:
+                    return new ConstellationAnimal("Male", AnimalName.Cat);
+                case ConstellationName.Punarvasu:
+                    return new ConstellationAnimal("Female", AnimalName.Cat);
+                case ConstellationName.Makha:
+                    return new ConstellationAnimal("Male", AnimalName.Rat);
+                case ConstellationName.Pubba:
+                    return new ConstellationAnimal("Female", AnimalName.Rat);
+                case ConstellationName.Uttara:
+                    return new ConstellationAnimal("Male", AnimalName.Cow);
+                case ConstellationName.Uttarabhadra:
+                    return new ConstellationAnimal("Female", AnimalName.Cow);
+                case ConstellationName.Swathi:
+                    return new ConstellationAnimal("Male", AnimalName.Buffalo);
+                case ConstellationName.Hasta:
+                    return new ConstellationAnimal("Female", AnimalName.Buffalo);
+                case ConstellationName.Vishhaka:
+                    return new ConstellationAnimal("Male", AnimalName.Tiger);
+                case ConstellationName.Chitta:
+                    return new ConstellationAnimal("Female", AnimalName.Tiger);
+                case ConstellationName.Jyesta:
+                    return new ConstellationAnimal("Male", AnimalName.Hare);
+                case ConstellationName.Anuradha:
+                    return new ConstellationAnimal("Female", AnimalName.Hare);
+                case ConstellationName.Poorvashada:
+                    return new ConstellationAnimal("Male", AnimalName.Monkey);
+                case ConstellationName.Sravana:
+                    return new ConstellationAnimal("Female", AnimalName.Monkey);
+                case ConstellationName.Poorvabhadra:
+                    return new ConstellationAnimal("Male", AnimalName.Lion);
+                case ConstellationName.Dhanishta:
+                    return new ConstellationAnimal("Female", AnimalName.Lion);
+                case ConstellationName.Uttarashada:
+                    return new ConstellationAnimal("Male", AnimalName.Mongoose);
 
-        return wrap;
+
+
+                default: throw new Exception("");
+            }
+        }
     }
-
 }
-

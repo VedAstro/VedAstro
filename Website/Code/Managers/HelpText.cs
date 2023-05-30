@@ -7,7 +7,7 @@
     public static class HelpText
     {
         public const string GeoLocationName = @"Enter city or state name, will auto detect location";
-        public const string DasaTimeRange = @"Select time to show in Dasa report";
+        public const string DasaTimeRange = @"Start and end time for chart";
         public const string Gender = @"Gender is used in predicting marriage compatibility and horoscope";
         public const string PrivateProfileName = @"Use unique names for easy sorting later";
         public const string PersonAdvanced = @"This is optional";

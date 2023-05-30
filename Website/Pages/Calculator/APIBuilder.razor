@@ -221,6 +221,13 @@
                     _jsRuntime.Hide(housePropertySelector);
                     _jsRuntime.Hide(planetPropertySelector);
                     break;
+                //if none above then hide all
+                default:
+                    _jsRuntime.Hide(houseNameSelector);
+                    _jsRuntime.Hide(planetNameSelector);
+                    _jsRuntime.Hide(housePropertySelector);
+                    _jsRuntime.Hide(planetPropertySelector);
+                    break;
             }
         }
     }
@@ -233,7 +240,7 @@
     /// <returns></returns>
     private async Task OnClickGenerateButton()
     {
-        await _jsRuntime.ShowLoading(); 
+        await _jsRuntime.ShowLoading();
 
         //only continue if passed input field validation
         if (!(await IsValidationPassed())) { return; }
@@ -285,7 +292,7 @@
         else
         {
             var celesPropertyStr = string.IsNullOrEmpty(finalCelesProperty) ? "" : $"/{finalCelesProperty}"; // sign, angle
-            var selectedBodyTypeStr = string.IsNullOrEmpty(SelectedBodyType) ? "" : $"/{SelectedBodyType}"; //planet, house 
+            var selectedBodyTypeStr = string.IsNullOrEmpty(SelectedBodyType) ? "" : $"/{SelectedBodyType}"; //planet, house
             var finalCelesNameStr = string.IsNullOrEmpty(finalCelesName) ? "" : $"/{finalCelesName}"; // sun, moon, house 1
             var celestialBodyData = selectedBodyTypeStr + finalCelesNameStr + celesPropertyStr;
             placeHolder = domain + location + time + celestialBodyData;

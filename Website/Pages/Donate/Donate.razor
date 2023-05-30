@@ -8,9 +8,9 @@
 </PageTop>
  *@
 
-<PageTop ImageName="join-our-family.svg"
+<PageTop 
          Title="Support us"
-         DescriptionText="Help pay bills, maintain servers and improve this project. Your money will go for the benefit of all people. Opportunity for good karma.">
+         DescriptionText="Help pay bills, maintain servers and improve the project. Your money will go for the benefit of all people. Opportunity for good karma.">
 </PageTop>
 
 
@@ -23,12 +23,33 @@
     @*STACK BOXES ON RIGHT*@
     <div class="ms-md-5">
         <div class="gap-3">
-            <p>
-                Free Gifts:
-            </p>
-            <InfoBox MaxWidth="365" FullWidth="@true" Title="Full Life Chart" Description="Written full life analysis by expert astrologer" IconName="icon-park:table-report" />
-            <InfoBox MaxWidth="365" FullWidth="@true" Title="Astrologer Call" Description="45 minute live call consultation with vedic astrologer" IconName="flat-color-icons:customer-support" />
-            <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Monthly Updates" Description="We'll keep you updated on latest astro events" IconName="emojione:closed-mailbox-with-raised-flag" />
+            <h4>
+                Sponsor Items
+            </h4>
+
+            <InfoBox IsNewTabOpen="true" ClickUrl="https://www.ebay.com/itm/285277846059?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=VrFMFovPSYa&sssrc=2047675&ssuid=mOy92WUoRFe&widget_ver=artemis&media=COPY" Title="Telescope" FullWidth="true" MaxWidth="@GR.W412">
+                <DescriptionHTML>
+                    <div class="hstack gap-2 mt-1">
+                        <div><img class="img-thumbnail" src="images/wish-list-telescope.png" style=" width: 475px; " /></div>
+                        <div>
+                            With a computerized telescope we can improve the accuracy of the system to match the real world.
+                            We plan to also feed data from this telescope into the Open API.
+                        </div>
+                    </div>
+                </DescriptionHTML>
+            </InfoBox>
+
+            <InfoBox IsNewTabOpen="true" ClickUrl="https://www.ebay.com/itm/304878531330?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=xMAoTCQGQWy&sssrc=2047675&ssuid=mOy92WUoRFe&widget_ver=artemis&media=COPY" Title="Laptop" FullWidth="true" MaxWidth="@GR.W412">
+                <DescriptionHTML>
+                    <div class="hstack gap-2 mt-1">
+                        <div><img class="img-thumbnail" src="images/wish-list-laptop.png" style=" width: 475px;" /></div>
+                        <div>
+                            Our developers need laptops to build better code. A good laptop can help
+                            team members work remotely and while travelling increase their productivity.
+                        </div>
+                    </div>
+                </DescriptionHTML>
+            </InfoBox>
         </div>
     </div>
 

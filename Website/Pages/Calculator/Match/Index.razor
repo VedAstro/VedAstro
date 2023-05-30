@@ -139,8 +139,8 @@
         if (!_malePeopleSelector.IsPersonSelected)
         {
             //mark invalid & alert user
-            var msg = $"Select <strong>male</strong> person name!";
-            await _jsRuntime.ShowAlert("error", msg, true);
+            var msg = $"Select 1st person";
+            await _jsRuntime.ShowAlert("error", msg, "How to check match if you don't select a person?");
             return false;
 
         }
@@ -150,8 +150,8 @@
         if (!_femalePeopleSelector.IsPersonSelected)
         {
             //mark invalid & alert user
-            var msg = $"Select <strong>female</strong> person name!";
-            await _jsRuntime.ShowAlert("error", msg, true);
+            var msg = $"Select 2nd person";
+            await _jsRuntime.ShowAlert("error", msg, "We need two people minimum to tango.");
             return false;
         }
 
@@ -165,7 +165,7 @@
             {
                 icon = "question",
                 title = $"Are you sure?",
-                html = $"Both male and female horoscope is <strong>{_malePeopleSelector.SelectedPerson.Name}</strong>! What's the point of checking match.",
+                html = $"You selected the <strong>same person</strong> for both. Seriously, what's the point of checking match then?",
                 showCancelButton = true,
                 confirmButtonColor = "#3085d6",
                 cancelButtonColor = "#d33",
@@ -192,7 +192,7 @@
             {
                 icon = "question",
                 title = $"Are you sure?",
-                html = $@"<strong>{_malePeopleSelector.SelectedPerson.Name}</strong> is Male but in selected as Female!",
+                html = $@"<strong>{_malePeopleSelector.SelectedPerson.Name}</strong> is Female but in selected as Male!",
                 showCancelButton = true,
                 confirmButtonColor = "#3085d6",
                 cancelButtonColor = "#d33",

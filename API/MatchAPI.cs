@@ -7,6 +7,7 @@ using VedAstro.Library;
 using System.Net.Mime;
 using static System.Formats.Asn1.AsnWriter;
 using System.Diagnostics.Metrics;
+using System.Linq;
 
 namespace API
 {
@@ -381,10 +382,7 @@ namespace API
             //order the list by strength, highest at 0 index
             var resultListOrdered = resultList.OrderByDescending(o => o.KutaScore).ToList();
 
-
-            //auto calculate cutoff limit
-            //var maxScore = resultListOrdered[0].KutaScore;
-            //15 points from max take all
+            //only above 70 should be considered perfect
             var minimumScore = 70;
 
             //FILTER
@@ -394,14 +392,21 @@ namespace API
                 where matchReport.KutaScore >= minimumScore
                 select matchReport;
 
+            //package together all the needed data
             //get needed details, person name and score to them
             List<PersonKutaScore> personList2;
-            //if male put in female
-            if (inputPersonIsMale) { personList2 = finalList.Select(x => new PersonKutaScore(x.Female.Id, x.Female.Name, x.KutaScore)).ToList(); }
-
-            //if female put in male
-            else { personList2 = finalList.Select(x => new PersonKutaScore(x.Male.Id, x.Male.Name, x.KutaScore)).ToList(); }
-
+            personList2 = finalList.Select(matchReport =>
+            {
+                //if male put in female
+                //if female put in male
+                var matchPerson = inputPersonIsMale ? matchReport.Female : matchReport.Male;
+                var id = matchPerson.Id;
+                var name = matchPerson.Name;
+                var gender = matchPerson.Gender;
+                var age = matchPerson.GetAge();
+                return new PersonKutaScore(id, name, gender, age, matchReport.KutaScore);
+            }).ToList();
+            
             return personList2;
         }
 

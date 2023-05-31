@@ -181,6 +181,12 @@ namespace VedAstro.Library
         /// </summary>
         public int GetAge(int year) => year - this.BirthYear;
 
+        /// <summary>
+        /// Gets age at now time at current time's locations
+        /// </summary>
+        /// <returns></returns>
+        public int GetAge() => GetAge(Time.Now(this.GetBirthLocation()));
+
 
 
         //OVERRIDES METHODS
@@ -247,7 +253,7 @@ namespace VedAstro.Library
             JArray returnArray = new JArray();
             foreach (var person in personList)
             {
-                
+
                 //compile into an JSON array
                 returnArray.Add(person.ToJson());
             }

@@ -240,7 +240,8 @@ namespace API
             //note:compensate for padding, makes border fit nicely around content
             var borderWidth = dasaSvgWidth + 2; //contentPadding = 2 todo centralize
             var roundedBorder = 3;
-            var compiledRow = $"<rect class=\"EventChartBorder\" rx=\"{roundedBorder}\" width=\"{borderWidth}\" height=\"{svgTotalHeight}\" style=\"stroke-width: 1; fill: none; paint-order: stroke; stroke:#333;\"></rect>";
+            svgTotalHeight += 10; //adjust
+            var compiledRow = $"<rect class=\"EventChartBorder\" rx=\"{roundedBorder}\" width=\"{borderWidth}\" height=\"{svgTotalHeight}\" style=\"stroke-width: 2; fill: none; paint-order: stroke; stroke:#333;\"></rect>";
 
             return compiledRow;
         }
@@ -1352,7 +1353,7 @@ namespace API
             //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
             const int singleRowHeight = 5;
-            const int SummaryRowHeight = 20;
+            const int SummaryRowHeight = 30;
 
 
             //sort event by duration, so that events are ordered nicely in chart

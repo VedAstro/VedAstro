@@ -16,7 +16,7 @@ namespace API
         {
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Environment.GetEnvironmentVariable("API_STORAGE"); //vedastro-api-data
+            var storageConnectionString = Secrets.API_STORAGE;
 
             //get image from storage
             var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);

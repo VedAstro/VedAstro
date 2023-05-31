@@ -570,8 +570,8 @@ namespace API
             EmailClient getEmailClient()
             {
                 //read the connection string
-                var connectionString =
-                    Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
+                var connectionString = Secrets.AutoEmailerConnectString;
+                    
 
                 //raise alarm if no connection string
                 if (string.IsNullOrEmpty(connectionString))
@@ -973,5 +973,13 @@ namespace API
 
             return chartBlobClient;
         }
+    }
+
+    public class Secrets
+    {
+        public static string? AutoEmailerConnectString => Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
+        public static string? API_STORAGE => Environment.GetEnvironmentVariable("API_STORAGE"); 
+        public static string? EnableCache => Environment.GetEnvironmentVariable("EnableCache");
+        public static string? SLACK_EMAIL_WEBHOOK => Environment.GetEnvironmentVariable("SLACK_EMAIL_WEBHOOK");
     }
 }

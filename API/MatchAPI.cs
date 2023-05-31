@@ -194,7 +194,7 @@ namespace API
             var person = await APITools.GetPersonById(personId);
 
             var minimumScore = 75; //minimum score needed to make the list
-            var personList = await GetAllPersonByMatchStrength(person, minimumScore);
+            var personList = await GetAllPersonByMatchStrength(person);
 
             var returnJson = PersonKutaScore.ToJsonList(personList);
 
@@ -342,7 +342,7 @@ namespace API
         /// Gets all people ordered by kuta total strength 0 is highest kuta score
         /// note : chart created to make score is discarded
         /// </summary>
-        public static async Task<List<PersonKutaScore>> GetAllPersonByMatchStrength(Person inputPerson, double minimumScore)
+        public static async Task<List<PersonKutaScore>> GetAllPersonByMatchStrength(Person inputPerson)
         {
             var resultList = new List<MatchReport>();
 
@@ -382,11 +382,17 @@ namespace API
             //order the list by strength, highest at 0 index
             var resultListOrdered = resultList.OrderByDescending(o => o.KutaScore).ToList();
 
+
+            //auto calculate cutoff limit
+            //var maxScore = resultListOrdered[0].KutaScore;
+            //15 points from max take all
+            var minimumScore = 70;
+
             //FILTER
             //needs to meets minimum score to make into list
             var finalList = 
                 from matchReport in resultListOrdered
-                where matchReport.KutaScore > minimumScore
+                where matchReport.KutaScore >= minimumScore
                 select matchReport;
 
             //get needed details, person name and score to them

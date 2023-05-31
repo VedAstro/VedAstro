@@ -16,7 +16,8 @@ namespace API
 
                 //if user id local skip
                 var isLocal = newVisitorXml.Element("UserId")?.Value == "102111269113114363117";
-                if (isLocal)
+                var isLocal2 = newVisitorXml.Element("TimeStamp")?.Value.Contains("+08:00") ?? false;
+                if (isLocal || isLocal2)
                 {
                     return APITools.PassMessage(incomingRequest);
                 }

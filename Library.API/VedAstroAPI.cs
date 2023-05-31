@@ -16,7 +16,6 @@ namespace Library.API
     {
         private readonly VedAstroAPI _api;
 
-        private List<PersonKutaScore> CachedPersonKutaScore { get; set; } = new List<PersonKutaScore>();
 
         public MatchTools(VedAstroAPI vedAstroApi)
         {
@@ -27,13 +26,13 @@ namespace Library.API
         {
             //CHECK CACHE
             //cache will be cleared when update is needed
-            if (CachedPersonKutaScore.Any()) { return CachedPersonKutaScore; }
+            //if (CachedPersonKutaScore.Any()) { return CachedPersonKutaScore; }
 
             //prepare url to call
             var url = $"{_api.URL.FindMatch}/PersonId/{personId}";
-            CachedPersonKutaScore = await _api.GetList(url, PersonKutaScore.FromJsonList);
+           var  personKutaScore = await _api.GetList(url, PersonKutaScore.FromJsonList);
 
-            return CachedPersonKutaScore;
+            return personKutaScore;
 
         }
     }

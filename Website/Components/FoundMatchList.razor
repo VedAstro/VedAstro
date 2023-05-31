@@ -23,9 +23,9 @@ else
             @foreach (var report in MatchReportList)
             {
                 <tr>
-                    <td>@report</td>
-                    <td>@report</td>
-                    <td><IconButton ButtonText="View" OpenNewTab="true" /></td>
+                    <td>@report.PersonName</td>
+                    <td>@report.KutaScore</td>
+                    <td><IconButton OnClickCallback="@(()=>OnClickViewPerson(report.PersonId))" ButtonText="View" OpenNewTab="true" /></td>
                 </tr>
             }
         </tbody>
@@ -37,16 +37,32 @@ else
 
 @code {
 
-    private bool NothingToShow { get; set; }
+    private bool NothingToShow { get; set; } = true;
 
-    public List<string> MatchReportList { get; set; } = new List<string>();
+    public List<PersonKutaScore> MatchReportList { get; set; } = new List<PersonKutaScore>();
 
 
     private Person selectedPerson { get; set; }
 
 
-    public void Update(Person person)
+
+    public void Update(List<PersonKutaScore> personKutaScoreList)
     {
-        //get list from server
+        NothingToShow = true;
+
+        MatchReportList = personKutaScoreList;
+
+        NothingToShow = false;
+
+        StateHasChanged();
+
+
     }
+
+    private void OnClickViewPerson(string personId)
+    {
+
+        throw new NotImplementedException();
+    }
+
 }

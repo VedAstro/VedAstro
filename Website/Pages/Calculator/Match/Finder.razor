@@ -86,11 +86,16 @@
 
     private async Task OnClickSearchButton()
     {
+        _jsRuntime.ShowLoading();
 
        //get list of people match from API
        var personKutaScoreList = await AppData.API.Match.GetList(_selectedPersonId);
 
-        Console.WriteLine($"found!!!! {personKutaScoreList.Count}");
+        foundMathcList.Update(personKutaScoreList);
+
+        _jsRuntime.HideLoading();
+
+
     }
 
 

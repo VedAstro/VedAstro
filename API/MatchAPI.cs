@@ -2,7 +2,9 @@
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
+using Newtonsoft.Json;
 using VedAstro.Library;
+using System.Net.Mime;
 
 namespace API
 {
@@ -191,9 +193,10 @@ namespace API
 
             var personList = await GetAllPersonByMatchStrength(person);
 
-           var returnJson = PersonKutaScore.ToJsonList(personList);
+            var returnJson = PersonKutaScore.ToJsonList(personList);
 
-            return APITools.PassMessageJson(returnJson, incomingRequest);
+            var x = await APITools.SendPassHeaderToCaller(returnJson.ToString(Formatting.None),incomingRequest, MediaTypeNames.Application.Json);
+            return x;
         }
 
 
@@ -379,10 +382,10 @@ namespace API
             //get needed details, person name and score to them
             List<PersonKutaScore> personList2;
             //if male put in female
-            if (inputPersonIsMale) { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Female.Id,x.Female.Name, x.KutaScore)).ToList(); }
-            
+            if (inputPersonIsMale) { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Female.Id, x.Female.Name, x.KutaScore)).ToList(); }
+
             //if female put in male
-            else { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Male.Id,x.Male.Name, x.KutaScore)).ToList(); }
+            else { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Male.Id, x.Male.Name, x.KutaScore)).ToList(); }
 
             return personList2;
         }

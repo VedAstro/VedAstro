@@ -816,6 +816,25 @@ namespace API
             return response;
         }
 
+        public static async Task<HttpResponseData> SendPassHeaderToCaller(string dataToSend, HttpRequestData req, string mimeType)
+        {
+            //send image back to caller
+            //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
+            response.Headers.Add("Content-Type", mimeType);
+
+            //place in response body
+            //NOTE: very important to pass as stream to make work
+            //      if convert to byte array will not work!
+            //      needs to be direct stream to response
+            await response.WriteStringAsync(dataToSend);
+
+            return response;
+        }
+
+
+
         //gets the exact width of a text based on Font size & type
         //used to generate nicely fitting background for text
         public static double GetTextWidthPx(string textInput)

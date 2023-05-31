@@ -249,11 +249,11 @@ namespace Library.API
     }
 
 
-    public class EventsChart
+    public class EventsChartTools
     {
         private readonly VedAstroAPI _api;
 
-        public EventsChart(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
+        public EventsChartTools(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
 
 
         public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags)
@@ -288,6 +288,7 @@ namespace Library.API
 
         public MatchTools Match;
         public PersonTools Person;
+        public EventsChartTools EventsChart;
 
         public readonly string UserId;
         public readonly string VisitorID;
@@ -305,6 +306,7 @@ namespace Library.API
             URL = url;
             Match = new MatchTools(this);
             Person = new PersonTools(this);
+            EventsChart = new EventsChartTools(this);
         }
 
 

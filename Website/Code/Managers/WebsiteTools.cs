@@ -157,7 +157,7 @@ namespace Website
             //user's person profile, which is allowed but also monitored
             await WebLogger.Data($"Direct Link Access:{personId}");
 
-            foundPerson = await AppData.API.GetPerson(personId);
+            foundPerson = await AppData.API.Person.GetPerson(personId);
 
             return foundPerson;
 
@@ -167,7 +167,7 @@ namespace Website
             async Task<Person> GetFromPersonList(string personId)
             {
                 //try to get from person's own user list
-                var personList = await AppData.API.GetPersonList();
+                var personList = await AppData.API.Person.GetPersonList();
                 var personFromId = personList.Where(p => p.Id == personId);
 
                 //will return Empty person if none found

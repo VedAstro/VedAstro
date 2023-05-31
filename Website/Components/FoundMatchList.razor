@@ -1,0 +1,52 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+@*show loading first*@
+@if (NothingToShow)
+{
+    @AppData.LoadingImage
+}
+else
+{
+
+    <table class="table mb-5">
+        <thead>
+            <tr>
+                <th scope="col">Person</th>
+                <th scope="col">Prediction</th>
+                <th scope="col">Report</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var report in MatchReportList)
+            {
+                <tr>
+                    <td>@report</td>
+                    <td>@report</td>
+                    <td><IconButton ButtonText="View" OpenNewTab="true" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+
+
+@code {
+
+    private bool NothingToShow { get; set; }
+
+    public List<string> MatchReportList { get; set; } = new List<string>();
+
+
+    private Person selectedPerson { get; set; }
+
+
+    public void Update(Person person)
+    {
+        //get list from server
+    }
+}

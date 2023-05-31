@@ -92,7 +92,7 @@
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
-        var serverReply = await AppData.API.AddPerson(_person);
+        var serverReply = await AppData.API.Person.AddPerson(_person);
 
         //page ready
         _jsRuntime.HideAlert();
@@ -281,7 +281,7 @@
 
         //new human readable person ID made specially by API
         //note : ID for person should be only created here, for maintenance sake
-        var newPersonProfileId = await AppData.API.GetNewPersonId(nameInput, birthTime.GetStdYear());
+        var newPersonProfileId = await AppData.API.Person.GetNewPersonId(nameInput, birthTime.GetStdYear());
 
         //create the new complete person profile
         return new Person(newPersonProfileId, nameInput, birthTime, gender, new[] { newPersonOwnerId });

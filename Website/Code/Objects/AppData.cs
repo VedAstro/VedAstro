@@ -158,6 +158,16 @@ namespace Website
         /// </summary>
         public static GeoLocation ClientLocation { get; set; }
 
+        public static PersonSelectorBox PersonSelectorBox
+        {
+            get => _personSelectorBox;
+            set
+            {
+                Console.WriteLine("PERSON SELECTOR LOADED!!!!!!!!!");
+                _personSelectorBox = value;
+            }
+        }
+
 
         public static string DefaultLocationCountry = "Singapore";
 
@@ -180,6 +190,8 @@ namespace Website
         /// manager to access everything API
         /// </summary>
         public static VedAstroAPI API;
+
+        private static PersonSelectorBox _personSelectorBox;
 
 
         /// <summary>

@@ -127,7 +127,7 @@
 
         //send updated person to API
         //todo check for accidental multi tab scenario overwrite
-        await AppData.API.UpdatePerson(InputedPerson);
+        await AppData.API.Person.UpdatePerson(InputedPerson);
 
         _jsRuntime.HideLoading();
 

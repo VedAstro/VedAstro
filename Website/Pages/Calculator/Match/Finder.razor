@@ -4,7 +4,6 @@
 
 <PageTitle>Match Finder | VedAstro</PageTitle>
 
-
 <PageTop ImageName="match-checker.svg"
          Title="Match Finder"
          DescriptionText="Find your astrologically perfect match, the matching algorithm will find for your soulmate in our world wide database.">
@@ -17,7 +16,7 @@
     <div>
         <div class="vstack gap-3 me-5">
             <PersonSelectorBox @ref="_personSelector" @bind-SelectedPersonId="@_selectedPersonId" Label="Person" />
-            <IconButton TooltipText="Search database for perfect match" IconName="mdi:heart-search" ExtraClass="mt-1" Color="success" ButtonText="Search" OnClickCallback="OnClickSubmitButton" />
+            <IconButton TooltipText="Search database for perfect match" IconName="mdi:heart-search" ExtraClass="mt-1" Color="success" ButtonText="Search" OnClickCallback="@OnClickSearchButton" />
         </div>
     </div>
     @*SIDEBAR*@
@@ -25,9 +24,10 @@
         <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Love Letter" Description="Leave a love letter for your soulmate when they find you" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="twemoji:love-letter" />
         <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Cute Pic" Description="Let your soulmate see how you look when you send frend request" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="flat-color-icons:selfie" />
     </div>
-
 </div>
 
+
+<FoundMatchList @ref="foundMathcList" />
 
 
 <div class="gap-3 mt-3" style="max-width: @GR.W667px">
@@ -79,18 +79,22 @@
 
 @code {
 
+    private FoundMatchList foundMathcList;
     private PersonSelectorBox? _personSelector;
     private string? _selectedPersonId;
 
-    /// <summary>
-    /// Function that is called on save click of button
-    /// NOTE : surprisingly this is nessary for async await to work properly
-    /// </summary>
-    private async Task OnClickSubmitButton() => await InvokeAsync(async () => await _OnClickSubmitButton()).Try(_jsRuntime);
+
+    private async Task OnClickSearchButton()
+    {
+
+       //get list of people match from API
+       var personKutaScoreList = await AppData.API.Match.GetList(_selectedPersonId);
+
+        Console.WriteLine($"found!!!! {personKutaScoreList.Count}");
+    }
 
 
-
-    private async Task _OnClickSubmitButton()
+    private async Task OnClickSearchButtonOLD()
     {
 
         //only continue if passed input field validation

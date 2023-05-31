@@ -83,7 +83,7 @@ else
 
         //get all people from API server
         //auto checks if people list already loaded before
-        _personListAsync = await AppData.API.GetPersonList();
+        _personListAsync = await AppData.API.Person.GetPersonList();
 
         _isReady = true;
 

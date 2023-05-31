@@ -17,27 +17,48 @@ Know good and bad periods of your life years ahead.*@
 
 <div>
     <div class="d-flex justify-content-between">
-        
+
         <div class="vstack gap-3 p-3">
-            <PersonSelectorBox @ref="_easyPersonSelectorBox" />
+
+            <PersonSelectorBox @ref="_easyPersonSelectorBox" @bind-SelectedPersonId="@SelectedPersonId" />
 
             <div>
                 <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
-                <select @bind="_selectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
+                <select @bind="SelectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
                     <option value="FullLife">Full Life</option>
                     <option value="week">This Week</option>
                     <option value="month">This Month</option>
                     <option value="year">This Year</option>
                     <option value="decade">This Decade</option>
+                    <option value="selectyear">Select Start &amp; End</option>
                     <option value="Age1to25">Age 1 to 25</option>
-                    <option value="Age10to35">Age 10 to 35</option>
-                    <option value="Age25to50">Age 25 to 50</option>
-                    <option value="Age35to60">Age 35 to 60</option>
-                    <option value="Age50to75">Age 50 to 75</option>
-                    <option value="Age60to85">Age 60 to 85</option>
                     <option value="Age75to100">Age 75 to 100</option>
                 </select>
             </div>
+
+            <div @ref="lifeYearSelector" style="display: none;">
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">Start</label>
+                    <select @bind="SelectedLifeYearStart" class="form-select" id="inputGroupSelect01">
+                        <option selected>Choose...</option>
+                        @foreach (var year in lifeYearList)
+                        {
+                            <option value="@year">@year</option>
+                        }
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="inputGroupSelect01">End</label>
+                    <select @bind="SelectedLifeYearEnd" class="form-select" id="inputGroupSelect02">
+                        <option selected>Choose...</option>
+                        @foreach (var year in lifeYearList)
+                        {
+                            <option value="@year">@year</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
 
             <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
 
@@ -87,7 +108,7 @@ Know good and bad periods of your life years ahead.*@
             </p>
         </TextHTML>
     </ArticleBlock>
-    
+
 
 
     <ArticleBlock Title="Intensity" IconName="emojione:level-slider">
@@ -103,7 +124,7 @@ Know good and bad periods of your life years ahead.*@
             </p>
         </TextHTML>
     </ArticleBlock>
-    
+
     <img src="images/life-predictor-connection.jpg" class="img-thumbnail my-3" alt="...">
 
 
@@ -151,6 +172,10 @@ Know good and bad periods of your life years ahead.*@
 
 @code {
 
+    private string SelectedLifeYearStart;
+    private string SelectedLifeYearEnd;
+    private List<string> lifeYearList = new List<string>();
+
     /// <summary>
     /// Param used in URL to set Person ID via URL
     /// also set via URL when page is loaded
@@ -162,7 +187,7 @@ Know good and bad periods of your life years ahead.*@
 
     private ElementReference _holderDiv;
 
-    private string _pageTitle = "Dasa";
+    private string _pageTitle = "Life Predictor";
     //--------------------FIELDS
     private string _selectedTimeRange = "FullLife"; //1st in list
     private string _selectedChartId = "";
@@ -174,17 +199,85 @@ Know good and bad periods of your life years ahead.*@
     private EventsChartViewer? _eventsChartViewer;
 
     public Person SelectedPerson { get; set; }
+
+    private ElementReference lifeYearSelector;
+
+    public string SelectedLifeYear { get; set; }
+
+    public string SelectedTimeRange
+    {
+        get => _selectedTimeRange;
+
+        //hide and show easy options based on selection
+        set
+        {
+
+            //based on body type only show relevant related fields
+            switch (value.ToLower())
+            {
+                case "selectyear"://hide house & show planet
+                    _jsRuntime.Show(lifeYearSelector);
+                    break;
+                //if none above then hide all
+                default:
+                    _jsRuntime.Hide(lifeYearSelector);
+                    break;
+            }
+
+            //log it or better analytics
+            WebLogger.Data($"Selected Time Range:{value}");
+
+            _selectedTimeRange = value;
+        }
+    }
+
     private bool _isResultReady = false; //marks if the page ready to loaded
     private MonthYearSelectorBox _startTimeSelector;
     private MonthYearSelectorBox _endTimeSelector;
 
     private List<ChartName> _allChartList = new List<ChartName>();
+    private string? _selectedPersonId;
 
+    //linked to selector box
+    public string? SelectedPersonId
+    {
+        get => _selectedPersonId;
+        set
+        {
+            //update year select to make sense
+            UpdateYearSelectionRange(value);
+            _selectedPersonId = value;
+        }
+    }
+
+
+    private async Task UpdateYearSelectionRange(string personId)
+    {
+
+        var compiledList = new List<string>();
+        //generate year list, birth plus 100
+        var person = await WebsiteTools.GetPersonById(personId, _jsRuntime);
+        var startYear = person.BirthYear;
+
+        for (int i = 0; i < 100; i++)
+        {
+            compiledList.Add(startYear.ToString());
+            //increment
+            startYear++;
+        }
+
+        Console.WriteLine(Tools.ListToString(compiledList));
+
+        //make visible
+        lifeYearList = compiledList;
+
+
+        StateHasChanged();
+    }
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
-
 
 
     private async Task OnClickCalculateEasy() => await InvokeAsync(async () => await _OnClickCalculateEasy()).Try(_jsRuntime);
@@ -196,6 +289,7 @@ Know good and bad periods of your life years ahead.*@
 
     private async Task _OnAfterRenderAsync(bool firstRender)
     {
+
         //if parameter has been set then auto load person data as
         //though person was selected and don't do click cause we don't know where user whats to click
         if (PersonIdUrl != null && firstRender)
@@ -233,7 +327,7 @@ Know good and bad periods of your life years ahead.*@
 
         //set data into dasa viewer
         var systemTimezone = Tools.GetSystemTimezone();
-        var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, _selectedTimeRange, systemTimezone);
+        var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRange, systemTimezone);
         //generate the events row & time header row
         var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Prana, EventTag.Gochara };
 
@@ -243,15 +337,10 @@ Know good and bad periods of your life years ahead.*@
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
         PersonIdUrl = SelectedPerson.Id; //save local copy
-       AppData.Go($"{PageRoute.LifePredictor}/{PersonIdUrl}"); //change url
-
+        AppData.Go($"{PageRoute.LifePredictor}/{PersonIdUrl}"); //change url
 
         //mark page as ready to show results
         _isResultReady = true;
-
-        //inject selected person into component to show horoscope data
-        //do last so that loading box is not closed too soon
-        //await horoscopeInfoView?.SetPerson(SelectedPerson);
 
         _jsRuntime.HideAlert();
 
@@ -308,6 +397,7 @@ Know good and bad periods of your life years ahead.*@
 
         }
     }
+
 
 
 }

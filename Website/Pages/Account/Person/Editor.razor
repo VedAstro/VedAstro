@@ -372,7 +372,7 @@
         _person = await GetPersonInstanceFromInput();
 
         //update person in API by hash
-        await AppData.API.UpdatePerson(_person);
+        await AppData.API.Person.UpdatePerson(_person);
 
         //let user know person has been updated
         await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
@@ -392,7 +392,7 @@
         await _jsRuntime.ShowLoading();
 
         //tell API to delete person, using person id
-        await AppData.API.DeletePerson(PersonIdUrl);
+        await AppData.API.Person.DeletePerson(PersonIdUrl);
 
         //let user know person has been updates
         await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);

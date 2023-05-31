@@ -1351,7 +1351,8 @@ namespace API
         {
             //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
-            const int singleRowHeight = 15;
+            const int singleRowHeight = 5;
+            const int SummaryRowHeight = 20;
 
 
             //sort event by duration, so that events are ordered nicely in chart
@@ -1369,11 +1370,11 @@ namespace API
             if (eventList.Any())
             {
 
-
                 //note: summary data is filled when generating rows
                 //x axis, total nature score, planet name
                 summaryRowData = new Dictionary<int, SumData>();
                 //generate svg for each row & add to final row
+                //compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
                 compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
                 //set y axis (horizontal) for next row
                 yAxis = yAxis + finalHeight + padding;
@@ -1417,7 +1418,7 @@ namespace API
                                $"x=\"{xAxis}\" " +
                                $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                $"width=\"{widthPerSlice}\" " +
-                               $"height=\"{singleRowHeight}\" " +
+                               $"height=\"{SummaryRowHeight}\" " +
                                $"fill=\"{GetSummaryColor(totalNatureScore, minValue, maxValue)}\" />";
 
                     //add rect to row
@@ -1428,26 +1429,26 @@ namespace API
 
 
                 //STEP 2 : generate graph summary
-                var barChartRow = "";
-                foreach (var summarySlice in summaryRowData)
-                {
-                    int xAxis = summarySlice.Key;
-                    double totalNatureScore = summarySlice.Value.NatureScore; //possible negative
-                    var barHeight = (int)totalNatureScore.Remap(minValue, maxValue, 0, 30);
-                    var rect = $"<rect " +
-                               $"x=\"{xAxis}\" " +
-                               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                               $"width=\"{widthPerSlice}\" " +
-                               $"height=\"{barHeight}\" " +
-                               $"fill=\"black\" />";
+                //var barChartRow = "";
+                //foreach (var summarySlice in summaryRowData)
+                //{
+                //    int xAxis = summarySlice.Key;
+                //    double totalNatureScore = summarySlice.Value.NatureScore; //possible negative
+                //    var barHeight = (int)totalNatureScore.Remap(minValue, maxValue, 0, 30);
+                //    var rect = $"<rect " +
+                //               $"x=\"{xAxis}\" " +
+                //               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                //               $"width=\"{widthPerSlice}\" " +
+                //               $"height=\"{barHeight}\" " +
+                //               $"fill=\"black\" />";
 
-                    //add rect to row
-                    barChartRow += rect;
-                }
+                //    //add rect to row
+                //    barChartRow += rect;
+                //}
 
-                //note: chart is flipped 180, to start bar from bottom to top
-                //default hidden
-                rowHtml += $"<g id=\"BarChartRow\" transform=\"matrix(1, 0, 0, 1, 0, 20)\">{barChartRow}</g>";
+                ////note: chart is flipped 180, to start bar from bottom to top
+                ////default hidden
+                //rowHtml += $"<g id=\"BarChartRow\" transform=\"matrix(1, 0, 0, 1, 0, 20)\">{barChartRow}</g>";
 
 
                 //STEP 3 : generate color summary SMART

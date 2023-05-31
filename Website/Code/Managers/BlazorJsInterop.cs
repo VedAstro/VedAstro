@@ -377,7 +377,11 @@ namespace Website
         /// </summary>
         public static async Task SetCss(this IJSRuntime jsRuntime, string element, string propName, object propVal) => await jsRuntime.InvokeVoidAsync(JS.setCssWrapper, element, propName, propVal);
 
-        public static void OpenNewTab(this IJSRuntime jsRuntime, string url) => jsRuntime.InvokeVoidAsync(JS.open, url, "_blank");
+        public static void OpenNewTab(this IJSRuntime jsRuntime, string url)
+        {
+            WebLogger.Data($"NEW TAB TO: {url}");
+            jsRuntime.InvokeVoidAsync(JS.open, url, "_blank");
+        }
 
         /// <summary>
         /// Jquery .text()

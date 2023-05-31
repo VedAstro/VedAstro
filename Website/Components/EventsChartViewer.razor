@@ -321,7 +321,7 @@
             InputedEventTags = inputedEventTags;
 
             //poll till get
-            string chartSvg = await AppData.API.GetEventsChart(person, timeRange, inputedEventTags);
+            string chartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags);
 
             //control reaches here than already complete
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, chartSvg);

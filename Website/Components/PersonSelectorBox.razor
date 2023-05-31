@@ -131,6 +131,10 @@ KEEP IT REAL
     }
 
 
+    //below prop needed for 2-way binding between page & component to work
+    [Parameter]
+    public EventCallback<string> SelectedPersonIdChanged { get; set; }
+
 
     /// <summary>
     /// Text that is shown above list
@@ -144,10 +148,6 @@ KEEP IT REAL
     [Parameter]
     public bool HideTitle { get; set; } = false;
 
-
-    //below prop needed for 2-way binding between page & component to work
-    [Parameter]
-    public EventCallback<string> SelectedPersonIdChanged { get; set; }
 
     /// <summary>
     /// main list that is not effected by search
@@ -216,8 +216,8 @@ KEEP IT REAL
         IsReady = false;
 
         //get person list from server or cache and stores reference for later use
-        PersonList = await AppData.API.GetPersonList();
-        PublicPersonList = await AppData.API.GetPublicPersonList();
+        PersonList = await AppData.API.Person.GetPersonList();
+        PublicPersonList = await AppData.API.Person.GetPublicPersonList();
 
         //make visible, do so to support search feature
         PersonListDisplay = PersonList;

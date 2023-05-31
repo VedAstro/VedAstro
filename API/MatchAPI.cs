@@ -5,6 +5,8 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using VedAstro.Library;
 using System.Net.Mime;
+using static System.Formats.Asn1.AsnWriter;
+using System.Diagnostics.Metrics;
 
 namespace API
 {
@@ -191,11 +193,12 @@ namespace API
 
             var person = await APITools.GetPersonById(personId);
 
-            var personList = await GetAllPersonByMatchStrength(person);
+            var minimumScore = 75; //minimum score needed to make the list
+            var personList = await GetAllPersonByMatchStrength(person, minimumScore);
 
             var returnJson = PersonKutaScore.ToJsonList(personList);
 
-            var x = await APITools.SendPassHeaderToCaller(returnJson.ToString(Formatting.None),incomingRequest, MediaTypeNames.Application.Json);
+            var x = await APITools.SendPassHeaderToCaller(returnJson.ToString(Formatting.None), incomingRequest, MediaTypeNames.Application.Json);
             return x;
         }
 
@@ -339,7 +342,7 @@ namespace API
         /// Gets all people ordered by kuta total strength 0 is highest kuta score
         /// note : chart created to make score is discarded
         /// </summary>
-        public static async Task<List<PersonKutaScore>> GetAllPersonByMatchStrength(Person inputPerson)
+        public static async Task<List<PersonKutaScore>> GetAllPersonByMatchStrength(Person inputPerson, double minimumScore)
         {
             var resultList = new List<MatchReport>();
 
@@ -379,13 +382,20 @@ namespace API
             //order the list by strength, highest at 0 index
             var resultListOrdered = resultList.OrderByDescending(o => o.KutaScore).ToList();
 
+            //FILTER
+            //needs to meets minimum score to make into list
+            var finalList = 
+                from matchReport in resultListOrdered
+                where matchReport.KutaScore > minimumScore
+                select matchReport;
+
             //get needed details, person name and score to them
             List<PersonKutaScore> personList2;
             //if male put in female
-            if (inputPersonIsMale) { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Female.Id, x.Female.Name, x.KutaScore)).ToList(); }
+            if (inputPersonIsMale) { personList2 = finalList.Select(x => new PersonKutaScore(x.Female.Id, x.Female.Name, x.KutaScore)).ToList(); }
 
             //if female put in male
-            else { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Male.Id, x.Male.Name, x.KutaScore)).ToList(); }
+            else { personList2 = finalList.Select(x => new PersonKutaScore(x.Male.Id, x.Male.Name, x.KutaScore)).ToList(); }
 
             return personList2;
         }

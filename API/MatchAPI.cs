@@ -191,18 +191,7 @@ namespace API
 
             var personList = await GetAllPersonByMatchStrength(person);
 
-            var returnJson = new JArray();
-            foreach (var personKutaScore in personList)
-            {
-                //wrap data nicely
-                var wrapped = new JObject();
-                wrapped["PersonId"] = personKutaScore.Person.Id;
-                wrapped["PersonName"] = personKutaScore.Person.Name;
-                wrapped["KutaScore"] = personKutaScore.KutaScore;
-
-                //add to final list
-                returnJson.Add(wrapped);
-            }
+           var returnJson = PersonKutaScore.ToJsonList(personList);
 
             return APITools.PassMessageJson(returnJson, incomingRequest);
         }
@@ -347,7 +336,7 @@ namespace API
         /// Gets all people ordered by kuta total strength 0 is highest kuta score
         /// note : chart created to make score is discarded
         /// </summary>
-        private static async Task<List<PersonKutaScore>> GetAllPersonByMatchStrength(Person inputPerson)
+        public static async Task<List<PersonKutaScore>> GetAllPersonByMatchStrength(Person inputPerson)
         {
             var resultList = new List<MatchReport>();
 
@@ -385,15 +374,15 @@ namespace API
 
             //SORT
             //order the list by strength, highest at 0 index
-            var resultListOrdered = resultList.OrderBy(o => o.KutaScore).ToList();
+            var resultListOrdered = resultList.OrderByDescending(o => o.KutaScore).ToList();
 
             //get needed details, person name and score to them
             List<PersonKutaScore> personList2;
             //if male put in female
-            if (inputPersonIsMale) { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Female, x.KutaScore)).ToList(); }
+            if (inputPersonIsMale) { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Female.Id,x.Female.Name, x.KutaScore)).ToList(); }
             
             //if female put in male
-            else { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Male,x.KutaScore)).ToList(); }
+            else { personList2 = resultListOrdered.Select(x => new PersonKutaScore(x.Male.Id,x.Male.Name, x.KutaScore)).ToList(); }
 
             return personList2;
         }
@@ -430,7 +419,6 @@ namespace API
         }
     }
 
-    public record PersonKutaScore(Person Person, double KutaScore);
 
     public class AppInstance
     {

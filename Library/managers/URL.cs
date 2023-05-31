@@ -50,6 +50,7 @@ public class URL
         GetVisitorList = ApiUrl + "/getvisitorlist";
         GetMessageList = ApiUrl + "/getmessagelist";
 
+        FindMatch = ApiUrl + "/FindMatch";
         GetMatchReportList = ApiUrl + "/GetMatchReportList";
         GetPersonIdFromSavedChartId = ApiUrl + "/getpersonidfromsavedchartid";
         GetMatchReportApi = ApiUrl + "/getmatchreport";
@@ -102,6 +103,7 @@ public class URL
     public readonly string GetMatchReportApi;
     public readonly string SaveMatchReportApi;
     public readonly string GetMatchReportList;
+    public readonly string FindMatch;
 
     //PERSON
     public readonly string AddPerson;

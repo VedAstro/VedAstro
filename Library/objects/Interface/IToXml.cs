@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Collections.Generic;
+using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
@@ -26,6 +27,7 @@ namespace VedAstro.Library
     /// </summary>
     public interface IToJson
     {
+
         /// <summary>
         /// Converts Type to XML version of it
         /// </summary>

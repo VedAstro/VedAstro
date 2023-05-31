@@ -193,7 +193,6 @@ namespace API
 
             var person = await APITools.GetPersonById(personId);
 
-            var minimumScore = 75; //minimum score needed to make the list
             var personList = await GetAllPersonByMatchStrength(person);
 
             var returnJson = PersonKutaScore.ToJsonList(personList);

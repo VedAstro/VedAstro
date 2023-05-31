@@ -109,9 +109,9 @@ namespace VedAstro.Library
                     var grahaMaitram = list.Find(pr => pr.Name == MatchPredictionName.GrahaMaitram);
 
                     //if prediction is bad and exception can be applied
-                    var streeDeergaIsBad = streeDeerga.Nature == EventNature.Bad;
-                    var rasiKutaIsGood = rasiKuta.Nature == EventNature.Good;
-                    var grahaMaitramIsGood = grahaMaitram.Nature == EventNature.Good;
+                    var streeDeergaIsBad = streeDeerga?.Nature == EventNature.Bad;
+                    var rasiKutaIsGood = rasiKuta?.Nature == EventNature.Good;
+                    var grahaMaitramIsGood = grahaMaitram?.Nature == EventNature.Good;
 
                     if (streeDeergaIsBad && rasiKutaIsGood && grahaMaitramIsGood)
                     {
@@ -148,11 +148,11 @@ namespace VedAstro.Library
 
 
                     //if prediction is bad and exception can be applied
-                    var rajjuIsBad = rajju.Nature == EventNature.Bad;
-                    var grahaMaitramIsGood = grahaMaitram.Nature == EventNature.Good;
-                    var rasiKutaIsGood = rasiKuta.Nature == EventNature.Good;
-                    var dinaKutaIsGood = dinaKuta.Nature == EventNature.Good;
-                    var mahendraIsGood = mahendra.Nature == EventNature.Good;
+                    var rajjuIsBad = rajju?.Nature == EventNature.Bad;
+                    var grahaMaitramIsGood = grahaMaitram?.Nature == EventNature.Good;
+                    var rasiKutaIsGood = rasiKuta?.Nature == EventNature.Good;
+                    var dinaKutaIsGood = dinaKuta?.Nature == EventNature.Good;
+                    var mahendraIsGood = mahendra?.Nature == EventNature.Good;
 
 
                     if (rajjuIsBad && grahaMaitramIsGood && rasiKutaIsGood && dinaKutaIsGood && mahendraIsGood)
@@ -188,9 +188,9 @@ namespace VedAstro.Library
                     var rajju = list.Find(pr => pr.Name == MatchPredictionName.Rajju);
 
                     //if prediction is bad and exception can be applied
-                    var nadiKutaIsBad = nadiKuta.Nature == EventNature.Bad;
-                    var rasiKutaIsGood = rasiKuta.Nature == EventNature.Good;
-                    var rajjuIsGood = rajju.Nature == EventNature.Good;
+                    var nadiKutaIsBad = nadiKuta?.Nature == EventNature.Bad;
+                    var rasiKutaIsGood = rasiKuta?.Nature == EventNature.Good;
+                    var rajjuIsGood = rajju?.Nature == EventNature.Good;
 
                     if (nadiKutaIsBad && rasiKutaIsGood && rajjuIsGood)
                     {

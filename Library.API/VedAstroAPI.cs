@@ -1,22 +1,49 @@
 ﻿
 
 
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.JSInterop;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
 using VedAstro.Library;
+
 
 namespace Library.API
 {
 
-    /// <summary>
-    /// Make easy access to API, makes API easily consumable
-    /// </summary>
-    public class VedAstroAPI
+    public class MatchTools
     {
-        private readonly string _userId;
-        private readonly string _visitorId;
-        private readonly IJSRuntime _jsRuntime;
+        private readonly VedAstroAPI _api;
+
+        private List<PersonKutaScore> CachedPersonKutaScore { get; set; } = new List<PersonKutaScore>();
+
+        public MatchTools(VedAstroAPI vedAstroApi)
+        {
+            _api = vedAstroApi;
+        }
+
+        public async Task<List<PersonKutaScore>> GetList(string personId)
+        {
+            //CHECK CACHE
+            //cache will be cleared when update is needed
+            if (CachedPersonKutaScore.Any()) { return CachedPersonKutaScore; }
+
+            //prepare url to call
+            var url = $"{_api.URL.FindMatch}/PersonId/{personId}";
+            CachedPersonKutaScore = await _api.GetList(url, PersonKutaScore.FromJsonList);
+
+            return CachedPersonKutaScore;
+
+        }
+    }
+
+    public class PersonTools
+    {
+
+        private readonly VedAstroAPI _api;
+
+
 
         private List<Person> CachedPersonList { get; set; } = new List<Person>(); //if empty que to get new list
 
@@ -25,20 +52,9 @@ namespace Library.API
         /// </summary>
         private List<Person> CachedPublicPersonList { get; set; } = new List<Person>(); //if empty que to get new list
 
-        private readonly URL _url;
+        //PUBLIC
 
-
-        //--------CTOR
-        public VedAstroAPI(string userId, string visitorId, IJSRuntime jsRuntime, URL url)
-        {
-            _userId = userId;
-            _visitorId = visitorId;
-            _jsRuntime = jsRuntime;
-            _url = url;
-        }
-
-
-        //--------------------------------------------------
+        public PersonTools(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
 
         /// <summary>
         /// getting people list is a long process, because of clean up and stuff
@@ -50,7 +66,7 @@ namespace Library.API
 
             //STAGE 1 :get person list for current user, can be empty
             //tell API to get started
-            var url = $"{_url.GetPersonList}/UserId/{_userId}/VisitorId/{_visitorId}";
+            var url = $"{_api.URL.GetPersonList}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
 
             //no wait for speed
             //we get call status and id to get data from when ready
@@ -59,7 +75,7 @@ namespace Library.API
 
             //STAGE 2 : get person list for public, example profiles
             //tell API to get started
-            url = $"{_url.GetPersonList}/UserId/101/VisitorId/101";
+            url = $"{_api.URL.GetPersonList}/UserId/101/VisitorId/101";
 
             //no wait for speed
             //API gives a url to check on poll fo results
@@ -78,8 +94,8 @@ namespace Library.API
             if (CachedPersonList.Any()) { return CachedPersonList; }
 
             //prepare url to call
-            var url = $"{_url.GetPersonList}/UserId/{_userId}/VisitorId/{_visitorId}";
-            CachedPersonList = await GetPersonListBehind(url);
+            var url = $"{_api.URL.GetPersonList}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
+            CachedPersonList = await _api.GetList(url, Person.FromJsonList);
 
             return CachedPersonList;
         }
@@ -91,8 +107,8 @@ namespace Library.API
             if (CachedPublicPersonList.Any()) { return CachedPublicPersonList; }
 
             //tell API to get started
-            var url2 = $"{_url.GetPersonList}/UserId/101/VisitorId/101";
-            CachedPublicPersonList = await GetPersonListBehind(url2);
+            var url2 = $"{_api.URL.GetPersonList}/UserId/101/VisitorId/101";
+            CachedPublicPersonList = await _api.GetList(url2, Person.FromJsonList);
 
             return CachedPublicPersonList;
         }
@@ -105,7 +121,7 @@ namespace Library.API
             //send newly created person to API server
             var personJson = person.ToJson();
             //pass in user id to make sure user has right to delete
-            var url = $"{_url.AddPerson}/UserId/{_userId}/VisitorId/{_visitorId}";
+            var url = $"{_api.URL.AddPerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
             var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, personJson);
 
 #if DEBUG
@@ -129,7 +145,7 @@ namespace Library.API
         {
             //tell API to get started
             //pass in user id to make sure user has right to delete
-            var url = $"{_url.DeletePerson}/UserId/{_userId}/VisitorId/{_visitorId}/PersonId/{personId}";
+            var url = $"{_api.URL.DeletePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}/PersonId/{personId}";
 
             //API gives a url to check on poll fo results
             var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
@@ -156,7 +172,7 @@ namespace Library.API
 
             //prepare and send updated person to API server
             var updatedPerson = person.ToJson();
-            var url = $"{_url.UpdatePerson}/UserId/{_userId}/VisitorId/{_visitorId}";
+            var url = $"{_api.URL.UpdatePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
             var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, updatedPerson);
 
 
@@ -171,31 +187,18 @@ namespace Library.API
         }
 
         /// <summary>
-        /// Shows alert using sweet alert js
-        /// will show okay button, no timeout
-        /// </summary>
-        private  async Task ShowAlert(string icon, string title, string descriptionText)
-        {
-            //call SweetAlert lib directly via constructor
-            const string Swal_fire = "Swal.fire";
-            await _jsRuntime.InvokeVoidAsync(Swal_fire, title, descriptionText, icon);
-        }
-
-
-        /// <summary>
         /// used to get person direct not in users list for easy sharing
         /// </summary>
         public async Task<Person> GetPerson(string personId)
         {
-            var url = $"{_url.GetPerson}/PersonId/{personId}";
+            var url = $"{_api.URL.GetPerson}/PersonId/{personId}";
             var result = await Tools.ReadServer<JObject>(url);
 
             //get parsed payload from raw result
-            var person = GetPayload(result, Person.FromJson);
+            var person = VedAstroAPI.GetPayload(result, Person.FromJson);
 
             return person;
         }
-
         /// <summary>
         /// calls API to generate a new person ID, unique and human readable
         /// NOTE:
@@ -206,61 +209,23 @@ namespace Library.API
         {
 
             //get all person profile owned by current user/visitor
-            var url = $"{_url.GetNewPersonId}/Name/{personName}/BirthYear/{stdBirthYear}";
+            var url = $"{_api.URL.GetNewPersonId}/Name/{personName}/BirthYear/{stdBirthYear}";
             var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
 
             //get parsed payload from raw result
-            string personId = GetPayload<string>(jsonResult, null);
+            string personId = VedAstroAPI.GetPayload<string>(jsonResult, null);
 
             return personId;
 
         }
 
 
+        //PRIVATE
+
+
+
 
         //---------------------------------------------PRIVATE
-        private async Task<List<Person>> GetPersonListBehind(string inputUrl)
-        {
-
-            //call until data appears, API takes care of everything
-            JToken? personListJson = null;
-            var pollRate = 250;
-            var notReady = true;
-            while (notReady)
-            {
-                await Task.Delay(pollRate);
-                personListJson = await Tools.ReadOnlyIfPassJSJson(inputUrl, _jsRuntime);
-                notReady = personListJson == null;
-            }
-
-            var cachedPersonList = Person.FromJsonList(personListJson);
-
-            return cachedPersonList;
-
-        }
-
-        /// <summary>
-        /// Calls API till surrender
-        /// </summary>
-        private async Task<string?> PollApiTillData(string inputUrl, string dataToSend)
-        {
-
-            //call until data appears, API takes care of everything
-            string? parsedJsonReply = null;
-            var pollRate = 300;
-            var notReady = true;
-            while (notReady)
-            {
-                await Task.Delay(pollRate);
-                parsedJsonReply = await Tools.ReadOnlyIfPassJSString(inputUrl, dataToSend, _jsRuntime);
-                notReady = parsedJsonReply == null; //if null no data, continue wait
-            }
-
-            return parsedJsonReply;
-
-        }
-
-
         /// <summary>
         /// checks status, if pass clears person list cache, for update, delete and add
         /// </summary>
@@ -272,7 +237,7 @@ namespace Library.API
             if (status != "Pass") //FAIL
             {
                 var failMessage = jsonResult["Payload"]?.Value<string>() ?? "";
-                await ShowAlert("error", $"Server is not happy! Why?", failMessage);
+                await _api.ShowAlert("error", $"Server is not happy! Why?", failMessage);
             }
             else //PASS
             {
@@ -281,13 +246,130 @@ namespace Library.API
             }
         }
 
+    }
+
+
+    public class EventsChart
+    {
+        private readonly VedAstroAPI _api;
+
+        public EventsChart(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
+
+
+        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags)
+        {
+
+            if (VedAstro.Library.Person.Empty.Equals(person))
+            {
+                throw new InvalidOperationException("NO CHART FOR EMPTY PERSON!");
+            }
+
+
+            //1 : package data to get chart
+            var chartSpecsJson = VedAstro.Library.EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags);
+
+            //ask API to make new chart
+            var eventsChartApiCallUrl = $"{_api.URL.GetEventsChart}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
+
+            //NOTE:call is held here
+            var chartString = await  _api.PollApiTillData(eventsChartApiCallUrl, chartSpecsJson.ToString());
+
+            return chartString;
+        }
+
+    }
+
+    /// <summary>
+    /// Make easy access to API, makes API easily consumable
+    /// </summary>
+    public class VedAstroAPI
+    {
+
+
+        public MatchTools Match;
+        public PersonTools Person;
+
+        public readonly string UserId;
+        public readonly string VisitorID;
+        public readonly IJSRuntime JsRuntime;
+        public readonly URL URL;
+
+
+
+        //--------CTOR
+        public VedAstroAPI(string userId, string visitorId, IJSRuntime jsRuntime, URL url)
+        {
+            UserId = userId;
+            VisitorID = visitorId;
+            JsRuntime = jsRuntime;
+            URL = url;
+            Match = new MatchTools(this);
+            Person = new PersonTools(this);
+        }
+
+
+        //--------------------------------------------------
+
+        public async Task<List<T>> GetList<T>(string inputUrl, Func<JToken, List<T>> converter)
+        {
+
+            //call until data appears, API takes care of everything
+            JToken? personListJson = null;
+            var pollRate = 250;
+            var notReady = true;
+            while (notReady)
+            {
+                await Task.Delay(pollRate);
+                personListJson = await Tools.ReadOnlyIfPassJSJson(inputUrl, JsRuntime);
+                notReady = personListJson == null;
+            }
+
+            //var cachedPersonList = Person.FromJsonList(personListJson);
+            var cachedPersonList = converter.Invoke(personListJson);
+
+            return cachedPersonList;
+
+        }
+
+
+        /// <summary>
+        /// Shows alert using sweet alert js
+        /// will show okay button, no timeout
+        /// </summary>
+        public async Task ShowAlert(string icon, string title, string descriptionText)
+        {
+            //call SweetAlert lib directly via constructor
+            const string Swal_fire = "Swal.fire";
+            await JsRuntime.InvokeVoidAsync(Swal_fire, title, descriptionText, icon);
+        }
+
+        /// <summary>
+        /// Calls API till surrender
+        /// </summary>
+        public async Task<string?> PollApiTillData(string inputUrl, string dataToSend)
+        {
+
+            //call until data appears, API takes care of everything
+            string? parsedJsonReply = null;
+            var pollRate = 300;
+            var notReady = true;
+            while (notReady)
+            {
+                await Task.Delay(pollRate);
+                parsedJsonReply = await Tools.ReadOnlyIfPassJSString(inputUrl, dataToSend, JsRuntime);
+                notReady = parsedJsonReply == null; //if null no data, continue wait
+            }
+
+            return parsedJsonReply;
+
+        }
 
         /// <summary>
         /// takes in raw response from API and
         /// gets payload after checking status and shows error if status "Fail"
         /// note :  no parser use direct, support for string, int and double
         /// </summary>
-        private T GetPayload<T>(JToken rawResult, Func<JToken, T>? parser)
+        public static T GetPayload<T>(JToken rawResult, Func<JToken, T>? parser)
         {
             //result must say Pass, else it has failed
             var isPass = rawResult["Status"]?.Value<string>() == "Pass";
@@ -321,26 +403,5 @@ namespace Library.API
 
         }
 
-
-        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags)
-        {
-
-            if (Person.Empty.Equals(person))
-            {
-                throw new InvalidOperationException("NO CHART FOR EMPTY PERSON!");
-            }
-
-
-            //1 : package data to get chart
-            var chartSpecsJson = EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags);
-
-            //ask API to make new chart
-            var eventsChartApiCallUrl = $"{_url.GetEventsChart}/UserId/{_userId}/VisitorId/{_visitorId}";
-
-            //NOTE:call is held here
-            var chartString = await PollApiTillData(eventsChartApiCallUrl, chartSpecsJson.ToString());
-
-            return chartString;
-        }
     }
 }

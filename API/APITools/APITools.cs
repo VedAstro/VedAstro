@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
 using VedAstro.Library;
+using static Google.Protobuf.WireFormat;
 
 namespace API
 {
@@ -93,10 +94,11 @@ namespace API
         /// <summary>
         /// data comes in as XML should leave as JSON ready for sending to client via HTTP
         /// </summary>
-        public static HttpResponseData MessageJson<T>(string statusResult, T payload, HttpRequestData req)
+        public static HttpResponseData MessageJson<T>(string statusResult, T payload, HttpRequestData req, string contentType = MediaTypeNames.Application.Json)
         {
             var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", MediaTypeNames.Application.Json);
+            response.Headers.Add("Content-Type", contentType);
+            response.Headers.Add("Call-Status", statusResult); //lets caller know data is in payload
 
             var finalPayloadJson = new JObject();
             finalPayloadJson["Status"] = statusResult;

@@ -40,18 +40,50 @@
                 </select>
                 <label style="font-weight: 700; color: black;">Task</label>
             </div>
-            
+
             <div @ref="AddPersonMaker" style="display: none;" class="form-floating">
-                <div  class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">Name</span>
-                    <input @bind="addPersonName" type="text" class="form-control" placeholder="Juliet">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" style="min-width: @GR.W97px;">Name</span>
+                    <input @bind="AddPersonName" type="text" class="form-control" placeholder="Juliet">
                 </div>
-                <div  class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1">Gender</span>
-                    <input @bind="addPersonGender" type="text" class="form-control" placeholder="Female">
+
+                <div class="input-group mb-3">
+                    <label class="input-group-text" style="min-width: @GR.W97px;">Gender</label>
+                    <select @bind="AddPersonGender" class="form-select">
+                        <option selected>Choose...</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" style="min-width: @GR.W97px;">Owner</label>
+                    <select @bind="addPersonOwnerId" class="form-select">
+                        <option selected>Choose...</option>
+                        <option value="101">Guest</option>
+                        @RenderWelcomeInfo();
+                    </select>
                 </div>
             </div>
-            
+
+            @functions {
+                RenderFragment RenderWelcomeInfo()
+                {
+                    //based on login show accoringly
+                    //ask user to login
+                    if (AppData.IsGuestUser)
+                    {
+                        return @<option value="login">Login First</option>;
+                    }
+                    //already loged in
+                    else
+                    {
+                        return @<option value="@AppData.CurrentUser.Id">@AppData.CurrentUser.Name</option>;
+                    }
+
+                }
+            }
+
+
             @*Planet Name*@
             <div @ref="planetNameSelector" style="display: none;" class="form-floating">
                 <select @bind="SelectedPlanetName" class="form-select" id="planetNameSelector">
@@ -124,9 +156,9 @@
             @*OUTPUT ARROW ICON*@
             <Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="55" />
 
-            @*ARROW DOWN*@
-            <div>
-                <span>URL</span>
+            @*URL DISPLAY OUT*@
+            <div class="vstack gap-1">
+                <span style="color: #a7a7a7;">URL</span>
                 <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
             </div>
             <div style="display: none;" class="form-floating" @ref="PostBodyElement">
@@ -206,8 +238,20 @@
 
     private string selectedHouseName;
 
-    private string addPersonName { get; set; }
-    private string addPersonGender { get; set; }
+    private string AddPersonName { get; set; }
+    private string AddPersonGender { get; set; }
+
+    private string addPersonOwnerId
+    {
+        get => _addPersonOwnerId;
+        set
+        {
+            //if login send to login page
+            if (value == "login") { AppData.Go(PageRoute.Login); }
+
+            _addPersonOwnerId = value;
+        }
+    }
 
     private string SelectedPlanetName
     {
@@ -227,9 +271,12 @@
         {
             switch (value.ToLower())
             {
-             case "addperson":
-                 _jsRuntime.Show(accountTaskSelector);
-                 break;
+                case "addperson":
+                    _jsRuntime.Show(AddPersonMaker);
+                    break;
+                default:
+                    _jsRuntime.Hide(AddPersonMaker);
+                    break;
             }
             _selectedTaskName = value;
         }
@@ -313,6 +360,7 @@
     }
     private string _selectedBodyType;
     private string _selectedTaskName;
+    private string _addPersonOwnerId;
 
 
     /// <summary>
@@ -347,12 +395,11 @@
 
         //STAGE 2 :
         //combine the call
-        //---
         var domain = AppData.URL.ApiUrl; //get stable or beta as needed
-                                         //---
+
         var localNameNoSpace = Tools.RemoveWhiteSpace(_geoLocationInput.LocationName);
         var location = $"/Location/{localNameNoSpace}";
-        //---
+
         string hhmmStr = timeInputed.GetStdDateTimeOffset().ToString("HH:mm");
         string dateSt = timeInputed.GetStdDateTimeOffset().ToString("dd");
         string monthStr = timeInputed.GetStdDateTimeOffset().ToString("MM");
@@ -369,6 +416,14 @@
         else if (SelectedCategory == "SkyChartGIF")
         {
             placeHolder = domain + location + time + "/SkyChartGIF";
+        }
+        else if (SelectedCategory == "Account")
+        {
+            var ownerId = $"/OwnerId/{addPersonOwnerId}";
+            var name = $"/Name/{AddPersonName}";
+            var gender = $"/Gender/{AddPersonGender}";
+            var accountTask = $"/{SelectedTaskName}";
+            placeHolder = domain + accountTask + ownerId + name + gender + location + time;
         }
         else
         {

@@ -4,32 +4,111 @@
 
 
 @*show loading first*@
-@if (NothingToShow)
-{
-    @AppData.LoadingImage
-}
-else
+@if (!NothingToShow)
 {
 
-    <table class="table mb-5">
-        <thead>
-            <tr>
-                <th scope="col">Person</th>
-                <th scope="col">Prediction</th>
-                <th scope="col">Report</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var report in MatchReportList)
-            {
-                <tr>
-                    <td>@report.PersonName</td>
-                    <td>@report.KutaScore</td>
-                    <td><IconButton OnClickCallback="@(()=>OnClickViewPerson(report.PersonId))" ButtonText="View" OpenNewTab="true" /></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <IconTitle IconName="emojione:heart-with-arrow" Title="Found Match">
+        <ButtonRow>
+            <div class="hstack gap-3">
+                <div class="input-group" style="width: fit-content">
+                    <label class="input-group-text gap-1" for="genderFilterSelector">
+                        <Icon IconName="ph:gender-intersex-fill" Size="25"/> Gender
+                    </label>
+                    <select class="form-select" id="genderFilterSelector">
+                        <option selected>Both</option>
+                        <option value="1">Only Male</option>
+                        <option value="2">Only Female</option>
+                    </select>
+                </div>
+
+                <div class="input-group me-3" style="width: fit-content">
+                    <label class="input-group-text gap-1" for="ViewFilterSelector">
+                        <Icon IconName="ic:round-view-list" Size="25" /> View
+                    </label>
+                    <select class="form-select" id="ViewFilterSelector">
+                        <option selected>Card</option>
+                        <option value="1">List</option>
+                    </select>
+                </div>
+
+                <IconButton TooltipText="Share on Facebook" SmallSize="true" IconName="ic:twotone-facebook" OnClickCallback="@(() => WebsiteTools.ShareCurrentPageOnFacebook())"/>
+            </div>
+        </ButtonRow>
+    </IconTitle>
+
+
+    <div class="mt-3">
+        @if (IsCardView)
+        {
+            <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
+                @foreach (var report in MatchReportList)
+                {
+                    <div class="card me-4" style="width: @GR.W412px">
+                        <div class="card-header d-flex justify-content-between">
+                            <h5>@report.PersonName</h5>
+                            <h5>Score
+                                <b style="color: #00a702;">@report.KutaScore%</b>
+                            </h5>
+                        </div>
+                        <div class="card-body d-flex justify-content-between">
+                            <div style="width: @(GR.W97+GR.W22)px;">
+                                <img src="images/person/8e9b5804e68a4b82a1a975ebee1643dc.jpg">
+                            </div>
+                            <div class="vstack gap-2">
+                                <div class="d-flex justify-content-around">
+                                    <div class="card-text hstack gap-2"><Icon IconName="@GetGenderIconName(report.Gender)" /> @report.Gender</div>
+                                    <div class="card-text hstack gap-2"><Icon IconName="icon-park-outline:birthday-cake" /> Age @report.Age</div>
+                                </div>
+                                <div class="hstack gap-2">
+                                    <Icon IconName="mdi:head-love" Size="@((int)GR.W60)" />
+                                    Mind
+                                    <b style="color: #ff6969;">Not In Tune</b>
+                                </div>
+                                <div class="hstack gap-2">
+                                    <Icon ImageName="sex-in-bed.png" Size="@((int)GR.W60)" />
+                                    Sex Life
+                                    <b style="color: #00a702;">Good</b>
+                                </div>
+                                <div class="d-flex justify-content-evenly">
+                                    <IconButton IconName="openmoji:love-letter" OnClickCallback="@(() => OnClickViewMatchReport(report.PersonId))" ButtonText="Say Hi!" SmallSize="true" />
+                                    <IconButton IconName="carbon:report-data" OnClickCallback="@(() => OnClickViewMatchReport(report.PersonId))" ButtonText="View" SmallSize="true" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        }
+        @* TABLE VIEW *@
+        else
+        {
+
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Person</th>
+                        <th scope="col">Score</th>
+                        <th scope="col"></th>
+                        <th scope="col">Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var report in MatchReportList)
+                    {
+                        <tr>
+                            <td>@report.PersonName</td>
+                            <td>@report.KutaScore</td>
+                            <td><IconButton IconName="openmoji:love-letter" OnClickCallback="@(()=>OnClickViewMatchReport(report.PersonId))" ButtonText="Say Hi!" SmallSize="true" /></td>
+                            <td><IconButton IconName="carbon:report-data" OnClickCallback="@(()=>OnClickViewMatchReport(report.PersonId))" ButtonText="View" SmallSize="true" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+
 }
 
 
@@ -37,18 +116,24 @@ else
 
 @code {
 
+    private bool IsCardView { get; set; } = true;
+
+
     private bool NothingToShow { get; set; } = true;
 
     public List<PersonKutaScore> MatchReportList { get; set; } = new List<PersonKutaScore>();
 
 
-    private Person selectedPerson { get; set; }
+    private Person SelectedPerson { get; set; }
 
 
 
-    public void Update(List<PersonKutaScore> personKutaScoreList)
+    public async Task Update(Person selectedPerson, List<PersonKutaScore> personKutaScoreList)
     {
         NothingToShow = true;
+
+        //save person to make chart link
+        SelectedPerson = selectedPerson;
 
         MatchReportList = personKutaScoreList;
 
@@ -56,13 +141,26 @@ else
 
         StateHasChanged();
 
-
     }
 
-    private void OnClickViewPerson(string personId)
+    private void OnClickViewMatchReport(string personId)
     {
+        //make link to match chart with selected person and person from list
+        var matchReportUrlMale = $"/Calculator/Match/Report/{SelectedPerson.Id}/{personId}";
+        var matchReportUrlFemale = $"/Calculator/Match/Report/{personId}/{SelectedPerson.Id}";
 
-        throw new NotImplementedException();
+        //priority of gender order goes to selected person
+        var finalUrl = SelectedPerson.Gender == Gender.Male ? matchReportUrlMale : matchReportUrlFemale;
+
+        //open new tab for convenience
+        AppData.Go(finalUrl, newTab: true);
+    }
+
+    private string GetGenderIconName(Gender gender)
+    {
+        //change name of icon based on male or female
+        var iconName = $"ph:gender-{gender.ToString().ToLower()}-fill";
+        return iconName;
     }
 
 }

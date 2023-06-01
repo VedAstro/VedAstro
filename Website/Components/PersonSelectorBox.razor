@@ -33,7 +33,6 @@ KEEP IT REAL
     }
     <div class="hstack">
 
-        <!-- Example single danger button -->
         <div class="btn-group" style="width: @GR.W255px;">
             <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
                 @if (!SelectedPerson.Equals(Person.Empty))
@@ -45,8 +44,13 @@ KEEP IT REAL
                     @("Select Person")
                 }
             </button>
+            
+            @* DROPDOWN SECTION *@
             <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
-                <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                <div class="hstack gap-2">
+                    <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+                    <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() =>AppData.Go(PageRoute.PersonList))" />
+                </div>
                 @if (IsReady)
                 {
                     @foreach (var person in PersonListDisplay)
@@ -268,5 +272,6 @@ KEEP IT REAL
     {
         PublicPersonList.Clear();
     }
+
 
 }

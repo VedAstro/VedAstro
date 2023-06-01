@@ -149,7 +149,7 @@ namespace Website
         /// </summary>
         public static RenderFragment LoadingImage => (builder) =>
         {
-            builder.AddMarkupContent(0, $"<img style=\"position: relative; left: 39%; top: 30%;\" src=\"images/loading-animation-progress-transparent.gif\" />");
+            builder.AddMarkupContent(0, $"<img style=\"position: relative; left: 39%; top: 30%; cursor: progress;\" src=\"images/loading-animation-progress-transparent.gif\" />");
         };
 
         /// <summary>
@@ -253,11 +253,21 @@ namespace Website
         /// <summary>
         /// Simple blazor navigation wrapper with standard logging
         /// </summary>
-        public static void Go(string url, bool forceReload = false)
+        public static void Go(string url, bool forceReload = false, bool newTab = false)
         {
             WebLogger.Data($"NAVIGATE -> {url}");
 
-            Navigation.NavigateTo(url, forceReload);
+            //same tab navigation
+            if (!newTab)
+            {
+                Navigation.NavigateTo(url, forceReload);
+            }
+            //new tab navigation
+            else
+            {
+                JsRuntime.OpenNewTab(url);
+            }
+
         }
     }
 }

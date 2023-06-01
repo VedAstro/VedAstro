@@ -21,19 +21,40 @@
 
             @*Celestial Body*@
             <div class="form-floating">
-                <select @bind="SelectedBodyType" class="form-select" id="celestialBodySelect" aria-label="Celestial Body Select">
+                <select @bind="SelectedCategory" class="form-select" id="celestialBodySelect" aria-label="Celestial Body Select">
                     <option value="" selected>Make a choice</option>
                     <option value="Planet">Planet</option>
                     <option value="House">House</option>
                     <option value="SkyChart">Sky Chart</option>
                     <option value="SkyChartGIF">Sky Chart GIF</option>
+                    <option value="Account">Account</option>
                 </select>
-                <label style="font-weight: 700; color: black;" for="celestialBodySelect">Celestial Body</label>
+                <label style="font-weight: 700; color: black;" for="celestialBodySelect">Category</label>
             </div>
 
+            @*ACCOUNT STUFF*@
+            <div @ref="accountTaskSelector" style="display: none;" class="form-floating">
+                <select @bind="SelectedTaskName" class="form-select">
+                    <option value="" selected>Make a choice</option>
+                    <option value="AddPerson">Add Person</option>
+                </select>
+                <label style="font-weight: 700; color: black;">Task</label>
+            </div>
+            
+            <div @ref="AddPersonMaker" style="display: none;" class="form-floating">
+                <div  class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Name</span>
+                    <input @bind="addPersonName" type="text" class="form-control" placeholder="Juliet">
+                </div>
+                <div  class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Gender</span>
+                    <input @bind="addPersonGender" type="text" class="form-control" placeholder="Female">
+                </div>
+            </div>
+            
             @*Planet Name*@
             <div @ref="planetNameSelector" style="display: none;" class="form-floating">
-                <select @bind="selectedPlanetName" class="form-select" id="planetNameSelector" aria-label="Planet Name Select">
+                <select @bind="SelectedPlanetName" class="form-select" id="planetNameSelector">
                     <option value="" selected>Make a choice</option>
                     <option value="All">All</option>
                     <option value="Sun">Sun</option>
@@ -51,7 +72,7 @@
 
             @*House Name*@
             <div @ref="houseNameSelector" style="display: none;" class="form-floating">
-                <select @bind="selectedHouseName" class="form-select" id="houseNameSelector" aria-label="House Name Select">
+                <select @bind="SelectedHouseName" class="form-select" id="houseNameSelector" aria-label="House Name Select">
                     <option value="" selected>Make a choice</option>
                     <option value="House1">All</option>
                     <option value="House1">House 1</option>
@@ -100,11 +121,18 @@
 
             <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
 
-            @*OUTPUT*@
+            @*OUTPUT ARROW ICON*@
             <Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="55" />
 
             @*ARROW DOWN*@
-            <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
+            <div>
+                <span>URL</span>
+                <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
+            </div>
+            <div style="display: none;" class="form-floating" @ref="PostBodyElement">
+                <span>URL</span>
+                <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
+            </div>
 
             @*COPY AND CALL BUTTON*@
             <div class="d-flex justify-content-center gap-3">
@@ -166,13 +194,58 @@
 
 @code {
 
-    private string selectedPlanetName;
+    private string SelectedHouseName
+    {
+        get => selectedHouseName;
+        set
+        {
+            WebLogger.Data($"Selected House : {value}");
+            selectedHouseName = value;
+        }
+    }
+
     private string selectedHouseName;
+
+    private string addPersonName { get; set; }
+    private string addPersonGender { get; set; }
+
+    private string SelectedPlanetName
+    {
+        get => selectedPlanetName;
+        set
+        {
+            WebLogger.Data($"Selected Planet : {value}");
+            selectedPlanetName = value;
+        }
+
+    }
+
+    private string SelectedTaskName
+    {
+        get => _selectedTaskName;
+        set
+        {
+            switch (value.ToLower())
+            {
+             case "addperson":
+                 _jsRuntime.Show(accountTaskSelector);
+                 break;
+            }
+            _selectedTaskName = value;
+        }
+    }
+
+    private string selectedPlanetName;
+
     private string selectedPlanetProperty;
+
     private string selectedHouseProperty;
 
+    private ElementReference PostBodyElement;
     private ElementReference houseNameSelector;
     private ElementReference planetNameSelector;
+    private ElementReference AddPersonMaker;
+    private ElementReference accountTaskSelector;
     private ElementReference housePropertySelector;
     private ElementReference planetPropertySelector;
 
@@ -187,7 +260,7 @@
     /// <summary>
     /// Controls the showing and hiding of other dropdowns
     /// </summary>
-    public string SelectedBodyType
+    public string SelectedCategory
     {
         get => _selectedBodyType;
         set
@@ -205,37 +278,42 @@
                     _jsRuntime.Hide(houseNameSelector);
                     _jsRuntime.Show(planetPropertySelector);
                     _jsRuntime.Hide(housePropertySelector);
+                    _jsRuntime.Hide(accountTaskSelector);
                     break;
                 case "house"://show house & hide planet
                     _jsRuntime.Show(houseNameSelector);
                     _jsRuntime.Hide(planetNameSelector);
                     _jsRuntime.Show(housePropertySelector);
                     _jsRuntime.Hide(planetPropertySelector);
+                    _jsRuntime.Hide(accountTaskSelector);
                     break;
                 case "skychart"://show house & hide planet
                     _jsRuntime.Hide(houseNameSelector);
                     _jsRuntime.Hide(planetNameSelector);
                     _jsRuntime.Hide(housePropertySelector);
                     _jsRuntime.Hide(planetPropertySelector);
+                    _jsRuntime.Hide(accountTaskSelector);
                     break;
                 case "skychartgif"://show house & hide planet
                     _jsRuntime.Hide(houseNameSelector);
                     _jsRuntime.Hide(planetNameSelector);
                     _jsRuntime.Hide(housePropertySelector);
                     _jsRuntime.Hide(planetPropertySelector);
+                    _jsRuntime.Hide(accountTaskSelector);
                     break;
-                //if none above then hide all
-                default:
+                case "account"://show house & hide planet
                     _jsRuntime.Hide(houseNameSelector);
                     _jsRuntime.Hide(planetNameSelector);
                     _jsRuntime.Hide(housePropertySelector);
                     _jsRuntime.Hide(planetPropertySelector);
+                    _jsRuntime.Show(accountTaskSelector);
                     break;
             }
         }
     }
-
     private string _selectedBodyType;
+    private string _selectedTaskName;
+
 
     /// <summary>
     /// After user click generate check data validity, generate final url
@@ -259,8 +337,8 @@
         var timeInputed = await _timeInput.GetTime(geoLocation);
 
         //get final celes name, if empty raise nice alarm
-        var finalCelesName = GetFinalCelesName();
-        var finalCelesProperty = GetFinalCelesProperty();
+        var finalCelesName = GetFinalCategoryName();
+        var finalCelesProperty = GetFinalCategoryProperty();
 
         //data property
         //if select all, leave empty as for API to give all
@@ -284,18 +362,18 @@
 
         //format of the API call
         var placeHolder = "";
-        if (SelectedBodyType == "SkyChart")
+        if (SelectedCategory == "SkyChart")
         {
             placeHolder = domain + location + time + "/SkyChart";
         }
-        else if (SelectedBodyType == "SkyChartGIF")
+        else if (SelectedCategory == "SkyChartGIF")
         {
             placeHolder = domain + location + time + "/SkyChartGIF";
         }
         else
         {
             var celesPropertyStr = string.IsNullOrEmpty(finalCelesProperty) ? "" : $"/{finalCelesProperty}"; // sign, angle
-            var selectedBodyTypeStr = string.IsNullOrEmpty(SelectedBodyType) ? "" : $"/{SelectedBodyType}"; //planet, house
+            var selectedBodyTypeStr = string.IsNullOrEmpty(SelectedCategory) ? "" : $"/{SelectedCategory}"; //planet, house
             var finalCelesNameStr = string.IsNullOrEmpty(finalCelesName) ? "" : $"/{finalCelesName}"; // sun, moon, house 1
             var celestialBodyData = selectedBodyTypeStr + finalCelesNameStr + celesPropertyStr;
             placeHolder = domain + location + time + celestialBodyData;
@@ -334,7 +412,7 @@
         }
 
         //TEST 3 : Celes Type
-        if (String.IsNullOrWhiteSpace(SelectedBodyType))
+        if (String.IsNullOrWhiteSpace(SelectedCategory))
         {
             //mark invalid & alert user
             await _jsRuntime.ShowAlert("error", "Falling asleep?", "Select a celestial body first");
@@ -343,18 +421,18 @@
         }
 
         //TEST 4 : Celes Name
-        if (String.IsNullOrWhiteSpace(GetFinalCelesName()))
+        if (String.IsNullOrWhiteSpace(GetFinalCategoryName()))
         {
             //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", $"What's the \"Name\" of the {SelectedBodyType}?", true);
+            await _jsRuntime.ShowAlert("error", $"What's the \"Name\" of the {SelectedCategory}?", true);
             return false;
         }
 
         //TEST 5 : Celes Prop
-        if (String.IsNullOrWhiteSpace(GetFinalCelesProperty()))
+        if (String.IsNullOrWhiteSpace(GetFinalCategoryProperty()))
         {
             //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", $"What exact {SelectedBodyType} data you want?", true);
+            await _jsRuntime.ShowAlert("error", $"What exact {SelectedCategory} data you want?", true);
             return false;
         }
 
@@ -364,28 +442,27 @@
 
     }
 
-
     /// <summary>
     /// if null or empty than needs selection
     /// since only calculated when called
     /// </summary>
-    private string GetFinalCelesName()
+    private string GetFinalCategoryName()
     {
-        switch (SelectedBodyType.ToLower())
+        switch (SelectedCategory.ToLower())
         {
             case "planet":
-                return selectedPlanetName;
+                return SelectedPlanetName;
             case "house":
-                return selectedHouseName;
+                return SelectedHouseName;
         }
 
         //if not specified than not needed, return empty
         return "pass"; //something to escape validation
     }
 
-    private string GetFinalCelesProperty()
+    private string GetFinalCategoryProperty()
     {
-        switch (SelectedBodyType.ToLower())
+        switch (SelectedCategory.ToLower())
         {
             case "planet":
                 return selectedPlanetProperty;

@@ -1,5 +1,4 @@
-﻿
-@using VedAstro.Library
+﻿@using VedAstro.Library
 @attribute [Route(PageRoute.About)]
 
 <PageTitle>About</PageTitle>
@@ -20,14 +19,14 @@
 
 <div class="vstack gap-2" style="max-width:@GR.W667px">
 
-    <p class="text-justify">
+    <p class="text-justify" style="font-family: 'Gowun Dodum', serif;font-size: 18px;line-break: auto;">
         <DropCap Alphabet="A" />nybody who has studied Vedic Astrology knows well how accurate it can be.
         But also how complex it can get to make accurate predictions.
         It takes decades of experience to be able make accurate prediction.
         As such this knowledge only reaches a limited people.
         This project is an effort to change that.
     </p>
-    
+
     <SubArticleBlock Title="Goal">
         Our goal is to make Vedic Astrology easily accessible to anybody.
         So that people can use it in their daily lives for their benefit.
@@ -83,46 +82,48 @@
                 <br />
                 It's their gift to us, the <strong>"world folk"</strong>.
             </p>
-
-           @* <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
-                <figure class="text-center mt-4">
-                    <blockquote class="blockquote">
-                        <p>
-                            birth is not meant
-                            to emphasize fate, but to arouse man's will to escape
-                            from his universal thralldom
-                        </p>
-                    </blockquote>
-                    <figcaption class="blockquote-footer">
-                        Yukteswar <cite title="Source Title">Sage</cite>
-                    </figcaption>
-                </figure>
-            </div>*@
-            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
-                <figure class="text-center mt-4">
-                    <blockquote class="blockquote">
-                        <p>Mechanical features in the law of karma,<br> can be skillfully adjusted by the fingers of wisdom.</p>
-                    </blockquote>
-                    <figcaption class="blockquote-footer">
-                        Yukteswar
-                    </figcaption>
-                </figure>
-            </div>
-@*            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
-                <figure class="text-center mt-4">
-                    <blockquote class="blockquote">
-                        <p>he has spiritual resources which are not subject to planetary pressure</p>
-                    </blockquote>
-                    <figcaption class="blockquote-footer">
-                        Yukteswar <cite title="Source Title">Sage</cite>
-                    </figcaption>
-                </figure>
-            </div>
-*@
         </TextHTML>
     </ArticleBlock>
 
+    <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
+        <figure class="text-center">
+            <blockquote class="blockquote">
+                <p style="font-family: 'Homemade Apple', serif;">Mechanical features in the law of karma,<br> can be skillfully adjusted by the fingers of wisdom.</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                Yukteswar
+            </figcaption>
+        </figure>
+    </div>
+
 </div>
+
+@* <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
+            <figure class="text-center mt-4">
+            <blockquote class="blockquote">
+            <p>
+            birth is not meant
+            to emphasize fate, but to arouse man's will to escape
+            from his universal thralldom
+            </p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+            Yukteswar <cite title="Source Title">Sage</cite>
+            </figcaption>
+            </figure>
+            </div>*@
+@*            <div style="cursor: pointer;" @onclick="() => _jsRuntime.OpenNewTab(URL.YukteswarWiki)">
+            <figure class="text-center mt-4">
+            <blockquote class="blockquote">
+            <p>he has spiritual resources which are not subject to planetary pressure</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+            Yukteswar <cite title="Source Title">Sage</cite>
+            </figcaption>
+            </figure>
+            </div>
+            *@
+
 
 @*    <h4 class="fw-bold">Project Future</h4>
     <p class="text-justify" style="max-width:@AppData.ComponentWidth;">

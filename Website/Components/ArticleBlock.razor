@@ -2,12 +2,13 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-<div class="py-2">
+<div class="py-2"
+     @onmouseenter="@(() => WebLogger.Data($"READ ARTICLE : {Title}"))"> @*simple log*@
 
     <IconTitle TitleHTML="@TitleHTML" IconSize="@IconSize" Title="@Title" IconName="@IconName" TitleHolder="h4">
         <ButtonRow>@ButtonRow</ButtonRow>
     </IconTitle>
-    <p class="text-justify">
+    <p class="text-justify" style="font-family: 'Gowun Dodum', serif;font-size: 18px;line-break: auto;">
         @TextHTML
     </p>
 
@@ -51,5 +52,6 @@
     /// </summary>
     [Parameter]
     public RenderFragment? ButtonRow { get; set; }
+
 
 }

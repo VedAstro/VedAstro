@@ -6,7 +6,7 @@
 
 <PageTop ImageName="match-checker.svg"
          Title="Match Finder"
-         DescriptionText="Find your astrologically perfect match, the matching algorithm will find for your soulmate in our world wide database.">
+         DescriptionText="Find your astrologically perfect match. Matching algorithm will find for your soulmate in our world wide database.">
 </PageTop>
 
 
@@ -88,10 +88,12 @@
     {
         _jsRuntime.ShowLoading();
 
-       //get list of people match from API
-       var personKutaScoreList = await AppData.API.Match.GetList(_selectedPersonId);
+        //get list of people match from API
+        var personKutaScoreList = await AppData.API.Match.GetList(_selectedPersonId);
 
-        foundMathcList.Update(personKutaScoreList);
+        var person = await _personSelector.GetSelectedPerson();
+
+        foundMathcList.Update(person, personKutaScoreList);
 
         _jsRuntime.HideLoading();
 
@@ -168,7 +170,7 @@
             //tell user to login
             await _jsRuntime.ShowAlert("success", "Please Login", AlertText.FunnyLoginText());
 
-           AppData.Go(PageRoute.Login);
+            AppData.Go(PageRoute.Login);
             return false;
 
         }

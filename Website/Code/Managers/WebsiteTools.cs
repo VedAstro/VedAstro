@@ -136,7 +136,8 @@ namespace Website
             var result = GetPersonById(personId, jsRuntime).Result;
             return result;
         }
-        
+
+
         /// <summary>
         /// Gets person from ID
         /// Checks user's person list,

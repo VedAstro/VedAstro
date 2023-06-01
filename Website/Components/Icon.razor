@@ -2,17 +2,37 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-<div class="@ExtraClass" style="@ExtraStyle">
-    <span style="@CssStyle" class="iconify" data-icon="@IconName" data-width="@Size" />
+<div class="@ExtraClass" style="@ExtraStyle" @onclick="OnClickButton" @ref="HolderDiv">
+    @if (IconName != "")
+    {
+        <span style="@CssStyle" class="iconify" data-icon="@IconName" data-width="@Size" />
+    }
+    @if (ImageName != "")
+    {
+        <img src="images/icon/@ImageName" width="@(Size)px" style="@CssStyle">
+    }
 </div>
 
 @code {
 
     /// <summary>
+    /// Function that is called on click of button
+    /// Note: using delegate so that can change function based on page mode
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+
+    /// <summary>
     /// Special icon name from icon-sets.iconify.design
     /// </summary>
     [Parameter]
-    public string IconName { get; set; } = "ph:paw-print-duotone";
+    public string IconName { get; set; } = "";
+
+    /// <summary>
+    /// Special icon name from icon-sets.iconify.design
+    /// </summary>
+    [Parameter]
+    public string ImageName { get; set; } = "";
 
     /// <summary>
     /// add extra styles to SVG icon parent div
@@ -34,7 +54,7 @@
     public bool NextToText { get; set; } = false;
 
     /// <summary>
-    /// computed style applied to 
+    /// computed style applied to
     /// </summary>
     private string CssStyle
     {
@@ -54,6 +74,41 @@
     /// </summary>
     [Parameter]
     public int? Size { get; set; } = 25;
+    [Parameter]
+    public ElementReference HolderDiv { get; set; }
+
+    /// <summary>
+    /// Tooltip text
+    /// </summary>
+    [Parameter]
+    public string? TooltipText { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+    //attach tooltip lib element if tooltip provided
+            if (!string.IsNullOrEmpty(TooltipText))
+            {
+                await _jsRuntime.Tippy(HolderDiv, new { content = this.TooltipText });
+            }
+        }
+    }
+
+
+
+    /// <summary>
+    /// Default button click will send page to URL link if provided
+    /// else exit silently
+    /// </summary>
+    private async Task OnClickButton(MouseEventArgs obj)
+    {
+        //log this
+        WebLogger.Data($"CLICK ICON :{IconName}");
+
+        await OnClickCallback.InvokeAsync(obj);
+    }
 
 
 }

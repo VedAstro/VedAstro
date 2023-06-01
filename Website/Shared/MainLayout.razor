@@ -28,7 +28,7 @@
         <!-- DESKTOP ONLY : SIDEBAR -->
         <div class="col-auto align-items-start d-none d-md-block">
             <!--only visible in Desktop-->
-            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white">
+            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: auto;">@* special style to make appear in night mode dispite bg-white *@
                 <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
                 <SideBarButtons />
             </div>
@@ -97,11 +97,6 @@
             <hr class="mt-5" style="margin-bottom:@GR.W157px;">
         </div>
     </div>
-
-    @if (LoadExtra)
-    {
-        <PersonSelectorBox @ref="AppData.PersonSelectorBox" Label="Chicken Wing" />
-    }
 
 
 }

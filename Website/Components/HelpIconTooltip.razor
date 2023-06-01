@@ -10,14 +10,14 @@
 {
     <div class="hstack gap-2 align-content-center">
         <h4 class="mt-2">@Label</h4>
-        <div @ref="helpIconHolder" @onmouseenter="OnMouseOverHelpIcon" style="cursor: pointer;">
+        <div @ref="helpIconHolder" @onmouseenter="OnMouseOverHelpIcon" style="cursor: help;">
             <span class="iconify" data-icon="icon-park:help" data-width="@(SmallIcon?smallIconSize:bigIconSize)"></span>
         </div>
     </div>
 }
 else
 {
-    <div @ref="helpIconHolder" @onmouseenter="OnMouseOverHelpIcon" style="cursor: pointer; float: right; margin-left: 8px;margin-top: -2px;">
+    <div @ref="helpIconHolder" @onmouseenter="OnMouseOverHelpIcon" style="cursor: help; float: right; margin-left: 8px;margin-top: -2px;">
         <span class="iconify" data-icon="icon-park:help" data-width="@(SmallIcon?smallIconSize:bigIconSize)"></span>
     </div>
 }

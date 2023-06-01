@@ -14,13 +14,19 @@ namespace API
                 //get new visitor data out of incoming request 
                 var newVisitorXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 
+                //take data out and prepare for storage
+                var x = LogBookEntity.FromXml(newVisitorXml);
+                LogBook.Add(x);
+
+                //return APITools.PassMessage(incomingRequest);
+
                 //if user id local skip
-                var isLocal = newVisitorXml.Element("UserId")?.Value == "102111269113114363117";
-                var isLocal2 = newVisitorXml.Element("TimeStamp")?.Value.Contains("+08:00") ?? false;
-                if (isLocal || isLocal2)
-                {
-                    return APITools.PassMessage(incomingRequest);
-                }
+                //var isLocal = newVisitorXml.Element("UserId")?.Value == "102111269113114363117";
+                //var isLocal2 = newVisitorXml.Element("TimeStamp")?.Value.Contains("+08:00") ?? false;
+                //if (isLocal || isLocal2)
+                //{
+                //    return APITools.PassMessage(incomingRequest);
+                //}
 
                 //add new visitor to main list
                 await APITools.AddXElementToXDocumentAzure(newVisitorXml, APITools.VisitorLogFile, APITools.BlobContainerName);
@@ -54,6 +60,42 @@ namespace API
                 //convert list to nice string before sending to caller
                 var visitorLogXmlString = visitorLogXml?.Root ?? new XElement("Empty");
                 return APITools.PassMessage(visitorLogXmlString, incomingRequest);
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+        }
+
+        /// <summary>
+        /// transfers from XML to AZ Table
+        /// </summary>
+        [Function("Transfer")]
+        public static async Task<HttpResponseData> Transfer([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequestData incomingRequest)
+        {
+
+            try
+            {
+                //get visitor log from storage
+                var visitorLogXml = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
+
+                //go through each and send to table
+                var all = visitorLogXml?.Root.Elements();
+                foreach (var recordXml in all)
+                {
+                    //extract
+                    var temp = LogBookEntity.FromXml(recordXml);
+
+                    //add to table
+                    LogBook.Add(temp);
+                }
+
+                return APITools.PassMessage(incomingRequest);
 
             }
             catch (Exception e)

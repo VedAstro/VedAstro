@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using VedAstro.Library;
 using static API.CallTracker;
 
 namespace API
@@ -57,10 +58,9 @@ namespace API
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
         public string UserId { get; set; }
-        public string VisitorId { get; set; }
         public string Url { get; set; }
-        public string TimeStampClient { get; set; }
-        public string TimeStampServer { get; set; }
+        public DateTimeOffset TimeStampClient { get; set; }
+        public DateTimeOffset TimeStampServer { get; set; }
         public string Branch { get; set; }
         public string Source { get; set; }
         public string Data { get; set; }
@@ -68,12 +68,20 @@ namespace API
 
         public static LogBookEntity FromXml(XElement newVisitorXml)
         {
+            var timeStampClientRaw = newVisitorXml.Element("TimeStamp")?.Value ?? "";
+            var timeStampClient = DateTimeOffset.ParseExact(timeStampClientRaw, Time.DateTimeFormat, null);
+
+            var timeStampServerRaw = newVisitorXml.Element("TimeStampServer")?.Value ?? "";
+            var timeStampServer = DateTimeOffset.ParseExact(timeStampServerRaw, Time.DateTimeFormat, null);
+
             var x = new LogBookEntity()
             {
-                VisitorId = newVisitorXml.Element("VisitorId")?.Value ?? "",
+                //all records to 1 visitor is under 1 Partition (hence use as partition key) 
+                PartitionKey = newVisitorXml.Element("VisitorId")?.Value ?? "NO VISITOR BADGE",
+                RowKey = Tools.GenerateId(), //uniquely represents each record
                 UserId = newVisitorXml.Element("UserId")?.Value ?? "",
-                TimeStampClient = newVisitorXml.Element("TimeStamp")?.Value ?? "",
-                TimeStampServer = newVisitorXml.Element("TimeStampServer")?.Value ?? "",
+                TimeStampClient = timeStampClient,
+                TimeStampServer = timeStampServer,
                 Url = newVisitorXml.Element("Url")?.Value ?? "",
                 Branch = newVisitorXml.Element("Branch")?.Value ?? "",
                 Source = newVisitorXml.Element("Source")?.Value ?? "",

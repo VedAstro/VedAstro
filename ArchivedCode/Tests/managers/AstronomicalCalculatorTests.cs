@@ -9,11 +9,15 @@ namespace Genso.Astrology.Library.Tests
         [TestMethod()]
         public void GetPlanetRasiSignTest()
         {
+            //prepare data
             var geoLocation = new GeoLocation("Ipoh", 101, 4.59);
             var birthTime = new Time("06:42 16/04/2021 +08:00", geoLocation);
 
+            //calculate data
+            var result = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, birthTime);
 
-            AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Mercury, birthTime);
+            //print data
+            Console.WriteLine(result);
         }
 
         [TestMethod()]

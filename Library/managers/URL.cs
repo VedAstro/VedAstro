@@ -159,6 +159,7 @@ public class URL
     public const string SlackInviteURL = "https://join.slack.com/t/vedastro/shared_invite/zt-1u7pdqjky-hrJZ7e3_vM2dZOmVY8FeHA";
     public const string JohnLenonImagine = "https://youtu.be/rAn-AWXtHv0";
     public const string YukteswarWiki = "https://en.wikipedia.org/wiki/Swami_Sri_Yukteswar_Giri";
+    public const string WHAudenWiki = "https://en.wikipedia.org/wiki/W._H._Auden";
     public const string YoganandaWiki = "https://en.wikipedia.org/wiki/Paramahansa_Yogananda";
     public const string CarlSaganWiki = "https://en.wikipedia.org/wiki/Carl_Sagan";
 }

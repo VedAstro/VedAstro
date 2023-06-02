@@ -43,33 +43,33 @@
             <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
                 @foreach (var report in MatchReportList)
                 {
-                    <div class="card me-4" style="width: @GR.W412px">
-                        <div class="card-header d-flex justify-content-between">
-                            <h5>@report.PersonName</h5>
-                            <h5>Score
+                    <div class="me-4 rounded-3 border shadow px-3 pt-2 pb-3 bg-white" style="width: @GR.W412px;height: fit-content;">
+                        <div class="mb-2 d-flex justify-content-between px-3 border-bottom">
+                            <h4>@report.PersonName</h4>
+                            <h4>Score
                                 <b style="color: #00a702;">@report.KutaScore%</b>
-                            </h5>
+                            </h4>
                         </div>
                         <div class="card-body d-flex justify-content-between">
                             <div style="width: @(GR.W97+GR.W37)px;" class="me-3">
                                 <img style="width: inherit;" src="images/person/8e9b5804e68a4b82a1a975ebee1643dc.jpg">
                             </div>
                             <div class="vstack gap-2">
-                                <div class="d-flex justify-content-around">
-                                    <div class="card-text hstack gap-2"><Icon IconName="@GetGenderIconName(report.Gender)" /> @report.Gender</div>
-                                    <div class="card-text hstack gap-2"><Icon IconName="icon-park-outline:birthday-cake" /> Age @report.Age</div>
+                                <div class="gap-3 d-flex justify-content-begin">
+                                    <div class="card-text hstack gap-2"><Icon Size="30" IconName="@GetGenderIconName(report.Gender)" /> @report.Gender</div>
+                                    <div class="card-text hstack gap-1"><Icon Size="30" IconName="icon-park-outline:birthday-cake" /> Age @report.Age</div>
                                 </div>
-                                <div class=" gap-3 d-flex justify-content-begin">
-                                    <Icon IconName="mdi:head-love" Size="30" />
+                                <div style="margin-left: -5px;" class="gap-2 d-flex justify-content-begin">
+                                    <Icon IconName="mdi:head-love" Size="34" />
                                     Mind
                                     <b style="color: #ff6969;">Not In Tune</b>
                                 </div>
-                                <div class=" gap-3 d-flex justify-content-begin">
+                                <div class="gap-2 d-flex justify-content-begin">
                                     <Icon ImageName="sex-in-bed.png" Size="30" />
                                     Sex Life
                                     <b style="color: #00a702;">Good</b>
                                 </div>
-                                <div class="gap-3 d-flex justify-content-begin">
+                                <div class="gap-2 d-flex justify-content-begin">
                                     <Icon IconName="clarity:talk-bubbles-solid" Size="30" />
                                     Communication
                                     <b style="color: #333;">OK</b>

@@ -68,11 +68,24 @@ namespace API
 
         public static LogBookEntity FromXml(XElement newVisitorXml)
         {
-            var timeStampClientRaw = newVisitorXml.Element("TimeStamp")?.Value ?? "";
-            var timeStampClient = DateTimeOffset.ParseExact(timeStampClientRaw, Time.DateTimeFormat, null);
+            DateTimeOffset timeStampClient;
+            DateTimeOffset timeStampServer;
+            try
+            {
+                var timeStampClientRaw = newVisitorXml.Element("TimeStamp")?.Value ?? "";
+                timeStampClient = DateTimeOffset.ParseExact(timeStampClientRaw, Time.DateTimeFormatSeconds, null);
 
-            var timeStampServerRaw = newVisitorXml.Element("TimeStampServer")?.Value ?? "";
-            var timeStampServer = DateTimeOffset.ParseExact(timeStampServerRaw, Time.DateTimeFormat, null);
+                var timeStampServerRaw = newVisitorXml.Element("TimeStampServer")?.Value ?? "";
+                timeStampServer = DateTimeOffset.ParseExact(timeStampServerRaw, Time.DateTimeFormatSeconds, null);
+
+            }
+            //if fail log about that then!
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message); //todo
+                timeStampServer = DateTimeOffset.UtcNow;
+                timeStampClient = DateTimeOffset.UtcNow;
+            }
 
             var x = new LogBookEntity()
             {
@@ -91,6 +104,7 @@ namespace API
             };
 
             return x;
+
         }
 
     }

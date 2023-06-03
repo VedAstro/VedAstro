@@ -535,7 +535,7 @@ else
 
             _jsRuntime.HideAlert();
 
-    //return parsed report to caller
+            //return parsed report to caller
             return matchReport;
         }
     }
@@ -644,14 +644,8 @@ else
             //tell user to login
             await _jsRuntime.ShowAlert("success", "Please login first", AlertText.FunnyLoginText());
 
-
-            //remember this page to come back to after login
-            //saved in browser, so doesn't get deleted by refresh
-            var afterLoginPage = _navigation.Uri;
-            await _jsRuntime.SetProperty("PreviousPage", afterLoginPage);
-
             //now go to login page
-           AppData.Go(PageRoute.Login);
+            AppData.Go(PageRoute.Login);
         }
         //only start the save if already logged in
         else

@@ -44,7 +44,7 @@
     <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
 
         @* done so for dynamic UX *@
-        @foreach (var quickLink in quickLinkList)
+        @foreach (var quickLink in _quickLinkList)
         {
 
             <div @onclick="() => AppData.Go(quickLink.PageRoute)" style="cursor: pointer;" class="col">
@@ -88,7 +88,7 @@
 
         //mix the list up for newness effect
         var randotron = new Random();
-        quickLinkList = niceOrder.OrderBy(quickLink => randotron.Next()).ToList();
+        _quickLinkList = niceOrder.OrderBy(quickLink => randotron.Next()).ToList();
 
     }
 

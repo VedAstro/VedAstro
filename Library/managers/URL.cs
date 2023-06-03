@@ -162,4 +162,7 @@ public class URL
     public const string WHAudenWiki = "https://en.wikipedia.org/wiki/W._H._Auden";
     public const string YoganandaWiki = "https://en.wikipedia.org/wiki/Paramahansa_Yogananda";
     public const string CarlSaganWiki = "https://en.wikipedia.org/wiki/Carl_Sagan";
+    public const string RamanujanWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan";
+    public const string EmersonWiki = "https://en.wikipedia.org/wiki/Ralph_Waldo_Emerson";
+    public const string RamanujanQuoteWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan#Personality_and_spiritual_life";
 }

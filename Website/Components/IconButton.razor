@@ -6,7 +6,7 @@
 @*DROP DOWN VERSION*@
 @if (IsDropDownMode)
 {
-    <div style="font-family: 'Lexend Deca', serif;" class="dropdown @ExtraClass">
+    <div style="font-family: 'Lexend Deca', serif !important;" class="dropdown @ExtraClass">
         @*extra class for dropdown direct to parent div*@
         <button style="@FinalCss" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             @*only show icon if specified*@
@@ -25,7 +25,7 @@
 @*NORMAL BUTTON*@
 else
 {
-    <button style="@FinalCss" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr">
+    <button style="@FinalCss font-family: 'Lexend Deca', serif !important;" @ref="ElementReference" @onmouseover="OnMouseOver" @onclick="OnClickButton" class="@ButtonClassStr">
         @*SPECIAL LITTLE EXTRA INFO TEXT*@
         @if (!string.IsNullOrEmpty(RetinaText))
         {
@@ -47,7 +47,7 @@ else
 @*text below button*@
 @if (ShowDelayWarning)
 {
-    <IconText FontColor="#8f8f8f" IconName="mdi:snail">Warning Slow</IconText>
+    <IconText FontColor="#8f8f8f" FontSize="11" IconName="mdi:snail">Warning Slow</IconText>
 }
 
 @code {

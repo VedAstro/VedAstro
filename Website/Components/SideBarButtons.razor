@@ -17,10 +17,11 @@
 
 <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Top Secret" IconName="mdi:treasure-chest">
     <DropDownList>
-@*        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Journal" IconName="game-icons:secret-book" ClickUrl="@PageRoute.Journal"/>
+        @*        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Journal" IconName="game-icons:secret-book" ClickUrl="@PageRoute.Journal"/>
         <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Muhurtha" IconName="ic:twotone-event" ClickUrl="@PageRoute.Muhurtha"/>
         <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Birth Time Finder" IconName="fa-solid:history" ClickUrl="@PageRoute.BirthTimeFinder"/>
-*@        <li><a class="dropdown-item" href="@PageRoute.Journal">Journal</a></li>
+        *@
+        <li><a class="dropdown-item" href="@PageRoute.Journal">Journal</a></li>
         <li><a class="dropdown-item" href="@PageRoute.Muhurtha">Muhurtha</a></li>
         <li><a class="dropdown-item" href="@PageRoute.BirthTimeFinder">Birth Time Finder</a></li>
         <li><a class="dropdown-item" href="@PageRoute.LocalMeanTime">Local Mean Time</a></li>
@@ -56,19 +57,10 @@ else
 
     private async Task OnClickSignOutButton() => await InvokeAsync(async () => await _OnClickSignOutButton()).Try(_jsRuntime);
 
-
-    private async Task OnClickNavBarLoginButton()
-    {
-
-        //remember previous page to come back to after login
-        //saved in browser, so doesn't get deleted by refresh
-        var afterLoginPage = _navigation.Uri;
-        await _jsRuntime.SetProperty("PreviousPage", afterLoginPage);
-
-        //goto page
-       AppData.Go(PageRoute.Login);
-
-    }
+    /// <summary>
+    /// note will auto direct to caller page after login
+    /// </summary>
+    private void OnClickNavBarLoginButton() => AppData.Go(PageRoute.Login);
 
 
     private async Task _OnClickSignOutButton()

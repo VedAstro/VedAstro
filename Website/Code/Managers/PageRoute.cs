@@ -22,11 +22,7 @@
         public const string Glossary = "Docs/Glossary";
 
         //DOCS > API
-        public const string HouseApi = "Docs/API/House";
-        public const string PlanetApi = "Docs/API/Planet";
         public const string OpenApi = "Docs/API/";
-        public const string MatchApi = "Docs/API/Match";
-        public const string NLPApi = "Docs/API/NLP";
         
         //DEVELOPER
         public const string Developer = "Developer/";

@@ -26,7 +26,7 @@
 # Links
 - [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
 - [Open API](https://vedastro.org/Docs/API) easily get astrology data for your app or website
-- [Swiss Ephemris API](https://vedastro.org/Docs/API/SwissEphemeris) easily get astrology data for your app or website
+- [Swiss Ephemris API](https://vedastro.org/Docs/API) easily get astrology data for your app or website
 - [Calculators](https://vedastro.org/Calculator) each calculator shows an aspect of vedic astrology
 - [Docker](https://github.com/orgs/VedAstro/discussions/8) supported for easy deployement anywhere
 - [Contact](https://www.vedastro.org/Contact) us and we'll get back to you ASAP.

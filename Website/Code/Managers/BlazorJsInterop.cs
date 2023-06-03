@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VedAstro.Library;
 
 
@@ -249,12 +250,27 @@ namespace Website
 
         //ACCESS BROWSERS LOCAL STORAGE
 
-        public static async Task<string> GetProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeAsync<string>(JS.getProperty, propName);
+        public static async Task<string> GetProperty(this IJSRuntime jsRuntime, string propName)
+        {
+            var value = await jsRuntime.InvokeAsync<string>(JS.getProperty, propName);
+
+#if DEBUG
+            Console.WriteLine($"GET Prop : {propName} = {value}");
+#endif
+
+            return value;
+        }
 
         /// <summary>
         /// Set data into browser local storage
         /// </summary>
-        public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value) => await jsRuntime.InvokeVoidAsync(JS.setProperty, propName, value);
+        public static async Task SetProperty(this IJSRuntime jsRuntime, string propName, string value)
+        {
+#if DEBUG
+            Console.WriteLine($"SET Prop : {propName} = {value}");
+#endif
+            await jsRuntime.InvokeVoidAsync(JS.setProperty, propName, value);
+        }
 
         public static async Task RemoveProperty(this IJSRuntime jsRuntime, string propName) => await jsRuntime.InvokeVoidAsync(JS.removeProperty, propName);
 

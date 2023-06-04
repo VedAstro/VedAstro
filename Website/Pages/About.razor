@@ -3,16 +3,9 @@
 
 <PageTitle>About</PageTitle>
 
-@*<IconTitle IconName="emojione:shinto-shrine" IconSize="50" TitleHolder="h1" Title="About">
-    <ButtonRow>
-        <IconButton ButtonText="Join Us" IconName="carbon:pedestrian-family" ClickUrl="@PageRoute.JoinOurFamily" />
-    </ButtonRow>
-</IconTitle>
-*@
-
-
 <IconTitle Title="About" TitleHolder="h1" MaxWidthPx="@((int)GR.W667)">
     <ButtonRow>
+        <IconButton PlaceBottom="true" ExtraClass="mb-2" ButtonText="Made In" IconName="clarity:factory-line" ClickUrl="@PageRoute.MadeOnEarth" />
         <IconButton PlaceBottom="true" ExtraClass="mb-2" ButtonText="Join Us" IconName="carbon:pedestrian-family" ClickUrl="@PageRoute.JoinOurFamily" />
     </ButtonRow>
 </IconTitle>

@@ -176,6 +176,11 @@ namespace Website
 
         public const string DefaultLocationCountry = "Singapore";
 
+        public const string TitleFont = "Lexend Deca";
+        public const string DescriptionFont = "Gowun Dodum";
+        public const string ButtonFont = "Varta";
+        public const string CursiveFont = "Homemade Apple";
+
 
         /// <summary>
         /// Base address currently used by App,

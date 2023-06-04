@@ -1,4 +1,4 @@
-﻿@namespace Website.Pages
+@namespace Website.Pages
 @using VedAstro.Library
 @using System.Xml.Linq
 
@@ -6,7 +6,7 @@
 <div style="cursor: pointer; margin-top:@GR.W60px;" @onclick="() => _jsRuntime.OpenNewTab(URL)">
     <figure class="text-center">
         <blockquote class="blockquote">
-            <p style="font-family: 'Homemade Apple', serif;">
+            <p style="font-family: '@AppData.CursiveFont', serif;">
                 @ChildContent
             </p>
         </blockquote>

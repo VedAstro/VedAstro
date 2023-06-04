@@ -34,7 +34,7 @@
 
 
 ## Whats Possible
-![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk1.gif)
+![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk2.gif)
 
 
 # 🌍 Links

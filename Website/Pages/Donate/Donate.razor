@@ -61,9 +61,11 @@
 
 </div>
 
+@* more option message *@
 <hr />
-
+<p class="align-self-center" style="color:@AppData.Grey;">Don't see your preferred payment method? <a href="@PageRoute.Contact">Contact us</a></p>
 <hr class="mt-4 mb-4" />
+
 <h4 class="fw-bold mb-3">Crypto Geeks</h4>
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Bitcoin"))">
@@ -107,8 +109,7 @@
 
 <hr />
 
-<div class="vstack gap-3" style="max-width:@GR.W667px;">
-
+<div class="vstack gap-3 mt-3" style="max-width:@GR.W667px;">
 
     <ArticleBlock Title="Why Donate?" IconName="emojione:convenience-store">
         <TextHTML>

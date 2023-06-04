@@ -66,9 +66,7 @@
 
 @code {
 
-    private void OnClickSourceCodeButton() => _jsRuntime.OpenNewTab(URL.GitHubRepo);
-    private void OnClickGuideButton() => AppData.Go(PageRoute.QuickGuide);
-    private List<QuickLink> quickLinkList = new List<QuickLink>();
+    private List<QuickLink> _quickLinkList = new List<QuickLink>();
 
 
     protected override void OnInitialized()

@@ -285,7 +285,7 @@ else
 
             //if specified opens link in new tab
             if (OpenNewTab) { _jsRuntime.OpenNewTab(ClickUrl); }
-            else {AppData.Go(ClickUrl); }
+            else { AppData.Go(ClickUrl); }
         }
     }
 
@@ -327,17 +327,16 @@ else
     private async Task HandleSamePageClick(string inputRelativeUrl)
     {
         //get current page url
-        var xxx = _navigation.Uri;
-        var urlTool = new Uri(xxx);
+        var urlTool = new Uri(_navigation.Uri);
         var currentRelativePath = urlTool.PathAndQuery;
 
-        var possibleMsg = new []
+        var possibleMsg = new[]
         {
-            
             "You are already where you want to go, my friend",
-            "You just wasted a click. Never getting that back.",
             "Looks like you're sleepy. Go take a break.",
-        };
+            "You just wasted a click. Never getting that back.",
+            "You have reached your destination instantly",
+    };
 
         var sameUrl = currentRelativePath == Path.Combine("/", inputRelativeUrl);
         if (sameUrl)
@@ -349,8 +348,9 @@ else
 
     private async Task OnMouseOver(MouseEventArgs obj)
     {
+        //todo only log if mouse hovered long, else not valid data from here
         //log this
-        WebLogger.Data($"Almost Click : {this.ButtonText}");
+        //WebLogger.Data($"Almost Click : {this.ButtonText}");
 
     }
 

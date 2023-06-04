@@ -1,4 +1,4 @@
-﻿@namespace Website.Pages
+@namespace Website.Pages
 @using VedAstro.Library;
 @using System.Xml.Linq
 
@@ -42,12 +42,10 @@ else
 
 }
 
-
-
 @*text below button*@
 @if (ShowDelayWarning)
 {
-    <IconText FontColor="#8f8f8f" FontSize="11" IconName="mdi:snail">Warning Slow</IconText>
+    <IconText ExtraStyle="margin-top:-10px" FontColor="@AppData.Grey" FontSize="11" IconName="mdi:snail">Warning Slow</IconText>
 }
 
 @code {

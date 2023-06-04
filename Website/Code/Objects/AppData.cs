@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Xml.Linq;
 using Library.API;
@@ -163,13 +163,18 @@ namespace Website
             get => _personSelectorBox;
             set
             {
-                Console.WriteLine("PERSON SELECTOR LOADED!!!!!!!!!");
+                Console.WriteLine("EXP:PERSON SELECTOR LOADED!!!!!!!!!");
                 _personSelectorBox = value;
             }
         }
 
 
-        public static string DefaultLocationCountry = "Singapore";
+        /// <summary>
+        /// standardized grey used in small text 
+        /// </summary>
+        public const string Grey = "#8f8f8f";
+
+        public const string DefaultLocationCountry = "Singapore";
 
 
         /// <summary>

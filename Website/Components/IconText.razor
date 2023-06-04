@@ -6,7 +6,7 @@
 @using System.Xml.Linq
 
 
-<div class="@ExtraClass hstack gap-2" style="@(ShowLine?lineStyle:"")">
+<div class="@ExtraClass hstack gap-2" style="@(ShowLine?lineStyle:"") @ExtraStyle">
     <Icon IconName="@IconName" Size="25" />
     <span style="font-size: @(FontSize)px; color: @FontColor;">@ChildContent</span>
 </div>
@@ -46,6 +46,9 @@
     
     [Parameter]
     public string ExtraClass { get; set; } = "";
+
+    [Parameter]
+    public string ExtraStyle { get; set; } = "";
 
     /// <summary>
     /// If true show horizontal line below text, default false

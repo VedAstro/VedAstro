@@ -164,5 +164,6 @@ public class URL
     public const string CarlSaganWiki = "https://en.wikipedia.org/wiki/Carl_Sagan";
     public const string RamanujanWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan";
     public const string EmersonWiki = "https://en.wikipedia.org/wiki/Ralph_Waldo_Emerson";
+    public const string MahatmaGandhiWiki = "https://en.wikipedia.org/wiki/Mahatma_Gandhi";
     public const string RamanujanQuoteWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan#Personality_and_spiritual_life";
 }

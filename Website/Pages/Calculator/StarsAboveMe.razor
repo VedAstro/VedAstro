@@ -66,16 +66,11 @@ else
 
 <hr />
 
-<div>
-    <figure style="cursor: pointer;" class="text-center mt-5" @onclick="() => _jsRuntime.OpenNewTab(URL.CarlSaganWiki)">
-        <blockquote class="blockquote">
-            <p style="font-family: 'Homemade Apple', serif;">We're made of star stuff</p>
-        </blockquote>
-        <figcaption class="blockquote-footer">
-            Carl Sagan
-        </figcaption>
-    </figure>
-</div>
+
+<QuoteTextBlock Author="Carl Sagan" URL="URL.CarlSaganWiki">
+    We're made of star stuff
+</QuoteTextBlock>
+
 
 
 @code {

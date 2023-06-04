@@ -6,7 +6,6 @@
 @using System.Globalization
 @using System.Text.Json
 @using JsonSerializer = Newtonsoft.Json.JsonSerializer
-@using VedAstro.Library;
 @using System.Xml.Linq
 
 
@@ -84,6 +83,10 @@
 
     }
 
+    /// <summary>
+    /// todo make for custom table bye bye tabulator!
+    /// </summary>
+    /// <returns></returns>
     private async Task _OnClickAddLifeEvent()
     {
         //get person birth location name
@@ -130,6 +133,8 @@
         await AppData.API.Person.UpdatePerson(InputedPerson);
 
         _jsRuntime.HideLoading();
+
+        _jsRuntime.PlayDoneSound();//tactile feedback
 
         //show message to user
         await _jsRuntime.ShowAlert("success", $"Saved successfully!", false, 2500);

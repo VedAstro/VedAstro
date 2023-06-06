@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Xml.Linq;
 using Library.API;
@@ -264,10 +264,21 @@ namespace Website
 
         /// <summary>
         /// Simple blazor navigation wrapper with standard logging
+        /// if going to login page will auto set come back url
         /// </summary>
-        public static void Go(string url, bool forceReload = false, bool newTab = false)
+        public static void Go(string url, bool forceReload = false, bool newTab = false, bool rememberMe = false)
         {
-            WebLogger.Data($"NAVIGATE -> {url}");
+            WebLogger.Data($"NAVIGATE -> {url}"); //log
+
+            //if going to login page then obviously enable auto comeback
+            //NOTE: this only sets data into browser storage, page as to start comeback
+            //saved in browser, so doesn't get deleted by refresh
+            if (url == PageRoute.Login || rememberMe)
+            {
+                var comebackUrl = _navigation.Uri; //current page url
+                _jsRuntime.SetProperty("PreviousPage", comebackUrl);
+            }
+
 
             //same tab navigation
             if (!newTab)

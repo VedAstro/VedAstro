@@ -27,6 +27,7 @@ KEEP IT REAL
 
 
 <div class="@ExtraClass">
+    @* LABEL *@
     @if (!HideTitle) @*only show if no hide*@
     {
         <label class="form-label">@Label</label>
@@ -34,23 +35,29 @@ KEEP IT REAL
     <div class="hstack">
 
         <div class="btn-group" style="width: @GR.W255px;">
-            <button type="button" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+
+            @* DROPDOWN SECTION *@
+            <button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
                 @if (!SelectedPerson.Equals(Person.Empty))
                 {
-                    <PersonTooltip Person="@SelectedPerson" />
+                    <PersonTooltip Person="@SelectedPerson"/>
                 }
                 else
                 {
                     @("Select Person")
                 }
             </button>
-            
+
             @* DROPDOWN SECTION *@
             <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
+                
+                @* SEARCH *@
                 <div class="hstack gap-2">
                     <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
-                    <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() =>AppData.Go(PageRoute.PersonList))" />
+                    <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.PersonList))"/>
                 </div>
+
+                @* LIST OF PEOPLE *@
                 @if (IsReady)
                 {
                     @foreach (var person in PersonListDisplay)
@@ -73,7 +80,7 @@ KEEP IT REAL
                 else
                 {
                     <div class="d-flex justify-content-center mt-5">
-                        <Icon Size="60" IconName="line-md:loading-twotone-loop" />
+                        <Icon Size="60" IconName="line-md:loading-twotone-loop"/>
                     </div>
                 }
 
@@ -84,7 +91,7 @@ KEEP IT REAL
 
 
         @*add person icon*@
-        <IconButton ExtraClass="ms-2" TooltipText="Add New Person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
+        <IconButton ExtraClass="ms-2" TooltipText="Add New Person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson"/>
     </div>
 </div>
 
@@ -175,8 +182,6 @@ KEEP IT REAL
     //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
-    //protected override async Task OnParametersSetAsync() => await FillDropDown();
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -256,6 +261,9 @@ KEEP IT REAL
     }
 
 
+    /// <summary>
+    /// when a person in tooltip drop down menu is clicked
+    /// </summary>
     private void OnClickPersonName(Person person)
     {
         //set tooltip as well
@@ -273,5 +281,12 @@ KEEP IT REAL
         PublicPersonList.Clear();
     }
 
+    /// <summary>
+    /// When main button is clicked to trigger auto focus to search bar
+    /// </summary>
+    private void OnClickTrigger()
+    {
+        _searchInput.FocusAsync();
+    }
 
 }

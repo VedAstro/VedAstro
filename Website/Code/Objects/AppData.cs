@@ -177,7 +177,9 @@ namespace Website
         public const string DefaultLocationCountry = "Singapore";
 
         public const string TitleFont = "Lexend Deca";
-        public const string DescriptionFont = "Gowun Dodum";
+
+        public const string DescriptionFont = "font-family: 'Gowun Dodum', serif;";
+
         public const string ButtonFont = "Varta";
         public const string CursiveFont = "Homemade Apple";
 

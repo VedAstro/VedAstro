@@ -59,8 +59,6 @@ The chart takes alot of computational power to generate, so please be patient af
  -->
 
 
-
-
 # 📜 About
 
 Using modern computational technologies &amp; methods we can simplify the
@@ -87,7 +85,7 @@ This project is an effort to change that.
 # 🎂 9 Years Old 
 The first line of code for this project was written in late 2014 at Itä-Pasila.
 Back then it was a simple desktop software, with no UI and only text display.
-With continued support from users, this project has steadily developed to what it is today.
+With continued support from users, this project has steadily grown to what it is today.
 Helping people from all over the world.
     
 # 📚 Credits &amp; Reference 
@@ -103,9 +101,6 @@ Last but not least, we thank users like you who keep this project going.
 
 <hr>
 
-
-<hr>
-
 # 👪 Join our family
 We're always looking for somebody to write docs, edit code, raise funds or help out in another ways.
 You can also choose to get paid for your time spent improving VedAstro.
@@ -116,7 +111,7 @@ You can also choose to get paid for your time spent improving VedAstro.
 [![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
 
 
-# ⚙️ Gonzo Development Pattern
+# 🧰 Gonzo Development Pattern
 This development style celebrates the methodology of chaotic development at the benefit of low cost and fast paced prototyping.
 Inspired by the concept of "Gonzo Journalism", pioneered by [Hunter S. Thompson](https://en.wikipedia.org/wiki/Hunter_S._Thompson) in the 1970s.
 
@@ -127,6 +122,7 @@ So the "gonzo development" pattern is best for this needs.
 
 ![gonzon-dev-button](https://vedastro.org/images/gonzon-dev-button.png)
 
+### BETA & STABLE
 The negative side effect is that there will be bugs forever. Because it's near impossible to constantly
 change an ever-growing code base without having to constantly fix breaking changes.
 To deal with this, we split the Web App into Beta and Stable.
@@ -134,12 +130,19 @@ Stable version will contain an old version of the App, while beta will always co
 But the database will be shared between these. Meaning changes in Beta will seen in Stable as well.
 
 
+ # 👶 Drunk Proofing 
+ We would like to introduce in this project a novel UX concept called "Drunk Proofing".
+ The idea is simple. All UI is designed to be operated by an alcoholically intoxicated person aka drunk.
+
+ Why? Because this forces the team to make a simple and intuitive UI design.
+ It is all too easy during development to make a complicated UI. It is far more difficult and rewarding
+ to make UI easy. 
+
+
 # ⚙️ Project Structure
 ![vedastro-4-parts](https://vedastro.org/images/4-parts-of-vedastro.jpg)
 
-
-
-## Core Function Explained
+## Core Library Explained
 The main part of the program is the prediction/event generator.
 It works by combining **logic** on how to calculate a prediction with **data** about that prediction.
 This is done everytime a "Calculate" button is clicked. Below you will see a brief explanation of this process.

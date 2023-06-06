@@ -1,37 +1,54 @@
-﻿@attribute [Route(PageRoute.MadeOnEarth)]
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.MadeOnEarth)]
 
 <PageTitle>Made On Earth</PageTitle>
 
-<div style="max-width:@GR.W412px">
-    
+<style>
+    p {
+        @AppData.DescriptionFont font-size: 18px;
+    }
+</style>
+
+<div style="max-width:@(GR.W412)px">
+
     <img src="images/made-on-earth.jpg" width="@GR.W412px" class="img-thumbnail" alt="...">
+
+    @*     <QuoteTextBlock Author="Milton Freedman - Nobel Prize '76" URL="@URL.MiltonFriedmanWiki">
+    There is not a single person in the world who could make a pencil.
+    </QuoteTextBlock>
+    *@
 
     <figure class="text-center mt-1" style="max-width:@GR.W412px">
         <blockquote class="blockquote">
-            <p>There is not a single person in the world who could make a pencil.</p>
+            <p style=" font-size: 25px; ">There is not a single person in the world who could make a pencil.</p>
         </blockquote>
-        <figcaption class="blockquote-footer">
+        <figcaption class="blockquote-footer" style=" font-size: 16px; ">
             Milton Freedman <cite title="Source Title">Nobel Prize '76</cite>
         </figcaption>
     </figure>
 
-    <h4 class="fw-bold text-center mt-4">Made On Earth Movement</h4>
 
-    <p class="text-justify mt-3" >
-        Everywhere on so many things we see "Made in USA", "Made in Great Britain", "Made in China", "Made in Sweden",
-        made here &amp; made there. I would love to put such a label on this project, but where to begin?
-    </p>
+    <div>
+        <h4 class="fw-bold text-center mt-4">Made On Earth Movement</h4>
 
-    <p class="text-justify" >
-        As the genius <a href="https://youtu.be/67tHtpac5ws" target="_blank">M. Freedman put it</a>, even to manufacture a humble <strong>"pencil"</strong> it takes the accumulated
-        might of industry spread across the earth. From graphite mines in Brazil to rubber
-        trees in Indonesia, just to make a pencil!
-    </p>
-    <p class="text-justify" style=" margin-bottom:@GR.W157px;">
-        The point we're trying to make here is this. VedAstro is only possible because of people and
-        resources from many countries spread across the earth and time.
-        As such, the only valid label for this project is, <strong>"Made on Earth"</strong>.
-    </p>
+        <SubArticleBlock>
+            <p class="mt-3">
+                Everywhere on so many things we see "Made in USA", "Made in Great Britain", "Made in China", "Made in Sweden",
+                made here &amp; made there. I would love to put such a label on this project, but where to begin?
+            </p>
+            <p>
+                As the genius <BoldLink URL="@URL.FreedmanYoutubePencil">M. Freedman put it</BoldLink>, even to manufacture a humble <strong>"pencil"</strong> it takes the accumulated
+                might of industry spread across the earth. From graphite mines in Brazil to rubber
+                trees in Indonesia, just to make a pencil!
+            </p>
+            <p>
+                The point we're trying to make here is this. VedAstro is only possible because of people and
+                resources from many countries spread across the earth and time.
+                As such, the only valid label for this project is, <br />
+            </p>
+        </SubArticleBlock>
+        <strong style="margin-left: 153px; @AppData.DescriptionFont font-size: 18px;">"Made on Earth"</strong>.
+    </div>
 
 </div>
 

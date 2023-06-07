@@ -9,8 +9,13 @@ using System.Net.Mime;
 using System.Text.Json;
 using System.Xml.Linq;
 using Azure.Storage.Blobs;
+using SuperConvert.Extensions;
 using VedAstro.Library;
 using static Google.Protobuf.WireFormat;
+using Microsoft.Bing.ImageSearch.Models;
+using Microsoft.Bing.ImageSearch;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
+using Person = VedAstro.Library.Person;
 
 namespace API
 {
@@ -429,7 +434,7 @@ namespace API
                 var msg = $"FAILED TO GET FILE:/n{url}";
                 Console.WriteLine(msg);
                 await APILogger.Data(msg); //log it
-                return new byte[]{};
+                return new byte[] { };
             }
 
 
@@ -604,7 +609,7 @@ namespace API
             {
                 //read the connection string
                 var connectionString = Secrets.AutoEmailerConnectString;
-                    
+
 
                 //raise alarm if no connection string
                 if (string.IsNullOrEmpty(connectionString))
@@ -946,7 +951,7 @@ namespace API
 
 
         //--------------------TODO NEEDS MOVING
-      
+
 
 
         public static async Task<T> CacheExecuteTask<T>(Func<Task<T>> generateChart, string callerId, string mimeType = "")
@@ -1025,14 +1030,64 @@ namespace API
 
             return chartBlobClient;
         }
+
+        public static string JsonToCsv(string jsonData)
+        {
+
+            string csvPath = jsonData.ToCsv();
+
+
+            Console.WriteLine(csvPath);
+
+            return csvPath;
+        }
+
+
+        /// <summary>
+        /// Searches for person's image on BING and return one most probable as result
+        /// note uses thumbnail version for speed and data save
+        /// </summary>
+        public static async Task<byte[]> GetSearchImage(VedAstro.Library.Person personToImage)
+        {
+
+            //IMPORTANT: replace this variable with your Cognitive Services subscription key
+            string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
+            //stores the image results returned by Bing
+            Images imageResults = null;
+
+            var client = new ImageSearchClient(new ApiKeyServiceClientCredentials(subscriptionKey));
+
+            //make search query based on person's details
+            var keywords = personToImage.DisplayName; //todo maybe location can help
+
+            // make the search request to the Bing Image API, and get the results
+            imageResults = await client.Images.SearchAsync(query: keywords); //search query
+
+            
+            //pick out the images that seems most suited
+            var handPickedApples = imageResults.Value.Where(delegate (ImageObject x)
+            {
+                var isJpeg = x.EncodingFormat == "jpeg";//get only jpeg images for ease of handling down the road
+                var isCorrectShape = x.Width < x.Height; //rectangle image to fit site style better
+                return isJpeg && isCorrectShape;
+            });
+
+
+            //get 1st image in list as data
+            var topImageUrl = handPickedApples.First().ThumbnailUrl;
+            var imageBytes = await APITools.GetFileHttp(topImageUrl);
+
+            //return to caller
+            return imageBytes;
+        }
     }
 
     public class Secrets
     {
         public static string? AutoEmailerConnectString => Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
-        public static string? API_STORAGE => Environment.GetEnvironmentVariable("API_STORAGE"); 
-        public static string? BING_IMAGE_SEARCH => Environment.GetEnvironmentVariable("BING_IMAGE_SEARCH"); 
-        public static string? WEB_STORAGE => Environment.GetEnvironmentVariable("WEB_STORAGE"); 
+        public static string? API_STORAGE => Environment.GetEnvironmentVariable("API_STORAGE");
+        public static string? BING_IMAGE_SEARCH => Environment.GetEnvironmentVariable("BING_IMAGE_SEARCH");
+        public static string? WEB_STORAGE => Environment.GetEnvironmentVariable("WEB_STORAGE");
         public static string? EnableCache => Environment.GetEnvironmentVariable("EnableCache");
         public static string? SLACK_EMAIL_WEBHOOK => Environment.GetEnvironmentVariable("SLACK_EMAIL_WEBHOOK");
     }

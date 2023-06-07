@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using System.Xml.Linq;
+using Azure.Storage.Blobs.Models;
 using VedAstro.Library;
 
 namespace API
@@ -56,6 +57,43 @@ namespace API
             return x;
 
         }
+
+
+        /// <summary>
+        /// Given an image in byte form, will save it as Person profile image in correct place with ID as file name
+        /// </summary>
+        public static async Task SaveNewPersonImage(string personId, byte[] imageBytes)
+        {
+
+            var blobContainerName = "$web";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.WEB_STORAGE; //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            //BinaryData yy = BinaryData.FromBytes(imageBytes);
+
+            using var ms = new MemoryStream(imageBytes);
+            await fileBlobClient.UploadAsync(ms, overwrite: true);
+
+//            var blobUploadOptions = new BlobUploadOptions();
+//            blobUploadOptions.AccessTier = AccessTier.Cold;
+//            var result = await fileBlobClient.UploadAsync(yy, blobUploadOptions, CancellationToken.None);
+
+//#if DEBUG
+//            Console.WriteLine(result.Value);
+//#endif
+
+
+        }
+
         public static BlobClient GetPersonImage(string personId)
         {
 
@@ -73,7 +111,7 @@ namespace API
             var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
 
             return fileBlobClient;
-            
+
         }
 
         /// <summary>

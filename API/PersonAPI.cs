@@ -165,15 +165,22 @@ namespace API
 
                 //-----------------
                 //OPTION 1.5 : GET AZURE SEARCHED IMAGED
-                //todo for awesome feature's birth
+                //get the person record by ID
+                var foundPersonXml = await APITools.FindPersonXMLById(personId);
+                var personToImage = Person.FromXml(foundPersonXml);
+                byte[] foundImage = await APITools.GetSearchImage(personToImage); //gets most probable fitting person image
+                
+                //save copy of image under profile, so future calls don't spend BING search quota
+                await APITools.SaveNewPersonImage(personToImage.Id, foundImage);
+
+                //return gotten image as is
+                return APITools.SendFileToCaller(foundImage, req, MediaTypeNames.Image.Jpeg);
 
 
                 //-----------------
                 //OPTION 2 : GET PLACE HOLDER BASED ON GENDER
 
                 //get the person record by ID
-                var foundPersonXml = await APITools.FindPersonXMLById(personId);
-                var personToImage = Person.FromXml(foundPersonXml);
                 imageFile = personToImage.Gender == Gender.Male ? APITools.GetPersonImage("male") : APITools.GetPersonImage("female");
 
                 //send person image to caller

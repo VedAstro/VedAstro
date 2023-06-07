@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Mime;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
@@ -140,6 +141,61 @@ namespace API
 
         }
 
+        /// <summary>
+        /// Intelligible gets a person's image
+        /// </summary>
+        [Function(nameof(GetPersonImage))]
+        public static async Task<HttpResponseData> GetPersonImage(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonImage/PersonId/{personId}")] HttpRequestData req,
+            string personId)
+        {
+
+            try
+            {
+                //OPTION 1
+                //check directly if custom uploaded image exist, end here
+                var imageFound = await APITools.IsCustomPersonImageExist(personId);
+
+                BlobClient imageFile;
+                if (imageFound)
+                {
+                    imageFile = APITools.GetPersonImage(personId);
+                    return APITools.SendFileToCaller(imageFile, req, MediaTypeNames.Image.Jpeg);
+                }
+
+                //-----------------
+                //OPTION 1.5 : GET AZURE SEARCHED IMAGED
+                //todo for awesome feature's birth
+
+
+                //-----------------
+                //OPTION 2 : GET PLACE HOLDER BASED ON GENDER
+
+                //get the person record by ID
+                var foundPersonXml = await APITools.FindPersonXMLById(personId);
+                var personToImage = Person.FromXml(foundPersonXml);
+                imageFile = personToImage.Gender == Gender.Male ? APITools.GetPersonImage("male") : APITools.GetPersonImage("female");
+
+                //send person image to caller
+                return APITools.SendFileToCaller(imageFile, req, MediaTypeNames.Image.Jpeg);
+
+
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, req);
+
+                //let caller know fail, include exception info for easy debugging
+                return APITools.FailMessageJson(e, req);
+            }
+
+
+        }
+
+
+
 
         [Function(nameof(AddPerson))]
         public static async Task<HttpResponseData> AddPerson(
@@ -147,7 +203,7 @@ namespace API
             string userId, string visitorId)
         {
             //STAGE 1 : GET DATA OUT
-            var parsedRequest = new CallerInfo(visitorId,userId);
+            var parsedRequest = new CallerInfo(visitorId, userId);
 
             //adding new person needs make sure all cache is cleared if any
             await AzureCache.Delete(parsedRequest.CallerId);

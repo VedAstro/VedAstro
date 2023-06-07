@@ -31,6 +31,52 @@ namespace API
         }
 
         /// <summary>
+        /// check if file exist in aZure storage
+        /// </summary>
+        public static async Task<bool> IsCustomPersonImageExist(string personId)
+        {
+
+            var blobContainerName = "$web";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.WEB_STORAGE; //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            //do the actual code 
+            var isCustomPersonImageExist = await fileBlobClient.ExistsAsync();
+
+            var x = isCustomPersonImageExist.Value;
+            return x;
+
+        }
+        public static BlobClient GetPersonImage(string personId)
+        {
+
+            var blobContainerName = "$web";
+
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.WEB_STORAGE; //place where is image is stored
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+
+            //get access to file
+            var imageFile = $"images/person/{personId}.jpg";
+            var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
+
+            return fileBlobClient;
+            
+        }
+
+        /// <summary>
         /// Gets XML file from Azure blob storage
         /// </summary>
         public static async Task<XDocument> GetXmlFileFromAzureStorage(string fileName, string blobContainerName)

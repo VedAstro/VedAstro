@@ -13,7 +13,13 @@
 </PageTop>
 
 
+
+
 <div class="container">
+
+
+
+
     @*TAB HEADER*@
     <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -44,7 +50,7 @@
         <DropDownButton ButtonText="Actions" IconName="carbon:touch-interaction">
             <ButtonList>
                 <li><a class="dropdown-item" style="cursor: pointer;" @onclick="CopyPersonProfileShareLink"><Icon IconName="material-symbols:ios-share" /> Share Link</a></li>
-                <li><a class="dropdown-item" style="cursor: pointer;" @onclick="OnClickSubmitButton"><Icon IconName="bx:save" /> Save</a></li>
+                <li><a class="dropdown-item" style="cursor: pointer;" @onclick="UpdateExistingPerson"><Icon IconName="bx:save" /> Save</a></li>
                 <li><a class="dropdown-item" style="cursor: pointer;" @onclick="OnClickDeleteButton"><Icon IconName="material-symbols:delete-rounded" /> Delete</a></li>
             </ButtonList>
         </DropDownButton>
@@ -100,15 +106,15 @@
                     <li class="list-group-item active" aria-current="true">Info</li>
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item">Local Mean Time (LMT)</li>
-                        <li class="list-group-item">@_person.BirthTime.GetLmtDateTimeOffsetText()</li>
+                        <li class="list-group-item">@SelectedPerson.BirthTime.GetLmtDateTimeOffsetText()</li>
                     </ul>
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item">Local Standard Time (STD)</li>
-                        <li class="list-group-item">@_person.BirthTime.GetStdDateTimeOffsetText()</li>
+                        <li class="list-group-item">@SelectedPerson.BirthTime.GetStdDateTimeOffsetText()</li>
                     </ul>
                     <ul class="list-group list-group-horizontal">
                         <li class="list-group-item">Owners</li>
-                        <li class="list-group-item">@_person.UserIdString</li>
+                        <li class="list-group-item">@SelectedPerson.UserIdString</li>
                     </ul>
                 </ul>
             </div>
@@ -119,7 +125,7 @@
     <div style="margin-top: 50px" class="hstack row gap-2">
         @*Only show delete button in Editor mode*@
         <IconButton SmallSize="true" ButtonText="Delete" IconName="fluent:delete-20-regular" OnClickCallback="@OnClickDeleteButton" />
-        <IconButton SmallSize="true" Color="success" ButtonText="Save" IconName="bx:save" OnClickCallback="@OnClickSubmitButton" />
+        <IconButton SmallSize="true" Color="success" ButtonText="Save" IconName="bx:save" OnClickCallback="@UpdateExistingPerson" />
     </div>
 </div>
 
@@ -137,7 +143,7 @@
     /// <summary>
     /// represents the Person instance that this page represents
     /// </summary>
-    private Person _person;
+    private Person SelectedPerson;
 
     /// <summary>
     /// a copy of the person's hash during init is saved in edit mode
@@ -167,7 +173,6 @@
 
     protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
     private async Task OnClickDeleteButton() => await InvokeAsync(async () => await _OnClickDeleteButton()).Try(_jsRuntime);
-    private async Task OnClickSubmitButton() => await InvokeAsync(async () => await _OnClickSubmitButton()).Try(_jsRuntime);
 
 
 
@@ -189,16 +194,7 @@
 
 
 
-    /// <summary>
-    /// Function that is called on click of button
-    /// </summary>
-    private async Task _OnClickSubmitButton()
-    {
 
-        //UpdateExistingPerson();
-        await UpdateExistingPerson();
-
-    }
 
 
     /// <summary>
@@ -208,37 +204,37 @@
     {
 
         //try get person profile from ID
-        _person = await WebsiteTools.GetPersonById(PersonIdUrl, _jsRuntime);
+        SelectedPerson = await WebsiteTools.GetPersonById(PersonIdUrl, _jsRuntime);
 
         //set page title
-        _pageTitle = $"Profile | {_person.Name}";
+        _pageTitle = $"Profile | {SelectedPerson.Name}";
 
         //place data into fields
-        PersonIdUrl = _person.Id;
-        _nameInput = _person.Name;
-        _notesInput = _person.Notes;
-        _genderInput = _person.Gender.ToString();
+        PersonIdUrl = SelectedPerson.Id;
+        _nameInput = SelectedPerson.Name;
+        _notesInput = SelectedPerson.Notes;
+        _genderInput = SelectedPerson.Gender.ToString();
 
         //set timezone if NOT creator, else component will auto set
-        var personBirthTimeOffset = _person.BirthTimeZone;
+        var personBirthTimeOffset = SelectedPerson.BirthTimeZone;
         _timeInput.TimeZone = personBirthTimeOffset;
 
-        var birthTimeHourMin = _person.BirthHourMinute;
+        var birthTimeHourMin = SelectedPerson.BirthHourMinute;
         _timeInput.HourMin = birthTimeHourMin;
 
-        var birthTimeDate = _person.BirthDateMonthYear;
+        var birthTimeDate = SelectedPerson.BirthDateMonthYear;
         _timeInput.DateMonthYear = birthTimeDate;
 
         var geoLocation = new GeoLocation
         (
-            _person.GetBirthLocation().GetName(),
-           _person.GetBirthLocation().GetLongitude(),
-           _person.GetBirthLocation().GetLatitude()
+            SelectedPerson.GetBirthLocation().GetName(),
+           SelectedPerson.GetBirthLocation().GetLongitude(),
+           SelectedPerson.GetBirthLocation().GetLatitude()
         );
         _geoLocationInput.UpdateData(geoLocation);
 
         //life events
-        await _lifeEventEditor.SetData(_person);
+        await _lifeEventEditor.SetData(SelectedPerson);
 
         //todo check if needed
         this.StateHasChanged();
@@ -346,15 +342,15 @@
 
         //get all owner list & add this user id if not included
         //this way 1 user does not delete other users when click save
-        var userFound = _person.UserId.Contains(currentUserId);
+        var userFound = SelectedPerson.UserId.Contains(currentUserId);
         string[] allUserIdList;
         //use old list since, only updating
-        if (userFound) { allUserIdList = _person.UserId; }
+        if (userFound) { allUserIdList = SelectedPerson.UserId; }
         //add current user to person's owner list
-        else { allUserIdList = _person.UserId?.Append(currentUserId)?.ToArray(); }
+        else { allUserIdList = SelectedPerson.UserId?.Append(currentUserId)?.ToArray(); }
 
         //note: person id does NOT change
-        return new Person(_person.Id, _nameInput, birthTime, gender, allUserIdList, _notesInput, lifeEventList);
+        return new Person(SelectedPerson.Id, _nameInput, birthTime, gender, allUserIdList, _notesInput, lifeEventList);
 
 
         //----------LOCAL FUNCTION ---------------------
@@ -369,21 +365,45 @@
         if (!(await IsValidationPassed())) { return; }
 
         //make a new person from the details in the input
-        _person = await GetPersonInstanceFromInput();
+        SelectedPerson = await GetPersonInstanceFromInput();
 
         //update person in API by hash
-        await AppData.API.Person.UpdatePerson(_person);
-
-        //let user know person has been updated
-        await _jsRuntime.ShowAlert("success", "Updated successfully!", false, timer: 1000);
+        await AppData.API.Person.UpdatePerson(SelectedPerson);
 
         //page ready
         _jsRuntime.HideAlert();
 
-        //send user to task list page after period of time
-        //todo ask user if wants to go back to previous page or stay
-        //await Task.Delay(100);
-        //_navigation.NavigateTo(PageRoute.PersonList);
+        //ask user if wants to go back to previous page or stay
+        //prepare question to ask user
+        var alertData = new
+        {
+            icon = "question",
+            title = $"Go back to previous page?",
+            html = $"You can also stay in this page and continue edits",
+            showCancelButton = true,
+            confirmButtonColor = "#3085d6",
+            cancelButtonColor = "#d33",
+            confirmButtonText = "Go Back",
+            cancelButtonText = "Stay"
+        };
+        var sweetAlertResult = await _jsRuntime.ShowAlertResult(alertData);
+
+        //if user clicked continue, then 00:00 is correct, so pass validation
+        var continueClicked = sweetAlertResult.GetProperty("isConfirmed").GetBoolean();
+
+        //stay
+        if (!continueClicked)
+        {
+            return;
+        }
+        //go back
+        else
+        {
+            //wait a little and send user back to previous page
+            await _jsRuntime.ShowAlert("info", $"Going back to previous page", false, 500);
+            _jsRuntime?.GoBack();
+        }
+
     }
 
     private async Task _OnClickDeleteButton()
@@ -392,10 +412,7 @@
         await _jsRuntime.ShowLoading();
 
         //tell API to delete person, using person id
-        await AppData.API.Person.DeletePerson(PersonIdUrl);
-
-        //let user know person has been updates
-        await _jsRuntime.ShowAlert("success", $"{_nameInput} deleted successfully!", false, timer: 1000);
+        await AppData.API.Person.DeletePerson(SelectedPerson);
 
         //refresh the page variables
         //todo marked for deletion, test without = no difference -> delete
@@ -404,9 +421,9 @@
         //page ready
         _jsRuntime.HideAlert();
 
-        //send user to task list page after period of time
-        await Task.Delay(100);
-       AppData.Go(PageRoute.PersonList);
+        //send back to previous page
+        await _jsRuntime.ShowAlert("info", $"Going back to previous page", false, 500);
+        AppData.Go(PageRoute.PersonList);
     }
 
     /// <summary>

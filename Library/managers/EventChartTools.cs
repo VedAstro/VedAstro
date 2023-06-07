@@ -11,13 +11,10 @@ namespace VedAstro.Library
 
         /// <summary>
         /// given a nice human time range will generate start and end times
-        /// input user's current timezone, dould be different from birth
+        /// input user's current timezone, could be different from birth
         /// </summary>
-        /// <param name="inputPerson"></param>
-        /// <param name="timePresetRaw"></param>
         /// <param name="outputTimezone">"+08:00"</param>
-        /// <returns></returns>
-        public static TimeRange AutoCalculateTimeRange(Person inputPerson, string timePresetRaw, TimeSpan outputTimezone)
+        public static TimeRange AutoCalculateTimeRange(Person inputPerson, string timePreset, TimeSpan outputTimezone)
         {
             var birthDateMonthYear = inputPerson.BirthDateMonthYear;
 
@@ -34,16 +31,22 @@ namespace VedAstro.Library
             var today = now.ToString("dd/MM/yyyy zzz");
 
             var yesterday = now.AddDays(-1).ToString("dd/MM/yyyy zzz");
-            var timePreset = timePresetRaw.ToLower(); //so that all cases are accepted
+            var timePresetString = timePreset.ToLower(); //so that all cases are accepted
 
+
+            //NOTE:
+            //two possible name types for 6months and "thismonth"
+            //so if got number infront then different handle
             //assume input is "3days", number + date type
             //so split by number
-            var split = Tools.SplitAlpha(timePreset);
+            var split = Tools.SplitAlpha(timePresetString);
             var result = int.TryParse(split[0], out int number);
             number = number < 1 ? 1 : number; //min 1, so user can in put just, "year" and except 1 year
             //if no number, than data type in 1st place
             var dateType = result ? split[1] : split[0];
 
+
+            //process accordingly
             int days;
             double hoursToAdd;
             string _2MonthsAgo;
@@ -94,6 +97,10 @@ namespace VedAstro.Library
                     start = new Time($"00:00 {_2MonthsAgo}", birthLocation);
                     end = timeNow.AddHours(hoursToAdd);
                     return new TimeRange(start, end);
+                case "age1to50":
+                    start = birthTimeClient;
+                    end = birthTimeClient.AddYears(50);
+                    return new TimeRange(start, end);
                 case "age1to25":
                     start = birthTimeClient;
                     end = birthTimeClient.AddYears(25);
@@ -120,6 +127,10 @@ namespace VedAstro.Library
                     return new TimeRange(start, end);
                 case "age75to100":
                     start = birthTimeClient.AddYears(75);
+                    end = birthTimeClient.AddYears(100);
+                    return new TimeRange(start, end);
+                case "age50to100":
+                    start = birthTimeClient.AddYears(50);
                     end = birthTimeClient.AddYears(100);
                     return new TimeRange(start, end);
                 case "fulllife":

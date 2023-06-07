@@ -6,8 +6,11 @@
 
 
 <div>
-    <h4 class="fw-bold">@Title</h4>
-    <p class="text-justify" style="font-family: 'Gowun Dodum', serif !important; font-size: 18px; line-break: auto;">
+    @if (!string.IsNullOrEmpty(Title))
+    {
+        <h4 class="fw-bold">@Title</h4>
+    }
+    <p class="text-justify" style="@AppData.DescriptionFont font-size: 18px; line-break: auto;">
         @ChildContent
     </p>
 </div>
@@ -15,6 +18,9 @@
 
 @code {
 
+    /// <summary>
+    /// Optional, can be left out
+    /// </summary>
     [Parameter]
     public string? Title { get; set; } = "";
 

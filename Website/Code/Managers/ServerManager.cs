@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using Newtonsoft.Json.Linq;
 
+//A LIE IS JUST A GREAT STORY THAT SOMEONE RUINED WITH THE TRUTH -- Barnabus Stinson
+
 namespace Website
 {
 

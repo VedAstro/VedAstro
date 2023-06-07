@@ -69,8 +69,6 @@
     private async Task OnClickSubmitButton() => await InvokeAsync(async () => await _OnClickSubmitButton()).Try(_jsRuntime);
 
 
-
-
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
@@ -92,29 +90,35 @@
         _person = await GetPersonInstanceFromInput();
 
         //send newly created person to API server
-        var serverReply = await AppData.API.Person.AddPerson(_person);
+        await AppData.API.Person.AddPerson(_person);
 
         //page ready
         _jsRuntime.HideAlert();
         //hide final loading, needed because SweetAlert fails when to many calls
         NothingToShow = false;
 
+        _jsRuntime.PlayDoneSound();//tactile feedback
 
-        _jsRuntime.PlayDoneSound();
+        //wait a little and send user back to previous page
+        // await Task.Delay(500);
+        await _jsRuntime.ShowAlert("info", $"Going back to previous page", false, 500);
+        _jsRuntime?.GoBack();
 
-        if (serverReply["Status"]?.Value<string>() == "Pass")
-        {
-            await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
 
-            //wait a little and send user back to previous page
-            await Task.Delay(500);
-            _jsRuntime?.GoBack();
-        }
-        else
-        {
-            var xxx = serverReply["Payload"]?.Value<string>() ?? "";
-            await _jsRuntime.ShowAlert("error", $"Server said fail. Why?", xxx);
-        }
+        //todo marked for deletion
+        // if (serverReply["Status"]?.Value<string>() == "Pass")
+        // {
+        //     await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
+
+        //     //wait a little and send user back to previous page
+        //     await Task.Delay(500);
+        //     _jsRuntime?.GoBack();
+        // }
+        // else
+        // {
+        //     var xxx = serverReply["Payload"]?.Value<string>() ?? "";
+        //     await _jsRuntime.ShowAlert("error", $"Server said fail. Why?", xxx);
+        // }
     }
 
     /// <summary>

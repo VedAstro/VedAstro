@@ -57,7 +57,7 @@
                 </div>
                 <div class="input-group mb-3">
                     <label class="input-group-text" style="min-width: @GR.W97px;">Owner</label>
-                    <select @bind="addPersonOwnerId" class="form-select">
+                    <select @bind="AddPersonOwnerId" class="form-select">
                         <option selected>Choose...</option>
                         <option value="101">Guest</option>
                         @RenderWelcomeInfo();
@@ -106,7 +106,7 @@
             <div @ref="houseNameSelector" style="display: none;" class="form-floating">
                 <select @bind="SelectedHouseName" class="form-select" id="houseNameSelector" aria-label="House Name Select">
                     <option value="" selected>Make a choice</option>
-                    <option value="House1">All</option>
+                    <option value="All">All</option>
                     <option value="House1">House 1</option>
                     <option value="House2">House 2</option>
                     <option value="House3">House 3</option>
@@ -171,15 +171,13 @@
                 <IconButton ButtonText="Copy" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
                 <IconButton ButtonText="Test Call" IconName="ph:phone-call-light" OnClickCallback="OnDemoCallGeneratedUrl" SmallSize="true" />
             </div>
-
-
         </div>
 
         @*GUIDE TEXT*@
         <div class="vstack gap-3">
             <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
                 <ButtonRow>
-                    <IconButton SmallSize="true" Color="info" ButtonText="Read More" ClickUrl="@PageRoute.OpenApi" IconName="octicon:info-16" />
+                    <IconButton SmallSize="true" Outline="true" ButtonText="Read More" ClickUrl="@PageRoute.OpenApi" IconName="octicon:info-16" />
                 </ButtonRow>
                 <TextHTML>
                     Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language,
@@ -216,9 +214,7 @@
                 </TextHTML>
             </ArticleBlock>
 
-
         </div>
-
     </div>
 </div>
 
@@ -239,9 +235,10 @@
     private string selectedHouseName;
 
     private string AddPersonName { get; set; }
+
     private string AddPersonGender { get; set; }
 
-    private string addPersonOwnerId
+    private string AddPersonOwnerId
     {
         get => _addPersonOwnerId;
         set
@@ -419,7 +416,7 @@
         }
         else if (SelectedCategory == "Account")
         {
-            var ownerId = $"/OwnerId/{addPersonOwnerId}";
+            var ownerId = $"/OwnerId/{AddPersonOwnerId}";
             var name = $"/Name/{AddPersonName}";
             var gender = $"/Gender/{AddPersonGender}";
             var accountTask = $"/{SelectedTaskName}";

@@ -1,0 +1,216 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+
+
+@* SEARCH INPUT BOX *@
+<input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control" placeholder="Search...">
+
+
+
+@* RESULTS *@
+<div style="width: @(GR.W255+GR.W97)px;" class="m-2" @ref="tooltipElement">
+    @* without z will go under other elms *@
+    <div class="d-flex justify-content-between">
+        <div class="d-flex">
+            <Icon Size="30" IconName="fluent:book-search-20-filled" />
+            <h4>Quick Search</h4>
+        </div>
+        <IconButton SmallSize="true" ButtonText="Full Search" OnClickCallback="OnClickFullSearch" />
+    </div>
+    <hr/>
+
+    @* LOADING ICON *@
+    @if (showSearchLoading)
+    {
+        <div class="d-flex justify-content-center mt-5 flex-column">
+            <Icon Size="60" IconName="line-md:loading-twotone-loop" />
+            <span>Please wait...</span>
+        </div>
+
+    }
+
+    @* SEARCH RESULT *@
+    else
+    {
+        @if (foundReference.Any())
+        {
+            @foreach (var prediction in foundReference)
+            {
+                @*only generate if got desc*@
+
+                <div class="vstack gap-2 shadow ">
+                    <h6 class="mb-0">
+                        @Format.FormatName(prediction.Element("Name")?.Value)
+                    </h6>
+                    <p class="">@prediction.Element("Description")?.Value</p>
+                </div>
+                <hr />
+            }
+        }
+        @* PLACEHOLDER TEXT *@
+        else
+        {
+            <p>Search terms "Venus", "House 10", "Wife"...</p>
+        }
+    }
+
+
+</div>
+
+
+@code {
+    private ElementReference _searchInput;
+
+    IEnumerable<XElement> foundReference = Enumerable.Empty<XElement>();
+
+    public string SearchText { get; set; }
+    private bool showSearchLoading { get; set; }
+
+    /// <summary>
+    /// element that is shown in tool tip is referenced here to be accessed by Tippy.js
+    /// </summary>
+    private ElementReference tooltipElement { get; set; }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+
+            //make pop up bigger for to show preview video clearly
+            var customSet = new { maxWidth = GR.W667px };
+            await _jsRuntime.InvokeVoidAsync("tippy.setDefaultProps", customSet);
+
+
+            //attach tooltip lib element if tooltip provided
+            //construct html to show image
+            var tooltipSettings =
+                new
+                {
+                    hideOnClick = false,
+                    placement = "right",
+                    content = tooltipElement, //content html
+                    theme = "light",
+                    allowHTML = true,
+                    arrow = true,
+                    interactive = true //so that can click button
+                };
+
+            await _jsRuntime.Tippy(_searchInput, tooltipSettings);
+
+        }
+    }
+
+
+
+    /// <summary>
+    /// Handle when user uses the Search
+    /// </summary>
+    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
+    {
+        //important don't wait here else, key strokes will lag
+        PerformSearch();
+
+    }
+
+    /// <summary>
+    /// perform search and updates visible results
+    /// </summary>
+    /// <returns></returns>
+    private async Task PerformSearch()
+    {
+        //show loading the moment a key is pressed
+        showSearchLoading = true;
+
+        //get search text, lower case for more results
+        SearchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
+
+        //if nothing then end here
+        //only continue once more than 4 chars, else end here, so don't was time searching
+        if (SearchText.Length < 2)
+        {
+            foundReference = Enumerable.Empty<XElement>();
+            //off loading
+            showSearchLoading = false;
+
+            //for better updates
+            StateHasChanged();
+
+            return;
+        }
+
+        //only load the xml files if not yet loaded
+        //this is set here, so on 2nd search in same session it will use back
+        if (!AppData.ReferenceSearchFilesLoaded) { await AppData.LoadReferenceSearchFiles(); }
+
+        foundReference = AppData.ReferenceList.Where(IsFound);
+
+        //off loading
+        showSearchLoading = false;
+
+        //for better updates
+        StateHasChanged();
+    }
+
+
+    /// <summary>
+    /// checks x element for matching keyword
+    /// note: for speed purposes we stick with xelement
+    /// </summary>
+    private bool IsFound(XElement x)
+    {
+        //convert the event data to string form
+        //note: all 1st level children are converted
+        var evenDataXmlString = "";
+        foreach (var xElement in x.Elements())
+        {
+            //only name make format it first
+            var text = "";
+            if (xElement.Name == "Name")
+            {
+                text = Format.FormatName(xElement?.Value ?? "");
+            }
+            else
+            {
+                text = $" {xElement.Value}";
+            }
+            evenDataXmlString += text;
+        }
+
+
+
+
+        //convert to lower case and do basic word match
+        var isFound = evenDataXmlString.ToLower().Contains(SearchText.ToLower());
+
+        if (isFound)
+        {
+            Console.WriteLine(evenDataXmlString.ToLower());
+        }
+
+        return isFound;
+    }
+
+
+    //takes user to main search page
+    private async Task OnClickFullSearch()
+    {
+        //get search text
+        var text = await _jsRuntime.GetValue(_searchInput);
+
+        //log
+        WebLogger.Data("Search: " + text);
+
+        //go home when no text
+        if (text.Length == 0) { AppData.Go(PageRoute.Home); return; }
+
+        //show search page & input the search text
+        AppData.Go(PageRoute.SearchResult);
+        await Task.Delay(250);//little time for page to load (needed else fails)
+        await AppData.SearchPage.Search(text);
+    }
+
+}

@@ -36,7 +36,10 @@ public class HouseSubStrength : IToJson
             //add to main list
             returnList.Add(temp);
         }
+        
+        Console.WriteLine("POSSIBLE CRASH!!");
 
+        //todo FAIL ALERT!!!!!
         //send list on its way
         var wrap = new JObject();
         wrap.Add(returnList);

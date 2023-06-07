@@ -48,6 +48,12 @@ else
     <IconText ExtraStyle="margin-top:-10px" FontColor="@AppData.Grey" FontSize="11" IconName="mdi:snail">Warning Slow</IconText>
 }
 
+@if (ChildContent != null)
+{
+    @* wrap in div to get reference to dynamic element, z needed to make top *@
+    <div style="z-index: 999;" @ref="@TooltipHTML">@ChildContent</div>
+}
+
 @code {
 
 
@@ -80,6 +86,9 @@ else
     /// </summary>
     [Parameter]
     public bool Outline { get; set; } = false;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
     /// adds align-self: self-end; which pushes it down bottom of parent
@@ -149,6 +158,23 @@ else
     [Parameter]
     public string? TooltipText { get; set; }
 
+    /// <summary>
+    /// Tooltip text in HTML format
+    /// </summary>
+    [Parameter]
+    public ElementReference TooltipHTML
+    {
+        get => _tooltipHtml;
+        set
+        {
+            Console.WriteLine("TOOLTIP SET");
+            isToolTip = true;
+            _tooltipHtml = value;
+        }
+    }
+
+    [Parameter]
+    public bool isToolTip { get; set; } = false;
 
     /// <summary>
     /// Function that is called on click of button
@@ -204,9 +230,11 @@ else
     [Parameter]
     public bool TextCenter { get; set; } = false;
 
+    /// <summary>
+    /// refernce to div holding
+    /// </summary>
     [Parameter]
     public ElementReference ElementReference { get; set; }
-
 
     /// <summary>
     /// if true will use Golden Ratio 60.1px
@@ -236,6 +264,12 @@ else
             return css;
         }
     }
+    
+    private ElementReference _tooltipHtml;
+
+
+
+    //------------------------------------------------------------FUNCTION
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
@@ -246,12 +280,37 @@ else
             //attach tooltip lib element if tooltip provided
             if (!string.IsNullOrEmpty(TooltipText))
             {
-                await _jsRuntime.Tippy(ElementReference, new { content = this.TooltipText });
+
+                var tooltipData = new { content = TooltipText, placement = "right" };
+                await _jsRuntime.Tippy(ElementReference, tooltipData);
+            }
+
+            //BIG HTML version
+            else if (ChildContent != null)
+            {
+                //make pop up bigger for to show preview video clearly
+                var customSet = new { maxWidth = GR.W412px };
+                await _jsRuntime.InvokeVoidAsync("tippy.setDefaultProps", customSet);
+
+
+                //attach tooltip lib element if tooltip provided
+                //construct html to show image
+                var tooltipSettings =
+                    new
+                    {
+                        placement = "right",
+                        content = TooltipHTML,
+                        theme = "light",
+                        allowHTML = true,
+                        arrow = true,
+                        interactive = true //so that can click button
+                    };
+
+
+                await _jsRuntime.Tippy(ElementReference, tooltipSettings);
             }
         }
     }
-
-
 
     /// <summary>
     /// Default button click will send page to URL link if provided

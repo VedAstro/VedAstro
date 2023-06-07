@@ -12,7 +12,7 @@
             <div class="hstack gap-3">
                 <div class="input-group" style="width: fit-content">
                     <label class="input-group-text gap-1" for="genderFilterSelector">
-                        <Icon IconName="ph:gender-intersex-fill" Size="25"/> Gender
+                        <Icon IconName="ph:gender-intersex-fill" Size="25" /> Gender
                     </label>
                     <select class="form-select" id="genderFilterSelector">
                         <option selected>Both</option>
@@ -31,7 +31,7 @@
                     </select>
                 </div>
 
-                <IconButton TooltipText="Share on Facebook" SmallSize="true" IconName="ic:twotone-facebook" OnClickCallback="@(() => WebsiteTools.ShareCurrentPageOnFacebook())"/>
+                <IconButton TooltipText="Share on Facebook" SmallSize="true" IconName="ic:twotone-facebook" OnClickCallback="@(() => WebsiteTools.ShareCurrentPageOnFacebook())" />
             </div>
         </ButtonRow>
     </IconTitle>
@@ -43,38 +43,47 @@
             <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
                 @foreach (var report in MatchReportList)
                 {
-                    <div class="me-4 rounded-3 border shadow px-3 pt-2 pb-3 bg-white" style="width: @GR.W412px;height: fit-content;">
-                        <div class="mb-2 d-flex justify-content-between px-3 border-bottom">
-                            <h4>@report.PersonName</h4>
-                            <h4>Score
-                                <b style="color: #00a702;">@report.KutaScore%</b>
-                            </h4>
+                    <div class="me-4 rounded-3 border shadow px-3 pt-2 pb-3 d-flex" style="background-color: #fff; width: @GR.W412px;height: fit-content;">
+
+                        <div style="width: @(GR.W97+GR.W37)px;" class="me-3">
+                            <img style="width: inherit;" src="images/person/8e9b5804e68a4b82a1a975ebee1643dc.jpg">
                         </div>
-                        <div class="card-body d-flex justify-content-between">
-                            <div style="width: @(GR.W97+GR.W37)px;" class="me-3">
-                                <img style="width: inherit;" src="images/person/8e9b5804e68a4b82a1a975ebee1643dc.jpg">
+
+                        <div class="flex-column justify-content-between gap-3">
+                            <div class="mb-2 d-flex justify-content-between border-bottom">
+                                <span style="font-size: 23px; font-weight: 600; ">@report.PersonName.Truncate(16)</span>
+                                <span style=" width: min-content;  font-size: 22px;" class="ms-3">
+                                    Score
+                                    <b style="color: #00a702;">@report.KutaScore%</b>
+                                </span>
                             </div>
                             <div class="vstack gap-2">
-                                <div class="gap-3 d-flex justify-content-begin">
+                                <div class="gap-3 d-flex justify-content-between">
                                     <div class="card-text hstack gap-2"><Icon Size="30" IconName="@GetGenderIconName(report.Gender)" /> @report.Gender</div>
-                                    <div class="card-text hstack gap-1"><Icon Size="30" IconName="icon-park-outline:birthday-cake" /> Age @report.Age</div>
+                                    <div class="card-text hstack gap-1 me-2"><Icon Size="30" IconName="icon-park-outline:birthday-cake" /> Age @report.Age</div>
                                 </div>
-                                <div style="margin-left: -5px;" class="gap-2 d-flex justify-content-begin">
-                                    <Icon IconName="mdi:head-love" Size="34" />
-                                    Mind
-                                    <b style="color: #ff6969;">Not In Tune</b>
+                                <div class="gap-3 d-flex justify-content-between">
+                                    <div class="card-text hstack gap-2"><Icon Size="30" IconName="clarity:talk-bubbles-solid" /><b style="color: #ff6969;">Bad</b></div>
+                                    <div class="card-text hstack gap-1 me-2"><Icon Size="30" ImageName="sex-in-bed.png" /><b style="color: #00a702;">Good</b></div>
                                 </div>
-                                <div class="gap-2 d-flex justify-content-begin">
-                                    <Icon ImageName="sex-in-bed.png" Size="30" />
-                                    Sex Life
-                                    <b style="color: #00a702;">Good</b>
-                                </div>
-                                <div class="gap-2 d-flex justify-content-begin">
-                                    <Icon IconName="clarity:talk-bubbles-solid" Size="30" />
-                                    Communication
-                                    <b style="color: #333;">OK</b>
-                                </div>
-                                <div class="d-flex gap-3 justify-content-evenly">
+
+                                @* <div style="margin-left: -5px;" class="gap-2 d-flex justify-content-begin">
+                    <Icon IconName="mdi:head-love" Size="34" />
+                    Mind
+                    <b style="color: #ff6969;">Not In Tune</b>
+                    </div>
+                    <div class="gap-2 d-flex justify-content-begin">
+                    <Icon ImageName="sex-in-bed.png" Size="30" />
+                    Sex Life
+                    <b style="color: #00a702;">Good</b>
+                    </div>
+                    <div class="gap-2 d-flex justify-content-begin">
+                    <Icon IconName="clarity:talk-bubbles-solid" Size="30" />
+                    Communication
+                    <b style="color: #333;">OK</b>
+                    </div> *@
+                                @* BUTTONS *@
+                                <div class="d-flex gap-3 justify-content-between">
                                     <IconButton IconName="openmoji:love-letter" OnClickCallback="@(() => OnClickViewMatchReport(report.PersonId))" ButtonText="Say Hi!" SmallSize="true" />
                                     <IconButton IconName="carbon:report-data" OnClickCallback="@(() => OnClickViewMatchReport(report.PersonId))" ButtonText="View" SmallSize="true" />
                                 </div>

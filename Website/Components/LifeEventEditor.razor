@@ -132,12 +132,9 @@
         //todo check for accidental multi tab scenario overwrite
         await AppData.API.Person.UpdatePerson(InputedPerson);
 
-        _jsRuntime.HideLoading();
-
         _jsRuntime.PlayDoneSound();//tactile feedback
 
-        //show message to user
-        await _jsRuntime.ShowAlert("success", $"Saved successfully!", false, 2500);
+        _jsRuntime.HideLoading();
 
     }
 

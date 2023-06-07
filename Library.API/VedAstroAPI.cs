@@ -128,7 +128,7 @@ namespace Library.API
 #endif
 
             //if pass, clear local person cache
-            await HandleResultClearLocalCache(jsonResult);
+            await HandleResultClearLocalCache(person,jsonResult, "add");
 
             //up to caller to interpret data, can be failed one also
             return jsonResult;
@@ -137,14 +137,15 @@ namespace Library.API
         /// <summary>
         /// Deletes person from API server  main list
         /// note:
+        /// - takes care of pass and fail messages to end user
         /// - if fail will show alert message
         /// - cached person list is cleared here
         /// </summary>
-        public async Task DeletePerson(string personId)
+        public async Task DeletePerson(Person personToDelete)
         {
             //tell API to get started
             //pass in user id to make sure user has right to delete
-            var url = $"{_api.URL.DeletePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}/PersonId/{personId}";
+            var url = $"{_api.URL.DeletePerson}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}/PersonId/{personToDelete.Id}";
 
             //API gives a url to check on poll fo results
             var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
@@ -154,7 +155,7 @@ namespace Library.API
 #endif
 
             //if pass, clear local person cache
-            await HandleResultClearLocalCache(jsonResult);
+            await HandleResultClearLocalCache(personToDelete, jsonResult, "delete"); //task is for message box
 
         }
 
@@ -175,13 +176,12 @@ namespace Library.API
             var jsonResult = await Tools.WriteServer(HttpMethod.Post, url, updatedPerson);
 
 
-
 #if DEBUG
             Console.WriteLine($"SERVER SAID:\n{jsonResult}");
 #endif
 
             //if pass, clear local person cache
-            await HandleResultClearLocalCache(jsonResult);
+            await HandleResultClearLocalCache(person, jsonResult, "update");
 
         }
 
@@ -228,20 +228,25 @@ namespace Library.API
         /// <summary>
         /// checks status, if pass clears person list cache, for update, delete and add
         /// </summary>
-        private async Task HandleResultClearLocalCache(JToken jsonResult)
+        private async Task HandleResultClearLocalCache(Person personInQuestion, JToken jsonResult, string task)
         {
 
             //if anything but pass, raise alarm
             var status = jsonResult["Status"]?.Value<string>() ?? "";
             if (status != "Pass") //FAIL
             {
-                var failMessage = jsonResult["Payload"]?.Value<string>() ?? "";
-                await _api.ShowAlert("error", $"Server is not happy! Why?", failMessage);
+                var failMessage = jsonResult["Payload"]?.Value<string>() ?? "Server didn't give reason, pls try later.";
+                await _api.ShowAlert("error", $"Server said no to your request! Why?", failMessage);
             }
             else //PASS
             {
+
                 //1: clear stored person list
                 this.CachedPersonList.Clear();
+
+                //let user know person has been updates
+                await _api.ShowAlert("success", $"{personInQuestion.Name} {task} complete!", false, timer: 1000);
+
             }
         }
 
@@ -331,7 +336,69 @@ namespace Library.API
             return cachedPersonList;
 
         }
+        /// <summary>
+        /// Shows alert using sweet alert js
+        /// </summary>
+        /// <param name="timer">milliseconds to auto close alert, if 0 then won't close which is default (optional)</param>
+        /// <param name="useHtml">If true title can be HTML, default is false (optional)</param>
+        public  async Task ShowAlert( string icon, string title, bool showConfirmButton, int timer = 0, bool useHtml = false)
+        {
+            object alertData;
 
+            if (useHtml)
+            {
+                alertData = new
+                {
+                    icon = icon,
+                    html = title,
+                    showConfirmButton = showConfirmButton,
+                    timer = timer
+                };
+            }
+            else
+            {
+                alertData = new
+                {
+                    icon = icon,
+                    title = title,
+                    showConfirmButton = showConfirmButton,
+                    timer = timer
+                };
+            }
+
+
+            await ShowAlert(alertData);
+        }
+
+        /// <summary>
+        /// Shows alerts on page using SweetAlert js lib 
+        /// this call is equivalent to
+        /// Note: create alter data as anonymous type exactly like js version
+        /// 
+        /// Swal.fire({
+        /// title: 'Error!',
+        /// text: 'Do you want to continue',
+        /// icon: 'error',
+        /// confirmButtonText: 'Cool'
+        /// })
+        /// 
+        /// </summary>
+        public async Task ShowAlert( object alertData)
+        {
+            try
+            {
+                await JsRuntime.InvokeVoidAsync(Swal_fire, alertData);
+            }
+            //above code will fail when called during app start, because haven't load lib
+            //as such catch failure and silently ignore
+            catch (Exception)
+            {
+                Console.WriteLine($"BLZ: ShowAlert Not Yet Load Lib Silent Fail!");
+            }
+
+        }
+
+        const string Swal_fire = "Swal.fire";
 
         /// <summary>
         /// Shows alert using sweet alert js
@@ -340,7 +407,6 @@ namespace Library.API
         public async Task ShowAlert(string icon, string title, string descriptionText)
         {
             //call SweetAlert lib directly via constructor
-            const string Swal_fire = "Swal.fire";
             await JsRuntime.InvokeVoidAsync(Swal_fire, title, descriptionText, icon);
         }
 

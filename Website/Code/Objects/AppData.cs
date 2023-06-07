@@ -168,11 +168,16 @@ namespace Website
             }
         }
 
+        /// <summary>
+        /// starts false, set when search is used for the 1st time
+        /// </summary>
+        public static bool SearchFilesLoaded { get; set; }
+
 
         /// <summary>
         /// standardized grey used in small text 
         /// </summary>
-        public const string Grey = "#8f8f8f";
+        public const string Grey = "#8f8f8f"; //#969696
 
         public const string DefaultLocationCountry = "Singapore";
 
@@ -292,5 +297,35 @@ namespace Website
             }
 
         }
+
+
+
+        public static async Task LoadSearchFiles()
+        {
+            //this data is used later search for fast loading
+            AppData.HoroscopeDataList = await WebsiteTools.GetXmlFile("data/HoroscopeDataList.xml");
+            AppData.EventDataList = await WebsiteTools.GetXmlFile("data/EventDataList.xml");
+            AppData.ReferenceList = await WebsiteTools.GetXmlFile("data/ReferenceList.xml");
+
+            //mark as loaded so on next search won't reload
+            AppData.SearchFilesLoaded = true;
+
+        }
+
+        /// <summary>
+        /// used for quick search, no need to load all
+        /// </summary>
+        /// <returns></returns>
+        public static async Task LoadReferenceSearchFiles()
+        {
+            //this data is used later search for fast loading
+            AppData.ReferenceList = await WebsiteTools.GetXmlFile("data/ReferenceList.xml");
+
+            //mark as loaded so on next search won't reload
+            AppData.ReferenceSearchFilesLoaded = true;
+
+        }
+
+        public static bool ReferenceSearchFilesLoaded { get; set; }
     }
 }

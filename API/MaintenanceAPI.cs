@@ -5,6 +5,12 @@ using VedAstro.Library;
 using System.Net.Mime;
 using System.Net;
 using Azure.Storage.Blobs;
+using System;
+using System.Linq;
+using Microsoft.Bing.ImageSearch;
+using Microsoft.Bing.ImageSearch.Models;
+using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Routing;
 
 namespace API
 {
@@ -24,6 +30,46 @@ namespace API
 
             return APITools.SendTextToCaller(APIHomePageTxt, incomingRequest);
         }
+
+        /// <summary>
+        /// API Home page
+        /// </summary>
+        [Function(nameof(SearchImage))]
+        public static async Task<HttpResponseData> SearchImage([HttpTrigger(AuthorizationLevel.Anonymous, "get",
+            Route = "SearchImage/Keywords/{keywords}")] HttpRequestData incomingRequest,
+            string keywords)
+        {
+            //IMPORTANT: replace this variable with your Cognitive Services subscription key
+            string subscriptionKey = Secrets.BING_IMAGE_SEARCH;
+            //stores the image results returned by Bing
+            Images imageResults = null;
+
+            var client = new ImageSearchClient(new ApiKeyServiceClientCredentials(subscriptionKey));
+
+            // make the search request to the Bing Image API, and get the results"
+            imageResults = await client.Images.SearchAsync(query: keywords); //search query
+
+            //get only jpeg images for ease of handling down the road
+            var jpegOnly = imageResults.Value.Where(x => x.EncodingFormat == "jpeg");
+
+
+            var possibleImages = new JArray();
+            foreach (var image in jpegOnly)
+            {            
+                //pack data nicely
+                var temp = new JObject();
+                temp["Name"] = image.Name; //keywords to image
+                temp["URL"] = image.ThumbnailUrl; //show as number
+
+                //add to main list
+                possibleImages.Add(temp);
+            }
+
+            return APITools.PassMessageJson(possibleImages, incomingRequest);
+
+        }
+
+
 
 
         /// <summary>
@@ -49,7 +95,7 @@ namespace API
                 return response;
             }
 
-             else if (formatName.ToLower() == "gif")
+            else if (formatName.ToLower() == "gif")
             {
                 //for images get and send direct with as less operations as possible
                 var fileBlobClient = await AzureCache.GetData<BlobClient>(callerId);
@@ -213,5 +259,6 @@ namespace API
             }
 
         }
+
     }
 }

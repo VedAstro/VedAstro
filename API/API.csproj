@@ -18,6 +18,7 @@
 		<PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
 		<PackageReference Include="itext7" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
+		<PackageReference Include="Microsoft.Bing.Search.ImageSearch" Version="1.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
 		<PackageReference Include="Svg" Version="3.4.4" />
 		<PackageReference Include="System.Drawing.Common" Version="8.0.0-preview.2.23128.3" />

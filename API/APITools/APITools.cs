@@ -375,7 +375,8 @@ namespace API
         }
 
         /// <summary>
-        /// Gets any file at given url as string
+        /// Gets any file at given WWW url will return as string
+        /// used for SVG
         /// </summary>
         public static async Task<string> GetStringFileHttp(string url)
         {
@@ -399,6 +400,36 @@ namespace API
                 Console.WriteLine(msg);
                 await APILogger.Data(msg); //log it
                 return "";
+            }
+
+
+        }
+
+
+        /// <summary>
+        /// Gets any file at given WWW url will return as bytes
+        /// </summary>
+        public static async Task<byte[]> GetFileHttp(string url)
+        {
+            try
+            {
+                //get the data sender
+                using var client = new HttpClient();
+
+                client.Timeout = Timeout.InfiniteTimeSpan;
+
+                //load xml event data files before hand to be used quickly later for search
+                //get main horoscope prediction file (located in wwwroot)
+                var fileBytes = await client.GetByteArrayAsync(url, CancellationToken.None);
+
+                return fileBytes;
+            }
+            catch (Exception e)
+            {
+                var msg = $"FAILED TO GET FILE:/n{url}";
+                Console.WriteLine(msg);
+                await APILogger.Data(msg); //log it
+                return new byte[]{};
             }
 
 
@@ -1000,6 +1031,7 @@ namespace API
     {
         public static string? AutoEmailerConnectString => Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
         public static string? API_STORAGE => Environment.GetEnvironmentVariable("API_STORAGE"); 
+        public static string? BING_IMAGE_SEARCH => Environment.GetEnvironmentVariable("BING_IMAGE_SEARCH"); 
         public static string? WEB_STORAGE => Environment.GetEnvironmentVariable("WEB_STORAGE"); 
         public static string? EnableCache => Environment.GetEnvironmentVariable("EnableCache");
         public static string? SLACK_EMAIL_WEBHOOK => Environment.GetEnvironmentVariable("SLACK_EMAIL_WEBHOOK");

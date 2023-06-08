@@ -5,240 +5,51 @@
 
 
 <div @ref="MainElement" class="vstack gap-1" style="width: fit-content;">
-    @*dont show controls until after chart has been made*@
-    @if (_isReady)
-    {
-        <div class="hstack gap-3 mt-2">
-            <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="mdi:content-save-cog">
-                <DropDownList>
-                    <li>
-                        <a class="dropdown-item hstack gap-1" @onclick="OnClickSaveAsImage">
-                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:image-download" />
-                            <span>Download</span>
-                        </a>
-                    </li>
-                </DropDownList>
-            </IconButton>
-            <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="ic:sharp-ios-share">
-                <DropDownList>
-                    <li>
-                        <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickSendToEmail(PdfFileName, eventsChartSvgHolder))">
-                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
-                            <span>Email</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.ShareCurrentPageOnFacebook())">
-                            <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
-                            <span>Facebook</span>
-                        </a>
-                    </li>
-                </DropDownList>
-            </IconButton>
-
-            <IconButton SmallSize="true" Outline="true" ButtonText="Planets" IconName="ic:sharp-ios-share">
-                <DropDownList>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Sun" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Sun @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Moon" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Moon @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Mars" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Mars @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Mercury" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Mercury @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Venus" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Venus @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Jupiter" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Jupiter @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Saturn" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Saturn @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Rahu" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Rahu @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Rahu, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="Ketu" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Ketu @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Ketu, SelectedPerson.BirthTime).ToDouble()</label>
-                        </div>
-                    </li>
-
-                </DropDownList>
-            </IconButton>
-
-
-            
-
-            @*HOUSE*@
-            <style>
-                house-info-style {
-                    font-size: 10px;
-                    color: grey;
-                }
-            </style>
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <Icon IconName="ant-design:highlight-twotone" /> Houses
-                </button>
-                <ul class="dropdown-menu">
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 1" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 1</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)1, SelectedPerson.BirthTime).ToDouble() | personal self, personal behavior</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 2" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 2</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)2, SelectedPerson.BirthTime).ToDouble() | accumulated money/wealth, food, speech</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 3" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 3</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)3, SelectedPerson.BirthTime).ToDouble() | younger siblings, artistic expression, communication, courage</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 4" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 4</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)4, SelectedPerson.BirthTime).ToDouble() | mother, happiness, vehicles, fixed assets/real estate</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 5" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 5</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)5, SelectedPerson.BirthTime).ToDouble() | romance/love from spouse, speculation, meditation techniques, intelligence</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 6" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 6</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)6, SelectedPerson.BirthTime).ToDouble() | acute disease, struggle, war, opposition, service</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 7" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 7</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)7, SelectedPerson.BirthTime).ToDouble() | partnerships</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 8" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 8</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)8, SelectedPerson.BirthTime).ToDouble() | longevity, transcendental knowledge, unearned wealth, secrets, chronic illness</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 9" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 9</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)9, SelectedPerson.BirthTime).ToDouble() | god, philosophy, guru, religion, fortune, relation with father</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 10" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 10</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)10, SelectedPerson.BirthTime).ToDouble() | career, father’s position</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 11" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 11</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)11, SelectedPerson.BirthTime).ToDouble() | cash flow, opportunities, hopes, friends, influential people older sibling</span></label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="House 12" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault"><span>House 12</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)12, SelectedPerson.BirthTime).ToDouble() | enlightenment, expenditures/losses, pleasures from spouse, confinement</span></label>
-                        </div>
-                    </li>
-                </ul>
+    
+    @* BUTTON ROW *@
+    <div>
+        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Show/Hide" IconName="bx:hide">
+            <div style="" class="vstack gap-2 w-100">
+                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
             </div>
-
-            @*Show /hide*@
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <Icon IconName="zondicons:view-show" /> Show/Hide
-                </button>
-                <ul class="dropdown-menu">
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="LifeEvents" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Life Events</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="ColorSummary" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Color Summary</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="SmartSummary" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Smart Summary</label>
-                        </div>
-                    </li>
-                    <li class="dropdown-item">
-                        <div class="form-check">
-                            <input class="form-check-input CheckBox" id="BarSummary" type="checkbox" value="">
-                            <label class="form-check-label" for="flexCheckDefault">Bar Summary</label>
-                        </div>
-                    </li>
-                </ul>
+        </IconButton>
+        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Life Events" IconName="mdi:calendar-outline">
+            <div style="" class="vstack gap-2 w-100">
+                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
             </div>
-            <IconButton ButtonText="Copy Link" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
-
-            <IconButton SmallSize="true" @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" />
-
-        </div>
-    }
+        </IconButton>
+        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Save" IconName="bx:hide">
+            <div style="" class="vstack gap-2 w-100">
+                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
+            </div>
+        </IconButton>
+        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Share" IconName="bx:hide">
+            <div style="" class="vstack gap-2 w-100">
+                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
+            </div>
+        </IconButton>
+        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Print" IconName="bx:hide">
+            <div style="" class="vstack gap-2 w-100">
+                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
+            </div>
+        </IconButton>
+    </div>
 
     @*
     dark mode is disabled for chart with mix-blend-mode
     note: extra logic to remove filter in normal mode
     *@
-
     <div @ref="eventsChartSvgHolder" class="container-xxl" id="EventsChartSvgHolder" style="margin-left: -11px; @(AppData.DarkMode?"mix-blend-mode: difference;":"")"></div>
 
     @*bottom chart options row*@
 
 
 </div>
-
-
-
 
 @code {
 
@@ -416,4 +227,217 @@
 
 }
 
+@* 
+    @if (_isReady)
+{
+    <div class="hstack gap-3 mt-2">
+        <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="mdi:content-save-cog">
+            <DropDownList>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="OnClickSaveAsImage">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:image-download" />
+                        <span>Download</span>
+                    </a>
+                </li>
+            </DropDownList>
+        </IconButton>
+        <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="ic:sharp-ios-share">
+            <DropDownList>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(()=>WebsiteTools.OnClickSendToEmail(PdfFileName, eventsChartSvgHolder))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
+                        <span>Email</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.ShareCurrentPageOnFacebook())">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
+                        <span>Facebook</span>
+                    </a>
+                </li>
+            </DropDownList>
+        </IconButton>
+        <IconButton SmallSize="true" Outline="true" ButtonText="Planets" IconName="ic:sharp-ios-share">
+            <DropDownList>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Sun" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Sun @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Sun, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Moon" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Moon @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Moon, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Mars" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Mars @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mars, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Mercury" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Mercury @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Mercury, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Venus" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Venus @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Venus, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Jupiter" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Jupiter @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Jupiter, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Saturn" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Saturn @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Saturn, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Rahu" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Rahu @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Rahu, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="Ketu" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Ketu @AstronomicalCalculator.GetPlanetShadbalaPinda(PlanetName.Ketu, SelectedPerson.BirthTime).ToDouble()</label>
+                    </div>
+                </li>
 
+            </DropDownList>
+        </IconButton>
+
+        <style>
+            house-info-style {
+                font-size: 10px;
+                color: grey;
+            }
+        </style>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <Icon IconName="ant-design:highlight-twotone" /> Houses
+            </button>
+            <ul class="dropdown-menu">
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 1" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 1</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)1, SelectedPerson.BirthTime).ToDouble() | personal self, personal behavior</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 2" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 2</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)2, SelectedPerson.BirthTime).ToDouble() | accumulated money/wealth, food, speech</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 3" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 3</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)3, SelectedPerson.BirthTime).ToDouble() | younger siblings, artistic expression, communication, courage</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 4" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 4</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)4, SelectedPerson.BirthTime).ToDouble() | mother, happiness, vehicles, fixed assets/real estate</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 5" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 5</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)5, SelectedPerson.BirthTime).ToDouble() | romance/love from spouse, speculation, meditation techniques, intelligence</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 6" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 6</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)6, SelectedPerson.BirthTime).ToDouble() | acute disease, struggle, war, opposition, service</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 7" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 7</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)7, SelectedPerson.BirthTime).ToDouble() | partnerships</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 8" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 8</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)8, SelectedPerson.BirthTime).ToDouble() | longevity, transcendental knowledge, unearned wealth, secrets, chronic illness</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 9" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 9</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)9, SelectedPerson.BirthTime).ToDouble() | god, philosophy, guru, religion, fortune, relation with father</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 10" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 10</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)10, SelectedPerson.BirthTime).ToDouble() | career, father’s position</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 11" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 11</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)11, SelectedPerson.BirthTime).ToDouble() | cash flow, opportunities, hopes, friends, influential people older sibling</span></label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="House 12" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault"><span>House 12</span><span class="house-info-style">@AstronomicalCalculator.GetBhavaBala((HouseName)12, SelectedPerson.BirthTime).ToDouble() | enlightenment, expenditures/losses, pleasures from spouse, confinement</span></label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <Icon IconName="zondicons:view-show" /> Show/Hide
+            </button>
+            <ul class="dropdown-menu">
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="LifeEvents" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Life Events</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="ColorSummary" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Color Summary</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="SmartSummary" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Smart Summary</label>
+                    </div>
+                </li>
+                <li class="dropdown-item">
+                    <div class="form-check">
+                        <input class="form-check-input CheckBox" id="BarSummary" type="checkbox" value="">
+                        <label class="form-check-label" for="flexCheckDefault">Bar Summary</label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <IconButton ButtonText="Copy Link" IconName="carbon:link" OnClickCallback="OnClickCopyChartLink" SmallSize="true" />
+
+        <IconButton SmallSize="true" @ref="_mobileViewButton" ButtonText="Mobile View" IconName="icomoon-free:mobile" OnClickCallback="OnClickMobileViewButton" />
+
+    </div>
+}
+ *@

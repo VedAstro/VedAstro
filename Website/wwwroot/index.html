@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 
 <!--
@@ -149,10 +149,21 @@ Allen Mullen
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
 
-
+        //SPECIAL SCENARIO FUNCTIONS BELOW RELATED TO LOGIN PROVIDERS
+        //------------------------------------------------------------
         //makes a reference to SignInButton instance, to be used when user clicks sign in
         //called in Blazor, after component render
         window.SetSignInButtonInstance = (instance) => window.SignInButtonInstance = instance;
+
+        //have set the size of the google button via JS,
+        //because of google's genius design to lock it iframe
+        //also the same reason they have to buy companies to stay afloat
+        window.ResizeGoogleLoginButton = function () {
+            var myElement = document.querySelector("#container"); //id of elm holding button
+            myElement.style.zoom = 2;
+        }
+
+
         //wrapper function to forward call to blazor (hardwired in Blazor HTML)
         window.OnGoogleSignInSuccessHandler = (response) => window.SignInButtonInstance.invokeMethodAsync('OnGoogleSignInSuccessHandler', response);
 

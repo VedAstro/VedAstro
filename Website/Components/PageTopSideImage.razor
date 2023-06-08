@@ -1,0 +1,115 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+@*
+    Small component placed on page top
+*@
+
+<div class="vstack mb-2">
+    @*TITLE, IMAGE, ICON, TEXT DESC*@
+    <div class="hstack">
+        <div class="vstack gap-2">
+            @*MAIN TITLE*@
+            <h1 class="fw-bold" style="font-family: '@AppData.TitleFont', serif;">@Title</h1>
+
+            @*DESC TEXT*@
+            <span style="@DescriptionWidthCss font-size: 21px; font-weight: lighter; font-family: inherit;">@DescriptionText</span>
+        </div>
+
+        @*SIDE IMAGE*@
+        @if (IsImageMode)
+        {
+            @*center the image in available space after header text (top right)*@
+            <!-- Not visible in mobile, no space to joke around -->
+            <div class="w-100 d-none d-md-block" style="max-width: @GR.W412px; text-align: center;">
+                <img src="images/@ImageName" style="width: @(ImageWidth)px;" class="" />
+            </div>
+        }
+    </div>
+
+
+    @*BUTTONS*@
+    @if (IsButtonsRow)
+    {
+        @*flex wrap needed to make button wrap nicely in mobile*@
+        <div class="hstack gap-4 d-flex flex-wrap">
+            @ButtonsRow
+        </div>
+    }
+
+    @*DIVIDER*@
+    <hr class="border-secondary border @(IsButtonsRow ? "" : "mt-3")" />
+</div>
+
+@code {
+    // SPECS NEEDED
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public double ImageWidth { get; set; } = 235;
+
+    /// <summary>
+    /// Description HTML, can be just text
+    /// </summary>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>
+    /// Name of image in wwwroot images folder, will override icons
+    /// </summary>
+    [Parameter]
+    public string? ImageName { get; set; } = "";
+
+    /// <summary>
+    /// Text only version
+    /// </summary>
+    [Parameter]
+    public string? DescriptionText { get; set; }
+
+    [Parameter]
+    public RenderFragment? ButtonsRow { get; set; }
+
+
+
+    //--------------------------------------INTERNAL
+
+    /// <summary>
+    /// setting custom css based on props
+    /// </summary>
+    private string MaxWidthGRCss => $" max-width:{GR.W667px};";
+
+    /// <summary>
+    /// auto set width of description based on text length
+    /// </summary>
+    private string DescriptionWidthCss
+    {
+        get
+        {
+            var charCount = DescriptionText.Length;
+            var countThreshold = 120;
+            var isShortText = charCount < countThreshold;
+
+#if DEBUG
+    Console.WriteLine(isShortText ? "PAGE TOP : LONG VERSION" : "PAGE TOP : SHORT VERSION");
+#endif
+
+            var finalWidth = isShortText ? GR.W412px : GR.W667px;
+
+            return $" max-width:{finalWidth};";
+        }
+    }
+
+    /// <summary>
+    /// will be true when image name is specified, used in rendering
+    /// </summary>
+    private bool IsImageMode => !string.IsNullOrEmpty(ImageName);
+
+    /// <summary>
+    /// If true, then buttons row data provided
+    /// </summary>
+    private bool IsButtonsRow => ButtonsRow != null;
+
+}

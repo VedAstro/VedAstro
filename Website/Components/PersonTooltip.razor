@@ -65,12 +65,18 @@
     /// </summary>
     private string ImageUrl(Person person) => $"images/person/{person.ImageName}";
 
+    /// <summary>
+    /// specially formatted name to note break beyond 18 char limit
+    /// </summary>
     private string DisplayName
     {
         get
         {
+            var personName = Person.Name.Truncate(18);
+            personName += $" - {Person.BirthYear}";
+
             //if person empty, than say please select name, used in sub sub-component in dropdown
-            return Person.Equals(Person.Empty) ? "Select Person" : Person.DisplayName;
+            return Person.Equals(Person.Empty) ? "Select Person" : personName;
         }
     }
 

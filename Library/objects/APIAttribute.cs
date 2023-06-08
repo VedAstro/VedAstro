@@ -11,7 +11,8 @@ namespace VedAstro.Library
         StarsAboveMe,
         Astronomical,
         Astrology,
-        All
+        All,
+        Yoga
     }
 
     /// <summary>

@@ -98,6 +98,8 @@
         //SPECIAL SIGN IN FUNCS RESIDE IN index.html
         public const string facebookLogin = "window.facebookLogin";
         public const string SetSignInButtonInstance = "window.SetSignInButtonInstance";
+        public const string ResizeGoogleLoginButton = "window.ResizeGoogleLoginButton";
+
         /// <summary>
         /// can't use window. needs direct method name
         /// declared in index.html, no dots just direct method name

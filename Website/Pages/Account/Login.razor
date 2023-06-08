@@ -1,19 +1,63 @@
-﻿                                                                                                                                                        @attribute [Route(PageRoute.Login)]
+﻿@attribute [Route(PageRoute.Login)]
 
 
-<div class="d-flex flex-wrap">
-    <div class="vstack gap-3 me-5 mb-4" style="max-width:286px">
+
+
+
+<div class="vstack">
+    <h2 class="align-self-center">Login</h2>
+    <h5 class="align-self-center">To prove you're a human from earth</h5>
+</div>
+
+<div class="vstack">
+    <div class="align-self-center vstack gap-3 mb-4" style="max-width: 286px">
+        <span style="color: @AppData.Grey;">@LoginHumanMemoryHelperText</span>
         <SignInButton />
-    </div>
-    @*STACK BOXES ON RIGHT*@
-    <div class="w-50">
-        <InfoBox MaxWidth="365" FullWidth="@true" Title="Secure" Description="Login safe & fast with Google or Facebook authentication." IconName="flat-color-icons:approval" />
-        <InfoBox MaxWidth="365" Color="success" FullWidth="@true" Title="Save" Description="Person horoscope data is saved for easy access on your next visit" IconName="emojione:floppy-disk" />
-        <InfoBox MaxWidth="365" FullWidth="@true" Title="Privacy" Description="We don't collect or connect to any data from your Google or Facebook account." IconName="flat-color-icons:customer-support" />
     </div>
 </div>
 
+
+
+<IconTitle Title="Why login?" IconName="flat-color-icons:key" TitleHolder="h4" />
+<div class="hstack gap-3">
+    @*STACK BOXES ON RIGHT*@
+    <InfoBox MaxWidth="365" FullWidth="@true" Title="Secure" Description="Safe & fast with Google or Facebook authentication." IconName="flat-color-icons:approval" />
+    <InfoBox MaxWidth="365" Color="success" Title="Save" FullWidth="@true" Description="Free cloud storage for charts, reports and horoscopes" IconName="ic:baseline-cloud-done" />
+    <InfoBox MaxWidth="365" FullWidth="@true" Title="Privacy" Description="We don't collect data or connect to your Google or Facebook account." IconName="flat-color-icons:privacy" />
+</div>
+
+
 @code {
+
+    private string? LoginHumanMemoryHelperText = "";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //set the memory helper text if any
+        LoginHumanMemoryHelperText = await LoginHumanMemoryHelper();
+    }
+
+    /// <summary>
+    /// if user logged in before using Google then,
+    /// remind them nicely else no show,
+    /// little UX helpers like these makes a difference
+    /// </summary>
+    private async Task<string> LoginHumanMemoryHelper()
+    {
+
+        //get data stored in browser storage (DON'T FORGET SETTER)
+        var loginProvider = await _jsRuntime.GetProperty("PreviousLoginMethod");
+        var noPrevFound = string.IsNullOrEmpty(loginProvider);
+
+        //if first login, then nothing to show, end here
+        if (noPrevFound) { return ""; }
+
+        //if all good, prev login provider is displayed
+        //combine with text here, so can show/hide easy
+
+        var final = $"Before this, you used {loginProvider}.";
+        return final;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -24,7 +68,7 @@
             //get the previously saved page before login, if any else deafult to home
             var previousPage = await _jsRuntime.GetProperty("PreviousPage");
             previousPage = string.IsNullOrEmpty(previousPage) ? PageRoute.Home : previousPage;
-           AppData.Go(previousPage);
+            AppData.Go(previousPage);
 
         }
     }

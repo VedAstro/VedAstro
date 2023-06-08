@@ -16,9 +16,11 @@
 Know good and bad periods of your life years ahead.*@
 
 
+@* SELECTOR AND INFO BOXES*@
 <div>
     <div class="d-flex justify-content-between">
 
+        @* SELECTOR *@
         <div class="vstack gap-3 p-3">
 
             <PersonSelectorBox @ref="_easyPersonSelectorBox" @bind-SelectedPersonId="@SelectedPersonId" />
@@ -27,13 +29,15 @@ Know good and bad periods of your life years ahead.*@
                 <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
                 <select @bind="SelectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
                     <option value="FullLife">Full Life</option>
-                    <option value="week">This Week</option>
-                    <option value="month">This Month</option>
-                    <option value="year">This Year</option>
-                    <option value="decade">This Decade</option>
-                    <option value="selectyear">Select Start &amp; End</option>
-                    <option value="Age1to25">Age 1 to 25</option>
-                    <option value="Age75to100">Age 75 to 100</option>
+                    <option value="1week">+/- 1 Week</option>
+                    <option value="1month">+/- 1 Month</option>
+                    <option value="6month">+/- 6 Months</option>
+                    <option value="1year">+/- 1 Year</option>
+                    <option value="5year">+/- 5 Year</option>
+                    <option value="10year">+/- 10 Year</option>
+                    <option value="Age1to50">Age 1 to 50</option>
+                    <option value="Age50to100">Age 50 to 100</option>
+                    <option style="" value="selectyear">Custom Start &amp; End</option>
                 </select>
             </div>
 
@@ -60,12 +64,10 @@ Know good and bad periods of your life years ahead.*@
                 </div>
             </div>
 
-
             <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
-
         </div>
 
-
+        @* SIDE EXAMPLE *@
         <div>
             <InfoBox Title="Accurate" FullWidth="true" MaxWidth="@GR.W412" IconName="noto-v1:direct-hit">
                 <DescriptionHTML>
@@ -76,21 +78,29 @@ Know good and bad periods of your life years ahead.*@
                 </ImageHTML>
             </InfoBox>
         </div>
-
-    </div>
-
-</div>
-
-<hr>
-
-@*hide until ready but initialized as well*@
-<div style="@(_isResultReady?"":"display:none;")">
-    <div @ref="_holderDiv">
-        <EventsChartViewer @ref="_eventsChartViewer" />
     </div>
 </div>
 
-<hr />
+
+@* CHART DISPLAY HERE *@
+<div>
+    <hr>
+    @*hide until ready but initialized as well*@
+    <div style="@(_isResultReady?"":"display:none;")">
+        <div @ref="_holderDiv">
+            <EventsChartViewer @ref="_eventsChartViewer" />
+        </div>
+    </div>
+
+    @* PLACE HOLDER MESSAGE *@
+    @* hide when loaded *@
+    <div class="d-flex justify-content-center" style="@(!_isResultReady ? "" : "display:none;")">
+        <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear here after you click calculate</span>
+    </div>
+    <hr />
+</div>
+
+
 
 <div class="gap-3 mt-5" style="max-width: @GR.W667px">
 
@@ -104,76 +114,153 @@ Know good and bad periods of your life years ahead.*@
             <img src="images/life-predictor-image-1.jpg" class="img-thumbnail mb-3 mt-1" alt="...">
 
             <p class="text-justify">
-                <span style="color: red; font-weight: 900;">RED</span> is for bad life events, <span style="color: green; font-weight: 900;">GREEN</span> is
-                for good. This makes it possible to quickly read with <strong>zero</strong> astrological knowledge. No manuals needed.
+                @RED is for bad life events, @GREEN is for good. This makes it possible to quickly read with
+                <strong>zero</strong> astrological knowledge. No manuals needed.
             </p>
         </TextHTML>
     </ArticleBlock>
-
-
 
     <ArticleBlock Title="Intensity" IconName="emojione:level-slider">
         <TextHTML>
             <p class="text-justify">
                 To see how <strong>good or bad </strong> the life event is going to be. Look carefully at the summary row.
-                The intensity of the <span style="color: red;font-weight: 900;">RED</span> or <span style="color: green;font-weight: 900;">GREEN</span> is different.
+                The intensity of the  @RED or @GREEN is different.
                 When it is very <span style="color: darkred;font-weight: 900;">dark red</span> and no green lines around, it means that a very bad event will happen then.
-                What exactly will happen will depend on your karma.
+                What exactly will happen will depend on past and present karma.
             </p>
+            <img src="images/life-predictor-connection.jpg" class="img-thumbnail mt-2 mb-3" alt="...">
             <p>
                 What we can say <strong>for sure</strong>:- during red period a native
-                will never say "I'm perfectly happy in life now". When it says red, something will be poking you. Maybe it is big, maybe small issue.
-                But if the charts says it is there it will be there.
+                will never say "I'm perfectly happy in life now". When it says red, something will be poking you. Maybe it is big, maybe small.
+                But if the chart says it is there it will be there.
             </p>
         </TextHTML>
     </ArticleBlock>
 
-    <img src="images/life-predictor-connection.jpg" class="img-thumbnail my-3" alt="...">
-
+    <ArticleBlock Title="Perfect Predictions" IconName="noto-v1:direct-hit">
+        <TextHTML>
+            <img class="img-thumbnail" src="images/life-predictor-alertbox-examples.jpg" />
+        </TextHTML>
+    </ArticleBlock>
 
     <ArticleBlock Title="Coincidence?" IconName="line-md:moon-rising-loop">
         <TextHTML>
-            We use the aspect of "<strong>Mind</strong>" in astrology to make this chart. <strong>Why?</strong> because anything that effects your mind will make a difference to you.
-            For instance we can make a chart to predict only "<strong>Weather</strong>" over your head, but if you live in the city and don't really care about rain or shine.
-            Than what use is that complex chart to you. Most people will say the prediction is wrong. Of course it never effected the them, can't tell even if correct.
+            <p>
+                We use the aspect of "<strong>Mind</strong>" in astrology to make this chart. <strong>Why?</strong> because anything that effects your mind will make a difference to you.
+                For instance we can make a chart to predict only "<strong>Weather</strong>" over your head, but if you live in the city and don't really care about rain or shine.
+                Than what use is that complex chart to you. Most people will say the prediction is wrong. Of course it never effected them, can't tell even if correct.
+            </p>
 
-            We have seen to many cases to call this <strong>prediction lines</strong> a "coincidence".
-            You will be aware of it. But when it says <span style="color: green;font-weight: 900;">GREEN</span>, than one can say it is <strong>impossible</strong> to have a worried mind or troubled heart.
+            <p>
+                We have seen too many cases to call this <strong>prediction lines</strong> a "coincidence".
+                You will be aware of it. But when it says @GREEN, than one can say it is <strong>impossible</strong> to have a worried mind or troubled heart.
+            </p>
         </TextHTML>
 
     </ArticleBlock>
+
+    <ArticleBlock Title="Astro Umbrella" IconName="twemoji:cloud-with-lightning-and-rain">
+        <TextHTML>
+            <p>
+                The power of gems and metals to fight the planets pull should never be underestimated.
+                Wear the remedies before your @RED period starts and never take it off during this period.
+            </p>
+            <p>
+                Even <BoldLink URL="@URL.MahatmaGandhiWiki">Mahatma Gandhi</BoldLink> noted in his writing that his father just before
+                death, awoke one night from sleep <strong>took off the astro bangle</strong> he had worn for decades. Threw it
+                across the room and only then did he die.
+            </p>
+
+            <p>
+                This is but one of many public records from all corners of the globe, proving the power of
+                gems &amp; metals to change you karma. <BoldLink URL="@PageRoute.Remedy">Read more</BoldLink> about astro remedies written by Yukteswar himself.
+            </p>
+        </TextHTML>
+    </ArticleBlock>
+
 
     <ArticleBlock Title="Fear Death Date?" IconName="mdi:death">
         <TextHTML>
-            There are many recorded accounts of people through history dying peacefully in their sleep.
-            Death will not be a tragedy to everybody, <strong>just not possible</strong>.
-            It is only a transition date, to be afraid of it is like being afraid of your birthday. Life will not be fun that way, we have all tried it.
-            And know very well what life without knowing tomorrows tragedy is like.
-            Even death during <span style="color: green;font-weight: 900;">GREEN</span> period will be happy or peaceful and never tragic.
-            Keep in mind this algorithm does "NOT" count <strong>death</strong> as a bad life event, it is <strong>how</strong> you die that is predicted to be good or bad.
-            Some say, "I like not knowing". We say, "<strong>Good luck</strong>".
+            <p>
+                There are many recorded accounts of people through history dying peacefully in their sleep.
+                Death will not be a tragedy to everybody, <strong>just not possible</strong>.
+                It is only a transition date, to be afraid of it is like being afraid of your birthday. Life will not be fun that way, we have all tried it.
+                And know very well what life without knowing tomorrows tragedy is like.
+            </p>
+            <p>
+                Even death during @GREEN period will be happy or peaceful and never tragic.
+                Keep in mind this algorithm does "NOT" count <strong>death</strong> as a bad life event, it is <strong>how</strong> you die that is predicted to be good or bad.
+                Some say, "I like not knowing". We say, "<strong>Good luck</strong>".
+            </p>
         </TextHTML>
-
     </ArticleBlock>
+
 
     <ArticleBlock Title="Winning The Lotto" IconName="noto-v1:money-bag">
         <TextHTML>
-            Since it is without doubt that we can predict when will a person smile or frown. Than it is possible to predict when a person
-            will win the lottery. The "<strong>lottery prize</strong>" is different for every person. Not everybody wants money. Some people are very
-            happy when they are with others. When lonely they are sad and dont't like it. For example, for this person we can accurately predict
-            that when <span style="color: red;font-weight: 900;">RED</span> lines appear that this person will most likely be left alone,
-            hence causing their <strong>lottery loss</strong>. Ergo we predict with confidence, that a person will win a <strong>real cash lottery</strong>
-            if only money is equal to happiness to him. The fact is, most people want not just "cash", but also good <strong>Wife or Fame or Career or Education</strong>
-            for actual happiness. Hence also proving why most people don't win the lottery in real life.
+            <p>
+                Since it is without doubt that we can predict when will a person smile or frown. Than it is possible to predict when a person
+                will win the lottery. The "<strong>lottery prize</strong>" is different for every person. Not everybody wants money. Some people are very
+                happy when they are with others. When lonely they are sad and dont't like it.
+            </p>
+            <p>
+                For example, for this person we can accurately predict
+                that when  @RED lines appear that this person will most likely be left alone,
+                hence causing their <strong>lottery loss</strong>. Ergo we predict with confidence, that a person will win a <strong>real cash lottery</strong>
+                if only money is equal to happiness to him. The fact is, most people want not just "cash", but also good <strong>Wife or Fame or Career or Education</strong>
+                for actual happiness. Hence also proving why most people don't win the lottery in real life.
+            </p>
         </TextHTML>
 
     </ArticleBlock>
 
+    <ArticleBlock Title="Source of Code" IconName="noto-v1:backhand-index-pointing-up">
+        <TextHTML>
+            <p class="text-justify">
+                The people should know, the source behind many of the algorithmic patterns used to make this chart.
+                It was gained only during deep prayers and dreams. This is <strong>nothing new</strong> nor surprising.
+                <BoldLink URL="@URL.RamanujanQuoteWiki">Ramanujan</BoldLink> also credits his theorems to the dreams of the goddess Namagiri.
+                An example of this <strong>divine guidance</strong> can be seen below.
+            </p>
+
+            <img src="images/ChartV11vsChartV12.jpg" class="img-thumbnail mt-2 mb-3" alt="...">
+
+            <p class="text-justify">
+                The code needed to solve V11 inaccuracy only came in the dream of the programmer.
+                At first the solution seemed <strong>technically not logical</strong>, it was implemented only because of faith.
+                The programmer who wrote the solution did not believe it would work at the time of development.
+                And when the chart came out better than before, we doubted no more.
+            </p>
+
+            <QuoteTextBlock Author="Emerson" URL="@URL.EmersonWiki">
+                Did the wires generate the galvanism?
+            </QuoteTextBlock>
+
+        </TextHTML>
+
+    </ArticleBlock>
+
+
+
+
+    @*     <QuoteTextBlock Author="Srinivasa Ramanujan" URL="@URL.RamanujanQuoteWiki">While asleep,
+    I had an unusual experience.
+    There was a red screen formed by flowing blood, as it were. I was observing it. Suddenly a hand began to write on the screen.
+    I became all attention.
+    That hand wrote a number of elliptic integrals. They stuck to my mind. As soon as I woke up,
+    I committed them to writing.</QuoteTextBlock>
+    *@
 
 </div>
 
 
 @code {
+
+    /// <summary>
+    /// shortcut for red text
+    /// </summary>
+    private RenderFragment RED = @<span style="color: red; font-weight: 900;">RED</span>;
+    private RenderFragment GREEN = @<span style="color: green; font-weight: 900;">GREEN</span>;
 
     private string SelectedLifeYearStart;
     private string SelectedLifeYearEnd;

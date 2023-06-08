@@ -41,26 +41,27 @@
         @if (IsCardView)
         {
             <div class="g-4 row row-cols-2 row-cols-sm-3 row-cols-lg-4">
-                @foreach (var report in MatchReportList)
+                @foreach (var personKutaScore in PersonKutaScoreList)
                 {
                     <div class="me-4 rounded-3 border shadow px-3 pt-2 pb-3 d-flex" style="background-color: #fff; width: @GR.W412px;height: fit-content;">
 
-                        <div style="width: @(GR.W97+GR.W37)px;" class="me-3">
-                            <img style="width: inherit;" src="images/person/8e9b5804e68a4b82a1a975ebee1643dc.jpg">
+                        <div style="width: @GR.W134px;" class="me-3">
+                            @* set height manually to compensate for bing images, calls API directly from img *@
+                            <img style="width: inherit; height: 188px;" src="@($"{AppData.URL.GetPersonImage}/{personKutaScore.PersonId}")">
                         </div>
 
                         <div class="flex-column justify-content-between gap-3">
                             <div class="mb-2 d-flex justify-content-between border-bottom">
-                                <span style="font-size: 23px; font-weight: 600; ">@report.PersonName.Truncate(16)</span>
+                                <span style="font-size: 23px; font-weight: 600; ">@personKutaScore.PersonName.Truncate(16)</span>
                                 <span style=" width: min-content;  font-size: 22px;" class="ms-3">
                                     Score
-                                    <b style="color: #00a702;">@report.KutaScore%</b>
+                                    <b style="color: #00a702;">@personKutaScore.KutaScore%</b>
                                 </span>
                             </div>
                             <div class="vstack gap-2">
                                 <div class="gap-3 d-flex justify-content-between">
-                                    <div class="card-text hstack gap-2"><Icon Size="30" IconName="@GetGenderIconName(report.Gender)" /> @report.Gender</div>
-                                    <div class="card-text hstack gap-1 me-2"><Icon Size="30" IconName="icon-park-outline:birthday-cake" /> Age @report.Age</div>
+                                    <div class="card-text hstack gap-2"><Icon Size="30" IconName="@GetGenderIconName(personKutaScore.Gender)" /> @personKutaScore.Gender</div>
+                                    <div class="card-text hstack gap-1 me-2"><Icon Size="30" IconName="icon-park-outline:birthday-cake" /> Age @personKutaScore.Age</div>
                                 </div>
                                 <div class="gap-3 d-flex justify-content-between">
                                     <div class="card-text hstack gap-2"><Icon Size="30" IconName="clarity:talk-bubbles-solid" /><b style="color: #ff6969;">Bad</b></div>
@@ -84,8 +85,8 @@
                     </div> *@
                                 @* BUTTONS *@
                                 <div class="d-flex gap-3 justify-content-between">
-                                    <IconButton IconName="openmoji:love-letter" OnClickCallback="@(() => OnClickViewMatchReport(report.PersonId))" ButtonText="Say Hi!" SmallSize="true" />
-                                    <IconButton IconName="carbon:report-data" OnClickCallback="@(() => OnClickViewMatchReport(report.PersonId))" ButtonText="View" SmallSize="true" />
+                                    <IconButton IconName="openmoji:love-letter" OnClickCallback="@(() => OnClickViewMatchReport(personKutaScore.PersonId))" ButtonText="Say Hi!" SmallSize="true" />
+                                    <IconButton IconName="carbon:report-data" OnClickCallback="@(() => OnClickViewMatchReport(personKutaScore.PersonId))" ButtonText="View" SmallSize="true" />
                                 </div>
                             </div>
                         </div>
@@ -108,7 +109,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var report in MatchReportList)
+                    @foreach (var report in PersonKutaScoreList)
                     {
                         <tr>
                             <td>@report.PersonName</td>
@@ -135,7 +136,7 @@
 
     private bool NothingToShow { get; set; } = true;
 
-    public List<PersonKutaScore> MatchReportList { get; set; } = new List<PersonKutaScore>();
+    public List<PersonKutaScore> PersonKutaScoreList { get; set; } = new List<PersonKutaScore>();
 
 
     private Person SelectedPerson { get; set; }
@@ -149,7 +150,7 @@
         //save person to make chart link
         SelectedPerson = selectedPerson;
 
-        MatchReportList = personKutaScoreList;
+        PersonKutaScoreList = personKutaScoreList;
 
         NothingToShow = false;
 
@@ -176,5 +177,10 @@
         var iconName = $"ph:gender-{gender.ToString().ToLower()}-fill";
         return iconName;
     }
+
+    // private string GetImageUrl(string personId)
+    // {
+    //     var x = $"{AppData.URL.GetPersonImage}/{personId}";
+    // }
 
 }

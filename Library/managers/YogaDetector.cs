@@ -15,6 +15,9 @@ namespace VedAstro.Library
         [API("KemadrumaYoga", "", Category.Yoga)]
         public static YogaResult KemadrumaYoga(Time time)
         {
+            //leave here until can ready for compile
+            throw new NotImplementedException();
+            
             //get planet longitude
             var moonLongitude = AstronomicalCalculator.GetPlanetNirayanaLongitude(time, PlanetName.Moon);
 

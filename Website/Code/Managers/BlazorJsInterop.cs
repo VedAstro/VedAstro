@@ -250,6 +250,9 @@ namespace Website
 
         //ACCESS BROWSERS LOCAL STORAGE
 
+        /// <summary>
+        /// Gets data stored in browser storage
+        /// </summary>
         public static async Task<string> GetProperty(this IJSRuntime jsRuntime, string propName)
         {
             var value = await jsRuntime.InvokeAsync<string>(JS.getProperty, propName);

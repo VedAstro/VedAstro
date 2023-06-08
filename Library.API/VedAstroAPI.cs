@@ -260,7 +260,7 @@ namespace Library.API
         public EventsChartTools(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
 
 
-        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags)
+        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth)
         {
 
             if (VedAstro.Library.Person.Empty.Equals(person))
@@ -270,7 +270,7 @@ namespace Library.API
 
 
             //1 : package data to get chart
-            var chartSpecsJson = VedAstro.Library.EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags);
+            var chartSpecsJson = VedAstro.Library.EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags, maxWidth);
 
             //ask API to make new chart
             var eventsChartApiCallUrl = $"{_api.URL.GetEventsChart}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";

@@ -4,38 +4,33 @@
 @using Newtonsoft.Json.Linq
 
 
-<div @ref="MainElement" class="vstack gap-1" style="width: fit-content;">
+<div @ref="MainElement" class="vstack gap-1" >
     
     @* BUTTON ROW *@
-    <div>
-        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Show/Hide" IconName="bx:hide">
+    <div class="hstack gap-3 mb-2">
+        <IconButton  SmallSize="true" Outline="true" ButtonText="Show/Hide" IconName="bx:hide">
             <div style="" class="vstack gap-2 w-100">
-                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
-                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
         </IconButton>
-        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Life Events" IconName="mdi:calendar-outline">
+        <IconButton SmallSize="true" Outline="true" ButtonText="Life Events" IconName="mdi:calendar-outline">
             <div style="" class="vstack gap-2 w-100">
-                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
-                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
         </IconButton>
-        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Save" IconName="bx:hide">
+        <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="ic:outline-save">
             <div style="" class="vstack gap-2 w-100">
-                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
-                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
         </IconButton>
-        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Share" IconName="bx:hide">
+        <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="ion:share-outline">
             <div style="" class="vstack gap-2 w-100">
-                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
-                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
         </IconButton>
-        <IconButton FullWidth="true" SmallSize="true" Outline="true" ButtonText="Print" IconName="bx:hide">
+        <IconButton SmallSize="true" Outline="true" ButtonText="Print" IconName="ic:round-print">
             <div style="" class="vstack gap-2 w-100">
-                @* <img class="rounded-2" src="images/EasyAPIBuilderGuide.gif" /> *@
-                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Easy prediction of real life events</p>
+                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
         </IconButton>
     </div>
@@ -132,7 +127,8 @@
             InputedEventTags = inputedEventTags;
 
             //poll till get
-            string chartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags);
+            int maxWidth = 940;
+            string chartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth);
 
             //control reaches here than already complete
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, chartSvg);

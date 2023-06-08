@@ -94,7 +94,7 @@ Know good and bad periods of your life years ahead.*@
 
     @* PLACE HOLDER MESSAGE *@
     @* hide when loaded *@
-    <div class="d-flex justify-content-center" style="@(!_isResultReady ? "" : "display:none;")">
+    <div class="d-flex justify-content-center" style="@((!_isResultReady) ? "" : "display:none !important;")"> @* important needed to override flex *@
         <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear here after you click calculate</span>
     </div>
     <hr />
@@ -158,6 +158,7 @@ Know good and bad periods of your life years ahead.*@
         </TextHTML>
 
     </ArticleBlock>
+
 
     <ArticleBlock Title="Astro Umbrella" IconName="twemoji:cloud-with-lightning-and-rain">
         <TextHTML>

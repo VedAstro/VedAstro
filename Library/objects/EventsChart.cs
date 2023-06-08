@@ -144,10 +144,10 @@ namespace VedAstro.Library
         /// <summary>
         /// Packages the data to send to API to generate the chart
         /// </summary>
-        public static JObject GenerateChartSpecsJson(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags)
+        public static JObject GenerateChartSpecsJson(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth)
         {
             //auto calculate precision
-            var daysPerPixelRaw = EventsChart.GetDayPerPixel(timeRange);
+            var daysPerPixelRaw = EventsChart.GetDayPerPixel(timeRange, maxWidth);
             //if not defined, use input
             double daysPerPixelInput = 30;
             daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
@@ -168,9 +168,8 @@ namespace VedAstro.Library
         /// <summary>
         /// calculates the precision of the events to fit inside 1000px width
         /// </summary>
-        public static double GetDayPerPixel(TimeRange timeRange)
+        public static double GetDayPerPixel(TimeRange timeRange, int maxWidth)
         {
-            const int maxWidth = 1000; //px
 
             var daysPerPixel = Math.Round(timeRange.daysBetween / maxWidth, 3); //small val = higher precision
             //var daysPerPixel = Math.Round(yearsBetween * 0.4, 3); //small val = higher precision

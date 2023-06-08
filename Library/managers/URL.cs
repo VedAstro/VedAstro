@@ -161,6 +161,7 @@ public class URL
     public const string JohnLenonImagine = "https://youtu.be/rAn-AWXtHv0";
     public const string YukteswarWiki = "https://en.wikipedia.org/wiki/Swami_Sri_Yukteswar_Giri";
     public const string WHAudenWiki = "https://en.wikipedia.org/wiki/W._H._Auden";
+    public const string SwamiRamaWiki = "https://en.wikipedia.org/wiki/Swami_Rama";
     public const string YoganandaWiki = "https://en.wikipedia.org/wiki/Paramahansa_Yogananda";
     public const string CarlSaganWiki = "https://en.wikipedia.org/wiki/Carl_Sagan";
     public const string RamanujanWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan";
@@ -168,5 +169,6 @@ public class URL
     public const string MahatmaGandhiWiki = "https://en.wikipedia.org/wiki/Mahatma_Gandhi";
     public const string MiltonFriedmanWiki = "https://en.wikipedia.org/wiki/Milton_Friedman";
     public const string RamanujanQuoteWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan#Personality_and_spiritual_life";
+    public const string StPaulWiki = "https://en.wikipedia.org/wiki/Paul_the_Apostle";
     public const string FreedmanYoutubePencil = "https://youtu.be/67tHtpac5ws";
 }

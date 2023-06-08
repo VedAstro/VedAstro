@@ -94,6 +94,9 @@ namespace API
 
         }
 
+        /// <summary>
+        /// gets image already stored in Images/Person as blobclient based on image name, without file format
+        /// </summary>
         public static BlobClient GetPersonImage(string personId)
         {
 
@@ -111,6 +114,7 @@ namespace API
             var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
 
             return fileBlobClient;
+
 
         }
 

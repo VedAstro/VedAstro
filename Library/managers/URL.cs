@@ -36,6 +36,7 @@ public class URL
         DeletePerson = ApiUrl + "/DeletePerson";
         UpdatePerson = ApiUrl + "/UpdatePerson";
         GetPerson = ApiUrl + "/getperson";
+        GetPersonImage = ApiUrl + "/GetPersonImage/PersonId/";
         GetNewPersonId = ApiUrl + "/GetNewPersonId";
 
         GetHoroscope = ApiUrl + "/gethoroscope";
@@ -113,6 +114,7 @@ public class URL
     public readonly string GetCallData;
     public readonly string GetPersonList;
     public readonly string GetPerson;
+    public readonly string GetPersonImage;
     public readonly string GetNewPersonId;
     public readonly string GetPersonIdFromSavedChartId;
     public readonly string UpdatePerson;
@@ -145,7 +147,6 @@ public class URL
     public const string KoFiPage = "https://ko-fi.com/vedastro";
     public const string KoFiDonateIframe = "https://ko-fi.com/vedastro/?hidefeed=true&widget=true&embed=true&preview=true";
     public const string PaypalMePage = "https://paypal.me/VedAstroOrg";
-    public const string AddPersonGuideVideo = "https://youtu.be/RDUPsFOrr3c";
     public const string NasaJplSource = "https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html";
     public const string SwissEphSource = "https://www.astro.com/swisseph/swephinfo_e.htm";
     public const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";

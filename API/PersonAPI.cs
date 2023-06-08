@@ -4,6 +4,8 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
 using Azure.Storage.Blobs;
+using Microsoft.Bing.ImageSearch.Models;
+using Person = VedAstro.Library.Person;
 
 namespace API
 {
@@ -149,55 +151,53 @@ namespace API
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "GetPersonImage/PersonId/{personId}")] HttpRequestData req,
             string personId)
         {
+            //start with backup person if all fails
+            var personToImage = Person.Empty;
+            BlobClient imageFile = null;
 
             try
             {
                 //OPTION 1
-                //check directly if custom uploaded image exist, end here
+                //check directly if custom uploaded image exist, if got end here
                 var imageFound = await APITools.IsCustomPersonImageExist(personId);
 
-                BlobClient imageFile;
                 if (imageFound)
                 {
                     imageFile = APITools.GetPersonImage(personId);
                     return APITools.SendFileToCaller(imageFile, req, MediaTypeNames.Image.Jpeg);
                 }
 
-                //-----------------
-                //OPTION 1.5 : GET AZURE SEARCHED IMAGED
-                //get the person record by ID
-                var foundPersonXml = await APITools.FindPersonXMLById(personId);
-                var personToImage = Person.FromXml(foundPersonXml);
-                byte[] foundImage = await APITools.GetSearchImage(personToImage); //gets most probable fitting person image
-                
-                //save copy of image under profile, so future calls don't spend BING search quota
-                await APITools.SaveNewPersonImage(personToImage.Id, foundImage);
+                //OPTION 2 : GET AZURE SEARCHED IMAGED
+                else
+                {
+                    //get the person record by ID
+                    var foundPersonXml = await APITools.FindPersonXMLById(personId);
+                    personToImage = Person.FromXml(foundPersonXml);
+                    byte[] foundImage = await APITools.GetSearchImage(personToImage); //gets most probable fitting person image
 
-                //return gotten image as is
-                return APITools.SendFileToCaller(foundImage, req, MediaTypeNames.Image.Jpeg);
+                    //save copy of image under profile, so future calls don't spend BING search quota
+                    await APITools.SaveNewPersonImage(personToImage.Id, foundImage);
 
+                    //return gotten image as is
+                    return APITools.SendFileToCaller(foundImage, req, MediaTypeNames.Image.Jpeg);
 
-                //-----------------
-                //OPTION 2 : GET PLACE HOLDER BASED ON GENDER
+                }
 
-                //get the person record by ID
+            }
+
+            //OPTION 3 : USE ANONYMOUS IMAGE
+            //used only when bing and saved records fail
+            catch (Exception e)
+            {
+                //log error
+                APILogger.Error(e, req);
+
+                //get default male or female image
                 imageFile = personToImage.Gender == Gender.Male ? APITools.GetPersonImage("male") : APITools.GetPersonImage("female");
 
                 //send person image to caller
                 return APITools.SendFileToCaller(imageFile, req, MediaTypeNames.Image.Jpeg);
-
-
-
             }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, req);
-
-                //let caller know fail, include exception info for easy debugging
-                return APITools.FailMessageJson(e, req);
-            }
-
 
         }
 

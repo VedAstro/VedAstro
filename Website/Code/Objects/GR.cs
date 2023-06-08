@@ -37,6 +37,9 @@
         public static double W157 => Math.Round(W255 / GoldenRatio, 1);
         public static string W157px => $"{W157}px";
 
+        public static double W134 => GR.W97 + GR.W37;
+        public static string W134px => $"{W134}px";
+
         public static double W97 => Math.Round(W157 / GoldenRatio, 1);
         public static string W97px => $"{W97}px";
 

@@ -19,14 +19,11 @@
         </div>
 
         @*SIDE IMAGE*@
-        @if (IsImageMode)
-        {
-            @*center the image in available space after header text (top right)*@
-            <!-- Not visible in mobile, no space to joke around -->
-            <div class="w-100 d-none d-md-block" style="max-width: @GR.W412px; text-align: center;">
-                <img src="images/@ImageName" style="width: @(ImageWidth)px;" class="" />
-            </div>
-        }
+        @*center the image in available space after header text (top right)*@
+        <!-- Not visible in mobile, no space to joke around -->
+        <div class="w-100 d-none d-md-block" style="max-width: @GR.W412px; text-align: center;">
+            <img src="images/@ImageName" style="width: @(ImageWidth)px;" class="" />
+        </div>
     </div>
 
 
@@ -51,11 +48,6 @@
     [Parameter]
     public double ImageWidth { get; set; } = 235;
 
-    /// <summary>
-    /// Description HTML, can be just text
-    /// </summary>
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
 
     /// <summary>
     /// Name of image in wwwroot images folder, will override icons
@@ -67,7 +59,7 @@
     /// Text only version
     /// </summary>
     [Parameter]
-    public string? DescriptionText { get; set; }
+    public string? DescriptionText { get; set; } = "";
 
     [Parameter]
     public RenderFragment? ButtonsRow { get; set; }
@@ -88,7 +80,7 @@
     {
         get
         {
-            var charCount = DescriptionText.Length;
+            var charCount = DescriptionText?.Length ?? 0;
             var countThreshold = 120;
             var isShortText = charCount < countThreshold;
 
@@ -101,11 +93,6 @@
             return $" max-width:{finalWidth};";
         }
     }
-
-    /// <summary>
-    /// will be true when image name is specified, used in rendering
-    /// </summary>
-    private bool IsImageMode => !string.IsNullOrEmpty(ImageName);
 
     /// <summary>
     /// If true, then buttons row data provided

@@ -11,8 +11,9 @@ namespace VedAstro.Library
     public static class YogaDetector
     {
 
-        [API("PlanetHoraSign", "", Category.StarsAboveMe)]
-        public static bool Kemadruma(Time time)
+
+        [API("Kemadruma", "", Category.StarsAboveMe)]
+        public static YogaResult Kemadruma(Time time)
         {
             //get planet sign
             var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planetName, time);
@@ -87,4 +88,7 @@ namespace VedAstro.Library
 
 
     }
+
+
+    public readonly record struct YogaResult(bool IsOccurred, double Strength, string Notes);
 }

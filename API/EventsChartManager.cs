@@ -1353,7 +1353,7 @@ namespace API
             //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
             const int singleRowHeight = 5;
-            const int SummaryRowHeight = 30;
+            const int SummaryRowHeight = 22;
 
 
             //sort event by duration, so that events are ordered nicely in chart

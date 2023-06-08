@@ -1352,7 +1352,7 @@ namespace API
         {
             //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
-            const int singleRowHeight = 5;
+            const int singleRowHeight = 15;
             const int SummaryRowHeight = 22;
 
 

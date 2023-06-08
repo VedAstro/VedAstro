@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root>
 
-	<!--This is the DATA list for Horoscope-->
+	<!--THIS IS THE DATA LIST FOR HOROSCOPE-->
+
+
+	<!--YOGA DETECTOR RESULTS-->
+	<Event>
+		<Name>KemadrumaYoga</Name>
+		<Nature>Bad</Nature>
+		<Description>
+			The person will be dirty, sorrowful,
+			doing unrighteous deeds, poor, dependent, rogue
+			and a swindler
+		</Description>
+		<Tag>Personal</Tag>
+	</Event>
+
+
 
 	<!--Results of Lord of 1st House Occupying Different Houses-->
 	<Event>

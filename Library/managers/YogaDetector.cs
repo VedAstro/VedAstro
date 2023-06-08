@@ -12,13 +12,15 @@ namespace VedAstro.Library
     {
 
 
-        [API("Kemadruma", "", Category.StarsAboveMe)]
-        public static YogaResult Kemadruma(Time time)
+        [API("KemadrumaYoga", "", Category.Yoga)]
+        public static YogaResult KemadrumaYoga(Time time)
         {
             //get planet longitude
             var moonLongitude = AstronomicalCalculator.GetPlanetNirayanaLongitude(time, PlanetName.Moon);
 
             //plus 15 to 
+
+
         }
 
 

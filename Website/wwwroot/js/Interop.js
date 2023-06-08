@@ -24,6 +24,145 @@ export var scrollIntoView = (id) => $(id)[0].scrollIntoView(); //scrolls element
 const RETRY_COUNT = 5;
 
 
+
+//--------------------------CALENDAR INPUT SELECTOR CODE
+    //DESCRIPTION
+    //This file stores all code fo js date picker (VanillaCalendar)
+    //To use: first load file via blazor
+    //then call LoadCalendar
+    //make sure empty calendar div exists
+
+export function InitCalendarPicker() {
+
+    //global space to store calendar related refs
+    window.Calendar = {};
+
+    //date input element
+    window.Calendar.hourInputId = '#HourInput';
+    window.Calendar.minuteInputId = '#MinuteInput';
+    window.Calendar.meridianInputId = '#MeridianInput';
+    window.Calendar.dateInputId = '#DateInput';
+    window.Calendar.monthInputId = '#MonthInput';
+    window.Calendar.yearInputId = '#YearInput';
+
+    window.Calendar.calendarPickerHolderId = '#CalendarPickerHolder';
+
+    window.Calendar.hourInputElm = document.querySelector(window.Calendar.hourInputId);
+    window.Calendar.minuteInputElm = document.querySelector(window.Calendar.minuteInputId);
+    window.Calendar.meridianInputElm = document.querySelector(window.Calendar.meridianInputId);
+    window.Calendar.dateInputElm = document.querySelector(window.Calendar.dateInputId);
+    window.Calendar.monthInputElm = document.querySelector(window.Calendar.monthInputId);
+    window.Calendar.yearInputElm = document.querySelector(window.Calendar.yearInputId);
+
+    //date picker holder element
+    window.Calendar.calendarDatepickerPopupEl = document.querySelector(window.Calendar.calendarPickerHolderId);
+
+}
+
+//sets the input dates and initializes the calendar
+export function LoadCalendar(hour12, minute, meridian, date, month, year) {
+    // CSS Selector
+    window.Calendar.calendar = new VanillaCalendar(window.Calendar.calendarPickerHolderId, {
+        // Options
+        date: {
+            //set the date to show when calendar opens
+            today: new Date(`${year}-${month}-${date}`),
+        },
+        settings: {
+            range: {
+                min: '0001-01-01',
+                max: '9999-01-01'
+            },
+            selection: {
+                time: 12, //AM/PM format
+            },
+            selected: {
+                //set the time to show when calendar opens
+                time: `${hour12}:${minute} ${meridian}`,
+            },
+        },
+        actions: {
+            changeTime(e, time, hours, minutes, keeping) {
+                window.Calendar.hourInputElm.value = hours;
+                window.Calendar.minuteInputElm.value = minutes;
+                window.Calendar.meridianInputElm.value = keeping;
+            },
+            clickDay(e, dates) {
+                //if date selected, hide date picker
+                if (dates[0]) {
+                    window.Calendar.calendarDatepickerPopupEl.classList.add('visually-hidden');
+                }
+
+                //check needed because random clicks get through
+                if (dates[0] !== undefined) {
+                    //format the selected date for blazor
+                    const choppedTimeData = dates[0].split("-");
+                    var year = choppedTimeData[0];
+                    var month = choppedTimeData[1];
+                    var day = choppedTimeData[2];
+
+                    //inject the values into the text input
+                    window.Calendar.dateInputElm.value = day;
+                    window.Calendar.monthInputElm.value = month;
+                    window.Calendar.yearInputElm.value = year;
+                }
+
+            },
+            //update year & month immediately even though not yet click date
+            //allows user to change only month or year
+            clickMonth(e, month) {
+                month = month + 1; //correction for jb lib bug
+                var with0 = ('0' + month).slice(-2);//change 9 to 09
+                window.Calendar.monthInputElm.value = with0;
+            },
+            clickYear(e, year) { window.Calendar.yearInputElm.value = year; }
+        },
+    });
+
+    //when module is loaded, calendar is initialized but not visible
+    //click event in blazor will make picker visible
+    window.Calendar.calendar.init();
+
+    //handle clicks outside of picker
+    document.addEventListener('click', autoHidePicker, { capture: true });
+
+
+
+
+    //----------------------------------------------------LOCAL FUNCS
+
+    //if click is outside picker & input then hide it
+    function autoHidePicker(e) {
+
+        //check if click was outside input
+        const pickerHolder = e.target.closest(window.Calendar.calendarPickerHolderId);
+        const timeInput = e.target.closest("#TimeInputHolder"); //reference in Blazor
+
+        //if click is not on either inputs then hide picker
+        if (!(timeInput || pickerHolder)) {
+            window.Calendar.calendarDatepickerPopupEl.classList.add('visually-hidden');
+        }
+    }
+
+}
+
+
+//TODO MARKED FOR DELETION SINCE CAN TOGGLE VIA CLASS IN BLAZOR
+//export function togglePopup(e) {
+//    const input = e.target.closest(dateInputId);
+//    const calendar = e.target.closest(calendarPickerHolderId);
+
+//    var timeInput = (input && !input.classList.contains('input_focus'));
+//    if (timeInput || calendar) {
+//        calendarDatepickerPopupEl.classList.remove('visually-hidden');
+//    } else {
+//        calendarDatepickerPopupEl.classList.add('visually-hidden');
+//    }
+//};
+
+
+
+
 //-----------------------FOR JSFetchWrapper
 //calls to server from blazor come here not via blazor http client, reliable
 export async function SkyChartInit(imageHolder, SkyChartUrl) {

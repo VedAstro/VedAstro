@@ -1,5 +1,4 @@
-﻿@implements IAsyncDisposable
-@using VedAstro.Library
+﻿@using VedAstro.Library
 @using System.Reflection.Emit
 @namespace Website.Pages
 @using System.Xml.Linq
@@ -98,6 +97,7 @@
             StateHasChanged();
         }
     }
+
     public string? Month
     {
         get => _month;
@@ -171,17 +171,13 @@
     private string? _year = DateTime.Today.ToString("yyyy");
     private string? _timeZone = DateTimeOffset.Now.ToString("zzz");
 
-    IJSObjectReference module;
     private ElementReference CalendarPickerHolder;
-
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
         if (firstRender)
         {
-            //load js script for date time picker
-            module = await _jsRuntime.InvokeAsync<IJSObjectReference>(JS.import, "./js/TimeInput.js");
+            await _jsRuntime.InvokeVoidAsync(JS.InitCalendarPicker);
         }
     }
 
@@ -215,24 +211,11 @@
 
         //initialize picker with needed values
         //note: we get values using JS, because set via JS and Blazor Bind doesn't get it
-        await module.InvokeVoidAsync(JS.LoadCalendar, hour, minute, meridian, date, month, year);
+        //note: timeInput.js holds LoadCalendar
+        await _jsRuntime.InvokeVoidAsync(JS.LoadCalendar, hour, minute, meridian, date, month, year);
 
         //toggle picker
         await _jsRuntime.ToggleClass(CalendarPickerHolder, "visually-hidden");
-    }
-
-    /// <summary>
-    /// using a module, we need to make sure we explicitly dispose of it for garbage collection.
-    /// If we don't, the JSRuntime will continue holding a reference to our module for the lifetime of the application.
-    /// To do this, our component must implement IAsyncDisposable, then we can dispose of our module in the DisposeAsync method.
-    /// TODO CHECK RELEVANCE
-    /// </summary>
-    async ValueTask IAsyncDisposable.DisposeAsync()
-    {
-        if (module is not null)
-        {
-            await module.DisposeAsync();
-        }
     }
 
     /// <summary>

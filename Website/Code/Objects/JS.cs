@@ -90,7 +90,8 @@
         public const string tippy = "tippy";
 
         //TIMEINPUT.JS
-        public const string LoadCalendar = "LoadCalendar";
+        public const string LoadCalendar = "Interop.LoadCalendar";
+        public const string InitCalendarPicker = "Interop.InitCalendarPicker";
 
 
         //BOOTSTRAP JS

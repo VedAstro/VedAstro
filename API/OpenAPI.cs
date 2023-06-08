@@ -3,7 +3,8 @@ using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
-//1 Convert json to csv
+
+
 namespace API
 {
     public static class OpenAPI
@@ -102,154 +103,13 @@ namespace API
         }
 
 
-        /// <summary>
-        /// https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
-        /// </summary>
-        [Function(nameof(Income1Format))]
-        public static async Task<HttpResponseData> Income1Format([HttpTrigger(AuthorizationLevel.Anonymous,
-                "get",
-                Route = "Format/{formatName}/Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}/{propertyName}")]
-            HttpRequestData incomingRequest,
-            string locationName,
-            string hhmmStr,
-            string dateStr,
-            string monthStr,
-            string yearStr,
-            string offsetStr,
-            string celestialBodyType,
-            string celestialBodyName,
-            string formatName,
-            string propertyName)
-        {
-            //log the call
-            APILogger.Visitor(incomingRequest);
-
-
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
-
-
-            //send to sorter
-            var httpResponseData = await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, geoLocationResult, incomingRequest);
-
-            //convert to CSV if specified
-            if (formatName == "CSV")
-            {
-                var jsonData = Tools.StreamToString(httpResponseData.Body);
-
-                //convert to CSV
-                var csvString = APITools.JsonToCsv(jsonData);
-
-                //pump CSV back into send package
-                httpResponseData?.WriteStringAsync(csvString);
-            }
-
-            return httpResponseData;
-        }
-
-        [Function(nameof(Income2Format))]
-        public static async Task<HttpResponseData> Income2Format([HttpTrigger(AuthorizationLevel.Anonymous,
-                "get",
-                Route = "Format/{formatName}/Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}")]
-            HttpRequestData incomingRequest,
-            string locationName,
-            string hhmmStr,
-            string dateStr,
-            string monthStr,
-            string yearStr,
-            string offsetStr,
-            string celestialBodyType,
-            string formatName,
-            string celestialBodyName)
-        {
-            //log the call
-            APILogger.Visitor(incomingRequest);
-
-
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
-
-            //send to sorter (no property, set null)
-            var httpResponseData = await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest, formatName);
-
-            //convert to CSV if specified
-            if (formatName == "CSV")
-            {
-                var jsonData = Tools.StreamToString(httpResponseData.Body);
-
-                //convert to CSV
-                var csvString = APITools.JsonToCsv(jsonData);
-
-                //pump CSV back into send package
-                httpResponseData?.WriteStringAsync(csvString);
-            }
-
-
-            return httpResponseData;
-        }
-
-
-        [Function(nameof(Income3Format))]
-        public static async Task<HttpResponseData> Income3Format([HttpTrigger(AuthorizationLevel.Anonymous,
-                "get",
-                Route = "Format/{formatName}/Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}")]
-            HttpRequestData incomingRequest,
-            string locationName,
-            string hhmmStr,
-            string dateStr,
-            string monthStr,
-            string yearStr,
-            string offsetStr,
-            string formatName,
-            string celestialBodyType)
-        {
-            //log the call
-            APILogger.Visitor(incomingRequest);
-
-
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
-
-            //send to sorter (no property, set null)
-            var httpResponseData = await FrontDeskSorter(celestialBodyType, "", null, parsedTime, geoLocationResult, incomingRequest);
-
-            //convert to CSV if specified
-            if (formatName == "CSV")
-            {
-                var jsonData = Tools.StreamToString(httpResponseData.Body);
-                
-                //convert to CSV
-                var csvString = APITools.JsonToCsv(jsonData);
-
-                //pump CSV back into send package
-                 httpResponseData?.WriteStringAsync(csvString);
-            }
-
-            return httpResponseData;
-        }
-
-
-        private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation> geoLocationResult, HttpRequestData incomingRequest, string formatName)
-        {
-            throw new NotImplementedException();
-        }
-
 
         private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
             HttpRequestData incomingRequest)
         {
+
+            var individualPropertySelected = !string.IsNullOrEmpty(propertyName);
+
 
             //all planet body calls
             if (celestialBodyType.ToLower() == "planet")

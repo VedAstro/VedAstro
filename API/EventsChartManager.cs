@@ -1,4 +1,4 @@
-﻿using VedAstro.Library;
+using VedAstro.Library;
 using System.Web;
 
 namespace API
@@ -1479,12 +1479,12 @@ namespace API
 
 
                 //STEP 4 : final wrapper
-                //add in "Summary" label above row
+                //add in "Smart Summary" label above row
                 float aboveRow = yAxis - singleRowHeight - padding;
                 rowHtml += $@"
                     <g id=""SummaryLabel"" transform=""matrix(1, 0, 0, 1, 0, {aboveRow})"">
-				        <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""68"" height=""15"" rx=""2"" ry=""2""/>
-				        <text style=""fill:#FFFFFF; font-size:11px; font-weight:400;"" x=""16"" y=""11"">Summary</text>
+				        <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""93"" height=""15"" rx=""2"" ry=""2""/>
+				        <text style=""fill:#FFFFFF; font-size:11px; font-weight:400;"" x=""16"" y=""11"">Smart Summary</text>
 				        <path transform=""matrix(0.045, 0, 0, 0.045, -14, -4)"" fill=""#fff"" d=""M437 122c-15 2-26 5-38 10-38 16-67 51-75 91-4 17-4 36 0 54 10 48 47 86 95 98 11 2 15 3 30 3s19-1 30-3c48-12 86-50 96-98 3-18 3-37 0-54-10-47-48-86-95-98-10-2-16-3-29-3h-14zm66 59c2 2 3 3 4 6s1 17 0 20c-2 7-11 9-15 2-1-2-1-3-1-7v-5h-37-37s8 11 18 23l21 25c1 2 1 5 1 7-1 1-10 13-21 26l-19 24c0 1 13 1 37 1h37v-5c0-6 1-9 5-11 5-2 11 1 11 8 1 1 1 6 1 10-1 7-1 8-2 10s-3 4-7 4h-52-50l-2-1c-4-3-5-7-3-11 0 0 11-14 24-29l22-28-22-28c-13-16-24-29-24-30-2-3-1-7 2-9 2-3 2-3 55-3h51l3 1z"" stroke=""none"" fill-rule=""nonzero""/>
 			        </g>";
 

@@ -25,12 +25,15 @@
     @*divider*@
     <hr />
 
+
+    @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
+    <HoroscopeInfoView @ref="_horoscopeInfoView" />
+    
+    @* EXPERIMENTAL *@
     <SkyChartViewer @ref="skyChartViewer" />
     
     <PlanetChart @ref="planetChart"/>
 
-    @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
-    <HoroscopeInfoView @ref="_horoscopeInfoView" />
 
     @*HELP SECTION*@
     <PageHelpSection @ref="_helpSection">

@@ -1140,5 +1140,8 @@
         KetuSukshmaVenusPrana,
         VenusSukshmaVenusPrana,
 
+        //YOGA DETECTOR
+        KemadrumaYoga
+
     }
 }

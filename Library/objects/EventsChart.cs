@@ -21,8 +21,6 @@ namespace VedAstro.Library
         public string PersonId { get; }
         public double DaysPerPixel { get; }
         public List<EventTag> EventTagList { get; set; }
-        public Time StartTime { get; set; }
-        public Time EndTime { get; set; }
         public TimeRange TimeRange { get; set; }
 
         public EventsChart(string chartId, string contentSvg, string personId, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTagList)
@@ -50,8 +48,8 @@ namespace VedAstro.Library
                 personId,
                 daysPerPixel,
                 eventTagListXml,
-                new XElement("StartTime", StartTime.ToXml()),
-                new XElement("EndTime", EndTime.ToXml()),
+                new XElement("StartTime", TimeRange.start.ToXml()),
+                new XElement("EndTime", TimeRange.end.ToXml()),
                 contentSvg);
 
             return chartXml;
@@ -109,7 +107,9 @@ namespace VedAstro.Library
             //var dataSignature = this.PersonId + this.StartTime.GetHashCode() + this.EndTime.GetHashCode() + this.DaysPerPixel + eventTagsHash;
 
             //use ticks because can revert back from there
-            var dataSignature = $"{this.PersonId}-{this.StartTime.GetStdDateTimeOffset().Ticks}-{this.EndTime.GetStdDateTimeOffset().Ticks}-{this.DaysPerPixel}-{eventTagsHash}";
+            var endTime = TimeRange.end.GetStdDateTimeOffset().Ticks;
+            var startTime = TimeRange.start.GetStdDateTimeOffset().Ticks;
+            var dataSignature = $"{this.PersonId}-{startTime}-{endTime}-{this.DaysPerPixel}-{eventTagsHash}";
 
             return dataSignature;
         }

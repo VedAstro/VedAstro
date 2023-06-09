@@ -27,7 +27,7 @@ Know good and bad periods of your life years ahead.*@
 
             <div>
                 <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
-                <select @bind="SelectedTimeRange" class="form-control" style="width: fit-content; min-width: 273px;">
+                <select @bind="SelectedTimeRangePreset" class="form-control" style="width: fit-content; min-width: 273px;">
                     <option value="FullLife">Full Life</option>
                     <option value="1week">+/- 1 Week</option>
                     <option value="1month">+/- 1 Month</option>
@@ -182,7 +182,7 @@ Know good and bad periods of your life years ahead.*@
             </p>
         </TextHTML>
     </ArticleBlock>
-    
+
     <ArticleBlock Title="Mind Predict" IconName="icon-park:brain">
         <TextHTML>
             <p>
@@ -190,7 +190,7 @@ Know good and bad periods of your life years ahead.*@
                 because anything that effects your mind will make a difference to you. For your awareness of reality
                 is through your mind.
             </p>
-            <p>                
+            <p>
                 For instance we can make a chart to predict only "<strong>Weather</strong>" over your head,
                 but if you live in the city and don't really care about rain or shine.
                 Than what use is that complex chart to you. Most people will say the prediction is wrong.
@@ -317,7 +317,7 @@ Know good and bad periods of your life years ahead.*@
 
     public string SelectedLifeYear { get; set; }
 
-    public string SelectedTimeRange
+    public string SelectedTimeRangePreset
     {
         get => _selectedTimeRange;
 
@@ -436,11 +436,11 @@ Know good and bad periods of your life years ahead.*@
         SelectedPerson = await _easyPersonSelectorBox.GetSelectedPerson();
 
         //put person name into tab title for easy multi-tabbing
-        _pageTitle = $"Dasa | {SelectedPerson.Name}";
+        _pageTitle = $"Life Predictor | {SelectedPerson.Name}";
 
         //set data into dasa viewer
-        var systemTimezone = Tools.GetSystemTimezone();
-        var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRange, systemTimezone);
+        var timeRange = GetTimeRange();
+
         //generate the events row & time header row
         var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Prana, EventTag.Gochara };
 
@@ -457,6 +457,25 @@ Know good and bad periods of your life years ahead.*@
 
         _jsRuntime.HideAlert();
 
+    }
+
+    /// <summary>
+    /// Gets parsed time from users crazy input
+    /// </summary>
+    /// <returns></returns>
+    private TimeRange GetTimeRange()
+    {
+        var systemTimezone = Tools.GetSystemTimezone();
+
+        //if user selected indiviual year than make new preset to match
+        if (SelectedTimeRangePreset == "selectyear")
+        {
+            SelectedTimeRangePreset = $"{SelectedLifeYearStart}-{SelectedLifeYearEnd}";
+        }
+
+        var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
+
+        return timeRange;
     }
 
 

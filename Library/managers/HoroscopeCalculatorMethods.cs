@@ -4,6 +4,34 @@ namespace VedAstro.Library
 {
     public class HoroscopeCalculatorMethods
     {
+        public readonly record struct YogaResult(bool IsOccurred, double Strength, string Notes);
+
+
+        #region YOGA DETECTOR
+
+        [EventCalculator(EventName.KemadrumaYoga)]
+        public static CalculatorResult KemadrumaYoga(Time time, Person person)
+        {
+            //needed to make code compile in WIP
+            return CalculatorResult.NotOccuring();
+
+            //When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts
+            //and such an individual should be mated to one who has similar instincts
+
+            //mars in 7th at birth
+            var marsIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Mars, 7);
+
+            //venus in 7th at birth
+            var venusIn7th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, PlanetName.Venus, 7);
+
+            //occuring if all conditions met
+            var occuring = marsIn7th && venusIn7th;
+
+            return CalculatorResult.New(occuring, new[] { HouseName.House7 }, new[] { PlanetName.Mars, PlanetName.Venus }, time);
+        }
+
+        #endregion
+
         #region HOROSCOPE
 
         #region Lord of 1st being Situated in Different Houses

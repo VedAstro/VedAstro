@@ -19,6 +19,7 @@ namespace VedAstro.Library
 
         General,
         Personal,
+        Yoga,
         RulingConstellation,
         HairNailCutting,
         Medical,

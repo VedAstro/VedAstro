@@ -101,6 +101,9 @@ async function EyesOnPageLogger() {
         window.MinutedPassedPage = window.location.href; //save page
     }
 
+    //if time exceed 10 min no count, call it quits will log too much
+    if (window.MinutesPassed > 10) { return; }
+
     //current page url
     var msg = `EYES ON PAGE ${window.MinutesPassed} MIN`;
 

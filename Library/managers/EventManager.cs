@@ -267,12 +267,10 @@ namespace VedAstro.Library
                 }
             }
 
-
+            //control should not reach here
             //if calculator method not found,
             //to make old code run with updated eventdatalist.xml file, an empty calculator return no event is attached as default
-            return emptyCalculator;
-            //todo log if this happens hack
-            throw new Exception("Calculator method not found!");
+            throw new Exception($"Calculator method not found! : {inputEventName}");
 
         }
 
@@ -309,8 +307,9 @@ namespace VedAstro.Library
             }
 
 
+            //if control reaches here than failure
             //if calculator method not found, raise error
-            throw new Exception("Calculator method not found!");
+            throw new Exception($"Calculator method not found! : {inputEventName.ToString()}");
 
         }
 

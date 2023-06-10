@@ -29,7 +29,7 @@ namespace API
                 //}
 
                 //add new visitor to main list
-                await APITools.AddXElementToXDocumentAzure(newVisitorXml, APITools.VisitorLogFile, APITools.BlobContainerName);
+                //await APITools.AddXElementToXDocumentAzure(newVisitorXml, APITools.VisitorLogFile, APITools.BlobContainerName);
 
                 return APITools.PassMessage(incomingRequest);
             }

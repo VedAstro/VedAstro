@@ -2742,7 +2742,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Checks if a planet is in a kendra house (4,7,10)
+        /// Checks if a planet is in a kendra house (1,4,7,10)
         /// </summary>
         [API("InKendra")]
         public static bool IsPlanetInKendra(PlanetName planet, Time time)
@@ -2751,7 +2751,9 @@ namespace VedAstro.Library
             var planetHouse = AstronomicalCalculator.GetHousePlanetIsIn(time, planet);
 
             //check if planet is in kendra
-            return planetHouse == 4 || planetHouse == 7 || planetHouse == 10;
+            var isPlanetInKendra = planetHouse == 1 ||planetHouse == 4 || planetHouse == 7 || planetHouse == 10;
+
+            return isPlanetInKendra;
         }
 
         /// <summary>

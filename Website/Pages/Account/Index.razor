@@ -2,13 +2,17 @@
 
 <PageTitle>User Account | VedAstro</PageTitle>
 
-<PageTop Title="User Account" IconName="carbon:gateway-api">
-    <Description>Data related to your account in VedAstro</Description>
+<PageTop Title="User Account" IconName="mdi:user-badge-outline">
+    <Description>Data &amp; settings related to your account in VedAstro</Description>
 </PageTop>
 
 
-<table class="table">
-    <tbody>
+<div class="vstack" style="max-width:@GR.W667px;">
+    
+
+    <IconTitle Title="Data" IconName="eos-icons:big-data-outlined" />
+    <table class="table mb-5">
+        <tbody>
         <tr>
             <td class="d-flex justify-content-start gap-2"><Icon IconName="flat-color-icons:butting-in" /> Name</td>
             <td>@AppData.CurrentUser.Name</td>
@@ -28,9 +32,56 @@
             <td class="d-flex justify-content-start gap-2"><Icon IconName="mdi:form-textbox-password" /> Password</td>
             <td>Managed by Google/Facebook. Go there to change it.</td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+
+    <IconTitle Title="Settings" IconName="gala:settings">
+        <ButtonRow>
+            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@Callback" />
+        </ButtonRow>
+
+    </IconTitle>
+    <div class="vstack gap-2" style="max-width:@GR.W412px;">
+        @* AYANAMSA *@
+        <div class="input-group">
+            <label style="width:@GR.W134px;" class="input-group-text" ><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
+            <select @onchange="Callback" class="form-select">
+                <option selected>Raman</option>
+                <option value="1">Lahiri</option>
+                <option value="1">Pushya Paksha</option>
+                <option value="2">Chitra Paksha</option>
+                <option value="2">Surya Siddhanta</option>
+                <option value="3">Custom</option>
+            </select>
+        </div>
+
+        @* LIFE CHART LOCAL *@
+        <div class="input-group">
+            <label style="width:@GR.W134px;" class="input-group-text" ><Icon ExtraClass="me-2" IconName="iconoir:developer" /> Debug</label>
+            <select @onchange="Callback" class="form-select" >
+                <option selected>Disabled</option>
+                <option value="1">Enabled</option>
+            </select>
+        </div>
+        
+
+
+    </div>
+</div>
+
+
+
 
 @code {
+
+    private async Task Callback()
+    {
+        //log this
+        WebLogger.Click("Custom ayanamsa");
+
+        var descriptionText = "<a style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development";
+        await _jsRuntime.ShowAlert("info", "Coming soon", descriptionText);
+    }
 
 }

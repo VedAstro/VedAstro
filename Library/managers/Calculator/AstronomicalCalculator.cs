@@ -2748,7 +2748,7 @@ namespace VedAstro.Library
         public static bool IsPlanetInKendra(PlanetName planet, Time time)
         {
             //The 4th, the 7th and the 10th are the Kendras
-            var planetHouse = AstronomicalCalculator.GetHousePlanetIsIn(time, planet);
+            var planetHouse = GetHousePlanetIsIn(time, planet);
 
             //check if planet is in kendra
             var isPlanetInKendra = planetHouse == 1 ||planetHouse == 4 || planetHouse == 7 || planetHouse == 10;

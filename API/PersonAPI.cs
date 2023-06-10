@@ -195,6 +195,9 @@ namespace API
                 //get default male or female image
                 imageFile = personToImage.Gender == Gender.Male ? APITools.GetPersonImage("male") : APITools.GetPersonImage("female");
 
+                //save copy of image under profile, so future calls don't spend BING search quota
+                await APITools.SaveNewPersonImage(personToImage.Id, imageFile);
+
                 //send person image to caller
                 return APITools.SendFileToCaller(imageFile, req, MediaTypeNames.Image.Jpeg);
             }

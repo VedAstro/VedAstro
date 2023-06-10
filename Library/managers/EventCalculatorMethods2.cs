@@ -4670,6 +4670,10 @@ namespace VedAstro.Library
             return new() { Occuring = false };
         }
 
+        /// <summary>
+        /// TODO NOTES : this used to be pumped into life predictor,
+        ///              but now its just sitting here because suspected to overthrow the final prediction
+        /// </summary>
         [EventCalculator(EventName.ExaltedSunDasa)]
         public static CalculatorResult ExaltedSunDasa(Time time, Person person)
         {

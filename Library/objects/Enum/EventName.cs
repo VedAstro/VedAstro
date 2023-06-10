@@ -688,7 +688,7 @@
         SunWithLord5Dasa,
         SunWithLord2Dasa,
         SunBadPositionDasa,
-        ExaltatedSunDasa,
+        ExaltedSunDasa,
         GocharaSummary,
 
 

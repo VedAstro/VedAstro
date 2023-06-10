@@ -84,7 +84,7 @@
             var _houseSign = AstronomicalCalculator.GetHouseSignName(houseNumber, _time).ToString();
             var _houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign((HouseName)houseNumber, _time).ToString();
 
-            var _lordExalted = AstronomicalCalculator.IsPlanetExaltated(lordOfHouse, _time);
+            var _lordExalted = AstronomicalCalculator.IsPlanetExalted(lordOfHouse, _time);
             var _lordDebilitated = AstronomicalCalculator.IsPlanetDebilitated(lordOfHouse, _time);
 
             var _currentSignDescription = AstronomicalCalculator.GetSignTags(AstronomicalCalculator.GetHouseSignName(houseNumber, _time));

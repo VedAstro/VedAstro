@@ -1691,7 +1691,7 @@ namespace VedAstro.Library
 
                 //get planet debilitated & exalted friendship
                 var planetDebilitated = AstronomicalCalculator.IsPlanetDebilitated(planet, birthTime);
-                var planetExalted = AstronomicalCalculator.IsPlanetExaltated(planet, birthTime);
+                var planetExalted = AstronomicalCalculator.IsPlanetExalted(planet, birthTime);
 
 
                 //for rahu/ketu special method

@@ -4670,8 +4670,8 @@ namespace VedAstro.Library
             return new() { Occuring = false };
         }
 
-        [EventCalculator(EventName.ExaltatedSunDasa)]
-        public static CalculatorResult ExaltatedSunDasa(Time time, Person person)
+        [EventCalculator(EventName.ExaltedSunDasa)]
+        public static CalculatorResult ExaltedSunDasa(Time time, Person person)
         {
             //The Dasa of the Sun in deep exaltation : Sudden
             //gains in cattle and wealth, much travelling in eastern
@@ -4682,7 +4682,7 @@ namespace VedAstro.Library
             //is sun dasa occuring
             var isSunDasa = AstronomicalCalculator.GetCurrentDasaBhuktiAntaram(person.BirthTime, time).Dasa == PlanetName.Sun;
 
-            var isSunExalted = AstronomicalCalculator.IsPlanetExaltated(PlanetName.Sun, time);
+            var isSunExalted = AstronomicalCalculator.IsPlanetExalted(PlanetName.Sun, time);
 
             //conditions met
             var occuring = isSunDasa && isSunExalted;

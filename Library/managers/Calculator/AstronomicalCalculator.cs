@@ -3106,8 +3106,8 @@ namespace VedAstro.Library
         ///     the planet is exalted but in a particular degree
         ///     its exaltation is at the maximum level.
         /// </summary>
-        [API("Exaltated")]
-        public static bool IsPlanetExaltated(PlanetName planet, Time time)
+        [API("Exalted")]
+        public static bool IsPlanetExalted(PlanetName planet, Time time)
         {
             //get planet location
             var planetLongitude = GetPlanetNirayanaLongitude(time, planet);

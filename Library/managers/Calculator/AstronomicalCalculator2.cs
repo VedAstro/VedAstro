@@ -795,7 +795,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets the exact longitude where planet is Exaltated/Exaltation
+        /// Gets the exact longitude where planet is Exalted/Exaltation
         ///
         /// NOTE:
         /// Rahu & ketu have exaltation points ref : Astroloy for Beginners pg. 12

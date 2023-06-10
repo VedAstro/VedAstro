@@ -129,7 +129,7 @@
     public async Task OnGoogleSignInSuccessHandler(JsonNode credentialResponse)
     {
         //set user memory helper (don't wait, no point)
-        _jsRuntime.SetProperty("PreviousLoginMethod", "Facebook");
+        await _jsRuntime.SetProperty("PreviousLoginMethod", "Google");
 
 
 #if DEBUG
@@ -193,7 +193,7 @@
     public async Task OnFacebookSignInSuccessHandler(JsonNode response)
     {
         //set user memory helper (don't wait, no point)
-        _jsRuntime.SetProperty("PreviousLoginMethod", "Facebook");
+        await _jsRuntime.SetProperty("PreviousLoginMethod", "Facebook");
 
         var authResponse = response["authResponse"];
         //login failed, let user know, and exit here

@@ -1,17 +1,17 @@
-﻿@attribute [Route(PageRoute.Login)]
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.Login)]
 
 
 
 
 
-<div class="vstack">
+<div class="vstack gap-1 mb-4">
     <h2 class="align-self-center">Login</h2>
-    <h5 class="align-self-center">To prove you're a human from earth</h5>
+    <h5 class="align-self-center" style="color: @AppData.Grey;">@LoginHumanMemoryHelperText</h5>
 </div>
 
 <div class="vstack">
     <div class="align-self-center vstack gap-3 mb-4" style="max-width: 286px">
-        <span style="color: @AppData.Grey;">@LoginHumanMemoryHelperText</span>
         <SignInButton />
     </div>
 </div>
@@ -22,7 +22,7 @@
 <div class="hstack gap-3">
     @*STACK BOXES ON RIGHT*@
     <InfoBox MaxWidth="365" FullWidth="@true" Title="Secure" Description="Safe & fast with Google or Facebook authentication." IconName="flat-color-icons:approval" />
-    <InfoBox MaxWidth="365" Color="success" Title="Save" FullWidth="@true" Description="Free cloud storage for charts, reports and horoscopes" IconName="ic:baseline-cloud-done" />
+    <InfoBox MaxWidth="365" FullWidth="@true" Title="Storage" Description="Free cloud storage for charts, reports and horoscopes" IconName="ic:baseline-cloud-done" />
     <InfoBox MaxWidth="365" FullWidth="@true" Title="Privacy" Description="We don't collect data or connect to your Google or Facebook account." IconName="flat-color-icons:privacy" />
 </div>
 
@@ -31,11 +31,24 @@
 
     private string? LoginHumanMemoryHelperText = "";
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
         //set the memory helper text if any
         LoginHumanMemoryHelperText = await LoginHumanMemoryHelper();
+
+        //after login this page is loaded again,
+        //if login success, redirect user to previous page
+        if (AppData.IsLoginSuccess)
+        {
+            //get the previously saved page before login, if any else deafult to home
+            var previousPage = await _jsRuntime.GetProperty("PreviousPage");
+            previousPage = string.IsNullOrEmpty(previousPage) ? PageRoute.Home : previousPage;
+            AppData.Go(previousPage);
+
+        }
     }
+
+
 
     /// <summary>
     /// if user logged in before using Google then,
@@ -49,28 +62,29 @@
         var loginProvider = await _jsRuntime.GetProperty("PreviousLoginMethod");
         var noPrevFound = string.IsNullOrEmpty(loginProvider);
 
-        //if first login, then nothing to show, end here
-        if (noPrevFound) { return ""; }
+        //if first login, then show some nice greeting
+        if (noPrevFound)
+        {
+
+            //list messages here for faster access
+            var msgList = new[]
+            {
+                $"To prove you're a human from Earth",
+                $"To prove you're not from the Machine World",
+                $"To authenticate yourself as a biological entity",
+            };
+
+            var finalGreeting = Tools.RandomSelect(msgList);
+            return finalGreeting;
+
+        }
 
         //if all good, prev login provider is displayed
         //combine with text here, so can show/hide easy
 
-        var final = $"Before this, you used {loginProvider}.";
+        var final = $"On your last visit, you used \"{loginProvider}\"";
         return final;
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        //after login this page is loaded again,
-        //if login success, redirect user to previous page
-        if (AppData.IsLoginSuccess)
-        {
-            //get the previously saved page before login, if any else deafult to home
-            var previousPage = await _jsRuntime.GetProperty("PreviousPage");
-            previousPage = string.IsNullOrEmpty(previousPage) ? PageRoute.Home : previousPage;
-            AppData.Go(previousPage);
-
-        }
-    }
 
 }

@@ -1,4 +1,5 @@
-﻿@attribute [Route(PageRoute.UserAccount)]
+﻿@using VedAstro.Library
+@attribute [Route(PageRoute.UserAccount)]
 
 <PageTitle>User Account | VedAstro</PageTitle>
 
@@ -8,30 +9,30 @@
 
 
 <div class="vstack" style="max-width:@GR.W667px;">
-    
+
 
     <IconTitle Title="Data" IconName="eos-icons:big-data-outlined" />
     <table class="table mb-5">
         <tbody>
-        <tr>
-            <td class="d-flex justify-content-start gap-2"><Icon IconName="flat-color-icons:butting-in" /> Name</td>
-            <td>@AppData.CurrentUser.Name</td>
-            @*TODO ADD buttons to edit*@
-        </tr>
-        <tr>
-            <td class="d-flex justify-content-start gap-2"><Icon IconName="flat-color-icons:address-book" /> Email</td>
-            <td>@AppData.CurrentUser.Email</td>
-            @*TODO ADD buttons to edit*@
-        </tr>
-        <tr>
-            <td class="d-flex justify-content-start gap-2"><Icon IconName="flat-color-icons:key" /> API Key / User ID</td>
-            <td>@AppData.CurrentUser.Id</td>
-            @*TODO ADD buttons to copy*@
-        </tr>
-        <tr>
-            <td class="d-flex justify-content-start gap-2"><Icon IconName="mdi:form-textbox-password" /> Password</td>
-            <td>Managed by Google/Facebook. Go there to change it.</td>
-        </tr>
+            <tr>
+                <td class="d-flex justify-content-start gap-2"><Icon IconName="flat-color-icons:butting-in" /> Name</td>
+                <td>@AppData.CurrentUser.Name</td>
+                @*TODO ADD buttons to edit*@
+            </tr>
+            <tr>
+                <td class="d-flex justify-content-start gap-2"><Icon IconName="flat-color-icons:address-book" /> Email</td>
+                <td>@AppData.CurrentUser.Email</td>
+                @*TODO ADD buttons to edit*@
+            </tr>
+            <tr>
+                <td class="d-flex justify-content-start gap-2"><Icon IconName="flat-color-icons:key" /> API Key / User ID</td>
+                <td>@AppData.CurrentUser.Id</td>
+                @*TODO ADD buttons to copy*@
+            </tr>
+            <tr>
+                <td class="d-flex justify-content-start gap-2"><Icon IconName="mdi:form-textbox-password" /> Password</td>
+                <td>Managed by Google/Facebook. Go there to change it.</td>
+            </tr>
         </tbody>
     </table>
 
@@ -45,7 +46,7 @@
     <div class="vstack gap-2" style="max-width:@GR.W412px;">
         @* AYANAMSA *@
         <div class="input-group">
-            <label style="width:@GR.W134px;" class="input-group-text" ><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
+            <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
             <select @onchange="Callback" class="form-select">
                 <option selected>Raman</option>
                 <option value="1">Lahiri</option>
@@ -58,13 +59,13 @@
 
         @* LIFE CHART LOCAL *@
         <div class="input-group">
-            <label style="width:@GR.W134px;" class="input-group-text" ><Icon ExtraClass="me-2" IconName="iconoir:developer" /> Debug</label>
-            <select @onchange="Callback" class="form-select" >
+            <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="iconoir:developer" /> Debug</label>
+            <select @onchange="Callback" class="form-select">
                 <option selected>Disabled</option>
                 <option value="1">Enabled</option>
             </select>
         </div>
-        
+
 
 
     </div>
@@ -74,6 +75,21 @@
 
 
 @code {
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        //if not logged in tell user why, and send them to right place
+        if (AppData.IsGuestUser)
+        {
+            //show nice dynamic message
+            await _jsRuntime.ShowAlert("info", $"Please login, {AlertText.RandomNoun()}", "");
+
+            //send to login page, with command to come back here! after login
+            AppData.Go(url: PageRoute.Login, rememberMe: true);
+        }
+
+    }
 
     private async Task Callback()
     {

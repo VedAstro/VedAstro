@@ -6,7 +6,7 @@
 @*SIMPLE HEADING TITLE WITH NICELY POSITIONED ICON*@
 
 @*extra div wrap so that parent hstack spacing does not break here *@
-<div>
+<div class="@ExtraClass">
     <div class="fw-bold hstack gap-2 d-flex" style="@MaxWidthCss">
         @if (IsIconMode)
         {
@@ -68,7 +68,10 @@
     public int IconSize { get; set; } = AppData.DefaultIconSize;
 
     [Parameter]
-    public string Title { get; set; } = "Demo Title";
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string ExtraClass { get; set; } = "";
 
     [Parameter]
     public RenderFragment? TitleHTML { get; set; }

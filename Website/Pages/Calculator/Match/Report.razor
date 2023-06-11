@@ -91,7 +91,7 @@
                         <td scope="row">
                             <b style="font-size: 22px;">@prediction.FormattedName</b>
                             <p style="margin: 0px; font-size: 15px;">@prediction.Description</p>
-                            <IconButton Outline="@true" ExtraClass=" my-1" SmallSize="true" ButtonText="More Info" OnClickCallback="@(() => OnClickMoreInfo(@prediction.Name.ToString()))" />
+                            <IconButton Outline="@true" ExtraClass=" my-1" SmallSize="true" ButtonText="More Info" OnClickCallback="@(() => _jsRuntime.ScrollToDivById(prediction.Name.ToString()))" /> @* id her has to match help text id *@
                         </td>
 
                         <td>
@@ -586,11 +586,6 @@ else
     }
 
 
-    private void OnClickMoreInfo(string predictionName)
-    {
-        //make scroll movement to place
-        _jsRuntime.InvokeVoidAsync(JS.scrollToDiv, "#" + predictionName);
-    }
 
     private async Task OnClickPrintPDF()
     {

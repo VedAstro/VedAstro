@@ -31,6 +31,9 @@
         public static double W412 => Math.Round(W667 / GoldenRatio, 1);
         public static string W412px => $"{W412}px";
 
+        public static double W291 => W157 + W134;
+        public static string W291px => $"{W291}px";
+
         public static double W255 => Math.Round(W412 / GoldenRatio, 1);
         public static string W255px => $"{W255}px";
 

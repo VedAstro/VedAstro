@@ -39,7 +39,7 @@
                     <option value="officeClerk">Office Clerk</option>
                     <option value="others">Others, not in this list</option>
                 </select>
-                <IconButton OnClickCallback="OnClickSubmit" ButtonText="Join"></IconButton>
+                <IconButton OnClickCallback="OnClickJoinUs" ButtonText="Join"></IconButton>
             </div>
         </TextHTML>
     </ArticleBlock>
@@ -110,6 +110,12 @@
             All team members have equal rights. Nobody is going to tell you what todo.
             Be your own manager and <strong>work for the common good</strong> of the human race!
             We personally believe that every single VedAstro user is the boss, whoa we work for.
+
+
+            <QuoteTextBlock Author="W.H. Auden" URL="@URL.WHAudenWiki">
+                We are all here on earth to help others:<br />what on earth the others are here for,<br />I don't know.
+            </QuoteTextBlock>
+
         </TextHTML>
     </ArticleBlock>
 
@@ -125,22 +131,16 @@
     public string SelectedExperience;
 
 
-    private async Task OnClickSubmit()
+    private async Task OnClickJoinUs()
     {
 
         //get email from user via js sweet alert lib
         var emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Email me at...");
 
-        //send to message to API
-        //package message data to be sent
-        var textXml = new XElement("Text", $"Join Family > Tasks > {SelectedExperience}");
-        var emailXml = new XElement("Email", emailFromAlert);
-        var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
-        var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
-        var messageXml = new XElement("Message", userIdXml, visitorIdXml, emailXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, textXml);
+        //loading box show
+        await _jsRuntime.ShowLoading();
 
-        //send message to API server
-        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
+        await WebsiteTools.SendMailToAPI(emailFromAlert, $"Join Family > Tasks > {SelectedExperience}");
 
         //say thank you and will get back
         await _jsRuntime.ShowAlert("success", "Thank you", "we'll get back to you soon");

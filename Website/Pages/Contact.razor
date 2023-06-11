@@ -66,15 +66,7 @@
         //loading box show
         await _jsRuntime.ShowLoading();
 
-        //package message data to be sent
-        var textXml = new XElement("Text", _messageInput);
-        var emailXml = new XElement("Email", _emailInput);
-        var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
-        var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
-        var messageXml = new XElement("Message", userIdXml, visitorIdXml, emailXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, textXml);
-
-        //send message to API server
-        await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
+        await WebsiteTools.SendMailToAPI(_emailInput, _messageInput);
 
         //hide message form
         await _jsRuntime.Hide(_messageFormElement);

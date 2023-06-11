@@ -137,7 +137,7 @@ async function SmallScreenGreetingMessage() {
     if (isTooSmall) {
         //show special message
         //Swal.fire('Small Screen Warning!', 'This site might not work on such a <strong>small screen</strong>. Don\'t say we didn\'t warn you.', 'warning');
-        Swal.fire('Screen Little Small!', 'Not designed for such a small screen, probably works but dont expect perfection', 'warning');
+        Swal.fire('Screen Little Small!', 'Please use a device with larger screen for best experience', 'warning');
     }
 
 }

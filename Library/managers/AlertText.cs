@@ -70,12 +70,38 @@ namespace VedAstro.Library
             return isDoneText;
         }
 
+        /// <summary>
+        /// How was your day, darling?
+        /// </summary>
+        /// <returns></returns>
+        public static string RandomNoun()
+        {
+            //word below should nicely ryme with My darling, my dear,
+            //exp: if you don't login, how are we supposed get your data, darling?
+            //note: comma before question
+            //How was your day, darling? 
+            var msgList = new[]
+            {
+                "dear",
+                "darling",
+                "friend",
+                "sweetheart",
+            };
+
+            var isDoneText = Tools.RandomSelect(msgList);
+            return isDoneText;
+
+        }
+
         public static string IsDoneText()
         {
             //list messages here for faster access
             var msgList = new[]
             {
                 "Your pizza is ready!",
+                "Ready, captain!",
+                "Shells away!",
+                "Fire in the hole!",
                 "Your cake is baked!",
                 "Generated nicely!",
                 "Bingo done!",

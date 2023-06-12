@@ -185,3 +185,22 @@
     .tippy-tooltip.translucent-theme[data-animatefill] {
         background-color: transparent
     }
+
+
+
+/*
+    BOOTSTARP PLACEHOLDER IMAGE STYLES (FROM DOCS PAGE)
+*/
+
+
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    text-anchor: middle
+}
+
+.bd-placeholder-img-lg {
+    font-size: calc(1.475rem + 2.7vw)
+}

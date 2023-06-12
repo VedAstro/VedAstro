@@ -27,7 +27,7 @@ Know good and bad periods of your life years ahead.*@
 
             <div>
                 <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
-                <select @bind="SelectedTimeRangePreset" class="form-control" style="width: fit-content; min-width: 273px;">
+                <select @bind="SelectedTimeRangePreset" class="form-control" style="width: @GR.W255px;">
                     <option value="FullLife">Full Life</option>
                     <option value="1week">+/- 1 Week</option>
                     <option value="1month">+/- 1 Month</option>
@@ -42,9 +42,9 @@ Know good and bad periods of your life years ahead.*@
             </div>
 
             <div @ref="lifeYearSelector" style="display: none;">
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="inputGroupSelect01">Start</label>
-                    <select @bind="SelectedLifeYearStart" class="form-select" id="inputGroupSelect01">
+                <div class="input-group mb-3" style="width: @GR.W255px;">
+                    <label class="input-group-text" >Start</label>
+                    <select @bind="SelectedLifeYearStart" class="form-select" >
                         <option selected>Choose...</option>
                         @foreach (var year in lifeYearList)
                         {
@@ -52,9 +52,9 @@ Know good and bad periods of your life years ahead.*@
                         }
                     </select>
                 </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="inputGroupSelect01">End</label>
-                    <select @bind="SelectedLifeYearEnd" class="form-select" id="inputGroupSelect02">
+                <div class="input-group mb-3" style="width: @GR.W255px;">
+                    <label class="input-group-text">End</label>
+                    <select @bind="SelectedLifeYearEnd" class="form-select" >
                         <option selected>Choose...</option>
                         @foreach (var year in lifeYearList)
                         {

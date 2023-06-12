@@ -8,7 +8,7 @@
     <IconTitle TitleHTML="@TitleHTML" IconSize="@IconSize" Title="@Title" IconName="@IconName" TitleHolder="h4">
         <ButtonRow>@ButtonRow</ButtonRow>
     </IconTitle>
-    <p class="text-justify" style="@AppData.DescriptionFont font-size: 18px;line-break: auto;">
+    <p class="@TextClass" style="@AppData.DescriptionFont font-size: 18px;line-break: auto;">
         @TextHTML
     </p>
 
@@ -16,6 +16,12 @@
 
 @code {
 
+
+    /// <summary>
+    /// Title text, placed in heading
+    /// </summary>
+    [Parameter]
+    public string TextClass { get; set; } = "";
     /// <summary>
     /// Title text, placed in heading
     /// </summary>

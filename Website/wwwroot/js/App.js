@@ -127,7 +127,7 @@ window.GetInteropFuncList = () => {
 async function SmallScreenGreetingMessage() {
 
     //check if screen is too small
-    var isTooSmall = window.innerWidth < 1080;
+    var isTooSmall = window.innerWidth < 720;
 
     //get log payload from blazor
     //var payload = await DotNet.invokeMethodAsync('Website', 'GetDataLogPayload', "TEST");

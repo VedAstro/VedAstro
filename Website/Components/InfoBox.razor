@@ -2,7 +2,7 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 
-<div @onclick="OnClick" class="@(FullWidth?"":"w-50")" style="@InlineStyle">
+<div @onclick="OnClick" class="@(FullWidth?"":"")" style="@InlineStyle">
     <div class="alert alert-primary d-flex align-items-center vstack" role="alert" style="background-color: @Color !important; ">
         <div class="hstack mb-2">
             <span class="iconify bi flex-shrink-0 me-2" data-icon="@IconName" data-width="50"></span>
@@ -45,8 +45,9 @@
         get
         {
             var final = "";
-            final += IsClickMode ? PointerCursorStyle : "";
+            final += IsClickMode || IsCallMode ? PointerCursorStyle : "";
             final += MaxWidth == null ? "" : MaxWidthStyle;
+            final += Width == null ? "" : WidthStyle;
             return final;
         }
     }
@@ -76,6 +77,11 @@
     /// </summary>
     public bool IsClickMode => !string.IsNullOrEmpty(ClickUrl);
 
+    /// <summary>
+    /// Checks if click URL has been specified
+    /// </summary>
+    public bool IsCallMode => OnClickCallback.HasDelegate;
+
 
     /// <summary>
     /// If set true, class w-50 will be removed
@@ -91,16 +97,38 @@
     public double? MaxWidth { get; set; }
 
     /// <summary>
+    /// Note: Needs to be nullable so that can detect if was set
+    /// </summary>
+    [Parameter]
+    public double? Width { get; set; }
+
+    /// <summary>
     /// used to make class applied in style attribute
     /// </summary>
     private string MaxWidthStyle => $" max-width:{MaxWidth}px;";
+    private string WidthStyle => $" width:{Width}px !important;";
     private string PointerCursorStyle => $" cursor: pointer;";
 
-    private void OnClick()
+    /// <summary>
+    /// Function that is called on click of button
+    /// Note: using delegate so that can change function based on page mode
+    /// </summary>
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+
+
+
+    private async Task OnClick(MouseEventArgs obj)
     {
 
+        //log this
+        await WebLogger.Data($"InfoBox Click : {Title}");
 
-        if (IsClickMode)
+        //if custom onclick has been specified than use that
+        if (IsCallMode) { await OnClickCallback.InvokeAsync(obj); }
+
+        //else if URL has been specified use that
+        else if (IsClickMode)
         {
             //if specified opens link in new tab
             if (IsNewTabOpen)
@@ -109,7 +137,7 @@
             }
             else
             {
-               AppData.Go(ClickUrl);
+                AppData.Go(ClickUrl);
             }
         }
     }

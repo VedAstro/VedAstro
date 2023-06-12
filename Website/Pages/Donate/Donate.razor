@@ -3,109 +3,33 @@
 
 <PageTitle>Donate</PageTitle>
 
-@* <PageTop Title="Support us" IconName="iconoir:donate">
-    <Description>With every donation you'll receive free astro gifts as a sign of our thanks</Description>
-</PageTop>
- *@
-
-<PageTop ImageName="donate-banner.png"
+@* <PageTop ImageName="donate-banner.png"
          Title="Support us"
          DescriptionText="Help pay bills, maintain servers and improve the project. Contribute for the benefit of all people. Opportunity for good karma.">
 </PageTop>
+ *@
 
-@* todo marked for oblivion *@
-<style>
-    img {
-        max-width: 167px;
-    }
-</style>
+<PageTopSideImage ImageWidth="@GR.W157" ImageName="donate-banner.png"
+                  Title="Crowdfunding"
+                  DescriptionText="Help pay bills, maintain servers and improve the project. Contribute for the benefit of all people. Opportunity for good karma." />
 
-<div class="d-flex flex-wrap">
-    @*KO-FI WIDGET*@
-    <div class="me-5" style="">
-        <iframe id='kofiframe' src='@URL.KoFiDonateIframe' style="width: @GR.W412px; height: 557px;" class="border shadow rounded-4" title='vedastro'></iframe>
-    </div>
 
+@*KO-FI WIDGET*@
+<div class="vstack" style="">
+    <iframe class="align-self-center border shadow rounded-4" id='kofiframe' src='@URL.KoFiDonateIframe' style="width: @GR.W412px; height: 557px;" title='vedastro'></iframe>
+</div>
+
+
+
+
+<IconTitle ExtraClass="mt-3" Title="Options" TitleHolder="h4" />
+<div class="hstack gap-3">
     @*STACK BOXES ON RIGHT*@
-    <div class="ms-md-5">
-        <div class="gap-3">
-            <h4>
-                Sponsor Items
-            </h4>
-
-            <InfoBox IsNewTabOpen="true" ClickUrl="https://www.ebay.com/itm/285277846059?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=VrFMFovPSYa&sssrc=2047675&ssuid=mOy92WUoRFe&widget_ver=artemis&media=COPY" Title="Telescope" FullWidth="true" MaxWidth="@GR.W412">
-                <DescriptionHTML>
-                    <div class="hstack gap-2 mt-1">
-                        <div><img class="img-thumbnail" src="images/wish-list-telescope.png" style=" width: 475px; " /></div>
-                        <div>
-                            With a computerized telescope we can improve the accuracy of the system to match the real world.
-                            We plan to also feed data from this telescope into the Open API.
-                        </div>
-                    </div>
-                </DescriptionHTML>
-            </InfoBox>
-
-            <InfoBox IsNewTabOpen="true" ClickUrl="https://www.ebay.com/itm/304878531330?mkcid=16&mkevt=1&mkrid=711-127632-2357-0&ssspo=xMAoTCQGQWy&sssrc=2047675&ssuid=mOy92WUoRFe&widget_ver=artemis&media=COPY" Title="Laptop" FullWidth="true" MaxWidth="@GR.W412">
-                <DescriptionHTML>
-                    <div class="hstack gap-2 mt-1">
-                        <div><img class="img-thumbnail" src="images/wish-list-laptop.png" style=" width: 475px;" /></div>
-                        <div>
-                            Our developers need laptops to build better code. A good laptop can help
-                            team members work remotely and while travelling increase their productivity.
-                        </div>
-                    </div>
-                </DescriptionHTML>
-            </InfoBox>
-        </div>
-    </div>
-
+    <InfoBox Width="255" Title="Gifts" Description="Donate warm gifts, instead of cold cash" IconName="fluent-emoji:wrapped-gift" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("WishList"))" />
+    <InfoBox Width="255" Title="Crypto" Description="Instant and anonymous donation" IconName="cryptocurrency-color:btc" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("ForCryptoGeeks"))" />
+    <InfoBox Width="255" Title="Patreon" Description="Monthly contribution via Patreon" IconName="logos:patreon" IsNewTabOpen="true" ClickUrl="@URL.PatreonPage" />
+    <InfoBox Width="255" Title="Bank Transfer" Description="Send money via BIC/SWIFT transfer" IconName="noto-v1:bank" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("BankDetails"))" />
 </div>
-
-@* more option message *@
-<hr />
-<p class="align-self-center" style="color:@AppData.Grey;">Don't see your preferred payment method? <a href="@PageRoute.Contact">Contact us</a></p>
-<hr class="mt-4 mb-4" />
-
-<h4 class="fw-bold mb-3">Crypto Geeks</h4>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Bitcoin"))">
-        <div class="card text-center">
-            <img src="images/luno-btc-donate.png" class="card-img-top" style="align-self: center;">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <span class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span>
-                    Bitcoin
-                </h5>
-                <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
-            </div>
-        </div>
-    </div>
-    <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Litecoin"))">
-        <div class="card text-center">
-            <img src="images/luno-ltc-donate.png" class="card-img-top" style="align-self: center;">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <span class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span>
-                    Litecoin
-                </h5>
-                <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
-            </div>
-        </div>
-    </div>
-    <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Ethereum"))">
-        <div class="card text-center">
-            <img src="images/luno-eth-donate.png" class="card-img-top" style="align-self: center;">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <span class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span>
-                    Ethereum
-                </h5>
-                <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <hr />
 
@@ -132,98 +56,166 @@
         That's an impressive number. The more code there is, the more testing &amp; debugging that needs to be done. As such more developer/programmer work hours are required.
         Every dollar donated <strong>goes a long way</strong> to help pay for this expenses.
     </SubArticleBlock>
+
+
+    <ArticleBlock Title="Bank Transfer" IconName="noto-v1:bank">
+        <TextHTML>
+            <div id="BankDetails" class="hstack gap-3">
+                @* id so can auto navigate here *@
+                @*STACK BOXES ON RIGHT*@
+                <InfoBox Title="India" IconName="twemoji:flag-india">
+                    <DescriptionHTML>
+                        <ul class="list-group" style=" font-size: 15px; ">
+                            <li class="list-group-item">BANK : <strong>ICICI Bank</strong></li>
+                            <li class="list-group-item">IFSC code : <strong>ICIC0002186</strong></li>
+                            <li class="list-group-item">Account No.: <strong>2186-0100-0219</strong></li>
+                        </ul>
+                    </DescriptionHTML>
+                </InfoBox>
+                <InfoBox Title="Malaysia" IconName="twemoji:flag-malaysia">
+                    <DescriptionHTML>
+                        <ul class="list-group" style=" font-size: 15px; ">
+                            <li class="list-group-item">BANK : <strong>Public Bank</strong></li>
+                            <li class="list-group-item">BIC/SWIFT code : <strong>PBBEMYKL</strong></li>
+                            <li class="list-group-item">Account No.: <strong>63-9872-3519</strong></li>
+                        </ul>
+                    </DescriptionHTML>
+                </InfoBox>
+            </div>
+        </TextHTML>
+    </ArticleBlock>
+
+    <ArticleBlock Title="For Crypto Fans" IconName="cryptocurrency-color:btc">
+        <TextHTML>
+            <div id="ForCryptoGeeks" class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Bitcoin"))">
+                    <div class="card text-center">
+                        <img src="images/luno-btc-donate.png" class="card-img-top" style="align-self: center;">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <span class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span>
+                                Bitcoin
+                            </h5>
+                            <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Litecoin"))">
+                    <div class="card text-center">
+                        <img src="images/luno-ltc-donate.png" class="card-img-top" style="align-self: center;">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <span class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span>
+                                Litecoin
+                            </h5>
+                            <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Ethereum"))">
+                    <div class="card text-center">
+                        <img src="images/luno-eth-donate.png" class="card-img-top" style="align-self: center;">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <span class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span>
+                                Ethereum
+                            </h5>
+                            <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </TextHTML>
+    </ArticleBlock>
+    
+    
+    <ArticleBlock Title="Wish List" IconName="fluent-emoji:wrapped-gift">
+        <TextHTML>
+            <div id="WishList" class="hstack gap-2">
+                <div class="card" style="width: 18rem; cursor: pointer;" @onclick="OnClickTelescope">
+                    <img src="images/wish-list-telescope-card.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text"><strong>Auto Telescope:</strong> can improve the accuracy of the system to match the real world</p>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem; cursor: pointer;" @onclick="OnClickLaptop">
+                    <img src="images/wish-list-laptop-card.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text"><strong>Laptop:</strong> can help programmers work remotely, increase their productivity</p>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem; cursor: pointer;" @onclick="OnClickFanMail">
+                    <img src="images/wish-list-santa-card.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text"><strong>Fan Mail:</strong> receiving letters from users is like receiving gifts from an old friend</p>
+                    </div>
+                </div>
+
+            </div>
+        </TextHTML>
+    </ArticleBlock>
+
+
+    @* more option message *@
+    <p class="align-self-center" style="color:@AppData.Grey; font-size: 14px; ">Don't see your preferred payment method? <a href="@PageRoute.Contact">Contact us</a></p>
+
 </div>
 
 
-@*
 
-<style>
-    img {
-        max-width: 167px;
-    }
-</style>
 
-<div style="max-width:@AppData.MaxWidth;">
-    <hr class="mt-4 mb-4" />
-    <h4 class="fw-bold mb-3">Donate Options</h4>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
-            <div class="card text-center">
-                <img src="images/patreon-logo.jpg" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <IconButton ButtonText="Patreon" OnClickCallback="@(() =>AppData.Go(PageRoute.PatreonPage))" />
-                    </h5>
-                    <p class="card-text">
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card text-center">
-                <img src="images/ko-fi-logo.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <IconButton ButtonText="Ko-fi" OnClickCallback="@(() =>AppData.Go(PageRoute.KoFiPage))" />
-                    </h5>
-                    <p class="card-text"></p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card text-center">
-                <img src="images/paypal-logo.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <IconButton ButtonText="PayPal" OnClickCallback="@(() =>AppData.Go(PageRoute.PaypalMePage))" />
-                    </h5>
-                    <p class="card-text">
-
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Bitcoin"))">
-            <div class="card text-center">
-                <img src="images/luno-btc-donate.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <span class="me-3 iconify" data-icon="cryptocurrency:btc" data-width="25" data-height="25"></span>
-                        Bitcoin
-                    </h5>
-                    <p class="card-text">3Ky3AXYvxTNUmJuGMGhX1Vqa4RZbhrFPbQ</p>
-                </div>
-            </div>
-        </div>
-        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Litecoin"))">
-            <div class="card text-center">
-                <img src="images/luno-ltc-donate.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <span class="me-3 iconify" data-icon="cryptocurrency:ltc" data-width="25" data-height="25"></span>
-                        Litecoin
-                    </h5>
-                    <p class="card-text">MV2Uot32vCT1KDWbMpDTZ5JMdrjJ3E8WfL</p>
-                </div>
-            </div>
-        </div>
-        <div class="col" @onmouseenter="@(() => WebLogger.Data("MouseOver: Ethereum"))">
-            <div class="card text-center">
-                <img src="images/luno-eth-donate.png" class="card-img-top" style="align-self: center;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <span class="me-3 iconify" data-icon="cryptocurrency:eth" data-width="25" data-height="25"></span>
-                        Ethereum
-                    </h5>
-                    <p class="card-text">0x92d275C0e511853baE90560a2928f784AEfE3144</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-*@
 @code {
 
+
+    private async Task OnClickBankTransfer()
+    {
+        //get email from user via js sweet alert lib
+        var emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("We will send bank details via email");
+
+        //loading box show
+        await _jsRuntime.ShowLoading();
+
+        await WebsiteTools.SendMailToAPI("Bank Details Request", emailFromAlert);
+
+        //say thank you and will get back
+        await _jsRuntime.ShowAlert("success", "Thank you", "we'll get back to you soon");
+
+
+    }
+
+    private async Task OnClickTelescope()
+    {
+        await _jsRuntime.ShowAlert("success", "Thank you", "for wanting to donate. Now redirecting to safe and verified buy page.");
+
+        //send user to telescope page on new tab
+        AppData.Go(url:URL.TelescopeBuyPage, newTab:true);
+
+        //then on user return from buy page, address is shown
+        var address = "Shipping Address:<br/>7, Hala Pengkalan Timur 8A, Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
+        await _jsRuntime.ShowAlert("success", "Thank you for gifts", address);
+
+    }
+
+    private async Task OnClickLaptop()
+    {
+        await _jsRuntime.ShowAlert("success", "Thank you", "for wanting to donate. Now redirecting to safe and verified buy page.");
+
+        //send user to telescope page on new tab
+        AppData.Go(url:URL.LaptopBuyPage, newTab:true);
+
+        //then on user return from buy page, address is shown
+        var address = "Shipping Address:<br/>7, Hala Pengkalan Timur 8A, Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
+        await _jsRuntime.ShowAlert("success", "Thank you for gifts", address);
+
+    }
+
+    private async Task OnClickFanMail()
+    {
+
+        //then on user return from buy page, address is shown
+        var address = "7, Hala Pengkalan Timur 8A, Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
+        await _jsRuntime.ShowAlert("success", "Send love letters to:", address);
+
+    }
 
 }

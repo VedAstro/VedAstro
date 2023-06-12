@@ -78,19 +78,12 @@ namespace API
             var imageFile = $"images/person/{personId}.jpg";
             var fileBlobClient = blobContainerClient.GetBlobClient(imageFile);
 
-            //BinaryData yy = BinaryData.FromBytes(imageBytes);
-
             using var ms = new MemoryStream(imageBytes);
-            await fileBlobClient.UploadAsync(ms, overwrite: true);
+            var blobUploadOptions = new BlobUploadOptions();
+            blobUploadOptions.AccessTier = AccessTier.Cool; //save money!
 
-            //            var blobUploadOptions = new BlobUploadOptions();
-            //            blobUploadOptions.AccessTier = AccessTier.Cold;
-            //            var result = await fileBlobClient.UploadAsync(yy, blobUploadOptions, CancellationToken.None);
-
-            //#if DEBUG
-            //            Console.WriteLine(result.Value);
-            //#endif
-
+            //note no override needed because specifying BlobUploadOptions, is auto override
+            await fileBlobClient.UploadAsync(content:ms, options: blobUploadOptions);
 
         }
 

@@ -102,17 +102,27 @@ namespace API
                 //NOTE:set UTF 8 so when taking out will go fine
                 var content = Encoding.UTF8.GetBytes(stringToSave);
                 using var ms = new MemoryStream(content);
-                await blobClient.UploadAsync(ms, overwrite: true);
+
+                var blobUploadOptions = new BlobUploadOptions();
+                blobUploadOptions.AccessTier = AccessTier.Cool; //save money!
+
+                //note no override needed because specifying BlobUploadOptions, is auto override
+                await blobClient.UploadAsync(ms, options: blobUploadOptions);
 
             }
             else if (typeof(T) == typeof(byte[]))
             {
-                var vv = value as byte[];
-                using var ms = new MemoryStream(vv, false);
-                await blobClient.UploadAsync(ms, overwrite: true);
+                var byteArrayData = value as byte[];
+                using var ms = new MemoryStream(byteArrayData, false);
+
+                var blobUploadOptions = new BlobUploadOptions();
+                blobUploadOptions.AccessTier = AccessTier.Cool; //save money!
+
+                //note no override needed because specifying BlobUploadOptions, is auto override
+                await blobClient.UploadAsync(ms, options: blobUploadOptions);
 
                 //var xx = new BinaryData(value, JsonSerializerOptions.Default);
-                //blobClient.Upload(xx);
+                //blobClient.UploadAsync(ms, options: blobUploadOptions);
             }
 
             //if specified

@@ -21,8 +21,12 @@ namespace API
             //convert xml string to stream
             var dataStream = GenerateStreamFromString(dataString);
 
+            var blobUploadOptions = new BlobUploadOptions();
+            blobUploadOptions.AccessTier = AccessTier.Cool; //save money!
+
             //upload stream to blob
-            await blobClient.UploadAsync(dataStream, overwrite: true);
+            //note: no override needed because specifying BlobUploadOptions, is auto override
+            await blobClient.UploadAsync(dataStream, options: blobUploadOptions);
 
             //auto correct content type from wrongly set "octet/stream"
             var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/xml" };

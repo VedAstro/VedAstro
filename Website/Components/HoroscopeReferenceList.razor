@@ -5,10 +5,10 @@
 @using System.Xml.Linq
 
 
-<div class="d-flex justify-content-center gap-3">
-    
+<div class="d-flex justify-content-center gap-3 mb-2">
+
     @*Planet Name*@
-    <div @ref="planetNameSelector"  class="form-floating">
+    <div @ref="planetNameSelector" class="form-floating">
         <select @bind="SelectedPlanet" class="form-select" id="planetNameSelector" aria-label="Planet Name Select">
             <option value="" selected>Filter by Planet</option>
             <option value="Sun">Sun</option>
@@ -148,19 +148,24 @@
 
     private async Task SearchButtonClicked() => await InvokeAsync(async () => await _SearchButtonClicked()).Try(_jsRuntime);
 
-    private async Task FilterButtonClicked() => await InvokeAsync(async () => await _FilterButtonClicked()).Try(_jsRuntime);
+
+
 
     private async Task _SearchButtonClicked()
     {
-        await _jsRuntime.ShowLoading();
 
-        //if no search text means reset (no filter applied)
-        if (_searchInput == "") { _filteredHoroscopePredictions = _horoscopePredictions.ToList(); return; }
+        await _jsRuntime.FunFeaturePopUp("Search Reference");
 
-        //else search by text
-        _filteredHoroscopePredictions = _horoscopePredictions.FindAll(x => x.Contains(_searchInput));
+        //todo
+        // await _jsRuntime.ShowLoading();
 
-        _jsRuntime.HideLoading();
+        // //if no search text means reset (no filter applied)
+        // if (_searchInput == "") { _filteredHoroscopePredictions = _horoscopePredictions.ToList(); return; }
+
+        // //else search by text
+        // _filteredHoroscopePredictions = _horoscopePredictions.FindAll(x => x.Contains(_searchInput));
+
+        // _jsRuntime.HideLoading();
     }
 
     public async Task ShowPrediction(Person selectedPerson)

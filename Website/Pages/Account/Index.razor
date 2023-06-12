@@ -39,7 +39,7 @@
 
     <IconTitle Title="Settings" IconName="gala:settings">
         <ButtonRow>
-            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@Callback" />
+            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("CustomAyanamsa"))" />
         </ButtonRow>
 
     </IconTitle>
@@ -47,7 +47,7 @@
         @* AYANAMSA *@
         <div class="input-group">
             <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
-            <select @onchange="Callback" class="form-select">
+            <select @onchange="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" class="form-select">
                 <option selected>Raman</option>
                 <option value="1">Lahiri</option>
                 <option value="1">Pushya Paksha</option>
@@ -60,7 +60,7 @@
         @* LIFE CHART LOCAL *@
         <div class="input-group">
             <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="iconoir:developer" /> Debug</label>
-            <select @onchange="Callback" class="form-select">
+            <select @onchange="@(() => _jsRuntime.FunFeaturePopUp("Debug Mode"))" class="form-select">
                 <option selected>Disabled</option>
                 <option value="1">Enabled</option>
             </select>
@@ -91,13 +91,5 @@
 
     }
 
-    private async Task Callback()
-    {
-        //log this
-        WebLogger.Click("Custom ayanamsa");
-
-        var descriptionText = "<a style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development";
-        await _jsRuntime.ShowAlert("info", "Coming soon", descriptionText);
-    }
 
 }

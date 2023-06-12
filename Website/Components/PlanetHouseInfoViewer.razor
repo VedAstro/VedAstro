@@ -10,16 +10,23 @@
     }
 </style>
 
-<h4>Planet Info</h4>
-<div style="min-height: 150px; width:100%;" class="mb-5" id="@PlanetTableId"></div>
-<hr />
-<div style="min-height: 150px; width:100%;" class="mb-5" id="@PlanetInfoTableId"></div>
+<div class="vstack gap-3">
+    <div>
+        <h4>Planet Info</h4>
+        <div class="vstack gap-2">
+            <div style="min-height: 150px; width:100%;" class="" id="@PlanetTableId"></div>
+            <div style="min-height: 150px; width:100%;" class="" id="@PlanetInfoTableId"></div>
+        </div>
+    </div>
 
-<h4>House Info</h4>
-<div style="min-height: 150px; width:100%;" class="mb-5" id="@HouseTableId"></div>
-<hr />
-<div style="min-height: 150px; width:100%;" class="mb-5" id="@HouseInfoTableId"></div>
-
+    <div>
+        <h4>House Info</h4>
+        <div class="vstack gap-2">
+            <div style="min-height: 150px; width:100%;" class="" id="@HouseTableId"></div>
+            <div style="min-height: 150px; width:100%;" class="" id="@HouseInfoTableId"></div>
+        </div>
+    </div>
+</div>
 
 @code {
 
@@ -55,7 +62,7 @@
 
         //if harmful remove
         this.StateHasChanged();
-        
+
     }
 
     public List<object> GetHouseData()

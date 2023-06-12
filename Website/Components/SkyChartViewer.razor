@@ -3,29 +3,35 @@
 @using System.Xml.Linq
 
 
-<div class="vstack">
-    <div @ref="imageHolder" class="vstack" style="width: fit-content;">
-    </div>
-    <div id="SkyChartLoadingIcon" style="display: none;">
-        @AppData.LoadingImage
-    </div>
 
+<div>
     @if (isReady)
     {
-        @*BUTTON ROW*@
-        <div class="hstack gap-2 px-1 p-1 ms-1 rounded-3 border shadow d-flex  align-items-center">
-            <IconButton SmallSize="true" TooltipText="Play" IconName="ph:play-bold" />
-            <IconButton SmallSize="true" TooltipText="Previous" IconName="fluent:previous-24-filled" />
-            <IconButton SmallSize="true" TooltipText="Next" IconName="fluent:next-24-filled" />
-
-            <IconButton SmallSize="true" Outline="true" TooltipText="Print" IconName="flat-color-icons:print" />
-            <IconButton SmallSize="true" Outline="true" TooltipText="Save as Image" IconName="emojione:floppy-disk" />
-            <IconButton SmallSize="true" Outline="true" TooltipText="Embed in app or website" IconName="dashicons:embed-photo" />
-        </div>
+        <IconTitle Title="Sky Chart" IconName="twemoji:ringed-planet" TitleHolder="h4" />
     }
+    <div class="vstack">
+        <div @ref="imageHolder" class="vstack" style="width: fit-content;">
+        </div>
+        <div id="SkyChartLoadingIcon" style="display: none;">
+            @AppData.LoadingImage
+        </div>
+
+        @if (isReady)
+        {
+            @*BUTTON ROW*@
+            @*         <div class="hstack gap-2 px-1 p-1 ms-1 rounded-3 border shadow d-flex  align-items-center">
+        <IconButton SmallSize="true" TooltipText="Play" IconName="ph:play-bold" />
+        <IconButton SmallSize="true" TooltipText="Previous" IconName="fluent:previous-24-filled" />
+        <IconButton SmallSize="true" TooltipText="Next" IconName="fluent:next-24-filled" />
+
+        <IconButton SmallSize="true" Outline="true" TooltipText="Print" IconName="flat-color-icons:print" />
+        <IconButton SmallSize="true" Outline="true" TooltipText="Save as Image" IconName="emojione:floppy-disk" />
+        <IconButton SmallSize="true" Outline="true" TooltipText="Embed in app or website" IconName="dashicons:embed-photo" />
+        </div>
+        *@  }
+    </div>
+
 </div>
-
-
 
 
 

@@ -6,29 +6,44 @@
 @*render, but visibily hide untill ready to show data*@
 <div style="@(_isReadyToShow ? "" : "display: none;")" class="vstack gap-3">
 
-
-    <IconTitle Title="Prediction" IconName="maki:school" TitleHolder="h4" />
-    <AIPrediction @ref="_aiPrediction" />
-
-    <div class="my-2" />
-
-    <IconTitle Title="Chart" IconName="maki:school" TitleHolder="h4" />
-    @*only show when all is loaded*@
-    <StrengthChart @ref="_strengthChart" />
-
-    <div class="my-2" />
-
-    <IconTitle Title="Data" IconName="maki:school" TitleHolder="h4">
-        <ButtonRow>
-            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" />
-        </ButtonRow>
-    </IconTitle>
-    <PlanetHouseInfoViewer @ref="_planetHouseInfoViewer" />
-
-    <div class="my-2" />
-
-    <IconTitle Title="Reference" IconName="maki:school" TitleHolder="h4" />
-    <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
+    @* Auto Prediction *@
+    <div>
+        <IconTitle Title="Auto Prediction" IconName="twemoji:robot" TitleHolder="h4" />
+        <AIPrediction @ref="_aiPrediction" />
+    </div>
+    
+    @* Strength *@
+    <div class="mt-4">
+        <IconTitle Title="Strength" IconName="twemoji:antenna-bars" TitleHolder="h4" />
+        @*only show when all is loaded*@
+        <StrengthChart @ref="_strengthChart" />
+    </div>
+    
+    @* Data *@
+    <div class="mt-5">
+        <IconTitle Title="Data" IconName="twemoji:abacus" TitleHolder="h4">
+            <ButtonRow>
+                <IconButton SmallSize="true"
+                            Color="success"
+                            IconName="bx:save"
+                            ButtonText="Save"
+                            OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Save Horoscope Data"))" />
+                <IconButton SmallSize="true"
+                            TooltipText="Get this data for your app or service"
+                            Color="primary"
+                            IconName="fluent-mdl2:embed"
+                            ButtonText="Embed"
+                            ClickUrl="@PageRoute.APIBuilder" />
+            </ButtonRow>
+        </IconTitle>
+        <PlanetHouseInfoViewer @ref="_planetHouseInfoViewer" />
+    </div>
+    
+    @* Reference *@
+    <div class="mt-5">
+        <IconTitle Title="Reference" IconName="twemoji:books" TitleHolder="h4" />
+        <HoroscopeReferenceList @ref="_horoscopeReferenceList" />
+    </div>
 
 </div>
 

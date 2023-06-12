@@ -10,6 +10,8 @@
          DescriptionText="Insight into a peron's character, nature and general future. Over +370 planetary combinations are used.">
 </PageTop>
 
+
+
 <div class="gap-3" style="max-width: @GR.W824px;">
 
     @*SELECTOR & BUTTON*@
@@ -21,19 +23,20 @@
         </div>
     </div>
 
-
-    @*divider*@
-    <hr />
-
-
-    @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
-    <HoroscopeInfoView @ref="_horoscopeInfoView" />
     
-    @* EXPERIMENTAL *@
-    <SkyChartViewer @ref="skyChartViewer" />
-    
-    <PlanetChart @ref="planetChart"/>
+    <div class="mt-5 vstack gap-4">
+        
+        @*divider*@
+        <SkyChartViewer @ref="skyChartViewer" />
 
+        @*SHOW RAW HOROSCOPE & PREDICTION DATA VIA TABS*@
+        <HoroscopeInfoView @ref="_horoscopeInfoView" />
+
+        @* EXPERIMENTAL *@
+        <PlanetChart @ref="planetChart"/>
+
+    </div>
+    
 
     @*HELP SECTION*@
     <PageHelpSection @ref="_helpSection">

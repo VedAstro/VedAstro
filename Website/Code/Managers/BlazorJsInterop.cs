@@ -303,6 +303,16 @@ namespace Website
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, elementSelector);
 
+        public static async Task FunFeaturePopUp(this IJSRuntime jsRuntime, string featureName)
+        {
+            //log this
+            WebLogger.Click($"Fund : {featureName}");
+
+            var descriptionText = "<a style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development";
+            await jsRuntime.ShowAlert("info", "Coming soon", descriptionText);
+        }
+
+
         /// <summary>
         /// Uses jQuery to hide element via blazor reference
         /// </summary>

@@ -83,6 +83,8 @@ namespace VedAstro.Library
             var msgList = new[]
             {
                 "dear",
+                "madam",
+                "sir",
                 "darling",
                 "friend",
                 "sweetheart",

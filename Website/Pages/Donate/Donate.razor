@@ -127,8 +127,8 @@
             </div>
         </TextHTML>
     </ArticleBlock>
-    
-    
+
+
     <ArticleBlock Title="Wish List" IconName="fluent-emoji:wrapped-gift">
         <TextHTML>
             <div id="WishList" class="hstack gap-2">
@@ -166,6 +166,7 @@
 
 @code {
 
+    private const string OfficeAddress = "7, Hala Pengkalan Timur 8A,<br/>Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
 
     private async Task OnClickBankTransfer()
     {
@@ -188,10 +189,10 @@
         await _jsRuntime.ShowAlert("success", "Thank you", "for wanting to donate. Now redirecting to safe and verified buy page.");
 
         //send user to telescope page on new tab
-        AppData.Go(url:URL.TelescopeBuyPage, newTab:true);
+        AppData.Go(url: URL.TelescopeBuyPage, newTab: true);
 
         //then on user return from buy page, address is shown
-        var address = "Shipping Address:<br/>7, Hala Pengkalan Timur 8A, Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
+        var address = $"Shipping Address:<br/>{OfficeAddress}";
         await _jsRuntime.ShowAlert("success", "Thank you for gifts", address);
 
     }
@@ -201,10 +202,10 @@
         await _jsRuntime.ShowAlert("success", "Thank you", "for wanting to donate. Now redirecting to safe and verified buy page.");
 
         //send user to telescope page on new tab
-        AppData.Go(url:URL.LaptopBuyPage, newTab:true);
+        AppData.Go(url: URL.LaptopBuyPage, newTab: true);
 
         //then on user return from buy page, address is shown
-        var address = "Shipping Address:<br/>7, Hala Pengkalan Timur 8A, Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
+        var address = $"Shipping Address:<br/>{OfficeAddress}";
         await _jsRuntime.ShowAlert("success", "Thank you for gifts", address);
 
     }
@@ -213,8 +214,7 @@
     {
 
         //then on user return from buy page, address is shown
-        var address = "7, Hala Pengkalan Timur 8A, Taman Pengkalan Puteri, 31650,<br/>Ipoh, Perak, MALAYSIA";
-        await _jsRuntime.ShowAlert("success", "Send love letters to:", address);
+        await _jsRuntime.ShowAlert("success", "Send love letters to:", OfficeAddress);
 
     }
 

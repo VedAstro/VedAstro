@@ -263,14 +263,13 @@ namespace Library.API
         public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth)
         {
 
-            if (VedAstro.Library.Person.Empty.Equals(person))
+            if (Person.Empty.Equals(person))
             {
                 throw new InvalidOperationException("NO CHART FOR EMPTY PERSON!");
             }
 
-
             //1 : package data to get chart
-            var chartSpecsJson = VedAstro.Library.EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags, maxWidth);
+            var chartSpecsJson = EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags, maxWidth);
 
             //ask API to make new chart
             var eventsChartApiCallUrl = $"{_api.URL.GetEventsChart}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
@@ -321,7 +320,7 @@ namespace Library.API
 
             //call until data appears, API takes care of everything
             JToken? personListJson = null;
-            var pollRate = 250;
+            var pollRate = 500;
             var notReady = true;
             while (notReady)
             {
@@ -418,7 +417,7 @@ namespace Library.API
 
             //call until data appears, API takes care of everything
             string? parsedJsonReply = null;
-            var pollRate = 300;
+            var pollRate = 700;
             var notReady = true;
             while (notReady)
             {

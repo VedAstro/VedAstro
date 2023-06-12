@@ -45,7 +45,6 @@ namespace Website
             var emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("Send PDF to...");
 
             //calls special JS lib to convert html version of the chart to PDF
-            //and initiated download as well, with 1 call
             var cleanFileName = Tools.RemoveWhiteSpace(pdfFileName); //remove spaces so that no errors and looks clean in URL
 
             //will also show complete alert after done
@@ -524,6 +523,23 @@ namespace Website
             while ((fi = t.GetField(name, bf)) == null && (t = t.BaseType) != null) ;
 
             return fi;
+        }
+
+
+        /// <summary>
+        /// Adds a message to API server records from user
+        /// </summary>
+        public static async Task SendMailToAPI(string? title, string? description)
+        {
+            //package message data to be sent
+            var textXml = new XElement("Title", title);
+            var emailXml = new XElement("Text", description);
+            var userIdXml = new XElement("UserId", AppData.CurrentUser?.Id);
+            var visitorIdXml = new XElement("VisitorId", AppData.VisitorId);
+            var messageXml = new XElement("Message", userIdXml, visitorIdXml, emailXml, Tools.TimeStampSystemXml, Tools.TimeStampServerXml, textXml);
+
+            //send message to API server
+            await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
         }
     }
 }

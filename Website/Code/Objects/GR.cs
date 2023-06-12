@@ -28,8 +28,14 @@
         public static double W667 => Math.Round(W1080 / GoldenRatio, 1);
         public static string W667px => $"{W667}px";
 
+        public static double W509 => W412 + W97;
+        public static string W509px => $"{W509}px";
+
         public static double W412 => Math.Round(W667 / GoldenRatio, 1);
         public static string W412px => $"{W412}px";
+
+        public static double W352 => W255 + W97;
+        public static string W352px => $"{W352}px";
 
         public static double W291 => W157 + W134;
         public static string W291px => $"{W291}px";

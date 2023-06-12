@@ -2899,8 +2899,8 @@ namespace VedAstro.Library
             //take top 3 as needed planets
             var returnList = new List<PlanetName>();
             returnList.Add(allPlanetByStrenght[0]);
-            returnList.Add(allPlanetByStrenght[1]);
-            returnList.Add(allPlanetByStrenght[2]);
+            //returnList.Add(allPlanetByStrenght[1]);
+            //returnList.Add(allPlanetByStrenght[2]);
 
             return returnList;
         }
@@ -2938,8 +2938,8 @@ namespace VedAstro.Library
             //take top 3 as needed planets
             var returnList = new List<HouseName>();
             returnList.Add(allPlanetByStrenght[0]);
-            returnList.Add(allPlanetByStrenght[1]);
-            returnList.Add(allPlanetByStrenght[2]);
+            //returnList.Add(allPlanetByStrenght[1]);
+            //returnList.Add(allPlanetByStrenght[2]);
 
             return returnList;
 
@@ -2973,11 +2973,11 @@ namespace VedAstro.Library
             //get all planets
             var allPlanetByStrenght = AstronomicalCalculator.GetAllPlanetOrderedByStrength(personBirthTime);
 
-            //take top 3 as needed planets
+            //take last 3 as needed planets
             var returnList = new List<PlanetName>();
             returnList.Add(allPlanetByStrenght[^1]);
-            returnList.Add(allPlanetByStrenght[^2]);
-            returnList.Add(allPlanetByStrenght[^3]);
+            //returnList.Add(allPlanetByStrenght[^2]);
+            //returnList.Add(allPlanetByStrenght[^3]);
 
             return returnList;
 
@@ -3012,11 +3012,11 @@ namespace VedAstro.Library
             //get all planets
             var allPlanetByStrenght = AstronomicalCalculator.GetAllHousesOrderedByStrength(personBirthTime);
 
-            //take top 3 as needed planets
+            //take last 3 as needed planets
             var returnList = new List<HouseName>();
             returnList.Add(allPlanetByStrenght[^1]);
-            returnList.Add(allPlanetByStrenght[^2]);
-            returnList.Add(allPlanetByStrenght[^3]);
+            //returnList.Add(allPlanetByStrenght[^2]);
+            //returnList.Add(allPlanetByStrenght[^3]);
 
             return returnList;
 

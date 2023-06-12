@@ -365,6 +365,12 @@ namespace Website
             return finalXml;
         }
 
+        public static async Task ScrollToDivById(this IJSRuntime jsRuntime, string predictionName)
+        {
+            //make scroll movement to place
+            await jsRuntime.InvokeVoidAsync(JS.scrollToDiv, "#" + predictionName);
+        }
+
         public static async Task AddClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync(JS.addClassWrapper, element, classNames);
 
         public static async Task RemoveClass(this IJSRuntime jsRuntime, ElementReference element, string classNames) => await jsRuntime.InvokeVoidAsync(JS.removeClassWrapper, element, classNames);

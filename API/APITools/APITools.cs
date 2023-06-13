@@ -52,7 +52,7 @@ namespace API
         static APITools()
         {
             //make urls used here for beta or stable
-            Url = new URL(GetIsBetaRuntime());
+            Url = new URL(GetIsBetaRuntime(), false); //obviously no debug mode
         }
 
         /// <summary>

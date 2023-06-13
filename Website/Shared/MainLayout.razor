@@ -27,7 +27,8 @@
         <!-- DESKTOP ONLY : SIDEBAR -->
         <div class="col-auto align-items-start d-none d-md-block">
             <!--only visible in Desktop-->
-            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 999;"> <!-- special style to make appear in night mode dispite bg-white -->
+            <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 999;">
+                <!-- special style to make appear in night mode dispite bg-white -->
                 @* SEARCH *@
                 <SearchBox />
                 <SideBarButtons />
@@ -153,13 +154,10 @@
         //1: do little check to make sure all functions in Interop is accounted for
         await InteropHealthCheck();
 
-        //2: create url based on beta or stable
-        AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime());
-
-        //3: to be accessed by classes
+        //3: to be accessed by classes todo obliviion
         AppData.HttpClient = _client;
 
-        //4: used later to create HTTP client with correct base address
+        //4: used later to create HTTP client with correct base address todo obliviion
         AppData.BaseAddress = new Uri(_navigation.BaseUri);
 
         //5: get visitor ID if available
@@ -168,10 +166,29 @@
         //6: retrieve login status from previous visit if available
         await TryGetPreviousLogin();
 
+
+        //2: create url based on beta or stable
+        //note : must do after 
+        //---------------------
+        bool debugMode;
+
+        //if no login can't access account page, so can't set debug
+        //thus no login, disable debug
+        if (AppData.IsGuestUser) { debugMode = false; }
+
+        //user already logged in, get debug mode from browser setting if any
+        //note: "debug mode" is stored local instead of online, because possible mobile use under same account
+        else { debugMode = await WebsiteTools.GetDebugMode(_jsRuntime); }
+
+        AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime(), debugMode);
+
+        //---------------------
+
+
         //7: prepare server communicator
         AppData.API = new VedAstroAPI(AppData.CurrentUser.Id, AppData.VisitorId, _jsRuntime, AppData.URL);
 
-        //ask server to prepare person list, will be available instantly later when user needs it
+        //8:ask server to prepare person list, will be available instantly later when user needs it
         AppData.API.Person.PreparePersonList();
 
 
@@ -233,7 +250,7 @@
 #if DEBUG
     Console.WriteLine("BLZ: Using Previous Login Data");
 #endif
-            AppData.CurrentUser = UserData.FromXml(XElement.Parse(userDataXml)) ?? throw new Exception("userDataXml failed to parse!");
+            AppData.CurrentUser = UserData.FromXml(XElement.Parse(userDataXml)) ?? UserData.Guest;
         }
     }
 
@@ -248,7 +265,7 @@
         {
             case 2: await _jsRuntime.ShowAlert("success", $"You clicked this 2x times, why?", true); break;
             case 4: await _jsRuntime.ShowAlert("success", $"Stop clicking! There is no \"Cake\" here.", true); break;
-            case 6:AppData.Go(PageRoute.EasterEgg, true); break;
+            case 6: AppData.Go(PageRoute.EasterEgg, true); break;
         }
     }
 }

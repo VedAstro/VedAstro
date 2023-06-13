@@ -19,11 +19,20 @@ public class URL
     /// All API functions can be accessed by this .org URL
     /// Note: possible via azure CDN rules engine : AccessApiViaWebDomain
     /// </summary>
-    public URL(bool isBetaRuntime)
+    public URL(bool isBetaRuntime, bool debugMode) //don't hide to make obvious easy id
     {
+        //set beta or stable based on Runtime Stamp data
         ApiUrl = isBetaRuntime ? ApiBeta : ApiStable;
         ApiUrlDirect = isBetaRuntime ? ApiBetaDirect : ApiStableDirect;
         WebUrl = isBetaRuntime ? WebBeta : WebStable;
+
+        //if DEBUG MODE set all to local (bye bye Postman! we don't need you anymore!)
+        if (debugMode)
+        {
+            ApiUrl = "http://localhost:7071/api";
+            ApiUrlDirect = "http://localhost:7071/api";
+        }
+
 
         //--------------done here so that can be readonly------------------
 

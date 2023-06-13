@@ -541,5 +541,17 @@ namespace Website
             //send message to API server
             await ServerManager.WriteToServerXmlReply(AppData.URL.AddMessageApi, messageXml);
         }
+
+
+        /// <summary>
+        /// gets debug mode set in browser memory
+        /// </summary>
+        public static async Task<bool> GetDebugMode(IJSRuntime jsRuntime)
+        {
+            var dataInBrowser = await jsRuntime.GetProperty("DebugMode"); //enabled/disabled
+            var debugMode = string.IsNullOrEmpty(dataInBrowser) ? false : (dataInBrowser == "enabled" ? true : false);
+
+            return debugMode;
+        }
     }
 }

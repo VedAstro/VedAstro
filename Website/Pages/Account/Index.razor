@@ -39,7 +39,7 @@
 
     <IconTitle Title="Settings" IconName="gala:settings">
         <ButtonRow>
-            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("CustomAyanamsa"))" />
+            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSaveSettingsButton" />
         </ButtonRow>
 
     </IconTitle>
@@ -57,12 +57,12 @@
             </select>
         </div>
 
-        @* LIFE CHART LOCAL *@
+        @* DEBUG MODE *@
         <div class="input-group">
             <label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="iconoir:developer" /> Debug</label>
-            <select @onchange="@(() => _jsRuntime.FunFeaturePopUp("Debug Mode"))" class="form-select">
-                <option selected>Disabled</option>
-                <option value="1">Enabled</option>
+            <select @bind="@SelectedDebugMode" class="form-select">
+                <option value="disabled" selected>Disabled</option>
+                <option value="enabled">Enabled</option>
             </select>
         </div>
 
@@ -75,6 +75,10 @@
 
 
 @code {
+
+
+    private string SelectedDebugMode { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -89,7 +93,26 @@
             AppData.Go(url: PageRoute.Login, rememberMe: true);
         }
 
+        //if user logged in than try get debug mode selection from memory
+        else
+        {
+            var debugMode = await WebsiteTools.GetDebugMode(_jsRuntime);
+            SelectedDebugMode = debugMode ? "enabled" : "disabled";
+        }
+
+
     }
 
+
+    private async Task OnClickSaveSettingsButton()
+    {
+
+        //save debug settings to local browser storage only, because
+        _jsRuntime.SetProperty("DebugMode", SelectedDebugMode);
+
+        //let user know settings saved
+        await _jsRuntime.ShowAlert("success", "Saved", false, timer: 1500);
+
+    }
 
 }

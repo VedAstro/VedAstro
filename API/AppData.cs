@@ -8,7 +8,7 @@ namespace API
          static AppData()
         {
             //load data at startup
-            URL = new URL(GetIsBetaRuntime());
+            URL = new URL(GetIsBetaRuntime(), false);
         }
 
         public static bool GetIsBetaRuntime() => ThisAssembly.BranchName.Contains("beta");

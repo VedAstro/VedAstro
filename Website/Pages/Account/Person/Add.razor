@@ -303,7 +303,7 @@
         var newPersonOwnerId = AppData.IsGuestUser ? AppData.VisitorId : AppData.CurrentUser?.Id;
 
         //there is possibility user has put invalid characters, clean it!
-        var nameInput = Tools.CleanNameText(_nameInput);
+        var nameInput = Tools.CleanAndFormatNameText(_nameInput);
 
         //new human readable person ID made specially by API
         //note : ID for person should be only created here, for maintenance sake

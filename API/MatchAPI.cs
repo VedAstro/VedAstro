@@ -242,7 +242,7 @@ namespace API
                 var ownerId = apiKey;
 
                 //there is possibility user has put invalid characters, clean it!
-                var nameInput = Tools.CleanNameText(name);
+                var nameInput = Tools.CleanAndFormatNameText(name);
 
                 //new person ID made from thin air todo should be generated for human consumption, use new generator
                 var newPersonProfileId = Tools.GenerateId();

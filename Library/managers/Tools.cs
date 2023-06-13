@@ -1144,12 +1144,20 @@ namespace VedAstro.Library
         /// allowed chars : periods (.) and hyphens (-), space ( )
         /// SRC:https://learn.microsoft.com/en-us/dotnet/standard/base-types/how-to-strip-invalid-characters-from-a-string
         /// </summary>
-        public static string CleanNameText(string nameInput)
+        public static string CleanAndFormatNameText(string nameInput)
         {
             // Replace invalid characters with empty strings.
             try
             {
+                //remove invalid
                 var cleanText = Regex.Replace(nameInput, @"[^\w\.\s*-]", "", RegexOptions.None, TimeSpan.FromSeconds(2));
+
+                var textinfo = new CultureInfo("en-US", false).TextInfo;
+
+                //tit le case it!, needs all small else will fail when some nut puts all as capital 
+                cleanText = cleanText.ToLower(); //lower
+                cleanText = textinfo.ToTitleCase(cleanText); //convert
+
                 return cleanText;
             }
             // If we timeout when replacing invalid characters,

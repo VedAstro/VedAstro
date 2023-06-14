@@ -31,7 +31,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-    //set the memory helper text if any
+        //set the memory helper text if any
         LoginHumanMemoryHelperText = await LoginHumanMemoryHelper();
 
         //after login this page is loaded again,
@@ -67,9 +67,10 @@
             var msgList = new[]
             {
                 $"To prove you're a human from Earth",
+                $"To prove you're not a robot",
                 $"To prove you're not from the Machine World",
                 $"To authenticate yourself as a biological entity",
-            };
+        };
 
             var finalGreeting = Tools.RandomSelect(msgList);
             return finalGreeting;

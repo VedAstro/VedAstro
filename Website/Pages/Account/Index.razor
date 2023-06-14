@@ -113,6 +113,9 @@
         //let user know settings saved
         await _jsRuntime.ShowAlert("success", "Saved", false, timer: 1500);
 
+        //hard refresh to make app restart and use new settings
+        await _jsRuntime.LoadPage(PageRoute.UserAccount);
+
     }
 
 }

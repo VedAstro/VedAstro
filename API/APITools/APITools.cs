@@ -104,6 +104,7 @@ namespace API
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", contentType);
             response.Headers.Add("Call-Status", statusResult); //lets caller know data is in payload
+            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
 
             var finalPayloadJson = new JObject();
             finalPayloadJson["Status"] = statusResult;
@@ -842,6 +843,7 @@ namespace API
             //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
+            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
             response.Headers.Add("Content-Type", mimeType);
 
             //place in response body
@@ -858,6 +860,7 @@ namespace API
             //response = incomingRequest.CreateResponse(HttpStatusCode.OK);
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Call-Status", "Pass"); //lets caller know data is in payload
+            response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
             response.Headers.Add("Content-Type", mimeType);
 
             //place in response body

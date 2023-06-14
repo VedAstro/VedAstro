@@ -331,10 +331,17 @@ export async function ReadOnlyIfPassJson(url) {
 
         return payload;
 
-    } else {
+    } else if (callStatus == "Fail") {
 
         var payload = { Status: "Fail", Payload: null };
 
+        return payload;
+    }
+
+    //call should not come here
+    else {
+        console.log("ERROR: No Call Status Found!");
+        var payload = { Status: "Fail", Payload: null };
         return payload;
     }
 

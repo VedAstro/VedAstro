@@ -175,6 +175,7 @@ namespace API
             {
                 var response = httpRequestData.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Call-Status", "Running"); //caller checks this
+                response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
                 return response;
             }
             //start new call
@@ -215,6 +216,7 @@ namespace API
 
                     var response = httpRequestData.CreateResponse(HttpStatusCode.OK);
                     response.Headers.Add("Call-Status", "Running"); //caller checks this
+                    response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
                     return response;
 
                 }

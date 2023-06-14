@@ -74,6 +74,7 @@ namespace API
                 await APILogger.Error(e);
                 var response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Call-Status", "Fail"); //caller checks this
+                response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
                 return response;
             }
 

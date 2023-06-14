@@ -38,6 +38,7 @@ public class URL
 
         //GENERAL
         GetCallData = ApiUrl + "/GetCallData";
+        Login = WebUrl + "/Account/Login"; //note must match with page route
 
         //PERSON
         GetPersonList = ApiUrl + "/GetPersonList";
@@ -47,6 +48,7 @@ public class URL
         GetPerson = ApiUrl + "/getperson";
         GetPersonImage = ApiUrl + "/GetPersonImage/PersonId/";
         GetNewPersonId = ApiUrl + "/GetNewPersonId";
+
 
         GetHoroscope = ApiUrl + "/gethoroscope";
         AddLifeEventApi = ApiUrl + "/addlifeevent";
@@ -140,6 +142,7 @@ public class URL
     public readonly string GetEventsApi;
     public readonly string SignInGoogle;
     public readonly string SignInFacebook;
+    public readonly string Login;
 
     /// <summary>
     /// link to js file used for google sign in function

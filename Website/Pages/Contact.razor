@@ -9,34 +9,43 @@
 </PageTop>
 
 
-<div class="d-flex flex-wrap">
-    @*Default hidden Thank you message*@
-    <div style="display: none;" @ref="_thankYouMessageElement">
-        <h3>
-            Thank you for your message.<br />
-            We'll reply soon.
-        </h3>
-    </div>
-    <div class="vstack gap-3 me-5 mb-4" style="max-width: 300px">
+<div class="d-md-flex justify-content-between">
 
-        <div @ref="_messageFormElement" class="vstack gap-2" style="max-width: @GR.W667px;">
-            <div>
-                <label for="emailInputId">Email</label>
-                <input @bind="_emailInput" type="text" id="emailInputId" class="form-control" placeholder="john@example.com">
+    @*CONTACT FORM*@
+    <div class="me-5">
+        @*Default hidden Thank you message*@
+        <div style="display: none;" @ref="_thankYouMessageElement">
+            <h3>
+                Thank you for your message.<br />
+                We'll reply soon.
+            </h3>
+        </div>
+        <div class="vstack gap-3 me-5 mb-4" style="max-width: 300px">
+
+            <div @ref="_messageFormElement" class="vstack gap-2" style="max-width: @GR.W667px;">
+                <div>
+                    <label for="emailInputId">Email</label>
+                    <input @bind="_emailInput" type="text" id="emailInputId" class="form-control" placeholder="john@example.com">
+                </div>
+                <div>
+                    <label for="messageInputId">Message</label>
+                    <textarea style="min-height: 132px;" class="form-control" @bind="_messageInput" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
+                </div>
+                <IconButton SmallSize="true" OnClickCallback="@OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
             </div>
-            <div>
-                <label for="messageInputId">Message</label>
-                <textarea style="min-height: 132px;" class="form-control" @bind="_messageInput" id="messageInputId" placeholder="Hi, this is a short message."></textarea>
-            </div>
-            <IconButton SmallSize="true" OnClickCallback="@OnClickSendButton" ButtonText="Send" IconName="bi:send-check" />
         </div>
     </div>
-    @*STACK BOXES ON RIGHT*@
-    <div class="w-50">
-        <InfoBox MaxWidth="365" IsNewTabOpen="true" FullWidth="@true" Title="WhatsApp" ClickUrl="@URL.WhatsAppContact" Description="Call or chat with us." IconName="logos:whatsapp-icon" />
-        <InfoBox MaxWidth="365" IsNewTabOpen="true" FullWidth="@true" Title="Email" ClickUrl="@URL.EmailToClick" Description="contact@vedastro.org" IconName="flat-color-icons:address-book" Color="success" />
-        <InfoBox MaxWidth="365" IsNewTabOpen="true" FullWidth="@true" Title="Telegram" ClickUrl="@URL.TelegramContact" Description="Call or chat with us." IconName="logos:telegram" />
+
+    @*SIDEBAR*@
+    <div class="mt-md-0 mt-4 me-md-5">
+        <!--when small give at top-->
+        <div class="vstack gap-0 gap-md-2">
+            <InfoBox MaxWidth="365" IsNewTabOpen="true" FullWidth="@true" Title="WhatsApp" ClickUrl="@URL.WhatsAppContact" Description="Call or chat with us." IconName="logos:whatsapp-icon" />
+            <InfoBox MaxWidth="365" IsNewTabOpen="true" FullWidth="@true" Title="Email" ClickUrl="@URL.EmailToClick" Description="contact@vedastro.org" IconName="flat-color-icons:address-book" Color="success" />
+            <InfoBox MaxWidth="365" IsNewTabOpen="true" FullWidth="@true" Title="Telegram" ClickUrl="@URL.TelegramContact" Description="Call or chat with us." IconName="logos:telegram" />
+        </div>
     </div>
+
 </div>
 
 

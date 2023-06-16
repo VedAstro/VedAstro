@@ -11,18 +11,20 @@
 
 
 
-<div class="d-flex justify-content-between mb-5">
+<div class="d-md-flex justify-content-between">
     @*SELECTOR*@
-    <div>
-        <div class="vstack gap-3 me-5">
+    <div class="me-5">
+        <div class="vstack gap-3">
             <PersonSelectorBox @ref="_personSelector" @bind-SelectedPersonId="@_selectedPersonId" Label="Person" />
             <IconButton TooltipText="Search database for perfect match" IconName="mdi:heart-search" ExtraClass="mt-1" Color="success" ButtonText="Search" OnClickCallback="@OnClickSearchButton" />
         </div>
     </div>
     @*SIDEBAR*@
-    <div class="me-md-4">
-        <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Love Letter" Description="Leave a love letter for your soulmate when they find you" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="twemoji:love-letter" />
-        <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Cute Pic" Description="Let your soulmate see how you look when you send frend request" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="flat-color-icons:selfie" />
+    <div class="mt-md-0 mt-4 me-md-5">
+        <div class="vstack gap-0 gap-md-2">
+            <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Love Letter" Description="Leave a love letter for your soulmate when they find you" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="twemoji:love-letter" />
+            <InfoBox ClickUrl="@PageRoute.MatchProfile" Title="Cute Pic" Description="Let your soulmate see how you look when you send frend request" MaxWidth="365" Color="#ffbdf7" FullWidth="@true" IconName="flat-color-icons:selfie"/>
+        </div>
     </div>
 </div>
 

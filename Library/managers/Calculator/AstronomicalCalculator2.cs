@@ -2336,9 +2336,9 @@ namespace VedAstro.Library
         public static int GetCurrentDasaCountFromBirth(Time birthTime, Time currentTime)
         {
             //get dasa planet at birth (birth time = current time)
-            var birthDasaPlanet = GetCurrentDasaBhuktiAntaram(birthTime, birthTime).Dasa;
+            var birthDasaPlanet = GetCurrentPlanetDasas(birthTime, birthTime).PD1;
 
-            var currentDasaPlanet = GetCurrentDasaBhuktiAntaram(birthTime, currentTime).Dasa;
+            var currentDasaPlanet = GetCurrentPlanetDasas(birthTime, currentTime).PD1;
 
 
             //count from birth dasa planet to current dasa planet
@@ -2368,12 +2368,12 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Gets the occuring dasa, bhukti & antaram for a person at the given time
+        /// Gets the occuring Planet Dasas (PD1, PD2,...) for a person at the given time
         /// </summary>
-        public static Dasas GetCurrentDasaBhuktiAntaram(Time birthTime, Time currentTime)
+        public static Dasas GetCurrentPlanetDasas(Time birthTime, Time currentTime)
         {
             //get dasa planet at birth
-            var moonConstellation = GetMoonConstellation(birthTime);
+            var moonConstellation = GetMoonConstellation(birthTime); //note: mind aspect represented by moon here for entire chart
             var birthDasaPlanet = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
 
             //get time traversed in birth dasa
@@ -2399,115 +2399,222 @@ namespace VedAstro.Library
         /// </summary>
         public static Dasas GetDasaCountedFromInputDasa(PlanetName startDasaPlanet, double years)
         {
-            double dasaYears = years;
-            double bhuktiYears; //will be filled when getting dasa
-            double antaramYears; //will be filled when getting bhukti
-            double sukshmaYears; //will be filled when getting antaram
-            double pranaYears; //will be filled when getting prana
+            double pd1Years = years;
+            double pd2Years; //will be filled when getting dasa
+            double pd3Years; //will be filled when getting bhukti
+            double pd4Years; //will be filled when getting antaram
+            double pd5Years; //will be filled when getting prana
+            double pd6Years; //will be filled when getting prana
+            double pd7Years; //will be filled when getting prana
+            double pd8Years; //will be filled when getting prana
 
             //NOTE: Get Dasa prepares values for Get Bhukti and so on.
 
             //first get the major dasa planet
-            var dasaPlanet = GetDasa();
-
-            //based on major dasa get bhukti planet
-            var bhuktiPlanet = GetBhukti();
-
-            //based on bhukti get antaram planet
-            var antaramPlanet = GetAntaram();
-
-            //based on antaram get sukshma planet
-            var sukshmaPlanet = GetSukshma();
-
-            //based on sukshma get prana planet
-            var pranaPlanet = GetPrana();
+            //then based on the pd2 get pd3 and so on in same pattern
+            var pd1Planet = GetPD1();
+            var pd2Planet = GetPD2();
+            var pd3Planet = GetPD3();
+            var pd4Planet = GetPD4();
+            var pd5Planet = GetPD5();
+            var pd6Planet = GetPD6();
+            var pd7Planet = GetPD7();
+            var pd8Planet = GetPD8();
 
 
-            return new Dasas() { Dasa = dasaPlanet, Bhukti = bhuktiPlanet, Antaram = antaramPlanet, Sukshma = sukshmaPlanet, Prana = pranaPlanet };
-
-
-            //LOCAL FUNCTIONS
-            PlanetName GetPrana()
+            return new Dasas()
             {
-                //first possible Prana planet is the Sukshma planet
-                var possiblePranaPlanet = sukshmaPlanet;
+                PD1 = pd1Planet,
+                PD2 = pd2Planet,
+                PD3 = pd3Planet,
+                PD4 = pd4Planet,
+                PD5 = pd5Planet,
+                PD6 = pd6Planet,
+                PD7 = pd7Planet,
+                PD8 = pd8Planet
+            };
 
-            //minus the possible Prana planet's full years
-            MinusPranaYears:
-                var pranaPlanetFullYears = GetPranaPlanetFullYears(dasaPlanet, bhuktiPlanet, antaramPlanet, sukshmaPlanet, possiblePranaPlanet);
-                pranaYears -= pranaPlanetFullYears;
 
-                //if remaining prana time is negative,
-                //than current possible sukshma planet is correct
-                if (pranaYears <= 0)
+            //--------------------------------LOCAL FUNCTIONS
+
+            PlanetName GetPD8()
+            {
+                //first possible PD8 planet is the PD7 planet
+                var possiblePD8Planet = pd7Planet;
+
+            //minus the possible PD8 planet's full years
+            MinusPD8Years:
+                var pd8PlanetFullYears = GetPD8PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, pd4Planet, pd5Planet, pd6Planet, pd7Planet, possiblePD8Planet);
+                pd8Years -= pd8PlanetFullYears;
+
+                //if remaining pd8 time is negative,
+                //than current possible PD7 planet is correct
+                if (pd8Years <= 0)
                 {
                     //return possible planet as correct
-                    return possiblePranaPlanet;
+                    return possiblePD8Planet;
                 }
-                //else possible prana planet not correct, go to next one 
+                //else possible pd8 planet not correct, go to next one 
                 else
                 {
-                    //change to next prana planet in order
-                    possiblePranaPlanet = GetNextDasaPlanet(possiblePranaPlanet);
+                    //change to next pd8 planet in order
+                    possiblePD8Planet = GetNextDasaPlanet(possiblePD8Planet);
                     //go back to minus this planet's years
-                    goto MinusPranaYears;
+                    goto MinusPD8Years;
                 }
-
 
             }
 
-            PlanetName GetSukshma()
+            PlanetName GetPD7()
             {
-                //first possible sukshma planet is the antaram planet
-                var possibleSukshmaPlanet = antaramPlanet;
+                //first possible PD7 planet is the PD6 planet
+                var possiblePD7Planet = pd6Planet;
 
-            //minus the possible sukshma planet's full years
-            MinusSukshmaYears:
-                var sukshmaPlanetFullYears = GetSukshmaPlanetFullYears(dasaPlanet, bhuktiPlanet, antaramPlanet, possibleSukshmaPlanet);
-                sukshmaYears -= sukshmaPlanetFullYears;
+            //minus the possible PD7 planet's full years
+            MinusPD7Years:
+                var pd7PlanetFullYears = GetPD7PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, pd4Planet, pd5Planet, pd6Planet, possiblePD7Planet);
+                pd7Years -= pd7PlanetFullYears;
 
-                //if remaining sukshma years is negative,
-                //than current possible sukshma planet is correct
-                if (sukshmaYears <= 0)
+                //if remaining pd7 time is negative,
+                //than current possible PD6 planet is correct
+                if (pd7Years <= 0)
                 {
-                    //get back the Sukshma time before it becomes negative
-                    //this is the time inside the current Sukshma, aka Prana time
+                    //get back the PD7 time before it becomes negative
+                    //this is the time inside the current PD7, aka PD8 time
                     //save it for late use
-                    pranaYears = sukshmaYears + sukshmaPlanetFullYears;
+                    pd8Years = pd7Years + pd7PlanetFullYears;
 
                     //return possible planet as correct
-                    return possibleSukshmaPlanet;
+                    return possiblePD7Planet;
                 }
-                //else possible sukshma planet not correct, go to next one 
+                //else possible pd7 planet not correct, go to next one 
                 else
                 {
-                    //change to next sukshma planet in order
-                    possibleSukshmaPlanet = GetNextDasaPlanet(possibleSukshmaPlanet);
+                    //change to next pd7 planet in order
+                    possiblePD7Planet = GetNextDasaPlanet(possiblePD7Planet);
                     //go back to minus this planet's years
-                    goto MinusSukshmaYears;
+                    goto MinusPD7Years;
                 }
-
 
             }
 
-            PlanetName GetAntaram()
+            PlanetName GetPD6()
+            {
+                //first possible PD6 planet is the PD4 planet
+                var possiblePD6Planet = pd5Planet;
+
+            //minus the possible PD6 planet's full years
+            MinusPD6Years:
+                var pd6PlanetFullYears = GetPD6PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, pd4Planet, pd5Planet, possiblePD6Planet);
+                pd6Years -= pd6PlanetFullYears;
+
+                //if remaining pd6 time is negative,
+                //than current possible PD5 planet is correct
+                if (pd6Years <= 0)
+                {
+                    //get back the PD6 time before it becomes negative
+                    //this is the time inside the current PD6, aka PD7 time
+                    //save it for late use
+                    pd7Years = pd6Years + pd6PlanetFullYears;
+
+                    //return possible planet as correct
+                    return possiblePD6Planet;
+                }
+                //else possible pd6 planet not correct, go to next one 
+                else
+                {
+                    //change to next pd6 planet in order
+                    possiblePD6Planet = GetNextDasaPlanet(possiblePD6Planet);
+                    //go back to minus this planet's years
+                    goto MinusPD6Years;
+                }
+
+            }
+
+            PlanetName GetPD5()
+            {
+                //first possible PD5 planet is the PD4 planet
+                var possiblePD5Planet = pd4Planet;
+
+            //minus the possible PD5 planet's full years
+            MinusPD5Years:
+                var pd5PlanetFullYears = GetPD5PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, pd4Planet, possiblePD5Planet);
+                pd5Years -= pd5PlanetFullYears;
+
+                //if remaining pd5 time is negative,
+                //than current possible PD4 planet is correct
+                if (pd5Years <= 0)
+                {
+                    //get back the PD5 time before it becomes negative
+                    //this is the time inside the current PD5, aka PD6 time
+                    //save it for late use
+                    pd6Years = pd5Years + pd5PlanetFullYears;
+
+                    //return possible planet as correct
+                    return possiblePD5Planet;
+                }
+                //else possible pd5 planet not correct, go to next one 
+                else
+                {
+                    //change to next pd5 planet in order
+                    possiblePD5Planet = GetNextDasaPlanet(possiblePD5Planet);
+                    //go back to minus this planet's years
+                    goto MinusPD5Years;
+                }
+
+            }
+
+            PlanetName GetPD4()
+            {
+                //first possible pd4 planet is the antaram planet
+                var possiblePD4Planet = pd3Planet;
+
+            //minus the possible pd4 planet's full years
+            MinusPD4Years:
+                var pd4PlanetFullYears = GetPD4PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, possiblePD4Planet);
+                pd4Years -= pd4PlanetFullYears;
+
+                //if remaining pd4 years is negative,
+                //than current possible pd4 planet is correct
+                if (pd4Years <= 0)
+                {
+                    //get back the PD4 time before it becomes negative
+                    //this is the time inside the current PD4, aka PD5 time
+                    //save it for late use
+                    pd5Years = pd4Years + pd4PlanetFullYears;
+
+                    //return possible planet as correct
+                    return possiblePD4Planet;
+                }
+                //else possible pd4 planet not correct, go to next one 
+                else
+                {
+                    //change to next pd4 planet in order
+                    possiblePD4Planet = GetNextDasaPlanet(possiblePD4Planet);
+                    //go back to minus this planet's years
+                    goto MinusPD4Years;
+                }
+
+            }
+
+            PlanetName GetPD3()
             {
                 //first possible antaram planet is the bhukti planet
-                var possibleAntaramPlanet = bhuktiPlanet;
+                var possibleAntaramPlanet = pd2Planet;
 
             //minus the possible antaram planet's full years
-            MinusAntaramYears:
-                var antaramPlanetFullYears = GetAntaramPlanetFullYears(dasaPlanet, bhuktiPlanet, possibleAntaramPlanet);
-                antaramYears -= antaramPlanetFullYears;
+            MinusPD3Years:
+                var antaramPlanetFullYears = GetPD3PlanetFullYears(pd1Planet, pd2Planet, possibleAntaramPlanet);
+                pd3Years -= antaramPlanetFullYears;
 
                 //if remaining antaram years is negative,
                 //than current possible antaram planet is correct
-                if (antaramYears <= 0)
+                if (pd3Years <= 0)
                 {
                     //get back the antaram time before it became negative
                     //this is the time inside the current antaram, aka Sukshma time
                     //save it for late use
-                    sukshmaYears = antaramYears + antaramPlanetFullYears;
+                    pd4Years = pd3Years + antaramPlanetFullYears;
 
                     //return possible planet as correct
                     return possibleAntaramPlanet;
@@ -2518,63 +2625,63 @@ namespace VedAstro.Library
                     //change to next antaram planet in order
                     possibleAntaramPlanet = GetNextDasaPlanet(possibleAntaramPlanet);
                     //go back to minus this planet's years
-                    goto MinusAntaramYears;
+                    goto MinusPD3Years;
                 }
 
 
             }
 
-            PlanetName GetBhukti()
+            PlanetName GetPD2()
             {
-                //first possible bhukti planet is the major Dasa planet
-                var possibleBhuktiPlanet = dasaPlanet;
+                //first possible pd2 planet is the major Dasa planet
+                var possiblePD2Planet = pd1Planet;
 
-            //minus the possible bhukti planet's full years
-            MinusBhuktiYears:
-                var bhuktiPlanetFullYears = GetBhuktiPlanetFullYears(dasaPlanet, possibleBhuktiPlanet);
-                bhuktiYears -= bhuktiPlanetFullYears;
+            //minus the possible pd2 planet's full years
+            MinusPD2Years:
+                var pd2PlanetFullYears = GetPD2PlanetFullYears(pd1Planet, possiblePD2Planet);
+                pd2Years -= pd2PlanetFullYears;
 
-                //if remaining bhukti years is negative,
-                //than current possible bhukti planet is correct
-                if (bhuktiYears <= 0)
+                //if remaining pd2 years is negative,
+                //than current possible pd2 planet is correct
+                if (pd2Years <= 0)
                 {
-                    //get back the bhukti years before it became negative
-                    //this is the years inside the current bhukti, aka antaram years
+                    //get back the pd2 years before it became negative
+                    //this is the years inside the current pd2, aka antaram years
                     //save it for late use
-                    antaramYears = bhuktiYears + bhuktiPlanetFullYears;
+                    pd3Years = pd2Years + pd2PlanetFullYears;
 
                     //return possible planet as correct
-                    return possibleBhuktiPlanet;
+                    return possiblePD2Planet;
                 }
-                //else possible bhukti planet not correct, go to next one 
+                //else possible pd2 planet not correct, go to next one 
                 else
                 {
-                    //change to next bhukti planet in order
-                    possibleBhuktiPlanet = GetNextDasaPlanet(possibleBhuktiPlanet);
+                    //change to next pd2 planet in order
+                    possiblePD2Planet = GetNextDasaPlanet(possiblePD2Planet);
                     //go back to minus this planet's years
-                    goto MinusBhuktiYears;
+                    goto MinusPD2Years;
                 }
 
             }
 
-            PlanetName GetDasa()
+            PlanetName GetPD1()
             {
                 //possible planet starts with the inputed one
                 var possibleDasaPlanet = startDasaPlanet;
 
             //minus planet years
-            MinusDasaYears:
-                var dasaPlanetFullYears = GetDasaPlanetFullYears(possibleDasaPlanet);
-                dasaYears -= dasaPlanetFullYears;
+            MinusPD1Years:
+                var dasaPlanetFullYears = GetPD1PlanetFullYears(possibleDasaPlanet);
+                pd1Years -= dasaPlanetFullYears;
 
                 //if remaining dasa years is negative,
                 //than possible dasa planet is correct
-                if (dasaYears <= 0)
+                if (pd1Years <= 0)
                 {
                     //get back the dasa years before it became negative
                     //this is the years inside the current dasa, aka bhukti years
                     //save it for late use
-                    bhuktiYears = dasaYears + dasaPlanetFullYears;
+                    pd2Years = pd1Years + dasaPlanetFullYears;
 
                     //return possible planet as correct
                     return possibleDasaPlanet;
@@ -2585,7 +2692,7 @@ namespace VedAstro.Library
                     //change to next dasa planet in order
                     possibleDasaPlanet = GetNextDasaPlanet(possibleDasaPlanet);
                     //go back to minus this planet's years
-                    goto MinusDasaYears;
+                    goto MinusPD1Years;
                 }
             }
 
@@ -2627,7 +2734,7 @@ namespace VedAstro.Library
             //get full years of birth dasa planet
             var moonConstellation = GetMoonConstellation(birthTime);
             var birthDasaPlanet = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
-            var fullYears = GetDasaPlanetFullYears(birthDasaPlanet);
+            var fullYears = GetPD1PlanetFullYears(birthDasaPlanet);
 
             //calculate the years left in birth dasa at birth
             var yearsLeft = fullYears - yearsTraversed;
@@ -2671,119 +2778,13 @@ namespace VedAstro.Library
             var relatedPlanet = GetConstellationDasaPlanet(constellationName);
 
             //get the full Dasa years for the related planet
-            var fullYears = GetDasaPlanetFullYears(relatedPlanet);
+            var fullYears = GetPD1PlanetFullYears(relatedPlanet);
 
             //calculate the time in years each longitude minute represents
             var timePerMinute = fullYears / maxMinutes;
 
             return timePerMinute;
         }
-
-        /// <summary>
-        /// Gets the full Dasa years for a given planet
-        /// Note: Returns "double" so that division down the road is accurate
-        /// Ref:Hindu Predictive Astrology pg. 54
-        /// </summary>
-        public static double GetDasaPlanetFullYears(PlanetName planet)
-        {
-
-            if (planet == PlanetName.Sun) { return 6.0; }
-            if (planet == PlanetName.Moon) { return 10.0; }
-            if (planet == PlanetName.Mars) { return 7.0; }
-            if (planet == PlanetName.Rahu) { return 18.0; }
-            if (planet == PlanetName.Jupiter) { return 16.0; }
-            if (planet == PlanetName.Saturn) { return 19.0; }
-            if (planet == PlanetName.Mercury) { return 17.0; }
-            if (planet == PlanetName.Ketu) { return 7.0; }
-            if (planet == PlanetName.Venus) { return 20.0; }
-
-            //if no plant found something wrong
-            throw new Exception("Planet not found!");
-
-        }
-
-
-        /// <summary>
-        /// Gets the full years of a bhukti planet in a dasa
-        /// </summary>
-        public static double GetBhuktiPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet)
-        {
-            //120 years is the total of all the dasa planet's years
-            const double fullHumanLifeYears = 120.0;
-
-            //the time a bhukti planet consumes in a dasa is
-            //a fixed percentage it consumes in a person's full life
-            var bhuktiPlanetPercentage = GetDasaPlanetFullYears(bhuktiPlanet) / fullHumanLifeYears;
-
-            //bhukti planet's years in a dasa is percentage of the dasa planet's full years
-            var bhuktiPlanetFullYears = bhuktiPlanetPercentage * GetDasaPlanetFullYears(dasaPlanet);
-
-            //return the calculated value
-            return bhuktiPlanetFullYears;
-
-        }
-
-        /// <summary>
-        /// Gets the full years of an antaram planet in a bhukti of a dasa
-        /// </summary>
-        public static double GetAntaramPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet, PlanetName antaramPlanet)
-        {
-            //120 years is the total of all the dasa planet's years
-            const double fullHumanLifeYears = 120.0;
-
-            //the time an antaram planet consumes in a bhukti is
-            //a fixed percentage it consumes in a person's full life
-            var antaramPlanetPercentage = GetDasaPlanetFullYears(antaramPlanet) / fullHumanLifeYears;
-
-            //Antaram planet's full years is a percentage of the Bhukti planet's full years
-            var antaramPlanetFullYears = antaramPlanetPercentage * GetBhuktiPlanetFullYears(dasaPlanet, bhuktiPlanet);
-
-            //return the calculated value
-            return antaramPlanetFullYears;
-
-        }
-
-        /// <summary>
-        /// Gets the full time of an Sukshma planet 
-        /// Sukshma is a Sanskrit word meaning "subtle" or "dormant." The presence of sukshma is felt, but not seen.
-        /// </summary>
-        public static double GetSukshmaPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet, PlanetName antaramPlanet, PlanetName sukshmaPlanet)
-        {
-            //120 years is the total of all the dasa planet's years
-            const double fullHumanLifeYears = 120.0;
-
-            //the time an sukshma planet consumes in a antaram is
-            //a fixed percentage it consumes in a person's full life
-            var sukshmaPlanetPercentage = GetDasaPlanetFullYears(sukshmaPlanet) / fullHumanLifeYears;
-
-            //sukshma planet's full years is a percentage of the Antaram planet's full years
-            var sukshmaPlanetFullYears = sukshmaPlanetPercentage * GetAntaramPlanetFullYears(dasaPlanet, bhuktiPlanet, antaramPlanet);
-
-            //return the calculated value
-            return sukshmaPlanetFullYears;
-
-        }
-
-        /// <summary>
-        /// Gets the full time of an Prana planet 
-        /// </summary>
-        public static double GetPranaPlanetFullYears(PlanetName dasaPlanet, PlanetName bhuktiPlanet, PlanetName antaramPlanet, PlanetName sukshmaPlanet, PlanetName pranaPlanet)
-        {
-            //120 years is the total of all the dasa planet's years
-            const double fullHumanLifeYears = 120.0;
-
-            //the time an Prana planet consumes in a Sukshma is
-            //a fixed percentage it consumes in a person's full life
-            var pranaPlanetPercentage = GetDasaPlanetFullYears(pranaPlanet) / fullHumanLifeYears;
-
-            //Prana planet's full time is a percentage of the Sukshma planet's full time
-            var pranaPlanetFullTime = pranaPlanetPercentage * GetSukshmaPlanetFullYears(dasaPlanet, bhuktiPlanet, antaramPlanet, sukshmaPlanet);
-
-            //return the calculated value
-            return pranaPlanetFullTime;
-
-        }
-
 
         /// <summary>
         /// Gets the related (lord) Dasa planet for a given constellation
@@ -2843,6 +2844,162 @@ namespace VedAstro.Library
             //if it reaches here something wrong
             throw new Exception("Dasa planet for constellation not found!");
         }
+
+
+
+
+        /// <summary>
+        /// Gets the full Dasa years for a given planet
+        /// Note: Returns "double" so that division down the road is accurate
+        /// Ref:Hindu Predictive Astrology pg. 54
+        /// </summary>
+        public static double GetPD1PlanetFullYears(PlanetName planet)
+        {
+
+            if (planet == PlanetName.Sun) { return 6.0; }
+            if (planet == PlanetName.Moon) { return 10.0; }
+            if (planet == PlanetName.Mars) { return 7.0; }
+            if (planet == PlanetName.Rahu) { return 18.0; }
+            if (planet == PlanetName.Jupiter) { return 16.0; }
+            if (planet == PlanetName.Saturn) { return 19.0; }
+            if (planet == PlanetName.Mercury) { return 17.0; }
+            if (planet == PlanetName.Ketu) { return 7.0; }
+            if (planet == PlanetName.Venus) { return 20.0; }
+
+            //if no plant found something wrong
+            throw new Exception("Planet not found!");
+
+        }
+
+        /// <summary>
+        /// Gets the full years of a bhukti planet in a dasa
+        /// </summary>
+        public static double GetPD2PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time a bhukti planet consumes in a dasa is
+            //a fixed percentage it consumes in a person's full life
+            var bhuktiPlanetPercentage = GetPD1PlanetFullYears(pd2Planet) / fullHumanLifeYears;
+
+            //bhukti planet's years in a dasa is percentage of the dasa planet's full years
+            var bhuktiPlanetFullYears = bhuktiPlanetPercentage * GetPD1PlanetFullYears(pd1Planet);
+
+            //return the calculated value
+            return bhuktiPlanetFullYears;
+
+        }
+
+        /// <summary>
+        /// Gets the full years of an antaram planet in a bhukti of a dasa
+        /// </summary>
+        public static double GetPD3PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time an antaram planet consumes in a bhukti is
+            //a fixed percentage it consumes in a person's full life
+            var antaramPlanetPercentage = GetPD1PlanetFullYears(pd3Planet) / fullHumanLifeYears;
+
+            //Antaram planet's full years is a percentage of the Bhukti planet's full years
+            var antaramPlanetFullYears = antaramPlanetPercentage * GetPD2PlanetFullYears(pd1Planet, pd2Planet);
+
+            //return the calculated value
+            return antaramPlanetFullYears;
+
+        }
+
+        /// <summary>
+        /// Gets the full time of an Sukshma planet 
+        /// Sukshma is a Sanskrit word meaning "subtle" or "dormant." The presence of sukshma is felt, but not seen.
+        /// </summary>
+        public static double GetPD4PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time an sukshma planet consumes in a antaram is
+            //a fixed percentage it consumes in a person's full life
+            var sukshmaPlanetPercentage = GetPD1PlanetFullYears(pd4Planet) / fullHumanLifeYears;
+
+            //sukshma planet's full years is a percentage of the Antaram planet's full years
+            var sukshmaPlanetFullYears = sukshmaPlanetPercentage * GetPD3PlanetFullYears(pd1Planet, pd2Planet, pd3Planet);
+
+            //return the calculated value
+            return sukshmaPlanetFullYears;
+
+        }
+
+        /// <summary>
+        /// Gets the full time of an Prana planet 
+        /// </summary>
+        public static double GetPD5PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time an PD5 planet consumes in a PD4 is
+            //a fixed percentage it consumes in a person's full life
+            var pd5PlanetPercentage = GetPD1PlanetFullYears(pd5Planet) / fullHumanLifeYears;
+
+            //Prana planet's full time is a percentage of the Sukshma planet's full time
+            var pd5PlanetFullTime = pd5PlanetPercentage * GetPD4PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, pd4Planet);
+
+            //return the calculated value
+            return pd5PlanetFullTime;
+
+        }
+        public static double GetPD6PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time an PD6 planet consumes in a PD5 is
+            //a fixed percentage it consumes in a person's full life
+            var pd6PlanetPercentage = GetPD1PlanetFullYears(pd6Planet) / fullHumanLifeYears;
+
+            //Prana planet's full time is a percentage of the Sukshma planet's full time
+            var pd6PlanetFullTime = pd6PlanetPercentage * GetPD5PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, pd4Planet, pd5Planet);
+
+            //return the calculated value
+            return pd6PlanetFullTime;
+
+        }
+        public static double GetPD7PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet, PlanetName pd7Planet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time an PD7 planet consumes in a PD6 is
+            //a fixed percentage it consumes in a person's full life
+            var pd7PlanetPercentage = GetPD1PlanetFullYears(pd7Planet) / fullHumanLifeYears;
+
+            //Prana planet's full time is a percentage of the Sukshma planet's full time
+            var pd7PlanetFullTime = pd7PlanetPercentage * GetPD6PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, pd4Planet, pd5Planet, pd6Planet);
+
+            //return the calculated value
+            return pd7PlanetFullTime;
+
+        }
+        public static double GetPD8PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet, PlanetName pd7Planet, PlanetName pd8Planet)
+        {
+            //120 years is the total of all the dasa planet's years
+            const double fullHumanLifeYears = 120.0;
+
+            //the time an PD8 planet consumes in a PD7 is
+            //a fixed percentage it consumes in a person's full life
+            var pd8PlanetPercentage = GetPD1PlanetFullYears(pd8Planet) / fullHumanLifeYears;
+
+            //PD8 planet's full time is a percentage of the Sukshma planet's full time
+            var pd8PlanetFullTime = pd8PlanetPercentage * GetPD7PlanetFullYears(pd1Planet, pd2Planet, pd3Planet, pd4Planet, pd5Planet, pd6Planet, pd7Planet);
+
+            //return the calculated value
+            return pd8PlanetFullTime;
+
+        }
+
 
         #endregion
 

@@ -29,18 +29,25 @@ namespace VedAstro.Library
         BuyingSelling,
         Building,
         Gochara,
-        Dasa,
-        Bhukti,
-        Antaram,
-        Sukshma, // weeks
-        Prana, // days
-        DasaSpecialRules,
         Horoscope,
         Tarabala,
         Chandrabala,
         Travel,
         RisingSign, //used in birth time finder
-        GocharaSummary
+        GocharaSummary,
+
+        //DASA STUFF
+        PD1,
+        PD2,
+        PD3,
+        PD4, 
+        PD5, 
+        PD6, 
+        PD7, 
+        PD8, 
+
+        DasaSpecialRules,
+
     }
 
     public static class EventTagExtensions

@@ -423,7 +423,7 @@ namespace API
 
                 //generate the needed charts
                 var chartList = new List<EventsChart>();
-                var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Gochara, EventTag.DasaSpecialRules };
+                var dasaEventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.PD7, EventTag.PD8, EventTag.Gochara };
                 //PRECISION
                 //calculate based on max screen width,
                 //done for fast calculation only for needed viewability

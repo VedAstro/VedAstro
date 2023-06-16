@@ -13,6 +13,15 @@ using Microsoft.Extensions.Caching.Memory;
 //using Xfrogcn.BinaryFormatter;
 #pragma warning disable SYSLIB0011
 
+
+//IF I LIVED IN A WORLD WHERE JESUS DID NOT WALK
+//I'LL NEVER PUT ALL MY WEIGHT ON THE NEXT STEP I TAKE
+//
+//BUT I LIVE IN A WORLD WHERE JESUS DID WALK
+//AND SO I'LL PUT ALL MY WEIGHT ON THE NEXT STEP I TAKE
+//
+//AS HE DID
+
 namespace VedAstro.Library
 {
     /// <summary>

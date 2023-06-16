@@ -193,23 +193,6 @@ namespace Website
 
         public static void ReloadPage(NavigationManager navigation) => navigation.NavigateTo(navigation.Uri, forceLoad: true);
 
-        /// <summary>
-        /// Gets Dasa events from API
-        /// </summary>
-        public static async Task<List<Event>?> GetDasaEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person)
-            => await EventsByTag(EventTag.Dasa, _eventsPrecision, startTime, endTime, _jsRuntime, person);
-
-        /// <summary>
-        /// Gets Bhukti events from API
-        /// </summary>
-        public static async Task<List<Event>?> GetBhuktiEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person)
-            => await EventsByTag(EventTag.Bhukti, _eventsPrecision, startTime, endTime, _jsRuntime, person);
-
-        /// <summary>
-        /// Gets Antaram events from API
-        /// </summary>
-        public static async Task<List<Event>?> GetAntaramEvents(double _eventsPrecision, Time startTime, Time endTime, IJSRuntime _jsRuntime, Person person)
-            => await EventsByTag(EventTag.Antaram, _eventsPrecision, startTime, endTime, _jsRuntime, person);
 
         /// <summary>
         /// gets events from server filtered by event tag

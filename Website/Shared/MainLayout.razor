@@ -66,11 +66,7 @@
                         <Icon IconName="material-symbols:menu-open-rounded" Size="30" />
                     </button>
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                        <div class="offcanvas-header">
-                            <h6 class="offcanvas-title" id="offcanvasNavbarLabel">Mobile Menu</h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
+                        <div class="offcanvas-body" data-bs-dismiss="offcanvas"> <!--Needed close mobile menu onclick-->
                             <div class="d-flex flex-wrap gap-2 mb-2 p-2 rounded-3 border shadow"><TopBarButtons /></div>
                             <hr />
                             <div class="vstack gap-2 mb-2 p-2 rounded-3 border shadow"><SideBarButtons /></div>

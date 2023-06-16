@@ -2493,7 +2493,7 @@
 
 	<!--Sun Dasa-->
 	<Event>
-		<Name>AriesSunDasa</Name>
+		<Name>AriesSunPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			The Dasa of the Sun in Aries in deep exaltation.- Sudden
@@ -2502,186 +2502,186 @@
 			friends and relations, pleasure trips and picnic parties and
 			company of beautiful women.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusSunDasa</Name>
+		<Name>TaurusSunPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Taurus - Increase in landed properties, fame among relations
 			and friends, cultivation of love and reverence for holy people
 			and saints.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiSunDasa</Name>
+		<Name>GeminiSunPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Gemini - Much wealth, education, inclination
 			to interest oneself in music and such other fine arts, and
 			generally happy and cheerful.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerSunDasa</Name>
+		<Name>CancerSunPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Cancer - Political success,
 			always gay and happy, traveling in foreign countries and
 			increase in lands, houses and wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoSunDasa</Name>
+		<Name>LeoSunPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Leo - Respect from
 			kings and noble personages, righteous conduct, birth of
 			children and respect among children.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoSunDasa</Name>
+		<Name>VirgoSunPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Virgo - Suffering off
 			and on from physical complaints, loss of cattle, wealth and
 			house and misunderstandings with close relatives and friends.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraSunDasa</Name>
+		<Name>LibraSunPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Libra - Reduced to poverty, troubled by enemies, failure in
 			undertakings, death of brothers and friends and miserable
 			and complicated life.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioSunDasa</Name>
+		<Name>ScorpioSunPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Scorpio - Starting new schemes and
 			enterprises, realization of many ambitious things, travelling
 			in hilly tracts and countries.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusSunDasa</Name>
+		<Name>SagittariusSunPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Happiness, success in undertakings, good health, destruction of enemies, satisfaction
 			in every way.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusSunDasa</Name>
+		<Name>CapricornusSunPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Capricorn - A wandering life, loss of
 			patrimony, self-respect and good name, misunderstanding
 			among his own people.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusSunDasa</Name>
+		<Name>AquariusSunPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Aquarius - Mental worries, loss or
 			illness to wife, loss of property and wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesSunDasa</Name>
+		<Name>PiscesSunPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Pisces - Gains
 			in wealth, auspicious celebrations, respect among relations,
 			increase in family members and smooth sailing in every way.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 	<!--Moon Dasa-->
 	<Event>
-		<Name>AriesMoonDasa</Name>
+		<Name>AriesMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			The Moon in Aries - Physical and mental happiness,
 			gains in wealth and perfect contentment.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusMoonDasa</Name>
+		<Name>TaurusMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Taurus - Increase
 			in fame and name, collection of enormous wealth, mental and
 			physical happiness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiMoonDasa</Name>
+		<Name>GeminiMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Gemini - Progress in education and
 			acquiring of much immovable and movable properties.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerMoonDasa</Name>
+		<Name>CancerMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Cancer - Addition in wealth, success in litigation, unexpected findings
 			of treasure, travels.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoMoonDasa</Name>
+		<Name>LeoMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Leo - Progress in education, much gains
 			from unexpected sources.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoMoonDasa</Name>
+		<Name>VirgoMoonPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Virgo - Death of serious illness to
 			mother, worries from enemies and swindlers, mental and
 			physical restlessness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraMoonDasa</Name>
+		<Name>LibraMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Libra - Gains in wealth, increase in
 			friends, visits to holy places and shrines, realisation of
 			schemes and destruction of enemies.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioMoonDasa</Name>
+		<Name>ScorpioMoonPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Scorpio - Fear from
@@ -2689,90 +2689,90 @@
 			every respect, loss of wealth, liberty and honor at risk and
 			much mental uneasiness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusMoonDasa</Name>
+		<Name>SagittariusMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Domestic happiness and felicity, celebration of happy functions, accumulation of
 			wealth and undisturbed progress of normal private affairs.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusMoonDasa</Name>
+		<Name>CapricornusMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Increase in lands and houses and wealth, success
 			in every new enterprise, pilgrimages to holy places and success
 			in litigation.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusMoonDasa</Name>
+		<Name>AquariusMoonPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Aquarius - Destruction of property, fear from
 			political authorities, mental worries from enemies, misunderstandings
 			among relatives and friends.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesMoonDasa</Name>
+		<Name>PiscesMoonPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Pisces - Taking
 			charges of fresh office, reciting religious texts and moral codes
 			and easy access to anything coveted without effort.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 	<!--Mars Dasa-->
 	<Event>
-		<Name>AriesMarsDasa</Name>
+		<Name>AriesMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Aries - Acquisition of wealth, increase in reputation
 			and respect, much gain.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusMarsDasa</Name>
+		<Name>TaurusMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Taurus - Destruction of
 			enemies, success in all struggles, respect from elders and rulers
 			and good produce from lands.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiMarsDasa</Name>
+		<Name>GeminiMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Gemini - Access to great
 			wealth, precious· stones and me~ agricultural success,
 			general success in all undertakings.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerMarsDasa</Name>
+		<Name>CancerMarsPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Cancer - Danger from
 			enemies, of honour and reputation, domestic disharmony and
 			misunderstandings among brothers or close relatives.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoMarsDasa</Name>
+		<Name>LeoMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Leo - Happy
@@ -2780,10 +2780,10 @@
 			in fine arts and material gains through them, increase of income
 			from house and lands.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoMarsDasa</Name>
+		<Name>VirgoMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Virgo - Beneficial results, successful
@@ -2791,49 +2791,49 @@
 			meetings and deliver lectures, and happiness from relatives
 			and friends.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraMarsDasa</Name>
+		<Name>LibraMarsPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Libra - Most miserable life, misunderstandings
 			with cousins and brothers, death of wife and children, loss of
 			wealth and grains and mortgaging of landed property.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioMarsDasa</Name>
+		<Name>ScorpioMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Scorpio - Increase in wealth, good earnings, friendship and intimacy with exalted personages,
 			love for own people, always happy and active.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusMarsDasa</Name>
+		<Name>SagittariusMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Earnings from political or royal
 			sources, courting their friendships, destruction of enemies and
 			realisation of all hopes and desires.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusMarsDasa</Name>
+		<Name>CapricornusMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Success in
 			battles and respect for military skill, gains from quadrupeds
 			and increase in wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusMarsDasa</Name>
+		<Name>AquariusMarsPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Aquarius - Great hardships and
@@ -2841,22 +2841,22 @@
 			superiors in office, unpleasant relations with mother and
 			servants.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesMarsDasa</Name>
+		<Name>PiscesMarsPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Pisces - Much wealth, general success and
 			happiness. bumper crops in lands, prosperity and acquisition
 			of house and business, respect as a learned man, great reputation.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 	<!--Rahu Dasa-->
 	<Event>
-		<Name>AriesRahuDasa</Name>
+		<Name>AriesRahuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Rahu In Aries - Auspicious celebrations in the house,
@@ -2864,50 +2864,50 @@
 			perfect domestic happiness, respect from rulers and a life of
 			harmony in every respect.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusRahuDasa</Name>
+		<Name>TaurusRahuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Taurus - Pilgrimages to shrines
 			and holy places, increase in philosophical knowledge, entertainments,
 			gains from cattle and dealings with quadrupeds.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiRahuDasa</Name>
+		<Name>GeminiRahuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Gemini - Multiplication of enemies, always peevish and short tempered,
 			fear from police and magistrates, sickness to wife
 			and family, misunderstandings and disfavour.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerRahuDasa</Name>
+		<Name>CancerRahuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Cancer - Serving the suffering, humanitarian propaganda, zeal and
 			enthusiasm for national service, gains and increase in wealth,
 			riches and honour and great reputation.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoRahuDasa</Name>
+		<Name>LeoRahuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Leo - Fear of imprisonment of fraud and deception or misappropriation or
 			political offenses, destruction of property and mental worries
 			distractions.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoRahuDasa</Name>
+		<Name>VirgoRahuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Virgo - Gain in wealth, general prosperity and
@@ -2915,10 +2915,10 @@
 			respect for learning, sexual happiness and domestic
 			harmony, birth of children and sudden access to much wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraRahuDasa</Name>
+		<Name>LibraRahuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Libra - Destruction of property, loss of wealth, waste of
@@ -2927,10 +2927,10 @@
 			hardships, business failure, litigation troubles and physical
 			and mental sufferings.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioRahuDasa</Name>
+		<Name>ScorpioRahuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Scorpio - Rahu is debilitated here
@@ -2939,10 +2939,10 @@
 			to bid farewell to moral aspect of life, failure in business
 			enterprises and mental discontentment.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusRahuDasa</Name>
+		<Name>SagittariusRahuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Acquisition
@@ -2950,10 +2950,10 @@
 			great success in any undertakings, loss of near and dear
 			relatives and mental unrest.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusRahuDasa</Name>
+		<Name>CapricornusRahuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Sudden promotions
@@ -2961,20 +2961,20 @@
 			and rulers, marriage festivities at home, increase of wealth
 			and general prosperity.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusRahuDasa</Name>
+		<Name>AquariusRahuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Aquarius - Orphanage, disappointments,
 			mental derangement and affection, sorrowful news,
 			loss of wife or children, premature death and mean instincts.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesRahuDasa</Name>
+		<Name>PiscesRahuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Pisces - Great fear in life from thieves, swindlers and such
@@ -2984,12 +2984,12 @@
 			in a friendly or unfriendly sign, in the house of loss or gain,
 			wife or children, etc., should be correctly determined.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 	<!--Jupiter Dasa-->
 	<Event>
-		<Name>AriesJupiterDasa</Name>
+		<Name>AriesJupiterPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter in Aries - Acquisition of landed property, general
@@ -2997,10 +2997,10 @@
 			elevation to a responsible office or appointment as a trustee
 			and great respect from his or her own people.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusJupiterDasa</Name>
+		<Name>TaurusJupiterPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Taurus - If a king or a president - access to new territories, fresh treaties
@@ -3008,20 +3008,20 @@
 			of business on a firm foundation, gains in trade
 			and agriculture, increase in lands and cattle, respect from friends and foes.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiJupiterDasa</Name>
+		<Name>GeminiJupiterPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Gemini - Death of wife if married or
 			sweet heart, loss of children, brothers and cousins, deportation,
 			fear from rulers and mental uneasiness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerJupiterDasa</Name>
+		<Name>CancerJupiterPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Cancer - Jupiter is exalted here and gives all beneficial results such as much
@@ -3030,19 +3030,19 @@
 			sources and without efforts, journalistic success, minister of
 			education or lands and perfect harmony in domestic life.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoJupiterDasa</Name>
+		<Name>LeoJupiterPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Leo - Respect from rulers, gain of lands, much agricultural
 			produce, and realisation of one's own desires and ambitions.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoJupiterDasa</Name>
+		<Name>VirgoJupiterPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Virgo - Residence in foreign countries, destruction of wife
@@ -3050,10 +3050,10 @@
 			strife, body ill-health and symptoms of nervous
 			troubles and diseases.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraJupiterDasa</Name>
+		<Name>LibraJupiterPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Libra - Residence in desolate places,
@@ -3061,10 +3061,10 @@
 			reform, selfish interests, great and unbearable difficulties and
 			troubles, tendency to create factions in societies and families.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioJupiterDasa</Name>
+		<Name>ScorpioJupiterPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Scorpio - Mental calm and happiness, acquisition of new
@@ -3073,20 +3073,20 @@
 			over sensual passions, reputation at stake if aspected by
 			malefics.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusJupiterDasa</Name>
+		<Name>SagittariusJupiterPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Many sons, much wealth, success in
 			every undertaking, increase in relations and family members.
 			widespread fame and perfect happiness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusJupiterDasa</Name>
+		<Name>CapricornusJupiterPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Capricorn - Death or
@@ -3095,19 +3095,19 @@
 			sacred institutions, predominance of mean motives, liable to
 			prosecution and the upspringing of numerous enemies.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusJupiterDasa</Name>
+		<Name>AquariusJupiterPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Aquarius - Consumption and fear from wild beasts, animals,
 			bad luck, many hardships and loss of wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesJupiterDasa</Name>
+		<Name>PiscesJupiterPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Pisces - Much
@@ -3115,12 +3115,12 @@
 			and gt1in from exhibition of knowledge, acquisition of
 			property and general success and happiness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 	<!--Saturn Dasa-->
 	<Event>
-		<Name>AriesSaturnDasa</Name>
+		<Name>AriesSaturnPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn In Aries - The worst period in a man's career,
@@ -3128,40 +3128,40 @@
 			among relatives and friends and increase in the
 			number of enemies.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusSaturnDasa</Name>
+		<Name>TaurusSaturnPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Taurus - Success and gains in agricultural
 			operations, much prosperity to the cattle and other domestic
 			animals, great income, and access to things desired.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiSaturnDasa</Name>
+		<Name>GeminiSaturnPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Gemini - Recognition of his services, great humanitarian work, profits
 			in speculations and trade, respect from rulers, political
 			success, reputation, fame and much general happiness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerSaturnDasa</Name>
+		<Name>CancerSaturnPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Cancer - Miseries and calamities, family strife, increase of
 			enemies, trouble from relatives and physical diseases and mental
 			affliction.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoSaturnDasa</Name>
+		<Name>LeoSaturnPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Leo - A period of uneasiness, distrust, disappointments
@@ -3169,19 +3169,19 @@
 			prosecution if Saturn is afflicted powerfully, hatred by all and
 			courting death as a source of relief from mental worries.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoSaturnDasa</Name>
+		<Name>VirgoSaturnPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Virgo - Elevation to exalted positions, royal favour, business
 			success and establishment of fame and reputation.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraSaturnDasa</Name>
+		<Name>LibraSaturnPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Libra - Travelling in countries inhabited by Christians and Moslems,
@@ -3190,20 +3190,20 @@
 			great honour and respect throughout the long period of 19 years
 			and perfect domestic happiness.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioSaturnDasa</Name>
+		<Name>ScorpioSaturnPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Scorpio - Odium of superiors,
 			disliked and hated by all, loss or prestige, self-respect and
 			fame and destruction and damage to property and possessions.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusSaturnDasa</Name>
+		<Name>SagittariusSaturnPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Inclination to study philosophical and religious
@@ -3211,42 +3211,42 @@
 			marriage ceremonies, etc., at home and happiness and mental
 			peace throughout.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusSaturnDasa</Name>
+		<Name>CapricornusSaturnPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Increase in lands, gains in
 			wealth and business, friendship with great and illustrious
 			personages.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusSaturnDasa</Name>
+		<Name>AquariusSaturnPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Aquarius - Great travelling in Western countries,
 			success in litigation, mental happiness and acquisition of
 			wealth.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesSaturnDasa</Name>
+		<Name>PiscesSaturnPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Pisces - Pilgrimage to sacred shrines and holy
 			places, indifference towards sectarian restrictions and observances,
 			sorrows, misery and unrest.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 	<!--Mercury Dasa-->
 	<Event>
-		<Name>AriesMercuryDasa</Name>
+		<Name>AriesMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury in Aries - Marriage, performance of religious and
@@ -3254,10 +3254,10 @@
 			favour of rulers, gains from cultivation. cattle, precious
 			stones and conveyances and happiness through these.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusMercuryDasa</Name>
+		<Name>TaurusMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Taurus - Great happiness, sexual contact with beautiful young
@@ -3265,10 +3265,10 @@
 			men, acquaintance of sweet girls and their company and
 			practice of music and kindred sciences.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiMercuryDasa</Name>
+		<Name>GeminiMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Gemini - Access to
@@ -3277,10 +3277,10 @@
 			wealth, happiness from wife and children, marriage ceremonies
 			and recitation of sacred scriptures.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerMercuryDasa</Name>
+		<Name>CancerMercuryPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Cancer - Degradation,
@@ -3288,10 +3288,10 @@
 			confinement in chains, hatred of relations, loss of lands.
 			failure of crops and comity with all.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoMercuryDasa</Name>
+		<Name>LeoMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Leo - Good courage
@@ -3300,10 +3300,10 @@
 			knowledge, expeditions to mountains, caves and similar
 			places, marriage and great reputation.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoMercuryDasa</Name>
+		<Name>VirgoMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Virgo - The most
@@ -3312,30 +3312,30 @@
 			health, marriage in the house, increase in intelligence, religiousness,
 			charitable foundings, and unexpected gains.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraMercuryDasa</Name>
+		<Name>LibraMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Libra - Great works published in the native's name, favour of
 			wealthy and educated people without effort, and leadership
 			over men.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioMercuryDasa</Name>
+		<Name>ScorpioMercuryPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Scorpio - Loss or wife, children, riches, mental
 			troubles, losses from merchandise, great hatred of people and
 			relations and loss of reputation and power.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusMercuryDasa</Name>
+		<Name>SagittariusMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Success
@@ -3344,10 +3344,10 @@
 			travelling in Eastern countries, inclination for marital enterprises
 			and great exhilaration.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusMercuryDasa</Name>
+		<Name>CapricornusMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Success in trade,
@@ -3356,20 +3356,20 @@
 			contemplations, patronage of kings, destruction of foes and
 			enemies and general success in life.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusMercuryDasa</Name>
+		<Name>AquariusMercuryPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Aquarius - Acquisition
 			of paraphernalia, access to good and much wealth, indulging
 			in a pleasurely life and good fame and name.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesMercuryDasa</Name>
+		<Name>PiscesMercuryPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Pisces - Trouble
@@ -3377,12 +3377,12 @@
 			quarrels with relatives, mental derangement, nervous breakdown
 			and failure in attempts.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 	<!--Ketu Dasa-->
 	<Event>
-		<Name>AriesKetuDasa</Name>
+		<Name>AriesKetuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu in Aries - Disgrace, troubles from relatives, loss of
@@ -3391,10 +3391,10 @@
 			mother and wife or their serious sickness, want of prudence
 			and capacity in private matters.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusKetuDasa</Name>
+		<Name>TaurusKetuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Taurus - Many dangers,
@@ -3404,10 +3404,10 @@
 			compunction and in the end appeasing sins by resort to foul
 			stratagems.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiKetuDasa</Name>
+		<Name>GeminiKetuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Gemini - Good health, happiness, elevation to responsible
@@ -3416,10 +3416,10 @@
 			troubles, death of near relation and loss of reputation and
 			self-respect.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerKetuDasa</Name>
+		<Name>CancerKetuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Cancer - Many dangers, disturbances from his
@@ -3427,10 +3427,10 @@
 			or children, and if badly afflicted, their death, quarrels with
 			friends, initiation into the mysteries of philosophical knowledge.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoKetuDasa</Name>
+		<Name>LeoKetuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Leo - Increase of lands, cultivation. progress in education,
@@ -3440,20 +3440,20 @@
 			mountainous tracts and billy countries to spread any righteous
 			cause, and treated to great musical entertainment.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoKetuDasa</Name>
+		<Name>VirgoKetuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Virgo - Fear from fires, weapons and poisonous gases, beasts and reptiles,
 			destruction of dear lives, properties and self-respect,
 			unrighteous acts and nasty venereal complaints.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraKetuDasa</Name>
+		<Name>LibraKetuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Libra - Happiness
@@ -3462,10 +3462,10 @@
 			stones, headache, heart disease, nervous breakdown, trouble
 			in the anus and much discontent.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioKetuDasa</Name>
+		<Name>ScorpioKetuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Scorpio - Living dependent
@@ -3474,10 +3474,10 @@
 			from among the members of the fair sex and liable
 			to suffer from venereal complaints.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusKetuDasa</Name>
+		<Name>SagittariusKetuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Perfect
@@ -3485,10 +3485,10 @@
 			progress in education, religious discussions, moral elevation
 			and manifestation of a spirit of tolerance and equality.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusKetuDasa</Name>
+		<Name>CapricornusKetuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Capricorn - Misappropriation of private and governmental
@@ -3497,20 +3497,20 @@
 			anxiety about everything, misunderstanding with relations
 			and disgrace and disappointments.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusKetuDasa</Name>
+		<Name>AquariusKetuPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Aquarius - Hating all and hated by all, incurring the displeasure of superiors,
 			pessimistic about every hope, abject dependency and servile flattery; in the end,
 			happiness and prosperity to wife and children.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesKetuDasa</Name>
+		<Name>PiscesKetuPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Pisces - Learned discussions, general success, helping
@@ -3519,12 +3519,12 @@
 			moral and religious devotions, vigorous and clear understanding,
 			travel on water to distant countries and respect there.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 	<!--Venus Dasa-->
 	<Event>
-		<Name>AriesVenusDasa</Name>
+		<Name>AriesVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus in Aries - Residence in palatial buildings, acquaintance
@@ -3532,10 +3532,10 @@
 			earnings, spread of fame, much respect, birth of child, happy
 			sexual relations and praised by friends and enemies.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>TaurusVenusDasa</Name>
+		<Name>TaurusVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Taurus - A life of great ease and indulgence throughout the period of
@@ -3544,10 +3544,10 @@
 			particularly southern, all ambitions of life fairly realised,
 			redemption from debts, symptoms of venereal troubles.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>GeminiVenusDasa</Name>
+		<Name>GeminiVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Gemini - Gain of territory, affording
@@ -3556,10 +3556,10 @@
 			harmony with wife, mental peace and a check over inclination
 			to indulge in loose life.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CancerVenusDasa</Name>
+		<Name>CancerVenusPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Cancer - Paroxysms of grief and terror, destruction of property,
@@ -3567,10 +3567,10 @@
 			of enemies, loss of wealth, disturbance to good work
 			and some mental ease in the end.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LeoVenusDasa</Name>
+		<Name>LeoVenusPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Leo - Mental disease and
@@ -3580,10 +3580,10 @@
 			sickness to the better half or a child, stigma on self-respect
 			due to mean fellows and inclination to conceal true identity.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>VirgoVenusDasa</Name>
+		<Name>VirgoVenusPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Virgo - Quarrels with wife or husband and separation from
@@ -3593,10 +3593,10 @@
 			unrest, separation from relatives and friends and much grief
 			and sorrow.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>LibraVenusDasa</Name>
+		<Name>LibraVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Libra - Great reputation, gain of wealth from
@@ -3604,30 +3604,30 @@
 			invitations and worships of mammon and a period of extreme
 			sensuality.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>ScorpioVenusDasa</Name>
+		<Name>ScorpioVenusPD1</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Scorpio - Hatred for all, many miseries and
 			troubles, serious risks, vengeance against relatives, loss of
 			wealth and property, mental affliction and imbalance.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>SagittariusVenusDasa</Name>
+		<Name>SagittariusVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Sagittarius - Much fame and name, religious _and philosophical
 			studies, recitation of sacred writings, regard for holy people
 			and ascetics, success in any undertakings and general prosperity.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>CapricornusVenusDasa</Name>
+		<Name>CapricornusVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Capricorn - Travels in foreign lands, freedom from
@@ -3636,10 +3636,10 @@
 			development of perverted ideas of social or religious reform
 			and success in all endeavors.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>AquariusVenusDasa</Name>
+		<Name>AquariusVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Aquarius - Acquisition of
@@ -3648,10 +3648,10 @@
 			and its studies, stray intercourse with senile women, domestic
 			happiness and harmony.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 	<Event>
-		<Name>PiscesVenusDasa</Name>
+		<Name>PiscesVenusPD1</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Pisces - High political power and
@@ -3660,13 +3660,13 @@
 			perfect happiness in domestic life and smooth-sailing in every
 			respect.
 		</Description>
-		<Tag>Dasa</Tag>
+		<Tag>PD1</Tag>
 	</Event>
 
 
 	<!--SUN BHUKTI-->
 	<Event>
-		<Name>SunDasaSunBhukti</Name>
+		<Name>SunDasaSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Unpleasantness with relatives and superiors, anxieties,
@@ -3676,10 +3676,10 @@
 			and travels, gains through religious people, mental
 			sufferings, a wandering life in a foreign country.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaMoonBhukti</Name>
+		<Name>SunDasaMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			The Moon's sub-period-6 months
@@ -3689,10 +3689,10 @@
 			and kindred ailments, new clothes and ornaments, will be
 			happy, healthy, good meals, respect among relatives.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaMarsBhukti</Name>
+		<Name>SunDasaMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars' sub-period-4 months, 6 days.
@@ -3704,10 +3704,10 @@
 			diseases, mental worries, danger from fire, ill-health, loss of
 			reputation, sorrow.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaRahuBhukti</Name>
+		<Name>SunDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 10 months, 24 days.
@@ -3717,10 +3717,10 @@
 			money, sorrows, unsuccessful in all attempts, fear of thieves
 			and reptiles, scandals.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaJupiterBhukti</Name>
+		<Name>SunDasaJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period-9 months, 18 days.
@@ -3731,10 +3731,10 @@
 			virtuous acts, good traditional observances, good society and
 			conversations, reputation, gains and court-honours.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaSaturnBhukti</Name>
+		<Name>SunDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period--11 months, 12 days.
@@ -3744,10 +3744,10 @@
 			of money, disease, lacking in energy, ignoble calls, mental
 			worries, loans, danger from thieve and rulers.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaMercuryBhukti</Name>
+		<Name>SunDasaMercuryPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mercury's sub-period-IO months, 6 days.
@@ -3759,10 +3759,10 @@
 			disputes and trouble from ruler or judge, suffer
 			disgrace, many short journeys and wanderings.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaKetuBhukti</Name>
+		<Name>SunDasaKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 4 months, 6 days.
@@ -3773,10 +3773,10 @@
 			ophthalmia, serious illness, fear from kings or rulers and
 			enemies, diseases, cheated by others.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaVenusBhukti</Name>
+		<Name>SunDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus sub-period - 1 year.
@@ -3786,13 +3786,13 @@
 			stones, fatigue, addiction to immoral females and profitless
 			discussions.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 
 	<!--Moon BHUKTI-->
 	<Event>
-		<Name>MoonDasaSunBhukti</Name>
+		<Name>MoonDasaSunPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 6 months.
@@ -3803,10 +3803,10 @@
 			danger to father and mother, piles, weakness, loss of
 			children and friends.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaMoonBhukti</Name>
+		<Name>MoonDasaMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			The Moon's sub-period- 1O months.
@@ -3817,10 +3817,10 @@
 			deeds, inclination to public life, change of residence, birth of
 			a child, increase of wealth, prosperity to relatives.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaMarsBhukti</Name>
+		<Name>MoonDasaMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars's sub-period - 7 months.
@@ -3832,10 +3832,10 @@
 			instruments or stones, loss of blood and disease to household
 			animals.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaRahuBhukti</Name>
+		<Name>MoonDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 1 year, 6 months.
@@ -3847,10 +3847,10 @@
 			thieves and poison, ill-health to father and mother, suffering
 			from hunger.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaJupiterBhukti</Name>
+		<Name>MoonDasaJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period - 1 year, 4 months.
@@ -3860,10 +3860,10 @@
 			and success in undertakings, patronage or rulers, gain or
 			property, respect, learned.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaSaturnBhukti</Name>
+		<Name>MoonDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period - 1 year, 7 months.
@@ -3873,10 +3873,10 @@
 			with unfriendly people, disease due to indigestion, no peace of mind,
 			quarrels with relatives.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaMercuryBhukti</Name>
+		<Name>MoonDasaMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 1 year, 5 months.
@@ -3887,10 +3887,10 @@
 			from rulers, general happiness, enjoyment with females,
 			addiction to betting and drinks.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaKetuBhukti</Name>
+		<Name>MoonDasaKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 7 months.
@@ -3902,10 +3902,10 @@
 			among equals, eating of prohibited food, bad acts, bad
 			company, loss of money and memory.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaVenusBhukti</Name>
+		<Name>MoonDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus's sub-period - 1 year, 8 months.
@@ -3915,13 +3915,13 @@
 			houses, good works and good meals, birth of children,
 			expenses due to marriage or other auspicious acts.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 
 	<!--Mars BHUKTI-->
 	<Event>
-		<Name>MarsDasaSunBhukti</Name>
+		<Name>MarsDasaSunPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 4 months, 6 days.
@@ -3932,10 +3932,10 @@
 			other inflammatory affection, danger of fire, troubles through
 			persons in position, many enemies.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaMoonBhukti</Name>
+		<Name>MarsDasaMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			The Moon's sub-period -7 months.
@@ -3943,10 +3943,10 @@
 			improvements effected in it, comforts of wealth, heavy sleep,
 			ardent passion, enjoyment by the help or women.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaMarsBhukti</Name>
+		<Name>MarsDasaMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars's sub-period - 4 months, 27 days.
@@ -3959,10 +3959,10 @@
 			consumption, loss of blood, fistula, and fissures in anus, loss
 			of females and brothers, evil doings and boils.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaRahuBhukti</Name>
+		<Name>MarsDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 1 year, 18 days.
@@ -3975,10 +3975,10 @@
 			fear from ghosts, affection of gonorrhea, fretting and
 			litigation.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaJupiterBhukti</Name>
+		<Name>MarsDasaJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period - 11 months, 6 days.
@@ -3988,10 +3988,10 @@
 			or wealth through holy people, freedom from illness, public
 			reputation, ascendancy and happiness.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaSaturnBhukti</Name>
+		<Name>MarsDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period - 1 year, 1 month, 9 days.
@@ -4001,10 +4001,10 @@
 			quarrel, disputes, litigation, loss of property, cutaneous
 			effects. loss of office or position and much anxiety.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaMercuryBhukti</Name>
+		<Name>MarsDasaMercuryPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mercury's sub-period- 11 months, 27 days.
@@ -4015,10 +4015,10 @@
 			worries, service rendered to friends and relatives, new knowledge,
 			success in litigation.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaKetuBhukti</Name>
+		<Name>MarsDasaKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 4 months, 27 days.
@@ -4029,10 +4029,10 @@
 			diseases, poisonous complaints, trouble through women, many
 			enemies.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaVenusBhukti</Name>
+		<Name>MarsDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus's sub-period - 1 year, 2 months.
@@ -4044,12 +4044,12 @@
 			odium.of females and their society, increase of intelligence,
 			enjoyment of females and gain of money.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 	<!--Rahu BHUKTI-->
 	<Event>
-		<Name>RahuDasaSunBhukti</Name>
+		<Name>RahuDasaSunPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 1O months, 24 days.
@@ -4061,10 +4061,10 @@
 			diseases, success in examinations, private life happy,
 			much reputation and fame, but mental unrest.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaMoonBhukti</Name>
+		<Name>RahuDasaMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Moon - 1 year, 6 months.
@@ -4075,10 +4075,10 @@
 			health, sea voyages, gain of lands and money, loss or danger
 			to wife and children.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaMarsBhukti</Name>
+		<Name>RahuDasaMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars - 1 year, 18 days.
@@ -4089,10 +4089,10 @@
 			anxiety, combination of all possible calamities, bewilderment
 			in every work and culpable failure of memory.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaRahuBhukti</Name>
+		<Name>RahuDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu - 2 years, 8 months, 12 days.
@@ -4104,10 +4104,10 @@
 			diseases, illness to wife, failure of intellect, loss of wealth,
 			wandering in far-off countries and distress there.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaJupiterBhukti</Name>
+		<Name>RahuDasaJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter - 2 years, 4 months, 24 days.
@@ -4118,10 +4118,10 @@
 			the house, increase of enemies, litigations and dips in sacred
 			rivers.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaSaturnBhukti</Name>
+		<Name>RahuDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn - 2 years, 10 months, 6 days.
@@ -4131,10 +4131,10 @@
 			wind and bile, distress of relatives, friends and well-wishers,
 			residence in a remote foreign land.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaMercuryBhukti</Name>
+		<Name>RahuDasaMercuryPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mercury - 2 years, 6 months, 18 days.
@@ -4146,10 +4146,10 @@
 			relatives and family, enjoyments with prostitutes, showy,
 			gains through trade, fraudulent schemes.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaKetuBhukti</Name>
+		<Name>RahuDasaKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu - 1 year, 18 days.
@@ -4160,10 +4160,10 @@
 			honour, loss of children, death of cattle and misfortunes of
 			all kinds.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaVenusBhukti</Name>
+		<Name>RahuDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 3 years.
@@ -4174,13 +4174,13 @@
 			office, liable to deception, false friends, gain in land, birth
 			of a child or marriage.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 
 	<!--JUPITER BHUKTI-->
 	<Event>
-		<Name>JupiterDasaSunBhukti</Name>
+		<Name>JupiterDasaSunPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 9 months, 18 days.
@@ -4188,10 +4188,10 @@
 			wealth, royal favour and sound health, gain,good actions or
 			fruits of good action, loss of bodily strength.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaMoonBhukti</Name>
+		<Name>JupiterDasaMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Tbe Moon's sub-period - 1 year, 4 months.
@@ -4201,10 +4201,10 @@
 			birth or a female child or marriage to some male member in
 			the family, gain of money.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaMarsBhukti</Name>
+		<Name>JupiterDasaMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars' sub-period - 11 months, 6 days.
@@ -4215,20 +4215,20 @@
 			pilgrimage to temples, acquisition of wealth and fame,
 			adventures.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaRahuBhukti</Name>
+		<Name>JupiterDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 2 years, 4 months, 24 days.
 			Income through low-caste people, apprehension of diseases,
 			possibility of every possible calamity, deprivation of wealth.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaJupiterBhukti</Name>
+		<Name>JupiterDasaJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period - 2 years, 1 month, 18 days.
@@ -4238,10 +4238,10 @@
 			success in all attempts, travels, dips in sacred rivers, pilgrimage,
 			honour at stake if afflicted.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaSaturnBhukti</Name>
+		<Name>JupiterDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period - 2 years, 6 months, 12 days.
@@ -4253,10 +4253,10 @@
 			unrighteous, a witness in court, quarrels in family, mental
 			depression, funeral ceremonies for others,
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaMercuryBhukti</Name>
+		<Name>JupiterDasaMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 2 years, 3 months, 6 days.
@@ -4267,10 +4267,10 @@
 			through knowledge in fine arts, birth of a well-favoured child,
 			advantages from superiors.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaKetuBhukti</Name>
+		<Name>JupiterDasaKetuPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Ketu's sub-period - 11 months, 6 days.
@@ -4280,10 +4280,10 @@
 			and friends, may forsake business, poisonous effects, loss of
 			wealth, destruction of work, illness, boils.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaVenusBhukti</Name>
+		<Name>JupiterDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus's sub-period - 2 years, 8 months.
@@ -4295,13 +4295,13 @@
 			relatives, friends, peace or mind, acquisition or valuables,
 			troubles from females and odium of public.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 
 	<!--Saturn BHUKTI-->
 	<Event>
-		<Name>SaturnDasaSunBhukti</Name>
+		<Name>SaturnDasaSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Sun - 11 months, 12 days.
@@ -4312,10 +4312,10 @@
 			wife, body full of pain and disorders, danger of death. fear of
 			death to father-in-law.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaMoonBhukti</Name>
+		<Name>SaturnDasaMoonPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Moon - 1 year, 7 months.
@@ -4326,10 +4326,10 @@
 			near relative, sorrow, dislike of relatives, coming in of money, 
 			windy diseases.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaMarsBhukti</Name>
+		<Name>SaturnDasaMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars - 1 year, 1 month, 9 days.
@@ -4338,10 +4338,10 @@
 			loss of money by fraud or theft, change of residence, serious
 			illness, distress to brothers and friends, hot diseases.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaRahuBhukti</Name>
+		<Name>SaturnDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 2 years, 10 months, 6 days.
@@ -4349,10 +4349,10 @@
 			and foes, danger of physical hurts, various physical troubles,
 			fevers, enemies, increase of troubles.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaJupiterBhukti</Name>
+		<Name>SaturnDasaJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter - 2 years, 6 months, 12 days.
@@ -4361,10 +4361,10 @@
 			the help of superiors, increase of family circles, attainment of
 			rank.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaSaturnBhukti</Name>
+		<Name>SaturnDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period 3 years, 3 days.
@@ -4376,10 +4376,10 @@
 			dispute and troubles from relatives, blood and bilious complaints,
 			quarrels in family, loss of money, mental derangement.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaMercuryBhukti</Name>
+		<Name>SaturnDasaMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 2 years, 8 months, 9 days.
@@ -4390,10 +4390,10 @@
 			benefits occurring from acts of piety and customary religious
 			observances, agriculture and commerce.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaKetuBhukti</Name>
+		<Name>SaturnDasaKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 1 year, I month, 9 days.
@@ -4401,10 +4401,10 @@
 			sons, loss of money, contentions and quarrels with vile and
 			wicked people, dread of evil dreams, quarrels in family.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaVenusBhukti</Name>
+		<Name>SaturnDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 3 years, 2 months.
@@ -4413,13 +4413,13 @@
 			members, victory over enemies, success in life, goodwill of
 			relatives, accession to wife's property and wealth.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 
 	<!--Mercury BHUKTI-->
 	<Event>
-		<Name>MercuryDasaSunBhukti</Name>
+		<Name>MercuryDasaSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Sun - 1O months, 6 days.
@@ -4428,10 +4428,10 @@
 			from enemies, many obstacles, troubles through superiors,
 			acquisition of wealth.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaMoonBhukti</Name>
+		<Name>MercuryDasaMoonPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Moon - 1 year, 5 months.
@@ -4441,10 +4441,10 @@
 			happiness, diseases, ill-will of enemies, miscarriage of every
 			concern, risk from quadrupeds.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaMarsBhukti</Name>
+		<Name>MercuryDasaMarsPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mars sub-period - 11 months, 27 days.
@@ -4456,10 +4456,10 @@
 			betting and prostitutes, boils and hurts of arms, travels in
 			forests and villages, sorrows, royal disfavour, imprisonment.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaRahuBhukti</Name>
+		<Name>MercuryDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu - 2 years, 6 months, 18 days.
@@ -4470,10 +4470,10 @@
 			headaches, sickness and loss of appetite. wealth from friends
 			and relatives, happiness, new earnings.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaJupiterBhukti</Name>
+		<Name>MercuryDasaJupiterPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Jupiter - 2 years, 3 months 6 days.
@@ -4482,10 +4482,10 @@
 			good happiness, good credit, benefits from superiors,
 			birth of a child or marriage.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaSaturnBhukti</Name>
+		<Name>MercuryDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn - 2 years, 8 months, 9 days.
@@ -4498,10 +4498,10 @@
 			wealth, material comforts through petty chiefs, failure in
 			agricultural operations.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaMercuryBhukti</Name>
+		<Name>MercuryDasaMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 2 years, 4 months, 27
@@ -4510,10 +4510,10 @@
 			or sister, increase in family, gain in business, good mind
 			charitable acts, learning of mathematics and arts.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaKetuBhukti</Name>
+		<Name>MercuryDasaKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu - 11 months, 27 days.
@@ -4523,10 +4523,10 @@
 			from relatives, mental agony, loss of comfort, dread of enemy,
 			failure in business.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaVenusBhukti</Name>
+		<Name>MercuryDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 2 years, 10 months.
@@ -4537,13 +4537,13 @@
 			not married, betrothal in this period, health, ornaments,
 			vehicles, house, money gained.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 
 	<!--Ketu BHUKTI-->
 	<Event>
-		<Name>KetuDasaSunBhukti</Name>
+		<Name>KetuDasaSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			The Sun's sub-period - 4 months, 6 days.
@@ -4552,10 +4552,10 @@
 			sickness in family, long journey and return, anxiety about
 			wife's health.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaMoonBhukti</Name>
+		<Name>KetuDasaMoonPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			The Moon's sub-period-7 months.
@@ -4564,10 +4564,10 @@
 			loss of relatives and money, destruction of wealth and
 			distress of mind.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaMarsBhukti</Name>
+		<Name>KetuDasaMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars' sub-period - 4 months, 27 days.
@@ -4580,10 +4580,10 @@
 			loss and difficulties
 			and surgical operations.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaRahuBhukti</Name>
+		<Name>KetuDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu - 1 year, 18 days.
@@ -4592,10 +4592,10 @@
 			and honour, rear of kings and robbers, sorrow, ruin of all
 			business, adultery with mean women.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaJupiterBhukti</Name>
+		<Name>KetuDasaJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter - 11 months, 6 days.
@@ -4604,10 +4604,10 @@
 			good position, danger of poison, wife an object of pleasure,
 			if unmarried marriage takes place.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaSaturnBhukti</Name>
+		<Name>KetuDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn - 1 year, 1 month, 9 days.
@@ -4618,10 +4618,10 @@
 			mental anguish, difference of opinion with relations, exile in
 			foreign countries.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaMercuryBhukti</Name>
+		<Name>KetuDasaMercuryPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mercury - 11 months 27 days.
@@ -4630,10 +4630,10 @@
 			children, failure in plans, deception, jealousy, falsehood, and
 			knowledge.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaKetuBhukti</Name>
+		<Name>KetuDasaKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 4 months, 27 days.
@@ -4642,10 +4642,10 @@
 			to some estrangement, restraint or detention, danger of
 			poison.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaVenusBhukti</Name>
+		<Name>KetuDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 1 year, 2 months.
@@ -4653,13 +4653,13 @@
 			with success, in the end sickness, wife ill, illness to children,
 			quarrels, loss of relatives and friends, fever and dysentery.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 
 	<!--Venus BHUKTI-->
 	<Event>
-		<Name>VenusDasaSunBhukti</Name>
+		<Name>VenusDasaSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Sun - 1 year.
@@ -4668,10 +4668,10 @@
 			diseases affecting head, belly and eyes, damage in respect of
 			agriculture.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaMoonBhukti</Name>
+		<Name>VenusDasaMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Moon - 1 year, 8 months.
@@ -4681,10 +4681,10 @@
 			and disease due to inflammation of nervous tissue and from
 			lust and other passions of human nature.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaMarsBhukti</Name>
+		<Name>VenusDasaMarsPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mars - 1 year, 2 months.
@@ -4695,10 +4695,10 @@
 			of females, negligence of duty, bent on pleasure and passion,
 			temporary affection of eyes.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaRahuBhukti</Name>
+		<Name>VenusDasaRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu - 3 years.
@@ -4707,10 +4707,10 @@
 			miserliness, acquisition of lost property, dislike of relatives.
 			evil from friends and injury by fire.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaJupiterBhukti</Name>
+		<Name>VenusDasaJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter - 2 years, 8 months.
@@ -4722,10 +4722,10 @@
 			increase of family reputation and good deeds, wealth.
 			ultimate happiness, wife and children suffer in the end.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaSaturnBhukti</Name>
+		<Name>VenusDasaSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn - 3 years, 2 months
@@ -4737,10 +4737,10 @@
 			bolting and gambling, addiction to liquor, bad company, etc.,
 			ill-health, loss of memory, impotence.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaMercuryBhukti</Name>
+		<Name>VenusDasaMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury - 2 years, 10 months.
@@ -4751,10 +4751,10 @@
 			aru and sciences, wealth, royal favour, prosperity on a large
 			scale and sound health.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaKetuBhukti</Name>
+		<Name>VenusDasaKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu - 1 year, 2 months.
@@ -4766,10 +4766,10 @@
 			relatives, bad company, abode in seclusion, manifold sorrows,
 			but happiness in the end.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaVenusBhukti</Name>
+		<Name>VenusDasaVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 3 years, 4 months.
@@ -4777,719 +4777,2241 @@
 			plentiful. disappearance of enemies, attainment of fame and
 			birth of children.
 		</Description>
-		<Tag>Bhukti</Tag>
+		<Tag>PD2</Tag>
 	</Event>
 
 
 	<!--Nature & description filled in by calculator-->
 
-	<!--SUN ANTARAM -->
-	<Event><Name>SunBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiSunAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--SUN PD3 -->
+	<Event><Name>SunSunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonSunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsSunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuSunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterSunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnSunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercurySunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuSunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusSunPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 
-	<!--MOON ANTARAM -->
-	<Event><Name>SunBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiMoonAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--MOON PD3 -->
+	<Event><Name>SunMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercuryMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusMoonPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 
-	<!--MARS ANTARAM -->
-	<Event><Name>SunBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiMarsAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--MARS PD3 -->
+	<Event><Name>SunMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercuryMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusMarsPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 	
-	<!--RAHU ANTARAM -->
-	<Event><Name>SunBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiRahuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--RAHU PD3 -->
+	<Event><Name>SunRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercuryRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusRahuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 
-	<!--JUPITER ANTARAM -->
-	<Event><Name>SunBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiJupiterAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--JUPITER PD3 -->
+	<Event><Name>SunJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercuryJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusJupiterPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 
-	<!--SATURN ANTARAM -->
-	<Event><Name>SunBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiSaturnAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--SATURN PD3 -->
+	<Event><Name>SunSaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonSaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsSaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuSaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterSaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnSaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercurySaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuSaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusSaturnPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 	
-	<!--MERCURY ANTARAM -->
-	<Event><Name>SunBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiMercuryAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--MERCURY PD3 -->
+	<Event><Name>SunMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercuryMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusMercuryPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 
-	<!--KETU ANTARAM -->
-	<Event><Name>SunBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiKetuAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--KETU PD3 -->
+	<Event><Name>SunKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercuryKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusKetuPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 
-	<!--VENUS ANTARAM -->
-	<Event><Name>SunBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MoonBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MarsBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>RahuBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>JupiterBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>SaturnBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>MercuryBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>KetuBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
-	<Event><Name>VenusBhuktiVenusAntaram</Name><Nature/><Description/><Tag>Antaram</Tag></Event>
+	<!--VENUS PD3 -->
+	<Event><Name>SunVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MoonVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MarsVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>RahuVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>JupiterVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>SaturnVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>MercuryVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>KetuVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
+	<Event><Name>VenusVenusPD3</Name><Nature/><Description/><Tag>PD3</Tag></Event>
 
 	
 	<!--Nature & description filled in by calculator-->
 
-	<!--SUN SUKSHMA -->
-	<Event><Name>SunAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramSunSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--SUN PD4 -->
+	<Event><Name>SunSunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonSunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsSunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuSunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterSunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnSunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercurySunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuSunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusSunPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 
-	<!--MOON SUKSHMA -->
-	<Event><Name>SunAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramMoonSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--MOON PD4 -->
+	<Event><Name>SunMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercuryMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusMoonPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 
-	<!--MARS SUKSHMA -->
-	<Event><Name>SunAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramMarsSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--MARS PD4 -->
+	<Event><Name>SunMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercuryMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusMarsPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 	
-	<!--RAHU SUKSHMA -->
-	<Event><Name>SunAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramRahuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--RAHU PD4 -->
+	<Event><Name>SunRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercuryRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusRahuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 
-	<!--JUPITER SUKSHMA -->
-	<Event><Name>SunAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramJupiterSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--JUPITER PD4 -->
+	<Event><Name>SunJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercuryJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusJupiterPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 
-	<!--SATURN SUKSHMA -->
-	<Event><Name>SunAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramSaturnSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--SATURN PD4 -->
+	<Event><Name>SunSaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonSaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsSaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuSaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterSaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnSaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercurySaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuSaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusSaturnPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 	
-	<!--MERCURY SUKSHMA -->
-	<Event><Name>SunAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramMercurySukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--MERCURY PD4 -->
+	<Event><Name>SunMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercuryMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusMercuryPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 
-	<!--KETU SUKSHMA -->
-	<Event><Name>SunAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramKetuSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--KETU PD4 -->
+	<Event><Name>SunKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercuryKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusKetuPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 
-	<!--VENUS SUKSHMA -->
-	<Event><Name>SunAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MoonAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MarsAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>RahuAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>JupiterAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>SaturnAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>MercuryAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>KetuAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
-	<Event><Name>VenusAntaramVenusSukshma</Name><Nature/><Description/><Tag>Sukshma</Tag></Event>
+	<!--VENUS PD4 -->
+	<Event><Name>SunVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MoonVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MarsVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>RahuVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>JupiterVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>SaturnVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>MercuryVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>KetuVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
+	<Event><Name>VenusVenusPD4</Name><Nature/><Description/><Tag>PD4</Tag></Event>
 
 
 
 	<!--Nature & description filled in by calculator-->
 
-	<!--SUN Prana -->
+	<!--SUN PD5 -->
 	<Event>
-		<Name>SunSukshmaSunPrana</Name>
+		<Name>SunSunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MoonSukshmaSunPrana</Name>
+		<Name>MoonSunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MarsSukshmaSunPrana</Name>
+		<Name>MarsSunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>RahuSukshmaSunPrana</Name>
+		<Name>RahuSunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterSukshmaSunPrana</Name>
+		<Name>JupiterSunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnSukshmaSunPrana</Name>
+		<Name>SaturnSunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MercurySukshmaSunPrana</Name>
+		<Name>MercurySunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>KetuSukshmaSunPrana</Name>
+		<Name>KetuSunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>VenusSukshmaSunPrana</Name>
+		<Name>VenusSunPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-
-	<!--MOON Prana -->
-	<Event>
-		<Name>SunSukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MoonSukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MarsSukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>RahuSukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>JupiterSukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>SaturnSukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MercurySukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>KetuSukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>VenusSukshmaMoonPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 
-	<!--MARS Prana -->
+	<!--MOON PD5 -->
 	<Event>
-		<Name>SunSukshmaMarsPrana</Name>
+		<Name>SunMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MoonSukshmaMarsPrana</Name>
+		<Name>MoonMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MarsSukshmaMarsPrana</Name>
+		<Name>MarsMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>RahuSukshmaMarsPrana</Name>
+		<Name>RahuMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterSukshmaMarsPrana</Name>
+		<Name>JupiterMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnSukshmaMarsPrana</Name>
+		<Name>SaturnMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MercurySukshmaMarsPrana</Name>
+		<Name>MercuryMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>KetuSukshmaMarsPrana</Name>
+		<Name>KetuMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>VenusSukshmaMarsPrana</Name>
+		<Name>VenusMoonPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-
-	<!--RAHU Prana -->
-	<Event>
-		<Name>SunSukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MoonSukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MarsSukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>RahuSukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>JupiterSukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>SaturnSukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MercurySukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>KetuSukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>VenusSukshmaRahuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 
-	<!--JUPITER Prana -->
+	<!--MARS PD5 -->
 	<Event>
-		<Name>SunSukshmaJupiterPrana</Name>
+		<Name>SunMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MoonSukshmaJupiterPrana</Name>
+		<Name>MoonMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MarsSukshmaJupiterPrana</Name>
+		<Name>MarsMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>RahuSukshmaJupiterPrana</Name>
+		<Name>RahuMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterSukshmaJupiterPrana</Name>
+		<Name>JupiterMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnSukshmaJupiterPrana</Name>
+		<Name>SaturnMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MercurySukshmaJupiterPrana</Name>
+		<Name>MercuryMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>KetuSukshmaJupiterPrana</Name>
+		<Name>KetuMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>VenusSukshmaJupiterPrana</Name>
+		<Name>VenusMarsPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-
-	<!--SATURN Prana -->
-	<Event>
-		<Name>SunSukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MoonSukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MarsSukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>RahuSukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>JupiterSukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>SaturnSukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MercurySukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>KetuSukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>VenusSukshmaSaturnPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 
-	<!--MERCURY Prana -->
+	<!--RAHU PD5 -->
 	<Event>
-		<Name>SunSukshmaMercuryPrana</Name>
+		<Name>SunRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MoonSukshmaMercuryPrana</Name>
+		<Name>MoonRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MarsSukshmaMercuryPrana</Name>
+		<Name>MarsRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>RahuSukshmaMercuryPrana</Name>
+		<Name>RahuRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterSukshmaMercuryPrana</Name>
+		<Name>JupiterRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnSukshmaMercuryPrana</Name>
+		<Name>SaturnRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MercurySukshmaMercuryPrana</Name>
+		<Name>MercuryRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>KetuSukshmaMercuryPrana</Name>
+		<Name>KetuRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>VenusSukshmaMercuryPrana</Name>
+		<Name>VenusRahuPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-
-	<!--KETU Prana -->
-	<Event>
-		<Name>SunSukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MoonSukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MarsSukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>RahuSukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>JupiterSukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>SaturnSukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>MercurySukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>KetuSukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
-	</Event>
-	<Event>
-		<Name>VenusSukshmaKetuPrana</Name>
-		<Nature/>
-		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 
-	<!--VENUS Prana -->
+	<!--JUPITER PD5 -->
 	<Event>
-		<Name>SunSukshmaVenusPrana</Name>
+		<Name>SunJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MoonSukshmaVenusPrana</Name>
+		<Name>MoonJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MarsSukshmaVenusPrana</Name>
+		<Name>MarsJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>RahuSukshmaVenusPrana</Name>
+		<Name>RahuJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterSukshmaVenusPrana</Name>
+		<Name>JupiterJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnSukshmaVenusPrana</Name>
+		<Name>SaturnJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>MercurySukshmaVenusPrana</Name>
+		<Name>MercuryJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>KetuSukshmaVenusPrana</Name>
+		<Name>KetuJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
 	</Event>
 	<Event>
-		<Name>VenusSukshmaVenusPrana</Name>
+		<Name>VenusJupiterPD5</Name>
 		<Nature/>
 		<Description/>
-		<Tag>Prana</Tag>
+		<Tag>PD5</Tag>
+	</Event>
+
+	<!--SATURN PD5 -->
+	<Event>
+		<Name>SunSaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MoonSaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MarsSaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>RahuSaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterSaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnSaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MercurySaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>KetuSaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>VenusSaturnPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+
+	<!--MERCURY PD5 -->
+	<Event>
+		<Name>SunMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMercuryPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+
+	<!--KETU PD5 -->
+	<Event>
+		<Name>SunKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MoonKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MarsKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>RahuKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>KetuKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>VenusKetuPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+
+	<!--VENUS PD5 -->
+	<Event>
+		<Name>SunVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MoonVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MarsVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>RahuVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>KetuVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+	<Event>
+		<Name>VenusVenusPD5</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD5</Tag>
+	</Event>
+
+
+
+	<!--Nature & description filled in by calculator-->
+
+	<!--SUN PD6 -->
+	<Event>
+		<Name>SunSunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonSunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsSunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuSunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterSunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnSunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercurySunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuSunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusSunPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	<!--MOON PD6 -->
+	<Event>
+		<Name>SunMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMoonPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	<!--MARS PD6 -->
+	<Event>
+		<Name>SunMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMarsPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	<!--RAHU PD6 -->
+	<Event>
+		<Name>SunRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusRahuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	<!--JUPITER PD6 -->
+	<Event>
+		<Name>SunJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusJupiterPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	<!--SATURN PD6 -->
+	<Event>
+		<Name>SunSaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonSaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsSaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuSaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterSaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnSaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercurySaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuSaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusSaturnPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	<!--MERCURY PD6 -->
+	<Event>
+		<Name>SunMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMercuryPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	<!--KETU PD6 -->
+	<Event>
+		<Name>SunKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusKetuPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	<!--VENUS PD6 -->
+	<Event>
+		<Name>SunVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MoonVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MarsVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>RahuVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>KetuVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+	<Event>
+		<Name>VenusVenusPD6</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD6</Tag>
+	</Event>
+
+	
+	<!--Nature & description filled in by calculator-->
+
+	<!--SUN PD7 -->
+	<Event>
+		<Name>SunSunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonSunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsSunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuSunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterSunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnSunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercurySunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuSunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusSunPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	<!--MOON PD7 -->
+	<Event>
+		<Name>SunMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMoonPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	<!--MARS PD7 -->
+	<Event>
+		<Name>SunMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMarsPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	<!--RAHU PD7 -->
+	<Event>
+		<Name>SunRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusRahuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	<!--JUPITER PD7 -->
+	<Event>
+		<Name>SunJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusJupiterPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	<!--SATURN PD7 -->
+	<Event>
+		<Name>SunSaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonSaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsSaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuSaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterSaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnSaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercurySaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuSaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusSaturnPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	<!--MERCURY PD7 -->
+	<Event>
+		<Name>SunMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMercuryPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	<!--KETU PD7 -->
+	<Event>
+		<Name>SunKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusKetuPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	<!--VENUS PD7 -->
+	<Event>
+		<Name>SunVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MoonVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MarsVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>RahuVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>KetuVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+	<Event>
+		<Name>VenusVenusPD7</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD7</Tag>
+	</Event>
+
+	
+	<!--Nature & description filled in by calculator-->
+
+	<!--SUN PD8 -->
+	<Event>
+		<Name>SunSunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonSunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsSunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuSunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterSunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnSunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercurySunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuSunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusSunPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+
+	<!--MOON PD8 -->
+	<Event>
+		<Name>SunMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMoonPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+
+	<!--MARS PD8 -->
+	<Event>
+		<Name>SunMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMarsPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+
+	<!--RAHU PD8 -->
+	<Event>
+		<Name>SunRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusRahuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+
+	<!--JUPITER PD8 -->
+	<Event>
+		<Name>SunJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusJupiterPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+
+	<!--SATURN PD8 -->
+	<Event>
+		<Name>SunSaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonSaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsSaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuSaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterSaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnSaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercurySaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuSaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusSaturnPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+
+	<!--MERCURY PD8 -->
+	<Event>
+		<Name>SunMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusMercuryPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+
+	<!--KETU PD8 -->
+	<Event>
+		<Name>SunKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusKetuPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+
+	<!--VENUS PD8 -->
+	<Event>
+		<Name>SunVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MoonVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MarsVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>RahuVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>KetuVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
+	</Event>
+	<Event>
+		<Name>VenusVenusPD8</Name>
+		<Nature/>
+		<Description/>
+		<Tag>PD8</Tag>
 	</Event>
 
 

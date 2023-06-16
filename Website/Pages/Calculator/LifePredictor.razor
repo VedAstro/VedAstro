@@ -17,10 +17,10 @@ Know good and bad periods of your life years ahead.*@
 
 
 @* SELECTOR AND INFO BOXES*@
-<div>
-    <div class="d-flex justify-content-between">
+<div class="d-md-flex justify-content-between">
 
-        @* SELECTOR *@
+    @*SELECTOR*@
+    <div class="me-5">
         <div class="vstack gap-3 p-3">
 
             <PersonSelectorBox @ref="_easyPersonSelectorBox" @bind-SelectedPersonId="@SelectedPersonId" />
@@ -43,8 +43,8 @@ Know good and bad periods of your life years ahead.*@
 
             <div @ref="lifeYearSelector" style="display: none;">
                 <div class="input-group mb-3" style="width: @GR.W255px;">
-                    <label class="input-group-text" >Start</label>
-                    <select @bind="SelectedLifeYearStart" class="form-select" >
+                    <label class="input-group-text">Start</label>
+                    <select @bind="SelectedLifeYearStart" class="form-select">
                         <option selected>Choose...</option>
                         @foreach (var year in lifeYearList)
                         {
@@ -54,7 +54,7 @@ Know good and bad periods of your life years ahead.*@
                 </div>
                 <div class="input-group mb-3" style="width: @GR.W255px;">
                     <label class="input-group-text">End</label>
-                    <select @bind="SelectedLifeYearEnd" class="form-select" >
+                    <select @bind="SelectedLifeYearEnd" class="form-select">
                         <option selected>Choose...</option>
                         @foreach (var year in lifeYearList)
                         {
@@ -66,18 +66,18 @@ Know good and bad periods of your life years ahead.*@
 
             <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
         </div>
+    </div>
 
-        @* SIDE EXAMPLE *@
-        <div>
-            <InfoBox Title="Accurate" FullWidth="true" MaxWidth="@GR.W412" IconName="noto-v1:direct-hit">
-                <DescriptionHTML>
-                    Easy prediction of your life events
-                </DescriptionHTML>
-                <ImageHTML>
-                    <img class="img-thumbnail" src="images/life-predictor-alertbox-examples.jpg" />
-                </ImageHTML>
-            </InfoBox>
-        </div>
+    @*SIDEBAR*@
+    <div class="mt-md-0 mt-4 me-md-5">
+        <InfoBox Title="Accurate" FullWidth="true" MaxWidth="@GR.W412" IconName="noto-v1:direct-hit">
+            <DescriptionHTML>
+                Easy prediction of your life events
+            </DescriptionHTML>
+            <ImageHTML>
+                <img class="img-thumbnail" src="images/life-predictor-alertbox-examples.jpg" />
+            </ImageHTML>
+        </InfoBox>
     </div>
 </div>
 

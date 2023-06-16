@@ -13,19 +13,21 @@
 </PageTop>
 
 
-<div class="d-flex justify-content-between mb-5">
+<div class="d-md-flex justify-content-between">
     @*SELECTOR*@
-    <div>
-        <div class="vstack gap-3 me-5">
+    <div class="me-5">
+        <div class="vstack gap-3">
             <PersonSelectorBox @ref="_malePeopleSelector" @bind-SelectedPersonId="@SelectedMale" Label="Male" />
             <PersonSelectorBox @ref="_femalePeopleSelector" @bind-SelectedPersonId="@SelectedFemale" Label="Female" />
             <IconButton IconName="uim:process" ExtraClass="mt-1" Color="success" ButtonText="Calculate" OnClickCallback="@OnClickSubmitButton" />
         </div>
     </div>
     @*SIDEBAR*@
-    <div class="gap-3 me-md-4">
-        <InfoBox Title="Find Perfect Match" Description="Your soulmate is out there. Start a search in our global database" Color="#ffbdf7" ClickUrl="@PageRoute.MatchFinder" MaxWidth="365" FullWidth="@true" IconName="emojione:heart-with-arrow" />
-        <InfoBox Title="Full Check" Description="16 astrological factors used to make this accurate prediction" Color="#d1e7dd" MaxWidth="365" FullWidth="@true" IconName="line-md:check-list-3-twotone" />
+    <div class="mt-md-0 mt-4 me-md-5"><!--when small give at top-->
+        <div class="vstack gap-3">
+            <InfoBox Title="Find Perfect Match" Description="Your soulmate is out there. Start a search in our global database" Color="#ffbdf7" ClickUrl="@PageRoute.MatchFinder" MaxWidth="365" FullWidth="@true" IconName="emojione:heart-with-arrow"/>
+            <InfoBox Title="Full Check" Description="16 astrological factors used to make this accurate prediction" Color="#d1e7dd" MaxWidth="365" FullWidth="@true" IconName="line-md:check-list-3-twotone"/>
+        </div>
     </div>
 </div>
 

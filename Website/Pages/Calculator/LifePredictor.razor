@@ -439,7 +439,7 @@ Know good and bad periods of your life years ahead.*@
         var timeRange = GetTimeRange();
 
         //generate the events row & time header row
-        var dasaEventTags = new List<EventTag> { EventTag.Dasa, EventTag.Bhukti, EventTag.Antaram, EventTag.Sukshma, EventTag.Prana, EventTag.Gochara };
+        var dasaEventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.Gochara };
 
         //pump data into chart
         await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, dasaEventTags);

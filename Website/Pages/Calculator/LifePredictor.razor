@@ -41,28 +41,33 @@ Know good and bad periods of your life years ahead.*@
                 </select>
             </div>
 
-            <div @ref="lifeYearSelector" style="display: none;">
-                <div class="input-group mb-3" style="width: @GR.W255px;">
-                    <label class="input-group-text">Start</label>
-                    <select @bind="SelectedLifeYearStart" class="form-select">
-                        <option selected>Choose...</option>
-                        @foreach (var year in lifeYearList)
-                        {
-                            <option value="@year">@year</option>
-                        }
-                    </select>
+            @* YEAR SELECTOR *@
+            @if (SelectedTimeRangePreset == "selectyear")
+            {
+                <div >
+                    <div class="input-group mb-3" style="width: @GR.W255px;">
+                        <label class="input-group-text">Start</label>
+                        <select @bind="SelectedLifeYearStart" class="form-select">
+                            <option selected>Choose...</option>
+                            @foreach (var year in lifeYearList)
+                            {
+                                <option value="@year">@year</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group mb-3" style="width: @GR.W255px;">
+                        <label class="input-group-text">End</label>
+                        <select @bind="SelectedLifeYearEnd" class="form-select">
+                            <option selected>Choose...</option>
+                            @foreach (var year in lifeYearList)
+                            {
+                                <option value="@year">@year</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-                <div class="input-group mb-3" style="width: @GR.W255px;">
-                    <label class="input-group-text">End</label>
-                    <select @bind="SelectedLifeYearEnd" class="form-select">
-                        <option selected>Choose...</option>
-                        @foreach (var year in lifeYearList)
-                        {
-                            <option value="@year">@year</option>
-                        }
-                    </select>
-                </div>
-            </div>
+
+            }
 
             <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
         </div>
@@ -310,7 +315,7 @@ Know good and bad periods of your life years ahead.*@
 
     public Person SelectedPerson { get; set; }
 
-    private ElementReference lifeYearSelector;
+    // private ElementReference lifeYearSelector;
 
     public string SelectedLifeYear { get; set; }
 
@@ -323,16 +328,16 @@ Know good and bad periods of your life years ahead.*@
         {
 
             //based on body type only show relevant related fields
-            switch (value.ToLower())
-            {
-                case "selectyear"://hide house & show planet
-                    _jsRuntime.Show(lifeYearSelector);
-                    break;
-                //if none above then hide all
-                default:
-                    _jsRuntime.Hide(lifeYearSelector);
-                    break;
-            }
+            // switch (value.ToLower())
+            // {
+            //     case "selectyear"://hide house & show planet
+            //                       //_jsRuntime.Show(lifeYearSelector);
+            //         break;
+            //     //if none above then hide all
+            //     default:
+            //         // _jsRuntime.Hide(lifeYearSelector);
+            //         break;
+            // }
 
             //log it or better analytics
             WebLogger.Data($"Selected Time Range:{value}");
@@ -420,6 +425,9 @@ Know good and bad periods of your life years ahead.*@
 
     private async Task _OnClickCalculateEasy()
     {
+        //keep copy of selected time range else gets reset, on re-render
+        var backUpSelection = SelectedTimeRangePreset;
+
         await _jsRuntime.ShowLoading();
 
         //only continue if passed input field validation
@@ -439,7 +447,12 @@ Know good and bad periods of your life years ahead.*@
         var timeRange = GetTimeRange();
 
         //generate the events row & time header row
-        var dasaEventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.Gochara };
+        var dasaEventTags = new List<EventTag>
+        {
+            EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4,
+            EventTag.PD5, EventTag.PD6, EventTag.PD7, EventTag.PD8,
+            EventTag.Gochara
+        };
 
         //pump data into chart
         await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, dasaEventTags);
@@ -453,6 +466,9 @@ Know good and bad periods of your life years ahead.*@
         _isResultReady = true;
 
         _jsRuntime.HideAlert();
+
+        //place time preset value back
+        SelectedTimeRangePreset = backUpSelection;
 
     }
 

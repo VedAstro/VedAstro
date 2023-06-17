@@ -37,14 +37,15 @@ Know good and bad periods of your life years ahead.*@
                     <option value="10year">+/- 10 Year</option>
                     <option value="Age1to50">Age 1 to 50</option>
                     <option value="Age50to100">Age 50 to 100</option>
-                    <option style="" value="selectyear">Custom Start &amp; End</option>
+                    <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
+                    <option style=" font-weight: bold; color: #0d6efd; " value="selectage">Custom Age</option>
                 </select>
             </div>
 
             @* YEAR SELECTOR *@
             @if (SelectedTimeRangePreset == "selectyear")
             {
-                <div >
+                <div>
                     <div class="input-group mb-3" style="width: @GR.W255px;">
                         <label class="input-group-text">Start</label>
                         <select @bind="SelectedLifeYearStart" class="form-select">
@@ -66,7 +67,33 @@ Know good and bad periods of your life years ahead.*@
                         </select>
                     </div>
                 </div>
+            }
 
+            @* AGE SELECTOR *@
+            @if (SelectedTimeRangePreset == "selectage")
+            {
+                <div>
+                    <div class="input-group mb-3" style="width: @GR.W255px;">
+                        <label class="input-group-text">Start</label>
+                        <select @bind="SelectedLifeAgeStart" class="form-select">
+                            <option selected>Choose...</option>
+                            @foreach (var age in lifeAgeList)
+                            {
+                                <option value="@age">@age</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="input-group mb-3" style="width: @GR.W255px;">
+                        <label class="input-group-text">End</label>
+                        <select @bind="SelectedLifeAgeEnd" class="form-select">
+                            <option selected>Choose...</option>
+                            @foreach (var age in lifeAgeList)
+                            {
+                                <option value="@age">@age</option>
+                            }
+                        </select>
+                    </div>
+                </div>
             }
 
             <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true"></IconButton>
@@ -266,8 +293,6 @@ Know good and bad periods of your life years ahead.*@
     </ArticleBlock>
 
 
-
-
     @*     <QuoteTextBlock Author="Srinivasa Ramanujan" URL="@URL.RamanujanQuoteWiki">While asleep,
     I had an unusual experience.
     There was a red screen formed by flowing blood, as it were. I was observing it. Suddenly a hand began to write on the screen.
@@ -289,7 +314,11 @@ Know good and bad periods of your life years ahead.*@
 
     private string SelectedLifeYearStart;
     private string SelectedLifeYearEnd;
+    private string SelectedLifeAgeStart;
+    private string SelectedLifeAgeEnd;
+
     private List<string> lifeYearList = new List<string>();
+    private List<string> lifeAgeList = GetAgeSelectionRange();
 
     /// <summary>
     /// Param used in URL to set Person ID via URL
@@ -315,10 +344,6 @@ Know good and bad periods of your life years ahead.*@
 
     public Person SelectedPerson { get; set; }
 
-    // private ElementReference lifeYearSelector;
-
-    public string SelectedLifeYear { get; set; }
-
     public string SelectedTimeRangePreset
     {
         get => _selectedTimeRange;
@@ -326,19 +351,6 @@ Know good and bad periods of your life years ahead.*@
         //hide and show easy options based on selection
         set
         {
-
-            //based on body type only show relevant related fields
-            // switch (value.ToLower())
-            // {
-            //     case "selectyear"://hide house & show planet
-            //                       //_jsRuntime.Show(lifeYearSelector);
-            //         break;
-            //     //if none above then hide all
-            //     default:
-            //         // _jsRuntime.Hide(lifeYearSelector);
-            //         break;
-            // }
-
             //log it or better analytics
             WebLogger.Data($"Selected Time Range:{value}");
 
@@ -366,28 +378,44 @@ Know good and bad periods of your life years ahead.*@
     }
 
 
+    /// <summary>
+    /// Gets possible year list for selection 120 years
+    /// </summary>
     private async Task UpdateYearSelectionRange(string personId)
     {
 
         var compiledList = new List<string>();
-        //generate year list, birth plus 100
+        //generate year list, birth plus 120
         var person = await WebsiteTools.GetPersonById(personId, _jsRuntime);
         var startYear = person.BirthYear;
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 120; i++)
         {
             compiledList.Add(startYear.ToString());
             //increment
             startYear++;
         }
 
-        Console.WriteLine(Tools.ListToString(compiledList));
-
         //make visible
         lifeYearList = compiledList;
 
-
         StateHasChanged();
+    }
+
+    /// <summary>
+    /// Gets possible age list for selection 120 years
+    /// </summary>
+    private static List<string> GetAgeSelectionRange()
+    {
+        var compiledList = new List<string>();
+
+        for (int i = 1; i < 120; i++)
+        {
+            compiledList.Add(i.ToString());
+        }
+
+        //make visible
+        return compiledList;
     }
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -421,7 +449,6 @@ Know good and bad periods of your life years ahead.*@
             _jsRuntime.HideLoading();
         }
     }
-
 
     private async Task _OnClickCalculateEasy()
     {
@@ -480,17 +507,14 @@ Know good and bad periods of your life years ahead.*@
     {
         var systemTimezone = Tools.GetSystemTimezone();
 
-        //if user selected indiviual year than make new preset to match
-        if (SelectedTimeRangePreset == "selectyear")
-        {
-            SelectedTimeRangePreset = $"{SelectedLifeYearStart}-{SelectedLifeYearEnd}";
-        }
+        //if user selected indiviual year than make new preset is placed in format that can be read by parser 
+        if (SelectedTimeRangePreset == "selectyear") { SelectedTimeRangePreset = $"{SelectedLifeYearStart}-{SelectedLifeYearEnd}"; } //exp 2000-2010
+        else if (SelectedTimeRangePreset == "selectage"){SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}";} //exp age4to50
 
         var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
 
         return timeRange;
     }
-
 
     /// <summary>
     /// Checks if validation of all input fields

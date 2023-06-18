@@ -30,6 +30,10 @@ namespace API
 
         public static async Task<bool> IsExist(string callerId)
         {
+//#if DEBUG
+//            Console.WriteLine("CACHE TURNED OFF IN DEBUG MODE!!");
+//            return false;
+//#endif
 
             BlobClient blobClient = blobContainerClient.GetBlobClient(callerId);
 
@@ -133,10 +137,9 @@ namespace API
                 await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
             }
 
-            //set as hot since file should be living for long
-            //note : can be changed to cool once in stable production,
+            //set as COOL since file should be living for long
             //where cache is expected to live long
-            await blobClient.SetAccessTierAsync(AccessTier.Hot);
+            await blobClient.SetAccessTierAsync(AccessTier.Cool);
 
             return blobClient;
 
@@ -161,6 +164,8 @@ namespace API
         public static async Task<HttpResponseData> CacheExecute(Func<Task<BlobClient>> cacheExecuteTask3,
             CallerInfo callerInfo, HttpRequestData httpRequestData)
         {
+
+            //1: CHECK IF RUNNING
             //check if call already made and is running
             //call is made again (polling), don't disturb running
             var isRunning = CallTracker.IsRunning(callerInfo.CallerId);
@@ -181,7 +186,7 @@ namespace API
             //start new call
             else
             {
-
+                //2: CHECK IF CACHED
                 //if task not running next check cache
                 var gotCache = await AzureCache.IsExist(callerInfo.CallerId);
                 if (gotCache)

@@ -1,5 +1,6 @@
 ﻿using VedAstro.Library;
 using System.Web;
+using iText.StyledXmlParser.Jsoup.Nodes;
 
 namespace API
 {
@@ -388,24 +389,29 @@ namespace API
             var backgroundWidth = APITools.GetTextWidthPx(formattedEventName);
 
             int iconYAxis = lineHeight; //start icon at end of line
-            var iconXAxis = $"-{backgroundWidth / 2}"; //use negative to move center under line
+            var iconXAxis = $"-7.5"; //use negative to move center under line
             var nameTextHeight = 15;
+
+            //only show name label for Major and Normal events
+            var isShowName = lifeEvent.Weight == "Normal" || lifeEvent.Weight == "Major";
+            var evtNameStyle = isShowName ? "" : "display: none;";
+
             var iconSvg = $@"
                                 <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{lineHeight}""></rect>
                                 <!-- EVENT ICON LABEL -->
                                 <g transform=""translate({iconXAxis},{iconYAxis})"">
-                                    <!-- NAME -->
                                     <g class=""name-label"" >
-                                        <g transform=""translate(15,0)"">
+                                        <!-- EVENT NAME-->
+                                        <g transform=""translate(15,0)"" style=""{evtNameStyle}"">
 						                    <rect class=""background"" x=""0"" y=""0"" style=""fill: blue; opacity: 0.8;"" width=""{backgroundWidth}"" height=""{nameTextHeight}"" rx=""2"" ry=""2"" />
 						                    <text class=""event-name"" x=""3"" y=""11"" style=""fill:#FFFFFF; font-family:'Calibri'; font-size:12px;"">{formattedEventName}</text>
 					                    </g>
+                                        <!-- EVENT ICON-->
 				                        <g class=""nature-icon"" transform=""translate(8,8)"">
-                                            <rect class=""background"" fill=""{GetColor(lifeEvent.Nature)}"" x=""-8"" y=""-8"" width=""15"" height=""15"" rx=""0"" ry=""0""/>
+                                            <rect class=""background"" fill=""{GetColor(lifeEvent.Nature)}"" x=""-7.5"" y=""-8"" width=""15"" height=""15"" rx=""2"" ry=""2""/>
 					                        <path d=""M2-0.2H0.7C0.5-0.2,0.3,0,0.3,0.2v1.3c0,0.2,0.2,0.4,0.4,0.4H2c0.2,0,0.4-0.2,0.4-0.4V0.2C2.5,0,2.3-0.2,2-0.2z M2-4.5v0.4 h-3.6v-0.4c0-0.2-0.2-0.4-0.4-0.4c-0.2,0-0.4,0.2-0.4,0.4v0.4h-0.4c-0.5,0-0.9,0.4-0.9,0.9v6.1c0,0.5,0.4,0.9,0.9,0.9h6.3 c0.5,0,0.9-0.4,0.9-0.9v-6.1c0-0.5-0.4-0.9-0.9-0.9H3.1v-0.4c0-0.2-0.2-0.4-0.4-0.4S2-4.8,2-4.5z M2.9,2.9h-5.4 c-0.2,0-0.4-0.2-0.4-0.4v-4.4h6.3v4.4C3.4,2.7,3.2,2.9,2.9,2.9z""/>
 				                        </g>
-			                        
-</g>
+                                    </g>
                                     <!-- DESCRIPTION -->
 		                            <g class=""description-label"" style=""display:none;"" transform=""translate(0,{20})"">
                                         <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{backgroundWidth}"" height=""50"" rx=""2"" ry=""2""/>
@@ -489,7 +495,7 @@ namespace API
         {
             //use offset of input time, this makes sure life event lines
             //are placed on event chart correctly, since event chart is based on input offset
-            var lineHeight = verticalYAxis + 6; //space between icon & last row
+            var lineHeight = verticalYAxis + 9; //space between icon & last row
             var inputOffset = startTime.GetStdDateTimeOffset().Offset; //timezone the chart will be in
 
 
@@ -1674,12 +1680,12 @@ namespace API
 
             }
 
-            
+
 
             var houseInEventList = foundEvent.GetRelatedHouse();
 
             var beneficHouseList = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime);
-           // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
+            // var beneficHouseList2 = AstronomicalCalculator.GetBeneficHouseListByShadbala(person.BirthTime, 550);
             var maleficHouseList = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime);
             //var maleficHouseList2 = AstronomicalCalculator.GetMaleficHouseListByShadbala(person.BirthTime, 250);
 
@@ -1707,8 +1713,8 @@ namespace API
             //return the compiled score to caller
             return finalScore;
         }
-        
-        
+
+
         private static int GetEventScoreFromShadvargaPlanetOrHouse(Event foundEvent, Person person)
         {
             var finalScore = 0;
@@ -1743,7 +1749,7 @@ namespace API
 
             }
 
-            
+
             //only use houses when planets empty
             var noPlanets = !planetInEventList.Any();
             if (noPlanets)

@@ -28,7 +28,7 @@
     <InfoBox Width="255" Title="Gifts" Description="Donate warm gifts, instead of cold cash" IconName="fluent-emoji:wrapped-gift" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("WishList"))" />
     <InfoBox Width="255" Title="Crypto" Description="Instant and anonymous donation" IconName="cryptocurrency-color:btc" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("ForCryptoGeeks"))" />
     <InfoBox Width="255" Title="Patreon" Description="Monthly contribution via Patreon" IconName="logos:patreon" IsNewTabOpen="true" ClickUrl="@URL.PatreonPage" />
-    <InfoBox Width="255" Title="Bank Transfer" Description="Send money via BIC/SWIFT transfer" IconName="noto-v1:bank" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("BankDetails"))" />
+    @* <InfoBox Width="255" Title="Bank Transfer" Description="Send money via BIC/SWIFT transfer" IconName="noto-v1:bank" OnClickCallback="@(() => _jsRuntime.ScrollToDivById("BankDetails"))" /> *@
 </div>
 
 <hr />
@@ -56,7 +56,9 @@
         That's an impressive number. The more code there is, the more testing &amp; debugging that needs to be done. As such more developer/programmer work hours are required.
         Every dollar donated <strong>goes a long way</strong> to help pay for this expenses.
     </SubArticleBlock>
-
+    
+    @* todo temp bank turned off *@
+    <!--
     <ArticleBlock Title="Bank Transfer" IconName="noto-v1:bank">
         <TextHTML>
             <div id="BankDetails" class="hstack gap-3">
@@ -85,6 +87,7 @@
             </div>
         </TextHTML>
     </ArticleBlock>
+    -->
 
     <ArticleBlock Title="For Crypto Fans" IconName="cryptocurrency-color:btc">
         <TextHTML>

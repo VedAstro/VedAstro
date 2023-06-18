@@ -13,38 +13,43 @@
 </PageTop>
 
 @*show loading first, note done by style because need element alive*@
-<div class="@(!NothingToShow?"d-none":"")">
+<div class="@(!_nothingToShow?"d-none":"")">
     @AppData.LoadingImage
 </div>
 
-<div class="d-flex flex-wrap @(NothingToShow?"d-none":"")">
-    <div class="vstack gap-3 me-5 mb-4" style="max-width:@GR.W412px">
-        <div>
-            <label>Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.PrivateProfileName" /></label>
-            <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
-        </div>
-        <TimeInputSimple @ref="_timeInput" LabelText="Birth Time" />
-        <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true" />
-        <div>
-            <label>
-                Gender
-                <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender" />
-            </label>
-            <select @bind="_genderInput" class="form-control">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
-        </div>
-        <div class="hstack gap-4">
-            <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-            <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton" />
+<div class="d-md-flex justify-content-between">
+    @*SELECTOR*@
+    <div class="me-5">
+        <div class="vstack gap-3 @(_nothingToShow ? "d-none" : "")" style="max-width: @GR.W412px">
+            <div>
+                <label>Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.PrivateProfileName"/></label>
+                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+            </div>
+            <TimeInputSimple @ref="_timeInput" LabelText="Birth Time"/>
+            <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true"/>
+            <div>
+                <label>
+                    Gender
+                    <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender"/>
+                </label>
+                <select @bind="_genderInput" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="hstack gap-4">
+                <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+                <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton"/>
+            </div>
         </div>
     </div>
 
-    @*PRIVATE DATA MESSAGE*@
-    <div class="w-50">
-        <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy" />
-        <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="fa-solid:history" ClickUrl="@PageRoute.BirthTimeFinder" />
+    @*SIDEBAR*@
+    <div class="mt-md-0 mt-4 me-md-5"> <!--when small give at top-->
+        <div class="vstack gap-0 gap-md-2">
+            <InfoBox MaxWidth="365" Title="Private" Description="Person data is private &amp; not visible to public." IconName="flat-color-icons:privacy"/>
+            <InfoBox MaxWidth="365" Title="Forgoten Time" Description="Use advanced computation to find your lost birth time" IconName="fa-solid:history" ClickUrl="@PageRoute.BirthTimeFinder"/>
+        </div>
     </div>
 </div>
 
@@ -59,7 +64,7 @@
     private GeoLocationInput _geoLocationInput;
     private string? _genderInput = "Male"; //since Male is first in combobox
     private Person _person;
-    private bool NothingToShow = false; //start by showing when start
+    private bool _nothingToShow = false; //start by showing when start
 
 
     //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -89,11 +94,11 @@
 
 
         await _jsRuntime.ShowLoading();
-        NothingToShow = true; //compensate for multiple popups, hides the input elm via css
+        _nothingToShow = true; //compensate for multiple popups, hides the input elm via css
 
 
         //only continue if passed input field validation
-        if (!(await IsValidationPassed())) { NothingToShow = false; return; } //if nothing than back to normal
+        if (!(await IsValidationPassed())) { _nothingToShow = false; return; } //if nothing than back to normal
 
         StateHasChanged();//needed to make change appear instantly, work
 
@@ -108,7 +113,7 @@
         //page ready
         _jsRuntime.HideAlert();
         //hide final loading, needed because SweetAlert fails when to many calls
-        NothingToShow = false;
+        _nothingToShow = false;
 
         _jsRuntime.PlayDoneSound();//tactile feedback
 

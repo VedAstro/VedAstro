@@ -413,7 +413,7 @@ namespace Library.API
 
             //call until data appears, API takes care of everything
             string? parsedJsonReply = null;
-            var pollRate = 700;
+            var pollRate = 1000;
             var notReady = true;
             while (notReady)
             {

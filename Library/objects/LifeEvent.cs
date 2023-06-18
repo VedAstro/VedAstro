@@ -70,6 +70,12 @@ namespace VedAstro.Library
         public string Nature { get; set; }
 
         /// <summary>
+        /// must be Major, Normal and Minor
+        /// </summary>
+        [JsonPropertyName("Weight")]
+        public string Weight { get; set; }
+
+        /// <summary>
         /// Auto set by code when not available using Google API
         /// </summary>
         [JsonPropertyName("Timezone")]
@@ -110,6 +116,7 @@ namespace VedAstro.Library
             temp["Location"] = this.Location;
             temp["Description"] = this.Description;
             temp["Nature"] = this.Nature;
+            temp["Weight"] = this.Weight;
 
             //compile into an JSON array
             return temp;
@@ -126,8 +133,9 @@ namespace VedAstro.Library
             var locationXml = new XElement("Location", this.Location);
             var descriptionXml = new XElement("Description", this.Description);
             var natureXml = new XElement("Nature", this.Nature);
+            var weightXml = new XElement("Weight", this?.Weight ?? "Normal");
 
-            lifeEventXml.Add(nameXml, startTimeXml, timezoneXml, locationXml, descriptionXml, natureXml);
+            lifeEventXml.Add(nameXml, startTimeXml, timezoneXml, locationXml, descriptionXml, natureXml, weightXml);
 
             return lifeEventXml;
         }
@@ -153,6 +161,7 @@ namespace VedAstro.Library
             lifeEventParsed.Location = !string.IsNullOrEmpty(lifeEventXml.Element("Location")?.Value) ? lifeEventXml?.Element("Location")?.Value : defaultLocation;
             lifeEventParsed.Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
             lifeEventParsed.Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
+            lifeEventParsed.Weight = !string.IsNullOrEmpty(lifeEventXml.Element("Weight")?.Value) ? lifeEventXml?.Element("Weight")?.Value : "Normal";
 
 
             return lifeEventParsed;
@@ -176,6 +185,7 @@ namespace VedAstro.Library
                 temp.Location = lifeEvent["Location"].Value<string>();
                 temp.Description = lifeEvent["Description"].Value<string>();
                 temp.Nature = lifeEvent["Nature"].Value<string>();
+                temp.Weight = lifeEvent["Weight"]?.Value<string>() ?? "Normal";
 
                 returnList.Add(temp);
             }
@@ -215,7 +225,7 @@ namespace VedAstro.Library
         public override string ToString()
         {
             //prepare string
-            var returnString = $"{this.Name} - {this.Nature} - {this.StartTime} - {this.Location} - {this.Description}";
+            var returnString = $"{this.Name} - {this.Nature} - {this.Weight} - {this.StartTime} - {this.Location} - {this.Description}";
 
             //return string to caller
             return returnString;
@@ -233,9 +243,10 @@ namespace VedAstro.Library
             var hash4 = Tools.GetStringHashCode(this.Location);
             var hash5 = Tools.GetStringHashCode(this.Description);
             var hash6 = Tools.GetStringHashCode(this.Nature);
+            var hash7 = Tools.GetStringHashCode(this.Weight);
 
             //take out negative before returning
-            return Math.Abs(hash1 + hash2 + hash3 + hash4 + hash5 + hash6);
+            return Math.Abs(hash1 + hash2 + hash3 + hash4 + hash5 + hash6 + hash7);
         }
 
 
@@ -280,7 +291,6 @@ namespace VedAstro.Library
             return lifeEvtTime;
         }
 
-
         /// <summary>
         /// Gets exact time event occurred without API
         /// note: if timezone not filled, time zone set to +00:00
@@ -300,7 +310,6 @@ namespace VedAstro.Library
 
             return lifeEvtTime;
         }
-
 
         /// <summary>
         /// Note this call uses Google API everytime

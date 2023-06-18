@@ -308,7 +308,7 @@ namespace Website
             //log this
             WebLogger.Click($"Fund : {featureName}");
 
-            var descriptionText = "<a style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development";
+            var descriptionText = "<a target=\"_blank\" style=\"text-decoration-line: none;\" href=\"https://vedastro.org/Donate/\" class=\"link-primary fw-bold\">Fund</a> this feature for faster development";
             await jsRuntime.ShowAlert("info", "Coming soon", descriptionText);
         }
 

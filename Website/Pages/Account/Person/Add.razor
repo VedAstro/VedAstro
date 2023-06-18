@@ -88,7 +88,7 @@
         //if not logged in tell user what the f he is doing
         if (AppData.IsGuestUser)
         {
-            var loginLink = $"<a style=\"text-decoration-line: none;\" href=\"{AppData.URL.Login}\" class=\"link-primary fw-bold\">logged in</a>";
+            var loginLink = $"<a target=\"_blank\" style=\"text-decoration-line: none;\" href=\"{AppData.URL.Login}\" class=\"link-primary fw-bold\">logged in</a>";
             await _jsRuntime.ShowAlert("warning", "Remember!", $"You have not {loginLink}, your data will <strong>disappear</strong> on next refresh!<br/>We can't stop that, it's how browsers work.");
         }
 

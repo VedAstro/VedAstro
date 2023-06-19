@@ -23,7 +23,7 @@
                         <span>Choose or add person's horoscope</span>
                     </div>
                     <div class="col">
-                        <PersonSelectorBox HideTitle="true" @ref="_peopleSelectorBox" />
+                        <PersonSelectorBox HideTitle="true" @ref="_peopleSelectorBox"/>
                     </div>
                 </div>
                 <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
@@ -40,9 +40,9 @@
                             <option value="Match">Match Checker</option>
                             <option value="Horoscope">Horoscope</option>
                             <option value="LifePredictor">Life Predictor</option>
-@*                             <option value="Muhurtha">Muhurtha</option>
+                            @*                             <option value="Muhurtha">Muhurtha</option>
                             <option value="MatchFinder">Match Finder</option>
- *@                        </select>
+ *@ </select>
                     </div>
                 </div>
                 <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
@@ -53,7 +53,7 @@
                         <span>Click calculate to view predictions. <strong style="color: #007e21;">Easy!</strong></span>
                     </div>
                     <div class="col">
-                        <IconButton SmallSize="true" ButtonText="Goto Calculator" OnClickCallback="OnClickCalculateEasyPeasy" TooltipText="Take me to calculator now!" TextCenter="true" IconName="gg:calendar-next" />
+                        <IconButton SmallSize="true" ButtonText="Goto Calculator" OnClickCallback="OnClickCalculateEasyPeasy" TooltipText="Take me to calculator now!" TextCenter="true" IconName="gg:calendar-next"/>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,8 @@
 
     <ArticleBlock Title="What is a calculator?" IconName="icon-park:calculator">
         <ButtonRow>
-            <IconButton SmallSize="true" ButtonText="View All" IconName="fluent:calculator-multiple-24-regular" ClickUrl="@PageRoute.CalculatorList" />
+            <IconButton SmallSize="true" PlaceBottom="true" ButtonText="Video Guides" IconName="mdi:youtube-subscription" OpenNewTab="true" ClickUrl="@URL.YoutubeChannel" />
+            <IconButton SmallSize="true" ButtonText="View All" IconName="fluent:calculator-multiple-24-regular" ClickUrl="@PageRoute.CalculatorList"/>
         </ButtonRow>
         <TextHTML>
             Each calculator shows aspect of astrology. For example <BoldLink URL="@PageRoute.Match">Match</BoldLink> is a calculator for

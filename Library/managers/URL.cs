@@ -177,6 +177,7 @@ public class URL
     public const string YukteswarWiki = "https://en.wikipedia.org/wiki/Swami_Sri_Yukteswar_Giri";
     public const string WHAudenWiki = "https://en.wikipedia.org/wiki/W._H._Auden";
     public const string SwamiRamaWiki = "https://en.wikipedia.org/wiki/Swami_Rama";
+    public const string StarsThatDontGiveDam = "https://youtu.be/RhtrXdirXk4";
     public const string YoganandaWiki = "https://en.wikipedia.org/wiki/Paramahansa_Yogananda";
     public const string CarlSaganWiki = "https://en.wikipedia.org/wiki/Carl_Sagan";
     public const string RamanujanWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan";

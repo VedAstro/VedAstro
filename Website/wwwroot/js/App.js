@@ -126,18 +126,19 @@ window.GetInteropFuncList = () => {
 //for site is better viewed above 1080p
 async function SmallScreenGreetingMessage() {
 
+    //only show warning once
+    var isShownBefore = "IsShownSmallScreenMessage" in localStorage ? JSON.parse(localStorage["IsShownSmallScreenMessage"]) : false;
+
     //check if screen is too small
     var isTooSmall = window.innerWidth < 720;
 
-    //get log payload from blazor
-    //var payload = await DotNet.invokeMethodAsync('Website', 'GetDataLogPayload', "TEST");
 
-    //console.log(payload);
-
-    if (isTooSmall) {
+    if (isTooSmall && !isShownBefore) {
         //show special message
-        //Swal.fire('Small Screen Warning!', 'This site might not work on such a <strong>small screen</strong>. Don\'t say we didn\'t warn you.', 'warning');
-        Swal.fire('Screen Little Small!', 'Please use a device with larger screen for best experience', 'warning');
+        Swal.fire('Screen Little Small!', 'Use device with <strong>larger screen</strong> for best experience', 'info');
+
+        //don't bother user too much, note that message shown, so next time no need to show
+        localStorage["IsShownSmallScreenMessage"] = JSON.stringify(true);
     }
 
 }

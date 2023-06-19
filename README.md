@@ -148,7 +148,7 @@ It works by combining **logic** on how to calculate a prediction with **data** a
 This is done everytime a "Calculate" button is clicked. Below you will see a brief explanation of this process.
 This method was choosen to easily accommodate the thousands of astrological calculation possibilities.
 
-## event prediction = (data + logic) + time
+## event prediction = (data + logic) X time
 
 ```
 

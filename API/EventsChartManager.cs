@@ -40,7 +40,7 @@ namespace API
         public static async Task<string> GenerateEventsChart(Person inputPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> inputedEventTags)
         {
 
-            //PART I : declare the components
+            //ACT I : declare the components
             string svgHead = null;
             string contentHead = null;
             string timeHeader = null;
@@ -54,12 +54,12 @@ namespace API
             string svgTail = null;
 
 
-            //PART II : fill the components in order
+            //ACT II : fill the components in order
 
             await GenerateComponents(inputPerson, timeRange.start, timeRange.end, daysPerPixel, inputedEventTags);
 
 
-            //PART III : compile in right placement
+            //ACT III : compile in right placement
             var final =
                 $@" <!--MADE BY MACHINES FOR HUMAN EYES-->
                     {svgHead}

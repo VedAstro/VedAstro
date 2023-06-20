@@ -96,7 +96,7 @@ namespace VedAstro.Library
                     case "today":
                     case "day":
                     case "days":
-                        start = new Time($"00:00 {today}", birthLocation);
+                        start = new Time($"00:00 {yesterday}", birthLocation);
                         end = timeNow.AddHours(Tools.DaysToHours(number));
                         return new TimeRange(start, end);
                     case "week":

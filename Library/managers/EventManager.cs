@@ -28,13 +28,6 @@ namespace VedAstro.Library
         private const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
 
 
-        /// <summary>
-        /// Every time events is being generated ((data+calculator)+time=event),
-        /// the count goes up, auto reset on new task 
-        /// </summary>
-        public static int EventsGeneratorProgressCounter { get; set; }
-
-
 
         /** PUBLIC METHODS **/
 
@@ -57,15 +50,11 @@ namespace VedAstro.Library
             //split time into slices based on precision
             var timeList = GetTimeListFromRange(startTime, endTime, precisionInHours);
 
-            EventsGeneratorProgressCounter = 0;// progress counter reset
 
             foreach (var eventData in eventDataList)
             {
                 //get list of occuring events for a single event type
                 var eventListForThisEvent = GetListOfEventsForEventData(eventData, person, timeList);
-
-                //increment counters, for anybody listening for progress
-                EventsGeneratorProgressCounter++;
 
                 //add events to main list of event
                 eventList.AddRange(eventListForThisEvent);

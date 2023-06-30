@@ -37,15 +37,17 @@
 
 
 ## What's Possible via Core Library
-[![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/Calculator/LifePredictor)
-[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Calculator/Match)
-[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Calculator/StarsAboveMe)
+[![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/Calculator/LifePredictor)   
+[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Calculator/Match)   
+[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Calculator/StarsAboveMe)   
 
 
-## 64 Data Points via FREE & Open API (yeah you read right!)
-Below is sample result for API call for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
+## 64 Data Points via Open API & FREE (yeah you read right!)
+Below is sample API call result for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
+[Watch Video Guide](https://www.youtube.com/@vedastro)
 ```json
  "Payload": {
+    "SwissEphemeris": "{ Longitude = 97.672406549912, Latitude = 2.2248025536827577E-05, DistanceAU = 1.0165940297895264, SpeedLongitude = 0, SpeedLatitude = 0, SpeedDistance = 0 }",
     "AbdaBala": "0",
     "AspectedByMalefics": "False",
     "AyanaBala": "118.071100045034",
@@ -107,7 +109,6 @@ Below is sample result for API call for data related to "**Sun**" on "**30/06/20
     "SignsPlanetIsAspecting": "Sagittarius",
     "Speed": "0.9533156649003025",
     "SthanaBala": "175.2288888888889",
-    "SwissEphemeris": "{ Longitude = 97.672406549912, Latitude = 2.2248025536827577E-05, DistanceAU = 1.0165940297895264, SpeedLongitude = 0, SpeedLatitude = 0, SpeedDistance = 0 }",
     "TemporaryFriends": "Venus, Mars, Jupiter",
     "Thrimsamsa": "Sagittarius",
     "TotalStrength": "446.02",
@@ -149,9 +150,8 @@ It takes **decades of experience** to be able make accurate prediction.
 As such this knowledge only reaches a limited people.
 This project is an effort to change that. [Read More](https://vedastro.org/About)
 
-
 # 🎂 9 Years Old 
-The first line of code for this project was written in late 2014 at Itä-Pasila.
+The first line of code for this project was written in **late 2014** at **Itä-Pasila**.
 Back then it was a simple desktop software, with no UI and only text display.
 With continued support from users, this project has steadily grown to what it is today.
 Helping people from all over the world.
@@ -166,8 +166,6 @@ Last but not least, we thank users like you who keep this project going.
 
 ### :pray: Special Thanks
 @Ceeper00 @razukc @kristaps.bunts @Circuito
-
-
 
 <hr>
 

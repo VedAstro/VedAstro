@@ -36,15 +36,15 @@
 
 
 
-## What's Possible via Core Library
+# 🎯 Perfect Predictions
 [![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/Calculator/LifePredictor)   
 [![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Calculator/Match)   
 [![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Calculator/StarsAboveMe)   
 
 
-## 64 Data Points via Open API & FREE (yeah you read right!)
+# 📊 64 Data Points via Open API & FREE (yeah you read right!)
 Below is sample API call result for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
-[Watch Video Guide](https://www.youtube.com/@vedastro)
+--> [Watch Video Guide](https://www.youtube.com/@vedastro)
 ```json
  "Payload": {
     "SwissEphemeris": "{ Longitude = 97.672406549912, Latitude = 2.2248025536827577E-05, DistanceAU = 1.0165940297895264, SpeedLongitude = 0, SpeedLatitude = 0, SpeedDistance = 0 }",
@@ -194,26 +194,33 @@ Inspired by the concept of "**Gonzo Journalism**", pioneered by [Hunter S. Thomp
 
 We favour this pattern for the development of VedAstro simply due to the volatile nature of this project.
 Other development styles like "Waterfall" and "Scrum" are equally good when the need is.
-We want to try out novel ideas at a heartbeat, we want the latest platform and we want it cheap.
-So the "gonzo development" pattern is best for this needs.
 
-![gonzon-dev-button](https://vedastro.org/images/gonzon-dev-button.png)
+We want to :
+- try out novel ideas at a heartbeat
+- we want the latest platform 
+- we want it cheap
 
-### BETA & STABLE
+Hence the "**gonzo development**" pattern is best suited for this needs.
+
+### Beta & Stable
 The negative side effect is that there will be bugs forever. Because it's near impossible to constantly
 change an ever-growing code base without having to constantly fix breaking changes.
 To deal with this, we split the Web App into Beta and Stable.
+
+![gonzon-dev-button](https://vedastro.org/images/gonzon-dev-button.png)
+
 Stable version will contain an old version of the App, while beta will always contain latest buildable code.
-But the database will be shared between these. Meaning changes in Beta will seen in Stable as well.
+But the database will be shared between these. Meaning data changes in Beta will seen in Stable as well.
 
 
- # 👶 Drunk Proofing 
- We would like to introduce in this project a novel UX concept called "Drunk Proofing".
+ # 👶 Drunk Proof UX 
+ We would like to introduce in this project a novel UX concept called "**Drunk Proofing**".
  The idea is simple. All UI is designed to be operated by an alcoholically intoxicated person aka drunk.
 
  Why? Because this forces the team to make a simple and intuitive UI design.
- It is all too easy during development to make a complicated UI. It is far more difficult and rewarding
- to make UI easy. 
+ It is all too easy during development to make a complicated UI that only coders understand.
+ But it is far more difficult and **rewarding** to make the UI intuitive & easy.
+ A "no manuals" and "no brainer" approach to design.
 
 
 # ⚙️ Project Structure

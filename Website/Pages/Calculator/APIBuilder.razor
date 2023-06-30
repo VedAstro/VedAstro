@@ -1,12 +1,11 @@
 ﻿@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
-<PageTitle>Easy API Builder | VedAstro</PageTitle>
+<PageTitle>Easy Open API | VedAstro</PageTitle>
 
 <PageTop ImageName="api-builder-banner.png"
-         Title="Easy API Builder"
-         DescriptionText="Build your HTTP calls fast and easy. No manuals needed.
-         Powered by .NET Roslyn compiler to auto generate calls dynamically from source code.">
+         Title="Open API"
+         DescriptionText="Advanced astronomical data via a simple HTTP request for free. Enabling you to build your app or service faster and cheaper.">
 </PageTop>
 
 
@@ -179,13 +178,10 @@
         @*GUIDE TEXT*@
         <div class="vstack gap-3">
             <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
-                <ButtonRow>
-                    <IconButton SmallSize="true" Outline="true" ButtonText="Read More" ClickUrl="@PageRoute.OpenApi" IconName="octicon:info-16" />
-                </ButtonRow>
                 <TextHTML>
                     Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language,
                     PHP, JS, Python, even your browsers' URL. Design your app to cache the received data.
-                    Note : calls have been known to fail once in a <strong>blue moon</strong>, if and when that happens,
+                    Note, calls have been known to fail once in a <strong>blue moon</strong>, if and when that happens,
                     just make sure your app just replays the same call again. Design your code to try
                     HTTP call at least 2 times be reporting as failed. Even a small network issue on the
                     client side may cause this.
@@ -199,6 +195,16 @@
                     error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alphabetically stored in <kbd>Payload</kbd> property.
                 </TextHTML>
             </ArticleBlock>
+            
+            <ArticleBlock Title="No Manuals Needed" IconName="emojione:clamp">
+                <TextHTML>
+                    Why a simple API builder using dropdown boxes? This will make it easy for any beginner to get started.
+                    The biggest problem with consuming any API, is the <strong>learning curve</strong> .
+                    Normally the first 3-5 hours will be spent learning the small
+                    nuances or semantics used by the API provider. Powered by .NET Roslyn compiler to auto generate calls dynamically from source code.
+                    We hope to reduce this lag with this simple &amp; intuitive API URL builder.
+                </TextHTML>
+            </ArticleBlock>
 
             <ArticleBlock Title="Reverse Engineer" IconName="emojione:hammer-and-wrench">
                 <TextHTML>
@@ -208,12 +214,47 @@
                     The API is designed to handle this, so don't worry about breaking it. Have fun.
                 </TextHTML>
             </ArticleBlock>
-
-            <ArticleBlock Title="Library (coming soon)" IconName="clarity:thin-client-line">
+            
+@*             <ArticleBlock Title="Library (coming soon)" IconName="clarity:thin-client-line">
                 <TextHTML>
                     There are also client libraries to help you access the API even more easily. It simply wraps HTTP calls into easy to consume functions, that your app can use.
                     Please note, these sub-projects is under <strong>prototype</strong> stage and much remains to be done. If you've created a library already please share it with the community.
                     <BoldLink URL="@URL.VedAstroJS">JavaScript</BoldLink>, <BoldLink URL="@URL.VedAstroNuget">.NET NuGet</BoldLink> &amp; <BoldLink URL="@URL.VedAstroSwift">Swift iOS &amp; MacOS</BoldLink>.
+                </TextHTML>
+            </ArticleBlock>
+ *@
+
+            <ArticleBlock Title="Fair Usage Policy" IconName="flat-color-icons:like">
+                <TextHTML>
+                    In order to keep this <strong>API FREE</strong> for the benefit of all people. Please do not abuse it.
+                    <ul class="mt-2 gap-2">
+                        <li>design your app to call the API only when needed</li>
+                        <li>cache the data you receive</li>
+                    </ul>
+                    If you ram the API with calls every 60s (like some people do), you'll ruin it for everybody.
+                    If you need technical help on this, shoot us a <BoldLink URL="@PageRoute.Contact">mail</BoldLink>. And we'll try our best to help you.
+                </TextHTML>
+            </ArticleBlock>
+
+
+            <ArticleBlock Title="Sponsor Music" IconName="emojione:violin">
+                <ButtonRow>
+                    <IconButton ClickUrl="@PageRoute.Donate" IconName="flat-color-icons:donate" ButtonText="Tip" Outline="true" SmallSize="true"></IconButton>
+                </ButtonRow>
+                <TextHTML>
+                    Running this API service, is like playing a <strong>beautiful public orchestra</strong>.
+                    It is only possible because of many moving parts by many people.
+                    Servers need to be optimized, updated and maintained. Code needs to be improved, tested and cleaned.
+
+                    <img src="images/public-orchestra.jpg" class="img-thumbnail my-3" alt="...">
+
+                    And all this has to be juggled to create the final product you see. Its a group effort.
+                    Please consider supporting this service to keep the "music" playing.
+                    <strong>Everybody</strong> can enjoy the music, so long as there's <strong>one</strong> person, willing to <BoldLink URL="@PageRoute.Donate">tip</BoldLink>
+
+                    <QuoteTextBlock Author="W.H. Auden" URL="@URL.WHAudenWiki">
+                        We are all here on earth to help others:<br />what on earth the others are here for,<br />I don't know.
+                    </QuoteTextBlock>
                 </TextHTML>
             </ArticleBlock>
 

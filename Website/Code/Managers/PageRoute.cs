@@ -21,9 +21,6 @@
         public const string QuickGuide = "Docs/QuickGuide";
         public const string Glossary = "Docs/Glossary";
 
-        //DOCS > API
-        public const string OpenApi = "Docs/API/";
-        
         //DEVELOPER
         public const string Developer = "Developer/";
         public const string DeveloperParam = "Developer/{TabName}";

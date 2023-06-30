@@ -12,14 +12,17 @@
 [![Docker](https://img.shields.io/static/v1?style=for-the-badge&message=Docker&color=2496ED&logo=Docker&logoColor=FFFFFF&label=)](https://hub.docker.com/r/vedastro/api)
 [![Ko-fi](https://img.shields.io/static/v1?style=for-the-badge&message=Ko-fi&color=FF5E5B&logo=Ko-fi&logoColor=FFFFFF&label=)](https://ko-fi.com/vedastro)
 [![Patreon](https://img.shields.io/static/v1?style=for-the-badge&message=Patreon&color=FF424D&logo=Patreon&logoColor=FFFFFF&label=)](https://www.patreon.com/vedastro)
-[![Slack](https://img.shields.io/static/v1?style=for-the-badge&message=Slack&color=4A154B&logo=Slack&logoColor=FFFFFF&label=)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)  
+[![Slack](https://img.shields.io/static/v1?style=for-the-badge&message=Slack&color=4A154B&logo=Slack&logoColor=FFFFFF&label=)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
 
 </span>
 <span align="center">
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/gen-so/Genso.Astrology)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/gen-so/Genso.Astrology)
-[![Stars](https://img.shields.io/github/stars/gen-so/Genso.Astrology?color=brightgreen)](https://github.com/gen-so/Genso.Astrology/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
 </span>
@@ -33,8 +36,87 @@
 
 
 
-## Whats Possible
-![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk2.gif)
+## What's Possible via Core Library
+[![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/Calculator/LifePredictor)
+[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Calculator/Match)
+[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Calculator/StarsAboveMe)
+
+
+## 64 Data Points via FREE & Open API (yeah you read right!)
+Below is sample result for API call for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
+```json
+ "Payload": {
+    "AbdaBala": "0",
+    "AspectedByMalefics": "False",
+    "AyanaBala": "118.071100045034",
+    "Benefic": "False",
+    "ChestaBala": "0",
+    "ConjunctWithMalefics": "True",
+    "Constellation": "Aridra - 3",
+    "Debilitated": "False",
+    "Declination": "23.2284400180136",
+    "DigBala": "5.222314814814815",
+    "Drekkana": "Libra",
+    "DrekkanaBala": "0",
+    "DrikBala": "4.883715277777782",
+    "Dwadasamsa": "Scorpio",
+    "Exalted": "False",
+    "HoraBala": "60",
+    "HousePlanetIsIn": "5",
+    "InKendra": "False",
+    "IsPlanetInOwnHouse": "False",
+    "IsPlanetStrongInShadvarga": "False",
+    "KalaBala": "200.68443337836732",
+    "KendraBala": "15",
+    "Malefic": "True",
+    "MasaBala": "0",
+    "Moolatrikona": "False",
+    "Motion": "Direct",
+    "NaisargikaBala": "60",
+    "NathonnathaBala": "5.709722222222221",
+    "Navamsa": "Aquarius",
+    "NirayanaLongitude": {
+      "DegreeMinuteSecond": "74° 56' 18",
+      "TotalDegrees": "74.93833333333333"
+    },
+    "OchchaBala": "38.35388888888889",
+    "OjayugmarasyamsaBala": "30",
+    "PakshaBala": "16.90361111111111",
+    "PlanetHoraSign": "Leo",
+    "PlanetsInConjuction": "Mercury",
+    "ReceivingAspectFrom": "",
+    "Saptamsa": "Virgo",
+    "SaptavargajaBala": "91.875",
+    "SayanaLatitude": {
+      "DegreeMinuteSecond": "0° 0' 0",
+      "TotalDegrees": "0"
+    },
+    "SayanaLongitude": {
+      "DegreeMinuteSecond": "97° 40' 20",
+      "TotalDegrees": "97.67222222222222"
+    },
+    "ShadbalaPinda": "446.02",
+    "ShadvargaBala": "88.125",
+    "Sign": {
+      "Name": "Gemini",
+      "DegreesIn": {
+        "DegreeMinuteSecond": "14° 56' 17",
+        "TotalDegrees": "14.938055555555556"
+      }
+    },
+    "SignsPlanetIsAspecting": "Sagittarius",
+    "Speed": "0.9533156649003025",
+    "SthanaBala": "175.2288888888889",
+    "SwissEphemeris": "{ Longitude = 97.672406549912, Latitude = 2.2248025536827577E-05, DistanceAU = 1.0165940297895264, SpeedLongitude = 0, SpeedLatitude = 0, SpeedDistance = 0 }",
+    "TemporaryFriends": "Venus, Mars, Jupiter",
+    "Thrimsamsa": "Sagittarius",
+    "TotalStrength": "446.02",
+    "TransmittingAspectToHouse": "House11",
+    "TransmittingAspectToPlanet": "",
+    "TribhagaBala": "0",
+    "VaraBala": "0"
+  }
+```
 
 
 # 🌍 Links
@@ -61,26 +143,12 @@ The chart takes alot of computational power to generate, so please be patient af
 
 # 📜 About
 
-Using modern computational technologies &amp; methods we can simplify the
-complexity of Vedic Astrology. For example, calculating planet strength (Bhava Bala)
-used to take hours, now with computers we can calculate it in milliseconds.
-And using databases &amp; innovative programming methods, there is no need to remember
-thousands of planetary combinations, allowing you to make accurate predictions
-with little to no knowledge.
-</br>
-
-Our goal is to make Vedic Astrology easily accessible to anybody.
-So that people can use it in their daily lives for their benefit.
-Vedic Astrology in Sanskrit mean "**Light**". And that is exactly what it is.
-It lights our future so we can change it.
-And it lights our past, to understand our mistakes.
-</br>
-
 Anybody who has studied Vedic Astrology knows well how accurate it can be.
 But also how complex it can get to make accurate predictions.
 It takes **decades of experience** to be able make accurate prediction.
 As such this knowledge only reaches a limited people.
-This project is an effort to change that.
+This project is an effort to change that. [Read More](https://vedastro.org/About)
+
 
 # 🎂 9 Years Old 
 The first line of code for this project was written in late 2014 at Itä-Pasila.
@@ -99,13 +167,24 @@ Last but not least, we thank users like you who keep this project going.
 ### :pray: Special Thanks
 @Ceeper00 @razukc @kristaps.bunts @Circuito
 
+
+
 <hr>
 
-# 👪 Join our family
-We're always looking for somebody to write docs, edit code, raise funds or help out in another ways.
-You can also choose to get paid for your time spent improving VedAstro.
+# ❤️ How can I help?
+Just **Like** & **Share** our social pages and it will be a **big** help already!
 
-[Read More](https://vedastro.org/JoinOurFamily)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
+[![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/_VedAstro)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
+
+# 👪 Join our family
+If you think you can do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
+We're always looking for somebody to **[help funding](https://vedastro.org/Donate)** and **[improve code.](https://vedastro.org/JoinOurFamily)**.
+
+
+# 🙋‍♂️ Come say "Hi", we don't bite!
 
 <!-- SLACK JOIN IMAGE -->
 [![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
@@ -113,7 +192,7 @@ You can also choose to get paid for your time spent improving VedAstro.
 
 # 🧰 Gonzo Development Pattern
 This development style celebrates the methodology of chaotic development at the benefit of low cost and fast paced prototyping.
-Inspired by the concept of "Gonzo Journalism", pioneered by [Hunter S. Thompson](https://en.wikipedia.org/wiki/Hunter_S._Thompson) in the 1970s.
+Inspired by the concept of "**Gonzo Journalism**", pioneered by [Hunter S. Thompson](https://en.wikipedia.org/wiki/Hunter_S._Thompson) in the 1970s.
 
 We favour this pattern for the development of VedAstro simply due to the volatile nature of this project.
 Other development styles like "Waterfall" and "Scrum" are equally good when the need is.
@@ -148,7 +227,7 @@ It works by combining **logic** on how to calculate a prediction with **data** a
 This is done everytime a "Calculate" button is clicked. Below you will see a brief explanation of this process.
 This method was choosen to easily accommodate the thousands of astrological calculation possibilities.
 
-## event prediction = (data + logic) X time
+## event prediction = (data + logic) * time
 
 ```
 

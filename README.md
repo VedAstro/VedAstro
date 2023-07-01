@@ -159,18 +159,17 @@ Helping people from all over the world.
 # 📚 Credits &amp; Reference 
 ![bv-raman-rao](https://user-images.githubusercontent.com/43817262/226793913-493ca156-cb69-4109-bbe4-3007f57a3941.png)
 
-Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao. Information from their books is the source
-material & inspiration for this project. Please buy their books to show your support.
-Astronomical calculation was made possible by "SwissEphNet" &amp; "SWISS EPHEMERIS".
+Thanks to [B.V. Raman](https://en.wikipedia.org/wiki/B._V._Raman) and his grandfather B. Suryanarain Rao
+for pioneering easy to read astrology books. 
+Credit also goes to [St. Jean-Baptiste de La Salle](https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle)
+for proving the efficacy of free and open work for the benefit all.
+
+Astronomical calculation was made possible by [NASA JPL](https://naif.jpl.nasa.gov/pipermail/spice_announce/2007-August/000055.html)
+data via "SWISS EPHEMERIS" ported by "SwissEphNet".
 Last but not least, we thank users like you who keep this project going.
 
-### :pray: Special Thanks
-@Ceeper00 @razukc @kristaps.bunts @Circuito
-
-<hr>
-
 # ❤️ How can I help?
-Just **Like** & **Share** our social pages and it will be a **big** help already!
+Just **Like** & **Share** our social pages and it'll be a **big** help already!
 
 [![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/_vedastro/)
 [![Facebook](https://img.shields.io/badge/Facebook-1877F2?style=for-the-badge&logo=facebook&logoColor=white)](https://www.facebook.com/vedastro.org)

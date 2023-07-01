@@ -183,6 +183,8 @@ public class URL
     public const string RamanujanWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan";
     public const string EmersonWiki = "https://en.wikipedia.org/wiki/Ralph_Waldo_Emerson";
     public const string MahatmaGandhiWiki = "https://en.wikipedia.org/wiki/Mahatma_Gandhi";
+    public const string LaSalleWiki = "https://en.wikipedia.org/wiki/Jean-Baptiste_de_La_Salle";
+    public const string BVRamanWiki = "https://en.wikipedia.org/wiki/B._V._Raman";
     public const string MiltonFriedmanWiki = "https://en.wikipedia.org/wiki/Milton_Friedman";
     public const string RamanujanQuoteWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan#Personality_and_spiritual_life";
     public const string StPaulWiki = "https://en.wikipedia.org/wiki/Paul_the_Apostle";

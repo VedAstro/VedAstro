@@ -35,7 +35,9 @@ namespace API
         //█▀█ █▀▀ █   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
 
 
-
+        /// <summary>
+        /// Main func to generate event charts used by site, via awesome built in cache mechanism
+        /// </summary>
         [Function(nameof(GetEventsChart))]
         public static async Task<HttpResponseData> GetEventsChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetEventsChart/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData incomingRequest,
@@ -76,6 +78,54 @@ namespace API
                 var httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask, callerInfo, incomingRequest);
 
                 return httpResponseData;
+
+            }
+            catch (Exception e)
+            {
+                //log it
+                await APILogger.Error(e);
+                var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Call-Status", "Fail"); //caller checks this
+                response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+                return response;
+            }
+
+        }
+        
+        
+        /// <summary>
+        /// SPECIAL DEBUG version to generate life chart without cache for R & D purposes
+        /// </summary>
+        [Function(nameof(GetEventsChartNoCache))]
+        public static async Task<HttpResponseData> GetEventsChartNoCache(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetEventsChartNoCache/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData incomingRequest,
+            string userId, string visitorId)
+        {
+
+            try
+            {
+                //data comes out of caller, basic spec on how the chart should be
+                var requestJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
+
+                //check if the specs given is correct and readable
+                //this is partially filled chart with no generated svg content only specs
+                var chartSpecsOnly = await EventsChart.FromJsonSpecOnly(requestJson);
+
+                //a hash to id the chart's specs (caching)
+                var chartId = chartSpecsOnly.GetEventsChartSignature();
+
+                //PREPARE THE CALL
+                var foundPerson = await APITools.GetPersonById(chartSpecsOnly.PersonId);
+                var chartSvg = await EventsChartManager.GenerateEventsChart(
+                    foundPerson,
+                    chartSpecsOnly.TimeRange,
+                    chartSpecsOnly.DaysPerPixel,
+                    chartSpecsOnly.EventTagList);
+                //return chartSvg;
+
+
+                //send image back to caller
+                return APITools.SendSvgToCaller(chartSvg, incomingRequest);
 
             }
             catch (Exception e)

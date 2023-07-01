@@ -23,7 +23,7 @@
                         <span>Choose or add person's horoscope</span>
                     </div>
                     <div class="col">
-                        <PersonSelectorBox HideTitle="true" @ref="_peopleSelectorBox"/>
+                        <PersonSelectorBox HideTitle="true" @ref="_peopleSelectorBox" />
                     </div>
                 </div>
                 <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
@@ -42,7 +42,8 @@
                             <option value="LifePredictor">Life Predictor</option>
                             @*                             <option value="Muhurtha">Muhurtha</option>
                             <option value="MatchFinder">Match Finder</option>
- *@ </select>
+                            *@
+                        </select>
                     </div>
                 </div>
                 <div class="mt-3 row row-cols-3 align-items-center justify-content-start">
@@ -53,7 +54,7 @@
                         <span>Click calculate to view predictions. <strong style="color: #007e21;">Easy!</strong></span>
                     </div>
                     <div class="col">
-                        <IconButton SmallSize="true" ButtonText="Goto Calculator" OnClickCallback="OnClickCalculateEasyPeasy" TooltipText="Take me to calculator now!" TextCenter="true" IconName="gg:calendar-next"/>
+                        <IconButton SmallSize="true" ButtonText="Goto Calculator" OnClickCallback="OnClickCalculateEasyPeasy" TooltipText="Take me to calculator now!" TextCenter="true" IconName="gg:calendar-next" />
                     </div>
                 </div>
             </div>
@@ -63,42 +64,45 @@
     <ArticleBlock Title="What is a calculator?" IconName="icon-park:calculator">
         <ButtonRow>
             <IconButton SmallSize="true" ButtonText="Tutorials" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.YoutubeChannel" />
-            <IconButton SmallSize="true" ButtonText="View All" IconName="fluent:calculator-multiple-24-regular" ClickUrl="@PageRoute.CalculatorList"/>
+            <IconButton SmallSize="true" ButtonText="View All" IconName="fluent:calculator-multiple-24-regular" ClickUrl="@PageRoute.CalculatorList" />
         </ButtonRow>
         <TextHTML>
-            Each calculator shows aspect of astrology. For example <BoldLink URL="@PageRoute.Match">Match</BoldLink> is a calculator for
-            checking marriage or friendship compatibility. <BoldLink URL="@PageRoute.Muhurtha">Muhurtha</BoldLink> is used for finding good
-            timing and using the <BoldLink URL="@PageRoute.LifePredictor">Life Predictor</BoldLink> you can make predictions up to 120 years.
+            Each calculator shows an aspect of astrology. For example <BoldLink URL="@PageRoute.Match">Match</BoldLink> is a calculator for
+            checking marriage or friendship compatibility. <BoldLink URL="@PageRoute.LifePredictor">Life Predictor</BoldLink>
+            can help predict major life events <strong>decades ahead</strong> and using <BoldLink URL="@PageRoute.Muhurtha">Muhurtha</BoldLink>
+            you can find the perfect time for important occasions like marriage, job interviews or starting a project.
             Explore each calculator to get a deep understanding of Vedic Astrology.
         </TextHTML>
     </ArticleBlock>
 
     <ArticleBlock Title="Unexpected errors?" IconName="flat-color-icons:broken-link">
         <TextHTML>
-            Press <kbd>CTRL + SHIFT + R</kbd> This will clear the old copy (cache), and
-            solve 90% of the errors you face.
-            VedAstro WebApp gets new updates almost <BoldLink URL="@URL.GitHubCommits">everyday!</BoldLink>
-            So it's important that you're using the latest version.
-            The browser caches the old version, which causes errors as it fails to work with the updated API Server.
-            For Mac OSX users, try <kbd>COMMAND + SHIFT + R</kbd> in Chrome.
+            <p>
+                Press <kbd>CTRL + SHIFT + R</kbd>. This will clear the old copy (cache), and
+                solve 90% of the errors you face. VedAstro gets new updates almost <BoldLink URL="@URL.GitHubCommits">everyday!</BoldLink>
+            </p>
+            <p>
+                So it's important that you're using the latest version.
+                The browser caches the old version, which causes errors as it fails to work with the updated API Server.
+                For <strong>Mac OSX</strong> users, try <kbd>COMMAND + SHIFT + R</kbd> in Chrome.
+            </p>
         </TextHTML>
 
     </ArticleBlock>
 
     <ArticleBlock Title="Who is this for?" IconName="flat-color-icons:conference-call">
         <TextHTML>
-
             <p class="text-justify">
-                Both an <strong>average</strong> person and expert astrologer can find VedAstro useful. There are complex calculators
-                like Dasa that <strong>experts</strong> can use and there are easy to use calculators like Match that require
-                no astrological knowledge.
+                Both an <strong>average</strong> person and expert astrologer can find VedAstro useful.
+                In every calculator there is an "<strong>Easy</strong>" and "<strong>Advanced</strong>"
+                version of the results.
             </p>
             <p class="text-justify">
-                These calculators a constantly being improved. The ideal goal of this project is to make all tools <strong>easily usable</strong> by anybody.
-                So if you find any of the calculator too difficult, just leave a comment and it might be better the next time you visit.
+                These calculators a constantly being improved. The ideal goal of this project is to make all tools
+                <strong>easily usable</strong> by anybody. So if you find any of the calculator too difficult,
+                just leave a note and it might be better the next time you visit.
             </p>
         </TextHTML>
-
     </ArticleBlock>
 
     <ArticleBlock Title="Must I login to use?" IconName="flat-color-icons:neutral-decision">
@@ -111,10 +115,11 @@
             </p>
             <p>
                 Else it <strong>will be deleted</strong> when you close &amp; clear cache.
-                To login is very simple using <BoldLink OpenInNewTab="false" URL="@PageRoute.Login">Google &amp; Facebook</BoldLink>. So you don't have to waste
-                your time creating a new account with boring passwords to remember. We strongly believe in user <strong>privacy</strong>.
-                So we <strong>don't collect or connect</strong> to any data from your Google or Facebook account, it is only to authenticate your access.
-                You can verify this in the open source code.
+                To login is very simple using <BoldLink OpenInNewTab="false" URL="@PageRoute.Login">Google &amp; Facebook</BoldLink>.
+                So you don't have to waste your time creating a new account with boring passwords to remember.
+                We strongly believe in user <strong>privacy</strong>. So we <strong>don't collect or connect</strong> to any
+                data from your Google or Facebook account, it is only to authenticate your access. You can verify
+                this in the open source code.
             </p>
         </TextHTML>
 
@@ -126,14 +131,14 @@
             <p>
                 Under the hood, VedAstro is a hybrid Blazor WebAssembly + JS web application.
                 The cloud method of using VedAstro is the recommended way for most users.
-                But if you're feeling adventurous, try out VedAstro in Windows & API.
+                But if you're feeling adventurous, try out VedAstro in Windows & Open API.
             </p>
 
             <img src="images/4-parts-of-vedastro.jpg" width="@GR.W667px" class="img-thumbnail my-3" alt="...">
 
             <p>
-                You can find the Windows exe build in our github repo. And for now the best way you can
-                learn to use the API is to read the code in our repo. As we have yet to reach the documentation stage of this project.
+                These 4 parts come together to make the final service you see. You can incorporate individual parts of VedAstro
+                into your own projects as well. You can find the Windows exe build in our github repo.
                 If you need help with our API or Code, just drop us a mail.
             </p>
         </TextHTML>
@@ -154,7 +159,7 @@
 
 
         //only continue if passed input field validation
-        if (!(await IsValidationPassed())) {return; } //if nothing than back to normal
+        if (!(await IsValidationPassed())) { return; } //if nothing than back to normal
 
 
         var personId = _peopleSelectorBox?.SelectedPersonId ?? "";

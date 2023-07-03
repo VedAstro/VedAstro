@@ -9,15 +9,16 @@ namespace API
 {
     public static class OpenAPI
     {
+        private const string Route1 = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}/{propertyName}";
+        private const string Route2 = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}";
+        private const string Route3 = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}";
 
 
         /// <summary>
         /// https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
         /// </summary>
         [Function(nameof(Income1))]
-        public static async Task<HttpResponseData> Income1([HttpTrigger(AuthorizationLevel.Anonymous,
-                "get",
-                Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}/{propertyName}")]
+        public static async Task<HttpResponseData> Income1([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route1)]
             HttpRequestData incomingRequest,
             string locationName,
             string hhmmStr,
@@ -46,9 +47,7 @@ namespace API
         }
 
         [Function(nameof(Income2))]
-        public static async Task<HttpResponseData> Income2([HttpTrigger(AuthorizationLevel.Anonymous,
-                "get",
-                Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}")]
+        public static async Task<HttpResponseData> Income2([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route2)]
             HttpRequestData incomingRequest,
             string locationName,
             string hhmmStr,
@@ -75,9 +74,7 @@ namespace API
         }
 
         [Function(nameof(Income3))]
-        public static async Task<HttpResponseData> Income3([HttpTrigger(AuthorizationLevel.Anonymous,
-                "get",
-                Route = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}")]
+        public static async Task<HttpResponseData> Income3([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route3)]
             HttpRequestData incomingRequest,
             string locationName,
             string hhmmStr,

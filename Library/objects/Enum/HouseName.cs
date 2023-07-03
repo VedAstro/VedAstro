@@ -8,6 +8,7 @@ namespace VedAstro.Library
     public enum HouseName
     {
         //Note: maintain int relation for code that is still using int
+        Empty = 0,
         House1 = 1,
         House2 = 2,
         House3 = 3,

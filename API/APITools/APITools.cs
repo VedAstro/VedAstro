@@ -1,3 +1,21 @@
+
+
+
+//░█▀▀█ ─█▀▀█ ░█▄─░█ ░█▀▀▄ ░█─░█ ▀█▀ 　 ░█─░█ ─█▀▀█ ░█▀▀▄ 　 ░█──░█ ░█▀▀▀█ ░█▄─░█ 　 ▀▀█▀▀ ░█─░█ ░█▀▀▀ 
+//░█─▄▄ ░█▄▄█ ░█░█░█ ░█─░█ ░█▀▀█ ░█─ 　 ░█▀▀█ ░█▄▄█ ░█─░█ 　 ░█░█░█ ░█──░█ ░█░█░█ 　 ─░█── ░█▀▀█ ░█▀▀▀ 
+//░█▄▄█ ░█─░█ ░█──▀█ ░█▄▄▀ ░█─░█ ▄█▄ 　 ░█─░█ ░█─░█ ░█▄▄▀ 　 ░█▄▀▄█ ░█▄▄▄█ ░█──▀█ 　 ─░█── ░█─░█ ░█▄▄▄ 
+
+//░█▀▀█ ░█▀▀█ ▀█▀ ▀▀█▀▀ ▀█▀ ░█▀▀▀█ ░█─░█ 　 ░█▀▀▀ ░█──░█ ░█▀▀▀ ░█▄─░█ 　 ░█▀▀█ ░█▀▀▀ ░█▀▀▀ ░█▀▀▀█ ░█▀▀█ ░█▀▀▀ 　 ▀▀█▀▀ ░█─░█ ░█▀▀▀ ░█──░█ 
+//░█▀▀▄ ░█▄▄▀ ░█─ ─░█── ░█─ ─▀▀▀▄▄ ░█▀▀█ 　 ░█▀▀▀ ─░█░█─ ░█▀▀▀ ░█░█░█ 　 ░█▀▀▄ ░█▀▀▀ ░█▀▀▀ ░█──░█ ░█▄▄▀ ░█▀▀▀ 　 ─░█── ░█▀▀█ ░█▀▀▀ ░█▄▄▄█ 
+//░█▄▄█ ░█─░█ ▄█▄ ─░█── ▄█▄ ░█▄▄▄█ ░█─░█ 　 ░█▄▄▄ ──▀▄▀─ ░█▄▄▄ ░█──▀█ 　 ░█▄▄█ ░█▄▄▄ ░█─── ░█▄▄▄█ ░█─░█ ░█▄▄▄ 　 ─░█── ░█─░█ ░█▄▄▄ ──░█── 
+
+//░█─░█ ░█▀▀▀ 　 ░█─▄▀ ░█▄─░█ ░█▀▀▀ ░█──░█ 　 ░█─░█ ░█▀▀▀ 　 ░█▀▀▀ ▀▄░▄▀ ▀█▀ ░█▀▀▀█ ▀▀█▀▀ ░█▀▀▀ ░█▀▀▄ 
+//░█▀▀█ ░█▀▀▀ 　 ░█▀▄─ ░█░█░█ ░█▀▀▀ ░█░█░█ 　 ░█▀▀█ ░█▀▀▀ 　 ░█▀▀▀ ─░█── ░█─ ─▀▀▀▄▄ ─░█── ░█▀▀▀ ░█─░█ 
+//░█─░█ ░█▄▄▄ 　 ░█─░█ ░█──▀█ ░█▄▄▄ ░█▄▀▄█ 　 ░█─░█ ░█▄▄▄ 　 ░█▄▄▄ ▄▀░▀▄ ▄█▄ ░█▄▄▄█ ─░█── ░█▄▄▄ ░█▄▄▀
+
+
+
+
 using Azure;
 using Azure.Communication.Email;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -411,7 +429,6 @@ namespace API
 
         }
 
-
         /// <summary>
         /// Gets any file at given WWW url will return as bytes
         /// </summary>
@@ -439,26 +456,6 @@ namespace API
             }
 
 
-        }
-
-        /// <summary>
-        /// If start time and end time is same then will only return 1 time in list
-        /// </summary>
-        public static List<Time> GetTimeListFromRange(Time startTime, Time endTime, double precisionInHours)
-        {
-            //declare return value
-            var timeList = new List<Time>();
-
-            //create list
-            for (var day = startTime;
-                 day.GetStdDateTimeOffset() <= endTime.GetStdDateTimeOffset();
-                 day = day.AddHours(precisionInHours))
-            {
-                timeList.Add(day);
-            }
-
-            //return value
-            return timeList;
         }
 
         /// <summary>

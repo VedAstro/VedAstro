@@ -109,6 +109,27 @@ namespace VedAstro.Library
         //█▀▀ █▄█ █▄█ █▄▄ █ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
         /// <summary>
+        /// Slices time range into pieces by inputed hours
+        /// Given a start time and end time, it will add precision hours to start time until reaching end time.
+        /// Note: number of slices returned != precision hours
+        /// </summary>
+        public static List<Time> GetTimeListFromRange(Time startTime, Time endTime, double precisionInHours)
+        {
+            //declare return value
+            var timeList = new List<Time>();
+
+            //create list
+            for (var day = startTime; day.GetStdDateTimeOffset() <= endTime.GetStdDateTimeOffset(); day = day.AddHours(precisionInHours))
+            {
+                timeList.Add(day);
+            }
+
+            //return value
+            return timeList;
+        }
+
+
+        /// <summary>
         /// Returns a new instance of the modified time.
         /// Only input positive numbers
         /// </summary>
@@ -512,6 +533,9 @@ namespace VedAstro.Library
             return hash1 + hash2;
         }
 
+        /// <summary>
+        /// Returns STD time in string HH:mm dd/MM/yyyy zzz
+        /// </summary>
         public override string ToString()
         {
             return GetStdDateTimeOffsetText();

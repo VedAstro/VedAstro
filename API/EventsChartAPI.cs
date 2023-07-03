@@ -27,7 +27,12 @@ namespace API
 
     public static class EventsChartAPI
     {
+
         private static Dictionary<double, string> _cacheList;
+
+        //CENTRAL FOR ROUTES
+        private const string RouteGetEventsChartNoCache = "GetEventsChartNoCache/UserId/{userId}/VisitorId/{visitorId}";
+        private const string RouteGetEventsChart = "GetEventsChart/UserId/{userId}/VisitorId/{visitorId}";
 
 
 
@@ -40,7 +45,7 @@ namespace API
         /// </summary>
         [Function(nameof(GetEventsChart))]
         public static async Task<HttpResponseData> GetEventsChart(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetEventsChart/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData incomingRequest,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = RouteGetEventsChart)] HttpRequestData incomingRequest,
             string userId, string visitorId)
         {
 
@@ -91,14 +96,14 @@ namespace API
             }
 
         }
-        
-        
+
+
         /// <summary>
         /// SPECIAL DEBUG version to generate life chart without cache for R & D purposes
         /// </summary>
         [Function(nameof(GetEventsChartNoCache))]
         public static async Task<HttpResponseData> GetEventsChartNoCache(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "GetEventsChartNoCache/UserId/{userId}/VisitorId/{visitorId}")] HttpRequestData incomingRequest,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = RouteGetEventsChartNoCache)] HttpRequestData incomingRequest,
             string userId, string visitorId)
         {
 
@@ -442,162 +447,6 @@ namespace API
             }
         }
 
-        [Function("findbirthtimedasa")]
-        public static async Task<HttpResponseData> FindBirthTimeDasa([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-            try
-            {
-                //get data needed to generate multiple charts
-                //accurate life event
-                var lifeEvent = new LifeEvent();
-                lifeEvent.StartTime = "00:00 01/01/2014";
-                lifeEvent.Location = "Malaysia";
-                //view little ahead & forward of event
-                var eventTime = await lifeEvent.GetDateTimeOffsetAsync();
-                var startTime = new Time(eventTime.AddMonths(-1), await lifeEvent.GetGeoLocation());
-                var endTime = new Time(eventTime.AddMonths(1), await lifeEvent.GetGeoLocation());
-
-                //person
-                var person = await APITools.GetPersonById("54041d1ffb494a79997f7987ecfcf08b5");
-                //zoom level
-                //possible birth times
-                var timeSkip = 1;// 1 hour
-                var possibleTimeList = new List<Time>();
-                Time previousTime = person.BirthTime;//start with birth time
-                for (int i = 0; i < 3; i++) //5 possibilities
-                {
-                    //save to be added upon later
-                    previousTime = previousTime.AddHours(timeSkip);
-                    possibleTimeList.Add(previousTime);
-                }
-
-                //generate the needed charts
-                var chartList = new List<EventsChart>();
-                var dasaEventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.PD7, EventTag.PD8, EventTag.Gochara };
-                //PRECISION
-                //calculate based on max screen width,
-                //done for fast calculation only for needed viewability
-                var timeRange = new TimeRange(startTime, endTime);
-                var daysPerPixel = GetDayPerPixel(timeRange, 800);
-
-
-                var combinedSvg = "";
-                var chartYPosition = 30; //start with top padding
-                var leftPadding = 10;
-                foreach (var possibleTime in possibleTimeList)
-                {
-                    //replace original birth time
-                    var personAdjusted = person.ChangeBirthTime(possibleTime);
-                    var newChart = await GenerateNewChart(personAdjusted, timeRange, daysPerPixel, dasaEventTags);
-                    var adjustedBirth = personAdjusted.BirthTimeString;
-
-                    //place in group with time above the chart
-                    var wrappedChart = $@"
-                            <g transform=""matrix(1, 0, 0, 1, {leftPadding}, {chartYPosition})"">
-                                <text style=""font-size: 16px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">{adjustedBirth}</text>
-                                {newChart.ContentSvg}
-                              </g>
-                            ";
-
-                    //combine charts together
-                    combinedSvg += wrappedChart;
-
-                    //next chart goes below this one
-                    //todo get actual chart height for dynamic stacking
-                    chartYPosition += 270;
-                }
-
-                //put all charts in 1 big container
-                var finalSvg = EventsChartManager.WrapSvgElements("MultipleDasa", combinedSvg, 800, chartYPosition, Tools.GenerateId());
-
-
-                //send image back to caller
-                return APITools.SendSvgToCaller(finalSvg, incomingRequest);
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-        }
-
-        [Function("findbirthtimerisingsign")]
-        public static async Task<HttpResponseData> FindBirthTimeRisingSign([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
-        {
-            try
-            {
-                //get person
-                var person = await APITools.GetPersonById("05abf671c8bf4e4badc07a086c067f26");
-
-                //get all birth time with different rising sign
-                var possibleTimeList = await GetTimeList(person);
-
-                //calculate predictions
-                List<HoroscopePrediction> predictionList = new List<HoroscopePrediction>();
-                foreach (var timeSlice in possibleTimeList)
-                {
-                    //replace original birth time
-                    var personAdjusted = person.ChangeBirthTime(timeSlice);
-
-                    var x = await Tools.GetHoroscopePrediction(personAdjusted, APITools.HoroscopeDataListFile);
-                }
-                //convert list to xml string in root elm
-                var responseMessage = Tools.AnyTypeToXmlList(predictionList).ToString();
-
-                return APITools.PassMessage(responseMessage, incomingRequest);
-            }
-            catch (Exception e)
-            {
-                //log error
-                await APILogger.Error(e, incomingRequest);
-                //format error nicely to show user
-                return APITools.FailMessage(e, incomingRequest);
-            }
-
-
-
-            //LOCAL FUNCTIONS
-            async Task<List<Time>> GetTimeList(Person person)
-            {
-
-                //start of day till end of day
-                var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-                var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-
-                var returnList = new List<Time>();
-                var timeSkip = 1;// 1 hour
-                var reachedDayEnd = false;
-                var checkTime = dayStart; //from the start of the day
-                var previousSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
-                //add 1st sign at start of day to list
-                returnList.Add(checkTime);
-
-                //scan through the day & add mark each time new sign rises
-                //stop looking when reached end of day
-                while (!reachedDayEnd)
-                {
-                    //if different from previous sign, then add time slice to list
-                    var checkSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
-                    if (checkSign != previousSign) { returnList.Add(checkTime); }
-
-                    //update previous sign
-                    previousSign = checkSign;
-
-                    //goto to next time slice
-                    checkTime = checkTime.AddHours(timeSkip);
-
-                    //if next time slice goes to next day, then end it here
-                    if (checkTime > dayEnd) { reachedDayEnd = true; }
-                }
-
-                return returnList;
-
-            }
-        }
-
 
 
 
@@ -710,7 +559,7 @@ namespace API
         //}
 
 
-        private static async Task<EventsChart> GenerateNewChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags)
+        public static async Task<EventsChart> GenerateNewChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags)
         {
             //from person get svg report
             var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags);

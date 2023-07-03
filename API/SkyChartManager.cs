@@ -17,7 +17,7 @@ namespace API
             //STAGE 1: get charts as SVG list frames
             var startTime = time.SubtractHours(Tools.DaysToHours(10));
             var endTime = time.AddHours(Tools.DaysToHours(10));
-            var timeSliceList = EventManager.GetTimeListFromRange(startTime, endTime, 24); //should be 30 frames\
+            var timeSliceList = Time.GetTimeListFromRange(startTime, endTime, 24); //should be 30 frames\
             var xxList = new List<object>();
             foreach (var time1 in timeSliceList)
             {

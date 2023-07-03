@@ -257,11 +257,11 @@ namespace VedAstro.Library
 
         /// <summary>
         /// gets all planets that this event is influenced by
-        /// extracted from name
+        /// extracted from name, if no house in name, then returns empty list
         /// </summary>
         public List<HouseName> GetRelatedHouse()
         {
-            //every time planet is mentioned add to list
+            //every time house name is mentioned add to list
             var eventName = this.Name.ToString().ToLower(); //take without spacing
             var returnList = new List<HouseName>();
             foreach (var houseName in House.AllHouses)

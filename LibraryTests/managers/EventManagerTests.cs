@@ -21,7 +21,7 @@ namespace VedAstro.Library.Tests
             //case 1 : 1 event in middle of 2 nulls
 
 
-            EventManager.EventSlicesToEvents(null, null, null, null, new[] { 1, 2});
+            //EventManager.EventSlicesToEvents(null, null, null, null, new[] { 1, 2});
 
             Assert.Fail();
         }

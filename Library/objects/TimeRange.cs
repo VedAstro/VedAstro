@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VedAstro.Library
+﻿namespace VedAstro.Library
 {
     /// <summary>
     /// Simple wrapper for the start and end of a period of Time.

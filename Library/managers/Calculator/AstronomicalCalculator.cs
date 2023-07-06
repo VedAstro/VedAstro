@@ -2751,7 +2751,7 @@ namespace VedAstro.Library
             var planetHouse = GetHousePlanetIsIn(time, planet);
 
             //check if planet is in kendra
-            var isPlanetInKendra = planetHouse == 1 ||planetHouse == 4 || planetHouse == 7 || planetHouse == 10;
+            var isPlanetInKendra = planetHouse == 1 || planetHouse == 4 || planetHouse == 7 || planetHouse == 10;
 
             return isPlanetInKendra;
         }
@@ -3815,26 +3815,26 @@ namespace VedAstro.Library
             var calculatorClass = typeof(AstronomicalCalculator);
 
             var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
-                let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 2 //only 2 params
-                      && parameter[0].ParameterType == typeof(HouseName)  //planet name
-                      && parameter[1].ParameterType == typeof(Time)        //birth time
-                select calculatorInfo;
+                               let parameter = calculatorInfo.GetParameters()
+                               where parameter.Length == 2 //only 2 params
+                                     && parameter[0].ParameterType == typeof(HouseName)  //planet name
+                                     && parameter[1].ParameterType == typeof(Time)        //birth time
+                               select calculatorInfo;
 
             //second possible order, technically should be aligned todo
             var calculators3 = from calculatorInfo in calculatorClass.GetMethods()
-                let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 2 //only 2 params
-                      && parameter[0].ParameterType == typeof(Time)  //birth time
-                      && parameter[1].ParameterType == typeof(HouseName)        //planet name
-                select calculatorInfo;
+                               let parameter = calculatorInfo.GetParameters()
+                               where parameter.Length == 2 //only 2 params
+                                     && parameter[0].ParameterType == typeof(Time)  //birth time
+                                     && parameter[1].ParameterType == typeof(HouseName)        //planet name
+                               select calculatorInfo;
 
             //these are for calculators with static tag data
             var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
-                let parameter = calculatorInfo.GetParameters()
-                where parameter.Length == 1 //only 2 params
-                      && parameter[0].ParameterType == typeof(HouseName)  //planet name
-                select calculatorInfo;
+                               let parameter = calculatorInfo.GetParameters()
+                               where parameter.Length == 1 //only 2 params
+                                     && parameter[0].ParameterType == typeof(HouseName)  //planet name
+                               select calculatorInfo;
 
 
             returnList.AddRange(calculators1);
@@ -3842,6 +3842,124 @@ namespace VedAstro.Library
             returnList.AddRange(calculators3);
 
             return returnList;
+
+        }
+
+        /// <summary>
+        /// Based on Shadvarga get nature of house for a person,
+        /// nature in number form to for easy calculation into summary
+        /// good = 1, bad = -1, neutral = 0
+        /// specially made method for life chart summary
+        /// </summary>
+        public static int GetHouseNatureScore(Time personBirthTime, HouseName inputHouse)
+        {
+            //if no house then no score
+            if (inputHouse == HouseName.Empty)
+            {
+                return 0;
+            }
+
+            //get house score
+            var houseStrength = GetHouseStrength(inputHouse, personBirthTime).ToDouble();
+
+            //based on score determine final nature
+            switch (houseStrength)
+            {
+                //positive
+                case > 550: return 2; //extra for power
+                case >= 450: return 1;
+
+                //negative
+                case < 250: return -3; //if below is even worse
+                case < 350: return -2; //if below is even worse
+                case < 450: return -1;
+                default:
+                    throw new Exception("No Strength Power defined!");
+            }
+        }
+
+        /// <summary>
+        /// Based on Shadvarga get nature of planet for a person,
+        /// nature in number form to for easy calculation into summary
+        /// good = 1, bad = -1, neutral = 0
+        /// specially made method for life chart summary
+        /// </summary>
+        public static int GetPlanetNatureScore(Time personBirthTime, PlanetName inputPlanet)
+        {
+            //get house score
+            var planetStrength = GetPlanetShadbalaPinda(inputPlanet, personBirthTime).ToDouble();
+
+
+            //based on score determine final nature
+            switch (planetStrength)
+            {
+                //positive
+                case > 550: return 2; //extra for power
+                case >= 450: return 1;
+
+                //negative
+                case < 250: return -3; //if below is even worse
+                case < 350: return -2; //if below is even worse
+                case < 450: return -1;
+                default:
+                    throw new Exception("No Strength Power defined!");
+            }
+        }
+
+        public enum Varna
+        {
+            SudraServant = 1,
+            VaisyaWorkmen = 2,
+            KshatriyaWarrior = 3,
+            BrahminScholar = 4
+        }
+
+        /// <summary>
+        /// Get a person's varna or color
+        /// A person's varna can be observed in real life
+        /// </summary>
+        public static Varna GetBirthVarna(Time birthTime)
+        {
+            //get ruling sign
+            var ruleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, birthTime).GetSignName();
+
+            //get grade
+            var maleGrade = GetGrade(ruleSign);
+
+            return maleGrade;
+
+            //higher grade is higher class
+            Varna GetGrade(ZodiacName sign)
+            {
+                switch (sign)
+                {   //Pisces, Scorpio and Cancer represent the highest development - Brahmin 
+                    case ZodiacName.Pisces:
+                    case ZodiacName.Scorpio:
+                    case ZodiacName.Cancer:
+                        return Varna.BrahminScholar;
+
+                    //Leo, Sagittarius and Libra indicate the second grade - or Kshatriya;
+                    case ZodiacName.Leo:
+                    case ZodiacName.Sagittarius:
+                    case ZodiacName.Libra:
+                        return Varna.KshatriyaWarrior;
+
+                    //Aries, Gemini and Aquarius suggest the third or the Vaisya;
+                    case ZodiacName.Aries:
+                    case ZodiacName.Gemini:
+                    case ZodiacName.Aquarius:
+                        return Varna.VaisyaWorkmen;
+
+                    //while Taurus, Virgo and Capricorn indicate the last grade, viz., Sudra
+                    case ZodiacName.Taurus:
+                    case ZodiacName.Virgo:
+                    case ZodiacName.Capricornus:
+                        return Varna.SudraServant;
+
+                    default: throw new Exception("");
+                }
+            }
+
 
         }
     }

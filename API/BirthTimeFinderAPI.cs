@@ -1,17 +1,22 @@
 ﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using System.Xml.Linq;
 using VedAstro.Library;
-using System.Net.Mime;
 using System.Net;
-using Azure.Storage.Blobs;
-using System;
-using System.Linq;
-using Microsoft.Bing.ImageSearch;
-using Microsoft.Bing.ImageSearch.Models;
 using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Routing;
 using Person = VedAstro.Library.Person;
+using Time = VedAstro.Library.Time;
+
+
+
+//█░█░█ █░█ █▀▀ █▄░█   ▀█▀ █▀▀ █▀▀ █░█ █▄░█ █▀█ █░░ █▀█ █▀▀ █▄█   █▀▀ ▄▀█ █▄░█ ▀ ▀█▀   █▄▀ █▀▀ █▀▀ █▀█   █░█ █▀█
+//▀▄▀▄▀ █▀█ ██▄ █░▀█   ░█░ ██▄ █▄▄ █▀█ █░▀█ █▄█ █▄▄ █▄█ █▄█ ░█░   █▄▄ █▀█ █░▀█ ░ ░█░   █░█ ██▄ ██▄ █▀▀   █▄█ █▀▀
+
+//█░█░█ █ ▀█▀ █░█   █▄█ █▀█ █░█ █▀█   █ █▀▄ █▀▀ ▄▀█ █▀ ░   ▀█▀ █░█ █▀▀ █▄░█   █▄█ █▀█ █░█   █▄▀ █▄░█ █▀█ █░█░█
+//▀▄▀▄▀ █ ░█░ █▀█   ░█░ █▄█ █▄█ █▀▄   █ █▄▀ ██▄ █▀█ ▄█ █   ░█░ █▀█ ██▄ █░▀█   ░█░ █▄█ █▄█   █░█ █░▀█ █▄█ ▀▄▀▄▀
+
+//█▀▄ █▀█ █ █▄░█ █▀▀   █▀ ▀█▀ █░█ █▀▀ █▀▀
+//█▄▀ █▄█ █ █░▀█ █▄█   ▄█ ░█░ █▄█ █▀░ █▀░
+//06/07/2023
 
 namespace API
 {
@@ -22,23 +27,35 @@ namespace API
     {
 
         //CENTRAL FOR ROUTES
-        private const string RouteFindBirthTimeAnimal = "FindBirthTimeAnimal/PersonId/{personId}";
         private const string startTime = "{hhmmStart}/{dateStart}/{monthStart}/{yearStart}/{offsetStart}";
         private const string endTime = "{hhmmEnd}/{dateEnd}/{monthEnd}/{yearEnd}/{offsetEnd}";
-        private const string RouteFindBirthTimeRisingSign = $"FindBirthTimeRisingSign/Location/{{locationName}}/StartTime/{startTime}/EndTime/{endTime}";
-        private const string RouteFindBirthTimeRisingSignPerson = "FindBirthTimeRisingSign/PersonId/{personId}";
+
+        private const string FindBirthTime_Animal_Person = "FindBirthTime/Animal/PersonId/{personId}";
+        private const string FindBirthTime_Animal_Time = "FindBirthTime/Animal/Location/{locationName}/StartTime/{startTime}/EndTime/{endTime}"; //todo
+
+        private const string FindBirthTime_RisingSign_Person = "FindBirthTime/RisingSign/PersonId/{personId}";
+        private const string FindBirthTime_RisingSign_Time = $"FindBirthTime/RisingSign/Location/{{locationName}}/StartTime/{startTime}/EndTime/{endTime}";
+
+        private const string FindBirthTime_HouseStrength_Person = "FindBirthTime/HouseStrength/PersonId/{personId}";
+        private const string FindBirthTime_EventsChart_Person = "FindBirthTime/EventsChart/PersonId/{personId}";
+
+
+
+        //--------------------------------------------------------
+
+
 
         [Function(nameof(FindBirthTimeAnimal))]
-        public static async Task<HttpResponseData> FindBirthTimeAnimal([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteFindBirthTimeAnimal)] HttpRequestData incomingRequest, string personId)
+        public static async Task<HttpResponseData> FindBirthTimeAnimal([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_Animal_Person)] HttpRequestData incomingRequest, string personId)
         {
 
             try
             {
                 //get person record
                 var foundPerson = await APITools.GetPersonById(personId);
-                
+
                 //get list of possible birth time slice in the current birth day
-                var timeSlices = Get24TimeSlices(foundPerson);
+                var timeSlices = GetTimeSlicesOnBirthDay(foundPerson, 1);
 
                 //get predictions for each slice and place in out going list  
                 var compiledObj = new JObject();
@@ -46,7 +63,7 @@ namespace API
                 {
                     //replace original birth time
                     var personAdjusted = foundPerson.ChangeBirthTime(timeSlice);
-                    
+
                     //get the animal prediction for possible birth time
                     var newBirthConstellation = AstronomicalCalculator.GetMoonConstellation(personAdjusted.BirthTime).GetConstellationName();
                     var animal = AstronomicalCalculator.GetAnimal(newBirthConstellation);
@@ -74,44 +91,31 @@ namespace API
 
         }
 
-        [Function(nameof(FindBirthTimeDasa))]
-        public static async Task<HttpResponseData> FindBirthTimeDasa([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData incomingRequest)
+        [Function(nameof(FindBirthTimeEventsChartPerson))]
+        public static async Task<HttpResponseData> FindBirthTimeEventsChartPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_EventsChart_Person)] HttpRequestData incomingRequest, string personId)
         {
+            //use hard cache if available
+            if (!string.IsNullOrEmpty(FindBirthTimeEventsChartPersonHardCache)) { return APITools.SendSvgToCaller(FindBirthTimeEventsChartPersonHardCache, incomingRequest); }
+
             try
             {
-                //get data needed to generate multiple charts
-                //accurate life event
-                var lifeEvent = new LifeEvent();
-                lifeEvent.StartTime = "00:00 01/01/2014";
-                lifeEvent.Location = "Malaysia";
-                //view little ahead & forward of event
-                var eventTime = await lifeEvent.GetDateTimeOffsetAsync();
-                var startTime = new Time(eventTime.AddMonths(-1), await lifeEvent.GetGeoLocation());
-                var endTime = new Time(eventTime.AddMonths(1), await lifeEvent.GetGeoLocation());
-
-                //person
-                var person = await APITools.GetPersonById("54041d1ffb494a79997f7987ecfcf08b5");
-                //zoom level
-                //possible birth times
-                var timeSkip = 1;// 1 hour
-                var possibleTimeList = new List<Time>();
-                Time previousTime = person.BirthTime;//start with birth time
-                for (int i = 0; i < 3; i++) //5 possibilities
-                {
-                    //save to be added upon later
-                    previousTime = previousTime.AddHours(timeSkip);
-                    possibleTimeList.Add(previousTime);
-                }
+                //get person specified by caller
+                var foundPerson = await APITools.GetPersonById(personId);
 
                 //generate the needed charts
                 var chartList = new List<EventsChart>();
-                var dasaEventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.PD6, EventTag.PD7, EventTag.PD8, EventTag.Gochara };
-                //PRECISION
-                //calculate based on max screen width,
-                //done for fast calculation only for needed viewability
-                var timeRange = new TimeRange(startTime, endTime);
-                var daysPerPixel = EventsChart.GetDayPerPixel(timeRange, 800);
+                var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.Gochara };
 
+                //time range is preset to full life 100 years from birth
+                var start = foundPerson.BirthTime;
+                var end = foundPerson.BirthTime.AddYears(100);
+                var timeRange = new TimeRange(start, end);
+
+                //calculate based on max screen width,
+                var daysPerPixel = EventsChart.GetDayPerPixel(timeRange, 1500);
+
+                //get list of possible birth time slice in the current birth day
+                var possibleTimeList = GetTimeSlicesOnBirthDay(foundPerson, 1);
 
                 var combinedSvg = "";
                 var chartYPosition = 30; //start with top padding
@@ -119,8 +123,8 @@ namespace API
                 foreach (var possibleTime in possibleTimeList)
                 {
                     //replace original birth time
-                    var personAdjusted = person.ChangeBirthTime(possibleTime);
-                    var newChart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, dasaEventTags);
+                    var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
+                    var newChart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
                     var adjustedBirth = personAdjusted.BirthTimeString;
 
                     //place in group with time above the chart
@@ -136,12 +140,20 @@ namespace API
 
                     //next chart goes below this one
                     //todo get actual chart height for dynamic stacking
-                    chartYPosition += 270;
+                    chartYPosition += 390;
                 }
 
                 //put all charts in 1 big container
-                var finalSvg = EventsChartManager.WrapSvgElements("MultipleDasa", combinedSvg, 800, chartYPosition, Tools.GenerateId());
+                var finalSvg = EventsChartManager.WrapSvgElements(
+                    svgClass: "MultipleDasa",
+                    combinedSvgString: combinedSvg,
+                    svgWidth: 800,
+                    svgTotalHeight: chartYPosition,
+                    randomId: Tools.GenerateId(),
+                    svgBackgroundColor: "#757575"); //grey easy on the eyes
 
+                //save copy for local reuse
+                FindBirthTimeEventsChartPersonHardCache = finalSvg;
 
                 //send image back to caller
                 return APITools.SendSvgToCaller(finalSvg, incomingRequest);
@@ -156,11 +168,13 @@ namespace API
             }
         }
 
+        public static string FindBirthTimeEventsChartPersonHardCache { get; set; } = "";
+
         /// <summary>
         /// Finds in same same day of birth, for quick & easy search
         /// </summary>
-        [Function(nameof(FindBirthTimeRisingSignEasy))]
-        public static async Task<HttpResponseData> FindBirthTimeRisingSignEasy([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteFindBirthTimeRisingSignPerson)] HttpRequestData incomingRequest, string personId)
+        [Function(nameof(FindBirthTimeRisingSignPerson))]
+        public static async Task<HttpResponseData> FindBirthTimeRisingSignPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_RisingSign_Person)] HttpRequestData incomingRequest, string personId)
         {
             try
             {
@@ -168,7 +182,7 @@ namespace API
                 var foundPerson = await APITools.GetPersonById(personId);
 
                 //get list of possible birth time slice in the current birth day
-                var timeSlices = Get24TimeSlices(foundPerson);
+                var timeSlices = GetTimeSlicesOnBirthDay(foundPerson, 1);
 
                 //get predictions for each slice and place in out going list  
                 var compiledObj = new JObject();
@@ -200,9 +214,63 @@ namespace API
             }
         }
 
+        /// <summary>
+        /// Finds in same same day of birth, for quick & easy search
+        /// </summary>
+        [Function(nameof(FindBirthTimeHouseStrengthPerson))]
+        public static async Task<HttpResponseData> FindBirthTimeHouseStrengthPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_HouseStrength_Person)] HttpRequestData incomingRequest, string personId)
+        {
+            try
+            {
+                //get person record
+                var foundPerson = await APITools.GetPersonById(personId);
 
-        [Function(nameof(FindBirthTimeRisingSign))]
-        public static async Task<HttpResponseData> FindBirthTimeRisingSign([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteFindBirthTimeRisingSign)] HttpRequestData incomingRequest,
+                //get list of possible birth time slice in the current birth day
+                var timeSlices = GetTimeSlicesOnBirthDay(foundPerson, 1);
+
+                //get predictions for each slice and place in out going list  
+                var compiledObj = new JObject();
+                foreach (var timeSlice in timeSlices)
+                {
+
+                    //compile all house strengths into a nice presentable string
+                    var finalString = "";
+                    foreach (var house in House.AllHouses)
+                    {
+                        //get house strength
+                        var strength = AstronomicalCalculator.GetHouseStrength(house, timeSlice).ToDouble(2);
+
+                        //add to compiled string
+                        var thisHouse = $"{house} {strength},";
+                        finalString += thisHouse;
+
+                    }
+
+
+                    //nicely packed with TIME next to variable data
+                    var named = new JProperty(timeSlice.ToString(), finalString);
+                    compiledObj.Add(named);
+
+                }
+
+
+                //send image back to caller
+                return APITools.PassMessageJson(compiledObj, incomingRequest);
+
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+        }
+
+
+        [Function(nameof(FindBirthTimeRisingSignTime))]
+        public static async Task<HttpResponseData> FindBirthTimeRisingSignTime([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_RisingSign_Time)] HttpRequestData incomingRequest,
             string locationName,
             string hhmmStart,
             string dateStart,
@@ -234,7 +302,7 @@ namespace API
 
                     //get all predictions for person
                     var allPredictions = await Tools.GetHoroscopePrediction(timeSlice, APITools.HoroscopeDataListFile);
-                    
+
                     //select only rising sign
                     var selected = allPredictions.Where(x => x.FormattedName.Contains("Rising")).FirstOrDefault();
 
@@ -266,20 +334,19 @@ namespace API
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
         /// <summary>
-        /// split a person's day into 24 slices of possible birth times
+        /// used for finding uncertain time in certain birth day
+        /// split a person's day into precision based slices of possible birth times
         /// </summary>
-        private static List<Time> Get24TimeSlices(Person person)
+        private static List<Time> GetTimeSlicesOnBirthDay(Person person, double precisionInHours)
         {
             //start of day till end of day
             var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
             var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
 
-            var finalList = Time.GetTimeListFromRange(dayStart, dayEnd, 1);
+            var finalList = Time.GetTimeListFromRange(dayStart, dayEnd, precisionInHours);
 
             return finalList;
         }
-
-
 
 
     }

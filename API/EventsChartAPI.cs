@@ -2,9 +2,10 @@ using System.Xml.Linq;
 using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Time = VedAstro.Library.Time;
 using Azure.Storage.Blobs;
 using System.Net;
+using static SuperConvert.Enums;
+using System.Collections;
 
 namespace API
 {
@@ -19,6 +20,7 @@ namespace API
         //CENTRAL FOR ROUTES
         private const string RouteGetEventsChartNoCache = "GetEventsChartNoCache/UserId/{userId}/VisitorId/{visitorId}";
         private const string RouteGetEventsChart = "GetEventsChart/UserId/{userId}/VisitorId/{visitorId}";
+        private const string SendGetEventsChart = "SendEventsChart/Email/{email}";
 
 
 
@@ -81,6 +83,59 @@ namespace API
                 return response;
             }
 
+        }
+
+        /// <summary>
+        /// creates an event chart and send it to email
+        /// calculates new does not use cache
+        /// </summary>
+        [Function(nameof(SendEventsChartToEmail))]
+        public static async Task<HttpResponseData> SendEventsChartToEmail(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = SendGetEventsChart)] HttpRequestData incomingRequest, string receiverEmail)
+        {
+
+            try
+            {
+                //data comes out of caller, basic spec on how the chart should be
+                var requestJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
+
+                //check if the specs given is correct and readable
+                //this is partially filled chart with no generated svg content only specs
+                var chartSpecsOnly = await EventsChart.FromJsonSpecOnly(requestJson);
+
+                //a hash to id the chart's specs (caching)
+                var chartId = chartSpecsOnly.GetEventsChartSignature();
+
+                //PREPARE THE CALL
+                var foundPerson = await APITools.GetPersonById(chartSpecsOnly.PersonId);
+                var chartSvg = await EventsChartManager.GenerateEventsChart(
+                    foundPerson,
+                    chartSpecsOnly.TimeRange,
+                    chartSpecsOnly.DaysPerPixel,
+                    chartSpecsOnly.EventTagList);
+                //return chartSvg;
+
+                //string to binary
+                byte[] rawFileBytes = System.Text.Encoding.UTF8.GetBytes(chartSvg); //SVG uses UTF-8
+                MemoryStream stream = new MemoryStream(rawFileBytes);
+
+                //using Azure Email Sender, send file to given email
+                var fileName = $"Chart-{foundPerson.Name}";
+                APITools.SendEmail(fileName, "svg", receiverEmail, stream);
+
+                return APITools.PassMessageJson("Email sent success", incomingRequest);
+
+
+            }
+            catch (Exception e)
+            {
+                //log it
+                await APILogger.Error(e);
+                var response = incomingRequest.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Call-Status", "Fail"); //caller checks this
+                response.Headers.Add("Access-Control-Expose-Headers", "Call-Status"); //needed by silly browser to read call-status
+                return response;
+            }
         }
 
 

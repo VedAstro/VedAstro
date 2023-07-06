@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Reference\rasis-and-extent.png = Reference\rasis-and-extent.png
 		README.md = README.md
 		NotCode\PublicLedger\README.md = NotCode\PublicLedger\README.md
+		VedAstroAPIDemo.html = VedAstroAPIDemo.html
 		version.json = version.json
 		Reference\zodiac-sign-name-symbol.png = Reference\zodiac-sign-name-symbol.png
 	EndProjectSection
@@ -25,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desktop", "Desktop\Desktop.csproj", "{9E283528-E200-4EA2-BA42-A43A95207F87}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.API", "Library.API\Library.API.csproj", "{BBC2261A-BB33-4C9D-B920-843348B2FBBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryTests", "LibraryTests\LibraryTests.csproj", "{DF38B69E-D142-4036-936B-AA0346B73E46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +69,12 @@ Global
 		{BBC2261A-BB33-4C9D-B920-843348B2FBBC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBC2261A-BB33-4C9D-B920-843348B2FBBC}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
 		{BBC2261A-BB33-4C9D-B920-843348B2FBBC}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
+		{DF38B69E-D142-4036-936B-AA0346B73E46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF38B69E-D142-4036-936B-AA0346B73E46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF38B69E-D142-4036-936B-AA0346B73E46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF38B69E-D142-4036-936B-AA0346B73E46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF38B69E-D142-4036-936B-AA0346B73E46}.ReleaseTest|Any CPU.ActiveCfg = Release|Any CPU
+		{DF38B69E-D142-4036-936B-AA0346B73E46}.ReleaseTest|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

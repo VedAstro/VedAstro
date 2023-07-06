@@ -2368,12 +2368,13 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// The main method that starts all Dasa Calculations
         /// Gets the occuring Planet Dasas (PD1, PD2,...) for a person at the given time
         /// </summary>
         public static Dasas GetCurrentPlanetDasas(Time birthTime, Time currentTime)
         {
             //get dasa planet at birth
-            var moonConstellation = GetMoonConstellation(birthTime); //note: mind aspect represented by moon here for entire chart
+            var moonConstellation = GetPlanetConstellation(birthTime, PlanetName.Moon);
             var birthDasaPlanet = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
 
             //get time traversed in birth dasa
@@ -2951,6 +2952,7 @@ namespace VedAstro.Library
             return pd5PlanetFullTime;
 
         }
+        
         public static double GetPD6PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet)
         {
             //120 years is the total of all the dasa planet's years
@@ -2967,6 +2969,7 @@ namespace VedAstro.Library
             return pd6PlanetFullTime;
 
         }
+        
         public static double GetPD7PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet, PlanetName pd7Planet)
         {
             //120 years is the total of all the dasa planet's years
@@ -2983,6 +2986,7 @@ namespace VedAstro.Library
             return pd7PlanetFullTime;
 
         }
+        
         public static double GetPD8PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet, PlanetName pd7Planet, PlanetName pd8Planet)
         {
             //120 years is the total of all the dasa planet's years

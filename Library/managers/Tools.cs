@@ -78,13 +78,13 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets all horoscope predictions for a person
         /// </summary>
-        public static async Task<List<HoroscopePrediction>> GetHoroscopePrediction(Person person, string fileUrl)
+        public static async Task<List<HoroscopePrediction>> GetHoroscopePrediction(Time birthTime, string fileUrl)
         {
             //get list of horoscope data (file from wwwroot)
             var horoscopeDataList = await GetHoroscopeDataList(fileUrl);
 
             //start calculating predictions (mix with time by person's birth date)
-            var predictionList = calculate(person, horoscopeDataList);
+            var predictionList = calculate(birthTime, horoscopeDataList);
 
             return predictionList;
 
@@ -92,7 +92,7 @@ namespace VedAstro.Library
             /// Get list of predictions occurring in a time period for all the
             /// inputed prediction types aka "prediction data"
             /// </summary>
-            List<HoroscopePrediction> calculate(Person person, List<HoroscopeData> horoscopeDataList)
+            List<HoroscopePrediction> calculate(Time birthTime, List<HoroscopeData> horoscopeDataList)
             {
                 //get data to instantiate muhurtha time period
                 //get start & end times
@@ -105,7 +105,7 @@ namespace VedAstro.Library
                     foreach (var horoscopeData in horoscopeDataList)
                     {
                         //only add if occuring
-                        var isOccuring = horoscopeData.IsEventOccuring(person.BirthTime, person);
+                        var isOccuring = horoscopeData.IsEventOccuring(birthTime);
                         if (isOccuring)
                         {
                             var newHoroscopePrediction = new HoroscopePrediction(horoscopeData.Name, horoscopeData.Description, horoscopeData.RelatedBody);

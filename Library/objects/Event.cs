@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace VedAstro.Library
 {
-    public class Event : IHasName, IToXml
+    public class Event : IToXml
     {
         /// <summary>
         /// Returns an Empty Time instance meant to be used as null/void filler
@@ -172,14 +172,14 @@ namespace VedAstro.Library
             {
 
                 var nameXml = eventXml.Element("Name")?.Element(typeof(EventName).FullName);
-                var name =  Enum.Parse<EventName>(nameXml.Value);
+                var name = Enum.Parse<EventName>(nameXml.Value);
 
                 var natureXml = eventXml.Element("Nature")?.Element(typeof(EventNature).FullName);
                 var nature = Enum.Parse<EventNature>(natureXml.Value);
 
                 var descriptionXml = eventXml.Element("Description")?.Element(typeof(String).FullName);
                 var description = descriptionXml.Value;
-                
+
                 var startTimeXml = eventXml.Element("StartTime").Element("Time");
                 var startTime = Time.FromXml(startTimeXml);
 
@@ -187,7 +187,7 @@ namespace VedAstro.Library
                 var endTime = Time.FromXml(endTimeXml);
 
 
-                var parsedPerson = new Event( name,  nature,  description,  startTime,  endTime);
+                var parsedPerson = new Event(name, nature, description, startTime, endTime);
 
                 return parsedPerson;
 

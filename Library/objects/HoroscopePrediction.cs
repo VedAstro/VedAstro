@@ -7,57 +7,43 @@ namespace VedAstro.Library
 {
 
     /// <summary>
-    /// Simple class to encapsulate a HoroscopePrediction (data)
+    /// Simple data wrapper for an instance of Horoscope Prediction (data)
     /// Note : EventData + Time = HoroscopePrediction
     /// </summary>
-    public class HoroscopePrediction : IHasName, IToXml
+    public class HoroscopePrediction : IToXml
     {
         //FIELDS
-        private readonly EventName _name;
-        private readonly string _description;
-        private readonly string _info;
-        private readonly RelatedBody _relatedBody;
 
 
         //CTOR
-        public HoroscopePrediction(EventName name, string description, RelatedBody relatedBody)
+        public HoroscopePrediction(HoroscopeName name, string description, RelatedBody relatedBody)
         {
             //initialize fields
-            _name = name;
-            _description = description;
-            _relatedBody = relatedBody;
+            Name = name;
+            Description = description;
+            RelatedBody = relatedBody;
         }
-
-        //public HoroscopePrediction(EventName name, string description, string info)
-        //{
-        //    //initialize fields
-        //    _name = name;
-        //    _description = description;
-        //    _info = info;
-        //}
 
 
 
         //PROPERTIES
         //Note: Created mainly for ease of use with WPF binding
-        public EventName Name => _name;
-        public string Description => _description;
-        public RelatedBody RelatedBody => _relatedBody;
-        //public string Info => _info;
-        public string FormattedName => Format.FormatName(this);
+        public HoroscopeName Name { get; }
+
+        public string Description { get; }
+
+        public RelatedBody RelatedBody { get; set; }
+
+        public string FormattedName => Format.FormatName(Name.ToString());
 
 
-
-
-        //PUBLIC METHODS
-        public EventName GetName() => _name;
 
         /// <summary>
         /// Note: Root element must be named HoroscopePrediction
         /// </summary>
         public static HoroscopePrediction FromXml(XElement predictionXml)
         {
-            var eventName = Enum.Parse<EventName>(predictionXml.Element("Name")?.Value ?? "Empty");
+            var eventName = Enum.Parse<HoroscopeName>(predictionXml.Element("Name")?.Value ?? "Empty");
             var description = predictionXml.Element("Description")?.Value ?? "Empty Description";
             var relatedBodyXml = predictionXml?.Element("RelatedBody") ?? new XElement("RelatedBody");
             var relatedBody = RelatedBody.FromXml(relatedBodyXml);
@@ -147,8 +133,8 @@ namespace VedAstro.Library
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
-            var hash1 = _name.GetHashCode();
-            var hash2 = Tools.GetStringHashCode(_description);
+            var hash1 = Name.GetHashCode();
+            var hash2 = Tools.GetStringHashCode(Description);
 
             return hash1 + hash2;
         }

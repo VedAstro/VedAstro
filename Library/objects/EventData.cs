@@ -11,7 +11,7 @@ namespace VedAstro.Library
     /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
-    public struct EventData : IHasName, IToXml
+    public struct EventData :  IToXml
     {
         /** FIELDS **/
 

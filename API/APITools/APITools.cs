@@ -29,10 +29,8 @@ using System.Xml.Linq;
 using Azure.Storage.Blobs;
 using SuperConvert.Extensions;
 using VedAstro.Library;
-using static Google.Protobuf.WireFormat;
 using Microsoft.Bing.ImageSearch.Models;
 using Microsoft.Bing.ImageSearch;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using Person = VedAstro.Library.Person;
 
 namespace API

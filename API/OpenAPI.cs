@@ -33,17 +33,11 @@ namespace API
             //log the call
             APILogger.Visitor(incomingRequest);
 
-
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
-
+            //parse time range from caller (possible to fail)
+            var parsedTime = await APITools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
 
             //send to sorter
-            return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, geoLocationResult, incomingRequest);
+            return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, incomingRequest);
         }
 
         [Function(nameof(Income2))]
@@ -61,16 +55,11 @@ namespace API
             //log the call
             APILogger.Visitor(incomingRequest);
 
-
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
+            //parse time range from caller (possible to fail)
+            var parsedTime = await APITools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
 
             //send to sorter (no property, set null)
-            return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, geoLocationResult, incomingRequest);
+            return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, incomingRequest);
         }
 
         [Function(nameof(Income3))]
@@ -87,21 +76,16 @@ namespace API
             //log the call
             APILogger.Visitor(incomingRequest);
 
-
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
+            //parse time range from caller (possible to fail)
+            var parsedTime = await APITools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
 
             //send to sorter (no property, set null)
-            return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, geoLocationResult, incomingRequest);
+            return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, incomingRequest);
         }
 
 
 
-        private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime, WebResult<GeoLocation>? geoLocationResult,
+        private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime,
             HttpRequestData incomingRequest)
         {
 
@@ -326,7 +310,6 @@ namespace API
 
 
         }
-
 
         private static JObject GetSignDataJson(PlanetName planetName, Time parsedTime)
         {

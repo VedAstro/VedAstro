@@ -240,13 +240,13 @@ namespace VedAstro.Library
                 if (eventCalculatorAttribute == null) { continue; }
 
                 //store empty event to be used if error
-                if (eventCalculatorAttribute.GetEventName() == EventName.Empty)
+                if (eventCalculatorAttribute.EventName == EventName.Empty)
                 {
                     emptyCalculator = (EventCalculatorDelegate)Delegate.CreateDelegate(typeof(EventCalculatorDelegate), eventCalculator);
                 }
 
                 //if attribute name matches input event name
-                if (eventCalculatorAttribute.GetEventName() == inputEventName)
+                if (eventCalculatorAttribute.EventName == inputEventName)
                 {
                     //convert calculator reference to a delegate instance
                     var eventCalculatorDelegate = (EventCalculatorDelegate)Delegate.CreateDelegate(typeof(EventCalculatorDelegate), eventCalculator);
@@ -266,7 +266,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the method that does the calculations for an event based on the events name
         /// </summary>
-        public static HoroscopeCalculatorDelegate GetHoroscopeCalculatorMethod(EventName inputEventName)
+        public static HoroscopeCalculatorDelegate GetHoroscopeCalculatorMethod(HoroscopeName inputEventName)
         {
             //get all event calculator methods
             var horoscopeCalculatorList = typeof(HoroscopeCalculatorMethods).GetMethods();
@@ -275,8 +275,8 @@ namespace VedAstro.Library
             foreach (var horoscopeCalculator in horoscopeCalculatorList)
             {
                 //try to get attribute attached to the calculator method
-                var horoscopeCalculatorAttribute = (EventCalculatorAttribute)Attribute.GetCustomAttribute(horoscopeCalculator,
-                    typeof(EventCalculatorAttribute));
+                var horoscopeCalculatorAttribute = (HoroscopeCalculatorAttribute)Attribute.GetCustomAttribute(horoscopeCalculator,
+                    typeof(HoroscopeCalculatorAttribute));
 
                 //if attribute not found
                 if (horoscopeCalculatorAttribute == null)
@@ -285,7 +285,7 @@ namespace VedAstro.Library
                 }
 
                 //if attribute name matches input event name
-                if (horoscopeCalculatorAttribute.GetEventName() == inputEventName)
+                if (horoscopeCalculatorAttribute.HoroscopeName == inputEventName)
                 {
                     //convert calculator reference to a delegate instance
                     var horoscopeCalculatorDelegate = (HoroscopeCalculatorDelegate)Delegate.CreateDelegate(typeof(HoroscopeCalculatorDelegate), horoscopeCalculator);
@@ -301,8 +301,6 @@ namespace VedAstro.Library
             throw new Exception($"Calculator method not found! : {inputEventName.ToString()}");
 
         }
-
-
 
         /// <summary>
         /// Splits events that span across 2 days or more

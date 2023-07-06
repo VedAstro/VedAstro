@@ -12,7 +12,7 @@ namespace VedAstro.Library
     /// Data structure to encapsulate an event before it's calculated
     /// In other words an object instance of the event data as stored in file
     /// </summary>
-    public struct HoroscopeData : IHasName
+    public struct HoroscopeData 
     {
         /** FIELDS **/
 
@@ -21,7 +21,7 @@ namespace VedAstro.Library
 
 
         /** CTOR **/
-        public HoroscopeData(EventName name, EventNature nature, string description, List<EventTag> eventTags, HoroscopeCalculatorDelegate horoscopeCalculator)
+        public HoroscopeData(HoroscopeName name, EventNature nature, string description, List<EventTag> eventTags, HoroscopeCalculatorDelegate horoscopeCalculator)
         {
             Name = name;
             Nature = nature;
@@ -33,7 +33,7 @@ namespace VedAstro.Library
 
         /** PROPERTIES **/
         //mainly created for access from WPF binding
-        public EventName Name { get; private set; } = EventName.Empty;
+        public HoroscopeName Name { get; private set; } = HoroscopeName.Empty;
         
         /// <summary>
         /// Gets human readable Event Name, removes camel case
@@ -66,10 +66,10 @@ namespace VedAstro.Library
         /// Calculator Results are made here
         /// Once run RelatedBody becomes available
         /// </summary>
-        public bool IsEventOccuring(Time time, Person person)
+        public bool IsEventOccuring(Time time)
         {
             //do calculation for this event to get prediction data
-            var predictionData = this.HoroscopeCalculator(time, person);
+            var predictionData = this.HoroscopeCalculator(time);
 
             //extract the data out and store it for later use
             //is prediction occuring
@@ -98,7 +98,7 @@ namespace VedAstro.Library
         {
             //extract the individual data out & convert it to the correct type
             var nameString = horoscopeData.Element("Name")?.Value;
-            Enum.TryParse(nameString, out EventName name);
+            Enum.TryParse(nameString, out HoroscopeName name);
             var natureString = horoscopeData.Element("Nature")?.Value;
             Enum.TryParse(natureString, out EventNature nature);
             var rawDescription = horoscopeData.Element("Description")?.Value;

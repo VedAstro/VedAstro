@@ -5,10 +5,9 @@ namespace VedAstro.Library
 {
 
     /// <summary>
-    /// Simple class to encapsulate a prediction (data)
-    /// TODO another Prediction class better naming?
+    /// Simple data wrapper to hold an instance of an Event Prediction (Muhurtha)
     /// </summary>
-    public struct Prediction : IHasName
+    public struct Prediction 
     {
         //FIELDS
         private readonly EventName _name;

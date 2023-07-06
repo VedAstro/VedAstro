@@ -9,16 +9,26 @@ namespace VedAstro.Library
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public sealed class EventCalculatorAttribute : Attribute
     {
-        private readonly EventName _eventName;
+        public EventName EventName { get; set; }
 
         public EventCalculatorAttribute(EventName eventName)
         {
-            _eventName = eventName;
+            EventName = eventName;
         }
 
-        public EventName GetEventName()
+    }
+
+    /// <summary>
+    /// Class that attaches attributes to horoscope calculator methods
+    /// </summary>
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
+    public sealed class HoroscopeCalculatorAttribute : Attribute
+    {
+        public HoroscopeName HoroscopeName { get; set; }
+
+        public HoroscopeCalculatorAttribute(HoroscopeName horoscopeName)
         {
-            return _eventName;
+            HoroscopeName = horoscopeName;
         }
 
     }

@@ -8,22 +8,6 @@ namespace VedAstro.Library
     public static class Format
     {
         //PUBLIC METHODS
-        /// <summary>
-        /// Gets human readable event name
-        /// </summary>
-        public static string FormatName(IHasName obj)
-        {
-            //get enum name of object
-            var name = obj.Name;
-
-            //convert enum name to string
-            var nameWithoutSpaces = name.ToString();
-
-            //add spaces in between camel case letters
-            var nameWithSpace = SplitCamelCase(nameWithoutSpaces);
-
-            return nameWithSpace;
-        }
 
         /// <summary>
         /// Input the camel case name enum
@@ -35,6 +19,14 @@ namespace VedAstro.Library
             //convert enum name to string
             var nameWithoutSpaces = obj.ToString();
 
+            //add spaces in between camel case letters
+            var nameWithSpace = SplitCamelCase(nameWithoutSpaces);
+
+            return nameWithSpace;
+        }
+
+        public static string FormatName(string nameWithoutSpaces)
+        {
             //add spaces in between camel case letters
             var nameWithSpace = SplitCamelCase(nameWithoutSpaces);
 

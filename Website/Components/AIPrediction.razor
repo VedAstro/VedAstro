@@ -141,7 +141,7 @@ else
         //1 strongest planet in sign
         var strongestPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(_birthTime)[0];
         var strongestPlanetSign = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet, _birthTime).GetSignName();
-        var allPredictions = await Tools.GetHoroscopePrediction(person, AppData.URL.HoroscopeDataListXml);
+        var allPredictions = await Tools.GetHoroscopePrediction(person.BirthTime, AppData.URL.HoroscopeDataListXml);
 
         //pick out planet predictions based on related body of planet and sign
         var strPlanetPredicts1 = allPredictions.FindAll(x =>

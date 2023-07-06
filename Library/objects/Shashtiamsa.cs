@@ -1,4 +1,6 @@
-﻿namespace VedAstro.Library
+﻿using System;
+
+namespace VedAstro.Library
 {
     /// <summary>
     /// Simple data type to encapsulate 
@@ -22,7 +24,17 @@
 
 
         //METHODS
+
+        /// <summary>
+        /// Returns raw Shashtiamsas as double
+        /// </summary>
         public double ToDouble() => _shashtiamsaAsDouble;
+
+        /// <summary>
+        /// Returns raw Shashtiamsas as double with Rounding
+        /// </summary>
+        /// <returns></returns>
+        public double ToDouble(int roundPrecision) => Math.Round(_shashtiamsaAsDouble, roundPrecision);
 
         //This divided by 60 will give shashtiamsa in rupas
         public double ToRupa() => _shashtiamsaAsDouble / 60;

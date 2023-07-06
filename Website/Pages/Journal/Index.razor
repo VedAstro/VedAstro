@@ -17,7 +17,10 @@
     <div class="me-5">
         <div class="vstack gap-3">
             <PersonSelectorBox @ref="_peopleSelectorBox" />
-            <IconButton SmallSize="true" IconName="uim:process" ButtonText="Show journal" OnClickCallback="ShowButtonClicked"></IconButton>
+            <div class="hstack">
+                <IconButton SmallSize="true" IconName="uim:process" ButtonText="Show Journal" OnClickCallback="ShowButtonClicked" />
+                <IconButton Color="success" SmallSize="true" IconName="zondicons:add-solid" ButtonText="Add Event" OnClickCallback="AddButtonClicked" />
+            </div>
         </div>
     </div>
 
@@ -141,6 +144,18 @@
 
         //close loading box
         _jsRuntime.HideAlert();
+
+    }
+
+
+    private async Task AddButtonClicked()
+    {
+        await _jsRuntime.ShowLoading();
+
+        //only continue if passed input field validation
+        if (!await IsValidationPassed()) { return; }
+
+        AppData.Go(url: PageRoute.JournalAdd, rememberMe: true);
 
     }
 

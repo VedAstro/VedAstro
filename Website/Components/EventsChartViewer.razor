@@ -4,11 +4,11 @@
 @using Newtonsoft.Json.Linq
 
 
-<div @ref="MainElement" class="vstack gap-1" >
-    
+<div @ref="MainElement" class="vstack gap-1">
+
     @* BUTTON ROW *@
     <div class="hstack gap-3 mb-2">
-        <IconButton  SmallSize="true" Outline="true" ButtonText="Show/Hide" IconName="bx:hide">
+        <IconButton SmallSize="true" Outline="true" ButtonText="Show/Hide" IconName="bx:hide">
             <div style="" class="vstack gap-2 w-100">
                 <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
@@ -24,8 +24,9 @@
             </div>
         </IconButton>
         <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="ion:share-outline">
-            <div style="" class="vstack gap-2 w-100">
-                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
+            <div style="" class="hstack gap-2 w-100">
+                <IconButton SmallSize="true" Outline="true" ButtonText="Email" OnClickCallback="OnClickShareToEmail" IconName="ion:share-outline" />
+                <IconButton SmallSize="true" Outline="true" ButtonText="Facebook" IconName="ion:share-outline" />
             </div>
         </IconButton>
         <IconButton SmallSize="true" Outline="true" ButtonText="Print" IconName="ic:round-print">
@@ -125,9 +126,10 @@
             //saved to be accessed later
             SelectedPerson = person;
             InputedEventTags = inputedEventTags;
+            SelectedTimeRange = timeRange;
 
             //poll till get
-            int maxWidth = 940;
+            int maxWidth = 940; //to fit nicely in page
             string chartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth);
 
             //control reaches here than already complete
@@ -156,7 +158,7 @@
 
     }
 
-
+    public TimeRange SelectedTimeRange { get; set; }
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -221,9 +223,41 @@
 
     }
 
+    private async Task OnClickShareToEmail()
+    {
+
+        try
+        {
+            //poll till get
+            int maxWidth = 940;
+            string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, InputedEventTags, maxWidth);
+
+            //control reaches here than already complete
+            await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, chartSvg);
+
+            //get latest dark mode setting
+            //so that event chart is not lost in darkness
+            await AppData.UpdateDarkMode(_jsRuntime);
+
+            //play sound for better ux
+            _jsRuntime.PlayDoneSound();
+
+            //render html
+            _isReady = true;
+
+            //needed to make save button appear again
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            WebLogger.Error(e);
+            Console.WriteLine(e.Message);
+        }
+    }
+
 }
 
-@* 
+@*
     @if (_isReady)
 {
     <div class="hstack gap-3 mt-2">

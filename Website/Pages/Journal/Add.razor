@@ -2,8 +2,67 @@
 
 @using VedAstro.Library
 
-<UnderConstructionHeader PageName="Journal Add"></UnderConstructionHeader>
+
+<div class="" style="width: @GR.W352px;">
+
+    <TimeInputSimple @ref="_timeInput" LabelText="Time"/>
+    <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true"/>
+
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" style="min-width: @GR.W97px;">Name</span>
+        <input @bind="inputName" type="text" class="form-control" placeholder="Marriage">
+    </div>
+    <div class="input-group mb-3">
+        <span class="input-group-text" style="min-width: @GR.W97px;">Name</span>
+        @*         <input @bind="inputDescription" type="text" class="form-control" placeholder="All went well">
+ *@ <textarea style="min-height: 132px;" class="form-control" @bind="inputDescription" placeholder="All went well"></textarea>
+    </div>
+    <div class="input-group mb-3">
+        <label class="input-group-text" style="min-width: @GR.W97px;">Weight</label>
+        <select @bind="inputWeight" class="form-select">
+            <option value="Major">Major</option>
+            <option value="Normal" selected>Normal</option>
+            <option value="Minor">Minor</option>
+        </select>
+    </div>
+    <div class="input-group mb-3">
+        <label class="input-group-text" style="min-width: @GR.W97px;">Nature</label>
+        <select @bind="inputNature" class="form-select">
+            <option value="" selected>Make choice...</option>
+            <option style="color: green;" value="Good">Good</option>
+            <option style="color: red;" value="Bad">Bad</option>
+        </select>
+    </div>
+</div>
+
+
 
 @code {
+
+    private string inputName;
+    private string inputDescription;
+    private string inputNature;
+    private string inputWeight;
+    private TimeInputSimple _timeInput;
+    private GeoLocationInput _geoLocationInput;
+
+
+    private async Task UpdateEvent()
+    {
+        //get event from fields
+        var newEvent = new LifeEvent()
+        {
+            Name = inputName,
+            Description = inputDescription,
+            Location = _geoLocationInput.LocationName,
+            Nature = inputNature,
+            StartTime = await _timeInput.GetFullTimeString(),
+            Timezone = _timeInput.TimeZone,
+            Weight = inputWeight
+
+        };
+    }
+
 
 }

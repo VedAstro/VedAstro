@@ -4,7 +4,6 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using VedAstro.Library;
 using Azure.Storage.Blobs;
-using Microsoft.Bing.ImageSearch.Models;
 using Person = VedAstro.Library.Person;
 
 namespace API

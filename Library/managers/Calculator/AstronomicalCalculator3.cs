@@ -583,29 +583,29 @@ namespace VedAstro.Library
             //UNDERLYING FUNCTION
             HouseName[] _getAllHousesOrderedByStrength()
             {
-                var houseStrenghtList = new Dictionary<double, HouseName>();
+                var houseStrengthList = new Dictionary<double, HouseName>();
 
                 //create a list with planet names & its strength (unsorted)
                 foreach (var house in House.AllHouses)
                 {
                     //get house strength
-                    var strength = GetBhavaBala(house, time).ToRupa();
+                    var strength = GetHouseStrength(house, time).ToRupa();
 
                     //place in list with house number
-                    houseStrenghtList[strength] = house;
+                    houseStrengthList[strength] = house;
 
                 }
 
 
                 //sort that list from strongest house to weakest house
-                var keys_sorted = houseStrenghtList.Keys.ToList();
-                keys_sorted.Sort();
+                var keysSorted = houseStrengthList.Keys.ToList();
+                keysSorted.Sort();
 
                 var sortedArray = new HouseName[12];
                 var count = 11;
-                foreach (var key in keys_sorted)
+                foreach (var key in keysSorted)
                 {
-                    sortedArray[count] = houseStrenghtList[key];
+                    sortedArray[count] = houseStrengthList[key];
                     count--;
                 }
 
@@ -2567,14 +2567,13 @@ namespace VedAstro.Library
         /// enjoy them. The strength of a bhava is composed
         /// of three factors, viz., (1) Bhavadhipathi Bala,
         /// (2) Bhava Digbala, (3) Bhava Drishti Bala.
-        /// todo change to house strength
         /// </summary>
-        [API("BhavaBala")]
-        public static Shashtiamsa GetBhavaBala(HouseName inputHouse, Time time)
+        [API("HouseStrength", "Bhava Bala")]
+        public static Shashtiamsa GetHouseStrength(HouseName inputHouse, Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetBhavabala", inputHouse, time), _getBhavabala);
+            return CacheManager.GetCache(new CacheKey(nameof(GetHouseStrength), inputHouse, time), _getBhavabala);
 
 
             //UNDERLYING FUNCTION
@@ -2916,7 +2915,7 @@ namespace VedAstro.Library
             foreach (var house in House.AllHouses)
             {
                 //get house strength
-                var strength = GetBhavaBala(house, personBirthTime).ToDouble();
+                var strength = GetHouseStrength(house, personBirthTime).ToDouble();
 
                 if (strength > threshold)
                 {
@@ -2994,7 +2993,7 @@ namespace VedAstro.Library
             foreach (var house in House.AllHouses)
             {
                 //get house strength
-                var strength = GetBhavaBala(house, personBirthTime).ToDouble();
+                var strength = GetHouseStrength(house, personBirthTime).ToDouble();
 
                 if (strength < threshold)
                 {

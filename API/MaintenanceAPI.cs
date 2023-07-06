@@ -5,12 +5,9 @@ using VedAstro.Library;
 using System.Net.Mime;
 using System.Net;
 using Azure.Storage.Blobs;
-using System;
-using System.Linq;
 using Microsoft.Bing.ImageSearch;
 using Microsoft.Bing.ImageSearch.Models;
 using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.Routing;
 
 namespace API
 {

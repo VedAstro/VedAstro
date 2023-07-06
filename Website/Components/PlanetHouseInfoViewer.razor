@@ -86,7 +86,7 @@
             var _houseLord = lordOfHouse.ToString();
             var _planetsInHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsInHouse(houseNumber, _time));
             var _planetsAspectingHouse = Tools.ListToString<PlanetName>(AstronomicalCalculator.GetPlanetsAspectingHouse((HouseName)houseNumber, _time));
-            var rawHouseStrength = AstronomicalCalculator.GetBhavaBala((HouseName)houseNumber, _time).ToDouble();
+            var rawHouseStrength = AstronomicalCalculator.GetHouseStrength((HouseName)houseNumber, _time).ToDouble();
             var _houseStrength = Math.Round(rawHouseStrength, 2).ToString();
             var _houseSign = AstronomicalCalculator.GetHouseSignName(houseNumber, _time).ToString();
             var _houseNavamsaSign = AstronomicalCalculator.GetHouseNavamsaSign((HouseName)houseNumber, _time).ToString();

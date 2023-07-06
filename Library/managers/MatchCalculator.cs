@@ -442,10 +442,10 @@ namespace VedAstro.Library
             prediction.FemaleInfo = femaleGuna.ToString();
 
             //rename for readability
-            var manIsManushaDeva = maleGuna is Guna.Deva or Guna.Manusha;
-            var girlIsRakshasa = femaleGuna == Guna.Rakshasa;
-            var femaleIsManushaDeva = femaleGuna is Guna.Deva or Guna.Manusha;
-            var maleIsRakshasa = maleGuna == Guna.Rakshasa;
+            var manIsManushaDeva = maleGuna is Guna.DevaAngel or Guna.ManushaHuman;
+            var girlIsRakshasa = femaleGuna == Guna.RakshasaDemon;
+            var femaleIsManushaDeva = femaleGuna is Guna.DevaAngel or Guna.ManushaHuman;
+            var maleIsRakshasa = maleGuna == Guna.RakshasaDemon;
 
 
             //Hence one born in a Deva
@@ -455,11 +455,11 @@ namespace VedAstro.Library
             if (maleGuna == femaleGuna)
             {
                 prediction.Nature = EventNature.Good;
-                prediction.Info = $"both are same {femaleGuna.ToString()} Guna";
+                prediction.Info = $"both are same {Format.FormatName(femaleGuna)} Guna";
             }
 
             // Manusha or a Deva man should not marry a Rakshasa girl unless there
-            // are other neutralising factors.
+            // are other neutralizing factors.
             else if (manIsManushaDeva && girlIsRakshasa)
             {
                 prediction.Nature = EventNature.Bad;
@@ -523,7 +523,7 @@ namespace VedAstro.Library
                     case ConstellationName.Anuradha:
                     case ConstellationName.Mrigasira:
                     case ConstellationName.Aswini:
-                        return Guna.Deva;
+                        return Guna.DevaAngel;
 
                     // Manusha Gana. - Rohini, Pubba, Poorvashadha, Poorvabhadra,
                     // Bharani, Aridra, Uttara, Uttarashadha and Uttarabhadra.
@@ -536,7 +536,7 @@ namespace VedAstro.Library
                     case ConstellationName.Uttara:
                     case ConstellationName.Uttarashada:
                     case ConstellationName.Uttarabhadra:
-                        return Guna.Manusha;
+                        return Guna.ManushaHuman;
 
                     // Rakshasa Gana. - Krittika, Aslesha, Makha, Chitta, Visakha, Jyeshta,
                     // Moola, Dhanishta and Satabhisha.
@@ -549,7 +549,7 @@ namespace VedAstro.Library
                     case ConstellationName.Moola:
                     case ConstellationName.Dhanishta:
                     case ConstellationName.Satabhisha:
-                        return Guna.Rakshasa;
+                        return Guna.RakshasaDemon;
 
 
                     default: throw new Exception("");
@@ -566,17 +566,13 @@ namespace VedAstro.Library
                 Description = "spiritual/ego compatibility"
             };
 
-            //get ruling sign
-            var maleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
-            var femaleRuleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
-
-            //get grade
-            var maleGrade = getGrade(maleRuleSign);
-            var femaleGrade = getGrade(femaleRuleSign);
 
             //copy info into prediction data
-            prediction.MaleInfo = getGradeName(maleGrade);
-            prediction.FemaleInfo = getGradeName(femaleGrade);
+            var maleGrade = AstronomicalCalculator.GetBirthVarna(male.BirthTime);
+            prediction.MaleInfo = Format.FormatName(maleGrade.ToString());
+
+            var femaleGrade = AstronomicalCalculator.GetBirthVarna(female.BirthTime);
+            prediction.FemaleInfo = Format.FormatName(femaleGrade.ToString());
 
 
             //A girl belonging fo a higher grade of
@@ -593,58 +589,11 @@ namespace VedAstro.Library
             if ((maleGrade > femaleGrade) || (maleGrade == femaleGrade))
             {
                 prediction.Nature = EventNature.Good;
-                prediction.Info = "boy higher and girl lower or both same Varna, is allowed";
+                prediction.Info = "boy higher and girl lower or both same Varna, is good";
             }
 
             return prediction;
 
-            string getGradeName(int grade)
-            {
-                switch (grade)
-                {
-                    case 1:
-                        return "Sudra";
-                    case 2:
-                        return "Vaisya";
-                    case 3:
-                        return "Kshatriya";
-                    case 4:
-                        return "Brahmin";
-                    default: throw new Exception();
-                }
-            }
-
-            //higher grade is higher class
-            int getGrade(ZodiacName sign)
-            {
-                switch (sign)
-                {   //Pisces, Scorpio and Cancer represent the highest development - Brahmin 
-                    case ZodiacName.Pisces:
-                    case ZodiacName.Scorpio:
-                    case ZodiacName.Cancer:
-                        return 4;
-
-                    //Leo, Sagittarius and Libra indicate the second grade - or Kshatriya;
-                    case ZodiacName.Leo:
-                    case ZodiacName.Sagittarius:
-                    case ZodiacName.Libra:
-                        return 3;
-
-                    //Aries, Gemini and Aquarius suggest the third or the Vaisya;
-                    case ZodiacName.Aries:
-                    case ZodiacName.Gemini:
-                    case ZodiacName.Aquarius:
-                        return 2;
-
-                    //while Taurus, Virgo and Capricorn indicate the last grade, viz., Sudra
-                    case ZodiacName.Taurus:
-                    case ZodiacName.Virgo:
-                    case ZodiacName.Capricornus:
-                        return 1;
-
-                    default: throw new Exception("");
-                }
-            }
         }
 
         public static MatchPrediction YoniKuta(Person male, Person female)

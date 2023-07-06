@@ -1080,6 +1080,26 @@ namespace API
             //return to caller
             return imageBytes;
         }
+
+        /// <summary>
+        /// Converts raw call from API via URL to parsed Time
+        /// </summary>
+        public static async Task<Time> ParseTime(string locationName,
+            string hhmmStr,
+            string dateStr,
+            string monthStr,
+            string yearStr,
+            string offsetStr)
+        {
+            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+            var geoLocation = geoLocationResult.Payload;
+
+            //clean time text
+            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
+            var parsedTime = new Time(timeStr, geoLocation);
+
+            return parsedTime;
+        }
     }
 
     public class Secrets

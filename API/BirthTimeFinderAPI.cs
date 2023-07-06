@@ -23,7 +23,10 @@ namespace API
 
         //CENTRAL FOR ROUTES
         private const string RouteFindBirthTimeAnimal = "FindBirthTimeAnimal/PersonId/{personId}";
-        private const string RouteFindBirthTimeRisingSign = "FindBirthTimeRisingSign/PersonId/{personId}";
+        private const string startTime = "{hhmmStart}/{dateStart}/{monthStart}/{yearStart}/{offsetStart}";
+        private const string endTime = "{hhmmEnd}/{dateEnd}/{monthEnd}/{yearEnd}/{offsetEnd}";
+        private const string RouteFindBirthTimeRisingSign = $"FindBirthTimeRisingSign/Location/{{locationName}}/StartTime/{startTime}/EndTime/{endTime}";
+        private const string RouteFindBirthTimeRisingSignPerson = "FindBirthTimeRisingSign/PersonId/{personId}";
 
         [Function(nameof(FindBirthTimeAnimal))]
         public static async Task<HttpResponseData> FindBirthTimeAnimal([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteFindBirthTimeAnimal)] HttpRequestData incomingRequest, string personId)
@@ -153,13 +156,14 @@ namespace API
             }
         }
 
-        [Function(nameof(FindBirthTimeRisingSign))]
-        public static async Task<HttpResponseData> FindBirthTimeRisingSign([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteFindBirthTimeRisingSign)] HttpRequestData incomingRequest, string personId)
+        /// <summary>
+        /// Finds in same same day of birth, for quick & easy search
+        /// </summary>
+        [Function(nameof(FindBirthTimeRisingSignEasy))]
+        public static async Task<HttpResponseData> FindBirthTimeRisingSignEasy([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteFindBirthTimeRisingSignPerson)] HttpRequestData incomingRequest, string personId)
         {
             try
             {
-
-
                 //get person record
                 var foundPerson = await APITools.GetPersonById(personId);
 
@@ -170,11 +174,67 @@ namespace API
                 var compiledObj = new JObject();
                 foreach (var timeSlice in timeSlices)
                 {
-                    //replace original birth time
-                    var personAdjusted = foundPerson.ChangeBirthTime(timeSlice);
+                    //get all predictions for person
+                    var allPredictions = await Tools.GetHoroscopePrediction(timeSlice, APITools.HoroscopeDataListFile);
+                    //select only rising sign
+                    var selected = allPredictions.Where(x => x.FormattedName.Contains("Rising")).FirstOrDefault();
+
+                    //nicely packed
+                    var named = new JProperty(timeSlice.ToString(), selected.ToString());
+                    compiledObj.Add(named);
+
+                }
+
+
+                //send image back to caller
+                return APITools.PassMessageJson(compiledObj, incomingRequest);
+
+
+            }
+            catch (Exception e)
+            {
+                //log error
+                await APILogger.Error(e, incomingRequest);
+                //format error nicely to show user
+                return APITools.FailMessage(e, incomingRequest);
+            }
+        }
+
+
+        [Function(nameof(FindBirthTimeRisingSign))]
+        public static async Task<HttpResponseData> FindBirthTimeRisingSign([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteFindBirthTimeRisingSign)] HttpRequestData incomingRequest,
+            string locationName,
+            string hhmmStart,
+            string dateStart,
+            string monthStart,
+            string yearStart,
+            string offsetStart,
+            string hhmmEnd,
+            string dateEnd,
+            string monthEnd,
+            string yearEnd,
+            string offsetEnd
+            )
+        {
+            try
+            {
+
+                //parse time range from caller (possible to fail)
+                var startTime = await APITools.ParseTime(locationName, hhmmStart, dateStart, monthStart, yearStart, offsetStart);
+                var endTime = await APITools.ParseTime(locationName, hhmmEnd, dateEnd, monthEnd, yearEnd, offsetEnd);
+
+
+                //get list of possible birth time slice in the current birth day
+                var timeSlices = Time.GetTimeListFromRange(startTime, endTime, 1);
+
+                //get predictions for each slice and place in out going list  
+                var compiledObj = new JObject();
+                foreach (var timeSlice in timeSlices)
+                {
 
                     //get all predictions for person
-                    var allPredictions = await Tools.GetHoroscopePrediction(personAdjusted, APITools.HoroscopeDataListFile);
+                    var allPredictions = await Tools.GetHoroscopePrediction(timeSlice, APITools.HoroscopeDataListFile);
+                    
                     //select only rising sign
                     var selected = allPredictions.Where(x => x.FormattedName.Contains("Rising")).FirstOrDefault();
 
@@ -202,46 +262,8 @@ namespace API
 
 
 
-
         //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
-        private static async Task<List<Time>> GetTimeList(Person person)
-        {
-
-            //start of day till end of day
-            var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-            var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-
-            var returnList = new List<Time>();
-            var timeSkip = 1;// 1 hour
-            var reachedDayEnd = false;
-            var checkTime = dayStart; //from the start of the day
-            var previousSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
-            //add 1st sign at start of day to list
-            returnList.Add(checkTime);
-
-            //scan through the day & add mark each time new sign rises
-            //stop looking when reached end of day
-            while (!reachedDayEnd)
-            {
-                //if different from previous sign, then add time slice to list
-                var checkSign = AstronomicalCalculator.GetHouseSignName(1, checkTime);
-                if (checkSign != previousSign) { returnList.Add(checkTime); }
-
-                //update previous sign
-                previousSign = checkSign;
-
-                //goto to next time slice
-                checkTime = checkTime.AddHours(timeSkip);
-
-                //if next time slice goes to next day, then end it here
-                if (checkTime > dayEnd) { reachedDayEnd = true; }
-            }
-
-            return returnList;
-
-        }
 
         /// <summary>
         /// split a person's day into 24 slices of possible birth times
@@ -256,6 +278,8 @@ namespace API
 
             return finalList;
         }
+
+
 
 
     }

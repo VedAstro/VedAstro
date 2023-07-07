@@ -86,11 +86,11 @@ namespace API
                 //swap visitor ID with user ID if any (data follows user when log in)
                 if (!callerInfo.Both101) //only swap if needed
                 {
-                    bool didSwap = await APITools.SwapUserId(callerInfo, APITools.PersonListFile);
+                    bool didSwap = await APITools.SwapUserId(callerInfo, Tools.PersonListFile);
                 }
 
                 //get latest all match reports
-                var personListXml = await APITools.GetXmlFileFromAzureStorage(APITools.PersonListFile, APITools.BlobContainerName);
+                var personListXml = await Tools.GetXmlFileFromAzureStorage(Tools.PersonListFile, Tools.BlobContainerName);
 
                 //filter out record by caller id, which will be visitor id when user not logged in
                 var personListByCallerIdXml = Tools.FindXmlByUserId(personListXml, callerInfo.CallerId);
@@ -123,7 +123,7 @@ namespace API
             try
             {
                 //get the person record by ID
-                var foundPersonXml = await APITools.FindPersonXMLById(personId);
+                var foundPersonXml = await Tools.FindPersonXMLById(personId);
 
                 var personToReturn = Person.FromXml(foundPersonXml);
 
@@ -171,7 +171,7 @@ namespace API
                 else
                 {
                     //get the person record by ID
-                    var foundPersonXml = await APITools.FindPersonXMLById(personId);
+                    var foundPersonXml = await Tools.FindPersonXMLById(personId);
                     personToImage = Person.FromXml(foundPersonXml);
                     byte[] foundImage = await APITools.GetSearchImage(personToImage); //gets most probable fitting person image
 
@@ -229,7 +229,7 @@ namespace API
             await AzureCache.DeleteStuffRelatedToPerson(newPerson);
 
             //add new person to main list
-            await APITools.AddXElementToXDocumentAzure(newPerson.ToXml(), APITools.PersonListFile, APITools.BlobContainerName);
+            await APITools.AddXElementToXDocumentAzure(newPerson.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
 
             return APITools.PassMessageJson(req);
 
@@ -266,8 +266,8 @@ namespace API
                     await AzureCache.DeleteStuffRelatedToPerson(updatedPerson);
 
                     //save a copy of the original person record in recycle bin, just in-case accidental update
-                    var originalPerson = await APITools.GetPersonById(updatedPerson.Id);
-                    await APITools.AddXElementToXDocumentAzure(originalPerson.ToXml(), APITools.RecycleBinFile, APITools.BlobContainerName);
+                    var originalPerson = await Tools.GetPersonById(updatedPerson.Id);
+                    await APITools.AddXElementToXDocumentAzure(originalPerson.ToXml(), APITools.RecycleBinFile, Tools.BlobContainerName);
 
                     //directly updates and saves new person record to main list (does all the work, sleep easy)
                     await APITools.UpdatePersonRecord(updatedPerson);
@@ -316,7 +316,7 @@ namespace API
             try
             {
                 //get the person record that needs to be deleted
-                var personToDelete = await APITools.FindPersonXMLById(personId);
+                var personToDelete = await Tools.FindPersonXMLById(personId);
                 var personParsed = Person.FromXml(personToDelete);
 
 
@@ -328,10 +328,10 @@ namespace API
                     await AzureCache.DeleteStuffRelatedToPerson(personParsed);
 
                     //add deleted person to recycle bin 
-                    await APITools.AddXElementToXDocumentAzure(personToDelete, APITools.RecycleBinFile, APITools.BlobContainerName);
+                    await APITools.AddXElementToXDocumentAzure(personToDelete, APITools.RecycleBinFile, Tools.BlobContainerName);
 
                     //delete the person record,
-                    await APITools.DeleteXElementFromXDocumentAzure(personToDelete, APITools.PersonListFile, APITools.BlobContainerName);
+                    await APITools.DeleteXElementFromXDocumentAzure(personToDelete, Tools.PersonListFile, Tools.BlobContainerName);
 
                     return APITools.PassMessageJson(req);
                 }

@@ -52,10 +52,10 @@ namespace API
             try
             {
                 //get person record
-                var foundPerson = await APITools.GetPersonById(personId);
+                var foundPerson = await Tools.GetPersonById(personId);
 
                 //get list of possible birth time slice in the current birth day
-                var timeSlices = GetTimeSlicesOnBirthDay(foundPerson, 1);
+                var timeSlices = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);
 
                 //get predictions for each slice and place in out going list  
                 var compiledObj = new JObject();
@@ -98,7 +98,7 @@ namespace API
             try
             {
                 //get person specified by caller
-                var foundPerson = await APITools.GetPersonById(personId);
+                var foundPerson = await Tools.GetPersonById(personId);
 
                 //generate the needed charts
                 var chartList = new List<EventsChart>();
@@ -113,7 +113,7 @@ namespace API
                 var daysPerPixel = EventsChart.GetDayPerPixel(timeRange, 1500);
 
                 //get list of possible birth time slice in the current birth day
-                var possibleTimeList = GetTimeSlicesOnBirthDay(foundPerson, 1);
+                var possibleTimeList = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);
 
                 var combinedSvg = "";
                 var chartYPosition = 30; //start with top padding
@@ -122,7 +122,7 @@ namespace API
                 {
                     //replace original birth time
                     var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
-                    var newChart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
+                    var newChart = await Tools.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
                     var adjustedBirth = personAdjusted.BirthTimeString;
 
                     //place in group with time above the chart
@@ -173,10 +173,10 @@ namespace API
             try
             {
                 //get person record
-                var foundPerson = await APITools.GetPersonById(personId);
+                var foundPerson = await Tools.GetPersonById(personId);
 
                 //get list of possible birth time slice in the current birth day
-                var timeSlices = GetTimeSlicesOnBirthDay(foundPerson, 1);
+                var timeSlices = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);
 
                 //get predictions for each slice and place in out going list  
                 var compiledObj = new JObject();
@@ -217,10 +217,10 @@ namespace API
             try
             {
                 //get person record
-                var foundPerson = await APITools.GetPersonById(personId);
+                var foundPerson = await Tools.GetPersonById(personId);
 
                 //get list of possible birth time slice in the current birth day
-                var timeSlices = GetTimeSlicesOnBirthDay(foundPerson, 1);
+                var timeSlices = Tools.GetTimeSlicesOnBirthDay(foundPerson, 1);
 
                 //get predictions for each slice and place in out going list  
                 var compiledObj = new JObject();
@@ -324,20 +324,6 @@ namespace API
 
 
 
-        /// <summary>
-        /// used for finding uncertain time in certain birth day
-        /// split a person's day into precision based slices of possible birth times
-        /// </summary>
-        public static List<Time> GetTimeSlicesOnBirthDay(Person person, double precisionInHours)
-        {
-            //start of day till end of day
-            var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-            var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
-
-            var finalList = Time.GetTimeListFromRange(dayStart, dayEnd, precisionInHours);
-
-            return finalList;
-        }
 
 
 

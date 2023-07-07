@@ -15,10 +15,14 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SwissEphNet;
 using Formatting = Newtonsoft.Json.Formatting;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs;
+
 
 namespace VedAstro.Library
 {
@@ -28,6 +32,34 @@ namespace VedAstro.Library
     /// </summary>
     public static class Tools
     {
+        public static async Task<EventsChart> GenerateNewChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags)
+        {
+            //from person get svg report
+            var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags);
+
+            //a new chart is born
+            var newChartId = Tools.GenerateId();
+            var newChart = new EventsChart(newChartId, eventsChartSvgString, foundPerson.Id, timeRange, daysPerPixel, eventTags);
+
+            return newChart;
+        }
+
+
+        /// <summary>
+        /// used for finding uncertain time in certain birth day
+        /// split a person's day into precision based slices of possible birth times
+        /// </summary>
+        public static List<Time> GetTimeSlicesOnBirthDay(Person person, double precisionInHours)
+        {
+            //start of day till end of day
+            var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
+            var dayEnd = new Time($"23:59 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
+
+            var finalList = Time.GetTimeListFromRange(dayStart, dayEnd, precisionInHours);
+
+            return finalList;
+        }
+
         public static async Task<T> DelayedResultTask<T>(TimeSpan delay, Func<T> fallbackMaker)
         {
             await Task.Delay(delay);
@@ -1957,6 +1989,157 @@ namespace VedAstro.Library
             return foundMethod;
 
         }
+
+
+        /// <summary>
+        /// Given a id will return parsed person from main list
+        /// Returns empty person if, no person found
+        /// </summary>
+        public static async Task<Person> GetPersonById(string personId)
+        {
+            //get the raw data of person
+            var foundPersonXml = await FindPersonXMLById(personId);
+
+            if (foundPersonXml == null) { return Person.Empty; }
+
+            var foundPerson = Person.FromXml(foundPersonXml);
+
+            return foundPerson;
+        }
+
+        /// <summary>
+        /// XML Person
+        /// Will look for a person in a given list
+        /// returns null if no person found
+        /// This a unique id representing the unique person record
+        /// </summary>
+        public static async Task<XElement?> FindPersonXMLById(string personIdToFind)
+        {
+            try
+            {
+                //get latest file from server
+                //note how this creates & destroys per call to method
+                //might cost little extra cycles but it's a functionality
+                //to always get the latest list
+                var personListXmlDoc = await GetPersonListFile();
+
+                //list of person XMLs
+                var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
+
+                //do the finding (default empty)
+                var foundPerson = personXmlList?.Where(MatchPersonId)?.First();
+
+                //log it (should not occur all the time)
+                if (foundPerson == null)
+                {
+                    await LibLogger.Error($"No person found with ID : {personIdToFind}");
+                    //return empty value so caller will know
+                    foundPerson = null;
+                }
+
+                return foundPerson;
+            }
+            catch (Exception e)
+            {
+                //if fail log it and return empty value so caller will know
+                await LibLogger.Error(e);
+                return null;
+            }
+
+            //--------
+            //do the finding, for id both case should match, but stored in upper case because looks nice
+            //but user might pump in with mixed case, who knows, so compensate.
+            bool MatchPersonId(XElement personXml)
+            {
+                if (personXml == null) { return false; }
+
+                var inputPersonId = personXml?.Element("PersonId")?.Value ?? ""; //todo PersonId has to be just Id
+
+                //lower case it before checking
+                var isMatch = inputPersonId == personIdToFind; //hoisting alert
+
+                return isMatch;
+            }
+        }
+
+
+        public const string BlobContainerName = "vedastro-site-data";
+
+        public const string PersonListFile = "PersonList.xml";
+
+        /// <summary>
+        /// Gets main person list xml doc file
+        /// </summary>
+        /// <returns></returns>
+        private static async Task<XDocument> GetPersonListFile()
+        {
+            var personListXml = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
+
+            return personListXml;
+        }
+
+        /// <summary>
+        /// Gets XML file from Azure blob storage
+        /// </summary>
+        public static async Task<XDocument> GetXmlFileFromAzureStorage(string fileName, string blobContainerName)
+        {
+            var fileClient = await GetBlobClientAzure(fileName, blobContainerName);
+            var xmlFile = await DownloadToXDoc(fileClient);
+
+            return xmlFile;
+        }
+
+        /// <summary>
+        /// Converts a blob client of a file to an XML document
+        /// </summary>
+        public static async Task<XDocument> DownloadToXDoc(BlobClient blobClient)
+        {
+            var isFileExist = (await blobClient.ExistsAsync()).Value;
+
+            if (isFileExist)
+            {
+                XDocument xDoc;
+                await using (var stream = (await blobClient.DownloadStreamingAsync()).Value.Content)
+                {
+                    xDoc = await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
+                }
+
+#if DEBUG
+                Console.WriteLine($"Downloaded: {blobClient.Name}");
+#endif
+
+                return xDoc;
+            }
+            else
+            {
+                //will be logged by caller
+                throw new Exception($"No File in Cloud! : {blobClient.Name}");
+            }
+
+        }
+
+
+        /// <summary>
+        /// Gets file blob client from azure storage by name
+        /// </summary>
+        public static async Task<BlobClient> GetBlobClientAzure(string fileName, string blobContainerName)
+        {
+            //get the connection string stored separately (for security reasons)
+            //note: dark art secrets are in local.settings.json
+            var storageConnectionString = Secrets.API_STORAGE;
+
+            //get image from storage
+            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
+            var fileBlobClient = blobContainerClient.GetBlobClient(fileName);
+
+            return fileBlobClient;
+
+            //var returnStream = new MemoryStream();
+            //await fileBlobClient.DownloadToAsync(returnStream);
+
+            //return returnStream;
+        }
+
     }
 
 

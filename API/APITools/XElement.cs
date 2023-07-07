@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs.Models;
 using Microsoft.Azure.Functions.Worker.Http;
 using System.Xml.Linq;
+using VedAstro.Library;
 
 namespace API
 {
@@ -49,7 +50,7 @@ namespace API
         public static async Task<XDocument> AddXElementToXDocument(BlobClient xDocuBlobClient, XElement newElement)
         {
             //get person list from storage
-            var xDocument = await DownloadToXDoc(xDocuBlobClient);
+            var xDocument = await Tools.DownloadToXDoc(xDocuBlobClient);
 
             //add new person to list
             xDocument.Root.Add(newElement);

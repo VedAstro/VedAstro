@@ -10,26 +10,6 @@ namespace API
     /// </summary>
     public static partial class APITools
     {
-        /// <summary>
-        /// Gets file blob client from azure storage by name
-        /// </summary>
-        public static async Task<BlobClient> GetBlobClientAzure(string fileName, string blobContainerName)
-        {
-            //get the connection string stored separately (for security reasons)
-            //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.API_STORAGE;
-
-            //get image from storage
-            var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
-            var fileBlobClient = blobContainerClient.GetBlobClient(fileName);
-
-            return fileBlobClient;
-
-            //var returnStream = new MemoryStream();
-            //await fileBlobClient.DownloadToAsync(returnStream);
-
-            //return returnStream;
-        }
 
         /// <summary>
         /// check if file exist in aZure storage
@@ -135,23 +115,13 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Gets XML file from Azure blob storage
-        /// </summary>
-        public static async Task<XDocument> GetXmlFileFromAzureStorage(string fileName, string blobContainerName)
-        {
-            var fileClient = await GetBlobClientAzure(fileName, blobContainerName);
-            var xmlFile = await DownloadToXDoc(fileClient);
-
-            return xmlFile;
-        }
 
         /// <summary>
         /// Gets any file from Azure blob storage in string form
         /// </summary>
         public static async Task<string> GetStringFileFromAzureStorage(string fileName, string blobContainerName)
         {
-            var fileClient = await GetBlobClientAzure(fileName, blobContainerName);
+            var fileClient = await Tools.GetBlobClientAzure(fileName, blobContainerName);
             var xmlFile = await BlobClientToString(fileClient);
 
             return xmlFile;
@@ -164,7 +134,7 @@ namespace API
         public static async Task AddXElementToXDocumentAzure(XElement dataXml, string fileName, string containerName)
         {
             //get user data list file (UserDataList.xml) Azure storage
-            var fileClient = await GetBlobClientAzure(fileName, containerName);
+            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
 
             //add new log to main list
             var updatedListXml = await AddXElementToXDocument(fileClient, dataXml);
@@ -180,9 +150,9 @@ namespace API
         public static async Task DeleteXElementFromXDocumentAzure(XElement dataXmlToDelete, string fileName, string containerName)
         {
             //access to file
-            var fileClient = await GetBlobClientAzure(fileName, containerName);
+            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
             //get xml file
-            var xmlDocFile = await DownloadToXDoc(fileClient);
+            var xmlDocFile = await Tools.DownloadToXDoc(fileClient);
 
             //check if record to delete exists
             //if not found, raise alarm
@@ -204,7 +174,7 @@ namespace API
         public static async Task SaveXDocumentToAzure(XDocument dataXml, string fileName, string containerName)
         {
             //get file client for file
-            var fileClient = await GetBlobClientAzure(fileName, containerName);
+            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
 
             //upload modified list to storage
             await OverwriteBlobData(fileClient, dataXml);

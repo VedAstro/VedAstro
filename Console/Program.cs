@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using API;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using VedAstro.Library;
 
 namespace VedAstro.Console
@@ -115,7 +113,7 @@ namespace VedAstro.Console
 
             //ACT 1 : Generate data needed to make charts
             //get person specified by caller
-            var foundPerson = await APITools.GetPersonById(personId);
+            var foundPerson = await Tools.GetPersonById(personId);
 
             //generate the needed charts
             var chartList = new List<EventsChart>();
@@ -130,7 +128,7 @@ namespace VedAstro.Console
             var daysPerPixel = EventsChart.GetDayPerPixel(timeRange, maxWidth);
 
             //get list of possible birth time slice in the current birth day
-            var possibleTimeList = BirthTimeFinderAPI.GetTimeSlicesOnBirthDay(foundPerson, precisionInHours);
+            var possibleTimeList = Tools.GetTimeSlicesOnBirthDay(foundPerson, precisionInHours);
 
 
             //ACT 3 : Generate charts (Parallel)
@@ -151,7 +149,7 @@ namespace VedAstro.Console
             {
                 var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
 
-                var chart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
+                var chart = await Tools.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
                 //var timeHash = possibleTime.ToString(); //time to id the chart, because will complete asymmetrically
                 dict.Add(possibleTime, chart.ContentSvg);
 

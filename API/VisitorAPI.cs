@@ -131,7 +131,7 @@ namespace API
                 }
 
                 //upload modified list to storage
-                await APITools.OverwriteBlobData(visitorLogClient, visitorListXml);
+                await Tools.OverwriteBlobData(visitorLogClient, visitorListXml);
 
                 return APITools.PassMessage(incomingRequest);
 
@@ -170,7 +170,7 @@ namespace API
                 }
 
                 //upload modified list to storage
-                await APITools.OverwriteBlobData(visitorLogClient, visitorListXml);
+                await Tools.OverwriteBlobData(visitorLogClient, visitorListXml);
 
                 return APITools.PassMessage(incomingRequest);
 

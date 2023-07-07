@@ -387,6 +387,9 @@ namespace VedAstro.Library
         /// </summary>
         private static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX)
         {
+            //no print minor events
+            if (lifeEvent.Weight == "Minor") { return ""; }
+
             //shorten the event name if too long & add ellipsis at end
             //else text goes out side box
             var formattedEventName = ShortenName(lifeEvent.Name);
@@ -551,7 +554,7 @@ namespace VedAstro.Library
             {
 
                 //get timezone at place event happened
-                var lifeEvtTime = lifeEvent.GetDateTimeOffset();//time at the place of event with correct standard timezone
+                var lifeEvtTime = lifeEvent.StartTime.GetStdDateTimeOffset();//time at the place of event with correct standard timezone
                 var startTimeInputOffset = lifeEvtTime.ToOffset(inputOffset); //change to output offset, to match chart
                 var positionX = GetLinePosition(timeSlices, startTimeInputOffset);
 

@@ -308,15 +308,6 @@ namespace API
             }
         }
 
-        public static Stream GenerateStreamFromString(string s)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
 
         /// <summary>
         /// Get all charts belonging to owner ID
@@ -352,7 +343,7 @@ namespace API
                 var newUser = new UserData(id, name, email);
 
                 //add new user xml to main list
-                await AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, Tools.BlobContainerName);
+                await Tools.AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, Tools.BlobContainerName);
 
                 //return newly created user to caller
                 return newUser;
@@ -387,7 +378,7 @@ namespace API
                 var newUser = new UserData(id, name, email);
 
                 //add new user xml to main list
-                await AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, Tools.BlobContainerName);
+                await Tools.AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, Tools.BlobContainerName);
 
                 //return newly created user to caller
                 return newUser;
@@ -473,33 +464,6 @@ namespace API
 
             //return the raw reply to caller
             return response;
-        }
-
-        /// <summary>
-        /// deletes old person record by ID and saves in new one as updated
-        /// </summary>
-        public static async Task UpdatePersonRecord(Person updatedPerson)
-        {
-            //var originalPerson = await APITools.GetPersonById(updatedPerson.Id);
-
-            //get the person record that needs to be updated
-            var personToUpdate = await Tools.FindPersonXMLById(updatedPerson.Id);
-
-            //only way it works manual update
-            //delete the previous person record,
-
-            //delete the old person record,
-            await APITools.DeleteXElementFromXDocumentAzure(personToUpdate, Tools.PersonListFile, Tools.BlobContainerName);
-
-            //and insert updated record in the updated as new
-            //add new person to main list
-            await APITools.AddXElementToXDocumentAzure(updatedPerson.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
-
-            // personToUpdate?.ReplaceWith(updatedPerson.ToXml());
-
-            //upload modified list file to storage
-            //var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
-            //await SaveXDocumentToAzure(personListXmlDoc, PersonListFile, BlobContainerName);
         }
 
         public static async Task UpdateRecordInDoc<T>(XElement updatedPersonXml, string cloudFileName) where T : IToXml
@@ -1077,25 +1041,7 @@ namespace API
             return imageBytes;
         }
 
-        /// <summary>
-        /// Converts raw call from API via URL to parsed Time
-        /// </summary>
-        public static async Task<Time> ParseTime(string locationName,
-            string hhmmStr,
-            string dateStr,
-            string monthStr,
-            string yearStr,
-            string offsetStr)
-        {
-            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
-            var geoLocation = geoLocationResult.Payload;
-
-            //clean time text
-            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
-            var parsedTime = new Time(timeStr, geoLocation);
-
-            return parsedTime;
-        }
+       
     }
 
 }

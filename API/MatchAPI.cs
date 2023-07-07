@@ -132,7 +132,7 @@ namespace API
 
                 //save chart into storage
                 //note: todo do not wait to speed things up, beware! failure will go undetected on client
-                await APITools.AddXElementToXDocumentAzure(chartReadyToInject, APITools.SavedMatchReportList, Tools.BlobContainerName);
+                await Tools.AddXElementToXDocumentAzure(chartReadyToInject, APITools.SavedMatchReportList, Tools.BlobContainerName);
 
                 //let caller know all good
                 return APITools.PassMessage(incomingRequest);

@@ -46,7 +46,7 @@ public static class APILogger
         visitorXml.Add(Tools.TimeStampSystemXml);
         visitorXml.Add(Tools.TimeStampServerXml);
 
-        await APITools.AddXElementToXDocumentAzure(visitorXml, AppLogXml, ContainerName);
+        await Tools.AddXElementToXDocumentAzure(visitorXml, AppLogXml, ContainerName);
 
     }
 
@@ -60,7 +60,7 @@ public static class APILogger
         visitorXml.Add(Tools.TimeStampServerXml);
 
         //add error data to main app log file
-        await APITools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
+        await Tools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
 
     }
 
@@ -74,7 +74,7 @@ public static class APILogger
         visitorXml.Add(Tools.TimeStampServerXml);
 
         //add error data to main app log file
-        await APITools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
+        await Tools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
 
     }
     public static async Task Data(string textData, HttpRequestData req = null)
@@ -88,7 +88,7 @@ public static class APILogger
         visitorXml.Add(Tools.TimeStampServerXml);
 
         //add error data to main app log file
-        await APITools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
+        await Tools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
 
     }
 

@@ -5,8 +5,8 @@
 
 <div class="" style="width: @GR.W352px;">
 
-    <TimeInputSimple @ref="_timeInput" LabelText="Time"/>
-    <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true"/>
+    <TimeInputSimple @ref="_timeInput" LabelText="Time" />
+    <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
 
 
     <div class="input-group mb-3">
@@ -16,7 +16,7 @@
     <div class="input-group mb-3">
         <span class="input-group-text" style="min-width: @GR.W97px;">Name</span>
         @*         <input @bind="inputDescription" type="text" class="form-control" placeholder="All went well">
- *@ <textarea style="min-height: 132px;" class="form-control" @bind="inputDescription" placeholder="All went well"></textarea>
+        *@ <textarea style="min-height: 132px;" class="form-control" @bind="inputDescription" placeholder="All went well"></textarea>
     </div>
     <div class="input-group mb-3">
         <label class="input-group-text" style="min-width: @GR.W97px;">Weight</label>
@@ -52,16 +52,14 @@
     {
         //get event from fields
         var newEvent = new LifeEvent()
-        {
-            Name = inputName,
-            Description = inputDescription,
-            Location = _geoLocationInput.LocationName,
-            Nature = inputNature,
-            StartTime = await _timeInput.GetFullTimeString(),
-            Timezone = _timeInput.TimeZone,
-            Weight = inputWeight
+            {
+                Name = inputName,
+                Description = inputDescription,
+                Nature = inputNature,
+                StartTime = await _timeInput.GetTime(_geoLocationInput.GetGeoLocation()),
+                Weight = inputWeight
 
-        };
+            };
     }
 
 

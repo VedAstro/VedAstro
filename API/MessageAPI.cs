@@ -46,7 +46,7 @@ namespace API
                 var newMessageXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 
                 //add new message to main list
-                await APITools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, Tools.BlobContainerName);
+                await Tools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, Tools.BlobContainerName);
 
                 //notify admin
                 await SendMessageToSlack(newMessageXml.Element("Email")?.Value ?? "Empty", newMessageXml.Element("Text")?.Value ?? "Empty");

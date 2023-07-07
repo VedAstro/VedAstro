@@ -32,6 +32,143 @@ namespace VedAstro.Library
     /// </summary>
     public static class Tools
     {
+
+        /// <summary>
+        /// Converts raw call from API via URL to parsed Time
+        /// </summary>
+        public static async Task<Time> ParseTime(string locationName,
+            string hhmmStr,
+            string dateStr,
+            string monthStr,
+            string yearStr,
+            string offsetStr)
+        {
+            WebResult<GeoLocation>? geoLocationResult = await Tools.AddressToGeoLocation(locationName);
+            var geoLocation = geoLocationResult.Payload;
+
+            //clean time text
+            var timeStr = $"{hhmmStr} {dateStr}/{monthStr}/{yearStr} {offsetStr}";
+            var parsedTime = new Time(timeStr, geoLocation);
+
+            return parsedTime;
+        }
+
+        /// <summary>
+        /// deletes old person record by ID and saves in new one as updated
+        /// </summary>
+        public static async Task UpdatePersonRecord(Person updatedPerson)
+        {
+            //var originalPerson = await APITools.GetPersonById(updatedPerson.Id);
+
+            //get the person record that needs to be updated
+            var personToUpdate = await Tools.FindPersonXMLById(updatedPerson.Id);
+
+            //only way it works manual update
+            //delete the previous person record,
+
+            //delete the old person record,
+            await Tools.DeleteXElementFromXDocumentAzure(personToUpdate, Tools.PersonListFile, Tools.BlobContainerName);
+
+            //and insert updated record in the updated as new
+            //add new person to main list
+            await Tools.AddXElementToXDocumentAzure(updatedPerson.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
+
+            // personToUpdate?.ReplaceWith(updatedPerson.ToXml());
+
+            //upload modified list file to storage
+            //var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
+            //await SaveXDocumentToAzure(personListXmlDoc, PersonListFile, BlobContainerName);
+        }
+
+        /// <summary>
+        /// Adds an XML element to XML document in by file & container name
+        /// and saves files directly to Azure blob store
+        /// </summary>
+        public static async Task AddXElementToXDocumentAzure(XElement dataXml, string fileName, string containerName)
+        {
+            //get user data list file (UserDataList.xml) Azure storage
+            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
+
+            //add new log to main list
+            var updatedListXml = await AddXElementToXDocument(fileClient, dataXml);
+
+            //upload modified list to storage
+            await OverwriteBlobData(fileClient, updatedListXml);
+        }
+
+        /// <summary>
+        /// Overwrites new XML data to a blob file
+        /// </summary>
+        public static async Task OverwriteBlobData(BlobClient blobClient, XDocument newData)
+        {
+            //convert xml data to string
+            var dataString = newData.ToString();
+
+            //convert xml string to stream
+            var dataStream = GenerateStreamFromString(dataString);
+
+            var blobUploadOptions = new BlobUploadOptions();
+            blobUploadOptions.AccessTier = AccessTier.Cool; //save money!
+
+            //upload stream to blob
+            //note: no override needed because specifying BlobUploadOptions, is auto override
+            await blobClient.UploadAsync(dataStream, options: blobUploadOptions);
+
+            //auto correct content type from wrongly set "octet/stream"
+            var blobHttpHeaders = new BlobHttpHeaders { ContentType = "text/xml" };
+            await blobClient.SetHttpHeadersAsync(blobHttpHeaders);
+        }
+        public static Stream GenerateStreamFromString(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
+        }
+
+
+        /// <summary>
+        /// Adds an XML element to XML document in blob form
+        /// </summary>
+        public static async Task<XDocument> AddXElementToXDocument(BlobClient xDocuBlobClient, XElement newElement)
+        {
+            //get person list from storage
+            var xDocument = await Tools.DownloadToXDoc(xDocuBlobClient);
+
+            //add new person to list
+            xDocument.Root.Add(newElement);
+
+            return xDocument;
+        }
+
+        /// <summary>
+        /// Deletes an XML element from an XML document in by file & container name
+        /// and saves files directly to Azure blob store
+        /// </summary>
+        public static async Task DeleteXElementFromXDocumentAzure(XElement dataXmlToDelete, string fileName, string containerName)
+        {
+            //access to file
+            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
+            //get xml file
+            var xmlDocFile = await Tools.DownloadToXDoc(fileClient);
+
+            //check if record to delete exists
+            //if not found, raise alarm
+            var xmlRecordList = xmlDocFile.Root.Elements();
+            var personToDelete = Person.FromXml(dataXmlToDelete);
+            var foundRecords = xmlRecordList.Where(x => Person.FromXml(x).Id == personToDelete.Id);
+            if (!foundRecords.Any()) { throw new Exception("Could not find XML record to delete in main list!"); }
+
+            //continue with delete
+            foundRecords.First().Remove();
+
+            //upload modified list to storage
+            await OverwriteBlobData(fileClient, xmlDocFile);
+        }
+
+
         public static async Task<EventsChart> GenerateNewChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags)
         {
             //from person get svg report
@@ -2071,7 +2208,7 @@ namespace VedAstro.Library
         /// Gets main person list xml doc file
         /// </summary>
         /// <returns></returns>
-        private static async Task<XDocument> GetPersonListFile()
+        public static async Task<XDocument> GetPersonListFile()
         {
             var personListXml = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
 

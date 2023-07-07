@@ -326,7 +326,7 @@ namespace VedAstro.Library
                 return returnXml;
             }
         }
-
+        
         /// <summary>
         /// The root element is expected to be Person
         /// Note: Special method done to implement IToXml

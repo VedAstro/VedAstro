@@ -94,8 +94,6 @@ namespace API
         [Function(nameof(FindBirthTimeEventsChartPerson))]
         public static async Task<HttpResponseData> FindBirthTimeEventsChartPerson([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = FindBirthTime_EventsChart_Person)] HttpRequestData incomingRequest, string personId)
         {
-            //use hard cache if available
-            if (!string.IsNullOrEmpty(FindBirthTimeEventsChartPersonHardCache)) { return APITools.SendSvgToCaller(FindBirthTimeEventsChartPersonHardCache, incomingRequest); }
 
             try
             {
@@ -152,9 +150,6 @@ namespace API
                     randomId: Tools.GenerateId(),
                     svgBackgroundColor: "#757575"); //grey easy on the eyes
 
-                //save copy for local reuse
-                FindBirthTimeEventsChartPersonHardCache = finalSvg;
-
                 //send image back to caller
                 return APITools.SendSvgToCaller(finalSvg, incomingRequest);
             }
@@ -168,7 +163,6 @@ namespace API
             }
         }
 
-        public static string FindBirthTimeEventsChartPersonHardCache { get; set; } = "";
 
         /// <summary>
         /// Finds in same same day of birth, for quick & easy search
@@ -330,14 +324,11 @@ namespace API
 
 
 
-        //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-        //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
         /// <summary>
         /// used for finding uncertain time in certain birth day
         /// split a person's day into precision based slices of possible birth times
         /// </summary>
-        private static List<Time> GetTimeSlicesOnBirthDay(Person person, double precisionInHours)
+        public static List<Time> GetTimeSlicesOnBirthDay(Person person, double precisionInHours)
         {
             //start of day till end of day
             var dayStart = new Time($"00:00 {person.BirthDateMonthYear} {person.BirthTimeZone}", person.GetBirthLocation());
@@ -347,6 +338,12 @@ namespace API
 
             return finalList;
         }
+
+
+
+        //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+        //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
 
 
     }

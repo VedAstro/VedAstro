@@ -1061,7 +1061,7 @@ namespace API
             // make the search request to the Bing Image API, and get the results
             imageResults = await client.Images.SearchAsync(query: keywords); //search query
 
-            
+
             //pick out the images that seems most suited
             var handPickedApples = imageResults.Value.Where(delegate (ImageObject x)
             {

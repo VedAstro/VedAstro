@@ -474,7 +474,7 @@ namespace API
                 //todo methodify or already exist
                 var savedChartListClient = await Tools.GetBlobClientAzure(APITools.SavedEventsChartListFile, Tools.BlobContainerName);
                 var savedChartListXml = await Tools.GetXmlFileFromAzureStorage(APITools.SavedEventsChartListFile, Tools.BlobContainerName);
-                await APITools.OverwriteBlobData(savedChartListClient, savedChartListXml);
+                await Tools.OverwriteBlobData(savedChartListClient, savedChartListXml);
 
                 return APITools.PassMessage(incomingRequest);
             }

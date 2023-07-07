@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Xml.Linq;
 using VedAstro.Library;
 
 namespace VedAstro.Console
@@ -36,8 +37,9 @@ namespace VedAstro.Console
                 System.Console.WriteLine("Choose wisely");
                 System.Console.WriteLine("1:Find Birth Time - Life Predictor - Person");
                 System.Console.WriteLine("2:Life Predictor - 100 Years - Super HD - 50MB");
-                System.Console.WriteLine("3:...COMING SOON");
-                System.Console.WriteLine("4:...UNDER DEVELOPMENT");
+                System.Console.WriteLine("3:Clean Life Events");
+                System.Console.WriteLine("4:...COMING SOON");
+                System.Console.WriteLine("5:...UNDER DEVELOPMENT");
 
                 //get selection from user
                 var choiceRaw = System.Console.ReadLine();
@@ -93,12 +95,16 @@ namespace VedAstro.Console
 
                         break;
                     }
+                case "3":
+                    await MigrateOldLifeEventsToNewFormat();
+                    break;
                 default: System.Console.WriteLine("Coming soon"); break;
             }
 
             System.Console.WriteLine("\t\t Done! You can go fly kites now.");
             System.Console.WriteLine("*****************************************************");
         }
+
 
         private static string GetInputFromUser(string inputAskMessage)
         {
@@ -229,5 +235,35 @@ namespace VedAstro.Console
             //let user know
             System.Console.WriteLine("File Done & Saved to Desktop!");
         }
+
+        private static async Task MigrateOldLifeEventsToNewFormat()
+        {
+
+            //get latest file from server
+            //note how this creates & destroys per call to method
+            //might cost little extra cycles but it's a functionality
+            //to always get the latest list
+            var personListXmlDoc = await Tools.GetPersonListFile();
+
+            //list of person XMLs
+            var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
+
+            //parse to type
+            var allPersonList = Person.FromXml(personXmlList);
+
+            //only person with life events
+            var filtered = allPersonList.Where(x => x.LifeEventList.Any());
+
+            //convert to new xml format then inset into xdoc back
+            foreach (var updatedPerson in filtered)
+            {
+                //directly updates and saves new person record to main list (does all the work, sleep easy)
+                await Tools.UpdatePersonRecord(updatedPerson);
+            }
+
+            System.Console.WriteLine("All person record updated!");
+
+        }
+
     }
 }

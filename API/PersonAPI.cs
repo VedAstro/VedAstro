@@ -229,7 +229,7 @@ namespace API
             await AzureCache.DeleteStuffRelatedToPerson(newPerson);
 
             //add new person to main list
-            await APITools.AddXElementToXDocumentAzure(newPerson.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
+            await Tools.AddXElementToXDocumentAzure(newPerson.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
 
             return APITools.PassMessageJson(req);
 
@@ -267,10 +267,10 @@ namespace API
 
                     //save a copy of the original person record in recycle bin, just in-case accidental update
                     var originalPerson = await Tools.GetPersonById(updatedPerson.Id);
-                    await APITools.AddXElementToXDocumentAzure(originalPerson.ToXml(), APITools.RecycleBinFile, Tools.BlobContainerName);
+                    await Tools.AddXElementToXDocumentAzure(originalPerson.ToXml(), APITools.RecycleBinFile, Tools.BlobContainerName);
 
                     //directly updates and saves new person record to main list (does all the work, sleep easy)
-                    await APITools.UpdatePersonRecord(updatedPerson);
+                    await Tools.UpdatePersonRecord(updatedPerson);
 
                     //all is good baby
                     return APITools.PassMessageJson(req);
@@ -328,10 +328,10 @@ namespace API
                     await AzureCache.DeleteStuffRelatedToPerson(personParsed);
 
                     //add deleted person to recycle bin 
-                    await APITools.AddXElementToXDocumentAzure(personToDelete, APITools.RecycleBinFile, Tools.BlobContainerName);
+                    await Tools.AddXElementToXDocumentAzure(personToDelete, APITools.RecycleBinFile, Tools.BlobContainerName);
 
                     //delete the person record,
-                    await APITools.DeleteXElementFromXDocumentAzure(personToDelete, Tools.PersonListFile, Tools.BlobContainerName);
+                    await Tools.DeleteXElementFromXDocumentAzure(personToDelete, Tools.PersonListFile, Tools.BlobContainerName);
 
                     return APITools.PassMessageJson(req);
                 }

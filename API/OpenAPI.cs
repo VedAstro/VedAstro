@@ -34,7 +34,7 @@ namespace API
             APILogger.Visitor(incomingRequest);
 
             //parse time range from caller (possible to fail)
-            var parsedTime = await APITools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
+            var parsedTime = await Tools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
 
             //send to sorter
             return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, incomingRequest);
@@ -56,7 +56,7 @@ namespace API
             APILogger.Visitor(incomingRequest);
 
             //parse time range from caller (possible to fail)
-            var parsedTime = await APITools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
+            var parsedTime = await Tools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
 
             //send to sorter (no property, set null)
             return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, incomingRequest);
@@ -77,7 +77,7 @@ namespace API
             APILogger.Visitor(incomingRequest);
 
             //parse time range from caller (possible to fail)
-            var parsedTime = await APITools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
+            var parsedTime = await Tools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
 
             //send to sorter (no property, set null)
             return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, incomingRequest);

@@ -127,46 +127,7 @@ namespace API
             return xmlFile;
         }
 
-        /// <summary>
-        /// Adds an XML element to XML document in by file & container name
-        /// and saves files directly to Azure blob store
-        /// </summary>
-        public static async Task AddXElementToXDocumentAzure(XElement dataXml, string fileName, string containerName)
-        {
-            //get user data list file (UserDataList.xml) Azure storage
-            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
 
-            //add new log to main list
-            var updatedListXml = await AddXElementToXDocument(fileClient, dataXml);
-
-            //upload modified list to storage
-            await OverwriteBlobData(fileClient, updatedListXml);
-        }
-
-        /// <summary>
-        /// Deletes an XML element from an XML document in by file & container name
-        /// and saves files directly to Azure blob store
-        /// </summary>
-        public static async Task DeleteXElementFromXDocumentAzure(XElement dataXmlToDelete, string fileName, string containerName)
-        {
-            //access to file
-            var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
-            //get xml file
-            var xmlDocFile = await Tools.DownloadToXDoc(fileClient);
-
-            //check if record to delete exists
-            //if not found, raise alarm
-            var xmlRecordList = xmlDocFile.Root.Elements();
-            var personToDelete = Person.FromXml(dataXmlToDelete);
-            var foundRecords = xmlRecordList.Where(x => Person.FromXml(x).Id == personToDelete.Id);
-            if (!foundRecords.Any()) { throw new Exception("Could not find XML record to delete in main list!"); }
-
-            //continue with delete
-            foundRecords.First().Remove();
-
-            //upload modified list to storage
-            await OverwriteBlobData(fileClient, xmlDocFile);
-        }
 
         /// <summary>
         /// Saves XML file direct to Azure storage
@@ -177,7 +138,7 @@ namespace API
             var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
 
             //upload modified list to storage
-            await OverwriteBlobData(fileClient, dataXml);
+            await Tools.OverwriteBlobData(fileClient, dataXml);
         }
 
     }

@@ -49,7 +49,6 @@ namespace API
         //NAMES OF FILES IN AZURE STORAGE FOR ACCESS
         public const string LiveChartHtml = "LiveChart.html";
 
-        public const string PersonListFile = "PersonList.xml";
         public const string VisitorLogFile = "VisitorLog.xml";
         public const string TaskListFile = "TaskList.xml";
         public const string MessageListFile = "MessageList.xml";
@@ -62,7 +61,6 @@ namespace API
             HoroscopeDataListFile =
                 "https://vedastro.org/data/HoroscopeDataList.xml"; //todo should be getting beta version
 
-        public const string BlobContainerName = "vedastro-site-data";
         public static URL Url { get; set; } //instance of beta or stable URLs
 
         static APITools()
@@ -334,7 +332,7 @@ namespace API
         public static async Task<UserData> GetUserData(string id, string name, string email)
         {
             //get user data list file (UserDataList.xml) Azure storage
-            var userDataListXml = await GetXmlFileFromAzureStorage(UserDataListXml, BlobContainerName);
+            var userDataListXml = await Tools.GetXmlFileFromAzureStorage(UserDataListXml, Tools.BlobContainerName);
 
             //look for user with matching email
             var foundUserXml = userDataListXml.Root?.Elements()
@@ -354,7 +352,7 @@ namespace API
                 var newUser = new UserData(id, name, email);
 
                 //add new user xml to main list
-                await AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, BlobContainerName);
+                await AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, Tools.BlobContainerName);
 
                 //return newly created user to caller
                 return newUser;
@@ -369,7 +367,7 @@ namespace API
         public static async Task<UserData> UpdateUserData(string id, string name, string email)
         {
             //get user data list file (UserDataList.xml) Azure storage
-            var userDataListXml = await GetXmlFileFromAzureStorage(UserDataListXml, BlobContainerName);
+            var userDataListXml = await Tools.GetXmlFileFromAzureStorage(UserDataListXml, Tools.BlobContainerName);
 
             //look for user with matching email
             var foundUserXml = userDataListXml.Root?.Elements()
@@ -389,7 +387,7 @@ namespace API
                 var newUser = new UserData(id, name, email);
 
                 //add new user xml to main list
-                await AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, BlobContainerName);
+                await AddXElementToXDocumentAzure(newUser.ToXml(), UserDataListXml, Tools.BlobContainerName);
 
                 //return newly created user to caller
                 return newUser;
@@ -485,17 +483,17 @@ namespace API
             //var originalPerson = await APITools.GetPersonById(updatedPerson.Id);
 
             //get the person record that needs to be updated
-            var personToUpdate = await FindPersonXMLById(updatedPerson.Id);
+            var personToUpdate = await Tools.FindPersonXMLById(updatedPerson.Id);
 
             //only way it works manual update
             //delete the previous person record,
 
             //delete the old person record,
-            await APITools.DeleteXElementFromXDocumentAzure(personToUpdate, APITools.PersonListFile, APITools.BlobContainerName);
+            await APITools.DeleteXElementFromXDocumentAzure(personToUpdate, Tools.PersonListFile, Tools.BlobContainerName);
 
             //and insert updated record in the updated as new
             //add new person to main list
-            await APITools.AddXElementToXDocumentAzure(updatedPerson.ToXml(), APITools.PersonListFile, APITools.BlobContainerName);
+            await APITools.AddXElementToXDocumentAzure(updatedPerson.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
 
             // personToUpdate?.ReplaceWith(updatedPerson.ToXml());
 
@@ -506,25 +504,25 @@ namespace API
 
         public static async Task UpdateRecordInDoc<T>(XElement updatedPersonXml, string cloudFileName) where T : IToXml
         {
-            var allListXmlDoc = await GetXmlFileFromAzureStorage(cloudFileName, BlobContainerName);
+            var allListXmlDoc = await Tools.GetXmlFileFromAzureStorage(cloudFileName, Tools.BlobContainerName);
 
             var updatedPerson = Person.FromXml(updatedPersonXml);
 
             //get the person record that needs to be updated
-            var personToUpdate = await FindPersonXMLById(updatedPerson.Id);
+            var personToUpdate = await Tools.FindPersonXMLById(updatedPerson.Id);
 
             //delete the previous person record,
             //and insert updated record in the same place
             personToUpdate?.ReplaceWith(updatedPersonXml);
 
             //upload modified list file to storage
-            await SaveXDocumentToAzure(allListXmlDoc, cloudFileName, BlobContainerName);
+            await SaveXDocumentToAzure(allListXmlDoc, cloudFileName, Tools.BlobContainerName);
         }
 
         public static async Task<List<Person>> GetAllPersonList()
         {
             //get all person list from storage
-            var personListXml = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
+            var personListXml = await Tools.GetXmlFileFromAzureStorage(Tools.PersonListFile, Tools.BlobContainerName);
             var allPersonList = personListXml.Root?.Elements();
 
             var returnList = Person.FromXml(allPersonList);
@@ -622,7 +620,7 @@ namespace API
         //if this is not done, then when user loses the visitor ID, they also loose access to the person profile
         public static async Task<bool> SwapUserId(CallerInfo callerInfo, string cloudXmlFile)
         {
-            var allListXmlDoc = await APITools.GetXmlFileFromAzureStorage(cloudXmlFile, APITools.BlobContainerName);
+            var allListXmlDoc = await Tools.GetXmlFileFromAzureStorage(cloudXmlFile, Tools.BlobContainerName);
 
             //filter out record by visitor id
             var visitorIdList = Tools.FindXmlByUserId(allListXmlDoc, callerInfo.VisitorId);
@@ -655,7 +653,7 @@ namespace API
                 }
 
                 //upload modified list file to storage
-                await SaveXDocumentToAzure(allListXmlDoc, cloudXmlFile, BlobContainerName);
+                await SaveXDocumentToAzure(allListXmlDoc, cloudXmlFile, Tools.BlobContainerName);
 
                 //since heavy computation, log if happens
                 APILogger.Data($"Profiles swapped : {visitorIdList.Count}", AppInstance.IncomingRequest);
@@ -735,8 +733,8 @@ namespace API
             //jamesbrown and JamesBrown, both should by common sense work
             async Task<bool> CheckBothCase(string checkThis)
             {
-                var x = (await APITools.FindPersonXMLById(checkThis)) == null;
-                var y = (await APITools.FindPersonXMLById(checkThis.ToLower())) == null;
+                var x = (await Tools.FindPersonXMLById(checkThis)) == null;
+                var y = (await Tools.FindPersonXMLById(checkThis.ToLower())) == null;
                 return x || y;
             }
 
@@ -1100,13 +1098,4 @@ namespace API
         }
     }
 
-    public class Secrets
-    {
-        public static string? AutoEmailerConnectString => Environment.GetEnvironmentVariable("AutoEmailerConnectString"); //vedastro-api-data
-        public static string? API_STORAGE => Environment.GetEnvironmentVariable("API_STORAGE");
-        public static string? BING_IMAGE_SEARCH => Environment.GetEnvironmentVariable("BING_IMAGE_SEARCH");
-        public static string? WEB_STORAGE => Environment.GetEnvironmentVariable("WEB_STORAGE");
-        public static string? EnableCache => Environment.GetEnvironmentVariable("EnableCache");
-        public static string? SLACK_EMAIL_WEBHOOK => Environment.GetEnvironmentVariable("SLACK_EMAIL_WEBHOOK");
-    }
 }

@@ -132,7 +132,7 @@ namespace API
 
                 //save chart into storage
                 //note: todo do not wait to speed things up, beware! failure will go undetected on client
-                await APITools.AddXElementToXDocumentAzure(chartReadyToInject, APITools.SavedMatchReportList, APITools.BlobContainerName);
+                await APITools.AddXElementToXDocumentAzure(chartReadyToInject, APITools.SavedMatchReportList, Tools.BlobContainerName);
 
                 //let caller know all good
                 return APITools.PassMessage(incomingRequest);
@@ -165,7 +165,7 @@ namespace API
 
                 //STAGE 3 : FILTER
                 //get updated all match reports (after swap)
-                var savedMatchReportList = await APITools.GetXmlFileFromAzureStorage(APITools.SavedMatchReportList, APITools.BlobContainerName);
+                var savedMatchReportList = await Tools.GetXmlFileFromAzureStorage(APITools.SavedMatchReportList, Tools.BlobContainerName);
                 //filter out record by user id
                 var userIdList = Tools.FindXmlByUserId(savedMatchReportList, userId);
 
@@ -189,7 +189,7 @@ namespace API
         public static async Task<HttpResponseData> FindMatch([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "FindMatch/PersonId/{personId}")] HttpRequestData incomingRequest, string personId)
         {
 
-            var person = await APITools.GetPersonById(personId);
+            var person = await Tools.GetPersonById(personId);
 
             var personList = await GetAllPersonByMatchStrength(person);
 
@@ -263,8 +263,8 @@ namespace API
         /// </summary>
         public static async Task<MatchReport> GetNewMatchReport(string maleId, string femaleId, string userId)
         {
-            var male = await APITools.GetPersonById(maleId);
-            var female = await APITools.GetPersonById(femaleId);
+            var male = await Tools.GetPersonById(maleId);
+            var female = await Tools.GetPersonById(femaleId);
 
             //if male & female profile found, make report and return caller
             var notEmpty = !Person.Empty.Equals(male) && !Person.Empty.Equals(female);

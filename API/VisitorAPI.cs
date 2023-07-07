@@ -1,6 +1,7 @@
 ﻿using System.Xml.Linq;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using VedAstro.Library;
 
 namespace API
 {
@@ -55,7 +56,7 @@ namespace API
             {
 
                 //get visitor log from storage
-                var visitorLogXml = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
+                var visitorLogXml = await Tools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, Tools.BlobContainerName);
 
                 //convert list to nice string before sending to caller
                 var visitorLogXmlString = visitorLogXml?.Root ?? new XElement("Empty");
@@ -82,7 +83,7 @@ namespace API
             try
             {
                 //get visitor log from storage
-                var visitorLogXml = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
+                var visitorLogXml = await Tools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, Tools.BlobContainerName);
 
                 //go through each and send to table
                 var all = visitorLogXml?.Root.Elements();
@@ -119,8 +120,8 @@ namespace API
                 var userId = userIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
-                var visitorLogClient = await APITools.GetBlobClientAzure(APITools.VisitorLogFile, APITools.BlobContainerName);
-                var visitorListXml = await APITools.DownloadToXDoc(visitorLogClient);
+                var visitorLogClient = await Tools.GetBlobClientAzure(APITools.VisitorLogFile, Tools.BlobContainerName);
+                var visitorListXml = await Tools.DownloadToXDoc(visitorLogClient);
                 var visitorLogsToDelete = visitorListXml.Root?.Elements().Where(x => x.Element("UserId")?.Value == userId).ToList();
 
                 //delete each record
@@ -156,8 +157,8 @@ namespace API
                 var visitorId = visitorIdXml.Value;
 
                 //get all visitor elements that needs to be deleted
-                var visitorLogClient = await APITools.GetBlobClientAzure(APITools.VisitorLogFile, APITools.BlobContainerName);
-                var visitorListXml = await APITools.DownloadToXDoc(visitorLogClient);
+                var visitorLogClient = await Tools.GetBlobClientAzure(APITools.VisitorLogFile, Tools.BlobContainerName);
+                var visitorListXml = await Tools.DownloadToXDoc(visitorLogClient);
                 var visitorLogsToDelete = (from xml in visitorListXml.Root?.Elements()
                                            where xml.Element("VisitorId")?.Value == visitorId
                                            select xml).ToList();

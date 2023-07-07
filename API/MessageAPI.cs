@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json;
+using VedAstro.Library;
 
 namespace API
 {
@@ -16,7 +17,7 @@ namespace API
             try
             {
                 //get message list from storage
-                var messageListXml = await APITools.GetXmlFileFromAzureStorage(APITools.MessageListFile, APITools.BlobContainerName);
+                var messageListXml = await Tools.GetXmlFileFromAzureStorage(APITools.MessageListFile, Tools.BlobContainerName);
 
 
                 //send task list to caller
@@ -45,7 +46,7 @@ namespace API
                 var newMessageXml = await APITools.ExtractDataFromRequestXml(incomingRequest);
 
                 //add new message to main list
-                await APITools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, APITools.BlobContainerName);
+                await APITools.AddXElementToXDocumentAzure(newMessageXml, APITools.MessageListFile, Tools.BlobContainerName);
 
                 //notify admin
                 await SendMessageToSlack(newMessageXml.Element("Email")?.Value ?? "Empty", newMessageXml.Element("Text")?.Value ?? "Empty");

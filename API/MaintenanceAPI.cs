@@ -203,7 +203,7 @@ namespace API
             try
             {
                 //get visitor log from storage
-                var visitorLogDocument = await APITools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, APITools.BlobContainerName);
+                var visitorLogDocument = await Tools.GetXmlFileFromAzureStorage(APITools.VisitorLogFile, Tools.BlobContainerName);
 
                 //unique visitors
                 var uniqueList = APITools.GetOnlineVisitors(visitorLogDocument);

@@ -66,34 +66,6 @@ namespace API
 
         }
 
-        /// <summary>
-        /// Converts a blob client of a file to an XML document
-        /// </summary>
-        public static async Task<XDocument> DownloadToXDoc(BlobClient blobClient)
-        {
-            var isFileExist = (await blobClient.ExistsAsync()).Value;
-
-            if (isFileExist)
-            {
-                XDocument xDoc;
-                await using (var stream = (await blobClient.DownloadStreamingAsync()).Value.Content)
-                {
-                    xDoc = await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
-                }
-
-#if DEBUG
-                Console.WriteLine($"Downloaded: {blobClient.Name}");
-#endif
-
-                return xDoc;
-            }
-            else
-            {
-                //will be logged by caller
-                throw new Exception($"No File in Cloud! : {blobClient.Name}");
-            }
-
-        }
 
     }
 }

@@ -45,6 +45,8 @@
 		<PackageReference Include="System.Drawing.Common" Version="8.0.0-preview.2.23128.3" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="SwissEphNet" Version="2.8.0.2" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
+
 	</ItemGroup>
 
 </Project>

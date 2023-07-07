@@ -52,7 +52,7 @@ namespace API
                 //PREPARE THE CALL
                 Func<Task<string>> generateChart = async () =>
                 {
-                    var foundPerson = await APITools.GetPersonById(chartSpecsOnly.PersonId);
+                    var foundPerson = await Tools.GetPersonById(chartSpecsOnly.PersonId);
                     var chartSvg = await EventsChartManager.GenerateEventsChart(
                         foundPerson,
                         chartSpecsOnly.TimeRange,
@@ -107,7 +107,7 @@ namespace API
                 var chartId = chartSpecsOnly.GetEventsChartSignature();
 
                 //PREPARE THE CALL
-                var foundPerson = await APITools.GetPersonById(chartSpecsOnly.PersonId);
+                var foundPerson = await Tools.GetPersonById(chartSpecsOnly.PersonId);
                 var chartSvg = await EventsChartManager.GenerateEventsChart(
                     foundPerson,
                     chartSpecsOnly.TimeRange,
@@ -161,7 +161,7 @@ namespace API
                 var chartId = chartSpecsOnly.GetEventsChartSignature();
 
                 //PREPARE THE CALL
-                var foundPerson = await APITools.GetPersonById(chartSpecsOnly.PersonId);
+                var foundPerson = await Tools.GetPersonById(chartSpecsOnly.PersonId);
                 var chartSvg = await EventsChartManager.GenerateEventsChart(
                     foundPerson,
                     chartSpecsOnly.TimeRange,
@@ -235,7 +235,7 @@ namespace API
                 var eventsChartViewerHtml = await APITools.GetStringFileHttp(APITools.Url.EventsChartViewerHtml);
 
                 //insert person name into page, to show ready page faster
-                var personName = (await APITools.FindPersonXMLById(personId)).Name;
+                var personName = (await Tools.FindPersonXMLById(personId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
                 jsVariables += $@"window.PersonId = ""{personId}"";";
@@ -310,7 +310,7 @@ namespace API
 
                 //insert person name into page, to show ready page faster
                 //TODO NEEDS TO BE UPDATED
-                var personName = (await APITools.GetPersonById(chart.PersonId)).Name;
+                var personName = (await Tools.GetPersonById(chart.PersonId)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
                 jsVariables += $@"window.PersonId = ""{chart.PersonId}"";";
@@ -415,7 +415,7 @@ namespace API
             {
 
                 //get ful saved chart list
-                var savedChartXmlDoc = await APITools.GetXmlFileFromAzureStorage(APITools.SavedEventsChartListFile, APITools.BlobContainerName);
+                var savedChartXmlDoc = await Tools.GetXmlFileFromAzureStorage(APITools.SavedEventsChartListFile, Tools.BlobContainerName);
 
                 //extract out the name & id
                 var rootXml = new XElement("Root");
@@ -426,7 +426,7 @@ namespace API
                 foreach (var chartXml in savedChartXmlList)
                 {
                     var parsedChart = EventsChart.FromXml(chartXml);
-                    var person = await APITools.GetPersonById(parsedChart.PersonId);
+                    var person = await Tools.GetPersonById(parsedChart.PersonId);
                     var chartNameXml = new XElement("ChartName",
                         new XElement("Name",
                             parsedChart.GetFormattedName(person.Name)),
@@ -472,8 +472,8 @@ namespace API
 
                 //upload modified list to storage
                 //todo methodify or already exist
-                var savedChartListClient = await APITools.GetBlobClientAzure(APITools.SavedEventsChartListFile, APITools.BlobContainerName);
-                var savedChartListXml = await APITools.GetXmlFileFromAzureStorage(APITools.SavedEventsChartListFile, APITools.BlobContainerName);
+                var savedChartListClient = await Tools.GetBlobClientAzure(APITools.SavedEventsChartListFile, Tools.BlobContainerName);
+                var savedChartListXml = await Tools.GetXmlFileFromAzureStorage(APITools.SavedEventsChartListFile, Tools.BlobContainerName);
                 await APITools.OverwriteBlobData(savedChartListClient, savedChartListXml);
 
                 return APITools.PassMessage(incomingRequest);
@@ -552,7 +552,7 @@ namespace API
             //EXTRACT & PREPARE DATA
 
             //get the person instance by id
-            var foundPerson = await APITools.GetPersonById(personId);
+            var foundPerson = await Tools.GetPersonById(personId);
 
             //TIME
             var timeRange = EventChartTools.AutoCalculateTimeRange(foundPerson, timePreset, timezone);
@@ -566,7 +566,7 @@ namespace API
             var daysPerPixel = GetDayPerPixel(timeRange, maxWidth);
 
 
-            return await GenerateNewChart(foundPerson, timeRange, daysPerPixel, eventTags);
+            return await Tools.GenerateNewChart(foundPerson, timeRange, daysPerPixel, eventTags);
         }
 
 
@@ -600,17 +600,6 @@ namespace API
         //}
 
 
-        public static async Task<EventsChart> GenerateNewChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags)
-        {
-            //from person get svg report
-            var eventsChartSvgString = await EventsChartManager.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags);
-
-            //a new chart is born
-            var newChartId = Tools.GenerateId();
-            var newChart = new EventsChart(newChartId, eventsChartSvgString, foundPerson.Id, timeRange, daysPerPixel, eventTags);
-
-            return newChart;
-        }
 
         /// <summary>
         /// calculates the precision of the events to fit inside 1000px width

@@ -88,8 +88,10 @@ namespace VedAstro.Console
                         //get person id from user
                         var personId = GetInputFromUser("Enter Person ID");
 
-                        await FindBirthTimeEventsChartPerson(personId);
+                        var maxWidth = int.Parse(GetInputFromUser("Enter Max Width in Px"));
+                        var precisionInHours = double.Parse(GetInputFromUser("Enter Precision in Hours"));
 
+                        await FindBirthTimeEventsChartPerson(personId, maxWidth, precisionInHours);
 
                         break;
                     }
@@ -108,7 +110,7 @@ namespace VedAstro.Console
 
         }
 
-        private static async Task FindBirthTimeEventsChartPerson(string personId)
+        private static async Task FindBirthTimeEventsChartPerson(string personId, int maxWidth, double precisionInHours)
         {
 
             //ACT 1 : Generate data needed to make charts
@@ -125,14 +127,54 @@ namespace VedAstro.Console
             var timeRange = new TimeRange(start, end);
 
             //calculate based on max screen width,
-            var daysPerPixel = EventsChart.GetDayPerPixel(timeRange, 1500);
+            var daysPerPixel = EventsChart.GetDayPerPixel(timeRange, maxWidth);
 
             //get list of possible birth time slice in the current birth day
-            var possibleTimeList = BirthTimeFinderAPI.GetTimeSlicesOnBirthDay(foundPerson, 1);
+            var possibleTimeList = BirthTimeFinderAPI.GetTimeSlicesOnBirthDay(foundPerson, precisionInHours);
 
 
             //ACT 3 : Generate charts (Parallel)
 
+            Dictionary<Time, string> dict = new Dictionary<Time, string>();
+            // Adding elements to the Dictionary
+
+            //Parallel.ForEach(possibleTimeList, async possibleTime =>
+            //{
+            //    var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
+
+            //    var chart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
+            //    //var timeHash = possibleTime.ToString(); //time to id the chart, because will complete asymmetrically
+            //    dict.Add(possibleTime, chart.ContentSvg);
+            //});
+
+            foreach (var possibleTime in possibleTimeList)
+            {
+                var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
+
+                var chart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
+                //var timeHash = possibleTime.ToString(); //time to id the chart, because will complete asymmetrically
+                dict.Add(possibleTime, chart.ContentSvg);
+
+            }
+
+            //List<Task> tasks = possibleTimeList.Select(async possibleTime =>
+            //{
+
+            //    var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
+
+            //    var chart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
+            //    //var timeHash = possibleTime.ToString(); //time to id the chart, because will complete asymmetrically
+            //    dict.Add(possibleTime, chart.ContentSvg);
+
+            //}).ToList();
+
+            //await Task.WhenAll(tasks);
+
+
+
+
+
+            //ACT 4 : Package to be vied together
             var combinedSvg = "";
             var chartYPosition = 30; //start with top padding
             var leftPadding = 10;
@@ -140,14 +182,14 @@ namespace VedAstro.Console
             {
                 //replace original birth time
                 var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
-                var newChart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
+                var newChartSvg = dict[possibleTime];
                 var adjustedBirth = personAdjusted.BirthTimeString;
 
                 //place in group with time above the chart
                 var wrappedChart = $@"
                             <g transform=""matrix(1, 0, 0, 1, {leftPadding}, {chartYPosition})"">
                                 <text style=""font-size: 16px; white-space: pre-wrap;"" x=""2"" y=""-6.727"">{adjustedBirth}</text>
-                                {newChart.ContentSvg}
+                                {newChartSvg}
                               </g>
                             ";
 
@@ -169,16 +211,21 @@ namespace VedAstro.Console
                 svgBackgroundColor: "#757575"); //grey easy on the eyes
 
 
-            //ACT 2 : Save to file
+            //ACT 5 : Save to file
             //This is the part that could not be done in cloud, cost and time
             //recognizable name for file
-            var fileName = $"BirthTimeFinder-EventsChart-{foundPerson.Name}-{foundPerson.BirthYear}.svg";
+            var fileName = $"BirthTimeFinder-EventsChart-{foundPerson.Name}-{foundPerson.BirthYear}-{precisionInHours}PiH.svg";
+            var folderName = $"VedAstro Console";
 
             //save to desktop, easy to spot
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string fullPath = Path.Combine(desktopPath, fileName);
-            
-            //save to desktop
+            string folderPath = Path.Combine(desktopPath, folderName);
+
+            //create folder if no show
+            Directory.CreateDirectory(folderPath);
+
+            //save to local file
+            string fullPath = Path.Combine(folderPath, fileName);
             await File.WriteAllTextAsync(fullPath, finalSvg);
 
             //let user know

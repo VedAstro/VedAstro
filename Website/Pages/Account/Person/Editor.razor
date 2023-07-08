@@ -6,20 +6,14 @@
 
 <PageTitle>@_pageTitle</PageTitle>
 
-<PageTop Title="Person profile" IconName="icomoon-free:profile">
+<PageTop Title="Person Profile" IconName="icomoon-free:profile">
     <Description>
         Person's birth info for astronomical calculation
     </Description>
 </PageTop>
 
 
-
-
 <div class="container">
-
-
-
-
     @*TAB HEADER*@
     <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -161,18 +155,6 @@
 
 
 
-    //--------------------PROPERTIES
-
-
-
-
-    //█░░ █ █▀▀ █▀▀ █▀▀ █▄█ █▀▀ █░░ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-    //█▄▄ █ █▀░ ██▄ █▄▄ ░█░ █▄▄ █▄▄ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-    //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
-
-
-    private async Task OnClickDeleteButton() => await InvokeAsync(async () => await _OnClickDeleteButton()).Try(_jsRuntime);
-
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -190,10 +172,6 @@
 
         _jsRuntime.HideLoading();
     }
-
-
-
-
 
 
     /// <summary>
@@ -402,7 +380,7 @@
 
     }
 
-    private async Task _OnClickDeleteButton()
+    private async Task OnClickDeleteButton()
     {
         //show loading message
         await _jsRuntime.ShowLoading();

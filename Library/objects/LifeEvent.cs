@@ -15,6 +15,15 @@ namespace VedAstro.Library
     /// </summary>
     public class LifeEvent : IToXml
     {
+        public static LifeEvent Empty = new LifeEvent()
+        {
+            Name = "New Life Event",
+            Description = "Event Description",
+            StartTime = Time.Empty,
+            Id = Tools.GenerateId(),
+            Nature = "Neutral",
+            Weight = "Normal"
+        };
         private string _name;
         private string _description;
 

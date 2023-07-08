@@ -17,7 +17,7 @@
     <div class="me-5">
         <div class="vstack gap-3">
             <PersonSelectorBox @ref="_peopleSelectorBox" />
-            <div class="hstack">
+            <div class="hstack gap-5">
                 <IconButton SmallSize="true" IconName="uim:process" ButtonText="Show Journal" OnClickCallback="ShowButtonClicked" />
                 <IconButton Color="success" SmallSize="true" IconName="zondicons:add-solid" ButtonText="Add Event" OnClickCallback="AddButtonClicked" />
             </div>
@@ -156,7 +156,7 @@
         //only continue if passed input field validation
         if (!await IsValidationPassed()) { return; }
 
-        AppData.Go(url: PageRoute.JournalAdd, rememberMe: true);
+        AppData.Go(url: $"{PageRoute.JournalEditorParam}/{PersonIdUrl}/{Tools.GenerateId()}", rememberMe: true);
 
     }
 

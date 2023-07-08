@@ -35,7 +35,8 @@
         </select>
     </div>
     <div class="hstack gap-5">
-        <IconButton Color="danger" SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="OnClickCancelBack" />
+        <IconButton Color="primary" SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="OnClickCancelBack" />
+        <IconButton Color="danger" SmallSize="true" IconName="fluent:delete-20-regular" ButtonText="Delete" OnClickCallback="OnClickDelete" />
         <IconButton Color="success" SmallSize="true" IconName="bx:save" ButtonText="Save" OnClickCallback="OnClickSave" />
     </div>
 </div>
@@ -109,15 +110,6 @@
         inputWeight = SelectedLifeEvent.Weight;
         _geoLocationInput.UpdateData(SelectedLifeEvent.StartTime.GetGeoLocation());
 
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            //_timeInput.SetTime(SelectedLifeEvent.StartTime);
-
-        }
     }
 
 
@@ -235,5 +227,32 @@
         return newEvent;
     }
 
+
+    /// <summary>
+    /// Deletes life event from person and updates person 
+    /// </summary>
+    private async Task OnClickDelete()
+    {
+
+        //show loading message
+        await _jsRuntime.ShowLoading();
+
+        //only continue if passed input field validation
+        if (!(await IsValidationPassed())) { return; }
+
+        //update or add this life event to caller
+        var alreadyExist = SelectedPerson.LifeEventList.Where(le => le.Id == LifeEventIdUrl).Any();
+
+        //delete old
+        if (alreadyExist) { SelectedPerson.LifeEventList.RemoveAll(le => le.Id == LifeEventIdUrl); }
+
+        //update person in API, includes message
+        await AppData.API.Person.UpdatePerson(SelectedPerson);
+        _jsRuntime.PlayDoneSound();
+
+        //send back to previous page
+        await _jsRuntime.ShowAlert("info", $"Going back to previous page", false, 500);
+        _jsRuntime?.GoBack();
+    }
 
 }

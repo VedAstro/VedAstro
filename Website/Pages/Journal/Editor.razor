@@ -15,8 +15,7 @@
     </div>
     <div class="input-group ">
         <span class="input-group-text" style="min-width: @GR.W97px;">Name</span>
-        @*         <input @bind="inputDescription" type="text" class="form-control" placeholder="All went well">
-        *@ <textarea style="min-height: 132px;" class="form-control" @bind="inputDescription" placeholder="All went well"></textarea>
+        <textarea style="min-height: 132px;" class="form-control" @bind="inputDescription" placeholder="All went well"></textarea>
     </div>
     <div class="input-group ">
         <label class="input-group-text" style="min-width: @GR.W97px;">Weight</label>
@@ -30,9 +29,9 @@
         <label class="input-group-text" style="min-width: @GR.W97px;">Nature</label>
         <select @bind="inputNature" class="form-select">
             <option value="" selected>Make choice...</option>
-            <option style="color: green;" value="Good">Good</option>
-            <option style="color: red;" value="Bad">Bad</option>
-            <option style="color: red;" value="Neutral">Neutral</option>
+            <option style="color: green; font-weight: bold" value="Good">Good</option>
+            <option style="color: red;font-weight: bold" value="Bad">Bad</option>
+            <option style="color: grey;font-weight: bold" value="Neutral">Neutral</option>
         </select>
     </div>
     <div class="hstack gap-5">
@@ -72,6 +71,10 @@
         await Task.Delay(400);
 
         await RenderPage();
+
+        //hide loading message
+        _jsRuntime.HideLoading();
+
     }
 
     /// <summary>
@@ -86,8 +89,18 @@
         //set page title
         _pageTitle = $"Life Event | {SelectedPerson.Name}";
 
+
         //get data of life event
-        SelectedLifeEvent = SelectedPerson.LifeEventList.Where(lE => lE.Id == LifeEventIdUrl).FirstOrDefault() ?? LifeEvent.Empty;
+        var newLifeEvent = new LifeEvent()
+            {
+                Id = LifeEventIdUrl, //use id from URL, given by caller
+                Name = "",
+                Description = "", // possible to be left empty
+                Nature = "",
+                Weight = "Normal", // default to normal to speed up
+                StartTime = SelectedPerson.TimeNowAtBirthLocation
+            };
+        SelectedLifeEvent = SelectedPerson.LifeEventList.Where(lE => lE.Id == LifeEventIdUrl).FirstOrDefault() ?? newLifeEvent;
 
         //place data into fields
         inputName = SelectedLifeEvent.Name;
@@ -95,11 +108,17 @@
         inputNature = SelectedLifeEvent.Nature;
         inputWeight = SelectedLifeEvent.Weight;
         _geoLocationInput.UpdateData(SelectedLifeEvent.StartTime.GetGeoLocation());
-        _timeInput.SetTime(SelectedLifeEvent.StartTime);
 
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //_timeInput.SetTime(SelectedLifeEvent.StartTime);
 
+        }
+    }
 
 
     private async Task OnClickCancelBack()
@@ -119,7 +138,7 @@
         await _jsRuntime.ShowLoading();
 
         //only continue if passed input field validation
-        //if (!(await IsValidationPassed())) { return; }
+        if (!(await IsValidationPassed())) { return; }
 
         //get updated life event
         var updatedLifeEvent = await GetLifeEventFromInputs();
@@ -168,6 +187,35 @@
             _jsRuntime?.GoBack();
         }
 
+
+    }
+
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// </summary>
+    private async Task<bool> IsValidationPassed()
+    {
+        //TEST 1 : Name
+        if (String.IsNullOrWhiteSpace(inputName))
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", AlertText.EnterName, true);
+            return false;
+        }
+
+        //TEST 2 : Nature
+        if (String.IsNullOrWhiteSpace(inputNature))
+        {
+            //mark invalid & alert user
+            await _jsRuntime.ShowAlert("error", "Was the event <strong>Good</strong> or <strong>Bad</strong>?", true);
+            return false;
+        }
+
+
+
+        //if control reaches here than, it's valid
+        return true;
 
     }
 

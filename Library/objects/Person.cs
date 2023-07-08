@@ -145,8 +145,20 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets now time at birth location of person (STD time)
         /// </summary>
-        public DateTimeOffset StdTimeNowAtBirthLocation =>
-            DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset);
+        public DateTimeOffset StdTimeNowAtBirthLocation => DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset);
+
+
+        /// <summary>
+        /// Gets now time at birth location of person
+        /// </summary>
+        public Time TimeNowAtBirthLocation
+        {
+            get
+            {
+                var temp = new Time(DateTimeOffset.Now.ToOffset(this.BirthTime.GetStdDateTimeOffset().Offset), this.GetBirthLocation());
+                return temp;
+            }
+        }
 
         /// <summary>
         /// image name is ID with .jpg at back

@@ -96,7 +96,7 @@
 
         @*LIFE EVENTS*@
         <div class="tab-pane fade" id="lifeEvents">
-            <LifeEventEditor @ref="_lifeEventEditor"></LifeEventEditor>
+            <LifeEventViewer @ref="lifeEventViewer" />
         </div>
 
         @*ADVANCED TAB CONTENT*@
@@ -157,7 +157,7 @@
     string _genderInput = "";
     string _pageTitle = "";
     private GeoLocationInput _geoLocationInput;
-    private LifeEventEditor _lifeEventEditor;
+    private LifeEventViewer lifeEventViewer;
 
 
 
@@ -171,7 +171,6 @@
     //METHODS THAT CAN IMPLEMENT ASYNC ERROR HANDLER
 
 
-    protected override async Task OnInitializedAsync() => await InvokeAsync(async () => await _OnInitialized()).Try(_jsRuntime);
     private async Task OnClickDeleteButton() => await InvokeAsync(async () => await _OnClickDeleteButton()).Try(_jsRuntime);
 
 
@@ -179,7 +178,7 @@
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-    private async Task _OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await _jsRuntime.ShowLoading();
 
@@ -234,7 +233,7 @@
         _geoLocationInput.UpdateData(geoLocation);
 
         //life events
-        await _lifeEventEditor.SetData(SelectedPerson);
+        await lifeEventViewer.SetData(SelectedPerson);
 
         //todo check if needed
         this.StateHasChanged();
@@ -324,12 +323,11 @@
     /// Note : Input fields do not use binding because implementing
     /// separated time fields is erroneous
     /// </summary>
-    private async Task<Person> GetPersonInstanceFromInput()
+    private Person GetPersonInstanceFromInput()
     {
-
         //parse data received from user
         var geoLocation = _geoLocationInput.GetGeoLocation();
-        var lifeEventList = await _lifeEventEditor.GetData();
+        var lifeEventList = lifeEventViewer.GetData();
 
         //get gender from gender string
         var gender = Enum.Parse<Gender>(_genderInput);
@@ -365,13 +363,11 @@
         if (!(await IsValidationPassed())) { return; }
 
         //make a new person from the details in the input
-        SelectedPerson = await GetPersonInstanceFromInput();
+        SelectedPerson = GetPersonInstanceFromInput();
 
-        //update person in API by hash
+        //update person in API & message user about it
         await AppData.API.Person.UpdatePerson(SelectedPerson);
-
-        //page ready
-        _jsRuntime.HideAlert();
+        _jsRuntime.PlayDoneSound();
 
         //ask user if wants to go back to previous page or stay
         //prepare question to ask user

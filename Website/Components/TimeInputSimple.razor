@@ -231,4 +231,27 @@
         return returnVal;
     }
 
+    /// <summary>
+    /// Sets time into field
+    /// </summary>
+    public async Task SetTime(Time startTime)
+    {
+
+        this.Hour = startTime.GetStdDateTimeOffset().Hour.ToString();
+        this.Minute = startTime.GetStdDateTimeOffset().Minute.ToString();
+
+        //note leading 0 must be added else parsing will fail
+        var dateTemp = startTime.GetStdDateTimeOffset().Day.ToString();
+        string paddedDate = dateTemp.PadLeft(2, '0'); // "01"
+        this.Date = paddedDate;
+
+        //note leading 0 must be added else parsing will fail
+        var monthTemp = startTime.GetStdDateTimeOffset().Month.ToString();
+        string paddedMonth = monthTemp.PadLeft(2, '0'); // "01"
+        this.Month = paddedMonth;
+
+        this.Year = startTime.GetStdDateTimeOffset().Year.ToString();
+        this.TimeZone = startTime.GetStdTimezoneText();
+    }
+
 }

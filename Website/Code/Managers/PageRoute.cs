@@ -30,8 +30,8 @@
         //JOURNAL
         public const string Journal = "Journal/";
         public const string JournalParam = "/Journal/{PersonIdUrl}";
-        public const string JournalAdd = "Journal/Add";
-        public const string JournalEditor = "Journal/Editor";
+        public const string JournalEditorParam = "Journal/Editor/{PersonIdUrl}/{LifeEventIdUrl}"; //for page declaration
+        public const string JournalEditor = "Journal/Editor"; //for page URL generation
 
         
         //CALCULATORS

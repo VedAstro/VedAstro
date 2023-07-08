@@ -25,15 +25,18 @@
             </tr>
         </thead>
         <tbody>
-            @for (int index = 0; index < LifeEventListDisplay.Count; index++)
+            @for (int indexPos = 0; indexPos < LifeEventListDisplay.Count; indexPos++)
             {
                 <tr>
-                    @*only make the name click able*@
-                    <td>@LifeEventListDisplay[index].Name</td>
-                    <td>@LifeEventListDisplay[index].StartTime</td>
-                    <td>@LifeEventListDisplay[index].Description</td>
-                    <td>@LifeEventListDisplay[index].Nature</td>
-                    <td>@LifeEventListDisplay[index].Weight</td>
+                    @{
+                        //needed to make click able
+                        var temp = @LifeEventListDisplay[indexPos].Id;
+                    }
+                    <td style="cursor: pointer; font-weight: bold;" @onclick="@(() => GotoEditLifeEvent(temp))">@LifeEventListDisplay[indexPos].Name</td>
+                    <td>@LifeEventListDisplay[indexPos].StartTime.GetStdDateMonthYearText()</td>
+                    <td>@LifeEventListDisplay[indexPos].Description</td>
+                    <td>@LifeEventListDisplay[indexPos].Nature</td>
+                    <td>@LifeEventListDisplay[indexPos].Weight</td>
                 </tr>
             }
         </tbody>
@@ -42,6 +45,7 @@
 
 
 @code {
+
 
     /// <summary>
     /// Hide on default till all ready to show
@@ -52,6 +56,7 @@
 
     public Person SelectedPerson { get; set; }
 
+    public List<LifeEvent> GetData() => SelectedPerson.LifeEventList;
 
     public async Task SetData(Person selectedPerson)
     {
@@ -106,5 +111,13 @@
     }
 
 
+    /// <summary>
+    /// Send to event edit page
+    /// </summary>
+    private void GotoEditLifeEvent(string lifeEventId)
+    {
+        //save current page url to be used by editor page to comeback
+        AppData.Go($"{PageRoute.JournalEditor}/{SelectedPerson.Id}/{lifeEventId}", rememberMe:true);
+    }
 
 }

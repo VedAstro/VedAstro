@@ -270,6 +270,7 @@ namespace Website
         /// <summary>
         /// Simple blazor navigation wrapper with standard logging
         /// if going to login page will auto set come back url
+        /// receiving page must then choose to use come back url
         /// </summary>
         public static void Go(string url, bool forceReload = false, bool newTab = false, bool rememberMe = false)
         {

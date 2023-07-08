@@ -224,6 +224,23 @@ namespace VedAstro.Library
             return final;
         }
 
+        public string GetStdDateMonthYearText()
+        {
+            var stdDateTimeString = _stdTime.ToString("dd/MM/yyyy");
+            return stdDateTimeString;
+        }
+
+
+        /// <summary>
+        /// Returns STD time zone as text "+08:00"
+        /// </summary>
+        /// <returns></returns>
+        public string GetStdTimezoneText()
+        {
+            var stdTimeZoneString = _stdTime.ToString("zzz"); //timezone separate so can clean date time
+            return stdTimeZoneString;
+        }
+
         public DateTimeOffset GetStdDateTimeOffset()
         {
             //return internal std time
@@ -591,5 +608,6 @@ namespace VedAstro.Library
             var formatted = returnVal.Replace(" ", "/"); //replace spacing between to slash
             return formatted;
         }
+
     }
 }

@@ -6,6 +6,7 @@
 @using System.ComponentModel.DataAnnotations
 
 
+
 @*this element is auto hidden by Tippy, and made visible when on hover*@
 <div @ref="tooltipElement" class="@nameof(this.GetType) hstack gap-2 shadow rounded-4 border-dark-subtle" style="width: max-content;">
     @*only show image if exist, don't waste that nice space*@
@@ -63,7 +64,7 @@
     /// <summary>
     /// final URL placed in src to get image
     /// </summary>
-    private string ImageUrl(Person person) => $"images/person/{person.ImageName}";
+    private string ImageUrl(Person person) => $"{AppData.URL.GetPersonImage}/{person.Id}";
 
     /// <summary>
     /// specially formatted name to note break beyond 18 char limit

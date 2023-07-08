@@ -66,6 +66,12 @@ namespace VedAstro.Library
         public string Weight { get; set; }
 
         /// <summary>
+        /// unique ID stamped at creation
+        /// </summary>
+        [JsonPropertyName("Id")]
+        public string Id { get; set; }
+
+        /// <summary>
         /// combined all text in life event used for search
         /// </summary>
         public string SearchText
@@ -85,25 +91,6 @@ namespace VedAstro.Library
             }
         }
 
-        ///// </summary>
-        //[JsonPropertyName("Timezone")]
-        //public string Timezone
-        //{
-        //    get
-        //    {
-        //        //get from API if no saved 
-        //        var savedExists = !string.IsNullOrEmpty(_timezone);
-        //        if (!savedExists)
-        //        {
-        //            //get timezone from Google API
-        //            var lifeEvtTimeNoTimezone = DateTime.ParseExact(this.StartTime, Time.DateTimeFormatNoTimezone, null);
-        //            _timezone = Tools.GetTimezoneOffsetString(this.Location, lifeEvtTimeNoTimezone, "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE");
-        //        }
-
-        //        return _timezone;
-        //    }
-        //    set => _timezone = value;
-        //}
 
 
         //░█▀▄▀█ ░█▀▀▀ ▀▀█▀▀ ░█─░█ ░█▀▀▀█ ░█▀▀▄ ░█▀▀▀█ 
@@ -114,6 +101,7 @@ namespace VedAstro.Library
         public JObject ToJson()
         {
             var temp = new JObject();
+            temp["Id"] = this.Id;
             temp["Name"] = this.Name;
             temp["StartTime"] = this.StartTime.ToJson();
             temp["Description"] = this.Description;
@@ -129,13 +117,14 @@ namespace VedAstro.Library
         public XElement ToXml()
         {
             var lifeEventXml = new XElement("LifeEvent");
+            var idXml = new XElement("Id", this.Id);
             var nameXml = new XElement("Name", this.Name);
             var startTimeXml = new XElement("StartTime", this.StartTime.ToXml());
             var descriptionXml = new XElement("Description", this.Description);
             var natureXml = new XElement("Nature", this.Nature);
             var weightXml = new XElement("Weight", this?.Weight ?? "Normal");
 
-            lifeEventXml.Add(nameXml, startTimeXml, descriptionXml, natureXml, weightXml);
+            lifeEventXml.Add(idXml, nameXml, startTimeXml, descriptionXml, natureXml, weightXml);
 
             return lifeEventXml;
         }
@@ -154,6 +143,7 @@ namespace VedAstro.Library
             var lifeEventParsed = new LifeEvent();
 
             //try get data from xml else use empty string
+            lifeEventParsed.Id = !string.IsNullOrEmpty(lifeEventXml.Element("Id")?.Value) ? lifeEventXml?.Element("Id")?.Value : Tools.GenerateId(); //generate new id on demand
             lifeEventParsed.Name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml?.Element("Name")?.Value : "";
             lifeEventParsed.Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
             lifeEventParsed.Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
@@ -175,6 +165,7 @@ namespace VedAstro.Library
             {
                 var temp = new LifeEvent();
 
+                temp.Id = lifeEvent["Id"].Value<string>();
                 temp.Name = lifeEvent["Name"].Value<string>();
                 temp.StartTime = Time.FromJson(lifeEvent["StartTime"]); ;
                 temp.Description = lifeEvent["Description"].Value<string>();
@@ -231,6 +222,7 @@ namespace VedAstro.Library
         public override int GetHashCode()
         {
             //get hash of all the fields & combine them
+            var hash0 = Tools.GetStringHashCode(this.Id);
             var hash1 = Tools.GetStringHashCode(this.Name);
             var hash2 = this.StartTime.GetHashCode();
             var hash5 = Tools.GetStringHashCode(this.Description);
@@ -238,15 +230,9 @@ namespace VedAstro.Library
             var hash7 = Tools.GetStringHashCode(this.Weight);
 
             //take out negative before returning
-            return Math.Abs(hash1 + hash2 + hash5 + hash6 + hash7);
+            return Math.Abs(hash0 + hash1 + hash2 + hash5 + hash6 + hash7);
         }
 
-
-        /// <summary>
-        /// Gets geo location instance for this event, uses Google API
-        /// </summary>
-        /// <returns></returns>
-        public GeoLocation GetGeoLocation() => StartTime.GetGeoLocation();
 
         /// <summary>
         /// compare logic to sort according to time

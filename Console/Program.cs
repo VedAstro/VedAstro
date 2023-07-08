@@ -37,6 +37,7 @@ namespace VedAstro.Console
                 System.Console.WriteLine("Choose wisely");
                 System.Console.WriteLine("1:Find Birth Time - Life Predictor - Person");
                 System.Console.WriteLine("2:Life Predictor - 100 Years - Super HD - 50MB");
+                System.Console.WriteLine("3:CLEAN");
                 System.Console.WriteLine("4:...COMING SOON");
                 System.Console.WriteLine("5:...UNDER DEVELOPMENT");
 
@@ -94,8 +95,8 @@ namespace VedAstro.Console
 
                         break;
                     }
-                //case "3":
-                //    await MigrateOldLifeEventsToNewFormat();
+                case "3":
+                    await MigrateOldLifeEventsToNewFormat2();
                     break;
                 default: System.Console.WriteLine("Coming soon"); break;
             }
@@ -259,6 +260,48 @@ namespace VedAstro.Console
                 //directly updates and saves new person record to main list (does all the work, sleep easy)
                 await Tools.UpdatePersonRecord(updatedPerson);
             }
+
+            System.Console.WriteLine("All person record updated!");
+
+        }
+        
+        private static async Task MigrateOldLifeEventsToNewFormat2()
+        {
+
+            //get latest file from server
+            //note how this creates & destroys per call to method
+            //might cost little extra cycles but it's a functionality
+            //to always get the latest list
+            //access to file
+            var fileClient = await Tools.GetBlobClientAzure(Tools.PersonListFile, Tools.BlobContainerName);
+
+            //get xml file
+            var personListXmlDoc = await Tools.DownloadToXDoc(fileClient);
+
+            //list of person XMLs
+            var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
+
+            //parse to type
+            var allPersonList = Person.FromXml(personXmlList);
+
+            //only person with life events
+            var filtered = allPersonList.Where(x => x.LifeEventList.Any());
+
+            //convert to new xml format then inset into xdoc back
+            foreach (var updatedPerson in filtered)
+            {
+
+                //delete the old person record,
+                Tools.DeleteXElementFromXDocumentAzure(updatedPerson.ToXml(), ref personListXmlDoc);
+
+                //and insert updated record in the updated as new
+                //add new person to main list
+                Tools.AddXElementToXDocumentAzure(updatedPerson.ToXml(), ref personListXmlDoc);
+
+            }
+
+            //upload modified list to storage
+            await Tools.OverwriteBlobData(fileClient, personListXmlDoc);
 
             System.Console.WriteLine("All person record updated!");
 

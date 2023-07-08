@@ -65,6 +65,26 @@ namespace VedAstro.Library
         [JsonPropertyName("Weight")]
         public string Weight { get; set; }
 
+        /// <summary>
+        /// combined all text in life event used for search
+        /// </summary>
+        public string SearchText
+        {
+            get
+            {
+                var compiledText = "";
+
+                //add in all stuff
+                compiledText += Name;
+                compiledText += Description;
+                compiledText += StartTime;
+                compiledText += Nature;
+                compiledText += Weight;
+
+                return compiledText;
+            }
+        }
+
         ///// </summary>
         //[JsonPropertyName("Timezone")]
         //public string Timezone
@@ -138,7 +158,7 @@ namespace VedAstro.Library
             lifeEventParsed.Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
             lifeEventParsed.Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";
             lifeEventParsed.Weight = !string.IsNullOrEmpty(lifeEventXml.Element("Weight")?.Value) ? lifeEventXml?.Element("Weight")?.Value : "Normal";
-            lifeEventParsed.StartTime = Time.FromXml(lifeEventXml.Element("BirthTime")?.Element("Time"));
+            lifeEventParsed.StartTime = Time.FromXml(lifeEventXml.Element("StartTime")?.Element("Time"));
 
             return lifeEventParsed;
 

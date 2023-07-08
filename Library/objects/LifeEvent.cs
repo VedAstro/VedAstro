@@ -143,7 +143,7 @@ namespace VedAstro.Library
             var lifeEventParsed = new LifeEvent();
 
             //try get data from xml else use empty string
-            lifeEventParsed.Id = !string.IsNullOrEmpty(lifeEventXml.Element("Id")?.Value) ? lifeEventXml?.Element("Id")?.Value : Tools.GenerateId(); //generate new id on demand
+            lifeEventParsed.Id = !string.IsNullOrEmpty(lifeEventXml.Element("Id")?.Value) ? lifeEventXml?.Element("Id")?.Value : ""; //leave empty to detect
             lifeEventParsed.Name = !string.IsNullOrEmpty(lifeEventXml.Element("Name")?.Value) ? lifeEventXml?.Element("Name")?.Value : "";
             lifeEventParsed.Description = !string.IsNullOrEmpty(lifeEventXml.Element("Description")?.Value) ? lifeEventXml?.Element("Description")?.Value : "";
             lifeEventParsed.Nature = !string.IsNullOrEmpty(lifeEventXml.Element("Nature")?.Value) ? lifeEventXml?.Element("Nature")?.Value : "";

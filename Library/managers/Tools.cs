@@ -56,28 +56,23 @@ namespace VedAstro.Library
         /// <summary>
         /// deletes old person record by ID and saves in new one as updated
         /// </summary>
-        public static async Task UpdatePersonRecord(Person updatedPerson)
+        public static async Task UpdatePersonRecord(Person updatedPersonData)
         {
-            //var originalPerson = await APITools.GetPersonById(updatedPerson.Id);
-
             //get the person record that needs to be updated
-            var personToUpdate = await Tools.FindPersonXMLById(updatedPerson.Id);
+            var originalPerson = await Tools.FindPersonXMLById(updatedPersonData.Id);
 
-            //only way it works manual update
-            //delete the previous person record,
+            //NOTE:
+            //only way it works is to
+            //delete the previous person record
+            //add new record at bottom
 
             //delete the old person record,
-            await Tools.DeleteXElementFromXDocumentAzure(personToUpdate, Tools.PersonListFile, Tools.BlobContainerName);
+            await Tools.DeleteXElementFromXDocumentAzure(originalPerson, Tools.PersonListFile, Tools.BlobContainerName);
 
             //and insert updated record in the updated as new
             //add new person to main list
-            await Tools.AddXElementToXDocumentAzure(updatedPerson.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
+            await Tools.AddXElementToXDocumentAzure(updatedPersonData.ToXml(), Tools.PersonListFile, Tools.BlobContainerName);
 
-            // personToUpdate?.ReplaceWith(updatedPerson.ToXml());
-
-            //upload modified list file to storage
-            //var personListXmlDoc = await GetXmlFileFromAzureStorage(PersonListFile, BlobContainerName);
-            //await SaveXDocumentToAzure(personListXmlDoc, PersonListFile, BlobContainerName);
         }
 
         /// <summary>
@@ -95,6 +90,14 @@ namespace VedAstro.Library
             //upload modified list to storage
             await OverwriteBlobData(fileClient, updatedListXml);
         }
+        public static void AddXElementToXDocumentAzure(XElement dataXml, ref XDocument xDocument)
+        {
+
+            //add new log to main list
+            AddXElementToXDocument(dataXml, ref xDocument);
+
+        }
+
 
         /// <summary>
         /// Overwrites new XML data to a blob file
@@ -142,6 +145,11 @@ namespace VedAstro.Library
 
             return xDocument;
         }
+        public static void AddXElementToXDocument(XElement newElement, ref XDocument xDocument)
+        {
+            //add new person to list
+            xDocument.Root.Add(newElement);
+        }
 
         /// <summary>
         /// Deletes an XML element from an XML document in by file & container name
@@ -151,6 +159,7 @@ namespace VedAstro.Library
         {
             //access to file
             var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
+            
             //get xml file
             var xmlDocFile = await Tools.DownloadToXDoc(fileClient);
 
@@ -166,6 +175,26 @@ namespace VedAstro.Library
 
             //upload modified list to storage
             await OverwriteBlobData(fileClient, xmlDocFile);
+        }
+
+        /// <summary>
+        /// deletes by using same reference to limit unnecessary calls to storage
+        /// used in maintenance scripts
+        /// deletes by ID not HASH
+        /// </summary>
+        public static void DeleteXElementFromXDocumentAzure(XElement dataXmlToDelete, ref XDocument xmlDocFile)
+        {
+
+            //check if record to delete exists
+            //if not found, raise alarm
+            var xmlRecordList = xmlDocFile.Root.Elements();
+            var personToDelete = Person.FromXml(dataXmlToDelete);
+            var foundRecords = xmlRecordList.Where(x => Person.FromXml(x).Id == personToDelete.Id);
+            if (!foundRecords.Any()) { throw new Exception("Could not find XML record to delete in main list!"); }
+
+            //continue with delete
+            foundRecords.First().Remove();
+
         }
 
 
@@ -2145,10 +2174,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// XML Person
-        /// Will look for a person in a given list
-        /// returns null if no person found
-        /// This a unique id representing the unique person record
+        /// Gets person XML given ID direct from storage
         /// </summary>
         public static async Task<XElement?> FindPersonXMLById(string personIdToFind)
         {
@@ -2180,6 +2206,51 @@ namespace VedAstro.Library
             {
                 //if fail log it and return empty value so caller will know
                 await LibLogger.Error(e);
+                return null;
+            }
+
+            //--------
+            //do the finding, for id both case should match, but stored in upper case because looks nice
+            //but user might pump in with mixed case, who knows, so compensate.
+            bool MatchPersonId(XElement personXml)
+            {
+                if (personXml == null) { return false; }
+
+                var inputPersonId = personXml?.Element("PersonId")?.Value ?? ""; //todo PersonId has to be just Id
+
+                //lower case it before checking
+                var isMatch = inputPersonId == personIdToFind; //hoisting alert
+
+                return isMatch;
+            }
+        }
+
+        /// <summary>
+        /// Reference version of above method
+        /// used in scripts
+        /// </summary>
+        public static XElement FindPersonXMLById(string personIdToFind, ref XDocument personListXmlDoc)
+        {
+            try
+            {
+                //list of person XMLs
+                var personXmlList = personListXmlDoc?.Root?.Elements() ?? new List<XElement>();
+
+                //do the finding (default empty)
+                var foundPerson = personXmlList?.Where(MatchPersonId)?.First();
+
+                //log it (should not occur all the time)
+                if (foundPerson == null)
+                {
+                    //return empty value so caller will know
+                    foundPerson = null;
+                }
+
+                return foundPerson;
+            }
+            catch (Exception e)
+            {
+                //if fail log it and return empty value so caller will know
                 return null;
             }
 

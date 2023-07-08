@@ -10,10 +10,8 @@
 @*this element is auto hidden by Tippy, and made visible when on hover*@
 <div @ref="tooltipElement" class="@nameof(this.GetType) hstack gap-2 shadow rounded-4 border-dark-subtle" style="width: max-content;">
     @*only show image if exist, don't waste that nice space*@
-    @if (ImageExist)
-    {
-        <img style="width: @GR.W157px;" src="@(ImageUrl(Person))" class="img-thumbnail mt-1" alt="..." />
-    }
+    <img style="width: @GR.W157px;" src="@($"{AppData.URL.GetPersonImage}/{Person.Id}")" class="img-thumbnail mt-1" alt="..." />
+
     @*buttons related to account*@
     <div class="vstack gap-2 my-1">
         <span class="ms-2" style="text-align: center;">@Person.BirthTimeString</span>
@@ -62,11 +60,6 @@
     private Person _person;
 
     /// <summary>
-    /// final URL placed in src to get image
-    /// </summary>
-    private string ImageUrl(Person person) => $"{AppData.URL.GetPersonImage}/{person.Id}";
-
-    /// <summary>
     /// specially formatted name to note break beyond 18 char limit
     /// </summary>
     private string DisplayName
@@ -91,18 +84,6 @@
     /// </summary>
     private ElementReference nameHolderElement { get; set; }
 
-    /// <summary>
-    /// if true image exists and it will be shown
-    /// </summary>
-    private bool ImageExist { get; set; }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        //make sure image is there else, no need to waste that nice space
-        //this will be used when rendering
-        var wwwUrl = Path.Combine(_navigation.BaseUri, ImageUrl(Person));
-        ImageExist = await Tools.DoesFileExist(wwwUrl);
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
 
@@ -128,7 +109,6 @@
 
         }
     }
-
 
     private async Task OnClickDeleteButton()
     {

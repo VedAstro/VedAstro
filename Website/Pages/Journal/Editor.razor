@@ -34,7 +34,7 @@
             <option style="color: grey;font-weight: bold" value="Neutral">Neutral</option>
         </select>
     </div>
-    <div class="hstack gap-5">
+    <div class="d-flex justify-content-between">
         <IconButton Color="primary" SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="OnClickCancelBack" />
         <IconButton Color="danger" SmallSize="true" IconName="fluent:delete-20-regular" ButtonText="Delete" OnClickCallback="OnClickDelete" />
         <IconButton Color="success" SmallSize="true" IconName="bx:save" ButtonText="Save" OnClickCallback="OnClickSave" />
@@ -67,6 +67,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _jsRuntime.ShowLoading();
 
         //need little delay for components to finish loading (time input)
         await Task.Delay(400);
@@ -229,7 +230,7 @@
 
 
     /// <summary>
-    /// Deletes life event from person and updates person 
+    /// Deletes life event from person and updates person
     /// </summary>
     private async Task OnClickDelete()
     {

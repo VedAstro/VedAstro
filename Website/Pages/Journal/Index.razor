@@ -52,7 +52,7 @@
     </div>*@
 
     @*LIST OF PREDICTIONS*@
-    <LifeEventEditor @ref="_lifeEventEditor" />
+    <LifeEventViewer @ref="lifeEventViewer" />
 
 </div>
 
@@ -61,6 +61,7 @@
 
 @code {
 
+
     /// <summary>
     /// Param used in URL to set Person ID via URL
     /// </summary>
@@ -68,7 +69,7 @@
     public string PersonIdUrl { get; set; } = "";
 
     private string _pageTitle = "Journal"; //default
-    private LifeEventEditor _lifeEventEditor;
+    private LifeEventViewer lifeEventViewer;
 
     private string _searchInput = "";
     private Person _selectedPerson;
@@ -132,7 +133,7 @@
         AppData.Go(urlWithId); //does not reload page since same URL
 
         //life events
-        await _lifeEventEditor.SetData(_selectedPerson);
+        await lifeEventViewer.SetData(_selectedPerson);
 
         //make a copy for search
         _filteredLifeEvents = _selectedPerson.LifeEventList.ToList();

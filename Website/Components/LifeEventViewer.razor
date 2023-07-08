@@ -1,0 +1,110 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+
+
+
+@if (_isReady)
+{
+    @* SEARCH *@
+    <div class="hstack gap-2">
+        <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+    </div>
+
+    <hr />
+
+    @* TABLE LIST *@
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Start Time</th>
+                <th>Description</th>
+                <th>Nature</th>
+                <th>Weight</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int index = 0; index < LifeEventListDisplay.Count; index++)
+            {
+                <tr>
+                    @*only make the name click able*@
+                    <td>@LifeEventListDisplay[index].Name</td>
+                    <td>@LifeEventListDisplay[index].StartTime</td>
+                    <td>@LifeEventListDisplay[index].Description</td>
+                    <td>@LifeEventListDisplay[index].Nature</td>
+                    <td>@LifeEventListDisplay[index].Weight</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+
+    /// <summary>
+    /// Hide on default till all ready to show
+    /// </summary>
+    private bool _isReady = false;
+
+    private ElementReference _searchInput;
+
+    public Person SelectedPerson { get; set; }
+
+
+    public async Task SetData(Person selectedPerson)
+    {
+        //save for later
+        SelectedPerson = selectedPerson;
+
+        //hide display
+        await _jsRuntime.ShowLoading();
+        _isReady = false;
+
+        //get all people from API server
+        //auto checks if people list already loaded before
+        _lifeEventListAsync = selectedPerson.LifeEventList;
+
+        //make copy for search
+        LifeEventListDisplay = _lifeEventListAsync;
+
+        //show data on display
+        _isReady = true;
+        _jsRuntime.HideAlert();
+
+        //needed to make changes appear
+        this.StateHasChanged();
+    }
+
+    /// <summary>
+    /// list that is shown to user and is changed by search
+    /// </summary>
+    private List<LifeEvent> LifeEventListDisplay { get; set; } = new List<LifeEvent>();
+
+    private List<LifeEvent> _lifeEventListAsync = new List<LifeEvent>();
+
+
+    /// <summary>
+    /// Handle when user uses the Search
+    /// </summary>
+    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
+    {
+        //get search text, lower case for more results
+        var text = (await _jsRuntime.GetValue(_searchInput)).ToLower();
+
+        //if no search text then show all
+        if (string.IsNullOrEmpty(text))
+        {
+            LifeEventListDisplay = _lifeEventListAsync;
+        }
+        else
+        {
+            LifeEventListDisplay = _lifeEventListAsync.FindAll(lifeEvent => lifeEvent.SearchText.ToLower().Contains(text)); //todo possible to search by birth date
+        }
+
+    }
+
+
+
+}

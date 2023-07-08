@@ -12,16 +12,16 @@ namespace API
     {
 
         /// <summary>
-        /// check if file exist in aZure storage
+        /// check if a person's profile image already exist on server
         /// </summary>
         public static async Task<bool> IsCustomPersonImageExist(string personId)
         {
 
-            var blobContainerName = "$web";
+            var blobContainerName = "vedastro-site-data";
 
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.WEB_STORAGE; //place where is image is stored
+            var storageConnectionString = Secrets.API_STORAGE; //place where is image is stored
 
             //get image from storage
             var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
@@ -45,11 +45,11 @@ namespace API
         public static async Task SaveNewPersonImage(string personId, byte[] imageBytes)
         {
 
-            var blobContainerName = "$web";
+            var blobContainerName = "vedastro-site-data";
 
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.WEB_STORAGE; //place where is image is stored
+            var storageConnectionString = Secrets.API_STORAGE; //place where is image is stored
 
             //get image from storage
             var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);
@@ -97,11 +97,11 @@ namespace API
         public static BlobClient GetPersonImage(string personId)
         {
 
-            var blobContainerName = "$web";
+            var blobContainerName = "vedastro-site-data";
 
             //get the connection string stored separately (for security reasons)
             //note: dark art secrets are in local.settings.json
-            var storageConnectionString = Secrets.WEB_STORAGE; //place where is image is stored
+            var storageConnectionString = Secrets.API_STORAGE; //place where is image is stored
 
             //get image from storage
             var blobContainerClient = new BlobContainerClient(storageConnectionString, blobContainerName);

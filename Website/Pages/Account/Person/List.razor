@@ -82,6 +82,9 @@ else
 
     private List<Person> _personListAsync = new List<Person>();
 
+    /// <summary>
+    /// Hide on default till all ready to show
+    /// </summary>
     private bool _isReady = false;
 
 
@@ -95,18 +98,19 @@ else
 
     private async Task GenerateTable()
     {
+        //hide display
         await _jsRuntime.ShowLoading();
-
         _isReady = false;
 
         //get all people from API server
         //auto checks if people list already loaded before
         _personListAsync = await AppData.API.Person.GetPersonList();
 
+        //make copy for search
         PersonListDisplay = _personListAsync;
 
+        //show data on display
         _isReady = true;
-
         _jsRuntime.HideAlert();
     }
 

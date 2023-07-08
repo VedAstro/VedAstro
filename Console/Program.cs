@@ -37,7 +37,6 @@ namespace VedAstro.Console
                 System.Console.WriteLine("Choose wisely");
                 System.Console.WriteLine("1:Find Birth Time - Life Predictor - Person");
                 System.Console.WriteLine("2:Life Predictor - 100 Years - Super HD - 50MB");
-                System.Console.WriteLine("3:Clean Life Events");
                 System.Console.WriteLine("4:...COMING SOON");
                 System.Console.WriteLine("5:...UNDER DEVELOPMENT");
 
@@ -95,8 +94,8 @@ namespace VedAstro.Console
 
                         break;
                     }
-                case "3":
-                    await MigrateOldLifeEventsToNewFormat();
+                //case "3":
+                //    await MigrateOldLifeEventsToNewFormat();
                     break;
                 default: System.Console.WriteLine("Coming soon"); break;
             }

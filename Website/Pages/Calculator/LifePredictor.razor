@@ -48,7 +48,7 @@ Know good and bad periods of your life years ahead.*@
             {
                 <div>
                     <div class="input-group mb-3" style="width: @GR.W255px;">
-                        <label class="input-group-text">Start</label>
+                        <label class="input-group-text" style="width: @GR.W60px;">Start</label>
                         <select @bind="SelectedLifeYearStart" class="form-select">
                             <option selected>Choose...</option>
                             @foreach (var year in lifeYearList)
@@ -58,7 +58,7 @@ Know good and bad periods of your life years ahead.*@
                         </select>
                     </div>
                     <div class="input-group mb-3" style="width: @GR.W255px;">
-                        <label class="input-group-text">End</label>
+                        <label class="input-group-text" style="width: @GR.W60px">End</label>
                         <select @bind="SelectedLifeYearEnd" class="form-select">
                             <option selected>Choose...</option>
                             @foreach (var year in lifeYearList)

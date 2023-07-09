@@ -398,7 +398,7 @@ namespace VedAstro.Library
             //mainly done to shorten background of short names (saving space)
             var backgroundWidth = GetTextWidthPx(formattedEventName);
 
-            int iconYAxis = lineHeight; //start icon at end of line
+            int iconYAxis = lineHeight + 7; //start icon at end of line + 7 padding
             var iconXAxis = $"-7.5"; //use negative to move center under line
             var nameTextHeight = 15;
 
@@ -406,8 +406,12 @@ namespace VedAstro.Library
             var isShowName = lifeEvent.Weight == "Normal" || lifeEvent.Weight == "Major";
             var evtNameStyle = isShowName ? "" : "display: none;";
 
+            //display description only for major events
+            var isMajor = lifeEvent.Weight == "Major";
+            var descriptionDisplayStyle = isMajor ? "" : "display:none;";
+
             var iconSvg = $@"
-                                <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{lineHeight}""></rect>
+                                <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{iconYAxis}""></rect>
                                 <!-- EVENT ICON LABEL -->
                                 <g transform=""translate({iconXAxis},{iconYAxis})"">
                                     <g class=""name-label"" >
@@ -423,7 +427,7 @@ namespace VedAstro.Library
 				                        </g>
                                     </g>
                                     <!-- DESCRIPTION -->
-		                            <g class=""description-label"" style=""display:none;"" transform=""translate(0,{20})"">
+		                            <g class=""description-label"" style=""{descriptionDisplayStyle}"" transform=""translate(0,{20})"">
                                         <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{backgroundWidth}"" height=""50"" rx=""2"" ry=""2""/>
                                         <text x=""4.849"" y=""-1.77"">
                                             {StringToSvgTextBox(lifeEvent.Description)}

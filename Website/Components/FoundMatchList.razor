@@ -161,8 +161,8 @@
     private void OnClickViewMatchReport(string personId)
     {
         //make link to match chart with selected person and person from list
-        var matchReportUrlMale = $"/Calculator/Match/Report/{SelectedPerson.Id}/{personId}";
-        var matchReportUrlFemale = $"/Calculator/Match/Report/{personId}/{SelectedPerson.Id}";
+        var matchReportUrlMale = $"/Match/Report/{SelectedPerson.Id}/{personId}";
+        var matchReportUrlFemale = $"/Match/Report/{personId}/{SelectedPerson.Id}";
 
         //priority of gender order goes to selected person
         var finalUrl = SelectedPerson.Gender == Gender.Male ? matchReportUrlMale : matchReportUrlFemale;

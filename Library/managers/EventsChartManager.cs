@@ -394,21 +394,24 @@ namespace VedAstro.Library
             //else text goes out side box
             var formattedEventName = ShortenName(lifeEvent.Name);
 
-            //based on length of event name make the background
-            //mainly done to shorten background of short names (saving space)
-            var backgroundWidth = GetTextWidthPx(formattedEventName);
-
             int iconYAxis = lineHeight + 7; //start icon at end of line + 7 padding
             var iconXAxis = $"-7.5"; //use negative to move center under line
             var nameTextHeight = 15;
 
             //only show name label for Major and Normal events
-            var isShowName = lifeEvent.Weight == "Normal" || lifeEvent.Weight == "Major";
+            var isMajor = lifeEvent.Weight == "Major";
+            var isNormal = lifeEvent.Weight == "Normal";
+            var isShowName = isNormal || isMajor; //show name for normal and major only
             var evtNameStyle = isShowName ? "" : "display: none;";
 
             //display description only for major events
-            var isMajor = lifeEvent.Weight == "Major";
             var descriptionDisplayStyle = isMajor ? "" : "display:none;";
+
+            string descriptionTextSvg = StringToSvgTextBox(lifeEvent.Description, out var boxHeightPx);
+
+            //special space saving background for Normal with desc box underneath
+            var nameBackgroundWidth = isMajor ? 82 : GetTextWidthPx(formattedEventName);
+            var descriptionBackgroundWidth = 100; //for 24 characters
 
             var iconSvg = $@"
                                 <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{iconYAxis}""></rect>
@@ -416,8 +419,8 @@ namespace VedAstro.Library
                                 <g transform=""translate({iconXAxis},{iconYAxis})"">
                                     <g class=""name-label"" >
                                         <!-- EVENT NAME-->
-                                        <g transform=""translate(15,0)"" style=""{evtNameStyle}"">
-						                    <rect class=""background"" x=""0"" y=""0"" style=""fill: blue; opacity: 0.8;"" width=""{backgroundWidth}"" height=""{nameTextHeight}"" rx=""2"" ry=""2"" />
+                                        <g transform=""translate(18,0)"" style=""{evtNameStyle}"">
+						                    <rect class=""background"" x=""0"" y=""0"" style=""fill: blue; opacity: 0.8;"" width=""{nameBackgroundWidth}"" height=""{nameTextHeight}"" rx=""2"" ry=""2"" />
 						                    <text class=""event-name"" x=""3"" y=""11"" style=""fill:#FFFFFF; font-family:'Calibri'; font-size:12px;"">{formattedEventName}</text>
 					                    </g>
                                         <!-- EVENT ICON-->
@@ -427,10 +430,10 @@ namespace VedAstro.Library
 				                        </g>
                                     </g>
                                     <!-- DESCRIPTION -->
-		                            <g class=""description-label"" style=""{descriptionDisplayStyle}"" transform=""translate(0,{20})"">
-                                        <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{backgroundWidth}"" height=""50"" rx=""2"" ry=""2""/>
-                                        <text x=""4.849"" y=""-1.77"">
-                                            {StringToSvgTextBox(lifeEvent.Description)}
+		                            <g class=""description-label"" style=""{descriptionDisplayStyle}"" transform=""translate(0,{17})"">
+                                        <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{descriptionBackgroundWidth}"" height=""{boxHeightPx+5}"" rx=""2"" ry=""2""/>
+                                        <text transform=""translate(2,11)"">
+                                            {descriptionTextSvg}
 			                            </text>
 		                            </g>
                                 </g>
@@ -447,7 +450,7 @@ namespace VedAstro.Library
             {
                 //if no changes needed return as is (default)
                 var returnVal = rawInput;
-                const int nameCharLimit = 12; //any number of char above this limit will be replaced with  ellipsis  "..."
+                const int nameCharLimit = 14; //any number of char above this limit will be replaced with  ellipsis  "..."
 
                 //if input is above limit
                 //replace extra chars with ...
@@ -468,19 +471,16 @@ namespace VedAstro.Library
 
         private static double GetTextWidthPx(string textInput)
         {
-            //TODO handle max & min
-            //set max & min width background
-            //const int maxWidth = 70;
-            //backgroundWidth = backgroundWidth > maxWidth ? maxWidth : backgroundWidth;
-            //const int minWidth = 30;
-            //backgroundWidth = backgroundWidth > minWidth ? minWidth : backgroundWidth;
-
 
             SizeF size;
             using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
             {
                 size = graphics.MeasureString(textInput,
-                    new Font("Calibri", 12, FontStyle.Regular, GraphicsUnit.Pixel));
+                    new Font(
+                        familyName: "Calibri",
+                        emSize: 10,
+                        style: FontStyle.Regular,
+                        unit: GraphicsUnit.Pixel));
             }
 
             var widthPx = Math.Round(size.Width);
@@ -494,7 +494,7 @@ namespace VedAstro.Library
         /// Note: this is only an invisible structured text, other styling have to be added separately
         /// </summary>
         /// <returns></returns>
-        private static string StringToSvgTextBox(string inputStr)
+        private static string StringToSvgTextBox(string inputStr, out int boxHeightPx)
         {
 
             const int characterLimit = 21;
@@ -518,6 +518,9 @@ namespace VedAstro.Library
                 //set next line to come underneath this (increment y axis)
                 nextYAxis += lineHeight;
             }
+
+            //save to be used to draw border around
+            boxHeightPx = nextYAxis;
 
             //var finalTextSvg = $@"{compiledSvgLines}";
 

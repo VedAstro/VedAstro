@@ -65,6 +65,7 @@
         public const string postWrapper = "Interop.postWrapper";
         public const string SkyChartAnimate = "Interop.SkyChartAnimate";
         public const string SkyChartInit = "Interop.SkyChartInit";
+        public const string SaveAsFile = "Interop.SaveAsFile";
         public const string getScreenData = "Interop.getScreenData";
         public const string shareDialogFacebook = "Interop.shareDialogFacebook";
 
@@ -109,10 +110,6 @@
 
         //SPECIAL APP.JS FUNCS
         public const string GetInteropFuncList = "window.GetInteropFuncList";
-
-
-        //SPECIAL EVENTS CHART JS TODO CALLED INSIDE EVENTS CHART
-        public const string DownloadChartFileSVG = "DownloadChartFileSVG";
 
 
 

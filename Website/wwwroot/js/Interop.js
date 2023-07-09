@@ -146,6 +146,15 @@ export function LoadCalendar(hour12, minute, meridian, date, month, year) {
 
 }
 
+export function SaveAsFile(filename, data) {
+    var link = document.createElement('a');
+    link.download = filename;
+    link.href = data;
+    document.body.appendChild(link); // Needed for Firefox
+    link.click();
+    document.body.removeChild(link);
+}
+
 
 //TODO MARKED FOR DELETION SINCE CAN TOGGLE VIA CLASS IN BLAZOR
 //export function togglePopup(e) {

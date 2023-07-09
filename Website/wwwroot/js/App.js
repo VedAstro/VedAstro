@@ -114,7 +114,6 @@ async function EyesOnPageLogger() {
     window.LogThread.postMessage(payload);
 }
 
-
 //makes sure every function needed by blazor is ready to be called
 //this allows full scale gonzo development pattern
 window.GetInteropFuncList = () => {

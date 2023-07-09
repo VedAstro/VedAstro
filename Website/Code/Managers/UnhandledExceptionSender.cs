@@ -105,8 +105,28 @@ namespace Website
                 //note: below refresh method works well to recover, though it should not happen
 
                 var timeToReadMsg = 4000; //give time for user to see the message
-                await AppData.JsRuntime.ShowAlert("warning", AlertText.ErrorWillRefresh, false, timeToReadMsg);
-                await AppData.JsRuntime.LoadPage(await AppData.CurrentUrlJS);
+                
+                //get debug mode, most likely cause for errors
+                //if debug mode enabled tell user it could be the cause of errors
+                if (await WebsiteTools.GetDebugModeBool())
+                {
+                    await AppData.JsRuntime.ShowAlert(
+                        icon: "warning",
+                        title: "Critical Error!",
+                        descriptionText: "Debug Mode is <strong>Enabled</strong>. It could be causing the error!"
+                        );
+                }
+                //normal error message with redirect to home page
+                else
+                {
+                    await AppData.JsRuntime.ShowAlert(
+                        icon: "warning",
+                        title: "App has crashed!",
+                        descriptionText: "Lets go to Home page and press <kbd>CTRL + SHIFT + R</kbd> to restart app");
+                    //send user to home page to restart
+                    await AppData.JsRuntime.LoadPage(AppData.URL.WebUrl);
+                }
+
             }
 
             public IDisposable BeginScope<TState>(TState state)

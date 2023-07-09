@@ -96,12 +96,13 @@
         //if user logged in than try get debug mode selection from memory
         else
         {
-            var debugMode = await WebsiteTools.GetDebugMode(_jsRuntime);
-            SelectedDebugMode = debugMode ? "enabled" : "disabled";
+            SelectedDebugMode = await WebsiteTools.GetDebugModeText();
         }
 
 
     }
+
+    
 
 
     private async Task OnClickSaveSettingsButton()

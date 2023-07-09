@@ -173,7 +173,7 @@
 
         //user already logged in, get debug mode from browser setting if any
         //note: "debug mode" is stored local instead of online, because possible mobile use under same account
-        else { debugMode = await WebsiteTools.GetDebugMode(_jsRuntime); }
+        else { debugMode = await WebsiteTools.GetDebugModeBool(); }
 
         AppData.URL = new URL(WebsiteTools.GetIsBetaRuntime(), debugMode);
 

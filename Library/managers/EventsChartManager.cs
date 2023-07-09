@@ -387,9 +387,6 @@ namespace VedAstro.Library
         /// </summary>
         private static string GenerateLifeEventLine(LifeEvent lifeEvent, int lineHeight, DateTimeOffset lifeEvtTime, int positionX)
         {
-            //no print minor events
-            if (lifeEvent.Weight == "Minor") { return ""; }
-
             //shorten the event name if too long & add ellipsis at end
             //else text goes out side box
             var formattedEventName = ShortenName(lifeEvent.Name);
@@ -545,8 +542,8 @@ namespace VedAstro.Library
             var rowList = new List<bool[]>();
 
             //space smaller than this is set as crowded
-            const int minSpaceBetween = 100;//px
-            var halfWidth = minSpaceBetween / 2; //icon
+            const int minSpaceBetween = 80;//px
+            //var halfWidth = minSpaceBetween / 2; //icon
 
 
             //sort by earliest to latest event
@@ -567,6 +564,9 @@ namespace VedAstro.Library
 
                 //if line is not in report time range, don't generate it
                 if (positionX == 0) { continue; }
+
+                //no print minor events
+                if (lifeEvent.Weight == "Minor") { continue; }
 
                 //get row number, assign row number that is free to occupy
                 var rowNumber = GetRowNumber(positionX); //start at 0 index
@@ -611,10 +611,10 @@ namespace VedAstro.Library
 
             //-------------------------
 
-            void MarkRowNumber(int middleX, int rowNumber)
+            void MarkRowNumber(int startX, int rowNumber)
             {
-                var startX = middleX - halfWidth;
-                var endX = halfWidth + middleX;
+                //var startX = middleX - halfWidth;
+                var endX = startX + minSpaceBetween;
 
                 //set limits
                 startX = startX < 0 ? 0 : startX;
@@ -629,10 +629,10 @@ namespace VedAstro.Library
             }
 
             //start at 0 index
-            int GetRowNumber(int middleX)
+            int GetRowNumber(int startX)
             {
-                var startX = middleX - halfWidth;
-                var endX = halfWidth + middleX;
+                //var startX = middleX - halfWidth;
+                var endX = startX + minSpaceBetween;
 
                 //set limits
                 startX = startX < 0 ? 0 : startX;

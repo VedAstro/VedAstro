@@ -38,6 +38,7 @@
 
 # 🎯 Perfect Predictions
 [![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/LifePredictor)   
+[![LifePredictor](https://vedastro.org/images/HallmarkCharts-SteveJobs-1982-2015.png)](https://vedastro.org/LifePredictor/SteveJobs1955)   
 [![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Match)   
 [![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/StarsAboveMe)   
 

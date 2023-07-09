@@ -128,41 +128,6 @@
         }
     }
 
-    /// <summary>
-    /// Gets parseable time string from JS calendar plugin
-    /// </summary>
-    public async Task<string> GetFullTimeString()
-    {
-        try
-        {
-
-            //get latest values using JS
-            var hour = await _jsRuntime.GetValue("#HourInput");
-            var minute = await _jsRuntime.GetValue("#MinuteInput");
-            var meridian = await _jsRuntime.GetValue("#MeridianInput");
-            var date = await _jsRuntime.GetValue("#DateInput");
-            var month = await _jsRuntime.GetValue("#MonthInput");
-            var year = await _jsRuntime.GetValue("#YearInput");
-
-
-            //convert 12H time from input to 24H
-            DateTime dt = DateTime.Parse($"{hour}:{minute} {meridian}");
-            var hour24 = dt.ToString("HH:mm");
-
-            //create 24H standard time format used
-            //note: time zone is set by parent
-            return $"{hour24} {date}/{month}/{year} {TimeZone}";
-        }
-        catch (Exception e)
-        {
-            //log, print and return empty data
-            WebLogger.Error(e);
-            Console.WriteLine(e);
-            return $"00:00 01/01/0001 +00:00";
-        }
-    }
-
-
     private string? _hour = DateTime.Today.ToString("HH");
     private string? _minute = DateTime.Today.ToString("mm");
     private string? _meridian = DateTime.Today.ToString("tt");
@@ -195,6 +160,38 @@
         return DateTimeOffset.ParseExact(fullTimeString, Time.DateTimeFormat, null);
     }
 
+    /// <summary>
+    /// Gets parseable time string from JS calendar plugin
+    /// </summary>
+    public async Task<string> GetFullTimeString()
+    {
+        try
+        {
+            //get latest values using JS
+            var hour = await _jsRuntime.GetValue("#HourInput");
+            var minute = await _jsRuntime.GetValue("#MinuteInput");
+            var meridian = await _jsRuntime.GetValue("#MeridianInput");
+            var date = await _jsRuntime.GetValue("#DateInput");
+            var month = await _jsRuntime.GetValue("#MonthInput");
+            var year = await _jsRuntime.GetValue("#YearInput");
+
+
+            //convert 12H time from input to 24H
+            DateTime dt = DateTime.Parse($"{hour}:{minute} {meridian}");
+            var hour24 = dt.ToString("HH:mm");
+
+            //create 24H standard time format used
+            //note: time zone is set by parent
+            return $"{hour24} {date}/{month}/{year} {TimeZone}";
+        }
+        catch (Exception e)
+        {
+            //log, print and return empty data
+            WebLogger.Error(e);
+            Console.WriteLine(e);
+            return $"00:00 01/01/2000 +00:00";
+        }
+    }
 
     private async Task OnClickDateTimeInput()
     {
@@ -236,9 +233,10 @@
     /// </summary>
     public async Task SetTime(Time startTime)
     {
-
-        this.Hour = startTime.GetStdDateTimeOffset().Hour.ToString();
-        this.Minute = startTime.GetStdDateTimeOffset().Minute.ToString();
+        //note leading 0 must be added else parsing will fail
+        this.Hour = startTime.GetStdDateTimeOffset().ToString("hh"); //small hh is for 12H format
+        this.Minute = startTime.GetStdDateTimeOffset().ToString("mm");
+        this.Meridian = startTime.GetStdDateTimeOffset().ToString("tt");
 
         //note leading 0 must be added else parsing will fail
         var dateTemp = startTime.GetStdDateTimeOffset().Day.ToString();

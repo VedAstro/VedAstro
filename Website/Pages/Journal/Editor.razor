@@ -53,7 +53,7 @@
     private string inputDescription;
     private string inputNature = "";
     private string inputWeight = "";
-    private TimeInputSimple _timeInput;
+    private TimeInputSimple? _timeInput;
     private GeoLocationInput _geoLocationInput;
 
     [Parameter]
@@ -110,7 +110,7 @@
         inputNature = SelectedLifeEvent.Nature;
         inputWeight = SelectedLifeEvent.Weight;
         _geoLocationInput.UpdateData(SelectedLifeEvent.StartTime.GetGeoLocation());
-
+        _timeInput?.SetTime(SelectedLifeEvent.StartTime);
     }
 
 

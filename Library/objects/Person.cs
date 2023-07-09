@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using static Azure.Core.HttpHeader;
 
 namespace VedAstro.Library
 {
@@ -167,9 +168,14 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Format name with birth year for easy identification
-        /// used for showing to  in website
+        /// used for showing to  in website Steve Jobs - 1995
         /// </summary>
         public string DisplayName => $"{Name} - {BirthYear}";
+
+        /// <summary>
+        /// Name with no space, used for file names, SteveJobs
+        /// </summary>
+        public string NameWithNoSpace => $"{Name.Replace(" ", "")}";
 
 
         //PUBLIC PROPERTIES

@@ -65,7 +65,7 @@
         SkyChartUrl = GetUrl("SkyChart");
         SkyChartUrlGif = GetUrl("SkyChartGIF");
 
-        await _jsRuntime.InvokeVoidAsync("Interop.SkyChartInit", imageHolder, SkyChartUrl);
+        await _jsRuntime.InvokeVoidAsync(JS.SkyChartInit, imageHolder, SkyChartUrl);
 
         isReady = true;
 

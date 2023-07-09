@@ -2,6 +2,7 @@
 @using VedAstro.Library
 @using System.Xml.Linq
 @using Newtonsoft.Json.Linq
+@using System.Text
 
 
 <div @ref="MainElement" class="vstack gap-1">
@@ -18,15 +19,11 @@
                 <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
         </IconButton>
-        <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="ic:outline-save">
-            <div style="" class="vstack gap-2 w-100">
-                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
-            </div>
-        </IconButton>
+        <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg" />
         <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="ion:share-outline">
             <div style="" class="hstack gap-2 w-100">
-                <IconButton SmallSize="true" Outline="true" ButtonText="Email" OnClickCallback="OnClickShareToEmail" IconName="ion:share-outline" />
-                <IconButton SmallSize="true" Outline="true" ButtonText="Facebook" IconName="ion:share-outline" />
+                <IconButton SmallSize="true" ButtonText="Email" OnClickCallback="OnClickShareToEmail" IconName="ion:share-outline" />
+                <IconButton SmallSize="true" ButtonText="Facebook" IconName="ion:share-outline" />
             </div>
         </IconButton>
         <IconButton SmallSize="true" Outline="true" ButtonText="Print" IconName="ic:round-print">
@@ -93,6 +90,9 @@
     /// </summary>
     bool _isReady = false;
 
+    public string RawChartSvg { get; set; }
+
+    public TimeRange SelectedTimeRange { get; set; }
 
 
 
@@ -128,12 +128,12 @@
             InputedEventTags = inputedEventTags;
             SelectedTimeRange = timeRange;
 
-            //poll till get
+            //get raw SVG chart from API as string
             int maxWidth = 940; //to fit nicely in page
-            string chartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth);
+            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth);
 
-            //control reaches here than already complete
-            await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, chartSvg);
+            //bring chart to live with EventsChart.js
+            await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, RawChartSvg);
 
             //get latest dark mode setting
             //so that event chart is not lost in darkness
@@ -154,11 +154,8 @@
             Console.WriteLine(e.Message);
         }
 
-
-
     }
 
-    public TimeRange SelectedTimeRange { get; set; }
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -215,13 +212,6 @@
 
     }
 
-    private async Task OnClickSaveAsImage()
-    {
-        //the downloading of the chart as image is done by JS
-        //this is done because, because save as image will be implemented directly in future
-        await _jsRuntime.InvokeVoidAsync(JS.DownloadChartFileSVG);
-
-    }
 
     private async Task OnClickShareToEmail()
     {
@@ -253,6 +243,21 @@
             WebLogger.Error(e);
             Console.WriteLine(e.Message);
         }
+    }
+
+    /// <summary>
+    /// Takes the chart as an SVG string and saves it to Downloads as SVG file
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnClickSaveChartSvg()
+    {
+
+        var bytes = Encoding.UTF8.GetBytes(RawChartSvg);
+        var base64 = Convert.ToBase64String(bytes);
+        var url = $"data:text/plain;base64,{base64}";
+        var filename = $"LifePredictor-{SelectedPerson.NameWithNoSpace}-{SelectedPerson.BirthYear}.svg";
+        //await JSRuntime.InvokeVoidAsync("saveAsFile", filename, url);
+        await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, url);
     }
 
 }

@@ -528,13 +528,33 @@ namespace Website
 
         /// <summary>
         /// gets debug mode set in browser memory
+        /// false = disabled, enabled = true
         /// </summary>
-        public static async Task<bool> GetDebugMode(IJSRuntime jsRuntime)
+        public static async Task<bool> GetDebugModeBool()
         {
-            var dataInBrowser = await jsRuntime.GetProperty("DebugMode"); //enabled/disabled
+            var dataInBrowser = await AppData.JsRuntime.GetProperty("DebugMode"); //enabled/disabled
             var debugMode = string.IsNullOrEmpty(dataInBrowser) ? false : (dataInBrowser == "enabled" ? true : false);
 
             return debugMode;
+        }
+
+        public static async Task<string> GetDebugModeText()
+        {
+            string selectedDebugMode;
+
+            //only continue if logged in
+            if (!AppData.IsGuestUser)
+            {
+                var debugMode = await WebsiteTools.GetDebugModeBool();
+                selectedDebugMode = debugMode ? "enabled" : "disabled";
+            }
+            //if not logged in then auto set disabled
+            else
+            {
+                selectedDebugMode = "disabled";
+            }
+
+            return selectedDebugMode;
         }
     }
 }

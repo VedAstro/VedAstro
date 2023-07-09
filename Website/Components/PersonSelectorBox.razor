@@ -40,7 +40,7 @@ KEEP IT REAL
             <button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
                 @if (!SelectedPerson.Equals(Person.Empty))
                 {
-                    <PersonTooltip Person="@SelectedPerson"/>
+                    <PersonTooltip Person="@SelectedPerson" />
                 }
                 else
                 {
@@ -50,11 +50,11 @@ KEEP IT REAL
 
             @* DROPDOWN SECTION *@
             <ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
-                
+
                 @* SEARCH *@
                 <div class="hstack gap-2">
                     <input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
-                    <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.PersonList))"/>
+                    <Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.PersonList))" />
                 </div>
 
                 @* LIST OF PEOPLE *@
@@ -94,7 +94,7 @@ KEEP IT REAL
 
 
         @*add person icon*@
-        <IconButton ExtraClass="ms-2" TooltipText="Add New Person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson"/>
+        <IconButton ExtraClass="ms-2" TooltipText="Add New Person" IconName="ant-design:user-add-outlined" ClickUrl="@PageRoute.AddPerson" />
     </div>
 </div>
 

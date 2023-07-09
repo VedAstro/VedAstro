@@ -37,9 +37,9 @@
 
 
 # 🎯 Perfect Predictions
-[![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/Calculator/LifePredictor)   
-[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Calculator/Match)   
-[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/Calculator/StarsAboveMe)   
+[![LifePredictor](https://vedastro.org/images/life-predictor-alertbox-examples.jpg)](https://vedastro.org/LifePredictor)   
+[![MatchChecker](https://vedastro.org/images/marriage-prediction-perfect-example.png)](https://vedastro.org/Match)   
+[![SkyChartGIF](https://vedastro.org/images/SkyChart/release-mk3.gif)](https://vedastro.org/StarsAboveMe)   
 
 
 # 📊 64 Data Points via Open API & FREE (yeah you read right!)
@@ -122,10 +122,10 @@ Below is sample API call result for data related to "**Sun**" on "**30/06/2023**
 
 # 🌍 Links
 - [Quick Guide](https://vedastro.org/Docs/QuickGuide) learn how to use
-- [Open API](https://vedastro.org/Calculator/APIBuilder) easily get astrology data for your app or website with a simple `HTTP GET`
-- [Swiss Ephemeris API](https://vedastro.org/Calculator/APIBuilder) free and simple API to get advanced astronomical data
-- [Match Finder](https://vedastro.org/Calculator/Match/Finder) find your astrologically perfect match in our global database
-- [Life Predictor](https://vedastro.org/Calculator/LifePredictor) algorithmic prediction of a human life's past and future
+- [Open API](https://vedastro.org/APIBuilder) easily get astrology data for your app or website with a simple `HTTP GET`
+- [Swiss Ephemeris API](https://vedastro.org/APIBuilder) free and simple API to get advanced astronomical data
+- [Match Finder](https://vedastro.org/Match/Finder) find your astrologically perfect match in our global database
+- [Life Predictor](https://vedastro.org/LifePredictor) algorithmic prediction of a human life's past and future
 
 
 <!--

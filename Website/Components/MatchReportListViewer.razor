@@ -35,7 +35,7 @@ else
                     </td>
                     <td><b style="color: @report.Summary.scoreColor;">@report.KutaScore%</b></td>
                     <td>@report.Notes</td>
-                    <td><IconButton ButtonText="View" OpenNewTab="true" ClickUrl=@($"/Calculator/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
+                    <td><IconButton ButtonText="View" OpenNewTab="true" ClickUrl=@($"/Match/Report/{@report.Male.Id}/{@report.Female.Id}") /></td>
                 </tr>
             }
         </tbody>

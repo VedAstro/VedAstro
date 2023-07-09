@@ -7,6 +7,9 @@ using System.Xml.Linq;
 
 namespace VedAstro.Library
 {
+    /// <summary>
+    /// Represents a period of time "Event" with start, end time and data related
+    /// </summary>
     public class Event : IToXml
     {
         /// <summary>
@@ -38,7 +41,7 @@ namespace VedAstro.Library
         //PROPERTIES
         //Note: Created mainly for ease of use with WPF binding
         public EventName Name => _name;
-        public string FormattedName => Format.FormatName(this);
+        public string FormattedName => Format.FormatName(this.Name);
         public string Description => HttpUtility.HtmlDecode(_description);
         public EventNature Nature => _nature;
         public Time StartTime => _startTime;

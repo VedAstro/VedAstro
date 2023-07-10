@@ -14,10 +14,9 @@
 {
     @*TOP BUTTON ROW*@
     <div class="hstack gap-3 my-3">
-        <IconButton SmallSize="true" Outline="true" ButtonText="Back" IconName="akar-icons:arrow-back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
-        @*        <IconButton SmallSize="true" Outline="true" ButtonText="Add Person" IconName="flat-color-icons:good-decision" ClickUrl="@PageRoute.AddPerson"></IconButton>
-    *@        <IconButton SmallSize="true" Outline="true" ButtonText="View Saved" IconName="flat-color-icons:filing-cabinet" ClickUrl="@PageRoute.SavedMatchReports"></IconButton>
-        <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="emojione:floppy-disk">
+        <IconButton SmallSize="true" ButtonText="Back" IconName="akar-icons:arrow-back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
+        <IconButton SmallSize="true" ButtonText="View Saved" IconName="ph:files-light" ClickUrl="@PageRoute.SavedMatchReports"></IconButton>
+        <IconButton SmallSize="true" ButtonText="Save" IconName="material-symbols:save">
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="OnClickDownloadPdf">
@@ -33,7 +32,7 @@
                 </li>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="flat-color-icons:tree-structure">
+        <IconButton SmallSize="true" ButtonText="Share" IconName="tabler:share-2">
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.OnClickSendToEmail(PdfFileName, matchReportElement))">
@@ -55,7 +54,7 @@
                 </li>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" Outline="true" ButtonText="Print" IconName="flat-color-icons:print" OnClickCallback="OnClickPrintPDF"></IconButton>
+        <IconButton SmallSize="true" ButtonText="Print" IconName="subway:print" OnClickCallback="OnClickPrintPDF"/>
     </div>
 
     <hr />

@@ -9,28 +9,64 @@
 
     @* BUTTON ROW *@
     <div class="hstack gap-3 mb-2">
-        <IconButton SmallSize="true" Outline="true" ButtonText="Show/Hide" IconName="bx:hide">
+        <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide">
             <div style="" class="vstack gap-2 w-100">
                 <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
         </IconButton>
+
+        <IconButton DropDownWidthPx="@GR.W255px" ExtraDropdownClass="" SmallSize="true" ButtonText="Highlight" IconName="fluent:highlight-16-filled">
+            <DropDownList>
+                <div class="d-flex flex-wrap gap-1">
+                    @foreach (var eventNameKeyword in SelectedHighlightDictionary.Keys)
+                    {
+                        <div style="width: @GR.W97px; margin-left:10px;" class="form-check">
+                            <input @bind="@(SelectedHighlightDictionary[eventNameKeyword])" class="form-check-input" type="checkbox">
+                            <label class="form-check-label">
+                                @eventNameKeyword
+                            </label>
+                        </div>
+                    }
+                </div>
+            </DropDownList>
+        </IconButton>
+
         <IconButton SmallSize="true" Outline="true" ButtonText="Life Events" IconName="mdi:calendar-outline">
             <div style="" class="vstack gap-2 w-100">
                 <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
             </div>
         </IconButton>
-        <IconButton SmallSize="true" Outline="true" ButtonText="Save" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg" />
-        <IconButton SmallSize="true" Outline="true" ButtonText="Share" IconName="ion:share-outline">
-            <div style="" class="hstack gap-2 w-100">
-                <IconButton SmallSize="true" ButtonText="Email" OnClickCallback="OnClickShareToEmail" IconName="ion:share-outline" />
-                <IconButton SmallSize="true" ButtonText="Facebook" IconName="ion:share-outline" />
-            </div>
+        <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg" />
+        <IconButton SmallSize="true" ButtonText="Print" IconName="ic:round-print" />
+        <IconButton SmallSize="true" ButtonText="Share" IconName="tabler:share-2">
+            <DropDownList>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="OnClickShareToEmail">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
+                        <span>Email PDF</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.ShareCurrentPageOnFacebook())">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
+                        <span>Facebook</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Instagram, newTab:true))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:instagram" />
+                        <span>Instagram</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Twitter, newTab:true))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:twitter" />
+                        <span>Twitter</span>
+                    </a>
+                </li>
+            </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" Outline="true" ButtonText="Print" IconName="ic:round-print">
-            <div style="" class="vstack gap-2 w-100">
-                <p style="text-align: center;font-size: 18px;white-space: nowrap;margin: 4px; @AppData.DescriptionFont">Coming soon to a browser near you</p>
-            </div>
-        </IconButton>
+
     </div>
 
     @*
@@ -94,10 +130,30 @@
 
     public TimeRange SelectedTimeRange { get; set; }
 
+    public Dictionary<string, bool> SelectedHighlightDictionary { get; set; } = new Dictionary<string, bool>();
 
 
     //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▄█ █▄█ █▄▄ █ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+    protected override async Task OnInitializedAsync()
+    {
+        //checkboxes for 12 houses
+        foreach (var houseName in House.AllHouses)
+        {
+            var formatedHouseName = Format.FormatName(houseName.ToString());
+            SelectedHighlightDictionary.Add(formatedHouseName, false);
+        }
+
+        //checkboxes for 9 planets
+        foreach (var planetName in PlanetName.All9Planets)
+        {
+            var formatedPlanetName = Format.FormatName(planetName.ToString());
+            SelectedHighlightDictionary.Add(formatedPlanetName, false);
+        }
+
+
+    }
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -252,14 +308,15 @@
     /// <returns></returns>
     private async Task OnClickSaveChartSvg()
     {
-
-        var bytes = Encoding.UTF8.GetBytes(RawChartSvg);
+        var encodingHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+        var bytes = Encoding.UTF8.GetBytes(encodingHeader + RawChartSvg);
         var base64 = Convert.ToBase64String(bytes);
         var url = $"data:text/plain;base64,{base64}";
         var filename = $"LifePredictor-{SelectedPerson.NameWithNoSpace}-{SelectedPerson.BirthYear}.svg";
         //await JSRuntime.InvokeVoidAsync("saveAsFile", filename, url);
         await _jsRuntime.InvokeVoidAsync(JS.SaveAsFile, filename, url);
     }
+
 
 }
 

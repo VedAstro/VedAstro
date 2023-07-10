@@ -16,7 +16,7 @@
             }
             @ButtonText
         </button>
-        <ul style="cursor: pointer;" class="dropdown-menu w-100">
+        <ul style="cursor: pointer; width: @DropDownWidthPx;" class="dropdown-menu @ExtraDropdownClass">
             @*auto match size with button width*@
             @DropDownList
         </ul>
@@ -55,6 +55,12 @@ else
 }
 
 @code {
+
+    /// <summary>
+    /// defaults to 100%
+    /// </summary>
+    [Parameter]
+    public string DropDownWidthPx { get; set; } = "100%";
 
 
     /// <summary>
@@ -150,6 +156,12 @@ else
     /// </summary>
     [Parameter]
     public string? ExtraClass { get; set; }
+
+    /// <summary>
+    /// If specified extra, added directly to button class attribute
+    /// </summary>
+    [Parameter]
+    public string? ExtraDropdownClass { get; set; }
 
 
     /// <summary>
@@ -413,6 +425,7 @@ else
         //WebLogger.Data($"Almost Click : {this.ButtonText}");
 
     }
+
 
 
 }

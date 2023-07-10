@@ -91,6 +91,90 @@ export class EventsChart {
         setInterval(() => EventsChart.updateNowLine(this), 60 * 1000); // 60 seconds
     }
 
+    //highlights all events rects in chart by
+    //the inputed keyword in the event name
+    highlightByEventName(keyword) {
+
+        //find all rects representing the keyword based event
+        //note keyword will be planet name or house name
+        this.AllEventRects.each(function (index) {
+            //get parsed time from rect
+            var svgEventRect = this;
+            var eventName = svgEventRect.getAttribute("eventname");
+            //check if event name contains keyword
+            var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
+
+            //if event is related to planet, highlight the rect
+            if (foundEvent) {
+
+                //save original color for later return
+                var oriColor = svgEventRect.getAttribute("fill");
+                svgEventRect.setAttribute("fillORI", oriColor);
+
+                //set new highlight color
+                var highlightColor = EventsChart.getHighlightColor(keyword);
+                svgEventRect.setAttribute("fill", highlightColor);
+            }
+
+        });
+
+    }
+
+    unhighlightByEventName(keyword) {
+
+        //find all rects representing the keyword based event
+        this.AllEventRects.each(function (index) {
+            //get parsed time from rect
+            var svgEventRect = this;
+            var eventName = svgEventRect.getAttribute("eventname");
+            //check if event name contains keyword
+            var foundEvent = eventName.toLowerCase().includes(keyword.toLowerCase());
+
+            //if event is related to planet, highlight the rect
+            if (foundEvent) {
+
+                //save original color for later return
+                var oriColor = svgEventRect.getAttribute("fillORI");
+
+                //ori will be null if never highlighted before
+                oriColor = oriColor === null ? svgEventRect.getAttribute("fill") : oriColor;
+
+                //set original color if changed, else same color
+                svgEventRect.setAttribute("fill", oriColor);
+            }
+
+        });
+
+    }
+
+
+    //-----------------------------STATIC----------------------------------------
+
+    //for highlighting events by name
+    static getHighlightColor(keyword) {
+
+        switch (keyword.toLowerCase()) {
+        case "sun": return "#FFFF00";
+        case "moon": return "#00FFFF";
+        case "mars": return "#ff609b";
+        case "mercury": return "#005522";
+        case "jupiter": return "#ff60fa";
+        case "venus": return "#FF0099";
+        case "saturn": return "#60aaff";
+        case "rahu": return "#ffb460";
+        case "ketu": return "#faff60";
+        }
+
+        //default
+        return "ff60fa";
+
+        //    var arrayValues = ["#ff60fa", "#ff60fa", "#ff60fa"];
+
+        //    var arrayMax = arrayValues.length - 1;
+        //    var randomIndex = Math.floor(Math.random() * arrayMax);
+
+        //    return arrayValues[randomIndex];
+    }
 
     //update now line position
     static updateNowLine(instance) {

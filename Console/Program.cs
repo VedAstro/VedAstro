@@ -209,8 +209,8 @@ namespace VedAstro.Console
             var finalSvg = EventsChartManager.WrapSvgElements(
                 svgClass: "MultipleDasa",
                 combinedSvgString: combinedSvg,
-                svgWidth: 800,
-                svgTotalHeight: chartYPosition,
+                svgWidth: maxWidth+100,
+                svgTotalHeight: chartYPosition+100,
                 randomId: Tools.GenerateId(),
                 svgBackgroundColor: "#757575"); //grey easy on the eyes
 

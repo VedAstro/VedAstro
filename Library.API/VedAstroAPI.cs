@@ -316,7 +316,7 @@ namespace Library.API
 
             //call until data appears, API takes care of everything
             JToken? personListJson = null;
-            var pollRate = 500;
+            var pollRate = 1500;
             var notReady = true;
             while (notReady)
             {
@@ -413,7 +413,7 @@ namespace Library.API
 
             //call until data appears, API takes care of everything
             string? parsedJsonReply = null;
-            var pollRate = 1500;
+            var pollRate = 3000;
             var notReady = true;
             while (notReady)
             {

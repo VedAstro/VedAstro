@@ -5,7 +5,7 @@
 <PageTitle>@pageTitle</PageTitle>
 
 @* PAGE HEADER *@
-<PageTopSideImage ImageName="join-our-family.svg"
+<PageTopSideImage ImageName="good-time-finder.png"
                   Title="Good Time Finder"
                   DescriptionText="Find the right time for wedding, job interview, buying house and etc. Muhurtha is sanskrit for Good Time or Electional Astrology." />
 
@@ -170,9 +170,11 @@
         //set data into dasa viewer
         var timeRange = GetTimeRange();
 
+        //for muhurtha standard event nature is more logical
+        var summaryOptions = new SummaryOptions(Algorithm.Empty, true);
 
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions);
 
         //mark page as ready to show results
         _isResultReady = true;

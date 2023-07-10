@@ -5,11 +5,10 @@
 <PageTitle>@_pageTitle</PageTitle>
 
 @* EXAMPLE OF DYNAMIC IMAGE *@
-<PageTop ImageName="life-predictor-banner.png"
-         Title="Life Predictor"
-         DescriptionText="Each life is a story. Advanced computation algorithms fused with ancient astrology makes this chart possible.
-        Its a digital snapshot of a human's life on earth.">
-</PageTop>
+<PageTopSideImage ImageName="life-predictor-banner.png"
+                  Title="Life Predictor"
+                  DescriptionText="Each life is a story. Advanced computation algorithms fused with ancient astrology makes this chart possible.
+        Its a digital snapshot of a human's life on earth." />
 
 
 @*Dasas are major periods in which the indications of the planets are realised.
@@ -241,7 +240,7 @@ Know good and bad periods of your life years ahead.*@
             </p>
             <p>
                 Even death during @GREEN period will be happy or peaceful and never tragic.
-                Keep in mind this algorithm does "<strong>NOT</strong>" count <strong>death</strong> as a bad life event, 
+                Keep in mind this algorithm does "<strong>NOT</strong>" count <strong>death</strong> as a bad life event,
                 it is <strong>how</strong> you die that is predicted to be good or bad.
                 Some say, "I like not knowing". We say, "<strong>Good luck</strong>".
             </p>
@@ -264,7 +263,7 @@ Know good and bad periods of your life years ahead.*@
             </p>
         </TextHTML>
     </ArticleBlock>
-    
+
     <ArticleBlock Title="Future of Humanity" IconName="twemoji:globe-showing-europe-africa">
         <TextHTML>
             <p>
@@ -498,8 +497,10 @@ Know good and bad periods of your life years ahead.*@
             EventTag.Gochara
         };
 
+        var summaryOptions = new SummaryOptions(Algorithm.MK3, true);
+
         //pump data into chart
-        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, dasaEventTags);
+        await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, dasaEventTags, summaryOptions);
 
         //only set url if not already set
         //note:this improves UX, as links can lead faster to data
@@ -524,9 +525,9 @@ Know good and bad periods of your life years ahead.*@
     {
         var systemTimezone = Tools.GetSystemTimezone();
 
-        //if user selected indiviual year than make new preset is placed in format that can be read by parser 
+        //if user selected indiviual year than make new preset is placed in format that can be read by parser
         if (SelectedTimeRangePreset == "selectyear") { SelectedTimeRangePreset = $"{SelectedLifeYearStart}-{SelectedLifeYearEnd}"; } //exp 2000-2010
-        else if (SelectedTimeRangePreset == "selectage"){SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}";} //exp age4to50
+        else if (SelectedTimeRangePreset == "selectage") { SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}"; } //exp age4to50
 
         var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
 

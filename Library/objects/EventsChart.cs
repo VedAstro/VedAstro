@@ -13,7 +13,7 @@ namespace VedAstro.Library
     public class EventsChart
     {
 
-        public static EventsChart Empty = new EventsChart("Empty", "Empty", "Empty", TimeRange.Empty,  0, new List<EventTag>());
+        public static EventsChart Empty = new EventsChart("Empty", "Empty", "Empty", TimeRange.Empty, 0, new List<EventTag>(), SummaryOptions.Empty);
 
         public string ChartId { get; set; }
         public string ContentSvg { get; set; }
@@ -22,14 +22,17 @@ namespace VedAstro.Library
         public List<EventTag> EventTagList { get; set; }
         public TimeRange TimeRange { get; set; }
 
-        public EventsChart(string chartId, string contentSvg, string personId, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTagList)
+        public SummaryOptions SummaryOptions { get; set; }
+
+        public EventsChart(string chartId, string contentSvg, string personId, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTagList, SummaryOptions summaryOptions)
         {
             ChartId = chartId;
             ContentSvg = contentSvg;
             PersonId = personId;
             EventTagList = eventTagList;
-            TimeRange = timeRange; 
+            TimeRange = timeRange;
             DaysPerPixel = daysPerPixel;
+            SummaryOptions = summaryOptions;
         }
 
 
@@ -67,9 +70,11 @@ namespace VedAstro.Library
             var startTimeXml = personXml.Element("StartTime").Element("Time");
             var endTimeXml = personXml.Element("EndTime").Element("Time");
             var daysPerPixel = double.Parse(personXml.Element("DaysPerPixel")?.Value);
+            var summaryOptionsXml = personXml.Element("StartTime");
+            var summaryOptions = Library.SummaryOptions.FromXml(summaryOptionsXml);
 
             var timeRange = new TimeRange(Time.FromXml(startTimeXml), Time.FromXml(endTimeXml));
-            var parsedPerson = new EventsChart(chartId, contentSvg, personId, timeRange, daysPerPixel, eventTagList);
+            var parsedPerson = new EventsChart(chartId, contentSvg, personId, timeRange, daysPerPixel, eventTagList, summaryOptions);
 
             return parsedPerson;
         }
@@ -130,11 +135,12 @@ namespace VedAstro.Library
             var endTimeJson = requestJson["EndTime"];
             var endTime = Time.FromJson(endTimeJson);
             var daysPerPixel = requestJson["DaysPerPixel"].Value<double>();
-
+            var summaryOptionsJson = requestJson["SummaryOptions"];
+            var summaryOptions = SummaryOptions.FromJson(summaryOptionsJson);
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
-            var newChart = new EventsChart(newChartId, "", personId, new TimeRange(startTime, endTime), daysPerPixel, eventTags);
+            var newChart = new EventsChart(newChartId, "", personId, new TimeRange(startTime, endTime), daysPerPixel, eventTags, summaryOptions);
 
             return newChart;
         }
@@ -143,7 +149,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Packages the data to send to API to generate the chart
         /// </summary>
-        public static JObject GenerateChartSpecsJson(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth)
+        public static JObject GenerateChartSpecsJson(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, SummaryOptions summaryOptions)
         {
             //auto calculate precision
             var daysPerPixelRaw = EventsChart.GetDayPerPixel(timeRange, maxWidth);
@@ -158,6 +164,7 @@ namespace VedAstro.Library
             returnPayload["EndTime"] = timeRange.end.ToJson();
             returnPayload["DaysPerPixel"] = daysPerPixelInput;
             returnPayload["EventTagList"] = EventTagExtensions.ToJsonList(inputedEventTags);
+            returnPayload["SummaryOptions"] = summaryOptions.ToJson();
 
             return returnPayload;
 

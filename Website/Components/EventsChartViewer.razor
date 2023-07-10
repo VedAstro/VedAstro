@@ -113,7 +113,7 @@
     /// Sets the data that is processed and fill the content
     /// - Parent element calls here to start display chart process
     /// </summary>
-    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags)
+    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, SummaryOptions summaryOptions)
     {
         //stop if empty person
         if (Person.Empty.Equals(person)) { throw new InvalidOperationException("PERSON CAN'T BE EMPTY!!!"); }
@@ -130,7 +130,7 @@
 
             //get raw SVG chart from API as string
             int maxWidth = 940; //to fit nicely in page
-            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth);
+            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth, summaryOptions);
 
             //bring chart to live with EventsChart.js
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, RawChartSvg);
@@ -220,7 +220,8 @@
         {
             //poll till get
             int maxWidth = 940;
-            string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, InputedEventTags, maxWidth);
+            var summaryOptions = new SummaryOptions(Algorithm.MK3, true);
+            string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, InputedEventTags, maxWidth, summaryOptions);
 
             //control reaches here than already complete
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, chartSvg);

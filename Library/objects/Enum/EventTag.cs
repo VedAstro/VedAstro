@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 
@@ -138,6 +140,15 @@ namespace VedAstro.Library
             var holder = new JObject(_eventTag.ToString());
 
             return holder;
+        }
+
+        /// <summary>
+        /// Get all in a list for looping
+        /// </summary>
+        public static List<EventTag> GetAll()
+        {
+            List<EventTag> enumList = Enum.GetValues(typeof(EventTag)).Cast<EventTag>().ToList();
+            return enumList;
         }
     }
 }

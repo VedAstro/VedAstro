@@ -38,6 +38,7 @@
         public const string CalculatorList = "Calculator/";
         public const string LifePredictor = "LifePredictor";
         public const string LifePredictorParam = "LifePredictor/{PersonIdUrl}";
+        public const string GoodTimeFinder = "GoodTimeFinder";
         public const string StarsAboveMe = "StarsAboveMe";
         public const string SunRiseSetTime = "SunRiseSetTime";
         public const string BirthTimeFinder = "BirthTimeFinder";

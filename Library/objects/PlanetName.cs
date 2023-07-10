@@ -202,6 +202,8 @@ namespace VedAstro.Library
 
         public override bool Equals(object obj)
         {
+            //nulls is false
+            if (ReferenceEquals(null, obj)) return false;
 
             if (obj.GetType() == typeof(PlanetName))
             {

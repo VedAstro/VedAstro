@@ -10,7 +10,7 @@ using System.Collections;
 namespace API
 {
 
-   
+
 
     public static class EventsChartAPI
     {
@@ -57,7 +57,8 @@ namespace API
                         foundPerson,
                         chartSpecsOnly.TimeRange,
                         chartSpecsOnly.DaysPerPixel,
-                        chartSpecsOnly.EventTagList);
+                        chartSpecsOnly.EventTagList,
+                        chartSpecsOnly.SummaryOptions);
                     return chartSvg;
                 };
 
@@ -112,7 +113,8 @@ namespace API
                     foundPerson,
                     chartSpecsOnly.TimeRange,
                     chartSpecsOnly.DaysPerPixel,
-                    chartSpecsOnly.EventTagList);
+                    chartSpecsOnly.EventTagList,
+                    chartSpecsOnly.SummaryOptions);
                 //return chartSvg;
 
                 //string to binary
@@ -158,15 +160,16 @@ namespace API
                 var chartSpecsOnly = await EventsChart.FromJsonSpecOnly(requestJson);
 
                 //a hash to id the chart's specs (caching)
-                var chartId = chartSpecsOnly.GetEventsChartSignature();
-
+                var chartId = chartSpecsOnly.GetEventsChartSignature(); 
+                
                 //PREPARE THE CALL
                 var foundPerson = await Tools.GetPersonById(chartSpecsOnly.PersonId);
                 var chartSvg = await EventsChartManager.GenerateEventsChart(
                     foundPerson,
                     chartSpecsOnly.TimeRange,
                     chartSpecsOnly.DaysPerPixel,
-                    chartSpecsOnly.EventTagList);
+                    chartSpecsOnly.EventTagList,
+                    chartSpecsOnly.SummaryOptions);
                 //return chartSvg;
 
 
@@ -533,6 +536,8 @@ namespace API
 
         private static async Task<EventsChart> GetEventReportSvgForIncomingRequestEasy(HttpRequestData req)
         {
+            //ACT 1 : SET VARIABLES
+
             //get all the data needed out of the incoming request
             var rootXml = await APITools.ExtractDataFromRequestXml(req);
             var personId = rootXml.Element("PersonId")?.Value;
@@ -542,8 +547,11 @@ namespace API
             //client's timezone, not based on birth
             var timezone = Tools.StringToTimezone(rootXml.Element("Timezone")?.Value);//should be "+08:00"
 
+
             //hard set max width to 1000px so that no forever calculation created
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
+
+            var summaryOptions = new SummaryOptions(Algorithm.Empty, true);
 
             //minus 7% from width for side padding
             //so that chart not squeezed to side of page
@@ -565,8 +573,7 @@ namespace API
             //done for fast calculation only for needed viewability
             var daysPerPixel = GetDayPerPixel(timeRange, maxWidth);
 
-
-            return await Tools.GenerateNewChart(foundPerson, timeRange, daysPerPixel, eventTags);
+            return await Tools.GenerateNewChart(foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
         }
 
 

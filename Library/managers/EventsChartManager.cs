@@ -41,7 +41,7 @@ namespace VedAstro.Library
         //▒█▄▄█ ▒█░▒█ ▒█▀▀▄ ▒█░░░ ▒█░ ▒█░░░ 
         //▒█░░░ ░▀▄▄▀ ▒█▄▄█ ▒█▄▄█ ▄█▄ ▒█▄▄█
 
-        public static async Task<string> GenerateEventsChart(Person inputPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> inputedEventTags)
+        public static async Task<string> GenerateEventsChart(Person inputPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> inputedEventTags, SummaryOptions summaryOptions)
         {
 
             //ACT I : declare the components
@@ -60,7 +60,7 @@ namespace VedAstro.Library
 
             //ACT II : fill the components in order
 
-            await GenerateComponents(inputPerson, timeRange.start, timeRange.end, daysPerPixel, inputedEventTags);
+            await GenerateComponents(inputPerson, timeRange.start, timeRange.end, daysPerPixel, inputedEventTags, summaryOptions);
 
 
             //ACT III : compile in right placement
@@ -86,7 +86,7 @@ namespace VedAstro.Library
             return final;
 
 
-            async Task GenerateComponents(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags)
+            async Task GenerateComponents(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags, SummaryOptions summaryOptions)
             {
                 //STEP 1: USER INPUT > USABLE DATA
                 var svgBackgroundColor = "#f0f9ff"; //not bleach white
@@ -120,7 +120,7 @@ namespace VedAstro.Library
                     endTime,
                     inputPerson,
                     timeSlices,
-                    inputedEventTags, ref verticalYAxis);
+                    inputedEventTags, summaryOptions, ref verticalYAxis);
 
                 nowLine = MakeNowLine(startTime, verticalYAxis, timeSlices);
 
@@ -428,7 +428,7 @@ namespace VedAstro.Library
                                     </g>
                                     <!-- DESCRIPTION -->
 		                            <g class=""description-label"" style=""{descriptionDisplayStyle}"" transform=""translate(0,{17})"">
-                                        <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{descriptionBackgroundWidth}"" height=""{boxHeightPx+5}"" rx=""2"" ry=""2""/>
+                                        <rect class=""background"" style=""fill: blue; opacity: 0.8;"" width=""{descriptionBackgroundWidth}"" height=""{boxHeightPx + 5}"" rx=""2"" ry=""2""/>
                                         <text transform=""translate(2,11)"">
                                             {descriptionTextSvg}
 			                            </text>
@@ -1393,7 +1393,7 @@ namespace VedAstro.Library
         /// Generate rows based of inputed events
         /// </summary>
         private static string GenerateEventRows(double eventsPrecision, Time startTime, Time endTime,
-            Person inputPerson, List<Time> timeSlices, List<EventTag> inputedEventTags, ref int yAxis)
+            Person inputPerson, List<Time> timeSlices, List<EventTag> inputedEventTags, SummaryOptions summaryOptions, ref int yAxis)
         {
             //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
@@ -1421,7 +1421,7 @@ namespace VedAstro.Library
                 summaryRowData = new Dictionary<int, SumData>();
                 //generate svg for each row & add to final row
                 //compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
-                compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
+                compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, summaryOptions, out int finalHeight);
                 //set y axis (horizontal) for next row
                 yAxis = yAxis + finalHeight + padding;
 
@@ -1542,7 +1542,7 @@ namespace VedAstro.Library
 
             //height not known until generated
             //returns the final dynamic height of this event row
-            string GenerateMultipleRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, out int finalHeight)
+            string GenerateMultipleRowSvg(List<Event> eventList, List<Time> timeSlices, int yAxis, int xAxis, SummaryOptions summaryOptions, out int finalHeight)
             {
                 //generate the row for each time slice
                 var rowHtml = "";
@@ -1604,7 +1604,7 @@ namespace VedAstro.Library
                         double natureScore = 0;
 
                         //calculate accurate nature score
-                        natureScore = CalculateNatureScore(foundEvent, inputPerson);
+                        natureScore = CalculateNatureScore(foundEvent, inputPerson, summaryOptions);
 
                         //compile nature score for making summary row later (defaults to 0)
                         var previousNatureScoreSum = (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition].NatureScore : 0);
@@ -1655,24 +1655,37 @@ namespace VedAstro.Library
         /// <summary>
         /// Intelligently calculates summary score
         /// </summary>
-        private static double CalculateNatureScore(Event foundEvent, Person person)
+        private static double CalculateNatureScore(Event foundEvent, Person person, SummaryOptions summaryOptions)
         {
             //STAGE 1:
             //score from general nature of event
             var generalScore = 0;
-            switch (foundEvent?.Nature)
+            if (summaryOptions.IncludeBase) //only include if specified
             {
-                case EventNature.Good:
-                    generalScore = 1;
-                    break;
-                case EventNature.Bad:
-                    generalScore = -1;
-                    break;
+                switch (foundEvent?.Nature)
+                {
+                    case EventNature.Good:
+                        generalScore = 1;
+                        break;
+                    case EventNature.Bad:
+                        generalScore = -1;
+                        break;
+                }
             }
 
             //STAGE 2: Special score
-            //var eventScore = GetEventScoreFromShadvargaTop3(foundEvent, person);
-            var eventScore2 = GetEventScoreFromShadvargaMK3(foundEvent, person);
+            var algorithmScore = 0;
+            switch (summaryOptions.SelectedAlgorithm)
+            {
+                case Algorithm.MK1:
+                    algorithmScore = GetEventScoreFromShadvargaTop3(foundEvent, person);
+                    break;
+                case Algorithm.MK2:
+                    break;
+                case Algorithm.MK3:
+                    algorithmScore = GetEventScoreFromShadvargaMK3(foundEvent, person);
+                    break;
+            }
 
 
 #if DEBUG
@@ -1681,7 +1694,7 @@ namespace VedAstro.Library
 
             var final = 0;
             final += generalScore;
-            final += eventScore2;
+            final += algorithmScore;
 
             return final;
         }

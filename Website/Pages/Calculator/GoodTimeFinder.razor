@@ -43,8 +43,8 @@
                     var eventTag = FullList[i];
                     //if more than height limit, break rendered list
                     <div style="width: @GR.W194px;" class="form-check">
-                        <input @bind="@(SelectedTagsDictionary[eventTag])" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">
+                        <input @bind="@(SelectedTagsDictionary[eventTag])" class="form-check-input" type="checkbox">
+                        <label class="form-check-label">
                             @(Format.FormatName(eventTag.ToString()))
                         </label>
                     </div>

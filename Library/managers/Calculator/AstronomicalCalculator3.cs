@@ -519,7 +519,7 @@ namespace VedAstro.Library
 
 
                 //sort that list from strongest planet to weakest planet
-                var sortedList= planetStrenghtList.OrderByDescending(item => item.Value);
+                var sortedList = planetStrenghtList.OrderByDescending(item => item.Value);
                 var nameOnlyList = sortedList.Select(x => x.Key).ToList();
 
                 return nameOnlyList;
@@ -633,6 +633,8 @@ namespace VedAstro.Library
         [API("ShadbalaPinda")]
         public static Shashtiamsa GetPlanetShadbalaPinda(PlanetName planetName, Time time)
         {
+            //return 0 if null planet
+            if (planetName == null) { return Shashtiamsa.Zero; }
 
             //CACHE MECHANISM
             return CacheManager.GetCache(new CacheKey("GetPlanetShadbalaPinda", planetName, time), _getPlanetShadbalaPinda);

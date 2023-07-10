@@ -66,6 +66,8 @@
         public const string SkyChartAnimate = "Interop.SkyChartAnimate";
         public const string SkyChartInit = "Interop.SkyChartInit";
         public const string SaveAsFile = "Interop.SaveAsFile";
+        public const string highlightByEventName = "Interop.highlightByEventName";
+        public const string unhighlightByEventName = "Interop.unhighlightByEventName";
         public const string getScreenData = "Interop.getScreenData";
         public const string shareDialogFacebook = "Interop.shareDialogFacebook";
 

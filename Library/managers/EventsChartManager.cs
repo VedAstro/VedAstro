@@ -49,6 +49,7 @@ namespace VedAstro.Library
             string contentHead = null;
             string timeHeader = null;
             string eventRows = null;
+            string summaryRow = null;
             string nowLine = null;
             string contentTail = null;
             string cursorLine = null;
@@ -70,13 +71,14 @@ namespace VedAstro.Library
                         <!--inside border-->
                         {contentHead}
                             {timeHeader}
-                            {eventRows} <!-- with summary-->
+                            {eventRows}
+                            {lifeEvents}
+                            {summaryRow}
                             {nowLine}
                         {contentTail}
 
                         <!--outside border-->
                         {cursorLine}
-                        {lifeEvents}
                         {border} <!--border painted last-->
                         {jsCode} <!--place last-->
                     {svgTail}
@@ -121,6 +123,9 @@ namespace VedAstro.Library
                     inputPerson,
                     timeSlices,
                     inputedEventTags, summaryOptions, ref verticalYAxis);
+
+                var padding = 1;//space between rows
+                summaryRow = GenerateSummaryRow(SummaryRowData, SummaryRowHeight, SingleRowHeight, padding, ref verticalYAxis);
 
                 nowLine = MakeNowLine(startTime, verticalYAxis, timeSlices);
 
@@ -1389,16 +1394,19 @@ namespace VedAstro.Library
 
         }
 
+        private static Dictionary<int, SumData> SummaryRowData { get; set; }
+
+        //1 GENERATE DATA FOR EVENT ROWS
+        public const int SingleRowHeight = 15;
+        public const int SummaryRowHeight = 22;
+
         /// <summary>
         /// Generate rows based of inputed events
         /// </summary>
         private static string GenerateEventRows(double eventsPrecision, Time startTime, Time endTime,
             Person inputPerson, List<Time> timeSlices, List<EventTag> inputedEventTags, SummaryOptions summaryOptions, ref int yAxis)
         {
-            //1 GENERATE DATA FOR EVENT ROWS
             const int widthPerSlice = 1;
-            const int singleRowHeight = 15;
-            const int SummaryRowHeight = 22;
 
 
             //sort event by duration, so that events are ordered nicely in chart
@@ -1410,29 +1418,17 @@ namespace VedAstro.Library
             //2 STACK & GENERATED ROWS FROM ABOVE DATA
             var padding = 1;//space between rows
             var compiledRow = "";
-            double maxValue;
-            double minValue;
-            Dictionary<int, SumData> summaryRowData;
             if (eventList.Any())
             {
 
                 //note: summary data is filled when generating rows
                 //x axis, total nature score, planet name
-                summaryRowData = new Dictionary<int, SumData>();
+                SummaryRowData = new Dictionary<int, SumData>();
                 //generate svg for each row & add to final row
                 //compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
                 compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, summaryOptions, out int finalHeight);
                 //set y axis (horizontal) for next row
                 yAxis = yAxis + finalHeight + padding;
-
-                //4 GENERATE SUMMARY ROW
-                //min & max used to calculate color later
-                maxValue = summaryRowData?.Values?.Max(x => x.NatureScore) ?? 0;
-                minValue = summaryRowData?.Values?.Min(x => x.NatureScore) ?? 0;
-                compiledRow += GenerateSummaryRow(yAxis);
-
-                //note caller checks final height by checking y axis by ref
-                yAxis += 15;//add in height of summary row
 
             }
 
@@ -1442,102 +1438,6 @@ namespace VedAstro.Library
 
             //█░░ █▀█ █▀▀ ▄▀█ █░░   █▀▀ █░█ █▄░█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀
             //█▄▄ █▄█ █▄▄ █▀█ █▄▄   █▀░ █▄█ █░▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█
-
-            string GenerateSummaryRow(int yAxis)
-            {
-#if DEBUG
-                Console.WriteLine($"GenerateSummaryRow : MAX:{maxValue}, MIN:{minValue}");
-#endif
-
-                var rowHtml = "";
-                //STEP 1 : generate color summary
-                var colorRow = "";
-                foreach (var summarySlice in summaryRowData)
-                {
-                    int xAxis = summarySlice.Key;
-                    //total nature score is sum of negative & positive 1s of all events
-                    //that occurred at this point in time, possible negative number
-                    //exp: -4 bad + 5 good = 1 total nature score
-                    double totalNatureScore = summarySlice.Value.NatureScore;
-
-                    var rect = $"<rect " +
-                               $"x=\"{xAxis}\" " +
-                               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                               $"width=\"{widthPerSlice}\" " +
-                               $"height=\"{SummaryRowHeight}\" " +
-                               $"fill=\"{GetSummaryColor(totalNatureScore, minValue, maxValue)}\" />";
-
-                    //add rect to row
-                    colorRow += rect;
-                }
-
-                rowHtml += $"<g id=\"ColorRow\">{colorRow}</g>";
-
-
-                //STEP 2 : generate graph summary
-                //var barChartRow = "";
-                //foreach (var summarySlice in summaryRowData)
-                //{
-                //    int xAxis = summarySlice.Key;
-                //    double totalNatureScore = summarySlice.Value.NatureScore; //possible negative
-                //    var barHeight = (int)totalNatureScore.Remap(minValue, maxValue, 0, 30);
-                //    var rect = $"<rect " +
-                //               $"x=\"{xAxis}\" " +
-                //               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                //               $"width=\"{widthPerSlice}\" " +
-                //               $"height=\"{barHeight}\" " +
-                //               $"fill=\"black\" />";
-
-                //    //add rect to row
-                //    barChartRow += rect;
-                //}
-
-                ////note: chart is flipped 180, to start bar from bottom to top
-                ////default hidden
-                //rowHtml += $"<g id=\"BarChartRow\" transform=\"matrix(1, 0, 0, 1, 0, 20)\">{barChartRow}</g>";
-
-
-                //STEP 3 : generate color summary SMART
-                //var colorRowSmart = "";
-                //foreach (var summarySlice in summaryRowData)
-                //{
-                //    int xAxis = summarySlice.Key;
-                //    //total nature score is sum of negative & positive 1s of all events
-                //    //that occurred at this point in time, possible negative number
-                //    //exp: -4 bad + 5 good = 1 total nature score
-                //    double totalNatureScore = summarySlice.Value.NatureScore;
-                //    var planetPowerFactor = GetPlanetPowerFactor(summarySlice.Value.Planet, summarySlice.Value.BirthTime);
-                //    var smartNatureScore = totalNatureScore * planetPowerFactor;
-                //    var rect = $"<rect " +
-                //               $"x=\"{xAxis}\" " +
-                //               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
-                //               $"width=\"{widthPerSlice}\" " +
-                //               $"height=\"{singleRowHeight}\" " +
-                //               $"fill=\"{GetSummaryColor(smartNatureScore, -100, 100)}\" />";
-
-                //    //add rect to row
-                //    colorRowSmart += rect;
-                //}
-                ////note: chart is flipped 180, to start bar from bottom to top
-                ////default hidden
-                //rowHtml += $"<g id=\"BarChartRowSmart\" transform=\"matrix(1, 0, 0, 1, 0, 43)\">{colorRowSmart}</g>";
-
-
-                //STEP 4 : final wrapper
-                //add in "Smart Summary" label above row
-                float aboveRow = yAxis - singleRowHeight - padding;
-                rowHtml += $@"
-                    <g id=""SummaryLabel"" transform=""matrix(1, 0, 0, 1, 0, {aboveRow})"">
-				        <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""100"" height=""15"" rx=""2"" ry=""2""/>
-				        <text style=""fill:#FFFFFF; font-size:11px; font-weight:400;"" x=""16"" y=""11"">Smart Summary</text>
-				        <path transform=""matrix(0.045, 0, 0, 0.045, -14, -4)"" fill=""#fff"" d=""M437 122c-15 2-26 5-38 10-38 16-67 51-75 91-4 17-4 36 0 54 10 48 47 86 95 98 11 2 15 3 30 3s19-1 30-3c48-12 86-50 96-98 3-18 3-37 0-54-10-47-48-86-95-98-10-2-16-3-29-3h-14zm66 59c2 2 3 3 4 6s1 17 0 20c-2 7-11 9-15 2-1-2-1-3-1-7v-5h-37-37s8 11 18 23l21 25c1 2 1 5 1 7-1 1-10 13-21 26l-19 24c0 1 13 1 37 1h37v-5c0-6 1-9 5-11 5-2 11 1 11 8 1 1 1 6 1 10-1 7-1 8-2 10s-3 4-7 4h-52-50l-2-1c-4-3-5-7-3-11 0 0 11-14 24-29l22-28-22-28c-13-16-24-29-24-30-2-3-1-7 2-9 2-3 2-3 55-3h51l3 1z"" stroke=""none"" fill-rule=""nonzero""/>
-			        </g>";
-
-                //return compiled rects as 1 row in a group for easy debugging & edits
-                rowHtml = $"<g id=\"SummaryRow\">{rowHtml}</g>";
-                return rowHtml;
-            }
-
 
 
             //height not known until generated
@@ -1591,7 +1491,7 @@ namespace VedAstro.Library
                                    $"x=\"{horizontalPosition}\" " +
                                    $"y=\"{finalYAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
                                    $"width=\"{widthPerSlice}\" " +
-                                   $"height=\"{singleRowHeight}\" " +
+                                   $"height=\"{SingleRowHeight}\" " +
                                    $"fill=\"{color}\" />";
 
                         //add rect to return list
@@ -1607,7 +1507,7 @@ namespace VedAstro.Library
                         natureScore = CalculateNatureScore(foundEvent, inputPerson, summaryOptions);
 
                         //compile nature score for making summary row later (defaults to 0)
-                        var previousNatureScoreSum = (summaryRowData.ContainsKey(horizontalPosition) ? summaryRowData[horizontalPosition].NatureScore : 0);
+                        var previousNatureScoreSum = (SummaryRowData.ContainsKey(horizontalPosition) ? SummaryRowData[horizontalPosition].NatureScore : 0);
 
                         var x = new SumData
                         {
@@ -1615,12 +1515,12 @@ namespace VedAstro.Library
                             Planet = Tools.GetPlanetFromName(foundEvent.FormattedName),
                             NatureScore = natureScore + previousNatureScoreSum //combine current with previous
                         };
-                        summaryRowData[horizontalPosition] = x;
+                        SummaryRowData[horizontalPosition] = x;
 
 
                         //increment vertical position for next
                         //element to be placed beneath this one
-                        verticalPosition += singleRowHeight + spaceBetweenRow;
+                        verticalPosition += SingleRowHeight + spaceBetweenRow;
 
                         multipleEventCount++; //include this in count
                     }
@@ -1632,8 +1532,8 @@ namespace VedAstro.Library
                     verticalPosition = 0;
 
                     //safe only the highest row (last row in to be added) used for calculating final height
-                    var multipleRowH = (multipleEventCount * (singleRowHeight + spaceBetweenRow)) - spaceBetweenRow; //minus 1 to compensate for last row
-                    var thisSliceHeight = multipleEventCount > 1 ? multipleRowH : singleRowHeight; //different height calc for multiple & single row
+                    var multipleRowH = (multipleEventCount * (SingleRowHeight + spaceBetweenRow)) - spaceBetweenRow; //minus 1 to compensate for last row
+                    var thisSliceHeight = multipleEventCount > 1 ? multipleRowH : SingleRowHeight; //different height calc for multiple & single row
                     highestTimeSlice = thisSliceHeight > highestTimeSlice ? thisSliceHeight : highestTimeSlice;
                     multipleEventCount = 0; //reset
 
@@ -1651,6 +1551,110 @@ namespace VedAstro.Library
             }
 
         }
+
+        private static string GenerateSummaryRow(Dictionary<int, SumData> summaryRowData, int summaryRowHeight, int singleRowHeight, int padding, ref int yAxis)
+        {
+            //min & max used to calculate color later
+            var maxValue = summaryRowData?.Values?.Max(x => x.NatureScore) ?? 0;
+            var minValue = summaryRowData?.Values?.Min(x => x.NatureScore) ?? 0;
+
+#if DEBUG
+            Console.WriteLine($"GenerateSummaryRow : MAX:{maxValue}, MIN:{minValue}");
+#endif
+
+            var rowHtml = "";
+            //STEP 1 : generate color summary
+            var colorRow = "";
+            foreach (var summarySlice in summaryRowData)
+            {
+                int xAxis = summarySlice.Key;
+                //total nature score is sum of negative & positive 1s of all events
+                //that occurred at this point in time, possible negative number
+                //exp: -4 bad + 5 good = 1 total nature score
+                double totalNatureScore = summarySlice.Value.NatureScore;
+
+                var rect = $"<rect " +
+                           $"x=\"{xAxis}\" " +
+                           $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+                           $"width=\"{widthPerSlice}\" " +
+                           $"height=\"{summaryRowHeight}\" " +
+                           $"fill=\"{GetSummaryColor(totalNatureScore, minValue, maxValue)}\" />";
+
+                //add rect to row
+                colorRow += rect;
+            }
+
+            rowHtml += $"<g id=\"ColorRow\">{colorRow}</g>";
+
+
+            //STEP 2 : generate graph summary
+            //var barChartRow = "";
+            //foreach (var summarySlice in summaryRowData)
+            //{
+            //    int xAxis = summarySlice.Key;
+            //    double totalNatureScore = summarySlice.Value.NatureScore; //possible negative
+            //    var barHeight = (int)totalNatureScore.Remap(minValue, maxValue, 0, 30);
+            //    var rect = $"<rect " +
+            //               $"x=\"{xAxis}\" " +
+            //               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+            //               $"width=\"{widthPerSlice}\" " +
+            //               $"height=\"{barHeight}\" " +
+            //               $"fill=\"black\" />";
+
+            //    //add rect to row
+            //    barChartRow += rect;
+            //}
+
+            ////note: chart is flipped 180, to start bar from bottom to top
+            ////default hidden
+            //rowHtml += $"<g id=\"BarChartRow\" transform=\"matrix(1, 0, 0, 1, 0, 20)\">{barChartRow}</g>";
+
+
+            //STEP 3 : generate color summary SMART
+            //var colorRowSmart = "";
+            //foreach (var summarySlice in summaryRowData)
+            //{
+            //    int xAxis = summarySlice.Key;
+            //    //total nature score is sum of negative & positive 1s of all events
+            //    //that occurred at this point in time, possible negative number
+            //    //exp: -4 bad + 5 good = 1 total nature score
+            //    double totalNatureScore = summarySlice.Value.NatureScore;
+            //    var planetPowerFactor = GetPlanetPowerFactor(summarySlice.Value.Planet, summarySlice.Value.BirthTime);
+            //    var smartNatureScore = totalNatureScore * planetPowerFactor;
+            //    var rect = $"<rect " +
+            //               $"x=\"{xAxis}\" " +
+            //               $"y=\"{yAxis}\" " + //y axis placed here instead of parent group, so that auto legend can use the y axis
+            //               $"width=\"{widthPerSlice}\" " +
+            //               $"height=\"{singleRowHeight}\" " +
+            //               $"fill=\"{GetSummaryColor(smartNatureScore, -100, 100)}\" />";
+
+            //    //add rect to row
+            //    colorRowSmart += rect;
+            //}
+            ////note: chart is flipped 180, to start bar from bottom to top
+            ////default hidden
+            //rowHtml += $"<g id=\"BarChartRowSmart\" transform=\"matrix(1, 0, 0, 1, 0, 43)\">{colorRowSmart}</g>";
+
+
+            //STEP 4 : final wrapper
+            //add in "Smart Summary" label above row
+            float aboveRow = yAxis - singleRowHeight - padding;
+            rowHtml += $@"
+                    <g id=""SummaryLabel"" transform=""matrix(1, 0, 0, 1, 0, {aboveRow})"">
+				        <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""100"" height=""15"" rx=""2"" ry=""2""/>
+				        <text style=""fill:#FFFFFF; font-size:11px; font-weight:400;"" x=""16"" y=""11"">Smart Summary</text>
+				        <path transform=""matrix(0.045, 0, 0, 0.045, -14, -4)"" fill=""#fff"" d=""M437 122c-15 2-26 5-38 10-38 16-67 51-75 91-4 17-4 36 0 54 10 48 47 86 95 98 11 2 15 3 30 3s19-1 30-3c48-12 86-50 96-98 3-18 3-37 0-54-10-47-48-86-95-98-10-2-16-3-29-3h-14zm66 59c2 2 3 3 4 6s1 17 0 20c-2 7-11 9-15 2-1-2-1-3-1-7v-5h-37-37s8 11 18 23l21 25c1 2 1 5 1 7-1 1-10 13-21 26l-19 24c0 1 13 1 37 1h37v-5c0-6 1-9 5-11 5-2 11 1 11 8 1 1 1 6 1 10-1 7-1 8-2 10s-3 4-7 4h-52-50l-2-1c-4-3-5-7-3-11 0 0 11-14 24-29l22-28-22-28c-13-16-24-29-24-30-2-3-1-7 2-9 2-3 2-3 55-3h51l3 1z"" stroke=""none"" fill-rule=""nonzero""/>
+			        </g>";
+
+            //return compiled rects as 1 row in a group for easy debugging & edits
+            rowHtml = $"<g id=\"SummaryRow\">{rowHtml}</g>";
+
+            //add in summary row height
+            yAxis += 15;
+
+            return rowHtml;
+        }
+
 
         /// <summary>
         /// Intelligently calculates summary score
@@ -1772,12 +1776,12 @@ namespace VedAstro.Library
         {
             //get house that the event is related to
             var relatedHouse = foundEvent.GetRelatedHouse().FirstOrDefault(); //for now assume only one
-            //get nature of house based on shadbala
+                                                                              //get nature of house based on shadbala
             var houseNatureScore = AstronomicalCalculator.GetHouseNatureScore(person.BirthTime, relatedHouse);
 
             //get houses and planet that the event is related to
             var relatedPlanet = foundEvent.GetRelatedPlanet().FirstOrDefault(); //for now assume only one
-            //get nature of planet based on shadbala
+                                                                                //get nature of planet based on shadbala
             var planetNatureScore = AstronomicalCalculator.GetPlanetNatureScore(person.BirthTime, relatedPlanet);
 
             var final = 0;

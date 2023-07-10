@@ -183,6 +183,12 @@ namespace VedAstro.Library
         //OPERATOR OVERRIDES
         public static bool operator ==(PlanetName left, PlanetName right)
         {
+            //check for nulls
+            if (ReferenceEquals(left, null))
+            {
+                return ReferenceEquals(right, null);
+            }
+
             return left.Equals(right);
         }
 

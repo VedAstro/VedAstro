@@ -71,8 +71,6 @@ namespace Library.API
             //if anything but pass, don't look inside just say nothing
             return null;
 
-
-
         }
         
 
@@ -82,26 +80,10 @@ namespace Library.API
         public static async Task<string?> ReadOnlyIfPassJSString(string receiverUrl, string? dataToSend, IJSRuntime jsRuntime)
         {
             //holds control till get
+            //more efficient than passing control back and form Blazor and JS
             var rawPayloadStr = await jsRuntime.InvokeAsync<string?>("Interop.ReadOnlyIfPassString", receiverUrl, dataToSend);
 
             return rawPayloadStr;
-
-            //var status = rawPayloadStr.GetProperty("Status").GetString();
-            //var payload = rawPayloadStr.GetProperty("Payload").GetString() ?? "{}";
-
-            //var isPass = status == "Pass";
-            ////var payload = rawPayload["Payload"]?.Value<JToken>() ?? new JObject();
-            //if (isPass)
-            //{
-            //    var rawPayload = JToken.Parse(payload);
-
-            //    //return the raw reply to caller
-            //    return rawPayload;
-
-            //}
-
-            ////if anything but pass, don't look inside just say nothing
-            //return null;
 
         }
 

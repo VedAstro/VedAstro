@@ -12,6 +12,7 @@ namespace VedAstro.Library
         //NESTED TYPES
         public enum PlanetNameEnum
         {
+            Empty = 0,
             Sun = 1,
             Moon,
             Mars,
@@ -60,6 +61,8 @@ namespace VedAstro.Library
 
         //DATA FIELDS
         public PlanetNameEnum Name { get; }
+
+        public static PlanetName Empty = new PlanetName(PlanetNameEnum.Empty);
 
 
         //CTOR

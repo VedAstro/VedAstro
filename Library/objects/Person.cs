@@ -310,6 +310,12 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// Returns STD birth time without hour and minute (for modification by caller)
+        /// EXP: 23/12/2000 +02:00
+        /// </summary>
+        public string BirthDateMonthYearOffset => $"{this.BirthDateMonthYear} {this.BirthTimeZone}";
+
         public XElement ToXml()
         {
             var person = new XElement("Person");

@@ -37,7 +37,6 @@ namespace VedAstro.Console
                 System.Console.WriteLine("Choose wisely");
                 System.Console.WriteLine("1:Find Birth Time - Life Predictor - Person");
                 System.Console.WriteLine("2:Life Predictor - 100 Years - Super HD - 50MB");
-                System.Console.WriteLine("3:CLEAN");
                 System.Console.WriteLine("4:...COMING SOON");
                 System.Console.WriteLine("5:...UNDER DEVELOPMENT");
 
@@ -90,14 +89,20 @@ namespace VedAstro.Console
 
                         var maxWidth = int.Parse(GetInputFromUser("Enter Max Width in Px"));
                         var precisionInHours = double.Parse(GetInputFromUser("Enter Precision in Hours"));
+                        System.Console.WriteLine("Start & End of Chart");
+                        var startYear = GetInputFromUser("Enter Start Year : 0001-9999");
+                        var endYear = GetInputFromUser("Enter End Year : 0001-9999");
+                        System.Console.WriteLine("Start & End of Possible Birth Hour");
+                        var startHour = GetInputFromUser("Enter Start 24Hour : 00-24");
+                        var endHour = GetInputFromUser("Enter End 24Hour : 00-24");
 
-                        await FindBirthTimeEventsChartPerson(personId, maxWidth, precisionInHours);
+                        await FindBirthTimeEventsChartPerson(personId, maxWidth, precisionInHours, startYear, endYear, startHour, endHour);
 
                         break;
                     }
-                case "3":
-                    await MigrateOldLifeEventsToNewFormat2();
-                    break;
+                //case "3":
+                //    await MigrateOldLifeEventsToNewFormat2();
+                //    break;
                 default: System.Console.WriteLine("Coming soon"); break;
             }
 
@@ -114,7 +119,7 @@ namespace VedAstro.Console
 
         }
 
-        private static async Task FindBirthTimeEventsChartPerson(string personId, int maxWidth, double precisionInHours)
+        private static async Task FindBirthTimeEventsChartPerson(string personId, int maxWidth, double precisionInHours, string startYear, string endYear, string startHour, string endHour)
         {
 
             //ACT 1 : Generate data needed to make charts
@@ -123,19 +128,22 @@ namespace VedAstro.Console
 
             //generate the needed charts
             var chartList = new List<EventsChart>();
-            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.PD5, EventTag.Gochara };
+            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.Gochara };
+            var summaryOptions = new SummaryOptions(Algorithm.Empty, true);
 
             //time range is preset to full life 100 years from birth
-            var start = foundPerson.BirthTime;
-            var end = foundPerson.BirthTime.AddYears(100);
+            var start = new Time($"00:00 01/01/{startYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());
+            var end = new Time($"00:00 31/12/{endYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());
             var timeRange = new TimeRange(start, end);
 
             //calculate based on max screen width,
             var daysPerPixel = EventsChart.GetDayPerPixel(timeRange, maxWidth);
 
-            //get list of possible birth time slice in the current birth day
-            var possibleTimeList = Tools.GetTimeSlicesOnBirthDay(foundPerson, precisionInHours);
 
+            //get list of possible birth time slice in the current birth day by inputed hour
+            var startHourParsed = new Time($"{startHour}:00 {foundPerson.BirthDateMonthYearOffset}", foundPerson.GetBirthLocation());
+            var endHourParsed = new Time($"{endHour}:00 {foundPerson.BirthDateMonthYearOffset}", foundPerson.GetBirthLocation());
+            var possibleTimeList = Time.GetTimeListFromRange(startHourParsed, endHourParsed, precisionInHours);
 
             //ACT 3 : Generate charts (Parallel)
 
@@ -155,7 +163,7 @@ namespace VedAstro.Console
             {
                 var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
 
-                var chart = await Tools.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
+                var chart = await Tools.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
                 //var timeHash = possibleTime.ToString(); //time to id the chart, because will complete asymmetrically
                 dict.Add(possibleTime, chart.ContentSvg);
 

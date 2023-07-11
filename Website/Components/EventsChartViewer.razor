@@ -16,8 +16,8 @@
                     @foreach (var eventNameKeyword in SelectedHighlightDictionary.Keys)
                     {
                         <div style="width: @GR.W97px; margin-left:10px;" @onclick="@(()=>OnClickHighlightKeyword(eventNameKeyword))" class="form-check">
-                            <input @bind="@(SelectedHighlightDictionary[eventNameKeyword])" class="form-check-input" type="checkbox">
-                            <label class="form-check-label">
+                            <input @bind="@(SelectedHighlightDictionary[eventNameKeyword])" class="form-check-input" type="checkbox" id="@eventNameKeyword">
+                            <label class="form-check-label" for="@eventNameKeyword">
                                 @eventNameKeyword
                             </label>
                         </div>

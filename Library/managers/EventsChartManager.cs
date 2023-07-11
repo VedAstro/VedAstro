@@ -1689,6 +1689,9 @@ namespace VedAstro.Library
                 case Algorithm.MK3:
                     algorithmScore = GetEventScoreFromShadvargaMK3(foundEvent, person);
                     break;
+                case Algorithm.MK4:
+                    algorithmScore = GetEventScoreFromShadvargaMK4(foundEvent, person);
+                    break;
             }
 
 
@@ -1783,6 +1786,26 @@ namespace VedAstro.Library
             var relatedPlanet = foundEvent.GetRelatedPlanet().FirstOrDefault(); //for now assume only one
                                                                                 //get nature of planet based on shadbala
             var planetNatureScore = AstronomicalCalculator.GetPlanetNatureScore(person.BirthTime, relatedPlanet);
+
+            var final = 0;
+            final += houseNatureScore;
+            final += planetNatureScore;
+
+            return final;
+
+        }
+        
+        private static int GetEventScoreFromShadvargaMK4(Event foundEvent, Person person)
+        {
+            //get house that the event is related to
+            var relatedHouse = foundEvent.GetRelatedHouse().FirstOrDefault(); //for now assume only one
+                                                                              //get nature of house based on shadbala
+            var houseNatureScore = AstronomicalCalculator.GetHouseNatureScoreMK4(person.BirthTime, relatedHouse);
+
+            //get houses and planet that the event is related to
+            var relatedPlanet = foundEvent.GetRelatedPlanet().FirstOrDefault(); //for now assume only one
+                                                                                //get nature of planet based on shadbala
+            var planetNatureScore = AstronomicalCalculator.GetPlanetNatureScoreMK4(person.BirthTime, relatedPlanet);
 
             var final = 0;
             final += houseNatureScore;

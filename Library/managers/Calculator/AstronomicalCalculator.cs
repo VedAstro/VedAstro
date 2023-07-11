@@ -3878,6 +3878,48 @@ namespace VedAstro.Library
             }
         }
 
+        public static int GetHouseNatureScoreMK4(Time personBirthTime, HouseName inputHouse)
+        {
+            //if no house then no score
+            if (inputHouse == HouseName.Empty)
+            {
+                return 0;
+            }
+
+            //get house score
+            var houseStrength = GetHouseStrength(inputHouse, personBirthTime).ToDouble();
+
+            //weakest planet gives lowest score -2
+            //strongest planet gives highest score 2
+            //get range
+            var highestHouseScore = GetHouseStrength(GetAllHousesOrderedByStrength(personBirthTime)[0], personBirthTime).ToDouble();
+            var lowestHouseScore = GetHouseStrength(GetAllHousesOrderedByStrength(personBirthTime)[11], personBirthTime).ToDouble();
+
+            var rangeBasedScore = (int)houseStrength.Remap(lowestHouseScore, highestHouseScore, -3, 3);
+
+
+            return rangeBasedScore;
+        }
+        public static int GetPlanetNatureScoreMK4(Time personBirthTime, PlanetName inputPlanet)
+        {
+            //if no house then no score
+            if (inputPlanet == PlanetName.Empty) { return 0; }
+
+            //get house score
+            var planetStrength = GetPlanetShadbalaPinda(inputPlanet, personBirthTime).ToDouble();
+
+            //weakest planet gives lowest score -2
+            //strongest planet gives highest score 2
+            //get range
+            var highestPlanetScore = GetPlanetShadbalaPinda(GetAllPlanetOrderedByStrength(personBirthTime)[0], personBirthTime).ToDouble();
+            var lowestPlanetScore = GetPlanetShadbalaPinda(GetAllPlanetOrderedByStrength(personBirthTime)[8], personBirthTime).ToDouble();
+
+            //find accurate planet strength relative to others
+            var rangeBasedScore = (int)planetStrength.Remap(lowestPlanetScore, highestPlanetScore, -3, 3);
+
+            return rangeBasedScore;
+        }
+
         /// <summary>
         /// Based on Shadvarga get nature of planet for a person,
         /// nature in number form to for easy calculation into summary

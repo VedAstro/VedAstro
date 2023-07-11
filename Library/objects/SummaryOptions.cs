@@ -14,6 +14,7 @@ namespace VedAstro.Library
         MK1,
         MK2,
         MK3,
+        MK4
     }
     public record SummaryOptions(Algorithm SelectedAlgorithm, bool IncludeBase)
     {

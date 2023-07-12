@@ -27,6 +27,29 @@ namespace VedAstro.Library
     {
 
         /// <summary>
+        /// Use of Residential Strength --This will
+        /// enable us to judge the exact quantity of effect that
+        /// a pJanet in a Bhava gives, which may find expression
+        /// during its Dasa.Its application and usefulness
+        /// will be explained on a subsequent occasion.
+        /// This effect will materialize during his Dasa or
+        /// Bhukti. This is only a general statement standing
+        /// to be modified or qualified in the light of other
+        /// important factors such as, the strength or the weakness
+        /// of the planets aspecting the Bhavas, the
+        /// strength of the Bhava itself and the disposition
+        /// of planets towards particular signs, the yogakarakas
+        /// and such other factors.
+        /// For instance, in the Standard Horoscope Jupiter
+        /// gives 0.48 units of the total effects of the 6th Bhava.
+        /// </summary>
+        public static double ResidentialStrength(PlanetName planetName, Time time)
+        {
+            //todo from PG15 of Bhava and Graha Balas
+            throw new NotImplementedException("");
+        }
+
+        /// <summary>
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
         /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
         /// </summary>

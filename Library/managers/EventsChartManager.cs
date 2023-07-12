@@ -1513,7 +1513,7 @@ namespace VedAstro.Library
                         {
                             BirthTime = inputPerson.BirthTime,
                             Planet = Tools.GetPlanetFromName(foundEvent.FormattedName),
-                            NatureScore = natureScore + previousNatureScoreSum //combine current with previous
+                            NatureScore = natureScore + previousNatureScoreSum //combine current with other events on same time slice
                         };
                         SummaryRowData[horizontalPosition] = x;
 
@@ -1678,7 +1678,7 @@ namespace VedAstro.Library
             }
 
             //STAGE 2: Special score
-            var algorithmScore = 0;
+            var algorithmScore = 0.0;
             switch (summaryOptions.SelectedAlgorithm)
             {
                 case Algorithm.MK1:
@@ -1699,9 +1699,12 @@ namespace VedAstro.Library
             //Console.WriteLine($"PlanetOrHouse:{eventScore2}");
 #endif
 
-            var final = 0;
+            var final = 0.0;
             final += generalScore;
             final += algorithmScore;
+
+            //rounding
+            final = Math.Round(final, 2);
 
             return final;
         }
@@ -1795,19 +1798,23 @@ namespace VedAstro.Library
 
         }
         
-        private static int GetEventScoreFromShadvargaMK4(Event foundEvent, Person person)
+        private static double GetEventScoreFromShadvargaMK4(Event foundEvent, Person person)
         {
-            //get house that the event is related to
-            var relatedHouse = foundEvent.GetRelatedHouse().FirstOrDefault(); //for now assume only one
-                                                                              //get nature of house based on shadbala
-            var houseNatureScore = AstronomicalCalculator.GetHouseNatureScoreMK4(person.BirthTime, relatedHouse);
+            double houseNatureScore = 0;
+            foreach (var relatedHouse in foundEvent.GetRelatedHouse())
+            {
+                houseNatureScore = AstronomicalCalculator.GetHouseNatureScoreMK4(person.BirthTime, relatedHouse);
+            }
+
 
             //get houses and planet that the event is related to
-            var relatedPlanet = foundEvent.GetRelatedPlanet().FirstOrDefault(); //for now assume only one
-                                                                                //get nature of planet based on shadbala
-            var planetNatureScore = AstronomicalCalculator.GetPlanetNatureScoreMK4(person.BirthTime, relatedPlanet);
+            double planetNatureScore = 0;
+            foreach (var relatedPlanet in foundEvent.GetRelatedPlanet())
+            {
+                planetNatureScore = AstronomicalCalculator.GetPlanetNatureScoreMK4(person.BirthTime, relatedPlanet);
+            }
 
-            var final = 0;
+            var final = 0.0;
             final += houseNatureScore;
             final += planetNatureScore;
 

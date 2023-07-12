@@ -33,6 +33,31 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console", "Console\Console.
 		{BBC2261A-BB33-4C9D-B920-843348B2FBBC} = {BBC2261A-BB33-4C9D-B920-843348B2FBBC}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Books", "Books", "{782C27F6-676B-4593-A79F-4D8BC0F1D576}"
+	ProjectSection(SolutionItems) = preProject
+		NotCode\Books\A Manual of Hindu Astrology (1935).pdf = NotCode\Books\A Manual of Hindu Astrology (1935).pdf
+		NotCode\Books\Ashtakvarga System of Prediction.pdf = NotCode\Books\Ashtakvarga System of Prediction.pdf
+		NotCode\Books\Astrology For Beginners (1992).pdf = NotCode\Books\Astrology For Beginners (1992).pdf
+		NotCode\Books\Astrology in Predicting Weather and Earthquakes.pdf = NotCode\Books\Astrology in Predicting Weather and Earthquakes.pdf
+		NotCode\Books\Bhava And Graha Balas.pdf = NotCode\Books\Bhava And Graha Balas.pdf
+		NotCode\Books\Bhavartha Ratnakara (1947).pdf = NotCode\Books\Bhavartha Ratnakara (1947).pdf
+		NotCode\Books\BrihatParasharaHoraSastra.pdf = NotCode\Books\BrihatParasharaHoraSastra.pdf
+		NotCode\Books\Hindu Predictive Astrology.pdf = NotCode\Books\Hindu Predictive Astrology.pdf
+		NotCode\Books\How to Judge Horoscope - Vol1.pdf = NotCode\Books\How to Judge Horoscope - Vol1.pdf
+		NotCode\Books\How to Judge Horoscope - Vol2.pdf = NotCode\Books\How to Judge Horoscope - Vol2.pdf
+		NotCode\Books\Maharshi Parasara - Brihat Parasara Hora Sastra. 2-Ranjan Publications (1984) (1).pdf = NotCode\Books\Maharshi Parasara - Brihat Parasara Hora Sastra. 2-Ranjan Publications (1984) (1).pdf
+		NotCode\Books\Mars in Astrology.pdf = NotCode\Books\Mars in Astrology.pdf
+		NotCode\Books\MUHURTHA.pdf = NotCode\Books\MUHURTHA.pdf
+		NotCode\Books\My Experiences in Astrology.pdf = NotCode\Books\My Experiences in Astrology.pdf
+		NotCode\Books\Notable Horoscopes (1998).pdf = NotCode\Books\Notable Horoscopes (1998).pdf
+		NotCode\Books\Planetary Influences on Human Affairs.pdf = NotCode\Books\Planetary Influences on Human Affairs.pdf
+		NotCode\Books\Prasna Marga Pt1.pdf = NotCode\Books\Prasna Marga Pt1.pdf
+		NotCode\Books\Prasna Marga Pt2.pdf = NotCode\Books\Prasna Marga Pt2.pdf
+		NotCode\Books\README.MD = NotCode\Books\README.MD
+		NotCode\Books\Three Hundred Important Combinations.pdf = NotCode\Books\Three Hundred Important Combinations.pdf
+		NotCode\Books\Varshaphala - Hindu Progressed Horoscope.pdf = NotCode\Books\Varshaphala - Hindu Progressed Horoscope.pdf
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +104,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{782C27F6-676B-4593-A79F-4D8BC0F1D576} = {317ADC97-8BF1-49D5-880F-07818908FCE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2FBEEBB-2243-4CB6-BD2C-2C91584B2662}

@@ -1161,6 +1161,32 @@ namespace VedAstro.Library
             //return the name of house sign
             return houseSignName;
         }
+        
+        /// <summary>
+        /// Gets the zodiac sign at middle longitude of the house.
+        /// </summary>
+        [API("HouseConstellation")]
+        public static PlanetConstellation GetHouseConstellation(int houseNumber, Time time)
+        {
+
+            //get all houses
+            var allHouses = AstronomicalCalculator.GetHouses(time);
+
+            //get the house specified 
+            var specifiedHouse = allHouses.Find(house => house.GetHouseNumber() == houseNumber);
+
+            //get sign of the specified house
+            //Note :
+            //When the middle longitude has just entered a new sign,
+            //rounding the longitude shows better accuracy.
+            //Example, with middle longitude 90.4694, becomes Cancer (0°28'9"),
+            //but predictive results points to Gemini (30°0'0"), so rounding is implemented
+            var middleLongitude = specifiedHouse.GetMiddleLongitude();
+            var houseConstellation = AstronomicalCalculator.GetConstellationAtLongitude(middleLongitude);
+
+            //return the name of house sign
+            return houseConstellation;
+        }
 
         [API("NavamsaSignNameFromLongitude")]
         public static ZodiacName GetNavamsaSignNameFromLongitude(Angle longitude)

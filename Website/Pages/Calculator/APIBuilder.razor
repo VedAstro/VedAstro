@@ -30,9 +30,9 @@
                 </select>
                 <label style="font-weight: 700; color: black;" for="celestialBodySelect">Category</label>
             </div>
-            
-            
-            <PlanetAPIPanel/>
+
+
+            <PlanetAPIPanel @ref="planetApiPanel"/>
 
             @*ACCOUNT STUFF*@
             <div @ref="accountTaskSelector" style="display: none;" class="form-floating">
@@ -48,7 +48,6 @@
                     <span class="input-group-text" style="min-width: @GR.W97px;">Name</span>
                     <input @bind="AddPersonName" type="text" class="form-control" placeholder="Juliet">
                 </div>
-
                 <div class="input-group mb-3">
                     <label class="input-group-text" style="min-width: @GR.W97px;">Gender</label>
                     <select @bind="AddPersonGender" class="form-select">
@@ -85,25 +84,6 @@
                 }
             }
 
-
-            @*Planet Name*@
-            <div @ref="planetNameSelector" style="display: none;" class="form-floating">
-                <select @bind="SelectedPlanetName" class="form-select" id="planetNameSelector">
-                    <option value="" selected>Make a choice</option>
-                    <option value="All">All</option>
-                    <option value="Sun">Sun</option>
-                    <option value="Moon">Moon</option>
-                    <option value="Mars">Mars</option>
-                    <option value="Mercury">Mercury</option>
-                    <option value="Jupiter">Jupiter</option>
-                    <option value="Venus">Venus</option>
-                    <option value="Saturn">Saturn</option>
-                    <option value="Rahu">Rahu</option>
-                    <option value="Ketu">Ketu</option>
-                </select>
-                <label style="font-weight: 700; color: black;" for="planetNameSelector">Planet Name</label>
-            </div>
-
             @*House Name*@
             <div @ref="houseNameSelector" style="display: none;" class="form-floating">
                 <select @bind="SelectedHouseName" class="form-select" id="houseNameSelector" aria-label="House Name Select">
@@ -125,20 +105,6 @@
                 <label style="font-weight: 700; color: black;" for="houseNameSelector">House Name</label>
             </div>
 
-            @*Planet Property*@
-            <div @ref="planetPropertySelector" style="display: none;" class="form-floating">
-                <select @bind="selectedPlanetProperty" class="form-select" id="planetPropertySelector" aria-label="Data Property Select">
-                    <option value="" selected>Make a choice</option>
-                    <option value="All">All</option>
-                    @*make a dynamic selection of all available calls*@
-                    @foreach (var dataProperty in PlanetCallList)
-                    {
-                        <option value="@dataProperty.Name">@(Format.FormatName(dataProperty.Name))</option>
-                    }
-                </select>
-                <label style="font-weight: 700; color: black;" for="planetPropertySelector">Planet Property</label>
-            </div>
-
             @*House Property*@
             <div @ref="housePropertySelector" style="display: none;" class="form-floating">
                 <select @bind="selectedHouseProperty" class="form-select" id="housePropertySelector" aria-label="Data Property Select">
@@ -152,7 +118,9 @@
                 </select>
                 <label style="font-weight: 700; color: black;" for="housePropertySelector">House Property</label>
             </div>
-
+            
+            
+            @* -------- BOTTOM BUTTONS --------*@
             <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
 
             @*OUTPUT ARROW ICON*@
@@ -265,6 +233,7 @@
 
 
 @code {
+    PlanetAPIPanel planetApiPanel;
 
     private string SelectedHouseName
     {
@@ -294,16 +263,6 @@
         }
     }
 
-    private string SelectedPlanetName
-    {
-        get => selectedPlanetName;
-        set
-        {
-            WebLogger.Data($"Selected Planet : {value}");
-            selectedPlanetName = value;
-        }
-
-    }
 
     private string SelectedTaskName
     {
@@ -323,26 +282,21 @@
         }
     }
 
-    private string selectedPlanetName;
-
-    private string selectedPlanetProperty;
 
     private string selectedHouseProperty;
 
     private ElementReference PostBodyElement;
     private ElementReference houseNameSelector;
-    private ElementReference planetNameSelector;
+
     private ElementReference AddPersonMaker;
     private ElementReference accountTaskSelector;
     private ElementReference housePropertySelector;
-    private ElementReference planetPropertySelector;
 
     TimeInputSimple _timeInput;
     private GeoLocationInput _geoLocationInput;
     private string _finalApiGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
 
     //done so that it is cached in memory
-    private static IEnumerable<Tools.APICallData> PlanetCallList = Tools.GetPlanetApiCallList<PlanetName, Time>();
     private static IEnumerable<Tools.APICallData> HouseCallList = Tools.GetPlanetApiCallList<HouseName, Time>();
 
     /// <summary>
@@ -362,39 +316,34 @@
             switch (value.ToLower())
             {
                 case "planet"://hide house & show planet
-                    _jsRuntime.Show(planetNameSelector);
+                    planetApiPanel.Show();
                     _jsRuntime.Hide(houseNameSelector);
-                    _jsRuntime.Show(planetPropertySelector);
                     _jsRuntime.Hide(housePropertySelector);
                     _jsRuntime.Hide(accountTaskSelector);
                     break;
                 case "house"://show house & hide planet
                     _jsRuntime.Show(houseNameSelector);
-                    _jsRuntime.Hide(planetNameSelector);
                     _jsRuntime.Show(housePropertySelector);
-                    _jsRuntime.Hide(planetPropertySelector);
                     _jsRuntime.Hide(accountTaskSelector);
+                    planetApiPanel.Hide();
                     break;
                 case "skychart"://show house & hide planet
                     _jsRuntime.Hide(houseNameSelector);
-                    _jsRuntime.Hide(planetNameSelector);
                     _jsRuntime.Hide(housePropertySelector);
-                    _jsRuntime.Hide(planetPropertySelector);
                     _jsRuntime.Hide(accountTaskSelector);
+                    planetApiPanel.Hide();
                     break;
                 case "skychartgif"://show house & hide planet
                     _jsRuntime.Hide(houseNameSelector);
-                    _jsRuntime.Hide(planetNameSelector);
                     _jsRuntime.Hide(housePropertySelector);
-                    _jsRuntime.Hide(planetPropertySelector);
                     _jsRuntime.Hide(accountTaskSelector);
+                    planetApiPanel.Hide();
                     break;
                 case "account"://show house & hide planet
                     _jsRuntime.Hide(houseNameSelector);
-                    _jsRuntime.Hide(planetNameSelector);
                     _jsRuntime.Hide(housePropertySelector);
-                    _jsRuntime.Hide(planetPropertySelector);
                     _jsRuntime.Show(accountTaskSelector);
+                    planetApiPanel.Hide();
                     break;
             }
         }
@@ -547,7 +496,7 @@
         switch (SelectedCategory.ToLower())
         {
             case "planet":
-                return SelectedPlanetName;
+                return planetApiPanel.SelectedPlanetName;
             case "house":
                 return SelectedHouseName;
         }
@@ -561,7 +510,7 @@
         switch (SelectedCategory.ToLower())
         {
             case "planet":
-                return selectedPlanetProperty;
+                return planetApiPanel.SelectedProperty;
             case "house":
                 return selectedHouseProperty;
         }

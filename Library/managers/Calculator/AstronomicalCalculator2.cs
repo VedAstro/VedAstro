@@ -2375,7 +2375,9 @@ namespace VedAstro.Library
         {
             //get dasa planet at birth
             var moonConstellation = GetPlanetConstellation(birthTime, PlanetName.Moon);
-            var birthDasaPlanet = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
+            //var risingConstellation = GetHouseConstellation(1, birthTime);
+            var birthDasaPlanetMoon = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
+            //var birthDasaPlanet = GetConstellationDasaPlanet(risingConstellation.GetConstellationName());
 
             //get time traversed in birth dasa
             var timeTraversedInDasa = GetYearsTraversedInBirthDasa(birthTime);
@@ -2386,7 +2388,7 @@ namespace VedAstro.Library
             //combine years traversed at birth and years to current time
             //this is done to easily calculate to current dasa, bhukti & antaram
             var combinedYears = timeTraversedInDasa + timeBetween;
-            var wholeDasa = GetDasaCountedFromInputDasa(birthDasaPlanet, combinedYears);
+            var wholeDasa = GetDasaCountedFromInputDasa(birthDasaPlanetMoon, combinedYears);
 
             return wholeDasa;
         }

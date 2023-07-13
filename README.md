@@ -178,8 +178,8 @@ Just **Like** & **Share** our social pages and it'll be a **big** help already!
 [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@vedastro)
 
 # 👪 Join our family
-If you think you can do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
-We're always looking for somebody to **[help funding](https://vedastro.org/Donate)** and **[improve code.](https://vedastro.org/JoinOurFamily)**.
+If you want to do more than just click "Like" & "Share", then [join us.](https://vedastro.org/JoinOurFamily)  
+We're always looking for somebody to **[improve code.](https://vedastro.org/JoinOurFamily)** or **[help with funding](https://vedastro.org/Donate)**.
 
 
 # 🙋‍♂️ Come say "Hi", we don't bite!

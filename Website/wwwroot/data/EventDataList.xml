@@ -3666,7 +3666,7 @@
 
 	<!--SUN BHUKTI-->
 	<Event>
-		<Name>SunDasaSunPD2</Name>
+		<Name>SunSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Unpleasantness with relatives and superiors, anxieties,
@@ -3679,7 +3679,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaMoonPD2</Name>
+		<Name>SunMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			The Moon's sub-period-6 months
@@ -3692,7 +3692,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaMarsPD2</Name>
+		<Name>SunMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars' sub-period-4 months, 6 days.
@@ -3707,7 +3707,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaRahuPD2</Name>
+		<Name>SunRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 10 months, 24 days.
@@ -3720,7 +3720,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaJupiterPD2</Name>
+		<Name>SunJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period-9 months, 18 days.
@@ -3734,7 +3734,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaSaturnPD2</Name>
+		<Name>SunSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period--11 months, 12 days.
@@ -3747,7 +3747,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaMercuryPD2</Name>
+		<Name>SunMercuryPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mercury's sub-period-IO months, 6 days.
@@ -3762,7 +3762,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaKetuPD2</Name>
+		<Name>SunKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 4 months, 6 days.
@@ -3776,7 +3776,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SunDasaVenusPD2</Name>
+		<Name>SunVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus sub-period - 1 year.
@@ -3792,7 +3792,7 @@
 
 	<!--Moon BHUKTI-->
 	<Event>
-		<Name>MoonDasaSunPD2</Name>
+		<Name>MoonSunPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 6 months.
@@ -3806,7 +3806,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaMoonPD2</Name>
+		<Name>MoonMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			The Moon's sub-period- 1O months.
@@ -3820,7 +3820,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaMarsPD2</Name>
+		<Name>MoonMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars's sub-period - 7 months.
@@ -3835,7 +3835,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaRahuPD2</Name>
+		<Name>MoonRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 1 year, 6 months.
@@ -3850,7 +3850,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaJupiterPD2</Name>
+		<Name>MoonJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period - 1 year, 4 months.
@@ -3863,7 +3863,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaSaturnPD2</Name>
+		<Name>MoonSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period - 1 year, 7 months.
@@ -3876,7 +3876,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaMercuryPD2</Name>
+		<Name>MoonMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 1 year, 5 months.
@@ -3890,7 +3890,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaKetuPD2</Name>
+		<Name>MoonKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 7 months.
@@ -3905,7 +3905,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MoonDasaVenusPD2</Name>
+		<Name>MoonVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus's sub-period - 1 year, 8 months.
@@ -3921,7 +3921,7 @@
 
 	<!--Mars BHUKTI-->
 	<Event>
-		<Name>MarsDasaSunPD2</Name>
+		<Name>MarsSunPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 4 months, 6 days.
@@ -3935,7 +3935,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaMoonPD2</Name>
+		<Name>MarsMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			The Moon's sub-period -7 months.
@@ -3946,7 +3946,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaMarsPD2</Name>
+		<Name>MarsMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars's sub-period - 4 months, 27 days.
@@ -3962,7 +3962,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaRahuPD2</Name>
+		<Name>MarsRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 1 year, 18 days.
@@ -3978,7 +3978,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaJupiterPD2</Name>
+		<Name>MarsJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period - 11 months, 6 days.
@@ -3991,7 +3991,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaSaturnPD2</Name>
+		<Name>MarsSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period - 1 year, 1 month, 9 days.
@@ -4004,7 +4004,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaMercuryPD2</Name>
+		<Name>MarsMercuryPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mercury's sub-period- 11 months, 27 days.
@@ -4018,7 +4018,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaKetuPD2</Name>
+		<Name>MarsKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 4 months, 27 days.
@@ -4032,7 +4032,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MarsDasaVenusPD2</Name>
+		<Name>MarsVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus's sub-period - 1 year, 2 months.
@@ -4049,7 +4049,7 @@
 
 	<!--Rahu BHUKTI-->
 	<Event>
-		<Name>RahuDasaSunPD2</Name>
+		<Name>RahuSunPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 1O months, 24 days.
@@ -4064,7 +4064,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaMoonPD2</Name>
+		<Name>RahuMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Moon - 1 year, 6 months.
@@ -4078,7 +4078,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaMarsPD2</Name>
+		<Name>RahuMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars - 1 year, 18 days.
@@ -4092,7 +4092,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaRahuPD2</Name>
+		<Name>RahuRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu - 2 years, 8 months, 12 days.
@@ -4107,7 +4107,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaJupiterPD2</Name>
+		<Name>RahuJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter - 2 years, 4 months, 24 days.
@@ -4121,7 +4121,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaSaturnPD2</Name>
+		<Name>RahuSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn - 2 years, 10 months, 6 days.
@@ -4134,7 +4134,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaMercuryPD2</Name>
+		<Name>RahuMercuryPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mercury - 2 years, 6 months, 18 days.
@@ -4149,7 +4149,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaKetuPD2</Name>
+		<Name>RahuKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu - 1 year, 18 days.
@@ -4163,7 +4163,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>RahuDasaVenusPD2</Name>
+		<Name>RahuVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 3 years.
@@ -4180,7 +4180,7 @@
 
 	<!--JUPITER BHUKTI-->
 	<Event>
-		<Name>JupiterDasaSunPD2</Name>
+		<Name>JupiterSunPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			The Sun's sub-period - 9 months, 18 days.
@@ -4191,7 +4191,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaMoonPD2</Name>
+		<Name>JupiterMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Tbe Moon's sub-period - 1 year, 4 months.
@@ -4204,7 +4204,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaMarsPD2</Name>
+		<Name>JupiterMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars' sub-period - 11 months, 6 days.
@@ -4218,7 +4218,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaRahuPD2</Name>
+		<Name>JupiterRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 2 years, 4 months, 24 days.
@@ -4228,7 +4228,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaJupiterPD2</Name>
+		<Name>JupiterJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter's sub-period - 2 years, 1 month, 18 days.
@@ -4241,7 +4241,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaSaturnPD2</Name>
+		<Name>JupiterSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period - 2 years, 6 months, 12 days.
@@ -4256,7 +4256,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaMercuryPD2</Name>
+		<Name>JupiterMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 2 years, 3 months, 6 days.
@@ -4270,7 +4270,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaKetuPD2</Name>
+		<Name>JupiterKetuPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Ketu's sub-period - 11 months, 6 days.
@@ -4283,7 +4283,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>JupiterDasaVenusPD2</Name>
+		<Name>JupiterVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus's sub-period - 2 years, 8 months.
@@ -4301,7 +4301,7 @@
 
 	<!--Saturn BHUKTI-->
 	<Event>
-		<Name>SaturnDasaSunPD2</Name>
+		<Name>SaturnSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Sun - 11 months, 12 days.
@@ -4315,7 +4315,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaMoonPD2</Name>
+		<Name>SaturnMoonPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Moon - 1 year, 7 months.
@@ -4329,7 +4329,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaMarsPD2</Name>
+		<Name>SaturnMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars - 1 year, 1 month, 9 days.
@@ -4341,7 +4341,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaRahuPD2</Name>
+		<Name>SaturnRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu's sub-period - 2 years, 10 months, 6 days.
@@ -4352,7 +4352,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaJupiterPD2</Name>
+		<Name>SaturnJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter - 2 years, 6 months, 12 days.
@@ -4364,7 +4364,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaSaturnPD2</Name>
+		<Name>SaturnSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn's sub-period 3 years, 3 days.
@@ -4379,7 +4379,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaMercuryPD2</Name>
+		<Name>SaturnMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 2 years, 8 months, 9 days.
@@ -4393,7 +4393,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaKetuPD2</Name>
+		<Name>SaturnKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 1 year, I month, 9 days.
@@ -4404,7 +4404,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>SaturnDasaVenusPD2</Name>
+		<Name>SaturnVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 3 years, 2 months.
@@ -4419,7 +4419,7 @@
 
 	<!--Mercury BHUKTI-->
 	<Event>
-		<Name>MercuryDasaSunPD2</Name>
+		<Name>MercurySunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Sun - 1O months, 6 days.
@@ -4431,7 +4431,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaMoonPD2</Name>
+		<Name>MercuryMoonPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Moon - 1 year, 5 months.
@@ -4444,7 +4444,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaMarsPD2</Name>
+		<Name>MercuryMarsPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mars sub-period - 11 months, 27 days.
@@ -4459,7 +4459,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaRahuPD2</Name>
+		<Name>MercuryRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu - 2 years, 6 months, 18 days.
@@ -4473,7 +4473,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaJupiterPD2</Name>
+		<Name>MercuryJupiterPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Jupiter - 2 years, 3 months 6 days.
@@ -4485,7 +4485,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaSaturnPD2</Name>
+		<Name>MercurySaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn - 2 years, 8 months, 9 days.
@@ -4501,7 +4501,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaMercuryPD2</Name>
+		<Name>MercuryMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury's sub-period - 2 years, 4 months, 27
@@ -4513,7 +4513,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaKetuPD2</Name>
+		<Name>MercuryKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu - 11 months, 27 days.
@@ -4526,7 +4526,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>MercuryDasaVenusPD2</Name>
+		<Name>MercuryVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 2 years, 10 months.
@@ -4543,7 +4543,7 @@
 
 	<!--Ketu BHUKTI-->
 	<Event>
-		<Name>KetuDasaSunPD2</Name>
+		<Name>KetuSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			The Sun's sub-period - 4 months, 6 days.
@@ -4555,7 +4555,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaMoonPD2</Name>
+		<Name>KetuMoonPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			The Moon's sub-period-7 months.
@@ -4567,7 +4567,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaMarsPD2</Name>
+		<Name>KetuMarsPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Mars' sub-period - 4 months, 27 days.
@@ -4583,7 +4583,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaRahuPD2</Name>
+		<Name>KetuRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu - 1 year, 18 days.
@@ -4595,7 +4595,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaJupiterPD2</Name>
+		<Name>KetuJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter - 11 months, 6 days.
@@ -4607,7 +4607,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaSaturnPD2</Name>
+		<Name>KetuSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn - 1 year, 1 month, 9 days.
@@ -4621,7 +4621,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaMercuryPD2</Name>
+		<Name>KetuMercuryPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mercury - 11 months 27 days.
@@ -4633,7 +4633,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaKetuPD2</Name>
+		<Name>KetuKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu's sub-period - 4 months, 27 days.
@@ -4645,7 +4645,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>KetuDasaVenusPD2</Name>
+		<Name>KetuVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 1 year, 2 months.
@@ -4659,7 +4659,7 @@
 
 	<!--Venus BHUKTI-->
 	<Event>
-		<Name>VenusDasaSunPD2</Name>
+		<Name>VenusSunPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Sun - 1 year.
@@ -4671,7 +4671,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaMoonPD2</Name>
+		<Name>VenusMoonPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Moon - 1 year, 8 months.
@@ -4684,7 +4684,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaMarsPD2</Name>
+		<Name>VenusMarsPD2</Name>
 		<Nature>Neutral</Nature>
 		<Description>
 			Mars - 1 year, 2 months.
@@ -4698,7 +4698,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaRahuPD2</Name>
+		<Name>VenusRahuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Rahu - 3 years.
@@ -4710,7 +4710,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaJupiterPD2</Name>
+		<Name>VenusJupiterPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Jupiter - 2 years, 8 months.
@@ -4725,7 +4725,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaSaturnPD2</Name>
+		<Name>VenusSaturnPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Saturn - 3 years, 2 months
@@ -4740,7 +4740,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaMercuryPD2</Name>
+		<Name>VenusMercuryPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Mercury - 2 years, 10 months.
@@ -4754,7 +4754,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaKetuPD2</Name>
+		<Name>VenusKetuPD2</Name>
 		<Nature>Bad</Nature>
 		<Description>
 			Ketu - 1 year, 2 months.
@@ -4769,7 +4769,7 @@
 		<Tag>PD2</Tag>
 	</Event>
 	<Event>
-		<Name>VenusDasaVenusPD2</Name>
+		<Name>VenusVenusPD2</Name>
 		<Nature>Good</Nature>
 		<Description>
 			Venus - 3 years, 4 months.

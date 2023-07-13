@@ -156,31 +156,31 @@ export class EventsChart {
 
         switch (keyword.toLowerCase()) {
             //planets
-        case "sun": return "#FFA500";  //orange #FFA500
-        case "moon": return "#7A7A7A"; //silver #7A7A7A
-        case "mars": return "#DC143C"; //crimson #DC143C
-        case "mercury": return "#00FF7F"; //springgreen #00FF7F
-        case "jupiter": return "#EEEE00"; //yellow #EEEE00
-        case "venus": return "#FF00FF";//magenta #FF00FF
-        case "saturn": return "#0000FF";//blue #0000FF
-        case "rahu": return "#FF7D40"; //flesh #FF7D40
-        case "ketu": return "#515151"; //grey #515151
+            case "sun": return "#FFA500";  //orange #FFA500
+            case "moon": return "#7A7A7A"; //silver #7A7A7A
+            case "mars": return "#DC143C"; //crimson #DC143C
+            case "mercury": return "#00FF7F"; //springgreen #00FF7F
+            case "jupiter": return "#EEEE00"; //yellow #EEEE00
+            case "venus": return "#FF00FF";//magenta #FF00FF
+            case "saturn": return "#0000FF";//blue #0000FF
+            case "rahu": return "#FF7D40"; //flesh #FF7D40
+            case "ketu": return "#515151"; //grey #515151
 
-        //house
-        //colors is the full spectrum divided into 12
-        //done to have the most unique colors possible for each house
-        case "house 1": return "#ff0000"; //red
-        case "house 2": return "#ff7f0a"; //orange
-        case "house 3": return "#ffff00"; //yellow
-        case "house 4": return "#7fff00"; //chartreuse green
-        case "house 5": return "#00ff00"; //green
-        case "house 6": return "#00ff7f"; //spring green
-        case "house 7": return "#00ffff"; //cyan
-        case "house 8": return "#007fff"; //azure
-        case "house 9": return "#0000ff"; //blue
-        case "house 10": return "#7f00ff";//violet
-        case "house 11": return "#ff00ff";//magenta
-        case "house 12": return "#ff007f";//rose
+            //house
+            //colors is the full spectrum divided into 12
+            //done to have the most unique colors possible for each house
+            case "house 1": return "#ff0000"; //red
+            case "house 2": return "#ff7f0a"; //orange
+            case "house 3": return "#ffff00"; //yellow
+            case "house 4": return "#7fff00"; //chartreuse green
+            case "house 5": return "#00ff00"; //green
+            case "house 6": return "#00ff7f"; //spring green
+            case "house 7": return "#00ffff"; //cyan
+            case "house 8": return "#007fff"; //azure
+            case "house 9": return "#0000ff"; //blue
+            case "house 10": return "#7f00ff";//violet
+            case "house 11": return "#ff00ff";//magenta
+            case "house 12": return "#ff007f";//rose
 
         }
 
@@ -431,13 +431,12 @@ export class EventsChart {
                 //if mouse is in event's row then highlight that row
                 if (mouseWithinRow) {
                     //highlight event name row
-                    //var backgroundElm = SVG(newLegendRow.children("rect")[0]);
                     var $backgroundElm = newLegendRow.children("rect");
-                    $backgroundElm.css("fill", "#003e99");
-                    $backgroundElm.css("opacity", 1);//solid
-                    //textElm.css("fill", "#fff");
-                    $textElm.css('font-weight', '700');
-                    //SVG(textElm).font('weight', '700');
+
+                    $textElm.attr('weight', '700');
+                    $backgroundElm.attr("fill", "#003e99");
+                    $backgroundElm.attr("opacity", 1);//solid
+
                     //if mouse within show description box
                     instance.showDescription = true;
                 }

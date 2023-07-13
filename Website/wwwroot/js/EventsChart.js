@@ -433,8 +433,8 @@ export class EventsChart {
                     //highlight event name row
                     var $backgroundElm = newLegendRow.children("rect");
 
-                    $textElm.attr('weight', '700');
-                    $backgroundElm.attr("fill", "#003e99");
+                    $textElm.attr('font-weight', '700');
+                    $backgroundElm.attr("fill", "#0096FF"); //bright blue
                     $backgroundElm.attr("opacity", 1);//solid
 
                     //if mouse within show description box

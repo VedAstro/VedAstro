@@ -1,7 +1,23 @@
-/*
-CLONE OF EVENTSCHART.JS WITHOUT EXPORT FOR USE INSIDE SVG
+﻿/*
+
+███████╗██╗░░░██╗███████╗███╗░░██╗████████╗░██████╗    ░█████╗░██╗░░██╗░█████╗░██████╗░████████╗  
+██╔════╝██║░░░██║██╔════╝████╗░██║╚══██╔══╝██╔════╝    ██╔══██╗██║░░██║██╔══██╗██╔══██╗╚══██╔══╝  
+█████╗░░╚██╗░██╔╝█████╗░░██╔██╗██║░░░██║░░░╚█████╗░    ██║░░╚═╝███████║███████║██████╔╝░░░██║░░░  
+██╔══╝░░░╚████╔╝░██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗    ██║░░██╗██╔══██║██╔══██║██╔══██╗░░░██║░░░  
+███████╗░░╚██╔╝░░███████╗██║░╚███║░░░██║░░░██████╔╝    ╚█████╔╝██║░░██║██║░░██║██║░░██║░░░██║░░░  
+╚══════╝░░░╚═╝░░░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░    ░╚════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░  
+
+░░░░░██╗░██████╗    ░█████╗░███╗░░██╗██╗███╗░░░███╗░█████╗░████████╗░█████╗░██████╗░
+░░░░░██║██╔════╝    ██╔══██╗████╗░██║██║████╗░████║██╔══██╗╚══██╔══╝██╔══██╗██╔══██╗
+░░░░░██║╚█████╗░    ███████║██╔██╗██║██║██╔████╔██║███████║░░░██║░░░██║░░██║██████╔╝
+██╗░░██║░╚═══██╗    ██╔══██║██║╚████║██║██║╚██╔╝██║██╔══██║░░░██║░░░██║░░██║██╔══██╗
+╚█████╔╝██████╔╝    ██║░░██║██║░╚███║██║██║░╚═╝░██║██║░░██║░░░██║░░░╚█████╔╝██║░░██║
+░╚════╝░╚═════╝░    ╚═╝░░╚═╝╚═╝░░╚══╝╚═╝╚═╝░░░░░╚═╝╚═╝░░╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝
+
 */
-class ID {
+//Single place for all code related to animating Events Chart SVG, used by light & full viewer
+
+ class ID {
     static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
     static CursorLineLegendCloneCls = ".CursorLineLegendClone";
     static CursorLineLegendDescriptionHolder = "#CursorLineLegendDescriptionHolder";
@@ -21,7 +37,7 @@ class ID {
 //this class is a living version SVG Events Chart
 //DESIGN NOTE: no logic to generate chart should be here
 //all generation via URL or API is to be done as separate helper functions only
-class EventsChart {
+ class EventsChart {
     //note: these are color codes used to
     //detect if event is good or bad
     static BadColor = "#FF0000";
@@ -417,8 +433,8 @@ class EventsChart {
                     //highlight event name row
                     var $backgroundElm = newLegendRow.children("rect");
 
-                    $textElm.attr('weight', '700');
-                    $backgroundElm.attr("fill", "#003e99");
+                    $textElm.attr('font-weight', '700');
+                    $backgroundElm.attr("fill", "#0096FF"); //bright blue
                     $backgroundElm.attr("opacity", 1);//solid
 
                     //if mouse within show description box

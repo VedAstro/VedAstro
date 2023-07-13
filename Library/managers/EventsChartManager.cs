@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -709,16 +709,17 @@ namespace VedAstro.Library
 			                    <rect width=""2"" height=""{lineHeight}"" style=""fill:#000000;"" x=""0"" y=""0""></rect>
 			                    <rect width=""20"" height=""2"" style=""fill:black;"" x=""-9"" y=""{lineHeight - 2}""></rect>
 		                    </g>
+                            <!--cloned to CursorLineLegendClone -->
 		                    <g id=""CursorLineLegendTemplate"" transform=""matrix(1, 0, 0, 1, 10, 26)"" style=""display:none;"">
-                                <rect style=""fill: blue; opacity: 0.80;"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
-			                    <text style=""fill:#FFFFFF; font-size:11px; font-weight:400; white-space: pre;"" x=""14"" y=""11"">Template</text>
+                                <rect opacity=""0.80"" fill=""blue"" x=""-1"" y=""0"" width=""160"" height=""15"" rx=""2"" ry=""2""></rect>
+			                    <text fill=""#FFFFFF"" font-size""11"" font-weight=""400"" x=""14"" y=""11"">Template</text>
                                 <!--icon set dynamic by JS-->
                                 <use xlink:href=""""></use>                                
                             </g>
                             <!--place where dynamic event names are placed by JS-->
                             <g id=""CursorLineLegendHolder"" transform=""matrix(1, 0, 0, 1, 0, 4)""></g>
                             <g id=""CursorLineLegendDescriptionHolder"" transform=""matrix(1, 0, 0, 1, 0, 0)"" style=""display:none;"">
-			                    <rect id=""CursorLineLegendDescriptionBackground"" style=""fill:#003e99;"" x=""170"" y=""11.244"" width=""150"" height=""0"" rx=""2"" ry=""2""></rect>
+			                    <rect id=""CursorLineLegendDescriptionBackground"" fill=""#003e99"" x=""170"" y=""11.244"" width=""150"" height=""0"" rx=""2"" ry=""2""></rect>
                                 <g id=""CursorLineLegendDescription""></g>
 		                    </g>
                        </g>
@@ -1797,7 +1798,7 @@ namespace VedAstro.Library
             return final;
 
         }
-        
+
         private static double GetEventScoreFromShadvargaMK4(Event foundEvent, Person person)
         {
             double houseNatureScore = 0;

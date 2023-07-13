@@ -4,8 +4,10 @@ console.log("Log Thread - INIT");
 
 
 self.addEventListener('message', async function (e) {
+
     //make a log
-    await addVisitor(e.data);
+    //NOTE: Log Disabled to reduce cost and data not as relevant anymore JUL2023
+    //await addVisitor(e.data);
 
     //var message = e.data + ' to myself!';
 

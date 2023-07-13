@@ -27,6 +27,12 @@ namespace VedAstro.Library
     {
 
         /// <summary>
+        /// Wrapper function to make planet name appear "Payload" of API call data, for easier data probing by 3rd party code
+        /// </summary>
+        [API("PlanetName", "name of planet", Category.Astronomical)]
+        public static string GetPlanetName(PlanetName planetName) => planetName.ToString();
+
+        /// <summary>
         /// Use of Residential Strength --This will
         /// enable us to judge the exact quantity of effect that
         /// a pJanet in a Bhava gives, which may find expression

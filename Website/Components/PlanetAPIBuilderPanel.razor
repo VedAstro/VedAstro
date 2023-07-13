@@ -7,7 +7,7 @@
 <div @ref="mainHolderReference" style="display: none;" class="vstack gap-3">
     @*Planet Name*@
     <div  class="form-floating">
-        <select @bind="SelectedPlanetName" class="form-select" id="planetNameSelector">
+        <select @bind="SelectedName" class="form-select" id="planetNameSelector">
             <option value="" selected>Make a choice</option>
             <option value="All">All</option>
             <option value="Sun">Sun</option>
@@ -43,7 +43,7 @@
 @code {
     private ElementReference mainHolderReference;
 
-    public string SelectedPlanetName { get; set; }
+    public string SelectedName { get; set; }
 
     public string SelectedProperty { get; set; }
 

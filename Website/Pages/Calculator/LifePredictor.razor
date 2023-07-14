@@ -498,7 +498,12 @@ Know good and bad periods of your life years ahead.*@
         };
 
         //set algorithm options (long lever design)
-        var summaryOptions = new SummaryOptions(Algorithm.MK3, true);
+        var algorithmFuncsList = new List<AlgorithmFuncs>()
+        {
+            EventsChartManager.Algorithm.GetGeneralScore,
+
+        };
+        var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart
         await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, dasaEventTags, summaryOptions);

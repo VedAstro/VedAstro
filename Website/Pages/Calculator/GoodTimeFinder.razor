@@ -38,17 +38,33 @@
             @* EVENT SELECT *@
             <IconTitle Title="Event Type" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
             <div style="width: @GR.W509px;" class="d-flex flex-wrap gap-1">
+                <div style="width: @GR.W194px;" class="form-check">
+                    <input @bind="@(SelectedTagsDictionary[EventTag.Agriculture])" class="form-check-input" type="checkbox">
+                    <label class="form-check-label">
+                        @(Format.FormatName(EventTag.Agriculture.ToString()))
+                        <Icon IconName="material-symbols:potted-plant" />
+                    </label>
+                </div>
+                <div style="width: @GR.W194px;" class="form-check">
+                    <input @bind="@(SelectedTagsDictionary[EventTag.Travel])" class="form-check-input" type="checkbox">
+                    <label class="form-check-label">
+                        @(Format.FormatName(EventTag.Travel.ToString()))
+                        <Icon IconName="mdi:plane-train" />
+                    </label>
+                </div>
+                
+                @*
                 @for (var i = 0; i < FullList.Count; i++)
                 {
-                    var eventTag = FullList[i];
-                    //if more than height limit, break rendered list
-                    <div style="width: @GR.W194px;" class="form-check">
-                        <input @bind="@(SelectedTagsDictionary[eventTag])" class="form-check-input" type="checkbox">
-                        <label class="form-check-label">
-                            @(Format.FormatName(eventTag.ToString()))
-                        </label>
-                    </div>
-                }
+                var eventTag = FullList[i];
+                //if more than height limit, break rendered list
+                <div style="width: @GR.W194px;" class="form-check">
+                <input @bind="@(SelectedTagsDictionary[eventTag])" class="form-check-input" type="checkbox">
+                <label class="form-check-label">
+                @(Format.FormatName(eventTag.ToString()))
+                </label>
+                </div>
+                } *@
 
 
             </div>
@@ -171,7 +187,8 @@
         var timeRange = GetTimeRange();
 
         //for muhurtha standard event nature is more logical
-        var summaryOptions = new SummaryOptions(Algorithm.Empty, true);
+        var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.GetGeneralScore };
+        var summaryOptions = new ChartOptions(algorithmFuncsList);
 
         //pump data into chart
         await _eventsChartViewer.ShowChart(SelectedPerson, timeRange, SelectedTags, summaryOptions);

@@ -260,7 +260,7 @@ namespace Library.API
         public EventsChartTools(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
 
 
-        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, SummaryOptions summaryOptions)
+        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions summaryOptions)
         {
             //no person no entry!
             if (Person.Empty.Equals(person)) { throw new InvalidOperationException("NO CHART FOR EMPTY PERSON!"); }

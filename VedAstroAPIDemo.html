@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VedAstro Open API Demo</title>
+</head>
+<body>
+    <button id="myButton">Get Data From API</button>
+
+    <table id="demoHtmlTable" style="margin-top: 10px;" border="1"></table>
+
+<script>
+
+    //on button click will get data from API and display in HTML table
+    document.getElementById('myButton').addEventListener('click', function () { RefreshDataFromAPI(); });
+
+
+    function RefreshDataFromAPI() {
+
+        //get data from API
+        fetch('https://api.vedastro.org/Location/Singapore/Time/00:00/15/07/2023/+08:00/House/House1')
+            .then(response => response.json())
+
+            //display received astro data in html table
+            .then(data => {
+
+                // Create a table
+                var table = document.getElementById('demoHtmlTable');
+                // Create table header
+                var thead = document.createElement('thead');
+                table.appendChild(thead);
+                var headerRow = document.createElement('tr');
+                thead.appendChild(headerRow);
+                var headerCellKey = document.createElement('th');
+                headerCellKey.textContent = 'Data Name';
+                headerRow.appendChild(headerCellKey);
+                var headerCellValue = document.createElement('th');
+                headerCellValue.textContent = 'Value';
+                headerRow.appendChild(headerCellValue);
+                // Create table body
+                var tbody = document.createElement('tbody');
+                table.appendChild(tbody);
+
+                // Populate the table with the data
+                for (var key in data.Payload) {
+                    var row = document.createElement('tr');
+                    var cellKey = document.createElement('td');
+                    cellKey.textContent = key;
+                    row.appendChild(cellKey);
+                    var cellValue = document.createElement('td');
+                    cellValue.textContent = data.Payload[key];
+                    row.appendChild(cellValue);
+                    tbody.appendChild(row);
+                }
+                // Add the table to the body of the document
+                document.body.appendChild(table);
+
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+</script>
+</body>
+</html>

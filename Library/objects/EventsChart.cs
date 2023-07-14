@@ -13,7 +13,7 @@ namespace VedAstro.Library
     public class EventsChart
     {
 
-        public static EventsChart Empty = new EventsChart("Empty", "Empty", "Empty", TimeRange.Empty, 0, new List<EventTag>(), SummaryOptions.Empty);
+        public static EventsChart Empty = new EventsChart("Empty", "Empty", "Empty", TimeRange.Empty, 0, new List<EventTag>(), ChartOptions.Empty);
 
         public string ChartId { get; set; }
         public string ContentSvg { get; set; }
@@ -22,9 +22,9 @@ namespace VedAstro.Library
         public List<EventTag> EventTagList { get; set; }
         public TimeRange TimeRange { get; set; }
 
-        public SummaryOptions SummaryOptions { get; set; }
+        public ChartOptions Options { get; set; }
 
-        public EventsChart(string chartId, string contentSvg, string personId, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTagList, SummaryOptions summaryOptions)
+        public EventsChart(string chartId, string contentSvg, string personId, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTagList, ChartOptions options)
         {
             ChartId = chartId;
             ContentSvg = contentSvg;
@@ -32,7 +32,7 @@ namespace VedAstro.Library
             EventTagList = eventTagList;
             TimeRange = timeRange;
             DaysPerPixel = daysPerPixel;
-            SummaryOptions = summaryOptions;
+            Options = options;
         }
 
 
@@ -70,11 +70,11 @@ namespace VedAstro.Library
             var startTimeXml = personXml.Element("StartTime").Element("Time");
             var endTimeXml = personXml.Element("EndTime").Element("Time");
             var daysPerPixel = double.Parse(personXml.Element("DaysPerPixel")?.Value);
-            var summaryOptionsXml = personXml.Element("StartTime");
-            var summaryOptions = Library.SummaryOptions.FromXml(summaryOptionsXml);
+            var optionsXml = personXml.Element("StartTime");
+            var options = ChartOptions.FromXml(optionsXml);
 
             var timeRange = new TimeRange(Time.FromXml(startTimeXml), Time.FromXml(endTimeXml));
-            var parsedPerson = new EventsChart(chartId, contentSvg, personId, timeRange, daysPerPixel, eventTagList, summaryOptions);
+            var parsedPerson = new EventsChart(chartId, contentSvg, personId, timeRange, daysPerPixel, eventTagList, options);
 
             return parsedPerson;
         }
@@ -135,8 +135,8 @@ namespace VedAstro.Library
             var endTimeJson = requestJson["EndTime"];
             var endTime = Time.FromJson(endTimeJson);
             var daysPerPixel = requestJson["DaysPerPixel"].Value<double>();
-            var summaryOptionsJson = requestJson["SummaryOptions"];
-            var summaryOptions = SummaryOptions.FromJson(summaryOptionsJson);
+            var summaryOptionsJson = requestJson["ChartOptions"];
+            var summaryOptions = ChartOptions.FromJson(summaryOptionsJson);
 
             //a new chart is born
             var newChartId = Tools.GenerateId();
@@ -149,7 +149,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Packages the data to send to API to generate the chart
         /// </summary>
-        public static JObject GenerateChartSpecsJson(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, SummaryOptions summaryOptions)
+        public static JObject GenerateChartSpecsJson(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions options)
         {
             //auto calculate precision
             var daysPerPixelRaw = EventsChart.GetDayPerPixel(timeRange, maxWidth);
@@ -164,7 +164,7 @@ namespace VedAstro.Library
             returnPayload["EndTime"] = timeRange.end.ToJson();
             returnPayload["DaysPerPixel"] = daysPerPixelInput;
             returnPayload["EventTagList"] = EventTagExtensions.ToJsonList(inputedEventTags);
-            returnPayload["SummaryOptions"] = summaryOptions.ToJson();
+            returnPayload["ChartOptions"] = options.ToJson();
 
             return returnPayload;
 

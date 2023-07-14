@@ -171,7 +171,7 @@
     /// Sets the data that is processed and fill the content
     /// - Parent element calls here to start display chart process
     /// </summary>
-    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, SummaryOptions summaryOptions)
+    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions summaryOptions)
     {
         //stop if empty person
         if (Person.Empty.Equals(person)) { throw new InvalidOperationException("PERSON CAN'T BE EMPTY!!!"); }
@@ -284,7 +284,8 @@
         {
             //poll till get
             int maxWidth = 940;
-            var summaryOptions = new SummaryOptions(Algorithm.MK3, true);
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.GetGeneralScore };
+            var summaryOptions = new ChartOptions(algorithmFuncsList);
             string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, InputedEventTags, maxWidth, summaryOptions);
 
             //control reaches here than already complete

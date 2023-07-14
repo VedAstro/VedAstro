@@ -15,8 +15,8 @@
                 <div class="d-flex flex-wrap gap-1">
                     @foreach (var eventNameKeyword in SelectedHighlightDictionary.Keys)
                     {
-                        <div style="width: @GR.W97px; margin-left:10px;" @onclick="@(()=>OnClickHighlightKeyword(eventNameKeyword))" class="form-check">
-                            <input @bind="@(SelectedHighlightDictionary[eventNameKeyword])" class="form-check-input" type="checkbox" id="@eventNameKeyword">
+                        <div @onclick="@(()=>OnClickHighlightKeyword(eventNameKeyword))" style="width: @GR.W97px; margin-left:10px;" class="form-check">
+                            <input class="form-check-input" type="checkbox" id="@eventNameKeyword">
                             <label class="form-check-label" for="@eventNameKeyword">
                                 @eventNameKeyword
                             </label>
@@ -334,6 +334,7 @@
     {
         //value not yet auto toggled, here we toggle to get correct result
         var toggled = !SelectedHighlightDictionary[keyword];
+        SelectedHighlightDictionary[keyword] = toggled; //set back value
 
         //calling this via JS
         if (toggled)

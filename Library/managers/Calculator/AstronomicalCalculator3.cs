@@ -615,6 +615,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// THE FINAL TOTAL STRENGTH
         /// Shadbala :the six sources of strength and weakness the planets
         /// The importance of and the part played by the Shadbalas,
         /// in the science of horoscopy, are manifold
@@ -2764,7 +2765,7 @@ namespace VedAstro.Library
 
                 //so get mid point of house
                 var mid = AstronomicalCalculator.GetHouse(houseNumber, time).GetMiddleLongitude().TotalDegrees;
-                var houseSign = AstronomicalCalculator.GetHouseSignName((int)houseNumber, time);
+                var houseSign = AstronomicalCalculator.GetHouseSignName(houseNumber, time);
 
                 //Therefore first find the number of a given Bhava Madhya and subtract
                 // it from 1, if the given Bhava Madhya is situated

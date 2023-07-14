@@ -1,4 +1,4 @@
-
+﻿
 //< !--Mona Lisa by Leonardo da Vinci
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -508,13 +508,10 @@ namespace VedAstro.Library
                 foreach (var planet in PlanetName.All9Planets)
                 {
                     //get planet strength in rupas
-                    var strength = GetPlanetShadbalaPinda(planet, time).ToRupa();
-
-                    //devide strength by minimum limit (based on planet)
-                    var strengthAfterLimit = strength / getLimit(planet);
+                    var strength = GetPlanetShadbalaPinda(planet, time).ToDouble();
 
                     //place in list with planet name
-                    planetStrenghtList.Add(planet, strengthAfterLimit);
+                    planetStrenghtList.Add(planet, strength);
                 }
 
 
@@ -525,26 +522,50 @@ namespace VedAstro.Library
                 return nameOnlyList;
 
                 /*--------------FUNCTIONS----------------*/
-
-                //get a preset strength limit for planet
-                //TODO more info needed on this method, why is it not in GetPlanetShadbalaPinda
-                double getLimit(PlanetName _planet)
-                {
-                    if (_planet == PlanetName.Sun) { return 5; }
-                    else if (_planet == PlanetName.Moon) { return 6; }
-                    else if (_planet == PlanetName.Mars) { return 5; }
-                    else if (_planet == PlanetName.Mercury) { return 7; }
-                    else if (_planet == PlanetName.Jupiter) { return 6.5; }
-                    else if (_planet == PlanetName.Venus) { return 5.5; }
-                    else if (_planet == PlanetName.Saturn) { return 5; }
-                    //todo rahu and ketu added later on based on saturn and mars
-                    else if (_planet == PlanetName.Rahu) { return 5; }
-                    else if (_planet == PlanetName.Ketu) { return 5; }
-
-                    throw new Exception("Planet not specified!");
-                }
             }
+        }
 
+
+        /// <summary>
+        /// Significance of being Powerful.-Among
+        /// the several planets associated with a bhava, that,
+        /// which has the greatest Sbadbala, influences the
+        /// bhava most.
+        /// Powerful Planets.-Ravi is befd to be
+        /// powerful when hi~Shadbala Pinda is 5 or more
+        /// rupas. Chandra becomes strong when his Shadbala
+        /// Pinda is 6 or more rupas. Kuja becomes powerful
+        /// when bis Shadbala Pinda does not fall short of
+        /// 5 rupas.Budha becomes potent by having his
+        /// Sbadbala Pinda as 7 rupas; Guru, Sukra and Sani
+        /// become thoroughly powerful if their Shadbala
+        /// Pindas are 6.5, 5.5 and 5 rupas or more respectively.
+        /// </summary>
+        public static bool IsPlanetBeneficInShadbala(PlanetName planet, Time time)   
+        {
+
+            var limit = 0.0;
+            if (planet == PlanetName.Sun) { limit = 5; }
+            else if (planet == PlanetName.Moon) { limit = 6; }
+            else if (planet == PlanetName.Mars) { limit = 5; }
+            else if (planet == PlanetName.Mercury) { limit = 7; }
+            else if (planet == PlanetName.Jupiter) { limit = 6.5; }
+            else if (planet == PlanetName.Venus) { limit = 5.5; }
+            else if (planet == PlanetName.Saturn) { limit = 5; }
+            //todo rahu and ketu added later on based on saturn and mars
+            else if (planet == PlanetName.Rahu) { limit = 5; }
+            else if (planet == PlanetName.Ketu) { limit = 5; }
+
+            //divide strength by minimum limit of power (based on planet)
+            //if above limit than benefic, else return false
+            var shadbalaRupa = AstronomicalCalculator.GetPlanetShadbalaPinda(planet, time);
+            var rupa = Math.Round(shadbalaRupa.ToRupa(),1);
+            var strengthAfterLimit = rupa / limit;
+
+            //if 1 or above is positive, below 1 is below limit
+            var isBenefic = strengthAfterLimit >= 1.1;
+
+            return isBenefic;
         }
 
 

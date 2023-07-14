@@ -58,7 +58,7 @@ namespace API
                         chartSpecsOnly.TimeRange,
                         chartSpecsOnly.DaysPerPixel,
                         chartSpecsOnly.EventTagList,
-                        chartSpecsOnly.SummaryOptions);
+                        chartSpecsOnly.Options);
                     return chartSvg;
                 };
 
@@ -114,7 +114,7 @@ namespace API
                     chartSpecsOnly.TimeRange,
                     chartSpecsOnly.DaysPerPixel,
                     chartSpecsOnly.EventTagList,
-                    chartSpecsOnly.SummaryOptions);
+                    chartSpecsOnly.Options);
                 //return chartSvg;
 
                 //string to binary
@@ -169,7 +169,7 @@ namespace API
                     chartSpecsOnly.TimeRange,
                     chartSpecsOnly.DaysPerPixel,
                     chartSpecsOnly.EventTagList,
-                    chartSpecsOnly.SummaryOptions);
+                    chartSpecsOnly.Options);
                 //return chartSvg;
 
 
@@ -550,8 +550,11 @@ namespace API
 
             //hard set max width to 1000px so that no forever calculation created
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
+            
+            //todo needs to be pumped in from input
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.GetGeneralScore };
+            var summaryOptions = new ChartOptions(algorithmFuncsList);
 
-            var summaryOptions = new SummaryOptions(Algorithm.Empty, true);
 
             //minus 7% from width for side padding
             //so that chart not squeezed to side of page

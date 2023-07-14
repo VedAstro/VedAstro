@@ -280,7 +280,7 @@ namespace API
             var hse1 = allPositions[0];
 
             //store entire row as names of signs to process after into icons (begin and end)
-            int[] rowData = new int[(int)widthPx]; //represent degree as sign name 
+            HouseName[] rowData = new HouseName[(int)widthPx]; //represent degree as sign name 
             for (int xAxis = 0; xAxis < widthPx; xAxis++)
             {
                 //get back actual angle
@@ -293,7 +293,7 @@ namespace API
                     if (inHouseRange)
                     {
                         //add in house number into list
-                        rowData[xAxis] = house.GetHouseNumber();
+                        rowData[xAxis] = house.GetHouseName();
                         break; //once found stop looking
                     }
                 }
@@ -305,7 +305,7 @@ namespace API
             //create compiled list of zodiac signs like events with start and end times
             var startPosition = 0;
             var endPosition = 0;
-            int previousHouse = 0;
+            var previousHouse = HouseName.Empty;
             var houseEventList = new List<HouseEvent>();
             for (int xAxis = 0; xAxis < widthPx; xAxis++)
             {
@@ -1783,5 +1783,5 @@ namespace API
 
     }
 
-    internal record HouseEvent(int HouseNumber, int StartX, int EndX);
+    internal record HouseEvent(HouseName HouseNumber, int StartX, int EndX);
 }

@@ -194,8 +194,8 @@ else
         //3 strongest house
         //source of happiness and source of sadness
         var weakestHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(_birthTime)[11];
-        var getHouseTagsGood = AstronomicalCalculator.GetHouseTags((int)strongestHouse);
-        var getHouseTagsBad = AstronomicalCalculator.GetHouseTags((int)weakestHouse);
+        var getHouseTagsGood = AstronomicalCalculator.GetHouseTags(strongestHouse);
+        var getHouseTagsBad = AstronomicalCalculator.GetHouseTags(weakestHouse);
 
         //add prediction to list
         predictionList.Add($"Source of Good :- {getHouseTagsGood}");

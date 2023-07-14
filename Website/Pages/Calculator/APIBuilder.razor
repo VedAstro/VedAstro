@@ -32,7 +32,9 @@
             </div>
 
 
-            <PlanetAPIPanel @ref="planetApiPanel"/>
+            <PlanetAPIBuilderPanel @ref="planetApiPanel" />
+
+            <HouseAPIBuilderPanel @ref="houseApiPanel" />
 
             @*ACCOUNT STUFF*@
             <div @ref="accountTaskSelector" style="display: none;" class="form-floating">
@@ -84,42 +86,8 @@
                 }
             }
 
-            @*House Name*@
-            <div @ref="houseNameSelector" style="display: none;" class="form-floating">
-                <select @bind="SelectedHouseName" class="form-select" id="houseNameSelector" aria-label="House Name Select">
-                    <option value="" selected>Make a choice</option>
-                    <option value="All">All</option>
-                    <option value="House1">House 1</option>
-                    <option value="House2">House 2</option>
-                    <option value="House3">House 3</option>
-                    <option value="House4">House 4</option>
-                    <option value="House5">House 5</option>
-                    <option value="House6">House 6</option>
-                    <option value="House7">House 7</option>
-                    <option value="House8">House 8</option>
-                    <option value="House9">House 9</option>
-                    <option value="House10">House 10</option>
-                    <option value="House11">House 11</option>
-                    <option value="House12">House 12</option>
-                </select>
-                <label style="font-weight: 700; color: black;" for="houseNameSelector">House Name</label>
-            </div>
 
-            @*House Property*@
-            <div @ref="housePropertySelector" style="display: none;" class="form-floating">
-                <select @bind="selectedHouseProperty" class="form-select" id="housePropertySelector" aria-label="Data Property Select">
-                    <option value="" selected>Make a choice</option>
-                    <option value="All">All</option>
-                    @*make a dynamic selection of all available calls*@
-                    @foreach (var dataProperty in HouseCallList)
-                    {
-                        <option value="@dataProperty.Name">@(Format.FormatName(dataProperty.Name))</option>
-                    }
-                </select>
-                <label style="font-weight: 700; color: black;" for="housePropertySelector">House Property</label>
-            </div>
-            
-            
+
             @* -------- BOTTOM BUTTONS --------*@
             <IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
 
@@ -163,7 +131,7 @@
                     error will be in <kbd>Payload</kbd> property. If call is successful, all the data you need will be alphabetically stored in <kbd>Payload</kbd> property.
                 </TextHTML>
             </ArticleBlock>
-            
+
             <ArticleBlock Title="No Manuals Needed" IconName="emojione:clamp">
                 <TextHTML>
                     Why a simple API builder using dropdown boxes? This will make it easy for any beginner to get started.
@@ -182,15 +150,15 @@
                     The API is designed to handle this, so don't worry about breaking it. Have fun.
                 </TextHTML>
             </ArticleBlock>
-            
-@*             <ArticleBlock Title="Library (coming soon)" IconName="clarity:thin-client-line">
-                <TextHTML>
-                    There are also client libraries to help you access the API even more easily. It simply wraps HTTP calls into easy to consume functions, that your app can use.
-                    Please note, these sub-projects is under <strong>prototype</strong> stage and much remains to be done. If you've created a library already please share it with the community.
-                    <BoldLink URL="@URL.VedAstroJS">JavaScript</BoldLink>, <BoldLink URL="@URL.VedAstroNuget">.NET NuGet</BoldLink> &amp; <BoldLink URL="@URL.VedAstroSwift">Swift iOS &amp; MacOS</BoldLink>.
-                </TextHTML>
+
+            @*             <ArticleBlock Title="Library (coming soon)" IconName="clarity:thin-client-line">
+            <TextHTML>
+            There are also client libraries to help you access the API even more easily. It simply wraps HTTP calls into easy to consume functions, that your app can use.
+            Please note, these sub-projects is under <strong>prototype</strong> stage and much remains to be done. If you've created a library already please share it with the community.
+            <BoldLink URL="@URL.VedAstroJS">JavaScript</BoldLink>, <BoldLink URL="@URL.VedAstroNuget">.NET NuGet</BoldLink> &amp; <BoldLink URL="@URL.VedAstroSwift">Swift iOS &amp; MacOS</BoldLink>.
+            </TextHTML>
             </ArticleBlock>
- *@
+            *@
 
             <ArticleBlock Title="Fair Usage Policy" IconName="flat-color-icons:like">
                 <TextHTML>
@@ -233,19 +201,10 @@
 
 
 @code {
-    PlanetAPIPanel planetApiPanel;
+    PlanetAPIBuilderPanel planetApiPanel;
 
-    private string SelectedHouseName
-    {
-        get => selectedHouseName;
-        set
-        {
-            WebLogger.Data($"Selected House : {value}");
-            selectedHouseName = value;
-        }
-    }
+    HouseAPIBuilderPanel houseApiPanel;
 
-    private string selectedHouseName;
 
     private string AddPersonName { get; set; } = "Juliet";
 
@@ -283,21 +242,14 @@
     }
 
 
-    private string selectedHouseProperty;
-
     private ElementReference PostBodyElement;
-    private ElementReference houseNameSelector;
-
     private ElementReference AddPersonMaker;
     private ElementReference accountTaskSelector;
-    private ElementReference housePropertySelector;
 
     TimeInputSimple _timeInput;
     private GeoLocationInput _geoLocationInput;
     private string _finalApiGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
 
-    //done so that it is cached in memory
-    private static IEnumerable<Tools.APICallData> HouseCallList = Tools.GetPlanetApiCallList<HouseName, Time>();
 
     /// <summary>
     /// Controls the showing and hiding of other dropdowns
@@ -317,31 +269,26 @@
             {
                 case "planet"://hide house & show planet
                     planetApiPanel.Show();
-                    _jsRuntime.Hide(houseNameSelector);
-                    _jsRuntime.Hide(housePropertySelector);
+                    houseApiPanel.Hide();
                     _jsRuntime.Hide(accountTaskSelector);
                     break;
                 case "house"://show house & hide planet
-                    _jsRuntime.Show(houseNameSelector);
-                    _jsRuntime.Show(housePropertySelector);
+                    houseApiPanel.Show();
                     _jsRuntime.Hide(accountTaskSelector);
                     planetApiPanel.Hide();
                     break;
                 case "skychart"://show house & hide planet
-                    _jsRuntime.Hide(houseNameSelector);
-                    _jsRuntime.Hide(housePropertySelector);
+                    houseApiPanel.Hide();
                     _jsRuntime.Hide(accountTaskSelector);
                     planetApiPanel.Hide();
                     break;
                 case "skychartgif"://show house & hide planet
-                    _jsRuntime.Hide(houseNameSelector);
-                    _jsRuntime.Hide(housePropertySelector);
+                    houseApiPanel.Hide();
                     _jsRuntime.Hide(accountTaskSelector);
                     planetApiPanel.Hide();
                     break;
                 case "account"://show house & hide planet
-                    _jsRuntime.Hide(houseNameSelector);
-                    _jsRuntime.Hide(housePropertySelector);
+                    houseApiPanel.Hide();
                     _jsRuntime.Show(accountTaskSelector);
                     planetApiPanel.Hide();
                     break;
@@ -496,9 +443,9 @@
         switch (SelectedCategory.ToLower())
         {
             case "planet":
-                return planetApiPanel.SelectedPlanetName;
+                return planetApiPanel.SelectedName;
             case "house":
-                return SelectedHouseName;
+                return houseApiPanel.SelectedName;
         }
 
         //if not specified than not needed, return empty
@@ -512,7 +459,7 @@
             case "planet":
                 return planetApiPanel.SelectedProperty;
             case "house":
-                return selectedHouseProperty;
+                return houseApiPanel.SelectedProperty;
         }
 
         //if not specified than not needed, return empty

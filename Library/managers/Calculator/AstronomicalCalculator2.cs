@@ -244,6 +244,12 @@ namespace VedAstro.Library
             //UNDERLYING FUNCTION
             PlanetConstellation _getPlanetConstellation()
             {
+                //if planet longitude is negative means, it before aries at 0, starts back at 360 pieces
+                if (planetLongitude.TotalDegrees < 0)
+                {
+                    planetLongitude = Angle.FromDegrees(360.0 + planetLongitude.TotalDegrees); //use plus because number is already negative
+                }
+
                 //get planet's longitude in minutes
                 var planetLongitudeInMinutes = planetLongitude.TotalMinutes;
 

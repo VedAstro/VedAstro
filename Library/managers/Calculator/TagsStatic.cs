@@ -11,22 +11,22 @@ namespace VedAstro.Library
         /// <summary>
         /// keywords or tag related to a house
         /// </summary>
-        public static string GetHouseTags(int house)
+        public static string GetHouseTags(HouseName house)
         {
             switch (house)
             {
-                case 1: return "beginning of life, childhood, health, environment, personality, the physical body and character";
-                case 2: return "family, face, right eye, food, wealth, literary gift, and manner and source of death, self-acquisition and optimism";
-                case 3: return "brothers and sisters, intelligence, cousins and other immediate relations";
-                case 4: return "peace of mind, home life, mother, conveyances, house property, landed and ancestral properties, education and neck and shoulders";
-                case 5: return "children, grandfather, intelligence, emotions and fame";
-                case 6: return "debts, diseases, enemies, miseries, sorrows, illness and disappointments";
-                case 7: return "wife, husband, marriage, urinary organs, marital happiness, sexual diseases, business partner, diplomacy, talent, energies and general happiness";
-                case 8: return "longevity, legacies and gifts and unearned wealth, cause of death, disgrace, degradation and details pertaining to death";
-                case 9: return "father, righteousness, preceptor, grandchildren, intuition, religion, sympathy, fame, charities, leadership, journeys and communications with spirits";
-                case 10: return "occupation, profession, temporal honours, foreign travels, self-respect, knowledge and dignity and means of livelihood";
-                case 11: return "means of gains, elder brother and freedom from misery";
-                case 12: return "losses, expenditure, waste, extravagance, sympathy, divine knowledge, Moksha and the state after death";
+                case HouseName.House1: return "beginning of life, childhood, health, environment, personality, the physical body and character";
+                case HouseName.House2: return "family, face, right eye, food, wealth, literary gift, and manner and source of death, self-acquisition and optimism";
+                case HouseName.House3: return "brothers and sisters, intelligence, cousins and other immediate relations";
+                case HouseName.House4: return "peace of mind, home life, mother, conveyances, house property, landed and ancestral properties, education and neck and shoulders";
+                case HouseName.House5: return "children, grandfather, intelligence, emotions and fame";
+                case HouseName.House6: return "debts, diseases, enemies, miseries, sorrows, illness and disappointments";
+                case HouseName.House7: return "wife, husband, marriage, urinary organs, marital happiness, sexual diseases, business partner, diplomacy, talent, energies and general happiness";
+                case HouseName.House8: return "longevity, legacies and gifts and unearned wealth, cause of death, disgrace, degradation and details pertaining to death";
+                case HouseName.House9: return "father, righteousness, preceptor, grandchildren, intuition, religion, sympathy, fame, charities, leadership, journeys and communications with spirits";
+                case HouseName.House10: return "occupation, profession, temporal honours, foreign travels, self-respect, knowledge and dignity and means of livelihood";
+                case HouseName.House11: return "means of gains, elder brother and freedom from misery";
+                case HouseName.House12: return "losses, expenditure, waste, extravagance, sympathy, divine knowledge, Moksha and the state after death";
                 default: throw new Exception("House details not found!");
             }
         }
@@ -101,7 +101,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Source: Hindu Predictive Astrology pg.17
         /// </summary>
-        public static string GetHouseType(int houseNumber)
+        public static string GetHouseType(HouseName houseNumber)
         {
             //Quadrants (kendras) are l, 4, 7 and 10.
             //Trines(Trikonas) are 5 and 9.
@@ -114,15 +114,15 @@ namespace VedAstro.Library
             switch (houseNumber)
             {
                 //Quadrants (kendras) are l, 4, 7 and 10.
-                case 1:
-                case 4:
-                case 7:
-                case 10:
+                case HouseName.House1:
+                case HouseName.House4:
+                case HouseName.House7:
+                case HouseName.House10:
                     returnString += @"Quadrants (kendras)";
                     break;
                 //Trines(Trikonas) are 5 and 9.
-                case 5:
-                case 9:
+                case HouseName.House5:
+                case HouseName.House9:
                     returnString += @"Trines (Trikonas)";
                     break;
             }
@@ -130,17 +130,17 @@ namespace VedAstro.Library
             switch (houseNumber)
             {
                 //Cadent (Panaparas) are 2, 5, 8 and 11
-                case 2:
-                case 5:
-                case 8:
-                case 11:
+                case HouseName.House2:
+                case HouseName.House5:
+                case HouseName.House8:
+                case HouseName.House11:
                     returnString += @"Cadent (Panaparas)";
                     break;
                 //Succeedent (Apoklimas) are 3, 6, 9 and 12 (9th being a trikona must be omitted)
-                case 3:
-                case 6:
-                case 9:
-                case 12:
+                case HouseName.House3:
+                case HouseName.House6:
+                case HouseName.House9:
+                case HouseName.House12:
                     returnString += @"Succeedent (Apoklimas)";
                     break;
             }
@@ -148,10 +148,10 @@ namespace VedAstro.Library
             switch (houseNumber)
             {
                 //Upachayas are 3, 6, 10 and 11.
-                case 3:
-                case 6:
-                case 10:
-                case 11:
+                case HouseName.House3:
+                case HouseName.House6:
+                case HouseName.House10:
+                case HouseName.House11:
                     returnString += @"Upachayas";
                     break;
 

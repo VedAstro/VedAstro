@@ -1503,8 +1503,8 @@ namespace VedAstro.Library
             //get birth moon sign & lagna, details needed for prediction
             var maleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, male.BirthTime).GetSignName();
             var femaleSign = AstronomicalCalculator.GetPlanetRasiSign(PlanetName.Moon, female.BirthTime).GetSignName();
-            var maleLagna = AstronomicalCalculator.GetHouseSignName(1, male.BirthTime);
-            var femaleLagna = AstronomicalCalculator.GetHouseSignName(1, female.BirthTime);
+            var maleLagna = AstronomicalCalculator.GetHouseSignName(HouseName.House1, male.BirthTime);
+            var femaleLagna = AstronomicalCalculator.GetHouseSignName(HouseName.House1, female.BirthTime);
 
             //If the Janma Rasi (Moon sign) of the wife (or husband) happens to be the Lagna of the husband (or wife)
             var femaleMoonSignIsMaleLagna = femaleSign == maleLagna;
@@ -1582,8 +1582,8 @@ namespace VedAstro.Library
                 //get planets house details
                 var planetHouse = AstronomicalCalculator.GetHousePlanetIsIn(birthTime, planet);
                 var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planet, birthTime).GetSignName();
-                var planetIn7Or8 = planetHouse == 7 || planetHouse == 8;
-                var planetIn2Or4Or12 = planetHouse == 2 || planetHouse == 4 || planetHouse == 12;
+                var planetIn7Or8 = planetHouse == HouseName.House7 || planetHouse == HouseName.House8;
+                var planetIn2Or4Or12 = planetHouse == HouseName.House2 || planetHouse == HouseName.House4 || planetHouse == HouseName.House12;
 
                 //set what the input planet is
                 var planetIsSaturnRahuKetu = planet == PlanetName.Saturn || planet == PlanetName.Rahu || planet == PlanetName.Ketu;
@@ -1599,26 +1599,26 @@ namespace VedAstro.Library
                 //2.1   Mars in the 2nd can be said to be bad provided such
                 //      2nd house is any other than Gemini and Virgo;
                 var geminiOrVirgo = planetSign == ZodiacName.Gemini || planetSign == ZodiacName.Virgo;
-                if (planet == PlanetName.Mars && planetHouse == 2 && geminiOrVirgo) { return 0; }
+                if (planet == PlanetName.Mars && planetHouse == HouseName.House2 && geminiOrVirgo) { return 0; }
 
                 //2.2   in the 12th the dosha is produced when such 12th house is
                 //      any other than Taurus and Libra
                 var taurusOrLibra = planetSign == ZodiacName.Taurus || planetSign == ZodiacName.Libra;
-                if (planet == PlanetName.Mars && planetHouse == 12 && taurusOrLibra) { return 0; }
+                if (planet == PlanetName.Mars && planetHouse == HouseName.House12 && taurusOrLibra) { return 0; }
 
                 //2.3   in the 4th house Mars causes dosha provided the house falls in
                 //      any sign other than Aries and Scorpio;
                 var ariesOrScorpio = planetSign == ZodiacName.Aries || planetSign == ZodiacName.Scorpio;
-                if (planet == PlanetName.Mars && planetHouse == 4 && ariesOrScorpio) { return 0; }
+                if (planet == PlanetName.Mars && planetHouse == HouseName.House4 && ariesOrScorpio) { return 0; }
 
                 //2.4   when the 7th is other than Capricorn and Cancer, the dosha is given rise to;
                 var cancerOrCapricorn = planetSign == ZodiacName.Capricornus || planetSign == ZodiacName.Cancer;
-                if (planet == PlanetName.Mars && planetHouse == 7 && cancerOrCapricorn) { return 0; }
+                if (planet == PlanetName.Mars && planetHouse == HouseName.House7 && cancerOrCapricorn) { return 0; }
 
                 //2.5   and Mars gives bad effects in the 8th, provided the 8th is any other than
                 //      Sagittarius and Pisces.
                 var sagittariusOrPisces = planetSign == ZodiacName.Sagittarius || planetSign == ZodiacName.Pisces;
-                if (planet == PlanetName.Mars && planetHouse == 8 && sagittariusOrPisces) { return 0; }
+                if (planet == PlanetName.Mars && planetHouse == HouseName.House8 && sagittariusOrPisces) { return 0; }
 
                 //2.6   In Aquarius and Leo, Mars produces no dosha whatsoever.
                 var aquariusOrLeo = planetSign == ZodiacName.Aquarius || planetSign == ZodiacName.Leo;
@@ -1630,8 +1630,8 @@ namespace VedAstro.Library
                 if (marsJupterConjunct && marsMoonConjunct) { return 0; }
 
                 //2.8   or by the presence of Jupiter or Venus in the ascendant.
-                var jupiterInLagna = AstronomicalCalculator.IsPlanetInHouse(birthTime, PlanetName.Jupiter, 1);
-                var venusInLagna = AstronomicalCalculator.IsPlanetInHouse(birthTime, PlanetName.Venus, 1);
+                var jupiterInLagna = AstronomicalCalculator.IsPlanetInHouse(birthTime, PlanetName.Jupiter, HouseName.House1);
+                var venusInLagna = AstronomicalCalculator.IsPlanetInHouse(birthTime, PlanetName.Venus, HouseName.House1);
                 if (jupiterInLagna || venusInLagna) { return 0; }
 
 

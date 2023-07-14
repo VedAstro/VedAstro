@@ -14,7 +14,7 @@ namespace VedAstro.Library
         private Angle _middleLongitude;
         private Angle _beginLongitude;
         private Angle _endLongitude;
-        private int _houseNumber;
+        private HouseName _houseNumber;
 
 
 
@@ -42,7 +42,7 @@ namespace VedAstro.Library
 
 
         //CTOR
-        public House(int houseNumber, Angle beginLongitude, Angle middleLongitude, Angle endLongitude)
+        public House(HouseName houseNumber, Angle beginLongitude, Angle middleLongitude, Angle endLongitude)
         {
             _middleLongitude = middleLongitude;
             _beginLongitude = beginLongitude;
@@ -52,7 +52,7 @@ namespace VedAstro.Library
 
 
         //PUBLIC METHODS
-        public int GetHouseNumber() => _houseNumber;
+        public HouseName GetHouseName() => _houseNumber;
         public Angle GetMiddleLongitude() => _middleLongitude;
 
         public bool IsLongitudeInHouseRange(Angle longitude)

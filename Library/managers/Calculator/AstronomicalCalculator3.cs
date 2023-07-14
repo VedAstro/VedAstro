@@ -1,4 +1,4 @@
-﻿
+
 //< !--Mona Lisa by Leonardo da Vinci
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -386,7 +386,7 @@ namespace VedAstro.Library
             foreach (var house in House.AllHouses)
             {
                 //get sign of house
-                var houseSign = AstronomicalCalculator.GetHouseSignName((int)house, time);
+                var houseSign = AstronomicalCalculator.GetHouseSignName(house, time);
 
                 //add house to list if sign is aspected by planet
                 if (signAspecting.Contains(houseSign)) { housesAspected.Add(house); }

@@ -729,7 +729,7 @@ namespace VedAstro.Library
 
             //2. Aries, Taurus. Cancer and Virgo are auspicious
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Aries
@@ -742,7 +742,7 @@ namespace VedAstro.Library
 
 
             //3. The 8th house must be unoccupied
-            var planets8thHouse = AstronomicalCalculator.GetPlanetsInHouse(8, time);
+            var planets8thHouse = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House8, time);
 
             //if got planets in 8th house, event not occuring
             if (planets8thHouse.Any()) { return CalculatorResult.NotOccuring(); }
@@ -903,7 +903,7 @@ namespace VedAstro.Library
             var houseVenusIsIn = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Venus);
 
             //if venus is in 6th house
-            if (houseVenusIsIn == 6)
+            if (houseVenusIsIn == HouseName.House6)
             {
                 //event is occuring
                 return CalculatorResult.IsOccuring();
@@ -930,7 +930,7 @@ namespace VedAstro.Library
             var houseMarsIsIn = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Mars);
 
             //if mars is in 8th house
-            if (houseMarsIsIn == 8)
+            if (houseMarsIsIn == HouseName.House8)
             {
                 //event is occuring
                 return CalculatorResult.IsOccuring();
@@ -968,7 +968,7 @@ namespace VedAstro.Library
             var evilPlanetFoundInHouse2 = false;
 
             //get planets in 12th house
-            List<PlanetName> planetsInHouse12 = AstronomicalCalculator.GetPlanetsInHouse(12, time);
+            List<PlanetName> planetsInHouse12 = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House12, time);
 
             //check if evil planets are found in house 12
             foreach (var planet in listOfEvilPlanets)
@@ -988,7 +988,7 @@ namespace VedAstro.Library
             if (evilPlanetFoundInHouse12)
             {
                 //get planets in 2nd house
-                List<PlanetName> planetsInHouse2 = AstronomicalCalculator.GetPlanetsInHouse(2, time);
+                List<PlanetName> planetsInHouse2 = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House2, time);
 
                 //check if evil planets are found in house 2
                 foreach (var planet in listOfEvilPlanets)
@@ -1030,7 +1030,7 @@ namespace VedAstro.Library
             var houseMoonIsIn = AstronomicalCalculator.GetHousePlanetIsIn(time, PlanetName.Moon);
 
             //if house moon is in is 6, 8 or 12
-            if (houseMoonIsIn == 6 || houseMoonIsIn == 8 || houseMoonIsIn == 12)
+            if (houseMoonIsIn == HouseName.House6 || houseMoonIsIn == HouseName.House8 || houseMoonIsIn == HouseName.House12)
             {
                 //event is occuring
                 return CalculatorResult.IsOccuring();
@@ -1213,7 +1213,7 @@ namespace VedAstro.Library
                     AstronomicalCalculator.GetSignsPlanetIsAspecting(navamsaLagnaLord, time);
 
                 //3.0 get sign of lagna
-                var lagnaSign = AstronomicalCalculator.GetHouseSignName(1, time);
+                var lagnaSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
                 //4.0 check if lagna is in one of the signs navamsa lagna lord is aspecting
                 if (signsNavamsaLagnaLordIsAspecting.Contains(lagnaSign))
@@ -1241,7 +1241,7 @@ namespace VedAstro.Library
                     AstronomicalCalculator.GetSignsPlanetIsAspecting(navamsa7thLord, time);
 
                 //3.0 get sign of 7th
-                var _7thSign = AstronomicalCalculator.GetHouseSignName(7, time);
+                var _7thSign = AstronomicalCalculator.GetHouseSignName(HouseName.House7, time);
 
                 //4.0 check if 7th is in one of the signs navamsa 7th lord is aspecting
                 if (signsNavamsa7thLordIsAspecting.Contains(_7thSign))
@@ -1323,7 +1323,7 @@ namespace VedAstro.Library
                 var ordinarySignOfNavamsaLagnaLord = AstronomicalCalculator.GetPlanetRasiSign(navamsaLagnaLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 1
-                var house1Sign = AstronomicalCalculator.GetHouseSignName(1, time);
+                var house1Sign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
                 //check if house 1 sign is same sign as the one navamsa lagna lord is in
                 if (house1Sign == ordinarySignOfNavamsaLagnaLord)
@@ -1354,7 +1354,7 @@ namespace VedAstro.Library
                 var ordinarySignOfNavamsa7thLord = AstronomicalCalculator.GetPlanetRasiSign(navamsa7thLord, person.BirthTime).GetSignName();
 
                 //3.0 Get sign of house 7
-                var house7Sign = AstronomicalCalculator.GetHouseSignName(7, time);
+                var house7Sign = AstronomicalCalculator.GetHouseSignName(HouseName.House7, time);
 
                 //check if house 7 sign is same sign as the one navamsa 7th lord is in
                 if (house7Sign == ordinarySignOfNavamsa7thLord)
@@ -1582,7 +1582,7 @@ namespace VedAstro.Library
             //other adverse influences
 
             //get planets in 1st house (ascendant)
-            var planetsInLagna = AstronomicalCalculator.GetPlanetsInHouse(1, time);
+            var planetsInLagna = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House1, time);
 
             //list of good planets to look for
             var goodList = new List<PlanetName>() { PlanetName.Venus, PlanetName.Mercury, PlanetName.Jupiter };
@@ -1604,7 +1604,7 @@ namespace VedAstro.Library
             // antidote for other evils obtaining in the horoscope
 
             //get planets in 11st house 
-            var planetsIn11th = AstronomicalCalculator.GetPlanetsInHouse(11, time);
+            var planetsIn11th = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House11, time);
 
             //list of good planets to look for
             var goodList = new List<PlanetName>() { PlanetName.Moon, PlanetName.Sun };
@@ -1664,7 +1664,7 @@ namespace VedAstro.Library
                     var planetHouse = AstronomicalCalculator.GetHousePlanetIsIn(time, malefic);
 
                     //if not in 3, 6 or 11, end here as not occuring
-                    if (!(planetHouse == 3 || planetHouse == 6 || planetHouse == 11)) { return false; }
+                    if (!(planetHouse == HouseName.House3 || planetHouse == HouseName.House6 || planetHouse == HouseName.House11)) { return false; }
                 }
 
                 //if control reaches here, than it is occuring
@@ -2827,7 +2827,7 @@ namespace VedAstro.Library
 
                 //2. Jupiter is in Lagna
                 //get planets in lagna 
-                var currentPlanetsInLagna = AstronomicalCalculator.GetPlanetsInHouse(1, time);
+                var currentPlanetsInLagna = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House1, time);
 
                 //check if jupiter is in lagna
                 var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Jupiter);
@@ -2864,7 +2864,7 @@ namespace VedAstro.Library
 
                 //2. Correct rising sign
                 //get rising sign
-                var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+                var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
                 //check rising sign
                 var rightSign = risingSign == ZodiacName.Sagittarius ||
@@ -2907,7 +2907,7 @@ namespace VedAstro.Library
 
             //2. Planet is in Lagna
             //get planets in lagna 
-            var currentPlanetsInLagna = AstronomicalCalculator.GetPlanetsInHouse(1, time);
+            var currentPlanetsInLagna = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House1, time);
 
             //check if correct planet is in lagna
             var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Venus);
@@ -2947,7 +2947,7 @@ namespace VedAstro.Library
 
             //2. Planet is in Lagna
             //get planets in lagna 
-            var currentPlanetsInLagna = AstronomicalCalculator.GetPlanetsInHouse(1, time);
+            var currentPlanetsInLagna = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House1, time);
 
             //check if correct planet is in lagna
             var rightPlanet = currentPlanetsInLagna.Contains(PlanetName.Mars);
@@ -2976,7 +2976,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Taurus ||
@@ -3006,7 +3006,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Virgo;
@@ -3032,7 +3032,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Aries;
@@ -3058,7 +3058,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Taurus;
@@ -3084,7 +3084,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Cancer;
@@ -3110,7 +3110,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Libra;
@@ -3136,7 +3136,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Scorpio;
@@ -3162,7 +3162,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Sagittarius;
@@ -3188,7 +3188,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Capricornus;
@@ -3214,7 +3214,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Aquarius;
@@ -3240,7 +3240,7 @@ namespace VedAstro.Library
 
             //2. Correct rising sign
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //check rising sign
             var rightSign = risingSign == ZodiacName.Pisces;
@@ -3300,7 +3300,7 @@ namespace VedAstro.Library
             //While beginning all agricultural operations, see that the 8th house is unoccupied
 
             //get all planets in 8th house
-            var planets = AstronomicalCalculator.GetPlanetsInHouse(8, time);
+            var planets = AstronomicalCalculator.GetPlanetsInHouse(HouseName.House8, time);
 
             //if any planets in 8th house, return occuring
             if (planets.Any())
@@ -3373,7 +3373,7 @@ namespace VedAstro.Library
             //Leo: Not good for any planting, especially bad for underground plants such as potato.
 
             //get rising sign
-            var risingSign = AstronomicalCalculator.GetHouseSignName(1, time);
+            var risingSign = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time);
 
             //if rising sign is Gemini or Leo, then event is occuring
             if (risingSign == ZodiacName.Gemini || risingSign == ZodiacName.Leo)
@@ -4208,13 +4208,13 @@ namespace VedAstro.Library
 
             //friday & lagna is taurus or libra
             var isFriday = AstronomicalCalculator.GetDayOfWeek(time) == DayOfWeek.Friday;
-            var lagnaIsTaurus = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Taurus;
-            var lagnaIsLibra = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Libra;
+            var lagnaIsTaurus = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time) == ZodiacName.Taurus;
+            var lagnaIsLibra = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time) == ZodiacName.Libra;
             var isFridayLagnaTaurusLibra = isFriday && (lagnaIsLibra || lagnaIsTaurus);
 
             //monday & lagna is cancer
             var isMonday = AstronomicalCalculator.GetDayOfWeek(time) == DayOfWeek.Monday;
-            var lagnaIsCancer = AstronomicalCalculator.GetHouseSignName(1, time) == ZodiacName.Cancer;
+            var lagnaIsCancer = AstronomicalCalculator.GetHouseSignName(HouseName.House1, time) == ZodiacName.Cancer;
             var isMondayLagnaCancer = isMonday && lagnaIsCancer;
 
             //if either is true
@@ -4232,7 +4232,7 @@ namespace VedAstro.Library
             // The Lagna must be occupied by a benefic and the Moon should be in an aquatic sign.
 
             //benefic in lagna
-            var beneficsInLagna = AstronomicalCalculator.IsBeneficPlanetInHouse(1, time);
+            var beneficsInLagna = AstronomicalCalculator.IsBeneficPlanetInHouse(HouseName.House1, time);
 
             //monday in aquatic sign
             var moonSign = AstronomicalCalculator.GetMoonSignName(time);

@@ -71,13 +71,13 @@
 
         foreach (var house in House.AllHouses)
         {
-            returnList.Add(getData((int)house));
+            returnList.Add(getData(house));
         }
 
         return returnList;
 
 
-        object getData(int houseNumber)
+        object getData(HouseName houseNumber)
         {
             var lordOfHouse = AstronomicalCalculator.GetLordOfHouse((HouseName)houseNumber, _time);
 
@@ -186,7 +186,7 @@
 
             var _planetInfo = AstronomicalCalculator.GetPlanetTags(planetName);
 
-            var lagna = AstronomicalCalculator.GetHouseSignName(1, _time);
+            var lagna = AstronomicalCalculator.GetHouseSignName(HouseName.House1, _time);
             var _isPlanetBeneficToLagna = AstronomicalCalculator.IsPlanetBeneficToLagna(planetName, lagna);
             var _isPlanetMaleficToLagna = AstronomicalCalculator.IsPlanetMaleficToLagna(planetName, lagna);
             var _isPlanetYogakarakaToLagna = AstronomicalCalculator.IsPlanetYogakarakaToLagna(planetName, lagna);

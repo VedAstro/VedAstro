@@ -5316,17 +5316,17 @@ namespace VedAstro.Library
 
             //condition 1
             //is bukti lord in 6th house at birth
-            var bhuktiLordIn6th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, buhktiLord, 6);
+            var bhuktiLordIn6th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, buhktiLord, HouseName.House6);
             //is dasa lord in 8th house at birth
-            var dasaLordIn8th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, dasaLord, 8);
+            var dasaLordIn8th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, dasaLord, HouseName.House8);
             //check if both planets are in bad houses at the same time
             var buhktiDasaIn6And8 = bhuktiLordIn6th && dasaLordIn8th;
 
             //condition 2
             //is bukti lord in 12th house at birth
-            var bhuktiLordIn12th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, buhktiLord, 12);
+            var bhuktiLordIn12th = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, buhktiLord, HouseName.House12);
             //is dasa lord in 2nd house at birth
-            var dasaLordIn2nd = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, dasaLord, 2);
+            var dasaLordIn2nd = AstronomicalCalculator.IsPlanetInHouse(person.BirthTime, dasaLord, HouseName.House2);
             //check if both planets are in bad houses at the same time
             var buhktiDasaIn12And2 = bhuktiLordIn12th && dasaLordIn2nd;
 

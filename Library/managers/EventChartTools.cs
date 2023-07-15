@@ -184,7 +184,7 @@ namespace VedAstro.Library
 
                 //add to birth time to get final time range
                 start = birthTimeClient.AddYears(startAge);
-                end = birthTimeClient.AddYears(35);
+                end = birthTimeClient.AddYears(endAge);
                 return new TimeRange(start, end);
 
             }

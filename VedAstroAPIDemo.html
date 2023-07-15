@@ -17,7 +17,7 @@
     function RefreshDataFromAPI() {
 
         //get data from API
-        fetch('https://api.vedastro.org/Location/Singapore/Time/00:00/15/07/2023/+08:00/House/House1')
+        fetch('https://api.vedastro.org/Location/London,UK/Time/00:00/15/07/2023/+00:00/House/House1')
             .then(response => response.json())
 
             //display received astro data in html table
@@ -47,7 +47,7 @@
                     cellKey.textContent = key;
                     row.appendChild(cellKey);
                     var cellValue = document.createElement('td');
-                    cellValue.textContent = data.Payload[key];
+                    cellValue.textContent = data.Payload[key];// name of the data point
                     row.appendChild(cellValue);
                     tbody.appendChild(row);
                 }

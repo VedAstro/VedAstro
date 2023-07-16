@@ -15,9 +15,9 @@
                 <div class="d-flex flex-wrap gap-1">
                     @foreach (var eventNameKeyword in SelectedHighlightDictionary.Keys)
                     {
-                        <div @onclick="@(()=>OnClickHighlightKeyword(eventNameKeyword))" style="width: @GR.W97px; margin-left:10px;" class="form-check">
-                            <input class="form-check-input" type="checkbox" id="@eventNameKeyword">
-                            <label class="form-check-label" for="@eventNameKeyword">
+                        <div style="width: @GR.W97px; margin-left:10px;" class="form-check">
+                            <input @onclick="@(()=>OnClickHighlightKeyword(eventNameKeyword))" style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="@eventNameKeyword">
+                            <label class="form-check-label"  for="@eventNameKeyword">
                                 @eventNameKeyword
                             </label>
                         </div>
@@ -348,6 +348,8 @@
             _jsRuntime.InvokeVoidAsync(JS.unhighlightByEventName, keyword);
         }
     }
+
+
 
 }
 

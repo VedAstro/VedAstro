@@ -167,14 +167,15 @@ else
 
     /// <summary>
     /// checks x element for matching keyword
+    /// search word in global variable
     /// note: for speed purposes we stick with xelement
     /// </summary>
-    private bool IsFound(XElement x)
+    private bool IsFound(XElement inputElement)
     {
         //convert the event data to string form
         //note: all 1st level children are converted
         var evenDataXmlString = "";
-        foreach (var xElement in x.Elements())
+        foreach (var xElement in inputElement.Elements())
         {
             //only name make format it first
             var text = "";

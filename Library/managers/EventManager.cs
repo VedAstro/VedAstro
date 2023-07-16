@@ -19,13 +19,17 @@ namespace VedAstro.Library
         /// Placed here to reduce overhead when being accessed by different methods in this class
         /// </summary>
         private static List<Event> EventList { get; set; } = new List<Event>();
-        private static List<EventData> EventDataList { get; set; }
+        
+        /// <summary>
+        /// cached copy of EventDataList.xml parsed
+        /// </summary>
+        public static List<EventData> EventDataList { get; set; }
 
         //we use direct storage URL for fast access & solid
         private const string AzureStorage = "vedastrowebsitestorage.z5.web.core.windows.net";
 
         //used in muhurtha, dasa, etc... events
-        private const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
+        public const string UrlEventDataListXml = $"https://{AzureStorage}/data/EventDataList.xml";
 
 
 

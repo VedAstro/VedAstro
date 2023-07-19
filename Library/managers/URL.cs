@@ -192,4 +192,5 @@ public class URL
     public const string RamanujanQuoteWiki = "https://en.wikipedia.org/wiki/Srinivasa_Ramanujan#Personality_and_spiritual_life";
     public const string StPaulWiki = "https://en.wikipedia.org/wiki/Paul_the_Apostle";
     public const string FreedmanYoutubePencil = "https://youtu.be/67tHtpac5ws";
+    public const string APIGuideNextStep = "https://youtu.be/y110RAgIorY?t=127";
 }

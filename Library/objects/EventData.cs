@@ -37,7 +37,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets human readable Event Name, removes camel case
         /// </summary>
-        public string FormattedName => Format.FormatName(this);
+        public string FormattedName => Format.FormatName(this.Name);
 
         public EventNature Nature { get; private set; }
         

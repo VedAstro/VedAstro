@@ -458,6 +458,16 @@ namespace VedAstro.Library
             //note : done so that any updates to that live file will be instantly reflected in API results
             var eventDataListXml = await Tools.GetXmlFileHttp(httpUrl);
 
+            var finalInstance = await ConvertXmlListFileToInstanceList<T>(eventDataListXml);
+
+            return finalInstance;
+        }
+
+        /// <summary>
+        /// Given an XML file will auto convert it to an instance using ToXml() method
+        /// </summary>
+        public static async Task<List<T>> ConvertXmlListFileToInstanceList<T>(List<XElement> eventDataListXml) where T : IToXml, new()
+        {
             //parse each raw event data in list
             var eventDataList = new List<T>();
             foreach (var eventDataXml in eventDataListXml)

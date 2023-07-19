@@ -81,25 +81,25 @@ namespace VedAstro.Library
         {
 
             //Convert string to PlanetName type
-            switch (name)
+            switch (name.ToLower())
             {
-                case "Sun":
+                case "sun":
                     return Sun;
-                case "Moon":
+                case "moon":
                     return Moon;
-                case "Mars":
+                case "mars":
                     return Mars;
-                case "Mercury":
+                case "mercury":
                     return Mercury;
-                case "Jupiter":
+                case "jupiter":
                     return Jupiter;
-                case "Venus":
+                case "venus":
                     return Venus;
-                case "Saturn":
+                case "saturn":
                     return Saturn;
-                case "Ketu":
+                case "ketu":
                     return Ketu;
-                case "Rahu":
+                case "rahu":
                     return Rahu;
             }
 

@@ -30,12 +30,13 @@ namespace VedAstro.Library
         Astronomical,
         BuyingSelling,
         Building,
+        Education,
         Gochara,
         Horoscope,
         Tarabala,
         Chandrabala,
         Travel,
-        RisingSign, //used in birth time finder
+        RisingSign, //used in birth time finder todo might not be needed
         GocharaSummary,
 
         //DASA STUFF

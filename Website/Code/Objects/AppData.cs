@@ -48,6 +48,7 @@ namespace Website
         public static Stream? HoroscopeDataListStream { get; set; }
 
         /// <summary>
+        /// Remember to load data first before 
         /// Place where global event data list is stored for quick access
         /// loaded in main layout
         /// </summary>

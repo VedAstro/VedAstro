@@ -1,4 +1,4 @@
-﻿
+
 
 //█▀▀ █▀█ █▀▀ ▄▀█ ▀█▀   █▀█ █▀█ █▀█ █▀▀ █▀█ ▄▀█ █▀▄▀█ █▀▄▀█ █▀▀ █▀█ █▀   █▀▄ █▀█ █▄░█ ▀ ▀█▀   ░░█ █░█ █▀ ▀█▀
 //█▄█ █▀▄ ██▄ █▀█ ░█░   █▀▀ █▀▄ █▄█ █▄█ █▀▄ █▀█ █░▀░█ █░▀░█ ██▄ █▀▄ ▄█   █▄▀ █▄█ █░▀█ ░ ░█░   █▄█ █▄█ ▄█ ░█░
@@ -1740,11 +1740,275 @@ namespace VedAstro.Library
             //check if there is any planet obstructing this transit prediction via Vedhasthana
             var obstructionNotFound = !AstronomicalCalculator.IsGocharaObstructed(planet, gocharaHouse, birthTime, time);
 
+            //get ashtakvarga bindu points to predict good/bad nature of gochara (percentage possible)
+            //var binduPoints = AstronomicalCalculator.GetBhinnashtakavargaChart(birthTime);
+
             //occuring if all conditions met
             var occuring = planetGocharaMatch && obstructionNotFound;
 
             return occuring;
         }
+
+        /// <summary>
+        /// Bhinnashtakavarga or individual Ashtakvarga charts
+        /// Made on cold winter morning in July
+        /// </summary>
+        public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> GetBhinnashtakavargaChart(Time birthTime)
+        {
+
+            var minorPlanetList = PlanetName.All7Planets.Select(e => e.ToString()).ToList();
+            minorPlanetList.Add("ascendant"); //add special case Ascendant for Ashtakvarga calculation
+            var mainBhinaAstaChart = new Dictionary<PlanetName, Dictionary<ZodiacName, int>>();
+
+            //make the charts compiled from the position of 7 planets
+            foreach (var mainPlanet in PlanetName.All7Planets)
+            {
+                //load the benefic places for all the minor planets
+                var allPlanetBeneficList = new Dictionary<string, int[]>();
+                foreach (var minorPlanet in minorPlanetList)
+                {
+                    var mainPlanetBeneficList = GetPlanetBeneficHouseAshtakvarga(mainPlanet.ToString(), minorPlanet);
+                    allPlanetBeneficList.Add(minorPlanet, mainPlanetBeneficList);
+                }
+
+                //Bhinnashtakavarga chart in array form
+                var mainPlanetBhinaAstaChart = ZodiacNameExtensions.GetDictionary(0);
+                foreach (var minorPlanet in minorPlanetList)
+                {
+                    //parse minor planet type, if ascendant get sign of 1st house
+                    //start sign can be from planet or 1st house (Ascendant)
+                    var isAscendant = minorPlanet == "ascendant";
+                    var minorPlanetStartSign = isAscendant
+                                                ? GetHouseSignName(HouseName.House1, birthTime)
+                                                : GetPlanetRasiSign(PlanetName.Parse(minorPlanet), birthTime).GetSignName();
+
+                    //add the points together, add 1 for a benefic sign
+                    foreach (var houseCount in allPlanetBeneficList[minorPlanet])
+                    {
+                        var signXFromPlanet = GetSignCountedFromInputSign(minorPlanetStartSign, houseCount);
+                        mainPlanetBhinaAstaChart[signXFromPlanet] += 1; //add 1 to existing score from previous
+                    }
+                }
+
+                //add the compiled main planet's chart to main list
+                mainBhinaAstaChart.Add(mainPlanet, mainPlanetBhinaAstaChart);
+            }
+
+
+            //return compiled charts for all 7 planets
+            return mainBhinaAstaChart;
+
+        }
+
+        /// <summary>
+        /// This a constant that does not change, when calculating ashtakvarga this is the constant count used
+        /// data from ashtakvarga table (Ashtakvarga System pg.9)
+        /// Code: Once this data was memorized by human minds, today it is programmed by human hands
+        /// </summary>
+        public static int[] GetPlanetBeneficHouseAshtakvarga(string mainPlanet, string minorPlanet)
+        {
+            //load the data from ashtakvarga table (Ashtakvarga System pg.9)
+            #region LOAD DATA
+
+            var dictionary = new Dictionary<(string, string), int[]>();
+
+            //---------------- SUN --------------
+
+            //Total 48 points.
+            //The Sun :- The Sun's benefic places are the
+            //1st, 2nd, 4th, 7th, 8th, 9th, 10th and 11th from
+            //himself; the same places from Mars and Saturn
+            dictionary.Add(("sun", "sun"), new[] { 1, 2, 4, 7, 8, 9, 10, 11 });
+            dictionary.Add(("sun", "mars"), new[] { 1, 2, 4, 7, 8, 9, 10, 11 });
+            dictionary.Add(("sun", "saturn"), new[] { 1, 2, 4, 7, 8, 9, 10, 11 });
+
+            //the 5th, 6th, 9th and 11th from Jupiter
+            dictionary.Add(("sun", "jupiter"), new[] { 5, 6, 9, 11 });
+
+            //he 3rd, 6th, 10th and 11th from the Moon;
+            dictionary.Add(("sun", "moon"), new[] { 3, 6, 10, 11 });
+
+            //the 3rd, 5th, 6th, 9th, 10th, 11th and 12th from Mercury;
+            dictionary.Add(("sun", "mercury"), new[] { 3, 5, 6, 9, 10, 11, 12 });
+
+            //the 3rd, 4th, 6th, 10th, 11th and 12th from the Ascendant
+            dictionary.Add(("sun", "ascendant"), new[] { 3, 4, 6, 10, 11, 12 });
+
+            //nd the 6th, 7th and 12th from Venus
+            dictionary.Add(("sun", "venus"), new[] { 6, 7, 12 });
+
+            //---------------- MOON --------------
+            //Total 49 points
+            //The Moon :- The benefic places of the Moon
+            //are the 3rd, 6th, 10th and 11th houses from the Ascendant
+            dictionary.Add(("moon", "ascendant"), new[] { 3, 6, 10, 11 });
+
+            //The Moon is auspicious in the 2nd, 3rd, 5th, 6th, 9th, 10th and 11th houses from Mars;
+            dictionary.Add(("moon", "mars"), new[] { 2, 3, 5, 6, 9, 10, 11 });
+
+            //the 1st, 3rd, 6th, 7th, 10th and 11th houses from the Moon herself;
+            dictionary.Add(("moon", "moon"), new[] { 1, 3, 6, 7, 10, 11 });
+
+            //the 3rd, 6th, 7th, 8th, 10th and 11th from the Sun;
+            dictionary.Add(("moon", "sun"), new[] { 3, 6, 7, 8, 10, 11 });
+
+            //the 3rd, 5th, 6th and 11th from Saturn
+            dictionary.Add(("moon", "saturn"), new[] { 3, 5, 6, 11 });
+
+            //the 1st, 3rd, 4th, 5th, 7th 8th 10th and 11th from Mercury
+            dictionary.Add(("moon", "mercury"), new[] { 1, 3, 4, 5, 7, 8, 10, 11 });
+
+            //the 1st, 4th, 7th, 8th, 10th, 11th ·and 12th from Jupiter
+            dictionary.Add(("moon", "jupiter"), new[] { 1, 4, 7, 8, 10, 11, 12 });
+
+            //and the 3rd, 4th, 5th, 7th, 9th, 10th and 11th from Venus:
+            dictionary.Add(("moon", "venus"), new[] { 3, 4, 5, 7, 9, 10, 11 });
+
+            //---------------- MARS --------------
+            //Total 39 potnts.
+            //Mars :- The benefic places of Mars will be the
+            //3rd, 5th, 6th, 10th and 11th houses from the Sun;
+            dictionary.Add(("mars", "sun"), new[] { 3, 5, 6, 10, 11 });
+
+            //the 1st, 3rd, 6th, 10th and 11th from the Ascendant;
+            dictionary.Add(("mars", "ascendant"), new[] { 1, 3, 6, 10, 11 });
+
+            //the 3rd, 6th and 11th from the Moon;
+            dictionary.Add(("mars", "moon"), new[] { 3, 6, 11 });
+
+            //the 1st, 2nd, 4th, 7th, 8th, 10th and 11th from himself;
+            dictionary.Add(("mars", "mars"), new[] { 1, 2, 4, 7, 8, 10, 11 });
+
+            //in 1, 4, 7, 8, 9, 10 and 11 from Saturn
+            dictionary.Add(("mars", "saturn"), new[] { 1, 4, 7, 8, 9, 10, 11 });
+
+            //in 3, 5, 6 and 11 from Mercury
+            dictionary.Add(("mars", "mercury"), new[] { 3, 5, 6, 11 });
+
+            //in 6, 8, 11 and 12 from Venus;
+            dictionary.Add(("mars", "venus"), new[] { 6, 8, 11, 12 });
+
+            //and in 6, 10, 11 and 12 from Jupiter.
+            dictionary.Add(("mars", "jupiter"), new[] { 6, 10, 11, 12 });
+
+
+            //---------------- MERCURY --------------
+            //Total 54 points
+            //Mercury :- Mercury produces good in
+            //1, 2, 3, 4, 5, 8, 9 and 11 from Venus;
+            dictionary.Add(("mercury", "venus"), new[] { 1, 2, 3, 4, 5, 8, 9, 11 });
+
+            //1, 2, 4, 7, 8, 9, 10 and 11 from Mars and Saturn;
+            dictionary.Add(("mercury", "mars"), new[] { 1, 2, 4, 7, 8, 9, 10, 11 });
+            dictionary.Add(("mercury", "saturn"), new[] { 1, 2, 4, 7, 8, 9, 10, 11 });
+
+            //in 6, 8, 11 and 12 from Jupiter;
+            dictionary.Add(("mercury", "jupiter"), new[] { 6, 8, 11, 12 });
+
+            //in 5, 6, 9, 11 and 12 from the Sun;
+            dictionary.Add(("mercury", "sun"), new[] { 5, 6, 9, 11, 12 });
+
+            //in 1, 3, 5, 6, 9, 10, 11 and 12 from himself;
+            dictionary.Add(("mercury", "mercury"), new[] { 1, 3, 5, 6, 9, 10, 11, 12 });
+
+            //in 2, 4, 6, 8, 10 and 11 from the Moon;
+            dictionary.Add(("mercury", "moon"), new[] { 2, 4, 6, 8, 10, 11 });
+
+            //and in 1, 2, 4, 6, 8, 10 and 11 from the Ascendant.
+            dictionary.Add(("mercury", "ascendant"), new[] { 1, 2, 4, 6, 8, 10, 11 });
+
+            //---------------- JUPITER --------------
+            //Total 56 points;
+            //Jupiter :-Jupiter will be auspicious in
+            //1, 2, 4, 7, 8, 10 and 11 from Mars;
+            dictionary.Add(("jupiter", "mars"), new[] { 1, 2, 4, 7, 8, 10, 11 });
+
+            //in 1, 2, 3, 4, 7, 8, 10 and 11 from himself;
+            dictionary.Add(("jupiter", "jupiter"), new[] { 1, 2, 3, 4, 7, 8, 10, 11 });
+
+            //in 1, 2, 3, 4, 7, 8, 9, 10 and 11 from the Sun;
+            dictionary.Add(("jupiter", "sun"), new[] { 1, 2, 3, 4, 7, 8, 9, 10, 11 });
+
+            //in 2, 5, 6, 9, 10 and 11 from Venus;
+            dictionary.Add(("jupiter", "venus"), new[] { 2, 5, 6, 9, 10, 11 });
+
+            //in 2, 5, 7, 9 and 11 from the Moon;
+            dictionary.Add(("jupiter", "moon"), new[] { 2, 5, 7, 9, 11 });
+
+            //in 3, 5, 6 and 12 from Saturn;
+            dictionary.Add(("jupiter", "saturn"), new[] { 3, 5, 6, 12 });
+
+            //in 1, 2, 4, 5, 6, 9, 10 and 11 from Mercury;
+            dictionary.Add(("jupiter", "mercury"), new[] { 1, 2, 4, 5, 6, 9, 10, 11 });
+
+            //and in 1, 2, 4, 5, 6, 7, 9, 10 and 11 from the Ascendant.
+            dictionary.Add(("jupiter", "ascendant"), new[] { 1, 2, 4, 5, 6, 7, 9, 10, 11 });
+
+            //---------------- VENUS --------------
+            //Total 52 points
+            //Venus :-- Venus produces good in
+            //1, 2, 3, 4, 5, 8, 9 and 11 from Lagna;
+            dictionary.Add(("venus", "ascendant"), new[] { 1, 2, 3, 4, 5, 8, 9, 11 });
+
+            //in 1, 2, 3, 4, 5, 8, 9, 11 and 12 from the Moon;
+            dictionary.Add(("venus", "moon"), new[] { 1, 2, 3, 4, 5, 8, 9, 11, 12 });
+
+            //in 1, 2, 3, 4, 5, 8, 9, 10 and 11 from himself;
+            dictionary.Add(("venus", "venus"), new[] { 1, 2, 3, 4, 5, 8, 9, 10, 11 });
+
+            //in 3, 4, 5, 8, 9, 10 and 11 from Saturn;
+            dictionary.Add(("venus", "saturn"), new[] { 3, 4, 5, 8, 9, 10, 11 });
+
+            //in 8, 11 and 12 from the Sun ;
+            dictionary.Add(("venus", "sun"), new[] { 8, 11, 12 });
+
+            //in 5, 8, 9, 10 and 11 from Jupiter;
+            dictionary.Add(("venus", "jupiter"), new[] { 5, 8, 9, 10, 11 });
+
+            //in 3, 5, 6, 9 and 11 from Mercury;
+            dictionary.Add(("venus", "mercury"), new[] { 3, 5, 6, 9, 11 });
+
+            //and in 3, 5, 6, 9, 11 and 12 from Mars.
+            dictionary.Add(("venus", "mars"), new[] { 3, 5, 6, 9, 11, 12 });
+
+            //---------------- SATURN --------------
+            //Total 39 points.
+            //Saturn :-Saturn is beneficial in
+            //3, 5, 6 and 11 from himself;
+            dictionary.Add(("saturn", "saturn"), new[] { 3, 5, 6, 11 });
+
+            //in 3, 5, 6, 10, 11 and 12 from Mars;
+            dictionary.Add(("saturn", "mars"), new[] { 3, 5, 6, 10, 11, 12 });
+
+            //in 1, 2, 4, 7, 8, 10 and 11 from the Sun;
+            dictionary.Add(("saturn", "sun"), new[] { 1, 2, 4, 7, 8, 10, 11 });
+
+            //in 1, 3, 4, 6, 10 and 11 from the Ascendant;
+            dictionary.Add(("saturn", "ascendant"), new[] { 1, 3, 4, 6, 10, 11 });
+
+            //in 6, 8, 9, 10, 11 and 12 from Mercury;
+            dictionary.Add(("saturn", "mercury"), new[] { 6, 8, 9, 10, 11, 12 });
+
+            //in 3, 6 and 11 from the Moon;
+            dictionary.Add(("saturn", "moon"), new[] { 3, 6, 11 });
+
+            //in 6, 11 and 12 from Venus;
+            dictionary.Add(("saturn", "venus"), new[] { 6, 11, 12 });
+
+            //and in 5, 6, 11 and 12 from Jupiter
+            dictionary.Add(("saturn", "jupiter"), new[] { 5, 6, 11, 12 });
+
+            #endregion
+
+            //make data small caps for sure check
+            mainPlanet = mainPlanet.ToLower();
+            minorPlanet = minorPlanet.ToLower();
+
+            //get value from dictionary
+            var returnValue = dictionary[(mainPlanet, minorPlanet)];
+            return returnValue;
+        }
+
 
         #endregion
 
@@ -2397,6 +2661,25 @@ namespace VedAstro.Library
             var wholeDasa = GetDasaCountedFromInputDasa(birthDasaPlanetMoon, combinedYears);
 
             return wholeDasa;
+        }
+
+        /// <summary>
+        /// Generally, a planet is said to become
+        /// highly benefic if be secures in his own Ashtakavarga
+        /// more than 5 bindus. A planet having less
+        /// than 4 bindus will affect the bhava i't is in
+        /// adversely. Thus for example, if the
+        /// bhava happens to he the 4th and tbe planet there
+        /// has I, 2 or 3 bindus, the person suffers misery
+        /// in respect of all the events pertaining to the 4th
+        /// bhava and also the events signified by the Karakatwa
+        /// of the planet c-oncerned.
+        /// </summary>
+        /// <param name="planetName"></param>
+        /// <returns></returns>
+        public static int GetPlanetBindu(PlanetName planetName)
+        {
+            throw new Exception();
         }
 
         /// <summary>

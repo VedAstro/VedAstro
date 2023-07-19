@@ -129,7 +129,8 @@ namespace VedAstro.Console
             //generate the needed charts
             var chartList = new List<EventsChart>();
             var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.Gochara };
-            var summaryOptions = new ChartOptions(Algorithm.Empty, true);
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.GetGeneralScore };
+            var summaryOptions = new ChartOptions(algorithmFuncsList);
 
             //time range is preset to full life 100 years from birth
             var start = new Time($"00:00 01/01/{startYear} {foundPerson.BirthTimeZone}", foundPerson.GetBirthLocation());

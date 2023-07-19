@@ -92,6 +92,35 @@ else
     protected override async Task OnInitializedAsync() => await GenerateTable();
 
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (firstRender)
+        {
+            //inject for each element one by one
+            //done here because only element in ready in DOM to be used by Tippy
+            foreach (var noteElemRef in TippNoteElmList)
+            {
+                var fullNoteText = noteElemRef.Value; //what to inject
+                var elemRef = noteElemRef.Key;  //where to inject
+
+                //hook on tooltip
+                var tooltipSettings =
+                    new
+                    {
+                        content = fullNoteText,
+                        theme = "light",
+                        allowHTML = true,
+                        arrow = true,
+                        interactive = true //so that can click button
+                    };
+
+                _jsRuntime.Tippy(elemRef, tooltipSettings);
+
+            }
+        }
+    }
+
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
@@ -153,38 +182,6 @@ else
         var tippyfyNotes = person.Notes.Truncate(16) ?? "";
 
         return tippyfyNotes;
-    }
-
-
-    protected override async Task OnAfterRenderAsync(bool firstRender) => await InvokeAsync(async () => await _OnAfterRender(firstRender)).Try(_jsRuntime);
-
-    private async Task _OnAfterRender(bool firstRender)
-    {
-
-        if (firstRender)
-        {
-            //inject for each element one by one
-            //done here because only element in ready in DOM to be used by Tippy
-            foreach (var noteElemRef in TippNoteElmList)
-            {
-                var fullNoteText = noteElemRef.Value; //what to inject
-                var elemRef = noteElemRef.Key;  //where to inject
-
-                //hook on tooltip
-                var tooltipSettings =
-                    new
-                    {
-                        content = fullNoteText,
-                        theme = "light",
-                        allowHTML = true,
-                        arrow = true,
-                        interactive = true //so that can click button
-                    };
-
-                _jsRuntime.Tippy(elemRef, tooltipSettings);
-
-            }
-        }
     }
 
 

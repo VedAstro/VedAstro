@@ -45,7 +45,7 @@
 
 # 📊 64 Data Points via Open API & FREE (yeah you read right!)
 Below is sample API call result for data related to "**Sun**" on "**30/06/2023**" at "**Singapore**"
---> [Watch Video Guide](https://www.youtube.com/@vedastro)
+--> [Watch Video Guide](https://www.youtube.com/watch?v=y110RAgIorY)
 ```json
  "Payload": {
     "SwissEphemeris": "{ Longitude = 97.672406549912, Latitude = 2.2248025536827577E-05, DistanceAU = 1.0165940297895264, SpeedLongitude = 0, SpeedLatitude = 0, SpeedDistance = 0 }",

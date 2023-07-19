@@ -1,4 +1,4 @@
-@attribute [Route(PageRoute.GoodTimeFinder)]
+﻿@attribute [Route(PageRoute.GoodTimeFinder)]
 @using VedAstro.Library
 @using System.Collections
 
@@ -10,97 +10,243 @@
                   DescriptionText="Find the right time for wedding, job interview, buying house and etc. Muhurtha is sanskrit for Good Time or Electional Astrology." />
 
 
-@* SELECTOR AND INFO BOXES*@
-<div class="d-md-flex justify-content-between">
+@if (_isResultReady)
+{
+    @* SELECTOR AND INFO BOXES*@
+    <div class="d-md-flex justify-content-between">
 
-    @*SELECTOR*@
-    <div class="me-5">
-        <div class="vstack gap-3 p-3">
+        @*SELECTOR*@
+        <div class="me-5">
+            <div class="vstack gap-3 p-3">
 
-            <PersonSelectorBox @ref="_easyPersonSelectorBox" @bind-SelectedPersonId="@SelectedPersonId" />
+                <PersonSelectorBox @ref="_easyPersonSelectorBox" @bind-SelectedPersonId="@SelectedPersonId" />
 
-            <div>
-                <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
-                <select @bind="SelectedTimeRangePreset" class="form-control" style="width: @GR.W255px;">
-                    <option value="3month" selected>+/- 3 Months</option>
-                    <option value="1day">+/- 1 Day</option>
-                    <option value="1week">+/- 1 Week</option>
-                    <option value="1month">+/- 1 Month</option>
-                    <option value="3month">+/- 3 Months</option>
-                    <option value="6month">+/- 6 Months</option>
-                    <option value="1year">+/- 1 Year</option>
-                    <option value="3year">+/- 3 Year</option>
-                    <option value="5year">+/- 5 Year</option>
-                    <option value="10year">+/- 10 Year</option>
-                    <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
-                </select>
+                <div>
+                    <label class="form-label">Time Range<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.DasaTimeRange" /></label>
+                    <select @bind="SelectedTimeRangePreset" class="form-control" style="width: @GR.W255px;">
+                        <option value="3month" selected>+/- 3 Months</option>
+                        <option value="1day">+/- 1 Day</option>
+                        <option value="1week">+/- 1 Week</option>
+                        <option value="1month">+/- 1 Month</option>
+                        <option value="3month">+/- 3 Months</option>
+                        <option value="6month">+/- 6 Months</option>
+                        <option value="1year">+/- 1 Year</option>
+                        <option value="3year">+/- 3 Year</option>
+                        <option value="5year">+/- 5 Year</option>
+                        <option value="10year">+/- 10 Year</option>
+                        <option style=" font-weight: bold; color: #0d6efd; " value="selectyear">Custom Year</option>
+                    </select>
+                </div>
+
+
+                @* EVENT SELECT *@
+                <IconTitle Title="Event Type" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
+                <div style="width: @GR.W667px; margin-top:-14px;" class="d-flex flex-wrap gap-1 mb-3">
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.General])" id="@EventTag.General" style=" width: 40px; height: 28px;" class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100" for="@EventTag.General">
+                            <Icon IconName="fluent:people-team-20-regular" />
+                            @(Format.FormatName(EventTag.General.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.General))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div>
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Personal])" id="@EventTag.Personal" style="width: 40px; height: 28px;" class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.Personal">
+                            <Icon IconName="bi:person-fill" />
+                            @(Format.FormatName(EventTag.Personal.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Personal))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div>
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Agriculture])" id="@EventTag.Agriculture" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.Agriculture">
+                            <Icon IconName="material-symbols:potted-plant" />
+                            @(Format.FormatName(EventTag.Agriculture.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div>
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Education])" id="@EventTag.Education" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.Education">
+                            <Icon IconName="tabler:school" />
+                            @(Format.FormatName(EventTag.Education.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    Coming Soon!
+                                    @* <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div> *@
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Building])" id="@EventTag.Building" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.Building">
+                            <Icon IconName="carbon:construction" />
+                            @(Format.FormatName(EventTag.Building.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    Coming Soon!
+                                    @* <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Agriculture))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div> *@
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Travel])" id="@EventTag.Travel" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.Travel">
+                            <Icon IconName="mdi:plane-train" />
+                            @(Format.FormatName(EventTag.Travel.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Travel))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div>
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Marriage])" id="@EventTag.Marriage" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.Marriage">
+                            <Icon IconName="fluent-emoji-high-contrast:heart-with-arrow" />
+                            @(Format.FormatName(EventTag.Marriage.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Marriage))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div>
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.BuyingSelling])" id="@EventTag.BuyingSelling" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.BuyingSelling">
+                            <Icon IconName="fluent-emoji-high-contrast:heart-with-arrow" />
+                            @(Format.FormatName(EventTag.BuyingSelling.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.BuyingSelling))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div>
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.HairNailCutting])" id="@EventTag.HairNailCutting" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.HairNailCutting">
+                            <Icon IconName="game-icons:hair-strands" />
+                            @(Format.FormatName(EventTag.HairNailCutting.ToString()))
+                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                                <HelpHtml>
+                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.HairNailCutting))
+                                        {
+                                            <span>@x.FormattedName</span>
+                                        }
+                                    </div>
+                                </HelpHtml>
+                            </IconTooltip>
+                        </label>
+                    </div>
+                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
+                        <input @bind="@(SelectedTagsDictionary[EventTag.Medical])" id="@EventTag.Medical" style=" width: 40px; height: 28px; " class="form-check-input" type="checkbox">
+                        <label class="form-check-label d-flex gap-2 w-100"for="@EventTag.Medical">
+                            <Icon IconName="bxs:injection" />
+                            @(Format.FormatName(EventTag.Medical.ToString()))
+                        </label>
+                        <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
+                            <HelpHtml>
+                                <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
+                                    @foreach (var x in EventManager.GetEventDataListByTag(EventTag.Medical))
+                                    {
+                                        <span>@x.FormattedName</span>
+                                    }
+                                </div>
+                            </HelpHtml>
+                        </IconTooltip>
+                    </div>
+                </div>
+                <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true" />
             </div>
+        </div>
+
+    </div>
 
 
-            @* EVENT SELECT *@
-            <IconTitle Title="Event Type" TitleHolder="h5" MaxWidthPx="@((int)GR.W667)" />
-            <div style="width: @GR.W509px;" class="d-flex flex-wrap gap-1">
-                <div style="width: @GR.W194px;" class="form-check">
-                    <input @bind="@(SelectedTagsDictionary[EventTag.Agriculture])" class="form-check-input" type="checkbox">
-                    <label class="form-check-label">
-                        @(Format.FormatName(EventTag.Agriculture.ToString()))
-                        <Icon IconName="material-symbols:potted-plant" />
-                    </label>
-                </div>
-                <div style="width: @GR.W194px;" class="form-check">
-                    <input @bind="@(SelectedTagsDictionary[EventTag.Travel])" class="form-check-input" type="checkbox">
-                    <label class="form-check-label">
-                        @(Format.FormatName(EventTag.Travel.ToString()))
-                        <Icon IconName="mdi:plane-train" />
-                    </label>
-                </div>
-                
-                @*
-                @for (var i = 0; i < FullList.Count; i++)
-                {
-                var eventTag = FullList[i];
-                //if more than height limit, break rendered list
-                <div style="width: @GR.W194px;" class="form-check">
-                <input @bind="@(SelectedTagsDictionary[eventTag])" class="form-check-input" type="checkbox">
-                <label class="form-check-label">
-                @(Format.FormatName(eventTag.ToString()))
-                </label>
-                </div>
-                } *@
-
-
+    @* CHART DISPLAY HERE *@
+    <div>
+        <hr>
+        @*hide until ready but initialized as well*@
+        <div style="@(_isResultReady?"":"display:none;")">
+            <div @ref="_holderDiv">
+                <EventsChartViewer @ref="_eventsChartViewer" />
             </div>
-            <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true" />
         </div>
-    </div>
 
-</div>
-
-
-@* CHART DISPLAY HERE *@
-<div>
-    <hr>
-    @*hide until ready but initialized as well*@
-    <div style="@(_isResultReady?"":"display:none;")">
-        <div @ref="_holderDiv">
-            <EventsChartViewer @ref="_eventsChartViewer" />
+        @* PLACE HOLDER MESSAGE *@
+        @* hide when loaded *@
+        <div class="d-flex justify-content-center" style="@((!_isResultReady) ? "" : "display:none !important;")">
+            @* important needed to override flex *@
+            <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear here after you click calculate</span>
         </div>
+        <hr />
     </div>
 
-    @* PLACE HOLDER MESSAGE *@
-    @* hide when loaded *@
-    <div class="d-flex justify-content-center" style="@((!_isResultReady) ? "" : "display:none !important;")">
-        @* important needed to override flex *@
-        <span class="" style="color: @AppData.Grey; font-size: 14px;">Chart will appear here after you click calculate</span>
-    </div>
-    <hr />
-</div>
-
+}
 
 @code {
 
     private string pageTitle;
-    private bool _isResultReady;
+    private bool _isResultReady = false;
     private ElementReference _holderDiv;
     private EventsChartViewer _eventsChartViewer;
     public string? SelectedTimeRangePreset { get; set; } = "3month"; //default to 3 months
@@ -124,27 +270,35 @@
     /// </summary>
     private Dictionary<EventTag, bool> SelectedTagsDictionary;
 
+    private List<EventData> eventDataListFiltered = new List<EventData>();
+
 
     protected override async Task OnInitializedAsync()
     {
+        _jsRuntime.ShowLoading();
+        //set all not selected as default
         //load tag extenstion list
         FullList = EventTagExtensions.GetAll();
-
-        //remove PD1 to PD8 doesnt make sense to show here (has number in name)
-        FullList.RemoveAll(et =>
-        {
-            var hasNumber = et.ToString().Any(char.IsDigit);
-            return hasNumber;//if has number than return true
-        });
-
-        //set all not selected as default
         SelectedTagsDictionary = new Dictionary<EventTag, bool>();
         foreach (var eventTag in FullList)
         {
             SelectedTagsDictionary.Add(eventTag, false);
         }
 
+        //only load the xml files if not yet loaded
+        //this is set here, so on 2nd search in same session it will use back
+        if (!AppData.SearchFilesLoaded) { await AppData.LoadSearchFiles(); }
+
+        EventManager.EventDataList = await Tools.ConvertXmlListFileToInstanceList<EventData>(AppData.EventDataList);
+
+
+        _jsRuntime.HideLoading();
+        _isResultReady = true;
+
+
     }
+
+
 
     public List<EventTag> FullList { get; set; }
 
@@ -252,5 +406,25 @@
         return true;
     }
 
+    private async Task<string> GetEventsByTag(EventTag tag)
+    {
+
+        //only load the xml files if not yet loaded
+        //this is set here, so on 2nd search in same session it will use back
+        if (!AppData.SearchFilesLoaded) { await AppData.LoadSearchFiles(); }
+
+        EventManager.EventDataList = await Tools.ConvertXmlListFileToInstanceList<EventData>(AppData.EventDataList);
+
+        //get all event data/types which has the inputed tag (FILTER)
+        eventDataListFiltered = EventManager.GetEventDataListByTag(tag);
+
+        var combined = "";
+        foreach (var eventData in eventDataListFiltered)
+        {
+            combined += eventData.FormattedName + ",";
+        }
+
+        return combined;
+    }
 
 }

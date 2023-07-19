@@ -1,4 +1,4 @@
-
+﻿
 
 //█▀▀ █▀█ █▀▀ ▄▀█ ▀█▀   █▀█ █▀█ █▀█ █▀▀ █▀█ ▄▀█ █▀▄▀█ █▀▄▀█ █▀▀ █▀█ █▀   █▀▄ █▀█ █▄░█ ▀ ▀█▀   ░░█ █░█ █▀ ▀█▀
 //█▄█ █▀▄ ██▄ █▀█ ░█░   █▀▀ █▀▄ █▄█ █▄█ █▀▄ █▀█ █░▀░█ █░▀░█ ██▄ █▀▄ ▄█   █▄▀ █▄█ █░▀█ ░ ░█░   █▄█ █▄█ ▄█ ░█░
@@ -12,7 +12,9 @@
 using SwissEphNet;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Reflection;
 
 namespace VedAstro.Library
 {
@@ -1370,7 +1372,6 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Gets Local mean time (LMT) at Greenwich (UTC) in Julian days based on the inputed time
         /// </summary>
@@ -2643,14 +2644,21 @@ namespace VedAstro.Library
         /// </summary>
         public static Dasas GetCurrentPlanetDasas(Time birthTime, Time currentTime)
         {
+            //todo strength determined by constellation rules not shad or bhava bala
+            //lagna lord or moon constellation used based on which is stronger
+            //var isLagnaLordStronger = AstronomicalCalculator.LagnaLordVsMoonStrength(birthTime);
+            //var finalConstellation = isLagnaLordStronger
+            //    ? GetPlanetConstellation(birthTime, AstronomicalCalculator.GetLordOfHouse(HouseName.House1, birthTime)) 
+            //    : GetMoonConstellation(birthTime);
+
             //get dasa planet at birth
             var moonConstellation = GetPlanetConstellation(birthTime, PlanetName.Moon);
             //var risingConstellation = GetHouseConstellation(1, birthTime);
             var birthDasaPlanetMoon = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
             //var birthDasaPlanet = GetConstellationDasaPlanet(risingConstellation.GetConstellationName());
 
-            //get time traversed in birth dasa
-            var timeTraversedInDasa = GetYearsTraversedInBirthDasa(birthTime);
+            //get time traversed in birth dasa 
+            var timeTraversedInDasa = GetYearsTraversedInBirthDasa(birthTime, moonConstellation);
 
             //get time from birth to current time (converted to Dasa years ie. 360 days per year)
             var timeBetween = currentTime.Subtract(birthTime).TotalDays / 360.0;
@@ -3016,16 +3024,16 @@ namespace VedAstro.Library
         /// <summary>
         ///  Gets years left in birth dasa at birth
         ///  Note : Returned years can only be 0 or above
+        /// Start constellation can be of moon or Lagna
         /// </summary>
         [API("YearsLeftInBirthDasa")]
-        public static double GetTimeLeftInBirthDasa(Time birthTime)
+        public static double GetTimeLeftInBirthDasa(Time birthTime, PlanetConstellation startConstellation)
         {
             //get years already passed in birth dasa
-            var yearsTraversed = GetYearsTraversedInBirthDasa(birthTime);
+            var yearsTraversed = GetYearsTraversedInBirthDasa(birthTime, startConstellation);
 
             //get full years of birth dasa planet
-            var moonConstellation = GetMoonConstellation(birthTime);
-            var birthDasaPlanet = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
+            var birthDasaPlanet = GetConstellationDasaPlanet(startConstellation.GetConstellationName());
             var fullYears = GetPD1PlanetFullYears(birthDasaPlanet);
 
             //calculate the years left in birth dasa at birth
@@ -3039,15 +3047,15 @@ namespace VedAstro.Library
 
         /// <summary>
         /// Gets the time in years traversed in Dasa at birth
+        /// Start constellation can of Moon's or Lagna lord
         /// </summary>
-        public static double GetYearsTraversedInBirthDasa(Time birthTime)
+        public static double GetYearsTraversedInBirthDasa(Time birthTime, PlanetConstellation startConstellation)
         {
-            //get longitude minutes the Moon already traveled in the constellation 
-            var moonConstellation = GetMoonConstellation(birthTime);
-            var minutesTraversed = moonConstellation.GetDegreesInConstellation().TotalMinutes;
+            //get longitude minutes the Moon/Lagna already traveled in the constellation 
+            var minutesTraversed = startConstellation.GetDegreesInConstellation().TotalMinutes;
 
             //get the time period each minute represents
-            var timePerMinute = GetDasaTimePerMinute(moonConstellation.GetConstellationName());
+            var timePerMinute = GetDasaTimePerMinute(startConstellation.GetConstellationName());
 
             //calculate the years already traversed
             var traversedYears = minutesTraversed * timePerMinute;
@@ -3243,7 +3251,7 @@ namespace VedAstro.Library
             return pd5PlanetFullTime;
 
         }
-        
+
         public static double GetPD6PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet)
         {
             //120 years is the total of all the dasa planet's years
@@ -3260,7 +3268,7 @@ namespace VedAstro.Library
             return pd6PlanetFullTime;
 
         }
-        
+
         public static double GetPD7PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet, PlanetName pd7Planet)
         {
             //120 years is the total of all the dasa planet's years
@@ -3277,7 +3285,7 @@ namespace VedAstro.Library
             return pd7PlanetFullTime;
 
         }
-        
+
         public static double GetPD8PlanetFullYears(PlanetName pd1Planet, PlanetName pd2Planet, PlanetName pd3Planet, PlanetName pd4Planet, PlanetName pd5Planet, PlanetName pd6Planet, PlanetName pd7Planet, PlanetName pd8Planet)
         {
             //120 years is the total of all the dasa planet's years

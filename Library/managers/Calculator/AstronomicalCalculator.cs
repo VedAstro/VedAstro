@@ -1802,7 +1802,7 @@ namespace VedAstro.Library
         /// - Moolatrikona, Debilited & Exalted is not calculated heres
         /// - Rahu & ketu not accounted for
         /// </summary>
-        [API("PlanetRelationshipWithSign")]
+        [API("PlanetRelationshipWithSign", "Gets a planets relationship with a sign, friend, enemy, etc.")]
         public static PlanetToSignRelationship GetPlanetRelationshipWithSign(PlanetName planetName, ZodiacName zodiacSignName, Time time)
         {
 
@@ -3779,6 +3779,7 @@ namespace VedAstro.Library
         /// meaning house sign owned by planet
         /// note: rahu and ketu return false always
         /// </summary>
+        [API("IsPlanetInOwnHouse", "Return true if planet is own house sign, planet is owner")]
         public static bool IsPlanetInOwnHouse(Time time, PlanetName planetName)
         {
             //find out if planet is rahu or ketu, because not all calculations supported
@@ -3804,7 +3805,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Swiss Ephemeris "swe_calc" wrapper for open API 
         /// </summary>
-        [API("SwissEphemeris")]
+        [API("SwissEphemeris", "Get planet's Longitude, Latitude, DistanceAU, SpeedLongitude, SpeedLatitude...")]
         public static dynamic swe_calc_wrapper(Time time, PlanetName planetName)
         {
             //Converts LMT to UTC (GMT)

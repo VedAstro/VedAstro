@@ -11,9 +11,26 @@ namespace VedAstro.Library
     {
         /// <summary>
         /// Data structure to hold api call method's name and description
+        /// INT = Outputs: Int32, List<string> = List of String
         /// </summary>
         public readonly record struct APICallData(string Name, string Description, List<string> ParamTypeList, string ReturnType, string SearchText)
         {
+            /// <summary>
+            /// Given a type will return is most relevant name
+            /// </summary>
+            public static string GetTypeName(Type type)
+            {
+                if (type.IsGenericType)
+                {
+                    Type itemType = type.GetGenericArguments()[0];
+                    return type.Name.Split('`')[0] + " of " + itemType.Name;
+                }
+                else
+                {
+                    return type.Name;
+                }
+            }
+
             public static List<APICallData> FromMethodInfoList(IEnumerable<MethodInfo> calcList)
             {
                 var finalList = new List<APICallData>();
@@ -23,14 +40,15 @@ namespace VedAstro.Library
                 foreach (var calc in calcList)
                 {
                     var paramNameList = calc.GetParametersStringList();
+                    var apiSpecialName = Tools.GetAPISpecialName(calc);
 
                     var apiSpecialDescription = Tools.GetAPISpecialDescription(calc);
                     finalList.Add(new APICallData(
-                        Name: Tools.GetAPISpecialName(calc),
+                        Name: apiSpecialName,
                         Description: apiSpecialDescription,
                         ParamTypeList: paramNameList,
-                        ReturnType: calc.ReturnType.Name,
-                        SearchText: calc.GetAllDataAsText() + apiSpecialDescription));
+                        ReturnType: GetTypeName(calc.ReturnType), //gets type name nicely formatted
+                        SearchText: calc.GetAllDataAsText() + apiSpecialDescription + apiSpecialName));
                 }
 
                 return finalList;

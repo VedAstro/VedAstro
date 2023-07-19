@@ -6,8 +6,8 @@
 @using System.Xml.Linq
 
 
-<div class="@ExtraClass hstack gap-2" style="@(ShowLine?lineStyle:"") @ExtraStyle">
-    <Icon IconName="@IconName" Size="25" />
+<div class="@ExtraClass hstack gap-@GapNumber" style="@(ShowLine?lineStyle:"") @ExtraStyle">
+    <Icon IconName="@IconName" Size="@IconSize" />
     <span style="font-size: @(FontSize)px; color: @FontColor;">@ChildContent</span>
 </div>
 @if (ShowLine)
@@ -17,6 +17,20 @@
 
 
 @code {
+
+    /// <summary>
+    /// Size in pixels, default is 25
+    /// </summary>
+    [Parameter]
+    public int? IconSize { get; set; } = 25;
+
+    /// <summary>
+    /// Gap between icon and text, default is 2
+    /// </summary>
+    [Parameter]
+    public int? GapNumber { get; set; } = 2;
+
+
 
     /// <summary>
     /// style only used with line below, move closer to line

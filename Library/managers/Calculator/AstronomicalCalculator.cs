@@ -29,7 +29,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Wrapper function to make planet name appear "Payload" of API call data, for easier data probing by 3rd party code
         /// </summary>
-        [API("PlanetName", "name of planet", Category.Astronomical)]
+        [API("PlanetName", "English name of planet", Category.Astronomical)]
         public static string GetPlanetName(PlanetName planetName) => planetName.ToString();
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VedAstro.Library
         /// For instance, in the Standard Horoscope Jupiter
         /// gives 0.48 units of the total effects of the 6th Bhava.
         /// </summary>
-        /// 
+        [API("Longitude", "Strength to judge the exact quantity of effect planet gives in a house")]
         public static double ResidentialStrength(PlanetName planetName, Time time)
         {
             //todo from PG15 of Bhava and Graha Balas
@@ -60,7 +60,7 @@ namespace VedAstro.Library
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
         /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
         /// </summary>
-        [API("Longitude", "time back to longitude", Category.Astronomical)]
+        [API("Longitude", "Converts time back to longitude", Category.Astronomical)]
         public static Angle TimeToLongitude(TimeSpan time)
         {
             //TODO function is a candidate for caching
@@ -76,7 +76,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the ephemris time that is consumed by Swiss Ephemeris
         /// </summary>
-        [API("EphemerisTime", "", Category.Astronomical)]
+        [API("EphemerisTime", "Converts normal time to Ephemeris time shown as a number")]
         public static double TimeToEphemerisTime(Time time)
         {
 
@@ -118,9 +118,9 @@ namespace VedAstro.Library
         /// Gets planet longitude used vedic astrology
         /// Nirayana Longitude = Sayana Longitude corrected to Ayanamsa
         /// Number from 0 to 360, represent the degrees in the zodiac as viewed from earth
-        /// Note: Since Niryana is corrected, in actuality 0 degrees will start at Taurus not Aries
+        /// Note: Since Nirayana is corrected, in actuality 0 degrees will start at Taurus not Aries
         /// </summary>
-        [API("NirayanaLongitude")]
+        [API("NirayanaLongitude", "Planet longitude that has been corrected with Ayanamsa")]
         public static Angle GetPlanetNirayanaLongitude(Time time, PlanetName planetName)
         {
             //CACHE MECHANISM
@@ -154,7 +154,7 @@ namespace VedAstro.Library
 
         }
 
-        [API("LunarDay", "", Category.StarsAboveMe)]
+        [API("LunarDay", "Gets Moon's position or day in lunar calendar", Category.StarsAboveMe)]
         public static LunarDay GetLunarDay(Time time)
         {
             //get position of sun & moon
@@ -188,7 +188,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets constellation behind the moon (shortcut function)
         /// </summary>
-        [API("MoonConstellation", "constellation behind the moon", Category.StarsAboveMe)]
+        [API("MoonConstellation", "Constellation behind the moon at a given time", Category.StarsAboveMe)]
         public static PlanetConstellation GetMoonConstellation(Time time) => GetPlanetConstellation(time, PlanetName.Moon);
 
         /// <summary>
@@ -956,7 +956,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets the planets in the house
         /// </summary>
-        [API("PlanetsInHouse")]
+        [API("PlanetsInHouse", "Gets list of planets that's in a house/bhava")]
         public static List<PlanetName> GetPlanetsInHouse(HouseName houseNumber, Time time)
         {
 
@@ -992,7 +992,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Gets longitude positions of all planets
         /// </summary>
-        [API("AllPlanetLongitude")]
+        [API("AllPlanetLongitude", "Gets the Nirayana longitude of all 9 planets")]
         public static List<PlanetLongitude> GetAllPlanetLongitude(Time time)
         {
 
@@ -1118,7 +1118,7 @@ namespace VedAstro.Library
         /// The lord of a bhava is
         /// the Graha (planet) in whose Rasi (sign) the Bhavamadhya falls
         /// </summary>
-        [API("LordOfHouse")]
+        [API("LordOfHouse", "Gets planet lord of given house at given time")]
         public static PlanetName GetLordOfHouse(HouseName houseNumber, Time time)
         {
             //get sign name based on house number //TODO Change to use house name instead of casting to int

@@ -48,7 +48,7 @@
     public string SelectedProperty { get; set; }
 
     //done so that it is cached in memory
-    private static IEnumerable<Tools.APICallData> PlanetCallList = Tools.GetPlanetApiCallList<PlanetName, Time>();
+    private static IEnumerable<AutoCalculator.APICallData> PlanetCallList = Tools.GetPlanetApiCallList<PlanetName, Time>();
 
 
     public void Show()

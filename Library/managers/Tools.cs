@@ -1575,35 +1575,78 @@ namespace VedAstro.Library
             return removed;
         }
 
-        public readonly record struct APICallData(string Name, string Description);
 
         /// <summary>
-        /// Get all methods that is available to time and planet param
-        /// this is the lis that will appear on the fly in API Builder dropdown
+        /// Get all methods that is available to 2 params
+        /// this is the list that will appear on the fly in API Builder dropdown
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<APICallData> GetPlanetApiCallList<T1, T2>()
+        public static List<AutoCalculator.APICallData> GetPlanetApiCallList<T1, T2>()
         {
             //get all the same methods gotten by Open api func
             var calcList = GetCalculatorListByParam<T1, T2>();
-
-            var finalList = new List<APICallData>();
-
-            //make final list with API description
-            //get nice API calc name, shown in builder dropdown
-            foreach (var calc in calcList)
-            {
-                finalList.Add(new APICallData(Tools.GetAPISpecialName(calc), Tools.GetAPICallDescByName("")));
-            }
+            
+            //extract needed data out in convenient form
+            var finalList = AutoCalculator.APICallData.FromMethodInfoList(calcList);
 
             return finalList;
         }
 
-        //todo needs improvement
-        private static string GetAPICallDescByName(string calcName)
+        /// <summary>
+        /// Get Description text from api code
+        /// </summary>
+        public static string GetAPISpecialDescription(MethodInfo methodInfo1)
         {
-            //temp
-            return "temp no data, implement pls";
+            //try to get special API name for the calculator, possible not to exist
+            var customAttributes = methodInfo1?.GetCustomAttributes(true);
+            var apiAttributes = customAttributes?.OfType<APIAttribute>();
+            var firstOrDefault = apiAttributes?.FirstOrDefault();
+            var properApiDescription = firstOrDefault?.Description ?? "Not yet written, coming soon.";
+            return properApiDescription;
+        }
+
+        /// <summary>
+        /// Searches text no caps and no space
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public static bool SearchText(this string text, string keyword)
+        {
+            // Remove spaces from the text and the keyword
+            string textWithoutSpaces = text.Replace(" ", "");
+            string keywordWithoutSpaces = keyword.Replace(" ", "");
+            return textWithoutSpaces.Contains(keywordWithoutSpaces, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Get all data inside a method info as string made by AI
+        /// </summary>
+        public static string GetAllDataAsText(this MethodInfo methodInfo)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Method Name: {methodInfo.Name}");
+            sb.AppendLine($"Return Type: {methodInfo.ReturnType}");
+            ParameterInfo[] parameters = methodInfo.GetParameters();
+            sb.AppendLine($"Parameters ({parameters.Length}):");
+            foreach (ParameterInfo parameter in parameters)
+            {
+                sb.AppendLine($"\t{parameter.ParameterType} {parameter.Name}");
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Gets input params of methods nicely formatted string for display
+        /// </summary>
+        public static List<string> GetParametersStringList(this MethodInfo methodInfo)
+        {
+            List<string> parameters = new List<string>();
+            foreach (ParameterInfo parameter in methodInfo.GetParameters())
+            {
+                parameters.Add($"{parameter.ParameterType.Name}");
+            }
+            return parameters;
         }
 
         /// <summary>
@@ -1890,6 +1933,21 @@ namespace VedAstro.Library
             //PRINT DEBUG DATA
             Console.WriteLine($"Calculators with 1 param : {calculators1?.Count()}");
 #endif
+
+            return finalList;
+        }
+        
+        /// <summary>
+        /// Gets all possible API calculators from code method info
+        /// used to make list to show user
+        /// </summary>
+        public static List<MethodInfo> GetAllApiCalculatorsMethodInfo()
+        {
+
+            //get all calculators that can work with the inputed data
+            var calculatorClass = typeof(AstronomicalCalculator);
+
+            var finalList = calculatorClass.GetMethods().ToList();
 
             return finalList;
         }

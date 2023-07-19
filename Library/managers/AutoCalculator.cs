@@ -6,10 +6,38 @@ using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
-    public readonly record struct APICallData(string Name, string Description);
 
     public static class AutoCalculator
     {
+        /// <summary>
+        /// Data structure to hold api call method's name and description
+        /// </summary>
+        public readonly record struct APICallData(string Name, string Description, List<string> ParamTypeList, string ReturnType, string SearchText)
+        {
+            public static List<APICallData> FromMethodInfoList(IEnumerable<MethodInfo> calcList)
+            {
+                var finalList = new List<APICallData>();
+
+                //make final list with API description
+                //get nice API calc name, shown in builder dropdown
+                foreach (var calc in calcList)
+                {
+                    var paramNameList = calc.GetParametersStringList();
+
+                    var apiSpecialDescription = Tools.GetAPISpecialDescription(calc);
+                    finalList.Add(new APICallData(
+                        Name: Tools.GetAPISpecialName(calc),
+                        Description: apiSpecialDescription,
+                        ParamTypeList: paramNameList,
+                        ReturnType: calc.ReturnType.Name,
+                        SearchText: calc.GetAllDataAsText() + apiSpecialDescription));
+                }
+
+                return finalList;
+            }
+
+        }
+
 
         /// <summary>
         /// based on number and type of params all available methods are taken and 
@@ -216,290 +244,290 @@ namespace VedAstro.Library
         //----------------------------------------
 
 
-//        /// <summary>
-//        /// Given a reference to astro calculator method,
-//        /// will return it's API friendly name
-//        /// </summary>
+        //        /// <summary>
+        //        /// Given a reference to astro calculator method,
+        //        /// will return it's API friendly name
+        //        /// </summary>
 
 
-//        /// <summary>
-//        /// Get all methods that is available to time and planet param
-//        /// this is the lis that will appear on the fly in API Builder dropdown
-//        /// </summary>
-//        /// <returns></returns>
-//        public static IEnumerable<APICallData> GetPlanetApiCallList<T1, T2>()
-//        {
-//            //get all the same methods gotten by Open api func
-//            var calcList = GetCalculatorListByParam<T1, T2>();
+        //        /// <summary>
+        //        /// Get all methods that is available to time and planet param
+        //        /// this is the lis that will appear on the fly in API Builder dropdown
+        //        /// </summary>
+        //        /// <returns></returns>
+        //        public static IEnumerable<APICallData> GetPlanetApiCallList<T1, T2>()
+        //        {
+        //            //get all the same methods gotten by Open api func
+        //            var calcList = GetCalculatorListByParam<T1, T2>();
 
-//            var finalList = new List<APICallData>();
+        //            var finalList = new List<APICallData>();
 
-//            //make final list with API description
-//            //get nice API calc name, shown in builder dropdown
-//            foreach (var calc in calcList)
-//            {
-//                finalList.Add(new APICallData(GetAPISpecialName(calc), GetAPICallDescByName("")));
-//            }
+        //            //make final list with API description
+        //            //get nice API calc name, shown in builder dropdown
+        //            foreach (var calc in calcList)
+        //            {
+        //                finalList.Add(new APICallData(GetAPISpecialName(calc), GetAPICallDescByName("")));
+        //            }
 
-//            return finalList;
-//        }
+        //            return finalList;
+        //        }
 
-//        //todo needs improvement
-//        private static string GetAPICallDescByName(string calcName)
-//        {
-//            //temp
-//            return "temp no data, implement pls";
-//        }
+        //        //todo needs improvement
+        //        private static string GetAPICallDescByName(string calcName)
+        //        {
+        //            //temp
+        //            return "temp no data, implement pls";
+        //        }
 
-//        /// <summary>
-//        /// Gets calculators by param type and count
-//        /// Gets all calculated data in nice JSON with matching param signature
-//        /// used to create a dynamic API call list
-//        /// </summary>
-//        public static List<APIFunctionResult> ExecuteCalculatorByParam<T1, T2>(T1 inputedPram1, T2 inputedPram2)
-//        {
-//            //get reference to all the calculators that can be used with the inputed param types
-//            var finalList = GetCalculatorListByParam<T1, T2>();
+        //        /// <summary>
+        //        /// Gets calculators by param type and count
+        //        /// Gets all calculated data in nice JSON with matching param signature
+        //        /// used to create a dynamic API call list
+        //        /// </summary>
+        //        public static List<APIFunctionResult> ExecuteCalculatorByParam<T1, T2>(T1 inputedPram1, T2 inputedPram2)
+        //        {
+        //            //get reference to all the calculators that can be used with the inputed param types
+        //            var finalList = GetCalculatorListByParam<T1, T2>();
 
-//            //sort alphabetically so easier to eye data point
-//            var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
-
-
-//            //place the data from all possible methods nicely in JSON
-//            var rootPayloadJson = new JObject(); //each call below adds to this root
-//            object[] paramList = new object[] { inputedPram1, inputedPram2 };
-//            foreach (var methodInfo in aToZOrder)
-//            {
-//                var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
-//                //done to get JSON formatting right
-//                var resultParse2 = JToken.FromObject(resultParse1); //jprop needs to be wrapped in JToken
-//                rootPayloadJson.Add(resultParse2);
-//            }
-
-//            return rootPayloadJson;
-
-//        }
-
-//        public static List<APIFunctionResult> ExecuteCalculatorByParam<T1>(T1 inputedPram1)
-//        {
-//            //get reference to all the calculators that can be used with the inputed param types
-//            var finalList = GetCalculatorListByParam<T1>();
-
-//            //sort alphabetically so easier to eye data point
-//            var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
-
-//            //place the data from all possible methods nicely in JSON
-//            var returnList = new List<APIFunctionResult>(); //data name and raw data
-//            object[] paramList = new object[] { inputedPram1 };
-//            foreach (var methodInfo in aToZOrder)
-//            {
-//                var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
-//                returnList.Add(resultParse1);
-//            }
-
-//            return returnList;
-
-//        }
+        //            //sort alphabetically so easier to eye data point
+        //            var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
 
 
-//        /// <summary>
-//        /// Given an API name, will find the calc and try to call and wrap it in JSON
-//        /// </summary>
-//        public static JProperty ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
-//        {
-//            var calculatorClass = typeof(AstronomicalCalculator);
-//            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
+        //            //place the data from all possible methods nicely in JSON
+        //            var rootPayloadJson = new JObject(); //each call below adds to this root
+        //            object[] paramList = new object[] { inputedPram1, inputedPram2 };
+        //            foreach (var methodInfo in aToZOrder)
+        //            {
+        //                var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
+        //                //done to get JSON formatting right
+        //                var resultParse2 = JToken.FromObject(resultParse1); //jprop needs to be wrapped in JToken
+        //                rootPayloadJson.Add(resultParse2);
+        //            }
 
-//            //place the data from all possible methods nicely in JSON
-//            var rootPayloadJson = new JObject(); //each call below adds to this root
+        //            return rootPayloadJson;
 
-//            //if method not found, possible outdated API call link, end call here
-//            if (foundMethod == null)
-//            {
-//                //let caller know that method not found
-//                var msg = $"Call not found, make sure API link is latest version : {methodName} ";
-//                return new JProperty(methodName, $"ERROR:{msg}");
-//            }
+        //        }
 
-//            //pass to main function
-//            return ExecuteCalculatorByApiName(foundMethod, param1, param2);
-//        }
+        //        public static List<APIFunctionResult> ExecuteCalculatorByParam<T1>(T1 inputedPram1)
+        //        {
+        //            //get reference to all the calculators that can be used with the inputed param types
+        //            var finalList = GetCalculatorListByParam<T1>();
 
-//        /// <summary>
-//        /// Given an API name, will find the calc and try to call and wrap it in JSON
-//        /// </summary>
-//        public static APIFunctionResult ExecuteCalculatorByApiName<T1, T2>(MethodInfo foundMethod, T1 param1, T2 param2)
-//        {
-//            //get methods 1st param
-//            var param1Type = foundMethod.GetParameters()[0].ParameterType;
-//            object[] paramOrder1 = new object[] { param1, param2 };
-//            object[] paramOrder2 = new object[] { param2, param1 };
+        //            //sort alphabetically so easier to eye data point
+        //            var aToZOrder = finalList.OrderBy(method => Tools.GetAPISpecialName(method)).ToList();
 
-//            //if first param match type, then use that
-//            var finalParamOrder = param1Type == param1.GetType() ? paramOrder1 : paramOrder2;
+        //            //place the data from all possible methods nicely in JSON
+        //            var returnList = new List<APIFunctionResult>(); //data name and raw data
+        //            object[] paramList = new object[] { inputedPram1 };
+        //            foreach (var methodInfo in aToZOrder)
+        //            {
+        //                var resultParse1 = ExecuteAPICalculator(methodInfo, paramList);
+        //                returnList.Add(resultParse1);
+        //            }
 
-//#if DEBUG
-//            //print out which order is used more, helps to clean code
-//            Console.WriteLine(param1Type == param1.GetType() ? "paramOrder1" : "paramOrder2");
-//#endif
+        //            return returnList;
 
-//            //based on what type it is we process accordingly, converts better to JSON
-//            var rawResult = foundMethod?.Invoke(null, finalParamOrder);
-
-//            //get correct name for this method, API friendly
-//            var apiSpecialName = Tools.GetAPISpecialName(foundMethod);
-
-//            var returnData = new APIFunctionResult(apiSpecialName, rawResult);
-
-//            return returnData;
-
-//        }
+        //        }
 
 
-//        public static APIFunctionResult ExecuteCalculatorByApiName<T1>(MethodInfo foundMethod, T1 param1)
-//        {
-//            //get methods 1st param
-//            var param1Type = foundMethod.GetParameters()[0].ParameterType;
-//            object[] paramOrder1 = new object[] { param1 };
+        //        /// <summary>
+        //        /// Given an API name, will find the calc and try to call and wrap it in JSON
+        //        /// </summary>
+        //        public static JProperty ExecuteCalculatorByApiName<T1, T2>(string methodName, T1 param1, T2 param2)
+        //        {
+        //            var calculatorClass = typeof(AstronomicalCalculator);
+        //            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
+
+        //            //place the data from all possible methods nicely in JSON
+        //            var rootPayloadJson = new JObject(); //each call below adds to this root
+
+        //            //if method not found, possible outdated API call link, end call here
+        //            if (foundMethod == null)
+        //            {
+        //                //let caller know that method not found
+        //                var msg = $"Call not found, make sure API link is latest version : {methodName} ";
+        //                return new JProperty(methodName, $"ERROR:{msg}");
+        //            }
+
+        //            //pass to main function
+        //            return ExecuteCalculatorByApiName(foundMethod, param1, param2);
+        //        }
+
+        //        /// <summary>
+        //        /// Given an API name, will find the calc and try to call and wrap it in JSON
+        //        /// </summary>
+        //        public static APIFunctionResult ExecuteCalculatorByApiName<T1, T2>(MethodInfo foundMethod, T1 param1, T2 param2)
+        //        {
+        //            //get methods 1st param
+        //            var param1Type = foundMethod.GetParameters()[0].ParameterType;
+        //            object[] paramOrder1 = new object[] { param1, param2 };
+        //            object[] paramOrder2 = new object[] { param2, param1 };
+
+        //            //if first param match type, then use that
+        //            var finalParamOrder = param1Type == param1.GetType() ? paramOrder1 : paramOrder2;
+
+        //#if DEBUG
+        //            //print out which order is used more, helps to clean code
+        //            Console.WriteLine(param1Type == param1.GetType() ? "paramOrder1" : "paramOrder2");
+        //#endif
+
+        //            //based on what type it is we process accordingly, converts better to JSON
+        //            var rawResult = foundMethod?.Invoke(null, finalParamOrder);
+
+        //            //get correct name for this method, API friendly
+        //            var apiSpecialName = Tools.GetAPISpecialName(foundMethod);
+
+        //            var returnData = new APIFunctionResult(apiSpecialName, rawResult);
+
+        //            return returnData;
+
+        //        }
 
 
-//            //based on what type it is we process accordingly, converts better to JSON
-//            var rawResult = foundMethod?.Invoke(null, paramOrder1);
-
-//            //get correct name for this method, API friendly
-//            var apiSpecialName = Tools.GetAPISpecialName(foundMethod);
-
-//            var returnData = new APIFunctionResult(apiSpecialName, rawResult);
-
-//            return returnData;
-//        }
-
-//        /// <summary>
-//        /// Executes all calculators for API based on input param type only
-//        /// Wraps return data in JSON
-//        /// </summary>
-//        public static APIFunctionResult ExecuteAPICalculator(MethodInfo methodInfo1, object[] param)
-//        {
-
-//            //likely to fail during call, as such just ignore and move along
-//            try
-//            {
-//                APIFunctionResult outputResult;
-//                //execute based on param count
-//                if (param.Length == 1)
-//                {
-//                    outputResult = ExecuteCalculatorByApiName(methodInfo1, param[0]);
-//                }
-//                else if (param.Length == 2)
-//                {
-//                    outputResult = ExecuteCalculatorByApiName(methodInfo1, param[0], param[1]);
-//                }
-//                else
-//                {
-//                    //if not filled than not accounted for
-//                    throw new Exception("END OF THE LINE!");
-//                }
+        //        public static APIFunctionResult ExecuteCalculatorByApiName<T1>(MethodInfo foundMethod, T1 param1)
+        //        {
+        //            //get methods 1st param
+        //            var param1Type = foundMethod.GetParameters()[0].ParameterType;
+        //            object[] paramOrder1 = new object[] { param1 };
 
 
-//                return outputResult;
-//            }
-//            catch (Exception e)
-//            {
-//                try
-//                {
-//#if DEBUG
-//                    Console.WriteLine($"Trying again in reverse! {methodInfo1.Name}:\n{e.Message}\n{e.StackTrace}");
-//#endif
-//                    //try again in reverse
-//                    if (param.Length == 2)
-//                    {
-//                        var outputResult3 = ExecuteCalculatorByApiName(methodInfo1, param[1], param[0]);
-//                        return outputResult3;
-//                    }
+        //            //based on what type it is we process accordingly, converts better to JSON
+        //            var rawResult = foundMethod?.Invoke(null, paramOrder1);
 
-//                    var jsonPacked = new JProperty(methodInfo1.Name, $"ERROR: {e.Message}");
-//                    return jsonPacked;
+        //            //get correct name for this method, API friendly
+        //            var apiSpecialName = Tools.GetAPISpecialName(foundMethod);
 
-//                }
-//                //if fail put error in data for easy detection
-//                catch (Exception e2)
-//                {
-//                    //save it nicely in json format
-//                    var jsonPacked = new JProperty(methodInfo1.Name, $"ERROR: {e2.Message}");
-//                    return jsonPacked;
-//                }
-//            }
-//        }
+        //            var returnData = new APIFunctionResult(apiSpecialName, rawResult);
 
-//        /// <summary>
-//        /// Gets all methods in Astronomical calculator that has the pram types inputed
-//        /// Note : also gets when order is reversed
-//        /// </summary>
-//        public static IEnumerable<MethodInfo> GetCalculatorListByParam<T1, T2>()
-//        {
-//            var inputedParamType1 = typeof(T1);
-//            var inputedParamType2 = typeof(T2);
+        //            return returnData;
+        //        }
 
-//            //get all calculators that can work with the inputed data
-//            var calculatorClass = typeof(AstronomicalCalculator);
+        //        /// <summary>
+        //        /// Executes all calculators for API based on input param type only
+        //        /// Wraps return data in JSON
+        //        /// </summary>
+        //        public static APIFunctionResult ExecuteAPICalculator(MethodInfo methodInfo1, object[] param)
+        //        {
 
-//            var finalList = new List<MethodInfo>();
-
-//            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
-//                               let parameter = calculatorInfo.GetParameters()
-//                               where parameter.Length == 2 //only 2 params
-//                                     && parameter[0].ParameterType == inputedParamType1
-//                                     && parameter[1].ParameterType == inputedParamType2
-//                               select calculatorInfo;
-
-//            finalList.AddRange(calculators1);
-
-//            //reverse order
-//            //second possible order, technically should be aligned todo
-//            var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
-//                               let parameter = calculatorInfo.GetParameters()
-//                               where parameter.Length == 2 //only 2 params
-//                                     && parameter[0].ParameterType == inputedParamType2
-//                                     && parameter[1].ParameterType == inputedParamType1
-//                               select calculatorInfo;
-
-//            finalList.AddRange(calculators2);
-
-//#if true
-//            //PRINT DEBUG DATA
-//            Console.WriteLine($"Calculators Type 1 : {calculators1?.Count()}");
-//            Console.WriteLine($"Calculators Type 2 : {calculators2?.Count()}");
-//#endif
-
-//            return finalList;
-//        }
+        //            //likely to fail during call, as such just ignore and move along
+        //            try
+        //            {
+        //                APIFunctionResult outputResult;
+        //                //execute based on param count
+        //                if (param.Length == 1)
+        //                {
+        //                    outputResult = ExecuteCalculatorByApiName(methodInfo1, param[0]);
+        //                }
+        //                else if (param.Length == 2)
+        //                {
+        //                    outputResult = ExecuteCalculatorByApiName(methodInfo1, param[0], param[1]);
+        //                }
+        //                else
+        //                {
+        //                    //if not filled than not accounted for
+        //                    throw new Exception("END OF THE LINE!");
+        //                }
 
 
-//        public static IEnumerable<MethodInfo> GetCalculatorListByParam<T1>()
-//        {
-//            var inputedParamType1 = typeof(T1);
+        //                return outputResult;
+        //            }
+        //            catch (Exception e)
+        //            {
+        //                try
+        //                {
+        //#if DEBUG
+        //                    Console.WriteLine($"Trying again in reverse! {methodInfo1.Name}:\n{e.Message}\n{e.StackTrace}");
+        //#endif
+        //                    //try again in reverse
+        //                    if (param.Length == 2)
+        //                    {
+        //                        var outputResult3 = ExecuteCalculatorByApiName(methodInfo1, param[1], param[0]);
+        //                        return outputResult3;
+        //                    }
 
-//            //get all calculators that can work with the inputed data
-//            var calculatorClass = typeof(AstronomicalCalculator);
+        //                    var jsonPacked = new JProperty(methodInfo1.Name, $"ERROR: {e.Message}");
+        //                    return jsonPacked;
 
-//            var finalList = new List<MethodInfo>();
+        //                }
+        //                //if fail put error in data for easy detection
+        //                catch (Exception e2)
+        //                {
+        //                    //save it nicely in json format
+        //                    var jsonPacked = new JProperty(methodInfo1.Name, $"ERROR: {e2.Message}");
+        //                    return jsonPacked;
+        //                }
+        //            }
+        //        }
 
-//            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
-//                               let parameter = calculatorInfo.GetParameters()
-//                               where parameter.Length == 1 //only 2 params
-//                                     && parameter[0].ParameterType == inputedParamType1
-//                               select calculatorInfo;
+        //        /// <summary>
+        //        /// Gets all methods in Astronomical calculator that has the pram types inputed
+        //        /// Note : also gets when order is reversed
+        //        /// </summary>
+        //        public static IEnumerable<MethodInfo> GetCalculatorListByParam<T1, T2>()
+        //        {
+        //            var inputedParamType1 = typeof(T1);
+        //            var inputedParamType2 = typeof(T2);
 
-//            finalList.AddRange(calculators1);
+        //            //get all calculators that can work with the inputed data
+        //            var calculatorClass = typeof(AstronomicalCalculator);
+
+        //            var finalList = new List<MethodInfo>();
+
+        //            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
+        //                               let parameter = calculatorInfo.GetParameters()
+        //                               where parameter.Length == 2 //only 2 params
+        //                                     && parameter[0].ParameterType == inputedParamType1
+        //                                     && parameter[1].ParameterType == inputedParamType2
+        //                               select calculatorInfo;
+
+        //            finalList.AddRange(calculators1);
+
+        //            //reverse order
+        //            //second possible order, technically should be aligned todo
+        //            var calculators2 = from calculatorInfo in calculatorClass.GetMethods()
+        //                               let parameter = calculatorInfo.GetParameters()
+        //                               where parameter.Length == 2 //only 2 params
+        //                                     && parameter[0].ParameterType == inputedParamType2
+        //                                     && parameter[1].ParameterType == inputedParamType1
+        //                               select calculatorInfo;
+
+        //            finalList.AddRange(calculators2);
+
+        //#if true
+        //            //PRINT DEBUG DATA
+        //            Console.WriteLine($"Calculators Type 1 : {calculators1?.Count()}");
+        //            Console.WriteLine($"Calculators Type 2 : {calculators2?.Count()}");
+        //#endif
+
+        //            return finalList;
+        //        }
 
 
-//#if true
-//            //PRINT DEBUG DATA
-//            Console.WriteLine($"Calculators with 1 param : {calculators1?.Count()}");
-//#endif
+        //        public static IEnumerable<MethodInfo> GetCalculatorListByParam<T1>()
+        //        {
+        //            var inputedParamType1 = typeof(T1);
 
-//            return finalList;
-//        }
+        //            //get all calculators that can work with the inputed data
+        //            var calculatorClass = typeof(AstronomicalCalculator);
+
+        //            var finalList = new List<MethodInfo>();
+
+        //            var calculators1 = from calculatorInfo in calculatorClass.GetMethods()
+        //                               let parameter = calculatorInfo.GetParameters()
+        //                               where parameter.Length == 1 //only 2 params
+        //                                     && parameter[0].ParameterType == inputedParamType1
+        //                               select calculatorInfo;
+
+        //            finalList.AddRange(calculators1);
+
+
+        //#if true
+        //            //PRINT DEBUG DATA
+        //            Console.WriteLine($"Calculators with 1 param : {calculators1?.Count()}");
+        //#endif
+
+        //            return finalList;
+        //        }
 
 
     }

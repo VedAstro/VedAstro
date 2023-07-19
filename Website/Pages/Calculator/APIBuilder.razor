@@ -114,15 +114,19 @@
         @*GUIDE TEXT*@
         <div class="vstack gap-3">
             <ArticleBlock Title="Next Step" IconName="mdi:foot-print">
+                <ButtonRow>
+                    <IconButton SmallSize="true" ButtonText="Guide" IconName="logos:youtube-icon" OpenNewTab="true" ClickUrl="@URL.APIGuideNextStep" />
+                </ButtonRow>
                 <TextHTML>
-                    Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language,
-                    PHP, JS, Python, even your browsers' URL. Design your app to cache the received data.
-                    Note, calls have been known to fail once in a <strong>blue moon</strong>, if and when that happens,
-                    just make sure your app just replays the same call again. Design your code to try
-                    HTTP call at least 2 times be reporting as failed. Even a small network issue on the
+                    Make a <kbd>HTTP GET</kbd> request from your app or website. It can be in any language
+                    <strong>JS, Python, C#, Java</strong> or even your browsers' URL. Design your app to cache the received data.
+                    <strong>If the call fails</strong>, just replay it again at least x2. Even a small network issue on the
                     client side may cause this.
                 </TextHTML>
             </ArticleBlock>
+            
+            @* LIST OF ALL API CALLS *@
+            <APICallList/>
 
             <ArticleBlock Title="Simple Response" IconName="bi:filetype-json">
                 <TextHTML>
@@ -205,7 +209,6 @@
 
     HouseAPIBuilderPanel houseApiPanel;
 
-
     private string AddPersonName { get; set; } = "Juliet";
 
     private string AddPersonGender { get; set; }
@@ -221,7 +224,6 @@
             _addPersonOwnerId = value;
         }
     }
-
 
     private string SelectedTaskName
     {
@@ -240,7 +242,6 @@
             _selectedTaskName = value;
         }
     }
-
 
     private ElementReference PostBodyElement;
     private ElementReference AddPersonMaker;

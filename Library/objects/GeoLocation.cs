@@ -20,14 +20,20 @@ namespace VedAstro.Library
         public static GeoLocation Empty = new("Empty", 101, 4.59); //ipoh
 
         /// <summary>
-        /// Fail Safe Location
+        /// Accurate AI typed ready made locations
         /// </summary>
         public static GeoLocation Tokyo = new GeoLocation("Tokyo, Japan", 139.83, 35.65);
-
-        /// <summary>
-        /// Fail Safe Location
-        /// </summary>
         public static GeoLocation Bangkok = new GeoLocation("Bangkok, Thailand", 100.50, 13.75);
+        public static GeoLocation Bangalore = new GeoLocation("Bangalore, India", 77.5946, 12.9716);
+        public static GeoLocation WashingtonDC = new GeoLocation("Washington D.C., USA", -77.0369, 38.9072);
+        public static GeoLocation London = new GeoLocation("London, UK", -0.1276, 51.5074);
+        public static GeoLocation Paris = new GeoLocation("Paris, France", 2.3522, 48.8566);
+        public static GeoLocation Berlin = new GeoLocation("Berlin, Germany", 13.4050, 52.5200);
+        public static GeoLocation Canberra = new GeoLocation("Canberra, Australia", 149.1300, -35.2809);
+        public static GeoLocation Ottawa = new GeoLocation("Ottawa, Canada", -75.6972, 45.4215);
+        public static GeoLocation Brasilia = new GeoLocation("Brasilia, Brazil", -47.8825, -15.7942);
+        public static GeoLocation Moscow = new GeoLocation("Moscow, Russia", 37.6176, 55.7558);
+        public static GeoLocation Beijing = new GeoLocation("Beijing, China", 116.4074, 39.9042);
 
 
         //FIELDS

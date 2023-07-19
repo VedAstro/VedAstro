@@ -1687,7 +1687,7 @@ namespace VedAstro.Library
         /// NOTE:
         /// - No moolatrikone for Rahu & Ketu, no error will be raised
         /// </summary>
-        [API("Moolatrikona")]
+        [API("Moolatrikona", "Similar to Exaltation but covers a range not just a point")]
         public static bool IsPlanetInMoolatrikona(PlanetName planetName, Time time)
         {
             //get sign planet is in

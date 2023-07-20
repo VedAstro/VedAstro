@@ -18,7 +18,6 @@ namespace VedAstro.Library
     {
         //todo made visible to public via api
         Agriculture,
-
         General,
         Personal,
         Yoga,
@@ -37,9 +36,10 @@ namespace VedAstro.Library
         Chandrabala,
         Travel,
         RisingSign, //used in birth time finder todo might not be needed
-        GocharaSummary,
+        GocharaSummary, //todo not yet implemented 
 
         //DASA STUFF
+        Dasa, //main category include below sub category
         PD1,
         PD2,
         PD3,

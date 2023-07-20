@@ -14,10 +14,10 @@ namespace VedAstro.Library.Tests
         public static Time StandardHoroscope = new("14:20 16/10/1918 +05:30", GeoLocation.Bangalore);
 
         [TestMethod()]
-        public void GetBhinnashtakavargaChartTest()
+        public void GetAllBhinnashtakavargaChartTest()
         {
 
-            var bhinnashtakavargaChart = AstronomicalCalculator.GetBhinnashtakavargaChart(StandardHoroscope);
+            var bhinnashtakavargaChart = AstronomicalCalculator.GetAllBhinnashtakavargaChart(StandardHoroscope);
 
             //correct answer for Standard Horoscope from Ashtakavarga System pg.18            
             Assert.AreEqual(5,bhinnashtakavargaChart[PlanetName.Sun][ZodiacName.Aries]);

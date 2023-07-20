@@ -8,16 +8,17 @@
 <div @ref="MainElement" class="vstack gap-1">
 
     @* BUTTON ROW *@
-    <div class="hstack gap-3 mb-2">
-        <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))" />
+    <div class="hstack gap-2 mb-2">
+        <IconButton SmallSize="true" ButtonText="Horoscope" OpenNewTab="true" IconName="fluent:book-star-20-filled" ClickUrl="@($"{PageRoute.Horoscope}/{SelectedPerson.Id}")" />
+        <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))"/>
         <IconButton DropDownWidthPx="@GR.W255px" ExtraDropdownClass="" SmallSize="true" ButtonText="Highlight" IconName="fluent:highlight-16-filled">
             <DropDownList>
                 <div class="d-flex flex-wrap gap-1">
                     @foreach (var eventNameKeyword in SelectedHighlightDictionary.Keys)
                     {
-                        <div style="width: @GR.W97px; margin-left:10px;" class="form-check">
-                            <input @onclick="@(()=>OnClickHighlightKeyword(eventNameKeyword))" style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="@eventNameKeyword">
-                            <label class="form-check-label"  for="@eventNameKeyword">
+                        <div style="width: @GR.W97px; margin-left: 10px;" class="form-check">
+                            <input @onclick="@(() => OnClickHighlightKeyword(eventNameKeyword))" style="width: 20px; height: 20px;" class="form-check-input" type="checkbox" id="@eventNameKeyword">
+                            <label class="form-check-label" for="@eventNameKeyword">
                                 @eventNameKeyword
                             </label>
                         </div>
@@ -25,32 +26,32 @@
                 </div>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}/{SelectedPerson.Id}")" />
-        <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg" />
-        <IconButton SmallSize="true" ButtonText="Print" IconName="ic:round-print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))" />
+        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}/{SelectedPerson.Id}")"/>
+        <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg"/>
+        <IconButton SmallSize="true" ButtonText="Print" IconName="ic:round-print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))"/>
         <IconButton SmallSize="true" ButtonText="Share" IconName="tabler:share-2">
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("ShareEmailEventsChart"))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email"/>
                         <span>Email PDF</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.ShareCurrentPageOnFacebook())">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook"/>
                         <span>Facebook</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Instagram, newTab:true))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:instagram" />
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Instagram, newTab: true))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:instagram"/>
                         <span>Instagram</span>
                     </a>
                 </li>
                 <li>
-                    <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Twitter, newTab:true))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:twitter" />
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Twitter, newTab: true))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:twitter"/>
                         <span>Twitter</span>
                     </a>
                 </li>

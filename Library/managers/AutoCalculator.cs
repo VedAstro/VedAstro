@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -30,6 +30,7 @@ namespace VedAstro.Library
                     return type.Name;
                 }
             }
+
 
             public static List<APICallData> FromMethodInfoList(IEnumerable<MethodInfo> calcList)
             {

@@ -11,12 +11,6 @@ using static VedAstro.Library.EventsChartManager;
 namespace VedAstro.Library
 {
 
-    /// <summary>
-    /// Format all funcs should have
-    /// </summary>
-    public delegate double AlgorithmFuncs(Event foundEvent, Person person);
-
-
     public class ChartOptions(List<AlgorithmFuncs> SelectedAlgorithm)
     {
         public static ChartOptions Empty = new ChartOptions(new List<AlgorithmFuncs>());
@@ -62,7 +56,6 @@ namespace VedAstro.Library
 
             return temp;
         }
-
 
         public static ChartOptions FromXml(XElement summaryOptionsXml)
         {

@@ -20,10 +20,11 @@ namespace VedAstro.Library
 
 
         /** CTOR **/
-        public EventData(EventName name, EventNature nature, string description, List<EventTag> eventTags, EventCalculatorDelegate eventCalculator)
+        public EventData(EventName name, EventNature nature, SpecializedNature specializedNature, string description, List<EventTag> eventTags, EventCalculatorDelegate eventCalculator)
         {
             Name = name;
             Nature = nature;
+            SpecializedNature = specializedNature;
             EventCalculator = eventCalculator;
             Description = description;
             EventTags = eventTags;
@@ -40,9 +41,14 @@ namespace VedAstro.Library
         public string FormattedName => Format.FormatName(this.Name);
 
         public EventNature Nature { get; private set; }
+
+        public SpecializedNature SpecializedNature { get; private set; }
         
         public EventCalculatorDelegate EventCalculator { get; private set; }
         
+        /// <summary>
+        /// Auto encoding to HTML safe on get & set
+        /// </summary>
         public string Description
         {
             get => HttpUtility.HtmlDecode(_description);
@@ -61,9 +67,36 @@ namespace VedAstro.Library
         /** PUBLIC METHODS **/
 
 
-       
+        /// <summary>
+        /// Converts an XML list of Event Data to instance List
+        /// </summary>
+        public static List<EventData> FromXmlList(List<XElement> eventDataListXml)
+        {
+            //create a place to store the list
+            List<EventData> eventDataList = new List<EventData>();
 
+            //parse each raw event data in list
+            foreach (var eventDataXml in eventDataListXml)
+            {
 
+                //add it to the return list
+                eventDataList.Add(EventData.FromXml(eventDataXml));
+            }
+
+            //return the list to caller
+            return eventDataList;
+        }
+
+        public XElement ToXml()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The root element is expected to be Person
+        /// Note: Special method done to implement IToXml
+        /// </summary>
+        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
         /// <summary>
         /// Converts XML to Instance
@@ -82,6 +115,7 @@ namespace VedAstro.Library
             Enum.TryParse(nameString, out name);
             var natureString = eventData.Element("Nature")?.Value ?? "Empty";
             Enum.TryParse(natureString, out nature);
+            var specializedNature = SpecializedNature.FromXml(eventData?.Element("SpecializedNature"));
             var rawDescription = eventData.Element("Description")?.Value ?? "Empty";
             var description = CleanText(rawDescription); //with proper formatting
             var tagString = eventData.Element("Tag")?.Value;
@@ -89,7 +123,7 @@ namespace VedAstro.Library
             var calculatorMethod = EventManager.GetEventCalculatorMethod(name);
 
             //place the data into an event data structure
-            var eventX = new EventData(name, nature, description, tagList, calculatorMethod);
+            var eventX = new EventData(name, nature, specializedNature, description, tagList, calculatorMethod);
 
             return eventX;
 
@@ -199,38 +233,6 @@ namespace VedAstro.Library
         {
             return !(left == right);
         }
-
-
-        /// <summary>
-        /// Converts an XML list of Event Data to instance List
-        /// </summary>
-        public static List<EventData> FromXmlList(List<XElement> eventDataListXml)
-        {
-            //create a place to store the list
-            List<EventData> eventDataList = new List<EventData>();
-
-            //parse each raw event data in list
-            foreach (var eventDataXml in eventDataListXml)
-            {
-
-                //add it to the return list
-                eventDataList.Add(EventData.FromXml(eventDataXml));
-            }
-
-            //return the list to caller
-            return eventDataList;
-        }
-
-        public XElement ToXml()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// The root element is expected to be Person
-        /// Note: Special method done to implement IToXml
-        /// </summary>
-        public dynamic FromXml<T>(XElement xml) where T : IToXml => FromXml(xml);
 
     }
 }

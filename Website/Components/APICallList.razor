@@ -4,7 +4,7 @@
 @using System.Reflection
 
 <div>
-    <IconTitle IconSize="AppData.DefaultIconSize" Title="All Calls" IconName="flat-color-icons:list" TitleHolder="h4">
+    <IconTitle IconSize="AppData.DefaultIconSize" Title="Browse Calls" IconName="fluent:line-horizontal-4-search-16-filled" TitleHolder="h4">
         <ButtonRow>
             <span style="font-size: 25px;">
                 Count : <strong>@APIAttributeListDisplay.Count</strong>
@@ -62,14 +62,28 @@
                                 </span>
                             </div>
                             <div class="card-body">
-                                <div class="vstack gap-3">
-                                    <div class="hstack gap-2">
-                                        <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text">Description :</IconText>
-                                        <span style="">@methodData.Description</span>
+                                <div class="d-flex justify-content-between">
+
+                                    @* DESCRIPTION *@
+                                    <div style="max-width: @GR.W509px;">
+                                        <div class="vstack gap-3">
+                                            <div class="hstack gap-2">
+                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text">Description :</IconText>
+                                                <span style="">@methodData.Description</span>
+                                            </div>
+                                            <div class="hstack gap-2">
+                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="ph:terminal-fill">Output :</IconText>
+                                                <span style="font-weight: 800; color: @ParamColor[2]">@methodData.ReturnType</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="hstack gap-2">
-                                        <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="ph:terminal-fill">Output :</IconText>
-                                        <span style="font-weight: 800; color: @ParamColor[1]">@methodData.ReturnType</span>
+
+                                    @* CALL & COPY BUTTONS *@
+                                    <div>
+                                        <div class="vstack gap-2">
+                                            <IconButton FullWidth="true" Color="success" IconName="ph:phone-call-light" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="Test Call" SmallSize="true"/>
+                                            <IconButton FullWidth="true" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="View Code" SmallSize="true"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

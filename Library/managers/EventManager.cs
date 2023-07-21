@@ -120,10 +120,10 @@ namespace VedAstro.Library
         /// and it also allows the code to be managed easily for parallel computation
         /// combines event data and calculator result 
         /// </summary>
-        public static EventSlice? ConvertToEventSlice(Time time, EventData _eventData, Person person)
+        public static EventSlice? ConvertToEventSlice(Time time, EventData eventData, Person person)
         {
             //do calculation for this event to get prediction data
-            var predictionData = _eventData.EventCalculator(time, person);
+            var predictionData = eventData.EventCalculator(time, person);
 
             if (predictionData.Occuring)
             {
@@ -133,11 +133,11 @@ namespace VedAstro.Library
                 var RelatedBody = predictionData.RelatedBody;
 
                 //override event nature from xml if specified
-                var nature = predictionData.NatureOverride == EventNature.Empty ? _eventData.Nature : predictionData.NatureOverride;
+                var nature = predictionData.NatureOverride == EventNature.Empty ? eventData.Nature : predictionData.NatureOverride;
 
                 //override description if specified
                 var isDescriptionOverride = !string.IsNullOrEmpty(predictionData.DescriptionOverride); //if true override, else false
-                var description = isDescriptionOverride ? predictionData.DescriptionOverride : _eventData.Description;
+                var description = isDescriptionOverride ? predictionData.DescriptionOverride : eventData.Description;
 
                 if (nature == EventNature.Empty || string.IsNullOrEmpty(description))
                 {
@@ -145,7 +145,7 @@ namespace VedAstro.Library
                 }
 
                 //send caller the updated event data, since override possibility
-                return new EventSlice(_eventData.Name, nature, description, time, predictionData.Occuring);
+                return new EventSlice(eventData.Name, nature, description, time, predictionData.Occuring);
 
             }
 
@@ -281,23 +281,15 @@ namespace VedAstro.Library
             //get all event calculator methods
             var eventCalculatorList = typeof(EventCalculatorMethods).GetMethods();
 
-            EventCalculatorDelegate emptyCalculator = null;
 
             //loop through all calculators
             foreach (var eventCalculator in eventCalculatorList)
             {
-
                 //try to get attribute attached to the calculator method
                 var eventCalculatorAttribute = (EventCalculatorAttribute)Attribute.GetCustomAttribute(eventCalculator, typeof(EventCalculatorAttribute));
 
-                //if attribute not found, go to next method (private function)
+                //if attribute not found, go to next method (private function not meant for events)
                 if (eventCalculatorAttribute == null) { continue; }
-
-                //store empty event to be used if error
-                if (eventCalculatorAttribute.EventName == EventName.Empty)
-                {
-                    emptyCalculator = (EventCalculatorDelegate)Delegate.CreateDelegate(typeof(EventCalculatorDelegate), eventCalculator);
-                }
 
                 //if attribute name matches input event name
                 if (eventCalculatorAttribute.EventName == inputEventName)

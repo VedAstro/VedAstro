@@ -217,8 +217,6 @@ namespace VedAstro.Library
 
                 var fromIpAddress = new GeoLocation(newLocationName, lng, lat);
 
-                Console.WriteLine($"Client Location:{fromIpAddress}");
-
                 //new geo location from the depths
                 return fromIpAddress;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace VedAstro.Library
@@ -7,8 +8,16 @@ namespace VedAstro.Library
     /// <summary>
     /// A list of planet names, with string parsing & comparison
     /// </summary>
-    public class PlanetName : IToXml
+    public class PlanetName : IToXml, IFromUrl
     {
+        /// <summary>
+        /// The number of pieces the URL version of this instance needs to be cut for processing
+        /// used to segregate out the combined URL with other data
+        /// EXP -> /PlanetName/Sun/ == 2 PIECES
+        /// </summary>
+        public static int OpenAPILength = 2;
+
+
         //NESTED TYPES
         public enum PlanetNameEnum
         {
@@ -75,7 +84,7 @@ namespace VedAstro.Library
         //METHODS
         
         /// <summary>
-        /// 
+        /// Given a planet name in string will give back an instance, caps auto corrected
         /// </summary>
         public static PlanetName Parse(string name)
         {
@@ -132,7 +141,6 @@ namespace VedAstro.Library
             return false;
         }
 
-
         public XElement ToXml()
         {
             var planetNameHolder = new XElement("PlanetName");
@@ -164,6 +172,20 @@ namespace VedAstro.Library
                 returnList.Add(PlanetName.FromXml(planetNameXml));
             }
             return returnList;
+        }
+
+        /// <summary>
+        /// Given PlanetName instance in URL form will convert to instance
+        /// /PlanetName/Mercury
+        /// </summary>
+        public static async Task<dynamic> FromUrl(string url)
+        {
+            // INPUT -> "/PlanetName/Mercury/"
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var parsed = PlanetName.Parse(parts[1]);
+
+            return parsed;
         }
 
         /// <summary>

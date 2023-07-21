@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
 {
-
 
     /// <summary>
     /// A single representation of time, contains both standard time (STD) & local mean time (LMT)
@@ -17,9 +17,16 @@ namespace VedAstro.Library
     /// to generate the Local Mean Time needed for astrological calculation
     /// </summary>
     [Serializable()]
-    public struct Time : IToXml
+    public struct Time : IToXml, IFromUrl
     {
         //FIELDS
+
+        /// <summary>
+        /// The number of pieces the URL version of this instance needs to be cut for processing
+        /// EXP -> Location/Singapore/Time/23:59/31/12/2000/+08:00/ == 8 PIECES
+        /// </summary>
+        public static int OpenAPILength = 8;
+
         private readonly DateTimeOffset _stdTime;
         private readonly GeoLocation _geoLocation;
 
@@ -78,7 +85,7 @@ namespace VedAstro.Library
             catch (Exception e)
             {
                 Console.WriteLine(e);
-               //return Empty;
+                //return Empty;
             }
         }
 
@@ -366,6 +373,12 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// Parse list of XML directly
+        /// </summary>
+        public static List<Time> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(timeXml => Time.FromXml(timeXml)).ToList();
+
+
         public static Time FromJson(JToken timeJson)
         {
             try
@@ -390,11 +403,41 @@ namespace VedAstro.Library
             }
         }
 
+        /// <summary>
+        /// Given Time instance in URL form will convert to instance
+        /// Location/Singapore/Time/23:59/31/12/2000/+08:00/
+        /// </summary>
+        public static async Task<dynamic> FromUrl(string url)
+        {
+            // INPUT -> "Location/Singapore/Time/23:59/31/12/2000/+08:00/"
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //parse time range from caller (possible to fail)
+            var parsedTime = await Tools.ParseTime(
+                locationName: parts[1], //note skip "Location"
+                hhmmStr: parts[3], //note skip "Time"
+                dateStr: parts[4],
+                monthStr: parts[5],
+                yearStr: parts[6],
+                offsetStr: parts[7]);
+
+            return parsedTime;
+        }
 
         /// <summary>
-        /// Parse list of XML directly
+        /// time converted to the format used in OPEN API url
+        /// Time/ + 00:00/22/05/2023/+00:00
         /// </summary>
-        public static List<Time> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(timeXml => Time.FromXml(timeXml)).ToList();
+        /// <returns></returns>
+        public string GetUrlString()
+        {
+            //reconstruct into URL pattern
+            //00:00/22/05/2023/+00:00
+            var returnVal = this.GetStdDateTimeOffsetText(); //date time with space
+            var formatted = returnVal.Replace(" ", "/"); //replace spacing between to slash
+            return formatted;
+        }
+
 
 
         /// <summary>
@@ -409,7 +452,7 @@ namespace VedAstro.Library
         }
 
         public int GetStdYear() => this.GetStdDateTimeOffset().Year;
-        
+
         public int GetStdMonth() => this.GetStdDateTimeOffset().Month;
 
         /// <summary>
@@ -595,19 +638,10 @@ namespace VedAstro.Library
             }
         }
 
-        /// <summary>
-        /// time converted to the format used in OPEN API url
-        /// Time/ + 00:00/22/05/2023/+00:00
-        /// </summary>
-        /// <returns></returns>
-        public string GetUrlString()
-        {
-            //reconstruct into URL pattern
-            //00:00/22/05/2023/+00:00
-            var returnVal = this.GetStdDateTimeOffsetText(); //date time with space
-            var formatted = returnVal.Replace(" ", "/"); //replace spacing between to slash
-            return formatted;
-        }
+
+
 
     }
+
+    
 }

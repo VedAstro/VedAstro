@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace VedAstro.Library
@@ -23,6 +24,11 @@ namespace VedAstro.Library
         House12 = 12,
     }
 
+
+
+    /// <summary>
+    /// Follow naming convention "{Enum}Extensions" (depended by Open API)
+    /// </summary>
     public static class HouseNameExtensions
     {
 
@@ -31,7 +37,7 @@ namespace VedAstro.Library
         /// </summary>
         public static HouseName? FromString(string inputHouseName)
         {
-            var houseName = (HouseName)Enum.Parse(typeof(HouseName), inputHouseName,true);
+            var houseName = (HouseName)Enum.Parse(typeof(HouseName), inputHouseName, true);
 
             return houseName;
         }
@@ -84,6 +90,20 @@ namespace VedAstro.Library
 
             return holder;
         }
+
+        /// <summary>
+        /// /HouseName/1
+        /// </summary>
+        public static async Task<dynamic> FromUrl(string url)
+        {
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var houseNumber = int.Parse(parts[1]);
+            var parsedAngle = (HouseName)houseNumber;
+
+            return parsedAngle;
+        }
+
     }
 
 }

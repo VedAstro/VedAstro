@@ -22,6 +22,8 @@ using SwissEphNet;
 using Formatting = Newtonsoft.Json.Formatting;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
+using System.Reflection.Metadata;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace VedAstro.Library
@@ -159,7 +161,7 @@ namespace VedAstro.Library
         {
             //access to file
             var fileClient = await Tools.GetBlobClientAzure(fileName, containerName);
-            
+
             //get xml file
             var xmlDocFile = await Tools.DownloadToXDoc(fileClient);
 
@@ -1585,7 +1587,7 @@ namespace VedAstro.Library
         {
             //get all the same methods gotten by Open api func
             var calcList = GetCalculatorListByParam<T1, T2>();
-            
+
             //extract needed data out in convenient form
             var finalList = AutoCalculator.APICallData.FromMethodInfoList(calcList);
 
@@ -1936,7 +1938,7 @@ namespace VedAstro.Library
 
             return finalList;
         }
-        
+
         /// <summary>
         /// Gets all possible API calculators from code method info
         /// used to make list to show user
@@ -1954,56 +1956,34 @@ namespace VedAstro.Library
 
 
 
-        public static JToken AnyToJSON(dynamic anyTypeData)
+        /// <summary>
+        /// Given a type will convert to json
+        /// used for parsing results from all OPEN API calcs
+        /// </summary>
+        public static JProperty AnyToJSON(string dataName, dynamic anyTypeData)
         {
-            JToken parsed = JToken.Parse("{}");//to identify errors by default
-
-            try
+            //process list differently
+            JProperty rootPayloadJson;
+            if (anyTypeData is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris
             {
-                string rawText = anyTypeData.ToString();
-                parsed = JToken.Parse("'" + rawText + "'");
+                //convert list to comma separated string
+                var parsedList = iList.Cast<object>().ToList();
+                var stringComma = Tools.ListToString(parsedList);
+
+                rootPayloadJson = new JProperty(dataName, stringComma);
             }
-            catch (Exception e)
+            //custom JSON converter available
+            else if (anyTypeData is IToJson iToJson)
             {
-                //todo better error
-                Console.WriteLine("Could not parse JSON");
+                rootPayloadJson = new JProperty(dataName, iToJson.ToJson());
             }
-
-            try
+            //normal conversion via to string
+            else
             {
-
-                //string goes in like normal
-                if (anyTypeData is string stringData) { return parsed; }
-                else if (anyTypeData is IEnumerable dataList)
-                {
-                    //convert to string
-                    foreach (var data in dataList)
-                    {
-                        var rawText = data.ToString();
-                        parsed = JToken.Parse("'" + rawText + "'");
-
-                        return parsed;
-                    }
-                }
-
-                //just convert direct
-                return parsed;
-
-
-            }
-            catch (Exception e)
-            {
-
-                //in prod log data and exist silent
-                LibLogger.Error(e);
-#if DEBUG
-                Console.WriteLine(e.Message);
-                //raise alarm
-                throw e;
-#endif
+                rootPayloadJson = new JProperty(dataName, anyTypeData?.ToString());
             }
 
-            throw new Exception("END OF LINE");
+            return rootPayloadJson;
 
         }
 
@@ -2164,7 +2144,7 @@ namespace VedAstro.Library
             return "Earth";
             //switch (timeZone)
             //{
-               
+
             //}
         }
 
@@ -2213,12 +2193,17 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// for open api AstronomicalCalculator
+        /// Given a method name in string form, will get it's reference to code
+        /// gets from AstronomicalCalculator class
         /// </summary>
         public static MethodInfo MethodNameToMethodInfo(string methodName)
         {
             var calculatorClass = typeof(AstronomicalCalculator);
-            var foundMethod = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName).FirstOrDefault();
+            var foundList = calculatorClass.GetMethods().Where(x => Tools.GetAPISpecialName(x) == methodName);
+            var foundMethod = foundList.FirstOrDefault();
+
+            //if more than 1 method found major internal error, crash it!
+            if (foundList.Count() > 1) { throw new InvalidOperationException($"Duplicate API Names : {methodName}"); }
 
             return foundMethod;
 
@@ -2416,6 +2401,32 @@ namespace VedAstro.Library
             //return returnStream;
         }
 
+        /// <summary>
+        /// INPUT:
+        /// /Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
+        /// OUTPUT:
+        /// "/Singapore/Time/23:59/"
+        /// NOTE:
+        /// In this example, if cutCount is 3, the CutString method will return
+        /// the first 3 substrings ("Singapore", "Time", "23:59")
+        /// from the input string. The result will be "/Singapore/Time/23:59/".
+        /// </summary>
+        public static string CutOutString(string input, int cutCount)
+        {
+            var parts = input.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var firstParts = parts.Take(cutCount);
+            return "/" + string.Join("/", firstParts) + "/";
+        }
+
+        /// <summary>
+        /// removes the what is within count, returns rest
+        /// </summary>
+        public static string CutRemoveString(string input, int cutCount)
+        {
+            var parts = input.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var remainingParts = parts.Skip(cutCount);
+            return "/" + string.Join("/", remainingParts) + "/";
+        }
     }
 
 

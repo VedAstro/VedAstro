@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace VedAstro.Library
@@ -14,7 +15,7 @@ namespace VedAstro.Library
     }
 
     [Serializable()]
-    public class Angle : IAngle, IToJson
+    public class Angle : IAngle, IToJson, IFromUrl
     {
         //CONST FIELDS
         private const long SecondsPerDegree = SecondsPerMinute * 60; //3600
@@ -206,6 +207,20 @@ namespace VedAstro.Library
 
             //return string to caller
             return $"{degreeAll}";
+        }
+
+        /// <summary>
+        /// Given Angle instance in URL form will convert to instance
+        /// /Angle/23.555/
+        /// </summary>
+        public static async Task<dynamic> FromUrl(string url)
+        {
+            // INPUT -> "/Person/JesusHChrist0000/"
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var parsedAngle = Angle.FromDegrees(double.Parse(parts[1]));
+
+            return parsedAngle;
         }
 
         public JObject ToJson()

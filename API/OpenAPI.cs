@@ -3,88 +3,98 @@ using VedAstro.Library;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 
 namespace API
 {
     public static class OpenAPI
     {
-        private const string Route1 = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}/{propertyName}";
-        private const string Route2 = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}/{celestialBodyName}";
-        private const string Route3 = "Location/{locationName}/Time/{hhmmStr}/{dateStr}/{monthStr}/{yearStr}/{offsetStr}/{celestialBodyType}";
+        //  CALC                          TIME
+        //Karana/Location/Singapore/Time/23:59/31/12/2000/+08:00
+        private const string Route1 = "Calculator/{calculatorName}/{*fullParamString}"; //* that captures the rest of the URL path
 
 
         /// <summary>
-        /// https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/
+        /// Main Open API method to handle calls
+        /// /.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
         /// </summary>
-        [Function(nameof(Income1))]
-        public static async Task<HttpResponseData> Income1([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route1)]
+        [Function(nameof(Calculator))]
+        public static async Task<HttpResponseData> Calculator([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route1)]
             HttpRequestData incomingRequest,
-            string locationName,
-            string hhmmStr,
-            string dateStr,
-            string monthStr,
-            string yearStr,
-            string offsetStr,
-            string celestialBodyType,
-            string celestialBodyName,
-            string propertyName)
+            string calculatorName,
+            string fullParamString
+            )
         {
-            //log the call
-            APILogger.Visitor(incomingRequest);
+            try
+            {
 
-            //parse time range from caller (possible to fail)
-            var parsedTime = await Tools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
+                //1 : PREPARE INPUT
+                //Based on the calculator method we prepare to cut the string into parameters as text
+                //get calculator data
+                var calculator = Tools.MethodNameToMethodInfo(calculatorName);
+                var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
 
-            //send to sorter
-            return await FrontDeskSorter(celestialBodyType, celestialBodyName, propertyName, parsedTime, incomingRequest);
+                //place to store ready params
+                var parsedParamList = new List<dynamic>(); //exact number as specified (performance)
+                                                           //cut the string based on parameter type
+                foreach (var parameterType in parameterTypes)
+                {
+                    //get inches to cut based on Type of cloth (ask the cloth)
+                    var nameOfField = nameof(IFromUrl.OpenAPILength);
+                    FieldInfo fieldInfo = parameterType.GetField(nameOfField, BindingFlags.Public | BindingFlags.Static);
+                    //note: enums can't set this, so default to 2 /{EnumName}/{EnumAsString}
+                    var cutCount = (int)(fieldInfo?.GetValue(null) ?? 2);
+
+                    //cut out the string that contains data of the parameter (URL version of Time, PlanetName, etc.)
+                    var extractedUrl = Tools.CutOutString(fullParamString, cutCount);
+                    fullParamString = Tools.CutRemoveString(fullParamString, cutCount); //removed used for next param parsing
+
+                    //convert URL to understandable data (magic)
+                    var nameOfMethod = nameof(IFromUrl.FromUrl);
+                    var parsedParamInstance = parameterType.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
+                    //if not found check in "extensions" class for enum
+                    if (parsedParamInstance == null)
+                    {
+                        var enumExtensions = $"VedAstro.Library.{parameterType.Name}Extensions, VedAstro.Library, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null";
+                        Type extensions = Type.GetType(enumExtensions);
+                        parsedParamInstance = extensions.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
+                    }
+
+                    //execute param parser
+                    Task task = (Task)parsedParamInstance.Invoke(null, new object[] { extractedUrl }); //pass in extracted URL
+                    await task; //getting person and location is async, so all same 
+                    dynamic parsedParam = task.GetType().GetProperty("Result").GetValue(task, null);
+
+                    //add to main list (used later for main final execution)
+                    parsedParamList.Add(parsedParam);
+                }
+
+
+                //2 : EXECUTE COMMAND
+                var rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray()); ;
+
+                //3 : CONVERT TO JSON
+                var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
+
+
+                //4 : SEND DATA
+                return APITools.PassMessageJson(payloadJson, incomingRequest);
+            }
+
+            //if any failure, show error in payload
+            catch (Exception e)
+            {
+                await APILogger.Error(e, incomingRequest);
+                return APITools.FailMessage(e.Message, incomingRequest);
+            }
+
         }
 
-        [Function(nameof(Income2))]
-        public static async Task<HttpResponseData> Income2([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route2)]
-            HttpRequestData incomingRequest,
-            string locationName,
-            string hhmmStr,
-            string dateStr,
-            string monthStr,
-            string yearStr,
-            string offsetStr,
-            string celestialBodyType,
-            string celestialBodyName)
-        {
-            //log the call
-            APILogger.Visitor(incomingRequest);
-
-            //parse time range from caller (possible to fail)
-            var parsedTime = await Tools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
-
-            //send to sorter (no property, set null)
-            return await FrontDeskSorter(celestialBodyType, celestialBodyName, null, parsedTime, incomingRequest);
-        }
-
-        [Function(nameof(Income3))]
-        public static async Task<HttpResponseData> Income3([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = Route3)]
-            HttpRequestData incomingRequest,
-            string locationName,
-            string hhmmStr,
-            string dateStr,
-            string monthStr,
-            string yearStr,
-            string offsetStr,
-            string celestialBodyType)
-        {
-            //log the call
-            APILogger.Visitor(incomingRequest);
-
-            //parse time range from caller (possible to fail)
-            var parsedTime = await Tools.ParseTime(locationName, hhmmStr, dateStr, monthStr, yearStr, offsetStr);
-
-            //send to sorter (no property, set null)
-            return await FrontDeskSorter(celestialBodyType, "", null, parsedTime, incomingRequest);
-        }
 
 
 
+        //TODO MARKED FOR DELETION  
         private static async Task<HttpResponseData> FrontDeskSorter(string celestialBodyType, string celestialBodyName, string propertyName, Time parsedTime,
             HttpRequestData incomingRequest)
         {
@@ -320,9 +330,6 @@ namespace API
 
             return rootJson;
         }
-
-
-
 
     }
 }

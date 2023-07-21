@@ -70,28 +70,9 @@ public record APIFunctionResult(string Name, object Result)
         {
             var content = apiFunctionResult.Result;
 
-
-            //process list differently
-            JProperty rootPayloadJson;
-            if (content is IList iList) //handles results that have many props from 1 call, exp : SwissEphemeris
-            {
-                //convert list to comma separated string
-                var parsedList = iList.Cast<object>().ToList();
-                var stringComma = Tools.ListToString(parsedList);
-
-                rootPayloadJson = new JProperty(apiFunctionResult.Name, stringComma);
-            }
-            //custom JSON converter available
-            else if (content is IToJson iToJson)
-            {
-                rootPayloadJson = new JProperty(apiFunctionResult.Name, iToJson.ToJson());
-            }
-            //normal conversion via to string
-            else
-            {
-                rootPayloadJson = new JProperty(apiFunctionResult.Name, content?.ToString());
-            }
-
+            //pass in name of function as header
+            var rootPayloadJson = Tools.AnyToJSON(apiFunctionResult.Name ,content);
+            
             //var sss = new JProperty(apiFunctionResult.Name, content);
             returnOb.Add(rootPayloadJson);
         }

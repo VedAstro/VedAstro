@@ -60,7 +60,7 @@ namespace VedAstro.Library
         /// Converts time back to longitude, it is the reverse of GetLocalTimeOffset in Time
         /// Exp :  5h. 10m. 20s. E. Long. to 77° 35' E. Long
         /// </summary>
-        [API("Longitude", "Converts time back to longitude", Category.Astronomical)]
+        [API("TimeToLongitude", "Converts time back to longitude", Category.Astronomical)]
         public static Angle TimeToLongitude(TimeSpan time)
         {
             //TODO function is a candidate for caching

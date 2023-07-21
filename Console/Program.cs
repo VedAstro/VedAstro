@@ -88,7 +88,7 @@ namespace VedAstro.Console
                         var personId = GetInputFromUser("Enter Person ID");
 
                         var maxWidth = int.Parse(GetInputFromUser("Enter Max Width in Px"));
-                        var precisionInHours = double.Parse(GetInputFromUser("Enter Precision in Hours"));
+                        var precisionInHours = double.Parse(GetInputFromUser("Enter Scan Precision in Hours"));
                         System.Console.WriteLine("Start & End of Chart");
                         var startYear = GetInputFromUser("Enter Start Year : 0001-9999");
                         var endYear = GetInputFromUser("Enter End Year : 0001-9999");
@@ -127,8 +127,7 @@ namespace VedAstro.Console
             var foundPerson = await Tools.GetPersonById(personId);
 
             //generate the needed charts
-            var chartList = new List<EventsChart>();
-            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4, EventTag.Gochara };
+            var eventTags = new List<EventTag> { EventTag.PD1, EventTag.PD2, EventTag.PD3, EventTag.PD4,EventTag.PD5, EventTag.Gochara };
             var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.GetGeneralScore };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
 

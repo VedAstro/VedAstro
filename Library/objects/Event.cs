@@ -240,15 +240,14 @@ namespace VedAstro.Library
         public List<PlanetName> GetRelatedPlanet()
         {
             //every time planet is mentioned add to list
-            var eventName = this.FormattedName.ToLower(); //take formatted name with spacing
+            var eventName = this.Name.ToString(); //take without spacing
             var returnList = new List<PlanetName>();
             foreach (var planetName in PlanetName.All9Planets)
             {
-                var found = eventName.Contains(planetName.ToString().ToLower());
-                if (found)
-                {
-                    returnList.Add(planetName);
-                }
+                var found = eventName.Contains(planetName.Name.ToString(), StringComparison.OrdinalIgnoreCase);
+
+                //if contains planet name, add to return list
+                if (found) { returnList.Add(planetName); }
             }
 
             //remove duplicates
@@ -265,15 +264,14 @@ namespace VedAstro.Library
         public List<HouseName> GetRelatedHouse()
         {
             //every time house name is mentioned add to list
-            var eventName = this.Name.ToString().ToLower(); //take without spacing
+            var eventName = this.Name.ToString(); //take without spacing
             var returnList = new List<HouseName>();
             foreach (var houseName in House.AllHouses)
             {
-                var found = eventName.Contains(houseName.ToString().ToLower());
-                if (found)
-                {
-                    returnList.Add(houseName);
-                }
+                var found = eventName.Contains(houseName.ToString(), StringComparison.OrdinalIgnoreCase);
+
+                //if contains planet name, add to return list
+                if (found) { returnList.Add(houseName); }
             }
 
             //remove duplicates

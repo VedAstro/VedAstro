@@ -1741,20 +1741,45 @@ namespace VedAstro.Library
             //check if there is any planet obstructing this transit prediction via Vedhasthana
             var obstructionNotFound = !AstronomicalCalculator.IsGocharaObstructed(planet, gocharaHouse, birthTime, time);
 
-            //get ashtakvarga bindu points to predict good/bad nature of gochara (percentage possible)
-            //var binduPoints = AstronomicalCalculator.GetBhinnashtakavargaChart(birthTime);
-
             //occuring if all conditions met
             var occuring = planetGocharaMatch && obstructionNotFound;
 
             return occuring;
         }
 
+
+        /// <summary>
+        /// Give a planet and sign and ashtakvarga bindu can be calculated
+        ///
+        /// NOTE ON USE: Ashtakvarga System pg.128 
+        /// For example, in the Standard Horoscope,
+        /// the Sun's transit of Aries (3rd from Moon) should
+        /// prove favourable. In the Sun's own Ashtakvarga,
+        /// there are 5 bindus in Aries. Therefore the
+        /// good effects produced should be to the extent
+        /// of 62%. The Sun's transit of Capricorn
+        /// (12th from the Moon) should prove adverse.
+        /// Capricorn, has no bindus.Therefore the evil results
+        /// to be produced by this transit are to the brim.
+        /// </summary>
+        /// <returns></returns>
+        [API("PlanetAshtakvargaBindu", "In the Sun's own Ashtakvarga, there are 5 bindus in Aries")]
+        public static int GetPlanetAshtakvargaBindu(PlanetName planet, ZodiacName signToCheck, Time time)
+        {
+            //calculates ashtakvarga for given planet 
+            var bhinnashtakavargaChart = GetPlanetBhinnashtakavargaChart(planet, time);
+
+            //get bindu score for given sign
+            var bindu = bhinnashtakavargaChart[signToCheck];
+
+            return bindu;
+        }
+
         /// <summary>
         /// Bhinnashtakavarga or individual Ashtakvarga charts
         /// Made on cold winter morning in July
         /// </summary>
-        public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> GetBhinnashtakavargaChart(Time birthTime)
+        public static Dictionary<PlanetName, Dictionary<ZodiacName, int>> GetAllBhinnashtakavargaChart(Time birthTime)
         {
 
             var minorPlanetList = PlanetName.All7Planets.Select(e => e.ToString()).ToList();
@@ -1799,6 +1824,52 @@ namespace VedAstro.Library
             //return compiled charts for all 7 planets
             return mainBhinaAstaChart;
 
+        }
+
+
+        /// <summary>
+        /// Calculates full ashtakvarga chart for a given planet for all 12 signs
+        /// Needed to compute final ashtakvarga
+        /// </summary>
+        public static Dictionary<ZodiacName, int> GetPlanetBhinnashtakavargaChart(PlanetName mainPlanet, Time birthTime)
+        {
+            //no rahu & ketu
+            if (mainPlanet.Name is PlanetName.PlanetNameEnum.Rahu or PlanetName.PlanetNameEnum.Ketu) { throw new InvalidOperationException("No rahu & ketu support"); }
+
+            //make the charts compiled from the position of 7 planets plus Ascendant
+            var minorPlanetList = PlanetName.All7Planets.Select(e => e.ToString()).ToList();
+            minorPlanetList.Add("ascendant"); //add special case Ascendant for Ashtakvarga calculation
+
+            //load the benefic places for all the minor planets
+            var allPlanetBeneficList = new Dictionary<string, int[]>();
+            foreach (var minorPlanet in minorPlanetList)
+            {
+                //fixed positions from a given planet that is positive (table data)
+                var mainPlanetBeneficList = GetPlanetBeneficHouseAshtakvarga(mainPlanet.ToString(), minorPlanet);
+                allPlanetBeneficList.Add(minorPlanet, mainPlanetBeneficList);
+            }
+
+            //Bhinnashtakavarga chart in array form
+            var mainPlanetBhinaAstaChart = ZodiacNameExtensions.GetDictionary(0);
+            foreach (var minorPlanet in minorPlanetList)
+            {
+                //parse minor planet type, if ascendant get sign of 1st house
+                //start sign can be from planet or 1st house (Ascendant)
+                var isAscendant = minorPlanet == "ascendant";
+                var minorPlanetStartSign = isAscendant
+                    ? GetHouseSignName(HouseName.House1, birthTime)
+                    : GetPlanetRasiSign(PlanetName.Parse(minorPlanet), birthTime).GetSignName();
+
+                //add the points together, add 1 for a benefic sign
+                foreach (var houseCount in allPlanetBeneficList[minorPlanet])
+                {
+                    var signXFromPlanet = GetSignCountedFromInputSign(minorPlanetStartSign, houseCount);
+                    mainPlanetBhinaAstaChart[signXFromPlanet] += 1; //add 1 to existing score from previous
+                }
+            }
+
+            //return compiled chart
+            return mainPlanetBhinaAstaChart;
         }
 
         /// <summary>

@@ -83,9 +83,18 @@ namespace VedAstro.Library
             var methodInfo = Tools.MethodNameToMethodInfo(methodName);
             var list = new List<MethodInfo> { methodInfo };
 
-            //STAGE 2: EXECUTE
-            var returnList = ExecuteCals(list, paramInput);
+            return ExecuteFunctionsJSON(list, paramInput);
+        }
 
+        /// <summary>
+        /// Given a list of already found calcs will execute it
+        /// </summary>
+        public static JToken ExecuteFunctionsJSON(List<MethodInfo> methodInfoList, params object[] paramInput)
+        {
+            //get results from executed calcs in list
+            var returnList = ExecuteCals(methodInfoList, paramInput);
+
+            //package nicely into JSON
             var parsed = APIFunctionResult.ToJsonList(returnList);
 
             return parsed;

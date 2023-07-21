@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
@@ -12,8 +13,17 @@ namespace VedAstro.Library
     /// Simple data type to contain a person's details
     /// NOTE: try to maintain as struct, for unmutable data
     /// </summary>
-    public struct Person : IToXml
+    public struct Person : IToXml, IFromUrl
     {
+
+        /// <summary>
+        /// The number of pieces the URL version of this instance needs to be cut for processing
+        /// used to segregate out the combined URL with other data
+        /// EXP -> /Person/JesusHChrist0000/ == 2 PIECES
+        /// </summary>
+        public static int OpenAPILength = 2;
+
+
         private static string[] DefaultUserId = new[] { "101" };
 
         /// <summary>
@@ -463,13 +473,27 @@ namespace VedAstro.Library
 
         }
 
-
         /// <summary>
         /// Parses a list of person's
         /// </summary>
         /// <param name="personXmlList"></param>
         /// <returns></returns>
         public static List<Person> FromXml(IEnumerable<XElement> personXmlList) => personXmlList.Select(personXml => Person.FromXml(personXml)).ToList();
+
+
+        /// <summary>
+        /// Given Time instance in URL form will convert to instance
+        /// /Person/JesusHChrist0000/
+        /// </summary>
+        public static async Task<dynamic> FromUrl(string url)
+        {
+            // INPUT -> "/Person/JesusHChrist0000/"
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var person = await Tools.GetPersonById(parts[1]);
+
+            return person;
+        }
 
         /// <summary>
         /// Replaces life event list and returns new Person with modified val

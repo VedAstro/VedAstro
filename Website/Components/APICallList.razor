@@ -38,41 +38,43 @@
                     @foreach (var methodData in APIAttributeListDisplay)
                     {
                         <div class="card shadow mt-2">
-                            <div class="card-header hstack">
+                            <div class="card-header d-flex justify-content-between">
                                 <h6 class="mb-0">
                                     <IconText IconSize="42" FontSize="19" IconName="openmoji:european-name-badge">
                                         @methodData.Name
                                     </IconText>
                                 </h6>
-                                <span class="ms-5 hstack gap-3" style="font-size: 15px;">
-                                    <div class="hstack gap-2">
-                                        <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="mdi:input">Input :</IconText>
-                                        @{
-                                            var temp = methodData.ParamTypeList;
-                                        }
-                                        <div class="hstack gap-3">
-                                            @for (var indexParamColor = 0; indexParamColor < temp.Count; indexParamColor++)
-                                            {
-                                                var paramTypeName = temp[indexParamColor];
-                                                var paramColor = ParamColor[indexParamColor]; //color based on number of param, to make each param look different
-                                                <span style="font-weight: 800; color: @paramColor">@paramTypeName,</span>
-                                            }
-                                        </div>
-                                    </div>
-                                </span>
+                                <IconButton TooltipText="Copy" IconName="carbon:link" OnClickCallback="@(()=>OnClickCopyAPI(methodData.Name))" SmallSize="true" />
                             </div>
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
 
                                     @* DESCRIPTION *@
-                                    <div style="max-width: @GR.W509px;">
+                                    <div style="max-width: @GR.W412px;">
                                         <div class="vstack gap-3">
+
                                             <div class="hstack gap-2">
-                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text">Description :</IconText>
+                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="mdi:input">Input </IconText>
+                                                @{
+                                                    var temp = methodData.ParamTypeList;
+                                                }
+                                                <div class="hstack gap-3">
+                                                    @for (var indexParamColor = 0; indexParamColor < temp.Count; indexParamColor++)
+                                                    {
+                                                        var paramTypeName = temp[indexParamColor];
+                                                        var paramColor = ParamColor[indexParamColor]; //color based on number of param, to make each param look different
+                                                        <span style="font-weight: 800; color: @paramColor">@paramTypeName,</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                            @* DESCRIPTION  TEXT*@
+                                            <div class="hstack gap-2">
+                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="dashicons:text">Description </IconText>
                                                 <span style="">@methodData.Description</span>
                                             </div>
+                                            @* OUTPUT RETURN TYPE *@
                                             <div class="hstack gap-2">
-                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="ph:terminal-fill">Output :</IconText>
+                                                <IconText GapNumber="1" IconSize="30" FontSize="15" FontColor="@AppData.Grey" IconName="ph:terminal-fill">Output </IconText>
                                                 <span style="font-weight: 800; color: @ParamColor[2]">@methodData.ReturnType</span>
                                             </div>
                                         </div>
@@ -81,8 +83,9 @@
                                     @* CALL & COPY BUTTONS *@
                                     <div>
                                         <div class="vstack gap-2">
-                                            <IconButton FullWidth="true" Color="success" IconName="ph:phone-call-light" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="Test Call" SmallSize="true"/>
-                                            <IconButton FullWidth="true" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="View Code" SmallSize="true"/>
+                                            <IconButton FullWidth="true" Color="success" IconName="ph:phone-call-light" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="Test" SmallSize="true" />
+                                            <IconButton FullWidth="true" IconName="streamline:programming-browser-code-2-code-browser-tags-angle-programming-bracket" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="Code" SmallSize="true" />
+                                            <IconButton FullWidth="true" IconName="clarity:bug-line" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" ButtonText="Bug" SmallSize="true" />
                                         </div>
                                     </div>
                                 </div>
@@ -209,5 +212,14 @@
 
     }
 
+
+    private async Task OnClickCopyAPI(string methodDataName)
+    {
+        //use js to transfer to clipboard
+        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, methodDataName);
+
+        //let user know link copied
+        await _jsRuntime.ShowAlert("success", $"Call Name Copied!", false, 2600);
+    }
 
 }

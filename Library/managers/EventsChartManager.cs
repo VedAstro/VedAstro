@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Drawing;
+using System.Diagnostics.Tracing;
 
 
 namespace VedAstro.Library
@@ -1682,7 +1683,7 @@ namespace VedAstro.Library
         public static class Algorithm
         {
             private static double topPlanetScore = 2;
-             
+
             public static double GetGeneralScore(Event foundEvent, Person person)
             {
                 //score from general nature of event
@@ -1700,6 +1701,42 @@ namespace VedAstro.Library
                 return generalScore;
             }
 
+            /// <summary>
+            /// Adds ashtakvarga bindu to only gochara events 
+            /// </summary>
+            public static double GocharaAshtakvargaBindu(Event foundEvent, Person person)
+            {
+                //if not gochara event, end here with 0/Neutral score
+                if (!foundEvent.Name.ToString().Contains("Gochara")) { return 0; }
+
+                //get gochara house number and planet from name of event
+                var gocharaHouse = foundEvent.GetRelatedHouse()[0];
+                var gocharaPlanet = foundEvent.GetRelatedPlanet()[0];
+
+                //no bindu for rahu & ketu, so default to 0/neutral
+                if (gocharaPlanet.Name is PlanetName.PlanetNameEnum.Rahu or PlanetName.PlanetNameEnum.Ketu) { return 0; }
+
+                //NOTE: Below we mix radical horoscope with now time = future prediction/muhurtha
+                //get ashtakvarga bindu points to predict good/bad nature of ongoing gochara (percentage possible)
+                //note here "Start Time" should be fine, since all throughout the event the house sign will be same as start
+                var houseSign = AstronomicalCalculator.GetHouseSignName(gocharaHouse, foundEvent.StartTime); //time here is current time, not birth
+                //here is birth time because ashtakvarga is based on birth
+                var binduPoints = AstronomicalCalculator.GetPlanetAshtakvargaBindu(gocharaPlanet, houseSign, person.BirthTime);//here is birth
+
+
+                //if bindu is below 3 and below bad
+                if (binduPoints == 0) { return -3; }
+                if (binduPoints == 1) { return -2; }
+                if (binduPoints is >= 2 and <= 3) { return -1; }
+
+                //if 4 and above is good
+                if (binduPoints is >= 4 and <= 5) { return 1; }
+                if (binduPoints is >= 6 and <= 7) { return 2; }
+                if (binduPoints == 8) { return 3; }
+
+                //end of line
+                throw new Exception("Not meant to hit here");
+            }
 
             //if strongest planet, gets an extra point
             public static double HighlightStrongestPlanet(Event foundEvent, Person person)

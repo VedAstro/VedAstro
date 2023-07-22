@@ -38,7 +38,7 @@ namespace VedAstro.Library
                 MatchCalculator.LagnaAndHouse7Good,
                 MatchCalculator.KujaDosa,
                 MatchCalculator.BadConstellations,
-                MatchCalculator.SexEnergyCompatibility
+                MatchCalculator.SexEnergy
             };
 
             //place to put results
@@ -1940,7 +1940,7 @@ namespace VedAstro.Library
 
         }
 
-        public static MatchPrediction SexEnergyCompatibility(Person male, Person female)
+        public static MatchPrediction SexEnergy(Person male, Person female)
         {
             //When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts and
             //such an individual should be mated to one who has similar instincts and not a person having Mercury or Jupiter in the 7th,
@@ -1949,7 +1949,7 @@ namespace VedAstro.Library
 
             var prediction = new MatchPrediction
             {
-                Name = MatchPredictionName.SexEnergyCompatibility,
+                Name = MatchPredictionName.SexEnergy,
                 Description = "sexual compatibility based on planets in 7th house"
             };
 

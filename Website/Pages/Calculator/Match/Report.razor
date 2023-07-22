@@ -54,7 +54,7 @@
                 </li>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" ButtonText="Print" IconName="subway:print" OnClickCallback="OnClickPrintPDF"/>
+        <IconButton SmallSize="true" ButtonText="Print" IconName="subway:print" OnClickCallback="OnClickPrintPDF" />
     </div>
 
     <hr />
@@ -69,11 +69,11 @@
 
         @*VEDIC TABLE*@
         <IconTitle Title="Advanced" IconName="tabler:school" TitleHolder="h4" />
-        <table class="table table-striped table-hover table-bordered">
+        <table class="table table-striped table-hover table-bordered " style="max-width: @GR.W764px">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col"><span class="hstack gap-2">Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.MatchReportName" /></span></th>
-                    <th scope="col">
+                    <th class="col-4"><span class="hstack gap-2">Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.MatchReportName" /></span></th>
+                    <th class="col">
                         <span class="hstack gap-2">
                             Result<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.MatchReportResult" />
                         </span>
@@ -87,18 +87,19 @@
                     @if (prediction.Name == MatchPredictionName.Empty) { continue; }
 
                     <tr>
-                        <td scope="row">
+                        <td scope="row" style="width: @GR.W412px;">
                             <b style="font-size: 22px;">@prediction.FormattedName</b>
                             <p style="margin: 0px; font-size: 15px;">@prediction.Description</p>
-                            <IconButton Outline="@true" ExtraClass=" my-1" SmallSize="true" ButtonText="More Info" OnClickCallback="@(() => _jsRuntime.ScrollToDivById(prediction.Name.ToString()))" /> @* id her has to match help text id *@
                         </td>
-
-                        <td>
-                            <b style="color: @GetNatureColor(prediction.Nature); font-size: 22px;">@prediction.Nature</b>
-                            <div style="color: #616161; font-size: 14px;">
-                                @prediction.Info
-                                <div class="hstack gap-2">[male: @prediction.MaleInfo, female: @prediction.FemaleInfo]</div>
+                        <td class="d-flex justify-content-between">
+                            <div>
+                                <b style="color: @GetNatureColor(prediction.Nature); font-size: 22px;">@prediction.Nature</b>
+                                <div style="color: #616161; font-size: 14px;">
+                                    @prediction.Info
+                                    <div class="hstack gap-2">[male: @prediction.MaleInfo, female: @prediction.FemaleInfo]</div>
+                                </div>
                             </div>
+                            <IconButton Outline="true" ExtraClass=" my-1" SmallSize="true" ButtonText="More Info" OnClickCallback="@(() => _jsRuntime.ScrollToDivById(prediction.Name.ToString()))" /> @* id here has to match help text id *@
                         </td>
                     </tr>
                 }
@@ -417,7 +418,7 @@ else
             quarter) for husband's mother; Jyeshta (first quarter) for girl's husband's
             elder brother; and Visakha (last quarter) for husband's younger brother.
         </p>
-        <h4 id="SexEnergyCompatibility" class="fw-bold">Sex Energy Compatibility</h4>
+        <h4 id="SexEnergy" class="fw-bold">Sex Energy Compatibility</h4>
         <p class="text-justify mb-4">
             When Mars and Venus are in the 7th, the boy or girl concerned will have strong sex instincts
             and such an individual should be mated to one who has similar

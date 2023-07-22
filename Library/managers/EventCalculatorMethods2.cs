@@ -10,6 +10,211 @@ namespace VedAstro.Library
     /// </summary>
     public static partial class EventCalculatorMethods
     {
+
+        #region ASHTAKVARGA_GOCHARA
+
+        //SUN
+        [EventCalculator(EventName.SunTransit8Bindu)]
+        public static CalculatorResult SunTransit8Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 8) };
+        
+        [EventCalculator(EventName.SunTransit7Bindu)]
+        public static CalculatorResult SunTransit7Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 7) };
+        
+        [EventCalculator(EventName.SunTransit6Bindu)]
+        public static CalculatorResult SunTransit6Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 6) };
+        
+        [EventCalculator(EventName.SunTransit5Bindu)]
+        public static CalculatorResult SunTransit5Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 5) };
+        
+        [EventCalculator(EventName.SunTransit4Bindu)]
+        public static CalculatorResult SunTransit4Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 4) };
+        
+        [EventCalculator(EventName.SunTransit3Bindu)]
+        public static CalculatorResult SunTransit3Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 3) };
+        
+        [EventCalculator(EventName.SunTransit2Bindu)]
+        public static CalculatorResult SunTransit2Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 2) };
+        
+        [EventCalculator(EventName.SunTransit1Bindu)]
+        public static CalculatorResult SunTransit1Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 1) };
+
+        [EventCalculator(EventName.SunTransit0Bindu)]
+        public static CalculatorResult SunTransit0Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Sun, 0) };
+        
+        //Moon
+        [EventCalculator(EventName.MoonTransit8Bindu)]
+        public static CalculatorResult MoonTransit8Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 8) };
+        
+        [EventCalculator(EventName.MoonTransit7Bindu)]
+        public static CalculatorResult MoonTransit7Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 7) };
+        
+        [EventCalculator(EventName.MoonTransit6Bindu)]
+        public static CalculatorResult MoonTransit6Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 6) };
+        
+        [EventCalculator(EventName.MoonTransit5Bindu)]
+        public static CalculatorResult MoonTransit5Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 5) };
+        
+        [EventCalculator(EventName.MoonTransit4Bindu)]
+        public static CalculatorResult MoonTransit4Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 4) };
+        
+        [EventCalculator(EventName.MoonTransit3Bindu)]
+        public static CalculatorResult MoonTransit3Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 3) };
+        
+        [EventCalculator(EventName.MoonTransit2Bindu)]
+        public static CalculatorResult MoonTransit2Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 2) };
+        
+        [EventCalculator(EventName.MoonTransit1Bindu)]
+        public static CalculatorResult MoonTransit1Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 1) };
+
+        [EventCalculator(EventName.MoonTransit0Bindu)]
+        public static CalculatorResult MoonTransit0Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Moon, 0) };
+        
+        //Mars
+        [EventCalculator(EventName.MarsTransit8Bindu)]
+        public static CalculatorResult MarsTransit8Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 8) };
+        
+        [EventCalculator(EventName.MarsTransit7Bindu)]
+        public static CalculatorResult MarsTransit7Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 7) };
+        
+        [EventCalculator(EventName.MarsTransit6Bindu)]
+        public static CalculatorResult MarsTransit6Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 6) };
+        
+        [EventCalculator(EventName.MarsTransit5Bindu)]
+        public static CalculatorResult MarsTransit5Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 5) };
+        
+        [EventCalculator(EventName.MarsTransit4Bindu)]
+        public static CalculatorResult MarsTransit4Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 4) };
+        
+        [EventCalculator(EventName.MarsTransit3Bindu)]
+        public static CalculatorResult MarsTransit3Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 3) };
+        
+        [EventCalculator(EventName.MarsTransit2Bindu)]
+        public static CalculatorResult MarsTransit2Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 2) };
+        
+        [EventCalculator(EventName.MarsTransit1Bindu)]
+        public static CalculatorResult MarsTransit1Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 1) };
+
+        [EventCalculator(EventName.MarsTransit0Bindu)]
+        public static CalculatorResult MarsTransit0Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mars, 0) };
+       
+        //Mercury
+        [EventCalculator(EventName.MercuryTransit8Bindu)]
+        public static CalculatorResult MercuryTransit8Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 8) };
+        
+        [EventCalculator(EventName.MercuryTransit7Bindu)]
+        public static CalculatorResult MercuryTransit7Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 7) };
+        
+        [EventCalculator(EventName.MercuryTransit6Bindu)]
+        public static CalculatorResult MercuryTransit6Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 6) };
+        
+        [EventCalculator(EventName.MercuryTransit5Bindu)]
+        public static CalculatorResult MercuryTransit5Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 5) };
+        
+        [EventCalculator(EventName.MercuryTransit4Bindu)]
+        public static CalculatorResult MercuryTransit4Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 4) };
+        
+        [EventCalculator(EventName.MercuryTransit3Bindu)]
+        public static CalculatorResult MercuryTransit3Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 3) };
+        
+        [EventCalculator(EventName.MercuryTransit2Bindu)]
+        public static CalculatorResult MercuryTransit2Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 2) };
+        
+        [EventCalculator(EventName.MercuryTransit1Bindu)]
+        public static CalculatorResult MercuryTransit1Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 1) };
+
+        [EventCalculator(EventName.MercuryTransit0Bindu)]
+        public static CalculatorResult MercuryTransit0Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Mercury, 0) };
+        
+        
+        //Venus
+        [EventCalculator(EventName.VenusTransit8Bindu)]
+        public static CalculatorResult VenusTransit8Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 8) };
+        
+        [EventCalculator(EventName.VenusTransit7Bindu)]
+        public static CalculatorResult VenusTransit7Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 7) };
+        
+        [EventCalculator(EventName.VenusTransit6Bindu)]
+        public static CalculatorResult VenusTransit6Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 6) };
+        
+        [EventCalculator(EventName.VenusTransit5Bindu)]
+        public static CalculatorResult VenusTransit5Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 5) };
+        
+        [EventCalculator(EventName.VenusTransit4Bindu)]
+        public static CalculatorResult VenusTransit4Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 4) };
+        
+        [EventCalculator(EventName.VenusTransit3Bindu)]
+        public static CalculatorResult VenusTransit3Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 3) };
+        
+        [EventCalculator(EventName.VenusTransit2Bindu)]
+        public static CalculatorResult VenusTransit2Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 2) };
+        
+        [EventCalculator(EventName.VenusTransit1Bindu)]
+        public static CalculatorResult VenusTransit1Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 1) };
+
+        [EventCalculator(EventName.VenusTransit0Bindu)]
+        public static CalculatorResult VenusTransit0Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Venus, 0) };
+        
+
+        //Jupiter
+        [EventCalculator(EventName.JupiterTransit8Bindu)]
+        public static CalculatorResult JupiterTransit8Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 8) };
+        
+        [EventCalculator(EventName.JupiterTransit7Bindu)]
+        public static CalculatorResult JupiterTransit7Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 7) };
+        
+        [EventCalculator(EventName.JupiterTransit6Bindu)]
+        public static CalculatorResult JupiterTransit6Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 6) };
+        
+        [EventCalculator(EventName.JupiterTransit5Bindu)]
+        public static CalculatorResult JupiterTransit5Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 5) };
+        
+        [EventCalculator(EventName.JupiterTransit4Bindu)]
+        public static CalculatorResult JupiterTransit4Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 4) };
+        
+        [EventCalculator(EventName.JupiterTransit3Bindu)]
+        public static CalculatorResult JupiterTransit3Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 3) };
+        
+        [EventCalculator(EventName.JupiterTransit2Bindu)]
+        public static CalculatorResult JupiterTransit2Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 2) };
+        
+        [EventCalculator(EventName.JupiterTransit1Bindu)]
+        public static CalculatorResult JupiterTransit1Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 1) };
+
+        [EventCalculator(EventName.JupiterTransit0Bindu)]
+        public static CalculatorResult JupiterTransit0Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Jupiter, 0) };
+
+        //Saturn
+        [EventCalculator(EventName.SaturnTransit8Bindu)]
+        public static CalculatorResult SaturnTransit8Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 8) };
+        
+        [EventCalculator(EventName.SaturnTransit7Bindu)]
+        public static CalculatorResult SaturnTransit7Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 7) };
+        
+        [EventCalculator(EventName.SaturnTransit6Bindu)]
+        public static CalculatorResult SaturnTransit6Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 6) };
+        
+        [EventCalculator(EventName.SaturnTransit5Bindu)]
+        public static CalculatorResult SaturnTransit5Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 5) };
+        
+        [EventCalculator(EventName.SaturnTransit4Bindu)]
+        public static CalculatorResult SaturnTransit4Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 4) };
+        
+        [EventCalculator(EventName.SaturnTransit3Bindu)]
+        public static CalculatorResult SaturnTransit3Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 3) };
+        
+        [EventCalculator(EventName.SaturnTransit2Bindu)]
+        public static CalculatorResult SaturnTransit2Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 2) };
+        
+        [EventCalculator(EventName.SaturnTransit1Bindu)]
+        public static CalculatorResult SaturnTransit1Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 1) };
+
+        [EventCalculator(EventName.SaturnTransit0Bindu)]
+        public static CalculatorResult SaturnTransit0Bindu(Time time, Person person) => new() { Occuring = AstronomicalCalculator.IsPlanetGocharaBindu(person.BirthTime, time, PlanetName.Saturn, 0) };
+
+
+
+        #endregion
+
         #region GOCHARA
 
         [EventCalculator(EventName.GocharaSummary)]

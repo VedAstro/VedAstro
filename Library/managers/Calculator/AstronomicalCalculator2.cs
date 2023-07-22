@@ -1730,6 +1730,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// Is SunGocharaInHouse1
         /// Checks if a Gochara is occuring for a planet in a given house without any obstructions at a given time
         /// Note : Basically a wrapper method for Gochra event calculations
         /// </summary>
@@ -1743,6 +1744,25 @@ namespace VedAstro.Library
 
             //occuring if all conditions met
             var occuring = planetGocharaMatch && obstructionNotFound;
+
+            return occuring;
+        }
+
+        /// <summary>
+        /// SunTransit8Bindu
+        /// Checks if a given planet's with given number of bindu is transiting now (Gochara)
+        /// </summary>
+        public static bool IsPlanetGocharaBindu(Time birthTime, Time nowTime, PlanetName planet, int bindu)
+        {
+            //now planet is transiting this sign
+            var gocharaHouse = AstronomicalCalculator.GetGocharaHouse(birthTime, nowTime, planet);
+            var gocharaSign = GetHouseSignName((HouseName)gocharaHouse, nowTime);
+
+            //get planet's current bindu
+            var planetBindu = AstronomicalCalculator.GetPlanetAshtakvargaBindu(planet, gocharaSign, nowTime);
+
+            //occuring if bindu is match
+            var occuring = planetBindu == bindu;
 
             return occuring;
         }
@@ -2742,24 +2762,6 @@ namespace VedAstro.Library
             return wholeDasa;
         }
 
-        /// <summary>
-        /// Generally, a planet is said to become
-        /// highly benefic if be secures in his own Ashtakavarga
-        /// more than 5 bindus. A planet having less
-        /// than 4 bindus will affect the bhava i't is in
-        /// adversely. Thus for example, if the
-        /// bhava happens to he the 4th and tbe planet there
-        /// has I, 2 or 3 bindus, the person suffers misery
-        /// in respect of all the events pertaining to the 4th
-        /// bhava and also the events signified by the Karakatwa
-        /// of the planet c-oncerned.
-        /// </summary>
-        /// <param name="planetName"></param>
-        /// <returns></returns>
-        public static int GetPlanetBindu(PlanetName planetName)
-        {
-            throw new Exception();
-        }
 
         /// <summary>
         /// Counts from inputed dasa by years to dasa, bhukti & antaram

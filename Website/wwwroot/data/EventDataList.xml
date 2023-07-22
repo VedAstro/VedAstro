@@ -1431,7 +1431,7 @@
 			In the 4th house, there will be diseases,
 			constant attacks from opponents, no peace of mind, pressure
 			from creditors, and sorrow and misery. Quarrels with wife,
-			unhappiness in conjugal life and the general ailments 
+			unhappiness in conjugal life and the general ailments
 		</Description>
 		<Tag>Gochara</Tag>
 	</Event>
@@ -2666,67 +2666,409 @@
 		<Tag>Gochara</Tag>
 	</Event>
 
-	<!--Sun Ashtakvarga-->
-	<!--
-	TODO TO BE ADDED SOON UNDER SPECIAL GOCHARA OR AT LEAST TEST
+	<!--ASHTAKVARGA GOCHARA : EFFECTS OF GOCHARA BASED SOLELY ON BINDU-->
+	<!--Sun -->
 	<Event>
 		<Name>SunTransit8Bindu</Name>
 		<Nature>Good</Nature>
-		<Description>
-			The effects will be wealth and prosperity and royal favour.
-		</Description>
-		<Tag>Gochara</Tag>
+		<Description>wealth and prosperity and royal favour</Description>
+		<Tag>AshtakvargaGochara</Tag>
 	</Event>
 	<Event>
 		<Name>SunTransit7Bindu</Name>
 		<Nature>Good</Nature>
-		<Description>
-			Welfare, happiness and pomp.
-		</Description>
-		<Tag>Gochara</Tag>
+		<Description>welfare, happiness and pomp</Description>
+		<Tag>AshtakvargaGochara</Tag>
 	</Event>
 	<Event>
 		<Name>SunTransit6Bindu</Name>
 		<Nature>Good</Nature>
-		<Description>
-
-		</Description>
-		<Tag>Gochara</Tag>
+		<Description>rising power</Description>
+		<Tag>AshtakvargaGochara</Tag>
 	</Event>
 	<Event>
-		<Name>SunTransit7Bindu</Name>
+		<Name>SunTransit5Bindu</Name>
 		<Nature>Good</Nature>
-		<Description>
-
-		</Description>
-		<Tag>Gochara</Tag>
+		<Description>wealth</Description>
+		<Tag>AshtakvargaGochara</Tag>
 	</Event>
 	<Event>
-		<Name>SunTransit7Bindu</Name>
-		<Nature>Good</Nature>
-		<Description>
-
-		</Description>
-		<Tag>Gochara</Tag>
+		<Name>SunTransit4Bindu</Name>
+		<Nature>Neutral</Nature>
+		<Description>both good and bad will be equal</Description>
+		<Tag>AshtakvargaGochara</Tag>
 	</Event>
 	<Event>
-		<Name>SunTransit7Bindu</Name>
-		<Nature>Good</Nature>
-		<Description>
-
-		</Description>
-		<Tag>Gochara</Tag>
+		<Name>SunTransit3Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>fatigue through journey</Description>
+		<Tag>AshtakvargaGochara</Tag>
 	</Event>
 	<Event>
-		<Name>SunTransit7Bindu</Name>
+		<Name>SunTransit2Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>sinful actions</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SunTransit1Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>severe sickness</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SunTransit0Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>death</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+
+	<!--Moon -->
+	<Event>
+		<Name>MoonTransit8Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>happiness,prosperity and help from relatives</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MoonTransit7Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>gain of clothes, agreeable food and gain of perfumes</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MoonTransit6Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>study of Mantras and association with religious heads</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MoonTransit5Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>courage and mental satisfaction</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MoonTransit4Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>misery and ill-health</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MoonTransit3Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>quarrels with relations</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MoonTransit2Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>quarrels brought about by one's wife and one's wealth</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MoonTransit1Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>irreparable losses</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MoonTransit0Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>sorrow and extreme panic</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+
+	<!--Mars -->
+	<Event>
+		<Name>MarsTransit8Bindu</Name>
 		<Nature>Good</Nature>
 		<Description>
-
+			gain of landed property and moneys, acquisition
+			of a house and victory
 		</Description>
-		<Tag>Gochara</Tag>
-	</Event>-->
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MarsTransit7Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>prosperity through brothers</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MarsTransit6Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>favour through kings</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MarsTransit5Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>pleasing experiences</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MarsTransit4Bindu</Name>
+		<Nature>Neutral</Nature>
+		<Description>good and bad in equal proportion</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MarsTransit3Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>separation from brothers and women</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MarsTransit2Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>quarrels due to wife and wealth</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MarsTransit1Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>disease, as smallpox, etc.</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MarsTransit0Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>disease in the stomach, fits and exhaustion</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	
+	<!--Mercury -->
+	<Event>
+		<Name>MercuryTransit8Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>respect from rulers</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryTransit7Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>increase of wealth and learning</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryTransit6Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>success attending all efforts</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryTransit5Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>reconciliation with relation</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryTransit4Bindu</Name>
+		<Nature>Neutral</Nature>
+		<Description>want of spirit in everything</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryTransit3Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>anxiety through disturbed thoughts</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryTransit2Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>diseases caused by mental worry</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryTransit1Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>imprisonment by force and unexpected calamities</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>MercuryTransit0Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>unexpected loss of everytime and consequent mental worries</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	
+	<!--Jupiter -->
+	<Event>
+		<Name>JupiterTransit8Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>sovereignty, ownership and kingly prosperity</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterTransit7Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>gain of wealth and happiness</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterTransit6Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>gain of clothes, vehicles and gold</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterTransit5Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>ruin to enemies, accomplishment of desired objects</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterTransit4Bindu</Name>
+		<Nature>Neutral</Nature>
+		<Description>gain and loss in equal measure</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterTransit3Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>nervous debility and ear diseases</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterTransit2Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>royal frowns</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterTransit1Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>loss of wealth and relations</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>JupiterTransit0Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>derangement of the mind, loss of wealth and children</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	
+	<!--Venus -->
+	<Event>
+		<Name>VenusTransit8Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>comfort from good clothes, women, flowers and
+			wholesome food</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>VenusTransit7Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>gain of ornaments and pearls</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>VenusTransit6Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>happiness from agreeable wife</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>VenusTransit5Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>meeting with friends</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>VenusTransit4Bindu</Name>
+		<Nature>Neutral</Nature>
+		<Description>equal dose of good and bad</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>VenusTransit3Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>quarrel with the people of the locality and relatives</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>VenusTransit2Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>diseases and dismissal from service</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>VenusTransit1Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>fear from water and poison</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>VenusTransit0Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>all sorts of calamities</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	
+	<!--Saturn -->
+	<Event>
+		<Name>SaturnTransit8Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>acquisition of administrative control over a
+			village or town</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnTransit7Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>acquisition of servants and domestic animals</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnTransit6Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>popularity with 
+		"thieves, hill tribes and army chief"</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnTransit5Bindu</Name>
+		<Nature>Good</Nature>
+		<Description>gain of grain</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnTransit4Bindu</Name>
+		<Nature>Neutral</Nature>
+		<Description>good and bad equal</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnTransit3Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>loss of wealth, servants, women and happiness</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnTransit2Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>imprisonment, fear and disease</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnTransit1Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>dirty fallen life</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
+	<Event>
+		<Name>SaturnTransit0Bindu</Name>
+		<Nature>Bad</Nature>
+		<Description>ill-luck in everything</Description>
+		<Tag>AshtakvargaGochara</Tag>
+	</Event>
 
 
+	
+	<!--DASA-->
+	
 	<!--Sun Dasa-->
 	<Event>
 		<Name>AriesSunPD1</Name>

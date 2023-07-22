@@ -187,8 +187,8 @@
         AppData.API.Person.PreparePersonList();
 
 
-        //get location from IP
-        AppData.ClientLocation = await GeoLocation.FromIpAddress();
+        //get location from IP (uses browser cache if any else google API)
+        AppData.ClientLocation = await WebsiteTools.GetClientLocation();
 
         //log it
         WebLogger.Data(AppData.ClientLocation.ToString());

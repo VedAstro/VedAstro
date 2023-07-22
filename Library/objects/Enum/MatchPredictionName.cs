@@ -25,6 +25,6 @@
         Rajju,
         LagnaAnd7thGood,
         BadConstellation,
-        SexEnergyCompatibility
+        SexEnergy
     }
 }

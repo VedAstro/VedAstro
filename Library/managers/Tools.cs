@@ -36,6 +36,22 @@ namespace VedAstro.Library
     {
 
         /// <summary>
+        /// gets last day of any month at any time
+        /// input : 01/1981
+        /// </summary>
+        public static int GetLastDay(string monthYearText)
+        {
+            //split month and year
+            string[] splited = monthYearText.Split('/');
+            var month = int.Parse(splited[0]);
+            var year = int.Parse(splited[1]);
+
+            int daysInMonth = DateTime.DaysInMonth(year: year, month: month);
+            return daysInMonth;
+
+        }
+
+        /// <summary>
         /// Converts raw call from API via URL to parsed Time
         /// </summary>
         public static async Task<Time> ParseTime(string locationName,

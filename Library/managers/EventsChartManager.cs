@@ -1682,7 +1682,7 @@ namespace VedAstro.Library
         /// </summary>
         public static class Algorithm
         {
-            private static double topPlanetScore = 2;
+            private static double topPlanetScore = 1;
 
             public static double GetGeneralScore(Event foundEvent, Person person)
             {

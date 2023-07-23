@@ -47,28 +47,7 @@ Know good and bad periods of your life years ahead.*@
             @* YEAR SELECTOR *@
             @if (SelectedTimeRangePreset == "selectyear")
             {
-                <div>
-                    <div class="input-group mb-3" style="width: @GR.W255px;">
-                        <label class="input-group-text" style="width: @GR.W60px;">Start</label>
-                        <select @bind="SelectedLifeYearStart" class="form-select">
-                            <option selected>Choose...</option>
-                            @foreach (var year in lifeYearList)
-                            {
-                                <option value="@year">@year</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="input-group mb-3" style="width: @GR.W255px;">
-                        <label class="input-group-text" style="width: @GR.W60px">End</label>
-                        <select @bind="SelectedLifeYearEnd" class="form-select">
-                            <option selected>Choose...</option>
-                            @foreach (var year in lifeYearList)
-                            {
-                                <option value="@year">@year</option>
-                            }
-                        </select>
-                    </div>
-                </div>
+                <MonthYearTimeRangeSelector @ref="monthYearTimeRangeSelector" />
             }
 
             @* AGE SELECTOR *@
@@ -326,17 +305,15 @@ Know good and bad periods of your life years ahead.*@
 
     /// <summary>
     /// shortcut for red text
+    /// NOTE : awesome way of using render fragments
     /// </summary>
     private RenderFragment RED = @<span style="color: red; font-weight: 900;">RED</span>;
     private RenderFragment GREEN = @<span style="color: green; font-weight: 900;">GREEN</span>;
 
-    private string SelectedLifeYearStart;
-    private string SelectedLifeYearEnd;
+
+    private List<string> lifeAgeList = GetAgeSelectionRange();
     private string SelectedLifeAgeStart;
     private string SelectedLifeAgeEnd;
-
-    private List<string> lifeYearList = new List<string>();
-    private List<string> lifeAgeList = GetAgeSelectionRange();
 
     /// <summary>
     /// Param used in URL to set Person ID via URL
@@ -359,6 +336,8 @@ Know good and bad periods of your life years ahead.*@
     private PersonSelectorBox? _easyPersonSelectorBox;
 
     private EventsChartViewer? _eventsChartViewer;
+
+    private MonthYearTimeRangeSelector? monthYearTimeRangeSelector;
 
     public Person SelectedPerson { get; set; }
 
@@ -384,41 +363,9 @@ Know good and bad periods of your life years ahead.*@
     private string? _selectedPersonId;
 
     //linked to selector box
-    public string? SelectedPersonId
-    {
-        get => _selectedPersonId;
-        set
-        {
-            //update year select to make sense
-            UpdateYearSelectionRange(value);
-            _selectedPersonId = value;
-        }
-    }
+    public string? SelectedPersonId { get; set; }
 
 
-    /// <summary>
-    /// Gets possible year list for selection 120 years
-    /// </summary>
-    private async Task UpdateYearSelectionRange(string personId)
-    {
-
-        var compiledList = new List<string>();
-        //generate year list, birth plus 120
-        var person = await WebsiteTools.GetPersonById(personId, _jsRuntime);
-        var startYear = person.BirthYear;
-
-        for (int i = 0; i < 120; i++)
-        {
-            compiledList.Add(startYear.ToString());
-            //increment
-            startYear++;
-        }
-
-        //make visible
-        lifeYearList = compiledList;
-
-        StateHasChanged();
-    }
 
     /// <summary>
     /// Gets possible age list for selection 120 years
@@ -478,7 +425,6 @@ Know good and bad periods of your life years ahead.*@
         //only continue if passed input field validation
         if (!EasyValidationPassed()) { return; }
 
-
         //mark page as NOT ready (when button clicked 2nd time)
         _isResultReady = false;
 
@@ -533,11 +479,19 @@ Know good and bad periods of your life years ahead.*@
     {
         var systemTimezone = Tools.GetSystemTimezone();
 
-        //if user selected indiviual year than make new preset is placed in format that can be read by parser
-        if (SelectedTimeRangePreset == "selectyear") { SelectedTimeRangePreset = $"{SelectedLifeYearStart}-{SelectedLifeYearEnd}"; } //exp 2000-2010
-        else if (SelectedTimeRangePreset == "selectage") { SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}"; } //exp age4to50
+        TimeRange timeRange;
 
-        var timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
+        //if user selected indiviual year than make new preset is placed in format that can be read by parser
+        if (SelectedTimeRangePreset == "selectyear") //input coming from
+        {
+            timeRange = monthYearTimeRangeSelector.GetTimeRange(SelectedPerson.GetBirthLocation());
+        }
+        else
+        {
+            if (SelectedTimeRangePreset == "selectage") { SelectedTimeRangePreset = $"age{SelectedLifeAgeStart}to{SelectedLifeAgeEnd}"; } //exp age4to50
+
+            timeRange = EventChartTools.AutoCalculateTimeRange(SelectedPerson, SelectedTimeRangePreset, systemTimezone);
+        }
 
         return timeRange;
     }
@@ -553,6 +507,13 @@ Know good and bad periods of your life years ahead.*@
         {
             //mark invalid & alert user
             _jsRuntime.ShowAlert("error", AlertText.SelectName, true);
+            return false;
+        }
+
+        //TEST 2
+        //if custom year selected then, make sure range selector report valid
+        if (!monthYearTimeRangeSelector.IsValid())
+        {
             return false;
         }
 

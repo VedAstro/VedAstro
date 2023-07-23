@@ -356,11 +356,6 @@ Know good and bad periods of your life years ahead.*@
     }
 
     private bool _isResultReady = false; //marks if the page ready to loaded
-    private MonthYearSelectorBox _startTimeSelector;
-    private MonthYearSelectorBox _endTimeSelector;
-
-    private List<ChartName> _allChartList = new List<ChartName>();
-    private string? _selectedPersonId;
 
     //linked to selector box
     public string? SelectedPersonId { get; set; }
@@ -517,43 +512,9 @@ Know good and bad periods of your life years ahead.*@
             return false;
         }
 
-
         //if control reaches here than, it's valid
         return true;
     }
-
-    private TimeRange ComputeStartEndTimeFromInput()
-    {
-        var startMonthYear = _startTimeSelector.GetSelectedTimeText();
-        //note the use of system timezone and not birth
-        var x = $"00:00 01/{startMonthYear} {Tools.GetSystemTimezoneStr()}";
-        var startTime = new Time(x, SelectedPerson.GetBirthLocation());
-
-        var endMonthYear = _endTimeSelector.GetSelectedTimeText();
-        //note the use of system timezone and not birth
-        var y = $"11:59 {GetLastDay(endMonthYear)}/{endMonthYear} {Tools.GetSystemTimezoneStr()}";
-        var endTime = new Time(y, SelectedPerson.GetBirthLocation());
-
-        return new TimeRange(startTime, endTime);
-
-
-
-        //-------------------------------
-
-        //gets last day of any month at any time
-        int GetLastDay(string monthYearText)
-        {
-            //split month and year
-            string[] splited = monthYearText.Split('/');
-            var month = int.Parse(splited[0]);
-            var year = int.Parse(splited[1]);
-
-            int daysInMonth = DateTime.DaysInMonth(year: year, month: month);
-            return daysInMonth;
-
-        }
-    }
-
 
 
 }

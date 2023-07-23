@@ -77,15 +77,11 @@
     public TimeRange GetTimeRange(GeoLocation birthLocation)
     {
 
-        //timezone to construct new time for client time
-        var systemTimezone = Tools.GetSystemTimezone();//use the inputed user's timezone
-        var now = DateTimeOffset.Now.ToOffset(systemTimezone);
-        var timeZone = now.ToString("zzz");
-
         //create time at start and end of year
-        var startTime = new Time($"00:00 01/{SelectedMonthStart}/{SelectedYearStart} {timeZone}", birthLocation);
-        var endTime = new Time($"00:00 31/{SelectedMonthEnd}/{SelectedYearEnd} {timeZone}", birthLocation);
+        var startTime = new Time($"00:00 01/{SelectedMonthStart}/{SelectedYearStart} {Tools.GetSystemTimezoneStr()}", birthLocation);
 
+        //note: last day month dynamically set
+        var endTime = new Time($"00:00 {Tools.GetLastDay(SelectedMonthEnd)}/{SelectedYearEnd} {Tools.GetSystemTimezoneStr()}", birthLocation);
         return new TimeRange(startTime, endTime);
 
     }

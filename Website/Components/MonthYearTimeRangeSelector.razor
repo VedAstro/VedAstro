@@ -1,0 +1,125 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+@using System.Text.RegularExpressions
+
+
+<div>
+    <div class="input-group mb-3" style="width:312px;">
+        <label class="input-group-text" style="width: @GR.W60px;">Start</label>
+        <input @bind="_selectedYearStart" type="number" class="form-control" pattern="\d{4}" title="Four digit year" required>
+        <span class="input-group-text">Month</span>
+        <select @bind="SelectedMonthStart" class="form-select">
+            <option value="01" selected>JAN</option>
+            <option value="02">FEB</option>
+            <option value="03">MAR</option>
+            <option value="04">APR</option>
+            <option value="05">MAY</option>
+            <option value="06">JUN</option>
+            <option value="07">JUL</option>
+            <option value="08">AUG</option>
+            <option value="09">SEP</option>
+            <option value="10">OCT</option>
+            <option value="11">NOV</option>
+            <option value="12">DEC</option>
+        </select>
+    </div>
+    <div class="input-group mb-3" style="width:312px;">
+        <label class="input-group-text" style="width: @GR.W60px">End</label>
+        <input @bind="_selectedYearEnd" type="number" class="form-control" pattern="\d{4}" title="Four digit year" required>
+        <span class="input-group-text">Month</span>
+        <select @bind="SelectedMonthEnd" class="form-select">
+            <option value="01">JAN</option>
+            <option value="02">FEB</option>
+            <option value="03">MAR</option>
+            <option value="04">APR</option>
+            <option value="05">MAY</option>
+            <option value="06">JUN</option>
+            <option value="07">JUL</option>
+            <option value="08">AUG</option>
+            <option value="09">SEP</option>
+            <option value="10">OCT</option>
+            <option value="11">NOV</option>
+            <option value="12" selected>DEC</option>
+        </select>
+    </div>
+</div>
+
+@code {
+    private string _selectedYearStart = DateTime.Now.Year.ToString();
+    private string _selectedYearEnd = DateTime.Now.Year.ToString();
+
+    private string SelectedMonthStart = "01";//defaults needs set else wont work without 1st select
+    private string SelectedMonthEnd = "12"; //                          ""
+
+    /// <summary>
+    /// auto removes spaces if any from copy pasting
+    /// </summary>
+    public string SelectedYearStart
+    {
+        get => _selectedYearStart;
+        set => _selectedYearStart = value.Replace(" ", string.Empty);
+    }
+
+    /// <summary>
+    /// auto removes spaces if any from copy pasting
+    /// </summary>
+    public string SelectedYearEnd
+    {
+        get => _selectedYearEnd;
+        set => _selectedYearEnd = value.Replace(" ", string.Empty);
+    }
+
+
+    /// <summary>
+    /// Remember to call is valid data before getting data out
+    /// </summary>
+    public TimeRange GetTimeRange(GeoLocation birthLocation)
+    {
+
+        //timezone to construct new time for client time
+        var systemTimezone = Tools.GetSystemTimezone();//use the inputed user's timezone
+        var now = DateTimeOffset.Now.ToOffset(systemTimezone);
+        var timeZone = now.ToString("zzz");
+
+        //create time at start and end of year
+        var startTime = new Time($"00:00 01/{SelectedMonthStart}/{SelectedYearStart} {timeZone}", birthLocation);
+        var endTime = new Time($"00:00 31/{SelectedMonthEnd}/{SelectedYearEnd} {timeZone}", birthLocation);
+
+        return new TimeRange(startTime, endTime);
+
+    }
+
+    /// <summary>
+    /// Checks if validation of all input fields
+    /// true if all good
+    /// </summary>
+    public bool IsValid()
+    {
+        //TEST 1
+        //start year must be 4 digits 0001-9999
+        var isFourDigits = Regex.IsMatch(SelectedYearStart, @"^\d{4}$");
+        if (!isFourDigits)
+        {
+            //mark invalid & alert user
+            _jsRuntime.ShowAlert("error", "Start year is wrong", "Must be a number from 0001 to 9999");
+            return false;
+        }
+
+        //TEST 2
+        //start year must be 4 digits 0001-9999
+         isFourDigits = Regex.IsMatch(SelectedYearEnd, @"^\d{4}$");
+        if (!isFourDigits)
+        {
+            //mark invalid & alert user
+            _jsRuntime.ShowAlert("error", "End year is wrong", "Must be a number from 0001 to 9999");
+            return false;
+        }
+
+
+        //if control reaches here than, it's valid
+        return true;
+    }
+
+
+}

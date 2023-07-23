@@ -1754,8 +1754,16 @@ namespace VedAstro.Library
         /// </summary>
         public static bool IsPlanetGocharaBindu(Time birthTime, Time nowTime, PlanetName planet, int bindu)
         {
-            //now planet is transiting this sign
+            //house the planet is transiting now
             var gocharaHouse = AstronomicalCalculator.GetGocharaHouse(birthTime, nowTime, planet);
+
+            //check if there is any planet obstructing this transit prediction via Vedhasthana
+            var obstructionFound = AstronomicalCalculator.IsGocharaObstructed(planet, gocharaHouse, birthTime, nowTime);
+
+            //if obstructed end here
+            if (obstructionFound) { return false; }
+
+            //gochara ongoing, get sign of house to get planet's bindu score for said transit
             var gocharaSign = GetHouseSignName((HouseName)gocharaHouse, nowTime);
 
             //get planet's current bindu

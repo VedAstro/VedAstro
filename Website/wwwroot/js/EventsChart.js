@@ -50,6 +50,7 @@ export class EventsChart {
 
         //use chart ID find the element on page
         //note: we make sure here that only the elements inside this specific SVG chart will be manipulated
+        this.$EventsChartSvgHolder = $(EventsChartSvgHolder);
         this.$SvgChartElm = $(`#${chartId}`);
         this.Id = chartId;
         this.$CursorLine = this.$SvgChartElm.find(ID.CursorLine);
@@ -253,7 +254,9 @@ export class EventsChart {
     static onMouseMoveHandler(mouse, instance) {
 
         //get relative position of mouse in Dasa view
-        var mousePosition = getMousePositionInElement(mouse);
+        //after zoom pixels on screen change, but when rendering
+        //SVG description box we need x, y before zoom (AI's code!)
+        var mousePosition = getMousePositionInElement(mouse); //todo no work in zoom
 
         //if cursor is out of chart view hide cursor and end here
         if (mousePosition === 0) { SVG(instance.$CursorLine[0]).hide(); return; }
@@ -269,33 +272,20 @@ export class EventsChart {
         //-------------------------LOCAL FUNCS--------------------------
 
         //Gets a mouses x axis relative inside the given element
-        //used to get mouse location on Dasa view
-        //returns 0 when mouse is out
+        //used to get mouse location on SVG chart, zoom auto corrected 
         function getMousePositionInElement(mouseEventData) {
-            //gets the measurements of the dasa view holder
-            //the element where cursor line will be moving
-            let chartMeasurements = instance.$SvgChartElm[0]?.getBoundingClientRect();
 
-            //if holder measurements invalid then end here
-            if (!chartMeasurements) { return 0; }
+            //get relative position of mouse in Dasa view
+            //after zoom pixels on screen change, but when rendering
+            //SVG description box we need x, y before zoom (AI's code!)
+            var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
+            var zoom = parseFloat(getComputedStyle(holder).zoom);
+            var mousePosition = {
+                xAxis: mouse.originalEvent.offsetX / zoom,
+                yAxis: mouse.originalEvent.offsetY / zoom
+            };
 
-            //calculate mouse X relative to dasa view box
-            let relativeMouseX = mouseEventData.clientX - chartMeasurements.left;
-            let relativeMouseY = mouseEventData.clientY - chartMeasurements.top; //when mouse leaves top
-            let relativeMouseYb = mouseEventData.clientY - chartMeasurements.bottom; //when mouse leaves bottom
-
-            //if mouse out of element element, set 0 as indicator
-            let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
-
-            if (mouseOut) {
-                return 0;
-            } else {
-                var mouse = {
-                    xAxis: relativeMouseX,
-                    yAxis: relativeMouseY
-                };
-                return mouse;
-            }
+            return mousePosition;
         }
 
         function autoMoveCursorLine(relativeMouseX) {

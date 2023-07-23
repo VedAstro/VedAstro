@@ -30,13 +30,15 @@ namespace VedAstro.Library
         BuyingSelling,
         Building,
         Education,
-        Gochara,
         Horoscope,
         Tarabala,
         Chandrabala,
         Travel,
         RisingSign, //used in birth time finder todo might not be needed
         GocharaSummary, //todo not yet implemented 
+
+        AshtakvargaGochara, //gochara based on bindu
+        Gochara,
 
         //DASA STUFF
         Dasa, //main category include below sub category

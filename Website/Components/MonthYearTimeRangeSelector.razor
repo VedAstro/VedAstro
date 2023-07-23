@@ -81,7 +81,8 @@
         var startTime = new Time($"00:00 01/{SelectedMonthStart}/{SelectedYearStart} {Tools.GetSystemTimezoneStr()}", birthLocation);
 
         //note: last day month dynamically set
-        var endTime = new Time($"00:00 {Tools.GetLastDay(SelectedMonthEnd)}/{SelectedYearEnd} {Tools.GetSystemTimezoneStr()}", birthLocation);
+        var lastDay = Tools.GetLastDay($"{SelectedMonthEnd}/{SelectedYearEnd}");
+        var endTime = new Time($"00:00 {lastDay}/{SelectedMonthEnd}/{SelectedYearEnd} {Tools.GetSystemTimezoneStr()}", birthLocation);
         return new TimeRange(startTime, endTime);
 
     }
@@ -104,7 +105,7 @@
 
         //TEST 2
         //start year must be 4 digits 0001-9999
-         isFourDigits = Regex.IsMatch(SelectedYearEnd, @"^\d{4}$");
+        isFourDigits = Regex.IsMatch(SelectedYearEnd, @"^\d{4}$");
         if (!isFourDigits)
         {
             //mark invalid & alert user

@@ -505,7 +505,8 @@ Know good and bad periods of your life years ahead.*@
 
         //TEST 2
         //if custom year selected then, make sure range selector report valid
-        if (!monthYearTimeRangeSelector.IsValid())
+        var customSelect = SelectedTimeRangePreset == "selectyear";
+        if (customSelect && !(monthYearTimeRangeSelector?.IsValid() ?? true)) //if not available then not selected
         {
             return false;
         }

@@ -10,7 +10,7 @@
     @* BUTTON ROW *@
     <div class="hstack gap-2 mb-2">
         <IconButton SmallSize="true" ButtonText="Horoscope" OpenNewTab="true" IconName="fluent:book-star-20-filled" ClickUrl="@($"{PageRoute.Horoscope}/{SelectedPerson.Id}")" />
-        <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))"/>
+        <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))" />
         <IconButton DropDownWidthPx="@GR.W255px" ExtraDropdownClass="" SmallSize="true" ButtonText="Highlight" IconName="fluent:highlight-16-filled">
             <DropDownList>
                 <div class="d-flex flex-wrap gap-1">
@@ -26,33 +26,49 @@
                 </div>
             </DropDownList>
         </IconButton>
-        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}/{SelectedPerson.Id}")"/>
-        <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg"/>
-        <IconButton SmallSize="true" ButtonText="Print" IconName="ic:round-print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))"/>
+        <IconButton SmallSize="true" ButtonText="Life Events" IconName="mdi:calendar-outline" OpenNewTab="true" ClickUrl="@($"{PageRoute.Journal}/{SelectedPerson.Id}")" />
+        <IconButton SmallSize="true" ButtonText="Download" IconName="ic:outline-save" OnClickCallback="OnClickSaveChartSvg" />
+        <IconButton SmallSize="true" ButtonText="Print" IconName="ic:round-print" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("PrintEventsChart"))" />
         <IconButton SmallSize="true" ButtonText="Share" IconName="tabler:share-2">
             <DropDownList>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("ShareEmailEventsChart"))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="ic:outline-attach-email" />
                         <span>Email PDF</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => WebsiteTools.ShareCurrentPageOnFacebook())">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:facebook" />
                         <span>Facebook</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Instagram, newTab: true))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:instagram"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:instagram" />
                         <span>Instagram</span>
                     </a>
                 </li>
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="@(() => Website.AppData.Go(URL.Twitter, newTab: true))">
-                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:twitter"/>
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="uil:twitter" />
                         <span>Twitter</span>
+                    </a>
+                </li>
+            </DropDownList>
+        </IconButton>
+        <IconButton SmallSize="true" TooltipText="Code Options" IconName="ph:code-fill">
+            <DropDownList>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="OnClickCopyPOSTCall">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mingcute:copy-3-line" />
+                        <span>Copy Call</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item hstack gap-1" @onclick="@(() => _jsRuntime.FunFeaturePopUp("ShareEmailEventsChart"))">
+                        <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mdi:gear" />
+                        <span>Ayanamsa</span>
                     </a>
                 </li>
             </DropDownList>
@@ -89,8 +105,13 @@
     /// </summary>
     public string CurrentChartId { get; set; }
 
-
+    //set when show is called
     public Person SelectedPerson { get; set; }
+    public TimeRange SelectedTimeRange { get; set; }
+    public List<EventTag> SelectedEventTags { get; set; }
+    public ChartOptions SelectedChartOptions { get; set; }
+
+
     public string _timePreset { get; set; }
     public string _eventPreset { get; set; }
 
@@ -98,7 +119,6 @@
     public Time StartTime { get; set; }
     public Time EndTime { get; set; }
     public TimeRange TimeRange => new TimeRange(StartTime, EndTime);
-    public List<EventTag> InputedEventTags { get; set; }
 
     private IconButton _showButton;
     private IconButton _hideButton;
@@ -116,9 +136,13 @@
 
     public string RawChartSvg { get; set; }
 
-    public TimeRange SelectedTimeRange { get; set; }
 
     public Dictionary<string, bool> SelectedHighlightDictionary { get; set; } = new Dictionary<string, bool>();
+
+    /// <summary>
+    /// max width of chart for fit on page
+    /// </summary>
+    private int maxWidth = 940;
 
 
     //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -172,7 +196,7 @@
     /// Sets the data that is processed and fill the content
     /// - Parent element calls here to start display chart process
     /// </summary>
-    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions summaryOptions)
+    public async Task ShowChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, ChartOptions chartOptions)
     {
         //stop if empty person
         if (Person.Empty.Equals(person)) { throw new InvalidOperationException("PERSON CAN'T BE EMPTY!!!"); }
@@ -184,13 +208,12 @@
 
             //saved to be accessed later
             SelectedPerson = person;
-            InputedEventTags = inputedEventTags;
             SelectedTimeRange = timeRange;
-
+            SelectedEventTags = inputedEventTags;
+            SelectedChartOptions = chartOptions;
 
             //get raw SVG chart from API as string
-            int maxWidth = 940; //to fit nicely in page
-            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth, summaryOptions);
+            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth, chartOptions);
 
             //bring chart to live with EventsChart.js
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, RawChartSvg);
@@ -217,10 +240,7 @@
             Console.WriteLine(e.Message);
         }
 
-
-
     }
-
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -280,14 +300,14 @@
 
     private async Task OnClickShareToEmail()
     {
-
+        //todo not yet done
         try
         {
             //poll till get
             int maxWidth = 940;
             var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.GetGeneralScore };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
-            string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, InputedEventTags, maxWidth, summaryOptions);
+            string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, SelectedEventTags, maxWidth, summaryOptions);
 
             //control reaches here than already complete
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, chartSvg);
@@ -350,7 +370,21 @@
         }
     }
 
+    /// <summary>
+    /// Gets body of POST data used to make chart from API, used for user's debug needs
+    /// </summary>
+    private async Task OnClickCopyPOSTCall()
+    {
+        //get call exactly as for API
+        var postData = AppData.API.EventsChart.GetPOSTCall(SelectedPerson, SelectedTimeRange, SelectedEventTags, maxWidth, SelectedChartOptions);
 
+        //use js to transfer to clipboard
+        await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, postData);
+
+        //let user know link copied
+        await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
+
+    }
 
 }
 

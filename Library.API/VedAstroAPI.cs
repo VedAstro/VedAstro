@@ -268,13 +268,28 @@ namespace Library.API
             //package data to get chart
             var chartSpecsJson = EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags, maxWidth, summaryOptions);
 
-            //ask API to make new chart
+            //ask API to make new chart (user id is for caching)
             var eventsChartApiCallUrl = $"{_api.URL.GetEventsChart}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
 
             //NOTE:call is held here
             var chartString = await  _api.PollApiTillData(eventsChartApiCallUrl, chartSpecsJson.ToString());
 
             return chartString;
+        }
+
+
+        /// <summary>
+        /// Gets POST call body data that is sent to API, used as a shortcut rather going into network tab in F12 
+        /// </summary>
+        public string GetPOSTCall(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth,
+            ChartOptions summaryOptions)
+        {
+            //generate the same data used when calling API
+            var chartSpecsJson = EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags, maxWidth, summaryOptions);
+
+            var jsonPostData = chartSpecsJson.ToString();
+
+            return jsonPostData;
         }
 
     }

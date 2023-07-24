@@ -35,6 +35,8 @@ namespace VedAstro.Library
     public static class Tools
     {
 
+
+
         /// <summary>
         /// gets last day of any month at any time
         /// input : 01/1981

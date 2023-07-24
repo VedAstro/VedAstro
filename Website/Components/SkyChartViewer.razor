@@ -52,7 +52,7 @@
         if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }
 
         var locationName = Tools.RemoveWhiteSpace(stringWithSpace);
-        var url = $"{AppData.URL.ApiUrl}/Location/{locationName}/Time/{time?.GetUrlString()}/{ending}";
+        var url = $"{AppData.URL.ApiUrl}/Location/{locationName}/Time/{time?.ToUrl()}/{ending}";
         return url;
 
     }

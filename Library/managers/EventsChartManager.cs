@@ -15,6 +15,9 @@ namespace VedAstro.Library
     /// </summary>
     public static class EventsChartManager
     {
+        //1 GENERATE DATA FOR EVENT ROWS
+        public const int SingleRowHeight = 15;
+        public const int SummaryRowHeight = 22;
 
         //px width & height of each slice of time
         //used when generating dasa rows
@@ -34,14 +37,16 @@ namespace VedAstro.Library
         /// </summary>
         public static List<Event> UnsortedEventList { get; set; }
 
-        //index is Y axis px (vertical position)
-        //private static string[] SvgConmponentList = new string[];
 
 
         //▒█▀▀█ ▒█░▒█ ▒█▀▀█ ▒█░░░ ▀█▀ ▒█▀▀█ 
         //▒█▄▄█ ▒█░▒█ ▒█▀▀▄ ▒█░░░ ▒█░ ▒█░░░ 
         //▒█░░░ ░▀▄▄▀ ▒█▄▄█ ▒█▄▄█ ▄█▄ ▒█▄▄█
 
+        
+        /// <summary>
+        /// Main method that starts making chart
+        /// </summary>
         public static async Task<string> GenerateEventsChart(Person inputPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> inputedEventTags, ChartOptions summaryOptions)
         {
 
@@ -119,11 +124,9 @@ namespace VedAstro.Library
                 //note : avg speed 30s
                 eventRows = GenerateEventRows(
                     eventsPrecisionHours,
-                    startTime,
-                    endTime,
                     inputPerson,
                     timeSlices,
-                    inputedEventTags, summaryOptions, ref verticalYAxis);
+                    summaryOptions, ref verticalYAxis);
 
                 var padding = 1;//space between rows
                 summaryRow = GenerateSummaryRow(SummaryRowData, SummaryRowHeight, SingleRowHeight, padding, ref verticalYAxis);
@@ -202,6 +205,7 @@ namespace VedAstro.Library
         /// NOTE : 2 names for 1 methods, yeah! clearer caller code
         /// </summary>
         private static int GetLastOccupiedYAxis() => GetNextFreeYAxis();
+        
         private static int GetNextFreeYAxis()
         {
             //scan from last till you hit something
@@ -487,7 +491,6 @@ namespace VedAstro.Library
 
             return widthPx;
         }
-
 
         /// <summary>
         /// Input sting to get nicely wrapped text in SVG
@@ -1395,15 +1398,10 @@ namespace VedAstro.Library
 
         private static Dictionary<int, SumData> SummaryRowData { get; set; }
 
-        //1 GENERATE DATA FOR EVENT ROWS
-        public const int SingleRowHeight = 15;
-        public const int SummaryRowHeight = 22;
-
         /// <summary>
         /// Generate rows based of inputed events
         /// </summary>
-        private static string GenerateEventRows(double eventsPrecision, Time startTime, Time endTime,
-            Person inputPerson, List<Time> timeSlices, List<EventTag> inputedEventTags, ChartOptions summaryOptions, ref int yAxis)
+        private static string GenerateEventRows(double hoursPerPixel, Person inputPerson, List<Time> timeSlices, ChartOptions options, ref int yAxis)
         {
             const int widthPerSlice = 1;
 
@@ -1411,21 +1409,30 @@ namespace VedAstro.Library
             //sort event by duration, so that events are ordered nicely in chart
             //todo events are breaking up between rows
             //todo order by planet strength
-            var eventList = EventsChartManager.UnsortedEventList.OrderByDescending(x => x.Duration).ToList();
+            var eventList = EventsChartManager.UnsortedEventList.OrderByDescending(x => x.DurationMin).ToList();
 
+            //1. FILTER
+            //remove events 70% shorter duration than time shown by 1 pixel
+            //exp: if event is only 10min but 1 pixel = 60min,
+            //then the small event is going to overpower the larger events
+            var removedCount = eventList.RemoveAll(evt => evt.DurationHour < (hoursPerPixel * 0.7));
+            Console.WriteLine($"!! REMOVED EVENT TOO SHORT COUNT : {removedCount} !!");
 
-            //2 STACK & GENERATED ROWS FROM ABOVE DATA
+            //todo make data visible to end user
+            Console.WriteLine($"Number Of Events In Chart :{eventList.Count}");
+
+            //2. STACK & GENERATED ROWS FROM ABOVE DATA
             var padding = 1;//space between rows
             var compiledRow = "";
             if (eventList.Any())
             {
-
-                //note: summary data is filled when generating rows
+                
                 //x axis, total nature score, planet name
-                SummaryRowData = new Dictionary<int, SumData>();
+                SummaryRowData = new Dictionary<int, SumData>(); //note: summary data is filled when generating rows
+
                 //generate svg for each row & add to final row
-                //compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, out int finalHeight);
-                compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, summaryOptions, out int finalHeight);
+                compiledRow += GenerateMultipleRowSvg(eventList, timeSlices, yAxis, 0, options, out int finalHeight);
+
                 //set y axis (horizontal) for next row
                 yAxis = yAxis + finalHeight + padding;
 
@@ -1654,8 +1661,6 @@ namespace VedAstro.Library
             return rowHtml;
         }
 
-
-
         /// <summary>
         /// Intelligently calculates summary score
         /// </summary>
@@ -1674,7 +1679,6 @@ namespace VedAstro.Library
 
             return final;
         }
-
 
         /// <summary>
         /// Special set of functions to calculate events chart summary row
@@ -2016,7 +2020,6 @@ namespace VedAstro.Library
             }
 
         }
-
 
     }
 }

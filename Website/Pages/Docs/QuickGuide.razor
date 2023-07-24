@@ -1,4 +1,14 @@
-﻿@using VedAstro.Library
+﻿
+@* 
+▀█▀ █░█ █▀▀   █░█░█ █ █▀ █▀▀   █▀▀ █▀█   █▀ █ █░░ █▀▀ █▄░█ ▀█▀ ░
+░█░ █▀█ ██▄   ▀▄▀▄▀ █ ▄█ ██▄   █▄█ █▄█   ▄█ █ █▄▄ ██▄ █░▀█ ░█░ █
+
+█▄▄ █▀▀ █▀▀ ▄▀█ █░█ █▀ █▀▀   █▄░█ █▀█ ▀█▀ █░█ █ █▄░█ █▀▀   █▄░█ █▀▀ █▀▀ █▀▄ █▀   ▀█▀ █▀█   █▄▄ █▀▀   █▀ ▄▀█ █ █▀▄
+█▄█ ██▄ █▄▄ █▀█ █▄█ ▄█ ██▄   █░▀█ █▄█ ░█░ █▀█ █ █░▀█ █▄█   █░▀█ ██▄ ██▄ █▄▀ ▄█   ░█░ █▄█   █▄█ ██▄   ▄█ █▀█ █ █▄▀
+ *@
+ 
+
+@using VedAstro.Library
 @attribute [Route(PageRoute.QuickGuide)]
 
 
@@ -40,9 +50,7 @@
                             <option value="Match">Match Checker</option>
                             <option value="Horoscope">Horoscope</option>
                             <option value="LifePredictor">Life Predictor</option>
-                            @*                             <option value="Muhurtha">Muhurtha</option>
-                            <option value="MatchFinder">Match Finder</option>
-                            *@
+                            <option value="GoodTimeFinder">Good Time Finder</option>
                         </select>
                     </div>
                 </div>
@@ -69,7 +77,7 @@
         <TextHTML>
             Each calculator shows an aspect of astrology. For example <BoldLink URL="@PageRoute.Match">Match</BoldLink> is a calculator for
             checking marriage or friendship compatibility. <BoldLink URL="@PageRoute.LifePredictor">Life Predictor</BoldLink>
-            can help predict major life events <strong>decades ahead</strong> and using <BoldLink URL="@PageRoute.Muhurtha">Muhurtha</BoldLink>
+            can help predict major life events <strong>decades ahead</strong> and using <BoldLink URL="@PageRoute.GoodTimeFinder">Good Time Finder</BoldLink>
             you can find the perfect time for important occasions like marriage, job interviews or starting a project.
             Explore each calculator to get a deep understanding of Vedic Astrology.
         </TextHTML>
@@ -171,7 +179,7 @@
             case "lifepredictor": AppData.Go($"{PageRoute.LifePredictor}/{personId}"); break;
             case "match": AppData.Go($"{PageRoute.Match}"); break; //fill only first name
             case "matchfinder": AppData.Go($"{PageRoute.MatchFinder}"); break;
-            case "muhurtha": AppData.Go($"{PageRoute.Muhurtha}"); break; //fill only first name
+            case "goodtimefinder": AppData.Go($"{PageRoute.GoodTimeFinder}"); break; //fill only first name
         }
 
     }

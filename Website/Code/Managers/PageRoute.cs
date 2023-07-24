@@ -45,7 +45,6 @@
         public const string LocalMeanTime = "LocalMeanTime";
         public const string Horoscope = "Horoscope";
         public const string HoroscopeParam = "Horoscope/{PersonIdUrl}";
-        public const string Muhurtha = "Muhurtha";
         public const string FamilyChart = "FamilyChart";
         public const string MatchReport = "Match/Report";
         public const string APIBuilder = "APIBuilder";

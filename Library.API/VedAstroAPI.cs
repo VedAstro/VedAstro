@@ -30,7 +30,7 @@ namespace Library.API
 
             //prepare url to call
             var url = $"{_api.URL.FindMatch}/PersonId/{personId}";
-           var  personKutaScore = await _api.GetList(url, PersonKutaScore.FromJsonList);
+            var personKutaScore = await _api.GetList(url, PersonKutaScore.FromJsonList);
 
             return personKutaScore;
 
@@ -128,7 +128,7 @@ namespace Library.API
 #endif
 
             //if pass, clear local person cache
-            await HandleResultClearLocalCache(person,jsonResult, "add");
+            await HandleResultClearLocalCache(person, jsonResult, "add");
 
             //up to caller to interpret data, can be failed one also
             return jsonResult;
@@ -252,44 +252,42 @@ namespace Library.API
 
     }
 
-
     public class EventsChartTools
     {
         private readonly VedAstroAPI _api;
 
         public EventsChartTools(VedAstroAPI vedAstroApi) => _api = vedAstroApi;
 
-
-        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions summaryOptions)
+        public async Task<string> GetEventsChart(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions options)
         {
             //no person no entry!
             if (Person.Empty.Equals(person)) { throw new InvalidOperationException("NO CHART FOR EMPTY PERSON!"); }
 
-            //package data to get chart
-            var chartSpecsJson = EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags, maxWidth, summaryOptions);
+            //generate URL to get chart from API
+            var eventsChartApiCallUrl = GetEventsChartApiUrl(person,timeRange,inputedEventTags, maxWidth, options);
 
-            //ask API to make new chart (user id is for caching)
-            var eventsChartApiCallUrl = $"{_api.URL.GetEventsChart}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
-
-            //NOTE:call is held here
-            var chartString = await  _api.PollApiTillData(eventsChartApiCallUrl, chartSpecsJson.ToString());
+            //make the call to API, NOTE:call is held here
+            var chartString = await _api.PollApiTillData(eventsChartApiCallUrl);
 
             return chartString;
         }
 
-
         /// <summary>
-        /// Gets POST call body data that is sent to API, used as a shortcut rather going into network tab in F12 
+        /// Get Events chart api call GET URL that is sent to API,
+        /// note: used as a shortcut in website rather going into network tab in F12 
         /// </summary>
-        public string GetPOSTCall(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth,
+        public string GetEventsChartApiUrl(Person person, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth,
             ChartOptions summaryOptions)
         {
-            //generate the same data used when calling API
-            var chartSpecsJson = EventsChart.GenerateChartSpecsJson(person, timeRange, inputedEventTags, maxWidth, summaryOptions);
+            //put specs to make chart into a URL format
+            var chartSpecsUrl = EventsChart.FromData(person, timeRange, inputedEventTags, maxWidth, summaryOptions).ToUrl();
 
-            var jsonPostData = chartSpecsJson.ToString();
+            //ask API to make new chart (user id is for caching)
+            var eventsChartApiCallUrl = $"{_api.URL.GetEventsChart}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
 
-            return jsonPostData;
+            var finalUrl = eventsChartApiCallUrl + chartSpecsUrl;
+
+            return finalUrl;
         }
 
     }
@@ -351,7 +349,7 @@ namespace Library.API
         /// </summary>
         /// <param name="timer">milliseconds to auto close alert, if 0 then won't close which is default (optional)</param>
         /// <param name="useHtml">If true title can be HTML, default is false (optional)</param>
-        public  async Task ShowAlert( string icon, string title, bool showConfirmButton, int timer = 0, bool useHtml = false)
+        public async Task ShowAlert(string icon, string title, bool showConfirmButton, int timer = 0, bool useHtml = false)
         {
             object alertData;
 
@@ -393,7 +391,7 @@ namespace Library.API
         /// })
         /// 
         /// </summary>
-        public async Task ShowAlert( object alertData)
+        public async Task ShowAlert(object alertData)
         {
             try
             {
@@ -422,8 +420,10 @@ namespace Library.API
 
         /// <summary>
         /// Calls API till surrender
+        /// Defaults to GET request when payload is null
+        /// POST/GET request with URL and payload needed
         /// </summary>
-        public async Task<string?> PollApiTillData(string inputUrl, string dataToSend)
+        public async Task<string?> PollApiTillData(string inputUrl, string dataToSend = null)
         {
 
             //call until data appears, API takes care of everything
@@ -440,6 +440,7 @@ namespace Library.API
             return parsedJsonReply;
 
         }
+
 
         /// <summary>
         /// takes in raw response from API and

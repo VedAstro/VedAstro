@@ -84,8 +84,10 @@ namespace Library.API
             var rawPayloadStr = await jsRuntime.InvokeAsync<string?>("Interop.ReadOnlyIfPassString", receiverUrl, dataToSend);
 
             return rawPayloadStr;
-
         }
+
+
+
 
         public static async Task<T?> ReadServer<T>(string receiverAddress) where T : JToken
         {

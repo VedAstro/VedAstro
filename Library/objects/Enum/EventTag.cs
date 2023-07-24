@@ -45,11 +45,11 @@ namespace VedAstro.Library
         PD1,
         PD2,
         PD3,
-        PD4, 
-        PD5, 
-        PD6, 
-        PD7, 
-        PD8, 
+        PD4,
+        PD5,
+        PD6,
+        PD7,
+        PD8,
 
         DasaSpecialRules,
 
@@ -151,6 +151,20 @@ namespace VedAstro.Library
         public static List<EventTag> GetAll()
         {
             List<EventTag> enumList = Enum.GetValues(typeof(EventTag)).Cast<EventTag>().ToList();
+            return enumList;
+        }
+
+
+        /// <summary>
+        /// Given a string separated by comma, parse to list
+        /// EXP : PD1,PD2,PD3,PD4,PD5,AshtakvargaGochara,Gochara
+        /// </summary>
+        public static List<EventTag> FromString(string eventTagString)
+        {
+            List<EventTag> enumList = eventTagString.Split(',')
+                .Select(s => (EventTag)Enum.Parse(typeof(EventTag), s))
+                .ToList();
+
             return enumList;
         }
     }

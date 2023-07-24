@@ -1,8 +1,10 @@
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VedAstro.Library
 {
@@ -19,7 +21,7 @@ namespace VedAstro.Library
         /// Placed here to reduce overhead when being accessed by different methods in this class
         /// </summary>
         private static List<Event> EventList { get; set; } = new List<Event>();
-        
+
         /// <summary>
         /// cached copy of EventDataList.xml parsed
         /// </summary>
@@ -48,16 +50,15 @@ namespace VedAstro.Library
             var startTime = new Time(startStdTime, geoLocation);
             var endTime = new Time(endStdTime, geoLocation);
 
-            //initialize empty list of event to return
+            //place to store all generated events
             List<Event> eventList = new();
 
             //split time into slices based on precision
             var timeList = Time.GetTimeListFromRange(startTime, endTime, precisionInHours);
 
-
             foreach (var eventData in eventDataList)
             {
-                //get list of occuring events for a single event type
+                //get list of occuring events for a single event data type
                 var eventListForThisEvent = GetListOfEventsForEventData(eventData, person, timeList);
 
                 //add events to main list of event
@@ -77,15 +78,12 @@ namespace VedAstro.Library
             List<Event> GetListOfEventsForEventData(EventData eventData, Person person, List<Time> timeList)
             {
                 //calculate if event occurred for each time slice and store it in a dictionary
-                //NOTE:
                 var eventSlices = ConvertToEventSlice(timeList, eventData, person);
 
-                //go through time slices and identify start & end of events
-                //place them in a event list
-                var eventList = EventSlicesToEvents(timeList, eventSlices);
+                //go through time slices and identify start & end of events, place them in a event list
+                var finalList = EventSlicesToEvents(eventSlices);
 
-                return eventList;
-
+                return finalList;
             }
 
         }
@@ -153,124 +151,39 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// before becoming events
-        /// scans array and creates events
+        /// Scans array of event times, and creates begin and end based events
+        /// Note: each array is one 1 event type only
         /// </summary>
-        public static List<Event> EventSlicesToEvents2(List<Time> timeList, EventSlice[] eventSliceList)
+        public static List<Event> EventSlicesToEvents(EventSlice[] eventSliceList)
         {
+            //convert event slices to array of occuring and not occuring (easy to detect range)
+            bool[] isOccuringList = Array.ConvertAll(eventSliceList, evtSlice => evtSlice != null);//not null is true in list
 
-            //Makes the events as it scans them
-            var returnList = new List<Event>();
-            var eventStartPosition = 0;
-            var inBetween = false; //in between start & end event, start as though null before
-            var lastIndex = eventSliceList.Length;
-            for (int i = 0; i < lastIndex; i++)
-            {
-                //if null move to next
-                var val = eventSliceList[i];
-                var notOccuring = val == null;
-                var isOccuring = !notOccuring;
-                if (notOccuring)
-                {
-                    //marks the end of the event, make it & save it
-                    if (inBetween)
-                    {
-                        inBetween = false;//halt
-                        var previousSlicePosition = --i;//last slice in previous event
+            //converts array into start & end ranges (all possible cases tested!)
+            var ranges = EventManager.GetTrueRanges(isOccuringList);
 
-                        //create the event
-                        var startSlice = eventSliceList[eventStartPosition];
-                        var startTime = startSlice.Time;
-                        var endTime = eventSliceList[previousSlicePosition].Time;//aka end I
-
-                        //note: only details from start slice is used, meaning if other slices have
-                        //different nature it is ignored, and should not have it either
-                        var newEvent = new Event(startSlice.Name, startSlice.Nature, startSlice.Description, startTime, endTime);
-                        returnList.Add(newEvent); //add to list
-                    }
-
-                    //nothing to see, go to next
-                    continue;
-                }
-
-                //if new event after null, set start
-                if (isOccuring && !inBetween) { eventStartPosition = i; inBetween = true; }
-
-            }
-
-            return returnList;
-
-        }
-
-        /// <summary>
-        /// Chunks of 1 event type in an array, scans it and makes events with start and end time
-        /// note: only details from start slice is used, meaning if other slices have
-        /// different nature it is ignored, and should not have it either
-        /// </summary>
-        public static List<Event> EventSlicesToEvents(List<Time> timeList, EventSlice[] eventSliceList)
-        {
-            //final event list
-            var returnList = new List<Event>();
-
-            //consecutive events occurring slice count
-            int occurringCount = 0;
-
-            //go through each slice
-            var totalSlices = eventSliceList.Length;
-            var eventStartPosition = 0;
-            for (int i = 0; i < totalSlices; i++)
-            {
-                //get whether event occurring
-                var val = eventSliceList[i];
-                var notOccurring = val == null;
-                var isOccurring = !notOccurring;
-
-                //if consecutive occurs count it
-                if (isOccurring)
-                {
-                    //if first count then this slice is start
-                    if (occurringCount == 0) { eventStartPosition = i; }
-                    occurringCount++;
-                }
-
-                //end of event
-                if (notOccurring && occurringCount > 0)
-                {
-                    //make new event
-                    var startSlice = eventSliceList[eventStartPosition];
-                    var startTime = startSlice.Time;
-                    var previousSlicePosition = --i;//right before this null
-                    var endTime = eventSliceList[previousSlicePosition].Time;//aka end I
-
-                    //note: only details from start slice is used, meaning if other slices have
-                    //different nature it is ignored, and should not have it either
-                    var newEvent = new Event(startSlice.Name, startSlice.Nature, startSlice.Description, startTime, endTime);
-                    returnList.Add(newEvent); //add to list
-
-                    //clear consecutive count
-                    occurringCount = 0;
-                }
-
-                //last slice but but still occurring
-                var isLastSlice = i == (totalSlices - 1);
-                if (isLastSlice && occurringCount > 0)
-                {
-                    //make new event
-                    var startSlice = eventSliceList[eventStartPosition];
-                    var startTime = startSlice.Time;
-                    var endTime = eventSliceList[i].Time; //this must be end of event
-
-                    //note: only details from start slice is used, meaning if other slices have
-                    //different nature it is ignored, and should not have it either
-                    var newEvent = new Event(startSlice.Name, startSlice.Nature, startSlice.Description, startTime, endTime);
-                    returnList.Add(newEvent); //add to list
-                }
-
-            }
-
+            //each range detected becomes an event
+            var returnList = ranges.Select(RangeToEvent).ToList();
 
             //send final compiled list to caller
             return returnList;
+
+
+            //------------------LOCAL FUNCS
+
+            //given a range converts it into an event
+            Event RangeToEvent((int Start, int End) range)
+            {
+                //note: using start for all event Name, Nature, Description (expected to be same)
+                var startSlice = eventSliceList[range.Start];
+                var startTime = startSlice.Time;
+                var endTime = eventSliceList[range.End].Time;
+
+                var convertedEvent = new Event(startSlice.Name, startSlice.Nature, startSlice.Description, startTime, endTime);
+
+                return convertedEvent;
+            }
+
         }
 
         /// <summary>
@@ -542,7 +455,8 @@ namespace VedAstro.Library
             var sync = new object();//to lock thread access to list
             Parallel.ForEach(inputedEventTags, (eventTag, state) =>
             {
-                var tempEventList = _CalculateEvents(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag);
+                //get all events for a specific tag
+                var tempEventList = CalculateEventsForTag(eventsPrecision, startTime, endTime, inputPerson.GetBirthLocation(), inputPerson, eventTag);
 
                 //adding to list needs to be synced for thread safety
                 lock (sync) { EventList.AddRange(tempEventList); }
@@ -553,7 +467,7 @@ namespace VedAstro.Library
 
         }
 
-        public static List<Event> _CalculateEvents(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag)
+        public static List<Event> CalculateEventsForTag(double eventsPrecision, Time startTime, Time endTime, GeoLocation geoLocation, Person person, EventTag tag)
         {
 
             //get all event data/types which has the inputed tag (FILTER)
@@ -571,6 +485,31 @@ namespace VedAstro.Library
             //send sorted events to view
             return orderByAscResult.ToList();
 
+        }
+
+
+        /// <summary>
+        /// takes an array of booleans and returns a list of tuples,
+        /// where each tuple represents the start and end indices of a range of true values
+        /// Note: written by AI
+        /// </summary>
+        public static List<(int Start, int End)> GetTrueRanges(bool[] array)
+        {
+            var ranges = new List<(int Start, int End)>();
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array[i])
+                {
+                    int start = i;
+                    while (i < array.Length && array[i])
+                    {
+                        i++;
+                    }
+                    int end = i - 1;
+                    ranges.Add((start, end));
+                }
+            }
+            return ranges;
         }
 
     }

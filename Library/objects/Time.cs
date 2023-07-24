@@ -425,16 +425,47 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// time converted to the format used in OPEN API url
-        /// Time/ + 00:00/22/05/2023/+00:00
+        /// Parses from URL with location already parsed
+        /// /23:59/31/12/2000/+08:00
         /// </summary>
-        /// <returns></returns>
-        public string GetUrlString()
+        public static Time FromUrl(string url, GeoLocation location)
+        {
+            // INPUT -> ".../23:59/31/12/2000/+08:00/"
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //name the pieces of time data extracted
+            var raw = new
+            {
+                hhmmStr = parts[0],
+                dateStr = parts[1],
+                monthStr = parts[2],
+                yearStr = parts[3],
+                offsetStr = parts[4]
+            };
+
+            //place all data together
+            var timeStr = $"{raw.hhmmStr} {raw.dateStr}/{raw.monthStr}/{raw.yearStr} {raw.offsetStr}";
+            var parsedTime = new Time(timeStr, location);
+
+            return parsedTime;
+        }
+
+
+
+        /// <summary>
+        /// Output TIME only for URL format
+        /// time converted to the format used in OPEN API url
+        /// 00:00/01/01/2011/+08:00
+        /// </summary>
+        public string ToUrl()
         {
             //reconstruct into URL pattern
-            //00:00/22/05/2023/+00:00
+            //00:00/22/05/2023/+08:00
             var returnVal = this.GetStdDateTimeOffsetText(); //date time with space
-            var formatted = returnVal.Replace(" ", "/"); //replace spacing between to slash
+
+            //replace spacing between to slash, presto done!
+            var formatted = returnVal.Replace(" ", "/"); 
+
             return formatted;
         }
 
@@ -637,8 +668,6 @@ namespace VedAstro.Library
                 return false;
             }
         }
-
-
 
 
     }

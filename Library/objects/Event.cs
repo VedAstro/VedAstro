@@ -46,7 +46,16 @@ namespace VedAstro.Library
         public EventNature Nature => _nature;
         public Time StartTime => _startTime;
         public Time EndTime => _endTime;
-        public double Duration => GetDurationMinutes();
+
+        /// <summary>
+        /// total duration of event in minutes
+        /// </summary>
+        public double DurationMin => GetDurationMinutes();
+
+        /// <summary>
+        /// total duration of event in Hours
+        /// </summary>
+        public double DurationHour => GetDurationHours();
 
 
 
@@ -126,6 +135,16 @@ namespace VedAstro.Library
             var difference = GetEndTime().GetStdDateTimeOffset() - GetStartTime().GetStdDateTimeOffset();
 
             return difference.TotalMinutes;
+        }
+
+        /// <summary>
+        /// Gets the duration of the event from start to end time
+        /// </summary>
+        public double GetDurationHours()
+        {
+            var difference = GetEndTime().GetStdDateTimeOffset() - GetStartTime().GetStdDateTimeOffset();
+
+            return difference.TotalHours;
         }
 
 

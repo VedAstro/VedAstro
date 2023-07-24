@@ -62,7 +62,7 @@
                 <li>
                     <a class="dropdown-item hstack gap-1" @onclick="OnClickCopyPOSTCall">
                         <Icon ExtraClass="me-2 mt-1" NextToText="true" IconName="mingcute:copy-3-line" />
-                        <span>Copy Call</span>
+                        <span>Copy API</span>
                     </a>
                 </li>
                 <li>
@@ -144,7 +144,7 @@
     /// <summary>
     /// max width of chart for fit on page
     /// </summary>
-    private int maxWidth = 940;
+    private int _maxWidth = 940;
 
 
     //█▀█ █░█ █▄▄ █░░ █ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
@@ -215,7 +215,7 @@
             SelectedChartOptions = chartOptions;
 
             //get raw SVG chart from API as string
-            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, maxWidth, chartOptions);
+            RawChartSvg = await AppData.API.EventsChart.GetEventsChart(person, timeRange, inputedEventTags, _maxWidth, chartOptions);
 
             //bring chart to live with EventsChart.js
             await _jsRuntime.InvokeVoidAsync(JS.ChartFromSVG, RawChartSvg);
@@ -378,7 +378,7 @@
     private async Task OnClickCopyPOSTCall()
     {
         //get call exactly as for API
-        var postData = AppData.API.EventsChart.GetPOSTCall(SelectedPerson, SelectedTimeRange, SelectedEventTags, maxWidth, SelectedChartOptions);
+        var postData = AppData.API.EventsChart.GetEventsChartApiUrl(SelectedPerson, SelectedTimeRange, SelectedEventTags, _maxWidth, SelectedChartOptions);
 
         //use js to transfer to clipboard
         await _jsRuntime.InvokeVoidAsync(JS.CopyToClipboard, postData);

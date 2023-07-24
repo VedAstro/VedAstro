@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VedAstro.Library
 {
@@ -24,6 +27,9 @@ namespace VedAstro.Library
 
         public ChartOptions Options { get; set; }
 
+        /// <summary>
+        /// CTOR
+        /// </summary>
         public EventsChart(string chartId, string contentSvg, string personId, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTagList, ChartOptions options)
         {
             ChartId = chartId;
@@ -79,13 +85,6 @@ namespace VedAstro.Library
             return parsedPerson;
         }
 
-
-        /// <summary>
-        /// Use CHART ID instead if possible
-        /// Gets HASH of chart ID, reliable
-        /// </summary>
-        public override int GetHashCode() => Tools.GetStringHashCode(ChartId);
-
         /// <summary>
         /// Gets a nice identifiable name for this chart to show user 
         /// </summary>
@@ -107,9 +106,6 @@ namespace VedAstro.Library
             var eventTagsHash = 0;
             foreach (var eventTag in this.EventTagList) { eventTagsHash += (int)eventTag; }
 
-            //convert input data into a signature
-            //var dataSignature = this.PersonId + this.StartTime.GetHashCode() + this.EndTime.GetHashCode() + this.DaysPerPixel + eventTagsHash;
-
             //use ticks because can revert back from there
             var endTime = TimeRange.end.GetStdDateTimeOffset().Ticks;
             var startTime = TimeRange.start.GetStdDateTimeOffset().Ticks;
@@ -118,13 +114,11 @@ namespace VedAstro.Library
             return dataSignature;
         }
 
-
         /// <summary>
         /// Creates empty from json SPEC ONLY
         /// </summary>
-        public static async Task<EventsChart> FromJsonSpecOnly(JObject? requestJson)
+        public static EventsChart FromJson(JObject? requestJson)
         {
-
             //get all the data needed out of the incoming request
             //var rootXml = await APITools.ExtractDataFromRequestXml(req);
             var personId = requestJson["PersonId"]?.Value<string>() ?? "101";
@@ -145,30 +139,102 @@ namespace VedAstro.Library
             return newChart;
         }
 
-
         /// <summary>
-        /// Packages the data to send to API to generate the chart
+        /// From user inputed data make specs for event 
         /// </summary>
-        public static JObject GenerateChartSpecsJson(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions options)
+        public static EventsChart FromData(Person inputPerson, TimeRange timeRange, List<EventTag> inputedEventTags, int maxWidth, ChartOptions options)
         {
+
             //auto calculate precision
             var daysPerPixelRaw = EventsChart.GetDayPerPixel(timeRange, maxWidth);
             //if not defined, use input
             double daysPerPixelInput = 30;
             daysPerPixelInput = daysPerPixelRaw != 0 ? daysPerPixelRaw : daysPerPixelInput;
 
+            //a new chart is born
+            var newChartId = Tools.GenerateId();
+            var newChart = new EventsChart(newChartId, "", inputPerson.Id, timeRange, daysPerPixelInput, inputedEventTags, options);
+
+            return newChart;
+        }
+
+        /// <summary>
+        /// Convert settings data from URL to instance only,
+        /// used by API, only settings no chart here
+        /// .../Settings/PersonId/Viknesh1994   : 2
+        /// /StartTime/00:00/01/01/2011/+08:00  : 4 to 8
+        /// /EndTime/00:00/31/12/2024/+08:00    : 10 to 14
+        /// /DaysPerPixel/5.439                 : 16
+        /// /EventTagList/PD1,PD2,PD3,PD4,PD5,AshtakvargaGochara,Gochara :18
+        /// /SelectedAlgorithm/GetGeneralScore,GocharaAshtakvargaBindu  :20   
+        /// /Location/Teluk Intan               :22
+        /// /Longitude/101.0206                 :24
+        /// /Latitude/4.0224                    :26
+        /// </summary>
+        public static EventsChart FromUrl(string url)
+        {
+            //split URL into data pieces
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //take out the needed data
+            var personId = parts[2];
+            var location = new GeoLocation(parts[22], double.Parse(parts[24]), double.Parse(parts[26]));
+
+            //combine time parts to be parsed easy
+            var startTimeText = new ArraySegment<string>(parts, 4, 5);
+            var startTime = Time.FromUrl(string.Join("/", startTimeText), location);
+
+            var endTimeText = new ArraySegment<string>(parts, 10, 5);
+            var endTime = Time.FromUrl(string.Join("/", endTimeText), location);
+
+            var eventTags = EventTagExtensions.FromString(parts[18]);
+            var daysPerPixel = double.Parse(parts[16]);
+            var summaryOptions = ChartOptions.FromUrl(parts[20]);
+
+            //a new chart is born
+            var newChartId = Tools.GenerateId();
+            var newChart = new EventsChart(newChartId, "", personId, new TimeRange(startTime, endTime), daysPerPixel, eventTags, summaryOptions);
+
+            return newChart;
+        }
+
+        /// <summary>
+        /// Converts an instance to URL format for easy transport to API server, only specs here
+        /// EXP : 
+        /// </summary>
+        public string ToUrl()
+        {
+            var final = "";
+
+            final += $"/Settings/PersonId/{this.PersonId}";
+            final += $"/StartTime/{this.TimeRange.start.ToUrl()}"; // 00:00/01/01/2011/+08:00
+            final += $"/EndTime/{this.TimeRange.end.ToUrl()}";
+            final += $"/DaysPerPixel/{this.DaysPerPixel}";
+            final += $"/EventTagList/{string.Join(",", this.EventTagList)}"; // PD1,PD2,PD3,PD4,PD5
+            final += $"/SelectedAlgorithm/{string.Join(",", this.Options.SelectedAlgorithm.Select(func => func.Method.Name))}"; // GetGeneralScore,GocharaAshtakvargaBindu
+            var geoLocation = this.TimeRange.start.GetGeoLocation(); //use start location for both
+            final += $"/Location/{geoLocation.GetName()}";
+            final += $"/Longitude/{geoLocation.GetLongitude()}";
+            final += $"/Latitude/{geoLocation.GetLatitude()}";
+
+            return final;
+        }
+
+        /// <summary>
+        /// Packages the data to send to API to generate the chart
+        /// </summary>
+        public JObject ToJson()
+        {
             var returnPayload = new JObject();
 
-            returnPayload["PersonId"] = inputPerson.Id;
-            returnPayload["StartTime"] = timeRange.start.ToJson();
-            returnPayload["EndTime"] = timeRange.end.ToJson();
-            returnPayload["DaysPerPixel"] = daysPerPixelInput;
-            returnPayload["EventTagList"] = EventTagExtensions.ToJsonList(inputedEventTags);
-            returnPayload["ChartOptions"] = options.ToJson();
+            returnPayload["PersonId"] = this.PersonId;
+            returnPayload["StartTime"] = this.TimeRange.start.ToJson();
+            returnPayload["EndTime"] = this.TimeRange.end.ToJson();
+            returnPayload["DaysPerPixel"] = this.DaysPerPixel;
+            returnPayload["EventTagList"] = EventTagExtensions.ToJsonList(this.EventTagList);
+            returnPayload["ChartOptions"] = this.Options.ToJson();
 
             return returnPayload;
-
-
         }
 
         /// <summary>
@@ -183,6 +249,12 @@ namespace VedAstro.Library
 
             return daysPerPixel;
         }
+
+        /// <summary>
+        /// Use CHART ID instead if possible
+        /// Gets HASH of chart ID, reliable
+        /// </summary>
+        public override int GetHashCode() => Tools.GetStringHashCode(ChartId);
 
     }
 }

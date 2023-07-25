@@ -112,7 +112,7 @@ namespace Website
                 {
                     await AppData.JsRuntime.ShowAlert(
                         icon: "warning",
-                        title: "Critical Error!",
+                        title: "App has crashed!",
                         descriptionText: "Debug Mode is <strong>Enabled</strong>. It could be causing the error!"
                         );
                 }
@@ -122,7 +122,7 @@ namespace Website
                     await AppData.JsRuntime.ShowAlert(
                         icon: "warning",
                         title: "App has crashed!",
-                        descriptionText: "Lets go to Home page and press <kbd>CTRL + SHIFT + R</kbd> to restart app");
+                        descriptionText: "Go <strong>Home</strong> page and press <kbd>CTRL + SHIFT + R</kbd> to <strong>restart</strong> app");
                     //send user to home page to restart
                     await AppData.JsRuntime.LoadPage(AppData.URL.WebUrl);
                 }

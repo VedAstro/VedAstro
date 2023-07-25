@@ -583,7 +583,7 @@ namespace Website
                 await AppData.JsRuntime.SetProperty("ClientLocation", parsedLocation.ToXml().ToString());
             }
 
-            Console.WriteLine($"Client Location:{parsedLocation.GetName()}");
+            Console.WriteLine($"Client Location:{parsedLocation.Name()}");
 
             return parsedLocation;
         }

@@ -95,7 +95,7 @@ namespace VedAstro.Library
         public Time(DateTime lmtDateTime, TimeSpan stdOffset, GeoLocation geoLocation)
         {
             //get lmt time
-            var lmtTime = new DateTimeOffset(lmtDateTime, GetLocalTimeOffset(geoLocation.GetLongitude()));
+            var lmtTime = new DateTimeOffset(lmtDateTime, GetLocalTimeOffset(geoLocation.Longitude()));
 
             //convert lmt to std & store it
             _stdTime = lmtTime.ToOffset(stdOffset);
@@ -198,7 +198,7 @@ namespace VedAstro.Library
         public DateTimeOffset GetLmtDateTimeOffset()
         {
             //get location longitude
-            var longitudeDeg = _geoLocation.GetLongitude();
+            var longitudeDeg = _geoLocation.Longitude();
 
             //convert internal STD time to LMT
             var lmtTime = StdToLmt(_stdTime, longitudeDeg);
@@ -297,7 +297,7 @@ namespace VedAstro.Library
         public string GetLmtDateTimeOffsetText()
         {
             //convert internal STD time to LMT
-            var lmtTime = StdToLmt(_stdTime, _geoLocation.GetLongitude());
+            var lmtTime = StdToLmt(_stdTime, _geoLocation.Longitude());
 
             //create LMT time string based on formatting info
             //note: only explicit statement of format as below works

@@ -23,6 +23,7 @@ using Formatting = Newtonsoft.Json.Formatting;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
 using System.Reflection.Metadata;
+using FuzzySharp;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -1628,9 +1629,6 @@ namespace VedAstro.Library
         /// <summary>
         /// Searches text no caps and no space
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="keyword"></param>
-        /// <returns></returns>
         public static bool SearchText(this string text, string keyword)
         {
             // Remove spaces from the text and the keyword
@@ -1645,13 +1643,12 @@ namespace VedAstro.Library
         public static string GetAllDataAsText(this MethodInfo methodInfo)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Method Name: {methodInfo.Name}");
-            sb.AppendLine($"Return Type: {methodInfo.ReturnType}");
+            sb.AppendLine($"{methodInfo.Name}");
+            sb.AppendLine($"{methodInfo.ReturnType.Name}");
             ParameterInfo[] parameters = methodInfo.GetParameters();
-            sb.AppendLine($"Parameters ({parameters.Length}):");
             foreach (ParameterInfo parameter in parameters)
             {
-                sb.AppendLine($"\t{parameter.ParameterType} {parameter.Name}");
+                sb.AppendLine($"\t{parameter.ParameterType.Name} {parameter.Name}");
             }
             return sb.ToString();
         }

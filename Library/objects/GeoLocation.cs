@@ -12,7 +12,6 @@ using static Azure.Core.HttpHeader;
 namespace VedAstro.Library
 {
 
-
     //IMMUTABLE CLASS
     [Serializable()]
     //TODO CANDIDATE FOR RECORD STRUCT
@@ -126,6 +125,7 @@ namespace VedAstro.Library
 
             return hash1 + hash2 + hash3;
         }
+        
         public JToken ToJson()
         {
             var temp = new JObject();
@@ -187,7 +187,6 @@ namespace VedAstro.Library
             return new GeoLocation(name, longitude, latitude);
 
         }
-
 
         /// <summary>
         /// Given a place's name, will get fully initialized GeoLocation.

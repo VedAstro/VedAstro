@@ -1433,7 +1433,7 @@ namespace VedAstro.Library
                 //we have to supply ascmc to make the function run
                 double[] ascmc = new double[10];
 
-                swissEph.swe_houses(jul_day_UT, location.GetLatitude(), location.GetLongitude(), 'P', cusps, ascmc);
+                swissEph.swe_houses(jul_day_UT, location.Latitude(), location.Longitude(), 'P', cusps, ascmc);
 
                 //we only return cusps, cause that is what is used for now
                 return cusps;

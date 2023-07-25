@@ -998,8 +998,8 @@ namespace VedAstro.Library
 
             //use timestamp to account for historic timezone changes
             var locationTimeUnix = timeAtLocation.ToUnixTimeSeconds();
-            var longitude = geoLocation.GetLongitude();
-            var latitude = geoLocation.GetLatitude();
+            var longitude = geoLocation.Longitude();
+            var latitude = geoLocation.Latitude();
 
             //create the request url for Google API 
             //todo get the API key string stored separately (for security reasons)

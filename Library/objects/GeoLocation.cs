@@ -1,8 +1,13 @@
 using System;
 using System.Net.Http;
+using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Azure;
+using FuzzySharp.Utils;
 using Newtonsoft.Json.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Azure.Core.HttpHeader;
 
 namespace VedAstro.Library
 {
@@ -43,28 +48,41 @@ namespace VedAstro.Library
 
         //CTOR
         /// <summary>
+        /// Auto checks and corrects of wrong coordinates decimal placing
         /// Note : Eastern longitudes are positive, western ones negative.
         /// </summary>
         public GeoLocation(string name, double longitude, double latitude)
         {
             _name = name;
-            _longitude = longitude;
-            _latitude = latitude;
+
+            //coordinates have been know to be inputed with misplaced decimal (from api)
+            //this will check and try correct if possible
+            bool isValid = IsValidLatitudeLongitude(latitude, longitude);
+            if (isValid) //normal operation
+            {
+                _longitude = longitude;
+                _latitude = latitude;
+            }
+            else //abnormal input, auto correct decimal place as most likely fault (heavy computation use only when sure fail)
+            {
+                _longitude = CorrectDecimalPoint(longitude);
+                _latitude = CorrectDecimalPoint(latitude);
+            }
         }
 
         //PUBLIC METHODS
-        public string GetName() => _name;
+        public string Name() => _name;
 
         /// <summary>
         /// Eastern longitudes are positive, western ones negative.
         /// Range : -180 to 180
         /// </summary>
-        public double GetLongitude() => _longitude;
+        public double Longitude() => _longitude;
 
         /// <summary>
         /// Range : -90 to 90
         /// </summary>
-        public double GetLatitude() => _latitude;
+        public double Latitude() => _latitude;
 
 
 
@@ -111,9 +129,9 @@ namespace VedAstro.Library
         public JToken ToJson()
         {
             var temp = new JObject();
-            temp["Name"] = this.GetName();
-            temp["Longitude"] = this.GetLongitude();
-            temp["Latitude"] = this.GetLatitude();
+            temp["Name"] = this.Name();
+            temp["Longitude"] = this.Longitude();
+            temp["Latitude"] = this.Latitude();
 
             return temp;
         }
@@ -121,9 +139,9 @@ namespace VedAstro.Library
         public XElement ToXml()
         {
             var locationHolder = new XElement("Location");
-            var name = new XElement("Name", this.GetName());
-            var longitude = new XElement("Longitude", this.GetLongitude());
-            var latitude = new XElement("Latitude", this.GetLatitude());
+            var name = new XElement("Name", this.Name());
+            var longitude = new XElement("Longitude", this.Longitude());
+            var latitude = new XElement("Latitude", this.Latitude());
 
             locationHolder.Add(name, longitude, latitude);
 
@@ -197,15 +215,12 @@ namespace VedAstro.Library
         {
             try
             {
-                var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
-                var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";
-                var resultString = await Tools.WriteServer(HttpMethod.Post, url);
-                //var parsed = JObject.Parse(resultString);
-                var lat = resultString["location"]["lat"].Value<double>();
-                var lng = resultString["location"]["lng"].Value<double>();
+                //get only coordinates 1st
+                dynamic coordinates = await GetLocationFromIpAddressGoogle();
 
-                //get name from lat and long
-                var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={lat},{lng}&key={apiKey}";
+                //get name from coordinates
+                var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
+                var urlReverse = $"https://maps.googleapis.com/maps/api/geocode/json?latlng={coordinates.Latitude},{coordinates.Longitude}&key={apiKey}";
                 var resultString2 = await Tools.WriteServer(HttpMethod.Post, urlReverse);
                 //var parsed2 = JObject.Parse(resultString2);
                 var resultsJson = resultString2["results"][0];
@@ -213,9 +228,9 @@ namespace VedAstro.Library
                 var locationNameLong = resultsJson["formatted_address"].Value<string>();
                 var splitted = locationNameLong.Split(',');
                 //keep only the last parts, country, state...
-                var newLocationName = $"{splitted[splitted.Length - 3]},{splitted[splitted.Length - 2]},{splitted[splitted.Length-1]}";
+                var newLocationName = $"{splitted[splitted.Length - 3]},{splitted[splitted.Length - 2]},{splitted[splitted.Length - 1]}";
 
-                var fromIpAddress = new GeoLocation(newLocationName, lng, lat);
+                var fromIpAddress = new GeoLocation(newLocationName, coordinates.Longitude, coordinates.Latitude);
 
                 //new geo location from the depths
                 return fromIpAddress;
@@ -231,6 +246,80 @@ namespace VedAstro.Library
             }
         }
 
-        
+        /// <summary>
+        /// Will get longitude and latitude from IP using google API
+        /// </summary>
+        /// <returns></returns>
+        private static async Task<object> GetLocationFromIpAddressGoogle()
+        {
+
+            var apiKey = "AIzaSyDqBWCqzU1BJenneravNabDUGIHotMBsgE";
+
+            var url = $"https://www.googleapis.com/geolocation/v1/geolocate?key={apiKey}";
+            var resultString = await Tools.WriteServer(HttpMethod.Post, url);
+
+            //get raw value 
+            var rawLat = resultString["location"]["lat"].Value<double>();
+            var rawLong = resultString["location"]["lng"].Value<double>();
+
+            var result = new
+            {
+                Latitude = rawLat,
+                Longitude = rawLong,
+            };
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// In geographical coordinates, the maximum latitude is 90 degrees and the minimum latitude is -90 degrees.
+        /// The maximum longitude is 180 degrees and the minimum longitude is -180 degrees.
+        /// Here is a simple C# method to check if a given latitude and longitude are within these ranges:
+        /// </summary>
+        public bool IsValidLatitudeLongitude(double latitude, double longitude)
+        {
+            if (latitude < -90 || latitude > 90)
+            {
+                return false;
+            }
+            if (longitude < -180 || longitude > 180)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// Converts "-466395571" to "-46.6395571", also maintains "34.333" to ""34.333"
+        /// Used for auto correcting bad input data, heavy computation use only when sure fail
+        /// </summary>
+        public double CorrectDecimalPoint(double input)
+        {
+            // Convert the double to a string
+            string inputStr = input.ToString();
+            // Check if the input is negative
+            bool isNegative = inputStr.StartsWith("-");
+            // Remove the negative sign if it exists
+            if (isNegative)
+            {
+                inputStr = inputStr.Substring(1);
+            }
+            // Calculate the position to insert the decimal point
+            int insertPosition = inputStr.Length > 7 ? inputStr.Length - 7 : 0;
+            // Insert the decimal point at the correct position
+            inputStr = inputStr.Insert(insertPosition, ".");
+            // Convert the string back to a double
+            double output = double.Parse(inputStr);
+            // If the input was negative, make the output negative
+            if (isNegative)
+            {
+                output = -output;
+            }
+            return output;
+        }
+
+
     }
 }

@@ -42,12 +42,13 @@ else
 
 }
 
-@*text below button*@
+@*TEXT BELOW BUTTON*@
 @if (ShowDelayWarning)
 {
     <IconText ExtraStyle="margin-top:-10px" FontColor="@AppData.Grey" FontSize="11" IconName="mdi:snail">Warning Slow</IconText>
 }
 
+@* TOOLTIP *@
 @if (ChildContent != null)
 {
     @* wrap in div to get reference to dynamic element, z needed to make top *@
@@ -256,6 +257,12 @@ else
     public bool GoldRatioWidth { get; set; } = false;
 
     /// <summary>
+    /// sets button height in px defaults to GR.37px
+    /// </summary>
+    [Parameter]
+    public double Height { get; set; } = GR.W37;
+
+    /// <summary>
     /// Computes the final css based on set variables
     /// </summary>
     private string FinalCss
@@ -270,7 +277,7 @@ else
             css += TextCenter ? $" place-content: center !important;" : "";
             css += !string.IsNullOrEmpty(FontWeight) ? $"font-weight: {FontWeight} !important;" : "";
             css += !string.IsNullOrEmpty(FontSize) ? $"font-size: {FontSize} !important;" : "";
-            css += $" height:{GR.W37px};";
+            css += $" height:{Height}px;";
             css += $" width: fit-content;";
 
             return css;

@@ -21,7 +21,7 @@
         <input @ref="_locationNameInput" @onblur="SetCoordinatesFromNameInput" @bind="LocationName" type="text" class="form-control" placeholder="New York">
     </div>
     @*dummy button to start location search*@
-    <IconButton ExtraClass="ms-1" SmallSize="true" IconName="bx:search-alt" OnClickCallback="SetCoordinatesFromNameInput" />
+    <IconButton ExtraClass="ms-1" SmallSize="true" Height="36" IconName="bx:search-alt" OnClickCallback="SetCoordinatesFromNameInput" />
 </div>
 
 @if (!HideLongLat)

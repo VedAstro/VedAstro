@@ -46,7 +46,7 @@
 
     private string GetUrl(string ending)
     {
-        var stringWithSpace = time?.GetGeoLocation().GetName();
+        var stringWithSpace = time?.GetGeoLocation().Name();
 
         //if null end here
         if (string.IsNullOrEmpty(stringWithSpace)) { return ""; }

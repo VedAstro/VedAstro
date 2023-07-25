@@ -204,9 +204,9 @@
 
         var geoLocation = new GeoLocation
         (
-            SelectedPerson.GetBirthLocation().GetName(),
-           SelectedPerson.GetBirthLocation().GetLongitude(),
-           SelectedPerson.GetBirthLocation().GetLatitude()
+            SelectedPerson.GetBirthLocation().Name(),
+           SelectedPerson.GetBirthLocation().Longitude(),
+           SelectedPerson.GetBirthLocation().Latitude()
         );
         _geoLocationInput.UpdateData(geoLocation);
 

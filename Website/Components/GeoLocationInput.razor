@@ -76,7 +76,7 @@
     //PARAMETERS
     public string LocationName
     {
-        get => _locationName ?? AppData.ClientLocation.GetName();
+        get => _locationName ?? AppData.ClientLocation.Name();
         set
         {
             //avoid same value to stop loops
@@ -98,7 +98,7 @@
 
     public double Longitude
     {
-        get => _longitude ?? AppData.ClientLocation.GetLongitude();
+        get => _longitude ?? AppData.ClientLocation.Longitude();
         set
         {
             //avoid same value to stop loops
@@ -118,7 +118,7 @@
 
     public double Latitude
     {
-        get => _latitude ?? AppData.ClientLocation.GetLatitude();
+        get => _latitude ?? AppData.ClientLocation.Latitude();
         set
         {
             //avoid same value to stop loops
@@ -189,9 +189,9 @@
     /// </summary>
     public void UpdateData(GeoLocation newData)
     {
-        LocationName = newData.GetName();
-        Longitude = newData.GetLongitude();
-        Latitude = newData.GetLatitude();
+        LocationName = newData.Name();
+        Longitude = newData.Longitude();
+        Latitude = newData.Latitude();
     }
 
 
@@ -254,10 +254,10 @@
 
         //update user typed location name to proper formatted one
         var geoLocal = results.Payload;
-        LocationName = geoLocal.GetName();
+        LocationName = geoLocal.Name();
         //set new coordinates into view
-        Longitude = geoLocal.GetLongitude();
-        Latitude = geoLocal.GetLatitude();
+        Longitude = geoLocal.Longitude();
+        Latitude = geoLocal.Latitude();
     }
 
     /// <summary>
@@ -283,7 +283,7 @@
 
             //set gotten location name into view
             var geoLocation = await Tools.CoordinateToGeoLocation((double)locationCoordinates.Longitude, (double)locationCoordinates.Latitude, ServerManager.GoogleGeoLocationApiKey);
-            LocationName = geoLocation.GetName();
+            LocationName = geoLocation.Name();
 
             //exit
             return;

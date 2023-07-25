@@ -161,7 +161,7 @@ namespace VedAstro.Library
         /// <summary>
         /// Convert settings data from URL to instance only,
         /// used by API, only settings no chart here
-        /// .../Settings/PersonId/Viknesh1994   : 2
+        /// .../Viknesh1994   : 0
         /// /StartTime/00:00/01/01/2011/+08:00  : 4 to 8
         /// /EndTime/00:00/31/12/2024/+08:00    : 10 to 14
         /// /DaysPerPixel/5.439                 : 16
@@ -213,9 +213,9 @@ namespace VedAstro.Library
             final += $"/EventTagList/{string.Join(",", this.EventTagList)}"; // PD1,PD2,PD3,PD4,PD5
             final += $"/SelectedAlgorithm/{string.Join(",", this.Options.SelectedAlgorithm.Select(func => func.Method.Name))}"; // GetGeneralScore,GocharaAshtakvargaBindu
             var geoLocation = this.TimeRange.start.GetGeoLocation(); //use start location for both
-            final += $"/Location/{geoLocation.GetName()}";
-            final += $"/Longitude/{geoLocation.GetLongitude()}";
-            final += $"/Latitude/{geoLocation.GetLatitude()}";
+            final += $"/Location/{geoLocation.Name()}";
+            final += $"/Longitude/{geoLocation.Longitude()}";
+            final += $"/Latitude/{geoLocation.Latitude()}";
 
             return final;
         }

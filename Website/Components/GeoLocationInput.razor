@@ -14,33 +14,27 @@
 @* get reference from program *@
 @inject LocationService _locationService
 
-
-<div class="hstack gap-2">
-    <div class="w-100">
-        @*fill parent width*@
-        <label class="form-label">
-            @LabelText<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.GeoLocationName" />
-        </label>
+<div class="hstack gap-1">
+    <div class="input-group">
+        <span class="input-group-text" id="basic-addon1">@LabelText<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.GeoLocationName" /></span>
         @*make input wider if without*@
-        <div class="hstack">
-            <input @ref="_locationNameInput" @onblur="SetCoordinatesFromNameInput" @bind="LocationName" type="text" class="form-control" placeholder="New York">
-            @*dummy button to start location search*@
-            <IconButton ExtraClass="ms-2" SmallSize="true" IconName="bx:search-alt" OnClickCallback="SetCoordinatesFromNameInput" />
-        </div>
-
+        <input @ref="_locationNameInput" @onblur="SetCoordinatesFromNameInput" @bind="LocationName" type="text" class="form-control" placeholder="New York">
     </div>
-    @if (!HideLongLat)
-    {
-        <div style="width: fit-content;">
-            <label class="form-label">Longitude</label>
-            <input @ref="_longitudeInput" @bind="Longitude" type="text" class="form-control" placeholder="103.82">
-        </div>
-        <div style="width: fit-content;">
-            <label class="form-label">Latitude</label>
-            <input @ref="_latitudeInput" @bind="Latitude" type="text" class="form-control" placeholder="1.352">
-        </div>
-    }
+    @*dummy button to start location search*@
+    <IconButton ExtraClass="ms-1" SmallSize="true" IconName="bx:search-alt" OnClickCallback="SetCoordinatesFromNameInput" />
 </div>
+
+@if (!HideLongLat)
+{
+    <div style="width: fit-content;">
+        <label class="form-label">Longitude</label>
+        <input @ref="_longitudeInput" @bind="Longitude" type="text" class="form-control" placeholder="103.82">
+    </div>
+    <div style="width: fit-content;">
+        <label class="form-label">Latitude</label>
+        <input @ref="_latitudeInput" @bind="Latitude" type="text" class="form-control" placeholder="1.352">
+    </div>
+}
 
 
 

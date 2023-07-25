@@ -2187,7 +2187,7 @@ namespace VedAstro.Library
             var localMeanTimeInJulian_UT = GetGreenwichLmtInJulianDays(time);
 
             //get longitude of location
-            double longitude = time.GetGeoLocation().GetLongitude();
+            double longitude = time.GetGeoLocation().Longitude();
 
             //delcare output variables
             double localApparentTimeInJulian;
@@ -2215,7 +2215,7 @@ namespace VedAstro.Library
                 var localMeanTimeInJulian_UT = ConvertLmtToJulian(time);
 
                 //get longitude of location
-                double longitude = time.GetGeoLocation().GetLongitude();
+                double longitude = time.GetGeoLocation().Longitude();
 
                 //delcare output variables
                 double localApparentTimeInJulian;
@@ -2529,7 +2529,7 @@ namespace VedAstro.Library
                 var options = SwissEph.SE_CALC_RISE | srflag; //set for sunrise
                 var planet = SwissEph.SE_SUN;
 
-                double[] geopos = new Double[3] { time.GetGeoLocation().GetLongitude(), time.GetGeoLocation().GetLatitude(), 0 };
+                double[] geopos = new Double[3] { time.GetGeoLocation().Longitude(), time.GetGeoLocation().Latitude(), 0 };
                 double riseTimeRaw = 0;
 
                 var errorMsg = "";
@@ -2586,7 +2586,7 @@ namespace VedAstro.Library
                 var options = SwissEph.SE_CALC_SET | srflag; //set for sunset
                 var planet = SwissEph.SE_SUN;
 
-                double[] geopos = new Double[3] { time.GetGeoLocation().GetLongitude(), time.GetGeoLocation().GetLatitude(), 0 };
+                double[] geopos = new Double[3] { time.GetGeoLocation().Longitude(), time.GetGeoLocation().Latitude(), 0 };
                 double setTimeRaw = 0;
 
                 var errorMsg = "";

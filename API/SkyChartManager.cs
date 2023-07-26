@@ -1023,8 +1023,8 @@ namespace API
             var dasaSvgWidth = 0; //will be filled when calling row generator
             var compiledRow = "";
 
-            var beginYear = timeSlices[0].GetStdYear();
-            var endYear = timeSlices.Last().GetStdYear();
+            var beginYear = timeSlices[0].StdYear();
+            var endYear = timeSlices.Last().StdYear();
             var difYears = endYear - beginYear;
 
             //header rows are dynamically generated as needed, hence the extra logic below
@@ -1067,7 +1067,7 @@ namespace API
                     //only generate new year box when year changes or at
                     //end of time slices to draw the last year box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var yearChanged = previousYear != slice.GetStdYear();
+                    var yearChanged = previousYear != slice.StdYear();
                     if (yearChanged || lastTimeSlice)
                     {
                         //and it is in the beginning
@@ -1115,7 +1115,7 @@ namespace API
                     }
 
                     //update previous year for next slice
-                    previousYear = slice.GetStdYear();
+                    previousYear = slice.StdYear();
 
                     yearBoxWidthCount++;
 
@@ -1140,7 +1140,7 @@ namespace API
                 int childAxisX = 0;
                 const int decade = 10;
 
-                var beginYear = timeSlices[0].GetStdYear();
+                var beginYear = timeSlices[0].StdYear();
                 var endYear = beginYear + decade; //decade
 
 
@@ -1150,13 +1150,13 @@ namespace API
                     //only generate new year box when year changes or at
                     //end of time slices to draw the last year box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var yearChanged = previousYear != slice.GetStdYear();
+                    var yearChanged = previousYear != slice.StdYear();
                     if (yearChanged || lastTimeSlice)
                     {
                         //is this slice end year & last month (month for accuracy, otherwise border at jan not december)
                         //todo begging of box is not beginning of year, possible solution month
                         //var isLastMonth = slice.GetStdMonth() is 10 or 11 or 12; //use oct & nov in-case december is not generated at low precision 
-                        var isEndYear = endYear == slice.GetStdYear();
+                        var isEndYear = endYear == slice.StdYear();
                         if (isEndYear)
                         {
                             //generate previous year data first before resetting
@@ -1194,7 +1194,7 @@ namespace API
                     }
 
                     //update previous year for next slice
-                    previousYear = slice.GetStdYear();
+                    previousYear = slice.StdYear();
 
                     yearBoxWidthCount++;
 
@@ -1220,7 +1220,7 @@ namespace API
 
                 const int yearRange = 5;
 
-                var beginYear = timeSlices[0].GetStdYear();
+                var beginYear = timeSlices[0].StdYear();
                 var endYear = beginYear + yearRange;
 
 
@@ -1230,11 +1230,11 @@ namespace API
                     //only generate new year box when year changes or at
                     //end of time slices to draw the last year box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var yearChanged = previousYear != slice.GetStdYear();
+                    var yearChanged = previousYear != slice.StdYear();
                     if (yearChanged || lastTimeSlice)
                     {
                         //is this slice end year
-                        var isEndYear = endYear == slice.GetStdYear();
+                        var isEndYear = endYear == slice.StdYear();
                         if (isEndYear)
                         {
                             //generate previous year data first before resetting
@@ -1272,7 +1272,7 @@ namespace API
                     }
 
                     //update previous year for next slice
-                    previousYear = slice.GetStdYear();
+                    previousYear = slice.StdYear();
 
                     yearBoxWidthCount++;
 
@@ -1302,7 +1302,7 @@ namespace API
                     //only generate new year box when year changes or at
                     //end of time slices to draw the last year box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var monthChanged = previousMonth != slice.GetStdMonth();
+                    var monthChanged = previousMonth != slice.StdMonth();
                     if (monthChanged || lastTimeSlice)
                     {
                         //and it is in the beginning
@@ -1350,7 +1350,7 @@ namespace API
                     }
 
                     //update previous month for next slice
-                    previousMonth = slice.GetStdMonth();
+                    previousMonth = slice.StdMonth();
 
                     yearBoxWidthCount++;
 
@@ -1401,7 +1401,7 @@ namespace API
                     //only generate new date box when date changes or at
                     //end of time slices to draw the last date box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var dateChanged = previousDate != slice.GetStdDate();
+                    var dateChanged = previousDate != slice.StdDate();
                     if (dateChanged || lastTimeSlice)
                     {
                         //and it is in the beginning
@@ -1441,7 +1441,7 @@ namespace API
                     }
 
                     //update previous date for next slice
-                    previousDate = slice.GetStdDate();
+                    previousDate = slice.StdDate();
 
                     dateBoxWidthCount++;
 
@@ -1472,7 +1472,7 @@ namespace API
                     //only generate new date box when hour changes or at
                     //end of time slices to draw the last hour box
                     var isLastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var hourChanged = previousHour != slice.GetStdHour();
+                    var hourChanged = previousHour != slice.StdHour();
                     if (hourChanged || isLastTimeSlice)
                     {
                         //and it is in the beginning
@@ -1512,7 +1512,7 @@ namespace API
                     }
 
                     //update previous hour for next slice
-                    previousHour = slice.GetStdHour();
+                    previousHour = slice.StdHour();
 
                     hourBoxWidthCount++;
                 }

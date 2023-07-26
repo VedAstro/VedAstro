@@ -124,7 +124,7 @@ namespace API
                 {
                     //replace original birth time
                     var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
-                    var newChart = await Tools.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
+                    var newChart = await EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
                     var adjustedBirth = personAdjusted.BirthTimeString;
 
                     //place in group with time above the chart

@@ -434,5 +434,11 @@ else
     }
 
 
+    public void ChangeIcon(string newIconName)
+    {
+        this.IconName = newIconName;
+
+        StateHasChanged();
+    }
 
 }

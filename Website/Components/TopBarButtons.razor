@@ -8,8 +8,8 @@
 - REFERENCE BUTTONS : buttons placed here are linked to places not needed all the time, like About and Docs -->
 *@
 
-<IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Hide Side Bar" />
-<IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Night Reader Mode" />
+<IconButton SmallSize="true" IconName="lucide:panel-left-close" OnClickCallback="OnClickHideSidebar" TooltipText="Hide Sidebar" />
+<IconButton SmallSize="true" IconName="mdi:theme-light-dark" OnClickCallback="OnClickDarkModeButton" TooltipText="Dark/Light Mode" />
 
 @*show links to beta & stable from vice versa*@
 @if (@WebsiteTools.GetIsBetaRuntime())
@@ -45,6 +45,11 @@ else
 
 
 @code {
+
+    private async Task OnClickHideSidebar()
+    {
+        _jsRuntime.ToggleClass(AppData.DesktopSidebar, "d-md-block");
+    }
 
     private async Task OnClickDarkModeButton()
     {

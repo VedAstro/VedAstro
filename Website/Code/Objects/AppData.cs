@@ -329,5 +329,11 @@ namespace Website
         }
 
         public static bool ReferenceSearchFilesLoaded { get; set; }
+
+
+        /// <summary>
+        /// HTML reference to desktop sidebar div, used to show and hide by button
+        /// </summary>
+        public static ElementReference DesktopSidebar { get; set; }
     }
 }

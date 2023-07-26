@@ -46,7 +46,7 @@ public class URL
         DeletePerson = ApiUrl + "/DeletePerson";
         UpdatePerson = ApiUrl + "/UpdatePerson";
         GetPerson = ApiUrl + "/getperson";
-        GetPersonImage = ApiUrl + "/GetPersonImage/PersonId/";
+        GetPersonImage = ApiUrl + "/GetPersonImage/PersonId";
         GetNewPersonId = ApiUrl + "/GetNewPersonId";
 
 

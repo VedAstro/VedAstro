@@ -21,23 +21,29 @@
     @*SELECTOR*@
     <div class="me-5">
         <div class="vstack gap-3 @(_nothingToShow ? "d-none" : "")" style="max-width: @GR.W412px">
-            <div>
-                <label>Name<HelpIconTooltip SmallIcon="true" HelpText="@HelpText.PrivateProfileName"/></label>
-                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name">
+            
+            @* NAME *@                
+            <div class="input-group">
+                <span class="input-group-text gap-2" style="width: 136px;"><Icon IconName="flat-color-icons:butting-in" Size="35" />Name</span>
+                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600;">
             </div>
+
+            @* TIME *@
             <TimeInputSimple @ref="_timeInput" LabelText="Birth Time"/>
+
+            @* LOCATION *@
             <GeoLocationInput @ref="_geoLocationInput" LabelText="Birth Location" HideLongLat="@true"/>
-            <div>
-                <label>
-                    Gender
-                    <HelpIconTooltip SmallIcon="true" HelpText="@HelpText.Gender"/>
-                </label>
-                <select @bind="_genderInput" class="form-control">
+
+            @* GENDER *@
+            <div class="input-group">
+                <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;"><Icon IconName="mdi:human-male-female" Size="34" />Gender</label>
+                <select @bind="_genderInput" class="form-select" id="genderSelectInput" style="font-weight: 600;">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>
             </div>
-            <div class="hstack gap-4">
+
+            <div class="mt-2 d-flex justify-content-between">
                 <IconButton SmallSize="true" IconName="akar-icons:arrow-back" ButtonText="Back" OnClickCallback="_jsRuntime.GoBack"></IconButton>
                 <IconButton SmallSize="true" Color="success" IconName="bx:save" ButtonText="Save" OnClickCallback="@OnClickSubmitButton"/>
             </div>

@@ -1,0 +1,30 @@
+﻿@*
+
+█ ▀█▀   █ █▀   ▄▀█   █▀▀ ▄▀█ █ █░░ ▄▄ █▀ ▄▀█ █▀▀ █▀▀   █▀█ █▀▀ ▄▀█ █░░ █ ▀█▀ █▄█
+█ ░█░   █ ▄█   █▀█   █▀░ █▀█ █ █▄▄ ░░ ▄█ █▀█ █▀░ ██▄   █▀▄ ██▄ █▀█ █▄▄ █ ░█░ ░█░
+
+█▀▄ █▀█   █▄░█ █▀█ ▀█▀   █▀▀ █▀▀ ▄▀█ █▀█ ░   █░░ █ █░█ █▀▀   █▀▀ █▀█ █▀█   █ ▀█▀   █ █▀   █▀▄ █▀▀ ▄▀█ █▀█
+█▄▀ █▄█   █░▀█ █▄█ ░█░   █▀░ ██▄ █▀█ █▀▄ █   █▄▄ █ ▀▄▀ ██▄   █▀░ █▄█ █▀▄   █ ░█░   █ ▄█   █▄▀ ██▄ █▀█ █▀▄
+ *@
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+@using System.Reflection
+
+<TimeInputSimple @ref="_timeInput" LabelText="Time" />
+
+<GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
+
+
+@code {
+
+    private TimeInputSimple _timeInput;
+    private GeoLocationInput _geoLocationInput;
+
+    public void Show(List<AutoCalculator.APICallData> paramList)
+    {
+        
+    }
+
+}

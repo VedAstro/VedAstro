@@ -1,4 +1,4 @@
-@*
+﻿@*
 
 █ ▀█▀   █ █▀   ▄▀█   █▀▀ ▄▀█ █ █░░ ▄▄ █▀ ▄▀█ █▀▀ █▀▀   █▀█ █▀▀ ▄▀█ █░░ █ ▀█▀ █▄█
 █ ░█░   █ ▄█   █▀█   █▀░ █▀█ █ █▄▄ ░░ ▄█ █▀█ █▀░ ██▄   █▀▄ ██▄ █▀█ █▄▄ █ ░█░ ░█░
@@ -132,45 +132,48 @@
 
 
     private ElementReference _searchInput;
-    private ElementReference resultsBox;
-    private ElementReference loadingBox;
+    private ElementReference _resultsBox;
+    private ElementReference _loadingBox;
 
 
     /// <summary>
     /// list that is shown to user and is changed by search
     /// </summary>
-    private List<AutoCalculator.APICallData> APIAttributeListDisplay { get; set; } = new List<AutoCalculator.APICallData>();
+    private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new List<AutoCalculator.APICallData>();
 
-    private List<AutoCalculator.APICallData> _apiAttributeListAsync = new List<AutoCalculator.APICallData>();
+    private List<AutoCalculator.APICallData> MethodListALL = new List<AutoCalculator.APICallData>();
+
+    /// <summary>
+    /// extracted search text for faster search
+    /// </summary>
+    private string[] MethodListALLSearchText;
 
     /// <summary>
     /// Hide on default till all ready to show
     /// </summary>
     private bool _isReady = false;
 
-    private bool showLoading = false;
+    private bool _showLoading = false;
 
-
-    protected override async Task OnInitializedAsync() => await GenerateTable();
 
 
     //█▀█ █▀█ █ █░█ ▄▀█ ▀█▀ █▀▀   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
     //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
-    private async Task GenerateTable()
+    protected override async Task OnInitializedAsync()
     {
         //hide display
         await _jsRuntime.ShowLoading();
         _isReady = false;
 
-        //get all people from API server
-        //auto checks if people list already loaded before
         var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
+
         //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
-        _apiAttributeListAsync = AutoCalculator.APICallData.FromMethodInfoList(allApiCalculatorsMethodInfo);
+        MethodListALL = AutoCalculator.APICallData.FromMethodInfoList(allApiCalculatorsMethodInfo);
+        MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
 
         //make copy for search
-        APIAttributeListDisplay = _apiAttributeListAsync;
+        MethodListFiltered = MethodListALL;
 
         //show data on display
         _isReady = true;
@@ -183,42 +186,60 @@
     /// </summary>
     private static System.Timers.Timer _onKeyUpWaitTimer = new(3000);
 
+
+    bool searchIsRunning = false;
+
     /// <summary>
     /// Handle when user uses the Search
     /// </summary>
-    private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
+    private async Task OnKeyUpSearchBar()
     {
-        _jsRuntime.Show(loadingBox);
-        _jsRuntime.Hide(resultsBox);
-
-        //effectively giving user time to press button before auto search begins
-        //restart timer count on every press
-        _onKeyUpWaitTimer.Stop();
-        _onKeyUpWaitTimer.Start();
-        _onKeyUpWaitTimer.Elapsed += async (sender, args) =>
+        if (!searchIsRunning)
         {
+            searchIsRunning = true;
+            _jsRuntime.Show(_loadingBox);
+            _jsRuntime.Hide(_resultsBox);
+
+            //effectively giving user time to press button before auto search begins
+            //restart timer count on every press
             _onKeyUpWaitTimer.Stop();
-
-            //get search text, lower case for more results
-            var text = (await _jsRuntime.GetValue(_searchInput)).ToLower();
-
-            //if no search text then show all
-            if (string.IsNullOrEmpty(text))
+            _onKeyUpWaitTimer.Start();
+            _onKeyUpWaitTimer.Elapsed += async (sender, args) =>
             {
-                APIAttributeListDisplay = _apiAttributeListAsync;
-            }
-            else
-            {
-                APIAttributeListDisplay = _apiAttributeListAsync.FindAll(apiCalc => apiCalc.SearchText.SearchText(text));
-            }
+                _onKeyUpWaitTimer.Stop();
 
-            // User has stopped typing, perform your action here
-            await InvokeAsync(StateHasChanged); // To refresh the UI
+                //get search text, lower case for more results
+                var searchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
 
-            _jsRuntime.Hide(loadingBox);
-            _jsRuntime.Show(resultsBox);
+                //if no search text then show all
+                if (string.IsNullOrEmpty(searchText))
+                {
+                    MethodListFiltered = MethodListALL;
+                }
+                else
+                {
 
-        };
+                    var results = Process.ExtractAll(searchText, MethodListALLSearchText, cutoff: 60).OrderByDescending(r => r.Score); ;
+
+                    foreach (var result in results)
+                    {
+                        Console.WriteLine($" Score: {result.Score}, Index: {result.Index}, Choice: {result.Value}");
+                    }
+
+                    MethodListFiltered = results.Select(yy => MethodListALL[yy.Index]).ToList();
+                }
+
+                // User has stopped typing, perform your action here
+                await InvokeAsync(StateHasChanged); // To refresh the UI
+
+                _jsRuntime.Hide(_loadingBox);
+                _jsRuntime.Show(_resultsBox);
+
+                searchIsRunning = false;
+            };
+
+        }
+
 
     }
 

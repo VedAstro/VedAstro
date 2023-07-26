@@ -282,10 +282,8 @@ namespace Library.API
             //put specs to make chart into a URL format
             var chartSpecsUrl = EventsChart.FromData(person, timeRange, inputedEventTags, maxWidth, summaryOptions).ToUrl();
 
-            //ask API to make new chart (user id is for caching)
-            var eventsChartApiCallUrl = $"{_api.URL.GetEventsChart}/UserId/{_api.UserId}/VisitorId/{_api.VisitorID}";
-
-            var finalUrl = eventsChartApiCallUrl + chartSpecsUrl;
+            //add in server address & API call name
+            var finalUrl = _api.URL.GetEventsChart + chartSpecsUrl;
 
             return finalUrl;
         }

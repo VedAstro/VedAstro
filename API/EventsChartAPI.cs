@@ -11,16 +11,14 @@ using Newtonsoft.Json.Linq;
 namespace API
 {
 
-
-
     public static class EventsChartAPI
     {
 
         private static Dictionary<double, string> _cacheList;
 
         //CENTRAL FOR ROUTES
-        private const string RouteGetEventsChartNoCache = "GetEventsChartNoCache/UserId/{userId}/VisitorId/{visitorId}/{*settingsUrl}";
-        private const string RouteGetEventsChart = "GetEventsChart/UserId/{userId}/VisitorId/{visitorId}/{*settingsUrl}";
+        private const string RouteGetEventsChartNoCache = "EventsChartNoCache/{*settingsUrl}";
+        private const string RouteGetEventsChart = "EventsChart/{*settingsUrl}";
         private const string SendGetEventsChart = "SendEventsChart/Email/{email}";
 
 
@@ -35,20 +33,16 @@ namespace API
         [Function(nameof(GetEventsChart))]
         public static async Task<HttpResponseData> GetEventsChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = RouteGetEventsChart)] HttpRequestData incomingRequest,
-            string userId, string visitorId, string settingsUrl)
+             string settingsUrl)
         {
 
             try
             {
 
-                //data comes out of caller, basic spec on how the chart should be
-                //var requestJson = await APITools.ExtractDataFromRequestJson(incomingRequest);
-                //var requestJson = JObject.Parse(settingsJson);
-
+                //get basic spec on how to make chart
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
-                //var chartSpecsOnly = await EventsChart.FromJsonSpecOnly(requestJson);
-                var chartSpecsOnly =  EventsChart.FromUrl(settingsUrl);
+                var chartSpecsOnly = await  EventsChart.FromUrl(settingsUrl);
 
                 //a hash to id the chart's specs (caching)
                 var chartId = chartSpecsOnly.GetEventsChartSignature();
@@ -56,13 +50,7 @@ namespace API
                 //PREPARE THE CALL
                 Func<Task<string>> generateChart = async () =>
                 {
-                    var foundPerson = await Tools.GetPersonById(chartSpecsOnly.PersonId);
-                    var chartSvg = await EventsChartManager.GenerateEventsChart(
-                        foundPerson,
-                        chartSpecsOnly.TimeRange,
-                        chartSpecsOnly.DaysPerPixel,
-                        chartSpecsOnly.EventTagList,
-                        chartSpecsOnly.Options);
+                    var chartSvg = await EventsChartManager.GenerateEventsChartSVG(chartSpecsOnly);
                     return chartSvg;
                 };
 
@@ -71,10 +59,13 @@ namespace API
 
 
                 //CACHE MECHANISM
-                var callerInfo = new CallerInfo(visitorId, userId);//get who or what is calling
+                var callerInfo = new CallerInfo("101", "101");//disabled because no space to squeeze in URL
                 callerInfo.CallerId = chartId;//NOTE OVERRIDE CALLER ID TO CHART FOR CACHE SHARING
-                var httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask, callerInfo, incomingRequest);
+                HttpResponseData httpResponseData = await AzureCache.CacheExecute(cacheExecuteTask, callerInfo, incomingRequest);
 
+                // mark as SVG to be viewed direct in browser, and remove old if already set
+                httpResponseData.Headers.Remove("Content-Type");
+                httpResponseData.Headers.Add("Content-Type", "image/svg+xml");
                 return httpResponseData;
 
             }
@@ -104,21 +95,10 @@ namespace API
             {
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
-                var chartSpecsOnly = EventsChart.FromUrl(settingsUrl);
-
-                //a hash to id the chart's specs (caching)
-                var chartId = chartSpecsOnly.GetEventsChartSignature();
+                var chartSpecsOnly = await EventsChart.FromUrl(settingsUrl);
 
                 //PREPARE THE CALL
-                var foundPerson = await Tools.GetPersonById(chartSpecsOnly.PersonId);
-                var chartSvg = await EventsChartManager.GenerateEventsChart(
-                    foundPerson,
-                    chartSpecsOnly.TimeRange,
-                    chartSpecsOnly.DaysPerPixel,
-                    chartSpecsOnly.EventTagList,
-                    chartSpecsOnly.Options);
-                //return chartSvg;
-
+                var chartSvg = await EventsChartManager.GenerateEventsChartSVG(chartSpecsOnly);
 
                 //send image back to caller
                 return APITools.SendSvgToCaller(chartSvg, incomingRequest);
@@ -153,20 +133,11 @@ namespace API
 
                 //check if the specs given is correct and readable
                 //this is partially filled chart with no generated svg content only specs
-                var chartSpecsOnly = EventsChart.FromJson(requestJson);
-
-                //a hash to id the chart's specs (caching)
-                var chartId = chartSpecsOnly.GetEventsChartSignature();
+                var chartSpecsOnly = await EventsChart.FromJson(requestJson);
 
                 //PREPARE THE CALL
-                var foundPerson = await Tools.GetPersonById(chartSpecsOnly.PersonId);
-                var chartSvg = await EventsChartManager.GenerateEventsChart(
-                    foundPerson,
-                    chartSpecsOnly.TimeRange,
-                    chartSpecsOnly.DaysPerPixel,
-                    chartSpecsOnly.EventTagList,
-                    chartSpecsOnly.Options);
-                //return chartSvg;
+                var foundPerson = await Tools.GetPersonById(chartSpecsOnly.Person.Id);
+                var chartSvg = await EventsChartManager.GenerateEventsChartSVG(chartSpecsOnly);
 
                 //string to binary
                 byte[] rawFileBytes = System.Text.Encoding.UTF8.GetBytes(chartSvg); //SVG uses UTF-8
@@ -308,7 +279,7 @@ namespace API
 
                 //get the saved chart record by id
                 var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
-                var chart = EventsChart.FromXml(foundChartXml);
+                var chart = await EventsChart.FromXml(foundChartXml);
                 var svgString = chart.ContentSvg;
 
                 //get chart index.html and send that to caller
@@ -317,10 +288,10 @@ namespace API
 
                 //insert person name into page, to show ready page faster
                 //TODO NEEDS TO BE UPDATED
-                var personName = (await Tools.GetPersonById(chart.PersonId)).Name;
+                var personName = (await Tools.GetPersonById(chart.Person.Id)).Name;
                 var jsVariables = $@"window.PersonName = ""{personName}"";";
                 jsVariables += $@"window.ChartType = ""{"Muhurtha"}"";";
-                jsVariables += $@"window.PersonId = ""{chart.PersonId}"";";
+                jsVariables += $@"window.PersonId = ""{chart.Person.Id}"";";
                 htmlTemplate = htmlTemplate.Replace("/*INSERT-JS-VAR-HERE*/", jsVariables);
 
                 //insert SVG into html place holder page
@@ -356,7 +327,7 @@ namespace API
 
                 //get the saved chart record by id
                 var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
-                var chart = EventsChart.FromXml(foundChartXml);
+                var chart = await EventsChart.FromXml(foundChartXml);
 
                 //send image back to caller
                 return APITools.SendSvgToCaller(chart.ContentSvg, incomingRequest);
@@ -389,10 +360,10 @@ namespace API
 
                 //get the saved chart record by id
                 var foundChartXml = await APITools.FindSavedEventsChartXMLById(chartId);
-                var chart = EventsChart.FromXml(foundChartXml);
+                var chart = await EventsChart.FromXml(foundChartXml);
 
                 //extract out the person id from chart and send it to caller
-                var personIdXml = new XElement("PersonId", chart.PersonId);
+                var personIdXml = new XElement("PersonId", chart.Person.Id);
 
                 return APITools.PassMessage(personIdXml, incomingRequest);
 
@@ -432,8 +403,8 @@ namespace API
                 var savedChartXmlList = savedChartXmlDoc?.Root?.Elements().ToList() ?? new List<XElement>(); //empty list so no failure
                 foreach (var chartXml in savedChartXmlList)
                 {
-                    var parsedChart = EventsChart.FromXml(chartXml);
-                    var person = await Tools.GetPersonById(parsedChart.PersonId);
+                    var parsedChart = await EventsChart.FromXml(chartXml);
+                    var person = await Tools.GetPersonById(parsedChart.Person.Id);
                     var chartNameXml = new XElement("ChartName",
                         new XElement("Name",
                             parsedChart.GetFormattedName(person.Name)),
@@ -502,41 +473,6 @@ namespace API
         //█▀▀ █▀▄ █ ▀▄▀ █▀█ ░█░ ██▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
 
-        ///// <summary>
-        ///// processes incoming xml request and outputs events svg report
-        ///// </summary>
-        //private static async Task<EventsChart> GetEventReportSvgForIncomingRequest(HttpRequestData req, bool cacheEnable)
-        //{
-        //    //get all the data needed out of the incoming request
-        //    var rootXml = await APITools.ExtractDataFromRequestXml(req);
-        //    var personId = rootXml.Element("PersonId")?.Value;
-        //    var eventTagListXml = rootXml.Element("EventTagList");
-        //    var eventTags = EventTagExtensions.FromXmlList(eventTagListXml);
-        //    var startTimeXml = rootXml.Element("StartTime")?.Elements().First();
-        //    var startTime = Time.FromXml(startTimeXml);
-        //    var endTimeXml = rootXml.Element("EndTime")?.Elements().First();
-        //    var endTime = Time.FromXml(endTimeXml);
-        //    var daysPerPixel = double.Parse(rootXml.Element("DaysPerPixel")?.Value ?? "0");
-
-        //    //get the person instance by id
-        //    var foundPerson = await APITools.GetPersonById(personId);
-
-        //    EventsChart chart = EventsChart.Empty;
-
-        //    if (cacheEnable)
-        //    {
-        //        //todo needs testing
-        //        //based on mode set by caller use cache
-        //        //chart = await GetChartCached(foundPerson, startTime, endTime, daysPerPixel, eventTags);
-        //    }
-        //    else
-        //    {
-        //        //based on mode set by caller use cache
-        //        chart = await GenerateNewChart(foundPerson, timeRange, daysPerPixel, eventTags);
-        //    }
-
-        //    return chart;
-        //}
 
         private static async Task<EventsChart> GetEventReportSvgForIncomingRequestEasy(HttpRequestData req)
         {
@@ -580,7 +516,7 @@ namespace API
             //done for fast calculation only for needed viewability
             var daysPerPixel = GetDayPerPixel(timeRange, maxWidth);
 
-            return await Tools.GenerateNewChart(foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
+            return await EventsChartManager.GenerateEventsChart(foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
         }
 
 

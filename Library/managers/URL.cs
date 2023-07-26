@@ -68,7 +68,7 @@ public class URL
         GetMatchReportApi = ApiUrl + "/getmatchreport";
         GetSavedMatchReport = ApiUrl + "/GetSavedMatchReport";
         SaveMatchReportApi = ApiUrl + "/SaveMatchReport";
-        GetEventsChart = ApiUrl + "/GetEventsChart";
+        GetEventsChart = ApiUrl + "/EventsChart";
         GetCallStatus = ApiUrl + "/GetCallStatus";
         //TODO special URL for chart because timeout Azure CDN timeout >30s
         GetEventsChartDirect = ApiUrlDirect + "/api/geteventschart"; 

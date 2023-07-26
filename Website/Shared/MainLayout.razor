@@ -25,7 +25,7 @@
     <div class="row flex-md-nowrap">
 
         <!-- DESKTOP ONLY : SIDEBAR -->
-        <div class="col-auto align-items-start d-none d-md-block">
+        <div @ref="AppData.DesktopSidebar" class="col-auto align-items-start d-none d-md-block">
             <!--only visible in Desktop-->
             <div class="vstack gap-2 mb-3 rounded-3 border shadow sticky-md-top p-md-3 bg-white" style="z-index: 999;">
                 <!-- special style to make appear in night mode dispite bg-white -->
@@ -66,7 +66,8 @@
                         <Icon IconName="material-symbols:menu-open-rounded" Size="30" />
                     </button>
                     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                        <div class="offcanvas-body" data-bs-dismiss="offcanvas"> <!--Needed close mobile menu onclick-->
+                        <div class="offcanvas-body" data-bs-dismiss="offcanvas">
+                            <!--Needed close mobile menu onclick-->
                             <div class="d-flex flex-wrap gap-2 mb-2 p-2 rounded-3 border shadow"><TopBarButtons /></div>
                             <hr />
                             <div class="vstack gap-2 mb-2 p-2 rounded-3 border shadow"><SideBarButtons /></div>
@@ -163,7 +164,7 @@
 
 
         //2: create url based on beta or stable
-        //note : must do after 
+        //note : must do after
         //---------------------
         bool debugMode;
 

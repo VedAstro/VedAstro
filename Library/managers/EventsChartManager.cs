@@ -47,8 +47,14 @@ namespace VedAstro.Library
         /// <summary>
         /// Main method that starts making chart
         /// </summary>
-        public static async Task<string> GenerateEventsChart(Person inputPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> inputedEventTags, ChartOptions summaryOptions)
+        public static async Task<string> GenerateEventsChartSVG(EventsChart chartSpecs)
         {
+
+            var inputPerson = chartSpecs.Person;
+            var timeRange = chartSpecs.TimeRange;
+            var daysPerPixel = chartSpecs.DaysPerPixel;
+            var inputedEventTags = chartSpecs.EventTagList;
+            var summaryOptions = chartSpecs.Options;
 
             //ACT I : declare the components
             string svgHead = null;
@@ -158,19 +164,33 @@ namespace VedAstro.Library
         }
 
 
-        //wraps a list of svg elements inside 1 main svg element
-        //if width not set defaults to 1000px, and height to 1000px
-        //todo temp who ever is calling can change
+        /// <summary>
+        /// Generates events chart with specs and generated SVG chart
+        /// </summary>
+        public static async Task<EventsChart> GenerateEventsChart(Person foundPerson, TimeRange timeRange, double daysPerPixel, List<EventTag> eventTags, ChartOptions summaryOptions)
+        {
+            //a new chart is born
+            var newChartId = Tools.GenerateId();
+            var newChart = new EventsChart(newChartId, "", foundPerson, timeRange, daysPerPixel, eventTags, summaryOptions);
+
+            //from person get SVG chart as string
+            var eventsChartSvgString = await EventsChartManager.GenerateEventsChartSVG(newChart);
+
+            //combine chart and data
+            newChart.ContentSvg = eventsChartSvgString;
+
+            return newChart;
+        }
+
+
+        /// <summary>
+        /// wraps a list of svg elements inside 1 main svg element
+        /// if width not set defaults to 1000px, and height to 1000px
+        /// </summary>
         public static string WrapSvgElements(string svgClass, string combinedSvgString, int svgWidth, int svgTotalHeight, string randomId, string svgBackgroundColor = "#f0f9ff")
         {
-
-            //var svgBackgroundColor = "#f0f9ff";
-
             //use random id for each chart, done so that js can uniquely
             //manipulate 1 chart in page of multiple charts
-
-            //<? xml version = "1.0" encoding = "utf-8" ?>
-            //    < svg viewBox = "5.376 1.192 809.205 1885.759" width = "809.205" height = "1885.759" style = "width:810px;height:1110px;background:#f0f9ff;" xmlns = "http://www.w3.org/2000/svg" xmlns: xlink = "http://www.w3.org/1999/xlink" >
 
             //create the final svg that will be displayed
             var svgTotalWidth = svgWidth + 10; //add little for wiggle room
@@ -801,8 +821,8 @@ namespace VedAstro.Library
 
                     //if same year and same month then send this slice position
                     //as the correct one
-                    var sameYear = time.GetStdYear() == nowYear;
-                    var sameMonth = time.GetStdMonth() == nowMonth;
+                    var sameYear = time.StdYear() == nowYear;
+                    var sameMonth = time.StdMonth() == nowMonth;
                     if (sameMonth && sameYear)
                     {
                         return slicePosition;
@@ -824,9 +844,9 @@ namespace VedAstro.Library
 
                     //if same year and same month then send this slice position
                     //as the correct one
-                    var sameDay = time.GetStdDate() == nowDay;
-                    var sameYear = time.GetStdYear() == nowYear;
-                    var sameMonth = time.GetStdMonth() == nowMonth;
+                    var sameDay = time.StdDate() == nowDay;
+                    var sameYear = time.StdYear() == nowYear;
+                    var sameMonth = time.StdMonth() == nowMonth;
                     if (sameMonth && sameYear && sameDay)
                     {
                         return slicePosition;
@@ -849,9 +869,9 @@ namespace VedAstro.Library
                     //if same year and same month then send this slice position
                     //as the correct one
                     var sameHour = time.GetStdDateTimeOffset().Hour == nowHour;
-                    var sameDay = time.GetStdDate() == nowDay;
-                    var sameYear = time.GetStdYear() == nowYear;
-                    var sameMonth = time.GetStdMonth() == nowMonth;
+                    var sameDay = time.StdDate() == nowDay;
+                    var sameYear = time.StdYear() == nowYear;
+                    var sameMonth = time.StdMonth() == nowMonth;
                     if (sameDay && sameHour && sameMonth && sameYear)
                     {
                         return slicePosition;
@@ -874,7 +894,7 @@ namespace VedAstro.Library
 
                     //if same year and same month then send this slice position
                     //as the correct one
-                    var sameYear = time.GetStdYear() == nowYear;
+                    var sameYear = time.StdYear() == nowYear;
                     if (sameYear)
                     {
                         return slicePosition;
@@ -893,8 +913,8 @@ namespace VedAstro.Library
             var dasaSvgWidth = 0; //will be filled when calling row generator
             var compiledRow = "";
 
-            var beginYear = timeSlices[0].GetStdYear();
-            var endYear = timeSlices.Last().GetStdYear();
+            var beginYear = timeSlices[0].StdYear();
+            var endYear = timeSlices.Last().StdYear();
             var difYears = endYear - beginYear;
 
             //header rows are dynamically generated as needed, hence the extra logic below
@@ -936,7 +956,7 @@ namespace VedAstro.Library
                     //only generate new year box when year changes or at
                     //end of time slices to draw the last year box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var yearChanged = previousYear != slice.GetStdYear();
+                    var yearChanged = previousYear != slice.StdYear();
                     if (yearChanged || lastTimeSlice)
                     {
                         //and it is in the beginning
@@ -984,7 +1004,7 @@ namespace VedAstro.Library
                     }
 
                     //update previous year for next slice
-                    previousYear = slice.GetStdYear();
+                    previousYear = slice.StdYear();
 
                     yearBoxWidthCount++;
 
@@ -1009,7 +1029,7 @@ namespace VedAstro.Library
                 int childAxisX = 0;
                 const int decade = 10;
 
-                var beginYear = timeSlices[0].GetStdYear();
+                var beginYear = timeSlices[0].StdYear();
                 var endYear = beginYear + decade; //decade
 
 
@@ -1019,13 +1039,13 @@ namespace VedAstro.Library
                     //only generate new year box when year changes or at
                     //end of time slices to draw the last year box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var yearChanged = previousYear != slice.GetStdYear();
+                    var yearChanged = previousYear != slice.StdYear();
                     if (yearChanged || lastTimeSlice)
                     {
                         //is this slice end year & last month (month for accuracy, otherwise border at jan not december)
                         //todo begging of box is not beginning of year, possible solution month
                         //var isLastMonth = slice.GetStdMonth() is 10 or 11 or 12; //use oct & nov in-case december is not generated at low precision 
-                        var isEndYear = endYear == slice.GetStdYear();
+                        var isEndYear = endYear == slice.StdYear();
                         if (isEndYear)
                         {
                             //generate previous year data first before resetting
@@ -1063,7 +1083,7 @@ namespace VedAstro.Library
                     }
 
                     //update previous year for next slice
-                    previousYear = slice.GetStdYear();
+                    previousYear = slice.StdYear();
 
                     yearBoxWidthCount++;
 
@@ -1089,7 +1109,7 @@ namespace VedAstro.Library
 
                 const int yearRange = 5;
 
-                var beginYear = timeSlices[0].GetStdYear();
+                var beginYear = timeSlices[0].StdYear();
                 var endYear = beginYear + yearRange;
 
 
@@ -1099,11 +1119,11 @@ namespace VedAstro.Library
                     //only generate new year box when year changes or at
                     //end of time slices to draw the last year box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var yearChanged = previousYear != slice.GetStdYear();
+                    var yearChanged = previousYear != slice.StdYear();
                     if (yearChanged || lastTimeSlice)
                     {
                         //is this slice end year
-                        var isEndYear = endYear == slice.GetStdYear();
+                        var isEndYear = endYear == slice.StdYear();
                         if (isEndYear)
                         {
                             //generate previous year data first before resetting
@@ -1141,7 +1161,7 @@ namespace VedAstro.Library
                     }
 
                     //update previous year for next slice
-                    previousYear = slice.GetStdYear();
+                    previousYear = slice.StdYear();
 
                     yearBoxWidthCount++;
 
@@ -1171,7 +1191,7 @@ namespace VedAstro.Library
                     //only generate new year box when year changes or at
                     //end of time slices to draw the last year box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var monthChanged = previousMonth != slice.GetStdMonth();
+                    var monthChanged = previousMonth != slice.StdMonth();
                     if (monthChanged || lastTimeSlice)
                     {
                         //and it is in the beginning
@@ -1219,7 +1239,7 @@ namespace VedAstro.Library
                     }
 
                     //update previous month for next slice
-                    previousMonth = slice.GetStdMonth();
+                    previousMonth = slice.StdMonth();
 
                     yearBoxWidthCount++;
 
@@ -1270,7 +1290,7 @@ namespace VedAstro.Library
                     //only generate new date box when date changes or at
                     //end of time slices to draw the last date box
                     var lastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var dateChanged = previousDate != slice.GetStdDate();
+                    var dateChanged = previousDate != slice.StdDate();
                     if (dateChanged || lastTimeSlice)
                     {
                         //and it is in the beginning
@@ -1310,7 +1330,7 @@ namespace VedAstro.Library
                     }
 
                     //update previous date for next slice
-                    previousDate = slice.GetStdDate();
+                    previousDate = slice.StdDate();
 
                     dateBoxWidthCount++;
 
@@ -1341,7 +1361,7 @@ namespace VedAstro.Library
                     //only generate new date box when hour changes or at
                     //end of time slices to draw the last hour box
                     var isLastTimeSlice = timeSlices.IndexOf(slice) == timeSlices.Count - 1;
-                    var hourChanged = previousHour != slice.GetStdHour();
+                    var hourChanged = previousHour != slice.StdHour();
                     if (hourChanged || isLastTimeSlice)
                     {
                         //and it is in the beginning
@@ -1381,7 +1401,7 @@ namespace VedAstro.Library
                     }
 
                     //update previous hour for next slice
-                    previousHour = slice.GetStdHour();
+                    previousHour = slice.StdHour();
 
                     hourBoxWidthCount++;
                 }

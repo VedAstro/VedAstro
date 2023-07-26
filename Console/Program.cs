@@ -155,7 +155,6 @@ namespace VedAstro.Console
             //    var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
 
             //    var chart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
-            //    //var timeHash = possibleTime.ToString(); //time to id the chart, because will complete asymmetrically
             //    dict.Add(possibleTime, chart.ContentSvg);
             //});
 
@@ -163,8 +162,7 @@ namespace VedAstro.Console
             {
                 var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
 
-                var chart = await Tools.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
-                //var timeHash = possibleTime.ToString(); //time to id the chart, because will complete asymmetrically
+                var chart = await EventsChartManager.GenerateEventsChart(personAdjusted, timeRange, daysPerPixel, eventTags, summaryOptions);
                 dict.Add(possibleTime, chart.ContentSvg);
 
             }
@@ -175,7 +173,6 @@ namespace VedAstro.Console
             //    var personAdjusted = foundPerson.ChangeBirthTime(possibleTime);
 
             //    var chart = await EventsChartAPI.GenerateNewChart(personAdjusted, timeRange, daysPerPixel, eventTags);
-            //    //var timeHash = possibleTime.ToString(); //time to id the chart, because will complete asymmetrically
             //    dict.Add(possibleTime, chart.ContentSvg);
 
             //}).ToList();

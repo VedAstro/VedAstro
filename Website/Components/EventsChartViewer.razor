@@ -11,7 +11,7 @@
     <div class="hstack gap-2 mb-2">
         <IconButton SmallSize="true" ButtonText="Horoscope" OpenNewTab="true" IconName="fluent:book-star-20-filled" ClickUrl="@($"{PageRoute.Horoscope}/{SelectedPerson.Id}")" />
         <IconButton SmallSize="true" ButtonText="Show/Hide" IconName="bx:hide" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("ShowHideEventsChart"))" />
-        <IconButton DropDownWidthPx="@GR.W255px" ExtraDropdownClass="" SmallSize="true" ButtonText="Highlight" IconName="fluent:highlight-16-filled">
+        <IconButton SmallSize="true" DropDownWidthPx="@GR.W255px" ExtraDropdownClass="" ButtonText="Highlight" IconName="fluent:highlight-16-filled">
             <DropDownList>
                 <div class="d-flex flex-wrap gap-1">
                     @foreach (var eventNameKeyword in SelectedHighlightDictionary.Keys)
@@ -289,7 +289,7 @@
         }
 
         //a name to uniquely identify this chart
-        var chartName = $"{SelectedPerson.Id}|{StartTime.GetStdYear()}-{EndTime.GetStdYear()}|Chart|{SelectedPerson.Name}"; //"Chart" important used later to find
+        var chartName = $"{SelectedPerson.Id}|{StartTime.StdYear()}-{EndTime.StdYear()}|Chart|{SelectedPerson.Name}"; //"Chart" important used later to find
         await _jsRuntime.SetProperty(chartName, _finalSvg);
 
         _jsRuntime.HideLoading();

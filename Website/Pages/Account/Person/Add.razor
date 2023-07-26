@@ -324,7 +324,7 @@
 
         //new human readable person ID made specially by API
         //note : ID for person should be only created here, for maintenance sake
-        var newPersonProfileId = await AppData.API.Person.GetNewPersonId(nameInput, birthTime.GetStdYear());
+        var newPersonProfileId = await AppData.API.Person.GetNewPersonId(nameInput, birthTime.StdYear());
 
         //create the new complete person profile
         return new Person(newPersonProfileId, nameInput, birthTime, gender, new[] { newPersonOwnerId });

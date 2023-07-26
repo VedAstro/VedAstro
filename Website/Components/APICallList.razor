@@ -1,5 +1,5 @@
-﻿@*
-    
+@*
+
 █ ▀█▀   █ █▀   ▄▀█   █▀▀ ▄▀█ █ █░░ ▄▄ █▀ ▄▀█ █▀▀ █▀▀   █▀█ █▀▀ ▄▀█ █░░ █ ▀█▀ █▄█
 █ ░█░   █ ▄█   █▀█   █▀░ █▀█ █ █▄▄ ░░ ▄█ █▀█ █▀░ ██▄   █▀▄ ██▄ █▀█ █▄▄ █ ░█░ ░█░
 
@@ -11,12 +11,13 @@
 @using VedAstro.Library;
 @using System.Xml.Linq
 @using System.Reflection
+@using FuzzySharp
 
 <div>
     <IconTitle IconSize="AppData.DefaultIconSize" Title="Browse Calls" IconName="fluent:line-horizontal-4-search-16-filled" TitleHolder="h4">
         <ButtonRow>
             <span style="font-size: 25px;">
-                Count : <strong>@APIAttributeListDisplay.Count</strong>
+                Count : <strong>@MethodListFiltered.Count</strong>
             </span>
         </ButtonRow>
     </IconTitle>
@@ -35,16 +36,16 @@
 
                 @* LOADING ICON *@
                 @* loading icon when list is being made, no loading popup because reduces user UX *@
-                <div @ref="loadingBox" style="display: none;">
+                <div @ref="_loadingBox" style="display: none;">
                     <div class="d-flex flex-column align-items-center mt-5">
                         <strong>Loading...</strong>
                         <div class="spinner-border" role="status" aria-hidden="true"></div>
                     </div>
                 </div>
                 @* RESULTS HOLDER *@
-                <div @ref="resultsBox" style="">
+                <div @ref="_resultsBox" style="">
                     @* list of method data *@
-                    @foreach (var methodData in APIAttributeListDisplay)
+                    @foreach (var methodData in MethodListFiltered)
                     {
                         <div class="card shadow mt-2">
                             <div class="card-header d-flex justify-content-between">

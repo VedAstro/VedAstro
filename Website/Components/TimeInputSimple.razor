@@ -262,7 +262,7 @@
         this.Month = paddedMonth;
 
         this.Year = startTime.GetStdDateTimeOffset().Year.ToString();
-        this.TimeZone = startTime.GetStdTimezoneText();
+        this.TimeZone = startTime.StdTimezoneText;
     }
 
 }

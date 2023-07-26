@@ -33,7 +33,7 @@
                         var temp = @LifeEventListDisplay[indexPos].Id;
                     }
                     <td style="cursor: pointer; font-weight: bold;" @onclick="@(() => GotoEditLifeEvent(temp))">@LifeEventListDisplay[indexPos].Name</td>
-                    <td>@LifeEventListDisplay[indexPos].StartTime.GetStdDateMonthYearText()</td>
+                    <td>@LifeEventListDisplay[indexPos].StartTime.StdDateMonthYearText</td>
                     <td>@LifeEventListDisplay[indexPos].Description</td>
                     <td>@LifeEventListDisplay[indexPos].Nature</td>
                     <td>@LifeEventListDisplay[indexPos].Weight</td>

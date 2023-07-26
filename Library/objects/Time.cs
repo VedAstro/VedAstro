@@ -116,6 +116,30 @@ namespace VedAstro.Library
         //█▀▀ █▄█ █▄█ █▄▄ █ █▄▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
 
         /// <summary>
+        /// Gets the Time now in current system, needs location
+        /// </summary>
+        public static Time Now(GeoLocation geoLocation) => new Time(DateTimeOffset.Now, geoLocation);
+
+        public int StdYear() => this.GetStdDateTimeOffset().Year;
+
+        public int StdMonth() => this.GetStdDateTimeOffset().Month;
+
+        /// <summary>
+        /// Gets date in month 1-31
+        /// </summary>
+        public int StdDate() => this.GetStdDateTimeOffset().Day;
+
+        /// <summary>
+        /// Gets hour in 0 - 23
+        /// </summary>
+        public int StdHour() => this.GetStdDateTimeOffset().Hour;
+
+        /// <summary>
+        /// Get the geo location at place of time
+        /// </summary>
+        public GeoLocation GetGeoLocation() => _geoLocation;
+
+        /// <summary>
         /// Slices time range into pieces by inputed hours
         /// Given a start time and end time, it will add precision hours to start time until reaching end time.
         /// Note: number of slices returned != precision hours
@@ -134,7 +158,6 @@ namespace VedAstro.Library
             //return value
             return timeList;
         }
-
 
         /// <summary>
         /// Returns a new instance of the modified time.
@@ -210,7 +233,6 @@ namespace VedAstro.Library
         /// <summary>
         /// Returns STD time in string HH:mm dd/MM/yyyy zzz
         /// </summary>
-        /// <returns></returns>
         public string GetStdDateTimeOffsetText()
         {
             //format time with formatting info
@@ -231,28 +253,27 @@ namespace VedAstro.Library
             return final;
         }
 
-        public string GetStdDateMonthYearText()
-        {
-            var stdDateTimeString = _stdTime.ToString("dd/MM/yyyy");
-            return stdDateTimeString;
-        }
-
+        /// <summary>
+        /// Returns STD time in string dd/MM/yyyy
+        /// </summary>
+        public readonly string StdDateMonthYearText => _stdTime.ToString("dd/MM/yyyy");
 
         /// <summary>
         /// Returns STD time zone as text "+08:00"
         /// </summary>
         /// <returns></returns>
-        public string GetStdTimezoneText()
-        {
-            var stdTimeZoneString = _stdTime.ToString("zzz"); //timezone separate so can clean date time
-            return stdTimeZoneString;
-        }
+        public readonly string StdTimezoneText => _stdTime.ToString("zzz");
+        
+        /// <summary>
+        /// STD Hour and Minute exp : 14:18
+        /// </summary>
+        public readonly string StdHourMinuteText => _stdTime.ToString("HH:mm");
 
-        public DateTimeOffset GetStdDateTimeOffset()
-        {
-            //return internal std time
-            return _stdTime;
-        }
+        /// <summary>
+        /// return internal std time
+        /// </summary>
+        /// <returns></returns>
+        public DateTimeOffset GetStdDateTimeOffset() => _stdTime;
 
         /// <summary>
         /// NOTE: custom time format is standardized here
@@ -268,7 +289,6 @@ namespace VedAstro.Library
 
             //define format pattern
             formatInfo.FullDateTimePattern = DateTimeFormat;
-
 
             //return format info to caller
             return formatInfo;
@@ -286,13 +306,6 @@ namespace VedAstro.Library
 
             return difference;
         }
-        /// <summary>
-        /// Get the geo location at place of time
-        /// </summary>
-        public GeoLocation GetGeoLocation()
-        {
-            return _geoLocation;
-        }
 
         public string GetLmtDateTimeOffsetText()
         {
@@ -306,6 +319,28 @@ namespace VedAstro.Library
             //return time string caller
             return lmtTimeString;
         }
+
+        /// <summary>
+        /// Check if an inputed STD time string is valid,
+        /// returns default time if not parseable
+        /// </summary>
+        public static bool TryParseStd(string stdDateTimeText, out DateTimeOffset parsed)
+        {
+            try
+            {
+                parsed = DateTimeOffset.ParseExact(stdDateTimeText, Time.DateTimeFormat, null);
+                return true;
+            }
+            catch (Exception)
+            {
+                //failure for any reason, return false
+                parsed = new DateTimeOffset();
+                return false;
+            }
+        }
+
+
+        #region CONVERTERS
 
         /// <summary>
         /// Note root element is "Time"
@@ -331,12 +366,6 @@ namespace VedAstro.Library
             //compile into an JSON array
             return temp;
         }
-
-
-        /// <summary>
-        /// The root element is expected to be name of Type
-        /// Note: Special method done to implement IToXml
-        /// </summary>
 
         /// <summary>
         /// The root element is expected to be name of Type
@@ -377,7 +406,6 @@ namespace VedAstro.Library
         /// Parse list of XML directly
         /// </summary>
         public static List<Time> FromXml(IEnumerable<XElement> xmlList) => xmlList.Select(timeXml => Time.FromXml(timeXml)).ToList();
-
 
         public static Time FromJson(JToken timeJson)
         {
@@ -450,8 +478,6 @@ namespace VedAstro.Library
             return parsedTime;
         }
 
-
-
         /// <summary>
         /// Output TIME only for URL format
         /// time converted to the format used in OPEN API url
@@ -464,37 +490,72 @@ namespace VedAstro.Library
             var returnVal = this.GetStdDateTimeOffsetText(); //date time with space
 
             //replace spacing between to slash, presto done!
-            var formatted = returnVal.Replace(" ", "/"); 
+            var formatted = returnVal.Replace(" ", "/");
 
             return formatted;
         }
 
 
+        #endregion
 
-        /// <summary>
-        /// Gets the Time now in current system, needs location
-        /// </summary>
-        public static Time Now(GeoLocation geoLocation)
+
+
+        //█▀█ █░█ █▀▀ █▀█ █▀█ █ █▀▄ █▀▀ █▀
+        //█▄█ ▀▄▀ ██▄ █▀▄ █▀▄ █ █▄▀ ██▄ ▄█
+
+        public override bool Equals(object obj)
         {
-            //get standard time now
-            var stdTimeNow = DateTimeOffset.Now;
+            //if type is correct
+            if (obj.GetType() == typeof(Time))
+            {
+                //hard cast inputed value to time
+                Time inputTime = (Time)obj;
 
-            return new Time(stdTimeNow, geoLocation);
+                //check equality with hash code
+                return this.GetHashCode() == inputTime.GetHashCode();
+            }
+
+            //not correct type, return not equal
+            else { return false; }
+
         }
 
-        public int GetStdYear() => this.GetStdDateTimeOffset().Year;
+        /// <summary>
+        /// Gets a unique value representing the data (NOT instance)
+        /// </summary>
+        public override int GetHashCode()
+        {
+            //combine all the hash of the fields
+            var hash1 = (int)_stdTime.Ticks;
+            var hash2 = _geoLocation.GetHashCode();
 
-        public int GetStdMonth() => this.GetStdDateTimeOffset().Month;
+            return hash1 + hash2;
+        }
 
         /// <summary>
-        /// Gets date in month 1-31
+        /// Returns STD time in string HH:mm dd/MM/yyyy zzz
         /// </summary>
-        public int GetStdDate() => this.GetStdDateTimeOffset().Day;
+        public override string ToString()
+        {
+            return GetStdDateTimeOffsetText();
+        }
 
-        /// <summary>
-        /// Gets hour in 0 - 23
-        /// </summary>
-        public int GetStdHour() => this.GetStdDateTimeOffset().Hour;
+
+
+        //█▀█ █▀█ █▀▀ █▀█ ▄▀█ ▀█▀ █▀█ █▀█   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
+        //█▄█ █▀▀ ██▄ █▀▄ █▀█ ░█░ █▄█ █▀▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
+
+        public static bool operator ==(Time left, Time right) => left.Equals(right);
+
+        public static bool operator !=(Time left, Time right) => !(left == right);
+
+        public static bool operator >(Time a, Time b) => a.GetStdDateTimeOffset() > b.GetStdDateTimeOffset();
+
+        public static bool operator <(Time a, Time b) => a.GetStdDateTimeOffset() < b.GetStdDateTimeOffset();
+
+        public static bool operator >=(Time a, Time b) => a.GetStdDateTimeOffset() >= b.GetStdDateTimeOffset();
+
+        public static bool operator <=(Time a, Time b) => a.GetStdDateTimeOffset() <= b.GetStdDateTimeOffset();
 
 
 
@@ -589,88 +650,7 @@ namespace VedAstro.Library
         }
 
 
-
-
-
-        //█▀█ █░█ █▀▀ █▀█ █▀█ █ █▀▄ █▀▀ █▀
-        //█▄█ ▀▄▀ ██▄ █▀▄ █▀▄ █ █▄▀ ██▄ ▄█
-
-        public override bool Equals(object obj)
-        {
-            //if type is correct
-            if (obj.GetType() == typeof(Time))
-            {
-                //hard cast inputed value to time
-                Time inputTime = (Time)obj;
-
-                //check equality with hash code
-                return this.GetHashCode() == inputTime.GetHashCode();
-            }
-
-            //not correct type, return not equal
-            else { return false; }
-
-        }
-
-        /// <summary>
-        /// Gets a unique value representing the data (NOT instance)
-        /// </summary>
-        public override int GetHashCode()
-        {
-            //combine all the hash of the fields
-            var hash1 = (int)_stdTime.Ticks;
-            var hash2 = _geoLocation.GetHashCode();
-
-            return hash1 + hash2;
-        }
-
-        /// <summary>
-        /// Returns STD time in string HH:mm dd/MM/yyyy zzz
-        /// </summary>
-        public override string ToString()
-        {
-            return GetStdDateTimeOffsetText();
-        }
-
-
-
-
-        //█▀█ █▀█ █▀▀ █▀█ ▄▀█ ▀█▀ █▀█ █▀█   █▀▄▀█ █▀▀ ▀█▀ █░█ █▀█ █▀▄ █▀
-        //█▄█ █▀▀ ██▄ █▀▄ █▀█ ░█░ █▄█ █▀▄   █░▀░█ ██▄ ░█░ █▀█ █▄█ █▄▀ ▄█
-
-        public static bool operator ==(Time left, Time right) => left.Equals(right);
-
-        public static bool operator !=(Time left, Time right) => !(left == right);
-
-        public static bool operator >(Time a, Time b) => a.GetStdDateTimeOffset() > b.GetStdDateTimeOffset();
-
-        public static bool operator <(Time a, Time b) => a.GetStdDateTimeOffset() < b.GetStdDateTimeOffset();
-
-        public static bool operator >=(Time a, Time b) => a.GetStdDateTimeOffset() >= b.GetStdDateTimeOffset();
-
-        public static bool operator <=(Time a, Time b) => a.GetStdDateTimeOffset() <= b.GetStdDateTimeOffset();
-
-        /// <summary>
-        /// Check if an inputed STD time string is valid,
-        /// returns default time if not parseable
-        /// </summary>
-        public static bool TryParseStd(string stdDateTimeText, out DateTimeOffset parsed)
-        {
-            try
-            {
-                parsed = DateTimeOffset.ParseExact(stdDateTimeText, Time.DateTimeFormat, null);
-                return true;
-            }
-            catch (Exception)
-            {
-                //failure for any reason, return false
-                parsed = new DateTimeOffset();
-                return false;
-            }
-        }
-
-
     }
 
-    
+
 }

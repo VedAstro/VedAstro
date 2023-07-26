@@ -299,6 +299,15 @@ namespace Website
         public static async Task Show(this IJSRuntime jsRuntime, ElementReference element) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, element);
 
         /// <summary>
+        /// toggles the display property of an element, show / hide
+        /// uses jquery toggle method
+        /// </summary>
+        public static async Task ToggleDisplay(this IJSRuntime jsRuntime, string elementID)
+        {
+            await jsRuntime.InvokeVoidAsync("eval", $"$('#{elementID}').toggle()");
+        }
+
+        /// <summary>
         /// Uses jQuery to show element via selector (#ID,.class)
         /// </summary>
         public static async Task Show(this IJSRuntime jsRuntime, string elementSelector) => await jsRuntime.InvokeVoidAsync(JS.showWrapper, elementSelector);

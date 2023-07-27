@@ -40,7 +40,7 @@
             <div @ref="_step2ElementRef" style="display: none">
                 <H6>Step 2</H6>
                 <div class="input-group mb-3">
-                    <label class="input-group-text" style="min-width: @GR.W97px;">Calculator</label>
+                    <label class="input-group-text gap-2" style="min-width: @GR.W97px;"><Icon IconName="flat-color-icons:calculator" Size="34" />Calculator</label>
                     <select @bind="SelectedMethod" class="form-select" style="font-weight: 700;">
                         <option selected>Choose...</option>
                         @foreach (var methodData in MethodListFiltered)

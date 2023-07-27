@@ -21,7 +21,7 @@
             @* NAME *@                
             <div class="input-group">
                 <span class="input-group-text gap-2" style="width: 136px;"><Icon IconName="flat-color-icons:butting-in" Size="35" />Name</span>
-                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600;">
+                <input @bind="_nameInput" type="text" class="form-control" placeholder="Enter name" style="font-weight: 600; font-size: 17px;">
             </div>
 
             @* TIME *@
@@ -33,7 +33,7 @@
             @* GENDER *@
             <div class="input-group">
                 <label class="input-group-text gap-2" for="genderSelectInput" style="width: 165px;"><Icon IconName="mdi:human-male-female" Size="34" />Gender</label>
-                <select @bind="_genderInput" class="form-select" id="genderSelectInput" style="font-weight: 600;">
+                <select @bind="_genderInput" class="form-select" id="genderSelectInput" style="font-weight: 600; font-size: 17px;">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>
@@ -91,7 +91,7 @@
         if (AppData.IsGuestUser)
         {
             var loginLink = $"<a target=\"_blank\" style=\"text-decoration-line: none;\" href=\"{AppData.URL.Login}\" class=\"link-primary fw-bold\">logged in</a>";
-            await _jsRuntime.ShowAlert("info", "Remember!", $"You have not {loginLink}, continue with as <strong>Guest</strong>?");
+            await _jsRuntime.ShowAlert("info", "Remember!", $"You have not {loginLink}, continue as <strong>Guest</strong>?");
         }
 
 
@@ -123,22 +123,6 @@
         // await Task.Delay(500);
         await _jsRuntime.ShowAlert("info", $"Going back to previous page", false, 500);
         _jsRuntime?.GoBack();
-
-
-        //todo marked for deletion
-        // if (serverReply["Status"]?.Value<string>() == "Pass")
-        // {
-        //     await _jsRuntime.ShowAlert("success", $"{_nameInput} added successfully!", false, 2500);
-
-        //     //wait a little and send user back to previous page
-        //     await Task.Delay(500);
-        //     _jsRuntime?.GoBack();
-        // }
-        // else
-        // {
-        //     var xxx = serverReply["Payload"]?.Value<string>() ?? "";
-        //     await _jsRuntime.ShowAlert("error", $"Server said fail. Why?", xxx);
-        // }
     }
 
     /// <summary>
@@ -186,8 +170,8 @@
             var alertData = new
             {
                 icon = "question",
-                title = $"Are you sure dear?",
-                html = $"You inputed <strong>{tempText}</strong> as your birth date, are you sure this is correct?",
+                title = $"Are you sure, {AlertText.RandomNoun()}?",
+                html = $"You inputed <strong>{tempText}</strong> as your birth date, is this correct?",
                 showCancelButton = true,
                 confirmButtonColor = "#3085d6",
                 cancelButtonColor = "#d33",
@@ -256,7 +240,7 @@
             var alertData = new
             {
                 icon = "question",
-                title = $"Such a short name? Suspicious.",
+                title = $"Such a short name? Suspicious",
                 html = $"Only machines use short names like <strong>{_nameInput}</strong>, are you a machine?",
                 showCancelButton = true,
                 confirmButtonColor = "#3085d6",

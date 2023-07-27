@@ -18,10 +18,10 @@
     <div class="input-group">
         <span class="input-group-text gap-2"><Icon IconName="streamline-emojis:globe-showing-americas" Size="34" />@LabelText</span>
         @*make input wider if without*@
-        <input @ref="_locationNameInput" @onblur="SetCoordinatesFromNameInput" @bind="LocationName" style="font-weight: 600;" type="text" class="form-control" placeholder="New York">
+        <input @ref="_locationNameInput" @onblur="SetCoordinatesFromNameInput" @bind="LocationName" style="font-weight: 600; font-size: 17px;" type="text" class="form-control" placeholder="New York">
     </div>
     @*dummy button to start location search*@
-    <IconButton ExtraClass="ms-1" SmallSize="true" Height="36" IconName="bx:search-alt" OnClickCallback="SetCoordinatesFromNameInput" />
+    <IconButton ExtraClass="ms-1" SmallSize="true" IconName="bx:search-alt" OnClickCallback="SetCoordinatesFromNameInput" />
 </div>
 
 @if (!HideLongLat)

@@ -114,7 +114,7 @@ namespace VedAstro.Library
             async Task GenerateComponents(Person inputPerson, Time startTime, Time endTime, double daysPerPixel, List<EventTag> inputedEventTags, ChartOptions summaryOptions)
             {
                 //STEP 1: USER INPUT > USABLE DATA
-                var svgBackgroundColor = "#f0f9ff"; //not bleach white
+                var svgBackgroundColor = "transparent"; //blends nicely with site's back
                 var randomId = Tools.GenerateId();
 
                 // One precision value for generating all dasa components,

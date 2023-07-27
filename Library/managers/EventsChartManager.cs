@@ -51,7 +51,7 @@ namespace VedAstro.Library
         //▒█▄▄█ ▒█░▒█ ▒█▀▀▄ ▒█░░░ ▒█░ ▒█░░░ 
         //▒█░░░ ░▀▄▄▀ ▒█▄▄█ ▒█▄▄█ ▄█▄ ▒█▄▄█
 
-        
+
         /// <summary>
         /// Main method that starts making chart
         /// </summary>
@@ -77,6 +77,7 @@ namespace VedAstro.Library
             string border = null;
             string jsCode = null;
             string svgTail = null;
+            string svgDefinitions = null;
 
 
             //ACT II : fill the components in order
@@ -88,6 +89,8 @@ namespace VedAstro.Library
             var final =
                 $@" <!--MADE BY MACHINES FOR HUMAN EYES-->
                     {svgHead}
+                        {svgDefinitions}
+
                         <!--inside border-->
                         {contentHead}
                             {timeHeader}
@@ -158,7 +161,14 @@ namespace VedAstro.Library
 
                 //note: if width & height not hard set, parent div clips it
                 var svgTotalHeight = MaxYAxis + 30;
-                var svgStyle = $@"width:{svgTotalWidth}px;height:{svgTotalHeight}px;background:{svgBackgroundColor};";//end of style tag
+
+                //set custom/global styles for main SVG element
+                var svgStyle = $@"
+                width:{svgTotalWidth}px;
+                font-family:Calibri;
+                height:{svgTotalHeight}px;
+                background:{svgBackgroundColor};";
+
                 svgHead = $"<svg class=\"EventChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
                 jsCode = GetJsCodeSvg(randomId);
@@ -169,6 +179,20 @@ namespace VedAstro.Library
 
                 svgTail = "</svg>";
                 contentTail = "</g>";
+
+                //filters used for extra styling
+                svgDefinitions = @"
+                        <defs>
+                            <filter id=""glow"">
+                                <feGaussianBlur in=""SourceAlpha"" stdDeviation=""1"" result=""blur"" />
+                                <feFlood flood-color=""white"" flood-opacity=""1"" result=""color"" />
+                                <feComposite in=""color"" in2=""blur"" operator=""in"" result=""blur"" />
+                                <feMerge>
+                                    <feMergeNode in=""blur"" />
+                                    <feMergeNode in=""SourceGraphic"" />
+                                </feMerge>
+                            </filter>
+                        </defs>";
 
             }
 
@@ -236,7 +260,7 @@ namespace VedAstro.Library
         /// NOTE : 2 names for 1 methods, yeah! clearer caller code
         /// </summary>
         private static int GetLastOccupiedYAxis() => GetNextFreeYAxis();
-        
+
         private static int GetNextFreeYAxis()
         {
             //scan from last till you hit something
@@ -456,7 +480,7 @@ namespace VedAstro.Library
                                         <!-- EVENT NAME-->
                                         <g transform=""translate(18,0)"" style=""{evtNameStyle}"">
 						                    <rect class=""background"" x=""0"" y=""0"" style=""fill: blue; opacity: 0.8;"" width=""{nameBackgroundWidth}"" height=""{nameTextHeight}"" rx=""2"" ry=""2"" />
-						                    <text class=""event-name"" x=""3"" y=""11"" style=""fill:#FFFFFF; font-family:'Calibri'; font-size:12px;"">{formattedEventName}</text>
+						                    <text class=""event-name"" x=""3"" y=""11"" style=""fill:#FFFFFF; font-size:12px;"">{formattedEventName}</text>
 					                    </g>
                                         <!-- EVENT ICON-->
 				                        <g class=""nature-icon"" transform=""translate(8,8)"">
@@ -544,7 +568,7 @@ namespace VedAstro.Library
             var nextYAxis = 0; //start with 0, at top
             foreach (var strLine in splitString)
             {
-                var newLineSvg = $@"<tspan x=""0"" y=""{nextYAxis}"" fill=""#FFFFFF"" font-family=""Calibri"" font-size=""10"">{strLine}</tspan>";
+                var newLineSvg = $@"<tspan x=""0"" y=""{nextYAxis}"" fill=""#FFFFFF"" font-size=""10"">{strLine}</tspan>";
 
                 //add together with other lines
                 compiledSvgLines += newLineSvg;
@@ -763,18 +787,20 @@ namespace VedAstro.Library
         /// get now line SVG group
         /// if set hide will set display as hidden
         /// </summary>
-        private static string GetNowLine(int lineHeight, int nowLinePosition, bool hideOnLoad = false)
+        private static string GetNowLine(int positionX, int positionY, bool hideOnLoad = false)
         {
 
             //add hide style if caller specifies to hide on load
             var extraClass = hideOnLoad ? "style=\"display: none;\"" : "";
 
+            positionX += 10; //adjust
+
             return $@"
-                       <g id=""NowVerticalLine"" x=""0"" y=""0"" {extraClass} transform=""matrix(1, 0, 0, 1, {nowLinePosition}, 0)"">
-		                    <rect width=""2"" height=""{lineHeight}"" style="" fill:blue; stroke-width:0.5px; stroke:#000;""></rect>
-		                    <g transform=""matrix(2, 0, 0, 2, -12, {lineHeight})"">
-			                    <rect style=""fill:blue; stroke:black; stroke-width: 0.5px;"" x=""0"" y=""0"" width=""12"" height=""9.95"" rx=""2.5"" ry=""2.5""></rect>
-			                    <text style=""fill: rgb(255, 255, 255); font-size: 4.1px; white-space: pre;"" x=""1.135"" y=""6.367"">NOW</text>
+                       <g id=""NowVerticalLine"" x=""0"" y=""0"" {extraClass} transform=""matrix(1, 0, 0, 1, {positionY}, 0)"">
+		                    <rect width=""2"" height=""{positionX}"" style="" fill:blue; stroke-width:0.5px; stroke:#000;""></rect>
+		                    <g transform=""matrix(2, 0, 0, 2, -12, {positionX})"">
+			                    <rect style=""fill: blue; opacity: 0.8; filter:url(#glow);"" x=""0"" y=""0"" width=""13.5"" height=""9.95"" rx=""2.5"" ry=""2.5""></rect>
+			                    <text style=""fill:#FFF; font-size: 5px; filter:url(#glow);"" x=""1.135"" y=""6.367"">NOW</text>
 		                    </g>
 	                    </g>
                         ";
@@ -1458,7 +1484,7 @@ namespace VedAstro.Library
             var compiledRow = "";
             if (eventList.Any())
             {
-                
+
                 //x axis, total nature score, planet name
                 SummaryRowData = new Dictionary<int, SumData>(); //note: summary data is filled when generating rows
 

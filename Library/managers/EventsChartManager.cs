@@ -26,7 +26,6 @@ namespace VedAstro.Library
         /// </summary>
         public static int MaxYAxis = 0;
 
-
         //px width & height of each slice of time
         //used when generating dasa rows
         //note: changes needed only here
@@ -1470,10 +1469,10 @@ namespace VedAstro.Library
             var eventList = EventsChartManager.UnsortedEventList.OrderByDescending(x => x.DurationMin).ToList();
 
             //1. FILTER
-            //remove events 70% shorter duration than time shown by 1 pixel
+            //remove events 85% shorter duration than time shown by 1 pixel
             //exp: if event is only 10min but 1 pixel = 60min,
             //then the small event is going to overpower the larger events
-            var removedCount = eventList.RemoveAll(evt => evt.DurationHour < (hoursPerPixel * 0.7));
+            var removedCount = eventList.RemoveAll(evt => evt.DurationHour < (hoursPerPixel * 0.85));
             Console.WriteLine($"!! REMOVED EVENT TOO SHORT COUNT : {removedCount} !!");
 
             //todo make data visible to end user

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -441,7 +441,7 @@ namespace VedAstro.Library
                                 <rect class=""vertical-line"" fill=""#1E1EEA"" width=""2"" height=""{iconYAxis}""></rect>
                                 <!-- EVENT ICON LABEL -->
                                 <g transform=""translate({iconXAxis},{iconYAxis})"">
-                                    <g class=""name-label"" >
+                                    <g class=""name-label"" style="" cursor: pointer; "" >
                                         <!-- EVENT NAME-->
                                         <g transform=""translate(18,0)"" style=""{evtNameStyle}"">
 						                    <rect class=""background"" x=""0"" y=""0"" style=""fill: blue; opacity: 0.8;"" width=""{nameBackgroundWidth}"" height=""{nameTextHeight}"" rx=""2"" ry=""2"" />

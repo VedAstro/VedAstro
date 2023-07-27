@@ -48,6 +48,7 @@ else
 
     private async Task OnClickHideSidebar()
     {
+        //sidebar is already set hide in mobile, only made visible via md block class
         _jsRuntime.ToggleClass(AppData.DesktopSidebar, "d-md-block");
     }
 

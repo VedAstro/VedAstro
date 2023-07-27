@@ -1,16 +1,12 @@
-﻿@using Newtonsoft.Json.Linq;
+@using Newtonsoft.Json.Linq;
 @using VedAstro.Library
 @*A simple page specialized for adding new Person profiles fast & easy*@
 @attribute [Route(PageRoute.AddPerson)]
 
 
-<PageTitle>Add New Person Profile</PageTitle>
+<PageTitle>Add Person | VedAstro</PageTitle>
 
-<PageTop Title="Add New Person" IconName="icomoon-free:profile">
-    <Description>
-        Person's birth info for astronomical calculation
-    </Description>
-</PageTop>
+<PageTop Title="Add New Person" IconName="icomoon-free:profile"/>
 
 @*show loading first, note done by style because need element alive*@
 <div class="@(!_nothingToShow?"d-none":"")">

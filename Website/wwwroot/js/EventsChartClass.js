@@ -17,9 +17,11 @@
 */
 //Single place for all code related to animating Events Chart SVG, used by light & full viewer
 
- class ID {
+class ID {
     static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
     static CursorLineLegendCloneCls = ".CursorLineLegendClone";
+    static LifeEventNameLabelCls = ".name-label";
+    static LifeEventVerticalLineCls = ".vertical-line";
     static CursorLineLegendDescriptionHolder = "#CursorLineLegendDescriptionHolder";
     static EventChartHolder = ".EventChartHolder"; //main chart SVG element, used class since ID is unique number
     static EventsChartSvgHolder = "#EventsChartSvgHolder"; //default expected parent in page to inject chart into
@@ -37,7 +39,7 @@
 //this class is a living version SVG Events Chart
 //DESIGN NOTE: no logic to generate chart should be here
 //all generation via URL or API is to be done as separate helper functions only
- class EventsChart {
+class EventsChart {
     //note: these are color codes used to
     //detect if event is good or bad
     static BadColor = "#FF0000";
@@ -50,9 +52,11 @@
 
         //use chart ID find the element on page
         //note: we make sure here that only the elements inside this specific SVG chart will be manipulated
+        this.$EventsChartSvgHolder = $(EventsChartSvgHolder);
         this.$SvgChartElm = $(`#${chartId}`);
         this.Id = chartId;
         this.$CursorLine = this.$SvgChartElm.find(ID.CursorLine);
+        this.$LifeEventNameLabel = this.$SvgChartElm.find(ID.LifeEventNameLabelCls);
         this.$NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine); //save now line
         this.AllEventRects = this.$SvgChartElm.find(ID.EventListHolder).children("rect");
         this.$CursorLineLegendDescriptionHolder = this.$SvgChartElm.find(ID.CursorLineLegendDescriptionHolder);
@@ -81,15 +85,22 @@
     attachEventHandlers() {
         console.log("Attaching events to chart...");
 
+        //1 TIME LEGEND
         //we pump the current EventChart instance into handler
         this.$SvgChartElm.mousemove((mouse) => EventsChart.onMouseMoveHandler(mouse, this));
         this.$SvgChartElm.mouseleave((mouse) => EventsChart.onMouseLeaveEventChart(mouse, this));
 
+        //2 NOW LINE
         //update once now
         EventsChart.updateNowLine(this);
 
         //setup to auto update every 1 minute
         setInterval(() => EventsChart.updateNowLine(this), 60 * 1000); // 60 seconds
+
+        //3 HIGHLIGHT LIFE EVENT
+        this.$LifeEventNameLabel.mouseenter((mouse) => EventsChart.onMouseEnterLifeEventHandler(mouse, this));
+        this.$LifeEventNameLabel.mouseleave((mouse) => EventsChart.onMouseLeaveLifeEventHandler(mouse, this));
+
     }
 
     //highlights all events rects in chart by
@@ -195,7 +206,6 @@
         //    return arrayValues[randomIndex];
     }
 
-
     //update now line position
     static updateNowLine(instance) {
         console.log("Updating now line position...");
@@ -248,12 +258,55 @@
     //on mouse leave event chart, auto hide time legend
     static onMouseLeaveEventChart(mouse, instance) { instance.$CursorLine.hide(); }
 
+    //on mouse over life event name label, highlight event line
+    static onMouseEnterLifeEventHandler(mouse, instance) {
+
+        //get label that has mouse over it
+        var targetElement = mouse.currentTarget;
+
+        //find the main vertical line for life event
+        var $parent = $(targetElement).parent();
+        var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
+
+        //make wider
+        $verticalLine.attr('width', '3');
+
+        //highlight color
+        $verticalLine.attr('fill', '#e502fa');
+
+        //glow
+        $verticalLine.css('filter', 'drop-shadow(0px 0px 1px rgb(255 0 0))');
+
+    }
+
+    //on mouse leave life event name label, unhighlight event line
+    static onMouseLeaveLifeEventHandler(mouse, instance) {
+
+        //get label that has mouse over it
+        var targetElement = mouse.currentTarget;
+
+        //find the main vertical line for life event
+        var $parent = $(targetElement).parent();
+        var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
+
+        //set back normal line width
+        $verticalLine.attr('width', '2');
+
+        //set line color back to default
+        $verticalLine.attr('fill', '#1E1EEA');
+
+        //glow
+        $verticalLine.css('filter', '');
+    }
+
     //fired when mouse moves over dasa view box
     //used to auto update cursor line & time legend
     static onMouseMoveHandler(mouse, instance) {
 
         //get relative position of mouse in Dasa view
-        var mousePosition = getMousePositionInElement(mouse);
+        //after zoom pixels on screen change, but when rendering
+        //SVG description box we need x, y before zoom (AI's code!)
+        var mousePosition = getMousePositionInElement(mouse); //todo no work in zoom
 
         //if cursor is out of chart view hide cursor and end here
         if (mousePosition === 0) { SVG(instance.$CursorLine[0]).hide(); return; }
@@ -269,33 +322,20 @@
         //-------------------------LOCAL FUNCS--------------------------
 
         //Gets a mouses x axis relative inside the given element
-        //used to get mouse location on Dasa view
-        //returns 0 when mouse is out
+        //used to get mouse location on SVG chart, zoom auto corrected 
         function getMousePositionInElement(mouseEventData) {
-            //gets the measurements of the dasa view holder
-            //the element where cursor line will be moving
-            let chartMeasurements = instance.$SvgChartElm[0]?.getBoundingClientRect();
 
-            //if holder measurements invalid then end here
-            if (!chartMeasurements) { return 0; }
+            //get relative position of mouse in Dasa view
+            //after zoom pixels on screen change, but when rendering
+            //SVG description box we need x, y before zoom (AI's code!)
+            var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
+            var zoom = parseFloat(getComputedStyle(holder).zoom);
+            var mousePosition = {
+                xAxis: mouse.originalEvent.offsetX / zoom,
+                yAxis: mouse.originalEvent.offsetY / zoom
+            };
 
-            //calculate mouse X relative to dasa view box
-            let relativeMouseX = mouseEventData.clientX - chartMeasurements.left;
-            let relativeMouseY = mouseEventData.clientY - chartMeasurements.top; //when mouse leaves top
-            let relativeMouseYb = mouseEventData.clientY - chartMeasurements.bottom; //when mouse leaves bottom
-
-            //if mouse out of element element, set 0 as indicator
-            let mouseOut = relativeMouseY < 0 || relativeMouseX < 0 || relativeMouseYb > 0;
-
-            if (mouseOut) {
-                return 0;
-            } else {
-                var mouse = {
-                    xAxis: relativeMouseX,
-                    yAxis: relativeMouseY
-                };
-                return mouse;
-            }
+            return mousePosition;
         }
 
         function autoMoveCursorLine(relativeMouseX) {
@@ -571,8 +611,6 @@
         }
     }
 }
-
-//LOGIC FUNCTIONS TO
 
 
 

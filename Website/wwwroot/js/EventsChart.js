@@ -274,6 +274,9 @@ export class EventsChart {
         //highlight color
         $verticalLine.attr('fill', '#e502fa');
 
+        //glow
+        $verticalLine.css('filter', 'drop-shadow(0px 0px 1px rgb(255 0 0))');
+
     }
 
     //on mouse leave life event name label, unhighlight event line
@@ -292,6 +295,8 @@ export class EventsChart {
         //set line color back to default
         $verticalLine.attr('fill', '#1E1EEA');
 
+        //glow
+        $verticalLine.css('filter', '');
     }
 
     //fired when mouse moves over dasa view box
@@ -606,8 +611,6 @@ export class EventsChart {
         }
     }
 }
-
-//LOGIC FUNCTIONS TO
 
 
 

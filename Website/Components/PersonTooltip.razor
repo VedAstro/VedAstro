@@ -15,11 +15,11 @@
     @*buttons related to account*@
     <div class="vstack gap-2 my-1">
         <span class="ms-2" style="text-align: center;">@Person.BirthTimeString</span>
-        <IconButton FullWidth="true" ButtonText="Horoscope" IconName="fluent:book-star-20-filled" SmallSize="true" ClickUrl="@($"{PageRoute.Horoscope}/{Person.Id}")" />
-        <IconButton FullWidth="true" ButtonText="Journal" IconName="game-icons:secret-book" SmallSize="true" ClickUrl="@($"{PageRoute.Journal}/{Person.Id}")" />
-        <IconButton FullWidth="true" ButtonText="Life Predictor" IconName="gis:map-time" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
+        <IconButton OpenNewTab="true" FullWidth="true" ButtonText="Horoscope" IconName="fluent:book-star-20-filled" SmallSize="true" ClickUrl="@($"{PageRoute.Horoscope}/{Person.Id}")" />
+        <IconButton OpenNewTab="true" FullWidth="true" ButtonText="Journal" IconName="game-icons:secret-book" SmallSize="true" ClickUrl="@($"{PageRoute.Journal}/{Person.Id}")" />
+        <IconButton OpenNewTab="true" FullWidth="true" ButtonText="Life Predictor" IconName="gis:map-time" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
         <div class="hstack gap-2">
-            <IconButton TooltipText="Edit" FullWidth="true" IconName="ic:baseline-ios-share" SmallSize="true" ClickUrl="@($"{PageRoute.LifePredictor}/{Person.Id}")" />
+            <IconButton TooltipText="Share" FullWidth="true" IconName="ic:baseline-ios-share" SmallSize="true" OnClickCallback="@(() => _jsRuntime.FunFeaturePopUp("Share"))" />
             <IconButton TooltipText="Edit" FullWidth="true" IconName="material-symbols:edit-square" SmallSize="true" ClickUrl="@($"{PageRoute.PersonEditor}/{Person.Id}")" />
             <IconButton TooltipText="Delete" FullWidth="true" IconName="material-symbols:delete" SmallSize="true" OnClickCallback="@OnClickDeleteButton" />
         </div>

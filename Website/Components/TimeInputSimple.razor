@@ -37,14 +37,16 @@
         background: transparent;
         font-size: 17px;
     }
+
 </style>
 
 
 <div class="input-group">
-   
+
     <span class="input-group-text gap-2"><Icon IconName="noto-v1:timer-clock" Size="30" />@LabelText</span>
-    <div class="form-control" @onclick="OnClickDateTimeInput">
-        <div id="TimeInputHolder" class="d-flex justify-content-between" style=" text-wrap: nowrap; overflow: hidden; ">
+    <div class="form-control">
+        @*note : on click will toggle picker, so picker cannot be inside TimeInputHolder*@
+        <div id="TimeInputHolder" class="d-flex justify-content-between" @onclick="OnClickDateTimeInput" style="text-wrap: nowrap; overflow: hidden;">
             <div>
                 <input class="border-0 inputPerfect" id="HourInput" style="width: 33px;" @bind="Hour" disabled/>:
                 <input class="border-0 inputPerfect" id="MinuteInput" style="width: 33px;" @bind="Minute" disabled/>
@@ -60,8 +62,7 @@
         <div @ref="CalendarPickerHolder"
              class="mt-2 vanilla-calendar visually-hidden border border-primary"
              style="position: absolute; z-index: 999; background: #f7f7f7;"
-             id="CalendarPickerHolder"></div>
-
+             id="CalendarPickerHolder"/>
     </div>
 </div>
 
@@ -209,7 +210,6 @@
 
     private async Task OnClickDateTimeInput()
     {
-        StateHasChanged();
 
         //get latest values using JS
         var hour = await _jsRuntime.GetValue("#HourInput");

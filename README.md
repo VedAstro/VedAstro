@@ -183,7 +183,7 @@ We're always looking for somebody to **[improve code.](https://vedastro.org/Join
 
 
 # 🙋‍♂️ Come say "Hi", we don't bite!
-
+We discuss & share ideas on astrology and computation. And ways you can integrate VedAstro into your own project.
 <!-- SLACK JOIN IMAGE -->
 [![image](https://user-images.githubusercontent.com/43817262/227275627-609ceb21-025a-4902-b552-6e12f62f2f9d.png)](https://join.slack.com/t/vedastro/shared_invite/zt-1rqkyn0vm-A7YncrN4PFPolVxCEBA37Q)
 

@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Drawing;
 using System.Diagnostics.Tracing;
+using System.Security.Cryptography;
 
 
 namespace VedAstro.Library
@@ -18,6 +19,13 @@ namespace VedAstro.Library
         //1 GENERATE DATA FOR EVENT ROWS
         public const int SingleRowHeight = 15;
         public const int SummaryRowHeight = 22;
+
+        /// <summary>
+        /// max Y axis used in chart set by life events, and other as generated
+        /// used to make final SVG height
+        /// </summary>
+        public static int MaxYAxis = 0;
+
 
         //px width & height of each slice of time
         //used when generating dasa rows
@@ -139,14 +147,17 @@ namespace VedAstro.Library
 
                 nowLine = MakeNowLine(startTime, verticalYAxis, timeSlices);
 
-                cursorLine = GetTimeCursorLine(verticalYAxis);
-
                 lifeEvents = GetLifeEventLinesSvg(inputPerson, verticalYAxis, startTime, timeSlices);
 
                 border = GetBorderSvg(timeSlices, verticalYAxis);
 
+                cursorLine = GetTimeCursorLine(verticalYAxis);
+
+                //get max height
+                MaxYAxis = verticalYAxis > MaxYAxis ? verticalYAxis : MaxYAxis;
+
                 //note: if width & height not hard set, parent div clips it
-                var svgTotalHeight = 350;//todo for now hard set, future use: verticalYAxis;
+                var svgTotalHeight = MaxYAxis + 30;
                 var svgStyle = $@"width:{svgTotalWidth}px;height:{svgTotalHeight}px;background:{svgBackgroundColor};";//end of style tag
                 svgHead = $"<svg class=\"EventChartHolder\" id=\"{randomId}\" style=\"{svgStyle}\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">";//much needed for use tags to work
 
@@ -561,7 +572,6 @@ namespace VedAstro.Library
             var lineHeight = verticalYAxis + 9; //space between icon & last row
             var inputOffset = startTime.GetStdDateTimeOffset().Offset; //timezone the chart will be in
 
-
             //add 1 to offset 0 index
             //each 1 cell is 1 px
             var maxSlices = timeSlices.Count + 1;
@@ -571,13 +581,12 @@ namespace VedAstro.Library
             const int minSpaceBetween = 80;//px
             //var halfWidth = minSpaceBetween / 2; //icon
 
-
             //sort by earliest to latest event
             var lifeEventList = person.LifeEventList;
             lifeEventList.Sort((x, y) => x.CompareTo(y));
 
             var incrementRate = 20; //for overcrowded jump
-            var adjustedLineHeight = lineHeight; //keep copy for resetting after overcrowded jum
+            var positionY = lineHeight; //keep copy for resetting after overcrowded jam
 
             var listRowData = new List<string>();
             foreach (var lifeEvent in lifeEventList)
@@ -601,17 +610,20 @@ namespace VedAstro.Library
                 MarkRowNumber(positionX, rowNumber);
 
                 //calculate final event icon height avoiding other icons 
-                adjustedLineHeight += rowNumber * incrementRate;
+                positionY += rowNumber * incrementRate;
 
                 //put together icon + line + event data
-                var generateLifeEventLine = GenerateLifeEventLine(lifeEvent, adjustedLineHeight, lifeEvtTime, positionX);
+                var generateLifeEventLine = GenerateLifeEventLine(lifeEvent, positionY, lifeEvtTime, positionX);
+
+                //save position Y if it is the highest so far, save it to be used to draw final SVG height
+                MaxYAxis = positionY > MaxYAxis ? positionY : MaxYAxis;
 
                 //save it under its row with others
                 while (rowNumber > (listRowData.Count - 1)) { listRowData.Add(""); } //add empty row if 1st
                 listRowData[rowNumber] += generateLifeEventLine;
 
                 //reset line height for next 
-                if (rowNumber != 0) { adjustedLineHeight = lineHeight; }
+                if (rowNumber != 0) { positionY = lineHeight; }
             }
 
             //place each row in a group and add to final list
@@ -710,7 +722,7 @@ namespace VedAstro.Library
             //add in the cursor line (moves with cursor via JS)
             //note: - template cursor line is duplicated to dynamically generate legend box
             //      - placed last so that show on top of others
-            var lineHeight = verticalYAxis + 110;//add space for life event icon
+            var lineHeight = verticalYAxis + 8;//minor adjust
 
 
             return $@"

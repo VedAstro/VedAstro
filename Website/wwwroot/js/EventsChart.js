@@ -20,6 +20,8 @@
 export class ID {
     static CursorLineLegendTemplate = `#CursorLineLegendTemplate`;
     static CursorLineLegendCloneCls = ".CursorLineLegendClone";
+    static LifeEventNameLabelCls = ".name-label";
+    static LifeEventVerticalLineCls = ".vertical-line";
     static CursorLineLegendDescriptionHolder = "#CursorLineLegendDescriptionHolder";
     static EventChartHolder = ".EventChartHolder"; //main chart SVG element, used class since ID is unique number
     static EventsChartSvgHolder = "#EventsChartSvgHolder"; //default expected parent in page to inject chart into
@@ -54,6 +56,7 @@ export class EventsChart {
         this.$SvgChartElm = $(`#${chartId}`);
         this.Id = chartId;
         this.$CursorLine = this.$SvgChartElm.find(ID.CursorLine);
+        this.$LifeEventNameLabel = this.$SvgChartElm.find(ID.LifeEventNameLabelCls);
         this.$NowVerticalLine = this.$SvgChartElm.find(ID.NowVerticalLine); //save now line
         this.AllEventRects = this.$SvgChartElm.find(ID.EventListHolder).children("rect");
         this.$CursorLineLegendDescriptionHolder = this.$SvgChartElm.find(ID.CursorLineLegendDescriptionHolder);
@@ -82,15 +85,22 @@ export class EventsChart {
     attachEventHandlers() {
         console.log("Attaching events to chart...");
 
+        //1 TIME LEGEND
         //we pump the current EventChart instance into handler
         this.$SvgChartElm.mousemove((mouse) => EventsChart.onMouseMoveHandler(mouse, this));
         this.$SvgChartElm.mouseleave((mouse) => EventsChart.onMouseLeaveEventChart(mouse, this));
 
+        //2 NOW LINE
         //update once now
         EventsChart.updateNowLine(this);
 
         //setup to auto update every 1 minute
         setInterval(() => EventsChart.updateNowLine(this), 60 * 1000); // 60 seconds
+
+        //3 HIGHLIGHT LIFE EVENT
+        this.$LifeEventNameLabel.mouseenter((mouse) => EventsChart.onMouseEnterLifeEventHandler(mouse, this));
+        this.$LifeEventNameLabel.mouseleave((mouse) => EventsChart.onMouseLeaveLifeEventHandler(mouse, this));
+
     }
 
     //highlights all events rects in chart by
@@ -196,7 +206,6 @@ export class EventsChart {
         //    return arrayValues[randomIndex];
     }
 
-
     //update now line position
     static updateNowLine(instance) {
         console.log("Updating now line position...");
@@ -248,6 +257,42 @@ export class EventsChart {
 
     //on mouse leave event chart, auto hide time legend
     static onMouseLeaveEventChart(mouse, instance) { instance.$CursorLine.hide(); }
+
+    //on mouse over life event name label, highlight event line
+    static onMouseEnterLifeEventHandler(mouse, instance) {
+
+        //get label that has mouse over it
+        var targetElement = mouse.currentTarget;
+
+        //find the main vertical line for life event
+        var $parent = $(targetElement).parent();
+        var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
+
+        //make wider
+        $verticalLine.attr('width', '3');
+
+        //highlight color
+        $verticalLine.attr('fill', '#e502fa');
+
+    }
+
+    //on mouse leave life event name label, unhighlight event line
+    static onMouseLeaveLifeEventHandler(mouse, instance) {
+
+        //get label that has mouse over it
+        var targetElement = mouse.currentTarget;
+
+        //find the main vertical line for life event
+        var $parent = $(targetElement).parent();
+        var $verticalLine = $parent.siblings(ID.LifeEventVerticalLineCls);
+
+        //set back normal line width
+        $verticalLine.attr('width', '2');
+
+        //set line color back to default
+        $verticalLine.attr('fill', '#1E1EEA');
+
+    }
 
     //fired when mouse moves over dasa view box
     //used to auto update cursor line & time legend

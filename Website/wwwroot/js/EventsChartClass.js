@@ -329,11 +329,22 @@ class EventsChart {
             //after zoom pixels on screen change, but when rendering
             //SVG description box we need x, y before zoom (AI's code!)
             var holder = instance.$EventsChartSvgHolder[0]; //zoom is done on main holder in Blazor side
-            var zoom = parseFloat(getComputedStyle(holder).zoom);
-            var mousePosition = {
-                xAxis: mouse.originalEvent.offsetX / zoom,
-                yAxis: mouse.originalEvent.offsetY / zoom
-            };
+
+            var mousePosition = {};
+            if (holder != null) {
+                var zoom = parseFloat(window.getComputedStyle(holder).zoom);
+                mousePosition = {
+                    xAxis: mouse.originalEvent.offsetX / zoom,
+                    yAxis: mouse.originalEvent.offsetY / zoom
+                };
+            }
+            //in svg direct browser we don't have DIV holder, so no zoom correction
+            else {
+                mousePosition = {
+                    xAxis: mouse.originalEvent.offsetX,
+                    yAxis: mouse.originalEvent.offsetY
+                };
+            }
 
             return mousePosition;
         }

@@ -32,6 +32,11 @@ namespace VedAstro.Library
     public static class HouseNameExtensions
     {
 
+        public static string ToString(this HouseName inputHouse)
+        {
+            return $"House {(int)inputHouse}";
+        }
+
         /// <summary>
         /// If fail will return null
         /// </summary>

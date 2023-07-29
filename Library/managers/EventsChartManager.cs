@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -1745,7 +1745,7 @@ namespace VedAstro.Library
         {
             private static double topPlanetScore = 1;
 
-            public static double GetGeneralScore(Event foundEvent, Person person)
+            public static double General(Event foundEvent, Person person)
             {
                 //score from general nature of event
                 var generalScore = 0.0;
@@ -1800,7 +1800,7 @@ namespace VedAstro.Library
             }
 
             //if strongest planet, gets an extra point
-            public static double HighlightStrongestPlanet(Event foundEvent, Person person)
+            public static double StrongestPlanet(Event foundEvent, Person person)
             {
                 //get top planet
                 var topPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(person.BirthTime)[0];
@@ -1822,7 +1822,7 @@ namespace VedAstro.Library
                 return planetNatureScore;
             }
 
-            public static double HighlightWeakestPlanet(Event foundEvent, Person person)
+            public static double WeakestPlanet(Event foundEvent, Person person)
             {
                 //get bottom planet
                 var bottomPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(person.BirthTime)[8];
@@ -1844,7 +1844,7 @@ namespace VedAstro.Library
                 return planetNatureScore;
             }
 
-            public static double HighlightStrongestHouse(Event foundEvent, Person person)
+            public static double StrongestHouse(Event foundEvent, Person person)
             {
                 //get top house
                 var topHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(person.BirthTime)[0];
@@ -1866,7 +1866,7 @@ namespace VedAstro.Library
                 return houseNatureScore;
             }
 
-            public static double HighlightWeakestHouse(Event foundEvent, Person person)
+            public static double WeakestHouse(Event foundEvent, Person person)
             {
                 //get bottom house
                 var bottomHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(person.BirthTime)[11];

@@ -492,7 +492,7 @@ namespace API
             maxWidth = maxWidth > 1000 ? 1000 : maxWidth;
             
             //todo needs to be pumped in from input
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.GetGeneralScore };
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
 
 

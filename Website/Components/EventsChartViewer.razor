@@ -308,7 +308,7 @@
         {
             //poll till get
             int maxWidth = 940;
-            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.GetGeneralScore };
+            var algorithmFuncsList = new List<AlgorithmFuncs>() { EventsChartManager.Algorithm.General };
             var summaryOptions = new ChartOptions(algorithmFuncsList);
             string chartSvg = await AppData.API.EventsChart.GetEventsChart(SelectedPerson, SelectedTimeRange, SelectedEventTags, maxWidth, summaryOptions);
 
@@ -415,6 +415,9 @@
     {
         //hide or show sidebar as toggled
         _jsRuntime.ToggleClass(AppData.DesktopSidebar, "d-md-block");
+
+
+        //todo zoom in till max of window
 
         //save value, so can zoom in and out as toggled
         _isMaximized = !_isMaximized;

@@ -52,7 +52,7 @@ export class EventsChart {
 
         //use chart ID find the element on page
         //note: we make sure here that only the elements inside this specific SVG chart will be manipulated
-        this.$EventsChartSvgHolder = $(EventsChartSvgHolder);
+        this.$EventsChartSvgHolder = $(ID.EventsChartSvgHolder);
         this.$SvgChartElm = $(`#${chartId}`);
         this.Id = chartId;
         this.$CursorLine = this.$SvgChartElm.find(ID.CursorLine);

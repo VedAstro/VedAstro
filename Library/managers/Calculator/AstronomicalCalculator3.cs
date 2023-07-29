@@ -1,4 +1,4 @@
-﻿
+
 //< !--Mona Lisa by Leonardo da Vinci
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -565,6 +565,15 @@ namespace VedAstro.Library
             //if 1 or above is positive, below 1 is below limit
             var isBenefic = strengthAfterLimit >= 1.1;
 
+            return isBenefic;
+        }
+        public static bool IsHouseBeneficInShadbala(HouseName house, Time birthTime, double threshold)
+        {
+            //get house strength
+            var strength = GetHouseStrength(house, birthTime).ToDouble();
+
+            //if above 450 then good
+            var isBenefic = strength > threshold;
             return isBenefic;
         }
 

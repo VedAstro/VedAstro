@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -1888,6 +1888,27 @@ namespace VedAstro.Library
                 return houseNatureScore;
             }
 
+            //all planets and house is bad, with no good
+            public static double CombinedBad(Event foundEvent, Person person)
+            {
+                //all planets in event is bad
+                var planetList = foundEvent.GetRelatedPlanet();
+                bool isAllPlanetBad = planetList.All(pln => AstronomicalCalculator.IsPlanetBeneficInShadbala(pln, person.BirthTime) == false);
+
+                //if all not bad, end here  
+                if (!isAllPlanetBad) { return 0; }
+
+                //if there is a house then all must be bad also
+                var houseList = foundEvent.GetRelatedHouse();
+                bool isAllHouseBad = houseList.All(hse => AstronomicalCalculator.IsHouseBeneficInShadbala(hse, person.BirthTime, 450) == false);
+
+                //if all not bad, end here  
+                if (!isAllHouseBad) { return 0; }
+
+                //if control reaches here than all is bad
+                return -0.5;
+
+            }
 
 
             //------------------------------------

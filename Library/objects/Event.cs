@@ -282,22 +282,30 @@ namespace VedAstro.Library
         /// </summary>
         public List<HouseName> GetRelatedHouse()
         {
-            //every time house name is mentioned add to list
-            var eventName = this.Name.ToString(); //take without spacing
-            var returnList = new List<HouseName>();
-            foreach (var houseName in House.AllHouses)
-            {
-                var found = eventName.Contains(houseName.ToString(), StringComparison.OrdinalIgnoreCase);
 
-                //if contains planet name, add to return list
-                if (found) { returnList.Add(houseName); }
+            var eventName = this.Name.ToString().ToLower(); //take without spacing
+
+            List<int> numbers = new List<int>();
+            // Use regex to find matches
+            MatchCollection matches = Regex.Matches(eventName, @"house(\d+)");
+            // Loop through matches
+            foreach (Match match in matches)
+            {
+                // Try to parse the number after "house"
+                if (int.TryParse(match.Groups[1].Value, out int number))
+                {
+                    numbers.Add(number);
+                }
             }
 
+            //convert to standard names
+            var houseList = numbers.Select(x => (HouseName)x).ToList();
+
             //remove duplicates
-            returnList = new List<HouseName>(returnList.Distinct());
+            houseList = new List<HouseName>(houseList.Distinct());
 
             //return to caller
-            return returnList;
+            return houseList;
         }
 
 

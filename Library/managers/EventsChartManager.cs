@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -1910,6 +1910,22 @@ namespace VedAstro.Library
 
             }
 
+            //only dasa events get good bad score based on ishata and kashata, bala book pg 110
+            public static double IshtaKashtaPhala(Event foundEvent, Person person)
+            {
+                //must be a dasa event, has PD in event name
+                var isDasaEvent = foundEvent.Name.ToString().Contains("PD");
+                if (!isDasaEvent) { return 0; }
+
+                //get first planet, as lord of current dasa, exp: Venus in Rahu Dasa = Venus only
+                var dasaMainPlanet = foundEvent.GetRelatedPlanet()[0];
+
+                //get good or bad based on Ishta and Kashta, if former is more than good
+                var score = AstronomicalCalculator.GetPlanetIshtaKashtaScore(dasaMainPlanet, person.BirthTime);
+
+                //-1 bad, +1 good, no neutral
+                return score;
+            }
 
             //------------------------------------
             public static double GetEventScoreFromShadvargaMK3(Event foundEvent, Person person)

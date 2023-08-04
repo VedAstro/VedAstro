@@ -4035,7 +4035,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Get a person's varna or color
+        /// Get a person's varna or color (character)
         /// A person's varna can be observed in real life
         /// </summary>
         public static Varna GetBirthVarna(Time birthTime)
@@ -4081,6 +4081,44 @@ namespace VedAstro.Library
             }
 
 
+        }
+
+        /// <summary>
+        /// Used for judging dasa good or bad, Bala book pg 110
+        /// if planet has more Ishta than good = +1
+        /// else if more Kashta than bad = -1
+        /// </summary>
+        public static double GetPlanetIshtaKashtaScore(PlanetName planet, Time birthTime)
+        {
+            var ishtaScore = GetPlanetIshtaScore(planet, birthTime);
+
+            var kashtaScore = GetPlanetKashtaScore(planet, birthTime);
+
+            //if more than good, else bad
+            var ishtaMore = ishtaScore > kashtaScore;
+
+            return ishtaMore ? 1 : -1;
+        }
+
+        private static double GetPlanetKashtaScore(PlanetName planet, Time birthTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static double GetPlanetIshtaScore(PlanetName planet, Time birthTime)
+        {
+            //The Ochcha Bala (exaltation strength) of a planet
+            //is multiplied by its Chesta Bala(motional strength)
+            //and then the square root of the product extracted.
+            var ochchaBala = GetPlanetOchchaBala(planet, birthTime).ToDouble();
+            var chestaBala = GetPlanetChestaBala(planet, birthTime, includeSunMoon:true).ToDouble();
+            var product = ochchaBala * chestaBala;
+
+            //Square root of the product extracted.
+            //the result would represent the Ishta Phala.
+            var ishtaScore = Math.Sqrt(product);
+
+            return ishtaScore;
         }
     }
 }

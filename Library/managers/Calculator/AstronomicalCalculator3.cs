@@ -1,4 +1,4 @@
-
+﻿
 //< !--Mona Lisa by Leonardo da Vinci
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -934,6 +934,7 @@ namespace VedAstro.Library
         }
 
         /// <summary>
+        /// NOTE: sun, moon get score for ISHTA/KESHA calculation TODO
         /// MOTIONAL STRENGTH
         /// Chesta here means Vakra Chesta or act of retrogression. Each planet, except the Sun and the Moon,
         /// and shadowy planets get into the state of Vakra or retrogression
@@ -953,14 +954,20 @@ namespace VedAstro.Library
         /// to the Sun) to aphelion (the part of a planet's
         /// oroit most distant from the Sun) as it recedes
         /// from the Sun, it gradually loses the power
-        /// of •the Sun's gravitation and consequently, 
+        /// of the Sun's gravitation and consequently, 
         /// </summary>
         [API("ChestaBala")]
-        public static Shashtiamsa GetPlanetChestaBala(PlanetName planetName, Time time)
+        public static Shashtiamsa GetPlanetChestaBala(PlanetName planetName, Time time, bool includeSunMoon = false)
         {
+            //if include Sun/Moon specified, then use special function (used for Ishta/Kashta score)
+            var isSunMoon = planetName == PlanetName.Sun || planetName == PlanetName.Moon;
+            if (isSunMoon && includeSunMoon)
+            {
+                return GetSunMoonChestaBala(planetName);
+            }
 
-            //the Sun,Moon,Rahu and Ketu doesn not retrograde, so 0 chesta bala
-            if (planetName == PlanetName.Sun || planetName == PlanetName.Moon || planetName == PlanetName.Rahu || planetName == PlanetName.Ketu) { return Shashtiamsa.Zero; }
+            //the Sun,Moon,Rahu and Ketu does not not retrograde, so 0 chesta bala
+            if (isSunMoon || planetName == PlanetName.Rahu || planetName == PlanetName.Ketu) { return Shashtiamsa.Zero; }
 
             //get the interval between birth date and the date of the epoch (1900)
             //verified standard horoscope = 6862.579
@@ -986,7 +993,6 @@ namespace VedAstro.Library
             var trueLongitude = ((planetMeanCircle + planetLongitude) / 2.0);
             //distance from stationary point, if less than 0 than add 360 
             var chestaKendra = (planetAphelion - trueLongitude);
-
 
 
             //If the Chesta kendra exceeds 180° (maximum retrograde), subtract it from 360, otherwise
@@ -1041,6 +1047,16 @@ namespace VedAstro.Library
                 return seegh;
             }
 
+        }
+
+
+        /// <summary>
+        /// special function to get chesta score for Ishta/Kashta score
+        /// Bala book pg. 108
+        /// </summary>
+        private static Shashtiamsa GetSunMoonChestaBala(PlanetName planetName)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -2937,6 +2953,7 @@ namespace VedAstro.Library
             return returnList;
         }
 
+
         /// <summary>
         /// 0 index is strongest
         /// </summary>
@@ -2978,9 +2995,6 @@ namespace VedAstro.Library
 
         }
 
-        /// <summary>
-        /// 0 index is most malefic
-        /// </summary>
         public static List<PlanetName> GetMaleficPlanetListByShadbala(Time personBirthTime, int threshold)
         {
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -159,7 +159,7 @@ namespace VedAstro.Library
                 MaxYAxis = verticalYAxis > MaxYAxis ? verticalYAxis : MaxYAxis;
 
                 //note: if width & height not hard set, parent div clips it
-                var svgTotalHeight = MaxYAxis + 30;
+                var svgTotalHeight = MaxYAxis + 45; //little padding
 
                 //set custom/global styles for main SVG element
                 var svgStyle = $@"

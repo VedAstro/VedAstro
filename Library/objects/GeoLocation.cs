@@ -54,7 +54,7 @@ namespace VedAstro.Library
         {
             _name = name;
 
-            //coordinates have been know to be inputed with misplaced decimal (from api)
+            //coordinates have been known to be inputed with misplaced decimal (from api)
             //this will check and try correct if possible
             bool isValid = IsValidLatitudeLongitude(latitude, longitude);
             if (isValid) //normal operation

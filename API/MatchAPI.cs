@@ -215,10 +215,11 @@ namespace API
             {
                 //NOTE: the person data received here is akin to user entering it via simple editor (so keep it human ready)
 
+                //create new person or use back old person ID
+
                 //1: extract the data out
-                //var personJson = personList.Current;
-                var name = personJson["Name"].Value<string>();
-                var genderText = personJson["Gender"].Value<string>();
+                var name = personJson["Name"]?.Value<string>() ?? "";
+                var genderText = personJson["Gender"]?.Value<string>() ?? "";
                 var birthTimeJson = personJson["BirthTime"];
 
                 //we're inside birth time
@@ -241,14 +242,14 @@ namespace API
                 //there is possibility user has put invalid characters, clean it!
                 var nameInput = Tools.CleanAndFormatNameText(name);
 
-                //new person ID made from thin air todo should be generated for human consumption, use new generator
-                var newPersonProfileId = Tools.GenerateId();
+                //new person ID made from thin air 
+                var brandNewHumanReadyId = await APITools.GeneratePersonId(nameInput, birthTime.StdYear().ToString());
 
                 //get gender from gender string
                 var gender = Enum.Parse<Gender>(genderText);
 
                 //create the new complete person profile
-                var newPerson = new Person(newPersonProfileId, nameInput, birthTime, gender, new[] { ownerId });
+                var newPerson = new Person(brandNewHumanReadyId, nameInput, birthTime, gender, new[] { ownerId });
 
                 //add to list
                 returnList.Add(newPerson);

@@ -245,6 +245,7 @@ namespace VedAstro.Library
                 return new MatchSummaryData(heartIcon, scoreColor, scoreSummary);
 
             }
+
             if (kutaScore >= 40 && kutaScore < 50)
             {
                 var heartIcon = "mdi:heart-half-full";
@@ -254,6 +255,7 @@ namespace VedAstro.Library
 
             }
 
+            //tipping point for GOOD and BAD at anything more than 50%
             if (kutaScore >= 50 && kutaScore < 60)
             {
                 var heartIcon = "mdi:cards-heart";

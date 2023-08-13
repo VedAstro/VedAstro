@@ -198,6 +198,7 @@ namespace Library.API
 
             return person;
         }
+        
         /// <summary>
         /// calls API to generate a new person ID, unique and human readable
         /// NOTE:
@@ -206,7 +207,6 @@ namespace Library.API
         /// </summary>
         public async Task<string> GetNewPersonId(string personName, int stdBirthYear)
         {
-
             //get all person profile owned by current user/visitor
             var url = $"{_api.URL.GetNewPersonId}/Name/{personName}/BirthYear/{stdBirthYear}";
             var jsonResult = await Tools.WriteServer(HttpMethod.Get, url);
@@ -215,7 +215,6 @@ namespace Library.API
             string personId = VedAstroAPI.GetPayload<string>(jsonResult, null);
 
             return personId;
-
         }
 
 

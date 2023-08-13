@@ -9,8 +9,8 @@
 </PageTop>
 
 
-<div class="hstack gap-3 mt-4 mb-5">
-    <TimeInputSimple @ref="_timeInput" LabelText="Time" /> @*todo default to now*@
+<div class="vstack gap-3 mt-4 mb-5" style="max-width:@GR.W412px;">
+    <TimeInputSimple @ref="_timeInput" LabelText="Date &amp; Time" /> @*todo default to now*@
     <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
     <IconButton ButtonText="Refresh" Color="success" ExtraClass="align-self-end" IconName="uim:process" OnClickCallback="RefreshData" />
 </div>
@@ -41,7 +41,7 @@
 
 
     <IconTitle Title="Astronomy" IconName="streamline:ecology-science-planet-solar-system-ring-planet-saturn-space-astronomy" />
-    <table class="table table-striped table-hover table-bordered" style="text-wrap: nowrap;">
+    <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
                 <th scope="col">Data</th>
@@ -107,7 +107,7 @@ else
         finalTime = await _timeInput.GetTime(finalGeoLocation);
 
         //update sky chart
-         await skyChartViewer?.Update(finalTime);
+        await skyChartViewer?.Update(finalTime);
 
         //get all methods that have only time as input
         astronomyCalcs = AutoCalculator.FindAndExecuteFunctions(Category.Astronomical, finalTime);

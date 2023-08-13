@@ -49,9 +49,11 @@ namespace VedAstro.Library
         /// For instance, in the Standard Horoscope Jupiter
         /// gives 0.48 units of the total effects of the 6th Bhava.
         /// </summary>
-        [API("Longitude", "Strength to judge the exact quantity of effect planet gives in a house")]
+        [API("ResidentialStrength", "Strength to judge the exact quantity of effect planet gives in a house")]
         public static double ResidentialStrength(PlanetName planetName, Time time)
         {
+            return 0;
+
             //todo from PG15 of Bhava and Graha Balas
             throw new NotImplementedException("");
         }

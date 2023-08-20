@@ -456,27 +456,27 @@ namespace VedAstro.Library
         /// Parses from URL with location already parsed
         /// /23:59/31/12/2000/+08:00
         /// </summary>
-        public static Time FromUrl(string url, GeoLocation location)
-        {
-            // INPUT -> ".../23:59/31/12/2000/+08:00/"
-            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+        //public static Time FromUrl(string url, GeoLocation location)
+        //{
+        //    // INPUT -> ".../23:59/31/12/2000/+08:00/"
+        //    string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 
-            //name the pieces of time data extracted
-            var raw = new
-            {
-                hhmmStr = parts[0],
-                dateStr = parts[1],
-                monthStr = parts[2],
-                yearStr = parts[3],
-                offsetStr = parts[4]
-            };
+        //    //name the pieces of time data extracted
+        //    var raw = new
+        //    {
+        //        hhmmStr = parts[0],
+        //        dateStr = parts[1],
+        //        monthStr = parts[2],
+        //        yearStr = parts[3],
+        //        offsetStr = parts[4]
+        //    };
 
-            //place all data together
-            var timeStr = $"{raw.hhmmStr} {raw.dateStr}/{raw.monthStr}/{raw.yearStr} {raw.offsetStr}";
-            var parsedTime = new Time(timeStr, location);
+        //    //place all data together
+        //    var timeStr = $"{raw.hhmmStr} {raw.dateStr}/{raw.monthStr}/{raw.yearStr} {raw.offsetStr}";
+        //    var parsedTime = new Time(timeStr, location);
 
-            return parsedTime;
-        }
+        //    return parsedTime;
+        //}
 
         /// <summary>
         /// Output TIME only for URL format

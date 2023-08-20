@@ -1339,6 +1339,26 @@ namespace VedAstro.Library
         public static XElement TimeStampServerXml => new("TimeStampServer", Tools.GetNowServerTimeSecondsText());
 
         /// <summary>
+        /// Converts any Enum from URL epx : ../EnumName/EnumValue
+        /// </summary>
+        public static async Task<dynamic> EnumFromUrl(string url)
+        {
+            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //enum has simple structure ../ZodiacName/Leo
+            var enumName = parts[0];
+            var enumValue = parts[1];
+
+            //get the type of the enum
+            var enumType = Type.GetType("VedAstro.Library." + enumName);
+
+            //parse the string to an enum value
+            var parsedZodiac = Enum.Parse(enumType, enumValue);
+
+            return parsedZodiac;
+        }
+
+        /// <summary>
         /// Gets now time in UTC +8:00
         /// Because server time is uncertain, all change to UTC8
         /// </summary>

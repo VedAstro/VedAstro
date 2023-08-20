@@ -126,7 +126,7 @@ namespace VedAstro.Library
         public static Angle GetPlanetNirayanaLongitude(Time time, PlanetName planetName)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(GetPlanetNirayanaLongitude), time, planetName), _getPlanetNirayanaLongitude);
+            return CacheManager.GetCache(new CacheKey(nameof(GetPlanetNirayanaLongitude), time, planetName, AstronomicalCalculator.YearOfCoincidence), _getPlanetNirayanaLongitude);
 
 
             //UNDERLYING FUNCTION
@@ -141,7 +141,6 @@ namespace VedAstro.Library
 
 
                 //3 - Hindu Nirayana Long = Sayana Long — Ayanamsa.
-
                 Angle birthAyanamsa = GetAyanamsa(time);
 
                 //if below ayanamsa add 360 before minus
@@ -613,7 +612,7 @@ namespace VedAstro.Library
         public static List<House> GetHouses(Time time)
         {
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetHouses", time), _getHouses);
+            return CacheManager.GetCache(new CacheKey("GetHouses", time, AstronomicalCalculator.YearOfCoincidence), _getHouses);
 
 
             //UNDERLYING FUNCTION
@@ -4122,6 +4121,7 @@ namespace VedAstro.Library
 
             return ishtaScore;
         }
+
     }
 }
 

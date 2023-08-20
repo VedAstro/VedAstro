@@ -18,19 +18,36 @@ using System.Reflection;
 
 namespace VedAstro.Library
 {
+
     public static partial class AstronomicalCalculator
     {
+
+        /// <summary>
+        /// Defaults to RAMAN, but can be set before calling any funcs,
+        /// NOTE: remember not to change mid instance, because "GetAyanamsa" & others are cached per instance
+        /// </summary>
+        public static int YearOfCoincidence { get; set; } = (int)Ayanamsa.Raman;
+
+
         #region Cached Functions
         //CACHED FUNCTIONS
         //NOTE : These are functions that don't call other functions from this class
         //       Only functions that don't call other cached functions are allowed to be cached
         //       otherwise, it's erroneous in parallel
 
+
+        /// <summary>
+        /// The distance between the Hindu First Point and the Vernal Equinox, measured at an epoch, is known as the Ayanamsa
+        /// in Varahamihira's time, the summer solistice coincided with the first degree of Cancer,
+        /// and the winter solistice with the first degree of Capricorn, whereas at one time the summer solistice coincided with the
+        /// middle of the Aslesha
+        /// </summary>
+        [API("Ayanamsa", "distance between the Hindu First Point and the Vernal Equinox, measured at an epoch, is known as the Ayanamsa")]
         public static Angle GetAyanamsa(Time time)
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetAyanamsa", time), _getAyanamsa);
+            return CacheManager.GetCache(new CacheKey("GetAyanamsa", time, AstronomicalCalculator.YearOfCoincidence), _getAyanamsa);
 
 
             //UNDERLYING FUNCTION
@@ -38,18 +55,24 @@ namespace VedAstro.Library
             {
                 int year = LmtToUtc(time).Year;
 
-                var returnValue = new Angle(seconds: (long)(Math.Round((year - 397) * 50.3333333333)));
+                //it has been observed and proved mathematically, that each year at the time when the Sun reaches his
+                //equinoctial point of Aries 0° when throughout the earth, the day and night are equal in length,
+                //the position of the earth in reference to some fixed star is nearly 50.333 of space farther west
+                //than the earth was at the same equinoctial moment of the previous year.
+                const double precessionRate = 50.3333333333;
+
+                var ayanamsaSecondsRaw = (year - AstronomicalCalculator.YearOfCoincidence) * precessionRate;
+                var returnValue = new Angle(seconds: (long)(Math.Round(ayanamsaSecondsRaw)));
 
                 return returnValue;
             }
 
         }
 
-
         /// <summary>
-        /// NOTE This method connects SwissEph Library with Muhurta Library
+        /// NOTE This method connects SwissEph Library with VedAstro Library
         /// </summary>
-        [API("SayanaLongitude")]
+        [API("SayanaLongitude", "get fixed longitude used in western systems")]
         public static Angle GetPlanetSayanaLongitude(Time time, PlanetName planetName)
         {
 
@@ -169,7 +192,6 @@ namespace VedAstro.Library
 
 
         }
-
 
         [API("Speed")]
         public static double GetPlanetSpeed(Time time, PlanetName planetName)

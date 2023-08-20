@@ -102,17 +102,6 @@ namespace VedAstro.Library
             return returnVal;
         }
 
-        /// <summary>
-        /// /ZodiacName/Leo
-        /// </summary>
-        public static async Task<dynamic> FromUrl(string url)
-        {
-            string[] parts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-            var parsedZodiac = (ZodiacName)Enum.Parse(typeof(ZodiacName), parts[1]); 
-
-            return parsedZodiac;
-        }
     }
 
 }

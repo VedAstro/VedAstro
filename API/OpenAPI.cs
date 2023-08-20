@@ -16,7 +16,7 @@ namespace API
 
 
         /// <summary>
-        /// Main Open API method to handle calls
+        /// Main Open API method to handle all calls
         /// /.../Calculator/DistanceBetweenPlanets/PlanetName/Sun/PlanetName/Moon/Location/Singapore/Time/23:59/31/12/2000/+08:00
         /// </summary>
         [Function(nameof(Calculator))]
@@ -35,6 +35,10 @@ namespace API
                 var calculator = Tools.MethodNameToMethodInfo(calculatorName);
                 var parameterTypes = calculator.GetParameters().Select(p => p.ParameterType).ToList();
 
+                //2 : DEFAULT AYANAMSA
+                var userAyanamsa = Ayanamsa.Raman; //todo accept custom
+
+
                 //place to store ready params
                 var parsedParamList = new List<dynamic>(); //exact number as specified (performance)
                                                            //cut the string based on parameter type
@@ -48,17 +52,18 @@ namespace API
 
                     //cut out the string that contains data of the parameter (URL version of Time, PlanetName, etc.)
                     var extractedUrl = Tools.CutOutString(fullParamString, cutCount);
-                    fullParamString = Tools.CutRemoveString(fullParamString, cutCount); //removed used for next param parsing
 
-                    //convert URL to understandable data (magic)
+                    //keep unused param string for next parsing
+                    fullParamString = Tools.CutRemoveString(fullParamString, cutCount);
+
+                    //convert URL to understandable data (magic!)
                     var nameOfMethod = nameof(IFromUrl.FromUrl);
                     var parsedParamInstance = parameterType.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
-                    //if not found check in "extensions" class for enum
+                    //if not found then probably Enum, so use special Enum converter
                     if (parsedParamInstance == null)
                     {
-                        var enumExtensions = $"VedAstro.Library.{parameterType.Name}Extensions, VedAstro.Library, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null";
-                        Type extensions = Type.GetType(enumExtensions);
-                        parsedParamInstance = extensions.GetMethod(nameOfMethod, BindingFlags.Public | BindingFlags.Static);
+                        //var enumExtensions = $"VedAstro.Library.{parameterType.Name}Extensions, VedAstro.Library, Version=1.2.0.0, Culture=neutral, PublicKeyToken=null";
+                        parsedParamInstance = typeof(Tools).GetMethod(nameof(Tools.EnumFromUrl), BindingFlags.Public | BindingFlags.Static);
                     }
 
                     //execute param parser
@@ -66,19 +71,32 @@ namespace API
                     await task; //getting person and location is async, so all same 
                     dynamic parsedParam = task.GetType().GetProperty("Result").GetValue(task, null);
 
-                    //add to main list (used later for main final execution)
+                    //ACT 5:
+                    //add to main list IF NOT AYANAMSA (used later for main final execution)
                     parsedParamList.Add(parsedParam);
                 }
 
+                //2 : CUSTOM AYANAMSA
+                //DON'T LIMIT FEATURES JUST BECAUSE NOT LOGGED IN
+                //as such no API KEY field here, direct to Ayanamsa
+                //if this is ayanamsa, then take it out to be used later...
+                //var isAyanamsa = parsedParam is Ayanamsa;
+                //if (isAyanamsa) { userAyanamsa = parsedParam; }//value to be used later...
+                var isAyanamsa = fullParamString.Contains(nameof(Ayanamsa));
+                if (isAyanamsa)
+                {
+                    userAyanamsa = await Tools.EnumFromUrl(fullParamString);
+                }
+                AstronomicalCalculator.YearOfCoincidence = (int)userAyanamsa;
 
-                //2 : EXECUTE COMMAND
+
+                //3 : EXECUTE COMMAND
                 var rawPlanetData = calculator?.Invoke(null, parsedParamList.ToArray()); ;
 
-                //3 : CONVERT TO JSON
+                //4 : CONVERT TO JSON
                 var payloadJson = Tools.AnyToJSON(calculatorName, rawPlanetData); //use calculator name as key
 
-
-                //4 : SEND DATA
+                //5 : SEND DATA
                 return APITools.PassMessageJson(payloadJson, incomingRequest);
             }
 

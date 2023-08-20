@@ -11,6 +11,7 @@ namespace VedAstro.Library
         /// <summary>
         /// keywords or tag related to a house
         /// </summary>
+        [API("HouseTags")]
         public static string GetHouseTags(HouseName house)
         {
             switch (house)
@@ -36,6 +37,7 @@ namespace VedAstro.Library
         /// character and mental disposition
         /// Source:Hindu Predictive Astrology pg.16
         /// </summary>
+        [API("ZodiacSignTags")]
         public static string GetSignTags(ZodiacName zodiacName)
         {
             switch (zodiacName)
@@ -69,7 +71,7 @@ namespace VedAstro.Library
             }
         }
 
-        [API("Tags")]
+        [API("PlanetTags")]
         public static string GetPlanetTags(PlanetName lordOfHouse)
         {
             switch (lordOfHouse.Name)
@@ -96,7 +98,6 @@ namespace VedAstro.Library
                     throw new ArgumentOutOfRangeException();
             }
         }
-
 
         /// <summary>
         /// Source: Hindu Predictive Astrology pg.17
@@ -161,19 +162,14 @@ namespace VedAstro.Library
         }
 
         /// <summary>
-        /// Astrology For Beginners - 1992 - B.V. Raman
-        /// </summary>
-
-
-        /// <summary>
         /// Get general planetary info for person's dasa (hardcoded table)
-        /// It is intended to be used to intpreate dasa predictions
+        /// It is intended to be used to interpret dasa predictions
         /// as such should be displayed next to dasa chart.
         /// This method is direct translation from the book.
         /// Similar to method GetPlanetDasaNature
         /// Data from pg 80 of Key-planets for Each Sign in Hindu Predictive Astrology
         /// </summary>
-        public static string GetDasaInfoForAscendant(ZodiacName acesendatName)
+        public static string GetDasaInfoForAscendant(ZodiacName ascendantName)
         {
             //As soon as tbc Dasas and Bhuktis are determined, the next
             //step would be to find out the good and evil planets for each
@@ -183,7 +179,7 @@ namespace VedAstro.Library
             //further with his predictions when applying the results of
             //Dasas and other combinations.
 
-            switch (acesendatName)
+            switch (ascendantName)
             {
                 case ZodiacName.Aries:
                     return @"
@@ -288,12 +284,10 @@ namespace VedAstro.Library
                         himself does not kill the person even if he is a maraka.
                         ";
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(acesendatName), acesendatName, null);
+                    throw new ArgumentOutOfRangeException(nameof(ascendantName), ascendantName, null);
             }
 
         }
-
-
 
     }
 

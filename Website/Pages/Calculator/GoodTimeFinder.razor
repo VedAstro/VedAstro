@@ -251,20 +251,6 @@
                             </HelpHtml>
                         </IconTooltip>
                     </div>
-                    <div style="width: @GR.W255px;" class="form-check hstack gap-2">
-                        <input @bind="@(SelectedTagsDictionary[EventTag.RulingConstellation])" id="@EventTag.RulingConstellation" style="width: 40px; height: 28px;" class="form-check-input" type="checkbox">
-                        <label class="form-check-label d-flex gap-2 w-100" for="@EventTag.RulingConstellation">
-                            <Icon IconName="solar:moon-stars-bold" />
-                            @(Format.FormatName(EventTag.RulingConstellation.ToString()))
-                            <IconTooltip SmallIcon="true" ExtraClass="ms-auto me-3">
-                                <HelpHtml>
-                                    <div style=" max-height: @GR.W157px; overflow: auto; " class="vstack gap-1">
-                                        @foreach (var x in EventManager.GetEventDataListByTag(EventTag.RulingConstellation)){<span>@x.FormattedName</span>}
-                                    </div>
-                                </HelpHtml>
-                            </IconTooltip>
-                        </label>
-                    </div>
                 </div>
                 <IconButton SmallSize="true" IconName="uim:process" ButtonText="Calculate" Color="success" OnClickCallback="OnClickCalculateEasy" ShowDelayWarning="true" />
             </div>

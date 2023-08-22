@@ -14,78 +14,49 @@
     <div class="d-flex flex-wrap gap-5" style="max-width:@GR.W667px;">
 
         @*GENERATOR*@
-        <div class="vstack gap-3" style="max-width:@GR.W412px;">
-            
-            <TimeInputSimple @ref="_timeInput" LabelText="Date &amp; Time" />
-            <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
+        <div class="vstack gap-3" style="max-width: @GR.W412px;">
 
-            @*Celestial Body*@
-            <div class="form-floating">
-                <select @bind="SelectedCategory" class="form-select" id="celestialBodySelect" aria-label="Celestial Body Select">
-                    <option value="" selected>Make a choice</option>
-                    <option value="Planet">Planet</option>
-                    <option value="House">House</option>
-                    <option value="SkyChart">Sky Chart</option>
-                    <option value="SkyChartGIF">Sky Chart GIF</option>
-                    <option value="Account">Account</option>
-                </select>
-                <label style="font-weight: 700; color: black;" for="celestialBodySelect">Category</label>
-            </div>
-
-
-            <PlanetAPIBuilderPanel @ref="planetApiPanel" />
-
-            <HouseAPIBuilderPanel @ref="houseApiPanel" />
-
-            @*ACCOUNT STUFF*@
-            <div @ref="accountTaskSelector" style="display: none;" class="form-floating">
-                <select @bind="SelectedTaskName" class="form-select">
-                    <option value="" selected>Make a choice</option>
-                    <option value="AddPerson">Add Person</option>
-                </select>
-                <label style="font-weight: 700; color: black;">Task</label>
-            </div>
-
-            <div @ref="AddPersonMaker" style="display: none;" class="form-floating">
+            @* CATEGORY FILTER *@
+            <div>
+                <H6>Step 1</H6>
                 <div class="input-group mb-3">
-                    <span class="input-group-text" style="min-width: @GR.W97px;">Name</span>
-                    <input @bind="AddPersonName" type="text" class="form-control" placeholder="Juliet">
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" style="min-width: @GR.W97px;">Gender</label>
-                    <select @bind="AddPersonGender" class="form-select">
+                    <label class="input-group-text" style="min-width: @GR.W97px;">Category</label>
+                    <select @bind="SelectedCategory" class="form-select" style="font-weight: 700;">
                         <option selected>Choose...</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" style="min-width: @GR.W97px;">Owner</label>
-                    <select @bind="AddPersonOwnerId" class="form-select">
-                        <option selected>Choose...</option>
-                        <option value="101">Guest</option>
-                        @RenderWelcomeInfo();
+                        <option value="Planet">Planet</option>
+                        <option value="House">House</option>
+                        <option value="ZodiacSign">Zodiac Signs</option>
+                        <option value="Swiss">Swiss Ephemeris</option>
+                        <option value="Sky Chart">Sky Chart</option>
+                        <option value="Dasa">Dasa Chart</option>
+                        <option value="Account">Account</option>
+                        <option value="All">All</option>
                     </select>
                 </div>
             </div>
 
-            @functions {
-                RenderFragment RenderWelcomeInfo()
-                {
-                    //based on login show accoringly
-                    //ask user to login
-                    if (AppData.IsGuestUser)
-                    {
-                        return @<option value="login">Login First</option>;
-                    }
-                    //already loged in
-                    else
-                    {
-                        return @<option value="@AppData.CurrentUser.Id">@AppData.CurrentUser.Name</option>;
-                    }
 
-                }
-            }
+            @* FUNCTION NAME SELECT *@
+            <div @ref="_step2ElementRef" style="display: none">
+                <H6>Step 2</H6>
+                <div class="input-group mb-3">
+                    <label class="input-group-text gap-2" style="min-width: @GR.W97px;"><Icon IconName="flat-color-icons:calculator" Size="34" />Calculator</label>
+                    <select @bind="SelectedMethod" class="form-select" style="font-weight: 700;">
+                        <option selected>Choose...</option>
+                        @foreach (var methodData in MethodListFiltered)
+                        {
+                            <option value="@methodData.Name">@methodData.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+
+            @* INPUT PARAM NAME SELECT *@
+            <div @ref="_step3ElementRef" style="display: none">
+                <H6>Step 3</H6>
+                <ParameterInputPanel @ref="_parameterInputPanel" />
+            </div>
 
 
 
@@ -98,11 +69,11 @@
             @*URL DISPLAY OUT*@
             <div class="vstack gap-1" style="margin-top: -32px;">
                 <span style="font-size: 14px; color: @AppData.Grey;">URL</span>
-                <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
+                <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
             </div>
-            <div style="display: none;" class="form-floating" @ref="PostBodyElement">
+            <div style="display: none;" class="form-floating" @ref="_postBodyElement">
                 <span>URL</span>
-                <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word;line-height: 33px;">@_finalApiGetCall</kbd>
+                <kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
             </div>
 
             @*COPY AND CALL BUTTON*@
@@ -206,101 +177,86 @@
 
 
 @code {
-    PlanetAPIBuilderPanel planetApiPanel;
+    /// <summary>
+    /// list that is shown to user and is changed by search
+    /// </summary>
+    private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new List<AutoCalculator.APICallData>();
 
-    HouseAPIBuilderPanel houseApiPanel;
+    private List<AutoCalculator.APICallData> MethodListALL = new List<AutoCalculator.APICallData>();
 
-    private string AddPersonName { get; set; } = "Juliet";
+    private string _selectedCategory;
+    private string _selectedMethod;
 
-    private string AddPersonGender { get; set; }
-
-    private string AddPersonOwnerId
-    {
-        get => _addPersonOwnerId;
-        set
-        {
-            //if login send to login page
-            if (value == "login") { AppData.Go(PageRoute.Login); }
-
-            _addPersonOwnerId = value;
-        }
-    }
-
-    private string SelectedTaskName
-    {
-        get => _selectedTaskName;
-        set
-        {
-            switch (value.ToLower())
-            {
-                case "addperson":
-                    _jsRuntime.Show(AddPersonMaker);
-                    break;
-                default:
-                    _jsRuntime.Hide(AddPersonMaker);
-                    break;
-            }
-            _selectedTaskName = value;
-        }
-    }
-
-    private ElementReference PostBodyElement;
-    private ElementReference AddPersonMaker;
-    private ElementReference accountTaskSelector;
+    private ElementReference _postBodyElement;
+    private ElementReference _step2ElementRef;
+    private ElementReference _step3ElementRef;
+    private ParameterInputPanel _parameterInputPanel;
 
     TimeInputSimple _timeInput;
     private GeoLocationInput _geoLocationInput;
-    private string _finalApiGetCall = "https://api.vedastro.org/Location/Singapore/Time/23:59/31/12/2000/+08:00/Planet/Sun/Sign/";
 
+    private string _finalApiGetCall = "https://api.vedastro.org/Home";
 
     /// <summary>
     /// Controls the showing and hiding of other dropdowns
     /// </summary>
     public string SelectedCategory
     {
-        get => _selectedBodyType;
+        get => _selectedCategory;
         set
         {
             //log this, don't await to reduce lag
             WebLogger.Data($"Selected Body:{value}");
 
-            _selectedBodyType = value;
+            _selectedCategory = value;
 
-            //based on body type only show relevant related fields
-            switch (value.ToLower())
-            {
-                case "planet"://hide house & show planet
-                    planetApiPanel.Show();
-                    houseApiPanel.Hide();
-                    _jsRuntime.Hide(accountTaskSelector);
-                    break;
-                case "house"://show house & hide planet
-                    houseApiPanel.Show();
-                    _jsRuntime.Hide(accountTaskSelector);
-                    planetApiPanel.Hide();
-                    break;
-                case "skychart"://show house & hide planet
-                    houseApiPanel.Hide();
-                    _jsRuntime.Hide(accountTaskSelector);
-                    planetApiPanel.Hide();
-                    break;
-                case "skychartgif"://show house & hide planet
-                    houseApiPanel.Hide();
-                    _jsRuntime.Hide(accountTaskSelector);
-                    planetApiPanel.Hide();
-                    break;
-                case "account"://show house & hide planet
-                    houseApiPanel.Hide();
-                    _jsRuntime.Show(accountTaskSelector);
-                    planetApiPanel.Hide();
-                    break;
-            }
+            //filter api method list by category
+            FilterMethodList(value);
+
+            //make step 2 visible
+            _jsRuntime.Show(_step2ElementRef);
+
         }
     }
-    private string _selectedBodyType;
-    private string _selectedTaskName;
-    private string _addPersonOwnerId;
 
+    private string SelectedMethod
+    {
+        get => _selectedMethod;
+        set
+        {
+            //log this, don't await to reduce lag
+            WebLogger.Data($"Selected Method:{value}");
+
+            _selectedMethod = value;
+
+            //make step 3 visible with data inputs
+            _jsRuntime.Show(_step3ElementRef);
+            var paramList = MethodListALL.FindAll(apiCalc => apiCalc.Name == value);
+            _parameterInputPanel.Show(paramList);
+
+        }
+    }
+
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //hide display
+        await _jsRuntime.ShowLoading();
+
+        //get all people from API server
+        //auto checks if people list already loaded before
+        var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
+        //NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
+        MethodListALL = AutoCalculator.APICallData.FromMethodInfoList(allApiCalculatorsMethodInfo);
+
+        //make copy for search
+        MethodListFiltered = MethodListALL;
+
+        //show data on display
+        _jsRuntime.HideAlert();
+    }
 
     /// <summary>
     /// After user click generate check data validity, generate final url
@@ -323,14 +279,6 @@
         //create a new person from the inputed data
         var timeInputed = await _timeInput.GetTime(geoLocation);
 
-        //get final celes name, if empty raise nice alarm
-        var finalCelesName = GetFinalCategoryName();
-        var finalCelesProperty = GetFinalCategoryProperty();
-
-        //data property
-        //if select all, leave empty as for API to give all
-        //finalCelesName = finalCelesName == "All" ? "All" : finalCelesName;
-        finalCelesProperty = finalCelesProperty == "All" ? "" : finalCelesProperty;
 
         //STAGE 2 :
         //combine the call
@@ -348,30 +296,30 @@
 
         //format of the API call
         var placeHolder = "";
-        if (SelectedCategory == "SkyChart")
-        {
-            placeHolder = domain + location + time + "/SkyChart";
-        }
-        else if (SelectedCategory == "SkyChartGIF")
-        {
-            placeHolder = domain + location + time + "/SkyChartGIF";
-        }
-        else if (SelectedCategory == "Account")
-        {
-            var ownerId = $"/OwnerId/{AddPersonOwnerId}";
-            var name = $"/Name/{AddPersonName}";
-            var gender = $"/Gender/{AddPersonGender}";
-            var accountTask = $"/{SelectedTaskName}";
-            placeHolder = domain + accountTask + ownerId + name + gender + location + time;
-        }
-        else
-        {
-            var celesPropertyStr = string.IsNullOrEmpty(finalCelesProperty) ? "" : $"/{finalCelesProperty}"; // sign, angle
-            var selectedBodyTypeStr = string.IsNullOrEmpty(SelectedCategory) ? "" : $"/{SelectedCategory}"; //planet, house
-            var finalCelesNameStr = string.IsNullOrEmpty(finalCelesName) ? "" : $"/{finalCelesName}"; // sun, moon, house 1
-            var celestialBodyData = selectedBodyTypeStr + finalCelesNameStr + celesPropertyStr;
-            placeHolder = domain + location + time + celestialBodyData;
-        }
+        // if (SelectedCategory == "SkyChart")
+        // {
+        //     placeHolder = domain + location + time + "/SkyChart";
+        // }
+        // else if (SelectedCategory == "SkyChartGIF")
+        // {
+        //     placeHolder = domain + location + time + "/SkyChartGIF";
+        // }
+        // else if (SelectedCategory == "Account")
+        // {
+        //     var ownerId = $"/OwnerId/{AddPersonOwnerId}";
+        //     var name = $"/Name/{AddPersonName}";
+        //     var gender = $"/Gender/{AddPersonGender}";
+        //     var accountTask = $"/{SelectedTaskName}";
+        //     placeHolder = domain + accountTask + ownerId + name + gender + location + time;
+        // }
+        // else
+        // {
+        //     var celesPropertyStr = string.IsNullOrEmpty(finalCelesProperty) ? "" : $"/{finalCelesProperty}"; // sign, angle
+        //     var selectedBodyTypeStr = string.IsNullOrEmpty(SelectedCategory) ? "" : $"/{SelectedCategory}"; //planet, house
+        //     var finalCelesNameStr = string.IsNullOrEmpty(finalCelesName) ? "" : $"/{finalCelesName}"; // sun, moon, house 1
+        //     var celestialBodyData = selectedBodyTypeStr + finalCelesNameStr + celesPropertyStr;
+        //     placeHolder = domain + location + time + celestialBodyData;
+        // }
 
         _finalApiGetCall = placeHolder;
 
@@ -414,21 +362,6 @@
             return false;
         }
 
-        //TEST 4 : Celes Name
-        if (String.IsNullOrWhiteSpace(GetFinalCategoryName()))
-        {
-            //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", $"What's the \"Name\" of the {SelectedCategory}?", true);
-            return false;
-        }
-
-        //TEST 5 : Celes Prop
-        if (String.IsNullOrWhiteSpace(GetFinalCategoryProperty()))
-        {
-            //mark invalid & alert user
-            await _jsRuntime.ShowAlert("error", $"What exact {SelectedCategory} data you want?", true);
-            return false;
-        }
 
 
         //if control reaches here than, it's valid
@@ -436,37 +369,6 @@
 
     }
 
-    /// <summary>
-    /// if null or empty than needs selection
-    /// since only calculated when called
-    /// </summary>
-    private string GetFinalCategoryName()
-    {
-        switch (SelectedCategory.ToLower())
-        {
-            case "planet":
-                return planetApiPanel.SelectedName;
-            case "house":
-                return houseApiPanel.SelectedName;
-        }
-
-        //if not specified than not needed, return empty
-        return "pass"; //something to escape validation
-    }
-
-    private string GetFinalCategoryProperty()
-    {
-        switch (SelectedCategory.ToLower())
-        {
-            case "planet":
-                return planetApiPanel.SelectedProperty;
-            case "house":
-                return houseApiPanel.SelectedProperty;
-        }
-
-        //if not specified than not needed, return empty
-        return "pass"; //something to escape validation
-    }
 
     private async Task OnDemoCallGeneratedUrl()
     {
@@ -481,6 +383,24 @@
 
         //let user know link copied
         await _jsRuntime.ShowAlert("success", $"Call Copied!", false, 2600);
+    }
+
+    private async Task FilterMethodList(string searchKeyword)
+    {
+
+        //if no search text then show all
+        if (string.IsNullOrEmpty(searchKeyword) || searchKeyword == "All")
+        {
+            MethodListFiltered = MethodListALL;
+        }
+        else
+        {
+            MethodListFiltered = MethodListALL.FindAll(apiCalc => apiCalc.SearchText.SearchText(searchKeyword));
+        }
+
+        // User has stopped typing, perform your action here
+        await InvokeAsync(StateHasChanged); // To refresh the UI
+
     }
 
 

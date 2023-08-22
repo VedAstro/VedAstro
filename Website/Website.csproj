@@ -13,12 +13,6 @@
 			<!--AOT disabled because not working in android chrome-->
 			<RunAOTCompilation>false</RunAOTCompilation>
 	</PropertyGroup>
-	<ItemGroup>
-	  <None Remove="Pages\Calculator\APIBuilder.MK2-razor" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Content Include="Pages\Calculator\APIBuilder.MK2-razor" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0-preview.5.23302.2" />

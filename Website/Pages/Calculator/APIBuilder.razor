@@ -231,8 +231,8 @@
 
             //make step 3 visible with data inputs
             _jsRuntime.Show(_step3ElementRef);
-            var paramList = MethodListALL.FindAll(apiCalc => apiCalc.Name == value);
-            _parameterInputPanel.Show(paramList);
+            var foundCalcs = MethodListALL.FindAll(apiCalc => apiCalc.Name == value);
+            _parameterInputPanel.Show(foundCalcs[0].ParamTypeList);
 
         }
     }

@@ -13,7 +13,7 @@ namespace VedAstro.Library
         /// Data structure to hold api call method's name and description
         /// INT = Outputs: Int32, List<string> = List of String
         /// </summary>
-        public readonly record struct APICallData(string Name, string Description, List<string> ParamTypeList, string ReturnType, string SearchText)
+        public readonly record struct APICallData(string Name, string Description, List<Type> ParamTypeList, string ReturnType, string SearchText)
         {
             /// <summary>
             /// Given a type will return is most relevant name
@@ -40,14 +40,17 @@ namespace VedAstro.Library
                 //get nice API calc name, shown in builder dropdown
                 foreach (var calc in calcList)
                 {
-                    var paramNameList = calc.GetParametersStringList();
+                    List<Type> parameterTypes = calc.GetParameters()
+                        .Select(param => param.ParameterType)
+                        .ToList();
+
                     var apiSpecialName = Tools.GetAPISpecialName(calc);
 
                     var apiSpecialDescription = Tools.GetAPISpecialDescription(calc);
                     finalList.Add(new APICallData(
                         Name: apiSpecialName,
                         Description: apiSpecialDescription,
-                        ParamTypeList: paramNameList,
+                        ParamTypeList: parameterTypes,
                         ReturnType: GetTypeName(calc.ReturnType), //gets type name nicely formatted
                         SearchText: calc.GetAllDataAsText() + apiSpecialDescription + apiSpecialName));
                 }

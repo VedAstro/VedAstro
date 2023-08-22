@@ -12,19 +12,30 @@
 @using System.Xml.Linq
 @using System.Reflection
 
-<TimeInputSimple @ref="_timeInput" LabelText="Time" />
+<div class="vstack gap-3">
 
-<GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true" />
+    <TypeSpecificInput @ref="param1" />
+    <TypeSpecificInput @ref="param2" />
+    <TypeSpecificInput @ref="param3" />
+
+</div>
+
 
 
 @code {
+    TypeSpecificInput param1;
+    TypeSpecificInput param2;
+    TypeSpecificInput param3;
 
     private TimeInputSimple _timeInput;
     private GeoLocationInput _geoLocationInput;
 
-    public void Show(List<AutoCalculator.APICallData> paramList)
+    public void Show(List<Type> paramTypeList)
     {
-        
+        //get value if any, else pass in Null, which will render nothing
+        param1.SetValue(paramTypeList.GetValueOrNull(0));
+        param2.SetValue(paramTypeList.GetValueOrNull(1));
+        param3.SetValue(paramTypeList.GetValueOrNull(2));
     }
 
 }

@@ -36,6 +36,20 @@ namespace VedAstro.Library
     public static class Tools
     {
 
+        /// <summary>
+        /// Extension method to get null when out of range, instead of exception
+        /// </summary>
+        public static T GetValueOrNull<T>(this List<T> list, int index)
+        {
+            if (index >= 0 && index < list.Count)
+            {
+                return list[index];
+            }
+            else
+            {
+                return default(T); // Returns null for reference types and zero for numeric value types
+            }
+        }
 
 
         /// <summary>

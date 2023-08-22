@@ -1,0 +1,53 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+
+
+
+@if (_apiCallData != null)
+{
+
+    @if (_apiCallData == typeof(Time))
+    {
+        <TimeInputSimple @ref="_timeInput" LabelText="Time"/>
+        <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true"/>
+    }
+    else if (_apiCallData == typeof(PlanetName))
+    {
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">@_apiCallData.Name</label>
+            <select class="form-select" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                @{
+                    foreach (var value in PlanetName.All9Planets)
+                    {
+                        <option value="@value">@value</option>
+                    }
+                }
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+        </div>
+    }
+    else
+    {
+        <p>Rendering For Type : @_apiCallData.FullName Not Specified!</p>
+    }
+
+
+}
+
+@code {
+    private Type _apiCallData;
+    private TimeInputSimple _timeInput;
+    private GeoLocationInput _geoLocationInput;
+
+
+    public void SetValue(Type apiCallData)
+    {
+        this._apiCallData = apiCallData;
+
+        StateHasChanged();
+    }
+
+}

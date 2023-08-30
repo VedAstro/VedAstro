@@ -8,14 +8,13 @@
 
     @if (_apiCallData == typeof(Time))
     {
-        <TimeInputSimple @ref="_timeInput" LabelText="Time"/>
-        <GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true"/>
+        <TimeLocationInput @ref="_timeLocationInput" />
     }
     else if (_apiCallData == typeof(PlanetName))
     {
         <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">@_apiCallData.Name</label>
-            <select class="form-select" id="inputGroupSelect01">
+            <label class="input-group-text" for="inputGroupSelect01">Planet</label>
+            <select @bind="_selectedPlanetName" class="form-select" id="inputGroupSelect01">
                 <option selected>Choose...</option>
                 @{
                     foreach (var value in PlanetName.All9Planets)
@@ -23,9 +22,28 @@
                         <option value="@value">@value</option>
                     }
                 }
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+            </select>
+        </div>
+    }
+    else if (_apiCallData == typeof(Angle))
+    {
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Degrees</span>
+            <input @bind="totalDegrees" type="text" class="form-control" placeholder="23.456" aria-label="Degrees" aria-describedby="basic-addon1">
+        </div>
+    }
+    else if (_apiCallData.IsEnum)
+    {
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">@_apiCallData.Name</label>
+            <select class="form-select" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                @{
+                    foreach (var value in Enum.GetValues(_apiCallData))
+                    {
+                        <option value="@value">@value</option>
+                    }
+                }
             </select>
         </div>
     }
@@ -39,15 +57,24 @@
 
 @code {
     private Type _apiCallData;
-    private TimeInputSimple _timeInput;
-    private GeoLocationInput _geoLocationInput;
-
+    private double totalDegrees;
+    private string _selectedPlanetName;
+    private TimeLocationInput _timeLocationInput;
 
     public void SetValue(Type apiCallData)
     {
         this._apiCallData = apiCallData;
 
-        StateHasChanged();
+        StateHasChanged(); //needed to propagate updates
+    }
+
+    public async Task<string> ToApiUrl()
+    {
+	    var combinedUrl = "";
+        combinedUrl += _timeLocationInput == null ? "" : await _timeLocationInput.ToApiUrl();
+        combinedUrl += _selectedPlanetName == null ? "" : $"/PlanetName/{_selectedPlanetName}";
+
+	    return combinedUrl;
     }
 
 }

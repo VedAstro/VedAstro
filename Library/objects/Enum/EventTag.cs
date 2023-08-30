@@ -20,7 +20,7 @@ namespace VedAstro.Library
         Agriculture,
         General,
         Personal,
-        Yoga,
+        Yoga, //todo not yet implemented 
         RulingConstellation,
         HairNailCutting,
         Medical,

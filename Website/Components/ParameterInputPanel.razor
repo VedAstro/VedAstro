@@ -14,28 +14,54 @@
 
 <div class="vstack gap-3">
 
-    <TypeSpecificInput @ref="param1" />
-    <TypeSpecificInput @ref="param2" />
-    <TypeSpecificInput @ref="param3" />
+	<TypeSpecificInput @ref="param1" />
+	<TypeSpecificInput @ref="param2" />
+	<TypeSpecificInput @ref="param3" />
 
 </div>
 
 
 
 @code {
-    TypeSpecificInput param1;
-    TypeSpecificInput param2;
-    TypeSpecificInput param3;
+	TypeSpecificInput param1;
+	TypeSpecificInput param2;
+	TypeSpecificInput param3;
+	List<TypeSpecificInput> paramList ;
 
-    private TimeInputSimple _timeInput;
-    private GeoLocationInput _geoLocationInput;
 
-    public void Show(List<Type> paramTypeList)
-    {
-        //get value if any, else pass in Null, which will render nothing
-        param1.SetValue(paramTypeList.GetValueOrNull(0));
-        param2.SetValue(paramTypeList.GetValueOrNull(1));
-        param3.SetValue(paramTypeList.GetValueOrNull(2));
-    }
+	protected async override Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			paramList = new() { param1, param2, param3 };
+		}
+		
+	}
+
+	public void Show(List<Type> paramTypeList)
+	{
+		//get value if any, else pass in Null, which will render nothing
+		param1.SetValue(paramTypeList.GetValueOrNull(0));
+		param2.SetValue(paramTypeList.GetValueOrNull(1));
+		param3.SetValue(paramTypeList.GetValueOrNull(2));
+
+		StateHasChanged(); //needed to propagate updates
+	}
+
+	public async Task<string> ToApiUrl()
+	{
+
+		var compiledUrl = "";
+		foreach (var paramInput in paramList)
+		{
+			if (paramInput != null)
+			{
+				compiledUrl += await paramInput.ToApiUrl() ?? "";
+			}
+		}
+
+		return compiledUrl;
+
+	}
 
 }

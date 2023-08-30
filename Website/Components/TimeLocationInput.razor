@@ -1,0 +1,46 @@
+﻿@namespace Website.Pages
+@using VedAstro.Library;
+
+
+<TimeInputSimple @ref="_timeInput" LabelText="Time"/>
+<GeoLocationInput @ref="_geoLocationInput" LabelText="Location" HideLongLat="@true"/>
+
+
+@code {
+    private TimeInputSimple _timeInput;
+    private GeoLocationInput _geoLocationInput;
+
+
+    /// <summary>
+    /// gets data from user input to URL format for API use
+    /// </summary>
+    public async Task<string> ToApiUrl(){
+
+        //auto set correct Timezone based on location & birth date
+        var dateTimeOffset = await _timeInput.GetDateTimeOffset(); //offset is ignored here
+        _timeInput.TimeZone = await Tools.GetTimezoneOffsetApi(_geoLocationInput.GetGeoLocation(), dateTimeOffset, ServerManager.GoogleGeoLocationApiKey);
+
+        //parse data received from user
+        var geoLocation = _geoLocationInput.GetGeoLocation();
+
+        //create a new person from the inputed data
+        var timeInputed = await _timeInput.GetTime(geoLocation);
+
+        var localNameNoSpace = Tools.RemoveWhiteSpace(_geoLocationInput.LocationName);
+        var location = $"/Location/{localNameNoSpace}";
+
+        string hhmmStr = timeInputed.GetStdDateTimeOffset().ToString("HH:mm");
+        string dateSt = timeInputed.GetStdDateTimeOffset().ToString("dd");
+        string monthStr = timeInputed.GetStdDateTimeOffset().ToString("MM");
+        string yearStr = timeInputed.GetStdDateTimeOffset().ToString("yyyy");
+        string offsetStr = timeInputed.GetStdDateTimeOffset().ToString("zzz");
+        var time = $"/Time/{hhmmStr}/{dateSt}/{monthStr}/{yearStr}/{offsetStr}";
+
+        //format of the API call
+        //.../Location/Singapore/Time/23:59/31/12/2000/+08:00
+        var placeHolder = "";
+        placeHolder =  location + time;
+
+        return placeHolder;
+    }
+}

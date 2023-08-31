@@ -27,6 +27,9 @@ namespace VedAstro.Library
 
         public static string FormatName(string nameWithoutSpaces)
         {
+            //if null end here
+	        if (string.IsNullOrEmpty(nameWithoutSpaces)) return "";
+
             //add spaces in between camel case letters
             var nameWithSpace = SplitCamelCase(nameWithoutSpaces);
 

@@ -36,7 +36,7 @@ KEEP IT REAL
 
         <div class="btn-group" style="width: @GR.W255px;">
 
-            @* DROPDOWN SECTION *@
+            @* DROPDOWN BUTTON *@
             <button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
                 @if (!SelectedPerson.Equals(Person.Empty))
                 {
@@ -64,7 +64,8 @@ KEEP IT REAL
                     {
                         <li class="dropdown-item" @onclick="@(() => OnClickPersonName(person))" style="cursor: pointer;">@person.DisplayName</li>
                     }
-                    <li><hr class="dropdown-divider"></li>
+	                <li><hr class="dropdown-divider"></li> 
+                    @* DIVIDER *@
                     <div class="ms-3 d-flex justify-content-between">
                         <IconText FontColor="@AppData.Grey" IconName="material-symbols:demography-rounded">
                             Examples

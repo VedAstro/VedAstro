@@ -17,6 +17,7 @@
 	<TypeSpecificInput @ref="param1" />
 	<TypeSpecificInput @ref="param2" />
 	<TypeSpecificInput @ref="param3" />
+	<TypeSpecificInput @ref="param4" />
 
 </div>
 
@@ -26,6 +27,7 @@
 	TypeSpecificInput param1;
 	TypeSpecificInput param2;
 	TypeSpecificInput param3;
+	TypeSpecificInput param4;
 	List<TypeSpecificInput> paramList ;
 
 
@@ -33,7 +35,7 @@
 	{
 		if (firstRender)
 		{
-			paramList = new() { param1, param2, param3 };
+			paramList = new() { param1, param2, param3, param4 };
 		}
 		
 	}
@@ -44,14 +46,18 @@
 		param1.SetValue(paramTypeList.GetValueOrNull(0));
 		param2.SetValue(paramTypeList.GetValueOrNull(1));
 		param3.SetValue(paramTypeList.GetValueOrNull(2));
+		param4.SetValue(paramTypeList.GetValueOrNull(3));
+
+		paramList = new() { param1, param2, param3, param4 };
 
 		StateHasChanged(); //needed to propagate updates
 	}
 
 	public async Task<string> ToApiUrl()
 	{
-
 		var compiledUrl = "";
+
+		//combine all the URLs of the inputs
 		foreach (var paramInput in paramList)
 		{
 			if (paramInput != null)

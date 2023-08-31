@@ -1,0 +1,184 @@
+@*⠀⠀⠀⠀⠀⠀⠀⢠⣶⣿⣶⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⢀⣴⣾⣶⣄⠘⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠈⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠙⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣷⣄⠙⢿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣿⣾⣿⣿⣿⠿⠿⠓⢀⣀⣠⣤⣤⣄⠀⠀⠀
+⠀⣀⣤⡀⠀⠀⢀⣤⣶⣤⡙⢿⣿⣿⣿⡟⣩⣶⣶⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀
+⢸⣿⣿⣿⣦⡀⠸⣿⣿⣿⣿⣦⡙⢿⣿⡇⣿⣿⣿⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⡆
+⠈⠻⣿⣿⣿⣿⣦⡉⢿⣿⣿⣿⣿⣦⡙⢿⣬⣉⣩⣭⣤⣴⣶⣿⣿⣿⣿⣿⣿⣧
+⠀⠀⠈⠻⣿⣿⣿⣿⣦⡉⠻⣿⣿⣿⣿⣦⡙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟
+⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣷⣍⠻⣿⣿⣿⠇⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇
+⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣷⣬⣭⣥⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⣿⣿⣿⡿⠿⠿⠛⠉⠀⠀⠀⠀⠀⠀
+KEEP IT REAL
+*@
+
+
+
+@namespace Website.Pages
+@using VedAstro.Library;
+@using System.Xml.Linq
+@using System.Collections
+@using FuzzySharp
+
+@*Component shows combo box with people list*@
+
+<div class="input-group mb-3">
+	<label class="input-group-text gap-2" style="min-width: @GR.W97px;"><Icon IconName="flat-color-icons:calculator" Size="34" />Calculator</label>
+
+	<div class="btn-group" style="width: @GR.W255px;">
+
+		@* DROPDOWN BUTTON *@
+		<button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+			@if (SelectedMethod != null)
+			{
+				@(Format.FormatName(SelectedMethod.Name))
+			}
+			else
+			{
+				@("Choose...")
+			}
+		</button>
+
+		@* DROPDOWN SECTION *@
+		<ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
+
+			@* SEARCH *@
+			<div class="hstack gap-2">
+				<input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+				<Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.PersonList))" />
+			</div>
+
+			@* LIST OF PEOPLE *@
+			@if (IsReady)
+			{
+				@foreach (var apiMethod in MethodListFiltered)
+				{
+					<li class="dropdown-item" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">@(Format.FormatName(apiMethod.Name))</li>
+				}
+			}
+			@* LOADING ICON *@
+			@* loading icon when list is being made, no loading popup because reduces user UX *@
+			else
+			{
+				<div class="d-flex flex-column align-items-center mt-5">
+					<strong>Loading...</strong>
+					<div class="spinner-border" role="status" aria-hidden="true"></div>
+				</div>
+			}
+
+
+		</ul>
+
+	</div>
+
+
+</div>
+
+
+@code {
+	/// <summary>
+	/// only this way of marking works
+	/// </summary>
+	private bool IsReady = false;
+
+
+	private ElementReference _searchInput;
+
+	/// <summary>
+	/// list that is shown to user and is changed by search
+	/// </summary>
+	private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new();
+
+	private AutoCalculator.APICallData SelectedMethod { get; set; }
+
+	private List<AutoCalculator.APICallData> MethodListALL = new();
+
+	/// <summary>
+	/// extracted search text for faster search
+	/// </summary>
+	private string[] MethodListALLSearchText;
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		//hide display
+		await _jsRuntime.ShowLoading();
+		IsReady = false;
+
+		var allApiCalculatorsMethodInfo = Tools.GetAllApiCalculatorsMethodInfo();
+
+		//NOTE: raw info about calculators is converted to hard data package, to speed up rendering on auto search
+		MethodListALL = AutoCalculator.APICallData.FromMethodInfoList(allApiCalculatorsMethodInfo);
+
+		//to speed up search array of description
+		MethodListALLSearchText = MethodListALL.Select(x => x.SearchText).ToArray();
+
+		//make copy for search
+		MethodListFiltered = MethodListALL;
+
+		//show data on display
+		IsReady = true;
+		_jsRuntime.HideAlert();
+	}
+
+	/// <summary>
+	/// when a method name in tooltip drop down menu is clicked
+	/// </summary>
+	private void OnClickMethodName(AutoCalculator.APICallData method)
+	{
+		//set tooltip as well
+		SelectedMethod = method;
+
+		//needed to make change appear
+		StateHasChanged();
+	}
+
+	/// <summary>
+	/// Handle when user uses the Search
+	/// </summary>
+	private async Task OnKeyUpSearchBar(KeyboardEventArgs keyEventArgs)
+	{
+		//get search text, lower case for more results
+		var searchText = (await _jsRuntime.GetValue(_searchInput)).ToLower();
+
+		//if no search text then show all
+		if (string.IsNullOrEmpty(searchText))
+		{
+			MethodListFiltered = MethodListALL;
+		}
+		else
+		{
+			//find in string list
+			var results = Process.ExtractAll(searchText, MethodListALLSearchText, cutoff: 60).OrderByDescending(r => r.Score); ;
+
+			foreach (var result in results)
+			{
+				Console.WriteLine($" Score: {result.Score}, Index: {result.Index}, Choice: {result.Value}");
+			}
+
+			MethodListFiltered = results.Select(yy => MethodListALL[yy.Index]).ToList();
+
+			//MethodListFiltered = MethodListALL.FindAll(person => person.DisplayName.ToLower().Contains(text));
+		}
+
+	}
+
+
+	/// <summary>
+	/// When main button is clicked to trigger auto focus to search bar
+	/// </summary>
+	private void OnClickTrigger()
+	{
+		//_searchInput.FocusAsync();
+	}
+
+	public string GetSelectedMethod()
+	{
+		throw new NotImplementedException();
+	}
+
+}

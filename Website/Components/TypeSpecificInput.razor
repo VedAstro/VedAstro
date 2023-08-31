@@ -8,13 +8,13 @@
 
     @if (_apiCallData == typeof(Time))
     {
-        <TimeLocationInput @ref="_timeLocationInput" />
+        <TimeLocationInput @ref="_inputTimeLocation" />
     }
     else if (_apiCallData == typeof(PlanetName))
     {
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelect01">Planet</label>
-            <select @bind="_selectedPlanetName" class="form-select" id="inputGroupSelect01">
+            <select @bind="_inputPlanetName" class="form-select" id="inputGroupSelect01">
                 <option selected>Choose...</option>
                 @{
                     foreach (var value in PlanetName.All9Planets)
@@ -29,14 +29,14 @@
     {
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">Degrees</span>
-            <input @bind="totalDegrees" type="text" class="form-control" placeholder="23.456" aria-label="Degrees" aria-describedby="basic-addon1">
+            <input @bind="_inputTotalDegrees" type="text" class="form-control" placeholder="23.456" aria-label="Degrees" aria-describedby="basic-addon1">
         </div>
     }
     else if (_apiCallData.IsEnum)
     {
         <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">@_apiCallData.Name</label>
-            <select class="form-select" id="inputGroupSelect01">
+            <label class="input-group-text" for="EnumInputElm">@(Format.FormatName(_apiCallData.Name))</label>
+            <select @bind="_inputEnumName" class="form-select" id="EnumInputElm">
                 <option selected>Choose...</option>
                 @{
                     foreach (var value in Enum.GetValues(_apiCallData))
@@ -57,9 +57,10 @@
 
 @code {
     private Type _apiCallData;
-    private double totalDegrees;
-    private string _selectedPlanetName;
-    private TimeLocationInput _timeLocationInput;
+    private double _inputTotalDegrees;
+    private string _inputPlanetName;
+    private string _inputEnumName;
+    private TimeLocationInput _inputTimeLocation;
 
     public void SetValue(Type apiCallData)
     {
@@ -71,8 +72,10 @@
     public async Task<string> ToApiUrl()
     {
 	    var combinedUrl = "";
-        combinedUrl += _timeLocationInput == null ? "" : await _timeLocationInput.ToApiUrl();
-        combinedUrl += _selectedPlanetName == null ? "" : $"/PlanetName/{_selectedPlanetName}";
+        combinedUrl += _inputTimeLocation == null ? "" : await _inputTimeLocation.ToApiUrl();
+        combinedUrl += _inputPlanetName == null ? "" : $"/PlanetName/{_inputPlanetName}";
+        combinedUrl += _inputEnumName == null ? "" : $"/{_apiCallData.Name}/{_inputPlanetName}";
+        combinedUrl += _inputTotalDegrees == null ? "" : $"/Angle/{_inputTotalDegrees}";
 
 	    return combinedUrl;
     }

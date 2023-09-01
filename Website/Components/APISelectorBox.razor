@@ -16,65 +16,57 @@
 KEEP IT REAL
 *@
 
-
-
 @namespace Website.Pages
 @using VedAstro.Library;
 @using System.Xml.Linq
 @using System.Collections
 @using FuzzySharp
 
+
 @*Component shows combo box with people list*@
+<div class="btn-group" style="width: @GR.W255px;">
 
-<div class="input-group mb-3">
-	<label class="input-group-text gap-2" style="min-width: @GR.W97px;"><Icon IconName="flat-color-icons:calculator" Size="34" />Calculator</label>
+	@* DROPDOWN BUTTON *@
+	<button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
+		@if (SelectedMethod != null)
+		{
+			@(Format.FormatName(SelectedMethod.Name))
+		}
+		else
+		{
+			@("Choose...")
+		}
+	</button>
 
-	<div class="btn-group" style="width: @GR.W255px;">
+	@* DROPDOWN SECTION *@
+	<ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
 
-		@* DROPDOWN BUTTON *@
-		<button type="button" @onclick="OnClickTrigger" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-			@if (SelectedMethod != null)
+		@* SEARCH *@
+		<div class="hstack gap-2">
+			<input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+			<Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.PersonList))" />
+		</div>
+
+		@* LIST OF PEOPLE *@
+		@if (IsReady)
+		{
+			@foreach (var apiMethod in MethodListFiltered)
 			{
-				@(Format.FormatName(SelectedMethod.Name))
+				<li class="dropdown-item" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">@(Format.FormatName(apiMethod.Name))</li>
 			}
-			else
-			{
-				@("Choose...")
-			}
-		</button>
-
-		@* DROPDOWN SECTION *@
-		<ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
-
-			@* SEARCH *@
-			<div class="hstack gap-2">
-				<input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
-				<Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.PersonList))" />
-			</div>
-
-			@* LIST OF PEOPLE *@
-			@if (IsReady)
-			{
-				@foreach (var apiMethod in MethodListFiltered)
-				{
-					<li class="dropdown-item" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">@(Format.FormatName(apiMethod.Name))</li>
-				}
-			}
+		}
 			@* LOADING ICON *@
 			@* loading icon when list is being made, no loading popup because reduces user UX *@
-			else
-			{
-				<div class="d-flex flex-column align-items-center mt-5">
-					<strong>Loading...</strong>
-					<div class="spinner-border" role="status" aria-hidden="true"></div>
-				</div>
-			}
+		else
+		{
+			<div class="d-flex flex-column align-items-center mt-5">
+				<strong>Loading...</strong>
+				<div class="spinner-border" role="status" aria-hidden="true"></div>
+			</div>
+		}
 
 
-		</ul>
-
-	</div>
-
+	</ul>
 
 </div>
 
@@ -85,7 +77,6 @@ KEEP IT REAL
 	/// </summary>
 	private bool IsReady = false;
 
-
 	private ElementReference _searchInput;
 
 	/// <summary>
@@ -93,7 +84,7 @@ KEEP IT REAL
 	/// </summary>
 	private List<AutoCalculator.APICallData> MethodListFiltered { get; set; } = new();
 
-	private AutoCalculator.APICallData SelectedMethod { get; set; }
+	public AutoCalculator.APICallData SelectedMethod { get; set; }
 
 	private List<AutoCalculator.APICallData> MethodListALL = new();
 
@@ -102,6 +93,10 @@ KEEP IT REAL
 	/// </summary>
 	private string[] MethodListALLSearchText;
 
+	/// <summary>
+	/// Event fired when selection of method is changed
+	/// </summary>
+	public event EventHandler OnChangeSelectMethod;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -126,12 +121,23 @@ KEEP IT REAL
 	}
 
 	/// <summary>
+	/// checks if OnChangeSelectMethod is not null (meaning it has at least one subscriber)
+	/// </summary>
+	public void RaiseOnChangeSelectMethod()
+	{
+		OnChangeSelectMethod?.Invoke(this, EventArgs.Empty);
+	}
+
+	/// <summary>
 	/// when a method name in tooltip drop down menu is clicked
 	/// </summary>
 	private void OnClickMethodName(AutoCalculator.APICallData method)
 	{
 		//set tooltip as well
 		SelectedMethod = method;
+
+		//fire event, so parent listening can update other elements
+		RaiseOnChangeSelectMethod();
 
 		//needed to make change appear
 		StateHasChanged();
@@ -167,7 +173,6 @@ KEEP IT REAL
 
 	}
 
-
 	/// <summary>
 	/// When main button is clicked to trigger auto focus to search bar
 	/// </summary>
@@ -176,9 +181,10 @@ KEEP IT REAL
 		//_searchInput.FocusAsync();
 	}
 
-	public string GetSelectedMethod()
-	{
-		throw new NotImplementedException();
-	}
+	/// <summary>
+	/// if not selected will return empty
+	/// </summary>
+	public string GetSelectedMethodName() => SelectedMethod.Name ?? "";
+
 
 }

@@ -301,6 +301,7 @@ namespace Website
         /// <summary>
         /// toggles the display property of an element, show / hide
         /// uses jquery toggle method
+        /// ID without #
         /// </summary>
         public static async Task ToggleDisplay(this IJSRuntime jsRuntime, string elementID)
         {

@@ -6,78 +6,80 @@
 @if (_apiCallData != null)
 {
 
-    @if (_apiCallData == typeof(Time))
-    {
-        <TimeLocationInput @ref="_inputTimeLocation" />
-    }
-    else if (_apiCallData == typeof(PlanetName))
-    {
-        <div class="input-group">
-            <label class="input-group-text" for="inputGroupSelect01">Planet</label>
-            <select @bind="_inputPlanetName" class="form-select" id="inputGroupSelect01">
-                <option selected>Choose...</option>
-                @{
-                    foreach (var value in PlanetName.All9Planets)
-                    {
-                        <option value="@value">@value</option>
-                    }
-                }
-            </select>
-        </div>
-    }
-    else if (_apiCallData == typeof(Angle))
-    {
-        <div class="input-group">
-            <span class="input-group-text" id="basic-addon1">Degrees</span>
-            <input @bind="_inputTotalDegrees" type="text" class="form-control" placeholder="23.456" aria-label="Degrees" aria-describedby="basic-addon1">
-        </div>
-    }
-    else if (_apiCallData.IsEnum)
-    {
-        <div class="input-group">
-            <label class="input-group-text" for="EnumInputElm">@(Format.FormatName(_apiCallData.Name))</label>
-            <select @bind="_inputEnumName" class="form-select" id="EnumInputElm">
-                <option selected>Choose...</option>
-                @{
-                    foreach (var value in Enum.GetValues(_apiCallData))
-                    {
-                        <option value="@value">@value</option>
-                    }
-                }
-            </select>
-        </div>
-    }
-    else
-    {
-        <p>Rendering For Type : @_apiCallData.FullName Not Specified!</p>
-    }
+	@if (_apiCallData == typeof(Time))
+	{
+		<TimeLocationInput @ref="_inputTimeLocation" />
+	}
+	else if (_apiCallData == typeof(PlanetName))
+	{
+		<div class="input-group">
+			<label class="input-group-text" for="inputGroupSelect01">Planet</label>
+			<select @bind="_inputPlanetName" class="form-select" id="inputGroupSelect01">
+				<option selected>Choose...</option>
+				@{
+					foreach (var value in PlanetName.All9Planets)
+					{
+						<option value="@value">@value</option>
+					}
+				}
+			</select>
+		</div>
+	}
+	else if (_apiCallData == typeof(Angle))
+	{
+		<div class="input-group">
+			<span class="input-group-text" id="basic-addon1">Degrees</span>
+			<input @bind="_inputTotalDegrees" type="text" class="form-control" placeholder="23.456" aria-label="Degrees" aria-describedby="basic-addon1">
+		</div>
+	}
+	else if (_apiCallData.IsEnum)
+	{
+		<div class="input-group">
+			<label class="input-group-text" for="EnumInputElm">@(Format.FormatName(_apiCallData.Name))</label>
+			<select @bind="_inputEnumName" class="form-select" id="EnumInputElm">
+				<option selected>Choose...</option>
+				@{
+					foreach (var value in Enum.GetValues(_apiCallData))
+					{
+						<option value="@value">@value</option>
+					}
+				}
+			</select>
+		</div>
+	}
+	else
+	{
+		<p>Rendering For Type : @_apiCallData.FullName Not Specified!</p>
+	}
 
 
 }
 
 @code {
-    private Type _apiCallData;
-    private double _inputTotalDegrees;
-    private string _inputPlanetName;
-    private string _inputEnumName;
-    private TimeLocationInput _inputTimeLocation;
+	private Type _apiCallData;
+	private double _inputTotalDegrees;
+	private string _inputPlanetName;
+	private string _inputEnumName;
+	private TimeLocationInput _inputTimeLocation;
 
-    public void SetValue(Type apiCallData)
-    {
-        this._apiCallData = apiCallData;
+	public void SetValue(Type apiCallData)
+	{
+		this._apiCallData = apiCallData;
 
-        StateHasChanged(); //needed to propagate updates
-    }
+		StateHasChanged(); //needed to propagate updates
+	}
 
-    public async Task<string> ToApiUrl()
-    {
-	    var combinedUrl = "";
-        combinedUrl += _inputTimeLocation == null ? "" : await _inputTimeLocation.ToApiUrl();
-        combinedUrl += _inputPlanetName == null ? "" : $"/PlanetName/{_inputPlanetName}";
-        combinedUrl += _inputEnumName == null ? "" : $"/{_apiCallData.Name}/{_inputPlanetName}";
-        combinedUrl += _inputTotalDegrees == null ? "" : $"/Angle/{_inputTotalDegrees}";
+	public async Task<string> ToApiUrl()
+	{
+		var combinedUrl = "";
 
-	    return combinedUrl;
-    }
+		if (_apiCallData == typeof(Time)) { combinedUrl = await _inputTimeLocation.ToApiUrl(); }
+		else if (_apiCallData == typeof(PlanetName)) { combinedUrl = $"/PlanetName/{_inputPlanetName}"; }
+		else if (_apiCallData == typeof(Angle)) { combinedUrl = $"/Angle/{_inputTotalDegrees}"; }
+		else if (_apiCallData?.IsEnum ?? false) { combinedUrl = $"/{_apiCallData.Name}/{_inputPlanetName}"; }
+
+
+		return combinedUrl;
+	}
 
 }

@@ -154,6 +154,7 @@ public class URL
     public const string Paypal = "https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=USD";
     public const string GitHubDiscussions = "https://github.com/orgs/VedAstro/discussions";
     public const string YoutubeChannel = "https://www.youtube.com/@vedastro";
+    public const string YoutubePythonGuide = "https://youtu.be/chEeF-xEQ48?si=RNTvGlSD-WXgso7P";
     public const string FacebookPage = "https://www.facebook.com/vedastro.org";
     public const string Instagram = "https://www.instagram.com/_vedastro/";
     public const string Twitter = "https://twitter.com/_VedAstro";
@@ -172,6 +173,7 @@ public class URL
     public const string TelegramContact = "https://t.me/vedastro_org";
     public const string EmailToClick = "mailto:contact@vedastro.org";
     public const string GitHubRepo = "https://github.com/VedAstro/VedAstro";
+    public const string GitHubPython = "https://github.com/VedAstro/VedAstro.Python";
     public const string GitHubIssues = "https://github.com/VedAstro/VedAstro/issues";
     public const string GitHubCommits = "https://github.com/gen-so/Genso.Astrology/commits/master";
     public const string GitDeveloperRoomProject = "https://github.com/orgs/VedAstro/projects/1";

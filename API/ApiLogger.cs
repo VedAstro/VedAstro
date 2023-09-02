@@ -77,6 +77,7 @@ public static class APILogger
         await Tools.AddXElementToXDocumentAzure(visitorXml, VisitorLogXml, ContainerName);
 
     }
+
     public static async Task Data(string textData, HttpRequestData req = null)
     {
 

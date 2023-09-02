@@ -64,10 +64,11 @@
 			<IconButton ButtonText="Generate" FullWidth="true" FontSize="17px" FontWeight="500" TextCenter="true" SmallSize="true" Color="success" IconName="flat-color-icons:flash-auto" OnClickCallback="@OnClickGenerateButton" />
 
 			@*OUTPUT ARROW ICON*@
-			<Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="55" />
+			<Icon IconName="flat-color-icons:down" ExtraStyle="text-align: center;" Size="80" />
 
 			@*URL DISPLAY OUT*@
-			<div class="vstack gap-1" style="margin-top: -32px;">
+			@* id so we can scroll to on complete *@
+			<div id="UrlDisplayOut" class="vstack gap-1" style="margin-top: -32px;">
 				<span style="font-size: 14px; color: @AppData.Grey;">URL</span>
 				<kbd style="padding: 12px; font-size: 18px; overflow-wrap: break-word; line-height: 33px;">@_finalApiGetCall</kbd>
 			</div>
@@ -250,6 +251,9 @@
 		await _jsRuntime.ShowAlert("success", AlertText.IsDoneText(), false, 2200);
 
 		_jsRuntime.PlayDoneSound();
+
+		//auto scroll to URL display out, so user can see better
+		AppData.Go(PageRoute.UrlDisplayOut);
 	}
 
 	/// <summary>

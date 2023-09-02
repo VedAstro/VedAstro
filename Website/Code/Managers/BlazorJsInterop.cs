@@ -124,16 +124,11 @@ namespace Website
             await jsRuntime.InvokeVoidAsync(JS.Swal_fire, title, descriptionText, icon);
         }
 
-        /// <summary>
-        /// Shows leave email alert box and returns the email as string
-        /// note: uses sweet alert js
-        /// </summary>
-        public static async Task<string> ShowLeaveEmailAlert(this IJSRuntime jsRuntime) => await jsRuntime.InvokeAsync<string>(JS.ShowLeaveEmailAlert);
 
         /// <summary>
         /// Shows a dialog box with request for email, done via SweetAlert JS
         /// </summary>
-        public static async Task<string> ShowSendToEmail(this IJSRuntime jsRuntime, string message) => await jsRuntime.InvokeAsync<string>(JS.ShowSendToEmail, message);
+        public static async Task<string> PopupTextInput(this IJSRuntime jsRuntime, string message, string inputType = "email", string inputPlaceholder = "Enter your email address") => await jsRuntime.InvokeAsync<string>(JS.PopupTextInput, message, inputType, inputPlaceholder);
 
         /// <summary>
         /// Will inject an option with the data given the data

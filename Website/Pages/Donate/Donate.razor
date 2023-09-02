@@ -174,7 +174,7 @@
     private async Task OnClickBankTransfer()
     {
         //get email from user via js sweet alert lib
-        var emailFromAlert = await AppData.JsRuntime.ShowSendToEmail("We will send bank details via email");
+        var emailFromAlert = await AppData.JsRuntime.PopupTextInput("We will send bank details via email");
 
         //loading box show
         await _jsRuntime.ShowLoading();

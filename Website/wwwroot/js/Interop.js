@@ -400,26 +400,13 @@ export function getUrl() {
     return window.location.href;
 };
 
-//shows an email
-export async function ShowLeaveEmailAlert() {
-    //show alert to get email
-    const { value: email } = await Swal.fire({
-        title: 'Notify me on update',
-        input: 'email',
-        inputPlaceholder: 'Enter your email address'
-    });
 
-    if (email) { Swal.fire('Thanks', 'We will update you soon..', 'success'); }
-
-    //send email inputed to caller
-    return email;
-}
-export async function ShowSendToEmail(message) {
+export async function PopupTextInput(message, inputType, inputPlaceholder) {
     //show alert to get email
     const { value: email } = await Swal.fire({
         title: message,
-        input: 'email',
-        inputPlaceholder: 'Enter your email address'
+        input: inputType,
+        inputPlaceholder: inputPlaceholder
     });
 
     //send email inputed to caller

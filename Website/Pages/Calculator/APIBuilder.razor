@@ -1,4 +1,4 @@
-@using VedAstro.Library
+﻿@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
 <PageTitle>Easy Open API | VedAstro</PageTitle>
@@ -177,6 +177,13 @@
 </div>
 
 @code {
+
+	/// <summary>
+	/// if not specified will not be included in final URL
+	/// default set to Raman, as used system wide
+	/// </summary>
+	private string _selectedAyanamsa = "Raman";
+
 	/// <summary>
 	/// list that is shown to user and is changed by search
 	/// </summary>
@@ -242,7 +249,8 @@
 		var placeHolder = "";
 		var calcName = $"/Calculate/{_apiSelectorBox.GetSelectedMethodName()}";
 		var paramInput = await _parameterInputPanel.ToApiUrl();
-		placeHolder = domain + calcName + paramInput;
+		var ayanamsaUrl = _selectedAyanamsa == "Raman" ? "" : $"/Ayanamsa/{_selectedAyanamsa}" ;
+		placeHolder = domain + calcName + paramInput + ayanamsaUrl;
 
 
 		_finalApiGetCall = placeHolder;

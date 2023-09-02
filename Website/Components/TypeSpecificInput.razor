@@ -13,8 +13,8 @@
 	else if (_apiCallData == typeof(PlanetName))
 	{
 		<div class="input-group">
-			<label class="input-group-text" for="inputGroupSelect01">Planet</label>
-			<select @bind="_inputPlanetName" class="form-select" id="inputGroupSelect01">
+			<label class="input-group-text" for="@InstanceId">Planet</label>
+			<select @bind="_inputPlanetName" class="form-select" id="@InstanceId">
 				<option selected>Choose...</option>
 				@{
 					foreach (var value in PlanetName.All9Planets)
@@ -35,8 +35,8 @@
 	else if (_apiCallData.IsEnum)
 	{
 		<div class="input-group">
-			<label class="input-group-text" for="EnumInputElm">@(Format.FormatName(_apiCallData.Name))</label>
-			<select @bind="_inputEnumName" class="form-select" id="EnumInputElm">
+			<label class="input-group-text" for="@InstanceId">@(Format.FormatName(_apiCallData.Name))</label>
+			<select @bind="_inputEnumName" class="form-select" id="@InstanceId">
 				<option selected>Choose...</option>
 				@{
 					foreach (var value in Enum.GetValues(_apiCallData))
@@ -49,13 +49,18 @@
 	}
 	else
 	{
-		<p>Rendering For Type : @_apiCallData.FullName Not Specified!</p>
+		<p>UNDER CONSTRUCTION : <a href="@PageRoute.Donate">Donate to help development</a></p>
+		<p style="font-size=8px;">@_apiCallData.FullName</p>
 	}
 
 
 }
 
 @code {
+	/// <summary>
+	/// id used to sync labels and inputs, for HTML sake
+	/// </summary>
+	private static string InstanceId = Guid.NewGuid().ToString();
 	private Type _apiCallData;
 	private double _inputTotalDegrees;
 	private string _inputPlanetName;
@@ -76,7 +81,7 @@
 		if (_apiCallData == typeof(Time)) { combinedUrl = await _inputTimeLocation.ToApiUrl(); }
 		else if (_apiCallData == typeof(PlanetName)) { combinedUrl = $"/PlanetName/{_inputPlanetName}"; }
 		else if (_apiCallData == typeof(Angle)) { combinedUrl = $"/Angle/{_inputTotalDegrees}"; }
-		else if (_apiCallData?.IsEnum ?? false) { combinedUrl = $"/{_apiCallData.Name}/{_inputPlanetName}"; }
+		else if (_apiCallData?.IsEnum ?? false) { combinedUrl = $"/{_apiCallData.Name}/{_inputEnumName}"; }
 
 
 		return combinedUrl;

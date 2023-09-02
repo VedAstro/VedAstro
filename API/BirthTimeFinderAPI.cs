@@ -65,7 +65,7 @@ namespace API
                     var personAdjusted = foundPerson.ChangeBirthTime(timeSlice);
 
                     //get the animal prediction for possible birth time
-                    var newBirthConstellation = Calculate.GetMoonConstellation(personAdjusted.BirthTime).GetConstellationName();
+                    var newBirthConstellation = Calculate.MoonConstellation(personAdjusted.BirthTime).GetConstellationName();
                     var animal = Calculate.GetAnimal(newBirthConstellation);
 
                     //nicely packed

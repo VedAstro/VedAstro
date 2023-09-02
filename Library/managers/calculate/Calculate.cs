@@ -190,13 +190,13 @@ namespace VedAstro.Library
         /// Gets constellation behind the moon (shortcut function)
         /// </summary>
         [API("MoonConstellation", "Constellation behind the moon at a given time", Category.StarsAboveMe)]
-        public static PlanetConstellation GetMoonConstellation(Time time) => GetPlanetConstellation(time, PlanetName.Moon);
+        public static PlanetConstellation MoonConstellation(Time time) => PlanetConstellation(time, PlanetName.Moon);
 
         /// <summary>
         /// Gets the constellation behind a planet at a given time
         /// </summary>
         [API("Constellation")]
-        public static PlanetConstellation GetPlanetConstellation(Time time, PlanetName planet)
+        public static PlanetConstellation PlanetConstellation(Time time, PlanetName planet)
         {
             //get position of planet in longitude
             var planetLongitude = GetPlanetNirayanaLongitude(time, planet);
@@ -206,11 +206,11 @@ namespace VedAstro.Library
         }
 
         [API("Tarabala")]
-        public static Tarabala GetTarabala(Time time, Person person)
+        public static Tarabala Tarabala(Time time, Person person)
         {
-            int dayRulingConstellationNumber = GetMoonConstellation(time).GetConstellationNumber();
+            int dayRulingConstellationNumber = MoonConstellation(time).GetConstellationNumber();
 
-            int birthRulingConstellationNumber = GetMoonConstellation(person.BirthTime).GetConstellationNumber();
+            int birthRulingConstellationNumber = MoonConstellation(person.BirthTime).GetConstellationNumber();
 
             int counter = 0;
 
@@ -269,7 +269,7 @@ namespace VedAstro.Library
         /// happens to represent the 6th, 8th or 12th from the person's Janma Rasi.
         /// </summary>
         [API("Chandrabala")]
-        public static int GetChandrabala(Time time, Person person)
+        public static int Chandrabala(Time time, Person person)
         {
             //TODO Needs to be updated with count sign from sign for better consistency
             //     also possible to leave it as is for better decoupling since this is working fine
@@ -278,8 +278,8 @@ namespace VedAstro.Library
             int chandrabalaNumber = 0;
 
             //get zodiac name & convert to its number
-            var dayMoonSignNumber = (int)GetMoonSignName(time);
-            var birthMoonSignNumber = (int)GetMoonSignName(person.BirthTime);
+            var dayMoonSignNumber = (int)MoonSignName(time);
+            var birthMoonSignNumber = (int)MoonSignName(person.BirthTime);
 
 
             //Need to count from birthMoonSign to dayMoonSign
@@ -309,7 +309,7 @@ namespace VedAstro.Library
         }
 
         [API("MoonSign", "", Category.StarsAboveMe)]
-        public static ZodiacName GetMoonSignName(Time time)
+        public static ZodiacName MoonSignName(Time time)
         {
             //get zodiac sign behind the moon
             var moonSign = GetPlanetRasiSign(PlanetName.Moon, time);
@@ -319,7 +319,7 @@ namespace VedAstro.Library
         }
 
         [API("NithyaYoga", "", Category.StarsAboveMe)]
-        public static NithyaYoga GetNithyaYoga(Time time)
+        public static NithyaYoga NithyaYoga(Time time)
         {
             //Nithya Yoga = (Longitude of Sun + Longitude of Moon) / 13°20' (or 800')
 
@@ -346,7 +346,7 @@ namespace VedAstro.Library
         }
 
         [API("Karana", "", Category.StarsAboveMe)]
-        public static Karana GetKarana(Time time)
+        public static Karana Karana(Time time)
         {
             //declare karana as empty first
             Karana? karanaToReturn = null;
@@ -377,54 +377,54 @@ namespace VedAstro.Library
             {
                 //based on lunar date get karana
                 case 1:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Kimstughna : Karana.Bava;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Kimstughna : Library.Karana.Bava;
                     break;
                 case 23:
                 case 16:
                 case 9:
                 case 2:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Balava : Karana.Kaulava;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Balava : Library.Karana.Kaulava;
                     break;
                 case 24:
                 case 17:
                 case 10:
                 case 3:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Taitula : Karana.Garija;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Taitula : Library.Karana.Garija;
                     break;
                 case 25:
                 case 18:
                 case 11:
                 case 4:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Vanija : Karana.Visti;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Vanija : Library.Karana.Visti;
                     break;
                 case 26:
                 case 19:
                 case 12:
                 case 5:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Bava : Karana.Balava;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Bava : Library.Karana.Balava;
                     break;
                 case 27:
                 case 20:
                 case 13:
                 case 6:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Kaulava : Karana.Taitula;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Kaulava : Library.Karana.Taitula;
                     break;
                 case 28:
                 case 21:
                 case 14:
                 case 7:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Garija : Karana.Vanija;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Garija : Library.Karana.Vanija;
                     break;
                 case 22:
                 case 15:
                 case 8:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Visti : Karana.Bava;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Visti : Library.Karana.Bava;
                     break;
                 case 29:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Visti : Karana.Sakuna;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Visti : Library.Karana.Sakuna;
                     break;
                 case 30:
-                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Karana.Chatushpada : Karana.Naga;
+                    karanaToReturn = lunarDayAlreadyTraversed <= 0.5 ? Library.Karana.Chatushpada : Library.Karana.Naga;
                     break;
 
             }
@@ -439,7 +439,7 @@ namespace VedAstro.Library
         }
 
         [API("SunSign", "", Category.StarsAboveMe)]
-        public static ZodiacSign GetSunSign(Time time)
+        public static ZodiacSign SunSign(Time time)
         {
 
             //get zodiac sign behind the sun
@@ -479,13 +479,13 @@ namespace VedAstro.Library
 
 
                 //get current sun sign
-                var currentSunSign = Calculate.GetSunSign(time);
+                var currentSunSign = Calculate.SunSign(time);
 
                 //if entered time not yet found
                 while (true)
                 {
                     //get the sign at possible entered time
-                    var possibleSunSign = Calculate.GetSunSign(possibleEnteredTime);
+                    var possibleSunSign = Calculate.SunSign(possibleEnteredTime);
 
                     //if possible sign name is same as current sign name, then check if sun is about to enter sign
                     var signNameIsSame = possibleSunSign.GetSignName() == currentSunSign.GetSignName();
@@ -535,7 +535,7 @@ namespace VedAstro.Library
         ///     2. accuracy limit is hit
         ///</summary>
         [API("TimeSunLeavesCurrentSign", "", Category.StarsAboveMe)]
-        public static Time GetTimeSunLeavesCurrentSign(Time time)
+        public static Time TimeSunLeavesCurrentSign(Time time)
         {
 
             //CACHE MECHANISM
@@ -558,13 +558,13 @@ namespace VedAstro.Library
                 var previousPossibleLeavingTime = time;
 
                 //get current sun sign
-                var currentSunSign = Calculate.GetSunSign(time);
+                var currentSunSign = Calculate.SunSign(time);
 
                 //find leaving time
                 while (true)
                 {
                     //get the sign at possible leaving time
-                    var possibleSunSign = Calculate.GetSunSign(possibleLeavingTime);
+                    var possibleSunSign = Calculate.SunSign(possibleLeavingTime);
 
                     //if possible sign name is same as current sign name, then check if sun is about to leave sign
                     var signNameIsSame = possibleSunSign.GetSignName() == currentSunSign.GetSignName();
@@ -2202,7 +2202,7 @@ namespace VedAstro.Library
             return localApparentTimeInJulian;
         }
 
-        public static DateTime GetLocalApparentTime(Time time)
+        public static DateTime LocalApparentTime(Time time)
         {
 
             //CACHE MECHANISM
@@ -2240,9 +2240,9 @@ namespace VedAstro.Library
         /// This method exists mainly for testing internal time calculation of LMT
         /// Important that this method passes the test at all times, so much depends on this
         /// </summary>
-        public static DateTimeOffset GetLocalMeanTime(Time time) => time.GetLmtDateTimeOffset();
+        public static DateTimeOffset LocalMeanTime(Time time) => time.GetLmtDateTimeOffset();
 
-        public static House GetHouse(HouseName houseNumber, Time time)
+        public static House House(HouseName houseNumber, Time time)
         {
 
             //CACHE MECHANISM
@@ -2265,7 +2265,7 @@ namespace VedAstro.Library
         }
 
         [API("Panchaka", "", Category.StarsAboveMe)]
-        public static PanchakaName GetPanchaka(Time time)
+        public static PanchakaName Panchaka(Time time)
         {
             //If the remainder is 1 (mrityu panchakam), it
             // indicates danger; if 2 (agni panchakam), risk from fire; if 4 (raja
@@ -2277,7 +2277,7 @@ namespace VedAstro.Library
             var lunarDateNumber = Calculate.GetLunarDay(time).GetLunarDateNumber();
 
             //get the number of the constellation (from Aswini)
-            var rullingConstellationNumber = Calculate.GetMoonConstellation(time).GetConstellationNumber();
+            var rullingConstellationNumber = Calculate.MoonConstellation(time).GetConstellationNumber();
 
             //Number of weekday
             var weekdayNumber = (int)Calculate.GetDayOfWeek(time);
@@ -2324,7 +2324,7 @@ namespace VedAstro.Library
         }
 
         [API("LordOfWeekday", "", Category.StarsAboveMe)]
-        public static PlanetName GetLordOfWeekday(Time time)
+        public static PlanetName LordOfWeekday(Time time)
         {
             //Sunday Sun
             //Monday Moon
@@ -2353,7 +2353,7 @@ namespace VedAstro.Library
             }
         }
 
-        public static PlanetName GetLordOfWeekday(DayOfWeek weekday)
+        public static PlanetName LordOfWeekday(DayOfWeek weekday)
         {
             //Sunday Sun
             //Monday Moon
@@ -2395,12 +2395,12 @@ namespace VedAstro.Library
         /// before sunrise the next day.
         /// </summary>
         [API("Hora", "A hora is equal to 1/24th part of a day", Category.StarsAboveMe)]
-        public static int GetHoraAtBirth(Time time)
+        public static int HoraAtBirth(Time time)
         {
             TimeSpan hours;
 
             var birthTime = time.GetLmtDateTimeOffset();
-            var sunriseTime = GetSunriseTime(time).GetLmtDateTimeOffset();
+            var sunriseTime = SunriseTime(time).GetLmtDateTimeOffset();
 
             //if birth time is after sunrise, then sunrise time is correct 
             if (birthTime >= sunriseTime)
@@ -2414,7 +2414,7 @@ namespace VedAstro.Library
             {
                 //get sunrise of the previous day
                 var previousDay = new Time(time.GetLmtDateTimeOffset().DateTime.AddDays(-1), time.GetStdDateTimeOffset().Offset, time.GetGeoLocation());
-                sunriseTime = GetSunriseTime(previousDay).GetLmtDateTimeOffset();
+                sunriseTime = SunriseTime(previousDay).GetLmtDateTimeOffset();
 
                 //get hours (hora) passed since sunrise (start of day)
                 hours = birthTime.Subtract(sunriseTime);
@@ -2434,7 +2434,7 @@ namespace VedAstro.Library
 
 
         [API("PlanetHoraSign", "", Category.StarsAboveMe)]
-        public static ZodiacName GetPlanetHoraSign(PlanetName planetName, Time time)
+        public static ZodiacName PlanetHoraSign(PlanetName planetName, Time time)
         {
             //get planet sign
             var planetSign = Calculate.GetPlanetRasiSign(planetName, time);
@@ -2512,7 +2512,7 @@ namespace VedAstro.Library
         /// get sunrise time for that day
         /// </summary>
         [API("Sunrise")]
-        public static Time GetSunriseTime(Time time)
+        public static Time SunriseTime(Time time)
         {
 
             //CACHE MECHANISM
@@ -2569,7 +2569,7 @@ namespace VedAstro.Library
         /// Get actual sunset time for that day at that place
         /// </summary>
         [API("Sunset")]
-        public static Time GetSunsetTime(Time time)
+        public static Time SunsetTime(Time time)
         {
 
             //CACHE MECHANISM
@@ -2633,10 +2633,10 @@ namespace VedAstro.Library
         /// *Center of disk is not actually used for now (future implementation)
         /// </summary>
         [API("LocalNoonTime", "Sun is exactly overhead at location")]
-        public static DateTime GetNoonTime(Time time)
+        public static DateTime NoonTime(Time time)
         {
             //get apparent time
-            var localApparentTime = Calculate.GetLocalApparentTime(time);
+            var localApparentTime = Calculate.LocalApparentTime(time);
             var apparentNoon = new DateTime(localApparentTime.Year, localApparentTime.Month, localApparentTime.Day, 12, 0, 0);
 
             return apparentNoon;
@@ -2711,7 +2711,7 @@ namespace VedAstro.Library
         /// min = lowest possible value
         /// </summary>
         [API("PlanetSthanaBalaNeutralPoint", "", Category.Astronomical)]
-        public static double GetPlanetSthanaBalaNeutralPoint(PlanetName planet)
+        public static double PlanetSthanaBalaNeutralPoint(PlanetName planet)
         {
             //no calculation for rahu and ketu here
             var isRahu = planet.Name == PlanetName.PlanetNameEnum.Rahu;
@@ -2760,7 +2760,7 @@ namespace VedAstro.Library
         /// min = lowest possible value
         /// </summary>
         [API("ShadvargaBalaNeutralPoint")]
-        public static double GetPlanetShadvargaBalaNeutralPoint(PlanetName planet)
+        public static double PlanetShadvargaBalaNeutralPoint(PlanetName planet)
         {
 
             //no calculation for rahu and ketu here
@@ -2771,7 +2771,7 @@ namespace VedAstro.Library
 
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey(nameof(GetPlanetShadvargaBalaNeutralPoint), planet), _getPlanetShadvargaBalaNeutralPoint);
+            return CacheManager.GetCache(new CacheKey(nameof(PlanetShadvargaBalaNeutralPoint), planet), _getPlanetShadvargaBalaNeutralPoint);
 
 
 
@@ -3024,7 +3024,7 @@ namespace VedAstro.Library
         /// then the 4th from Taurus, viz., Leo becomes Arudha Lagna.
         /// </summary>
         [API("ArudhaLagna", "bearing on the financial status", Category.StarsAboveMe)]
-        public static ZodiacName GetArudhaLagnaSign(Time time)
+        public static ZodiacName ArudhaLagnaSign(Time time)
         {
             //get janma lagna
             var janmaLagna = Calculate.GetHouseSignName(HouseName.House1, time);
@@ -3189,10 +3189,10 @@ namespace VedAstro.Library
         }
 
         [API("LunarMonth", "name of vedic month", Category.StarsAboveMe)]
-        public static LunarMonth GetLunarMonth(Time time)
+        public static LunarMonth LunarMonth(Time time)
         {
 
-            return LunarMonth.Empty;
+            return Library.LunarMonth.Empty;
 
             //TODO NEEDS WORK
             throw new NotImplementedException();
@@ -3202,12 +3202,12 @@ namespace VedAstro.Library
             var fullMoonTime = getFullMoonTime();
 
             //sunrise
-            var x = GetSunriseTime(time);
-            var y = GetMoonConstellation(x).GetConstellationName();
+            var x = SunriseTime(time);
+            var y = MoonConstellation(x).GetConstellationName();
 
         Calculate:
             //get the constellation behind the moon
-            var constellation = GetMoonConstellation(fullMoonTime).GetConstellationName();
+            var constellation = MoonConstellation(fullMoonTime).GetConstellationName();
 
             //go back one constellation
             //constellation = constellation - 1;
@@ -3215,65 +3215,65 @@ namespace VedAstro.Library
             switch (constellation)
             {
                 case ConstellationName.Aswini:
-                    return LunarMonth.Aswijam;
+                    return Library.LunarMonth.Aswijam;
                     break;
                 case ConstellationName.Bharani:
                     break;
                 case ConstellationName.Krithika:
-                    return LunarMonth.Karthikam;
+                    return Library.LunarMonth.Karthikam;
                     break;
                 case ConstellationName.Rohini:
                     break;
                 case ConstellationName.Mrigasira:
                 case ConstellationName.Aridra:
-                    return LunarMonth.Margasiram;
+                    return Library.LunarMonth.Margasiram;
                     break;
                 case ConstellationName.Punarvasu:
                     break;
                 case ConstellationName.Pushyami:
-                    return LunarMonth.Pooshiam;
+                    return Library.LunarMonth.Pooshiam;
                     break;
                 case ConstellationName.Aslesha:
                     break;
                 case ConstellationName.Makha:
-                    return LunarMonth.Magham;
+                    return Library.LunarMonth.Magham;
                     break;
                 case ConstellationName.Pubba:
-                    return LunarMonth.Phalgunam;
+                    return Library.LunarMonth.Phalgunam;
                     break;
                 case ConstellationName.Uttara:
                     break;
                 case ConstellationName.Hasta:
                     break;
                 case ConstellationName.Chitta:
-                    return LunarMonth.Chitram;
+                    return Library.LunarMonth.Chitram;
                     break;
                 case ConstellationName.Swathi:
                     break;
                 case ConstellationName.Vishhaka:
-                    return LunarMonth.Visakham;
+                    return Library.LunarMonth.Visakham;
                     break;
                 case ConstellationName.Anuradha:
                     break;
                 case ConstellationName.Jyesta:
-                    return LunarMonth.Jaistam;
+                    return Library.LunarMonth.Jaistam;
                     break;
                 case ConstellationName.Moola:
                     break;
                 case ConstellationName.Poorvashada:
-                    return LunarMonth.Ashadam;
+                    return Library.LunarMonth.Ashadam;
                     break;
                 case ConstellationName.Uttarashada:
                     break;
                 case ConstellationName.Sravana:
-                    return LunarMonth.Sravanam;
+                    return Library.LunarMonth.Sravanam;
                     break;
                 case ConstellationName.Dhanishta:
                     break;
                 case ConstellationName.Satabhisha:
                     break;
                 case ConstellationName.Poorvabhadra:
-                    return LunarMonth.Bhadrapadam;
+                    return Library.LunarMonth.Bhadrapadam;
                 case ConstellationName.Uttarabhadra:
                     break;
                 case ConstellationName.Revathi:
@@ -3419,7 +3419,7 @@ namespace VedAstro.Library
         /// Data from pg 80 of Key-planets for Each Sign in Hindu Predictive Astrology
         /// TODO meant to determine nature of antram
         /// </summary>
-        public static EventNature GetPlanetAntaramNature(Person person, PlanetName planet)
+        public static EventNature PlanetAntaramNature(Person person, PlanetName planet)
         {
             //todo account for rahu & ketu
             //rahu & ketu not sure for now, just return neutral
@@ -3912,7 +3912,7 @@ namespace VedAstro.Library
         /// good = 1, bad = -1, neutral = 0
         /// specially made method for life chart summary
         /// </summary>
-        public static int GetHouseNatureScore(Time personBirthTime, HouseName inputHouse)
+        public static int HouseNatureScore(Time personBirthTime, HouseName inputHouse)
         {
             //if no house then no score
             if (inputHouse == HouseName.Empty)
@@ -3939,7 +3939,7 @@ namespace VedAstro.Library
             }
         }
 
-        public static double GetHouseNatureScoreMK4(Time personBirthTime, HouseName inputHouse)
+        public static double HouseNatureScoreMK4(Time personBirthTime, HouseName inputHouse)
         {
             //if no house then no score
             if (inputHouse == HouseName.Empty)
@@ -3962,7 +3962,7 @@ namespace VedAstro.Library
             return rangeBasedScore;
         }
         
-        public static double GetPlanetNatureScoreMK4(Time personBirthTime, PlanetName inputPlanet)
+        public static double PlanetNatureScoreMK4(Time personBirthTime, PlanetName inputPlanet)
         {
             //if no house then no score
             if (inputPlanet == PlanetName.Empty) { return 0; }
@@ -4005,7 +4005,7 @@ namespace VedAstro.Library
         /// good = 1, bad = -1, neutral = 0
         /// specially made method for life chart summary
         /// </summary>
-        public static int GetPlanetNatureScore(Time personBirthTime, PlanetName inputPlanet)
+        public static int PlanetNatureScore(Time personBirthTime, PlanetName inputPlanet)
         {
             //get house score
             var planetStrength = GetPlanetShadbalaPinda(inputPlanet, personBirthTime).ToDouble();
@@ -4039,7 +4039,7 @@ namespace VedAstro.Library
         /// Get a person's varna or color (character)
         /// A person's varna can be observed in real life
         /// </summary>
-        public static Varna GetBirthVarna(Time birthTime)
+        public static Varna BirthVarna(Time birthTime)
         {
             //get ruling sign
             var ruleSign = Calculate.GetPlanetRasiSign(PlanetName.Moon, birthTime).GetSignName();
@@ -4089,11 +4089,11 @@ namespace VedAstro.Library
         /// if planet has more Ishta than good = +1
         /// else if more Kashta than bad = -1
         /// </summary>
-        public static double GetPlanetIshtaKashtaScore(PlanetName planet, Time birthTime)
+        public static double PlanetIshtaKashtaScore(PlanetName planet, Time birthTime)
         {
             var ishtaScore = GetPlanetIshtaScore(planet, birthTime);
 
-            var kashtaScore = GetPlanetKashtaScore(planet, birthTime);
+            var kashtaScore = PlanetKashtaScore(planet, birthTime);
 
             //if more than good, else bad
             var ishtaMore = ishtaScore > kashtaScore;
@@ -4101,7 +4101,7 @@ namespace VedAstro.Library
             return ishtaMore ? 1 : -1;
         }
 
-        private static double GetPlanetKashtaScore(PlanetName planet, Time birthTime)
+        private static double PlanetKashtaScore(PlanetName planet, Time birthTime)
         {
             throw new NotImplementedException();
         }

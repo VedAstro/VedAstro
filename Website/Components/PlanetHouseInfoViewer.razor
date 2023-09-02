@@ -164,7 +164,7 @@
 
             var _planetCurrentNavamsaSign = planetNavamsaSign.ToString();
 
-            var _planetCurrentConstellation = Calculate.GetPlanetConstellation(_time, planetName).ToString();
+            var _planetCurrentConstellation = Calculate.PlanetConstellation(_time, planetName).ToString();
 
             var _currentHouseRelation = isRahuKetu ? 0 : Calculate.GetPlanetRelationshipWithHouse((HouseName)_planetCurrentHouse, planetName, _time);
 

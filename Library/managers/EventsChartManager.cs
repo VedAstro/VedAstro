@@ -1921,7 +1921,7 @@ namespace VedAstro.Library
                 var dasaMainPlanet = foundEvent.GetRelatedPlanet()[0];
 
                 //get good or bad based on Ishta and Kashta, if former is more than good
-                var score = Calculate.GetPlanetIshtaKashtaScore(dasaMainPlanet, person.BirthTime);
+                var score = Calculate.PlanetIshtaKashtaScore(dasaMainPlanet, person.BirthTime);
 
                 //-1 bad, +1 good, no neutral
                 return score;
@@ -1933,12 +1933,12 @@ namespace VedAstro.Library
                 //get house that the event is related to
                 var relatedHouse = foundEvent.GetRelatedHouse().FirstOrDefault(); //for now assume only one
                 //get nature of house based on shadbala
-                var houseNatureScore = Calculate.GetHouseNatureScore(person.BirthTime, relatedHouse);
+                var houseNatureScore = Calculate.HouseNatureScore(person.BirthTime, relatedHouse);
 
                 //get houses and planet that the event is related to
                 var relatedPlanet = foundEvent.GetRelatedPlanet().FirstOrDefault(); //for now assume only one
                 //get nature of planet based on shadbala
-                var planetNatureScore = Calculate.GetPlanetNatureScore(person.BirthTime, relatedPlanet);
+                var planetNatureScore = Calculate.PlanetNatureScore(person.BirthTime, relatedPlanet);
 
                 var final = 0;
                 final += houseNatureScore;
@@ -1961,7 +1961,7 @@ namespace VedAstro.Library
                 double planetNatureScore = 0;
                 foreach (var relatedPlanet in foundEvent.GetRelatedPlanet())
                 {
-                    planetNatureScore = Calculate.GetPlanetNatureScoreMK4(person.BirthTime, relatedPlanet);
+                    planetNatureScore = Calculate.PlanetNatureScoreMK4(person.BirthTime, relatedPlanet);
                 }
 
                 var final = 0.0;

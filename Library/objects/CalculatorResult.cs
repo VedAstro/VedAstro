@@ -91,7 +91,7 @@ namespace VedAstro.Library
             var newCalcResult = new CalculatorResult();
             newCalcResult.Occuring = occuring;
             newCalcResult.RelatedBody.RelatedHouses.AddRange(houseNames.ToList());
-            var lordNames = AstronomicalCalculator.GetLordOfHouseList(newCalcResult.RelatedBody.RelatedHouses, time);
+            var lordNames = Calculate.GetLordOfHouseList(newCalcResult.RelatedBody.RelatedHouses, time);
             newCalcResult.RelatedBody.RelatedPlanets.AddRange(lordNames.ToList());
 
             return newCalcResult;
@@ -173,7 +173,7 @@ namespace VedAstro.Library
             var newCalcResult = new CalculatorResult();
             newCalcResult.Occuring = occuring;
             newCalcResult.RelatedBody.RelatedHouses.Add(houseNumber);
-            var lord = AstronomicalCalculator.GetLordOfHouse(houseNumber, time);
+            var lord = Calculate.GetLordOfHouse(houseNumber, time);
             newCalcResult.RelatedBody.RelatedPlanets.Add(lord);
             return newCalcResult;
         }

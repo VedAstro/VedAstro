@@ -139,8 +139,8 @@ else
 
         //--------------------------------
         //1 strongest planet in sign
-        var strongestPlanet = AstronomicalCalculator.GetAllPlanetOrderedByStrength(_birthTime)[0];
-        var strongestPlanetSign = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet, _birthTime).GetSignName();
+        var strongestPlanet = Calculate.GetAllPlanetOrderedByStrength(_birthTime)[0];
+        var strongestPlanetSign = Calculate.GetPlanetRasiSign(strongestPlanet, _birthTime).GetSignName();
         var allPredictions = await Tools.GetHoroscopePrediction(person.BirthTime, AppData.URL.HoroscopeDataListXml);
 
         //pick out planet predictions based on related body of planet and sign
@@ -157,8 +157,8 @@ else
 
         //--------------------------------
         //2 2nd strongest planet in sign
-        var strongestPlanet2 = AstronomicalCalculator.GetAllPlanetOrderedByStrength(_birthTime)[1];
-        var strongestPlanetSign2 = AstronomicalCalculator.GetPlanetRasiSign(strongestPlanet2, _birthTime).GetSignName();
+        var strongestPlanet2 = Calculate.GetAllPlanetOrderedByStrength(_birthTime)[1];
+        var strongestPlanetSign2 = Calculate.GetPlanetRasiSign(strongestPlanet2, _birthTime).GetSignName();
 
         //pick out planet predictions based on related body of planet and sign
         var strPlanetPredicts2 = allPredictions.FindAll(x =>
@@ -175,7 +175,7 @@ else
 
         //--------------------------------
         //2 2nd strongest House
-        var strongestHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(_birthTime)[0];
+        var strongestHouse = Calculate.GetAllHousesOrderedByStrength(_birthTime)[0];
         //var strongestHouseSign = AstronomicalCalculator.GetHouseSignName((int)strongestHouse, _birthTime);
 
         //pick out planet predictions based on related body of planet and sign
@@ -193,9 +193,9 @@ else
         //---------------------------------
         //3 strongest house
         //source of happiness and source of sadness
-        var weakestHouse = AstronomicalCalculator.GetAllHousesOrderedByStrength(_birthTime)[11];
-        var getHouseTagsGood = AstronomicalCalculator.GetHouseTags(strongestHouse);
-        var getHouseTagsBad = AstronomicalCalculator.GetHouseTags(weakestHouse);
+        var weakestHouse = Calculate.GetAllHousesOrderedByStrength(_birthTime)[11];
+        var getHouseTagsGood = Calculate.GetHouseTags(strongestHouse);
+        var getHouseTagsBad = Calculate.GetHouseTags(weakestHouse);
 
         //add prediction to list
         predictionList.Add($"Source of Good :- {getHouseTagsGood}");
@@ -204,7 +204,7 @@ else
 
         //---------------------------------
         //ASTRAL BODY NATURE (based on yoni animal)
-        var x = AstronomicalCalculator.GetAstralBodyPrediction(person);
+        var x = Calculate.GetAstralBodyPrediction(person);
         predictionList.Add(x);
 
 

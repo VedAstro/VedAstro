@@ -111,7 +111,7 @@
 
         //calculate STD time
         var lmtDateTime = DateTimeOffset.ParseExact(_lmtInput, Time.DateTimeFormatNoTimezone, null);
-        var std = AstronomicalCalculator.LmtToStd(lmtDateTime, offsetTimeSpan);
+        var std = Calculate.LmtToStd(lmtDateTime, offsetTimeSpan);
 
         //update view with STD time
         _stdString2 = std.ToString(Time.DateTimeFormat);

@@ -157,7 +157,7 @@ namespace VedAstro.Library
 
             //get all calculators that can work with the inputed data
             //note: does not account for param order, only count and type
-            var calculatorClass = typeof(AstronomicalCalculator);
+            var calculatorClass = typeof(Calculate);
             var matchedCalculators =
                 from calculatorInfo in calculatorClass.GetMethods()
                 let parameter = calculatorInfo.GetParameters()

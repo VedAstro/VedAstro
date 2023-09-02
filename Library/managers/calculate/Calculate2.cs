@@ -19,7 +19,7 @@ using System.Reflection;
 namespace VedAstro.Library
 {
 
-    public static partial class AstronomicalCalculator
+    public static partial class Calculate
     {
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace VedAstro.Library
         {
 
             //CACHE MECHANISM
-            return CacheManager.GetCache(new CacheKey("GetAyanamsa", time, AstronomicalCalculator.YearOfCoincidence), _getAyanamsa);
+            return CacheManager.GetCache(new CacheKey("GetAyanamsa", time, Calculate.YearOfCoincidence), _getAyanamsa);
 
 
             //UNDERLYING FUNCTION
@@ -61,7 +61,7 @@ namespace VedAstro.Library
                 //than the earth was at the same equinoctial moment of the previous year.
                 const double precessionRate = 50.3333333333;
 
-                var ayanamsaSecondsRaw = (year - AstronomicalCalculator.YearOfCoincidence) * precessionRate;
+                var ayanamsaSecondsRaw = (year - Calculate.YearOfCoincidence) * precessionRate;
                 var returnValue = new Angle(seconds: (long)(Math.Round(ayanamsaSecondsRaw)));
 
                 return returnValue;
@@ -422,7 +422,7 @@ namespace VedAstro.Library
                 //TODO Change to new day system
                 //TODO make test first
 
-                var sunRise = AstronomicalCalculator.GetSunriseTime(time);
+                var sunRise = Calculate.GetSunriseTime(time);
 
                 //get week day name in string
                 var dayOfWeekNameInString = time.GetLmtDateTimeOffset().DayOfWeek.ToString();
@@ -1510,13 +1510,13 @@ namespace VedAstro.Library
         public static int GetGocharaHouse(Time birthTime, Time currentTime, PlanetName planet)
         {
             //get moon sign at birth (janma rasi)
-            var janmaSign = AstronomicalCalculator.GetMoonSignName(birthTime);
+            var janmaSign = Calculate.GetMoonSignName(birthTime);
 
             //get planet sign at input time
-            var planetSign = AstronomicalCalculator.GetPlanetRasiSign(planet, currentTime).GetSignName();
+            var planetSign = Calculate.GetPlanetRasiSign(planet, currentTime).GetSignName();
 
             //count from janma to sign planet is in
-            var count = AstronomicalCalculator.CountFromSignToSign(janmaSign, planetSign);
+            var count = Calculate.CountFromSignToSign(janmaSign, planetSign);
 
             return count;
         }
@@ -1759,10 +1759,10 @@ namespace VedAstro.Library
         public static bool IsGocharaOccurring(Time birthTime, Time time, PlanetName planet, int gocharaHouse)
         {
             //check if planet is in the specified gochara house
-            var planetGocharaMatch = AstronomicalCalculator.GetGocharaHouse(birthTime, time, planet) == gocharaHouse;
+            var planetGocharaMatch = Calculate.GetGocharaHouse(birthTime, time, planet) == gocharaHouse;
 
             //check if there is any planet obstructing this transit prediction via Vedhasthana
-            var obstructionNotFound = !AstronomicalCalculator.IsGocharaObstructed(planet, gocharaHouse, birthTime, time);
+            var obstructionNotFound = !Calculate.IsGocharaObstructed(planet, gocharaHouse, birthTime, time);
 
             //occuring if all conditions met
             var occuring = planetGocharaMatch && obstructionNotFound;
@@ -1777,10 +1777,10 @@ namespace VedAstro.Library
         public static bool IsPlanetGocharaBindu(Time birthTime, Time nowTime, PlanetName planet, int bindu)
         {
             //house the planet is transiting now
-            var gocharaHouse = AstronomicalCalculator.GetGocharaHouse(birthTime, nowTime, planet);
+            var gocharaHouse = Calculate.GetGocharaHouse(birthTime, nowTime, planet);
 
             //check if there is any planet obstructing this transit prediction via Vedhasthana
-            var obstructionFound = AstronomicalCalculator.IsGocharaObstructed(planet, gocharaHouse, birthTime, nowTime);
+            var obstructionFound = Calculate.IsGocharaObstructed(planet, gocharaHouse, birthTime, nowTime);
 
             //if obstructed end here
             if (obstructionFound) { return false; }
@@ -1789,7 +1789,7 @@ namespace VedAstro.Library
             var gocharaSign = GetHouseSignName((HouseName)gocharaHouse, nowTime);
 
             //get planet's current bindu
-            var planetBindu = AstronomicalCalculator.GetPlanetAshtakvargaBindu(planet, gocharaSign, nowTime);
+            var planetBindu = Calculate.GetPlanetAshtakvargaBindu(planet, gocharaSign, nowTime);
 
             //occuring if bindu is match
             var occuring = planetBindu == bindu;

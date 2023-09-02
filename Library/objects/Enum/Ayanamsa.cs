@@ -16,17 +16,25 @@ namespace VedAstro.Library
         /// Aries took place in 499 A.D. (12000-11501= 499 A.D.)
         /// </summary>
         Yukteshwar = 499,
+        
         /// <summary>
         /// B.V.Raman accepted 397 AD as the Zero Ayanamsa Year 
         /// </summary>
         Raman = 397,
+        
         /// <summary>
         /// N.C.Lahiri took 285 AD as the Zero Ayanamsa Year 
         /// </summary>
         Lahiri = 285,
+        
         /// <summary>
         ///  K.S.Krishnamurti fixed 291 AD as the Zero Ayanamsa Year 
         /// </summary>
-        Krishnamurti = 291
+        Krishnamurti = 291,
+
+        /// <summary>
+        /// Western astrology does not use ayanamsa, set year 0
+        /// </summary>
+        Western = 0
     }
 }

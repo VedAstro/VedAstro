@@ -1,4 +1,4 @@
-﻿@using VedAstro.Library
+@using VedAstro.Library
 @attribute [Route(PageRoute.APIBuilder)]
 
 <PageTitle>Easy Open API | VedAstro</PageTitle>
@@ -42,11 +42,12 @@
 					<div id="AyanamsaInputHolder" style="display: none">
 						<div class="input-group mb-2">
 							<label style="width:@GR.W134px;" class="input-group-text"><Icon ExtraClass="me-2" IconName="solar:stars-line-broken" /> Ayanamsa</label>
-							<select class="form-select">
-								<option value="Raman" selected>Raman</option>
-								<option value="Lahiri">Lahiri</option>
-								<option value="Krishnamurti">Krishnamurti</option>
-								<option value="Yukteshwar">Yukteshwar</option>
+							<select @bind="_selectedAyanamsa" class="form-select">
+								@foreach (var ayanamsa in Enum.GetValues(typeof(Ayanamsa)))
+								{
+									<option value="@ayanamsa">@ayanamsa</option>
+
+								}
 								<option @onclick="@(() => _jsRuntime.FunFeaturePopUp("Custom Ayanamsa"))" value="Custom" disabled>Custom</option>
 							</select>
 						</div>

@@ -22,45 +22,46 @@ KEEP IT REAL
 @using System.Collections
 @using FuzzySharp
 
+<div class="hstack">
+	@*Component shows combo box with people list*@
+	<div class="btn-group" style="width: @GR.W412px;">
+		@* DROPDOWN BUTTON *@
+		<button type="button" @onclick="OnClickTrigger" style="text-align-last: center;" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown">
+			@FormattedMethodName
+		</button>
+		@* DROPDOWN SECTION *@
+		<ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
 
-@*Component shows combo box with people list*@
-<div class="btn-group" style="width: @GR.W412px;">
+			@* SEARCH *@
+			<div class="hstack gap-2">
+				<input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
+				<Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.APICallList))" />
+			</div>
 
-	@* DROPDOWN BUTTON *@
-	<button type="button" @onclick="OnClickTrigger" style="text-align-last: center;" class="btn dropdown-toggle btn-outline-primary text-start" data-bs-toggle="dropdown" aria-expanded="false">
-		@FormattedMethodName
-	</button>
-
-	@* DROPDOWN SECTION *@
-	<ul class="dropdown-menu ps-2 pe-3" style="height: @GR.W412px; overflow-y: scroll; overflow-x: clip;">
-
-		@* SEARCH *@
-		<div class="hstack gap-2">
-			<input @ref="_searchInput" @onkeyup="OnKeyUpSearchBar" type="text" class="form-control ms-0 mb-2 ps-3" placeholder="Search...">
-			<Icon ExtraClass="mb-2" ExtraStyle="cursor: pointer;" TooltipText="View List" IconName="pepicons-pop:list" OnClickCallback="@(() => AppData.Go(PageRoute.APICallList))" />
-		</div>
-
-		@* LIST OF PEOPLE *@
-		@if (IsReady)
-		{
-			@foreach (var apiMethod in MethodListFiltered)
+			@* LIST OF PEOPLE *@
+			@if (IsReady)
 			{
-				<li class="dropdown-item" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">@(Format.FormatName(apiMethod.Name))</li>
+				@foreach (var apiMethod in MethodListFiltered)
+				{
+					<li class="dropdown-item" @onclick="@(() => OnClickMethodName(apiMethod))" style="cursor: pointer;">@(Format.FormatName(apiMethod.Name))</li>
+				}
 			}
-		}
 			@* LOADING ICON *@
 			@* loading icon when list is being made, no loading popup because reduces user UX *@
-		else
-		{
-			<div class="d-flex flex-column align-items-center mt-5">
-				<strong>Loading...</strong>
-				<div class="spinner-border" role="status" aria-hidden="true"></div>
-			</div>
-		}
+			else
+			{
+				<div class="d-flex flex-column align-items-center mt-5">
+					<strong>Loading...</strong>
+					<div class="spinner-border" role="status" aria-hidden="true"></div>
+				</div>
+			}
 
 
-	</ul>
+		</ul>
+	</div>
 
+	@*ADD NEW FUNCTION ICON*@
+	<IconButton ExtraClass="ms-2" TooltipText="Add New API" IconName="ic:round-add-box" OnClickCallback="OnClickAddNewApi" />
 </div>
 
 
@@ -186,5 +187,21 @@ KEEP IT REAL
 	/// </summary>
 	public string GetSelectedMethodName() => SelectedMethod.Name ?? "";
 
+
+	private async Task OnClickAddNewApi()
+	{
+		//get suggestion from user via js sweet alert lib
+		var newApiDesc = await AppData.JsRuntime.PopupTextInput("Add new API Call", "textarea", "name or describe");
+
+		//loading box show
+		await _jsRuntime.ShowLoading();
+
+		//add message to API Messages book
+		await WebsiteTools.SendMailToAPI(AppData.CurrentUser.Id, $"Add new API : {newApiDesc}");
+
+		//say thank you and will get back
+		await _jsRuntime.ShowAlert("success", "Thank you", "stay tuned in our Facebook for updates");
+
+	}
 
 }

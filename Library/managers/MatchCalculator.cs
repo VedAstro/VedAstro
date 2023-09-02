@@ -293,8 +293,8 @@ namespace VedAstro.Library
             // promotes well-being and increases longevity.
 
             //get ruling sign
-            var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime);
-            var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime);
+            var maleConstellation = Calculate.MoonConstellation(male.BirthTime);
+            var femaleConstellation = Calculate.MoonConstellation(female.BirthTime);
 
             //show extra info
             prediction.MaleInfo = maleConstellation.ToString();
@@ -326,8 +326,8 @@ namespace VedAstro.Library
 
 
             //get constellation
-            var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime);
-            var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime);
+            var maleConstellation = Calculate.MoonConstellation(male.BirthTime);
+            var femaleConstellation = Calculate.MoonConstellation(female.BirthTime);
 
             //get nadi
             var maleNadi = getNadi(maleConstellation.GetConstellationName());
@@ -430,8 +430,8 @@ namespace VedAstro.Library
 
 
             //get constellation
-            var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime);
-            var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime);
+            var maleConstellation = Calculate.MoonConstellation(male.BirthTime);
+            var femaleConstellation = Calculate.MoonConstellation(female.BirthTime);
 
             //get guna
             var maleGuna = getGuna(maleConstellation.GetConstellationName());
@@ -568,10 +568,10 @@ namespace VedAstro.Library
 
 
             //copy info into prediction data
-            var maleGrade = Calculate.GetBirthVarna(male.BirthTime);
+            var maleGrade = Calculate.BirthVarna(male.BirthTime);
             prediction.MaleInfo = Format.FormatName(maleGrade.ToString());
 
-            var femaleGrade = Calculate.GetBirthVarna(female.BirthTime);
+            var femaleGrade = Calculate.BirthVarna(female.BirthTime);
             prediction.FemaleInfo = Format.FormatName(femaleGrade.ToString());
 
 
@@ -607,8 +607,8 @@ namespace VedAstro.Library
 
             //1. Get Details
 
-            var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime).GetConstellationName();
-            var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime).GetConstellationName();
+            var maleConstellation = Calculate.MoonConstellation(male.BirthTime).GetConstellationName();
+            var femaleConstellation = Calculate.MoonConstellation(female.BirthTime).GetConstellationName();
 
 
             //get group names
@@ -757,8 +757,8 @@ namespace VedAstro.Library
             // boy and girl whos Janma Nakshatras belong to the same pair unless the
             // are other relieving factors.
 
-            var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime).GetConstellationName();
-            var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime).GetConstellationName();
+            var maleConstellation = Calculate.MoonConstellation(male.BirthTime).GetConstellationName();
+            var femaleConstellation = Calculate.MoonConstellation(female.BirthTime).GetConstellationName();
 
             //show user
             prediction.MaleInfo = maleConstellation.ToString();
@@ -837,8 +837,8 @@ namespace VedAstro.Library
             };
 
 
-            var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime).GetConstellationName();
-            var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime).GetConstellationName();
+            var maleConstellation = Calculate.MoonConstellation(male.BirthTime).GetConstellationName();
+            var femaleConstellation = Calculate.MoonConstellation(female.BirthTime).GetConstellationName();
 
 
             //get group names
@@ -1346,8 +1346,8 @@ namespace VedAstro.Library
             if (maleRuleSign == femaleRuleSign)
             {
                 //get male & female constellation number
-                var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime).GetConstellationNumber();
-                var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime).GetConstellationNumber();
+                var maleConstellation = Calculate.MoonConstellation(male.BirthTime).GetConstellationNumber();
+                var femaleConstellation = Calculate.MoonConstellation(female.BirthTime).GetConstellationNumber();
 
                 //male constellation number should precede (lower number)
                 if (maleConstellation < femaleConstellation)
@@ -1429,8 +1429,8 @@ namespace VedAstro.Library
             // the 9th from that of the girl. According to some authorities the distance
             // should be more than 7 constellations.
             //get ruling sign
-            var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime);
-            var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime);
+            var maleConstellation = Calculate.MoonConstellation(male.BirthTime);
+            var femaleConstellation = Calculate.MoonConstellation(female.BirthTime);
 
             //show user
             prediction.MaleInfo = maleConstellation.ToString();
@@ -1886,8 +1886,8 @@ namespace VedAstro.Library
             };
 
             //get female constellation
-            var femaleConstellation = Calculate.GetMoonConstellation(female.BirthTime);
-            var maleConstellation = Calculate.GetMoonConstellation(male.BirthTime);
+            var femaleConstellation = Calculate.MoonConstellation(female.BirthTime);
+            var maleConstellation = Calculate.MoonConstellation(male.BirthTime);
 
             //Moola (first quarter) for husband's father;
             //the boy or girl born in the first quarter of Moola is to be

@@ -383,7 +383,7 @@ namespace VedAstro.Library
 
             //get all the houses located in these signs
             var housesAspected = new List<HouseName>();
-            foreach (var house in House.AllHouses)
+            foreach (var house in Library.House.AllHouses)
             {
                 //get sign of house
                 var houseSign = Calculate.GetHouseSignName(house, time);
@@ -616,7 +616,7 @@ namespace VedAstro.Library
                 var houseStrengthList = new Dictionary<double, HouseName>();
 
                 //create a list with planet names & its strength (unsorted)
-                foreach (var house in House.AllHouses)
+                foreach (var house in Library.House.AllHouses)
                 {
                     //get house strength
                     var strength = GetHouseStrength(house, time).ToRupa();
@@ -1248,7 +1248,7 @@ namespace VedAstro.Library
                 }
 
                 //get planet hora
-                var planetHora = Calculate.GetPlanetHoraSign(planetName, time);
+                var planetHora = Calculate.PlanetHoraSign(planetName, time);
                 var horaSignRelationship = Calculate.GetPlanetRelationshipWithSign(planetName, planetHora, time);
                 //add planet hora relationship to list
                 planetSignRelationshipList.Add(horaSignRelationship);
@@ -1393,7 +1393,7 @@ namespace VedAstro.Library
 
                 //2.
                 //get planet hora
-                var planetHora = Calculate.GetPlanetHoraSign(planetName, time);
+                var planetHora = Calculate.PlanetHoraSign(planetName, time);
                 var horaSignRelationship = Calculate.GetPlanetRelationshipWithSign(planetName, planetHora, time);
                 //add planet hora relationship to list
                 planetSignRelationshipList.Add(horaSignRelationship);
@@ -1504,7 +1504,7 @@ namespace VedAstro.Library
 
             //Note: To determine if shadvarga bala value is strong or weak
             //a neutral point is set, anything above is strong & below is weak
-            var neutralPoint = Calculate.GetPlanetShadvargaBalaNeutralPoint(planet);
+            var neutralPoint = Calculate.PlanetShadvargaBalaNeutralPoint(planet);
 
             //if above neutral number, is strong else it is weak
             return planetBala > 140;
@@ -2091,7 +2091,7 @@ namespace VedAstro.Library
 
                 //ascertain the number of hours elapsed from sunrise to birth
                 //This shows the number of horas passed.
-                var hora = Calculate.GetHoraAtBirth(time);
+                var hora = Calculate.HoraAtBirth(time);
 
                 //get lord of hora (hour)
                 var lord = Calculate.GetLordOfHora(hora, birthWeekday);
@@ -2168,7 +2168,7 @@ namespace VedAstro.Library
             //as his Varabala.
 
             //calculate day lord
-            PlanetName dayLord = Calculate.GetLordOfWeekday(time);
+            PlanetName dayLord = Calculate.LordOfWeekday(time);
 
             //if inputed planet is day lord than 45 Shashtiamsas
             if (dayLord == planetName) { return new Shashtiamsa(45); }
@@ -2228,10 +2228,10 @@ namespace VedAstro.Library
 
 
                 //Abdadbipat : the planet that rules over the weekday on which the year begins (hindu year)
-                yearLord = Calculate.GetLordOfWeekday(yearWeekday);
+                yearLord = Calculate.LordOfWeekday(yearWeekday);
 
                 //Masadhipath : The planet that rules the weekday of the commencement of the month of the birth
-                monthLord = Calculate.GetLordOfWeekday(monthWeekday);
+                monthLord = Calculate.LordOfWeekday(monthWeekday);
 
                 //package year & month lord together & return
                 return new { YearLord = yearLord, MonthLord = monthLord };
@@ -2272,13 +2272,13 @@ namespace VedAstro.Library
         {
             PlanetName ret = PlanetName.Jupiter;
 
-            var sunsetTime = Calculate.GetSunsetTime(time);
+            var sunsetTime = Calculate.SunsetTime(time);
 
             if (IsDayBirth(time))
             {
                 //find out which part of the day birth took place
 
-                var sunriseTime = Calculate.GetSunriseTime(time);
+                var sunriseTime = Calculate.SunriseTime(time);
 
                 //substraction should always return a positive number, since sunset is always after sunrise
                 double lengthHours = (sunsetTime.Subtract(sunriseTime).TotalHours) / 3;
@@ -2295,7 +2295,7 @@ namespace VedAstro.Library
             {
                 //get sunrise time at on next day to get duration of the night
                 var nextDayTime = time.AddHours(24);
-                var nextDaySunrise = Calculate.GetSunriseTime(nextDayTime);
+                var nextDaySunrise = Calculate.SunriseTime(nextDayTime);
 
                 double lengthHours = (nextDaySunrise.Subtract(sunsetTime).TotalHours) / 3;
                 double offset = time.Subtract(sunsetTime).TotalHours;
@@ -2362,8 +2362,8 @@ namespace VedAstro.Library
         public static bool IsDayBirth(Time time)
         {
             //get sunrise & sunset times
-            var sunrise = Calculate.GetSunriseTime(time).GetLmtDateTimeOffset();
-            var sunset = Calculate.GetSunsetTime(time).GetLmtDateTimeOffset();
+            var sunrise = Calculate.SunriseTime(time).GetLmtDateTimeOffset();
+            var sunset = Calculate.SunsetTime(time).GetLmtDateTimeOffset();
             var checkingTime = time.GetLmtDateTimeOffset();
 
             //if time is after sunrise & before sunset, than it is during the day
@@ -2480,7 +2480,7 @@ namespace VedAstro.Library
 
 
             //get local apparent time
-            var localApparentTime = Calculate.GetLocalApparentTime(time);
+            var localApparentTime = Calculate.LocalApparentTime(time);
 
             //convert birth time (reckoned from midnight) into degrees at 15 degrees per hour
             var hour = localApparentTime.Hour;
@@ -2552,28 +2552,28 @@ namespace VedAstro.Library
             //subtract the longitude of the 4th house from the longitudes of the Sun and Mars.
             if (planetName == PlanetName.Sun || planetName == PlanetName.Mars)
             {
-                powerlessHouse = Calculate.GetHouse(HouseName.House4, time);
+                powerlessHouse = Calculate.House(HouseName.House4, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //Subtract the 7th house, from Jupiter and Mercury.
             if (planetName == PlanetName.Jupiter || planetName == PlanetName.Mercury)
             {
-                powerlessHouse = Calculate.GetHouse(HouseName.House7, time);
+                powerlessHouse = Calculate.House(HouseName.House7, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //Subtracc the 10th house from Venus and the Moon
             if (planetName == PlanetName.Venus || planetName == PlanetName.Moon)
             {
-                powerlessHouse = Calculate.GetHouse(HouseName.House10, time);
+                powerlessHouse = Calculate.House(HouseName.House10, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
             //from Saturn, the ascendant.
             if (planetName == PlanetName.Saturn)
             {
-                powerlessHouse = Calculate.GetHouse(HouseName.House1, time);
+                powerlessHouse = Calculate.House(HouseName.House1, time);
                 powerlessPointLongitude = powerlessHouse.GetMiddleLongitude();
             }
 
@@ -2637,7 +2637,7 @@ namespace VedAstro.Library
 
                 var totalBhavaBala = new Dictionary<HouseName, double>();
 
-                foreach (var houseToTotal in House.AllHouses)
+                foreach (var houseToTotal in Library.House.AllHouses)
                 {
                     //to get the total strength of the a house, we combine 3 types sub-strengths
                     double total = 0;
@@ -2683,7 +2683,7 @@ namespace VedAstro.Library
 
                 var BhavaDrishtiBala = new Dictionary<HouseName, double>();
 
-                foreach (var house in House.AllHouses)
+                foreach (var house in Library.House.AllHouses)
                 {
 
                     bala = 0;
@@ -2750,10 +2750,10 @@ namespace VedAstro.Library
 
                     foreach (var planet in PlanetName.All7Planets)
                     {
-                        foreach (var houseNo in House.AllHouses)
+                        foreach (var houseNo in Library.House.AllHouses)
                         {
                             //house is considered as a Drusya Graha (aspected body)
-                            var houseMid = Calculate.GetHouse(houseNo, time1).GetMiddleLongitude();
+                            var houseMid = Calculate.House(houseNo, time1).GetMiddleLongitude();
                             var plantLong = Calculate.GetPlanetNirayanaLongitude(time1, planet);
 
                             //Subtract the longitude of the Drishti (aspecting)
@@ -2804,13 +2804,13 @@ namespace VedAstro.Library
             int dig = 0;
 
             //for every house
-            foreach (var houseNumber in House.AllHouses)
+            foreach (var houseNumber in Library.House.AllHouses)
             {
                 //a particular bhava acquires strength by its mid-point
                 //falling in a particular kind of sign.
 
                 //so get mid point of house
-                var mid = Calculate.GetHouse(houseNumber, time).GetMiddleLongitude().TotalDegrees;
+                var mid = Calculate.House(houseNumber, time).GetMiddleLongitude().TotalDegrees;
                 var houseSign = Calculate.GetHouseSignName(houseNumber, time);
 
                 //Therefore first find the number of a given Bhava Madhya and subtract
@@ -2893,7 +2893,7 @@ namespace VedAstro.Library
 
                 var BhavaAdhipathiBala = new Dictionary<HouseName, double>();
 
-                foreach (var house in House.AllHouses)
+                foreach (var house in Library.House.AllHouses)
                 {
 
                     //get current house lord
@@ -2962,7 +2962,7 @@ namespace VedAstro.Library
             var returnList = new List<HouseName>();
 
             //create a list with planet names & its strength (unsorted)
-            foreach (var house in House.AllHouses)
+            foreach (var house in Library.House.AllHouses)
             {
                 //get house strength
                 var strength = GetHouseStrength(house, personBirthTime).ToDouble();
@@ -3037,7 +3037,7 @@ namespace VedAstro.Library
             var returnList = new List<HouseName>();
 
             //create a list with planet names & its strength (unsorted)
-            foreach (var house in House.AllHouses)
+            foreach (var house in Library.House.AllHouses)
             {
                 //get house strength
                 var strength = GetHouseStrength(house, personBirthTime).ToDouble();
@@ -3072,7 +3072,7 @@ namespace VedAstro.Library
         {
             var finalPrediction = "";
 
-            var birthConst = Calculate.GetMoonConstellation(person.BirthTime);
+            var birthConst = Calculate.MoonConstellation(person.BirthTime);
             var animal = Calculate.GetAnimal(birthConst.GetConstellationName());
 
             finalPrediction += animal.ToString();

@@ -1265,7 +1265,7 @@ namespace VedAstro.Library
 
 
             //get Arudha Lagna
-            var arudhaLagna = Calculate.GetArudhaLagnaSign(time);
+            var arudhaLagna = Calculate.ArudhaLagnaSign(time);
 
             //get 11th sign from Arudha lagna
             var sign11fromArudha = Calculate.GetSignCountedFromInputSign(arudhaLagna, 11);
@@ -1292,7 +1292,7 @@ namespace VedAstro.Library
 
 
             //get Arudha Lagna
-            var arudhaLagna = Calculate.GetArudhaLagnaSign(time);
+            var arudhaLagna = Calculate.ArudhaLagnaSign(time);
 
             //get 11th sign from Arudha lagna
             var sign11fromArudha = Calculate.GetSignCountedFromInputSign(arudhaLagna, 11);

@@ -30,7 +30,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsGoodTarabalaOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             switch (tarabala.GetName())
             {   //return true for good tarabala names
@@ -54,7 +54,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsBadTarabalaOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             switch (tarabala.GetName())
             {   //return true if tarabala is false
@@ -76,7 +76,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaJanmaStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 1;
 
@@ -87,7 +87,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaSampatStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 1;
@@ -100,7 +100,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaVipatStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 1;
@@ -113,7 +113,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaKshemaStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 1;
@@ -126,7 +126,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaPratyakStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 1;
@@ -138,7 +138,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaSadhanaStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 1;
@@ -151,7 +151,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaNaidhanaStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 1;
@@ -164,7 +164,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaMitraStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 1;
@@ -177,7 +177,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaParamaMitraStrongOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 1;
@@ -189,7 +189,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaJanmaMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 2;
@@ -201,7 +201,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaSampatMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 2;
@@ -213,7 +213,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaVipatMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 2;
@@ -225,7 +225,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaKshemaMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 2;
@@ -237,7 +237,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaPratyakMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 2;
@@ -249,7 +249,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaSadhanaMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 2;
@@ -261,7 +261,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaNaidhanaMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 2;
@@ -273,7 +273,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaMitraMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 2;
@@ -285,7 +285,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaParamaMitraMiddlingOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 2;
@@ -297,7 +297,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaJanmaWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Janma && tarabala.GetCycle() == 3;
@@ -309,7 +309,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaSampatWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Sampat && tarabala.GetCycle() == 3;
@@ -321,7 +321,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaVipatWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Vipat && tarabala.GetCycle() == 3;
@@ -333,7 +333,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaKshemaWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Kshema && tarabala.GetCycle() == 3;
@@ -345,7 +345,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaPratyakWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Pratyak && tarabala.GetCycle() == 3;
@@ -356,7 +356,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaSadhanaWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Sadhana && tarabala.GetCycle() == 3;
@@ -367,7 +367,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaNaidhanaWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Naidhana && tarabala.GetCycle() == 3;
@@ -378,7 +378,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaMitraWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.Mitra && tarabala.GetCycle() == 3;
@@ -389,7 +389,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTarabalaParamaMitraWeakOccuring(Time time, Person person)
         {
             //get tarabala for current time
-            var tarabala = Calculate.GetTarabala(time, person);
+            var tarabala = Calculate.Tarabala(time, person);
 
             //event occuring based on tarabala name & cycle
             var occuring = tarabala.GetName() == TarabalaName.ParamaMitra && tarabala.GetCycle() == 3;
@@ -417,7 +417,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsBadChandrabalaOccuring(Time time, Person person)
         {
             //get chandrabala number for time
-            var chandrabalaNumber = Calculate.GetChandrabala(time, person);
+            var chandrabalaNumber = Calculate.Chandrabala(time, person);
 
             switch (chandrabalaNumber)
             {
@@ -512,7 +512,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsGoodPanchakaOccuring(Time time, Person person)
         {
             //get occuring panchaka
-            var panchakaName = Calculate.GetPanchaka(time);
+            var panchakaName = Calculate.Panchaka(time);
 
             //if panchaka is good (subha)
             if (panchakaName == PanchakaName.Shubha)
@@ -650,10 +650,10 @@ namespace VedAstro.Library
             // favourable for marriage.
 
             //get birth rulling costellation 
-            var birthRulingConstellation = Calculate.GetMoonConstellation(person.BirthTime);
+            var birthRulingConstellation = Calculate.MoonConstellation(person.BirthTime);
 
             //get current rulling constellation
-            var currentRulingConstellation = Calculate.GetMoonConstellation(time);
+            var currentRulingConstellation = Calculate.MoonConstellation(time);
 
             //check only if constellation "name" is match (not checking quater), if match event occuring
             var occuring = birthRulingConstellation.GetConstellationName() == currentRulingConstellation.GetConstellationName();
@@ -678,7 +678,7 @@ namespace VedAstro.Library
             //get lunar day
             var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
 
             if (lunarDayNumber == 3 || lunarDayNumber == 9
@@ -819,7 +819,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsTaitulaKaranaOccuring(Time time, Person person)
         {
             //Thaithula is propitious for marriage
-            var karana = Calculate.GetKarana(time);
+            var karana = Calculate.Karana(time);
 
             //occuring if correct Karana
             var occuring = karana == Karana.Taitula;
@@ -838,7 +838,7 @@ namespace VedAstro.Library
         {
             //For getting initiations into mantras Sakuni Karana is propitious.   
 
-            var karana = Calculate.GetKarana(time);
+            var karana = Calculate.Karana(time);
 
             //occuring if correct Karana
             var occuring = karana == Karana.Sakuna;
@@ -850,7 +850,7 @@ namespace VedAstro.Library
         public static CalculatorResult IsBavaKaranaOccuring(Time time, Person person)
         {
             //Thus Bava is auspicious for starting works of permanent importance while
-            var karana = Calculate.GetKarana(time);
+            var karana = Calculate.Karana(time);
 
             //occuring if correct Karana
             var occuring = karana == Karana.Bava;
@@ -864,7 +864,7 @@ namespace VedAstro.Library
             //Bhadra is unfit for any good work but is eminently suitable for
             //violent and cruel deeds.
 
-            var karana = Calculate.GetKarana(time);
+            var karana = Calculate.Karana(time);
 
             //occuring if correct Karana
             var occuring = karana == Karana.Visti;
@@ -1480,7 +1480,7 @@ namespace VedAstro.Library
         {
 
             //get house 1 middle longitude
-            var house1MiddleLongitude = Calculate.GetHouse(HouseName.House1, time).GetMiddleLongitude();
+            var house1MiddleLongitude = Calculate.House(HouseName.House1, time).GetMiddleLongitude();
 
             //get zodiac sign at lagna (middle longitude)
             var house1ZodiacSign = Calculate.GetZodiacSignAtLongitude(house1MiddleLongitude);
@@ -1566,9 +1566,9 @@ namespace VedAstro.Library
             bool isAfterMidday()
             {
                 //get current apparent time
-                var localApparentTime = Calculate.GetLocalApparentTime(time);
+                var localApparentTime = Calculate.LocalApparentTime(time);
                 //get apparent noon
-                var apparentNoon = Calculate.GetNoonTime(time);
+                var apparentNoon = Calculate.NoonTime(time);
 
                 //if current time is past noon, then occuring
                 return localApparentTime > apparentNoon;
@@ -1681,7 +1681,7 @@ namespace VedAstro.Library
 
             //1. Constellation
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Pushyami;
@@ -1720,7 +1720,7 @@ namespace VedAstro.Library
 
             //1. Constellation
             //get ruling constellation
-            var rulingConstellation = Calculate.GetMoonConstellation(time);
+            var rulingConstellation = Calculate.MoonConstellation(time);
             var rulingConstellationName = rulingConstellation.GetConstellationName();
 
 
@@ -1784,7 +1784,7 @@ namespace VedAstro.Library
                 //get lunar day
                 var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
                 //get ruling constellation
-                var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+                var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
                 //check day of week
                 if (dayOfWeek == DayOfWeek.Sunday)
@@ -1823,7 +1823,7 @@ namespace VedAstro.Library
                 //get lunar day
                 var lunarDayNumber = Calculate.GetLunarDay(time).GetLunarDayNumber();
                 //get ruling constellation
-                var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+                var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
                 //check day of week
                 if (dayOfWeek == DayOfWeek.Monday)
@@ -1863,7 +1863,7 @@ namespace VedAstro.Library
                 //get lunar day
                 var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
-                var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+                var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
                 //check day of week
                 if (dayOfWeek == DayOfWeek.Tuesday)
@@ -1906,7 +1906,7 @@ namespace VedAstro.Library
                 //get lunar day
                 var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
-                var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+                var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
                 //check day of week
                 if (dayOfWeek == DayOfWeek.Wednesday)
@@ -1952,7 +1952,7 @@ namespace VedAstro.Library
                 //get lunar day
                 var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
-                var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+                var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
                 //check day of week
                 if (dayOfWeek == DayOfWeek.Thursday)
@@ -2002,7 +2002,7 @@ namespace VedAstro.Library
                 //get lunar day group
                 var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
-                var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+                var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
                 //check day of week
                 if (dayOfWeek == DayOfWeek.Friday)
@@ -2048,7 +2048,7 @@ namespace VedAstro.Library
                 //get lunar day
                 var lunarDayGroup = Calculate.GetLunarDay(time).GetLunarDayGroup();
                 //get ruling constellation
-                var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+                var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
                 //check day of week
                 if (dayOfWeek == DayOfWeek.Saturday)
@@ -2090,7 +2090,7 @@ namespace VedAstro.Library
             //get weekday
             var dayOfWeek = Calculate.GetDayOfWeek(time);
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check day of week
             if (dayOfWeek == DayOfWeek.Sunday)
@@ -2211,7 +2211,7 @@ namespace VedAstro.Library
             // Jyeshta and Revati should also be avoided.
 
             //get ruling constellation
-            var rulingConstellation = Calculate.GetMoonConstellation(time);
+            var rulingConstellation = Calculate.MoonConstellation(time);
             var rulingConstellationName = rulingConstellation.GetConstellationName();
 
             if (rulingConstellationName == ConstellationName.Bharani || rulingConstellationName == ConstellationName.Krithika)
@@ -2235,7 +2235,7 @@ namespace VedAstro.Library
             // and 27th (Vydhruti) have deleterious effects upon events which are
             // started or commenced under them. -
 
-            var yoga = Calculate.GetNithyaYoga(time);
+            var yoga = Calculate.NithyaYoga(time);
 
             if (yoga == NithyaYoga.Atiganda || yoga == NithyaYoga.Soola
                 || yoga == NithyaYoga.Ganda || yoga == NithyaYoga.Vyatapata
@@ -2251,7 +2251,7 @@ namespace VedAstro.Library
             // Bhadra(vishti) is unfit for any good work but is eminently suitable for violent and cruel deeds.
             // For getting initiation into kshudra mantras Sakuni Havana is propitious.
 
-            var karana = Calculate.GetKarana(time);
+            var karana = Calculate.Karana(time);
             //all karana mentioned are included
             if (karana != Karana.Bava || karana != Karana.Taitula || karana != Karana.Visti || karana != Karana.Sakuna)
             {
@@ -2273,7 +2273,7 @@ namespace VedAstro.Library
             // and 27th (Vydhruti) have deleterious effects upon events which are
             // started or commenced under them. -
 
-            var yoga = Calculate.GetNithyaYoga(time);
+            var yoga = Calculate.NithyaYoga(time);
 
             if (yoga == NithyaYoga.Atiganda || yoga == NithyaYoga.Soola
                                             || yoga == NithyaYoga.Ganda || yoga == NithyaYoga.Vyatapata
@@ -2320,7 +2320,7 @@ namespace VedAstro.Library
 
 
             //get time sun will leave current sign
-            var timeSunLeavesCurrentSign = Calculate.GetTimeSunLeavesCurrentSign(time);
+            var timeSunLeavesCurrentSign = Calculate.TimeSunLeavesCurrentSign(time);
 
             //get hours before entry into new sign
             var hoursBeforeEntryIntoSign = timeSunLeavesCurrentSign.Subtract(time).TotalHours;
@@ -2389,7 +2389,7 @@ namespace VedAstro.Library
             //  Satabhisha and Swati
 
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var correctConstellation = rulingConstellationName == ConstellationName.Pushyami ||
@@ -2485,7 +2485,7 @@ namespace VedAstro.Library
 
 
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var fixedConstellation = rulingConstellationName == ConstellationName.Rohini ||
@@ -2510,7 +2510,7 @@ namespace VedAstro.Library
 
 
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var softConstellation = rulingConstellationName == ConstellationName.Chitta ||
@@ -2536,7 +2536,7 @@ namespace VedAstro.Library
 
 
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var lightConstellation = rulingConstellationName == ConstellationName.Aswini ||
@@ -2559,7 +2559,7 @@ namespace VedAstro.Library
             //and separation of friends.
 
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var sharpConstellation = rulingConstellationName == ConstellationName.Moola ||
@@ -2583,7 +2583,7 @@ namespace VedAstro.Library
             //for going on procession.
 
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var movableConstellation = rulingConstellationName == ConstellationName.Sravana ||
@@ -2608,7 +2608,7 @@ namespace VedAstro.Library
             //deceit, imprisonment, setting fire and other evil deeds.
 
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var dreadfulConstellation = rulingConstellationName == ConstellationName.Pubba ||
@@ -2632,7 +2632,7 @@ namespace VedAstro.Library
             //influences, works of day-to-day importance can be undertaken.
 
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var mixedConstellation = rulingConstellationName == ConstellationName.Krithika ||
@@ -2670,7 +2670,7 @@ namespace VedAstro.Library
 
             //2. Constellation
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Hasta ||
@@ -2710,7 +2710,7 @@ namespace VedAstro.Library
 
             //2. Constellation
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Rohini;
@@ -2740,7 +2740,7 @@ namespace VedAstro.Library
 
             //2. Constellation
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Mrigasira ||
@@ -2775,7 +2775,7 @@ namespace VedAstro.Library
 
             //2. Constellation
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Punarvasu;
@@ -3322,7 +3322,7 @@ namespace VedAstro.Library
             var lagnaLord = Calculate.GetLordOfHouse(HouseName.House1, time);
 
             //get lord of weekday
-            var weekdayLord = Calculate.GetLordOfWeekday(time);
+            var weekdayLord = Calculate.LordOfWeekday(time);
 
 
             //if the lord of lagna & lord of weekday same, then event occuring
@@ -3532,7 +3532,7 @@ namespace VedAstro.Library
 
             //1.Avoid the asterisms of Aslesha. Moola and Jyeshta.
             //get ruling constellation
-            var rulingConstellationName = Calculate.GetMoonConstellation(time).GetConstellationName();
+            var rulingConstellationName = Calculate.MoonConstellation(time).GetConstellationName();
 
             //check ruling constellation name
             var rightConstellation = rulingConstellationName == ConstellationName.Aslesha ||
@@ -3727,8 +3727,8 @@ namespace VedAstro.Library
 
                 //Note: To determine if sthana bala is indicating good position or bad position
                 //a neutral point is set, anything above is good & below is bad
-                var sunNeutralPoint = Calculate.GetPlanetSthanaBalaNeutralPoint(PlanetName.Sun);
-                var moonNeutralPoint = Calculate.GetPlanetSthanaBalaNeutralPoint(PlanetName.Moon);
+                var sunNeutralPoint = Calculate.PlanetSthanaBalaNeutralPoint(PlanetName.Sun);
+                var moonNeutralPoint = Calculate.PlanetSthanaBalaNeutralPoint(PlanetName.Moon);
 
                 //if NOT above neutral number, end here as not good
                 if (!(sunPositionStrenght.ToDouble() > sunNeutralPoint && moonPositionStrenght.ToDouble() > moonNeutralPoint)) { return false; }
@@ -3946,7 +3946,7 @@ namespace VedAstro.Library
             //actual sunrise at location, when center of sun disk is at horizon
 
             //get sunrise time for that day
-            var sunriseTime = Calculate.GetSunriseTime(time);
+            var sunriseTime = Calculate.SunriseTime(time);
 
             //+-5 min added to get the event, otherwise match with exact time might miss
             var MIN_5 = 0.08333333;// in hours
@@ -3970,7 +3970,7 @@ namespace VedAstro.Library
             //actual sunset at location, when center of sun disk is at horizon
 
             //get sunset time for that day
-            var sunsetTime = Calculate.GetSunsetTime(time);
+            var sunsetTime = Calculate.SunsetTime(time);
 
             //+-5 min added to get the event, otherwise match with exact time might miss
             var MIN_5 = 0.08333333;// in hours
@@ -3997,8 +3997,8 @@ namespace VedAstro.Library
 
 
             //get apparent time
-            var localApparentTime = Calculate.GetLocalApparentTime(time);
-            var apparentNoon = Calculate.GetNoonTime(time);
+            var localApparentTime = Calculate.LocalApparentTime(time);
+            var apparentNoon = Calculate.NoonTime(time);
 
             //+-5 min added to get the event, otherwise match with exact time might miss
             var MIN_5 = 0.08333333;// in hours
@@ -4031,7 +4031,7 @@ namespace VedAstro.Library
             // physical danger
 
             //get lunar current lunar month
-            var lunarMonth = Calculate.GetLunarMonth(time);
+            var lunarMonth = Calculate.LunarMonth(time);
 
             if (lunarMonth is LunarMonth.Jaistam or LunarMonth.Ashadam or LunarMonth.Bhadrapadam
                 or LunarMonth.Aswijam or LunarMonth.Margasiram or LunarMonth.Pooshiam or LunarMonth.Phalgunam)
@@ -4055,7 +4055,7 @@ namespace VedAstro.Library
             // at least movable signs but
 
             //get sign sun is in
-            var sunSign = Calculate.GetSunSign(time).GetSignName();
+            var sunSign = Calculate.SunSign(time).GetSignName();
 
             //check if sign is a fixed or movable sign
             var isFixedSign = Calculate.IsFixedSign(sunSign);
@@ -4073,7 +4073,7 @@ namespace VedAstro.Library
             // the Sun is in common signs.
 
             //get sign sun is in
-            var sunSign = Calculate.GetSunSign(time).GetSignName();
+            var sunSign = Calculate.SunSign(time).GetSignName();
 
             //check if sign is a common sign
             var isCommonSign = Calculate.IsCommonSign(sunSign);
@@ -4235,7 +4235,7 @@ namespace VedAstro.Library
             var beneficsInLagna = Calculate.IsBeneficPlanetInHouse(HouseName.House1, time);
 
             //monday in aquatic sign
-            var moonSign = Calculate.GetMoonSignName(time);
+            var moonSign = Calculate.MoonSignName(time);
             var isMoonInAquaticSign = Calculate.IsAquaticSign(moonSign);
 
             //if either is true

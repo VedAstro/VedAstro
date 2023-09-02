@@ -422,7 +422,7 @@ namespace VedAstro.Library
                 //TODO Change to new day system
                 //TODO make test first
 
-                var sunRise = Calculate.GetSunriseTime(time);
+                var sunRise = Calculate.SunriseTime(time);
 
                 //get week day name in string
                 var dayOfWeekNameInString = time.GetLmtDateTimeOffset().DayOfWeek.ToString();
@@ -1510,7 +1510,7 @@ namespace VedAstro.Library
         public static int GetGocharaHouse(Time birthTime, Time currentTime, PlanetName planet)
         {
             //get moon sign at birth (janma rasi)
-            var janmaSign = Calculate.GetMoonSignName(birthTime);
+            var janmaSign = Calculate.MoonSignName(birthTime);
 
             //get planet sign at input time
             var planetSign = Calculate.GetPlanetRasiSign(planet, currentTime).GetSignName();
@@ -2773,7 +2773,7 @@ namespace VedAstro.Library
             //    : GetMoonConstellation(birthTime);
 
             //get dasa planet at birth
-            var moonConstellation = GetPlanetConstellation(birthTime, PlanetName.Moon);
+            var moonConstellation = PlanetConstellation(birthTime, PlanetName.Moon);
             //var risingConstellation = GetHouseConstellation(1, birthTime);
             var birthDasaPlanetMoon = GetConstellationDasaPlanet(moonConstellation.GetConstellationName());
             //var birthDasaPlanet = GetConstellationDasaPlanet(risingConstellation.GetConstellationName());

@@ -50,8 +50,8 @@
         //get time now
         var timeNow = Time.Now(geoLocation);
 
-        var rise = Calculate.GetSunriseTime(timeNow);
-        var set = Calculate.GetSunsetTime(timeNow);
+        var rise = Calculate.SunriseTime(timeNow);
+        var set = Calculate.SunsetTime(timeNow);
 
         //show lmt time as string
         _sunRiseTime = rise.GetStdDateTimeOffsetText();

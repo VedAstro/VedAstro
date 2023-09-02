@@ -49,6 +49,7 @@
         public const string MatchReport = "Match/Report";
         public const string APIBuilder = "APIBuilder";
         public const string APICallList = "APIBuilder#APICallList";
+        public const string UrlDisplayOut = "APIBuilder#UrlDisplayOut";
 
 
         //MATCH
